@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   }
   s.author   = { "LeanCloud" => "support@leancloud.cn" }
 
-  s.platform = :osx, 10.8
+  s.platform = :osx, 10.9
   s.requires_arc = true  
 
   s.source   = { :http => "http://download.leancloud.cn/sdk/OSX/release-v#{s.version}/#{component}.framework.zip" }
