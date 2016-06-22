@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
 
   s.name     = "AVOSCloud"
   s.version  = "3.1.6.2"
-  s.platform = :ios, "6.0"
+  s.platform = :ios, "7.0"
   s.summary  = "LeanCloud iOS SDK for mobile backend."
   s.homepage = "https://leancloud.cn"
   s.documentation_url = "https://leancloud.cn/api-docs/iOS/index.html"
