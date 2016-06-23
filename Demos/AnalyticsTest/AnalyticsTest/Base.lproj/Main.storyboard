@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--First-->
+        <scene sceneID="hNz-n2-bh7">
+            <objects>
+                <viewController id="9pv-A4-QxB" customClass="FirstViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Ia1-K6-d13"/>
+                        <viewControllerLayoutGuide type="bottom" id="4ug-Mw-9AY"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="tsR-hK-woN">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QG8-Iy-MyL">
+                                <rect key="frame" x="270" y="60" width="60" height="30"/>
+                                <state key="normal" title="简单事件"/>
+                                <connections>
+                                    <action selector="simpleEvent:" destination="9pv-A4-QxB" eventType="touchUpInside" id="fpf-ZZ-ijx"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tev-nu-Hlr">
+                                <rect key="frame" x="255" y="110" width="90" height="30"/>
+                                <state key="normal" title="开始录制事件"/>
+                                <connections>
+                                    <action selector="startEvent:" destination="9pv-A4-QxB" eventType="touchUpInside" id="ltn-oF-gN9"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ftX-Ll-QST">
+                                <rect key="frame" x="255" y="160" width="90" height="30"/>
+                                <state key="normal" title="结束录制事件"/>
+                                <connections>
+                                    <action selector="endEvent:" destination="9pv-A4-QxB" eventType="touchUpInside" id="kM4-Vu-nCZ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5qr-Y7-crc">
+                                <rect key="frame" x="270" y="210" width="60" height="30"/>
+                                <state key="normal" title="购买事件"/>
+                                <connections>
+                                    <action selector="buyEvent:" destination="9pv-A4-QxB" eventType="touchUpInside" id="KU5-HC-xsW"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bNf-XI-d1j">
+                                <rect key="frame" x="255" y="260" width="90" height="30"/>
+                                <state key="normal" title="播放视频事件"/>
+                                <connections>
+                                    <action selector="playVideoEvent:" destination="9pv-A4-QxB" eventType="touchUpInside" id="J7w-wN-Jiy"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请多点几次或频繁切换 Tab，然后观察日志及控制台。" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qLd-Z7-nCP">
+                                <rect key="frame" x="28" y="506" width="552" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="ij8-U8-NuT"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PG4-Om-Oiy">
+                                <rect key="frame" x="255" y="310" width="90" height="30"/>
+                                <state key="normal" title="设定事件次数"/>
+                                <connections>
+                                    <action selector="useEventAcc:" destination="9pv-A4-QxB" eventType="touchUpInside" id="hOX-xM-7wa"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="60e-Vv-2Lh">
+                                <rect key="frame" x="263" y="360" width="75" height="30"/>
+                                <state key="normal" title="自定义属性"/>
+                                <connections>
+                                    <action selector="useCustomAttributes:" destination="9pv-A4-QxB" eventType="touchUpInside" id="TcX-MV-61s"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iQL-L8-ee0">
+                                <rect key="frame" x="255" y="410" width="90" height="30"/>
+                                <state key="normal" title="设定事件时长"/>
+                                <connections>
+                                    <action selector="useEventDuraion:" destination="9pv-A4-QxB" eventType="touchUpInside" id="jtZ-mM-1Bh"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZjS-yn-Rkk">
+                                <rect key="frame" x="270" y="460" width="60" height="30"/>
+                                <state key="normal" title="触发崩溃"/>
+                                <connections>
+                                    <action selector="crash:" destination="9pv-A4-QxB" eventType="touchUpInside" id="eTc-cB-wIW"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="qLd-Z7-nCP" firstAttribute="centerX" secondItem="ftX-Ll-QST" secondAttribute="centerX" constant="4" id="1hm-Yx-mrz"/>
+                            <constraint firstItem="5qr-Y7-crc" firstAttribute="centerX" secondItem="bNf-XI-d1j" secondAttribute="centerX" id="76M-z5-H6z"/>
+                            <constraint firstItem="QG8-Iy-MyL" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="40" id="C0X-m4-b9I"/>
+                            <constraint firstItem="iQL-L8-ee0" firstAttribute="top" secondItem="60e-Vv-2Lh" secondAttribute="bottom" constant="20" id="F8Q-UC-sQH"/>
+                            <constraint firstItem="60e-Vv-2Lh" firstAttribute="top" secondItem="PG4-Om-Oiy" secondAttribute="bottom" constant="20" id="FfI-Oi-8PY"/>
+                            <constraint firstItem="PG4-Om-Oiy" firstAttribute="top" secondItem="bNf-XI-d1j" secondAttribute="bottom" constant="20" id="G8R-mp-dAQ"/>
+                            <constraint firstItem="4ug-Mw-9AY" firstAttribute="top" secondItem="qLd-Z7-nCP" secondAttribute="bottom" constant="24" id="LDS-VU-2jL"/>
+                            <constraint firstItem="60e-Vv-2Lh" firstAttribute="centerX" secondItem="PG4-Om-Oiy" secondAttribute="centerX" id="NIL-iM-shf"/>
+                            <constraint firstItem="iQL-L8-ee0" firstAttribute="leading" secondItem="PG4-Om-Oiy" secondAttribute="leading" id="Ol5-aT-o7B"/>
+                            <constraint firstItem="Tev-nu-Hlr" firstAttribute="centerX" secondItem="QG8-Iy-MyL" secondAttribute="centerX" id="Pie-Zl-i35"/>
+                            <constraint firstItem="qLd-Z7-nCP" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" constant="8" id="Rnt-Mr-lzz"/>
+                            <constraint firstItem="ZjS-yn-Rkk" firstAttribute="leading" secondItem="5qr-Y7-crc" secondAttribute="leading" id="TkD-h1-uQj"/>
+                            <constraint firstItem="5qr-Y7-crc" firstAttribute="top" secondItem="ftX-Ll-QST" secondAttribute="bottom" constant="20" id="bvl-gk-D6x"/>
+                            <constraint firstItem="QG8-Iy-MyL" firstAttribute="centerX" secondItem="tsR-hK-woN" secondAttribute="centerX" id="cIo-YO-1pd"/>
+                            <constraint firstItem="ftX-Ll-QST" firstAttribute="top" secondItem="Tev-nu-Hlr" secondAttribute="bottom" constant="20" id="cUa-qT-uU3"/>
+                            <constraint firstItem="5qr-Y7-crc" firstAttribute="leading" secondItem="QG8-Iy-MyL" secondAttribute="leading" id="jxk-Wr-V7X"/>
+                            <constraint firstItem="ZjS-yn-Rkk" firstAttribute="top" secondItem="iQL-L8-ee0" secondAttribute="bottom" constant="20" id="rH2-8j-oxq"/>
+                            <constraint firstItem="Tev-nu-Hlr" firstAttribute="centerX" secondItem="ftX-Ll-QST" secondAttribute="centerX" id="vQf-tP-xIR"/>
+                            <constraint firstItem="PG4-Om-Oiy" firstAttribute="leading" secondItem="bNf-XI-d1j" secondAttribute="leading" id="wGj-yu-G2V"/>
+                            <constraint firstItem="Tev-nu-Hlr" firstAttribute="top" secondItem="QG8-Iy-MyL" secondAttribute="bottom" constant="20" id="ysc-ou-iwC"/>
+                            <constraint firstItem="bNf-XI-d1j" firstAttribute="top" secondItem="5qr-Y7-crc" secondAttribute="bottom" constant="20" id="zNL-fb-XZ8"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="First" image="first" id="acW-dT-cKf"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="750" y="-320"/>
+        </scene>
+        <!--Second-->
+        <scene sceneID="wg7-f3-ORb">
+            <objects>
+                <viewController id="8rJ-Kc-sve" customClass="SecondViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="L7p-HK-0SC"/>
+                        <viewControllerLayoutGuide type="bottom" id="Djb-ko-YwX"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="QS5-Rx-YEW">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="这里的背景颜色由在线自定义参数配置" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NDk-cv-Gan">
+                                <rect key="frame" x="181" y="291" width="238" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="NDk-cv-Gan" firstAttribute="centerX" secondItem="QS5-Rx-YEW" secondAttribute="centerX" id="YWq-4F-Rew"/>
+                            <constraint firstItem="NDk-cv-Gan" firstAttribute="centerY" secondItem="QS5-Rx-YEW" secondAttribute="centerY" id="sMM-tF-nB8"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Second" image="second" id="cPa-gy-q4n"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="750" y="360"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="yl2-sM-qoP">
+            <objects>
+                <tabBarController id="49e-Tb-3d3" sceneMemberID="viewController">
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="W28-zg-YXA">
+                        <rect key="frame" x="0.0" y="975" width="768" height="49"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="9pv-A4-QxB" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
+                        <segue destination="8rJ-Kc-sve" kind="relationship" relationship="viewControllers" id="lzU-1b-eKA"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="0.0" y="0.0"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="first" width="30" height="30"/>
+        <image name="second" width="30" height="30"/>
+    </resources>
+</document>

@@ -1,0 +1,27 @@
+#!/bin/bash
+
+function fail_and_exit()
+{
+  echo "$*, Failed and EXIT "
+  exit 1
+}
+
+function get_current_branch()
+{
+  git branch | sed -n -e 's/^\* \(.*\)/\1/p'
+}
+
+function json_replace()
+{
+  # if hash key does not exist, will append to json
+  ruby -e "
+    require 'rubygems'
+    require 'json'
+
+    exit 1 unless ARGV.count > 2
+    json = JSON.parse( File.read( ARGV[0] ) )
+    json[ ARGV[1] ] = ARGV[2]
+    File.open( ARGV[0], 'w' ) { | file | file.write( JSON.dump( json ) ) }
+    exit 0
+  " $1 $2 $3
+}

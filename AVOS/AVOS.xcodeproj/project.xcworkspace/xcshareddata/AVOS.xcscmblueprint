@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "D1F9F70025FA660182F75266D3D4F5D7ECED2B2C",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "D1F9F70025FA660182F75266D3D4F5D7ECED2B2C" : 0,
+    "0A02D7AD172CD0FE10B50DDED69BA407037CC7BF" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "9CA117F5-83AD-4CBC-90C0-7D2EB9317745",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "D1F9F70025FA660182F75266D3D4F5D7ECED2B2C" : "iOS-sdk\/",
+    "0A02D7AD172CD0FE10B50DDED69BA407037CC7BF" : "iOS-sdk\/Breakpad\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "AVOS",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "AVOS\/AVOS.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:leancloud\/Breakpad.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "0A02D7AD172CD0FE10B50DDED69BA407037CC7BF"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:leancloud\/iOS-sdk.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "D1F9F70025FA660182F75266D3D4F5D7ECED2B2C"
+    }
+  ]
+}

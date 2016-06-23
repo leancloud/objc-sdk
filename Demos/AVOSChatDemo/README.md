@@ -1,0 +1,1 @@
+[安装](itms-services://?action=download-manifest&url=https://github.com/ufosky/iOS-sdk/raw/master/Demos/AVOSChatDemo/Release/AVOSChatDemo.plist)

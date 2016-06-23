@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>AVOSCloudIMTests.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>7</integer>
+		</dict>
+		<key>AVOSCloudTests.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>10</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>8C255D251AE9F815008A6FFC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8C255D2F1AE9F817008A6FFC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8C8419851A5A791300C5C6C4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8C8419901A5A791300C5C6C4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8C8419C21A5A796000C5C6C4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8C8419CC1A5A796000C5C6C4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8C841C4D1A5A8A3100C5C6C4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>

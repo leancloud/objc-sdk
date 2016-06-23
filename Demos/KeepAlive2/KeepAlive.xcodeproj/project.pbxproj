@@ -1,0 +1,460 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		565B0DE5192DDA8500C6F21B /* KAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 565B0DE4192DDA8500C6F21B /* KAViewController.m */; };
+		565B0DE8192DDB3800C6F21B /* KAChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 565B0DE7192DDB3800C6F21B /* KAChatCell.m */; };
+		565B0DEC192DEB0A00C6F21B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 565B0DEB192DEB0A00C6F21B /* SystemConfiguration.framework */; };
+		565B0DEE192DEB1300C6F21B /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 565B0DED192DEB1300C6F21B /* MobileCoreServices.framework */; };
+		565B0DF0192DEB1C00C6F21B /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 565B0DEF192DEB1C00C6F21B /* CoreTelephony.framework */; };
+		565B0DF2192DEB2400C6F21B /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 565B0DF1192DEB2400C6F21B /* CoreLocation.framework */; };
+		565B0DF4192DEB2F00C6F21B /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 565B0DF3192DEB2F00C6F21B /* libicucore.dylib */; };
+		566A5300192CBFAB00D1CD21 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 566A52FF192CBFAB00D1CD21 /* Foundation.framework */; };
+		566A5302192CBFAB00D1CD21 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 566A5301192CBFAB00D1CD21 /* CoreGraphics.framework */; };
+		566A5304192CBFAB00D1CD21 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 566A5303192CBFAB00D1CD21 /* UIKit.framework */; };
+		566A530A192CBFAB00D1CD21 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 566A5308192CBFAB00D1CD21 /* InfoPlist.strings */; };
+		566A530C192CBFAB00D1CD21 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 566A530B192CBFAB00D1CD21 /* main.m */; };
+		566A5310192CBFAB00D1CD21 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 566A530F192CBFAB00D1CD21 /* AppDelegate.m */; };
+		566A5313192CBFAB00D1CD21 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 566A5311192CBFAB00D1CD21 /* Main.storyboard */; };
+		566A5318192CBFAB00D1CD21 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 566A5317192CBFAB00D1CD21 /* Images.xcassets */; };
+		8C2E7A4D197CDD30002C7EAC /* AVOSCloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C2E7A3E197CDD0B002C7EAC /* AVOSCloud.framework */; };
+		8C2E7A50197CEF15002C7EAC /* KALoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2E7A4F197CEF15002C7EAC /* KALoginController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8C2E7A3D197CDD0B002C7EAC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C2E7A35197CDCFF002C7EAC /* AVOS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8CCC29FA196E4E3C0098C0FB;
+			remoteInfo = AVOSCloud;
+		};
+		8C2E7A3F197CDD0B002C7EAC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C2E7A35197CDCFF002C7EAC /* AVOS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8CCC2A05196E4E3D0098C0FB;
+			remoteInfo = AVOSCloudTests;
+		};
+		8C2E7A41197CDD0B002C7EAC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C2E7A35197CDCFF002C7EAC /* AVOS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8CCC2B82196E67190098C0FB;
+			remoteInfo = AVOSCloudSNS;
+		};
+		8C2E7A43197CDD0B002C7EAC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C2E7A35197CDCFF002C7EAC /* AVOS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8CCC2B8C196E67190098C0FB;
+			remoteInfo = AVOSCloudSNSTests;
+		};
+		8C2E7A46197CDD28002C7EAC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C2E7A35197CDCFF002C7EAC /* AVOS.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8CCC29F9196E4E3C0098C0FB;
+			remoteInfo = AVOSCloud;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		565B0DE3192DDA8500C6F21B /* KAViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KAViewController.h; sourceTree = "<group>"; };
+		565B0DE4192DDA8500C6F21B /* KAViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KAViewController.m; sourceTree = "<group>"; };
+		565B0DE6192DDB3800C6F21B /* KAChatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KAChatCell.h; sourceTree = "<group>"; };
+		565B0DE7192DDB3800C6F21B /* KAChatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KAChatCell.m; sourceTree = "<group>"; };
+		565B0DEB192DEB0A00C6F21B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		565B0DED192DEB1300C6F21B /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		565B0DEF192DEB1C00C6F21B /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		565B0DF1192DEB2400C6F21B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		565B0DF3192DEB2F00C6F21B /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		566A52FC192CBFAB00D1CD21 /* KeepAlive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KeepAlive.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		566A52FF192CBFAB00D1CD21 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		566A5301192CBFAB00D1CD21 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		566A5303192CBFAB00D1CD21 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		566A5307192CBFAB00D1CD21 /* KeepAlive-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "KeepAlive-Info.plist"; sourceTree = "<group>"; };
+		566A5309192CBFAB00D1CD21 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		566A530B192CBFAB00D1CD21 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		566A530D192CBFAB00D1CD21 /* KeepAlive-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KeepAlive-Prefix.pch"; sourceTree = "<group>"; };
+		566A530E192CBFAB00D1CD21 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		566A530F192CBFAB00D1CD21 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		566A5312192CBFAB00D1CD21 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		566A5317192CBFAB00D1CD21 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		8C2E7A35197CDCFF002C7EAC /* AVOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AVOS.xcodeproj; path = ../../AVOS/AVOS.xcodeproj; sourceTree = "<group>"; };
+		8C2E7A4E197CEF15002C7EAC /* KALoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KALoginController.h; sourceTree = "<group>"; };
+		8C2E7A4F197CEF15002C7EAC /* KALoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KALoginController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		566A52F9192CBFAB00D1CD21 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C2E7A4D197CDD30002C7EAC /* AVOSCloud.framework in Frameworks */,
+				565B0DF4192DEB2F00C6F21B /* libicucore.dylib in Frameworks */,
+				565B0DF2192DEB2400C6F21B /* CoreLocation.framework in Frameworks */,
+				565B0DF0192DEB1C00C6F21B /* CoreTelephony.framework in Frameworks */,
+				565B0DEE192DEB1300C6F21B /* MobileCoreServices.framework in Frameworks */,
+				565B0DEC192DEB0A00C6F21B /* SystemConfiguration.framework in Frameworks */,
+				566A5302192CBFAB00D1CD21 /* CoreGraphics.framework in Frameworks */,
+				566A5304192CBFAB00D1CD21 /* UIKit.framework in Frameworks */,
+				566A5300192CBFAB00D1CD21 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		566A52F3192CBFAB00D1CD21 = {
+			isa = PBXGroup;
+			children = (
+				8C2E7A35197CDCFF002C7EAC /* AVOS.xcodeproj */,
+				566A5305192CBFAB00D1CD21 /* KeepAlive */,
+				566A52FE192CBFAB00D1CD21 /* Frameworks */,
+				566A52FD192CBFAB00D1CD21 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		566A52FD192CBFAB00D1CD21 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				566A52FC192CBFAB00D1CD21 /* KeepAlive.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		566A52FE192CBFAB00D1CD21 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				565B0DF3192DEB2F00C6F21B /* libicucore.dylib */,
+				565B0DF1192DEB2400C6F21B /* CoreLocation.framework */,
+				565B0DEF192DEB1C00C6F21B /* CoreTelephony.framework */,
+				565B0DED192DEB1300C6F21B /* MobileCoreServices.framework */,
+				565B0DEB192DEB0A00C6F21B /* SystemConfiguration.framework */,
+				566A52FF192CBFAB00D1CD21 /* Foundation.framework */,
+				566A5301192CBFAB00D1CD21 /* CoreGraphics.framework */,
+				566A5303192CBFAB00D1CD21 /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		566A5305192CBFAB00D1CD21 /* KeepAlive */ = {
+			isa = PBXGroup;
+			children = (
+				566A530E192CBFAB00D1CD21 /* AppDelegate.h */,
+				566A530F192CBFAB00D1CD21 /* AppDelegate.m */,
+				566A5311192CBFAB00D1CD21 /* Main.storyboard */,
+				566A5317192CBFAB00D1CD21 /* Images.xcassets */,
+				566A5306192CBFAB00D1CD21 /* Supporting Files */,
+				565B0DE3192DDA8500C6F21B /* KAViewController.h */,
+				565B0DE4192DDA8500C6F21B /* KAViewController.m */,
+				565B0DE6192DDB3800C6F21B /* KAChatCell.h */,
+				565B0DE7192DDB3800C6F21B /* KAChatCell.m */,
+				8C2E7A4E197CEF15002C7EAC /* KALoginController.h */,
+				8C2E7A4F197CEF15002C7EAC /* KALoginController.m */,
+			);
+			path = KeepAlive;
+			sourceTree = "<group>";
+		};
+		566A5306192CBFAB00D1CD21 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				566A5307192CBFAB00D1CD21 /* KeepAlive-Info.plist */,
+				566A5308192CBFAB00D1CD21 /* InfoPlist.strings */,
+				566A530B192CBFAB00D1CD21 /* main.m */,
+				566A530D192CBFAB00D1CD21 /* KeepAlive-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8C2E7A36197CDCFF002C7EAC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8C2E7A3E197CDD0B002C7EAC /* AVOSCloud.framework */,
+				8C2E7A40197CDD0B002C7EAC /* AVOSCloudTests.xctest */,
+				8C2E7A42197CDD0B002C7EAC /* AVOSCloudSNS.framework */,
+				8C2E7A44197CDD0B002C7EAC /* AVOSCloudSNSTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		566A52FB192CBFAB00D1CD21 /* KeepAlive */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 566A532E192CBFAB00D1CD21 /* Build configuration list for PBXNativeTarget "KeepAlive" */;
+			buildPhases = (
+				566A52F8192CBFAB00D1CD21 /* Sources */,
+				566A52F9192CBFAB00D1CD21 /* Frameworks */,
+				566A52FA192CBFAB00D1CD21 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8C2E7A47197CDD28002C7EAC /* PBXTargetDependency */,
+			);
+			name = KeepAlive;
+			productName = KeepAlive;
+			productReference = 566A52FC192CBFAB00D1CD21 /* KeepAlive.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		566A52F4192CBFAB00D1CD21 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = avoscloud;
+			};
+			buildConfigurationList = 566A52F7192CBFAB00D1CD21 /* Build configuration list for PBXProject "KeepAlive" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 566A52F3192CBFAB00D1CD21;
+			productRefGroup = 566A52FD192CBFAB00D1CD21 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 8C2E7A36197CDCFF002C7EAC /* Products */;
+					ProjectRef = 8C2E7A35197CDCFF002C7EAC /* AVOS.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				566A52FB192CBFAB00D1CD21 /* KeepAlive */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		8C2E7A3E197CDD0B002C7EAC /* AVOSCloud.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = AVOSCloud.framework;
+			remoteRef = 8C2E7A3D197CDD0B002C7EAC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8C2E7A40197CDD0B002C7EAC /* AVOSCloudTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = AVOSCloudTests.xctest;
+			remoteRef = 8C2E7A3F197CDD0B002C7EAC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8C2E7A42197CDD0B002C7EAC /* AVOSCloudSNS.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = AVOSCloudSNS.framework;
+			remoteRef = 8C2E7A41197CDD0B002C7EAC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8C2E7A44197CDD0B002C7EAC /* AVOSCloudSNSTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = AVOSCloudSNSTests.xctest;
+			remoteRef = 8C2E7A43197CDD0B002C7EAC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		566A52FA192CBFAB00D1CD21 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				566A5318192CBFAB00D1CD21 /* Images.xcassets in Resources */,
+				566A530A192CBFAB00D1CD21 /* InfoPlist.strings in Resources */,
+				566A5313192CBFAB00D1CD21 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		566A52F8192CBFAB00D1CD21 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				565B0DE5192DDA8500C6F21B /* KAViewController.m in Sources */,
+				8C2E7A50197CEF15002C7EAC /* KALoginController.m in Sources */,
+				566A5310192CBFAB00D1CD21 /* AppDelegate.m in Sources */,
+				566A530C192CBFAB00D1CD21 /* main.m in Sources */,
+				565B0DE8192DDB3800C6F21B /* KAChatCell.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8C2E7A47197CDD28002C7EAC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AVOSCloud;
+			targetProxy = 8C2E7A46197CDD28002C7EAC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		566A5308192CBFAB00D1CD21 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				566A5309192CBFAB00D1CD21 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		566A5311192CBFAB00D1CD21 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				566A5312192CBFAB00D1CD21 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		566A532C192CBFAB00D1CD21 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		566A532D192CBFAB00D1CD21 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		566A532F192CBFAB00D1CD21 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "KeepAlive/KeepAlive-Prefix.pch";
+				GENERATE_PROFILING_CODE = YES;
+				INFOPLIST_FILE = "KeepAlive/KeepAlive-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		566A5330192CBFAB00D1CD21 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "KeepAlive/KeepAlive-Prefix.pch";
+				INFOPLIST_FILE = "KeepAlive/KeepAlive-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		566A52F7192CBFAB00D1CD21 /* Build configuration list for PBXProject "KeepAlive" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				566A532C192CBFAB00D1CD21 /* Debug */,
+				566A532D192CBFAB00D1CD21 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		566A532E192CBFAB00D1CD21 /* Build configuration list for PBXNativeTarget "KeepAlive" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				566A532F192CBFAB00D1CD21 /* Debug */,
+				566A5330192CBFAB00D1CD21 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 566A52F4192CBFAB00D1CD21 /* Project object */;
+}

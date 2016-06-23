@@ -1,0 +1,15 @@
+//
+//  AVOSCloud.pch
+//  AVOS
+//
+//  Created by Tang Tianyong on 9/10/15.
+//  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
+//
+
+#import <Availability.h>
+
+#ifdef __OBJC__
+    #import "SDMacros.h"
+    #import "AVUtils.h"
+    #import "LCRouter.h"
+#endif
