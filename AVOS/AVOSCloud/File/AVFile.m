@@ -170,11 +170,15 @@ static NSMutableDictionary *downloadingMap = nil;
                     progressBlock:(AVProgressBlock)progressBlock
 {
     /*
-     * If has local file to upload, upload file.
-     * Else, if only has remote URL, just update the URL.
+     * If has object id, do nothing.
+     * Else, if local file exists, upload file.
+     * Else, if has external URL, update the URL.
      * Else, nothing to save, report not found error.
      */
-    if ([self hasLocalFile]) {
+    if (self.objectId) {
+        [AVUtils callProgressBlock:progressBlock percent:100];
+        [AVUtils callBooleanResultBlock:resultBlock error:nil];
+    } else if ([self hasLocalFile]) {
         [self uploadFileWithResultBlock:resultBlock progressBlock:progressBlock];
     } else if ([self hasExternalURL]) {
         [self updateURLWithResultBlock:resultBlock progressBlock:progressBlock];
