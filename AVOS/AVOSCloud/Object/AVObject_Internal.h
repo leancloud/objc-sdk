@@ -29,6 +29,7 @@ NSString *request_object_id(NSDictionary *request) {
 
 @interface AVObject ()
 
+@property (nonatomic, retain, readwrite) NSString *objectId;
 @property (nonatomic, retain, readwrite) NSDate *updatedAt;
 @property (nonatomic, retain, readwrite) NSDate *createdAt;
 

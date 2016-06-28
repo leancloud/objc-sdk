@@ -78,7 +78,7 @@
 /*!
  The id of the object.
  */
-@property (nonatomic, retain) NSString *objectId;
+@property (nonatomic, retain, readonly) NSString *objectId;
 
 /*!
  When the object was last updated.
