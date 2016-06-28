@@ -1,0 +1,29 @@
+Pod::Spec.new do |s|
+  s.name     = 'AVOSCloudIM'
+  s.version  = '{{{version}}}'
+  s.homepage = 'https://leancloud.cn/'
+  s.summary  = 'LeanCloud Swift Crash Reporting SDK'
+  s.authors  = 'LeanCloud'
+  s.license  = {
+    :type => 'Apache License, Version 2.0',
+    :file => 'LICENSE'
+  }
+
+  s.platform = :ios, :osx
+
+  s.ios.deployment_target = '7.0'
+  s.osx.deployment_target = '10.9'
+
+  s.source = {
+    :git => "https://github.com/leancloud/objc-sdk.git",
+    :tag => "#{s.version}"
+  }
+
+  s.source_files =
+    {{{source_files}}}
+
+  s.public_header_files =
+    {{{public_header_files}}}
+
+  s.dependency = 'AVOSCloud', "#{s.version}"
+end
