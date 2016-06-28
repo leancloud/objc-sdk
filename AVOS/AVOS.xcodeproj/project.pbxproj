@@ -110,28 +110,6 @@
 		704F3BCF1BE0D07F0033245C /* AVMPOrderedDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C895DD21A78A5D900992A8F /* AVMPOrderedDictionary.h */; };
 		704F3BD01BE0D07F0033245C /* AVOSCloudIM.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419C71A5A796000C5C6C4 /* AVOSCloudIM.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		704F3BD11BE0D07F0033245C /* AVIMUserOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DD6A6F1B83103C00DACA27 /* AVIMUserOptions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		704F3BD21BE0D07F0033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BD31BE0D07F0033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BD41BE0D07F0033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BD51BE0D07F0033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BD61BE0D07F0033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BD71BE0D07F0033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BD81BE0D07F0033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BD91BE0D07F0033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BDA1BE0D07F0033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BDB1BE0D07F0033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BDC1BE0D0800033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BDD1BE0D0800033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BDE1BE0D0800033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BDF1BE0D0800033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BE01BE0D0800033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BE11BE0D0800033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BE21BE0D0800033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BE31BE0D0800033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BE41BE0D0800033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BE51BE0D0800033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BE61BE0D0800033245C /* (null) in Headers */ = {isa = PBXBuildFile; };
-		704F3BE71BE0D0800033245C /* AVIMReadCommand.h in Headers */ = {isa = PBXBuildFile; fileRef = 837A83601B87187200885DCA /* AVIMReadCommand.h */; };
 		704F3BE81BE0D0810033245C /* AVIMTypedMessageObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA1571D1A5E8556003C2532 /* AVIMTypedMessageObject.h */; };
 		704F3BE91BE0D0810033245C /* AVIMGeneralObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C2FED521A67C2DA0056F945 /* AVIMGeneralObject.h */; };
 		704F3BEA1BE0D0810033245C /* AVIMMessageObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C895DEE1A78B0B700992A8F /* AVIMMessageObject.h */; };
@@ -3664,39 +3642,17 @@
 				9A2F1B511CF6F6FA00BE52F2 /* LCIMRootObject_PackagePrivate.h in Headers */,
 				704F3BCF1BE0D07F0033245C /* AVMPOrderedDictionary.h in Headers */,
 				9A2F1B421CF6F6FA00BE52F2 /* LCIMMessage_PackagePrivate.h in Headers */,
-				704F3BD21BE0D07F0033245C /* (null) in Headers */,
 				70BA7A711BE22B2500C3EB70 /* LCIMClientSessionTokenCacheStore.h in Headers */,
 				9A2F1B1E1CF6F6FA00BE52F2 /* LCIMDescriptor.h in Headers */,
-				704F3BD31BE0D07F0033245C /* (null) in Headers */,
-				704F3BD41BE0D07F0033245C /* (null) in Headers */,
-				704F3BD51BE0D07F0033245C /* (null) in Headers */,
-				704F3BD61BE0D07F0033245C /* (null) in Headers */,
-				704F3BD71BE0D07F0033245C /* (null) in Headers */,
 				9AE76C531C3F7CC600325902 /* AVIMCommandFormatter.h in Headers */,
-				704F3BD81BE0D07F0033245C /* (null) in Headers */,
-				704F3BD91BE0D07F0033245C /* (null) in Headers */,
-				704F3BDA1BE0D07F0033245C /* (null) in Headers */,
-				704F3BDB1BE0D07F0033245C /* (null) in Headers */,
 				9A2F1B571CF6F6FA00BE52F2 /* LCIMUnknownField.h in Headers */,
-				704F3BDC1BE0D0800033245C /* (null) in Headers */,
-				704F3BDD1BE0D0800033245C /* (null) in Headers */,
 				9A2F1B541CF6F6FA00BE52F2 /* LCIMRuntimeTypes.h in Headers */,
-				704F3BDE1BE0D0800033245C /* (null) in Headers */,
-				704F3BDF1BE0D0800033245C /* (null) in Headers */,
 				9A7C67D91C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.h in Headers */,
 				9A2F1B5D1CF6F6FA00BE52F2 /* LCIMUnknownField_PackagePrivate.h in Headers */,
-				704F3BE01BE0D0800033245C /* (null) in Headers */,
 				9A2F1B0C1CF6F6FA00BE52F2 /* LCIMCodedInputStream.h in Headers */,
 				9A2F1B2D1CF6F6FA00BE52F2 /* LCIMDictionary_PackagePrivate.h in Headers */,
-				704F3BE11BE0D0800033245C /* (null) in Headers */,
-				704F3BE21BE0D0800033245C /* (null) in Headers */,
-				704F3BE31BE0D0800033245C /* (null) in Headers */,
 				9AE76C551C3F7CC600325902 /* AVIMCommandCommon.h in Headers */,
-				704F3BE41BE0D0800033245C /* (null) in Headers */,
-				704F3BE51BE0D0800033245C /* (null) in Headers */,
-				704F3BE61BE0D0800033245C /* (null) in Headers */,
 				9A2F1B1B1CF6F6FA00BE52F2 /* LCIMCodedOutputStream_PackagePrivate.h in Headers */,
-				704F3BE71BE0D0800033245C /* AVIMReadCommand.h in Headers */,
 				704F3BE81BE0D0810033245C /* AVIMTypedMessageObject.h in Headers */,
 				9A2F1B3C1CF6F6FA00BE52F2 /* LCIMMessage.h in Headers */,
 				704F3BE91BE0D0810033245C /* AVIMGeneralObject.h in Headers */,
