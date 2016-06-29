@@ -92,7 +92,7 @@ module Podspec
 
       podspec = Mustache.render template, {
         'version'               => version,
-        'source_files'          => "'AVOS/AVOSCloud/**/*.{h,m}'",
+        'source_files'          => "'AVOS/AVOSCloud/**/*.{h,m,inc}'",
         'public_header_files'   => file_list_string(ios_headers),
         'osx_exclude_files'     => file_list_string(osx_exclude_files),
         'watchos_exclude_files' => file_list_string(watchos_exclude_files)
