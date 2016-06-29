@@ -83,4 +83,18 @@
     WAIT;
 }
 
+- (void)testAlwaysPost {
+    AVInstallation *installation = [AVInstallation currentInstallation];
+
+    installation[@"child"] = ({
+        AVObject *child = [AVObject objectWithObjectId:@"0000000000000000"];
+        child[@"foo"] = @"bar";
+        child;
+    });
+
+    NSArray *requests = [installation buildSaveRequests];
+
+    XCTAssertEqual(requests[0][@"method"], @"PUT");
+}
+
 @end
