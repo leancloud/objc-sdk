@@ -519,11 +519,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     [parentClass setObject:@(999999) forKey:@"score"];
     [parentClass setObject:c1 forKey:@"c1"];
     [parentClass setObject:c2 forKey:@"c2"];
-    
-//     requests 数量不是 5，TODO
-//     NSArray *requests = [parentClass buildSaveRequests];
-//     XCTAssertTrue(requests.count == 5);
-    
+
     XCTAssertTrue([parentClass save]);
     
     [self addDeleteObjects:@[parentClass, c1, c2, c22,c221]];
