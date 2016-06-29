@@ -12,7 +12,7 @@
 #import "AVObjectUtils.h"
 #import "AVObject_Internal.h"
 #import "AVQuery_Internal.h"
-
+#import "SDMacros.h"
 #import "AVUtils.h"
 
 

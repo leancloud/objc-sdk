@@ -26,6 +26,7 @@
 #import "AVXMLRequestOperation.h"
 #import "AVFileHTTPRequestOperation.h"
 #import "LCURLConnection.h"
+#import "AVLogger.h"
 
 NSString * const kAVAmazonS3BaseURLString = @"http://s3.amazonaws.com";
 NSString * const kAVAmazonS3BucketBaseURLFormatString = @"http://%@.s3.amazonaws.com";

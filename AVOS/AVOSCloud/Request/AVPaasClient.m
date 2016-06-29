@@ -23,7 +23,7 @@
 #import "AVObjectUtils.h"
 #import "LCNetworkStatistics.h"
 #import "LCRouter.h"
-
+#import "SDMacros.h"
 #import "AVOSCloud_Internal.h"
 
 #define MAX_LAG_TIME 5.0

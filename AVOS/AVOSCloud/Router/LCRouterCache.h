@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AVOSCloud.h"
 
 @interface LCRouterCache : NSObject
 

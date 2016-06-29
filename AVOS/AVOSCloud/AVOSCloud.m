@@ -30,6 +30,7 @@
 
 #import "LCRouter.h"
 #import "LCRouter_internal.h"
+#import "SDMacros.h"
 
 #define PUSH_GROUP_CN @"g0"
 #define PUSH_GROUP_US @"a0"

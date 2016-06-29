@@ -6,6 +6,8 @@
 //  Copyright © 2016 LeanCloud Inc. All rights reserved.
 //
 
+#import "AVOSCloud.h"
+
 @interface LCRouter ()
 
 /// Service region of router.

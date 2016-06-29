@@ -25,6 +25,7 @@
 #import <libkern/OSAtomic.h>
 
 #import "AVUser_Internal.h"
+#import "SDMacros.h"
 
 #define AV_BATCH_SAVE_SIZE 100
 #define AV_BATCH_CONCURRENT_SIZE 20

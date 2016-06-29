@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AVAvailability.h"
 
 #define kAVSessionIdTag @"sessionId"
 #define kAVPrimaryKeyTag @"primaryKey"
