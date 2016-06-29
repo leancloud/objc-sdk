@@ -13,6 +13,11 @@
 FOUNDATION_EXPORT NSString *const internalIdTag;
 
 NS_INLINE
+NSString *request_path(NSDictionary *request) {
+    return request[@"path"];
+}
+
+NS_INLINE
 NSString *request_method(NSDictionary *request) {
     return request[@"method"];
 }

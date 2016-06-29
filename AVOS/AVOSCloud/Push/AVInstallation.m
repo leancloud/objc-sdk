@@ -217,7 +217,7 @@
     NSString *classEndpoint = [NSString stringWithFormat:@"/%@/%@", API_VERSION, [[self class] endPoint]];
 
     for (NSMutableDictionary *request in [requests copy]) {
-        if ([request_method(request) isEqualToString:@"PUT"]) {
+        if ([request_path(request) hasPrefix:classEndpoint] && [request_method(request) isEqualToString:@"PUT"]) {
             request[@"method"] = @"POST";
             request[@"path"]   = classEndpoint;
             request[@"body"][@"objectId"]    = self.objectId;
