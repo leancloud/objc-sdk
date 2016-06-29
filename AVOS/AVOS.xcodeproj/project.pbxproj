@@ -917,7 +917,6 @@
 		835E015C1B31922B0025F99A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 835E015B1B31922B0025F99A /* CoreTelephony.framework */; };
 		835E015E1B31922F0025F99A /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 835E015D1B31922F0025F99A /* libicucore.dylib */; };
 		836705AB1BA1358D0050E968 /* SDMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705AA1BA1358D0050E968 /* SDMacros.h */; };
-		836705AD1BA15A2E0050E968 /* AVOSCloudCrashReporting.pch in Headers */ = {isa = PBXBuildFile; fileRef = 836705AC1BA15A2E0050E968 /* AVOSCloudCrashReporting.pch */; };
 		836705DF1BA1C1710050E968 /* AVKeychain.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705DC1BA1C1710050E968 /* AVKeychain.h */; };
 		836705E01BA1C1710050E968 /* AVKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 836705DD1BA1C1710050E968 /* AVKeychain.m */; };
 		837CC71E1B568431001333AD /* NSDictionary+LCHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 837CC71C1B568431001333AD /* NSDictionary+LCHash.h */; };
@@ -1948,7 +1947,6 @@
 		835E015B1B31922B0025F99A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		835E015D1B31922F0025F99A /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		836705AA1BA1358D0050E968 /* SDMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMacros.h; sourceTree = "<group>"; };
-		836705AC1BA15A2E0050E968 /* AVOSCloudCrashReporting.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVOSCloudCrashReporting.pch; sourceTree = "<group>"; };
 		836705DC1BA1C1710050E968 /* AVKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVKeychain.h; sourceTree = "<group>"; };
 		836705DD1BA1C1710050E968 /* AVKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVKeychain.m; sourceTree = "<group>"; };
 		837A83601B87187200885DCA /* AVIMReadCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMReadCommand.h; sourceTree = "<group>"; };
@@ -2862,7 +2860,6 @@
 				83B5FF071B7C7678000C3923 /* Breakpad */,
 				8C255D431AE9FD9D008A6FFC /* AVOSCloudCrashReporting_Internal.h */,
 				8C255D2A1AE9F817008A6FFC /* AVOSCloudCrashReporting.h */,
-				836705AC1BA15A2E0050E968 /* AVOSCloudCrashReporting.pch */,
 				8C255D411AE9FD91008A6FFC /* AVOSCloudCrashReporting.m */,
 				8C255D281AE9F817008A6FFC /* Supporting Files */,
 			);
@@ -4362,7 +4359,6 @@
 				83B5FF671B7C768B000C3923 /* file_id.h in Headers */,
 				83B5FF691B7C768B000C3923 /* macho_id.h in Headers */,
 				83B5FF631B7C768B000C3923 /* convert_UTF.h in Headers */,
-				836705AD1BA15A2E0050E968 /* AVOSCloudCrashReporting.pch in Headers */,
 				83B5FF4F1B7C768B000C3923 /* breakpad_nlist_64.h in Headers */,
 				83B5FF531B7C768B000C3923 /* exception_handler.h in Headers */,
 				83B5FF731B7C768B000C3923 /* string_conversion.h in Headers */,
@@ -6450,7 +6446,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREFIX_HEADER = AVOSCloudCrashReporting/AVOSCloudCrashReporting.pch;
+				GCC_PREFIX_HEADER = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -6515,7 +6511,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREFIX_HEADER = AVOSCloudCrashReporting/AVOSCloudCrashReporting.pch;
+				GCC_PREFIX_HEADER = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -7230,7 +7226,7 @@
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREFIX_HEADER = AVOSCloudCrashReporting/AVOSCloudCrashReporting.pch;
+				GCC_PREFIX_HEADER = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -7297,7 +7293,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREFIX_HEADER = AVOSCloudCrashReporting/AVOSCloudCrashReporting.pch;
+				GCC_PREFIX_HEADER = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
