@@ -84,10 +84,10 @@
 }
 
 - (void)testAlwaysPost {
-    AVInstallation *installation = [AVInstallation currentInstallation];
+    AVInstallation *installation = [AVInstallation objectWithObjectId:@"abcdef"];
 
     installation[@"child"] = ({
-        AVObject *child = [AVObject objectWithObjectId:@"0000000000000000"];
+        AVObject *child = [AVObject objectWithObjectId:@"abcdef"];
         child[@"foo"] = @"bar";
         child;
     });
