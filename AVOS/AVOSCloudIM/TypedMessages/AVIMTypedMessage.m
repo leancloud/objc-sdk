@@ -6,14 +6,28 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
+#import <AVOSCloud/AVOSCloud.h>
+
 #import "AVIMTypedMessage.h"
 #import "AVIMTypedMessage_Internal.h"
 #import "AVIMGeneralObject.h"
 #import "AVIMMessage_Internal.h"
-#import "AVFile_Internal.h"
-#import "AVGeoPoint_Internal.h"
 
 NSMutableDictionary const *_typeDict = nil;
+
+@interface AVFile ()
+
++(AVFile *)fileFromDictionary:(NSDictionary *)dict;
++(NSDictionary *)dictionaryFromFile:(AVFile *)file;
+
+@end
+
+@interface AVGeoPoint ()
+
++(NSDictionary *)dictionaryFromGeoPoint:(AVGeoPoint *)point;
++(AVGeoPoint *)geoPointFromDictionary:(NSDictionary *)dict;
+
+@end
 
 @implementation AVIMTypedMessage
 

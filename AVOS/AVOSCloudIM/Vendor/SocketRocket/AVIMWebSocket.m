@@ -1429,6 +1429,9 @@ static const size_t AVIMFrameHeaderOverhead = 32;
     return NO;
 }
 
+BOOL LCSecKeyIsEqual(SecKeyRef key1, SecKeyRef key2);
+SecKeyRef LCGetPublicKeyFromCertificate(SecCertificateRef cert);
+
 /*!
  * Convert certificates to public keys.
  * @param certs Certificate array, it should be an array of SecCertificateRef.

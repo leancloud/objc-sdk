@@ -26,6 +26,7 @@
 #import "LCIMClientSessionTokenCacheStore.h"
 #import "AVIMCommandCommon.h"
 #import "LCObserver.h"
+#import "SDMacros.h"
 
 #import <objc/runtime.h>
 #import <libkern/OSAtomic.h>

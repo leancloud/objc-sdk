@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
+#import <AVOSCloud/AVOSCloud.h>
+
 #import "AVPersistenceUtils.h"
 #import "LCIMMessageCache.h"
 #import "LCIMMessageCacheStore.h"

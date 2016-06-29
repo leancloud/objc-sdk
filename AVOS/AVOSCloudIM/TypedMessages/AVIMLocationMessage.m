@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
+#import <AVOSCloud/AVOSCloud.h>
+
 #import "AVIMLocationMessage.h"
 #import "AVIMGeneralObject.h"
 #import "AVIMTypedMessage_Internal.h"

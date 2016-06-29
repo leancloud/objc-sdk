@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
+#import "AVIMAvailability.h"
+
 #import "AVIMCommon.h"
 #import "AVIMSignature.h"
 

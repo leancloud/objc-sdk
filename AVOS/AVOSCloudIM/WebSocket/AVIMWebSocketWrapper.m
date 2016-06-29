@@ -16,6 +16,7 @@
 #import "AVPaasClient.h"
 #import "AVOSCloud_Internal.h"
 #import "LCRouter.h"
+#import "SDMacros.h"
 
 #define PING_INTERVAL 60*3
 #define TIMEOUT_CHECK_INTERVAL 1
@@ -527,6 +528,8 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
         }
     }
 }
+
+SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 
 - (NSArray *)pinnedCertificates {
     id cert = (__bridge_transfer id)LCGetCertificateFromBase64String(LCRootCertificate);

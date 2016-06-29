@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
+#import <AVOSCloud/AVOSCloud.h>
+
 #import <Foundation/Foundation.h>
 #import "AVIMCommon.h"
 
