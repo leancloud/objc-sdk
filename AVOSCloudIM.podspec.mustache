@@ -25,17 +25,20 @@ Pod::Spec.new do |s|
   s.public_header_files =
     {{{public_header_files}}}
 
-  exclude_files = []
+  all_exclude_files = []
 
   {{#exclude_files}}
-  exclude_files.concat {{{exclude_files}}}
+  exclude_files =
+    {{{exclude_files}}}
+
+  all_exclude_files.concat Array(exclude_files)
   {{/exclude_files}}
 
   {{#non_arc_files}}
   non_arc_files =
     {{{non_arc_files}}}
 
-  exclude_files.concat non_arc_files
+  all_exclude_files.concat Array(non_arc_files)
 
   s.subspec 'no-arc' do |s|
     s.requires_arc = false
@@ -43,11 +46,12 @@ Pod::Spec.new do |s|
   end
   {{/non_arc_files}}
 
-  s.ios.exclude_files = exclude_files
-  s.osx.exclude_files = exclude_files
+  s.ios.exclude_files = all_exclude_files
+  s.osx.exclude_files = all_exclude_files
 
   {{#preserve_paths}}
-  s.preserve_paths = {{{preserve_paths}}}
+  s.preserve_paths =
+    {{{preserve_paths}}}
   {{/preserve_paths}}
 
   {{#xcconfig}}
