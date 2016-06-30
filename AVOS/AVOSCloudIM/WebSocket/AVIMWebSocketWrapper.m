@@ -488,6 +488,49 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 
     return nil;
 }
+/*!
+ *
+ 美国节点返回值：
+ response: {
+    groupId = g0;
+    groupUrl = "http://router-g0-push.leancloud.cn";
+    secondary = "wss://cn-n1-cell3.leancloud.cn:6799/";
+    server = "wss://rtm57.leancloud.cn:6799/";
+    ttl = 3600;
+ }
+ 
+ 中国节点返回值：
+ response: {
+    groupId = g0;
+    secondary = "wss://rtm55.leancloud.cn:6799/";
+    server = "wss://rtm55.leancloud.cn:6799/";
+    ttl = 3600;
+ }
+ */
+- (NSString *)pushRouterHostFromOriginURLString:(NSString *)originURLString {
+    NSError *error = NULL;
+    NSString *pushRouterHost;
+    NSString *pattern = @"(https?)://([^[\"|']]*)";
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:&error];
+    NSArray *matches = [regex matchesInString:originURLString
+                                      options:0
+                                        range:NSMakeRange(0, originURLString.length)];
+    if (matches.count == 0) {
+        return originURLString;
+    }
+    for (NSTextCheckingResult *match in matches) {
+        NSUInteger numberOfRanges = [match numberOfRanges];
+        if (numberOfRanges != 3) {
+            pushRouterHost = originURLString;
+        } else {
+            NSRange pathRange = [match rangeAtIndex:2];
+            pushRouterHost = [originURLString substringWithRange:pathRange];
+        }
+    }
+    return pushRouterHost;
+}
 
 - (void)handleRouterData:(NSData *)data fromCache:(BOOL)fromCache {
     NSError *error = nil;
@@ -508,7 +551,7 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
         NSTimeInterval TTL = [dict[@"ttl"] doubleValue];
 
         if (groupUrl && TTL) {
-            [[LCRouter sharedInstance] cachePushRouterHostWithHost:groupUrl lastModified:lastModified TTL:TTL];
+            [[LCRouter sharedInstance] cachePushRouterHostWithHost:[self pushRouterHostFromOriginURLString:groupUrl] lastModified:lastModified TTL:TTL];
         }
 
         /* open socket connection. */
