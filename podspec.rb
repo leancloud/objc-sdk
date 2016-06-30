@@ -126,7 +126,7 @@ module Podspec
 
       podspec = Mustache.render template, {
         'version'             => version,
-        'source_files'        => "'AVOS/AVOSCloudIM/**/*.{h,m}'",
+        'source_files'        => "'AVOS/AVOSCloudIM/**/*.{h,c,m}'",
         'public_header_files' => file_list_string(headers),
         'exclude_files'       => "'AVOS/AVOSCloudIM/Protobuf/google'",
         'non_arc_files'       => file_list_string(non_arc_files),
