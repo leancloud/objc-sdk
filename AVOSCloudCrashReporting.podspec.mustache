@@ -9,10 +9,11 @@ Pod::Spec.new do |s|
     :file => 'LICENSE'
   }
 
-  s.platform = :ios, :osx
+  s.platform = :ios
 
   s.ios.deployment_target = '7.0'
-  s.osx.deployment_target = '10.9'
+
+  s.requires_arc = false
 
   s.source = {
     :git => "https://github.com/leancloud/objc-sdk.git",
@@ -24,6 +25,22 @@ Pod::Spec.new do |s|
 
   s.public_header_files =
     {{{public_header_files}}}
+
+  all_exclude_files = []
+
+  {{#arc_files}}
+  arc_files =
+    {{{arc_files}}}
+
+  all_exclude_files.concat Array(arc_files)
+
+  s.subspec 'arc' do |s|
+    s.requires_arc = true
+    s.source_files = arc_files
+  end
+  {{/arc_files}}
+
+  s.exclude_files = all_exclude_files
 
   s.dependency 'AVOSCloud', "#{s.version}"
 end

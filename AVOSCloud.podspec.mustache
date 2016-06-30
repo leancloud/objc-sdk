@@ -16,6 +16,8 @@ Pod::Spec.new do |s|
   s.tvos.deployment_target    = '9.0'
   s.watchos.deployment_target = '2.0'
 
+  s.requires_arc = true
+
   s.source = {
     :git => "https://github.com/leancloud/objc-sdk.git",
     :tag => "#{s.version}"
@@ -62,8 +64,6 @@ Pod::Spec.new do |s|
     'MobileCoreServices',
     'QuartzCore',
     'Security'
-
-  s.requires_arc = true
 
   s.libraries =
     'icucore',

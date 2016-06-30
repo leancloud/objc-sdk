@@ -33,7 +33,23 @@ module Podspec
       return target
     end
 
+    def relative_pathnames(pathnames)
+      pathnames.map do |pathname|
+        pwd = Pathname.new('.').realpath
+        pathname.file_ref.real_path.relative_path_from(pwd)
+      end
+    end
+
     def header_files(target_name)
+      target = target(target_name)
+
+      header_files = target.headers_build_phase.files
+
+      header_paths = relative_pathnames header_files
+      header_paths
+    end
+
+    def public_header_files(target_name)
       target = target(target_name)
 
       header_files = target.headers_build_phase.files.select do |file|
@@ -41,41 +57,31 @@ module Podspec
         settings && settings['ATTRIBUTES'].include?('Public')
       end
 
-      header_paths = header_files.map do |file|
-        pwd = Pathname.new('.').realpath
-        file.file_ref.real_path.relative_path_from(pwd)
-      end
-
+      header_paths = relative_pathnames header_files
       header_paths
     end
 
-    def source_files(target_name)
+    def source_files(target_name, &filter)
       target = target(target_name)
       source_files = target.source_build_phase.files
 
-      source_paths = source_files.map do |file|
-        pwd = Pathname.new('.').realpath
-        file.file_ref.real_path.relative_path_from(pwd)
-      end
-
+      source_files = source_files.select &filter unless filter.nil?
+      source_paths = relative_pathnames source_files
       source_paths
     end
 
     def non_arc_files(target_name)
-      target = target(target_name)
-      source_files = target.source_build_phase.files
-
-      source_files = source_files.select do |file|
+      source_files(target_name) do |file|
         settings = file.settings
         settings && settings['COMPILER_FLAGS'] == '-fno-objc-arc'
       end
+    end
 
-      source_paths = source_files.map do |file|
-        pwd = Pathname.new('.').realpath
-        file.file_ref.real_path.relative_path_from(pwd)
+    def arc_files(target_name)
+      source_files(target_name) do |file|
+        settings = file.settings
+        settings && settings['COMPILER_FLAGS'] == '-fobjc-arc'
       end
-
-      source_paths
     end
 
     def file_list_string(pathnames)
@@ -92,10 +98,10 @@ module Podspec
     end
 
     def generateAVOSCloud()
-      ios_headers     = header_files('AVOSCloud')
-      osx_headers     = header_files('AVOSCloud-OSX')
-      tvos_headers    = header_files('AVOSCloud-tvOS')
-      watchos_headers = header_files('AVOSCloud-watchOS')
+      ios_headers     = public_header_files('AVOSCloud')
+      osx_headers     = public_header_files('AVOSCloud-OSX')
+      tvos_headers    = public_header_files('AVOSCloud-tvOS')
+      watchos_headers = public_header_files('AVOSCloud-watchOS')
 
       ios_sources     = source_files('AVOSCloud')
       osx_sources     = source_files('AVOSCloud-OSX')
@@ -119,7 +125,7 @@ module Podspec
     end
 
     def generateAVOSCloudIM()
-      headers = header_files('AVOSCloudIM')
+      headers = public_header_files('AVOSCloudIM')
       non_arc_files = non_arc_files('AVOSCloudIM')
 
       template = read 'AVOSCloudIM.podspec.mustache'
@@ -138,14 +144,18 @@ module Podspec
     end
 
     def generateAVOSCloudCrashReporting()
-      ios_headers = header_files('AVOSCloudCrashReporting')
+      header_files = header_files('AVOSCloudCrashReporting')
+      source_files = source_files('AVOSCloudCrashReporting')
+      public_header_files = public_header_files('AVOSCloudCrashReporting')
+      arc_files = arc_files('AVOSCloudCrashReporting')
 
       template = read 'AVOSCloudCrashReporting.podspec.mustache'
 
       podspec = Mustache.render template, {
         'version'             => version,
-        'source_files'        => "'AVOS/AVOSCloudCrashReporting/**/*.{h,m}'",
-        'public_header_files' => file_list_string(ios_headers),
+        'source_files'        => file_list_string(header_files + source_files),
+        'public_header_files' => file_list_string(public_header_files),
+        'arc_files'           => file_list_string(arc_files)
       }
 
       write 'AVOSCloudCrashReporting.podspec', podspec
