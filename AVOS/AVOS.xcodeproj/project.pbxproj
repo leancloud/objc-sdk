@@ -913,6 +913,7 @@
 		834B4A9C1B94080500A7ADBC /* LCIMConversationQueryCacheStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 834B4A9A1B94080500A7ADBC /* LCIMConversationQueryCacheStore.h */; };
 		834B4A9D1B94080500A7ADBC /* LCIMConversationQueryCacheStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 834B4A9B1B94080500A7ADBC /* LCIMConversationQueryCacheStore.m */; };
 		835C5F711D25929600EF0EBB /* AVFriendQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A651A5A79FF00C5C6C4 /* AVFriendQuery.h */; };
+		835C5F721D2594EA00EF0EBB /* AVAnalyticsActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419E71A5A79FF00C5C6C4 /* AVAnalyticsActivity.h */; };
 		835E015A1B3192240025F99A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 835E01591B3192240025F99A /* CoreLocation.framework */; };
 		835E015C1B31922B0025F99A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 835E015B1B31922B0025F99A /* CoreTelephony.framework */; };
 		835E015E1B31922F0025F99A /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 835E015D1B31922F0025F99A /* libicucore.dylib */; };
@@ -4020,6 +4021,7 @@
 				70CA7FF11BDE42F6000A3B21 /* AVFileQuery.h in Headers */,
 				70CA7FF61BDE42F6000A3B21 /* AVGeoPoint.h in Headers */,
 				70CA7FFA1BDE4313000A3B21 /* AVObject.h in Headers */,
+				835C5F721D2594EA00EF0EBB /* AVAnalyticsActivity.h in Headers */,
 				835C5F711D25929600EF0EBB /* AVFriendQuery.h in Headers */,
 				70CA7FF91BDE4313000A3B21 /* AVObject+Subclass.h in Headers */,
 				70CA7FFB1BDE4313000A3B21 /* AVObject_Internal.h in Headers */,
