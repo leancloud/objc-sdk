@@ -37,8 +37,6 @@
 #import "AVUtils.h"
 #import "AVUser.h"
 
-#import "AVAnalyticsImpl.h"
-
 static NSString * identifierForVendorTag = @"identifierForVendor";
 
 @implementation AVAnalyticsUtils
