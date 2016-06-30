@@ -155,7 +155,8 @@ module Podspec
         'version'             => version,
         'source_files'        => file_list_string(header_files + source_files),
         'public_header_files' => file_list_string(public_header_files),
-        'arc_files'           => file_list_string(arc_files)
+        'arc_files'           => file_list_string(arc_files),
+        'preserve_paths'      => "'Breakpad'"
       }
 
       write 'AVOSCloudCrashReporting.podspec', podspec

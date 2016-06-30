@@ -17,7 +17,8 @@ Pod::Spec.new do |s|
 
   s.source = {
     :git => "https://github.com/leancloud/objc-sdk.git",
-    :tag => "#{s.version}"
+    :tag => "#{s.version}",
+    :submodules => true
   }
 
   s.source_files =
@@ -39,6 +40,11 @@ Pod::Spec.new do |s|
     s.source_files = arc_files
   end
   {{/arc_files}}
+
+  {{#preserve_paths}}
+  s.preserve_paths =
+    {{{preserve_paths}}}
+  {{/preserve_paths}}
 
   s.exclude_files = all_exclude_files
 
