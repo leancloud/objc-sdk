@@ -284,13 +284,22 @@ CLActive do
   subcmd :deploy do
     action do |opt|
       print 'New version: '
+
       version = STDIN.gets.strip
-      abort 'Version number is invalid.' unless Gem::Version.correct? version
+      abort 'Invalid version number.' unless Gem::Version.correct? version
+
       print "Are you sure to deploy version #{version} (yes or no): "
       abort 'Canceled.' unless STDIN.gets.strip == 'yes'
 
+      user_agent = File.read('AVOS/AVOSCloud/Utils/UserAgent.h')
+      user_agent_version = user_agent[/SDK_VERSION @"v(.*?)"/, 1]
+      abort "Version mismatched with user agent (#{user_agent_version})." unless version == user_agent_version
+
       generator = Podspec::Generator.new(version, 'Podspec')
       generator.generate
+
+      pusher = Podspec::Pusher.new('Podspec')
+      pusher.push
     end
   end
 
