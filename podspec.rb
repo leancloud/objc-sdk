@@ -268,6 +268,18 @@ module Podspec
 
 end
 
+def execute_command(command, exit_on_error = true)
+  output = `#{command}`
+  exitstatus = $?.exitstatus
+
+  if exitstatus != 0 && exit_on_error
+    $stderr.puts "Following command exits with status #{exitstatus}:"
+    $stderr.puts command
+    exit 1
+  end
+
+  output
+end
 
 CLActive do
   subcmd :create do
@@ -283,16 +295,42 @@ CLActive do
 
   subcmd :deploy do
     action do |opt|
-      print 'New version: '
+      clean = `git status --porcelain`.empty?
+      abort 'Current branch is dirty.' unless clean
 
+      print 'New deployment version: '
       version = STDIN.gets.strip
       abort 'Invalid version number.' unless Gem::Version.correct? version
 
       print "Are you sure to deploy version #{version} (yes or no): "
       abort 'Canceled.' unless STDIN.gets.strip == 'yes'
 
-      tags = `git ls-remote --tags git@github.com:leancloud/ios-sdk.git`
+      remote_url = 'git@github.com:leancloud/objc-sdk.git'
+
+      tags = execute_command "git ls-remote --tags #{remote_url}"
       abort 'Git tag not found on remote repository. You can push one.' unless tags.include? "refs/tags/#{version}"
+
+      commit_sha = tags[/([0-9a-f]+)\srefs\/tags\/#{version}/, 1]
+
+      temp_remote = "_origin-temp-remote-for-deployment"
+      temp_branch = "_branch-temp-branch-for-deployment"
+
+      execute_command "git remote remove #{temp_remote} >/dev/null 2>&1", false
+      execute_command "git remote add #{temp_remote} #{remote_url} >/dev/null 2>&1", false
+      execute_command "git fetch #{temp_remote} --tags >/dev/null 2>&1"
+      execute_command "git checkout -b #{temp_branch} #{commit_sha} >/dev/null 2>&1"
+
+      begin
+        user_agent = File.read('AVOS/AVOSCloud/Utils/UserAgent.h')
+        user_agent_version = user_agent[/SDK_VERSION @"v(.*?)"/, 1]
+        abort "Version mismatched with user agent (#{user_agent_version})." unless version == user_agent_version
+      ensure
+        execute_command <<-CMD.gsub(/^[ \t]+/, '')
+        git checkout - >/dev/null 2>&1
+        git branch -D #{temp_branch} >/dev/null 2>&1
+        git remote remove #{temp_remote} >/dev/null 2>&1
+        CMD
+      end
 
       generator = Podspec::Generator.new(version, 'Podspec')
       generator.generate
