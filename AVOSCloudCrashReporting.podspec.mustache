@@ -46,7 +46,14 @@ Pod::Spec.new do |s|
     {{{preserve_paths}}}
   {{/preserve_paths}}
 
+  {{#xcconfig}}
+  s.xcconfig = {{{xcconfig}}}
+  {{/xcconfig}}
+
   s.exclude_files = all_exclude_files
 
   s.dependency 'AVOSCloud', "#{s.version}"
+
+  s.libraries =
+    'c++'
 end

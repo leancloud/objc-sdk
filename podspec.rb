@@ -148,6 +148,11 @@ module Podspec
       source_files = source_files('AVOSCloudCrashReporting')
       public_header_files = public_header_files('AVOSCloudCrashReporting')
       arc_files = arc_files('AVOSCloudCrashReporting')
+      header_search_paths = [
+        '"${PODS_ROOT}/AVOSCloudCrashReporting/Breakpad/src"',
+        '"${PODS_ROOT}/AVOSCloudCrashReporting/Breakpad/src/client/apple/Framework"',
+        '"${PODS_ROOT}/AVOSCloudCrashReporting/Breakpad/src/common/mac"'
+      ].join(' ')
 
       template = read 'AVOSCloudCrashReporting.podspec.mustache'
 
@@ -156,7 +161,8 @@ module Podspec
         'source_files'        => file_list_string(header_files + source_files),
         'public_header_files' => file_list_string(public_header_files),
         'arc_files'           => file_list_string(arc_files),
-        'preserve_paths'      => "'Breakpad'"
+        'preserve_paths'      => "'Breakpad'",
+        'xcconfig'            => "{'HEADER_SEARCH_PATHS' => '#{header_search_paths}'}"
       }
 
       write 'AVOSCloudCrashReporting.podspec', podspec
