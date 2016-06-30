@@ -291,9 +291,8 @@ CLActive do
       print "Are you sure to deploy version #{version} (yes or no): "
       abort 'Canceled.' unless STDIN.gets.strip == 'yes'
 
-      user_agent = File.read('AVOS/AVOSCloud/Utils/UserAgent.h')
-      user_agent_version = user_agent[/SDK_VERSION @"v(.*?)"/, 1]
-      abort "Version mismatched with user agent (#{user_agent_version})." unless version == user_agent_version
+      tags = `git ls-remote --tags git@github.com:leancloud/ios-sdk.git`
+      abort 'Git tag not found on remote repository. You can push one.' unless tags.include? "refs/tags/#{version}"
 
       generator = Podspec::Generator.new(version, 'Podspec')
       generator.generate
