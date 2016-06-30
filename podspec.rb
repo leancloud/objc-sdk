@@ -128,7 +128,10 @@ module Podspec
         'version'             => version,
         'source_files'        => "'AVOS/AVOSCloudIM/**/*.{h,m}'",
         'public_header_files' => file_list_string(headers),
-        'non_arc_files'       => file_list_string(non_arc_files)
+        'exclude_files'       => "'AVOS/AVOSCloudIM/Protobuf/google'",
+        'non_arc_files'       => file_list_string(non_arc_files),
+        'preserve_paths'      => "'AVOS/AVOSCloudIM/Protobuf'",
+        'xcconfig'            => "{'HEADER_SEARCH_PATHS' => '\"$(PODS_ROOT)/AVOSCloudIM/AVOS/AVOSCloudIM/Protobuf\"'}"
       }
 
       write 'AVOSCloudIM.podspec', podspec
