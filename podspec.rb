@@ -61,6 +61,23 @@ module Podspec
       source_paths
     end
 
+    def non_arc_files(target_name)
+      target = target(target_name)
+      source_files = target.source_build_phase.files
+
+      source_files = source_files.select do |file|
+        settings = file.settings
+        settings && settings['COMPILER_FLAGS'] == '-fno-objc-arc'
+      end
+
+      source_paths = source_files.map do |file|
+        pwd = Pathname.new('.').realpath
+        file.file_ref.real_path.relative_path_from(pwd)
+      end
+
+      source_paths
+    end
+
     def file_list_string(pathnames)
       paths = pathnames.map { |pathname| "'#{pathname.to_s}'" }
       paths.join(",\n    ")
@@ -102,14 +119,16 @@ module Podspec
     end
 
     def generateAVOSCloudIM()
-      ios_headers = header_files('AVOSCloudIM')
+      headers = header_files('AVOSCloudIM')
+      non_arc_files = non_arc_files('AVOSCloudIM')
 
       template = read 'AVOSCloudIM.podspec.mustache'
 
       podspec = Mustache.render template, {
         'version'             => version,
         'source_files'        => "'AVOS/AVOSCloudIM/**/*.{h,m}'",
-        'public_header_files' => file_list_string(ios_headers),
+        'public_header_files' => file_list_string(headers),
+        'non_arc_files'       => file_list_string(non_arc_files)
       }
 
       write 'AVOSCloudIM.podspec', podspec
