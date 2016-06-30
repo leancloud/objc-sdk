@@ -133,7 +133,8 @@ module Podspec
         'source_files'          => "'AVOS/AVOSCloud/**/*.{h,m,inc}'",
         'public_header_files'   => file_list_string(ios_headers),
         'osx_exclude_files'     => file_list_string(osx_exclude_files),
-        'watchos_exclude_files' => file_list_string(watchos_exclude_files)
+        'watchos_exclude_files' => file_list_string(watchos_exclude_files),
+        'resources'             => "'AVOS/AVOSCloud/AVOSCloud_Art.inc'"
       }
 
       write 'AVOSCloud.podspec', podspec

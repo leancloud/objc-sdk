@@ -35,6 +35,11 @@ Pod::Spec.new do |s|
   s.watchos.exclude_files =
     {{{watchos_exclude_files}}}
 
+  {{#resources}}
+  s.resources =
+    {{{resources}}}
+  {{/resources}}
+
   s.ios.frameworks =
     'CFNetwork',
     'CoreGraphics',
