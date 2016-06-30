@@ -113,16 +113,17 @@ module Podspec
     end
 
     def generateAVOSCloud()
-      ios_headers     = public_header_files('AVOSCloud')
-      osx_headers     = public_header_files('AVOSCloud-OSX')
-      tvos_headers    = public_header_files('AVOSCloud-tvOS')
-      watchos_headers = public_header_files('AVOSCloud-watchOS')
+      ios_headers     = header_files('AVOSCloud')
+      osx_headers     = header_files('AVOSCloud-OSX')
+      tvos_headers    = header_files('AVOSCloud-tvOS')
+      watchos_headers = header_files('AVOSCloud-watchOS')
 
       ios_sources     = source_files('AVOSCloud')
       osx_sources     = source_files('AVOSCloud-OSX')
       tvos_sources    = source_files('AVOSCloud-tvOS')
       watchos_sources = source_files('AVOSCloud-watchOS')
 
+      public_header_files   = public_header_files('AVOSCloud')
       osx_exclude_files     = (ios_headers - osx_headers) + (ios_sources - osx_sources)
       watchos_exclude_files = (ios_headers - watchos_headers) + (ios_sources - watchos_sources)
 
@@ -131,7 +132,7 @@ module Podspec
       podspec = Mustache.render template, {
         'version'               => version,
         'source_files'          => "'AVOS/AVOSCloud/**/*.{h,m,inc}'",
-        'public_header_files'   => file_list_string(ios_headers),
+        'public_header_files'   => file_list_string(public_header_files),
         'osx_exclude_files'     => file_list_string(osx_exclude_files),
         'watchos_exclude_files' => file_list_string(watchos_exclude_files),
         'resources'             => "'AVOS/AVOSCloud/AVOSCloud_Art.inc'"
