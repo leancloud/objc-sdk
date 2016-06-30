@@ -245,7 +245,7 @@ module Podspec
         ok = false
 
         20.times do
-          ok = system("pod trunk push #{file}")
+          ok = system("pod trunk push --allow-warnings #{file}")
 
           if ok
             log("succeed to push #{file}")
