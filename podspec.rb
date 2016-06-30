@@ -7,6 +7,7 @@
 require 'xcodeproj'
 require 'mustache'
 require 'clactive'
+require 'fileutils'
 
 module Podspec
 
@@ -14,13 +15,15 @@ module Podspec
     attr_accessor :version
     attr_accessor :project
     attr_accessor :targets
+    attr_accessor :output_dir
 
     PROJECT_PATH = 'AVOS/AVOS.xcodeproj'
 
-    def initialize(version)
+    def initialize(version, output_dir = nil)
       @version = version
       @project = Xcodeproj::Project.open(PROJECT_PATH)
       @targets = project.targets
+      @output_dir = output_dir
     end
 
     def target(name)
@@ -93,7 +96,19 @@ module Podspec
       File.open(path).read
     end
 
-    def write(path, content)
+    def write(filename, content)
+      abort 'Filename not found.' if filename.nil?
+
+      path = output_dir
+
+      if path.nil?
+        path = filename
+      elsif File.directory?(path)
+        path = File.join(path, filename)
+      else
+        abort "Invalid output directory: #{path}"
+      end
+
       File.open(path, 'w') { |file| file.write(content) }
     end
 
@@ -111,7 +126,7 @@ module Podspec
       osx_exclude_files     = (ios_headers - osx_headers) + (ios_sources - osx_sources)
       watchos_exclude_files = (ios_headers - watchos_headers) + (ios_sources - watchos_sources)
 
-      template = read 'AVOSCloud.podspec.mustache'
+      template = read 'Podspec/AVOSCloud.podspec.mustache'
 
       podspec = Mustache.render template, {
         'version'               => version,
@@ -128,7 +143,7 @@ module Podspec
       headers = public_header_files('AVOSCloudIM')
       non_arc_files = non_arc_files('AVOSCloudIM')
 
-      template = read 'AVOSCloudIM.podspec.mustache'
+      template = read 'Podspec/AVOSCloudIM.podspec.mustache'
 
       podspec = Mustache.render template, {
         'version'             => version,
@@ -154,7 +169,7 @@ module Podspec
         '"${PODS_ROOT}/AVOSCloudCrashReporting/Breakpad/src/common/mac"'
       ].join(' ')
 
-      template = read 'AVOSCloudCrashReporting.podspec.mustache'
+      template = read 'Podspec/AVOSCloudCrashReporting.podspec.mustache'
 
       podspec = Mustache.render template, {
         'version'             => version,
@@ -262,6 +277,19 @@ CLActive do
       abort 'Version number is invalid.' unless Gem::Version.correct? version?
 
       generator = Podspec::Generator.new(version?)
+      generator.generate
+    end
+  end
+
+  subcmd :deploy do
+    action do |opt|
+      print 'New version: '
+      version = STDIN.gets.strip
+      abort 'Version number is invalid.' unless Gem::Version.correct? version
+      print "Are you sure to deploy version #{version} (yes or no): "
+      abort 'Canceled.' unless STDIN.gets.strip == 'yes'
+
+      generator = Podspec::Generator.new(version, 'Podspec')
       generator.generate
     end
   end
