@@ -935,6 +935,7 @@
 		838DD7A31B3D3FD100C95897 /* LCKeyValueSQL.h in Headers */ = {isa = PBXBuildFile; fileRef = 838DD7A21B3D3FD100C95897 /* LCKeyValueSQL.h */; };
 		838DD7C21B42630400C95897 /* LCSSLChallenger.h in Headers */ = {isa = PBXBuildFile; fileRef = 838DD7C01B42630400C95897 /* LCSSLChallenger.h */; };
 		838DD7C31B42630400C95897 /* LCSSLChallenger.m in Sources */ = {isa = PBXBuildFile; fileRef = 838DD7C11B42630400C95897 /* LCSSLChallenger.m */; };
+		839A35671D2A1DC000B3AF1D /* AVIMMessage_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C895DF21A78B73600992A8F /* AVIMMessage_Internal.h */; };
 		83A2BD2F1CF33CDA0047B230 /* AVPaasClient_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 83A2BD2E1CF33CDA0047B230 /* AVPaasClient_internal.h */; };
 		83A2BD301CF33CDA0047B230 /* AVPaasClient_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 83A2BD2E1CF33CDA0047B230 /* AVPaasClient_internal.h */; };
 		83A2BD311CF33CDA0047B230 /* AVPaasClient_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 83A2BD2E1CF33CDA0047B230 /* AVPaasClient_internal.h */; };
@@ -4532,6 +4533,7 @@
 				8C9A927A1A70AF1800CA4912 /* AVIMTypedMessage.h in Headers */,
 				9A2F1B701CF6F6FA00BE52F2 /* LCIMWellKnownTypes.h in Headers */,
 				8C9A92741A70AF1800CA4912 /* AVIMImageMessage.h in Headers */,
+				839A35671D2A1DC000B3AF1D /* AVIMMessage_Internal.h in Headers */,
 				9A2F1B5E1CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.h in Headers */,
 				8CA1571A1A5E8369003C2532 /* AVIMConversationUpdateBuilder.h in Headers */,
 				9A2F1B401CF6F6FA00BE52F2 /* LCIMMessage_PackagePrivate.h in Headers */,
