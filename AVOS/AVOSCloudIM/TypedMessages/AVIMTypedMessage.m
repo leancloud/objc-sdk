@@ -277,6 +277,10 @@ NSMutableDictionary const *_typeDict = nil;
     self.messageObject._lcloc = location ? [AVGeoPoint dictionaryFromGeoPoint:location] : nil;
 }
 
+- (void)setObject:(id)object forKey:(NSString *)key {
+    [self.messageObject setObject:object forKey:key];
+}
+
 - (NSString *)payload {
     NSDictionary *dict = [self.messageObject dictionary];
 

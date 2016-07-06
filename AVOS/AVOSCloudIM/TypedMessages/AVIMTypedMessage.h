@@ -43,6 +43,14 @@ enum : AVIMMessageMediaType {
 @property(nonatomic, strong, readonly)AVGeoPoint *location;  // 位置
 
 /**
+ * Add custom property for message.
+ *
+ * @param object The property value.
+ * @param key    The property name.
+ */
+- (void)setObject:(id)object forKey:(NSString *)key;
+
+/**
  *  子类调用此方法进行注册，一般可在子类的 [+(void)load] 方法里面调用
  */
 + (void)registerSubclass;
