@@ -6,25 +6,6 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		8C841C4D1A5A8A3100C5C6C4 /* UniversalFramework */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 8C841C4E1A5A8A3100C5C6C4 /* Build configuration list for PBXAggregateTarget "UniversalFramework" */;
-			buildPhases = (
-				8C841C511A5A8A4000C5C6C4 /* Run Script */,
-			);
-			dependencies = (
-				8345DC2F1C05654B00CB7349 /* PBXTargetDependency */,
-				8345DC311C05654B00CB7349 /* PBXTargetDependency */,
-				8345DC271C05654700CB7349 /* PBXTargetDependency */,
-				8345DC231C05653F00CB7349 /* PBXTargetDependency */,
-				8345DC251C05653F00CB7349 /* PBXTargetDependency */,
-			);
-			name = UniversalFramework;
-			productName = UniversalFramework;
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
 		701881F51BC6777200432D43 /* AVFileQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 701881F31BC6777200432D43 /* AVFileQuery.m */; };
 		701881F61BC6777200432D43 /* AVFileQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 701881F41BC6777200432D43 /* AVFileQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1293,41 +1274,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 70CA7F671BDE2DC3000A3B21;
 			remoteInfo = AVOSCloudOSX;
-		};
-		8345DC221C05653F00CB7349 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8C8419851A5A791300C5C6C4;
-			remoteInfo = AVOSCloud;
-		};
-		8345DC241C05653F00CB7349 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8C8419C21A5A796000C5C6C4;
-			remoteInfo = AVOSCloudIM;
-		};
-		8345DC261C05654700CB7349 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8C255D251AE9F815008A6FFC;
-			remoteInfo = AVOSCloudCrashReporting;
-		};
-		8345DC2E1C05654B00CB7349 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 70CA7F671BDE2DC3000A3B21;
-			remoteInfo = "AVOSCloud-OSX";
-		};
-		8345DC301C05654B00CB7349 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 704F3B6D1BE0D0180033245C;
-			remoteInfo = "AVOSCloudIM-OSX";
 		};
 		8C8419931A5A791300C5C6C4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3818,7 +3764,6 @@
 				8320F8D41C1918C60024B45E /* Frameworks */,
 				8320F8D81C1918C60024B45E /* Headers */,
 				8320F9571C1918C60024B45E /* Resources */,
-				8320F9581C1918C60024B45E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -3837,7 +3782,6 @@
 				83D8CECD1C17DAF50094279D /* Frameworks */,
 				83D8CED11C17DAF50094279D /* Headers */,
 				83D8CF501C17DAF50094279D /* Resources */,
-				83D8CF511C17DAF50094279D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -3874,7 +3818,6 @@
 				8C8419821A5A791300C5C6C4 /* Frameworks */,
 				8C8419831A5A791300C5C6C4 /* Headers */,
 				8C8419841A5A791300C5C6C4 /* Resources */,
-				8C841C4A1A5A89C800C5C6C4 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -3911,7 +3854,6 @@
 				8C8419BF1A5A796000C5C6C4 /* Frameworks */,
 				8C8419C01A5A796000C5C6C4 /* Headers */,
 				8C8419C11A5A796000C5C6C4 /* Resources */,
-				8C841C4C1A5A8A0A00C5C6C4 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -3980,9 +3922,6 @@
 					8C8419CC1A5A796000C5C6C4 = {
 						CreatedOnToolsVersion = 6.1.1;
 					};
-					8C841C4D1A5A8A3100C5C6C4 = {
-						CreatedOnToolsVersion = 6.1.1;
-					};
 				};
 			};
 			buildConfigurationList = 8C84197E1A5A78E100C5C6C4 /* Build configuration list for PBXProject "AVOS" */;
@@ -3999,16 +3938,15 @@
 			targets = (
 				8C8419851A5A791300C5C6C4 /* AVOSCloud */,
 				8C8419901A5A791300C5C6C4 /* AVOSCloudTests */,
-				8C8419C21A5A796000C5C6C4 /* AVOSCloudIM */,
-				8C8419CC1A5A796000C5C6C4 /* AVOSCloudIMTests */,
-				8C255D251AE9F815008A6FFC /* AVOSCloudCrashReporting */,
 				70CA7F671BDE2DC3000A3B21 /* AVOSCloud-OSX */,
 				70F315311BDE503B00D691B3 /* AVOSCloudTests-OSX */,
-				704F3B6D1BE0D0180033245C /* AVOSCloudIM-OSX */,
-				704F3B761BE0D0180033245C /* AVOSCloudIMTests-OSX */,
 				83D8CE731C17DAF50094279D /* AVOSCloud-tvOS */,
 				8320F87A1C1918C60024B45E /* AVOSCloud-watchOS */,
-				8C841C4D1A5A8A3100C5C6C4 /* UniversalFramework */,
+				8C8419C21A5A796000C5C6C4 /* AVOSCloudIM */,
+				8C8419CC1A5A796000C5C6C4 /* AVOSCloudIMTests */,
+				704F3B6D1BE0D0180033245C /* AVOSCloudIM-OSX */,
+				704F3B761BE0D0180033245C /* AVOSCloudIMTests-OSX */,
+				8C255D251AE9F815008A6FFC /* AVOSCloudCrashReporting */,
 			);
 		};
 /* End PBXProject section */
@@ -4110,75 +4048,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		8320F9581C1918C60024B45E /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "${SRCROOT}/XcodeCoverage/exportenv.sh";
-		};
-		83D8CF511C17DAF50094279D /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "${SRCROOT}/XcodeCoverage/exportenv.sh";
-		};
-		8C841C4A1A5A89C800C5C6C4 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "${SRCROOT}/XcodeCoverage/exportenv.sh";
-		};
-		8C841C4C1A5A8A0A00C5C6C4 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "${SRCROOT}/XcodeCoverage/exportenv.sh";
-		};
-		8C841C511A5A8A4000C5C6C4 /* Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = "/usr/bin/env ruby";
-			shellScript = "# SDK build script\n#\n# Created by Tang Tianyong on 12/14/15.\n# Copyright (c) 2015 LeanCloud Inc. All rights reserved.\n\nrequire 'FileUtils'\n\nclass Builder\n\n  def empty(string)\n    !string || string.strip.length == 0\n  end\n\n  def prefix\n    \"#{ENV[\"BUILD_DIR\"]}/#{ENV[\"CONFIGURATION\"]}\"\n  end\n\n  def execmd(cmd)\n    abort(\"\\n>>> Command execution failed:\\n>>> #{cmd}\\n\") unless system(cmd)\n  end\n\n  def clean_build_dir\n    dir = ENV[\"BUILD_DIR\"]\n    FileUtils.rm_rf(dir) if File.exist?(dir) && dir != '/'\n  end\n\n  def clean_target(target)\n    execmd \"xcodebuild -target #{target} clean\"\n  end\n\n  def build_target(target, sdk, build_dir, archs)\n    command = \"xcodebuild -target #{target}\"\n\n    command += \" -sdk #{sdk}\" unless empty(sdk)\n    command += \" CONFIGURATION_BUILD_DIR=\\\"#{build_dir}\\\"\" unless empty(build_dir)\n    command += \" ARCHS=\\\"#{archs}\\\"\" unless empty(archs)\n\n    execmd command\n  end\n\n  def lipo(output, *inputs)\n    execmd \"lipo -create -output #{output} #{inputs.join(' ')}\"\n  end\n\n  def build_ios_sdk(target, product_name)\n    clean_target target\n\n    path = \"#{prefix}-#{target}\"\n\n    build_target target, 'iphonesimulator', \"#{path}-iphonesimulator\", 'i386 x86_64'\n    build_target target, 'iphoneos',        \"#{path}-iphoneos\"       , 'armv7 armv7s arm64'\n\n    lipo File.join(\"#{path}-iphoneos\", \"#{product_name}.framework\", product_name), \\\n         File.join(\"#{path}-iphonesimulator\", \"#{product_name}.framework\", product_name), \\\n         File.join(\"#{path}-iphoneos\", \"#{product_name}.framework\", product_name) \\\n  end\n\n  def build_watchos_sdk(target, product_name)\n    clean_target target\n\n    path = \"#{prefix}-#{target}\"\n\n    build_target target, 'watchsimulator', \"#{path}-watchsimulator\", 'i386'\n    build_target target, 'watchos',        \"#{path}-watchos\"       , 'armv7k'\n\n    lipo File.join(\"#{path}-watchos\", \"#{product_name}.framework\", product_name), \\\n         File.join(\"#{path}-watchsimulator\", \"#{product_name}.framework\", product_name), \\\n         File.join(\"#{path}-watchos\", \"#{product_name}.framework\", product_name) \\\n  end\n\n  def build_tvos_sdk(target, product_name)\n    clean_target target\n\n    path = \"#{prefix}-#{target}\"\n\n    build_target target, 'appletvsimulator', \"#{path}-appletvsimulator\", 'i386 x86_64'\n    build_target target, 'appletvos',        \"#{path}-appletvos\"       , 'arm64'\n\n    lipo File.join(\"#{path}-appletvos\", \"#{product_name}.framework\", product_name), \\\n         File.join(\"#{path}-appletvsimulator\", \"#{product_name}.framework\", product_name), \\\n         File.join(\"#{path}-appletvos\", \"#{product_name}.framework\", product_name) \\\n  end\n\n  def build_osx_sdk(target, product_name)\n    clean_target target\n    build_target target, '', \"#{prefix}-#{target}-osx\", 'x86_64'\n  end\n\n  def run\n    clean_build_dir\n\n    # iOS SDK\n    build_ios_sdk 'AVOSCloud', 'AVOSCloud'\n    build_ios_sdk 'AVOSCloudIM', 'AVOSCloudIM'\n    build_ios_sdk 'AVOSCloudCrashReporting', 'AVOSCloudCrashReporting'\n    build_ios_sdk 'AVOSCloudDynamic', 'AVOSCloud'\n    build_ios_sdk 'AVOSCloudIMDynamic', 'AVOSCloudIM'\n    build_ios_sdk 'AVOSCloudCrashReportingDynamic', 'AVOSCloudCrashReporting'\n\n    # watchOS SDK\n    build_watchos_sdk 'AVOSCloud-watchOS', 'AVOSCloud'\n\n    # tvOS SDK\n    build_tvos_sdk 'AVOSCloud-tvOS', 'AVOSCloud'\n\n    # OS X SDK\n    build_osx_sdk 'AVOSCloud-OSX', 'AVOSCloud'\n    build_osx_sdk 'AVOSCloudIM-OSX', 'AVOSCloudIM'\n  end\n\nend\n\nBuilder.new.run\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		704F3B691BE0D0180033245C /* Sources */ = {
@@ -4819,31 +4688,6 @@
 			isa = PBXTargetDependency;
 			target = 70CA7F671BDE2DC3000A3B21 /* AVOSCloud-OSX */;
 			targetProxy = 70F315381BDE503B00D691B3 /* PBXContainerItemProxy */;
-		};
-		8345DC231C05653F00CB7349 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8C8419851A5A791300C5C6C4 /* AVOSCloud */;
-			targetProxy = 8345DC221C05653F00CB7349 /* PBXContainerItemProxy */;
-		};
-		8345DC251C05653F00CB7349 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8C8419C21A5A796000C5C6C4 /* AVOSCloudIM */;
-			targetProxy = 8345DC241C05653F00CB7349 /* PBXContainerItemProxy */;
-		};
-		8345DC271C05654700CB7349 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8C255D251AE9F815008A6FFC /* AVOSCloudCrashReporting */;
-			targetProxy = 8345DC261C05654700CB7349 /* PBXContainerItemProxy */;
-		};
-		8345DC2F1C05654B00CB7349 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 70CA7F671BDE2DC3000A3B21 /* AVOSCloud-OSX */;
-			targetProxy = 8345DC2E1C05654B00CB7349 /* PBXContainerItemProxy */;
-		};
-		8345DC311C05654B00CB7349 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 704F3B6D1BE0D0180033245C /* AVOSCloudIM-OSX */;
-			targetProxy = 8345DC301C05654B00CB7349 /* PBXContainerItemProxy */;
 		};
 		8C8419941A5A791300C5C6C4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -6087,24 +5931,6 @@
 			};
 			name = Release;
 		};
-		8C841C4F1A5A8A3100C5C6C4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		8C841C501A5A8A3100C5C6C4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -6212,15 +6038,6 @@
 			buildConfigurations = (
 				8C8419DA1A5A796000C5C6C4 /* Debug */,
 				8C8419DB1A5A796000C5C6C4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		8C841C4E1A5A8A3100C5C6C4 /* Build configuration list for PBXAggregateTarget "UniversalFramework" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				8C841C4F1A5A8A3100C5C6C4 /* Debug */,
-				8C841C501A5A8A3100C5C6C4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
