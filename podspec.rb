@@ -1,185 +1,209 @@
 #!/usr/bin/env ruby
-# Podspec file generation script
+# Podspec automation script
 #
 # Created by Tang Tianyong on 06/28/16.
 # Copyright (c) 2016 LeanCloud Inc. All rights reserved.
 
-require 'xcodeproj'
-require 'mustache'
 require 'clactive'
 require 'fileutils'
+require 'mustache'
+require 'xcodeproj'
 
 module Podspec
 
   class Generator
-    attr_accessor :version
-    attr_accessor :project
-    attr_accessor :targets
-    attr_accessor :output_dir
+    attr_reader :version
+    attr_reader :project
+    attr_reader :targets
+    attr_reader :output_path
 
     PROJECT_PATH = 'AVOS/AVOS.xcodeproj'
 
-    def initialize(version, output_dir = nil)
-      @version = version
-      @project = Xcodeproj::Project.open(PROJECT_PATH)
-      @targets = project.targets
-      @output_dir = output_dir
+    def initialize(version, output_path = nil)
+      @version     = version
+      @project     = Xcodeproj::Project.open(PROJECT_PATH)
+      @output_path = output_path
     end
 
+    # All targets of project.
+    def targets
+      project.targets
+    end
+
+    # Return target for name.
     def target(name)
       target = targets.find { |target| target.name == name }
-
-      if target.nil?
-        raise "The target named #{name} not found."
-      end
-
+      abort "The target named #{name} not found." if target.nil?
       return target
     end
 
-    def relative_pathnames(pathnames)
-      pathnames.map do |pathname|
+    # Return relative path based on current working directory.
+    def relative_path(pathname)
         pwd = Pathname.new('.').realpath
         pathname.file_ref.real_path.relative_path_from(pwd)
-      end
     end
 
-    def header_files(target_name)
+    # Return all header files of a target.
+    def header_files(target_name, &filter)
       target = target(target_name)
 
       header_files = target.headers_build_phase.files
+      header_files = header_files.select(&filter) unless filter.nil?
 
-      header_paths = relative_pathnames header_files
+      header_paths = header_files.map { |pathname|
+        relative_path(pathname)
+      }
+
       header_paths
     end
 
+    # Return all public header files of a target.
     def public_header_files(target_name)
-      target = target(target_name)
-
-      header_files = target.headers_build_phase.files.select do |file|
+      header_files(target_name) do |file|
         settings = file.settings
         settings && settings['ATTRIBUTES'].include?('Public')
       end
-
-      header_paths = relative_pathnames header_files
-      header_paths
     end
 
+    # Return all public source files for a target.
     def source_files(target_name, &filter)
       target = target(target_name)
-      source_files = target.source_build_phase.files
 
-      source_files = source_files.select &filter unless filter.nil?
-      source_paths = relative_pathnames source_files
+      source_files = target.source_build_phase.files
+      source_files = source_files.select(&filter) unless filter.nil?
+
+      source_paths = source_files.map { |pathname|
+        relative_path(pathname)
+      }
+
       source_paths
     end
 
-    def non_arc_files(target_name)
+    # Check whether a file has compiler flag or not.
+    def has_compiler_flag(file, flag)
+      settings = file.settings
+      return false if settings.nil?
+
+      compiler_flags = settings['COMPILER_FLAGS']
+      return false if compiler_flags.nil?
+
+      compiler_flags.include? flag
+    end
+
+    # Return all files that have '-fno-objc-arc' flag of a target.
+    def no_arc_files(target_name)
       source_files(target_name) do |file|
-        settings = file.settings
-        settings && settings['COMPILER_FLAGS'] == '-fno-objc-arc'
+        has_compiler_flag(file, '-fno-objc-arc')
       end
     end
 
+    # Return all files that have '-fobjc-arc' flag of a target.
     def arc_files(target_name)
       source_files(target_name) do |file|
-        settings = file.settings
-        settings && settings['COMPILER_FLAGS'] == '-fobjc-arc'
+        has_compiler_flag(file, '-fobjc-arc')
       end
     end
 
-    def file_list_string(pathnames)
-      paths = pathnames.map { |pathname| "'#{pathname.to_s}'" }
-      paths.join(",\n    ")
+    # Convert pathnames to file list string.
+    def file_list_string(pathnames, indent)
+      spaces = ' ' * indent
+      paths  = pathnames.map { |pathname| "'#{pathname.to_s}'" }
+      paths.join(",\n#{spaces}")
     end
 
-    def read(path)
-      File.open(path).read
-    end
-
+    # Write content to file.
+    # If `output_path` specified, file will be written to that path,
+    # otherwise, file will be written to `filename`.
     def write(filename, content)
-      abort 'Filename not found.' if filename.nil?
+      abort 'File name not found.' if filename.nil?
+      path = filename
 
-      path = output_dir
-
-      if path.nil?
-        path = filename
-      elsif File.directory?(path)
-        path = File.join(path, filename)
-      else
-        abort "Invalid output directory: #{path}"
+      unless output_path.nil?
+        abort "Invalid output directory: #{output_path}" unless File.directory?(output_path)
+        path = File.join(output_path, filename)
       end
 
-      File.open(path, 'w') { |file| file.write(content) }
+      File.write(path, content)
     end
 
+    # Generate foundtion podspec.
     def generateAVOSCloud()
-      ios_headers     = header_files('AVOSCloud')
-      osx_headers     = header_files('AVOSCloud-OSX')
-      tvos_headers    = header_files('AVOSCloud-tvOS')
-      watchos_headers = header_files('AVOSCloud-watchOS')
+      ios_header_files      = header_files('AVOSCloud')
+      osx_header_files      = header_files('AVOSCloud-OSX')
+      watchos_header_files  = header_files('AVOSCloud-watchOS')
 
-      ios_sources     = source_files('AVOSCloud')
-      osx_sources     = source_files('AVOSCloud-OSX')
-      tvos_sources    = source_files('AVOSCloud-tvOS')
-      watchos_sources = source_files('AVOSCloud-watchOS')
+      ios_source_files      = source_files('AVOSCloud')
+      osx_source_files      = source_files('AVOSCloud-OSX')
+      watchos_source_files  = source_files('AVOSCloud-watchOS')
 
       public_header_files   = public_header_files('AVOSCloud')
-      osx_exclude_files     = (ios_headers - osx_headers) + (ios_sources - osx_sources)
-      watchos_exclude_files = (ios_headers - watchos_headers) + (ios_sources - watchos_sources)
+      osx_exclude_files     = (ios_header_files - osx_header_files)     + (ios_source_files - osx_source_files)
+      watchos_exclude_files = (ios_header_files - watchos_header_files) + (ios_source_files - watchos_source_files)
 
-      template = read 'Podspec/AVOSCloud.podspec.mustache'
+      template = File.read('Podspec/AVOSCloud.podspec.mustache')
 
       podspec = Mustache.render template, {
         'version'               => version,
-        'source_files'          => "'AVOS/AVOSCloud/**/*.{h,m,inc}'",
-        'public_header_files'   => file_list_string(public_header_files),
-        'osx_exclude_files'     => file_list_string(osx_exclude_files),
-        'watchos_exclude_files' => file_list_string(watchos_exclude_files),
-        'resources'             => "'AVOS/AVOSCloud/AVOSCloud_Art.inc'"
+        'source_files'          => "'AVOS/AVOSCloud/**/*.{h,m}'",
+        'resources'             => "'AVOS/AVOSCloud/AVOSCloud_Art.inc'",
+        'public_header_files'   => file_list_string(public_header_files, 4),
+        'osx_exclude_files'     => file_list_string(osx_exclude_files, 4),
+        'watchos_exclude_files' => file_list_string(watchos_exclude_files, 4),
+        'xcconfig'              => "{'OTHER_LDFLAGS' => '-ObjC'}"
       }
 
       write 'AVOSCloud.podspec', podspec
     end
 
+    # Generate IM podspec.
     def generateAVOSCloudIM()
-      headers = public_header_files('AVOSCloudIM')
-      non_arc_files = non_arc_files('AVOSCloudIM')
+      header_files        = header_files('AVOSCloudIM')
+      source_files        = source_files('AVOSCloudIM')
+      no_arc_files        = [Pathname.new('AVOS/AVOSCloudIM/Protobuf/*.{h,m}'), Pathname.new('AVOS/AVOSCloudIM/Commands/MessagesProtoOrig.pbobjc.{h,m}')]
+      public_header_files = public_header_files('AVOSCloudIM')
 
-      template = read 'Podspec/AVOSCloudIM.podspec.mustache'
+      template = File.read('Podspec/AVOSCloudIM.podspec.mustache')
 
       podspec = Mustache.render template, {
-        'version'             => version,
-        'source_files'        => "'AVOS/AVOSCloudIM/**/*.{h,c,m}'",
-        'public_header_files' => file_list_string(headers),
-        'exclude_files'       => "'AVOS/AVOSCloudIM/Protobuf/google'",
-        'non_arc_files'       => file_list_string(non_arc_files),
-        'preserve_paths'      => "'AVOS/AVOSCloudIM/Protobuf'",
-        'xcconfig'            => "{'HEADER_SEARCH_PATHS' => '\"$(PODS_ROOT)/AVOSCloudIM/AVOS/AVOSCloudIM/Protobuf\"'}"
+        'version' => version,
+        '_ARC' => {
+          'source_files' => file_list_string(header_files + source_files, 6),
+          'public_header_files' => file_list_string(public_header_files, 6),
+          'exclude_files' => file_list_string(no_arc_files, 6)
+        }
       }
 
       write 'AVOSCloudIM.podspec', podspec
     end
 
+    # Generate crash reporting podspec.
     def generateAVOSCloudCrashReporting()
       header_files = header_files('AVOSCloudCrashReporting')
       source_files = source_files('AVOSCloudCrashReporting')
+
+      arc_files           = arc_files('AVOSCloudCrashReporting')
+      non_arc_files       = header_files + source_files - arc_files
       public_header_files = public_header_files('AVOSCloudCrashReporting')
-      arc_files = arc_files('AVOSCloudCrashReporting')
+
       header_search_paths = [
         '"${PODS_ROOT}/AVOSCloudCrashReporting/Breakpad/src"',
         '"${PODS_ROOT}/AVOSCloudCrashReporting/Breakpad/src/client/apple/Framework"',
         '"${PODS_ROOT}/AVOSCloudCrashReporting/Breakpad/src/common/mac"'
       ].join(' ')
 
-      template = read 'Podspec/AVOSCloudCrashReporting.podspec.mustache'
+      template = File.read('Podspec/AVOSCloudCrashReporting.podspec.mustache')
 
       podspec = Mustache.render template, {
-        'version'             => version,
-        'source_files'        => file_list_string(header_files + source_files),
-        'public_header_files' => file_list_string(public_header_files),
-        'arc_files'           => file_list_string(arc_files),
-        'preserve_paths'      => "'Breakpad'",
-        'xcconfig'            => "{'HEADER_SEARCH_PATHS' => '#{header_search_paths}'}"
+        'version' => version,
+        '_ARC' => {
+          'source_files' => file_list_string(arc_files, 6),
+        },
+        '_NOARC' => {
+          'source_files'   => file_list_string(non_arc_files, 6),
+          'public_header_files' => file_list_string(public_header_files, 6),
+          'preserve_paths' => "'Breakpad'",
+          'pod_target_xcconfig' => "{'HEADER_SEARCH_PATHS' => '#{header_search_paths}'}"
+        }
       }
 
       write 'AVOSCloudCrashReporting.podspec', podspec

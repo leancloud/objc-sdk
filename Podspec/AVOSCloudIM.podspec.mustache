@@ -14,51 +14,54 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '7.0'
   s.osx.deployment_target = '10.9'
 
-  s.requires_arc = true
-
   s.source = {
     :git => "https://github.com/leancloud/objc-sdk.git",
     :tag => "#{s.version}"
   }
 
-  s.source_files =
-    {{{source_files}}}
+  {{#_ARC}}
+  s.subspec '_ARC' do |ss|
+    ss.requires_arc = true
+    ss.dependency 'AVOSCloudIM/_NOARC', "#{s.version}"
 
-  s.public_header_files =
-    {{{public_header_files}}}
+    {{#source_files}}
+    ss.source_files =
+      {{{source_files}}}
+    {{/source_files}}
 
-  all_exclude_files = []
+    {{#public_header_files}}
+    ss.public_header_files =
+      {{{public_header_files}}}
+    {{/public_header_files}}
 
-  {{#exclude_files}}
-  exclude_files =
-    {{{exclude_files}}}
-
-  all_exclude_files.concat Array(exclude_files)
-  {{/exclude_files}}
-
-  {{#non_arc_files}}
-  non_arc_files =
-    {{{non_arc_files}}}
-
-  all_exclude_files.concat Array(non_arc_files)
-
-  s.subspec 'no-arc' do |s|
-    s.requires_arc = false
-    s.source_files = non_arc_files
+    {{#exclude_files}}
+    ss.exclude_files =
+      {{{exclude_files}}}
+    {{/exclude_files}}
   end
-  {{/non_arc_files}}
+  {{/_ARC}}
 
-  s.ios.exclude_files = all_exclude_files
-  s.osx.exclude_files = all_exclude_files
+  s.subspec '_NOARC' do |ss|
+    ss.requires_arc = false
 
-  {{#preserve_paths}}
-  s.preserve_paths =
-    {{{preserve_paths}}}
-  {{/preserve_paths}}
+    ss.source_files =
+      'AVOS/AVOSCloudIM/Protobuf/*.{h,m}',
+      'AVOS/AVOSCloudIM/Commands/MessagesProtoOrig.pbobjc.{h,m}'
 
-  {{#xcconfig}}
-  s.xcconfig = {{{xcconfig}}}
-  {{/xcconfig}}
+    ss.private_header_files =
+      'AVOS/AVOSCloudIM/Protobuf/*.h',
+      'AVOS/AVOSCloudIM/Commands/MessagesProtoOrig.pbobjc.h'
+
+    ss.preserve_paths =
+      'AVOS/AVOSCloudIM/Protobuf/google'
+
+    ss.pod_target_xcconfig = {
+      'HEADER_SEARCH_PATHS' => '"$(PODS_ROOT)/AVOSCloudIM/AVOS/AVOSCloudIM/Protobuf"'
+    }
+  end
 
   s.dependency 'AVOSCloud', "#{s.version}"
+
+  s.libraries =
+    'icucore'
 end

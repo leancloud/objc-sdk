@@ -13,44 +13,48 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '7.0'
 
-  s.requires_arc = false
-
   s.source = {
     :git => "https://github.com/leancloud/objc-sdk.git",
     :tag => "#{s.version}",
     :submodules => true
   }
 
-  s.source_files =
-    {{{source_files}}}
+  {{#_ARC}}
+  s.subspec '_ARC' do |ss|
+    ss.requires_arc = true
+    ss.dependency 'AVOSCloudCrashReporting/_NOARC', "#{s.version}"
 
-  s.public_header_files =
-    {{{public_header_files}}}
-
-  all_exclude_files = []
-
-  {{#arc_files}}
-  arc_files =
-    {{{arc_files}}}
-
-  all_exclude_files.concat Array(arc_files)
-
-  s.subspec 'arc' do |s|
-    s.requires_arc = true
-    s.source_files = arc_files
+    {{#source_files}}
+    ss.source_files =
+      {{{source_files}}}
+    {{/source_files}}
   end
-  {{/arc_files}}
+  {{/_ARC}}
 
-  {{#preserve_paths}}
-  s.preserve_paths =
-    {{{preserve_paths}}}
-  {{/preserve_paths}}
+  {{#_NOARC}}
+  s.subspec '_NOARC' do |ss|
+    ss.requires_arc = false
 
-  {{#xcconfig}}
-  s.xcconfig = {{{xcconfig}}}
-  {{/xcconfig}}
+    {{#source_files}}
+    ss.source_files =
+      {{{source_files}}}
+    {{/source_files}}
 
-  s.exclude_files = all_exclude_files
+    {{#public_header_files}}
+    ss.public_header_files =
+      {{{public_header_files}}}
+    {{/public_header_files}}
+
+    {{#preserve_paths}}
+    ss.preserve_paths =
+      {{{preserve_paths}}}
+    {{/preserve_paths}}
+
+    {{#pod_target_xcconfig}}
+    ss.pod_target_xcconfig = {{{pod_target_xcconfig}}}
+    {{/pod_target_xcconfig}}
+  end
+  {{/_NOARC}}
 
   s.dependency 'AVOSCloud', "#{s.version}"
 
