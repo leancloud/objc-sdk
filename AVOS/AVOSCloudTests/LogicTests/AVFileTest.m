@@ -91,10 +91,9 @@
 }
 
 -(void)testUploadLargeFile {
-    NSString *filePath=[[NSBundle bundleForClass:[self class]] pathForResource:@"32M" ofType:@"bin"];
+    NSString *filePath = [self generateFileOfMegabytes:32];
     NSString *fileMD5= [AVUtils MD5ForFile:filePath];
-    
-    
+
     AVFile *file=[AVFile fileWithName:@"32M.bin" contentsAtPath:filePath];
     [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         NOTIFY
@@ -196,10 +195,24 @@
     [self addDeleteObject:object];
 }
 
+- (NSString *)generateFileOfMegabytes:(NSInteger)megabytes {
+    unsigned long long size = megabytes * 1024 * 1024;
+
+    NSString *dir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+    NSString *filePath = [dir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@~%ldM", [AVUtils generateUUID], (long)megabytes]];
+
+    [[NSFileManager defaultManager] createFileAtPath:filePath contents:[NSData data] attributes:nil];
+    NSFileHandle *fh = [NSFileHandle fileHandleForUpdatingAtPath:filePath];
+    [fh seekToFileOffset:size-1];
+    [fh writeData:[@"\x00" dataUsingEncoding:NSUTF8StringEncoding]];
+    [fh closeFile];
+
+    return filePath;
+}
+
 - (void)testDownloadFileSimultaneous {
-    NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"1M" ofType:@"bin"];
-    NSString *fieldName = NSStringFromSelector(_cmd);
-    
+    NSString *filePath = [self generateFileOfMegabytes:1];
+
     AVFile *file = [AVFile fileWithName:@"1M.bin" contentsAtPath:filePath];
     [file save];
     int64_t s = file.size;
@@ -236,57 +249,17 @@
     WAIT;
 }
 
-//- (void)testDownloadSameFileWithDifferentURLSimultaneous {
-//    NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"4M" ofType:@"bin"];
-//    NSString *fieldName = NSStringFromSelector(_cmd);
-//    NSError *error;
-//    AVFile *file = [AVFile fileWithName:@"4M.bin" contentsAtPath:filePath];
-//    [file save:&error];
-//    XCTAssertNil(error, @"%@", error);
-//    int64_t s = file.size;
-////    [file clearCachedFile];
-//    AVFile *file2 = [AVFile fileWithName:@"4M.bin" contentsAtPath:filePath];
-//    [file2 save:&error];
-//    XCTAssertNil(error, @"%@", error);
-//    int64_t s2 = file.size;
-//    [file2 clearCachedFile];
-//
-//    [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-//        XCTAssertNil(error, @"%@", error);
-//        if (!error) {
-//            XCTAssertEqual(data.length, s);
-//        }
-//        NOTIFY;
-//    } progressBlock:^(NSInteger percentDone) {
-//        NSLog(@"percent1:%d", percentDone);
-//    }];
-//    
-//    [file2 getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-//        XCTAssertNil(error, @"%@", error);
-//        if (!error) {
-//            XCTAssertEqual(data.length, s);
-//        }
-//        NOTIFY;
-//    } progressBlock:^(NSInteger percentDone) {
-//        NSLog(@"percent2:%d", percentDone);
-//    }];
-//    WAIT;
-//}
-
 - (void)testDownloadSameFileSerialize {
-    NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"1M" ofType:@"bin"];
-    NSString *fieldName = NSStringFromSelector(_cmd);
-    
+    NSString *filePath = [self generateFileOfMegabytes:1];
+
     NSError *error;
     AVFile *file = [AVFile fileWithName:@"1M.bin" contentsAtPath:filePath];
     [file save:&error];
     XCTAssertNil(error);
     int64_t s = file.size;
-//    [file clearCachedFile];
-    
+
     AVFile *file2 = [AVFile fileWithName:@"1M.bin" contentsAtPath:filePath];
     [file2 save];
-    int64_t s2 = file.size;
     [file2 clearCachedFile];
 
     [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
@@ -312,52 +285,6 @@
     }];
     WAIT;
 }
-
-//- (void)testDownloadSameFileWithObjectSerialize {
-//    NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"4M" ofType:@"bin"];
-//    NSString *fieldName = NSStringFromSelector(_cmd);
-//    
-//    AVFile *file = [AVFile fileWithName:@"4M.bin" contentsAtPath:filePath];
-//    [file save];
-//    int64_t s = file.size;
-//
-////    [file clearCachedFile];
-//    AVObject *object = [AVObject objectWithClassName:NSStringFromClass([self class])];
-//    [object setObject:file forKey:fieldName];
-//    [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-//        XCTAssertTrue(succeeded, @"%@", error);
-//        NOTIFY;
-//    }];
-//    NSLog(@"reached");
-//    WAIT_FOREVER;
-//    AVObject *object2 = [AVObject objectWithoutDataWithClassName:NSStringFromClass([self class]) objectId:object.objectId];
-//    [object2 fetch];
-//    file = [object2 objectForKey:fieldName];
-//    [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-//        XCTAssertNil(error, @"%@", error);
-//        if (!error) {
-//            XCTAssertEqual(data.length, s);
-//        }
-//        NOTIFY;
-//    } progressBlock:^(NSInteger percentDone) {
-//        NSLog(@"percent1:%d", percentDone);
-//    }];
-//    WAIT;
-//    AVObject *object3 = [AVObject objectWithoutDataWithClassName:NSStringFromClass([self class]) objectId:object.objectId];
-//    [object3 fetch];
-//    file = [object3 objectForKey:fieldName];
-//    [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-//        XCTAssertNil(error, @"%@", error);
-//        if (!error) {
-//            XCTAssertEqual(data.length, s);
-//        }
-//        NOTIFY;
-//    } progressBlock:^(NSInteger percentDone) {
-//        NSLog(@"percent2:%d", percentDone);
-//    }];
-//    WAIT;
-//}
-
 
 - (void)testFileLocalPath {
     NSData *data = [@"hello world!" dataUsingEncoding:NSUTF8StringEncoding];
@@ -422,7 +349,7 @@
 }
 
 - (void)testProgress {
-    NSString *filePath=[[NSBundle bundleForClass:[self class]] pathForResource:@"1M" ofType:@"bin"];
+    NSString *filePath = [self generateFileOfMegabytes:1];
     AVFile *file=[AVFile fileWithData:[NSData dataWithContentsOfFile:filePath]];
     [file save];
     NSInteger size = file.size;

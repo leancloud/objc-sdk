@@ -35,11 +35,6 @@
 		70276B5C1B8092FF002E91EC /* AVRoleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 70276B5B1B8092FF002E91EC /* AVRoleTest.m */; };
 		70276B5E1B809333002E91EC /* AVACLTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 70276B5D1B809333002E91EC /* AVACLTest.m */; };
 		70344DD41B71C4F600C3DAD9 /* TestRelation.json in Resources */ = {isa = PBXBuildFile; fileRef = 70344DD31B71C4F600C3DAD9 /* TestRelation.json */; };
-		703812E41BDE8257009F2385 /* 16M.bin in Resources */ = {isa = PBXBuildFile; fileRef = 8CEEABA81ABC179300B9E757 /* 16M.bin */; };
-		703812E51BDE8257009F2385 /* 1M.bin in Resources */ = {isa = PBXBuildFile; fileRef = 8CEEABA91ABC179300B9E757 /* 1M.bin */; };
-		703812E61BDE8257009F2385 /* 32M.bin in Resources */ = {isa = PBXBuildFile; fileRef = 8CEEABAA1ABC179300B9E757 /* 32M.bin */; };
-		703812E71BDE8257009F2385 /* 4M.bin in Resources */ = {isa = PBXBuildFile; fileRef = 8CEEABAB1ABC179300B9E757 /* 4M.bin */; };
-		703812E81BDE8257009F2385 /* 8M.bin in Resources */ = {isa = PBXBuildFile; fileRef = 8CEEABAC1ABC179300B9E757 /* 8M.bin */; };
 		703812E91BDE8257009F2385 /* alpacino.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8CEEABAD1ABC179300B9E757 /* alpacino.jpg */; };
 		703812EA1BDE8257009F2385 /* TestRelation.json in Resources */ = {isa = PBXBuildFile; fileRef = 70344DD31B71C4F600C3DAD9 /* TestRelation.json */; };
 		703812EB1BDE8257009F2385 /* TestDescriptionKey.json in Resources */ = {isa = PBXBuildFile; fileRef = 708F554C1B86121A0071CA48 /* TestDescriptionKey.json */; };
@@ -1516,11 +1511,6 @@
 		8CEA86621A777A7900864211 /* XCTestCase+AsyncTesting.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA865C1A777A7900864211 /* XCTestCase+AsyncTesting.m */; };
 		8CEA86671A77817B00864211 /* AVTestUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA86661A77817B00864211 /* AVTestUtil.m */; };
 		8CEA86691A77817B00864211 /* AVTestUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA86661A77817B00864211 /* AVTestUtil.m */; };
-		8CEEABC51ABC179300B9E757 /* 16M.bin in Resources */ = {isa = PBXBuildFile; fileRef = 8CEEABA81ABC179300B9E757 /* 16M.bin */; };
-		8CEEABC61ABC179300B9E757 /* 1M.bin in Resources */ = {isa = PBXBuildFile; fileRef = 8CEEABA91ABC179300B9E757 /* 1M.bin */; };
-		8CEEABC71ABC179300B9E757 /* 32M.bin in Resources */ = {isa = PBXBuildFile; fileRef = 8CEEABAA1ABC179300B9E757 /* 32M.bin */; };
-		8CEEABC81ABC179300B9E757 /* 4M.bin in Resources */ = {isa = PBXBuildFile; fileRef = 8CEEABAB1ABC179300B9E757 /* 4M.bin */; };
-		8CEEABC91ABC179300B9E757 /* 8M.bin in Resources */ = {isa = PBXBuildFile; fileRef = 8CEEABAC1ABC179300B9E757 /* 8M.bin */; };
 		8CEEABCA1ABC179300B9E757 /* alpacino.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8CEEABAD1ABC179300B9E757 /* alpacino.jpg */; };
 		8CEEABCB1ABC179300B9E757 /* Armor.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEEABAF1ABC179300B9E757 /* Armor.m */; };
 		8CEEABCC1ABC179300B9E757 /* AVCloudTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEEABB01ABC179300B9E757 /* AVCloudTest.m */; };
@@ -2302,11 +2292,6 @@
 		8CEA865C1A777A7900864211 /* XCTestCase+AsyncTesting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XCTestCase+AsyncTesting.m"; sourceTree = "<group>"; };
 		8CEA86651A77817B00864211 /* AVTestUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVTestUtil.h; sourceTree = "<group>"; };
 		8CEA86661A77817B00864211 /* AVTestUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVTestUtil.m; sourceTree = "<group>"; };
-		8CEEABA81ABC179300B9E757 /* 16M.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = 16M.bin; sourceTree = "<group>"; };
-		8CEEABA91ABC179300B9E757 /* 1M.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = 1M.bin; sourceTree = "<group>"; };
-		8CEEABAA1ABC179300B9E757 /* 32M.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = 32M.bin; sourceTree = "<group>"; };
-		8CEEABAB1ABC179300B9E757 /* 4M.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = 4M.bin; sourceTree = "<group>"; };
-		8CEEABAC1ABC179300B9E757 /* 8M.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = 8M.bin; sourceTree = "<group>"; };
 		8CEEABAD1ABC179300B9E757 /* alpacino.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = alpacino.jpg; sourceTree = "<group>"; };
 		8CEEABAE1ABC179300B9E757 /* Armor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Armor.h; sourceTree = "<group>"; };
 		8CEEABAF1ABC179300B9E757 /* Armor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Armor.m; sourceTree = "<group>"; };
@@ -3518,11 +3503,6 @@
 		8CEEABA71ABC179300B9E757 /* LogicTests */ = {
 			isa = PBXGroup;
 			children = (
-				8CEEABA81ABC179300B9E757 /* 16M.bin */,
-				8CEEABA91ABC179300B9E757 /* 1M.bin */,
-				8CEEABAA1ABC179300B9E757 /* 32M.bin */,
-				8CEEABAB1ABC179300B9E757 /* 4M.bin */,
-				8CEEABAC1ABC179300B9E757 /* 8M.bin */,
 				8CEEABAD1ABC179300B9E757 /* alpacino.jpg */,
 				70344DD31B71C4F600C3DAD9 /* TestRelation.json */,
 				708F554C1B86121A0071CA48 /* TestDescriptionKey.json */,
@@ -5031,11 +5011,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				703812E41BDE8257009F2385 /* 16M.bin in Resources */,
-				703812E51BDE8257009F2385 /* 1M.bin in Resources */,
-				703812E61BDE8257009F2385 /* 32M.bin in Resources */,
-				703812E71BDE8257009F2385 /* 4M.bin in Resources */,
-				703812E81BDE8257009F2385 /* 8M.bin in Resources */,
 				703812E91BDE8257009F2385 /* alpacino.jpg in Resources */,
 				703812EA1BDE8257009F2385 /* TestRelation.json in Resources */,
 				703812EB1BDE8257009F2385 /* TestDescriptionKey.json in Resources */,
@@ -5080,14 +5055,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				70C288B11BB55E0300A4773C /* TestInstallationSave.json in Resources */,
-				8CEEABC91ABC179300B9E757 /* 8M.bin in Resources */,
-				8CEEABC71ABC179300B9E757 /* 32M.bin in Resources */,
 				703EDB1A1BB4FBD400F06757 /* TestDictionaryForObject.json in Resources */,
 				70344DD41B71C4F600C3DAD9 /* TestRelation.json in Resources */,
-				8CEEABC51ABC179300B9E757 /* 16M.bin in Resources */,
-				8CEEABC81ABC179300B9E757 /* 4M.bin in Resources */,
 				8CEEABCA1ABC179300B9E757 /* alpacino.jpg in Resources */,
-				8CEEABC61ABC179300B9E757 /* 1M.bin in Resources */,
 				708F554D1B86121A0071CA48 /* TestDescriptionKey.json in Resources */,
 				70B05B3A1B909BD3009F6696 /* TestSaveAll.json in Resources */,
 			);
