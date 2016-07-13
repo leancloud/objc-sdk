@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "8C8419901A5A791300C5C6C4"
+               BuildableName = "AVOSCloudTests.xctest"
+               BlueprintName = "AVOSCloudTests"
+               ReferencedContainer = "container:AVOS.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "8C8419851A5A791300C5C6C4"
+            BuildableName = "AVOSCloud.framework"
+            BlueprintName = "AVOSCloud"
+            ReferencedContainer = "container:AVOS.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
