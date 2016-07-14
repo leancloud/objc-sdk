@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "70CA7F671BDE2DC3000A3B21"
                BuildableName = "AVOSCloud.framework"
-               BlueprintName = "AVOSCloud-OSX"
+               BlueprintName = "AVOSCloud-macOS"
                ReferencedContainer = "container:AVOS.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,7 +47,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "70CA7F671BDE2DC3000A3B21"
             BuildableName = "AVOSCloud.framework"
-            BlueprintName = "AVOSCloud-OSX"
+            BlueprintName = "AVOSCloud-macOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -65,7 +65,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "70CA7F671BDE2DC3000A3B21"
             BuildableName = "AVOSCloud.framework"
-            BlueprintName = "AVOSCloud-OSX"
+            BlueprintName = "AVOSCloud-macOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

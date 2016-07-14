@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8C8419851A5A791300C5C6C4"
                BuildableName = "AVOSCloud.framework"
-               BlueprintName = "AVOSCloud"
+               BlueprintName = "AVOSCloud-iOS"
                ReferencedContainer = "container:AVOS.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,8 +33,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8C8419901A5A791300C5C6C4"
-               BuildableName = "AVOSCloudTests.xctest"
-               BlueprintName = "AVOSCloudTests"
+               BuildableName = "AVOSCloud-iOSTests.xctest"
+               BlueprintName = "AVOSCloud-iOSTests"
                ReferencedContainer = "container:AVOS.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -44,7 +44,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8C8419851A5A791300C5C6C4"
             BuildableName = "AVOSCloud.framework"
-            BlueprintName = "AVOSCloud"
+            BlueprintName = "AVOSCloud-iOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -66,7 +66,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8C8419851A5A791300C5C6C4"
             BuildableName = "AVOSCloud.framework"
-            BlueprintName = "AVOSCloud"
+            BlueprintName = "AVOSCloud-iOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -84,7 +84,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8C8419851A5A791300C5C6C4"
             BuildableName = "AVOSCloud.framework"
-            BlueprintName = "AVOSCloud"
+            BlueprintName = "AVOSCloud-iOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
