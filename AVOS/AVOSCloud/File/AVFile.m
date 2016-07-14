@@ -695,30 +695,27 @@ typedef void (^AVFileSizeBlock)(long long fileSize);
     return file;
 }
 
+- (NSDictionary *)dictionary {
+    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+
+    [dictionary setObject:[AVFile className] forKey:@"__type"];
+
+    if (_name)             [dictionary setObject:_name forKey:@"name"];
+    if (_objectId)         [dictionary setObject:_objectId forKey:@"id"];
+    if (_url)              [dictionary setObject:_url forKey:@"url"];
+    if (_localPath)        [dictionary setObject:_localPath forKey:@"localPath"];
+    if ([_metaData count]) [dictionary setObject:_metaData forKey:@"metaData"];
+
+    [dictionary setObject:[self mimeType] forKey:@"mime_type"];
+
+    [file addACLToDict:dic];
+
+    return dictionary;
+}
+
 + (NSDictionary *)dictionaryFromFile:(AVFile *)file
 {
-    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-    [dic setObject:[AVFile className] forKey:@"__type"];
-    if (file.objectId) {
-        [dic setObject:file.objectId forKey:@"id"];
-    }
-    if (file.name) {
-        [dic setObject:file.name forKey:@"name"];
-    }
-    // for store locally(decode from file)
-    if (file.url) {
-        [dic setObject:file.url forKey:@"url"];
-    }
-    
-    if (file.metaData.count > 0) {
-        [dic setObject:file.metaData forKey:@"metaData"];
-    }
-
-    [dic setObject:[file mimeType] forKey:@"mime_type"];
-    
-    [file addACLToDict:dic];
-    
-    return dic;
+    return [file dictionary];
 }
 
 + (NSString *)className
