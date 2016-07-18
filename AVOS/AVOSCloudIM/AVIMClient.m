@@ -604,11 +604,6 @@ static BOOL AVIMClientHasInstantiated = NO;
 - (void)createConversationWithName:(NSString *)name clientIds:(NSArray *)clientIds attributes:(NSDictionary *)attributes options:(AVIMConversationOption)options callback:(AVIMConversationResultBlock)callback {
     [[self class] _assertClientIdsIsValid:clientIds];
     dispatch_async(imClientQueue, ^{
-        if (clientIds.count == 0) {
-            NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorInvalidArguments reason:@"Create conversation with 0 client ids."];
-            [AVIMBlockHelper callConversationResultBlock:callback conversation:nil error:error];
-            return;
-        }
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
         genericCommand.needResponse = YES;
         NSMutableDictionary *attr = nil;
@@ -627,11 +622,17 @@ static BOOL AVIMClientHasInstantiated = NO;
         genericCommand.op = AVIMOpType_Start;
 
         AVIMConvCommand *convCommand = [[AVIMConvCommand alloc] init];
-        convCommand.mArray = [NSMutableArray arrayWithArray:clientIds];
         convCommand.attr = [AVIMCommandFormatter JSONObjectWithDictionary:[attr copy]];
 
         if (transient) {
             convCommand.transient = YES;
+        } else {
+            /* If conversation is non-transient, we insert creator to member list. */
+            convCommand.mArray = [NSMutableArray arrayWithArray:({
+                NSMutableSet *members = [NSMutableSet setWithArray:clientIds ?: @[]];
+                [members addObject:self.clientId];
+                [members allObjects];
+            })];
         }
         
         if (unique) {
