@@ -385,35 +385,28 @@ static BOOL AVIMClientHasInstantiated = NO;
     /* NOTE: this will trigger an action that `command.sessionMessage.st = nil;` */
     [command avim_addRequiredKeyForSessionMessageWithSignature:signature];
 
-    BOOL force = [objc_getAssociatedObject(command, @selector(force)) boolValue];
-
     /* By default, we make non-initiative connection. */
-    BOOL r = YES;
+    BOOL force = NO;
 
-    /* If force, we make an initiative login. */
-    if (force) {
-        r = NO;
-    } else {
-        /* When open for the first time, we make an initiative connection. */
-        BOOL initiative = self.openTimes == 0;
-
-        if (initiative) {
+    if (self.openTimes == 0) {
+        /* If force, we make an initiative login. */
+        if ([objc_getAssociatedObject(command, @selector(force)) boolValue]) {
+            force = YES;
+        } else {
             /* However, if client has tag, we make a passive connection for the first time.
              * This connection may be rejected by server because of gone offline by the same client on other device.
              */
             BOOL hasTag = isValidTag(objc_getAssociatedObject(command, @selector(tag)));
 
             if (hasTag) {
-                r = YES;
+                force = NO;
             } else {
-                r = NO;
+                force = YES;
             }
-        } else {
-            r = YES;
         }
     }
 
-    command.sessionMessage.r = r;
+    command.sessionMessage.r = !force;
 
     OSAtomicIncrement32(&_openTimes);
 
