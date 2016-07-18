@@ -12,7 +12,6 @@
 #import "AVUtils.h"
 #import "AVFile_Internal.h"
 #import "AVPaasClient.h"
-#import "AVAmazonS3Client.h"
 #import "AVFileHTTPRequestOperation.h"
 #import "AVPartialInputStream.h"
 #import "AVObjectUtils.h"
@@ -21,7 +20,7 @@ static NSString * const QiniuServerPath = @"https://up.qbox.me";
 static NSString * const QCloudServerPath = @"https://web.file.myqcloud.com";
 static NSString * const QCloudHOST = @"web.file.myqcloud.com";
 static NSString * const S3BasePath = @"https://s3.amazonaws.com/avos-cloud";
-static NSUInteger const QCloudSliceSize = 512 * 1024;
+static uint64_t const QCloudSliceSize = 512 * 1024;
 
 @implementation AVHTTPClient (CancelMethods)
 - (void)cancelOperationsLocalPath:(NSString *)path {
@@ -66,9 +65,7 @@ static NSUInteger const QCloudSliceSize = 512 * 1024;
                 _httpClient = [AVPaasClient sharedInstance].clientImpl;
                 break;
             case AVStorageTypeS3:
-                _httpClient = [[AVAmazonS3Client alloc] initWithAccessKeyID:nil secret:nil];
-                [_httpClient registerHTTPOperationClass:[AVFileHTTPRequestOperation class]];
-                [(AVAmazonS3Client *)_httpClient setBucket:@"avos-cloud"];
+                _httpClient = [[AVHTTPClient alloc] init];
                 break;
             case AVStorageTypeQCloud: {
                 NSURL *url = [NSURL URLWithString:QCloudServerPath];
@@ -121,23 +118,7 @@ static NSUInteger const QCloudSliceSize = 512 * 1024;
 }
 
 - (void)uploadWithAVFile:(AVFile *)file progressBlock:(AVProgressBlock)progressBlock resultBlock:(AVBooleanResultBlock)resultBlock {
-   
     NSDictionary *parameters = [self parametersForFile:file];
-    //仅中国区需要判断上传节点
-    if (self.serviceRegion == AVServiceRegionUS) {
-        switch (self.storageType) {
-            case AVStorageTypeParse:
-                [self uploadToLeanCloudWithAVFile:file progressBlock:progressBlock resultBlock:resultBlock];
-                break;
-            case AVStorageTypeS3:
-                [self uploadToS3WithAVFile:file progressBlock:progressBlock resultBlock:resultBlock];
-                break;
-                
-            default:
-                NSAssert(NO, @"storage type error");
-        }
-        return;
-    }
     [[AVPaasClient sharedInstance] postObject:@"fileTokens" withParameters:parameters block:^(id object, NSError *error) {
         if (error) {
             [AVUtils callBooleanResultBlock:resultBlock error:[NSError errorWithDomain:@"AVOSUploadFileDomain" code:0 userInfo:@{@"reason":[NSString stringWithFormat:@"file upload failed."]}]];
@@ -150,6 +131,9 @@ static NSUInteger const QCloudSliceSize = 512 * 1024;
         } else if ([provider isEqualToString:@"qiniu"]) {
             self.storageType = AVStorageTypeQiniu;
             [self uploadToQiniuWithAVFile:file fileTokensInfo:object progressBlock:progressBlock resultBlock:resultBlock];
+        } else if ([provider isEqualToString:@"s3"]) {
+            self.storageType = AVStorageTypeS3;
+            [self uploadToS3WithAVFile:file fileTokensInfo:object progressBlock:progressBlock resultBlock:resultBlock];
         }
     }];
 }
@@ -193,60 +177,43 @@ static NSUInteger const QCloudSliceSize = 512 * 1024;
 
 #pragma mark - Upload to S3
 
-- (void)saveS3File:(AVFile *)file withBlock:(AVIdResultBlock)block {
+- (void)uploadToS3WithAVFile:(AVFile *)file
+              fileTokensInfo:(NSDictionary *)fileTokensInfo
+               progressBlock:(AVProgressBlock)progressBlock resultBlock:(AVBooleanResultBlock)resultBlock {
     NSDictionary *parameters = [self parametersForFile:file];
-
-    [[AVPaasClient sharedInstance] postObject:@"s3" withParameters:parameters block:^(id object, NSError *error) {
-        if (!error)
-            [AVUtils copyPropertiesFromDictionary:object toNSObject:file];
-
-        [AVUtils callIdResultBlock:block object:object error:error];
-    }];
-}
-
-- (void)uploadToS3WithAVFile:(AVFile *)file progressBlock:(AVProgressBlock)progressBlock resultBlock:(AVBooleanResultBlock)resultBlock {
-    [self saveS3File:file withBlock:^(NSDictionary *result, NSError *error) {
-        if (error) {
-            [AVUtils callBooleanResultBlock:resultBlock error:error];
-            return;
+    NSString *token = [fileTokensInfo valueForKey:@"token"];
+    NSString *bucket = [fileTokensInfo valueForKey:@"bucket"];
+    NSString *objectId = [fileTokensInfo valueForKey:@"objectId"];
+    NSString *originUrl = [fileTokensInfo valueForKey:@"url"];
+    NSString *uploadURLString = [fileTokensInfo valueForKey:@"upload_url"];
+    
+    [AVUtils copyPropertiesFromDictionary:fileTokensInfo toNSObject:file];
+    // make sure file.data is not nil
+    if (!file.data)
+        file.data = [NSData dataWithContentsOfFile:file.localPath];
+    // s3client only support upload from path
+    if (![[NSFileManager defaultManager] fileExistsAtPath:file.localPath]) {
+        [file.data writeToFile:file.localPath atomically:YES];
+    }
+    
+    void (^uploadResultBlock)(BOOL succeeded, NSError *error) = ^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            file.url = originUrl;
+            file.objectId = objectId;
+            if (file.name.length <= 0) {
+                file.name = objectId;
+            }
+            
+            [AVFile cacheFile:file];
+        } else {
+            [file deleteInBackground];
         }
-
-        AVAmazonS3Client *s3Client = (AVAmazonS3Client *)self.httpClient;
-
-        s3Client.accessKey = [result[@"access_key"] AVAES256Decrypt];
-        s3Client.secret    = [result[@"access_token"] AVAES256Decrypt];
-
-        // make sure file.data is not nil
-        if (!file.data)
-            file.data = [NSData dataWithContentsOfFile:file.localPath];
-
-        // s3client only support upload from path
-        if (![[NSFileManager defaultManager] fileExistsAtPath:file.localPath]) {
-            [file.data writeToFile:file.localPath atomically:YES];
-        }
-
-        [s3Client
-         putObjectWithFile:file.localPath
-         destinationPath:file.url
-         parameters:nil
-         progress:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
-             CGFloat progress = totalBytesWritten / (CGFloat)totalBytesExpectedToWrite;
-             [AVUtils callProgressBlock:progressBlock percent:progress * 100];
-         }
-         success:^(id responseObject) {
-             [AVFile cacheFile:file];
-             [AVUtils callBooleanResultBlock:resultBlock error:nil];
-         }
-         failure:^(NSError *error) {
-             [AVUtils callBooleanResultBlock:resultBlock error:error];
-             [file deleteInBackground];
-         }];
-    }];
-}
-
-// like alpacino.jpg, test/someother/alpacino.jpg
-- (NSString *)s3FileLinkWithPath:(NSString *)path {
-    return [NSString stringWithFormat:@"%@/%@",S3BasePath, path];
+        [AVUtils callBooleanResultBlock:resultBlock error:error];
+    };
+    NSString *key = parameters[@"key"];
+    NSURL *url = [NSURL URLWithString:uploadURLString];
+    self.httpClient = [[AVHTTPClient alloc] initWithBaseURL:url];
+    [self uploadFileToBucket:bucket withToken:token file:file key:key method:@"PUT" progressBlock:progressBlock resultBlock:uploadResultBlock];
 }
 
 #pragma mark - Upload to Qiniu
@@ -343,12 +310,23 @@ static NSUInteger const QCloudSliceSize = 512 * 1024;
             progressBlock:(AVProgressBlock)progressBlock
               resultBlock:(AVBooleanResultBlock)resultBlock
 {
+    [self uploadFileToBucket:bucket withToken:token file:file key:key method:@"POST" progressBlock:progressBlock resultBlock:resultBlock];
+}
+
+-(void)uploadFileToBucket:(NSString *)bucket
+                withToken:(NSString *)token
+                     file:(AVFile *)file
+                      key:(NSString *)key
+                   method:(NSString *)method
+            progressBlock:(AVProgressBlock)progressBlock
+              resultBlock:(AVBooleanResultBlock)resultBlock
+{
     NSDictionary *param = @{@"token":token, @"key":key};
     
     if (!file.data) file.data = [NSData dataWithContentsOfFile:file.localPath];
     NSData *uploadData = file.data;
-    NSMutableURLRequest *request = [self.httpClient multipartFormRequestWithMethod:@"POST" path:nil parameters:param constructingBodyWithBlock: ^(id <AVMultipartFormData>formData) {
-
+    NSMutableURLRequest *request = [self.httpClient multipartFormRequestWithMethod:method path:nil parameters:param constructingBodyWithBlock: ^(id <AVMultipartFormData>formData) {
+        
         [formData appendPartWithFileData:uploadData name:@"file" fileName:file.name mimeType:file.mimeType];
     }];
     
@@ -666,9 +644,9 @@ static NSUInteger const QCloudSliceSize = 512 * 1024;
                 [AVUtils callBooleanResultBlock:resultBlock error:error];
                 return;
             }
-            NSUInteger offSet = [responesDict[@"data"][@"offset"] unsignedLongLongValue];
+            uint64_t offSet = [responesDict[@"data"][@"offset"] unsignedLongLongValue];
             NSString *session = responesDict[@"data"][@"session"];
-//            NSUInteger sliceSize = [responesDict[@"data"][@"slice_size"] unsignedLongLongValue];
+            //            NSUInteger sliceSize = [responesDict[@"data"][@"slice_size"] unsignedLongLongValue];
             [self uploadLargeFileToQCloudWithToken:token offSet:offSet session:session uploadURLString:uploadURLString file:file key:key progressBlock:progressBlock resultBlock:resultBlock];
         }
     }];
@@ -676,7 +654,7 @@ static NSUInteger const QCloudSliceSize = 512 * 1024;
 }
 
 - (void)uploadLargeFileToQCloudWithToken:(NSString *)token
-                                  offSet:(NSUInteger)offSet
+                                  offSet:(uint64_t)offSet
                                  session:(NSString *)session
                          uploadURLString:(NSString *)uploadURLString
                                     file:(AVFile *)file
@@ -708,8 +686,8 @@ static NSUInteger const QCloudSliceSize = 512 * 1024;
     __block dispatch_semaphore_t semaphore = NULL;
     NSMutableArray *operations = [[NSMutableArray alloc] init];
     for (int i = 0; i < blockCount; ++i) {
-        NSUInteger offset_ = maxSize * i + offSet;
-        NSUInteger contentSize = maxSize;
+        uint64_t offset_ = maxSize * i + offSet;
+        uint64_t contentSize = maxSize;
         if (dataSize - offset_ < contentSize) {
             contentSize = dataSize - offset_;
         }
@@ -742,10 +720,6 @@ static NSUInteger const QCloudSliceSize = 512 * 1024;
                 int index = [numIndex intValue];
                 NSString *ctx = [responseObject objectForKey:@"ctx"];
                 [contexts replaceObjectAtIndex:index withObject:ctx];
-            } else {
-                int index = [[operation.userInfo objectForKey:@"index"] intValue];
-                //TODO: error info is to big
-//                AVLoggerD(@"cancelled index:%d object:%@", index, responseObject);
             }
             if (finishedCount == operations.count) {
                 dispatch_semaphore_signal(semaphore);
@@ -758,8 +732,6 @@ static NSUInteger const QCloudSliceSize = 512 * 1024;
                     [self updateProgressWithProgressDict:progressDict index:numIndex bytes:0 totalBytes:dataSize reachedPercent:reachedPercent progressBlock:progressBlock];
                 });
             }
-            int index = [numIndex intValue];
-//            AVLoggerD(@"index:%d error:%@", index, error);
             if (finishedCount == operations.count) {
                 dispatch_semaphore_signal(semaphore);
             }
@@ -890,11 +862,11 @@ static NSUInteger const QCloudSliceSize = 512 * 1024;
     }
     semaphore = dispatch_semaphore_create(0);
     [self enqueueBatchOfHTTPRequestOperations:operations progressBlock:^(NSUInteger numberOfFinishedOperations, NSUInteger totalNumberOfOperations) {
-        AVLoggerD(@"%ld of %ld", numberOfFinishedOperations, totalNumberOfOperations);
+        AVLoggerD(@"%@ of %@", @(numberOfFinishedOperations), @(totalNumberOfOperations));
     } completionBlock:^(NSArray *operations) {
         BOOL cancelled = NO;
         int failedCount = 0;
-        AVLoggerD(@"operations %ld", operations.count);
+        AVLoggerD(@"operations %@", @(operations.count));
         for (AVFileHTTPRequestOperation *operation in operations) {
             if (operation.isCancelled) {
                 cancelled = YES;
@@ -915,7 +887,7 @@ static NSUInteger const QCloudSliceSize = 512 * 1024;
 }
 
 -(void)uploadLargeFileToQCloudWithToken:(NSString *)token
-                                 offSet:(NSUInteger)offSet
+                                 offSet:(uint64_t)offSet
                                 session:(NSString *)session
                         uploadURLString:(NSString *)uploadURLString
                                   file:(AVFile *)file
@@ -954,7 +926,7 @@ static NSUInteger const QCloudSliceSize = 512 * 1024;
         
         
         NSMutableURLRequest *request = [self constructQCloudSliceRequestWithFile:file uploadURLString:uploadURLString offset:offset_ size:contentSize session:session];
-
+        
         AVFileHTTPRequestOperation *operation = [[AVFileHTTPRequestOperation alloc] initWithRequest:request];
         operation.localPath = file.localPath;
         operation.userInfo = @{@"index":@(i), @"offset":@(offset_), @"size":@(contentSize)};
@@ -993,9 +965,6 @@ static NSUInteger const QCloudSliceSize = 512 * 1024;
                     [self updateProgressWithProgressDict:progressDict index:numIndex bytes:0 totalBytes:dataSize reachedPercent:reachedPercent progressBlock:progressBlock];
                 });
             }
-            int index = [numIndex intValue];
-            //TODO: error info is to big
-//            AVLoggerD(@"i ndex:%d error:%@", index, error);
             if (finishedCount == operations.count) {
                 dispatch_semaphore_signal(semaphore);
             }
@@ -1004,11 +973,11 @@ static NSUInteger const QCloudSliceSize = 512 * 1024;
     }
     semaphore = dispatch_semaphore_create(0);
     [self enqueueBatchOfHTTPRequestOperations:operations progressBlock:^(NSUInteger numberOfFinishedOperations, NSUInteger totalNumberOfOperations) {
-        AVLoggerD(@"%ld of %ld", numberOfFinishedOperations, totalNumberOfOperations);
+        AVLoggerD(@"%@ of %@", @(numberOfFinishedOperations), @(totalNumberOfOperations));
     } completionBlock:^(NSArray *operations) {
         int failedCount = 0;
         BOOL cancelled = NO;
-        AVLoggerD(@"operations %ld", operations.count);
+        AVLoggerD(@"operations %@", @(operations.count));
         for (AVFileHTTPRequestOperation *operation in operations) {
             if (operation.isCancelled) {
                 cancelled = YES;
@@ -1124,11 +1093,11 @@ static NSUInteger const QCloudSliceSize = 512 * 1024;
     }
     semaphore = dispatch_semaphore_create(0);
     [self enqueueBatchOfHTTPRequestOperations:operations progressBlock:^(NSUInteger numberOfFinishedOperations, NSUInteger totalNumberOfOperations) {
-        AVLoggerD(@"%ld of %ld", numberOfFinishedOperations, totalNumberOfOperations);
+        AVLoggerD(@"%@ of %@", @(numberOfFinishedOperations), @(totalNumberOfOperations));
     } completionBlock:^(NSArray *operations) {
         int failedCount = 0;
         BOOL cancelled = NO;
-        AVLoggerD(@"operations %ld", operations.count);
+        AVLoggerD(@"operations %@", @(operations.count));
         for (AVFileHTTPRequestOperation *operation in operations) {
             if (operation.isCancelled) {
                 cancelled = YES;
