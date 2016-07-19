@@ -708,7 +708,7 @@ typedef void (^AVFileSizeBlock)(long long fileSize);
 
     [dictionary setObject:[self mimeType] forKey:@"mime_type"];
 
-    [file addACLToDict:dic];
+    [self addACLToDict:dictionary];
 
     return dictionary;
 }
