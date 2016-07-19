@@ -102,10 +102,19 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 @synthesize requestLock = _requestLock;
 
 #pragma mark - Utils Methods
+
+- (NSDictionary *)snapshot {
+    return [AVObjectUtils objectSnapshot:self recursive:NO];
+}
+
 - (NSString *)description {
-    return [NSString stringWithFormat:@"<%@, %@, %@, localData:%@, estimatedData:%@, relationData:%@>",NSStringFromClass([self class]),
-            self.className, self.objectId,
-            self.localData, self.estimatedData, self.relationData];
+    NSDictionary *snapshot = [self snapshot];
+
+    return [NSString stringWithFormat:@"<%@, %@, %@, %@>",
+            NSStringFromClass([self class]),
+            self.className,
+            self.objectId,
+            snapshot];
 }
 
 #pragma mark - Accessor

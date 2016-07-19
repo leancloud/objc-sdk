@@ -124,4 +124,11 @@ NSString *request_object_id(NSDictionary *request) {
  */
 - (BOOL)shouldIncludeUpdateRequests;
 
+/**
+ * Get snapshot of object.
+ *
+ * @return The snapshot of object
+ */
+- (NSDictionary *)snapshot;
+
 @end

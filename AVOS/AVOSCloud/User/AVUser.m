@@ -841,6 +841,13 @@ static BOOL enableAutomatic = NO;
     _mobilePhoneNumber = mobilePhoneNumber;
     [self addSetRequest:mobilePhoneNumberTag object:mobilePhoneNumber];
 }
+
+- (NSDictionary *)snapshot {
+    NSMutableDictionary *snapshot = [[super snapshot] mutableCopy];
+    [snapshot removeObjectForKey:passwordTag];
+    return snapshot;
+}
+
 @end
 
 
