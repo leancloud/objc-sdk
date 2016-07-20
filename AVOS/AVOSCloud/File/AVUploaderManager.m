@@ -120,7 +120,8 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
 - (void)uploadWithAVFile:(AVFile *)file progressBlock:(AVProgressBlock)progressBlock resultBlock:(AVBooleanResultBlock)resultBlock {
     NSDictionary *parameters = [self parametersForFile:file];
     [[AVPaasClient sharedInstance] postObject:@"fileTokens" withParameters:parameters block:^(id object, NSError *error) {
-        if (error) {
+        id bucket = [object valueForKey:@"bucket"];
+        if (error || !bucket || (bucket == [NSNull null])) {
             [AVUtils callBooleanResultBlock:resultBlock error:[NSError errorWithDomain:@"AVOSUploadFileDomain" code:0 userInfo:@{@"reason":[NSString stringWithFormat:@"file upload failed."]}]];
             return;
         }
