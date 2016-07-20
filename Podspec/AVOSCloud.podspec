@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   s.name     = 'AVOSCloud'
   s.version  = '3.4.0-beta'
   s.homepage = 'https://leancloud.cn/'
-  s.summary  = 'LeanCloud Swift SDK'
+  s.summary  = 'LeanCloud Objective-C SDK'
   s.authors  = 'LeanCloud'
   s.license  = {
     :type => 'Apache License, Version 2.0',
