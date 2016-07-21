@@ -116,8 +116,16 @@
 }
 
 - (BOOL)isDirty {
-    // 有修改过或者 [AVInstallation currentInstallation] 没保存过、过时了
-    return [self.requestManager containsRequest] || ([[self class] currentInstallation] == self && (self.objectId.length == 0 || (self.updatedAt && [self.updatedAt timeIntervalSinceNow] < - 60 * 60 * 24)));
+    if ([super isDirty]) {
+        return YES;
+    } else if ([AVInstallation currentInstallation] == self) {
+        /* If cache expired, we deem that it is dirty. */
+        if (!self.updatedAt || [self.updatedAt timeIntervalSinceNow] < - 60 * 60 * 24) {
+            return YES;
+        }
+    }
+
+    return NO;
 }
 
 -(NSError *)preSave {

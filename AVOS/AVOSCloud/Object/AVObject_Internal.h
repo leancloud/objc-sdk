@@ -131,4 +131,11 @@ NSString *request_object_id(NSDictionary *request) {
  */
 - (NSDictionary *)snapshot;
 
+/**
+ * Check wether an object is dirty.
+ *
+ * @return true if object is dirty, for example, has been modified or expired, false otherwise.
+ */
+- (BOOL)isDirty;
+
 @end

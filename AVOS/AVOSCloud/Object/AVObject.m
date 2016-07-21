@@ -103,6 +103,13 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 #pragma mark - Utils Methods
 
+- (BOOL)isDirty {
+    BOOL isNewborn = ![self hasValidObjectId];
+    BOOL isModified = [self.requestManager containsRequest];
+
+    return isNewborn || isModified;
+}
+
 - (NSDictionary *)snapshot {
     return [AVObjectUtils objectSnapshot:self recursive:NO];
 }
@@ -684,7 +691,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     /* Perform save request. */
     do {
         /* If object is clean, ignore save request. */
-        if ([self hasValidObjectId] && ![self.requestManager containsRequest]) {
+        if (![self isDirty]) {
             AVLoggerInfo(AVLoggerDomainStorage, @"Object not changed, ignore save request.");
             break;
         }
