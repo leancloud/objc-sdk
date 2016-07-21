@@ -22,7 +22,10 @@
 
 ## Installation
 
-Please read the [installation][installation] page.
+[Installation wiki page][installation-wiki-page] describes how to integrate SDK.
+
+Also see [Quick Start][quick-start].
 
 [LeanTicket]: https://leanticket.cn/t/leancloud
-[installation]: https://leancloud.cn/docs/start.html
+[installation-wiki-page]: https://github.com/leancloud/objc-sdk/wiki/Installation
+[quick-start]: https://leancloud.cn/docs/start.html
