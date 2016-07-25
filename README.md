@@ -1,5 +1,8 @@
 # LeanCloud Objective-C SDK
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+![platform](https://img.shields.io/badge/Platform-iOS%20%7C%20macOS%20%7C%20tvOS%20%7C%20watchOS-brightgreen.svg)
+
 ## Features
   * [x] Data Storage
   * [x] Object Query
