@@ -7,12 +7,13 @@
 //
 
 #import "AVOSCloud.h"
+#import "AVOSCloud_Internal.h"
+#import "AVConfiguration.h"
+#import "AVConfiguration_extension.h"
 #import "AVPaasClient.h"
 #import "AVUploaderManager.h"
 #import "AVScheduler.h"
 #import "AVPersistenceUtils.h"
-
-#import "AVOSCloud_Internal.h"
 
 #if !TARGET_OS_WATCH
 #import "AVAnalytics_Internal.h"
@@ -65,10 +66,10 @@ AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
     _verbosePolicy = verbosePolicy;
 }
 
-+ (void)logApplicationInfo:(NSString *)applicationID {
++ (void)logApplicationInfo {
     const char *s = (const char *)AVOSCloud_Art_inc;
     printf("%s\n", s);
-    printf("appid: %s\n", [applicationID UTF8String]);
+    printf("appid: %s\n", [[self getApplicationId] UTF8String]);
     NSDictionary *dict = [AVAnalyticsUtils deviceInfo];
     for (NSString *key in dict) {
         id value = [dict objectForKey:key];
@@ -84,11 +85,11 @@ AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
     [router updateInBackground];
 }
 
-+ (void)initializePaasClientWithApplicationId:(NSString *)applicationId clientKey:(NSString *)clientKey {
++ (void)initializePaasClient {
     AVPaasClient *paasClient = [AVPaasClient sharedInstance];
 
-    paasClient.applicationId = applicationId;
-    paasClient.clientKey = clientKey;
+    paasClient.applicationId = [self getApplicationId];
+    paasClient.clientKey     = [self getClientKey];
 
     // always handle offline requests, include analytics collection
     [paasClient handleAllArchivedRequests];
@@ -96,14 +97,17 @@ AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
 
 + (void)setApplicationId:(NSString *)applicationId clientKey:(NSString *)clientKey
 {
+    AVConfiguration *configuration = [AVConfiguration sharedInstance];
+
+    configuration.applicationId  = applicationId;
+    configuration.applicationKey = clientKey;
+
     if (_verbosePolicy == kAVVerboseShow) {
-        [self logApplicationInfo:applicationId];
+        [self logApplicationInfo];
     }
 
-    [self initializePaasClientWithApplicationId:applicationId clientKey:clientKey];
-
+    [self initializePaasClient];
     [self updateRouterInBackground];
-
     [[LCNetworkStatistics sharedInstance] start];
 
     for (Class<AVOSCloudModule> cls in AVOSCloudModules) {
@@ -133,12 +137,12 @@ AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
 
 + (NSString *)getApplicationId
 {
-    return [AVPaasClient sharedInstance].applicationId;
+    return [AVConfiguration sharedInstance].applicationId;
 }
 
 + (NSString *)getClientKey
 {
-    return [AVPaasClient sharedInstance].clientKey;
+    return [AVConfiguration sharedInstance].applicationKey;
 }
 
 + (void)setLastModifyEnabled:(BOOL)enabled{
