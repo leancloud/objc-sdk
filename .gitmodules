@@ -1,3 +1,3 @@
 [submodule "Breakpad"]
 	path = Breakpad
-	url = git@github.com:leancloud/Breakpad.git
+	url = https://github.com/leancloud/Breakpad.git
