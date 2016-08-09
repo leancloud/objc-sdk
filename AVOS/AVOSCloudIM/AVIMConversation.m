@@ -786,12 +786,11 @@
         return;
     }
     if (socketOpened) {
-        AVIMMessage *toMessage = [[self messageCacheStore] latestNoBreakpointMessage];
         /* If connection is open, query messages from server */
         [self queryMessagesFromServerBeforeId:nil
                                     timestamp:LCIM_DISTANT_FUTURE_TIMESTAMP
-                                  toMessageId:toMessage.messageId
-                                  toTimestamp:toMessage.sendTimestamp
+                                  toMessageId:nil
+                                  toTimestamp:0
                                         limit:limit
                                      callback:^(NSArray *messages, NSError *error)
          {
