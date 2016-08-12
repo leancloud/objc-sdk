@@ -100,9 +100,12 @@
 #pragma mark - Simple objecitive-c object from server side dictionary
 +(NSString *)stringFromDate:(NSDate *)date
 {
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:AV_DATE_FORMAT];
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    static NSDateFormatter *dateFormatter;
+    if (!dateFormatter) {
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:AV_DATE_FORMAT];
+        [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    }
     NSString *strDate = [dateFormatter stringFromDate:date];
     return strDate;
 }
@@ -113,9 +116,13 @@
         return [NSDate date];
     }
     
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:AV_DATE_FORMAT];
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    static NSDateFormatter *dateFormatter;
+    if (!dateFormatter) {
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:AV_DATE_FORMAT];
+        [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    }
+
     NSDate *date = [dateFormatter dateFromString:string];
 
     return date;
