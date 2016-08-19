@@ -650,6 +650,10 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     LCURLSessionManager *manager = [[LCURLSessionManager alloc] initWithSessionConfiguration:configuration];
     manager.completionQueue = self.completionQueue;
 
+    /* Remove all null value of result. */
+    LCJSONResponseSerializer *responseSerializer = (LCJSONResponseSerializer *)manager.responseSerializer;
+    responseSerializer.removesKeysWithNullValues = YES;
+
     NSURLSessionDataTask *dataTask = [manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         /* As Apple say:
          > Whenever you make an HTTP request,
