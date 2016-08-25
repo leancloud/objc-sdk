@@ -561,6 +561,13 @@
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
         genericCommand.needResponse = YES;
         genericCommand.cmd = AVIMCommandType_Direct;
+        if (message.priority > 0) {
+            if (self.transient) {
+                genericCommand.priority = message.priority;
+            } else {
+                AVLoggerInfo(AVLoggerDomainIM, @"Message priority has no effect in non-transient conversation.");
+            }
+        }
         AVIMDirectCommand *directCommand = [[AVIMDirectCommand alloc] init];
         [genericCommand avim_addRequiredKeyWithCommand:directCommand];
         [genericCommand avim_addRequiredKeyForDirectMessageWithMessage:message transient:NO];

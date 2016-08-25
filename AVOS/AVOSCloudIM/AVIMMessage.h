@@ -8,18 +8,25 @@
 
 #import "AVIMCommon.h"
 
-typedef enum : int8_t {
+typedef NS_ENUM(int8_t, AVIMMessageIOType) {
     AVIMMessageIOTypeIn = 1,
     AVIMMessageIOTypeOut,
-} AVIMMessageIOType;
+};
 
-typedef enum : int8_t {
+typedef NS_ENUM(int8_t, AVIMMessageStatus) {
     AVIMMessageStatusNone = 0,
     AVIMMessageStatusSending = 1,
     AVIMMessageStatusSent,
     AVIMMessageStatusDelivered,
     AVIMMessageStatusFailed,
-} AVIMMessageStatus;
+};
+
+typedef NS_ENUM(NSInteger, AVIMMessagePriority) {
+    AVIMMessagePriorityDefault = 0,
+    AVIMMessagePriorityHigh    = 1,
+    AVIMMessagePriorityNormal  = 2,
+    AVIMMessagePriorityLow     = 3,
+};
 
 @interface AVIMMessage : NSObject <NSCopying, NSCoding>
 
@@ -67,6 +74,11 @@ typedef enum : int8_t {
  * 是否是暂态消息
  */
 @property (nonatomic, readonly, assign) BOOL transient;
+
+/*!
+ 消息优先级。对话消息繁忙时，高优先级消息会优先到达。
+ */
+@property (nonatomic, assign) AVIMMessagePriority priority;
 
 - (NSString *)payload;
 
