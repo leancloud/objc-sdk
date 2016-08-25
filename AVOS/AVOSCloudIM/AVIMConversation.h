@@ -11,6 +11,7 @@
 #import "AVIMTypedMessage.h"
 #import "AVIMConversationUpdateBuilder.h"
 #import "AVIMKeyedConversation.h"
+#import "AVIMOnlineStatusPolicy.h"
 
 @class AVIMClient;
 
@@ -150,6 +151,15 @@ enum : AVIMMessageSendOption {
  将服务端该会话的未读消息数置零。
  */
 - (void)markAsReadInBackground;
+
+/*!
+ 更新在线状态的订阅和发布策略。
+
+ @param policy   - 在线状态的订阅和发布策略
+ @param callback - 结果回调
+ */
+- (void)updateOnlineStatusPolicy:(AVIMOnlineStatusPolicy *)policy
+                        callback:(AVIMBooleanResultBlock)callback;
 
 /*!
  邀请新成员加入对话。
