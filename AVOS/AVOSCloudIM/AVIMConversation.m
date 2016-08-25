@@ -342,6 +342,36 @@
     });
 }
 
+- (void)updateOnlineStatusPolicy:(AVIMOnlineStatusPolicy *)policy
+                        callback:(AVIMBooleanResultBlock)callback
+{
+    __weak typeof(self) weakSelf = self;
+
+    dispatch_async([AVIMClient imClientQueue], ^{
+        [weakSelf.imClient sendCommand:({
+            AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
+            genericCommand.cmd = AVIMCommandType_Conv;
+            genericCommand.op  = AVIMOpType_Status;
+            genericCommand.peerId = weakSelf.imClient.clientId;
+            genericCommand.needResponse = YES;
+
+            AVIMConvCommand *convCommand = [[AVIMConvCommand alloc] init];
+            convCommand.cid = weakSelf.conversationId;
+            convCommand.statusPub = policy.publishable;
+            convCommand.statusSub = policy.subscribable;
+            convCommand.statusTtl = MAX(policy.TTL, 0);
+
+            genericCommand.convMessage = convCommand;
+
+            [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
+                [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+            }];
+
+            genericCommand;
+        })];
+    });
+}
+
 - (void)sendMessage:(AVIMMessage *)message
            callback:(AVIMBooleanResultBlock)callback
 {

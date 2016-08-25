@@ -10,6 +10,7 @@
 
 #import "AVIMCommon.h"
 #import "AVIMSignature.h"
+#import "AVIMOnlineStatusPolicy.h"
 
 @class AVIMConversation;
 @class AVIMKeyedConversation;
@@ -288,6 +289,14 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  @param error 错误信息。
  */
 - (void)client:(AVIMClient *)client didOfflineWithError:(NSError *)error;
+
+/*!
+ 对话中其他成员的在线状态发生变化。
+ @param conversation 成员所属的对话。
+ @param members 在线状态发生变化的成员列表。
+ @param onlineStatus 在线状态。
+ */
+- (void)conversation:(AVIMConversation *)conversation members:(NSArray<NSString *> *)members onlineStatusDidChange:(AVIMOnlineStatus)onlineStatus;
 
 @end
 
