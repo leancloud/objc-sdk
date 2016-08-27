@@ -339,22 +339,25 @@ static NSMutableDictionary *downloadingMap = nil;
     }
 }
 
+- (BOOL)localFileExists {
+    return self.path && [[NSFileManager defaultManager] fileExistsAtPath:self.path];
+}
+
 - (NSString *)mimeType
 {
     NSString * type = nil;
-    if (self.name.length > 0) {
+
+    if ([self localFileExists]) {
+        type = [AVUtils MIMETypeFromPath:self.path];
+    } else if (self.name.length > 0) {
         type = [AVUtils MIMEType:self.name];
-    } else if (self.localPath.length > 0) {
-        type = [AVUtils MIMETypeFromPath:self.localPath];
     } else if (self.data.length > 0) {
         type = [AVUtils contentTypeForImageData:self.data];
     } else if (self.url) {
         type = [AVUtils MIMEType:self.url];
     }
-    if (type != nil) {
-        return type;
-    }
-    return @"application/octet-stream";
+
+    return type ?: @"application/octet-stream";
 }
 
 -(NSDictionary *)updateMetaData

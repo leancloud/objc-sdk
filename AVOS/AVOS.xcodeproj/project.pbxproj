@@ -2513,10 +2513,10 @@
 			isa = PBXGroup;
 			children = (
 				8C841A131A5A79FF00C5C6C4 /* AVFile.h */,
+				8C841A151A5A79FF00C5C6C4 /* AVFile_Internal.h */,
 				8C841A141A5A79FF00C5C6C4 /* AVFile.m */,
 				701881F41BC6777200432D43 /* AVFileQuery.h */,
 				701881F31BC6777200432D43 /* AVFileQuery.m */,
-				8C841A151A5A79FF00C5C6C4 /* AVFile_Internal.h */,
 				8C841A161A5A79FF00C5C6C4 /* AVFileHTTPRequestOperation.h */,
 				8C841A171A5A79FF00C5C6C4 /* AVFileHTTPRequestOperation.m */,
 				8C841A181A5A79FF00C5C6C4 /* AVPartialInputStream.h */,
