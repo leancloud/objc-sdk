@@ -82,6 +82,7 @@ static NSMutableDictionary *downloadingMap = nil;
 {
     AVFile * file = [[self alloc] init];
     file.name = name;
+    file.path = path;
     file.localPath = path;
     NSError *error = nil;
     file.data = [[NSData alloc] initWithContentsOfFile:path options:NSDataReadingMapped error:&error];

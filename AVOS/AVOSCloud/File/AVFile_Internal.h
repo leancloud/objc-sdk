@@ -12,6 +12,20 @@
 @interface AVFile  ()
 
 @property (readwrite) NSString *name;
+
+/**
+ File path.
+
+ Unlike `localPath`, it can be nil if file not constructed by path.
+ */
+@property (nonatomic, copy) NSString *path;
+
+/**
+ Local file path.
+
+ If file is constructed by path, it is equal to `path`.
+ However, if no path, it will return a temporary path for data cache.
+ */
 @property (nonatomic, readwrite) NSString *localPath;
 @property (nonatomic, readwrite, copy) NSString *bucket;
 @property (readwrite) NSString *url;
