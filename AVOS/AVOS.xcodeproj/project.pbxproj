@@ -496,6 +496,50 @@
 		8320F9511C1918C60024B45E /* AVCloudQueryResult_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A641A5A79FF00C5C6C4 /* AVCloudQueryResult_Internal.h */; };
 		8320F9541C1918C60024B45E /* AVPush_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A601A5A79FF00C5C6C4 /* AVPush_Internal.h */; };
 		8320F95E1C1918FE0024B45E /* AVOSCloud-watchOS.Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8320F95D1C1918FE0024B45E /* AVOSCloud-watchOS.Info.plist */; };
+		8326D8491D717FFE00775F81 /* GTMDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8461D717FFE00775F81 /* GTMDefines.h */; };
+		8326D84A1D717FFE00775F81 /* GTMDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8461D717FFE00775F81 /* GTMDefines.h */; };
+		8326D84B1D717FFE00775F81 /* GTMDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8461D717FFE00775F81 /* GTMDefines.h */; };
+		8326D84C1D717FFE00775F81 /* GTMDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8461D717FFE00775F81 /* GTMDefines.h */; };
+		8326D84D1D717FFE00775F81 /* GTMStringEncoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8471D717FFE00775F81 /* GTMStringEncoding.h */; };
+		8326D84E1D717FFE00775F81 /* GTMStringEncoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8471D717FFE00775F81 /* GTMStringEncoding.h */; };
+		8326D84F1D717FFE00775F81 /* GTMStringEncoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8471D717FFE00775F81 /* GTMStringEncoding.h */; };
+		8326D8501D717FFE00775F81 /* GTMStringEncoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8471D717FFE00775F81 /* GTMStringEncoding.h */; };
+		8326D8511D717FFE00775F81 /* GTMStringEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D8481D717FFE00775F81 /* GTMStringEncoding.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8326D8521D717FFE00775F81 /* GTMStringEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D8481D717FFE00775F81 /* GTMStringEncoding.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8326D8531D717FFE00775F81 /* GTMStringEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D8481D717FFE00775F81 /* GTMStringEncoding.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8326D8541D717FFE00775F81 /* GTMStringEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D8481D717FFE00775F81 /* GTMStringEncoding.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8326D8591D7180DE00775F81 /* AVFileBreakpoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8551D7180DE00775F81 /* AVFileBreakpoint.h */; };
+		8326D85A1D7180DE00775F81 /* AVFileBreakpoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8551D7180DE00775F81 /* AVFileBreakpoint.h */; };
+		8326D85B1D7180DE00775F81 /* AVFileBreakpoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8551D7180DE00775F81 /* AVFileBreakpoint.h */; };
+		8326D85C1D7180DE00775F81 /* AVFileBreakpoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8551D7180DE00775F81 /* AVFileBreakpoint.h */; };
+		8326D85D1D7180DE00775F81 /* AVFileBreakpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D8561D7180DE00775F81 /* AVFileBreakpoint.m */; };
+		8326D85E1D7180DE00775F81 /* AVFileBreakpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D8561D7180DE00775F81 /* AVFileBreakpoint.m */; };
+		8326D85F1D7180DE00775F81 /* AVFileBreakpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D8561D7180DE00775F81 /* AVFileBreakpoint.m */; };
+		8326D8601D7180DE00775F81 /* AVFileBreakpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D8561D7180DE00775F81 /* AVFileBreakpoint.m */; };
+		8326D8611D7180DE00775F81 /* AVQiniuResumableUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8571D7180DE00775F81 /* AVQiniuResumableUploader.h */; };
+		8326D8621D7180DE00775F81 /* AVQiniuResumableUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8571D7180DE00775F81 /* AVQiniuResumableUploader.h */; };
+		8326D8631D7180DE00775F81 /* AVQiniuResumableUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8571D7180DE00775F81 /* AVQiniuResumableUploader.h */; };
+		8326D8641D7180DE00775F81 /* AVQiniuResumableUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8571D7180DE00775F81 /* AVQiniuResumableUploader.h */; };
+		8326D8651D7180DE00775F81 /* AVQiniuResumableUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D8581D7180DE00775F81 /* AVQiniuResumableUploader.m */; };
+		8326D8661D7180DE00775F81 /* AVQiniuResumableUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D8581D7180DE00775F81 /* AVQiniuResumableUploader.m */; };
+		8326D8671D7180DE00775F81 /* AVQiniuResumableUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D8581D7180DE00775F81 /* AVQiniuResumableUploader.m */; };
+		8326D8681D7180DE00775F81 /* AVQiniuResumableUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D8581D7180DE00775F81 /* AVQiniuResumableUploader.m */; };
+		8326D86C1D71817200775F81 /* AVFileHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D86A1D71817200775F81 /* AVFileHash.h */; };
+		8326D86D1D71817200775F81 /* AVFileHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D86A1D71817200775F81 /* AVFileHash.h */; };
+		8326D86E1D71817200775F81 /* AVFileHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D86A1D71817200775F81 /* AVFileHash.h */; };
+		8326D86F1D71817200775F81 /* AVFileHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D86A1D71817200775F81 /* AVFileHash.h */; };
+		8326D8701D71817200775F81 /* AVFileHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D86B1D71817200775F81 /* AVFileHash.m */; };
+		8326D8711D71817200775F81 /* AVFileHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D86B1D71817200775F81 /* AVFileHash.m */; };
+		8326D8721D71817200775F81 /* AVFileHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D86B1D71817200775F81 /* AVFileHash.m */; };
+		8326D8731D71817200775F81 /* AVFileHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D86B1D71817200775F81 /* AVFileHash.m */; };
+		8326D8801D71A74C00775F81 /* AVFileAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D87E1D71A74C00775F81 /* AVFileAccessor.h */; };
+		8326D8811D71A74C00775F81 /* AVFileAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D87E1D71A74C00775F81 /* AVFileAccessor.h */; };
+		8326D8821D71A74C00775F81 /* AVFileAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D87E1D71A74C00775F81 /* AVFileAccessor.h */; };
+		8326D8831D71A74C00775F81 /* AVFileAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D87E1D71A74C00775F81 /* AVFileAccessor.h */; };
+		8326D8841D71A74C00775F81 /* AVFileAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D87F1D71A74C00775F81 /* AVFileAccessor.m */; };
+		8326D8851D71A74C00775F81 /* AVFileAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D87F1D71A74C00775F81 /* AVFileAccessor.m */; };
+		8326D8861D71A74C00775F81 /* AVFileAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D87F1D71A74C00775F81 /* AVFileAccessor.m */; };
+		8326D8871D71A74C00775F81 /* AVFileAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D87F1D71A74C00775F81 /* AVFileAccessor.m */; };
 		833E1F631B69F629002A691C /* AVIMFileMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 833E1F611B69F629002A691C /* AVIMFileMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		833E1F641B69F629002A691C /* AVIMFileMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 833E1F621B69F629002A691C /* AVIMFileMessage.m */; };
 		834775DC1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 834775DB1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h */; };
@@ -1369,6 +1413,17 @@
 		8311CD841C3D25B9007DEFF8 /* AVAvailability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVAvailability.h; sourceTree = "<group>"; };
 		8320F95C1C1918C60024B45E /* AVOSCloud.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloud.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8320F95D1C1918FE0024B45E /* AVOSCloud-watchOS.Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AVOSCloud-watchOS.Info.plist"; sourceTree = "<group>"; };
+		8326D8461D717FFE00775F81 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
+		8326D8471D717FFE00775F81 /* GTMStringEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMStringEncoding.h; sourceTree = "<group>"; };
+		8326D8481D717FFE00775F81 /* GTMStringEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMStringEncoding.m; sourceTree = "<group>"; };
+		8326D8551D7180DE00775F81 /* AVFileBreakpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFileBreakpoint.h; sourceTree = "<group>"; };
+		8326D8561D7180DE00775F81 /* AVFileBreakpoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVFileBreakpoint.m; sourceTree = "<group>"; };
+		8326D8571D7180DE00775F81 /* AVQiniuResumableUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVQiniuResumableUploader.h; sourceTree = "<group>"; };
+		8326D8581D7180DE00775F81 /* AVQiniuResumableUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVQiniuResumableUploader.m; sourceTree = "<group>"; };
+		8326D86A1D71817200775F81 /* AVFileHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFileHash.h; sourceTree = "<group>"; };
+		8326D86B1D71817200775F81 /* AVFileHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVFileHash.m; sourceTree = "<group>"; };
+		8326D87E1D71A74C00775F81 /* AVFileAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFileAccessor.h; sourceTree = "<group>"; };
+		8326D87F1D71A74C00775F81 /* AVFileAccessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVFileAccessor.m; sourceTree = "<group>"; };
 		833E1F611B69F629002A691C /* AVIMFileMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMFileMessage.h; sourceTree = "<group>"; };
 		833E1F621B69F629002A691C /* AVIMFileMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMFileMessage.m; sourceTree = "<group>"; };
 		834775DB1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMKeyedConversation_internal.h; sourceTree = "<group>"; };
@@ -1942,6 +1997,25 @@
 				830EB9BF1C3E4BFA00BA917F /* LCObserver.m */,
 			);
 			path = COSObserver;
+			sourceTree = "<group>";
+		};
+		8326D8451D717FFE00775F81 /* GTM */ = {
+			isa = PBXGroup;
+			children = (
+				8326D8461D717FFE00775F81 /* GTMDefines.h */,
+				8326D8471D717FFE00775F81 /* GTMStringEncoding.h */,
+				8326D8481D717FFE00775F81 /* GTMStringEncoding.m */,
+			);
+			path = GTM;
+			sourceTree = "<group>";
+		};
+		8326D8691D71817200775F81 /* FileHash */ = {
+			isa = PBXGroup;
+			children = (
+				8326D86A1D71817200775F81 /* AVFileHash.h */,
+				8326D86B1D71817200775F81 /* AVFileHash.m */,
+			);
+			path = FileHash;
 			sourceTree = "<group>";
 		};
 		836705A91BA1358D0050E968 /* SDMacros */ = {
@@ -2523,6 +2597,12 @@
 				8C841A191A5A79FF00C5C6C4 /* AVPartialInputStream.m */,
 				8C841A1A1A5A79FF00C5C6C4 /* AVUploaderManager.h */,
 				8C841A1B1A5A79FF00C5C6C4 /* AVUploaderManager.m */,
+				8326D87E1D71A74C00775F81 /* AVFileAccessor.h */,
+				8326D87F1D71A74C00775F81 /* AVFileAccessor.m */,
+				8326D8551D7180DE00775F81 /* AVFileBreakpoint.h */,
+				8326D8561D7180DE00775F81 /* AVFileBreakpoint.m */,
+				8326D8571D7180DE00775F81 /* AVQiniuResumableUploader.h */,
+				8326D8581D7180DE00775F81 /* AVQiniuResumableUploader.m */,
 			);
 			path = File;
 			sourceTree = "<group>";
@@ -2690,6 +2770,8 @@
 				836705A91BA1358D0050E968 /* SDMacros */,
 				8C841A981A5A7A0000C5C6C4 /* SocketRocket */,
 				830EB9BD1C3E4BFA00BA917F /* COSObserver */,
+				8326D8451D717FFE00775F81 /* GTM */,
+				8326D8691D71817200775F81 /* FileHash */,
 			);
 			path = ThirdParty;
 			sourceTree = "<group>";
@@ -3075,6 +3157,7 @@
 				70CA800E1BDE4314000A3B21 /* AVSearchSortBuilder.h in Headers */,
 				70CA7FE71BDE42F6000A3B21 /* AVConstants.h in Headers */,
 				70CA7FFD1BDE4313000A3B21 /* AVRelation.h in Headers */,
+				8326D84A1D717FFE00775F81 /* GTMDefines.h in Headers */,
 				70CA80001BDE4313000A3B21 /* AVSubclassing.h in Headers */,
 				70CA80011BDE4313000A3B21 /* AVInstallation.h in Headers */,
 				70CA80031BDE4313000A3B21 /* AVPush.h in Headers */,
@@ -3083,6 +3166,7 @@
 				70CA80081BDE4313000A3B21 /* AVQuery.h in Headers */,
 				70CA80101BDE4314000A3B21 /* AVStatus.h in Headers */,
 				70CA80321BDE4318000A3B21 /* AVAnonymousUtils.h in Headers */,
+				8326D84E1D717FFE00775F81 /* GTMStringEncoding.h in Headers */,
 				70CA80331BDE4318000A3B21 /* AVUser.h in Headers */,
 				70CA80381BDE4319000A3B21 /* AVLogger.h in Headers */,
 				83A2BD311CF33CDA0047B230 /* AVPaasClient_internal.h in Headers */,
@@ -3094,6 +3178,7 @@
 				70CA7FEE1BDE42F6000A3B21 /* AVCloud.h in Headers */,
 				70CA7FF01BDE42F6000A3B21 /* AVFile.h in Headers */,
 				70CA7FF11BDE42F6000A3B21 /* AVFileQuery.h in Headers */,
+				8326D86D1D71817200775F81 /* AVFileHash.h in Headers */,
 				70CA7FF61BDE42F6000A3B21 /* AVGeoPoint.h in Headers */,
 				70CA7FFA1BDE4313000A3B21 /* AVObject.h in Headers */,
 				835C5F721D2594EA00EF0EBB /* AVAnalyticsActivity.h in Headers */,
@@ -3105,6 +3190,7 @@
 				70CA7FFE1BDE4313000A3B21 /* AVRequestManager.h in Headers */,
 				70CA7FFF1BDE4313000A3B21 /* AVRelation_Internal.h in Headers */,
 				70CA80021BDE4313000A3B21 /* AVInstallation_Internal.h in Headers */,
+				8326D8811D71A74C00775F81 /* AVFileAccessor.h in Headers */,
 				70CA80041BDE4313000A3B21 /* AVPush_Internal.h in Headers */,
 				70CA80061BDE4313000A3B21 /* AVCloudQueryResult_Internal.h in Headers */,
 				83FCB9BA1CEDC57C007D8712 /* LCSecurityPolicy.h in Headers */,
@@ -3119,6 +3205,7 @@
 				8311CD871C3D25B9007DEFF8 /* AVAvailability.h in Headers */,
 				70CA80131BDE4314000A3B21 /* AVHTTPRequestOperation.h in Headers */,
 				70CA80141BDE4314000A3B21 /* AVImageRequestOperation.h in Headers */,
+				8326D85A1D7180DE00775F81 /* AVFileBreakpoint.h in Headers */,
 				83FCB9A11CEDC57C007D8712 /* LCHTTPSessionManager.h in Headers */,
 				83FCB9CE1CEDC57C007D8712 /* LCURLResponseSerialization.h in Headers */,
 				70CA80151BDE4315000A3B21 /* AVJSONRequestOperation.h in Headers */,
@@ -3173,6 +3260,7 @@
 				830EB9F61C44D68400BA917F /* AVSaveOption.h in Headers */,
 				70CA7FF51BDE42F6000A3B21 /* AVUploaderManager.h in Headers */,
 				83FCB9C41CEDC57C007D8712 /* LCURLRequestSerialization.h in Headers */,
+				8326D8621D7180DE00775F81 /* AVQiniuResumableUploader.h in Headers */,
 				8302AED71C192A0700E13F8A /* LCURLConnection.h in Headers */,
 				70CA7FF71BDE42F6000A3B21 /* AVGeoPoint_Internal.h in Headers */,
 				70CA7FF81BDE42F6000A3B21 /* AVLocationManager.h in Headers */,
@@ -3200,6 +3288,7 @@
 				8320F8F01C1918C60024B45E /* AVObject.h in Headers */,
 				8320F8F11C1918C60024B45E /* AVRelation.h in Headers */,
 				83FCB9C61CEDC57C007D8712 /* LCURLRequestSerialization.h in Headers */,
+				8326D8501D717FFE00775F81 /* GTMStringEncoding.h in Headers */,
 				8320F8F21C1918C60024B45E /* AVSubclassing.h in Headers */,
 				8320F8F31C1918C60024B45E /* AVInstallation.h in Headers */,
 				8320F8F41C1918C60024B45E /* AVFileQuery.h in Headers */,
@@ -3217,6 +3306,7 @@
 				8320F8FB1C1918C60024B45E /* LCDatabaseCoordinator.h in Headers */,
 				8320F8FC1C1918C60024B45E /* AVSearchSortBuilder.h in Headers */,
 				8320F8FD1C1918C60024B45E /* AVStatus.h in Headers */,
+				8326D86F1D71817200775F81 /* AVFileHash.h in Headers */,
 				9A404DE11CE5A9C400DEB3DC /* LCRouterCache.h in Headers */,
 				83FCB9A31CEDC57C007D8712 /* LCHTTPSessionManager.h in Headers */,
 				83FCB9B21CEDC57C007D8712 /* LCNetworkReachabilityManager.h in Headers */,
@@ -3225,6 +3315,7 @@
 				8320F9011C1918C60024B45E /* AVLogger.h in Headers */,
 				830EBA031C44F3D600BA917F /* AVSaveOption_internal.h in Headers */,
 				8320F9021C1918C60024B45E /* AVGlobal.h in Headers */,
+				8326D8831D71A74C00775F81 /* AVFileAccessor.h in Headers */,
 				8320F9031C1918C60024B45E /* AVFileHTTPRequestOperation.h in Headers */,
 				8320F9041C1918C60024B45E /* AVLocationManager.h in Headers */,
 				830EB9C41C3E4BFA00BA917F /* LCObserver.h in Headers */,
@@ -3242,6 +3333,7 @@
 				8320F9111C1918C60024B45E /* LCDatabaseCommon.h in Headers */,
 				8320F9121C1918C60024B45E /* LCResultSet.h in Headers */,
 				8320F9131C1918C60024B45E /* AVFile_Internal.h in Headers */,
+				8326D8641D7180DE00775F81 /* AVQiniuResumableUploader.h in Headers */,
 				83A2BD331CF33CDA0047B230 /* AVPaasClient_internal.h in Headers */,
 				8320F9171C1918C60024B45E /* AVPaasClient.h in Headers */,
 				8320F9181C1918C60024B45E /* AVQuery_Internal.h in Headers */,
@@ -3263,6 +3355,7 @@
 				8320F9311C1918C60024B45E /* AVUploaderManager.h in Headers */,
 				8320F9321C1918C60024B45E /* AVOSCloud_Internal.h in Headers */,
 				8320F9351C1918C60024B45E /* AVCacheManager.h in Headers */,
+				8326D84C1D717FFE00775F81 /* GTMDefines.h in Headers */,
 				8320F9371C1918C60024B45E /* AVUser_Internal.h in Headers */,
 				8320F9381C1918C60024B45E /* AVInstallation_Internal.h in Headers */,
 				8320F9391C1918C60024B45E /* AVPersistenceUtils.h in Headers */,
@@ -3271,6 +3364,7 @@
 				8320F93E1C1918C60024B45E /* AVScheduler.h in Headers */,
 				8320F9401C1918C60024B45E /* AVGeoPoint_Internal.h in Headers */,
 				8320F9471C1918C60024B45E /* AVDuration.h in Headers */,
+				8326D85C1D7180DE00775F81 /* AVFileBreakpoint.h in Headers */,
 				8320F9481C1918C60024B45E /* UserAgent.h in Headers */,
 				8320F94B1C1918C60024B45E /* LCKeyValueSQL.h in Headers */,
 				8320F94C1C1918C60024B45E /* AVRole_Internal.h in Headers */,
@@ -3300,6 +3394,7 @@
 				83D8CEDA1C17DAF50094279D /* NSDictionary+LCHash.h in Headers */,
 				83D8CEDB1C17DAF50094279D /* LCKeyValueStore.h in Headers */,
 				83D8CEDC1C17DAF50094279D /* AVKeychain.h in Headers */,
+				8326D84B1D717FFE00775F81 /* GTMDefines.h in Headers */,
 				83D8CEDD1C17DAF50094279D /* AVFile.h in Headers */,
 				83D8CEDF1C17DAF50094279D /* AVGeoPoint.h in Headers */,
 				83D8CEE01C17DAF50094279D /* AVGroup.h in Headers */,
@@ -3320,6 +3415,7 @@
 				8302AED81C192A0700E13F8A /* LCURLConnection.h in Headers */,
 				83D8CEEE1C17DAF50094279D /* AVPush.h in Headers */,
 				83D8CEEF1C17DAF50094279D /* AVCloudQueryResult.h in Headers */,
+				8326D8821D71A74C00775F81 /* AVFileAccessor.h in Headers */,
 				83D8CEF01C17DAF50094279D /* AVQuery.h in Headers */,
 				83D8CEF11C17DAF50094279D /* AVSearchQuery.h in Headers */,
 				83D8CEF41C17DAF50094279D /* LCDatabaseCoordinator.h in Headers */,
@@ -3339,6 +3435,7 @@
 				9A404DD51CE5A9BA00DEB3DC /* LCRouter.h in Headers */,
 				83D8CF041C17DAF50094279D /* AVNetworkActivityIndicatorManager.h in Headers */,
 				83D8CF051C17DAF50094279D /* AVNetworking.h in Headers */,
+				8326D84F1D717FFE00775F81 /* GTMStringEncoding.h in Headers */,
 				83D8CF061C17DAF50094279D /* AVURLConnectionOperation.h in Headers */,
 				83D8CF071C17DAF50094279D /* AVXMLRequestOperation.h in Headers */,
 				83D8CF081C17DAF50094279D /* AVHelpers.h in Headers */,
@@ -3359,6 +3456,7 @@
 				83D8CF181C17DAF50094279D /* AVExceptionHandler.h in Headers */,
 				83E13C131D4B4FC60009CB6F /* AVConfiguration.h in Headers */,
 				83FCB9A21CEDC57C007D8712 /* LCHTTPSessionManager.h in Headers */,
+				8326D85B1D7180DE00775F81 /* AVFileBreakpoint.h in Headers */,
 				83D8CF191C17DAF50094279D /* AVDirectOutCommand.h in Headers */,
 				83FCB9C51CEDC57C007D8712 /* LCURLRequestSerialization.h in Headers */,
 				83D8CF1A1C17DAF50094279D /* LCDatabasePool.h in Headers */,
@@ -3372,7 +3470,9 @@
 				83D8CF221C17DAF50094279D /* AVObject_Internal.h in Headers */,
 				83D8CF231C17DAF50094279D /* AVRelation_Internal.h in Headers */,
 				83D8CF241C17DAF50094279D /* AVACL_Internal.h in Headers */,
+				8326D86E1D71817200775F81 /* AVFileHash.h in Headers */,
 				83D8CF251C17DAF50094279D /* LCNetworkStatistics.h in Headers */,
+				8326D8631D7180DE00775F81 /* AVQiniuResumableUploader.h in Headers */,
 				83D8CF261C17DAF50094279D /* AVDynamicBase.h in Headers */,
 				83D8CF271C17DAF50094279D /* AVErrorUtils.h in Headers */,
 				83D8CF281C17DAF50094279D /* AVRequestManager.h in Headers */,
@@ -3470,6 +3570,7 @@
 				838DD7A01B3D3FB600C95897 /* LCKeyValueStore.h in Headers */,
 				836705DF1BA1C1710050E968 /* AVKeychain.h in Headers */,
 				8C841ADE1A5A7A0000C5C6C4 /* AVFile.h in Headers */,
+				8326D8491D717FFE00775F81 /* GTMDefines.h in Headers */,
 				8C841AE71A5A7A0000C5C6C4 /* AVGeoPoint.h in Headers */,
 				8C841AEE1A5A7A0000C5C6C4 /* AVGroup.h in Headers */,
 				83DF02B21AF86032000E289C /* LCDatabaseAdditions.h in Headers */,
@@ -3490,6 +3591,7 @@
 				8C841B271A5A7A0000C5C6C4 /* AVCloudQueryResult.h in Headers */,
 				8C841B2C1A5A7A0000C5C6C4 /* AVQuery.h in Headers */,
 				8C841B361A5A7A0000C5C6C4 /* AVSearchQuery.h in Headers */,
+				8326D8801D71A74C00775F81 /* AVFileAccessor.h in Headers */,
 				830E7CF81B1CA2A2005F4B22 /* LCDatabaseCoordinator.h in Headers */,
 				8C841B381A5A7A0000C5C6C4 /* AVSearchSortBuilder.h in Headers */,
 				8C841B3A1A5A7A0000C5C6C4 /* AVStatus.h in Headers */,
@@ -3509,6 +3611,7 @@
 				8C841B481A5A7A0000C5C6C4 /* AVNetworking.h in Headers */,
 				8C841B4B1A5A7A0000C5C6C4 /* AVURLConnectionOperation.h in Headers */,
 				8C841B4D1A5A7A0000C5C6C4 /* AVXMLRequestOperation.h in Headers */,
+				8326D84D1D717FFE00775F81 /* GTMStringEncoding.h in Headers */,
 				8C841B5E1A5A7A0000C5C6C4 /* AVHelpers.h in Headers */,
 				830E7CFF1B1CB07B005F4B22 /* LCDatabaseCommon.h in Headers */,
 				83DF02B91AF86032000E289C /* LCResultSet.h in Headers */,
@@ -3529,6 +3632,7 @@
 				8C841B071A5A7A0000C5C6C4 /* AVDirectOutCommand.h in Headers */,
 				83E13C111D4B4FC60009CB6F /* AVConfiguration.h in Headers */,
 				83DF02B41AF86032000E289C /* LCDatabasePool.h in Headers */,
+				8326D8591D7180DE00775F81 /* AVFileBreakpoint.h in Headers */,
 				8C841AE31A5A7A0000C5C6C4 /* AVPartialInputStream.h in Headers */,
 				8C841AF01A5A7A0000C5C6C4 /* AVGroup_Internal.h in Headers */,
 				8C841AFE1A5A7A0000C5C6C4 /* AVAckCommand.h in Headers */,
@@ -3542,7 +3646,9 @@
 				8C841B1F1A5A7A0000C5C6C4 /* AVRelation_Internal.h in Headers */,
 				8C841AAF1A5A7A0000C5C6C4 /* AVACL_Internal.h in Headers */,
 				838DD7961B3D309F00C95897 /* LCNetworkStatistics.h in Headers */,
+				8326D86C1D71817200775F81 /* AVFileHash.h in Headers */,
 				8C841B091A5A7A0000C5C6C4 /* AVDynamicBase.h in Headers */,
+				8326D8611D7180DE00775F81 /* AVQiniuResumableUploader.h in Headers */,
 				8C841B5C1A5A7A0000C5C6C4 /* AVErrorUtils.h in Headers */,
 				7068A7231BA3614D0004623A /* AVRequestManager.h in Headers */,
 				83DF02B61AF86032000E289C /* LCDatabaseQueue.h in Headers */,
@@ -4141,6 +4247,7 @@
 				70CA7F991BDE374C000A3B21 /* AVImageRequestOperation.m in Sources */,
 				70CA7F9A1BDE374C000A3B21 /* AVJSONRequestOperation.m in Sources */,
 				70CA7F9B1BDE374C000A3B21 /* AVNetworkActivityIndicatorManager.m in Sources */,
+				8326D8851D71A74C00775F81 /* AVFileAccessor.m in Sources */,
 				70CA7F9C1BDE374C000A3B21 /* AVURLConnectionOperation.m in Sources */,
 				830EB9C71C3E4BFA00BA917F /* LCObserver.m in Sources */,
 				70CA7F9D1BDE374C000A3B21 /* AVXMLRequestOperation.m in Sources */,
@@ -4151,6 +4258,7 @@
 				70CA7FA21BDE374C000A3B21 /* LCResultSet.m in Sources */,
 				83FCB9A61CEDC57C007D8712 /* LCHTTPSessionManager.m in Sources */,
 				70CA7FA81BDE374C000A3B21 /* AVSRWebSocket.m in Sources */,
+				8326D85E1D7180DE00775F81 /* AVFileBreakpoint.m in Sources */,
 				830EB9FB1C44D68400BA917F /* AVSaveOption.m in Sources */,
 				70CA7FA91BDE374C000A3B21 /* AVAnonymousUtils.m in Sources */,
 				70CA7FAA1BDE374C000A3B21 /* AVUser.m in Sources */,
@@ -4163,9 +4271,11 @@
 				70CA7FB21BDE374C000A3B21 /* LCKeyValueStore.m in Sources */,
 				70CA7FB31BDE374C000A3B21 /* LCSSLChallenger.m in Sources */,
 				9A404DDA1CE5A9C200DEB3DC /* LCRouterCache.m in Sources */,
+				8326D8711D71817200775F81 /* AVFileHash.m in Sources */,
 				70CA7FB41BDE374C000A3B21 /* NSDictionary+LCHash.m in Sources */,
 				70CA7F721BDE3721000A3B21 /* AVACL.m in Sources */,
 				83E13C161D4B4FC60009CB6F /* AVConfiguration.m in Sources */,
+				8326D8521D717FFE00775F81 /* GTMStringEncoding.m in Sources */,
 				70CA7F731BDE3721000A3B21 /* AVRole.m in Sources */,
 				70CA7F741BDE3721000A3B21 /* AVAnalytics.m in Sources */,
 				70CA7F751BDE3721000A3B21 /* AVAnalyticsActivity.m in Sources */,
@@ -4180,6 +4290,7 @@
 				70CA7F7E1BDE3721000A3B21 /* AVScheduler.m in Sources */,
 				70CA7F7F1BDE3721000A3B21 /* AVCloud.m in Sources */,
 				70CA7F801BDE3721000A3B21 /* AVFile.m in Sources */,
+				8326D8661D7180DE00775F81 /* AVQiniuResumableUploader.m in Sources */,
 				70CA7F811BDE3721000A3B21 /* AVFileQuery.m in Sources */,
 				70CA7F821BDE3721000A3B21 /* AVFileHTTPRequestOperation.m in Sources */,
 				70CA7F831BDE3721000A3B21 /* AVPartialInputStream.m in Sources */,
@@ -4249,6 +4360,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8326D8731D71817200775F81 /* AVFileHash.m in Sources */,
 				83E5D9521C1AA7C000E61E37 /* AVAnalyticsUtils.m in Sources */,
 				8320F87C1C1918C60024B45E /* AVRequestOperation.m in Sources */,
 				8320F87D1C1918C60024B45E /* AVFile.m in Sources */,
@@ -4287,6 +4399,8 @@
 				8320F8AF1C1918C60024B45E /* AVRole.m in Sources */,
 				8320F8B01C1918C60024B45E /* AVPaasClient.m in Sources */,
 				8302AEDE1C192A0700E13F8A /* LCURLConnection.m in Sources */,
+				8326D8871D71A74C00775F81 /* AVFileAccessor.m in Sources */,
+				8326D8541D717FFE00775F81 /* GTMStringEncoding.m in Sources */,
 				8320F8B11C1918C60024B45E /* AVHTTPRequestOperation.m in Sources */,
 				8320F8B21C1918C60024B45E /* AVErrorUtils.m in Sources */,
 				83FCB9CB1CEDC57C007D8712 /* LCURLRequestSerialization.m in Sources */,
@@ -4295,12 +4409,14 @@
 				8320F8B71C1918C60024B45E /* AVLocationManager.m in Sources */,
 				8320F8B81C1918C60024B45E /* AVStatus.m in Sources */,
 				8320F8BB1C1918C60024B45E /* AVGeoPoint.m in Sources */,
+				8326D8601D7180DE00775F81 /* AVFileBreakpoint.m in Sources */,
 				8320F8BC1C1918C60024B45E /* AVCacheManager.m in Sources */,
 				8320F8BD1C1918C60024B45E /* AVACL.m in Sources */,
 				8320F8BE1C1918C60024B45E /* AVFriendQuery.m in Sources */,
 				8320F8BF1C1918C60024B45E /* AVPartialInputStream.m in Sources */,
 				8320F8C01C1918C60024B45E /* AVPush.m in Sources */,
 				83FCB9A81CEDC57C007D8712 /* LCHTTPSessionManager.m in Sources */,
+				8326D8681D7180DE00775F81 /* AVQiniuResumableUploader.m in Sources */,
 				8320F8C11C1918C60024B45E /* LCDatabaseCoordinator.m in Sources */,
 				83FCB9B71CEDC57C007D8712 /* LCNetworkReachabilityManager.m in Sources */,
 				8320F8C51C1918C60024B45E /* AVRelation.m in Sources */,
@@ -4353,6 +4469,7 @@
 				83D8CE921C17DAF50094279D /* AVUser.m in Sources */,
 				83D8CE941C17DAF50094279D /* AVInstallation.m in Sources */,
 				83D8CE951C17DAF50094279D /* LCDatabasePool.m in Sources */,
+				8326D8861D71A74C00775F81 /* AVFileAccessor.m in Sources */,
 				83D8CE961C17DAF50094279D /* AVSession.m in Sources */,
 				83D8CE971C17DAF50094279D /* AVOSCloud.m in Sources */,
 				83D8CE981C17DAF50094279D /* AVSignature.m in Sources */,
@@ -4364,12 +4481,14 @@
 				83D8CE9F1C17DAF50094279D /* AVObject.m in Sources */,
 				83D8CEA01C17DAF50094279D /* AVAnalyticsActivity.m in Sources */,
 				83D8CEA11C17DAF50094279D /* AVHistoryMessageQuery.m in Sources */,
+				8326D8721D71817200775F81 /* AVFileHash.m in Sources */,
 				83D8CEA21C17DAF50094279D /* AVUploaderManager.m in Sources */,
 				83D8CEA31C17DAF50094279D /* AVSearchSortBuilder.m in Sources */,
 				830EB9C81C3E4BFA00BA917F /* LCObserver.m in Sources */,
 				83D8CEA41C17DAF50094279D /* AVCommandDictionary.m in Sources */,
 				83D8CEA51C17DAF50094279D /* LCNetworkStatistics.m in Sources */,
 				9A404DDE1CE5A9C300DEB3DC /* LCRouterCache.m in Sources */,
+				8326D8531D717FFE00775F81 /* GTMStringEncoding.m in Sources */,
 				83D8CEA61C17DAF50094279D /* AVDuration.m in Sources */,
 				83E13C171D4B4FC60009CB6F /* AVConfiguration.m in Sources */,
 				83D8CEA71C17DAF50094279D /* AVExceptionHandler.m in Sources */,
@@ -4391,6 +4510,7 @@
 				83D8CEB51C17DAF50094279D /* AVCacheManager.m in Sources */,
 				83D8CEB61C17DAF50094279D /* AVACL.m in Sources */,
 				83D8CEB71C17DAF50094279D /* AVFriendQuery.m in Sources */,
+				8326D85F1D7180DE00775F81 /* AVFileBreakpoint.m in Sources */,
 				83D8CEB81C17DAF50094279D /* AVPartialInputStream.m in Sources */,
 				83D8CEB91C17DAF50094279D /* AVPush.m in Sources */,
 				83D8CEBA1C17DAF50094279D /* LCDatabaseCoordinator.m in Sources */,
@@ -4398,6 +4518,7 @@
 				83D8CEBC1C17DAF50094279D /* AVAckCommand.m in Sources */,
 				83D8CEBD1C17DAF50094279D /* AVPresenceCommand.m in Sources */,
 				83D8CEBE1C17DAF50094279D /* AVRelation.m in Sources */,
+				8326D8671D7180DE00775F81 /* AVQiniuResumableUploader.m in Sources */,
 				83D8CEBF1C17DAF50094279D /* AVReachability.m in Sources */,
 				83FCB9B61CEDC57C007D8712 /* LCNetworkReachabilityManager.m in Sources */,
 				9A404DDC1CE5A9C300DEB3DC /* LCRouter.m in Sources */,
@@ -4482,6 +4603,7 @@
 				8C841B5A1A5A7A0000C5C6C4 /* AVUser.m in Sources */,
 				8C841B221A5A7A0000C5C6C4 /* AVInstallation.m in Sources */,
 				83DF02B51AF86032000E289C /* LCDatabasePool.m in Sources */,
+				8326D8841D71A74C00775F81 /* AVFileAccessor.m in Sources */,
 				8C841AF81A5A7A0000C5C6C4 /* AVSession.m in Sources */,
 				8C841AC71A5A7A0000C5C6C4 /* AVOSCloud.m in Sources */,
 				8C841AFB1A5A7A0000C5C6C4 /* AVSignature.m in Sources */,
@@ -4493,12 +4615,14 @@
 				8C841B191A5A7A0000C5C6C4 /* AVObject.m in Sources */,
 				8C841AB71A5A7A0000C5C6C4 /* AVAnalyticsActivity.m in Sources */,
 				8C841AF41A5A7A0000C5C6C4 /* AVHistoryMessageQuery.m in Sources */,
+				8326D8701D71817200775F81 /* AVFileHash.m in Sources */,
 				8C841AE61A5A7A0000C5C6C4 /* AVUploaderManager.m in Sources */,
 				8C841B391A5A7A0000C5C6C4 /* AVSearchSortBuilder.m in Sources */,
 				830EB9C51C3E4BFA00BA917F /* LCObserver.m in Sources */,
 				8C841AED1A5A7A0000C5C6C4 /* AVCommandDictionary.m in Sources */,
 				838DD7971B3D309F00C95897 /* LCNetworkStatistics.m in Sources */,
 				838B32EC1CE032F800CAEBF8 /* LCRouterCache.m in Sources */,
+				8326D8511D717FFE00775F81 /* GTMStringEncoding.m in Sources */,
 				8C841ABF1A5A7A0000C5C6C4 /* AVDuration.m in Sources */,
 				83E13C151D4B4FC60009CB6F /* AVConfiguration.m in Sources */,
 				8C841AC11A5A7A0000C5C6C4 /* AVExceptionHandler.m in Sources */,
@@ -4520,6 +4644,7 @@
 				8C841AC91A5A7A0000C5C6C4 /* AVCacheManager.m in Sources */,
 				8C841AAE1A5A7A0000C5C6C4 /* AVACL.m in Sources */,
 				8C841B2B1A5A7A0000C5C6C4 /* AVFriendQuery.m in Sources */,
+				8326D85D1D7180DE00775F81 /* AVFileBreakpoint.m in Sources */,
 				8C841AE41A5A7A0000C5C6C4 /* AVPartialInputStream.m in Sources */,
 				8C841B251A5A7A0000C5C6C4 /* AVPush.m in Sources */,
 				830E7CF91B1CA2A2005F4B22 /* LCDatabaseCoordinator.m in Sources */,
@@ -4527,6 +4652,7 @@
 				8C841AFF1A5A7A0000C5C6C4 /* AVAckCommand.m in Sources */,
 				8C841B0C1A5A7A0000C5C6C4 /* AVPresenceCommand.m in Sources */,
 				8C841B1E1A5A7A0000C5C6C4 /* AVRelation.m in Sources */,
+				8326D8651D7180DE00775F81 /* AVQiniuResumableUploader.m in Sources */,
 				8C841B631A5A7A0000C5C6C4 /* AVReachability.m in Sources */,
 				83FCB9B31CEDC57C007D8712 /* LCNetworkReachabilityManager.m in Sources */,
 				83F9A2C81CE014430002E21B /* LCRouter.m in Sources */,
