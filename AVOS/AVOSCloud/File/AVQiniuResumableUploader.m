@@ -281,9 +281,6 @@ static dispatch_queue_t completionQueue = nil;
 
             NSInteger roundPercentage = (NSInteger)(totalPercentage * 100);
 
-            if (roundPercentage > 99)
-                roundPercentage = 99;
-
             if (self.progressBlock && roundPercentage > self.lastPercentage) {
                 self.lastPercentage = roundPercentage;
                 self.progressBlock(roundPercentage);
