@@ -170,6 +170,15 @@ static NSMutableDictionary *downloadingMap = nil;
 - (void)saveInBackgroundWithBlock:(AVBooleanResultBlock)resultBlock
                     progressBlock:(AVProgressBlock)progressBlock
 {
+    [self saveInBackgroundWithBlock:resultBlock
+                      progressBlock:progressBlock
+                             option:nil];
+}
+
+- (void)saveInBackgroundWithBlock:(AVBooleanResultBlock)resultBlock
+                    progressBlock:(AVProgressBlock)progressBlock
+                           option:(AVFileSaveOption *)option
+{
     /*
      * If has object id, do nothing.
      * Else, if local file exists, upload file.
@@ -180,7 +189,7 @@ static NSMutableDictionary *downloadingMap = nil;
         [AVUtils callProgressBlock:progressBlock percent:100];
         [AVUtils callBooleanResultBlock:resultBlock error:nil];
     } else if ([self hasLocalFile]) {
-        [self uploadFileWithResultBlock:resultBlock progressBlock:progressBlock];
+        [self uploadFileWithResultBlock:resultBlock progressBlock:progressBlock option:option];
     } else if ([self hasExternalURL]) {
         [self updateURLWithResultBlock:resultBlock progressBlock:progressBlock];
     } else {
@@ -188,16 +197,26 @@ static NSMutableDictionary *downloadingMap = nil;
     }
 }
 
-- (void)uploadFileWithResultBlock:(AVBooleanResultBlock)resultBlock progressBlock:(AVProgressBlock)progressBlock {
-    __weak typeof(self) ws=self;
-    [[AVUploaderManager sharedInstance] uploadWithAVFile:self progressBlock:progressBlock resultBlock:^(BOOL succeeded, NSError *error) {
-        if (!succeeded) {
-            [ws deleteInBackground];
+- (void)uploadFileWithResultBlock:(AVBooleanResultBlock)resultBlock
+                    progressBlock:(AVProgressBlock)progressBlock
+                           option:(AVFileSaveOption *)option
+{
+    __weak typeof(self) weakSelf = self;
+
+    void(^resultBlockWrapper)(BOOL succeeded, NSError *error) = ^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            weakSelf.isDirty = NO;
         } else {
-            ws.isDirty = NO;
+            [weakSelf deleteInBackground];
         }
-        resultBlock(succeeded,error);
-    }];
+
+        resultBlock(succeeded, error);
+    };
+
+    [[AVUploaderManager sharedInstance] uploadWithAVFile:self
+                                           progressBlock:progressBlock
+                                             resultBlock:resultBlockWrapper
+                                                  option:option];
 }
 
 - (void)updateURLWithResultBlock:(AVBooleanResultBlock)resultBlock progressBlock:(AVProgressBlock)progressBlock {

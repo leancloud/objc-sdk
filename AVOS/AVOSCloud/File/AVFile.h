@@ -6,6 +6,7 @@
 #import <Foundation/Foundation.h>
 #import "AVConstants.h"
 #import "AVACL.h"
+#import "AVFileSaveOption.h"
 
 @class AVFileQuery;
 
@@ -131,6 +132,17 @@ The name of the file.
  */
 - (void)saveInBackgroundWithBlock:(AVBooleanResultBlock)block
                     progressBlock:(AVProgressBlock)progressBlock;
+
+/*!
+ Saves the file asynchronously and executes the given resultBlock. Executes the progressBlock periodically with the percent
+ progress. progressBlock will get called with 100 before resultBlock is called.
+ @param block The block should have the following argument signature: (BOOL succeeded, NSError *error)
+ @param progressBlock The block should have the following argument signature: (int percentDone)
+ @param option The option to qualify saving operation.
+ */
+- (void)saveInBackgroundWithBlock:(AVBooleanResultBlock)block
+                    progressBlock:(AVProgressBlock)progressBlock
+                           option:(AVFileSaveOption *)option;
 
 /*!
  Saves the file asynchronously and calls the given callback.

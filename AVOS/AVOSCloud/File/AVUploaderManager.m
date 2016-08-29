@@ -15,6 +15,7 @@
 #import "AVFileHTTPRequestOperation.h"
 #import "AVPartialInputStream.h"
 #import "AVObjectUtils.h"
+#import "AVQiniuResumableUploader.h"
 
 static NSString * const QiniuServerPath = @"https://up.qbox.me";
 static NSString * const QCloudServerPath = @"https://web.file.myqcloud.com";
@@ -118,7 +119,19 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
 }
 
 - (void)uploadWithAVFile:(AVFile *)file progressBlock:(AVProgressBlock)progressBlock resultBlock:(AVBooleanResultBlock)resultBlock {
+    [self uploadWithAVFile:file
+             progressBlock:progressBlock
+               resultBlock:resultBlock
+                    option:nil];
+}
+
+- (void)uploadWithAVFile:(AVFile *)file
+           progressBlock:(AVProgressBlock)progressBlock
+             resultBlock:(AVBooleanResultBlock)resultBlock
+                  option:(AVFileSaveOption *)option
+{
     NSDictionary *parameters = [self parametersForFile:file];
+
     [[AVPaasClient sharedInstance] postObject:@"fileTokens" withParameters:parameters block:^(id object, NSError *error) {
         id bucket = [object valueForKey:@"bucket"];
         if (error || !bucket || (bucket == [NSNull null])) {
@@ -131,7 +144,7 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
             [self uploadToQCloudWithAVFile:file fileTokensInfo:object progressBlock:progressBlock resultBlock:resultBlock];
         } else if ([provider isEqualToString:@"qiniu"]) {
             self.storageType = AVStorageTypeQiniu;
-            [self uploadToQiniuWithAVFile:file fileTokensInfo:object progressBlock:progressBlock resultBlock:resultBlock];
+            [self uploadToQiniuWithAVFile:file fileTokensInfo:object progressBlock:progressBlock resultBlock:resultBlock option:option];
         } else if ([provider isEqualToString:@"s3"]) {
             self.storageType = AVStorageTypeS3;
             [self uploadToS3WithAVFile:file fileTokensInfo:object progressBlock:progressBlock resultBlock:resultBlock];
@@ -219,7 +232,12 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
 
 #pragma mark - Upload to Qiniu
 
-- (void)uploadToQiniuWithAVFile:(AVFile *)file fileTokensInfo:(NSDictionary *)object progressBlock:(AVProgressBlock)progressBlock resultBlock:(AVBooleanResultBlock)resultBlock {
+- (void)uploadToQiniuWithAVFile:(AVFile *)file
+                 fileTokensInfo:(NSDictionary *)object
+                  progressBlock:(AVProgressBlock)progressBlock
+                    resultBlock:(AVBooleanResultBlock)resultBlock
+                         option:(AVFileSaveOption *)option
+{
     NSString *token = [object valueForKey:@"token"];
     NSString *bucket = [object valueForKey:@"bucket"];
     NSString *objectId = [object valueForKey:@"objectId"];
@@ -227,7 +245,6 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
     
     [AVUtils copyPropertiesFromDictionary:object toNSObject:file];
     
-    const uint64_t maxSize = 1 << 22;
     void (^uploadResultBlock)(BOOL succeeded, NSError *error) = ^(BOOL succeeded, NSError *error) {
         if (!error) {
             file.url = uploadURLString;
@@ -240,10 +257,21 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
         
         [AVUtils callBooleanResultBlock:resultBlock error:error];
     };
-    NSString *boundaryFrontier = [uploadURLString lastPathComponent];
-    NSString *key = boundaryFrontier;
-    if (file.size > maxSize) {
-        [self uploadLargeFileToQiNiuWithToken:token file:file key:key progressBlock:progressBlock resultBlock:uploadResultBlock];
+
+    NSString *key = [uploadURLString lastPathComponent];
+
+    if ([file localFileExists]) {
+        AVQiniuResumableUploader *uploader = [[AVQiniuResumableUploader alloc] initWithFile:file
+                                                                                        key:key
+                                                                                      token:token
+                                                                                       host:QiniuServerPath
+                                                                                 breakpoint:option.breakpoint
+                                                                        breakpointDidUpdate:option.breakpointDidUpdateBlock
+                                                                                   progress:progressBlock
+                                                                               cancellation:option.cancellationBlock
+                                                                                 completion:uploadResultBlock];
+
+        [uploader upload];
     } else {
         [self uploadFileToBucket:bucket withToken:token file:file key:key progressBlock:progressBlock resultBlock:uploadResultBlock];
     }
@@ -774,119 +802,6 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
     } semaphore:semaphore];
 }
 
--(void)uploadLargeFileToQiNiuWithToken:(NSString *)token
-                                  file:(AVFile *)file
-                                   key:(NSString *)key
-                         progressBlock:(AVProgressBlock)progressBlock
-                           resultBlock:(AVBooleanResultBlock)resultBlock {
-    __block NSMutableArray *contexts = [[NSMutableArray alloc] init];
-    [self.httpClient setDefaultHeader:@"Authorization" value:[NSString stringWithFormat:@"UpToken %@", token]];
-    
-    NSError * error = nil;
-    if (!file.data) file.data = [NSData dataWithContentsOfFile: file.localPath
-                                                       options: NSDataReadingMapped
-                                                         error: &error];
-    if (error) {
-        [AVUtils callBooleanResultBlock:resultBlock error:error];
-        return;
-    }
-    NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:file.localPath error:&error];
-    if (error) {
-        [AVUtils callBooleanResultBlock:resultBlock error:error];
-        return;
-    }
-    const uint64_t maxSize = 1 << 22;
-    const uint64_t dataSize = [fileDictionary fileSize];
-    int blockCount = ceil(1.0f*dataSize/maxSize);
-    __block int finishedCount = 0;
-    __block NSMutableDictionary *progressDict = [[NSMutableDictionary alloc] initWithCapacity:blockCount];
-    __block NSMutableString *reachedPercent = [[NSMutableString alloc] initWithFormat:@"0"];
-    __block dispatch_semaphore_t semaphore = NULL;
-    NSMutableArray *operations = [[NSMutableArray alloc] init];
-    for (int i = 0; i < blockCount; ++i) {
-        uint64_t offset = maxSize * i;
-        uint64_t contentSize = maxSize;
-        if (dataSize - offset < contentSize) {
-            contentSize = dataSize - offset;
-        }
-        if (contentSize <= 0) {
-            break;
-        }
-        NSMutableURLRequest *request = [self constructRequestWithFile:file offset:offset size:contentSize];
-        
-        [contexts addObject:@""];
-        AVFileHTTPRequestOperation *operation = [[AVFileHTTPRequestOperation alloc] initWithRequest:request];
-        operation.localPath = file.localPath;
-        operation.userInfo = @{@"index":@(i), @"offset":@(offset), @"size":@(contentSize)};
-        [operation setUploadProgressBlock:^(AVURLConnectionOperation *operation, NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
-            NSNumber *index = [operation.userInfo objectForKey:@"index"];
-            if (!operation.isCancelled) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self updateProgressWithProgressDict:progressDict index:index bytes:totalBytesWritten totalBytes:dataSize reachedPercent:reachedPercent progressBlock:progressBlock];
-                });
-            }
-        }];
-        
-        [operation setCompletionBlockWithSuccess:^(AVHTTPRequestOperation *operation, id responseObject) {
-            ++finishedCount;
-            if (![operation isCancelled]) {
-                NSNumber *numIndex = [operation.userInfo objectForKey:@"index"];
-                NSNumber *numSize = [operation.userInfo objectForKey:@"size"];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self updateProgressWithProgressDict:progressDict index:numIndex bytes:[numSize longLongValue] totalBytes:dataSize reachedPercent:reachedPercent progressBlock:progressBlock];
-                });
-                int index = [numIndex intValue];
-                NSString *ctx = [responseObject objectForKey:@"ctx"];
-                [contexts replaceObjectAtIndex:index withObject:ctx];
-            } else {
-                int index = [[operation.userInfo objectForKey:@"index"] intValue];
-                AVLoggerD(@"cancelled index:%d object:%@", index, responseObject);
-            }
-            if (finishedCount == operations.count) {
-                dispatch_semaphore_signal(semaphore);
-            }
-        } failure:^(AVHTTPRequestOperation *operation, NSError *error) {
-            ++finishedCount;
-            NSNumber *numIndex = [operation.userInfo objectForKey:@"index"];
-            if (!operation.isCancelled) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self updateProgressWithProgressDict:progressDict index:numIndex bytes:0 totalBytes:dataSize reachedPercent:reachedPercent progressBlock:progressBlock];
-                });
-            }
-            int index = [numIndex intValue];
-            AVLoggerD(@"index:%d error:%@", index, error);
-            if (finishedCount == operations.count) {
-                dispatch_semaphore_signal(semaphore);
-            }
-        }];
-        [operations addObject:operation];
-    }
-    semaphore = dispatch_semaphore_create(0);
-    [self enqueueBatchOfHTTPRequestOperations:operations progressBlock:^(NSUInteger numberOfFinishedOperations, NSUInteger totalNumberOfOperations) {
-        AVLoggerD(@"%@ of %@", @(numberOfFinishedOperations), @(totalNumberOfOperations));
-    } completionBlock:^(NSArray *operations) {
-        BOOL cancelled = NO;
-        int failedCount = 0;
-        AVLoggerD(@"operations %@", @(operations.count));
-        for (AVFileHTTPRequestOperation *operation in operations) {
-            if (operation.isCancelled) {
-                cancelled = YES;
-                break;
-            }
-            if (operation.response.statusCode != 200) {
-                ++failedCount;
-            }
-        }
-        if (cancelled) {
-            [AVUtils callBooleanResultBlock:resultBlock error:[NSError errorWithDomain:@"AVOSUploadFileDomain" code:701 userInfo:@{@"reason":@"File upload cancelled."}]];
-        } else if (failedCount > 0) {
-            [self uploadLargeFileToQiNiuWithToken:token file:file key:key progressBlock:progressBlock resultBlock:resultBlock contexts:contexts maxSize:maxSize progressDictionary:progressDict reachedPercent:reachedPercent tryCount:1];
-        } else {
-            [self makeFileForQiNiuWithKey:key size:dataSize contexts:contexts resultBlock:resultBlock];
-        }
-    } semaphore:semaphore];
-}
-
 -(void)uploadLargeFileToQCloudWithToken:(NSString *)token
                                  offSet:(uint64_t)offSet
                                 session:(NSString *)session
@@ -1005,118 +920,6 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
                 [self uploadLargeFileToQCloudWithToken:token offSet:offSet session:session uploadURLString:uploadURLString file:file key:key progressBlock:progressBlock resultBlock:resultBlock contexts:contexts maxSize:maxSize progressDictionary:progressDict reachedPercent:reachedPercent tryCount:tryCount + 1];
             } else {
                 [AVUtils callBooleanResultBlock:resultBlock error:nil];
-            }
-        }
-    } semaphore:semaphore];
-}
-
--(void)uploadLargeFileToQiNiuWithToken:(NSString *)token
-                                  file:(AVFile *)file
-                                   key:(NSString *)key
-                         progressBlock:(AVProgressBlock)progressBlock
-                           resultBlock:(AVBooleanResultBlock)resultBlock
-                              contexts:(NSMutableArray *)contexts
-                               maxSize:(uint64_t)maxSize
-                    progressDictionary:(NSMutableDictionary *)progressDict
-                        reachedPercent:(NSMutableString *)reachedPercent
-                              tryCount:(int)tryCount {
-    NSError * error = nil;
-    NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:file.localPath error:&error];
-    if (error) {
-        [AVUtils callBooleanResultBlock:resultBlock error:error];
-        return;
-    }
-    const uint64_t dataSize = [fileDictionary fileSize];
-    int blockCount = ceil(1.0f*dataSize/maxSize);
-    __block int finishedCount = 0;
-    __block dispatch_semaphore_t semaphore = NULL;
-    
-    NSMutableArray *operations = [[NSMutableArray alloc] init];
-    for (int i = 0; i < blockCount; ++i) {
-        if (![[contexts objectAtIndex:i] isEqualToString:@""]) {
-            continue;
-        }
-        uint64_t offset = maxSize * i;
-        uint64_t contentSize = maxSize;
-        if (dataSize - offset < contentSize) {
-            contentSize = dataSize - offset;
-        }
-        if (contentSize <= 0) {
-            break;
-        }
-        NSMutableURLRequest *request = [self constructRequestWithFile:file offset:offset size:contentSize];
-        
-        AVFileHTTPRequestOperation *operation = [[AVFileHTTPRequestOperation alloc] initWithRequest:request];
-        operation.localPath = file.localPath;
-        operation.userInfo = @{@"index":@(i), @"offset":@(offset), @"size":@(contentSize)};
-        [operation setUploadProgressBlock:^(AVURLConnectionOperation *operation, NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
-            NSNumber *index = [operation.userInfo objectForKey:@"index"];
-            if (!operation.isCancelled) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self updateProgressWithProgressDict:progressDict index:index bytes:totalBytesWritten totalBytes:dataSize reachedPercent:reachedPercent progressBlock:progressBlock];
-                });
-            }
-        }];
-        
-        [operation setCompletionBlockWithSuccess:^(AVHTTPRequestOperation *operation, id responseObject) {
-            ++finishedCount;
-            if (![operation isCancelled]) {
-                NSNumber *numIndex = [operation.userInfo objectForKey:@"index"];
-                NSNumber *numSize = [operation.userInfo objectForKey:@"size"];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self updateProgressWithProgressDict:progressDict index:numIndex bytes:[numSize longLongValue] totalBytes:dataSize reachedPercent:reachedPercent progressBlock:progressBlock];
-                });
-                int index = [numIndex intValue];
-                NSString *ctx = [responseObject objectForKey:@"ctx"];
-                [contexts replaceObjectAtIndex:index withObject:ctx];
-            } else {
-                int index = [[operation.userInfo objectForKey:@"index"] intValue];
-                AVLoggerD(@"cancelled index:%d object:%@", index, responseObject);
-            }
-            if (finishedCount == operations.count) {
-                dispatch_semaphore_signal(semaphore);
-            }
-        } failure:^(AVHTTPRequestOperation *operation, NSError *error) {
-            ++finishedCount;
-            NSNumber *numIndex = [operation.userInfo objectForKey:@"index"];
-            if (!operation.isCancelled) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self updateProgressWithProgressDict:progressDict index:numIndex bytes:0 totalBytes:dataSize reachedPercent:reachedPercent progressBlock:progressBlock];
-                });
-            }
-            int index = [numIndex intValue];
-            AVLoggerD(@"index:%d error:%@", index, error);
-            if (finishedCount == operations.count) {
-                dispatch_semaphore_signal(semaphore);
-            }
-        }];
-        [operations addObject:operation];
-    }
-    semaphore = dispatch_semaphore_create(0);
-    [self enqueueBatchOfHTTPRequestOperations:operations progressBlock:^(NSUInteger numberOfFinishedOperations, NSUInteger totalNumberOfOperations) {
-        AVLoggerD(@"%@ of %@", @(numberOfFinishedOperations), @(totalNumberOfOperations));
-    } completionBlock:^(NSArray *operations) {
-        int failedCount = 0;
-        BOOL cancelled = NO;
-        AVLoggerD(@"operations %@", @(operations.count));
-        for (AVFileHTTPRequestOperation *operation in operations) {
-            if (operation.isCancelled) {
-                cancelled = YES;
-                break;
-            }
-            if (operation.response.statusCode != 200) {
-                ++failedCount;
-            }
-        }
-        if (cancelled) {
-            [AVUtils callBooleanResultBlock:resultBlock error:[NSError errorWithDomain:@"AVOSUploadFileDomain" code:701 userInfo:@{@"reason":@"File upload cancelled."}]];
-        } else if (tryCount > 3) {
-            [AVUtils callBooleanResultBlock:resultBlock error:[NSError errorWithDomain:@"AVOSUploadFileDomain" code:700 userInfo:@{@"reason":[NSString stringWithFormat:@"Try to upload %d times but not success.", tryCount]}]];
-        } else {
-            if (failedCount > 0) {
-                [self uploadLargeFileToQiNiuWithToken:token file:file key:key progressBlock:progressBlock resultBlock:resultBlock contexts:contexts maxSize:maxSize progressDictionary:progressDict reachedPercent:reachedPercent tryCount:tryCount + 1];
-            } else {
-                [self makeFileForQiNiuWithKey:key size:dataSize contexts:contexts resultBlock:resultBlock];
             }
         }
     } semaphore:semaphore];

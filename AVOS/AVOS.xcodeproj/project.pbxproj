@@ -508,10 +508,10 @@
 		8326D8521D717FFE00775F81 /* GTMStringEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D8481D717FFE00775F81 /* GTMStringEncoding.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8326D8531D717FFE00775F81 /* GTMStringEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D8481D717FFE00775F81 /* GTMStringEncoding.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8326D8541D717FFE00775F81 /* GTMStringEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D8481D717FFE00775F81 /* GTMStringEncoding.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		8326D8591D7180DE00775F81 /* AVFileBreakpoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8551D7180DE00775F81 /* AVFileBreakpoint.h */; };
-		8326D85A1D7180DE00775F81 /* AVFileBreakpoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8551D7180DE00775F81 /* AVFileBreakpoint.h */; };
-		8326D85B1D7180DE00775F81 /* AVFileBreakpoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8551D7180DE00775F81 /* AVFileBreakpoint.h */; };
-		8326D85C1D7180DE00775F81 /* AVFileBreakpoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8551D7180DE00775F81 /* AVFileBreakpoint.h */; };
+		8326D8591D7180DE00775F81 /* AVFileBreakpoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8551D7180DE00775F81 /* AVFileBreakpoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8326D85A1D7180DE00775F81 /* AVFileBreakpoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8551D7180DE00775F81 /* AVFileBreakpoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8326D85B1D7180DE00775F81 /* AVFileBreakpoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8551D7180DE00775F81 /* AVFileBreakpoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8326D85C1D7180DE00775F81 /* AVFileBreakpoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8551D7180DE00775F81 /* AVFileBreakpoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8326D85D1D7180DE00775F81 /* AVFileBreakpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D8561D7180DE00775F81 /* AVFileBreakpoint.m */; };
 		8326D85E1D7180DE00775F81 /* AVFileBreakpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D8561D7180DE00775F81 /* AVFileBreakpoint.m */; };
 		8326D85F1D7180DE00775F81 /* AVFileBreakpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D8561D7180DE00775F81 /* AVFileBreakpoint.m */; };
@@ -540,6 +540,14 @@
 		8326D8851D71A74C00775F81 /* AVFileAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D87F1D71A74C00775F81 /* AVFileAccessor.m */; };
 		8326D8861D71A74C00775F81 /* AVFileAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D87F1D71A74C00775F81 /* AVFileAccessor.m */; };
 		8326D8871D71A74C00775F81 /* AVFileAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D87F1D71A74C00775F81 /* AVFileAccessor.m */; };
+		8326D88B1D73E53500775F81 /* AVFileSaveOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8891D73E53500775F81 /* AVFileSaveOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8326D88C1D73E53500775F81 /* AVFileSaveOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8891D73E53500775F81 /* AVFileSaveOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8326D88D1D73E53500775F81 /* AVFileSaveOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8891D73E53500775F81 /* AVFileSaveOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8326D88E1D73E53500775F81 /* AVFileSaveOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 8326D8891D73E53500775F81 /* AVFileSaveOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8326D88F1D73E53500775F81 /* AVFileSaveOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D88A1D73E53500775F81 /* AVFileSaveOption.m */; };
+		8326D8901D73E53500775F81 /* AVFileSaveOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D88A1D73E53500775F81 /* AVFileSaveOption.m */; };
+		8326D8911D73E53500775F81 /* AVFileSaveOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D88A1D73E53500775F81 /* AVFileSaveOption.m */; };
+		8326D8921D73E53500775F81 /* AVFileSaveOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 8326D88A1D73E53500775F81 /* AVFileSaveOption.m */; };
 		833E1F631B69F629002A691C /* AVIMFileMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 833E1F611B69F629002A691C /* AVIMFileMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		833E1F641B69F629002A691C /* AVIMFileMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 833E1F621B69F629002A691C /* AVIMFileMessage.m */; };
 		834775DC1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 834775DB1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h */; };
@@ -1424,6 +1432,8 @@
 		8326D86B1D71817200775F81 /* AVFileHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVFileHash.m; sourceTree = "<group>"; };
 		8326D87E1D71A74C00775F81 /* AVFileAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFileAccessor.h; sourceTree = "<group>"; };
 		8326D87F1D71A74C00775F81 /* AVFileAccessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVFileAccessor.m; sourceTree = "<group>"; };
+		8326D8891D73E53500775F81 /* AVFileSaveOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFileSaveOption.h; sourceTree = "<group>"; };
+		8326D88A1D73E53500775F81 /* AVFileSaveOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVFileSaveOption.m; sourceTree = "<group>"; };
 		833E1F611B69F629002A691C /* AVIMFileMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMFileMessage.h; sourceTree = "<group>"; };
 		833E1F621B69F629002A691C /* AVIMFileMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMFileMessage.m; sourceTree = "<group>"; };
 		834775DB1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMKeyedConversation_internal.h; sourceTree = "<group>"; };
@@ -2597,6 +2607,8 @@
 				8C841A191A5A79FF00C5C6C4 /* AVPartialInputStream.m */,
 				8C841A1A1A5A79FF00C5C6C4 /* AVUploaderManager.h */,
 				8C841A1B1A5A79FF00C5C6C4 /* AVUploaderManager.m */,
+				8326D8891D73E53500775F81 /* AVFileSaveOption.h */,
+				8326D88A1D73E53500775F81 /* AVFileSaveOption.m */,
 				8326D87E1D71A74C00775F81 /* AVFileAccessor.h */,
 				8326D87F1D71A74C00775F81 /* AVFileAccessor.m */,
 				8326D8551D7180DE00775F81 /* AVFileBreakpoint.h */,
@@ -3153,7 +3165,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8326D85A1D7180DE00775F81 /* AVFileBreakpoint.h in Headers */,
 				70CA800D1BDE4314000A3B21 /* AVSearchQuery.h in Headers */,
+				8326D88C1D73E53500775F81 /* AVFileSaveOption.h in Headers */,
 				70CA800E1BDE4314000A3B21 /* AVSearchSortBuilder.h in Headers */,
 				70CA7FE71BDE42F6000A3B21 /* AVConstants.h in Headers */,
 				70CA7FFD1BDE4313000A3B21 /* AVRelation.h in Headers */,
@@ -3205,7 +3219,6 @@
 				8311CD871C3D25B9007DEFF8 /* AVAvailability.h in Headers */,
 				70CA80131BDE4314000A3B21 /* AVHTTPRequestOperation.h in Headers */,
 				70CA80141BDE4314000A3B21 /* AVImageRequestOperation.h in Headers */,
-				8326D85A1D7180DE00775F81 /* AVFileBreakpoint.h in Headers */,
 				83FCB9A11CEDC57C007D8712 /* LCHTTPSessionManager.h in Headers */,
 				83FCB9CE1CEDC57C007D8712 /* LCURLResponseSerialization.h in Headers */,
 				70CA80151BDE4315000A3B21 /* AVJSONRequestOperation.h in Headers */,
@@ -3271,7 +3284,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8326D85C1D7180DE00775F81 /* AVFileBreakpoint.h in Headers */,
 				8320F8D91C1918C60024B45E /* AVACL.h in Headers */,
+				8326D88E1D73E53500775F81 /* AVFileSaveOption.h in Headers */,
 				8320F8DA1C1918C60024B45E /* LCDB.h in Headers */,
 				8320F8DB1C1918C60024B45E /* AVRole.h in Headers */,
 				8320F8DD1C1918C60024B45E /* AVConstants.h in Headers */,
@@ -3296,6 +3311,7 @@
 				83E5D9531C1AA7D200E61E37 /* AVAnalyticsUtils.h in Headers */,
 				83E13C141D4B4FC60009CB6F /* AVConfiguration.h in Headers */,
 				8320F8F51C1918C60024B45E /* AVPush.h in Headers */,
+				830EBA031C44F3D600BA917F /* AVSaveOption_internal.h in Headers */,
 				8320F8F61C1918C60024B45E /* AVCloudQueryResult.h in Headers */,
 				83E13C1D1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */,
 				8320F8F71C1918C60024B45E /* AVQuery.h in Headers */,
@@ -3313,7 +3329,6 @@
 				8320F8FF1C1918C60024B45E /* AVAnonymousUtils.h in Headers */,
 				8320F9001C1918C60024B45E /* AVUser.h in Headers */,
 				8320F9011C1918C60024B45E /* AVLogger.h in Headers */,
-				830EBA031C44F3D600BA917F /* AVSaveOption_internal.h in Headers */,
 				8320F9021C1918C60024B45E /* AVGlobal.h in Headers */,
 				8326D8831D71A74C00775F81 /* AVFileAccessor.h in Headers */,
 				8320F9031C1918C60024B45E /* AVFileHTTPRequestOperation.h in Headers */,
@@ -3364,7 +3379,6 @@
 				8320F93E1C1918C60024B45E /* AVScheduler.h in Headers */,
 				8320F9401C1918C60024B45E /* AVGeoPoint_Internal.h in Headers */,
 				8320F9471C1918C60024B45E /* AVDuration.h in Headers */,
-				8326D85C1D7180DE00775F81 /* AVFileBreakpoint.h in Headers */,
 				8320F9481C1918C60024B45E /* UserAgent.h in Headers */,
 				8320F94B1C1918C60024B45E /* LCKeyValueSQL.h in Headers */,
 				8320F94C1C1918C60024B45E /* AVRole_Internal.h in Headers */,
@@ -3381,6 +3395,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8326D85B1D7180DE00775F81 /* AVFileBreakpoint.h in Headers */,
+				8326D88D1D73E53500775F81 /* AVFileSaveOption.h in Headers */,
 				83D8CED21C17DAF50094279D /* AVACL.h in Headers */,
 				83FCB9CF1CEDC57C007D8712 /* LCURLResponseSerialization.h in Headers */,
 				83D8CED31C17DAF50094279D /* LCDB.h in Headers */,
@@ -3456,7 +3472,6 @@
 				83D8CF181C17DAF50094279D /* AVExceptionHandler.h in Headers */,
 				83E13C131D4B4FC60009CB6F /* AVConfiguration.h in Headers */,
 				83FCB9A21CEDC57C007D8712 /* LCHTTPSessionManager.h in Headers */,
-				8326D85B1D7180DE00775F81 /* AVFileBreakpoint.h in Headers */,
 				83D8CF191C17DAF50094279D /* AVDirectOutCommand.h in Headers */,
 				83FCB9C51CEDC57C007D8712 /* LCURLRequestSerialization.h in Headers */,
 				83D8CF1A1C17DAF50094279D /* LCDatabasePool.h in Headers */,
@@ -3557,6 +3572,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8326D8591D7180DE00775F81 /* AVFileBreakpoint.h in Headers */,
+				8326D88B1D73E53500775F81 /* AVFileSaveOption.h in Headers */,
 				8C841AAD1A5A7A0000C5C6C4 /* AVACL.h in Headers */,
 				83DF02B81AF86032000E289C /* LCDB.h in Headers */,
 				8C841AB01A5A7A0000C5C6C4 /* AVRole.h in Headers */,
@@ -3632,7 +3649,6 @@
 				8C841B071A5A7A0000C5C6C4 /* AVDirectOutCommand.h in Headers */,
 				83E13C111D4B4FC60009CB6F /* AVConfiguration.h in Headers */,
 				83DF02B41AF86032000E289C /* LCDatabasePool.h in Headers */,
-				8326D8591D7180DE00775F81 /* AVFileBreakpoint.h in Headers */,
 				8C841AE31A5A7A0000C5C6C4 /* AVPartialInputStream.h in Headers */,
 				8C841AF01A5A7A0000C5C6C4 /* AVGroup_Internal.h in Headers */,
 				8C841AFE1A5A7A0000C5C6C4 /* AVAckCommand.h in Headers */,
@@ -4319,6 +4335,7 @@
 				70CA7F931BDE3721000A3B21 /* AVSearchSortBuilder.m in Sources */,
 				70CA7F941BDE3721000A3B21 /* LCNetworkStatistics.m in Sources */,
 				70CA7F951BDE3721000A3B21 /* AVStatus.m in Sources */,
+				8326D8901D73E53500775F81 /* AVFileSaveOption.m in Sources */,
 				83FCB9BF1CEDC57C007D8712 /* LCSecurityPolicy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4388,6 +4405,7 @@
 				830EB9FD1C44D68400BA917F /* AVSaveOption.m in Sources */,
 				83E13C181D4B4FC60009CB6F /* AVConfiguration.m in Sources */,
 				8320F89E1C1918C60024B45E /* AVOSCloud.m in Sources */,
+				8326D8921D73E53500775F81 /* AVFileSaveOption.m in Sources */,
 				8320F8A01C1918C60024B45E /* AVObjectUtils.m in Sources */,
 				8320F8A11C1918C60024B45E /* LCSSLChallenger.m in Sources */,
 				8320F8A51C1918C60024B45E /* AVCloud.m in Sources */,
@@ -4493,6 +4511,7 @@
 				83E13C171D4B4FC60009CB6F /* AVConfiguration.m in Sources */,
 				83D8CEA71C17DAF50094279D /* AVExceptionHandler.m in Sources */,
 				83D8CEA81C17DAF50094279D /* AVRole.m in Sources */,
+				8326D8911D73E53500775F81 /* AVFileSaveOption.m in Sources */,
 				83D8CEA91C17DAF50094279D /* AVPaasClient.m in Sources */,
 				8302AEDD1C192A0700E13F8A /* LCURLConnection.m in Sources */,
 				83D8CEAA1C17DAF50094279D /* AVHTTPRequestOperation.m in Sources */,
@@ -4627,6 +4646,7 @@
 				83E13C151D4B4FC60009CB6F /* AVConfiguration.m in Sources */,
 				8C841AC11A5A7A0000C5C6C4 /* AVExceptionHandler.m in Sources */,
 				8C841AB11A5A7A0000C5C6C4 /* AVRole.m in Sources */,
+				8326D88F1D73E53500775F81 /* AVFileSaveOption.m in Sources */,
 				8C841B331A5A7A0000C5C6C4 /* AVPaasClient.m in Sources */,
 				8302AEDA1C192A0700E13F8A /* LCURLConnection.m in Sources */,
 				8C841B411A5A7A0000C5C6C4 /* AVHTTPRequestOperation.m in Sources */,

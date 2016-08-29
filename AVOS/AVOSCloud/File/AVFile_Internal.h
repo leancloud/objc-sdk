@@ -46,4 +46,7 @@
 
 + (void)saveData:(NSData *)data withRemotePath:(NSString *)remotePath;
 + (void)cacheFile:(AVFile *)file;
+
+- (BOOL)localFileExists;
+
 @end

@@ -20,5 +20,6 @@
 -(void)cancelWithLocalPath:(NSString *)path;
 
 - (void)uploadWithAVFile:(AVFile *)file progressBlock:(AVProgressBlock)progressBlock resultBlock:(AVBooleanResultBlock)resultBlock;
+- (void)uploadWithAVFile:(AVFile *)file progressBlock:(AVProgressBlock)progressBlock resultBlock:(AVBooleanResultBlock)resultBlock option:(AVFileSaveOption *)option;
 
 @end

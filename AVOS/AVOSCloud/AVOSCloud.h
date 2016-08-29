@@ -28,6 +28,8 @@
 
 // File
 #import "AVFile.h"
+#import "AVFileBreakpoint.h"
+#import "AVFileSaveOption.h"
 #import "AVFileQuery.h"
 
 // Geo
