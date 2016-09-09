@@ -186,8 +186,12 @@ static NSMutableDictionary *downloadingMap = nil;
      * Else, nothing to save, report not found error.
      */
     if (self.objectId) {
-        [AVUtils callProgressBlock:progressBlock percent:100];
-        [AVUtils callBooleanResultBlock:resultBlock error:nil];
+        if (option.breakpoint) {
+            [self uploadFileWithResultBlock:resultBlock progressBlock:progressBlock option:option];
+        } else {
+            [AVUtils callProgressBlock:progressBlock percent:100];
+            [AVUtils callBooleanResultBlock:resultBlock error:nil];
+        }
     } else if ([self hasLocalFile]) {
         [self uploadFileWithResultBlock:resultBlock progressBlock:progressBlock option:option];
     } else if ([self hasExternalURL]) {

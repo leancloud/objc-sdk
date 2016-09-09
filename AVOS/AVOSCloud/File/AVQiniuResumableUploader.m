@@ -25,6 +25,7 @@ static dispatch_queue_t completionQueue = nil;
 @interface AVQiniuResumableUploader ()
 
 @property (nonatomic, strong) AVFile                 *file;
+@property (nonatomic, strong) NSDictionary           *info;
 @property (nonatomic,   copy) NSString               *key;
 @property (nonatomic,   copy) NSString               *token;
 @property (nonatomic,   copy) NSString               *host;
@@ -55,6 +56,7 @@ static dispatch_queue_t completionQueue = nil;
 }
 
 - (instancetype)initWithFile:(AVFile *)file
+                        info:(NSDictionary *)info
                          key:(NSString *)key
                        token:(NSString *)token
                         host:(NSString *)host
@@ -68,6 +70,7 @@ static dispatch_queue_t completionQueue = nil;
 
     if (self) {
         _file                     = file;
+        _info                     = info;
         _key                      = [key copy];
         _token                    = [token copy];
         _host                     = [host copy];
@@ -297,6 +300,7 @@ static dispatch_queue_t completionQueue = nil;
                 if (self.breakpointDidUpdateBlock) {
                     AVFileBreakpoint *breakpoint = [[AVFileBreakpoint alloc] init];
 
+                    breakpoint.info     = self.info;
                     breakpoint.size     = self.size;
                     breakpoint.offset   = nextOffset;
                     breakpoint.checksum = self.checksum;

@@ -17,6 +17,7 @@ typedef BOOL(^AVFileCancellationBlock)(void);
 @interface AVQiniuResumableUploader : NSObject
 
 - (instancetype)initWithFile:(AVFile *)file
+                        info:(NSDictionary *)info
                          key:(NSString *)key
                        token:(NSString *)token
                         host:(NSString *)host

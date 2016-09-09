@@ -30,4 +30,8 @@
     [aCoder encodeObject:_contexts       forKey:@"contexts"];
 }
 
+- (NSString *)provider {
+    return self.info[@"provider"];
+}
+
 @end

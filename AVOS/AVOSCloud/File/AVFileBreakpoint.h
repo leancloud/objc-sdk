@@ -10,9 +10,12 @@
 
 @interface AVFileBreakpoint : NSObject <NSCoding>
 
-@property (nonatomic, assign) uint64_t  size;
-@property (nonatomic, assign) uint64_t  offset;
-@property (nonatomic,   copy) NSString *checksum;
-@property (nonatomic, strong) NSArray  *contexts;
+@property (nonatomic, strong) NSDictionary *info;
+@property (nonatomic, assign) uint64_t      size;
+@property (nonatomic, assign) uint64_t      offset;
+@property (nonatomic,   copy) NSString     *checksum;
+@property (nonatomic, strong) NSArray      *contexts;
+
+- (NSString *)provider;
 
 @end

@@ -132,24 +132,47 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
 {
     NSDictionary *parameters = [self parametersForFile:file];
 
-    [[AVPaasClient sharedInstance] postObject:@"fileTokens" withParameters:parameters block:^(id object, NSError *error) {
-        id bucket = [object valueForKey:@"bucket"];
-        if (error || !bucket || (bucket == [NSNull null])) {
-            [AVUtils callBooleanResultBlock:resultBlock error:[NSError errorWithDomain:@"AVOSUploadFileDomain" code:0 userInfo:@{@"reason":[NSString stringWithFormat:@"file upload failed."]}]];
-            return;
-        }
-        NSString *provider = [object valueForKey:@"provider"];
-        if ([provider isEqualToString:@"qcloud"]) {
-            self.storageType = AVStorageTypeQCloud;
-            [self uploadToQCloudWithAVFile:file fileTokensInfo:object progressBlock:progressBlock resultBlock:resultBlock];
-        } else if ([provider isEqualToString:@"qiniu"]) {
-            self.storageType = AVStorageTypeQiniu;
-            [self uploadToQiniuWithAVFile:file fileTokensInfo:object progressBlock:progressBlock resultBlock:resultBlock option:option];
-        } else if ([provider isEqualToString:@"s3"]) {
-            self.storageType = AVStorageTypeS3;
-            [self uploadToS3WithAVFile:file fileTokensInfo:object progressBlock:progressBlock resultBlock:resultBlock];
-        }
-    }];
+    if (option.breakpoint) {
+        [self uploadWithAVFile:file
+                          info:option.breakpoint.info
+                 progressBlock:progressBlock
+                   resultBlock:resultBlock
+                        option:option];
+    } else {
+        [[AVPaasClient sharedInstance] postObject:@"fileTokens" withParameters:parameters block:^(id object, NSError *error) {
+            id bucket = [object valueForKey:@"bucket"];
+            if (error || !bucket || (bucket == [NSNull null])) {
+                [AVUtils callBooleanResultBlock:resultBlock error:[NSError errorWithDomain:@"AVOSUploadFileDomain" code:0 userInfo:@{@"reason":[NSString stringWithFormat:@"file upload failed."]}]];
+                return;
+            }
+
+            [self uploadWithAVFile:file
+                              info:object
+                     progressBlock:progressBlock
+                       resultBlock:resultBlock
+                            option:option];
+        }];
+    }
+}
+
+- (void)uploadWithAVFile:(AVFile *)file
+                    info:(NSDictionary *)info
+           progressBlock:(AVProgressBlock)progressBlock
+             resultBlock:(AVBooleanResultBlock)resultBlock
+                  option:(AVFileSaveOption *)option
+{
+    NSString *provider = [info valueForKey:@"provider"];
+
+    if ([provider isEqualToString:@"qcloud"]) {
+        self.storageType = AVStorageTypeQCloud;
+        [self uploadToQCloudWithAVFile:file fileTokensInfo:info progressBlock:progressBlock resultBlock:resultBlock];
+    } else if ([provider isEqualToString:@"qiniu"]) {
+        self.storageType = AVStorageTypeQiniu;
+        [self uploadToQiniuWithAVFile:file fileTokensInfo:info progressBlock:progressBlock resultBlock:resultBlock option:option];
+    } else if ([provider isEqualToString:@"s3"]) {
+        self.storageType = AVStorageTypeS3;
+        [self uploadToS3WithAVFile:file fileTokensInfo:info progressBlock:progressBlock resultBlock:resultBlock];
+    }
 }
 
 #pragma mark - Upload to LeanCloud
@@ -262,6 +285,7 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
 
     if ([file localFileExists]) {
         AVQiniuResumableUploader *uploader = [[AVQiniuResumableUploader alloc] initWithFile:file
+                                                                                       info:object
                                                                                         key:key
                                                                                       token:token
                                                                                        host:QiniuServerPath
