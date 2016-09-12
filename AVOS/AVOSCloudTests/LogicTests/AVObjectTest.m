@@ -1159,24 +1159,6 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     XCTAssertNil([AVPaasClient sharedInstance].currentUser);
 }
 
-- (void)testSetNull {
-    AVObject *object = [self objectForAVObjectTest];
-    [object setObject:[NSNull null] forKey:@"name"];
-    NSError *error;
-    [object save:&error];
-    
-    [AVObject setConvertingNullToNil:NO];
-    AVObject *fetchedObject = [self fetchObjectById:object.objectId];
-    NSString *name = [fetchedObject objectForKey:@"name"];
-    XCTAssertNotNil(name);
-    XCTAssertTrue([name isEqual:[NSNull null]]);
-    
-    [AVObject setConvertingNullToNil:YES];
-    NSString *name1 = [fetchedObject objectForKey:@"name"];
-    XCTAssertNil(name1);
-    XCTAssertFalse([name1 isEqual:[NSNull null]]);
-}
-
 - (void)testSaveDescriptionKey {
     NSString * className = NSStringFromClass([self class]);
     NSError * error = nil;
