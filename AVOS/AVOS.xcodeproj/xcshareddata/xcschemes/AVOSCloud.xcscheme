@@ -37,6 +37,11 @@
                BlueprintName = "AVOSCloud-iOSTests"
                ReferencedContainer = "container:AVOS.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "AVPushTest">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
