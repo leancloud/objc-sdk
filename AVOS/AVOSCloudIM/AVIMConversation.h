@@ -201,6 +201,18 @@ enum : AVIMMessageSendOption {
 /*!
  往对话中发送消息。
  @param message － 消息对象
+ @param option － 消息发送选项
+ @param progressBlock - 发送进度回调。仅对文件上传有效，发送文本消息时不进行回调。
+ @param callback － 结果回调
+ @return None.
+ */
+- (void)sendMessage:(AVIMMessage *)message
+             option:(AVIMMessageOption *)option
+           callback:(AVIMBooleanResultBlock)callback;
+
+/*!
+ 往对话中发送消息。
+ @param message － 消息对象
  @param progressBlock - 发送进度回调。仅对文件上传有效，发送文本消息时不进行回调。
  @param callback － 结果回调
  @return None.
@@ -273,7 +285,7 @@ enum : AVIMMessageSendOption {
  */
 - (void)sendMessage:(AVIMMessage *)message
             options:(AVIMMessageSendOption)options
-           callback:(AVIMBooleanResultBlock)callback AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.4.0. Use -[AVIMConversation sendMessage:option:progressBlock:callback:] instead.");
+           callback:(AVIMBooleanResultBlock)callback AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.4.0. Use -[AVIMConversation sendMessage:option:callback:] instead.");
 
 /*!
  往对话中发送消息。
