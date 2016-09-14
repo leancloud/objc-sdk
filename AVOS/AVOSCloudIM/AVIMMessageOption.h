@@ -20,6 +20,6 @@ typedef NS_ENUM(NSInteger, AVIMMessagePriority) {
 @property (nonatomic, assign) BOOL                 receipt;
 @property (nonatomic, assign) BOOL                 transient;
 @property (nonatomic, assign) AVIMMessagePriority  priority;
-@property (nonatomic,   copy) NSString            *pushData;
+@property (nonatomic, strong) NSDictionary        *pushData;
 
 @end
