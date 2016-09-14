@@ -604,6 +604,10 @@
         if (requestReceipt) {
             directCommand.r = YES;
         }
+        if (option.pushData) {
+            directCommand.pushData = option.pushData;
+        }
+
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             AVIMDirectCommand *directOutCommand = outCommand.directMessage;
             AVIMMessage *message = outCommand.directMessage.message;
