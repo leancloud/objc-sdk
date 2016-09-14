@@ -12,10 +12,13 @@
 #import "AVIMConversationUpdateBuilder.h"
 #import "AVIMKeyedConversation.h"
 #import "AVIMOnlineStatusPolicy.h"
+#import "AVIMAvailability.h"
+#import "AVIMMessageOption.h"
 
 @class AVIMClient;
 
-typedef uint64_t AVIMMessageSendOption;
+typedef uint64_t AVIMMessageSendOption AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.4.0. Use AVIMMessageOption instead.");
+
 enum : AVIMMessageSendOption {
     /// Default message.
     AVIMMessageSendOptionNone = 0,
@@ -23,7 +26,7 @@ enum : AVIMMessageSendOption {
     AVIMMessageSendOptionTransient = 1 << 0,
     /// When receiver receives the message, in sender part, -[AVIMClientDelegate conversation:messageDelivered:] will be called.
     AVIMMessageSendOptionRequestReceipt = 1 << 1,
-};
+} AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.4.0. Use AVIMMessageOption instead.");
 
 @interface AVIMConversation : NSObject
 
@@ -209,24 +212,13 @@ enum : AVIMMessageSendOption {
 /*!
  往对话中发送消息。
  @param message － 消息对象
- @param options － 可选参数，可以使用或 “|” 操作表示多个选项
- @param callback － 结果回调
- @return None.
- */
-- (void)sendMessage:(AVIMMessage *)message
-            options:(AVIMMessageSendOption)options
-           callback:(AVIMBooleanResultBlock)callback;
-
-/*!
- 往对话中发送消息。
- @param message － 消息对象
- @param options － 可选参数，可以使用或 “|” 操作表示多个选项
+ @param option － 消息发送选项
  @param progressBlock - 发送进度回调。仅对文件上传有效，发送文本消息时不进行回调。
  @param callback － 结果回调
  @return None.
  */
 - (void)sendMessage:(AVIMMessage *)message
-            options:(AVIMMessageSendOption)options
+             option:(AVIMMessageOption *)option
       progressBlock:(AVIMProgressBlock)progressBlock
            callback:(AVIMBooleanResultBlock)callback;
 
@@ -267,5 +259,33 @@ enum : AVIMMessageSendOption {
                     timestamp:(int64_t)timestamp
                         limit:(NSUInteger)limit
                      callback:(AVIMArrayResultBlock)callback;
+
+@end
+
+@interface AVIMConversation (AVDeprecated)
+
+/*!
+ 往对话中发送消息。
+ @param message － 消息对象
+ @param options － 可选参数，可以使用或 “|” 操作表示多个选项
+ @param callback － 结果回调
+ @return None.
+ */
+- (void)sendMessage:(AVIMMessage *)message
+            options:(AVIMMessageSendOption)options
+           callback:(AVIMBooleanResultBlock)callback AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.4.0. Use -[AVIMConversation sendMessage:option:progressBlock:callback:] instead.");
+
+/*!
+ 往对话中发送消息。
+ @param message － 消息对象
+ @param options － 可选参数，可以使用或 “|” 操作表示多个选项
+ @param progressBlock - 发送进度回调。仅对文件上传有效，发送文本消息时不进行回调。
+ @param callback － 结果回调
+ @return None.
+ */
+- (void)sendMessage:(AVIMMessage *)message
+            options:(AVIMMessageSendOption)options
+      progressBlock:(AVIMProgressBlock)progressBlock
+           callback:(AVIMBooleanResultBlock)callback AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.4.0. Use -[AVIMConversation sendMessage:option:progressBlock:callback:] instead.");
 
 @end

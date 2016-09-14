@@ -21,13 +21,6 @@ typedef NS_ENUM(int8_t, AVIMMessageStatus) {
     AVIMMessageStatusFailed,
 };
 
-typedef NS_ENUM(NSInteger, AVIMMessagePriority) {
-    AVIMMessagePriorityDefault = 0,
-    AVIMMessagePriorityHigh    = 1,
-    AVIMMessagePriorityNormal  = 2,
-    AVIMMessagePriorityLow     = 3,
-};
-
 @interface AVIMMessage : NSObject <NSCopying, NSCoding>
 
 /*!
@@ -74,11 +67,6 @@ typedef NS_ENUM(NSInteger, AVIMMessagePriority) {
  * 是否是暂态消息
  */
 @property (nonatomic, readonly, assign) BOOL transient;
-
-/*!
- 消息优先级。对话消息繁忙时，高优先级消息会优先到达。
- */
-@property (nonatomic, assign) AVIMMessagePriority priority;
 
 - (NSString *)payload;
 
