@@ -375,25 +375,21 @@
 - (void)sendMessage:(AVIMMessage *)message
            callback:(AVIMBooleanResultBlock)callback
 {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    [self sendMessage:message
-              options:AVIMMessageSendOptionNone
-             callback:callback];
-#pragma clang diagnostic pop
+    [self sendMessage:message option:nil callback:callback];
+}
+
+- (void)sendMessage:(AVIMMessage *)message
+             option:(AVIMMessageOption *)option
+           callback:(AVIMBooleanResultBlock)callback
+{
+    [self sendMessage:message option:option progressBlock:nil callback:callback];
 }
 
 - (void)sendMessage:(AVIMMessage *)message
       progressBlock:(AVProgressBlock)progressBlock
            callback:(AVIMBooleanResultBlock)callback
 {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    [self sendMessage:message
-              options:AVIMMessageSendOptionNone
-        progressBlock:progressBlock
-             callback:callback];
-#pragma clang diagnostic pop
+    [self sendMessage:message option:nil progressBlock:progressBlock callback:callback];
 }
 
 - (void)sendMessage:(AVIMMessage *)message
