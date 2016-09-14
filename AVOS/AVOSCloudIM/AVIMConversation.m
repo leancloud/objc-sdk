@@ -605,7 +605,14 @@
             directCommand.r = YES;
         }
         if (option.pushData) {
-            directCommand.pushData = option.pushData;
+            NSError *error = nil;
+            NSData  *data  = [NSJSONSerialization dataWithJSONObject:option.pushData options:0 error:&error];
+
+            if (error) {
+                AVLoggerInfo(AVLoggerDomainIM, @"Push data cannot be serialize to JSON string. Error: %@.", error.localizedDescription);
+            } else {
+                directCommand.pushData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            }
         }
 
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
