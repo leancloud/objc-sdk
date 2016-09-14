@@ -19,6 +19,7 @@
 #import "AVIMConversationQuery.h"
 #import "AVIMConversationUpdateBuilder.h"
 #import "AVIMMessage.h"
+#import "AVIMMessageOption.h"
 #import "AVIMTypedMessage.h"
 #import "AVIMTextMessage.h"
 #import "AVIMImageMessage.h"
