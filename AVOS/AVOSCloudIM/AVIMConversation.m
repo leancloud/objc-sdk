@@ -553,7 +553,7 @@
                 AVIMAckCommand *ackInCommand = inCommand.ackMessage;
                 message.sendTimestamp = ackInCommand.t;
                 message.messageId = ackInCommand.uid;
-                if (self.imClient.messageQueryCacheEnabled) {
+                if (!message.transient && self.imClient.messageQueryCacheEnabled) {
                     [[self messageCacheStore] insertMessage:message withBreakpoint:NO];
                 }
                 if (!transient && directOutCommand.r) {
