@@ -70,7 +70,7 @@
     AVFile *file = [AVFile fileWithName:@"aa.txt" data:data];
     file.name = @"helloworld.txt";
     
-    [file save];
+    XCTAssertTrue([file save]);
     [self addDeleteFile:file];
 
     [AVFile getFileWithObjectId:file.objectId withBlock:^(AVFile *file2, NSError *error) {
