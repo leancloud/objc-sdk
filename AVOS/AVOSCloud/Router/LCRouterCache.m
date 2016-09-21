@@ -102,7 +102,8 @@ extern NSString *LCTTLKey;
 }
 
 - (void)save {
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.routerInfoTable];
+    NSDictionary *routerInfoTable = [[NSDictionary alloc] initWithDictionary:self.routerInfoTable copyItems:YES];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:routerInfoTable];
     [[LCKeyValueStore sharedInstance] setData:data forKey:LCRouterKey];
 }
 
