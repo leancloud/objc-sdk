@@ -10,7 +10,6 @@ require 'xcodeproj'
 class FrameworkBuilder
   CONFIGURATION = 'Release'
   PROJECT_PATH  = 'AVOS/AVOS.xcodeproj'
-  CODE_SIGN_IDENTITY = 'iPhone Distribution: Meiwei Shuqian(Beijing) Information Technology co., LTD (Y6X8P44TM5)'
 
   def project_path
     @project_path || PROJECT_PATH
@@ -18,10 +17,6 @@ class FrameworkBuilder
 
   def configuration
     @configuration || CONFIGURATION
-  end
-
-  def code_sign_identity
-    @code_sign_identity || CODE_SIGN_IDENTITY
   end
 
   def empty_string?(string)
@@ -89,10 +84,6 @@ class FrameworkBuilder
     execmd "lipo -create -output #{output} #{inputs.join(' ')}"
   end
 
-  def codesign(framework)
-    execmd "codesign -f -s \"#{code_sign_identity}\" #{framework}"
-  end
-
   def merge_frameworks(prefix, target_name)
     product_name = product_name(target_name)
 
@@ -109,8 +100,6 @@ class FrameworkBuilder
     executables  = frameworks.map { |framework| File.join(framework, product_name) }
 
     lipo File.join(output, product_name), *executables
-
-    codesign(output)
   end
 
   def build_ios_sdk(target_name)
