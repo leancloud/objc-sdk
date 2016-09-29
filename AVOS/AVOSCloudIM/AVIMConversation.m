@@ -571,13 +571,17 @@
             directCommand.r = YES;
         }
         if (option.pushData) {
-            NSError *error = nil;
-            NSData  *data  = [NSJSONSerialization dataWithJSONObject:option.pushData options:0 error:&error];
-
-            if (error) {
-                AVLoggerInfo(AVLoggerDomainIM, @"Push data cannot be serialize to JSON string. Error: %@.", error.localizedDescription);
+            if (option.transient || self.transient) {
+                AVLoggerInfo(AVLoggerDomainIM, @"Push data cannot applied to transient message or transient conversation.");
             } else {
-                directCommand.pushData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                NSError *error = nil;
+                NSData  *data  = [NSJSONSerialization dataWithJSONObject:option.pushData options:0 error:&error];
+
+                if (error) {
+                    AVLoggerInfo(AVLoggerDomainIM, @"Push data cannot be serialize to JSON string. Error: %@.", error.localizedDescription);
+                } else {
+                    directCommand.pushData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                }
             }
         }
 
