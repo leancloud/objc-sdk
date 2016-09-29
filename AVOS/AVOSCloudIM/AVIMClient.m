@@ -749,9 +749,6 @@ static BOOL AVIMClientHasInstantiated = NO;
         case AVIMCommandType_Rcp:
             [self processReceiptCommand:command];
             break;
-        case AVIMCommandType_Presence:
-            [self processPresenceCommand:command];
-            break;
             
         default:
             break;
@@ -936,36 +933,6 @@ static BOOL AVIMClientHasInstantiated = NO;
         [cacheStore updateMessageWithoutBreakpoint:message];
         
         [self receiveMessageDelivered:message];
-    }
-}
-
-NS_INLINE
-AVIMOnlineStatus getOnlineStatus(AVIMStatusType type) {
-    switch (type) {
-    case AVIMStatusType_On:
-        return AVIMOnlineStatusOn;
-    case AVIMStatusType_Off:
-        return AVIMOnlineStatusOff;
-    }
-}
-
-- (void)processPresenceCommand:(AVIMGenericCommand *)genericCommand {
-    AVIMPresenceCommand *presenceCommand = genericCommand.presenceMessage;
-
-    if (presenceCommand) {
-        if (presenceCommand.hasCid && presenceCommand.hasStatus && presenceCommand.sessionPeerIdsArray_Count > 0) {
-            AVIMConversation *conversation = [self conversationWithId:presenceCommand.cid];
-
-            [conversation fetchWithCallback:^(BOOL succeeded, NSError *error) {
-                NSArray *members = presenceCommand.sessionPeerIdsArray;
-                AVIMOnlineStatus onlineStatus = getOnlineStatus(presenceCommand.status);
-
-                NSArray *arguments = @[conversation, members, @(onlineStatus)];
-                SEL selector = @selector(conversation:members:onlineStatusDidChange:);
-
-                [AVIMRuntimeHelper callMethodInMainThreadWithTarget:_delegate selector:selector arguments:arguments];
-            }];
-        }
     }
 }
 

@@ -515,10 +515,6 @@
 		836705AB1BA1358D0050E968 /* SDMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705AA1BA1358D0050E968 /* SDMacros.h */; };
 		836705DF1BA1C1710050E968 /* AVKeychain.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705DC1BA1C1710050E968 /* AVKeychain.h */; };
 		836705E01BA1C1710050E968 /* AVKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 836705DD1BA1C1710050E968 /* AVKeychain.m */; };
-		83739FAD1D6C9F7D00F4A63F /* AVIMOnlineStatusPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = 83739FAB1D6C9F7D00F4A63F /* AVIMOnlineStatusPolicy.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		83739FAE1D6C9F7D00F4A63F /* AVIMOnlineStatusPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = 83739FAB1D6C9F7D00F4A63F /* AVIMOnlineStatusPolicy.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		83739FAF1D6C9F7D00F4A63F /* AVIMOnlineStatusPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 83739FAC1D6C9F7D00F4A63F /* AVIMOnlineStatusPolicy.m */; };
-		83739FB01D6C9F7D00F4A63F /* AVIMOnlineStatusPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 83739FAC1D6C9F7D00F4A63F /* AVIMOnlineStatusPolicy.m */; };
 		837CC71E1B568431001333AD /* NSDictionary+LCHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 837CC71C1B568431001333AD /* NSDictionary+LCHash.h */; };
 		837CC71F1B568431001333AD /* NSDictionary+LCHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 837CC71D1B568431001333AD /* NSDictionary+LCHash.m */; };
 		838AF12A1AFE58F600B8965E /* LCIMMessageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 838AF1221AFE58F600B8965E /* LCIMMessageCache.h */; };
@@ -1404,8 +1400,6 @@
 		836705AA1BA1358D0050E968 /* SDMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMacros.h; sourceTree = "<group>"; };
 		836705DC1BA1C1710050E968 /* AVKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVKeychain.h; sourceTree = "<group>"; };
 		836705DD1BA1C1710050E968 /* AVKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVKeychain.m; sourceTree = "<group>"; };
-		83739FAB1D6C9F7D00F4A63F /* AVIMOnlineStatusPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMOnlineStatusPolicy.h; sourceTree = "<group>"; };
-		83739FAC1D6C9F7D00F4A63F /* AVIMOnlineStatusPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMOnlineStatusPolicy.m; sourceTree = "<group>"; };
 		837CC71C1B568431001333AD /* NSDictionary+LCHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+LCHash.h"; sourceTree = "<group>"; };
 		837CC71D1B568431001333AD /* NSDictionary+LCHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+LCHash.m"; sourceTree = "<group>"; };
 		838AF1221AFE58F600B8965E /* LCIMMessageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageCache.h; sourceTree = "<group>"; };
@@ -2424,8 +2418,6 @@
 				8C841BD01A5A84C600C5C6C4 /* AVIMConversation_Internal.h */,
 				8C841BD11A5A84C600C5C6C4 /* AVIMConversation.h */,
 				8C841BD21A5A84C600C5C6C4 /* AVIMConversation.m */,
-				83739FAB1D6C9F7D00F4A63F /* AVIMOnlineStatusPolicy.h */,
-				83739FAC1D6C9F7D00F4A63F /* AVIMOnlineStatusPolicy.m */,
 				83CFCB5E1B2A5D2700F97C92 /* AVIMKeyedConversation.h */,
 				83CFCB5F1B2A5D2700F97C92 /* AVIMKeyedConversation.m */,
 				834775DB1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h */,
@@ -3020,7 +3012,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83739FAE1D6C9F7D00F4A63F /* AVIMOnlineStatusPolicy.h in Headers */,
 				9A2F1B601CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.h in Headers */,
 				831E295B1D882CBB006E502B /* AVIMMessageOption.h in Headers */,
 				9AE76C4F1C3F7CC600325902 /* AVIMConversationOutCommand.h in Headers */,
@@ -3644,7 +3635,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83739FAD1D6C9F7D00F4A63F /* AVIMOnlineStatusPolicy.h in Headers */,
 				9A2F1B2E1CF6F6FA00BE52F2 /* LCIMExtensionInternals.h in Headers */,
 				831E295A1D882CBB006E502B /* AVIMMessageOption.h in Headers */,
 				83CFCB601B2A5D2700F97C92 /* AVIMKeyedConversation.h in Headers */,
@@ -4128,7 +4118,6 @@
 				704F3B901BE0D05C0033245C /* AVIMUserOptions.m in Sources */,
 				9AE76C571C3F7CC600325902 /* AVIMDynamicObject.m in Sources */,
 				830EB9EA1C3F996A00BA917F /* AVIMClientOpenOption.m in Sources */,
-				83739FB01D6C9F7D00F4A63F /* AVIMOnlineStatusPolicy.m in Sources */,
 				831E295D1D882CBB006E502B /* AVIMMessageOption.m in Sources */,
 				70BA7A701BE22B1900C3EB70 /* LCIMClientSessionTokenCacheStore.m in Sources */,
 				9AE76C501C3F7CC600325902 /* AVIMConversationOutCommand.m in Sources */,
@@ -4665,7 +4654,6 @@
 				8C895DE71A78A5D900992A8F /* AVMPOrderedDictionary.m in Sources */,
 				8C841C431A5A84C600C5C6C4 /* AVIMReachability.m in Sources */,
 				8C841C3F1A5A84C600C5C6C4 /* AVIMBlockHelper.m in Sources */,
-				83739FAF1D6C9F7D00F4A63F /* AVIMOnlineStatusPolicy.m in Sources */,
 				831E295C1D882CBB006E502B /* AVIMMessageOption.m in Sources */,
 				830EB9E81C3F996A00BA917F /* AVIMClientOpenOption.m in Sources */,
 				8C9A927D1A70AF1800CA4912 /* AVIMVideoMessage.m in Sources */,
