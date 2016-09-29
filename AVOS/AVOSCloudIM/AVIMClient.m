@@ -260,17 +260,23 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 - (void)sendCommand:(AVIMGenericCommand *)command {
-    if (!_socketWrapper) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            AVIMCommandResultBlock callback = command.callback;
-            if (callback) {
-                NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorClientNotOpen reason:@"Client not open when send a message."];
+    if (_socketWrapper) {
+        switch (_status) {
+        case AVIMClientStatusClosing:
+        case AVIMClientStatusClosed: return;
+        default: break;
+        }
+
+        [_socketWrapper sendCommand:command];
+    } else {
+        AVIMCommandResultBlock callback = command.callback;
+        if (callback) {
+            NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorClientNotOpen reason:@"Client not open when send a message."];
+            dispatch_async(dispatch_get_main_queue(), ^{
                 callback(command, nil, error);
-            }
-        });
-        return;
+            });
+        }
     }
-    [_socketWrapper sendCommand:command];
 }
 
 - (void)changeStatus:(AVIMClientStatus)status {
@@ -564,8 +570,6 @@ static BOOL AVIMClientHasInstantiated = NO;
 
 - (void)closeWithCallback:(AVIMBooleanResultBlock)callback {
     dispatch_async(imClientQueue, ^{
-        [self changeStatus:AVIMClientStatusClosing];
-        
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
         genericCommand.needResponse = YES;
         genericCommand.cmd = AVIMCommandType_Session;
@@ -587,6 +591,7 @@ static BOOL AVIMClientHasInstantiated = NO;
             [AVIMBlockHelper callBooleanResultBlock:callback error:error];
         }];
         [self sendCommand:genericCommand];
+        [self changeStatus:AVIMClientStatusClosing];
     });
 }
 
@@ -743,6 +748,9 @@ static BOOL AVIMClientHasInstantiated = NO;
             break;
         case AVIMCommandType_Rcp:
             [self processReceiptCommand:command];
+            break;
+        case AVIMCommandType_Presence:
+            [self processPresenceCommand:command];
             break;
             
         default:
@@ -928,6 +936,36 @@ static BOOL AVIMClientHasInstantiated = NO;
         [cacheStore updateMessageWithoutBreakpoint:message];
         
         [self receiveMessageDelivered:message];
+    }
+}
+
+NS_INLINE
+AVIMOnlineStatus getOnlineStatus(AVIMStatusType type) {
+    switch (type) {
+    case AVIMStatusType_On:
+        return AVIMOnlineStatusOn;
+    case AVIMStatusType_Off:
+        return AVIMOnlineStatusOff;
+    }
+}
+
+- (void)processPresenceCommand:(AVIMGenericCommand *)genericCommand {
+    AVIMPresenceCommand *presenceCommand = genericCommand.presenceMessage;
+
+    if (presenceCommand) {
+        if (presenceCommand.hasCid && presenceCommand.hasStatus && presenceCommand.sessionPeerIdsArray_Count > 0) {
+            AVIMConversation *conversation = [self conversationWithId:presenceCommand.cid];
+
+            [conversation fetchWithCallback:^(BOOL succeeded, NSError *error) {
+                NSArray *members = presenceCommand.sessionPeerIdsArray;
+                AVIMOnlineStatus onlineStatus = getOnlineStatus(presenceCommand.status);
+
+                NSArray *arguments = @[conversation, members, @(onlineStatus)];
+                SEL selector = @selector(conversation:members:onlineStatusDidChange:);
+
+                [AVIMRuntimeHelper callMethodInMainThreadWithTarget:_delegate selector:selector arguments:arguments];
+            }];
+        }
     }
 }
 
