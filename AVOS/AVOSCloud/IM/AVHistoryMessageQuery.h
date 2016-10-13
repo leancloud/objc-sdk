@@ -10,9 +10,12 @@
 #import "AVHistoryMessage.h"
 #import "AVConstants.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface AVHistoryMessageQuery : NSObject
-@property(nonatomic)int64_t timestamp;
-@property(nonatomic)int limit;
+
+@property (nonatomic, assign) int64_t timestamp;
+@property (nonatomic, assign) int     limit;
 
 /**
  *  构造通用 AVHistoryMessageQuery
@@ -98,14 +101,14 @@
  *  开始查询
  *  @return 历史聊天记录数组，发生错误返回nil
  */
--(NSArray *)find;
+-(nullable NSArray *)find;
 
 /**
  *  开始查询
  *  @param error 发生错误通过error返回
  *  @return 历史聊天记录数组，发生错误返回nil
  */
--(NSArray *)find:(NSError **)error;
+-(nullable NSArray *)find:(NSError **)error;
 
 /**
  *  开始查询
@@ -113,3 +116,5 @@
  */
 -(void)findInBackgroundWithCallback:(AVArrayResultBlock)callback;
 @end
+
+NS_ASSUME_NONNULL_END

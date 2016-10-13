@@ -103,6 +103,8 @@ typedef NS_ENUM(NSInteger, AVServiceRegion) {
 
 #define kAVDefaultNetworkTimeoutInterval 10.0
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  *  AVOSCloud is the main Class for AVOSCloud SDK
  */
@@ -240,8 +242,8 @@ typedef NS_ENUM(NSInteger, AVServiceRegion) {
  *  @param callback 回调结果
  */
 +(void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
-                             appName:(NSString *)appName
-                           operation:(NSString *)operation
+                             appName:(nullable NSString *)appName
+                           operation:(nullable NSString *)operation
                           timeToLive:(NSUInteger)ttl
                             callback:(AVBooleanResultBlock)callback;
 
@@ -254,8 +256,8 @@ typedef NS_ENUM(NSInteger, AVServiceRegion) {
  *  @param callback 回调结果
  */
 +(void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
-                        templateName:(NSString *)templateName
-                           variables:(NSDictionary *)variables
+                        templateName:(nullable NSString *)templateName
+                           variables:(nullable NSDictionary *)variables
                             callback:(AVBooleanResultBlock)callback;
 
 /*!
@@ -266,7 +268,7 @@ typedef NS_ENUM(NSInteger, AVServiceRegion) {
  * @param callback 回调结果
  */
 +(void)requestVoiceCodeWithPhoneNumber:(NSString *)phoneNumber
-                                   IDD:(NSString *)IDD
+                                   IDD:(nullable NSString *)IDD
                               callback:(AVBooleanResultBlock)callback;
 
 /*!
@@ -281,13 +283,13 @@ typedef NS_ENUM(NSInteger, AVServiceRegion) {
 /*!
  * 获取服务端时间。
  */
-+ (NSDate *)getServerDate:(NSError **)error;
++ (nullable NSDate *)getServerDate:(NSError **)error;
 
 /*!
  * 异步地获取服务端时间。
  * @param block 回调结果。
  */
-+ (void)getServerDateWithBlock:(void(^)(NSDate *date, NSError *error))block;
++ (void)getServerDateWithBlock:(void(^)(NSDate * _Nullable date, NSError * _Nullable error))block;
 
 #pragma mark - Push Notification
 
@@ -319,7 +321,7 @@ typedef NS_ENUM(NSInteger, AVServiceRegion) {
  * @param block       Constructing block of [AVInstallation currentInstallation].
  * This method should be called in -[UIApplication application:didRegisterForRemoteNotificationsWithDeviceToken:].
  */
-+ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken constructingInstallationWithBlock:(void (^)(AVInstallation *currentInstallation))block;
++ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken constructingInstallationWithBlock:(nullable void (^)(AVInstallation *currentInstallation))block;
 
 @end
 
@@ -340,3 +342,5 @@ typedef NS_ENUM(NSInteger, AVServiceRegion) {
 + (void)useAVCloudCN AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.3. Use +[AVOSCloud setServiceRegion:] instead.");
 
 @end
+
+NS_ASSUME_NONNULL_END
