@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param conversationId 对话Id
  *  @return query 对象
  */
-+ (instancetype)queryWithConversationId:(NSString *)conversationId;
++ (instancetype)queryWithConversationId:(nullable NSString *)conversationId;
 
 /**
  *  构造指定 conversationId 的 AVHistoryMessageQuery
@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param limit 限制返回结果数量，0表示不指定
  *  @return query 对象
  */
-+ (instancetype)queryWithConversationId:(NSString *)conversationId timestamp:(int64_t)timestamp limit:(int)limit;
++ (instancetype)queryWithConversationId:(nullable NSString *)conversationId timestamp:(int64_t)timestamp limit:(int)limit;
 
 /**
  *  构造查询指定来源 peerId 的 AVHistoryMessageQuery

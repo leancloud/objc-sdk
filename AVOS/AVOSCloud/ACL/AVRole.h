@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param name The name of the Role to create.
  */
-- (instancetype)initWithName:(NSString *)name NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithName:(NSString *)name;
 
 /*!
  Constructs a new AVRole with the given name.

@@ -63,7 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  The ID of the current client. Usually the user's ID.
  */
-@property (nonatomic, copy, readonly) NSString *clientId;
+@property (nonatomic, copy, readonly, nullable) NSString *clientId;
 
 /**
  * Tag of current client.
@@ -86,7 +86,7 @@ NS_ASSUME_NONNULL_BEGIN
  Initializes a newly allocated client.
  @param clientId Identifier of client, nonnull requierd.
  */
-- (instancetype)initWithClientId:(NSString *)clientId NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithClientId:(NSString *)clientId;
 
 /*!
  Initializes a newly allocated client.
