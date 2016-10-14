@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 /*!
  The `AVOSCloudCrashReporting` class is responsible for enabling crash reporting in your application.
  */
@@ -32,3 +34,5 @@
 + (BOOL)isCrashReportingEnabled;
 
 @end
+
+NS_ASSUME_NONNULL_END
