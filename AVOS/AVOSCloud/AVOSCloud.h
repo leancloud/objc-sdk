@@ -305,7 +305,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param categories A set of UIUserNotificationCategory objects that define the groups of actions a notification may include.
  * NOTE: categories only supported by iOS 8 and later. If application run below iOS 8, categories will be ignored.
  */
-+ (void)registerForRemoteNotificationTypes:(NSUInteger)types categories:(NSSet *)categories AV_TV_UNAVAILABLE AV_WATCH_UNAVAILABLE
++ (void)registerForRemoteNotificationTypes:(NSUInteger)types categories:(nullable NSSet *)categories AV_TV_UNAVAILABLE AV_WATCH_UNAVAILABLE
     AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.5.0. It will be removed in future.");
 
 /**
