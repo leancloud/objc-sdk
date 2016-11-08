@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AVOSCloudIM'
-  s.version  = '3.4.0-beta'
+  s.version  = '3.6.0'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud IM Objective-C SDK'
   s.authors  = 'LeanCloud'
@@ -25,6 +25,7 @@ Pod::Spec.new do |s|
 
     ss.source_files =
       'AVOS/AVOSCloudIM/Protobuf/LCIMExtensionInternals.h',
+      'AVOS/AVOSCloudIM/AVIMMessageOption.h',
       'AVOS/AVOSCloudIM/AVIMKeyedConversation.h',
       'AVOS/AVOSCloudIM/AVIMConversationQuery.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMTextMessage.h',
@@ -130,6 +131,7 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/AVMPMessagePack/AVMPOrderedDictionary.m',
       'AVOS/AVOSCloudIM/WebSocket/AVIMReachability.m',
       'AVOS/AVOSCloudIM/Utilities/AVIMBlockHelper.m',
+      'AVOS/AVOSCloudIM/AVIMMessageOption.m',
       'AVOS/AVOSCloudIM/AVIMClientOpenOption.m',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMVideoMessage.m',
       'AVOS/AVOSCloudIM/Protobuf/LCIMMessage.m',
@@ -170,6 +172,7 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/AVIMKeyedConversation.m'
 
     ss.public_header_files =
+      'AVOS/AVOSCloudIM/AVIMMessageOption.h',
       'AVOS/AVOSCloudIM/AVIMKeyedConversation.h',
       'AVOS/AVOSCloudIM/AVIMConversationQuery.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMTextMessage.h',

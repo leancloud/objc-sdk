@@ -364,6 +364,10 @@
 		8311CD871C3D25B9007DEFF8 /* AVAvailability.h in Headers */ = {isa = PBXBuildFile; fileRef = 8311CD841C3D25B9007DEFF8 /* AVAvailability.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8311CD881C3D25B9007DEFF8 /* AVAvailability.h in Headers */ = {isa = PBXBuildFile; fileRef = 8311CD841C3D25B9007DEFF8 /* AVAvailability.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8311CD891C3D25B9007DEFF8 /* AVAvailability.h in Headers */ = {isa = PBXBuildFile; fileRef = 8311CD841C3D25B9007DEFF8 /* AVAvailability.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		831E295A1D882CBB006E502B /* AVIMMessageOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 831E29581D882CBB006E502B /* AVIMMessageOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		831E295B1D882CBB006E502B /* AVIMMessageOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 831E29581D882CBB006E502B /* AVIMMessageOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		831E295C1D882CBB006E502B /* AVIMMessageOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 831E29591D882CBB006E502B /* AVIMMessageOption.m */; };
+		831E295D1D882CBB006E502B /* AVIMMessageOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 831E29591D882CBB006E502B /* AVIMMessageOption.m */; };
 		8320F87C1C1918C60024B45E /* AVRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A6D1A5A79FF00C5C6C4 /* AVRequestOperation.m */; };
 		8320F87D1C1918C60024B45E /* AVFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A141A5A79FF00C5C6C4 /* AVFile.m */; };
 		8320F87E1C1918C60024B45E /* AVJSONRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A861A5A7A0000C5C6C4 /* AVJSONRequestOperation.m */; };
@@ -586,6 +590,18 @@
 		83BE439C1D242905000C7AC3 /* AVIMWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BE43951D242905000C7AC3 /* AVIMWebSocket.h */; };
 		83BE439D1D242905000C7AC3 /* AVIMWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 83BE43961D242905000C7AC3 /* AVIMWebSocket.m */; };
 		83BE439F1D242905000C7AC3 /* AVIMWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 83BE43961D242905000C7AC3 /* AVIMWebSocket.m */; };
+		83BE73041D8105AF008ED3CF /* EXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BE73021D8105AF008ED3CF /* EXTScope.h */; };
+		83BE73051D8105AF008ED3CF /* EXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BE73021D8105AF008ED3CF /* EXTScope.h */; };
+		83BE73061D8105AF008ED3CF /* EXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BE73021D8105AF008ED3CF /* EXTScope.h */; };
+		83BE73071D8105AF008ED3CF /* EXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BE73021D8105AF008ED3CF /* EXTScope.h */; };
+		83BE73081D8105AF008ED3CF /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 83BE73031D8105AF008ED3CF /* EXTScope.m */; };
+		83BE73091D8105AF008ED3CF /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 83BE73031D8105AF008ED3CF /* EXTScope.m */; };
+		83BE730A1D8105AF008ED3CF /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 83BE73031D8105AF008ED3CF /* EXTScope.m */; };
+		83BE730B1D8105AF008ED3CF /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 83BE73031D8105AF008ED3CF /* EXTScope.m */; };
+		83BE730D1D810651008ED3CF /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BE730C1D810651008ED3CF /* metamacros.h */; };
+		83BE730E1D810651008ED3CF /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BE730C1D810651008ED3CF /* metamacros.h */; };
+		83BE730F1D810651008ED3CF /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BE730C1D810651008ED3CF /* metamacros.h */; };
+		83BE73101D810651008ED3CF /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BE730C1D810651008ED3CF /* metamacros.h */; };
 		83CFCB601B2A5D2700F97C92 /* AVIMKeyedConversation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83CFCB5E1B2A5D2700F97C92 /* AVIMKeyedConversation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83CFCB611B2A5D2700F97C92 /* AVIMKeyedConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83CFCB5F1B2A5D2700F97C92 /* AVIMKeyedConversation.m */; };
 		83D8CE751C17DAF50094279D /* AVRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A6D1A5A79FF00C5C6C4 /* AVRequestOperation.m */; };
@@ -795,6 +811,18 @@
 		83DF02B81AF86032000E289C /* LCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DF02AD1AF86032000E289C /* LCDB.h */; };
 		83DF02B91AF86032000E289C /* LCResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DF02AE1AF86032000E289C /* LCResultSet.h */; };
 		83DF02BA1AF86032000E289C /* LCResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DF02AF1AF86032000E289C /* LCResultSet.m */; };
+		83E13C111D4B4FC60009CB6F /* AVConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 83E13C0F1D4B4FC60009CB6F /* AVConfiguration.h */; };
+		83E13C121D4B4FC60009CB6F /* AVConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 83E13C0F1D4B4FC60009CB6F /* AVConfiguration.h */; };
+		83E13C131D4B4FC60009CB6F /* AVConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 83E13C0F1D4B4FC60009CB6F /* AVConfiguration.h */; };
+		83E13C141D4B4FC60009CB6F /* AVConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 83E13C0F1D4B4FC60009CB6F /* AVConfiguration.h */; };
+		83E13C151D4B4FC60009CB6F /* AVConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E13C101D4B4FC60009CB6F /* AVConfiguration.m */; };
+		83E13C161D4B4FC60009CB6F /* AVConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E13C101D4B4FC60009CB6F /* AVConfiguration.m */; };
+		83E13C171D4B4FC60009CB6F /* AVConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E13C101D4B4FC60009CB6F /* AVConfiguration.m */; };
+		83E13C181D4B4FC60009CB6F /* AVConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E13C101D4B4FC60009CB6F /* AVConfiguration.m */; };
+		83E13C1A1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */ = {isa = PBXBuildFile; fileRef = 83E13C191D4B509E0009CB6F /* AVConfiguration_extension.h */; };
+		83E13C1B1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */ = {isa = PBXBuildFile; fileRef = 83E13C191D4B509E0009CB6F /* AVConfiguration_extension.h */; };
+		83E13C1C1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */ = {isa = PBXBuildFile; fileRef = 83E13C191D4B509E0009CB6F /* AVConfiguration_extension.h */; };
+		83E13C1D1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */ = {isa = PBXBuildFile; fileRef = 83E13C191D4B509E0009CB6F /* AVConfiguration_extension.h */; };
 		83E5D9521C1AA7C000E61E37 /* AVAnalyticsUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419EE1A5A79FF00C5C6C4 /* AVAnalyticsUtils.m */; };
 		83E5D9531C1AA7D200E61E37 /* AVAnalyticsUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419ED1A5A79FF00C5C6C4 /* AVAnalyticsUtils.h */; };
 		83F745F11B91732D00437259 /* LCIMMessageCacheStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F745EE1B91732D00437259 /* LCIMMessageCacheStore.h */; };
@@ -1355,6 +1383,8 @@
 		830EB9FE1C44F3D600BA917F /* AVSaveOption_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVSaveOption_internal.h; sourceTree = "<group>"; };
 		8311CD801C3D24A6007DEFF8 /* AVIMAvailability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMAvailability.h; sourceTree = "<group>"; };
 		8311CD841C3D25B9007DEFF8 /* AVAvailability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVAvailability.h; sourceTree = "<group>"; };
+		831E29581D882CBB006E502B /* AVIMMessageOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMMessageOption.h; sourceTree = "<group>"; };
+		831E29591D882CBB006E502B /* AVIMMessageOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMMessageOption.m; sourceTree = "<group>"; };
 		8320F95C1C1918C60024B45E /* AVOSCloud.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloud.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8320F95D1C1918FE0024B45E /* AVOSCloud-watchOS.Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AVOSCloud-watchOS.Info.plist"; sourceTree = "<group>"; };
 		833E1F611B69F629002A691C /* AVIMFileMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMFileMessage.h; sourceTree = "<group>"; };
@@ -1438,6 +1468,9 @@
 		83BE43931D242905000C7AC3 /* SDMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMacros.h; sourceTree = "<group>"; };
 		83BE43951D242905000C7AC3 /* AVIMWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMWebSocket.h; sourceTree = "<group>"; };
 		83BE43961D242905000C7AC3 /* AVIMWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMWebSocket.m; sourceTree = "<group>"; };
+		83BE73021D8105AF008ED3CF /* EXTScope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTScope.h; sourceTree = "<group>"; };
+		83BE73031D8105AF008ED3CF /* EXTScope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTScope.m; sourceTree = "<group>"; };
+		83BE730C1D810651008ED3CF /* metamacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = metamacros.h; sourceTree = "<group>"; };
 		83CFCB5E1B2A5D2700F97C92 /* AVIMKeyedConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMKeyedConversation.h; sourceTree = "<group>"; };
 		83CFCB5F1B2A5D2700F97C92 /* AVIMKeyedConversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMKeyedConversation.m; sourceTree = "<group>"; };
 		83D8CF551C17DAF50094279D /* AVOSCloud.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloud.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1457,6 +1490,9 @@
 		83DF02AD1AF86032000E289C /* LCDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCDB.h; sourceTree = "<group>"; };
 		83DF02AE1AF86032000E289C /* LCResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCResultSet.h; sourceTree = "<group>"; };
 		83DF02AF1AF86032000E289C /* LCResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCResultSet.m; sourceTree = "<group>"; };
+		83E13C0F1D4B4FC60009CB6F /* AVConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVConfiguration.h; sourceTree = "<group>"; };
+		83E13C101D4B4FC60009CB6F /* AVConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVConfiguration.m; sourceTree = "<group>"; };
+		83E13C191D4B509E0009CB6F /* AVConfiguration_extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVConfiguration_extension.h; sourceTree = "<group>"; };
 		83F745EE1B91732D00437259 /* LCIMMessageCacheStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageCacheStore.h; sourceTree = "<group>"; };
 		83F745EF1B91732D00437259 /* LCIMMessageCacheStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMMessageCacheStore.m; sourceTree = "<group>"; };
 		83F745F01B91732D00437259 /* LCIMMessageCacheStoreSQL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageCacheStoreSQL.h; sourceTree = "<group>"; };
@@ -2156,6 +2192,16 @@
 			path = SocketRocket;
 			sourceTree = "<group>";
 		};
+		83BE73011D8105AF008ED3CF /* libextobjc */ = {
+			isa = PBXGroup;
+			children = (
+				83BE73021D8105AF008ED3CF /* EXTScope.h */,
+				83BE73031D8105AF008ED3CF /* EXTScope.m */,
+				83BE730C1D810651008ED3CF /* metamacros.h */,
+			);
+			path = libextobjc;
+			sourceTree = "<group>";
+		};
 		83DF02A41AF86032000E289C /* LCDB */ = {
 			isa = PBXGroup;
 			children = (
@@ -2315,6 +2361,9 @@
 				8C8419F61A5A79FF00C5C6C4 /* AVOSCloud_Internal.h */,
 				8C84198B1A5A791300C5C6C4 /* AVOSCloud.h */,
 				8C8419F81A5A79FF00C5C6C4 /* AVOSCloud.m */,
+				83E13C0F1D4B4FC60009CB6F /* AVConfiguration.h */,
+				83E13C191D4B509E0009CB6F /* AVConfiguration_extension.h */,
+				83E13C101D4B4FC60009CB6F /* AVConfiguration.m */,
 				8C8419F91A5A79FF00C5C6C4 /* Cache */,
 				8C841A001A5A79FF00C5C6C4 /* CloudCode */,
 				8C841A121A5A79FF00C5C6C4 /* File */,
@@ -2381,6 +2430,8 @@
 				8C895DF21A78B73600992A8F /* AVIMMessage_Internal.h */,
 				8C841BD31A5A84C600C5C6C4 /* AVIMMessage.h */,
 				8C841BD41A5A84C600C5C6C4 /* AVIMMessage.m */,
+				831E29581D882CBB006E502B /* AVIMMessageOption.h */,
+				831E29591D882CBB006E502B /* AVIMMessageOption.m */,
 				8C841BD51A5A84C600C5C6C4 /* AVIMSignature.h */,
 				8C841BD61A5A84C600C5C6C4 /* AVIMSignature.m */,
 				8311CD801C3D24A6007DEFF8 /* AVIMAvailability.h */,
@@ -2670,6 +2721,7 @@
 				836705DA1BA1C1710050E968 /* JNKeychain */,
 				83DF02A41AF86032000E289C /* LCDB */,
 				836705A91BA1358D0050E968 /* SDMacros */,
+				83BE73011D8105AF008ED3CF /* libextobjc */,
 				8C841A981A5A7A0000C5C6C4 /* SocketRocket */,
 				830EB9BD1C3E4BFA00BA917F /* COSObserver */,
 			);
@@ -2961,6 +3013,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A2F1B601CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.h in Headers */,
+				831E295B1D882CBB006E502B /* AVIMMessageOption.h in Headers */,
 				9AE76C4F1C3F7CC600325902 /* AVIMConversationOutCommand.h in Headers */,
 				704F3BBD1BE0D07E0033245C /* AVIMClient.h in Headers */,
 				704F3BC01BE0D07E0033245C /* AVIMConversation.h in Headers */,
@@ -3081,8 +3134,10 @@
 				835C5F721D2594EA00EF0EBB /* AVAnalyticsActivity.h in Headers */,
 				835C5F711D25929600EF0EBB /* AVFriendQuery.h in Headers */,
 				70CA7FF91BDE4313000A3B21 /* AVObject+Subclass.h in Headers */,
+				83BE730E1D810651008ED3CF /* metamacros.h in Headers */,
 				70CA7FFB1BDE4313000A3B21 /* AVObject_Internal.h in Headers */,
 				70CA7FFC1BDE4313000A3B21 /* AVObjectUtils.h in Headers */,
+				83E13C1B1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */,
 				70CA7FFE1BDE4313000A3B21 /* AVRequestManager.h in Headers */,
 				70CA7FFF1BDE4313000A3B21 /* AVRelation_Internal.h in Headers */,
 				70CA80021BDE4313000A3B21 /* AVInstallation_Internal.h in Headers */,
@@ -3113,8 +3168,10 @@
 				70CA801D1BDE4315000A3B21 /* LCDatabaseQueue.h in Headers */,
 				70CA801E1BDE4315000A3B21 /* LCDB.h in Headers */,
 				70CA801F1BDE4315000A3B21 /* LCResultSet.h in Headers */,
+				83BE73051D8105AF008ED3CF /* EXTScope.h in Headers */,
 				83FCB9D81CEDC57C007D8712 /* LCURLSessionManager.h in Headers */,
 				70CA80301BDE4318000A3B21 /* SDMacros.h in Headers */,
+				83E13C121D4B4FC60009CB6F /* AVConfiguration.h in Headers */,
 				70CA80311BDE4318000A3B21 /* AVSRWebSocket.h in Headers */,
 				70CA80341BDE4318000A3B21 /* AVUser_Internal.h in Headers */,
 				70CA80351BDE4318000A3B21 /* AVErrorUtils.h in Headers */,
@@ -3185,8 +3242,10 @@
 				8320F8F41C1918C60024B45E /* AVFileQuery.h in Headers */,
 				8302AED91C192A0700E13F8A /* LCURLConnection.h in Headers */,
 				83E5D9531C1AA7D200E61E37 /* AVAnalyticsUtils.h in Headers */,
+				83E13C141D4B4FC60009CB6F /* AVConfiguration.h in Headers */,
 				8320F8F51C1918C60024B45E /* AVPush.h in Headers */,
 				8320F8F61C1918C60024B45E /* AVCloudQueryResult.h in Headers */,
+				83E13C1D1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */,
 				8320F8F71C1918C60024B45E /* AVQuery.h in Headers */,
 				9A404DD61CE5A9BB00DEB3DC /* LCRouter.h in Headers */,
 				83FCB9DA1CEDC57C007D8712 /* LCURLSessionManager.h in Headers */,
@@ -3198,6 +3257,7 @@
 				9A404DE11CE5A9C400DEB3DC /* LCRouterCache.h in Headers */,
 				83FCB9A31CEDC57C007D8712 /* LCHTTPSessionManager.h in Headers */,
 				83FCB9B21CEDC57C007D8712 /* LCNetworkReachabilityManager.h in Headers */,
+				83BE73071D8105AF008ED3CF /* EXTScope.h in Headers */,
 				8320F8FF1C1918C60024B45E /* AVAnonymousUtils.h in Headers */,
 				8320F9001C1918C60024B45E /* AVUser.h in Headers */,
 				8320F9011C1918C60024B45E /* AVLogger.h in Headers */,
@@ -3205,6 +3265,7 @@
 				8320F9021C1918C60024B45E /* AVGlobal.h in Headers */,
 				8320F9031C1918C60024B45E /* AVFileHTTPRequestOperation.h in Headers */,
 				8320F9041C1918C60024B45E /* AVLocationManager.h in Headers */,
+				83BE73101D810651008ED3CF /* metamacros.h in Headers */,
 				830EB9C41C3E4BFA00BA917F /* LCObserver.h in Headers */,
 				83FCB9BC1CEDC57C007D8712 /* LCSecurityPolicy.h in Headers */,
 				8320F9051C1918C60024B45E /* AFNetworkingFix.h in Headers */,
@@ -3285,6 +3346,7 @@
 				83D8CEE31C17DAF50094279D /* AVHistoryMessage.h in Headers */,
 				83D8CEE41C17DAF50094279D /* AVHistoryMessageQuery.h in Headers */,
 				83D8CEE51C17DAF50094279D /* AVMessage.h in Headers */,
+				83BE73061D8105AF008ED3CF /* EXTScope.h in Headers */,
 				83D8CEE61C17DAF50094279D /* AVSession.h in Headers */,
 				83D8CEE71C17DAF50094279D /* AVSignature.h in Headers */,
 				83D8CEE81C17DAF50094279D /* AVObject+Subclass.h in Headers */,
@@ -3335,12 +3397,14 @@
 				83D8CF161C17DAF50094279D /* AVDirectCommand.h in Headers */,
 				83D8CF171C17DAF50094279D /* AVAnalyticsImpl.h in Headers */,
 				83D8CF181C17DAF50094279D /* AVExceptionHandler.h in Headers */,
+				83E13C131D4B4FC60009CB6F /* AVConfiguration.h in Headers */,
 				83FCB9A21CEDC57C007D8712 /* LCHTTPSessionManager.h in Headers */,
 				83D8CF191C17DAF50094279D /* AVDirectOutCommand.h in Headers */,
 				83FCB9C51CEDC57C007D8712 /* LCURLRequestSerialization.h in Headers */,
 				83D8CF1A1C17DAF50094279D /* LCDatabasePool.h in Headers */,
 				83D8CF1B1C17DAF50094279D /* AVPartialInputStream.h in Headers */,
 				83D8CF1D1C17DAF50094279D /* AVGroup_Internal.h in Headers */,
+				83BE730F1D810651008ED3CF /* metamacros.h in Headers */,
 				83D8CF1E1C17DAF50094279D /* AVAckCommand.h in Headers */,
 				83D8CF201C17DAF50094279D /* SDMacros.h in Headers */,
 				9A404DDB1CE5A9C300DEB3DC /* LCRouter_internal.h in Headers */,
@@ -3355,6 +3419,7 @@
 				83D8CF281C17DAF50094279D /* AVRequestManager.h in Headers */,
 				83D8CF291C17DAF50094279D /* LCDatabaseQueue.h in Headers */,
 				83D8CF2A1C17DAF50094279D /* AVUploaderManager.h in Headers */,
+				83E13C1C1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */,
 				83D8CF2B1C17DAF50094279D /* AVOSCloud_Internal.h in Headers */,
 				83D8CF2C1C17DAF50094279D /* AVCommandCommon.h in Headers */,
 				83D8CF2D1C17DAF50094279D /* AVPresenceCommand.h in Headers */,
@@ -3453,6 +3518,7 @@
 				8C841AF31A5A7A0000C5C6C4 /* AVHistoryMessageQuery.h in Headers */,
 				8C841AF51A5A7A0000C5C6C4 /* AVMessage.h in Headers */,
 				8C841AF71A5A7A0000C5C6C4 /* AVSession.h in Headers */,
+				83BE73041D8105AF008ED3CF /* EXTScope.h in Headers */,
 				8C841AFA1A5A7A0000C5C6C4 /* AVSignature.h in Headers */,
 				8C841B171A5A7A0000C5C6C4 /* AVObject+Subclass.h in Headers */,
 				8C841B181A5A7A0000C5C6C4 /* AVObject.h in Headers */,
@@ -3503,12 +3569,14 @@
 				8C841AB81A5A7A0000C5C6C4 /* AVAnalyticsImpl.h in Headers */,
 				8C841AC01A5A7A0000C5C6C4 /* AVExceptionHandler.h in Headers */,
 				8C841B071A5A7A0000C5C6C4 /* AVDirectOutCommand.h in Headers */,
+				83E13C111D4B4FC60009CB6F /* AVConfiguration.h in Headers */,
 				83DF02B41AF86032000E289C /* LCDatabasePool.h in Headers */,
 				8C841AE31A5A7A0000C5C6C4 /* AVPartialInputStream.h in Headers */,
 				8C841AF01A5A7A0000C5C6C4 /* AVGroup_Internal.h in Headers */,
 				8C841AFE1A5A7A0000C5C6C4 /* AVAckCommand.h in Headers */,
 				836705AB1BA1358D0050E968 /* SDMacros.h in Headers */,
 				838B32EB1CE032F800CAEBF8 /* LCRouterCache.h in Headers */,
+				83BE730D1D810651008ED3CF /* metamacros.h in Headers */,
 				83FCB9C21CEDC57C007D8712 /* LCURLRequestSerialization.h in Headers */,
 				838B32F01CE1B0C500CAEBF8 /* LCRouter_internal.h in Headers */,
 				830EB9C01C3E4BFA00BA917F /* LCObserver.h in Headers */,
@@ -3523,6 +3591,7 @@
 				83DF02B61AF86032000E289C /* LCDatabaseQueue.h in Headers */,
 				8C841AE51A5A7A0000C5C6C4 /* AVUploaderManager.h in Headers */,
 				8C841AC51A5A7A0000C5C6C4 /* AVOSCloud_Internal.h in Headers */,
+				83E13C1A1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */,
 				8C841B021A5A7A0000C5C6C4 /* AVCommandCommon.h in Headers */,
 				83A2BD2F1CF33CDA0047B230 /* AVPaasClient_internal.h in Headers */,
 				8C841B0B1A5A7A0000C5C6C4 /* AVPresenceCommand.h in Headers */,
@@ -3567,6 +3636,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A2F1B2E1CF6F6FA00BE52F2 /* LCIMExtensionInternals.h in Headers */,
+				831E295A1D882CBB006E502B /* AVIMMessageOption.h in Headers */,
 				83CFCB601B2A5D2700F97C92 /* AVIMKeyedConversation.h in Headers */,
 				8CBDFDE21A808EA500D67FBE /* AVIMConversationQuery.h in Headers */,
 				8C9A92781A70AF1800CA4912 /* AVIMTextMessage.h in Headers */,
@@ -3886,14 +3956,12 @@
 					};
 					8C8419851A5A791300C5C6C4 = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = Y6F2JPP7S7;
 					};
 					8C8419901A5A791300C5C6C4 = {
 						CreatedOnToolsVersion = 6.1.1;
 					};
 					8C8419C21A5A796000C5C6C4 = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = Y6X8P44TM5;
 					};
 					8C8419CC1A5A796000C5C6C4 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -4050,6 +4118,7 @@
 				704F3B901BE0D05C0033245C /* AVIMUserOptions.m in Sources */,
 				9AE76C571C3F7CC600325902 /* AVIMDynamicObject.m in Sources */,
 				830EB9EA1C3F996A00BA917F /* AVIMClientOpenOption.m in Sources */,
+				831E295D1D882CBB006E502B /* AVIMMessageOption.m in Sources */,
 				70BA7A701BE22B1900C3EB70 /* LCIMClientSessionTokenCacheStore.m in Sources */,
 				9AE76C501C3F7CC600325902 /* AVIMConversationOutCommand.m in Sources */,
 				9A2F1B3F1CF6F6FA00BE52F2 /* LCIMMessage.m in Sources */,
@@ -4114,6 +4183,7 @@
 				70CA7F981BDE374C000A3B21 /* AVHTTPRequestOperation.m in Sources */,
 				70CA7F991BDE374C000A3B21 /* AVImageRequestOperation.m in Sources */,
 				70CA7F9A1BDE374C000A3B21 /* AVJSONRequestOperation.m in Sources */,
+				83BE73091D8105AF008ED3CF /* EXTScope.m in Sources */,
 				70CA7F9B1BDE374C000A3B21 /* AVNetworkActivityIndicatorManager.m in Sources */,
 				70CA7F9C1BDE374C000A3B21 /* AVURLConnectionOperation.m in Sources */,
 				830EB9C71C3E4BFA00BA917F /* LCObserver.m in Sources */,
@@ -4139,6 +4209,7 @@
 				9A404DDA1CE5A9C200DEB3DC /* LCRouterCache.m in Sources */,
 				70CA7FB41BDE374C000A3B21 /* NSDictionary+LCHash.m in Sources */,
 				70CA7F721BDE3721000A3B21 /* AVACL.m in Sources */,
+				83E13C161D4B4FC60009CB6F /* AVConfiguration.m in Sources */,
 				70CA7F731BDE3721000A3B21 /* AVRole.m in Sources */,
 				70CA7F741BDE3721000A3B21 /* AVAnalytics.m in Sources */,
 				70CA7F751BDE3721000A3B21 /* AVAnalyticsActivity.m in Sources */,
@@ -4247,6 +4318,7 @@
 				8320F89B1C1918C60024B45E /* AVInstallation.m in Sources */,
 				8320F89C1C1918C60024B45E /* LCDatabasePool.m in Sources */,
 				830EB9FD1C44D68400BA917F /* AVSaveOption.m in Sources */,
+				83E13C181D4B4FC60009CB6F /* AVConfiguration.m in Sources */,
 				8320F89E1C1918C60024B45E /* AVOSCloud.m in Sources */,
 				8320F8A01C1918C60024B45E /* AVObjectUtils.m in Sources */,
 				8320F8A11C1918C60024B45E /* LCSSLChallenger.m in Sources */,
@@ -4254,6 +4326,7 @@
 				8320F8A61C1918C60024B45E /* AVObject.m in Sources */,
 				8320F8A91C1918C60024B45E /* AVUploaderManager.m in Sources */,
 				8320F8AA1C1918C60024B45E /* AVSearchSortBuilder.m in Sources */,
+				83BE730B1D8105AF008ED3CF /* EXTScope.m in Sources */,
 				8320F8AC1C1918C60024B45E /* LCNetworkStatistics.m in Sources */,
 				8320F8AD1C1918C60024B45E /* AVDuration.m in Sources */,
 				8320F8AF1C1918C60024B45E /* AVRole.m in Sources */,
@@ -4304,6 +4377,7 @@
 				83D8CE7C1C17DAF50094279D /* AVUtils.m in Sources */,
 				83D8CE7D1C17DAF50094279D /* AVHTTPClient.m in Sources */,
 				83D8CE7E1C17DAF50094279D /* AVAnalyticsUtils.m in Sources */,
+				83BE730A1D8105AF008ED3CF /* EXTScope.m in Sources */,
 				83D8CE7F1C17DAF50094279D /* AVMessage.m in Sources */,
 				83D8CE811C17DAF50094279D /* AVXMLRequestOperation.m in Sources */,
 				83D8CE831C17DAF50094279D /* AVSearchQuery.m in Sources */,
@@ -4343,6 +4417,7 @@
 				83D8CEA51C17DAF50094279D /* LCNetworkStatistics.m in Sources */,
 				9A404DDE1CE5A9C300DEB3DC /* LCRouterCache.m in Sources */,
 				83D8CEA61C17DAF50094279D /* AVDuration.m in Sources */,
+				83E13C171D4B4FC60009CB6F /* AVConfiguration.m in Sources */,
 				83D8CEA71C17DAF50094279D /* AVExceptionHandler.m in Sources */,
 				83D8CEA81C17DAF50094279D /* AVRole.m in Sources */,
 				83D8CEA91C17DAF50094279D /* AVPaasClient.m in Sources */,
@@ -4432,6 +4507,7 @@
 				8C841B651A5A7A0000C5C6C4 /* AVUtils.m in Sources */,
 				8C841B3F1A5A7A0000C5C6C4 /* AVHTTPClient.m in Sources */,
 				8C841ABD1A5A7A0000C5C6C4 /* AVAnalyticsUtils.m in Sources */,
+				83BE73081D8105AF008ED3CF /* EXTScope.m in Sources */,
 				8C841AF61A5A7A0000C5C6C4 /* AVMessage.m in Sources */,
 				8C841B4E1A5A7A0000C5C6C4 /* AVXMLRequestOperation.m in Sources */,
 				8C841B371A5A7A0000C5C6C4 /* AVSearchQuery.m in Sources */,
@@ -4471,6 +4547,7 @@
 				838DD7971B3D309F00C95897 /* LCNetworkStatistics.m in Sources */,
 				838B32EC1CE032F800CAEBF8 /* LCRouterCache.m in Sources */,
 				8C841ABF1A5A7A0000C5C6C4 /* AVDuration.m in Sources */,
+				83E13C151D4B4FC60009CB6F /* AVConfiguration.m in Sources */,
 				8C841AC11A5A7A0000C5C6C4 /* AVExceptionHandler.m in Sources */,
 				8C841AB11A5A7A0000C5C6C4 /* AVRole.m in Sources */,
 				8C841B331A5A7A0000C5C6C4 /* AVPaasClient.m in Sources */,
@@ -4577,6 +4654,7 @@
 				8C895DE71A78A5D900992A8F /* AVMPOrderedDictionary.m in Sources */,
 				8C841C431A5A84C600C5C6C4 /* AVIMReachability.m in Sources */,
 				8C841C3F1A5A84C600C5C6C4 /* AVIMBlockHelper.m in Sources */,
+				831E295C1D882CBB006E502B /* AVIMMessageOption.m in Sources */,
 				830EB9E81C3F996A00BA917F /* AVIMClientOpenOption.m in Sources */,
 				8C9A927D1A70AF1800CA4912 /* AVIMVideoMessage.m in Sources */,
 				9A2F1B3D1CF6F6FA00BE52F2 /* LCIMMessage.m in Sources */,
@@ -4692,6 +4770,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)-osx";
 				CONFIGURATION_TEMP_DIR = "$(PROJECT_TEMP_DIR)/$(CONFIGURATION)-osx";
@@ -4725,10 +4804,12 @@
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.avoscloud.AVOSCloudIMOSX;
 				PRODUCT_NAME = AVOSCloudIM;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -4754,6 +4835,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)-osx";
 				CONFIGURATION_TEMP_DIR = "$(PROJECT_TEMP_DIR)/$(CONFIGURATION)-osx";
@@ -4779,10 +4861,12 @@
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.avoscloud.AVOSCloudIMOSX;
 				PRODUCT_NAME = AVOSCloudIM;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -4807,6 +4891,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -4833,6 +4918,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.leancloud.AVOSCloudIM-OSXTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -4854,6 +4940,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -4873,6 +4960,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.leancloud.AVOSCloudIM-OSXTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -4895,6 +4983,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)-osx";
 				CONFIGURATION_TEMP_DIR = "$(PROJECT_TEMP_DIR)/$(CONFIGURATION)-osx";
@@ -4927,10 +5016,12 @@
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.AVOSCloud-macOS";
 				PRODUCT_NAME = AVOSCloud;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -4956,6 +5047,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)-osx";
 				CONFIGURATION_TEMP_DIR = "$(PROJECT_TEMP_DIR)/$(CONFIGURATION)-osx";
@@ -4980,10 +5072,12 @@
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.AVOSCloud-macOS";
 				PRODUCT_NAME = AVOSCloud;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -5008,6 +5102,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -5033,6 +5128,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.leancloud.AVOSCloudOSXTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -5054,6 +5150,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -5072,6 +5169,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.leancloud.AVOSCloudOSXTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -5130,6 +5228,7 @@
 					"-lz",
 				);
 				PRODUCT_NAME = AVOSCloud;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5157,6 +5256,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 3;
 				DEFINES_MODULE = YES;
@@ -5186,6 +5286,7 @@
 					"-lz",
 				);
 				PRODUCT_NAME = AVOSCloud;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5250,6 +5351,7 @@
 					"-lz",
 				);
 				PRODUCT_NAME = AVOSCloud;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5277,6 +5379,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 3;
 				DEFINES_MODULE = YES;
@@ -5306,6 +5410,7 @@
 					"-lz",
 				);
 				PRODUCT_NAME = AVOSCloud;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5334,6 +5439,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -5369,6 +5475,7 @@
 				);
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5378,6 +5485,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = AVOSCloudCrashReporting;
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -5403,6 +5511,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -5431,6 +5541,7 @@
 				);
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5440,6 +5551,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = AVOSCloudCrashReporting;
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -5500,7 +5612,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 3;
@@ -5526,6 +5638,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5539,7 +5652,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.AVOSCloud-iOS";
 				PRODUCT_NAME = AVOSCloud;
-				PROVISIONING_PROFILE = "2a6f2f85-65c9-4344-b118-8977505bcf3b";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -5565,8 +5678,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Meiwei Shuqian(Beijing) Information Technology co., LTD (Y6X8P44TM5)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Meiwei Shuqian(Beijing) Information Technology co., LTD (Y6X8P44TM5)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 3;
 				DEFINES_MODULE = YES;
@@ -5584,6 +5697,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5597,7 +5711,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.AVOSCloud-iOS";
 				PRODUCT_NAME = AVOSCloud;
-				PROVISIONING_PROFILE = "2a6f2f85-65c9-4344-b118-8977505bcf3b";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -5623,6 +5737,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5650,6 +5765,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -5670,6 +5786,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5689,6 +5806,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -5710,7 +5828,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 3;
@@ -5737,13 +5855,14 @@
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/AVOSCloudIM/Protobuf";
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
 				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = AVOSCloudIM;
-				PROVISIONING_PROFILE = "2a6f2f85-65c9-4344-b118-8977505bcf3b";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -5769,8 +5888,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Meiwei Shuqian(Beijing) Information Technology co., LTD (Y6X8P44TM5)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Meiwei Shuqian(Beijing) Information Technology co., LTD (Y6X8P44TM5)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 3;
 				DEFINES_MODULE = YES;
@@ -5789,13 +5908,14 @@
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/AVOSCloudIM/Protobuf";
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
 				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = AVOSCloudIM;
-				PROVISIONING_PROFILE = "2a6f2f85-65c9-4344-b118-8977505bcf3b";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -5821,6 +5941,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5854,6 +5975,7 @@
 					"-lz",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -5875,6 +5997,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -5900,6 +6024,7 @@
 					"-lz",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

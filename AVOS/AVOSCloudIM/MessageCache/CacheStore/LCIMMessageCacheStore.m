@@ -290,7 +290,7 @@
 - (void)cleanCache {
     LCIM_OPEN_DATABASE(db, ({
         NSArray *args = @[self.conversationId];
-        [db executeQuery:LCIM_SQL_CLEAN_MESSAGE withArgumentsInArray:args];
+        [db executeUpdate:LCIM_SQL_CLEAN_MESSAGE withArgumentsInArray:args];
     }));
 }
 

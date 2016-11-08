@@ -103,6 +103,13 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 #pragma mark - Utils Methods
 
+- (BOOL)isDirty {
+    BOOL isNewborn = ![self hasValidObjectId];
+    BOOL isModified = [self.requestManager containsRequest];
+
+    return isNewborn || isModified;
+}
+
 - (NSDictionary *)snapshot {
     return [AVObjectUtils objectSnapshot:self recursive:NO];
 }
@@ -350,6 +357,11 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
             hasKey = YES;
         }
         [dic removeObjectForKey:key];
+    }
+    if ([AVUtils containsProperty:key inClass:[self class] containSuper:YES filterDynamic:YES]) {
+        /* Create a clean object to produce an empty value. */
+        [self setValue:[[[self class] alloc] valueForKey:key] forKey:key];
+        hasKey = YES;
     }
     if (hasKey || [self hasValidObjectId]) {
         [self.requestManager unsetRequestForKey:key];
@@ -684,7 +696,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     /* Perform save request. */
     do {
         /* If object is clean, ignore save request. */
-        if ([self hasValidObjectId] && ![self.requestManager containsRequest]) {
+        if (![self isDirty]) {
             AVLoggerInfo(AVLoggerDomainStorage, @"Object not changed, ignore save request.");
             break;
         }
@@ -763,7 +775,9 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 - (void)saveInBackground
 {
-    [self saveInBackgroundWithBlock:nil];
+    [self saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        /* Ignore result intentionally. */
+    }];
 }
 
 - (void)saveInBackgroundWithBlock:(AVBooleanResultBlock)block
@@ -1082,7 +1096,9 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 - (void)saveEventually
 {
-    [self saveEventually:nil];
+    [self saveEventually:^(BOOL succeeded, NSError * _Nullable error) {
+        /* Ignore result intentionally. */
+    }];
 }
 
 - (void)saveEventually:(AVBooleanResultBlock)callback
@@ -1266,7 +1282,9 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 + (void)saveAllInBackground:(NSArray *)objects
 {
-    [[self class] saveAllInBackground:objects block:NULL];
+    [[self class] saveAllInBackground:objects block:^(BOOL succeeded, NSError * _Nullable error) {
+        /* Ignore result intentionally. */
+    }];
 }
 
 + (void)saveAllInBackground:(NSArray *)objects
@@ -1660,7 +1678,9 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 - (void)deleteInBackground
 {
-    [self deleteInBackgroundWithBlock:NULL];
+    [self deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        /* Ignore result intentionally. */
+    }];
 }
 
 - (void)deleteInBackgroundWithBlock:(AVBooleanResultBlock)block {
@@ -1696,7 +1716,9 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 }
 
 - (void)deleteEventually {
-    [self deleteEventuallyWithBlock:nil];
+    [self deleteEventuallyWithBlock:^(id  _Nullable object, NSError * _Nullable error) {
+        /* Ignore result intentionally. */
+    }];
 }
 
 - (void)deleteEventuallyWithBlock:(AVIdResultBlock)block {

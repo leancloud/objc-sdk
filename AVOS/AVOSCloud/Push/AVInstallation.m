@@ -62,8 +62,9 @@
 {
     self = [super init];
     if (self) {
-        self.className = [AVInstallation className];
+        self.className  = [AVInstallation className];
         self.deviceType = [AVInstallation deviceType];
+        self.timeZone   = [[NSTimeZone systemTimeZone] name];
         
         NSString *path = [AVPersistenceUtils currentInstallationArchivePath];
         if ([AVPersistenceUtils fileExist:path]) {
@@ -86,7 +87,10 @@
     deviceToken = [deviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
     if (submit || ![self.deviceToken isEqualToString:deviceToken]) {
         self.deviceToken = deviceToken;
-        [self updateInstallationDictionary:[self.requestManager setDict]];
+
+        [self.requestManager synchronize:^{
+            [self updateInstallationDictionary:[self.requestManager setDict]];
+        }];
     }
 }
 
@@ -116,13 +120,23 @@
 }
 
 - (BOOL)isDirty {
-    // 有修改过或者 [AVInstallation currentInstallation] 没保存过、过时了
-    return [self.requestManager containsRequest] || ([[self class] currentInstallation] == self && (self.objectId.length == 0 || (self.updatedAt && [self.updatedAt timeIntervalSinceNow] < - 60 * 60 * 24)));
+    if ([super isDirty]) {
+        return YES;
+    } else if ([AVInstallation currentInstallation] == self) {
+        /* If cache expired, we deem that it is dirty. */
+        if (!self.updatedAt || [self.updatedAt timeIntervalSinceNow] < - 60 * 60 * 24) {
+            return YES;
+        }
+    }
+
+    return NO;
 }
 
 -(NSError *)preSave {
     if ([self isDirty]) {
-        [self updateInstallationDictionary:[self.requestManager setDict]];
+        [self.requestManager synchronize:^{
+            [self updateInstallationDictionary:[self.requestManager setDict]];
+        }];
     }
     if (self.installationId==nil && self.deviceToken==nil) {
         return [AVErrorUtils errorWithCode:kAVErrorInvalidDeviceToken errorText:@"无法保存Installation数据, 请检查deviceToken是否在`application: didRegisterForRemoteNotificationsWithDeviceToken`方法中正常设置"];
@@ -138,8 +152,6 @@
 
 -(NSMutableDictionary *)updateInstallationDictionary:(NSMutableDictionary * )data
 {
-    self.timeZone = [[NSTimeZone systemTimeZone] name];
-
     [data addEntriesFromDictionary:@{
         badgeTag: @(self.badge),
         deviceTypeTag: [AVInstallation deviceType],

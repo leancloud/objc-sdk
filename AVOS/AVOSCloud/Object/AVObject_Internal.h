@@ -34,26 +34,25 @@ NSString *request_object_id(NSDictionary *request) {
 
 @interface AVObject ()
 
-@property (nonatomic, retain, readwrite) NSString *objectId;
-@property (nonatomic, retain, readwrite) NSDate *updatedAt;
-@property (nonatomic, retain, readwrite) NSDate *createdAt;
+@property (nonatomic,   copy) NSString *objectId;
+@property (nonatomic,   copy) NSString *className;
+@property (nonatomic, strong) NSDate *updatedAt;
+@property (nonatomic, strong) NSDate *createdAt;
 
+@property (nonatomic, strong) NSMutableDictionary *localData;
+@property (nonatomic, strong) NSMutableDictionary *estimatedData;
+@property (nonatomic, strong) NSMutableDictionary *relationData;
 
-@property (readwrite) NSString * className;
-@property (nonatomic, readwrite, strong) NSMutableDictionary * localData;
-@property (nonatomic, readwrite, strong) NSMutableDictionary * estimatedData;
-@property (nonatomic, readwrite, strong) NSMutableDictionary * relationData;
+@property (nonatomic,   copy, readonly) NSString *uuid;
+@property (nonatomic, assign) BOOL isPointer;
+@property (nonatomic, assign) BOOL running;
+@property (nonatomic, strong) AVRequestOperationQueue *operationQueue;
+@property (nonatomic, strong) AVRequestManager *requestManager;
 
-@property (nonatomic, readonly, strong) NSString *uuid;
-@property (nonatomic, readwrite) BOOL isPointer;
-@property (nonatomic, readwrite) BOOL running;
-@property (nonatomic, readwrite, strong) AVRequestOperationQueue *operationQueue;
-@property (nonatomic, readwrite, strong) AVRequestManager * requestManager;
-
-@property (nonatomic, readwrite) BOOL submit;
-@property (nonatomic, readwrite) BOOL inSetter;
-@property (nonatomic, readwrite) BOOL hasDataForCloud;
-@property (nonatomic, readwrite) BOOL hasDataForInitial;
+@property (nonatomic, assign) BOOL submit;
+@property (nonatomic, assign) BOOL inSetter;
+@property (nonatomic, assign) BOOL hasDataForCloud;
+@property (nonatomic, assign) BOOL hasDataForInitial;
 
 -(NSMutableArray *)findArrayForKey:(NSString *)key
                 inDictionary:(NSMutableDictionary *)dict
@@ -130,5 +129,12 @@ NSString *request_object_id(NSDictionary *request) {
  * @return The snapshot of object
  */
 - (NSDictionary *)snapshot;
+
+/**
+ * Check wether an object is dirty.
+ *
+ * @return true if object is dirty, for example, has been modified or expired, false otherwise.
+ */
+- (BOOL)isDirty;
 
 @end
