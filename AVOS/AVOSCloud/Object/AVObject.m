@@ -118,7 +118,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     [self setObject:value forKey:@"description"];
 }
 
-- (NSString *)description {
+- (id)description {
     if ([self objectForKey:@"description"] != nil) {
         return [self objectForKey:@"description"];
     } else {
