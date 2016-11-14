@@ -13,18 +13,16 @@
 #import "AVUtils.h"
 #import <libkern/OSAtomic.h>
 #import "EXTScope.h"
-#import "AVPersistenceUtils.h"
 
 #define LC_INTERVAL_HALF_AN_HOUR 30 * 60
 
 static NSTimeInterval LCNetworkStatisticsCheckInterval  = 60; // A minute
 static NSTimeInterval LCNetworkStatisticsUploadInterval = 24 * 60 * 60; // A day
 
-static NSString *LCNetworkStatisticsInfoKey       = @"LCNetworkStatisticsInfoKey";
+static NSString *LCNetworkStatisticsInfoKey       = @"LCNetworkStatisticsInfoKey" @"-" SDK_VERSION;
 static NSString *LCNetworkStatisticsLastUpdateKey = @"LCNetworkStatisticsLastUpdateKey";
 static NSInteger LCNetworkStatisticsMaxCount      = 10;
 static NSInteger LCNetworkStatisticsCacheSize     = 20;
-static NSString *const LCEverResetNetworkStatisticsDataStatus = @"LCEverResetNetworkStatisticsDataStatus";
 
 @interface LCNetworkStatistics ()
 
@@ -168,8 +166,9 @@ static NSString *const LCEverResetNetworkStatisticsDataStatus = @"LCEverResetNet
     LOCK_CACHED_STATISTIC_DICT();
 
     // Reset network statistics data
-    [self resetNetworkStatisticsData];
-    
+    LCKeyValueStore *store = [LCKeyValueStore sharedInstance];
+    [store deleteKey:LCNetworkStatisticsInfoKey];
+
     // Clean cached statistic dict
     [self.cachedStatisticDict removeAllObjects];
 
@@ -177,11 +176,6 @@ static NSString *const LCEverResetNetworkStatisticsDataStatus = @"LCEverResetNet
     LCNetworkStatisticsCheckInterval = LC_INTERVAL_HALF_AN_HOUR;
 
     [self updateLastUpdateAt];
-}
-
-- (void)resetNetworkStatisticsData {
-    LCKeyValueStore *store = [LCKeyValueStore sharedInstance];
-    [store deleteKey:LCNetworkStatisticsInfoKey];
 }
 
 - (void)updateLastUpdateAt {
@@ -251,30 +245,10 @@ static NSString *const LCEverResetNetworkStatisticsDataStatus = @"LCEverResetNet
 }
 
 - (void)start {
-    //After v3.6.0, we use millisecond instead of second as time unit in networking performance.
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    BOOL neverResetNetworkStatisticsData = ![fileManager fileExistsAtPath:[self pathForArchiveResetNetworkStatisticsData]];
-    if (neverResetNetworkStatisticsData) {
-        NSMutableDictionary *statisticsInfo = [[LCNetworkStatistics sharedInstance] statisticsInfo];
-        NSNumber *value = statisticsInfo[@"avg"];
-        if (value) {
-            [[LCNetworkStatistics sharedInstance] resetNetworkStatisticsData];
-        }
-        [self archiveEverResetNetworkStatisticsDataStatus:@(YES)];
-    } else if (!self.enable) {
+    if (!self.enable) {
         self.enable = YES;
         [self performSelectorInBackground:@selector(startInBackground) withObject:nil];
     }
-}
-
-- (void)archiveEverResetNetworkStatisticsDataStatus:(NSNumber *)everResetNetworkStatisticsData {
-    NSString *fullPath = [self pathForArchiveResetNetworkStatisticsData];
-    [NSKeyedArchiver archiveRootObject:everResetNetworkStatisticsData toFile:fullPath];
-}
-
-- (NSString *)pathForArchiveResetNetworkStatisticsData {
-    NSString *fullPath = [[AVPersistenceUtils networkStatisticsArchivePath] stringByAppendingPathComponent:LCEverResetNetworkStatisticsDataStatus];
-    return fullPath;
 }
 
 - (void)stop {

@@ -164,11 +164,6 @@
     return ret;
 }
 
-+ (NSString *)networkStatisticsArchivePath {
-    NSString *path = [[AVPersistenceUtils privateDocumentsDirectory] stringByAppendingString:@"/networkStatistics"];
-    return path;
-}
-
 #pragma mark - File Utils
 
 + (BOOL)saveJSON:(id)JSON toPath:(NSString *)path {
