@@ -52,8 +52,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     @"------ END --------------------------------\n" \
     @"\n"
 
-NSString *const LCEverResetNetworkStatisticsDataStatus = @"LCEverResetNetworkStatisticsDataStatus";
-
 @implementation NSMutableString (URLRequestFormatter)
 
 - (void)appendCommandLineArgument:(NSString *)arg {
@@ -701,29 +699,7 @@ NSString *const LCEverResetNetworkStatisticsDataStatus = @"LCEverResetNetworkSta
         }
     }
 
-    //After v3.6.0, we use millisecond instead of second as time unit in networking performance.
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    BOOL neverResetNetworkStatisticsData = ![fileManager fileExistsAtPath:[self pathForArchiveResetNetworkStatisticsData]];
-    if (neverResetNetworkStatisticsData) {
-        NSMutableDictionary *statisticsInfo = [[LCNetworkStatistics sharedInstance] statisticsInfo];
-        NSNumber *value = statisticsInfo[@"avg"];
-        if (value) {
-            [[LCNetworkStatistics sharedInstance] resetNetworkStatisticsData];
-        }
-        [self archiveEverResetNetworkStatisticsDataStatus:@(YES)];
-    }
-    
     return YES;
-}
-
-- (void)archiveEverResetNetworkStatisticsDataStatus:(NSNumber *)everResetNetworkStatisticsData {
-    NSString *fullPath = [self pathForArchiveResetNetworkStatisticsData];
-    [NSKeyedArchiver archiveRootObject:everResetNetworkStatisticsData toFile:fullPath];
-}
-
-- (NSString *)pathForArchiveResetNetworkStatisticsData {
-    NSString *fullPath = [[AVPersistenceUtils networkStatisticsArchivePath] stringByAppendingPathComponent:LCEverResetNetworkStatisticsDataStatus];
-    return fullPath;
 }
 
 #pragma mark - Archive and handle request

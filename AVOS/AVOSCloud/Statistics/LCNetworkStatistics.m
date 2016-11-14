@@ -13,6 +13,7 @@
 #import "AVUtils.h"
 #import <libkern/OSAtomic.h>
 #import "EXTScope.h"
+#import "AVPersistenceUtils.h"
 
 #define LC_INTERVAL_HALF_AN_HOUR 30 * 60
 
@@ -23,6 +24,7 @@ static NSString *LCNetworkStatisticsInfoKey       = @"LCNetworkStatisticsInfoKey
 static NSString *LCNetworkStatisticsLastUpdateKey = @"LCNetworkStatisticsLastUpdateKey";
 static NSInteger LCNetworkStatisticsMaxCount      = 10;
 static NSInteger LCNetworkStatisticsCacheSize     = 20;
+static NSString *const LCEverResetNetworkStatisticsDataStatus = @"LCEverResetNetworkStatisticsDataStatus";
 
 @interface LCNetworkStatistics ()
 
@@ -249,10 +251,30 @@ static NSInteger LCNetworkStatisticsCacheSize     = 20;
 }
 
 - (void)start {
-    if (!self.enable) {
+    //After v3.6.0, we use millisecond instead of second as time unit in networking performance.
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL neverResetNetworkStatisticsData = ![fileManager fileExistsAtPath:[self pathForArchiveResetNetworkStatisticsData]];
+    if (neverResetNetworkStatisticsData) {
+        NSMutableDictionary *statisticsInfo = [[LCNetworkStatistics sharedInstance] statisticsInfo];
+        NSNumber *value = statisticsInfo[@"avg"];
+        if (value) {
+            [[LCNetworkStatistics sharedInstance] resetNetworkStatisticsData];
+        }
+        [self archiveEverResetNetworkStatisticsDataStatus:@(YES)];
+    } else if (!self.enable) {
         self.enable = YES;
         [self performSelectorInBackground:@selector(startInBackground) withObject:nil];
     }
+}
+
+- (void)archiveEverResetNetworkStatisticsDataStatus:(NSNumber *)everResetNetworkStatisticsData {
+    NSString *fullPath = [self pathForArchiveResetNetworkStatisticsData];
+    [NSKeyedArchiver archiveRootObject:everResetNetworkStatisticsData toFile:fullPath];
+}
+
+- (NSString *)pathForArchiveResetNetworkStatisticsData {
+    NSString *fullPath = [[AVPersistenceUtils networkStatisticsArchivePath] stringByAppendingPathComponent:LCEverResetNetworkStatisticsDataStatus];
+    return fullPath;
 }
 
 - (void)stop {
