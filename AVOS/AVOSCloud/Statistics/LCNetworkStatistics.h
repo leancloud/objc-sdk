@@ -10,6 +10,8 @@
 
 @interface LCNetworkStatistics : NSObject
 
+@property (nonatomic, strong, readonly) NSMutableDictionary *statisticsInfo;
+
 + (instancetype)sharedInstance;
 
 - (void)addIncrementalAttribute:(NSInteger)amount forKey:(NSString *)key;
@@ -17,5 +19,6 @@
 
 - (void)start;
 - (void)stop;
+- (void)resetNetworkStatisticsData;
 
 @end

@@ -166,9 +166,8 @@ static NSInteger LCNetworkStatisticsCacheSize     = 20;
     LOCK_CACHED_STATISTIC_DICT();
 
     // Reset network statistics data
-    LCKeyValueStore *store = [LCKeyValueStore sharedInstance];
-    [store deleteKey:LCNetworkStatisticsInfoKey];
-
+    [self resetNetworkStatisticsData];
+    
     // Clean cached statistic dict
     [self.cachedStatisticDict removeAllObjects];
 
@@ -176,6 +175,11 @@ static NSInteger LCNetworkStatisticsCacheSize     = 20;
     LCNetworkStatisticsCheckInterval = LC_INTERVAL_HALF_AN_HOUR;
 
     [self updateLastUpdateAt];
+}
+
+- (void)resetNetworkStatisticsData {
+    LCKeyValueStore *store = [LCKeyValueStore sharedInstance];
+    [store deleteKey:LCNetworkStatisticsInfoKey];
 }
 
 - (void)updateLastUpdateAt {

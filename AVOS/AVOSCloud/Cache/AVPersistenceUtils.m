@@ -143,18 +143,15 @@
 
 #pragma mark -  Private Documents Concrete Path
 
-+ (NSString *)currentUserArchivePath
-{
++ (NSString *)currentUserArchivePath {
     NSString * path = [[AVPersistenceUtils privateDocumentsDirectory] stringByAppendingString:@"/currentUser"];
     return path;
 }
 
-+ (NSString *)currentUserClassArchivePath
-{
++ (NSString *)currentUserClassArchivePath {
     NSString *path = [[AVPersistenceUtils privateDocumentsDirectory] stringByAppendingString:@"/currentUserClass"];
     return path;
 }
-
 
 + (NSString *)currentInstallationArchivePath {
     NSString *path = [[AVPersistenceUtils privateDocumentsDirectory] stringByAppendingString:@"/currentInstallation"];
@@ -165,6 +162,11 @@
     NSString *ret = [[AVPersistenceUtils privateDocumentsDirectory] stringByAppendingPathComponent:@"OfflineRequests"];
     [self createDirectoryIfNeeded:ret];
     return ret;
+}
+
++ (NSString *)networkStatisticsArchivePath {
+    NSString *path = [[AVPersistenceUtils privateDocumentsDirectory] stringByAppendingString:@"/networkStatistics"];
+    return path;
 }
 
 #pragma mark - File Utils

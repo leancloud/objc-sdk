@@ -19,6 +19,8 @@
 
 + (NSString *)eventuallyPath;
 
++ (NSString *)networkStatisticsArchivePath;
+
 + (NSString *)messageCachePath;
 + (NSString *)messageCacheDatabasePathWithName:(NSString *)name;
 
