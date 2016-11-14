@@ -677,9 +677,10 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 }
 
 - (BOOL)validateStatusCode:(NSInteger)statusCode {
-    NSString *statusCodeRegex = @"^[1-5][0-9]{2}$";
-    NSPredicate *statusCodeRegexPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", statusCodeRegex];
-    return [statusCodeRegexPredicate evaluateWithObject:[@(statusCode) stringValue]];
+    if (statusCode >= 100 && statusCode < 600) {
+        return YES;
+    }
+    return NO;
 }
 
 - (BOOL)shouldStatisticsForUrl:(NSString *)url statusCode:(NSInteger)statusCode {
