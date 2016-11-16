@@ -6,6 +6,7 @@
 #import "AVObject.h"
 #import "AVSubclassing.h"
 
+@class AVRole;
 @class AVQuery;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -122,6 +123,22 @@ A LeanCloud Framework User Object that is a local representation of a user persi
  *  @param block 回调结果
  */
 +(void)verifyMobilePhone:(NSString *)code withBlock:(AVBooleanResultBlock)block;
+
+/*!
+ Get roles which current user belongs to.
+
+ @param error The error of request, or nil if request did succeed.
+
+ @return An array of roles, or nil if some error occured.
+ */
+- (nullable NSArray<AVRole *> *)getRoles:(NSError **)error;
+
+/*!
+ Asynchronously get roles which current user belongs to.
+
+ @param block The callback for request.
+ */
+- (void)getRolesInBackgroundWithBlock:(void (^)(NSArray<AVRole *> * _Nullable objects, NSError * _Nullable error))block;
 
 /*!
  Signs up the user. Make sure that password and username are set. This will also enforce that the username isn't already taken.
