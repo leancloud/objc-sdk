@@ -103,6 +103,19 @@ static BOOL enableAutomatic = NO;
     return[dict allKeys];
 }
 
+- (NSArray<AVRole *> *)getRoles:(NSError * _Nullable __autoreleasing *)error {
+    AVQuery *query = [AVRelation reverseQuery:@"_Role" relationKey:@"users" childObject:self];
+    return [query findObjects:error];
+}
+
+- (void)getRolesInBackgroundWithBlock:(void (^)(NSArray<AVRole *> * _Nullable, NSError * _Nullable))block {
+    [AVUtils asynchronizeTask:^{
+        NSError *error = nil;
+        NSArray<AVRole *> *result = [self getRoles:&error];
+        [AVUtils callArrayResultBlock:block array:result error:error];
+    }];
+}
+
 + (instancetype)user
 {
     AVUser *u = [[[self class] alloc] initWithClassName:[[self class] userTag]];

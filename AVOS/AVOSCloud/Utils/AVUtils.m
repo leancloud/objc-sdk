@@ -514,6 +514,28 @@ if (block) { \
     safeBlock(result);
 }
 
++ (dispatch_queue_t)asynchronousTaskQueue {
+    static dispatch_queue_t queue;
+    static dispatch_once_t onceToken;
+
+    if (queue)
+        return queue;
+
+    dispatch_once(&onceToken, ^{
+        queue = dispatch_queue_create("avos.common.dispatchQueue", DISPATCH_QUEUE_CONCURRENT);
+    });
+
+    return queue;
+}
+
++ (void)asynchronize:(void (^)())task {
+    NSAssert(task != nil, @"Task cannot be nil.");
+
+    dispatch_async([self asynchronousTaskQueue], ^{
+        task();
+    });
+}
+
 #pragma mark - String Util
 + (NSString *)MIMEType:(NSString *)filePathOrName {
     CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)[filePathOrName pathExtension], NULL);
