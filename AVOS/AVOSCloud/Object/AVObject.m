@@ -195,18 +195,12 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     static NSArray *_invalidKeys;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _invalidKeys = @[@"code",
-                         @"uuid",
-                         @"className",
-                         @"keyValues",
-                         @"fetchWhenSave",
-                         @"running",
-                         @"acl",
+        _invalidKeys = @[
                          @"ACL",
-                         @"pendingKeys",
                          @"createdAt",
                          @"updatedAt",
-                         @"objectId"];
+                         @"objectId"
+                         ];
     });
     return _invalidKeys;
 }
