@@ -380,4 +380,46 @@
     WAIT
 }
 
+- (AVUser *)signUpRandomUser {
+    AVUser *user  = [[AVUser alloc] init];
+
+    user.username = [@"foo" stringByAppendingFormat:@"%ld", (long)arc4random()];
+    user.password = [@"bar" stringByAppendingFormat:@"%ld", (long)arc4random()];
+
+    NSError *error = nil;
+    [user signUp:&error];
+
+    XCTAssert(!error, @"%@", error);
+
+    return user;
+}
+
+- (void)testGetRoles {
+    AVUser *user = [self signUpRandomUser];
+    AVRole *role = [AVRole roleWithName:[@"testRole" stringByAppendingFormat:@"%ld", (long)arc4random()]];
+
+    AVACL *acl = [AVACL ACL];
+    [acl setPublicReadAccess:YES];
+    [acl setWriteAccess:YES forUser:user];
+
+    role.ACL = acl;
+    [role.users addObject:user];
+
+    NSError *error1 = nil;
+    [role save:&error1];
+
+    XCTAssertTrue(error1 == nil, @"%@", error1);
+
+    NSError *error2 = nil;
+    NSArray<AVRole *> *roles = [user getRoles:&error2];
+
+    XCTAssertTrue(error2 == nil, @"%@", error2);
+
+    XCTAssertEqual(roles.count, 1);
+    XCTAssertTrue([[[roles firstObject] objectId] isEqualToString:role.objectId]);
+
+    [role delete];
+    [user delete];
+}
+
 @end
