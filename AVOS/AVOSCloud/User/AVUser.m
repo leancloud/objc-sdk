@@ -89,7 +89,16 @@ static BOOL enableAutomatic = NO;
 
 - (void)isAuthenticatedWithSessionToken:(NSString *)sessionToken callback:(AVBooleanResultBlock)callback {
     if (sessionToken == nil) {
-        [NSException raise:NSInvalidArgumentException format:@"sessionToken is nil"];
+        NSInteger code = 0;
+        NSString *errorReasonText = @"sessionToken is nil";
+        NSDictionary *errorInfo = @{
+                                    @"code" : @(code),
+                                    NSLocalizedDescriptionKey : errorReasonText,
+                                    };
+        NSError *error = [NSError errorWithDomain:kAVErrorDomain
+                                             code:code
+                                         userInfo:errorInfo];
+        [AVUtils callBooleanResultBlock:callback error:error];
         return;
     }
     
@@ -496,7 +505,18 @@ static BOOL enableAutomatic = NO;
 
 + (void)internalBecomeWithSessionTokenInBackground:(NSString *)sessionToken block:(AVUserResultBlock)block {
     if (sessionToken == nil) {
-        [NSException raise:NSInvalidArgumentException format:@"sessionToken is nil"];
+        NSInteger code = 0;
+        NSString *errorReasonText = @"sessionToken is nil";
+        NSDictionary *errorInfo = @{
+                                    @"code" : @(code),
+                                    NSLocalizedDescriptionKey : errorReasonText,
+                                    };
+        NSError *error = [NSError errorWithDomain:kAVErrorDomain
+                                             code:code
+                                         userInfo:errorInfo];
+        if (block) {
+            block(nil, error);
+        }
         return;
     }
     [[AVPaasClient sharedInstance] getObject:[NSString stringWithFormat:@"%@/%@", [self endPoint], @"me"] withParameters:@{@"session_token": sessionToken} block:^(id object, NSError *error) {

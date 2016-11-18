@@ -430,7 +430,7 @@ A LeanCloud Framework User Object that is a local representation of a user persi
  a signUp or logIn method. An authenticated object is required in order to save (with altered values) or delete it.
  @return whether the user is authenticated.
  */
-- (BOOL)isAuthenticated AV_DEPRECATED("3.7.0");
+- (BOOL)isAuthenticated AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.7.0. Use -[AVUser isAuthenticatedWithSessionToken:callback:] instead.");
 
 @end
 
