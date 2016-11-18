@@ -196,11 +196,10 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _invalidKeys = @[
-                         @"ACL",
-                         @"createdAt",
-                         @"updatedAt",
-                         @"objectId"
-                         ];
+            @"objectId",
+            @"createdAt",
+            @"updatedAt"
+        ];
     });
     return _invalidKeys;
 }
@@ -329,12 +328,14 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 - (void)setObject:(id)object forKey:(NSString *)key
 {
-    if ([[[self class] invalidKeys] containsObject:key]) {
-        NSError *error = [NSError errorWithDomain:kAVErrorDomain code:0 userInfo:@{@"text":[NSString stringWithFormat:@"Don't use an internal key name:%@", key]}];
-        AVLoggerE(@"fail to set object for key, error: %@", error);
-        NSException *exception = [NSException exceptionWithName:kAVErrorDomain reason:[NSString stringWithFormat:@"Invalid key name:%@", key] userInfo:nil];
-        [exception raise];
+    if ([key isEqualToString:@"ACL"]) {
+        [self setACL:object];
         return;
+    }
+
+    if ([[AVObject invalidKeys] containsObject:key]) {
+        NSException *exception = [NSException exceptionWithName:kAVErrorDomain reason:[NSString stringWithFormat:@"The key '%@' is reserved.", key] userInfo:nil];
+        [exception raise];
     }
     
     if (self.inSetter) {
@@ -617,6 +618,11 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 }
 
 -(void)setACL:(AVACL *)ACL {
+    if (ACL && ![ACL isKindOfClass:[AVACL class]]) {
+        NSException *exception = [NSException exceptionWithName:kAVErrorDomain reason:[NSString stringWithFormat:@"An instance of AVACL is required for property 'ACL'."] userInfo:nil];
+        [exception raise];
+    }
+
     _ACL = ACL;
     [self addSetRequest:ACLTag object:ACL.permissionsById];
 }

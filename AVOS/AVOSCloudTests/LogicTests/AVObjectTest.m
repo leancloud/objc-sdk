@@ -749,21 +749,17 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     NSString *className = @"TestObject";
     AVObject *object = [AVObject objectWithClassName:className];
     XCTAssertNoThrow([object setObject:@"test string" forKey:@"string"]);
-    NSArray *invalidKeys = @[@"code",
-                             @"uuid",
-                             @"className",
-                             @"keyValues",
-                             @"fetchWhenSave",
-                             @"running",
-                             @"acl",
-                             @"ACL",
-                             @"pendingKeys",
-                             @"createdAt",
-                             @"updatedAt",
-                             @"objectId"];
+    NSArray *invalidKeys = @[
+        @"objectId",
+        @"createdAt",
+        @"updatedAt"
+    ];
     for (NSString *key in invalidKeys) {
         XCTAssertThrows([object setObject:@"test object" forKey:key]);
     }
+    XCTAssertThrows([object setObject:@"String" forKey:@"ACL"]);
+    [object setObject:[AVACL ACL] forKey:@"ACL"];
+    [object setObject:nil forKey:@"ACL"];
 }
 
 - (void)testRemoveObjectForKey {
@@ -786,21 +782,17 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     NSString *className = @"TestObject";
     AVObject *object = [AVObject objectWithClassName:className];
     XCTAssertNoThrow(object[@"string"] = @"test string");
-    NSArray *invalidKeys = @[@"code",
-                             @"uuid",
-                             @"className",
-                             @"keyValues",
-                             @"fetchWhenSave",
-                             @"running",
-                             @"acl",
-                             @"ACL",
-                             @"pendingKeys",
-                             @"createdAt",
-                             @"updatedAt",
-                             @"objectId"];
+    NSArray *invalidKeys = @[
+        @"objectId",
+        @"createdAt",
+        @"updatedAt"
+    ];
     for (NSString *key in invalidKeys) {
         XCTAssertThrows(object[key] = @"test object");
     }
+    XCTAssertThrows(object[@"ACL"] = @"String");
+    object[@"ACL"] = [AVACL ACL];
+    object[@"ACL"] = nil;
 }
 
 - (void)testRelationForKey {
