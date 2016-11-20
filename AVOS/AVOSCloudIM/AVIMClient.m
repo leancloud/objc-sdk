@@ -620,7 +620,11 @@ static BOOL AVIMClientHasInstantiated = NO;
             attr = [[NSMutableDictionary alloc] init];
             
             if (name) [attr setObject:name forKey:KEY_NAME];
-            if (attributes) [attr setObject:attributes forKey:KEY_ATTR];
+            if (attributes) {
+                for (NSString *key in attributes) {
+                    [attr setObject:attributes[key] forKey:key];
+                }
+            }
         }
         
         BOOL transient = options & AVIMConversationOptionTransient;
@@ -662,7 +666,7 @@ static BOOL AVIMClientHasInstantiated = NO;
                 AVIMConversation *conversation = [self conversationWithId:conversationInCommand.cid];
                 NSDictionary *dict = [self parseJsonFromMessage:conversationOutCommand.attr];
                 conversation.name = [dict objectForKey:KEY_NAME];
-                conversation.attributes = dict;
+                conversation.attributes = [AVIMConversation filterCustomAttributesFromDictionary:dict];;
                 conversation.creator = self.clientId;
                 conversation.createAt = [AVObjectUtils dateFromString:[conversationInCommand cdate]];
                 conversation.transient = conversationOutCommand.transient;

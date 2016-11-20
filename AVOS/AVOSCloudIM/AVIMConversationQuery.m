@@ -383,6 +383,8 @@ NSString *const kAVIMKeyConversationId = @"objectId";
     return result;
 }
 
+
+
 - (NSArray *)conversationsWithResults:(AVIMJsonObjectMessage *)messages {
     NSArray *results = [self JSONValue:messages.data_p];
 
@@ -398,7 +400,7 @@ NSString *const kAVIMKeyConversationId = @"objectId";
         conversation.imClient = self.client;
         conversation.conversationId = [dict objectForKey:@"objectId"];
         conversation.name = [dict objectForKey:KEY_NAME];
-        conversation.attributes = [dict objectForKey:KEY_ATTR];
+        conversation.attributes = [AVIMConversation filterCustomAttributesFromDictionary:dict];
         conversation.creator = [dict objectForKey:@"c"];
         if (createdAt) conversation.createAt = [AVObjectUtils dateFromString:createdAt];
         if (updatedAt) conversation.updateAt = [AVObjectUtils dateFromString:updatedAt];

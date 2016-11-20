@@ -665,6 +665,23 @@
     });
 }
 
++ (NSDictionary *)filterCustomAttributesFromDictionary:(NSDictionary *)dictionary {
+    NSMutableDictionary *mutableDictionary = [dictionary mutableCopy];
+    NSArray *defaultAttributes = @[
+                                   @"createdAt",
+                                   @"updatedAt",
+                                   @"objectId",
+                                   @"lm",
+                                   KEY_NAME,
+                                   @"c",
+                                   @"m",
+                                   @"muted",
+                                   @"tr"
+                                   ];
+    [mutableDictionary removeObjectsForKeys:defaultAttributes];
+    return [mutableDictionary copy];
+}
+
 #pragma mark -
 
 - (NSArray *)takeContinuousMessages:(NSArray *)messages {
