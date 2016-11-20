@@ -74,6 +74,21 @@
     WAIT;
 }
 
+- (void)testConversationGetterAndSetter {
+    AVIMConversation *conversation = [self conversationForTest];
+    NSNumber *number = @(arc4random());
+    NSString *name = [number stringValue];
+    [conversation setObject:number forKey:@"number"];
+    [conversation setObject:name forKey:@"name"];
+    [conversation updateWithCallback:^(BOOL succeeded, NSError *error) {
+        XCTAssertNil(error);
+        XCTAssertEqualObjects(conversation.name, name);
+        XCTAssertEqualObjects([conversation objectForKey:@"number"], number);
+        NOTIFY;
+    }];
+    WAIT;
+}
+
 //FIXME:TEST FAILED ==> ALL XCTAssertNil FAILED
 //AVIMConvCommand should has cid
 - (void)testUpdateConversation {
