@@ -620,11 +620,7 @@ static BOOL AVIMClientHasInstantiated = NO;
             attr = [[NSMutableDictionary alloc] init];
             
             if (name) [attr setObject:name forKey:KEY_NAME];
-            if (attributes) {
-                for (NSString *key in attributes) {
-                    [attr setObject:attributes[key] forKey:key];
-                }
-            }
+            if (attributes) [attr setObject:attributes forKey:KEY_ATTR];
         }
         
         BOOL transient = options & AVIMConversationOptionTransient;
