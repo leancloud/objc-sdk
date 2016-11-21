@@ -104,8 +104,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  * Get custom property value for conversation.
- * @param key The property name.
- * @return key The property value.
+ * @param key The custom property name.
+ * @return The custom property value.
  */
 - (nullable id)objectForKey:(NSString *)key;
 
