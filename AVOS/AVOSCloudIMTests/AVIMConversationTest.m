@@ -79,6 +79,7 @@
     NSNumber *number = @(arc4random());
     NSString *name = [number stringValue];
     [conversation setObject:number forKey:@"number"];
+    XCTAssertEqualObjects([conversation objectForKey:@"number"], number);
     [conversation setObject:name forKey:@"name"];
     [conversation updateWithCallback:^(BOOL succeeded, NSError *error) {
         XCTAssertNil(error);
