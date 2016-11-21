@@ -48,7 +48,7 @@
 
 @interface AVIMConversation()
 
-@property (nonatomic, strong) NSMutableDictionary *conversationObject;
+@property (nonatomic, strong) NSMutableDictionary *mutableAttributes;
 
 @end
 
@@ -61,11 +61,12 @@
     return self;
 }
 
-- (NSMutableDictionary *)conversationObject {
-    if (_conversationObject == nil) {
-        _conversationObject = [[NSMutableDictionary alloc] init];
+- (NSMutableDictionary *)mutableAttributes {
+    if (_mutableAttributes == nil) {
+        _mutableAttributes = [[NSMutableDictionary alloc] init];
+        [_mutableAttributes addEntriesFromDictionary:self.attributes];
     }
-    return _conversationObject;
+    return _mutableAttributes;
 }
 
 - (NSString *)clientId {
@@ -85,11 +86,11 @@
 }
 
 - (void)setObject:(nullable id)object forKey:(NSString *)key {
-    [self.conversationObject setObject:object forKey:key];
+    [self.mutableAttributes setObject:object forKey:key];
 }
 
 - (nullable id)objectForKey:(NSString *)key {
-    return [self.attributes objectForKey:key];
+    return [self.mutableAttributes objectForKey:key];
 }
 
 - (AVIMConversationUpdateBuilder *)newUpdateBuilder {
@@ -258,7 +259,7 @@
 
 - (void)updateWithCallback:(AVIMBooleanResultBlock)callback {
     dispatch_async([AVIMClient imClientQueue], ^{
-        __block NSDictionary *attr = [self.conversationObject copy];
+        NSDictionary *attr = [self.mutableAttributes copy];
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
         genericCommand.needResponse = YES;
         genericCommand.cmd = AVIMCommandType_Conv;
@@ -267,7 +268,7 @@
         AVIMConvCommand *convCommand = [[AVIMConvCommand alloc] init];
         convCommand.cid = self.conversationId;
         genericCommand.op = AVIMOpType_Update;
-        AVIMJsonObjectMessage *attrs = [AVIMCommandFormatter JSONObjectWithDictionary:[self.conversationObject copy]];
+        AVIMJsonObjectMessage *attrs = [AVIMCommandFormatter JSONObjectWithDictionary:attr];
         convCommand.attr = attrs;
         [genericCommand avim_addRequiredKeyWithCommand:convCommand];
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
@@ -283,11 +284,11 @@
                         attributes = [[NSMutableDictionary alloc] init];
                     }
                     [attributes addEntriesFromDictionary:attr];
-                    self.attributes = attributes;
+                    self.attributes = [attributes copy];
                 }
-                self.conversationObject = nil;
                 [self removeCachedConversation];
             }
+            self.mutableAttributes = nil;
             [AVIMBlockHelper callBooleanResultBlock:callback error:error];
         }];
         [_imClient sendCommand:genericCommand];
@@ -296,7 +297,7 @@
 
 - (void)update:(NSDictionary *)updateDict callback:(AVIMBooleanResultBlock)callback {
     dispatch_async([AVIMClient imClientQueue], ^{
-       __block NSDictionary *attr = updateDict;
+        NSDictionary *attr = updateDict;
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
         genericCommand.needResponse = YES;
         genericCommand.cmd = AVIMCommandType_Conv;
@@ -320,7 +321,7 @@
                         attributes = [[NSMutableDictionary alloc] init];
                     }
                     [attributes addEntriesFromDictionary:attrs];
-                    self.attributes = attributes;
+                    self.attributes = [attributes copy];
                 }
                 [self removeCachedConversation];
             }
