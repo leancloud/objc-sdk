@@ -87,8 +87,27 @@ static BOOL enableAutomatic = NO;
     return user;
 }
 
-- (BOOL)isAuthenticated
-{
+- (void)isAuthenticatedWithSessionToken:(NSString *)sessionToken callback:(AVBooleanResultBlock)callback {
+    if (sessionToken == nil) {
+        NSInteger code = 0;
+        NSString *errorReasonText = @"sessionToken is nil";
+        NSDictionary *errorInfo = @{
+                                    @"code" : @(code),
+                                    NSLocalizedDescriptionKey : errorReasonText,
+                                    };
+        NSError *error = [NSError errorWithDomain:kAVErrorDomain
+                                             code:code
+                                         userInfo:errorInfo];
+        [AVUtils callBooleanResultBlock:callback error:error];
+        return;
+    }
+    
+    [[AVPaasClient sharedInstance] getObject:[NSString stringWithFormat:@"%@/%@", [[self class] endPoint], @"me"] withParameters:@{@"session_token": sessionToken} block:^(id object, NSError *error) {
+        [AVUtils callBooleanResultBlock:callback error:error];
+    }];
+}
+
+- (BOOL)isAuthDataExistInMemory {
     if (self.sessionToken.length > 0 ||
         self.sinaWeiboToken.length > 0 ||
         [self objectForKey:authDataTag]) // for sns user
@@ -96,6 +115,10 @@ static BOOL enableAutomatic = NO;
         return YES;
     }
     return NO;
+}
+
+- (BOOL)isAuthenticated {
+    return [self isAuthDataExistInMemory];
 }
 
 - (NSArray *)linkedServiceNames {
@@ -143,7 +166,7 @@ static BOOL enableAutomatic = NO;
 
 -(NSError *)preSave
 {
-    if ([self isAuthenticated])
+    if ([self isAuthDataExistInMemory])
     {
         return nil;
     }
@@ -279,7 +302,7 @@ static BOOL enableAutomatic = NO;
 }
 
 - (void)updatePassword:(NSString *)oldPassword newPassword:(NSString *)newPassword block:(AVIdResultBlock)block {
-    if (self.isAuthenticated && oldPassword && newPassword) {
+    if (self.isAuthDataExistInMemory && oldPassword && newPassword) {
         NSString *pathComponent = [NSString stringWithFormat:@"users/%@/updatePassword", self.objectId];
         NSString *path = [[[AVOSCloud RESTBaseURL] URLByAppendingPathComponent:pathComponent] absoluteString];
         NSDictionary *params = @{@"old_password":oldPassword,
@@ -298,7 +321,7 @@ static BOOL enableAutomatic = NO;
         }];
     } else {
         NSError *error = nil;
-        if (!self.isAuthenticated) {
+        if (!self.isAuthDataExistInMemory) {
             error= [AVErrorUtils errorWithCode:kAVErrorUserCannotBeAlteredWithoutSession];
         }
         
@@ -495,7 +518,18 @@ static BOOL enableAutomatic = NO;
 
 + (void)internalBecomeWithSessionTokenInBackground:(NSString *)sessionToken block:(AVUserResultBlock)block {
     if (sessionToken == nil) {
-        [NSException raise:NSInvalidArgumentException format:@"sessionToken is nil"];
+        NSInteger code = 0;
+        NSString *errorReasonText = @"sessionToken is nil";
+        NSDictionary *errorInfo = @{
+                                    @"code" : @(code),
+                                    NSLocalizedDescriptionKey : errorReasonText,
+                                    };
+        NSError *error = [NSError errorWithDomain:kAVErrorDomain
+                                             code:code
+                                         userInfo:errorInfo];
+        if (block) {
+            block(nil, error);
+        }
         return;
     }
     [[AVPaasClient sharedInstance] getObject:[NSString stringWithFormat:@"%@/%@", [self endPoint], @"me"] withParameters:@{@"session_token": sessionToken} block:^(id object, NSError *error) {
@@ -909,7 +943,7 @@ static BOOL enableAutomatic = NO;
 }
 
 -(void)follow:(NSString*)userId userDictionary:(NSDictionary *)dictionary andCallback:(AVBooleanResultBlock)callback{
-    if (![self isAuthenticated]) {
+    if (![self isAuthDataExistInMemory]) {
         NSError *error= [AVErrorUtils errorWithCode:kAVErrorUserCannotBeAlteredWithoutSession];
         callback(NO,error);
         return;
@@ -923,7 +957,7 @@ static BOOL enableAutomatic = NO;
 }
 
 -(void)unfollow:(NSString *)userId andCallback:(AVBooleanResultBlock)callback{
-    if (![self isAuthenticated]) {
+    if (![self isAuthDataExistInMemory]) {
         NSError *error= [AVErrorUtils errorWithCode:kAVErrorUserCannotBeAlteredWithoutSession];
         callback(NO,error);
         return;

@@ -47,11 +47,9 @@ A LeanCloud Framework User Object that is a local representation of a user persi
 @property (nonatomic, assign, readonly) BOOL isNew;
 
 /*!
- Whether the user is an authenticated object for the device. An authenticated AVUser is one that is obtained via
- a signUp or logIn method. An authenticated object is required in order to save (with altered values) or delete it.
- @return whether the user is authenticated.
+ Whether the user is an authenticated object with the given sessionToken.
  */
-- (BOOL)isAuthenticated;
+- (void)isAuthenticatedWithSessionToken:(NSString *)sessionToken callback:(AVBooleanResultBlock)callback;
 
 /** @name Creating a New User */
 
@@ -443,6 +441,13 @@ A LeanCloud Framework User Object that is a local representation of a user persi
 + (void)requestPasswordResetForEmailInBackground:(NSString *)email
                                           target:(id)target
                                         selector:(SEL)selector AV_DEPRECATED("2.6.10");
+
+/*!
+ Whether the user is an authenticated object for the device. An authenticated AVUser is one that is obtained via
+ a signUp or logIn method. An authenticated object is required in order to save (with altered values) or delete it.
+ @return whether the user is authenticated.
+ */
+- (BOOL)isAuthenticated AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.7.0. Use -[AVUser isAuthenticatedWithSessionToken:callback:] instead.");
 
 @end
 
