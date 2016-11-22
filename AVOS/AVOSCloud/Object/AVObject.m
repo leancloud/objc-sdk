@@ -1697,7 +1697,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }
     [self.requestManager clear];
     NSString *path = [self myObjectPath];
-    [[AVPaasClient sharedInstance] deleteObject:path withParameters:nil block:^(id object, NSError *error) {
+    [[AVPaasClient sharedInstance] deleteObject:path withParameters:nil eventually:eventually block:^(id object, NSError *error) {
         if (!error) {
             [self postDelete];
         }
