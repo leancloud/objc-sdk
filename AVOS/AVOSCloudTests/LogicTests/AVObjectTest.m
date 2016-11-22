@@ -986,6 +986,27 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     [self addDeleteObject:objectB];
 }
 
+- (void)testSaveOption {
+    AVObject *object = [[AVObject alloc] init];
+    NSError *error = nil;
+    [object save:&error];
+
+    XCTAssertNil(error, @"%@", error.localizedDescription);
+
+    object[@"foo"] = @"bar";
+
+    AVSaveOption *option = [[AVSaveOption alloc] init];
+    AVQuery *query = [[AVQuery alloc] init];
+
+    [query whereKey:@"createdAt" lessThan:object.createdAt];
+    option.query = query;
+
+    [object saveWithOption:option error:&error];
+
+    XCTAssertNotNil(error);
+    XCTAssertEqual(error.code, 305);
+}
+
 - (void)testSetTwoTimesForOneKey {
     AVObject *obj = [AVObject objectWithClassName:self.className];
     [obj addObject:@"swimming" forKey:@"array"];

@@ -1091,6 +1091,12 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 }
 
+- (NSDictionary *)whereJSONDictionary {
+    NSData *data = [[self whereString] dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+    return dictionary;
+}
+
 #pragma mark - Util methods
 - (void)raiseSyncExceptionIfNeed {
     if (self.cachePolicy == kAVCachePolicyCacheThenNetwork) {
