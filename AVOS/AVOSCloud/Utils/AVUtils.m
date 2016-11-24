@@ -172,6 +172,7 @@ SecKeyRef LCGetPublicKeyFromCertificate(SecCertificateRef cert) {
     result = SecTrustCopyPublicKey(trust);
 
 _out:
+    if (policy) CFRelease(policy);
     if (certArr) CFRelease(certArr);
     if (trust) CFRelease(trust);
 
