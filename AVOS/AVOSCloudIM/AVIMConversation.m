@@ -668,7 +668,18 @@
                                    @"tr"
                                    ];
     [mutableDictionary removeObjectsForKeys:defaultAttributes];
-    return [mutableDictionary copy];
+    NSDictionary *customAttributes = [mutableDictionary copy];
+    
+    //v3.7.0之前的旧版产生的数据中会有attr字段
+    NSDictionary *attr = [customAttributes objectForKey:KEY_ATTR];
+    if (!attr) {
+        return customAttributes;
+    }
+    //新版本中也可能产生同时含有attr字段，以及和attr字段同级的其他自定义属性
+    //同时含有attr和同一个层级的自定义属性，如果包含同一个自定义名称，则以新形式的自定义属性为准。
+    NSMutableDictionary *campatibleCustomAttributes = [attr mutableCopy];
+    [campatibleCustomAttributes addEntriesFromDictionary:dictionary];
+    return [campatibleCustomAttributes copy];
 }
 
 #pragma mark -
