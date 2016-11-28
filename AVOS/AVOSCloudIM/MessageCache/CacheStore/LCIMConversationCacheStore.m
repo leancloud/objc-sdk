@@ -47,6 +47,7 @@
         [NSNumber numberWithDouble:[conversation.createAt timeIntervalSince1970]],
         [NSNumber numberWithDouble:[conversation.updateAt timeIntervalSince1970]],
         [NSNumber numberWithDouble:[conversation.lastMessageAt timeIntervalSince1970]],
+        conversation.lastMessage ? [NSKeyedArchiver archivedDataWithRootObject:conversation.lastMessage] : [NSNull null],
         [NSNumber numberWithInteger:conversation.muted],
         [NSNumber numberWithDouble:expireAt]
     ];
@@ -154,8 +155,11 @@
     conversation.createAt       = [self dateFromTimeInterval:[result doubleForColumn:LCIM_FIELD_CREATE_AT]];
     conversation.updateAt       = [self dateFromTimeInterval:[result doubleForColumn:LCIM_FIELD_UPDATE_AT]];
     conversation.lastMessageAt  = [self dateFromTimeInterval:[result doubleForColumn:LCIM_FIELD_LAST_MESSAGE_AT]];
+    conversation.lastMessage    = ({
+        NSData *data = [result dataForColumn:LCIM_FIELD_LAST_MESSAGE];
+        data ? [NSKeyedUnarchiver unarchiveObjectWithData:data] : nil;
+    });
     conversation.muted          = [result boolForColumn:LCIM_FIELD_MUTED];
-
     return conversation;
 }
 

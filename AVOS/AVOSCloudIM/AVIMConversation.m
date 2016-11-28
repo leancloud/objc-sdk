@@ -998,6 +998,7 @@
     keyedConversation.createAt       = self.createAt;
     keyedConversation.updateAt       = self.updateAt;
     keyedConversation.lastMessageAt  = self.lastMessageAt;
+    keyedConversation.lastMessage    = self.lastMessage;
     keyedConversation.name           = self.name;
     keyedConversation.members        = self.members;
     keyedConversation.attributes     = self.attributes;
@@ -1013,6 +1014,7 @@
     self.createAt          = keyedConversation.createAt;
     self.updateAt          = keyedConversation.updateAt;
     self.lastMessageAt     = keyedConversation.lastMessageAt;
+    self.lastMessage       = keyedConversation.lastMessage;
     self.name              = keyedConversation.name;
     self.members           = keyedConversation.members;
     self.attributes        = keyedConversation.attributes;
