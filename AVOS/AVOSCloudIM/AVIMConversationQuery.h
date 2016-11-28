@@ -20,10 +20,10 @@ extern NSString *const kAVIMKeyMember;
 extern NSString *const kAVIMKeyCreator;
 extern NSString *const kAVIMKeyConversationId;
 
-typedef NS_ENUM(NSInteger, AVIMConversationOption) {
-    AVIMConversationOptionNone = 0,
-    AVIMConversationOptionCompact = 1 << 0, /**< 不返回成员列表 */
-    AVIMConversationOptionWithMessage = 1 << 0, /**< 返回对话最近一条消息 */
+typedef NS_OPTIONS(uint64_t, AVIMConversationQueryOption) {
+    AVIMConversationQueryOptionNone = 0,
+    AVIMConversationQueryOptionCompact = 1 << 0, /**< 不返回成员列表 */
+    AVIMConversationQueryOptionWithMessage = 1 << 1, /**< 返回对话最近一条消息 */
 };
 
 @interface AVIMConversationQuery : NSObject
@@ -51,7 +51,7 @@ typedef NS_ENUM(NSInteger, AVIMConversationOption) {
 /*!
  * 查询条件
  */
-@property (nonatomic, assign) AVIMConversationOption option;
+@property (nonatomic, assign) AVIMConversationQueryOption option;
 
 /*!
  * Build an query that is the OR of the passed in queries.

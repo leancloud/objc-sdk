@@ -412,7 +412,6 @@ NSString *const kAVIMKeyConversationId = @"objectId";
         conversation.members = [dict objectForKey:@"m"];
         conversation.muted = [[dict objectForKey:@"muted"] boolValue];
         conversation.transient = [[dict objectForKey:@"tr"] boolValue];
-
         [conversations addObject:conversation];
     }
 
@@ -522,17 +521,6 @@ NSString *const kAVIMKeyConversationId = @"objectId";
     default:
         break;
     }
-}
-
-#pragma mark -
-#pragma mark - AVIMConversationQueryConditions Method
-
-- (BOOL)isWithLastMessagesRefreshed {
-    return self.conditions.isWithLastMessagesRefreshed;
-}
-
-- (void)setWithLastMessagesRefreshed:(BOOL)withLastMessagesRefreshed {
-    [self.conditions setWithLastMessagesRefreshed:withLastMessagesRefreshed];
 }
 
 @end
