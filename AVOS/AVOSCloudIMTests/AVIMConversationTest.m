@@ -50,13 +50,17 @@
     // test created conversation by above test
     __block NSString *convid;
     NSString *name = NSStringFromSelector(_cmd);
+    NSString *lastMessageText = [@(arc4random()) stringValue];
     [[AVIMClient defaultClient] createConversationWithName:name clientIds:@[ AVIM_TEST_ClinetID_Peer ] attributes:@{@"type": @0} options:AVIMConversationOptionNone callback:^(AVIMConversation *conversation, NSError *error) {
         XCTAssertNil(error);
         convid = conversation.conversationId;
-        NOTIFY;
+        [conversation sendMessage:[AVIMTextMessage messageWithText:lastMessageText attributes: nil] callback:^(BOOL succeeded, NSError * _Nullable error) {
+            NOTIFY;
+        }];
     }];
     WAIT;
     AVIMConversationQuery *query = [[AVIMClient defaultClient] conversationQuery];
+    query.option = AVIMConversationQueryOptionWithMessage;
     [query getConversationById:convid callback:^(AVIMConversation *conversation, NSError *error) {
         XCTAssertNil(error);
         XCTAssertEqualObjects(conversation.name, name);
@@ -69,6 +73,9 @@
         XCTAssertNotNil(conversation.conversationId);
         XCTAssertFalse(conversation.muted);
         XCTAssertFalse(conversation.transient);
+        AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)conversation.lastMessage;
+        XCTAssertTrue([typedMessage.text isEqualToString:lastMessageText]);
+        XCTAssertEqual(typedMessage.mediaType, -1);
         NOTIFY;
     }];
     WAIT;
