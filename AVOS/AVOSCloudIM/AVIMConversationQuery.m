@@ -18,6 +18,7 @@
 #import "AVIMErrorUtil.h"
 #import "AVObjectUtils.h"
 #import "LCIMConversationCache.h"
+#import "AVIMMessage_Internal.h"
 
 NSString *const kAVIMKeyName = @"name";
 NSString *const kAVIMKeyMember = @"m";
@@ -402,16 +403,21 @@ NSString *const kAVIMKeyConversationId = @"objectId";
         NSDictionary *lastMessageAt = dict[KEY_LAST_MESSAGE_AT];
 
         conversation.imClient = self.client;
-        conversation.conversationId = [dict objectForKey:@"objectId"];
+        NSString *conversationId = [dict objectForKey:@"objectId"];
+        conversation.conversationId = conversationId;
         conversation.name = [dict objectForKey:KEY_NAME];
         conversation.attributes = [dict objectForKey:KEY_ATTR];
         conversation.creator = [dict objectForKey:@"c"];
         if (createdAt) conversation.createAt = [AVObjectUtils dateFromString:createdAt];
         if (updatedAt) conversation.updateAt = [AVObjectUtils dateFromString:updatedAt];
-        if (lastMessageAt) conversation.lastMessageAt = [AVObjectUtils dateFromDictionary:lastMessageAt];
+        if (lastMessageAt) {
+            conversation.lastMessageAt = [AVObjectUtils dateFromDictionary:lastMessageAt];
+            conversation.lastMessage = [AVIMMessage parseMessageWithConversationId:conversationId result:dict];
+        }
         conversation.members = [dict objectForKey:@"m"];
         conversation.muted = [[dict objectForKey:@"muted"] boolValue];
         conversation.transient = [[dict objectForKey:@"tr"] boolValue];
+
         [conversations addObject:conversation];
     }
 
