@@ -57,6 +57,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly, nullable) NSDate       *updateAt;
 
 /**
+ *  The last message in this conversation.
+ */
+@property (nonatomic, strong, readonly, nullable) AVIMMessage  *lastMessage;
+
+/**
  *  The send timestamp of the last message in this conversation.
  */
 @property (nonatomic, strong, readonly, nullable) NSDate       *lastMessageAt;

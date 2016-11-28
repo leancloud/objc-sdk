@@ -348,7 +348,7 @@ NSString *const kAVIMKeyConversationId = @"objectId";
     jsonObjectMessage.data_p = [self whereString];
     command.where = jsonObjectMessage;
     command.sort = self.order;
-
+    
     if (self.skip > 0) {
         command.skip = (uint32_t)self.skip;
     }
@@ -358,6 +358,11 @@ NSString *const kAVIMKeyConversationId = @"objectId";
     } else {
         command.limit = 10;
     }
+    
+    if (self.option) {
+        command.flag = self.option;
+    }
+    
     [genericCommand avim_addRequiredKeyWithCommand:command];
     return genericCommand;
 }
@@ -394,7 +399,7 @@ NSString *const kAVIMKeyConversationId = @"objectId";
 
         NSString *createdAt = dict[@"createdAt"];
         NSString *updatedAt = dict[@"updatedAt"];
-        NSDictionary *lastMessageAt = dict[@"lm"];
+        NSDictionary *lastMessageAt = dict[KEY_LAST_MESSAGE_AT];
 
         conversation.imClient = self.client;
         conversation.conversationId = [dict objectForKey:@"objectId"];
@@ -517,6 +522,17 @@ NSString *const kAVIMKeyConversationId = @"objectId";
     default:
         break;
     }
+}
+
+#pragma mark -
+#pragma mark - AVIMConversationQueryConditions Method
+
+- (BOOL)isWithLastMessagesRefreshed {
+    return self.conditions.isWithLastMessagesRefreshed;
+}
+
+- (void)setWithLastMessagesRefreshed:(BOOL)withLastMessagesRefreshed {
+    [self.conditions setWithLastMessagesRefreshed:withLastMessagesRefreshed];
 }
 
 @end

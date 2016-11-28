@@ -14,6 +14,7 @@
 #define KEY_DATA @"data"
 #define KEY_FROM @"from"
 #define KEY_MSGID @"msgId"
+#define KEY_LAST_MESSAGE_AT @"lm"
 
 @class AVIMConversationUpdateBuilder;
 
