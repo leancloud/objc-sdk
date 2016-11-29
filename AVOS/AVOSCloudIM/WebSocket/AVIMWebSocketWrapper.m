@@ -630,7 +630,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
     NSDictionary *userOptions = [AVIMClient userOptions];
 
     if ([userOptions[AVIMUserOptionUseUnread] boolValue]) {
-        [protocols addObject:AVIMProtocolPROTOBUF2];
+        [protocols addObject:AVIMProtocolPROTOBUF3];
     } else {
         [protocols addObject:AVIMProtocolPROTOBUF1];
     }
