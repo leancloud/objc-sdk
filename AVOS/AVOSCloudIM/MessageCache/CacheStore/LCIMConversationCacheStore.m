@@ -32,7 +32,13 @@
         /* Version 1: Add muted column. */
         [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
             [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN muted INTEGER"];
+        }],
+        
+        /* Version 2: Add lastMessage column. */
+        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
+            [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN last_message BLOB"];
         }]
+        
     ]];
 }
 

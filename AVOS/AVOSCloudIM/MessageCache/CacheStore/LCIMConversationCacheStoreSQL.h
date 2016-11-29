@@ -9,11 +9,7 @@
 #ifndef AVOS_LCIMConversationCacheStoreSQL_h
 #define AVOS_LCIMConversationCacheStoreSQL_h
 
-/*!
- * 3.7.3版本后，conversation缓存多了lastMessage字段
- */
-#define LCIM_TABLE_CONVERSATION_VERSION @"V1.0"
-#define LCIM_TABLE_CONVERSATION         @"conversation" @"-" LCIM_TABLE_CONVERSATION_VERSION
+#define LCIM_TABLE_CONVERSATION         @"conversation"
 
 #define LCIM_FIELD_CONVERSATION_ID      @"conversation_id"
 #define LCIM_FIELD_NAME                 @"name"
@@ -39,7 +35,6 @@
         LCIM_FIELD_CREATE_AT            @" REAL, "                \
         LCIM_FIELD_UPDATE_AT            @" REAL, "                \
         LCIM_FIELD_LAST_MESSAGE_AT      @" REAL, "                \
-        LCIM_FIELD_LAST_MESSAGE         @" BLOB, "                \
         LCIM_FIELD_EXPIRE_AT            @" REAL, "                \
         @"PRIMARY KEY(" LCIM_FIELD_CONVERSATION_ID @")"           \
     @")"
@@ -55,10 +50,10 @@
         LCIM_FIELD_CREATE_AT            @", "                  \
         LCIM_FIELD_UPDATE_AT            @", "                  \
         LCIM_FIELD_LAST_MESSAGE_AT      @", "                  \
-        LCIM_FIELD_LAST_MESSAGE         @", "                  \
+        LCIM_FIELD_LAST_MESSAGE         @", " /* Version 2 */  \
         LCIM_FIELD_MUTED                @", " /* Version 1 */  \
         LCIM_FIELD_EXPIRE_AT                                   \
-    @") VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    @") VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
 #define LCIM_SQL_DELETE_CONVERSATION              \
     @"DELETE FROM " LCIM_TABLE_CONVERSATION @" "  \
