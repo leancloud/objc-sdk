@@ -390,6 +390,16 @@
 }
 
 - (void)markAsReadInBackground {
+    NSDictionary *userOptions = [AVIMClient userOptions];
+    NSArray *userOptionCustomProtocols = userOptions[AVIMUserOptionCustomProtocols];
+    BOOL isUseProtobuf2 = [userOptionCustomProtocols containsObject:AVIMProtocolPROTOBUF2];
+    BOOL isUseJson2 = [userOptionCustomProtocols containsObject:AVIMProtocolJSON2];
+    BOOL isUserProtocol2 = isUseProtobuf2 || isUseJson2;
+    
+    if (!isUserProtocol2) {
+        AVLoggerInfo(AVLoggerDomainIM, @"`-markAsReadInBackground` can be used only when you set custom protocols like AVIMProtocolJSON2 or AVIMProtocolPROTOBUF2. Otherwise, you should use `-markAsReadInBackgroundForMessage:callback:` instead.");
+        return;
+    }
     __weak typeof(self) ws = self;
     
     dispatch_async([AVIMClient imClientQueue], ^{
@@ -402,6 +412,38 @@
             AVIMReadCommand *readCommand = [[AVIMReadCommand alloc] init];
             readCommand.cid = ws.conversationId;
             [genericCommand avim_addRequiredKeyWithCommand:readCommand];
+            genericCommand;
+        })];
+    });
+}
+
+- (void)markAsReadInBackgroundForMessage:(AVIMMessage *)message {
+    [self markAsReadInBackgroundForMessage:message callback:^(BOOL succeeded, NSError * _Nullable error) {
+        //ignore callback
+    }];
+}
+
+- (void)markAsReadInBackgroundForMessage:(AVIMMessage *)message callback:(AVIMBooleanResultBlock)callback {
+    __weak typeof(self) ws = self;
+    dispatch_async([AVIMClient imClientQueue], ^{
+        [ws.imClient sendCommand:({
+            AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
+            genericCommand.needResponse = YES;
+            genericCommand.cmd = AVIMCommandType_Read;
+            genericCommand.peerId = ws.imClient.clientId;
+            
+            AVIMReadTuple *readTuple = [[AVIMReadTuple alloc] init];
+            readTuple.mid = message.messageId;
+            readTuple.cid = ws.conversationId;
+            readTuple.timestamp = message.sendTimestamp;
+            NSMutableArray *convsArray = [@[readTuple] mutableCopy];
+
+            AVIMReadCommand *readCommand = [[AVIMReadCommand alloc] init];
+            readCommand.convsArray = convsArray;
+            [genericCommand avim_addRequiredKeyWithCommand:readCommand];
+            [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
+                [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+            }];
             genericCommand;
         })];
     });

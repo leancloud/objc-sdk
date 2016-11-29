@@ -277,7 +277,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)conversation:(AVIMConversation *)conversation kickedByClientId:(NSString *)clientId;
 
 /*!
-  收到未读通知。在该终端上线的时候，服务器会将对话的未读数发送过来。未读数可通过 -[AVIMConversation markAsReadInBackground] 清零，服务端不会自动清零。
+  收到未读通知。在该终端上线的时候，服务器会将对话的未读数发送过来。未读数可通过 -[AVIMConversation markAsReadInBackgroundForMessage:callback:] 清零，服务端不会自动清零。
  @param conversation 所属会话。
  @param unread 未读消息数量。
  */
