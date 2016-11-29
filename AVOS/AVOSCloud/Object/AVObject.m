@@ -230,6 +230,34 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     return self;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super init];
+
+    if (self) {
+        _ACL = [aDecoder decodeObjectForKey:@"ACL"];
+        _objectId = [aDecoder decodeObjectForKey:@"objectId"];
+        _createdAt = [aDecoder decodeObjectForKey:@"createdAt"];
+        _updatedAt = [aDecoder decodeObjectForKey:@"updatedAt"];
+        _className = [aDecoder decodeObjectForKey:@"className"];
+        _localData = [[aDecoder decodeObjectForKey:@"localData"] mutableCopy] ?: [NSMutableDictionary dictionary];
+        _estimatedData = [[aDecoder decodeObjectForKey:@"estimatedData"] mutableCopy] ?: [NSMutableDictionary dictionary];
+        _relationData = [[aDecoder decodeObjectForKey:@"relationData"] mutableCopy] ?: [NSMutableDictionary dictionary];
+    }
+
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:_ACL forKey:@"ACL"];
+    [aCoder encodeObject:_objectId forKey:@"objectId"];
+    [aCoder encodeObject:_createdAt forKey:@"createdAt"];
+    [aCoder encodeObject:_updatedAt forKey:@"updatedAt"];
+    [aCoder encodeObject:_className forKey:@"className"];
+    [aCoder encodeObject:_localData forKey:@"localData"];
+    [aCoder encodeObject:_estimatedData forKey:@"estimatedData"];
+    [aCoder encodeObject:_relationData forKey:@"relationData"];
+}
+
 -(NSArray *)allArray
 {
     NSArray * array = @[self.localData, self.estimatedData, self.relationData];

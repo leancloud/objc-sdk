@@ -1199,4 +1199,38 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     WAIT
 }
 
+- (void)testEncodingAndDecoding {
+    AVCustomObject *object = [AVCustomObject object];
+
+    NSString *avatarPath = @"/path/to/avatar.png";
+
+    object.objectName = @"Anonymous";
+    object.avatar = [AVFile fileWithName:@"Avatar" contentsAtPath:avatarPath];
+    object[@"nonPredefinedNumericProperty"] = @42;
+    object[@"nonPredefinedDateProperty"] = [NSDate date];
+
+    AVRelation *relation = [object relationForKey:@"bestFriends"];
+
+    AVUser *friend = [AVUser objectWithObjectId:@"10101010101010"];
+    friend.username = @"David";
+    friend.email = @"david@leancloud.cn";
+    friend.sessionToken = @"000000000000000000";
+    [relation addObject:friend];
+
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object];
+    AVCustomObject *objectCopy = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+
+    XCTAssertEqualObjects(objectCopy.objectName, @"Anonymous");
+    XCTAssertEqualObjects(objectCopy.avatar.name, @"Avatar");
+    XCTAssertEqualObjects(objectCopy.avatar.localPath, avatarPath);
+    XCTAssertEqualObjects(objectCopy[@"nonPredefinedNumericProperty"], object[@"nonPredefinedNumericProperty"]);
+    XCTAssertEqualObjects(objectCopy[@"nonPredefinedDateProperty"], object[@"nonPredefinedDateProperty"]);
+
+    AVUser *friendCopy = objectCopy.relationData[@"bestFriends"][0];
+    XCTAssertEqualObjects(friendCopy.objectId, friend.objectId);
+    XCTAssertEqualObjects(friendCopy.sessionToken, friend.sessionToken);
+    XCTAssertEqualObjects(friendCopy.username, friend.username);
+    XCTAssertEqualObjects(friendCopy.email, friend.email);
+}
+
 @end

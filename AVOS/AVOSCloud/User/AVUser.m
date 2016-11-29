@@ -25,17 +25,21 @@ static BOOL enableAutomatic = NO;
 
 @implementation  AVUser
 
-@synthesize sessionToken = _sessionToken;
-@synthesize isNew = _isNew;
-@synthesize username = _username;
-@synthesize password = _password;
-@synthesize email = _email;
-@synthesize mobilePhoneVerified = _mobilePhoneVerified;
-@synthesize facebookToken = _facebookToken;
-@synthesize twitterToken = _twitterToken;
-@synthesize sinaWeiboToken = _sinaWeiboToken;
-@synthesize qqWeiboToken = _qqWeiboToken;
-@synthesize mobilePhoneNumber = _mobilePhoneNumber;
+@dynamic sessionToken;
+@dynamic isNew;
+@dynamic username;
+@dynamic password;
+@dynamic email;
+@dynamic mobilePhoneVerified;
+@dynamic facebookToken;
+@dynamic twitterToken;
+@dynamic sinaWeiboToken;
+@dynamic qqWeiboToken;
+@dynamic mobilePhoneNumber;
+
++ (void)load {
+    [self registerSubclass];
+}
 
 + (NSString *)parseClassName
 {
@@ -869,26 +873,6 @@ static BOOL enableAutomatic = NO;
     NSMutableDictionary * data = [super postData];
     [data addEntriesFromDictionary:[self userDictionary]];
     return data;
-}
-
--(void)setUsername:(NSString *)username {
-    _username = username;
-    [self addSetRequest:usernameTag object:username];
-}
-
--(void)setPassword:(NSString *)password {
-    _password = password;
-    [self addSetRequest:passwordTag object:password];
-}
-
--(void)setEmail:(NSString *)email {
-    _email = email;
-    [self addSetRequest:emailTag object:email];
-}
-
-- (void)setMobilePhoneNumber:(NSString *)mobilePhoneNumber {
-    _mobilePhoneNumber = mobilePhoneNumber;
-    [self addSetRequest:mobilePhoneNumberTag object:mobilePhoneNumber];
 }
 
 - (NSDictionary *)snapshot {
