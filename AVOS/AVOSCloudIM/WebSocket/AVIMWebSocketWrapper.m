@@ -63,6 +63,10 @@ NSString *const AVIMProtocolJSON2 = @"lc.json.2";
 NSString *const AVIMProtocolMessagePack2 = @"lc.msgpack.2";
 NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 
+NSString *const AVIMProtocolJSON3 = @"lc.json.3";
+NSString *const AVIMProtocolMessagePack3 = @"lc.msgpack.3";
+NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
+
 @interface AVIMCommandCarrier : NSObject
 @property(nonatomic, strong) AVIMGenericCommand *command;
 @property(nonatomic)NSTimeInterval timestamp;

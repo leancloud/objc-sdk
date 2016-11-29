@@ -22,8 +22,11 @@
 
 FOUNDATION_EXPORT NSString *const AVIMProtocolJSON1;
 FOUNDATION_EXPORT NSString *const AVIMProtocolJSON2;
+FOUNDATION_EXPORT NSString *const AVIMProtocolJSON3;
+
 FOUNDATION_EXPORT NSString *const AVIMProtocolPROTOBUF1;
 FOUNDATION_EXPORT NSString *const AVIMProtocolPROTOBUF2;
+FOUNDATION_EXPORT NSString *const AVIMProtocolPROTOBUF3;
 
 @interface AVIMWebSocketWrapper : NSObject
 
