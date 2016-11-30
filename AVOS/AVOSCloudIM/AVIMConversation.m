@@ -593,7 +593,9 @@
                 message.status = AVIMMessageStatusFailed;
             } else {
                 message.status = AVIMMessageStatusSent;
-                
+
+                [self updateConversationAfterSendMessage:message];
+
                 AVIMAckCommand *ackInCommand = inCommand.ackMessage;
                 message.sendTimestamp = ackInCommand.t;
                 message.messageId = ackInCommand.uid;
@@ -609,6 +611,12 @@
         
         [_imClient sendCommand:genericCommand];
     });
+}
+
+- (void)updateConversationAfterSendMessage:(AVIMMessage *)message {
+    NSDate *messageSentAt = [NSDate dateWithTimeIntervalSince1970:(message.sendTimestamp / 1000.0)];
+    self.lastMessageAt = messageSentAt;
+    [self.conversationCache updateConversationForLastMessageAt:messageSentAt conversationId:self.conversationId];
 }
 
 #pragma mark -

@@ -96,6 +96,18 @@
     [self deleteAllMessageOfConversationForId:conversationId];
 }
 
+- (void)updateConversationForLastMessageAt:(NSDate *)lastMessageAt conversationId:(NSString *)conversationId {
+    if (!conversationId || !lastMessageAt) return;
+    
+    LCIM_OPEN_DATABASE(db, ({
+        NSArray *args = @[
+                          lastMessageAt,
+                          conversationId,
+                          ];
+        [db executeUpdate:LCIM_SQL_UPDATE_CONVERSATION withArgumentsInArray:args];
+    }));
+}
+
 - (AVIMConversation *)conversationForId:(NSString *)conversationId timestamp:(NSTimeInterval)timestamp {
     __block AVIMConversation *conversation = nil;
 
