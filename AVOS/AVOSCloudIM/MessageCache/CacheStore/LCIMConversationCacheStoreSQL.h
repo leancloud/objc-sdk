@@ -74,7 +74,7 @@
 
 #define LCIM_SQL_UPDATE_CONVERSATION                \
     @"UPDATE " LCIM_TABLE_CONVERSATION @" "         \
-    @"SET " LCIM_FIELD_UPDATE_AT @" = ? "           \
+    @"SET " LCIM_FIELD_LAST_MESSAGE_AT @" = ? "           \
     LCIM_SQL_CONVERSATION_WHERE_CLAUSE
 
 #endif

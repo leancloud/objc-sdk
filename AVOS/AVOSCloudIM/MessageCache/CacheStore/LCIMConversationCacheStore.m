@@ -99,9 +99,11 @@
 - (void)updateConversationForLastMessageAt:(NSDate *)lastMessageAt conversationId:(NSString *)conversationId {
     if (!conversationId || !lastMessageAt) return;
     
+    NSNumber *lastMessageAtNumber = [NSNumber numberWithDouble:[lastMessageAt timeIntervalSince1970]];
+    
     LCIM_OPEN_DATABASE(db, ({
         NSArray *args = @[
-                          lastMessageAt,
+                          lastMessageAtNumber,
                           conversationId,
                           ];
         [db executeUpdate:LCIM_SQL_UPDATE_CONVERSATION withArgumentsInArray:args];
