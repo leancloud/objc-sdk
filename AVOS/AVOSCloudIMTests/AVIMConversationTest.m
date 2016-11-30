@@ -76,9 +76,13 @@
 
 - (void)testSendMessage {
     AVIMConversation *conversation = [self conversationForTest];
-    [conversation sendMessage:[AVIMMessage messageWithContent:@"Hello world!"] callback:^(BOOL succeeded, NSError * _Nullable error) {
-        NSDate *lastMessageAt = conversation.lastMessageAt;
-        XCTAssertNotNil(lastMessageAt);
+    AVIMMessage *message = [AVIMMessage messageWithContent:@"Hello world!"];
+    [conversation sendMessage:message callback:^(BOOL succeeded, NSError * _Nullable error) {
+        NSDate *conversationLastMessageAt = conversation.lastMessageAt;
+        NSDate *messageSendTimestamp = [NSDate dateWithTimeIntervalSince1970:(message.sendTimestamp / 1000.0)];
+        XCTAssertNotNil(conversationLastMessageAt);
+        XCTAssertNotNil(messageSendTimestamp);
+        XCTAssertTrue([conversationLastMessageAt isEqualToDate:messageSendTimestamp]);
         NOTIFY;
     }];
     WAIT;

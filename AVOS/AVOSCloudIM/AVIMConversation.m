@@ -594,7 +594,6 @@
             } else {
                 message.status = AVIMMessageStatusSent;
 
-                [self updateConversationAfterSendMessage:message];
 
                 AVIMAckCommand *ackInCommand = inCommand.ackMessage;
                 message.sendTimestamp = ackInCommand.t;
@@ -605,6 +604,7 @@
                 if (!transient && directOutCommand.r) {
                     [_imClient addMessage:message];
                 }
+                [self updateConversationAfterSendMessage:message];
             }
             [AVIMBlockHelper callBooleanResultBlock:callback error:error];
         }];
