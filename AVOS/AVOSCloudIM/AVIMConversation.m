@@ -636,8 +636,7 @@
                 message.status = AVIMMessageStatusFailed;
             } else {
                 message.status = AVIMMessageStatusSent;
-
-
+                
                 AVIMAckCommand *ackInCommand = inCommand.ackMessage;
                 message.sendTimestamp = ackInCommand.t;
                 message.messageId = ackInCommand.uid;
