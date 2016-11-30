@@ -101,7 +101,27 @@
         NOTIFY;
     }];
     WAIT;
-
+    
+    AVIMConversationQuery *query3 = [[AVIMClient defaultClient] conversationQuery];
+    [query3 getConversationById:convid callback:^(AVIMConversation *conversation, NSError *error) {
+        XCTAssertNil(error);
+        XCTAssertEqualObjects(conversation.name, name);
+        XCTAssertEqual(conversation.members.count, 2);
+        XCTAssertTrue([conversation.members containsObject:AVIM_TEST_ClinetID]);
+        XCTAssertTrue([conversation.members containsObject:AVIM_TEST_ClinetID_Peer]);
+        XCTAssertEqual([conversation.attributes[@"type"] intValue], 0);
+        XCTAssertEqualObjects(conversation.creator, AVIM_TEST_ClinetID);
+        XCTAssertNotNil(conversation.createAt);
+        XCTAssertNotNil(conversation.conversationId);
+        XCTAssertFalse(conversation.muted);
+        XCTAssertFalse(conversation.transient);
+        AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)conversation.lastMessage;
+        XCTAssertNotNil(typedMessage);
+        XCTAssertTrue([typedMessage.text isEqualToString:lastMessageText]);
+        XCTAssertEqual(typedMessage.mediaType, -1);
+        NOTIFY;
+    }];
+    WAIT;
 }
 
 //FIXME:TEST FAILED ==> ALL XCTAssertNil FAILED
