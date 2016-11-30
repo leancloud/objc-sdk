@@ -603,8 +603,8 @@
                 }
                 if (!transient && directOutCommand.r) {
                     [_imClient addMessage:message];
+                    [self updateConversationAfterSendMessage:message];
                 }
-                [self updateConversationAfterSendMessage:message];
             }
             [AVIMBlockHelper callBooleanResultBlock:callback error:error];
         }];
