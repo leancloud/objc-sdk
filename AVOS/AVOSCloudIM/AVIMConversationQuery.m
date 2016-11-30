@@ -27,6 +27,13 @@ NSString *const kAVIMKeyConversationId = @"objectId";
 
 @implementation AVIMConversationQuery
 
+- (void)setOption:(AVIMConversationQueryOption)option {
+    _option = option;
+    if (option != AVIMConversationQueryOptionNone) {
+        self.cachePolicy = kAVIMCachePolicyNetworkOnly;
+    }
+}
+
 +(NSDictionary *)dictionaryFromGeoPoint:(AVGeoPoint *)point
 {
     return @{ @"__type": @"GeoPoint", @"latitude": @(point.latitude), @"longitude": @(point.longitude) };

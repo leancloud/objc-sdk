@@ -50,6 +50,7 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationQueryOption) {
 
 /*!
  * 查询条件
+ * @attention 如果设置了除 AVIMConversationQueryOptionNone 之外的选项，本次查询的缓存策略将会被修改为kAVIMCachePolicyNetworkOnly
  */
 @property (nonatomic, assign) AVIMConversationQueryOption option;
 

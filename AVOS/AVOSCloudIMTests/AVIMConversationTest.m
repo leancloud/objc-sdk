@@ -82,13 +82,12 @@
     WAIT;
     
     AVIMConversationQuery *query2 = [[AVIMClient defaultClient] conversationQuery];
-    query2.option = AVIMConversationQueryOptionWithMessage;
+    query2.option = AVIMConversationQueryOptionWithMessage | AVIMConversationQueryOptionCompact;
     [query2 getConversationById:convid callback:^(AVIMConversation *conversation, NSError *error) {
         XCTAssertNil(error);
         XCTAssertEqualObjects(conversation.name, name);
-        XCTAssertEqual(conversation.members.count, 2);
-        XCTAssertTrue([conversation.members containsObject:AVIM_TEST_ClinetID]);
-        XCTAssertTrue([conversation.members containsObject:AVIM_TEST_ClinetID_Peer]);
+        XCTAssertNil(conversation.members);
+        XCTAssertEqual(conversation.members.count, 0);
         XCTAssertEqual([conversation.attributes[@"type"] intValue], 0);
         XCTAssertEqualObjects(conversation.creator, AVIM_TEST_ClinetID);
         XCTAssertNotNil(conversation.createAt);
