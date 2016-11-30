@@ -74,6 +74,16 @@
     WAIT;
 }
 
+- (void)testSendMessage {
+    AVIMConversation *conversation = [self conversationForTest];
+    [conversation sendMessage:[AVIMMessage messageWithContent:@"Hello world!"] callback:^(BOOL succeeded, NSError * _Nullable error) {
+        NSDate *lastMessageAt = conversation.lastMessageAt;
+        XCTAssertNotNil(lastMessageAt);
+        NOTIFY;
+    }];
+    WAIT;
+}
+
 //FIXME:TEST FAILED ==> ALL XCTAssertNil FAILED
 //AVIMConvCommand should has cid
 - (void)testUpdateConversation {
