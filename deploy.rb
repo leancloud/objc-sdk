@@ -35,9 +35,7 @@ module Podspec
     end
 
     def podspec_exists?(name, version)
-      url = "https://github.com/CocoaPods/Specs/blob/master/Specs/#{name}/#{version}/#{name}.podspec.json"
-      http_code = `curl -o /dev/null --silent --head --write-out '%{http_code}' #{url}`
-      http_code == '200'
+      return `pod trunk info #{name}` =~ /^\s*- #{version}/
     end
 
     def push_podspec_in_path(path)
