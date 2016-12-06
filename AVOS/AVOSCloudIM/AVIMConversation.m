@@ -647,9 +647,7 @@
                     if (directOutCommand.r) {
                         [_imClient addMessage:message];
                     }
-                    if (!error) {
-                        [self updateConversationAfterSendMessage:message];
-                    }
+                    [self updateConversationAfterSendMessage:message];
                 }
             }
             [AVIMBlockHelper callBooleanResultBlock:callback error:error];
