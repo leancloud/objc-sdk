@@ -643,8 +643,10 @@
                 if (!directCommand.transient && self.imClient.messageQueryCacheEnabled) {
                     [[self messageCacheStore] insertMessage:message withBreakpoint:NO];
                 }
-                if (!transient && directOutCommand.r) {
-                    [_imClient addMessage:message];
+                if (!transient) {
+                    if (directOutCommand.r) {
+                        [_imClient addMessage:message];
+                    }
                     [self updateConversationAfterSendMessage:message];
                 }
             }
