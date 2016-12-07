@@ -73,10 +73,13 @@
     }];
     WAIT;
 }
-
+/*!
+ * 在获取会话列表的基础上同时返回系统对话
+ */
 - (void)testOrConversationQuery {
     /*!
      * 
+     创建系统对话：
      curl -X POST \
      -H "X-LC-Id: nq0awk3lh1dpmbkziz54377mryii8ny4xvp6njoygle5nlyg" \
      -H "X-LC-Key: 6vdnmdkdi4fva9i06lt50s4mcsfhppjpzm3zf5zjc9ty4pdz" \
@@ -86,8 +89,10 @@
      */
     
     AVIMConversationQuery *query1 = [[AVIMClient defaultClient] conversationQuery];
+    query1.limit = 10;
     AVIMConversationQuery *query2 = [[AVIMClient defaultClient] conversationQuery];
-    [query2 whereKey:@"sys" equalTo:@"true"];
+    query2.limit = 10;
+    [query2 whereKey:@"sys" equalTo:@(YES)];
    
     
     __block NSUInteger query1Result = 0;
@@ -108,6 +113,7 @@
     WAIT;
 
     AVIMConversationQuery *orConversationQuery = [AVIMConversationQuery orQueryWithSubqueries:@[ query1, query2 ]];
+    orConversationQuery.limit = (query1Result + query2Result);
     [orConversationQuery findConversationsWithCallback:^(NSArray * _Nullable objects, NSError * _Nullable error) {
         BOOL isNotZero = !error && objects.count > 0;
         XCTAssertTrue(isNotZero);
