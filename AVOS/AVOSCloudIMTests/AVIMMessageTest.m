@@ -259,9 +259,7 @@ const void *AVIMTestQueryMessagesFromSever = &AVIMTestQueryMessagesFromSever;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if ([fileManager fileExistsAtPath:filePath]) {
         NSData *data = [NSData dataWithContentsOfFile:filePath];
-//        id resultData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
         id resultData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-
         if(resultData) {
             return resultData;
         }
