@@ -235,6 +235,40 @@ const void *AVIMTestQueryMessagesFromSever = &AVIMTestQueryMessagesFromSever;
     [self waitNotification:AVIMTestSendTypedMessage];
 }
 
+
+- (void)testParseCustomMessage {
+    NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"TestTypedMessage" ofType:@"json"];
+    NSString *content = [self JSONFromFilePath:filePath];
+    XCTAssertNotNil(content);
+    AVIMMessage *message = [AVIMMessage messageWithContent:content];
+    AVIMConversation *conversation = [self createConversationOfTwoClient];
+    [conversation sendMessage:message callback:^(BOOL succeeded, NSError *error) {
+        XCTAssertNil(error);
+        [conversation queryMessagesFromServerWithLimit:1 callback:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+            AVIMTypedMessage *typedMessage = objects.lastObject;
+            NSString *name = [typedMessage.attributes objectForKey:@"name"];
+            BOOL right = [name isEqualToString:@"Tom"];
+            XCTAssertTrue(right);
+            [self postNotification:AVIMTestSendTypedMessage];
+        }];
+    }];
+    [self waitNotification:AVIMTestSendTypedMessage];
+}
+
+- (NSString *)JSONFromFilePath:(NSString *)filePath {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:filePath]) {
+        NSData *data = [NSData dataWithContentsOfFile:filePath];
+//        id resultData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        id resultData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+
+        if(resultData) {
+            return resultData;
+        }
+    }
+    return NULL;
+}
+
 - (void)testQueryMessages {
     AVIMTextMessage *message = [AVIMTextMessage messageWithText:@"testQueryMessages" attributes:nil];
     [self.conversation sendMessage:message callback:^(BOOL succeeded, NSError *error) {
