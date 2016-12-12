@@ -381,7 +381,7 @@
 }
 
 - (void)testUserPointerSave {
-    //Test for this forum ticket https://leanticket.cn/t/leancloud
+    //Test for this forum ticket https://leanticket.cn/t/leancloud/3411
     //Relation
     
     [AVUser logInWithUsername:@"travis" password:@"123456"];
