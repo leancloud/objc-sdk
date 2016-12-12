@@ -410,7 +410,7 @@
             AVObject *publicinfo = privateInfo[@"publicInfo"];
             XCTAssertNotNil(privateInfo);
             XCTAssertNotNil([publicinfo objectForKey:@"number"]);
-            XCTAssertEqual([publicinfo objectForKey:@"number"], @12);
+            XCTAssertEqual([publicinfo objectForKey:@"number"], number);
             XCTAssertNil(error);
             NOTIFY
         }];
