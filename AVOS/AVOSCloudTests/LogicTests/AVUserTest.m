@@ -380,6 +380,45 @@
     WAIT
 }
 
+- (void)testUserPointerSave {
+    //Test for this forum ticket https://leanticket.cn/t/leancloud
+    //Relation
+    
+    [AVUser logInWithUsername:@"travis" password:@"123456"];
+    
+    AVObject *publicInfo = [AVObject objectWithClassName:@"PublicInfo"];
+    NSNumber *number = @(arc4random());
+    [publicInfo setObject:number forKey:@"number"];
+    [publicInfo save];
+    
+    AVObject *privateInfo = [AVObject objectWithClassName:@"PrivateInfo"];
+    [privateInfo setObject:publicInfo forKey:@"publicInfo"];
+    [privateInfo save];
+    
+    AVUser *currentUser = [AVUser currentUser];
+    [currentUser setObject:privateInfo forKey:@"privateInfo"];
+    
+    [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        AVQuery *userData = [AVQuery queryWithClassName:@"_User"];
+        [userData whereKey:@"objectId" equalTo:currentUser.objectId];
+        [userData includeKey:@"privateInfo"];
+        [userData includeKey:@"privateInfo.publicInfo"];
+        [userData getFirstObjectInBackgroundWithBlock:^(AVObject * _Nullable object, NSError * _Nullable error) {
+            AVObject *privateInfo = object[@"privateInfo"];
+            XCTAssertNotNil(privateInfo);
+            
+            AVObject *publicinfo = privateInfo[@"publicInfo"];
+            XCTAssertNotNil(privateInfo);
+            XCTAssertNotNil([publicinfo objectForKey:@"number"]);
+            XCTAssertEqual([publicinfo objectForKey:@"number"], @12);
+            XCTAssertNil(error);
+            NOTIFY
+        }];
+        
+    }];
+    WAIT
+}
+
 - (AVUser *)signUpRandomUser {
     AVUser *user  = [[AVUser alloc] init];
 
