@@ -1233,4 +1233,20 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     XCTAssertEqualObjects(friendCopy.email, friend.email);
 }
 
+- (void)testSavingUnarchivedObject {
+    NSError *error = nil;
+    AVCustomObject *object = [AVCustomObject object];
+
+    object.objectName = @"Foo Barbaz";
+    [object save:&error];
+    XCTAssertNil(error);
+
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object];
+    AVCustomObject *objectCopy = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+
+    objectCopy.objectName = @"Barbaz Foo";
+    [objectCopy save:&error];
+    XCTAssertNotEqualObjects(object.updatedAt, objectCopy.updatedAt);
+}
+
 @end
