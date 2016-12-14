@@ -42,6 +42,18 @@
     return [self conversationForTestWithOption:AVIMConversationOptionNone];
 }
 
+- (AVIMConversation *)conversationForUpdate {
+    __block AVIMConversation *conversation = nil;
+    AVIMConversationQuery *query1 = [[AVIMClient defaultClient] conversationQuery];
+    [query1 findConversationsWithCallback:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+        XCTAssertTrue(objects.count >0 );
+        conversation = objects[0];
+        NOTIFY;
+    }];
+    WAIT;
+    return conversation;
+}
+
 - (AVIMConversation *)transientConversationForTest {
     return [self conversationForTestWithOption:AVIMConversationOptionTransient];
 }

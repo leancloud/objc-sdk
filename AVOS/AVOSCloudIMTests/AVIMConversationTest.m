@@ -94,7 +94,6 @@
     query2.limit = 10;
     [query2 whereKey:@"sys" equalTo:@(YES)];
    
-    
     __block NSUInteger query1Result = 0;
     __block NSUInteger query2Result = 0;
     [query1 findConversationsWithCallback:^(NSArray * _Nullable objects, NSError * _Nullable error) {
@@ -139,7 +138,9 @@
 }
 
 - (void)testConversationGetterAndSetter {
-    AVIMConversation *conversation = [self conversationForTest];
+    AVIMConversation *conversation = [self conversationForUpdate];
+    NSUInteger membersCount = conversation.members.count;
+    BOOL muted = conversation.muted;
     NSNumber *number = @(arc4random());
     NSString *name = [number stringValue];
     [conversation setObject:number forKey:@"number"];
@@ -149,6 +150,9 @@
         XCTAssertNil(error);
         XCTAssertEqualObjects(conversation.name, name);
         XCTAssertEqualObjects([conversation objectForKey:@"number"], number);
+        XCTAssertEqualObjects(@(conversation.members.count), @(membersCount));
+        XCTAssertEqualObjects(@(conversation.muted), @(muted));
+
         NOTIFY;
     }];
     WAIT;
@@ -157,7 +161,8 @@
 //FIXME:TEST FAILED ==> ALL XCTAssertNil FAILED
 //AVIMConvCommand should has cid
 - (void)testUpdateConversation {
-    AVIMConversation *conversation = [self conversationForTest];
+    AVIMConversation *conversation = [self conversationForUpdate];
+
     AVIMConversationUpdateBuilder *builder = [[AVIMConversationUpdateBuilder alloc] init];
     NSString *name = NSStringFromSelector(_cmd);
     builder.name = name;
@@ -182,7 +187,7 @@
 }
 
 - (void)testConversationMembersUpdate {
-    __weak AVIMConversation *conversation = [self conversationForTest];
+    __weak AVIMConversation *conversation = [self conversationForUpdate];
     [conversation addMembersWithClientIds:@[ AVIM_TEST_ClinetID_Peer_1 ] callback:^(BOOL succeeded, NSError *error) {
         XCTAssertNil(error);
         XCTAssertTrue([conversation.members containsObject:AVIM_TEST_ClinetID_Peer_1]);

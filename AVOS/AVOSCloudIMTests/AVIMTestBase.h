@@ -16,6 +16,8 @@
 - (AVIMConversation *)queryConversationById:(NSString *)convid;
 
 - (AVIMConversation *)conversationForTest;
+- (AVIMConversation *)conversationForUpdate;
+
 - (AVIMConversation *)transientConversationForTest;
 
 @end
