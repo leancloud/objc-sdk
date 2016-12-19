@@ -1230,6 +1230,8 @@
 		9A404DE01CE5A9C400DEB3DC /* LCRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F9A2C61CE014430002E21B /* LCRouter.m */; };
 		9A404DE11CE5A9C400DEB3DC /* LCRouterCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 838B32E91CE032F800CAEBF8 /* LCRouterCache.h */; };
 		9A404DE21CE5A9C400DEB3DC /* LCRouterCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 838B32EA1CE032F800CAEBF8 /* LCRouterCache.m */; };
+		9A62AE591DF8145400EE0973 /* TestTypedMessage.json in Resources */ = {isa = PBXBuildFile; fileRef = 9A62AE551DF813C100EE0973 /* TestTypedMessage.json */; };
+		9A62AE5B1DF8145900EE0973 /* TestTypedMessage.json in Resources */ = {isa = PBXBuildFile; fileRef = 9A62AE551DF813C100EE0973 /* TestTypedMessage.json */; };
 		9A7C67D71C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A7C67D51C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.h */; };
 		9A7C67D91C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A7C67D51C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.h */; };
 		9A7C67DA1C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7C67D61C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.m */; };
@@ -1818,6 +1820,7 @@
 		9A2F1ABF1CF6F6FA00BE52F2 /* LCIMWellKnownTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMWellKnownTypes.m; sourceTree = "<group>"; };
 		9A2F1AC01CF6F6FA00BE52F2 /* LCIMWireFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMWireFormat.h; sourceTree = "<group>"; };
 		9A2F1AC11CF6F6FA00BE52F2 /* LCIMWireFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMWireFormat.m; sourceTree = "<group>"; };
+		9A62AE551DF813C100EE0973 /* TestTypedMessage.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestTypedMessage.json; sourceTree = "<group>"; };
 		9A7C67D51C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVIMDirectCommand+DirectCommandAdditions.h"; sourceTree = "<group>"; };
 		9A7C67D61C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AVIMDirectCommand+DirectCommandAdditions.m"; sourceTree = "<group>"; };
 		9ACE83DA1BD6420E00CE2103 /* AVIMCommandFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMCommandFormatter.h; sourceTree = "<group>"; };
@@ -2916,6 +2919,7 @@
 			children = (
 				8CEEABAD1ABC179300B9E757 /* alpacino.jpg */,
 				70344DD31B71C4F600C3DAD9 /* TestRelation.json */,
+				9A62AE551DF813C100EE0973 /* TestTypedMessage.json */,
 				708F554C1B86121A0071CA48 /* TestDescriptionKey.json */,
 				70B05B391B909BD3009F6696 /* TestSaveAll.json */,
 				703EDB191BB4FBD400F06757 /* TestDictionaryForObject.json */,
@@ -4007,6 +4011,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A62AE5B1DF8145900EE0973 /* TestTypedMessage.json in Resources */,
 				704F3C0C1BE0D6030033245C /* testAudio.mp3 in Resources */,
 				704F3C0D1BE0D6030033245C /* testImage.png in Resources */,
 			);
@@ -4086,6 +4091,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A62AE591DF8145400EE0973 /* TestTypedMessage.json in Resources */,
 				70DA624A1B4BD7D100D95D4D /* testAudio.mp3 in Resources */,
 				70DA62481B4BD21B00D95D4D /* testImage.png in Resources */,
 			);
