@@ -73,6 +73,7 @@
     }];
     WAIT;
 }
+
 /*!
  * 在获取会话列表的基础上同时返回系统对话
  */
@@ -87,8 +88,12 @@
      -d '{"name": "Notification Channel","sys": true}' \
      https://api.leancloud.cn/1.1/classes/_Conversation
      */
-    
+
     AVIMConversationQuery *query1 = [[AVIMClient defaultClient] conversationQuery];
+    NSString *currentClientId = [AVIMClient defaultClient].clientId ;
+    [query1 whereKey:@"m" containsString:currentClientId];
+    [query1 whereKeyExists:@"lm"];
+    // [query1 whereKey:@"lm" greaterThan:[NSDate lcck_dateWithYear:2016 month:1 day:1]];//返回2016年以来有过消息的对话
     query1.limit = 10;
     AVIMConversationQuery *query2 = [[AVIMClient defaultClient] conversationQuery];
     query2.limit = 10;
