@@ -236,7 +236,7 @@ const void *AVIMTestQueryMessagesFromSever = &AVIMTestQueryMessagesFromSever;
 }
 
 
-- (void)testParseCustomMessage {
+- (void)testParseInvalidCustomMessage {
     NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"TestTypedMessage" ofType:@"json"];
     NSString *content = [self JSONFromFilePath:filePath];
     XCTAssertNotNil(content);
@@ -245,10 +245,13 @@ const void *AVIMTestQueryMessagesFromSever = &AVIMTestQueryMessagesFromSever;
     [conversation sendMessage:message callback:^(BOOL succeeded, NSError *error) {
         XCTAssertNil(error);
         [conversation queryMessagesFromServerWithLimit:1 callback:^(NSArray * _Nullable objects, NSError * _Nullable error) {
-            AVIMTypedMessage *typedMessage = objects.lastObject;
-            NSString *name = [typedMessage.attributes objectForKey:@"name"];
-            BOOL right = [name isEqualToString:@"Tom"];
-            XCTAssertTrue(right);
+            XCTAssertNil(error);
+            if (objects.count > 0) {
+                AVIMTypedMessage *typedMessage = objects.lastObject;
+                NSString *name = [typedMessage.attributes objectForKey:@"name"];
+                BOOL right = [name isEqualToString:@"Tom"];
+                XCTAssertTrue(right);
+            }
             [self postNotification:AVIMTestSendTypedMessage];
         }];
     }];
