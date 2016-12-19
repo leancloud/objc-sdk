@@ -292,7 +292,8 @@
 - (void)updateWithCallback:(AVIMBooleanResultBlock)callback {
     dispatch_async([AVIMClient imClientQueue], ^{
         NSDictionary *updateBuilderDataSource = [self.mutableAttributes copy];
-        AVIMGenericCommand *genericCommand = [self generateGenericCommandWithAttributes:updateBuilderDataSource];
+        NSDictionary *customAttributes = [[self class] filterCustomAttributesFromDictionary:updateBuilderDataSource];
+        AVIMGenericCommand *genericCommand = [self generateGenericCommandWithAttributes:customAttributes];
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             if (!error) {
                 [self updateAttributesWithUpdateBuilderDataSource:updateBuilderDataSource customAttributes:updateBuilderDataSource];
@@ -687,7 +688,7 @@
     //新版本中也可能产生同时含有attr字段，以及和attr字段同级的其他自定义属性
     //同时含有attr和同一个层级的自定义属性，如果包含同一个自定义名称，则以新形式的自定义属性为准。
     NSMutableDictionary *campatibleCustomAttributes = [attr mutableCopy];
-    [campatibleCustomAttributes addEntriesFromDictionary:dictionary];
+    [campatibleCustomAttributes addEntriesFromDictionary:customAttributes];
     return [campatibleCustomAttributes copy];
 }
 
