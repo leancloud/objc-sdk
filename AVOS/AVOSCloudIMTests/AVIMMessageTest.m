@@ -246,7 +246,8 @@ const void *AVIMTestQueryMessagesFromSever = &AVIMTestQueryMessagesFromSever;
         XCTAssertNil(error);
         [conversation queryMessagesFromServerWithLimit:1 callback:^(NSArray * _Nullable objects, NSError * _Nullable error) {
             XCTAssertNil(error);
-            if (objects.count > 0) {
+            AVIMMessage *lastMessage = objects.lastObject;
+            if ([lastMessage isKindOfClass:[AVIMTypedMessage class]]) {
                 AVIMTypedMessage *typedMessage = objects.lastObject;
                 NSString *name = [typedMessage.attributes objectForKey:@"name"];
                 BOOL right = [name isEqualToString:@"Tom"];
