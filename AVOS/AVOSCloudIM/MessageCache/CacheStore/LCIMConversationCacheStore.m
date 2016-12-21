@@ -65,15 +65,24 @@
 
 - (void)insertConversations:(NSArray *)conversations maxAge:(NSTimeInterval)maxAge {
     NSTimeInterval expireAt = [[NSDate date] timeIntervalSince1970] + maxAge;
-
-    LCIM_OPEN_DATABASE(db, ({
-        for (AVIMConversation *conversation in conversations) {
-            if (!conversation.conversationId) continue;
-
-            NSArray *insertionRecord = [self insertionRecordForConversation:conversation expireAt:expireAt];
-            [db executeUpdate:LCIM_SQL_INSERT_CONVERSATION withArgumentsInArray:insertionRecord];
+    for (AVIMConversation *conversation in conversations) {
+        if (!conversation.conversationId) continue;
+        BOOL noMembers = !conversation.members.count || conversation.members.count == 0;
+        BOOL noLastMessage = !conversation.lastMessage;
+        if (noMembers || noLastMessage) {
+            AVIMConversation *conversationInCache = [self conversationForId:conversation.conversationId];
+            if (noMembers) {
+                conversation.members = conversationInCache.members;
+            }
+            if (noLastMessage) {
+                conversation.lastMessage = conversationInCache.lastMessage;
+            }
         }
-    }));
+        NSArray *insertionRecord = [self insertionRecordForConversation:conversation expireAt:expireAt];
+        LCIM_OPEN_DATABASE(db, ({
+            [db executeUpdate:LCIM_SQL_INSERT_CONVERSATION withArgumentsInArray:insertionRecord];
+        }));
+    }
 }
 
 - (void)deleteConversation:(AVIMConversation *)conversation {

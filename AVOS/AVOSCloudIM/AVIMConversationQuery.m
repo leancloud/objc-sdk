@@ -27,20 +27,11 @@ NSString *const kAVIMKeyConversationId = @"objectId";
 
 @implementation AVIMConversationQuery
 
-- (void)setOption:(AVIMConversationQueryOption)option {
-    _option = option;
-    if (option != AVIMConversationQueryOptionNone) {
-        self.cachePolicy = kAVIMCachePolicyNetworkOnly;
-    }
-}
-
-+(NSDictionary *)dictionaryFromGeoPoint:(AVGeoPoint *)point
-{
++(NSDictionary *)dictionaryFromGeoPoint:(AVGeoPoint *)point {
     return @{ @"__type": @"GeoPoint", @"latitude": @(point.latitude), @"longitude": @(point.longitude) };
 }
 
-+(AVGeoPoint *)geoPointFromDictionary:(NSDictionary *)dict
-{
++(AVGeoPoint *)geoPointFromDictionary:(NSDictionary *)dict {
     AVGeoPoint * point = [[AVGeoPoint alloc]init];
     point.latitude = [[dict objectForKey:@"latitude"] doubleValue];
     point.longitude = [[dict objectForKey:@"longitude"] doubleValue];
@@ -356,7 +347,8 @@ NSString *const kAVIMKeyConversationId = @"objectId";
     jsonObjectMessage.data_p = [self whereString];
     command.where = jsonObjectMessage;
     command.sort = self.order;
-    
+    command.flag = self.option;
+
     if (self.skip > 0) {
         command.skip = (uint32_t)self.skip;
     }
@@ -367,9 +359,6 @@ NSString *const kAVIMKeyConversationId = @"objectId";
         command.limit = 10;
     }
     
-    if (self.option) {
-        command.flag = self.option;
-    }
     
     [genericCommand avim_addRequiredKeyWithCommand:command];
     return genericCommand;
