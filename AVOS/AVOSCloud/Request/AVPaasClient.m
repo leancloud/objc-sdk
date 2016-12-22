@@ -25,6 +25,7 @@
 #import "LCRouter.h"
 #import "SDMacros.h"
 #import "AVOSCloud_Internal.h"
+#import "LCSSLChallenger.h"
 
 #define MAX_LAG_TIME 5.0
 
@@ -185,6 +186,17 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
             LCURLSessionManager *manager = [[LCURLSessionManager alloc] initWithSessionConfiguration:configuration];
             manager.completionQueue = _completionQueue;
+
+#if LC_SSL_PINNING_ENABLED
+            [manager setSessionDidReceiveAuthenticationChallengeBlock:
+            ^NSURLSessionAuthChallengeDisposition(NSURLSession * _Nonnull session,
+                                                  NSURLAuthenticationChallenge * _Nonnull challenge,
+                                                  NSURLCredential *__autoreleasing  _Nullable * _Nullable credential)
+            {
+                [[LCSSLChallenger sharedInstance] acceptChallenge:challenge];
+                return NSURLSessionAuthChallengeUseCredential;
+            }];
+#endif
 
             /* Remove all null value of result. */
             LCJSONResponseSerializer *responseSerializer = (LCJSONResponseSerializer *)manager.responseSerializer;
