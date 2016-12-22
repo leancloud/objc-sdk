@@ -359,7 +359,6 @@ NSString *const kAVIMKeyConversationId = @"objectId";
         command.limit = 10;
     }
     
-    
     [genericCommand avim_addRequiredKeyWithCommand:command];
     return genericCommand;
 }
@@ -378,8 +377,7 @@ NSString *const kAVIMKeyConversationId = @"objectId";
     });
 }
 
-- (id)JSONValue:(NSString *)string
-{
+- (id)JSONValue:(NSString *)string {
     NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
     NSError *error = nil;
     id result = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];

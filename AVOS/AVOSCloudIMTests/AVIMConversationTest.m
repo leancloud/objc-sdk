@@ -50,16 +50,18 @@
     // test created conversation by above test
     __block NSString *convid;
     NSString *name = NSStringFromSelector(_cmd);
+    __block AVIMConversation *conversationForTest = nil;
     NSString *lastMessageText = [@(arc4random()) stringValue];
     [[AVIMClient defaultClient] createConversationWithName:name clientIds:@[ AVIM_TEST_ClinetID_Peer ] attributes:@{@"type": @0} options:AVIMConversationOptionNone callback:^(AVIMConversation *conversation, NSError *error) {
         XCTAssertNil(error);
+        conversationForTest = conversation;
         convid = conversation.conversationId;
         [conversation sendMessage:[AVIMTextMessage messageWithText:lastMessageText attributes: nil] callback:^(BOOL succeeded, NSError * _Nullable error) {
             NOTIFY;
         }];
     }];
     WAIT;
-    
+
     AVIMConversationQuery *query1 = [[AVIMClient defaultClient] conversationQuery];
     query1.cachePolicy = kAVIMCachePolicyNetworkOnly;
     query1.option = AVIMConversationQueryOptionNone;
@@ -103,7 +105,8 @@
     WAIT;
     
     AVIMConversationQuery *query3 = [[AVIMClient defaultClient] conversationQuery];
-    [query3 getConversationById:convid callback:^(AVIMConversation *conversation, NSError *error) {
+    [query3 getConversationById:convid
+                       callback:^(AVIMConversation *conversation, NSError *error) {
         XCTAssertNil(error);
         XCTAssertEqualObjects(conversation.name, name);
         XCTAssertEqual(conversation.members.count, 2);
@@ -122,6 +125,18 @@
         NOTIFY;
     }];
     WAIT;
+    
+    lastMessageText =  @"testForLastMessageUpdateForMessageQuery";
+    [conversationForTest sendMessage:[AVIMTextMessage messageWithText:lastMessageText attributes: nil] callback:^(BOOL succeeded, NSError * _Nullable error) {
+        XCTAssertNil(error);
+        NOTIFY;
+    }];
+    WAIT;
+    
+    AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)conversationForTest.lastMessage;
+    XCTAssertNotNil(typedMessage);
+    XCTAssertTrue([typedMessage.text isEqualToString:lastMessageText]);
+    
 }
 
 //FIXME:TEST FAILED ==> ALL XCTAssertNil FAILED

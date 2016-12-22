@@ -59,6 +59,31 @@
     return _imClient.clientId;
 }
 
+- (AVIMMessage *)lastMessage {
+    AVIMMessage *lastMessageInCache = _lastMessageInCache;
+    if (!_lastMessage && !lastMessageInCache) {
+        return nil;
+    }
+    
+    if (!_lastMessage && lastMessageInCache) {
+        return lastMessageInCache;
+    }
+    
+    if (_lastMessage && !lastMessageInCache) {
+        return _lastMessage;
+    }
+    
+    if (_lastMessage && lastMessageInCache) {
+        if (_lastMessage.sendTimestamp > lastMessageInCache.sendTimestamp) {
+            return _lastMessage;
+        }
+        if (lastMessageInCache.sendTimestamp > _lastMessage.sendTimestamp) {
+            return lastMessageInCache;
+        }
+    }
+    return nil;
+}
+
 - (void)setImClient:(AVIMClient *)imClient {
     _imClient = imClient;
 }
@@ -597,6 +622,7 @@
                 AVIMAckCommand *ackInCommand = inCommand.ackMessage;
                 message.sendTimestamp = ackInCommand.t;
                 message.messageId = ackInCommand.uid;
+                self.lastMessageInCache = message;
                 if (!directCommand.transient && self.imClient.messageQueryCacheEnabled) {
                     [[self messageCacheStore] insertMessage:message withBreakpoint:NO];
                 }
@@ -732,7 +758,7 @@
                     message.messageId = [logsItem msgId];
                     [messages addObject:message];
                 }
-                
+                self.lastMessageInCache = messages.lastObject;
                 [self postprocessMessages:messages];
                 [self sendACKIfNeeded:messages];
                 
