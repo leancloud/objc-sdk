@@ -157,7 +157,7 @@ static BOOL LCSecKeyIsEqualToKey(SecKeyRef key1, SecKeyRef key2) {
             NSURLCredential *credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
             [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
         } else {
-            NSLog(@"Request is rejected because SSL validation did fail.");
+            AVLoggerError(AVLoggerDomainNetwork, @"Request is rejected because SSL validation did fail.");
             [[challenge sender] cancelAuthenticationChallenge:challenge];
         }
     }
