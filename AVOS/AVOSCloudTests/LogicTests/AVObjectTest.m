@@ -1231,6 +1231,12 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     XCTAssertEqualObjects(friendCopy.sessionToken, friend.sessionToken);
     XCTAssertEqualObjects(friendCopy.username, friend.username);
     XCTAssertEqualObjects(friendCopy.email, friend.email);
+
+    AVGeoPoint *point = [AVGeoPoint geoPointWithLatitude:42.0 longitude:90.0];
+    AVGeoPoint *pointCopy = [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:point]];
+
+    XCTAssertEqual(point.latitude, pointCopy.latitude);
+    XCTAssertEqual(point.longitude, pointCopy.longitude);
 }
 
 - (void)testSavingUnarchivedObject {
