@@ -1239,6 +1239,46 @@
 		9ACE83DC1BD6420E00CE2103 /* AVIMCommandFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 9ACE83DA1BD6420E00CE2103 /* AVIMCommandFormatter.h */; };
 		9ACE83DD1BD6420E00CE2103 /* AVIMCommandFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ACE83DB1BD6420E00CE2103 /* AVIMCommandFormatter.m */; };
 		9AD143781BD8C6CE0022652C /* AVIMCommandCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD143771BD8C6CE0022652C /* AVIMCommandCommon.h */; };
+		9AD27C3F1E1418DB002F9C7C /* LCIMAny.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C2B1E1418DB002F9C7C /* LCIMAny.pbobjc.h */; };
+		9AD27C401E1418DB002F9C7C /* LCIMAny.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C2B1E1418DB002F9C7C /* LCIMAny.pbobjc.h */; };
+		9AD27C411E1418DB002F9C7C /* LCIMAny.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C2C1E1418DB002F9C7C /* LCIMAny.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9AD27C421E1418DB002F9C7C /* LCIMAny.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C2C1E1418DB002F9C7C /* LCIMAny.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9AD27C431E1418DB002F9C7C /* LCIMApi.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C2D1E1418DB002F9C7C /* LCIMApi.pbobjc.h */; };
+		9AD27C441E1418DB002F9C7C /* LCIMApi.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C2D1E1418DB002F9C7C /* LCIMApi.pbobjc.h */; };
+		9AD27C451E1418DB002F9C7C /* LCIMApi.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C2E1E1418DB002F9C7C /* LCIMApi.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9AD27C461E1418DB002F9C7C /* LCIMApi.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C2E1E1418DB002F9C7C /* LCIMApi.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9AD27C471E1418DB002F9C7C /* LCIMDuration.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C2F1E1418DB002F9C7C /* LCIMDuration.pbobjc.h */; };
+		9AD27C481E1418DB002F9C7C /* LCIMDuration.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C2F1E1418DB002F9C7C /* LCIMDuration.pbobjc.h */; };
+		9AD27C491E1418DB002F9C7C /* LCIMDuration.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C301E1418DB002F9C7C /* LCIMDuration.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9AD27C4A1E1418DB002F9C7C /* LCIMDuration.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C301E1418DB002F9C7C /* LCIMDuration.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9AD27C4B1E1418DB002F9C7C /* LCIMEmpty.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C311E1418DB002F9C7C /* LCIMEmpty.pbobjc.h */; };
+		9AD27C4C1E1418DB002F9C7C /* LCIMEmpty.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C311E1418DB002F9C7C /* LCIMEmpty.pbobjc.h */; };
+		9AD27C4D1E1418DB002F9C7C /* LCIMEmpty.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C321E1418DB002F9C7C /* LCIMEmpty.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9AD27C4E1E1418DB002F9C7C /* LCIMEmpty.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C321E1418DB002F9C7C /* LCIMEmpty.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9AD27C4F1E1418DB002F9C7C /* LCIMFieldMask.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C331E1418DB002F9C7C /* LCIMFieldMask.pbobjc.h */; };
+		9AD27C501E1418DB002F9C7C /* LCIMFieldMask.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C331E1418DB002F9C7C /* LCIMFieldMask.pbobjc.h */; };
+		9AD27C511E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C341E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9AD27C521E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C341E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9AD27C531E1418DB002F9C7C /* LCIMSourceContext.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C351E1418DB002F9C7C /* LCIMSourceContext.pbobjc.h */; };
+		9AD27C541E1418DB002F9C7C /* LCIMSourceContext.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C351E1418DB002F9C7C /* LCIMSourceContext.pbobjc.h */; };
+		9AD27C551E1418DB002F9C7C /* LCIMSourceContext.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C361E1418DB002F9C7C /* LCIMSourceContext.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9AD27C561E1418DB002F9C7C /* LCIMSourceContext.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C361E1418DB002F9C7C /* LCIMSourceContext.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9AD27C571E1418DB002F9C7C /* LCIMStruct.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C371E1418DB002F9C7C /* LCIMStruct.pbobjc.h */; };
+		9AD27C581E1418DB002F9C7C /* LCIMStruct.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C371E1418DB002F9C7C /* LCIMStruct.pbobjc.h */; };
+		9AD27C591E1418DB002F9C7C /* LCIMStruct.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C381E1418DB002F9C7C /* LCIMStruct.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9AD27C5A1E1418DB002F9C7C /* LCIMStruct.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C381E1418DB002F9C7C /* LCIMStruct.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9AD27C5B1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C391E1418DB002F9C7C /* LCIMTimestamp.pbobjc.h */; };
+		9AD27C5C1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C391E1418DB002F9C7C /* LCIMTimestamp.pbobjc.h */; };
+		9AD27C5D1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C3A1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9AD27C5E1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C3A1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9AD27C5F1E1418DB002F9C7C /* LCIMType.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C3B1E1418DB002F9C7C /* LCIMType.pbobjc.h */; };
+		9AD27C601E1418DB002F9C7C /* LCIMType.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C3B1E1418DB002F9C7C /* LCIMType.pbobjc.h */; };
+		9AD27C611E1418DB002F9C7C /* LCIMType.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C3C1E1418DB002F9C7C /* LCIMType.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9AD27C621E1418DB002F9C7C /* LCIMType.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C3C1E1418DB002F9C7C /* LCIMType.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9AD27C631E1418DB002F9C7C /* LCIMWrappers.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C3D1E1418DB002F9C7C /* LCIMWrappers.pbobjc.h */; };
+		9AD27C641E1418DB002F9C7C /* LCIMWrappers.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C3D1E1418DB002F9C7C /* LCIMWrappers.pbobjc.h */; };
+		9AD27C651E1418DB002F9C7C /* LCIMWrappers.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C3E1E1418DB002F9C7C /* LCIMWrappers.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9AD27C661E1418DB002F9C7C /* LCIMWrappers.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C3E1E1418DB002F9C7C /* LCIMWrappers.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9AD392421BFC395200D28074 /* AVIMConversationOutCommand.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD392401BFC395200D28074 /* AVIMConversationOutCommand.h */; };
 		9AD392431BFC395200D28074 /* AVIMConversationOutCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD392411BFC395200D28074 /* AVIMConversationOutCommand.m */; };
 		9AD392461BFC411300D28074 /* AVIMGenericCommand+AVIMMessagesAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD392441BFC411300D28074 /* AVIMGenericCommand+AVIMMessagesAdditions.h */; };
@@ -1826,6 +1866,26 @@
 		9ACE83DA1BD6420E00CE2103 /* AVIMCommandFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMCommandFormatter.h; sourceTree = "<group>"; };
 		9ACE83DB1BD6420E00CE2103 /* AVIMCommandFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMCommandFormatter.m; sourceTree = "<group>"; };
 		9AD143771BD8C6CE0022652C /* AVIMCommandCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMCommandCommon.h; sourceTree = "<group>"; };
+		9AD27C2B1E1418DB002F9C7C /* LCIMAny.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMAny.pbobjc.h; sourceTree = "<group>"; };
+		9AD27C2C1E1418DB002F9C7C /* LCIMAny.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMAny.pbobjc.m; sourceTree = "<group>"; };
+		9AD27C2D1E1418DB002F9C7C /* LCIMApi.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMApi.pbobjc.h; sourceTree = "<group>"; };
+		9AD27C2E1E1418DB002F9C7C /* LCIMApi.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMApi.pbobjc.m; sourceTree = "<group>"; };
+		9AD27C2F1E1418DB002F9C7C /* LCIMDuration.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMDuration.pbobjc.h; sourceTree = "<group>"; };
+		9AD27C301E1418DB002F9C7C /* LCIMDuration.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMDuration.pbobjc.m; sourceTree = "<group>"; };
+		9AD27C311E1418DB002F9C7C /* LCIMEmpty.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMEmpty.pbobjc.h; sourceTree = "<group>"; };
+		9AD27C321E1418DB002F9C7C /* LCIMEmpty.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMEmpty.pbobjc.m; sourceTree = "<group>"; };
+		9AD27C331E1418DB002F9C7C /* LCIMFieldMask.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMFieldMask.pbobjc.h; sourceTree = "<group>"; };
+		9AD27C341E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMFieldMask.pbobjc.m; sourceTree = "<group>"; };
+		9AD27C351E1418DB002F9C7C /* LCIMSourceContext.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMSourceContext.pbobjc.h; sourceTree = "<group>"; };
+		9AD27C361E1418DB002F9C7C /* LCIMSourceContext.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMSourceContext.pbobjc.m; sourceTree = "<group>"; };
+		9AD27C371E1418DB002F9C7C /* LCIMStruct.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMStruct.pbobjc.h; sourceTree = "<group>"; };
+		9AD27C381E1418DB002F9C7C /* LCIMStruct.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMStruct.pbobjc.m; sourceTree = "<group>"; };
+		9AD27C391E1418DB002F9C7C /* LCIMTimestamp.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMTimestamp.pbobjc.h; sourceTree = "<group>"; };
+		9AD27C3A1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMTimestamp.pbobjc.m; sourceTree = "<group>"; };
+		9AD27C3B1E1418DB002F9C7C /* LCIMType.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMType.pbobjc.h; sourceTree = "<group>"; };
+		9AD27C3C1E1418DB002F9C7C /* LCIMType.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMType.pbobjc.m; sourceTree = "<group>"; };
+		9AD27C3D1E1418DB002F9C7C /* LCIMWrappers.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMWrappers.pbobjc.h; sourceTree = "<group>"; };
+		9AD27C3E1E1418DB002F9C7C /* LCIMWrappers.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMWrappers.pbobjc.m; sourceTree = "<group>"; };
 		9AD392401BFC395200D28074 /* AVIMConversationOutCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMConversationOutCommand.h; sourceTree = "<group>"; };
 		9AD392411BFC395200D28074 /* AVIMConversationOutCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMConversationOutCommand.m; sourceTree = "<group>"; };
 		9AD392441BFC411300D28074 /* AVIMGenericCommand+AVIMMessagesAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVIMGenericCommand+AVIMMessagesAdditions.h"; sourceTree = "<group>"; };
@@ -2963,6 +3023,7 @@
 		9A2F1A811CF6F6F900BE52F2 /* Protobuf */ = {
 			isa = PBXGroup;
 			children = (
+				9AD27C2A1E1418DB002F9C7C /* protobuf */,
 				9A2F1A981CF6F6F900BE52F2 /* LCIMArray.h */,
 				9A2F1A991CF6F6F900BE52F2 /* LCIMArray.m */,
 				9A2F1A9A1CF6F6F900BE52F2 /* LCIMArray_PackagePrivate.h */,
@@ -3009,6 +3070,34 @@
 			path = Protobuf;
 			sourceTree = "<group>";
 		};
+		9AD27C2A1E1418DB002F9C7C /* protobuf */ = {
+			isa = PBXGroup;
+			children = (
+				9AD27C2B1E1418DB002F9C7C /* LCIMAny.pbobjc.h */,
+				9AD27C2C1E1418DB002F9C7C /* LCIMAny.pbobjc.m */,
+				9AD27C2D1E1418DB002F9C7C /* LCIMApi.pbobjc.h */,
+				9AD27C2E1E1418DB002F9C7C /* LCIMApi.pbobjc.m */,
+				9AD27C2F1E1418DB002F9C7C /* LCIMDuration.pbobjc.h */,
+				9AD27C301E1418DB002F9C7C /* LCIMDuration.pbobjc.m */,
+				9AD27C311E1418DB002F9C7C /* LCIMEmpty.pbobjc.h */,
+				9AD27C321E1418DB002F9C7C /* LCIMEmpty.pbobjc.m */,
+				9AD27C331E1418DB002F9C7C /* LCIMFieldMask.pbobjc.h */,
+				9AD27C341E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m */,
+				9AD27C351E1418DB002F9C7C /* LCIMSourceContext.pbobjc.h */,
+				9AD27C361E1418DB002F9C7C /* LCIMSourceContext.pbobjc.m */,
+				9AD27C371E1418DB002F9C7C /* LCIMStruct.pbobjc.h */,
+				9AD27C381E1418DB002F9C7C /* LCIMStruct.pbobjc.m */,
+				9AD27C391E1418DB002F9C7C /* LCIMTimestamp.pbobjc.h */,
+				9AD27C3A1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.m */,
+				9AD27C3B1E1418DB002F9C7C /* LCIMType.pbobjc.h */,
+				9AD27C3C1E1418DB002F9C7C /* LCIMType.pbobjc.m */,
+				9AD27C3D1E1418DB002F9C7C /* LCIMWrappers.pbobjc.h */,
+				9AD27C3E1E1418DB002F9C7C /* LCIMWrappers.pbobjc.m */,
+			);
+			name = protobuf;
+			path = google/protobuf;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -3035,13 +3124,16 @@
 				704F3BF41BE0D0820033245C /* AVIMImageMessage.h in Headers */,
 				704F3BF51BE0D0820033245C /* AVIMLocationMessage.h in Headers */,
 				704F3BF61BE0D0820033245C /* AVIMTextMessage.h in Headers */,
+				9AD27C641E1418DB002F9C7C /* LCIMWrappers.pbobjc.h in Headers */,
 				9AE76C4D1C3F7CC600325902 /* MessagesProtoOrig.pbobjc.h in Headers */,
 				9A2F1B481CF6F6FA00BE52F2 /* LCIMProtocolBuffers_RuntimeSupport.h in Headers */,
 				704F3BF81BE0D0820033245C /* AVIMTypedMessage.h in Headers */,
 				704F3BF91BE0D0820033245C /* AVIMVideoMessage.h in Headers */,
 				704F3BFA1BE0D0820033245C /* AVIMFileMessage.h in Headers */,
+				9AD27C4C1E1418DB002F9C7C /* LCIMEmpty.pbobjc.h in Headers */,
 				704F3BBE1BE0D07E0033245C /* AVIMCommon.h in Headers */,
 				704F3BD01BE0D07F0033245C /* AVOSCloudIM.h in Headers */,
+				9AD27C501E1418DB002F9C7C /* LCIMFieldMask.pbobjc.h in Headers */,
 				8311CD831C3D24A6007DEFF8 /* AVIMAvailability.h in Headers */,
 				704F3BBC1BE0D07E0033245C /* AVIMClient_Internal.h in Headers */,
 				9A2F1B121CF6F6FA00BE52F2 /* LCIMCodedInputStream_PackagePrivate.h in Headers */,
@@ -3058,6 +3150,7 @@
 				704F3BCA1BE0D07E0033245C /* avmp.h in Headers */,
 				704F3BCB1BE0D07E0033245C /* AVMPDefines.h in Headers */,
 				704F3BCC1BE0D07F0033245C /* AVMPMessagePack.h in Headers */,
+				9AD27C601E1418DB002F9C7C /* LCIMType.pbobjc.h in Headers */,
 				704F3BCD1BE0D07F0033245C /* AVMPMessagePackReader.h in Headers */,
 				704F3BCE1BE0D07F0033245C /* AVMPMessagePackWriter.h in Headers */,
 				9A2F1B511CF6F6FA00BE52F2 /* LCIMRootObject_PackagePrivate.h in Headers */,
@@ -3075,15 +3168,20 @@
 				9AE76C551C3F7CC600325902 /* AVIMCommandCommon.h in Headers */,
 				9A2F1B1B1CF6F6FA00BE52F2 /* LCIMCodedOutputStream_PackagePrivate.h in Headers */,
 				704F3BE81BE0D0810033245C /* AVIMTypedMessageObject.h in Headers */,
+				9AD27C581E1418DB002F9C7C /* LCIMStruct.pbobjc.h in Headers */,
 				9A2F1B3C1CF6F6FA00BE52F2 /* LCIMMessage.h in Headers */,
+				9AD27C441E1418DB002F9C7C /* LCIMApi.pbobjc.h in Headers */,
 				704F3BE91BE0D0810033245C /* AVIMGeneralObject.h in Headers */,
+				9AD27C541E1418DB002F9C7C /* LCIMSourceContext.pbobjc.h in Headers */,
 				9A2F1B151CF6F6FA00BE52F2 /* LCIMCodedOutputStream.h in Headers */,
 				704F3BEA1BE0D0810033245C /* AVIMMessageObject.h in Headers */,
 				704F3BEB1BE0D0810033245C /* LCIMMessageCache.h in Headers */,
 				704F3BEC1BE0D0810033245C /* LCIMConversationCache.h in Headers */,
+				9AD27C401E1418DB002F9C7C /* LCIMAny.pbobjc.h in Headers */,
 				9A2F1B091CF6F6FA00BE52F2 /* LCIMBootstrap.h in Headers */,
 				704F3BED1BE0D0810033245C /* LCIMCacheStore.h in Headers */,
 				704F3BEE1BE0D0810033245C /* LCIMMessageCacheStore.h in Headers */,
+				9AD27C481E1418DB002F9C7C /* LCIMDuration.pbobjc.h in Headers */,
 				704F3BEF1BE0D0810033245C /* LCIMMessageCacheStoreSQL.h in Headers */,
 				704F3BF01BE0D0810033245C /* LCIMConversationCacheStore.h in Headers */,
 				9AE76C511C3F7CC600325902 /* AVIMGenericCommand+AVIMMessagesAdditions.h in Headers */,
@@ -3103,6 +3201,7 @@
 				9A2F1B6F1CF6F6FA00BE52F2 /* LCIMUtilities_PackagePrivate.h in Headers */,
 				9A2F1B451CF6F6FA00BE52F2 /* LCIMProtocolBuffers.h in Headers */,
 				704F3C001BE0D0830033245C /* AVIMWebSocketWrapper.h in Headers */,
+				9AD27C5C1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3658,13 +3757,16 @@
 				9A2F1B491CF6F6FA00BE52F2 /* LCIMRootObject.h in Headers */,
 				8C9A927A1A70AF1800CA4912 /* AVIMTypedMessage.h in Headers */,
 				9A2F1B701CF6F6FA00BE52F2 /* LCIMWellKnownTypes.h in Headers */,
+				9AD27C631E1418DB002F9C7C /* LCIMWrappers.pbobjc.h in Headers */,
 				8C9A92741A70AF1800CA4912 /* AVIMImageMessage.h in Headers */,
 				839A35671D2A1DC000B3AF1D /* AVIMMessage_Internal.h in Headers */,
 				9A2F1B5E1CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.h in Headers */,
 				8CA1571A1A5E8369003C2532 /* AVIMConversationUpdateBuilder.h in Headers */,
 				9A2F1B401CF6F6FA00BE52F2 /* LCIMMessage_PackagePrivate.h in Headers */,
+				9AD27C4B1E1418DB002F9C7C /* LCIMEmpty.pbobjc.h in Headers */,
 				9AD392461BFC411300D28074 /* AVIMGenericCommand+AVIMMessagesAdditions.h in Headers */,
 				9A2F1AFE1CF6F6FA00BE52F2 /* LCIMArray.h in Headers */,
+				9AD27C4F1E1418DB002F9C7C /* LCIMFieldMask.pbobjc.h in Headers */,
 				8C9A927F1A70AF5C00CA4912 /* AVIMTypedMessage_Internal.h in Headers */,
 				83F745F11B91732D00437259 /* LCIMMessageCacheStore.h in Headers */,
 				8C841C0C1A5A84C600C5C6C4 /* AVIMClient.h in Headers */,
@@ -3681,6 +3783,7 @@
 				834B4A8E1B93ED3F00A7ADBC /* LCIMConversationCache.h in Headers */,
 				9A2F1B3A1CF6F6FA00BE52F2 /* LCIMMessage.h in Headers */,
 				9A2F1B671CF6F6FA00BE52F2 /* LCIMUtilities.h in Headers */,
+				9AD27C5F1E1418DB002F9C7C /* LCIMType.pbobjc.h in Headers */,
 				9AD651D51BD9470900C55F85 /* AVIMDynamicObject.h in Headers */,
 				838AF12A1AFE58F600B8965E /* LCIMMessageCache.h in Headers */,
 				9AD143781BD8C6CE0022652C /* AVIMCommandCommon.h in Headers */,
@@ -3698,15 +3801,20 @@
 				8C895DDB1A78A5D900992A8F /* avmp.h in Headers */,
 				8CA1571F1A5E8556003C2532 /* AVIMTypedMessageObject.h in Headers */,
 				9AD392421BFC395200D28074 /* AVIMConversationOutCommand.h in Headers */,
+				9AD27C571E1418DB002F9C7C /* LCIMStruct.pbobjc.h in Headers */,
 				9A2F1B221CF6F6FA00BE52F2 /* LCIMDescriptor_PackagePrivate.h in Headers */,
+				9AD27C431E1418DB002F9C7C /* LCIMApi.pbobjc.h in Headers */,
 				9AE76C3E1C3F7C5F00325902 /* AVIMConversationQuery_Internal.h in Headers */,
+				9AD27C531E1418DB002F9C7C /* LCIMSourceContext.pbobjc.h in Headers */,
 				9A2F1B2B1CF6F6FA00BE52F2 /* LCIMDictionary_PackagePrivate.h in Headers */,
 				9A2F1B341CF6F6FA00BE52F2 /* LCIMExtensionRegistry.h in Headers */,
 				8C841C101A5A84C600C5C6C4 /* AVIMConversation_Internal.h in Headers */,
 				83F745F31B91732D00437259 /* LCIMMessageCacheStoreSQL.h in Headers */,
+				9AD27C3F1E1418DB002F9C7C /* LCIMAny.pbobjc.h in Headers */,
 				8C841C401A5A84C600C5C6C4 /* AVIMRuntimeHelper.h in Headers */,
 				9A2F1B521CF6F6FA00BE52F2 /* LCIMRuntimeTypes.h in Headers */,
 				83BE43971D242905000C7AC3 /* SDMacros.h in Headers */,
+				9AD27C471E1418DB002F9C7C /* LCIMDuration.pbobjc.h in Headers */,
 				9A7C67D71C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.h in Headers */,
 				9A2F1B191CF6F6FA00BE52F2 /* LCIMCodedOutputStream_PackagePrivate.h in Headers */,
 				9A2F1B6D1CF6F6FA00BE52F2 /* LCIMUtilities_PackagePrivate.h in Headers */,
@@ -3726,6 +3834,7 @@
 				8C895DE61A78A5D900992A8F /* AVMPOrderedDictionary.h in Headers */,
 				8CA157271A5E9D22003C2532 /* AVIMConversationUpdateBuilder_Internal.h in Headers */,
 				8C895DE01A78A5D900992A8F /* AVMPMessagePackReader.h in Headers */,
+				9AD27C5B1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4114,19 +4223,24 @@
 				704F3B891BE0D05C0033245C /* AVIMConversationQuery.m in Sources */,
 				704F3B8A1BE0D05C0033245C /* AVIMConversationUpdateBuilder.m in Sources */,
 				9A2F1B6C1CF6F6FA00BE52F2 /* LCIMUtilities.m in Sources */,
+				9AD27C421E1418DB002F9C7C /* LCIMAny.pbobjc.m in Sources */,
 				704F3B8B1BE0D05C0033245C /* AVIMMessage.m in Sources */,
 				704F3B8C1BE0D05C0033245C /* AVIMSignature.m in Sources */,
 				704F3B8D1BE0D05C0033245C /* AVMPMessagePackReader.m in Sources */,
+				9AD27C5A1E1418DB002F9C7C /* LCIMStruct.pbobjc.m in Sources */,
 				704F3B8E1BE0D05C0033245C /* AVMPMessagePackWriter.m in Sources */,
 				704F3B8F1BE0D05C0033245C /* AVMPOrderedDictionary.m in Sources */,
 				9A2F1B751CF6F6FA00BE52F2 /* LCIMWellKnownTypes.m in Sources */,
+				9AD27C4A1E1418DB002F9C7C /* LCIMDuration.pbobjc.m in Sources */,
 				9A2F1B4E1CF6F6FA00BE52F2 /* LCIMRootObject.m in Sources */,
 				704F3B901BE0D05C0033245C /* AVIMUserOptions.m in Sources */,
 				9AE76C571C3F7CC600325902 /* AVIMDynamicObject.m in Sources */,
 				830EB9EA1C3F996A00BA917F /* AVIMClientOpenOption.m in Sources */,
 				831E295D1D882CBB006E502B /* AVIMMessageOption.m in Sources */,
+				9AD27C461E1418DB002F9C7C /* LCIMApi.pbobjc.m in Sources */,
 				70BA7A701BE22B1900C3EB70 /* LCIMClientSessionTokenCacheStore.m in Sources */,
 				9AE76C501C3F7CC600325902 /* AVIMConversationOutCommand.m in Sources */,
+				9AD27C561E1418DB002F9C7C /* LCIMSourceContext.pbobjc.m in Sources */,
 				9A2F1B3F1CF6F6FA00BE52F2 /* LCIMMessage.m in Sources */,
 				704F3BA61BE0D05C0033245C /* AVIMTypedMessageObject.m in Sources */,
 				9A2F1B0F1CF6F6FA00BE52F2 /* LCIMCodedInputStream.m in Sources */,
@@ -4137,18 +4251,23 @@
 				704F3BA91BE0D05C0033245C /* LCIMMessageCache.m in Sources */,
 				9A2F1B2A1CF6F6FA00BE52F2 /* LCIMDictionary.m in Sources */,
 				704F3BAA1BE0D05C0033245C /* LCIMConversationCache.m in Sources */,
+				9AD27C521E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m in Sources */,
 				9AE76C521C3F7CC600325902 /* AVIMGenericCommand+AVIMMessagesAdditions.m in Sources */,
 				83AB6DFA1C3CFEA70064BE17 /* AVOSCloudIM.m in Sources */,
 				9A2F1B5A1CF6F6FA00BE52F2 /* LCIMUnknownField.m in Sources */,
 				704F3BAB1BE0D05C0033245C /* LCIMCacheStore.m in Sources */,
 				704F3BAC1BE0D05C0033245C /* LCIMMessageCacheStore.m in Sources */,
 				9A2F1B211CF6F6FA00BE52F2 /* LCIMDescriptor.m in Sources */,
+				9AD27C621E1418DB002F9C7C /* LCIMType.pbobjc.m in Sources */,
 				704F3BAD1BE0D05C0033245C /* LCIMConversationCacheStore.m in Sources */,
 				704F3BAE1BE0D05C0033245C /* LCIMConversationQueryCacheStore.m in Sources */,
+				9AD27C661E1418DB002F9C7C /* LCIMWrappers.pbobjc.m in Sources */,
 				9A2F1B331CF6F6FA00BE52F2 /* LCIMExtensionInternals.m in Sources */,
 				9A2F1B391CF6F6FA00BE52F2 /* LCIMExtensionRegistry.m in Sources */,
 				83BE439F1D242905000C7AC3 /* AVIMWebSocket.m in Sources */,
 				704F3BAF1BE0D05C0033245C /* AVIMAudioMessage.m in Sources */,
+				9AD27C5E1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.m in Sources */,
+				9AD27C4E1E1418DB002F9C7C /* LCIMEmpty.pbobjc.m in Sources */,
 				704F3BB01BE0D05C0033245C /* AVIMImageMessage.m in Sources */,
 				9A2F1B7B1CF6F6FA00BE52F2 /* LCIMWireFormat.m in Sources */,
 				704F3BB11BE0D05C0033245C /* AVIMLocationMessage.m in Sources */,
@@ -4650,19 +4769,24 @@
 				8CA157201A5E8556003C2532 /* AVIMTypedMessageObject.m in Sources */,
 				83F745FB1B9177DE00437259 /* LCIMConversationCacheStore.m in Sources */,
 				9A2F1B6A1CF6F6FA00BE52F2 /* LCIMUtilities.m in Sources */,
+				9AD27C411E1418DB002F9C7C /* LCIMAny.pbobjc.m in Sources */,
 				9A7C67DA1C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.m in Sources */,
 				834B4A9D1B94080500A7ADBC /* LCIMConversationQueryCacheStore.m in Sources */,
 				8C841C411A5A84C600C5C6C4 /* AVIMRuntimeHelper.m in Sources */,
+				9AD27C591E1418DB002F9C7C /* LCIMStruct.pbobjc.m in Sources */,
 				9AD392431BFC395200D28074 /* AVIMConversationOutCommand.m in Sources */,
 				8C841C0D1A5A84C600C5C6C4 /* AVIMClient.m in Sources */,
 				9A2F1B731CF6F6FA00BE52F2 /* LCIMWellKnownTypes.m in Sources */,
+				9AD27C491E1418DB002F9C7C /* LCIMDuration.pbobjc.m in Sources */,
 				9A2F1B4C1CF6F6FA00BE52F2 /* LCIMRootObject.m in Sources */,
 				8C895DE71A78A5D900992A8F /* AVMPOrderedDictionary.m in Sources */,
 				8C841C431A5A84C600C5C6C4 /* AVIMReachability.m in Sources */,
 				8C841C3F1A5A84C600C5C6C4 /* AVIMBlockHelper.m in Sources */,
 				831E295C1D882CBB006E502B /* AVIMMessageOption.m in Sources */,
+				9AD27C451E1418DB002F9C7C /* LCIMApi.pbobjc.m in Sources */,
 				830EB9E81C3F996A00BA917F /* AVIMClientOpenOption.m in Sources */,
 				8C9A927D1A70AF1800CA4912 /* AVIMVideoMessage.m in Sources */,
+				9AD27C551E1418DB002F9C7C /* LCIMSourceContext.pbobjc.m in Sources */,
 				9A2F1B3D1CF6F6FA00BE52F2 /* LCIMMessage.m in Sources */,
 				8C841C161A5A84C600C5C6C4 /* AVIMSignature.m in Sources */,
 				9A2F1B0D1CF6F6FA00BE52F2 /* LCIMCodedInputStream.m in Sources */,
@@ -4673,18 +4797,23 @@
 				8C9A927B1A70AF1800CA4912 /* AVIMTypedMessage.m in Sources */,
 				9A2F1B281CF6F6FA00BE52F2 /* LCIMDictionary.m in Sources */,
 				9ACE83DD1BD6420E00CE2103 /* AVIMCommandFormatter.m in Sources */,
+				9AD27C511E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m in Sources */,
 				834B4A8F1B93ED3F00A7ADBC /* LCIMConversationCache.m in Sources */,
 				8CBDFDE31A808EA500D67FBE /* AVIMConversationQuery.m in Sources */,
 				9A2F1B581CF6F6FA00BE52F2 /* LCIMUnknownField.m in Sources */,
 				8C841C0F1A5A84C600C5C6C4 /* AVIMCommon.m in Sources */,
 				838AF12B1AFE58F600B8965E /* LCIMMessageCache.m in Sources */,
 				9A2F1B1F1CF6F6FA00BE52F2 /* LCIMDescriptor.m in Sources */,
+				9AD27C611E1418DB002F9C7C /* LCIMType.pbobjc.m in Sources */,
 				8C841C141A5A84C600C5C6C4 /* AVIMMessage.m in Sources */,
 				8C841C121A5A84C600C5C6C4 /* AVIMConversation.m in Sources */,
+				9AD27C651E1418DB002F9C7C /* LCIMWrappers.pbobjc.m in Sources */,
 				9A2F1B311CF6F6FA00BE52F2 /* LCIMExtensionInternals.m in Sources */,
 				9A2F1B371CF6F6FA00BE52F2 /* LCIMExtensionRegistry.m in Sources */,
 				83BE439D1D242905000C7AC3 /* AVIMWebSocket.m in Sources */,
 				83AB6DF81C3CFEA70064BE17 /* AVOSCloudIM.m in Sources */,
+				9AD27C5D1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.m in Sources */,
+				9AD27C4D1E1418DB002F9C7C /* LCIMEmpty.pbobjc.m in Sources */,
 				9A2F1B791CF6F6FA00BE52F2 /* LCIMWireFormat.m in Sources */,
 				8C9A92791A70AF1800CA4912 /* AVIMTextMessage.m in Sources */,
 				83F745F71B91735B00437259 /* LCIMCacheStore.m in Sources */,
