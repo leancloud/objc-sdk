@@ -28,25 +28,39 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <Foundation/Foundation.h>
+// If you want to build protocol buffers in your own project without adding the
+// project dependency, you can just add this file.
 
-@class LCIMExtensionRegistry;
 
-NS_ASSUME_NONNULL_BEGIN
+// This warning seems to treat code differently when it is #imported than when
+// it is inline in the file.  GPBDictionary.m compiles cleanly in other targets,
+// but when #imported here it triggers a bunch of warnings that don't make
+// much sense, and don't trigger when compiled directly.  So we shut off the
+// warnings here.
+#pragma clang diagnostic ignored "-Wnullability-completeness"
 
-/**
- * Every generated proto file defines a local "Root" class that exposes a
- * LCIMExtensionRegistry for all the extensions defined by that file and
- * the files it depends on.
- **/
-@interface LCIMRootObject : NSObject
+#import "LCIMArray.m"
+#import "LCIMCodedInputStream.m"
+#import "LCIMCodedOutputStream.m"
+#import "LCIMDescriptor.m"
+#import "LCIMDictionary.m"
+#import "LCIMExtensionInternals.m"
+#import "LCIMExtensionRegistry.m"
+#import "LCIMMessage.m"
+#import "LCIMRootObject.m"
+#import "LCIMUnknownField.m"
+#import "LCIMUnknownFieldSet.m"
+#import "LCIMUtilities.m"
+#import "LCIMWellKnownTypes.m"
+#import "LCIMWireFormat.m"
 
-/**
- * @return An extension registry for the given file and all the files it depends
- * on.
- **/
-+ (LCIMExtensionRegistry *)extensionRegistry;
-
-@end
-
-NS_ASSUME_NONNULL_END
+#import "google/protobuf/LCIMAny.pbobjc.m"
+#import "google/protobuf/LCIMApi.pbobjc.m"
+#import "google/protobuf/LCIMDuration.pbobjc.m"
+#import "google/protobuf/LCIMEmpty.pbobjc.m"
+#import "google/protobuf/LCIMFieldMask.pbobjc.m"
+#import "google/protobuf/LCIMSourceContext.pbobjc.m"
+#import "google/protobuf/LCIMStruct.pbobjc.m"
+#import "google/protobuf/LCIMTimestamp.pbobjc.m"
+#import "google/protobuf/LCIMType.pbobjc.m"
+#import "google/protobuf/LCIMWrappers.pbobjc.m"
