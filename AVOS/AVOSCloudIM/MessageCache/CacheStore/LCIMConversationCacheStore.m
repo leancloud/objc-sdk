@@ -67,15 +67,11 @@
     NSTimeInterval expireAt = [[NSDate date] timeIntervalSince1970] + maxAge;
     for (AVIMConversation *conversation in conversations) {
         if (!conversation.conversationId) continue;
-        BOOL noMembers = !conversation.members.count || conversation.members.count == 0;
-        BOOL noLastMessage = !conversation.lastMessage;
-        if (noMembers || noLastMessage) {
+        BOOL noMembers = (!conversation.members || conversation.members.count == 0);
+        if (noMembers) {
             AVIMConversation *conversationInCache = [self conversationForId:conversation.conversationId];
             if (noMembers) {
                 conversation.members = conversationInCache.members;
-            }
-            if (noLastMessage) {
-                conversation.lastMessage = conversationInCache.lastMessage;
             }
         }
         NSArray *insertionRecord = [self insertionRecordForConversation:conversation expireAt:expireAt];

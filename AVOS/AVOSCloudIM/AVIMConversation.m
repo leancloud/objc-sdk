@@ -25,6 +25,7 @@
 #import "AVIMErrorUtil.h"
 #import "LCIMConversationCache.h"
 #import "MessagesProtoOrig.pbobjc.h"
+#import "AVUtils.h"
 
 #define LCIM_VALID_LIMIT(limit) ({      \
     int32_t limit_ = (int32_t)(limit);  \
@@ -60,25 +61,32 @@
 }
 
 - (AVIMMessage *)lastMessage {
-    AVIMMessage *lastMessageInCache = _lastMessageInCache;
-    if (!_lastMessage && !lastMessageInCache) {
-        return nil;
+    if (!_lastMessage && _lastMessageInCache) {
+        return _lastMessageInCache;
     }
     
-    if (!_lastMessage && lastMessageInCache) {
-        return lastMessageInCache;
-    }
-    
-    if (_lastMessage && !lastMessageInCache) {
+    if (_lastMessage && !_lastMessageInCache) {
         return _lastMessage;
     }
     
-    if (_lastMessage && lastMessageInCache) {
-        if (_lastMessage.sendTimestamp > lastMessageInCache.sendTimestamp) {
+    if (_lastMessage && _lastMessageInCache) {
+        if (_lastMessage.sendTimestamp >= _lastMessageInCache.sendTimestamp) {
+            _lastMessageInCache = _lastMessage;
             return _lastMessage;
         }
-        if (lastMessageInCache.sendTimestamp > _lastMessage.sendTimestamp) {
-            return lastMessageInCache;
+        if (_lastMessageInCache.sendTimestamp > _lastMessage.sendTimestamp) {
+            _lastMessage = _lastMessageInCache;
+            return _lastMessageInCache;
+        }
+    }
+    
+    if (!_lastMessage && !_lastMessageInCache) {
+        [AVUtils warnMainThreadIfNecessary];
+        NSArray *cachedMessages = [[self messageCacheStore] latestMessagesWithLimit:1];
+        AVIMMessage *message = [cachedMessages lastObject];
+        if (message) {
+            _lastMessageInCache = message;
+            return _lastMessageInCache;
         }
     }
     return nil;
@@ -622,7 +630,9 @@
                 AVIMAckCommand *ackInCommand = inCommand.ackMessage;
                 message.sendTimestamp = ackInCommand.t;
                 message.messageId = ackInCommand.uid;
-                self.lastMessageInCache = message;
+                if (!transient) {
+                    self.lastMessageInCache = message;
+                }
                 if (!directCommand.transient && self.imClient.messageQueryCacheEnabled) {
                     [[self messageCacheStore] insertMessage:message withBreakpoint:NO];
                 }

@@ -1001,7 +1001,9 @@ static BOOL AVIMClientHasInstantiated = NO;
         if (!conversation.lastMessageAt || [conversation.lastMessageAt compare:messageSentAt] == NSOrderedAscending) {
             conversation.lastMessageAt = messageSentAt;
         }
-        conversation.lastMessageInCache = message;
+        if (!message.transient) {
+            conversation.lastMessageInCache = message;
+        }
         [ws passMessage:message toConversation:conversation];
     }];
 }
