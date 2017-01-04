@@ -192,17 +192,19 @@
 }
 
 - (void)testConversationMembersUpdate {
-    __weak AVIMConversation *conversation = [self conversationForUpdate];
+    AVIMConversation *conversation = [self conversationForUpdate];
+    __weak typeof(conversation) weakConversation = conversation;
+
     [conversation addMembersWithClientIds:@[ AVIM_TEST_ClinetID_Peer_1 ] callback:^(BOOL succeeded, NSError *error) {
         XCTAssertNil(error);
-        XCTAssertTrue([conversation.members containsObject:AVIM_TEST_ClinetID_Peer_1]);
+        XCTAssertTrue([weakConversation.members containsObject:AVIM_TEST_ClinetID_Peer_1]);
         NOTIFY;
     }];
     WAIT;
     
     [conversation removeMembersWithClientIds:@[AVIM_TEST_ClinetID_Peer_1] callback:^(BOOL succeeded, NSError *error) {
         XCTAssertNil(error);
-        XCTAssertFalse([conversation.members containsObject:AVIM_TEST_ClinetID_Peer_1]);
+        XCTAssertFalse([weakConversation.members containsObject:AVIM_TEST_ClinetID_Peer_1]);
         NOTIFY;
     }];
     WAIT;
@@ -210,14 +212,14 @@
     XCTAssertTrue([conversation.members containsObject:AVIM_TEST_ClinetID]);
     [conversation quitWithCallback:^(BOOL succeeded, NSError *error) {
         XCTAssertNil(error);
-        XCTAssertFalse([conversation.members containsObject:AVIM_TEST_ClinetID]);
+        XCTAssertFalse([weakConversation.members containsObject:AVIM_TEST_ClinetID]);
         NOTIFY;
     }];
     WAIT;
     
     [conversation joinWithCallback:^(BOOL succeeded, NSError *error) {
         XCTAssertNil(error);
-        XCTAssertTrue([conversation.members containsObject:AVIM_TEST_ClinetID]);
+        XCTAssertTrue([weakConversation.members containsObject:AVIM_TEST_ClinetID]);
         NOTIFY;
     }];
     WAIT;
