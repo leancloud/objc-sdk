@@ -934,16 +934,23 @@ static BOOL AVIMClientHasInstantiated = NO;
 - (void)processReceiptCommand:(AVIMGenericCommand *)genericCommand {
     AVIMRcpCommand *rcpCommand = genericCommand.rcpMessage;
     NSString *messageId = rcpCommand.id_p;
-     AVIMMessage *message = [self messageById:messageId];
-    if (message) {
+    AVIMMessage *message = [self messageById:messageId];
+    if (!message) {
+        return;
+    }
+    if (rcpCommand.hasRead) {
+        message.readTimestamp = rcpCommand.t;
+        message.status = AVIMMessageStatusRead;
+    } else {
         message.deliveredTimestamp = rcpCommand.t;
         message.status = AVIMMessageStatusDelivered;
-        
-        LCIMMessageCacheStore *cacheStore = [[LCIMMessageCacheStore alloc] initWithClientId:self.clientId conversationId:message.conversationId];
-        [cacheStore updateMessageWithoutBreakpoint:message];
-        
         [self receiveMessageDelivered:message];
     }
+    
+    LCIMMessageCacheStore *cacheStore = [[LCIMMessageCacheStore alloc] initWithClientId:self.clientId conversationId:message.conversationId];
+    [cacheStore updateMessageWithoutBreakpoint:message];
+    
+    
 }
 
 - (void)processSessionCommand:(AVIMGenericCommand *)genericCommand {
@@ -1027,6 +1034,14 @@ static BOOL AVIMClientHasInstantiated = NO;
     [self array:arguments addObject:conversation];
     [self array:arguments addObject:message];
     [AVIMRuntimeHelper callMethodInMainThreadWithTarget:_delegate selector:@selector(conversation:messageDelivered:) arguments:arguments];
+}
+
+- (void)receiveMessageRead:(AVIMMessage *)message {
+    AVIMConversation *conversation = [self conversationWithId:message.conversationId];
+    NSMutableArray *arguments = [[NSMutableArray alloc] init];
+    [self array:arguments addObject:conversation];
+    [self array:arguments addObject:message];
+    [AVIMRuntimeHelper callMethodInMainThreadWithTarget:_delegate selector:@selector(conversation:messageRead:) arguments:arguments];
 }
 
 - (void)receiveInvitedFromConversation:(AVIMConversation *)conversation byClientId:(NSString *)clientId {
