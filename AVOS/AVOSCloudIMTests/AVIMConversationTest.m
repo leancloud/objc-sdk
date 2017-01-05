@@ -78,7 +78,7 @@
         XCTAssertFalse(conversation.muted);
         XCTAssertFalse(conversation.transient);
         AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)conversation.lastMessage;
-        XCTAssertNil(typedMessage);
+        XCTAssertNotNil(typedMessage);
         NOTIFY;
     }];
     WAIT;
