@@ -215,6 +215,7 @@ Pod::Spec.new do |s|
 
     ss.exclude_files =
       'AVOS/AVOSCloudIM/Protobuf/*.{h,m}',
+      'AVOS/AVOSCloudIM/Protobuf/google/protobuf/*.{h,m}',
       'AVOS/AVOSCloudIM/Commands/MessagesProtoOrig.pbobjc.{h,m}'
   end
 
@@ -223,10 +224,12 @@ Pod::Spec.new do |s|
 
     ss.source_files =
       'AVOS/AVOSCloudIM/Protobuf/*.{h,m}',
+      'AVOS/AVOSCloudIM/Protobuf/google/protobuf/*.{h,m}',
       'AVOS/AVOSCloudIM/Commands/MessagesProtoOrig.pbobjc.{h,m}'
 
     ss.private_header_files =
       'AVOS/AVOSCloudIM/Protobuf/*.h',
+      'AVOS/AVOSCloudIM/Protobuf/google/protobuf/*.h',
       'AVOS/AVOSCloudIM/Commands/MessagesProtoOrig.pbobjc.h'
 
     ss.preserve_paths =
