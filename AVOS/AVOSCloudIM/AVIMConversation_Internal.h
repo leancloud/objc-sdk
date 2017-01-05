@@ -33,7 +33,6 @@
 @property (nonatomic, assign) BOOL          muted;           /**< 静音状态 */
 @property (nonatomic, assign) BOOL          transient;       /**< 是否为临时会话（开放群组） */
 @property (nonatomic, strong) AVIMMessage  *lastMessage;     /**< 对话中最后一条消息 */
-@property (nonatomic, strong) AVIMMessage  *lastMessageInCache;     /**< 消息记录缓存中最后一条消息 */
 
 - (instancetype)initWithConversationId:(NSString *)conversationId;
 - (void)setConversationId:(NSString *)conversationId;

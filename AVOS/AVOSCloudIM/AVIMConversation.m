@@ -61,33 +61,18 @@
 }
 
 - (AVIMMessage *)lastMessage {
-    if (!_lastMessage && _lastMessageInCache) {
-        return _lastMessageInCache;
-    }
-    
-    if (_lastMessage && !_lastMessageInCache) {
+    if (_lastMessage) {
         return _lastMessage;
     }
-    
-    if (_lastMessage && _lastMessageInCache) {
-        if (_lastMessage.sendTimestamp >= _lastMessageInCache.sendTimestamp) {
-            _lastMessageInCache = _lastMessage;
-            return _lastMessage;
-        }
-        if (_lastMessageInCache.sendTimestamp > _lastMessage.sendTimestamp) {
-            _lastMessage = _lastMessageInCache;
-            return _lastMessageInCache;
-        }
+    if (!_lastMessageAt || !self.imClient.messageQueryCacheEnabled) {
+        return nil;
     }
-    
-    if (!_lastMessage && !_lastMessageInCache) {
-        [AVUtils warnMainThreadIfNecessary];
-        NSArray *cachedMessages = [[self messageCacheStore] latestMessagesWithLimit:1];
-        AVIMMessage *message = [cachedMessages lastObject];
-        if (message) {
-            _lastMessageInCache = message;
-            return _lastMessageInCache;
-        }
+    [AVUtils warnMainThreadIfNecessary];
+    NSArray *cachedMessages = [[self messageCacheStore] latestMessagesWithLimit:1];
+    AVIMMessage *message = [cachedMessages lastObject];
+    if (message) {
+        _lastMessage = message;
+        return _lastMessage;
     }
     return nil;
 }
@@ -149,10 +134,13 @@
     AVIMConversationQuery *query = [self.imClient conversationQuery];
     query.cachePolicy = kAVCachePolicyNetworkOnly;
     [query getConversationById:self.conversationId callback:^(AVIMConversation *conversation, NSError *error) {
-        if (conversation && conversation != self) {
-            [self setKeyedConversation:[conversation keyedConversation]];
-        }
-        [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+        dispatch_async([AVIMClient imClientQueue], ^{
+            [conversation lastMessage];
+            if (conversation && conversation != self) {
+                [self setKeyedConversation:[conversation keyedConversation]];
+            }
+            [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+        });
     }];
 }
 
@@ -631,7 +619,7 @@
                 message.sendTimestamp = ackInCommand.t;
                 message.messageId = ackInCommand.uid;
                 if (!transient) {
-                    self.lastMessageInCache = message;
+                    self.lastMessage = message;
                 }
                 if (!directCommand.transient && self.imClient.messageQueryCacheEnabled) {
                     [[self messageCacheStore] insertMessage:message withBreakpoint:NO];
@@ -768,7 +756,7 @@
                     message.messageId = [logsItem msgId];
                     [messages addObject:message];
                 }
-                self.lastMessageInCache = messages.lastObject;
+                self.lastMessage = messages.lastObject;
                 [self postprocessMessages:messages];
                 [self sendACKIfNeeded:messages];
                 
