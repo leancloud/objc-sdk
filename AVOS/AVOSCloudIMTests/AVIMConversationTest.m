@@ -50,14 +50,22 @@
     // test created conversation by above test
     __block NSString *convid;
     NSString *name = NSStringFromSelector(_cmd);
+    __block AVIMConversation *conversationForTest = nil;
+    NSString *lastMessageText = [@(arc4random()) stringValue];
     [[AVIMClient defaultClient] createConversationWithName:name clientIds:@[ AVIM_TEST_ClinetID_Peer ] attributes:@{@"type": @0} options:AVIMConversationOptionNone callback:^(AVIMConversation *conversation, NSError *error) {
         XCTAssertNil(error);
+        conversationForTest = conversation;
         convid = conversation.conversationId;
-        NOTIFY;
+        [conversation sendMessage:[AVIMTextMessage messageWithText:lastMessageText attributes: nil] callback:^(BOOL succeeded, NSError * _Nullable error) {
+            NOTIFY;
+        }];
     }];
     WAIT;
-    AVIMConversationQuery *query = [[AVIMClient defaultClient] conversationQuery];
-    [query getConversationById:convid callback:^(AVIMConversation *conversation, NSError *error) {
+
+    AVIMConversationQuery *query1 = [[AVIMClient defaultClient] conversationQuery];
+    query1.cachePolicy = kAVIMCachePolicyNetworkOnly;
+    query1.option = AVIMConversationQueryOptionNone;
+    [query1 getConversationById:convid callback:^(AVIMConversation *conversation, NSError *error) {
         XCTAssertNil(error);
         XCTAssertEqualObjects(conversation.name, name);
         XCTAssertEqual(conversation.members.count, 2);
@@ -69,9 +77,66 @@
         XCTAssertNotNil(conversation.conversationId);
         XCTAssertFalse(conversation.muted);
         XCTAssertFalse(conversation.transient);
+        AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)conversation.lastMessage;
+        XCTAssertNotNil(typedMessage);
         NOTIFY;
     }];
     WAIT;
+    
+    AVIMConversationQuery *query2 = [[AVIMClient defaultClient] conversationQuery];
+    query2.option = AVIMConversationQueryOptionWithMessage | AVIMConversationQueryOptionCompact;
+    [query2 getConversationById:convid callback:^(AVIMConversation *conversation, NSError *error) {
+        XCTAssertNil(error);
+        XCTAssertEqualObjects(conversation.name, name);
+        XCTAssertNil(conversation.members);
+        XCTAssertEqual(conversation.members.count, 0);
+        XCTAssertEqual([conversation.attributes[@"type"] intValue], 0);
+        XCTAssertEqualObjects(conversation.creator, AVIM_TEST_ClinetID);
+        XCTAssertNotNil(conversation.createAt);
+        XCTAssertNotNil(conversation.conversationId);
+        XCTAssertFalse(conversation.muted);
+        XCTAssertFalse(conversation.transient);
+        AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)conversation.lastMessage;
+        XCTAssertNotNil(typedMessage);
+        XCTAssertTrue([typedMessage.text isEqualToString:lastMessageText]);
+        XCTAssertEqual(typedMessage.mediaType, -1);
+        NOTIFY;
+    }];
+    WAIT;
+    
+    AVIMConversationQuery *query3 = [[AVIMClient defaultClient] conversationQuery];
+    [query3 getConversationById:convid
+                       callback:^(AVIMConversation *conversation, NSError *error) {
+        XCTAssertNil(error);
+        XCTAssertEqualObjects(conversation.name, name);
+        XCTAssertEqual(conversation.members.count, 2);
+        XCTAssertTrue([conversation.members containsObject:AVIM_TEST_ClinetID]);
+        XCTAssertTrue([conversation.members containsObject:AVIM_TEST_ClinetID_Peer]);
+        XCTAssertEqual([conversation.attributes[@"type"] intValue], 0);
+        XCTAssertEqualObjects(conversation.creator, AVIM_TEST_ClinetID);
+        XCTAssertNotNil(conversation.createAt);
+        XCTAssertNotNil(conversation.conversationId);
+        XCTAssertFalse(conversation.muted);
+        XCTAssertFalse(conversation.transient);
+        AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)conversation.lastMessage;
+        XCTAssertNotNil(typedMessage);
+        XCTAssertTrue([typedMessage.text isEqualToString:lastMessageText]);
+        XCTAssertEqual(typedMessage.mediaType, -1);
+        NOTIFY;
+    }];
+    WAIT;
+    
+    lastMessageText =  @"testForLastMessageUpdateForMessageQuery";
+    [conversationForTest sendMessage:[AVIMTextMessage messageWithText:lastMessageText attributes: nil] callback:^(BOOL succeeded, NSError * _Nullable error) {
+        XCTAssertNil(error);
+        NOTIFY;
+    }];
+    WAIT;
+    
+    AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)conversationForTest.lastMessage;
+    XCTAssertNotNil(typedMessage);
+    XCTAssertTrue([typedMessage.text isEqualToString:lastMessageText]);
+    
 }
 
 /*!
