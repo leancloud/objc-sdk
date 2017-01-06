@@ -158,7 +158,11 @@ module Podspec
     def generateAVOSCloudIM()
       header_files        = header_files('AVOSCloudIM-iOS')
       source_files        = source_files('AVOSCloudIM-iOS')
-      no_arc_files        = [Pathname.new('AVOS/AVOSCloudIM/Protobuf/*.{h,m}'), Pathname.new('AVOS/AVOSCloudIM/Commands/MessagesProtoOrig.pbobjc.{h,m}')]
+      no_arc_files        = [
+        Pathname.new('AVOS/AVOSCloudIM/Protobuf/*.{h,m}'),
+        Pathname.new('AVOS/AVOSCloudIM/Protobuf/google/protobuf/*.{h,m}'),
+        Pathname.new('AVOS/AVOSCloudIM/Commands/MessagesProtoOrig.pbobjc.{h,m}')
+      ]
       public_header_files = public_header_files('AVOSCloudIM-iOS')
 
       template = File.read('Podspec/AVOSCloudIM.podspec.mustache')
