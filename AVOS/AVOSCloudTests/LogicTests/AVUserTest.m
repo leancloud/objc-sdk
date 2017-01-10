@@ -422,4 +422,10 @@
     [user delete];
 }
 
+- (void)testSessionToken {
+    AVUser *user = [self signUpRandomUser];
+    XCTAssertTrue([user fetch]);
+    XCTAssertNotNil(user.sessionToken);
+}
+
 @end
