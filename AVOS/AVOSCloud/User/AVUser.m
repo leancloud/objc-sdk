@@ -875,6 +875,19 @@ static BOOL enableAutomatic = NO;
 }
 
 #pragma mark - Override from AVObject
+
+/**
+ Avoid session token to be removed after fetching or refreshing.
+ */
+- (void)removeLocalData {
+    NSString *sessionToken = self.localData[@"sessionToken"];
+
+    [super removeLocalData];
+
+    if (sessionToken)
+        self.localData[@"sessionToken"] = sessionToken;
+}
+
 -(NSMutableDictionary *)postData
 {
     // TO BE REMOVED
