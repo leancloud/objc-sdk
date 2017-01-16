@@ -124,27 +124,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)setLogSendInterval:(double)second;
 
-
-///---------------------------------------------------------------------------------------
-/// @name  开启统计(已废止)
-///---------------------------------------------------------------------------------------
-
-
-/** 开启统计,默认以AV_BATCH方式发送log. 1.4.3以后不再需要，请前往在线配置进行配置。
- https://leancloud.cn/stat.html?appid=YOUR_APP_ID&os=ios#/statconfig/trans_strategoy
- */
-
-+ (void)start AV_DEPRECATED("1.4.3以后不再需要，请前往在线配置进行配置");
-
-/** 开启统计,默认以AV_BATCH方式发送log. 1.4.3以后不再需要，请前往在线配置进行配置。
- https://leancloud.cn/stat.html?appid=YOUR_APP_ID&os=ios#/statconfig/trans_strategoy
-
- @param rp 发送策略.
- @param cid 渠道名称,为nil或@""时,默认会被被当作@"App Store"渠道
- */
-+ (void)startWithReportPolicy:(AVReportPolicy)rp channelId:(nullable NSString *)cid AV_DEPRECATED("1.4.3以后不再需要，请前往在线配置进行配置");
-
-
 /** 跟踪 app 打开情况
  @discussion 该方法应在 "- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions" 中调用
  @param launchOptions 对应上述方法的参数launchOptions
