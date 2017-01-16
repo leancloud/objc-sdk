@@ -83,14 +83,18 @@ static NSString * identifierForVendorTag = @"identifierForVendor";
 
 + (BOOL) isJailbroken
 {
-    BOOL isJailbroken = NO;
-    BOOL cydiaInstalled = [[NSFileManager defaultManager] fileExistsAtPath:@"/Applications/Cydia.app"];
-    FILE *f = fopen("/bin/bash", "r");
-    if (!(errno == ENOENT) && cydiaInstalled) {
-        isJailbroken = YES;
+#if TARGET_OS_SIMULATOR
+    return NO;
+#else
+    FILE *bash = fopen("/bin/bash", "r");
+
+    if (bash) {
+        fclose(bash);
+        return YES;
     }
-    fclose(f);
-    return isJailbroken;
+
+    return NO;
+#endif
 }
 
 +(NSString *)screenResolution
