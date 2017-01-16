@@ -46,16 +46,6 @@ static NSString * currentSessionId;
     [AVAnalytics event:appOpenWithPush];
 }
 
-+ (void)start
-{
-    [AVAnalytics startWithReportPolicy:AV_BATCH channelId:@""];
-}
-
-+ (void)startWithReportPolicy:(AVReportPolicy)rp channelId:(NSString *)cid
-{
-    AVLoggerError(AVLoggerDomainDefault, @"The method is not supported anymore, please visit application web console to config.");
-}
-
 + (void)startInternallyWithChannel:(NSString *)cid
 {
     if (cid.length > 0) {
