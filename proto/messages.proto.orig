@@ -57,6 +57,9 @@ enum OpType {
   updated = 46;
   mute = 47;
   unmute = 48;
+  status = 49;
+  members = 50;
+  max_read = 51;
 
   // room
   join = 80;
@@ -125,6 +128,7 @@ message SessionCommand {
   optional string reason = 13;
   optional string deviceToken = 14;
   optional bool sp = 15;
+  optional string detail = 16;
 }
 
 message ErrorCommand {
@@ -148,6 +152,7 @@ message DirectCommand {
   optional bool transient = 13;
   optional string dt = 14;
   optional string roomId = 15;
+  optional string pushData = 16;
 }
 
 message AckCommand {
@@ -185,6 +190,15 @@ message ConvCommand {
   optional string n = 14;
   optional string s = 15;
 
+  optional bool statusSub = 16;
+  optional bool statusPub = 17;
+  optional int32 statusTTL = 18;
+
+  //repeated string members = 19;
+  optional string targetClientId = 20;
+  optional int64 maxReadTimestamp = 21;
+  optional int64 maxAckTimestamp = 22;
+  
   optional JsonObjectMessage results = 100;
   optional JsonObjectMessage where = 101;
   optional JsonObjectMessage attr = 103;
@@ -210,6 +224,7 @@ message LogsCommand {
   optional string mid = 7;
   optional string checksum = 8;
   optional bool stored = 9;
+  optional bool reversed = 10;
 
   repeated LogItem logs = 105;
 }
@@ -218,6 +233,7 @@ message RcpCommand {
   optional string id = 1;
   optional string cid = 2;
   optional int64 t = 3;
+  optional bool read = 4;
 }
 
 message ReadTuple {
@@ -235,6 +251,7 @@ message ReadCommand {
 message PresenceCommand {
   optional StatusType status = 1;
   repeated string sessionPeerIds = 2;
+  optional string cid = 3;
 }
 
 message ReportCommand {
@@ -251,6 +268,7 @@ message GenericCommand {
   optional string peerId = 4;
   optional int32 i = 5;
   optional string installationId = 6;
+  optional int32 priority = 7;
 
   optional LoginCommand loginMessage = 100;
   optional DataCommand dataMessage = 101;
