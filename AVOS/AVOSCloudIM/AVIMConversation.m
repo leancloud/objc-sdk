@@ -24,7 +24,7 @@
 #import "AVIMUserOptions.h"
 #import "AVIMErrorUtil.h"
 #import "LCIMConversationCache.h"
-#import "MessagesProtoOrig.pbobjc.h
+#import "MessagesProtoOrig.pbobjc.h"
 #import "AVUtils.h"
 #import "LCIMMessageReceiptCacheStore.h"
 
