@@ -117,6 +117,7 @@ typedef GPB_ENUM(AVIMOpType) {
   AVIMOpType_Unmute = 48,
   AVIMOpType_Status = 49,
   AVIMOpType_Members = 50,
+  AVIMOpType_MaxRead = 51,
 
   /** room */
   AVIMOpType_Join = 80,
@@ -556,7 +557,9 @@ typedef GPB_ENUM(AVIMConvCommand_FieldNumber) {
   AVIMConvCommand_FieldNumber_StatusSub = 16,
   AVIMConvCommand_FieldNumber_StatusPub = 17,
   AVIMConvCommand_FieldNumber_StatusTtl = 18,
-  AVIMConvCommand_FieldNumber_MembersArray = 19,
+  AVIMConvCommand_FieldNumber_TargetClientId = 20,
+  AVIMConvCommand_FieldNumber_MaxReadTimestamp = 21,
+  AVIMConvCommand_FieldNumber_MaxAckTimestamp = 22,
   AVIMConvCommand_FieldNumber_Results = 100,
   AVIMConvCommand_FieldNumber_Where = 101,
   AVIMConvCommand_FieldNumber_Attr = 103,
@@ -627,10 +630,17 @@ typedef GPB_ENUM(AVIMConvCommand_FieldNumber) {
 @property(nonatomic, readwrite) int32_t statusTtl;
 
 @property(nonatomic, readwrite) BOOL hasStatusTtl;
-@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *membersArray;
-/** The number of items in @c membersArray without causing the array to be created. */
-@property(nonatomic, readonly) NSUInteger membersArray_Count;
+/** repeated string members = 19; */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *targetClientId;
+/** Test to see if @c targetClientId has been set. */
+@property(nonatomic, readwrite) BOOL hasTargetClientId;
 
+@property(nonatomic, readwrite) int64_t maxReadTimestamp;
+
+@property(nonatomic, readwrite) BOOL hasMaxReadTimestamp;
+@property(nonatomic, readwrite) int64_t maxAckTimestamp;
+
+@property(nonatomic, readwrite) BOOL hasMaxAckTimestamp;
 @property(nonatomic, readwrite, strong, null_resettable) AVIMJsonObjectMessage *results;
 /** Test to see if @c results has been set. */
 @property(nonatomic, readwrite) BOOL hasResults;
