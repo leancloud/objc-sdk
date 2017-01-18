@@ -1044,11 +1044,8 @@ static BOOL AVIMClientHasInstantiated = NO;
         LCIMMessageReceiptCacheStore *messageStatusCacheStore = [[LCIMMessageReceiptCacheStore alloc] initWithClientId:self.clientId conversationId:message.conversationId];
         [messageStatusCacheStore insertMessage:message];
         
-        // Step 2 : update Message Read Status
-        /*原来的实现：只更新单条消息的回执状态，新的实现：更新之前所有消息的状态。
-         *
-         LCIMMessageCacheStore *cacheStore = [[LCIMMessageCacheStore alloc] initWithClientId:self.clientId conversationId:message.conversationId];
-         [cacheStore updateMessageWithoutBreakpoint:message];
+        /* Step 2 : update Message Read Status
+        原来的实现：只更新单条消息的回执状态，新的实现：更新之前所有消息的状态。
          */
         LCIMMessageCacheStore *cacheStore = [[LCIMMessageCacheStore alloc] initWithClientId:self.clientId conversationId:message.conversationId];
         NSArray *messageBeforeTimestamp = @[];
