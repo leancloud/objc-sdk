@@ -157,7 +157,6 @@
         return;
     }
     NSNumber *timestampNumber = [NSNumber numberWithDouble:timestamp];
-    NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@==%@", @(__PRETTY_FUNCTION__), @(__LINE__), timestampNumber, @(messages.count));
     if (!timestampNumber) {
         return;
     }
@@ -181,24 +180,7 @@
                               self.conversationId,
                               message.messageId
                               ];
-            
-            BOOL success ;
-            switch (status) {
-                case AVIMMessageStatusDelivered:
-                    //updateSQL = LCIM_SQL_UPDATE_MESSAGE_DELIVERED;
-                    success = [db executeUpdate:LCIM_SQL_UPDATE_MESSAGE_DELIVERED withArgumentsInArray:args];
-
-                    break;
-                case AVIMMessageStatusRead:
-                    //updateSQL = LCIM_SQL_UPDATE_MESSAGE_READ;
-                    success = [db executeUpdate:LCIM_SQL_UPDATE_MESSAGE_READ withArgumentsInArray:args];
-
-                    break;
-                default:
-                    break;
-            }
-            
-            NSLog(success ? @"==========YES" : @"=========NO");
+            [db executeUpdate:updateSQL withArgumentsInArray:args];
         }
     }));
 }
