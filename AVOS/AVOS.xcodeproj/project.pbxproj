@@ -1230,6 +1230,10 @@
 		9A404DE01CE5A9C400DEB3DC /* LCRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F9A2C61CE014430002E21B /* LCRouter.m */; };
 		9A404DE11CE5A9C400DEB3DC /* LCRouterCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 838B32E91CE032F800CAEBF8 /* LCRouterCache.h */; };
 		9A404DE21CE5A9C400DEB3DC /* LCRouterCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 838B32EA1CE032F800CAEBF8 /* LCRouterCache.m */; };
+		9A616B671E1EA69C005F70F2 /* LCIMMessageReceiptCacheStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A616B651E1EA69C005F70F2 /* LCIMMessageReceiptCacheStore.h */; };
+		9A616B681E1EA69C005F70F2 /* LCIMMessageReceiptCacheStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A616B651E1EA69C005F70F2 /* LCIMMessageReceiptCacheStore.h */; };
+		9A616B691E1EA69C005F70F2 /* LCIMMessageReceiptCacheStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A616B661E1EA69C005F70F2 /* LCIMMessageReceiptCacheStore.m */; };
+		9A616B6A1E1EA69C005F70F2 /* LCIMMessageReceiptCacheStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A616B661E1EA69C005F70F2 /* LCIMMessageReceiptCacheStore.m */; };
 		9A62AE591DF8145400EE0973 /* TestTypedMessage.json in Resources */ = {isa = PBXBuildFile; fileRef = 9A62AE551DF813C100EE0973 /* TestTypedMessage.json */; };
 		9A62AE5B1DF8145900EE0973 /* TestTypedMessage.json in Resources */ = {isa = PBXBuildFile; fileRef = 9A62AE551DF813C100EE0973 /* TestTypedMessage.json */; };
 		9A7C67D71C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A7C67D51C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.h */; };
@@ -1860,6 +1864,9 @@
 		9A2F1ABF1CF6F6FA00BE52F2 /* LCIMWellKnownTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMWellKnownTypes.m; sourceTree = "<group>"; };
 		9A2F1AC01CF6F6FA00BE52F2 /* LCIMWireFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMWireFormat.h; sourceTree = "<group>"; };
 		9A2F1AC11CF6F6FA00BE52F2 /* LCIMWireFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMWireFormat.m; sourceTree = "<group>"; };
+		9A616B651E1EA69C005F70F2 /* LCIMMessageReceiptCacheStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageReceiptCacheStore.h; sourceTree = "<group>"; };
+		9A616B661E1EA69C005F70F2 /* LCIMMessageReceiptCacheStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMMessageReceiptCacheStore.m; sourceTree = "<group>"; };
+		9A616B6B1E1EA6B7005F70F2 /* LCIMMessageReceiptCacheStoreSQL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCIMMessageReceiptCacheStoreSQL.h; sourceTree = "<group>"; };
 		9A62AE551DF813C100EE0973 /* TestTypedMessage.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestTypedMessage.json; sourceTree = "<group>"; };
 		9A7C67D51C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVIMDirectCommand+DirectCommandAdditions.h"; sourceTree = "<group>"; };
 		9A7C67D61C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AVIMDirectCommand+DirectCommandAdditions.m"; sourceTree = "<group>"; };
@@ -2291,6 +2298,9 @@
 				83F745EE1B91732D00437259 /* LCIMMessageCacheStore.h */,
 				83F745EF1B91732D00437259 /* LCIMMessageCacheStore.m */,
 				83F745F01B91732D00437259 /* LCIMMessageCacheStoreSQL.h */,
+				9A616B651E1EA69C005F70F2 /* LCIMMessageReceiptCacheStore.h */,
+				9A616B661E1EA69C005F70F2 /* LCIMMessageReceiptCacheStore.m */,
+				9A616B6B1E1EA6B7005F70F2 /* LCIMMessageReceiptCacheStoreSQL.h */,
 				83F745F81B9177DE00437259 /* LCIMConversationCacheStore.h */,
 				83F745F91B9177DE00437259 /* LCIMConversationCacheStore.m */,
 				83F745FC1B9177F100437259 /* LCIMConversationCacheStoreSQL.h */,
@@ -3121,6 +3131,7 @@
 				9AE76C561C3F7CC600325902 /* AVIMDynamicObject.h in Headers */,
 				9A2F1B301CF6F6FA00BE52F2 /* LCIMExtensionInternals.h in Headers */,
 				704F3BF31BE0D0820033245C /* AVIMAudioMessage.h in Headers */,
+				9A616B681E1EA69C005F70F2 /* LCIMMessageReceiptCacheStore.h in Headers */,
 				704F3BF41BE0D0820033245C /* AVIMImageMessage.h in Headers */,
 				704F3BF51BE0D0820033245C /* AVIMLocationMessage.h in Headers */,
 				704F3BF61BE0D0820033245C /* AVIMTextMessage.h in Headers */,
@@ -3754,6 +3765,7 @@
 				8C9A927C1A70AF1800CA4912 /* AVIMVideoMessage.h in Headers */,
 				833E1F631B69F629002A691C /* AVIMFileMessage.h in Headers */,
 				830EB9E51C3F996A00BA917F /* AVIMClientOpenOption.h in Headers */,
+				9A616B671E1EA69C005F70F2 /* LCIMMessageReceiptCacheStore.h in Headers */,
 				9A2F1B491CF6F6FA00BE52F2 /* LCIMRootObject.h in Headers */,
 				8C9A927A1A70AF1800CA4912 /* AVIMTypedMessage.h in Headers */,
 				9A2F1B701CF6F6FA00BE52F2 /* LCIMWellKnownTypes.h in Headers */,
@@ -4254,6 +4266,7 @@
 				9AD27C521E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m in Sources */,
 				9AE76C521C3F7CC600325902 /* AVIMGenericCommand+AVIMMessagesAdditions.m in Sources */,
 				83AB6DFA1C3CFEA70064BE17 /* AVOSCloudIM.m in Sources */,
+				9A616B6A1E1EA69C005F70F2 /* LCIMMessageReceiptCacheStore.m in Sources */,
 				9A2F1B5A1CF6F6FA00BE52F2 /* LCIMUnknownField.m in Sources */,
 				704F3BAB1BE0D05C0033245C /* LCIMCacheStore.m in Sources */,
 				704F3BAC1BE0D05C0033245C /* LCIMMessageCacheStore.m in Sources */,
@@ -4800,6 +4813,7 @@
 				9AD27C511E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m in Sources */,
 				834B4A8F1B93ED3F00A7ADBC /* LCIMConversationCache.m in Sources */,
 				8CBDFDE31A808EA500D67FBE /* AVIMConversationQuery.m in Sources */,
+				9A616B691E1EA69C005F70F2 /* LCIMMessageReceiptCacheStore.m in Sources */,
 				9A2F1B581CF6F6FA00BE52F2 /* LCIMUnknownField.m in Sources */,
 				8C841C0F1A5A84C600C5C6C4 /* AVIMCommon.m in Sources */,
 				838AF12B1AFE58F600B8965E /* LCIMMessageCache.m in Sources */,

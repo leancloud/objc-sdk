@@ -34,6 +34,10 @@
 @property (nonatomic, assign) BOOL          transient;       /**< 是否为临时会话（开放群组） */
 @property (nonatomic, strong) AVIMMessage  *lastMessage;     /**< 对话中最后一条消息 */
 
+@property (nonatomic, assign) int64_t latestReadTimestampFromPeer;
+
+@property (nonatomic, assign) int64_t latestDeliveredTimestampFromPeer;
+
 - (instancetype)initWithConversationId:(NSString *)conversationId;
 - (void)setConversationId:(NSString *)conversationId;
 - (void)setMembers:(NSArray *)members;

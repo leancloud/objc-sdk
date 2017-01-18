@@ -30,6 +30,7 @@
 
 #import <objc/runtime.h>
 #import <libkern/OSAtomic.h>
+#import "LCIMMessageReceiptCacheStore.h"
 
 static const int kMaxClientIdLength = 64;
 static AVIMClient *defaultClient = nil;
@@ -932,25 +933,34 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 - (void)processReceiptCommand:(AVIMGenericCommand *)genericCommand {
+    
     AVIMRcpCommand *rcpCommand = genericCommand.rcpMessage;
     NSString *messageId = rcpCommand.id_p;
     AVIMMessage *message = [self messageById:messageId];
     if (!message) {
         return;
     }
-    if (rcpCommand.hasRead) {
+    NSString *conversationId = rcpCommand.cid;
+    AVIMConversation *conversation = [self conversationWithId:conversationId];
+    if (rcpCommand.read) {
         message.readTimestamp = rcpCommand.t;
         message.status = AVIMMessageStatusRead;
     } else {
         message.deliveredTimestamp = rcpCommand.t;
         message.status = AVIMMessageStatusDelivered;
-        [self receiveMessageDelivered:message];
     }
-    
-    LCIMMessageCacheStore *cacheStore = [[LCIMMessageCacheStore alloc] initWithClientId:self.clientId conversationId:message.conversationId];
-    [cacheStore updateMessageWithoutBreakpoint:message];
-    
-    
+    __weak typeof(self) weakSelf = self;
+    [self fetchConversationIfNeeded:conversation withBlock:^(AVIMConversation *conversation) {
+        if (!conversation) {
+            [weakSelf updateConversationReceiptCacheForMessage:message];
+            return;
+        }
+        //已读回执仅对单聊有效
+        if (conversation.members.count != 2 && rcpCommand.read) {
+            return;
+        }
+        [weakSelf updateConversationReceiptCacheForMessage:message];
+    }];
 }
 
 - (void)processSessionCommand:(AVIMGenericCommand *)genericCommand {
@@ -1028,19 +1038,61 @@ static BOOL AVIMClientHasInstantiated = NO;
     }
 }
 
+- (void)updateConversationReceiptCacheForMessage:(AVIMMessage *)message {
+    dispatch_async(imClientQueue, ^{
+        // Step 1 : udpate Conversation Read Status
+        LCIMMessageReceiptCacheStore *messageStatusCacheStore = [[LCIMMessageReceiptCacheStore alloc] initWithClientId:self.clientId conversationId:message.conversationId];
+        [messageStatusCacheStore insertMessage:message];
+        
+        // Step 2 : update Message Read Status
+        /*原来的实现：只更新单条消息的回执状态，新的实现：更新之前所有消息的状态。
+         *
+         LCIMMessageCacheStore *cacheStore = [[LCIMMessageCacheStore alloc] initWithClientId:self.clientId conversationId:message.conversationId];
+         [cacheStore updateMessageWithoutBreakpoint:message];
+         */
+        LCIMMessageCacheStore *cacheStore = [[LCIMMessageCacheStore alloc] initWithClientId:self.clientId conversationId:message.conversationId];
+        NSArray *messageBeforeTimestamp = @[];
+        
+        AVIMMessageStatus receiptStutus = message.status;
+        BOOL isDeliveredStutusMessage = (receiptStutus == AVIMMessageStatusDelivered);
+        BOOL isReadStatusMessage = (receiptStutus == AVIMMessageStatusRead);
+        int64_t timestamp;
+        
+        if (isDeliveredStutusMessage) {
+            timestamp = message.deliveredTimestamp;
+            messageBeforeTimestamp = [cacheStore messagesBeforeTimestamp:timestamp status:AVIMMessageStatusDelivered];
+        } else if (isReadStatusMessage) {
+            timestamp = message.readTimestamp;
+            messageBeforeTimestamp = [cacheStore messagesBeforeTimestamp:timestamp status:AVIMMessageStatusRead];
+        }
+        
+        [cacheStore updateReceiptTimestamp:timestamp
+                                    status:receiptStutus
+                               forMessages:messageBeforeTimestamp];
+        
+        // Step 3 : 回调给 APP 层，用于更新 UI。
+        if (receiptStutus == AVIMMessageStatusDelivered) {
+            [self receiveMessageDelivered:message];
+        } else if (receiptStutus == AVIMMessageStatusRead) {
+            [self receiveMessageRead:message];
+        }
+    });
+}
+
 - (void)receiveMessageDelivered:(AVIMMessage *)message {
     AVIMConversation *conversation = [self conversationWithId:message.conversationId];
     NSMutableArray *arguments = [[NSMutableArray alloc] init];
     [self array:arguments addObject:conversation];
     [self array:arguments addObject:message];
+    conversation.latestDeliveredTimestampFromPeer = message.deliveredTimestamp;
     [AVIMRuntimeHelper callMethodInMainThreadWithTarget:_delegate selector:@selector(conversation:messageDelivered:) arguments:arguments];
 }
-
 - (void)receiveMessageRead:(AVIMMessage *)message {
     AVIMConversation *conversation = [self conversationWithId:message.conversationId];
     NSMutableArray *arguments = [[NSMutableArray alloc] init];
     [self array:arguments addObject:conversation];
     [self array:arguments addObject:message];
+    conversation.latestReadTimestampFromPeer = message.readTimestamp;
     [AVIMRuntimeHelper callMethodInMainThreadWithTarget:_delegate selector:@selector(conversation:messageRead:) arguments:arguments];
 }
 

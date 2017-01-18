@@ -285,6 +285,11 @@ NS_ASSUME_NONNULL_BEGIN
                     timestamp:(int64_t)timestamp
                         limit:(NSUInteger)limit
                      callback:(AVIMArrayResultBlock)callback;
+/*!
+ * 拉取服务器最新的回执数据。
+ * 该方法仅对“单聊”(也即：成员数为2的对话)有效
+ */
+- (void)fetchLatestReceiptTimestampIfNeededWithCallback:(AVIMBooleanResultBlock)callback;
 
 @end
 
