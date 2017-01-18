@@ -441,8 +441,7 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
             if (self.security) {
                 parameters[@"secure"] = @"1";
             }
-            //FIXME:这个是需要删除的，review的时候提醒下我
-            parameters[@"server"] = @"rtm51";
+
             /* Back door for user to connect to puppet environment. */
             if (getenv("LC_IM_PUPPET_ENABLED") && getenv("SIMULATOR_UDID")) {
                 parameters[@"debug"] = @"true";

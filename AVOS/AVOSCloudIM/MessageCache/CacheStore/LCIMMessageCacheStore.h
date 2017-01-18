@@ -8,7 +8,7 @@
 
 #import "LCIMCacheStore.h"
 
-@class AVIMMessage;
+#import "AVIMMessage.h"
 
 @interface LCIMMessageCacheStore : LCIMCacheStore
 
@@ -23,6 +23,9 @@
 - (void)updateBreakpoint:(BOOL)breakpoint forMessages:(NSArray *)messages;
 - (void)updateBreakpoint:(BOOL)breakpoint forMessage:(AVIMMessage *)message;
 
+- (void)updateReceiptTimestamp:(int64_t)timestamp
+                        status:(AVIMMessageStatus)status
+                   forMessages:(NSArray *)messages;
 - (void)updateMessageWithoutBreakpoint:(AVIMMessage *)message;
 
 - (void)deleteMessageForId:(NSString *)messageId;
@@ -36,6 +39,9 @@
 - (NSArray *)messagesBeforeTimestamp:(int64_t)timestamp
                            messageId:(NSString *)messageId
                                limit:(NSUInteger)limit;
+
+- (NSArray *)messagesBeforeTimestamp:(int64_t)timestamp
+                              status:(AVIMMessageStatus)status;
 
 - (NSArray *)latestMessagesWithLimit:(NSUInteger)limit;
 
