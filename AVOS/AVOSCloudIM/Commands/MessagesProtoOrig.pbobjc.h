@@ -811,6 +811,7 @@ typedef GPB_ENUM(AVIMReadCommand_FieldNumber) {
   AVIMReadCommand_FieldNumber_Cid = 1,
   AVIMReadCommand_FieldNumber_CidsArray = 2,
   AVIMReadCommand_FieldNumber_ConvsArray = 3,
+  AVIMReadCommand_FieldNumber_TriggerReceipt = 4,
 };
 
 @interface AVIMReadCommand : LCIMMessage
@@ -827,6 +828,9 @@ typedef GPB_ENUM(AVIMReadCommand_FieldNumber) {
 /** The number of items in @c convsArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger convsArray_Count;
 
+@property(nonatomic, readwrite) BOOL triggerReceipt;
+
+@property(nonatomic, readwrite) BOOL hasTriggerReceipt;
 @end
 
 #pragma mark - AVIMPresenceCommand

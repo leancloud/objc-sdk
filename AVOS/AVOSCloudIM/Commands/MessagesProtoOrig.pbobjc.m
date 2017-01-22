@@ -1947,6 +1947,7 @@ typedef struct AVIMReadTuple__storage_ {
 @dynamic hasCid, cid;
 @dynamic cidsArray, cidsArray_Count;
 @dynamic convsArray, convsArray_Count;
+@dynamic hasTriggerReceipt, triggerReceipt;
 
 typedef struct AVIMReadCommand__storage_ {
   uint32_t _has_storage_[1];
@@ -1988,6 +1989,15 @@ typedef struct AVIMReadCommand__storage_ {
         .flags = LCIMFieldRepeated,
         .dataType = GPBDataTypeMessage,
       },
+      {
+        .name = "triggerReceipt",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMReadCommand_FieldNumber_TriggerReceipt,
+        .hasIndex = 1,
+        .offset = 2,  // Stored in _has_storage_ to save space.
+        .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeBool,
+      },
     };
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[AVIMReadCommand class]
@@ -1997,6 +2007,11 @@ typedef struct AVIMReadCommand__storage_ {
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(AVIMReadCommand__storage_)
                                          flags:LCIMDescriptorInitializationFlag_None];
+#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    static const char *extraTextFormatInfo =
+        "\001\004\016\000";
+    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
+#endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
   }
@@ -2417,7 +2432,8 @@ typedef struct AVIMGenericCommand__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescriptionWithDefault))
                                    storageSize:sizeof(AVIMGenericCommand__storage_)
-                                         flags:LCIMDescriptorInitializationFlag_FieldsWithDefault];
+         
+                                          flags:LCIMDescriptorInitializationFlag_FieldsWithDefault];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
         "\021\003\005\000\004\006\000\006\016\000d\014\000e\013\000f\016\000g\014\000h\r\000i\n\000j\r\000k\013\000l\n\000m\013\000"

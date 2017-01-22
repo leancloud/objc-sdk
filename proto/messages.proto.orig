@@ -246,6 +246,7 @@ message ReadCommand {
   optional string cid = 1;
   repeated string cids = 2;
   repeated ReadTuple convs = 3;
+  optional bool triggerReceipt = 4;
 }
 
 message PresenceCommand {
