@@ -28,6 +28,12 @@ static NSMutableDictionary *downloadingMap = nil;
 
 @end
 
+@interface AVFile ()
+
+@property (nonatomic, copy) NSString *token;
+
+@end
+
 @implementation AVFile
 
 - (NSMutableDictionary *)metadata {
@@ -213,13 +219,23 @@ static NSMutableDictionary *downloadingMap = nil;
 - (void)uploadFileWithResultBlock:(AVBooleanResultBlock)resultBlock progressBlock:(AVProgressBlock)progressBlock {
     __weak typeof(self) ws=self;
     [[AVUploaderManager sharedInstance] uploadWithAVFile:self progressBlock:progressBlock resultBlock:^(BOOL succeeded, NSError *error) {
-        if (!succeeded) {
-            [ws deleteInBackground];
-        } else {
+        if (succeeded)
             ws.isDirty = NO;
-        }
-        resultBlock(succeeded,error);
+
+        [AVUtils callBooleanResultBlock:resultBlock error:error];
+        [ws feedbackUploadResult:succeeded];
     }];
+}
+
+- (void)feedbackUploadResult:(BOOL)succeeded {
+    NSString *token = self.token;
+
+    if (!token)
+        return;
+
+    NSDictionary *parameters = @{@"token":token, @"result":@(succeeded)};
+
+    [[AVPaasClient sharedInstance] postObject:@"fileCallback" withParameters:parameters block:nil];
 }
 
 - (void)updateURLWithResultBlock:(AVBooleanResultBlock)resultBlock progressBlock:(AVProgressBlock)progressBlock {
