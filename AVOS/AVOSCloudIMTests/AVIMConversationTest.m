@@ -261,7 +261,7 @@
     [conversation queryMessagesFromServerWithLimit:10 callback:^(NSArray * _Nullable objects, NSError * _Nullable error) {
         XCTAssertTrue(objects.count > 0);
         AVIMMessage *message = [objects lastObject];
-        [conversation markAsReadInBackgroundForMessage:message];
+        [conversation markAsReadInBackgroundForLastMessage];
         NOTIFY
     }];
     WAIT;
