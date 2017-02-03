@@ -233,7 +233,7 @@ NSInteger const kAVErrorFileDataNotAvailable = 401;
         code = @(kAVErrorUnknownErrorCode);
     }
     if (!errorString || ((id)errorString == [NSNull null])) {
-        errorString = kAVErrorUnknownText;
+        errorString = [NSString stringWithFormat:@"%@, `code` and `error` are reserved keys.", kAVErrorUnknownText];
     }
     return [AVErrorUtils errorWithCode:code.integerValue errorText:errorString];
 }
