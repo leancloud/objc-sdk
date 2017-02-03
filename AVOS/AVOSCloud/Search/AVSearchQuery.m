@@ -19,6 +19,7 @@
 
 @property (nonatomic, readwrite, strong) NSMutableDictionary *parameters;
 @property (nonatomic, readwrite, strong) NSString *order;
+@property (nonatomic, readwrite, strong) NSMutableSet *include;
 
 @end
 
@@ -37,15 +38,30 @@
     return searchQuery;
 }
 
-- (AVSearchQuery *)initWithQueryString:(NSString *)queryString {
+- (instancetype)init {
     self = [super init];
+
     if (self) {
+        _limit = 100;
         _searchPath = @"search/select";
-        self.queryString = queryString;
-        self.limit = 100;
+        _include = [[NSMutableSet alloc] init];
+    }
+
+    return self;
+}
+
+- (instancetype)initWithQueryString:(NSString *)queryString {
+    self = [self init];
+
+    if (self) {
+        _queryString = [queryString copy];
     }
     
     return self;
+}
+
+- (void)includeKey:(NSString *)key {
+    [self.include addObject:[key copy]];
 }
 
 #pragma mark - Find methods
@@ -208,6 +224,10 @@
     if (self.order.length > 0)
     {
         [self.parameters setObject:self.order forKey:@"order"];
+    }
+    if (self.include.count > 0) {
+        NSString *fields = [[self.include allObjects] componentsJoinedByString:@","];
+        [self.parameters setObject:fields forKey:@"include"];
     }
     
     if (self.sortBuilder) {
