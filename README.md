@@ -15,7 +15,6 @@
   * [x] Instant Messaging (iOS, macOS only)
 
 ## Wanted Features
-  * [ ] Live Broadcast
   * [ ] Your good idea we are looking forward to :)
 
 ## Communication
