@@ -136,4 +136,45 @@
     XCTAssertTrue(minKey1 <= [[[objects firstObject] objectForKey:@"key1"] intValue], @"last object key1 should be the largest one");
 }
 
+- (void)testInclude {
+    NSString *className = NSStringFromClass([self class]);
+
+    AVObject *parent = [AVObject objectWithClassName:className];
+    AVObject *child  = [AVObject objectWithClassName:className];
+
+    child[@"name"]   = @"Mr. Child";
+    parent[@"child"] = child;
+
+    XCTAssertTrue([parent save], @"Failed to save object.");
+
+    [parent setObject:parent.objectId forKey:@"content"];
+
+    XCTAssertTrue([parent save], @"Failed to save objectId as content.");
+
+    sleep(60); /* Sleep 1 minute to wait the index to be created by server. */
+
+    [self searchParent:parent andChild:child];
+}
+
+- (void)searchParent:(AVObject *)parent andChild:(AVObject *)child {
+    AVSearchQuery *searchQuery = [AVSearchQuery searchWithQueryString:parent.objectId];
+
+    searchQuery.className = parent.className;
+    searchQuery.fields    = @[@"content",@"child"];
+
+    AVObject *child1 = [[searchQuery findObjects] firstObject][@"child"];
+
+    XCTAssertNotNil(child1);
+    XCTAssertNil(child1[@"name"]);
+
+    searchQuery.sid = nil;
+
+    [searchQuery includeKey:@"child"];
+
+    AVObject *child2 = [[searchQuery findObjects] firstObject][@"child"];
+
+    XCTAssertNotNil(child2);
+    XCTAssertEqualObjects(child2[@"name"], child[@"name"]);
+}
+
 @end
