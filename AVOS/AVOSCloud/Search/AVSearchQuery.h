@@ -78,6 +78,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (readwrite, assign) NSTimeInterval maxCacheAge;
 
+/*!
+ Make the query include AVObjects that have a reference stored at the provided key.
+ This has an effect similar to a join.  You can use dot notation to specify which fields in
+ the included object are also fetch.
+
+ @param key The key to load child AVObjects for.
+ */
+- (void)includeKey:(NSString *)key;
+
 #pragma mark - Find methods
 
 /*!
