@@ -169,13 +169,13 @@ typedef struct LCIMApi__storage_ {
 
 @end
 
-int32_t GPBApi_Syntax_RawValue(LCIMApi *message) {
+int32_t LCIMGPBApi_Syntax_RawValue(LCIMApi *message) {
   LCIMDescriptor *descriptor = [LCIMApi descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBApi_FieldNumber_Syntax];
   return LCIMGetMessageInt32Field(message, field);
 }
 
-void SetGPBApi_Syntax_RawValue(LCIMApi *message, int32_t value) {
+void LCIMSetGPBApi_Syntax_RawValue(LCIMApi *message, int32_t value) {
   LCIMDescriptor *descriptor = [LCIMApi descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBApi_FieldNumber_Syntax];
   LCIMSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
@@ -293,13 +293,13 @@ typedef struct LCIMMethod__storage_ {
 
 @end
 
-int32_t GPBMethod_Syntax_RawValue(LCIMMethod *message) {
+int32_t LCIMGPBMethod_Syntax_RawValue(LCIMMethod *message) {
   LCIMDescriptor *descriptor = [LCIMMethod descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBMethod_FieldNumber_Syntax];
   return LCIMGetMessageInt32Field(message, field);
 }
 
-void SetGPBMethod_Syntax_RawValue(LCIMMethod *message, int32_t value) {
+void LCIMSetGPBMethod_Syntax_RawValue(LCIMMethod *message, int32_t value) {
   LCIMDescriptor *descriptor = [LCIMMethod descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBMethod_FieldNumber_Syntax];
   LCIMSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);

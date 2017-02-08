@@ -226,19 +226,19 @@ typedef struct LCIMValue__storage_ {
 
 @end
 
-int32_t GPBValue_NullValue_RawValue(LCIMValue *message) {
+int32_t LCIMGPBValue_NullValue_RawValue(LCIMValue *message) {
   LCIMDescriptor *descriptor = [LCIMValue descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBValue_FieldNumber_NullValue];
   return LCIMGetMessageInt32Field(message, field);
 }
 
-void SetGPBValue_NullValue_RawValue(LCIMValue *message, int32_t value) {
+void LCIMSetGPBValue_NullValue_RawValue(LCIMValue *message, int32_t value) {
   LCIMDescriptor *descriptor = [LCIMValue descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBValue_FieldNumber_NullValue];
   LCIMSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
 }
 
-void GPBValue_ClearKindOneOfCase(LCIMValue *message) {
+void LCIMGPBValue_ClearKindOneOfCase(LCIMValue *message) {
   LCIMDescriptor *descriptor = [message descriptor];
   LCIMOneofDescriptor *oneof = descriptor->oneofs_[0];
   LCIMMaybeClearOneof(message, oneof, -1, 0);
