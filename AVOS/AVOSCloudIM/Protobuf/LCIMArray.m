@@ -2035,7 +2035,7 @@ static BOOL ArrayDefault_IsValidValue(int32_t value) {
 
 @implementation LCIMEnumArray {
  @package
-  GPBEnumValidationFunc _validationFunc;
+  LCIMEnumValidationFunc _validationFunc;
   int32_t *_values;
   NSUInteger _count;
   NSUInteger _capacity;
@@ -2048,11 +2048,11 @@ static BOOL ArrayDefault_IsValidValue(int32_t value) {
   return [[[self alloc] initWithValidationFunction:NULL] autorelease];
 }
 
-+ (instancetype)arrayWithValidationFunction:(GPBEnumValidationFunc)func {
++ (instancetype)arrayWithValidationFunction:(LCIMEnumValidationFunc)func {
   return [[[self alloc] initWithValidationFunction:func] autorelease];
 }
 
-+ (instancetype)arrayWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)arrayWithValidationFunction:(LCIMEnumValidationFunc)func
                                    rawValue:(int32_t)value {
   return [[[self alloc] initWithValidationFunction:func
                                          rawValues:&value
@@ -2063,7 +2063,7 @@ static BOOL ArrayDefault_IsValidValue(int32_t value) {
   return [[(LCIMEnumArray*)[self alloc] initWithValueArray:array] autorelease];
 }
 
-+ (instancetype)arrayWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)arrayWithValidationFunction:(LCIMEnumValidationFunc)func
                                    capacity:(NSUInteger)count {
   return [[[self alloc] initWithValidationFunction:func capacity:count] autorelease];
 }
@@ -2078,7 +2078,7 @@ static BOOL ArrayDefault_IsValidValue(int32_t value) {
                                     count:array->_count];
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func {
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func {
   self = [super init];
   if (self) {
     _validationFunc = (func != NULL ? func : ArrayDefault_IsValidValue);
@@ -2086,7 +2086,7 @@ static BOOL ArrayDefault_IsValidValue(int32_t value) {
   return self;
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func
                                  rawValues:(const int32_t [])values
                                      count:(NSUInteger)count {
   self = [self initWithValidationFunction:func];
@@ -2108,7 +2108,7 @@ static BOOL ArrayDefault_IsValidValue(int32_t value) {
   return self;
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func
                                   capacity:(NSUInteger)count {
   self = [self initWithValidationFunction:func];
   if (self && count) {
@@ -2225,7 +2225,7 @@ static BOOL ArrayDefault_IsValidValue(int32_t value) {
                         usingBlock:(void (^)(int32_t value, NSUInteger idx, BOOL *stop))block {
   // NSEnumerationConcurrent isn't currently supported (and Apple's docs say that is ok).
   BOOL stop = NO;
-  GPBEnumValidationFunc func = _validationFunc;
+  LCIMEnumValidationFunc func = _validationFunc;
   if ((opts & NSEnumerationReverse) == 0) {
     int32_t *scan = _values;
     int32_t *end = scan + _count;
@@ -2367,7 +2367,7 @@ static BOOL ArrayDefault_IsValidValue(int32_t value) {
 
 - (void)addValues:(const int32_t [])values count:(NSUInteger)count {
   if (values == NULL || count == 0) return;
-  GPBEnumValidationFunc func = _validationFunc;
+  LCIMEnumValidationFunc func = _validationFunc;
   for (NSUInteger i = 0; i < count; ++i) {
     if (!func(values[i])) {
       [NSException raise:NSInvalidArgumentException
@@ -2429,7 +2429,7 @@ static BOOL ArrayDefault_IsValidValue(int32_t value) {
 //%PDDM-EXPAND-END (2 expansions)
 
 //%PDDM-DEFINE MUTATION_HOOK_EnumValidationList()
-//%  GPBEnumValidationFunc func = _validationFunc;
+//%  LCIMEnumValidationFunc func = _validationFunc;
 //%  for (NSUInteger i = 0; i < count; ++i) {
 //%    if (!func(values[i])) {
 //%      [NSException raise:NSInvalidArgumentException

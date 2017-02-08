@@ -23,15 +23,15 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-#pragma mark - GPBFieldMaskRoot
+#pragma mark - LCIMFieldMaskRoot
 
 @implementation LCIMFieldMaskRoot
 
 @end
 
-#pragma mark - GPBFieldMaskRoot_FileDescriptor
+#pragma mark - LCIMFieldMaskRoot_FileDescriptor
 
-static LCIMFileDescriptor *GPBFieldMaskRoot_FileDescriptor(void) {
+static LCIMFileDescriptor *LCIMFieldMaskRoot_FileDescriptor(void) {
   // This is called by +initialize so there is no need to worry
   // about thread safety of the singleton.
   static LCIMFileDescriptor *descriptor = NULL;
@@ -43,7 +43,7 @@ static LCIMFileDescriptor *GPBFieldMaskRoot_FileDescriptor(void) {
   return descriptor;
 }
 
-#pragma mark - GPBFieldMask
+#pragma mark - LCIMFieldMask
 
 @implementation LCIMFieldMask
 
@@ -63,7 +63,7 @@ typedef struct LCIMFieldMask__storage_ {
       {
         .name = "pathsArray",
         .dataTypeSpecific.className = NULL,
-        .number = GPBFieldMask_FieldNumber_PathsArray,
+        .number = LCIMFieldMask_FieldNumber_PathsArray,
         .hasIndex = GPBNoHasBit,
         .offset = (uint32_t)offsetof(LCIMFieldMask__storage_, pathsArray),
         .flags = LCIMFieldRepeated,
@@ -73,7 +73,7 @@ typedef struct LCIMFieldMask__storage_ {
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[LCIMFieldMask class]
                                      rootClass:[LCIMFieldMaskRoot class]
-                                          file:GPBFieldMaskRoot_FileDescriptor()
+                                          file:LCIMFieldMaskRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(LCIMFieldMask__storage_)

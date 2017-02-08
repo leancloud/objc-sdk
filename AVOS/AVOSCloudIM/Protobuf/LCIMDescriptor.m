@@ -468,7 +468,7 @@ uint32_t LCIMFieldAlternateTag(LCIMFieldDescriptor *self) {
   // be a enumDescriptor, otherwise it will be a enumVerifier.
   union {
     LCIMEnumDescriptor *enumDescriptor_;
-    GPBEnumValidationFunc enumVerifier_;
+    LCIMEnumValidationFunc enumVerifier_;
   } enumHandling_;
 }
 
@@ -750,7 +750,7 @@ uint32_t LCIMFieldAlternateTag(LCIMFieldDescriptor *self) {
   // names.
   const char *valueNames_;
   const int32_t *values_;
-  GPBEnumValidationFunc enumVerifier_;
+  LCIMEnumValidationFunc enumVerifier_;
   const uint8_t *extraTextFormatInfo_;
   uint32_t *nameOffsets_;
   uint32_t valueCount_;
@@ -764,7 +764,7 @@ uint32_t LCIMFieldAlternateTag(LCIMFieldDescriptor *self) {
                 valueNames:(const char *)valueNames
                     values:(const int32_t *)values
                      count:(uint32_t)valueCount
-              enumVerifier:(GPBEnumValidationFunc)enumVerifier {
+              enumVerifier:(LCIMEnumValidationFunc)enumVerifier {
   LCIMEnumDescriptor *descriptor = [[self alloc] initWithName:name
                                                   valueNames:valueNames
                                                       values:values
@@ -778,7 +778,7 @@ uint32_t LCIMFieldAlternateTag(LCIMFieldDescriptor *self) {
                 valueNames:(const char *)valueNames
                     values:(const int32_t *)values
                      count:(uint32_t)valueCount
-              enumVerifier:(GPBEnumValidationFunc)enumVerifier
+              enumVerifier:(LCIMEnumValidationFunc)enumVerifier
        extraTextFormatInfo:(const char *)extraTextFormatInfo {
   // Call the common case.
   LCIMEnumDescriptor *descriptor = [self allocDescriptorForName:name
@@ -795,7 +795,7 @@ uint32_t LCIMFieldAlternateTag(LCIMFieldDescriptor *self) {
                   valueNames:(const char *)valueNames
                       values:(const int32_t *)values
                        count:(uint32_t)valueCount
-                enumVerifier:(GPBEnumValidationFunc)enumVerifier {
+                enumVerifier:(LCIMEnumValidationFunc)enumVerifier {
   if ((self = [super init])) {
     name_ = [name copy];
     valueNames_ = valueNames;

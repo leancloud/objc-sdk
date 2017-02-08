@@ -1067,7 +1067,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** Number of entries stored in this dictionary. */
 @property(nonatomic, readonly) NSUInteger count;
 /** The validation function to check if the enums are valid. */
-@property(nonatomic, readonly) GPBEnumValidationFunc validationFunc;
+@property(nonatomic, readonly) LCIMEnumValidationFunc validationFunc;
 
 /**
  * @return A newly instanced and empty dictionary.
@@ -1081,7 +1081,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func;
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func;
 
 /**
  * Creates and initializes a dictionary with the single entry given.
@@ -1092,7 +1092,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary with the key and value in it.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                         rawValue:(int32_t)rawValue
                                           forKey:(uint32_t)key;
 
@@ -1106,7 +1106,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary with the keys and values in it.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                        rawValues:(const int32_t [])values
                                          forKeys:(const uint32_t [])keys
                                            count:(NSUInteger)count;
@@ -1130,7 +1130,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary with the given capacity.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                         capacity:(NSUInteger)numItems;
 
 /**
@@ -1140,7 +1140,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized dictionary.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func;
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func;
 
 /**
  * Initializes a dictionary with the entries given.
@@ -1152,7 +1152,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized dictionary with the keys and values in it.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                  rawValues:(const int32_t [])values
                                    forKeys:(const uint32_t [])keys
                                      count:(NSUInteger)count NS_DESIGNATED_INITIALIZER;
@@ -1176,7 +1176,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized dictionary with the given capacity.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                   capacity:(NSUInteger)numItems;
 
 // These will return kGPBUnrecognizedEnumeratorValue if the value for the key
@@ -2444,7 +2444,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** Number of entries stored in this dictionary. */
 @property(nonatomic, readonly) NSUInteger count;
 /** The validation function to check if the enums are valid. */
-@property(nonatomic, readonly) GPBEnumValidationFunc validationFunc;
+@property(nonatomic, readonly) LCIMEnumValidationFunc validationFunc;
 
 /**
  * @return A newly instanced and empty dictionary.
@@ -2458,7 +2458,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func;
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func;
 
 /**
  * Creates and initializes a dictionary with the single entry given.
@@ -2469,7 +2469,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary with the key and value in it.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                         rawValue:(int32_t)rawValue
                                           forKey:(int32_t)key;
 
@@ -2483,7 +2483,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary with the keys and values in it.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                        rawValues:(const int32_t [])values
                                          forKeys:(const int32_t [])keys
                                            count:(NSUInteger)count;
@@ -2507,7 +2507,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary with the given capacity.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                         capacity:(NSUInteger)numItems;
 
 /**
@@ -2517,7 +2517,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized dictionary.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func;
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func;
 
 /**
  * Initializes a dictionary with the entries given.
@@ -2529,7 +2529,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized dictionary with the keys and values in it.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                  rawValues:(const int32_t [])values
                                    forKeys:(const int32_t [])keys
                                      count:(NSUInteger)count NS_DESIGNATED_INITIALIZER;
@@ -2553,7 +2553,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized dictionary with the given capacity.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                   capacity:(NSUInteger)numItems;
 
 // These will return kGPBUnrecognizedEnumeratorValue if the value for the key
@@ -3821,7 +3821,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** Number of entries stored in this dictionary. */
 @property(nonatomic, readonly) NSUInteger count;
 /** The validation function to check if the enums are valid. */
-@property(nonatomic, readonly) GPBEnumValidationFunc validationFunc;
+@property(nonatomic, readonly) LCIMEnumValidationFunc validationFunc;
 
 /**
  * @return A newly instanced and empty dictionary.
@@ -3835,7 +3835,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func;
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func;
 
 /**
  * Creates and initializes a dictionary with the single entry given.
@@ -3846,7 +3846,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary with the key and value in it.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                         rawValue:(int32_t)rawValue
                                           forKey:(uint64_t)key;
 
@@ -3860,7 +3860,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary with the keys and values in it.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                        rawValues:(const int32_t [])values
                                          forKeys:(const uint64_t [])keys
                                            count:(NSUInteger)count;
@@ -3884,7 +3884,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary with the given capacity.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                         capacity:(NSUInteger)numItems;
 
 /**
@@ -3894,7 +3894,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized dictionary.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func;
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func;
 
 /**
  * Initializes a dictionary with the entries given.
@@ -3906,7 +3906,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized dictionary with the keys and values in it.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                  rawValues:(const int32_t [])values
                                    forKeys:(const uint64_t [])keys
                                      count:(NSUInteger)count NS_DESIGNATED_INITIALIZER;
@@ -3930,7 +3930,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized dictionary with the given capacity.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                   capacity:(NSUInteger)numItems;
 
 // These will return kGPBUnrecognizedEnumeratorValue if the value for the key
@@ -5198,7 +5198,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** Number of entries stored in this dictionary. */
 @property(nonatomic, readonly) NSUInteger count;
 /** The validation function to check if the enums are valid. */
-@property(nonatomic, readonly) GPBEnumValidationFunc validationFunc;
+@property(nonatomic, readonly) LCIMEnumValidationFunc validationFunc;
 
 /**
  * @return A newly instanced and empty dictionary.
@@ -5212,7 +5212,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func;
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func;
 
 /**
  * Creates and initializes a dictionary with the single entry given.
@@ -5223,7 +5223,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary with the key and value in it.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                         rawValue:(int32_t)rawValue
                                           forKey:(int64_t)key;
 
@@ -5237,7 +5237,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary with the keys and values in it.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                        rawValues:(const int32_t [])values
                                          forKeys:(const int64_t [])keys
                                            count:(NSUInteger)count;
@@ -5261,7 +5261,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary with the given capacity.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                         capacity:(NSUInteger)numItems;
 
 /**
@@ -5271,7 +5271,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized dictionary.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func;
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func;
 
 /**
  * Initializes a dictionary with the entries given.
@@ -5283,7 +5283,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized dictionary with the keys and values in it.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                  rawValues:(const int32_t [])values
                                    forKeys:(const int64_t [])keys
                                      count:(NSUInteger)count NS_DESIGNATED_INITIALIZER;
@@ -5307,7 +5307,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized dictionary with the given capacity.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                   capacity:(NSUInteger)numItems;
 
 // These will return kGPBUnrecognizedEnumeratorValue if the value for the key
@@ -6575,7 +6575,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** Number of entries stored in this dictionary. */
 @property(nonatomic, readonly) NSUInteger count;
 /** The validation function to check if the enums are valid. */
-@property(nonatomic, readonly) GPBEnumValidationFunc validationFunc;
+@property(nonatomic, readonly) LCIMEnumValidationFunc validationFunc;
 
 /**
  * @return A newly instanced and empty dictionary.
@@ -6589,7 +6589,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func;
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func;
 
 /**
  * Creates and initializes a dictionary with the single entry given.
@@ -6600,7 +6600,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary with the key and value in it.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                         rawValue:(int32_t)rawValue
                                           forKey:(BOOL)key;
 
@@ -6614,7 +6614,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary with the keys and values in it.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                        rawValues:(const int32_t [])values
                                          forKeys:(const BOOL [])keys
                                            count:(NSUInteger)count;
@@ -6638,7 +6638,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary with the given capacity.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                         capacity:(NSUInteger)numItems;
 
 /**
@@ -6648,7 +6648,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized dictionary.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func;
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func;
 
 /**
  * Initializes a dictionary with the entries given.
@@ -6660,7 +6660,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized dictionary with the keys and values in it.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                  rawValues:(const int32_t [])values
                                    forKeys:(const BOOL [])keys
                                      count:(NSUInteger)count NS_DESIGNATED_INITIALIZER;
@@ -6684,7 +6684,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized dictionary with the given capacity.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                   capacity:(NSUInteger)numItems;
 
 // These will return kGPBUnrecognizedEnumeratorValue if the value for the key
@@ -7952,7 +7952,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** Number of entries stored in this dictionary. */
 @property(nonatomic, readonly) NSUInteger count;
 /** The validation function to check if the enums are valid. */
-@property(nonatomic, readonly) GPBEnumValidationFunc validationFunc;
+@property(nonatomic, readonly) LCIMEnumValidationFunc validationFunc;
 
 /**
  * @return A newly instanced and empty dictionary.
@@ -7966,7 +7966,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func;
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func;
 
 /**
  * Creates and initializes a dictionary with the single entry given.
@@ -7977,7 +7977,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary with the key and value in it.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                         rawValue:(int32_t)rawValue
                                           forKey:(NSString *)key;
 
@@ -7991,7 +7991,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary with the keys and values in it.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                        rawValues:(const int32_t [])values
                                          forKeys:(const NSString * GPB_UNSAFE_UNRETAINED [])keys
                                            count:(NSUInteger)count;
@@ -8015,7 +8015,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced dictionary with the given capacity.
  **/
-+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                         capacity:(NSUInteger)numItems;
 
 /**
@@ -8025,7 +8025,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized dictionary.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func;
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func;
 
 /**
  * Initializes a dictionary with the entries given.
@@ -8037,7 +8037,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized dictionary with the keys and values in it.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                  rawValues:(const int32_t [])values
                                    forKeys:(const NSString * GPB_UNSAFE_UNRETAINED [])keys
                                      count:(NSUInteger)count NS_DESIGNATED_INITIALIZER;
@@ -8061,7 +8061,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized dictionary with the given capacity.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                   capacity:(NSUInteger)numItems;
 
 // These will return kGPBUnrecognizedEnumeratorValue if the value for the key
@@ -8350,7 +8350,7 @@ NS_ASSUME_NONNULL_END
 //%/** Number of entries stored in this dictionary. */
 //%@property(nonatomic, readonly) NSUInteger count;
 //%/** The validation function to check if the enums are valid. */
-//%@property(nonatomic, readonly) GPBEnumValidationFunc validationFunc;
+//%@property(nonatomic, readonly) LCIMEnumValidationFunc validationFunc;
 //%
 //%/**
 //% * @return A newly instanced and empty dictionary.
@@ -8364,7 +8364,7 @@ NS_ASSUME_NONNULL_END
 //% * 
 //% * @return A newly instanced dictionary.
 //% **/
-//%+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func;
+//%+ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func;
 //%
 //%/**
 //% * Creates and initializes a dictionary with the single entry given.
@@ -8375,7 +8375,7 @@ NS_ASSUME_NONNULL_END
 //% * 
 //% * @return A newly instanced dictionary with the key and value in it.
 //% **/
-//%+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
+//%+ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
 //%                                        rawValue:(VALUE_TYPE)rawValue
 //%                                          forKey:(KEY_TYPE##KisP$S##KisP)key;
 //%
@@ -8389,7 +8389,7 @@ NS_ASSUME_NONNULL_END
 //% * 
 //% * @return A newly instanced dictionary with the keys and values in it.
 //% **/
-//%+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
+//%+ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
 //%                                       rawValues:(const VALUE_TYPE ARRAY_ARG_MODIFIER##VHELPER()[])values
 //%                                         forKeys:(const KEY_TYPE##KisP$S##KisP ARRAY_ARG_MODIFIER##KHELPER()[])keys
 //%                                           count:(NSUInteger)count;
@@ -8413,7 +8413,7 @@ NS_ASSUME_NONNULL_END
 //% * 
 //% * @return A newly instanced dictionary with the given capacity.
 //% **/
-//%+ (instancetype)dictionaryWithValidationFunction:(nullable GPBEnumValidationFunc)func
+//%+ (instancetype)dictionaryWithValidationFunction:(nullable LCIMEnumValidationFunc)func
 //%                                        capacity:(NSUInteger)numItems;
 //%
 //%/**
@@ -8423,7 +8423,7 @@ NS_ASSUME_NONNULL_END
 //% * 
 //% * @return A newly initialized dictionary.
 //% **/
-//%- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func;
+//%- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func;
 //%
 //%/**
 //% * Initializes a dictionary with the entries given.
@@ -8435,7 +8435,7 @@ NS_ASSUME_NONNULL_END
 //% * 
 //% * @return A newly initialized dictionary with the keys and values in it.
 //% **/
-//%- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+//%- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
 //%                                 rawValues:(const VALUE_TYPE ARRAY_ARG_MODIFIER##VHELPER()[])values
 //%                                   forKeys:(const KEY_TYPE##KisP$S##KisP ARRAY_ARG_MODIFIER##KHELPER()[])keys
 //%                                     count:(NSUInteger)count NS_DESIGNATED_INITIALIZER;
@@ -8459,7 +8459,7 @@ NS_ASSUME_NONNULL_END
 //% * 
 //% * @return A newly initialized dictionary with the given capacity.
 //% **/
-//%- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+//%- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
 //%                                  capacity:(NSUInteger)numItems;
 //%
 //%// These will return kGPBUnrecognizedEnumeratorValue if the value for the key

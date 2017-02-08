@@ -674,7 +674,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 //%@implementation LCIM##KEY_NAME##VALUE_NAME##Dictionary {
 //% @package
 //%  NSMutableDictionary *_dictionary;
-//%  GPBEnumValidationFunc _validationFunc;
+//%  LCIMEnumValidationFunc _validationFunc;
 //%}
 //%
 //%@synthesize validationFunc = _validationFunc;
@@ -686,14 +686,14 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 //%                                             count:0] autorelease];
 //%}
 //%
-//%+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func {
+//%+ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func {
 //%  return [[[self alloc] initWithValidationFunction:func
 //%                                         rawValues:NULL
 //%                                           forKeys:NULL
 //%                                             count:0] autorelease];
 //%}
 //%
-//%+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
+//%+ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
 //%                                        rawValue:(VALUE_TYPE)rawValue
 //%                                          forKey:(KEY_TYPE##KisP$S##KisP)key {
 //%  // Cast is needed so the compiler knows what class we are invoking initWithValues:forKeys:count:
@@ -704,7 +704,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 //%               KEY_NAME$S VALUE_NAME$S                                             count:1] autorelease];
 //%}
 //%
-//%+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
+//%+ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
 //%                                       rawValues:(const VALUE_TYPE [])rawValues
 //%                                         forKeys:(const KEY_TYPE##KisP$S##KisP [])keys
 //%                                           count:(NSUInteger)count {
@@ -722,7 +722,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 //%  return [[(LCIM##KEY_NAME##VALUE_NAME##Dictionary*)[self alloc] initWithDictionary:dictionary] autorelease];
 //%}
 //%
-//%+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
+//%+ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
 //%                                        capacity:(NSUInteger)numItems {
 //%  return [[[self alloc] initWithValidationFunction:func capacity:numItems] autorelease];
 //%}
@@ -731,11 +731,11 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 //%  return [self initWithValidationFunction:NULL rawValues:NULL forKeys:NULL count:0];
 //%}
 //%
-//%- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func {
+//%- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func {
 //%  return [self initWithValidationFunction:func rawValues:NULL forKeys:NULL count:0];
 //%}
 //%
-//%- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func
+//%- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func
 //%                                 rawValues:(const VALUE_TYPE [])rawValues
 //%                                   forKeys:(const KEY_TYPE##KisP$S##KisP [])keys
 //%                                     count:(NSUInteger)count {
@@ -765,7 +765,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 //%  return self;
 //%}
 //%
-//%- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func
+//%- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func
 //%                                  capacity:(NSUInteger)numItems {
 //%  #pragma unused(numItems)
 //%  return [self initWithValidationFunction:func rawValues:NULL forKeys:NULL count:0];
@@ -795,7 +795,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 //%
 //%- (void)enumerateKeysAndEnumsUsingBlock:
 //%    (void (^)(KEY_TYPE KisP##key, VALUE_TYPE value, BOOL *stop))block {
-//%  GPBEnumValidationFunc func = _validationFunc;
+//%  LCIMEnumValidationFunc func = _validationFunc;
 //%  [_dictionary enumerateKeysAndObjectsUsingBlock:^(ENUM_TYPE##KHELPER(KEY_TYPE)##aKey,
 //%                                                   ENUM_TYPE##VHELPER(VALUE_TYPE)##aValue,
 //%                                                   BOOL *stop) {
@@ -915,7 +915,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 //%
 //%SERIAL_DATA_FOR_ENTRY_##VHELPER(KEY_NAME, VALUE_NAME)- (void)setGPBGenericValue:(GPBGenericValue *)value
 //%     forGPBGenericValueKey:(GPBGenericValue *)key {
-//%  [_dictionary setObject:WRAPPED##VHELPER(value->##GPBVALUE_##VHELPER(VALUE_NAME)##) forKey:WRAPPED##KHELPER(key->value##KEY_NAME)];
+//%  [_dictionary setObject:WRAPPED##VHELPER(value->##LCIMValue_##VHELPER(VALUE_NAME)##) forKey:WRAPPED##KHELPER(key->value##KEY_NAME)];
 //%}
 //%
 //%- (void)enumerateForTextFormat:(void (^)(id keyObj, id valueObj))block {
@@ -1059,7 +1059,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 //%
 //%BOOL_VALUE_FOR_KEY_##HELPER(VALUE_NAME, VALUE_TYPE)
 //%
-//%BOOL_SET_GPBVALUE_FOR_KEY_##HELPER(VALUE_NAME, VALUE_TYPE, VisP)
+//%BOOL_SET_LCIMValue_FOR_KEY_##HELPER(VALUE_NAME, VALUE_TYPE, VisP)
 //%
 //%- (void)enumerateForTextFormat:(void (^)(id keyObj, id valueObj))block {
 //%  if (BOOL_DICT_HAS##HELPER(0, )) {
@@ -1207,7 +1207,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 //%  return data;
 //%}
 //%
-//%PDDM-DEFINE GPBVALUE_POD(VALUE_NAME)
+//%PDDM-DEFINE LCIMValue_POD(VALUE_NAME)
 //%value##VALUE_NAME
 //%PDDM-DEFINE DICTIONARY_VALIDATE_VALUE_POD(VALUE_NAME, EXTRA_INDENT)
 // Empty
@@ -1270,7 +1270,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 //%  }
 //%  return NO;
 //%}
-//%PDDM-DEFINE BOOL_SET_GPBVALUE_FOR_KEY_POD(VALUE_NAME, VALUE_TYPE, VisP)
+//%PDDM-DEFINE BOOL_SET_LCIMValue_FOR_KEY_POD(VALUE_NAME, VALUE_TYPE, VisP)
 //%- (void)setGPBGenericValue:(GPBGenericValue *)value
 //%     forGPBGenericValueKey:(GPBGenericValue *)key {
 //%  int idx = (key->valueBool ? 1 : 0);
@@ -1403,7 +1403,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 //%
 //%PDDM-DEFINE SERIAL_DATA_FOR_ENTRY_OBJECT(KEY_NAME, VALUE_NAME)
 // Empty
-//%PDDM-DEFINE GPBVALUE_OBJECT(VALUE_NAME)
+//%PDDM-DEFINE LCIMValue_OBJECT(VALUE_NAME)
 //%valueString
 //%PDDM-DEFINE DICTIONARY_VALIDATE_VALUE_OBJECT(VALUE_NAME, EXTRA_INDENT)
 //%##EXTRA_INDENT$S##  if (!##VALUE_NAME) {
@@ -1466,7 +1466,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 //%- (VALUE_TYPE)objectForKey:(BOOL)key {
 //%  return _values[key ? 1 : 0];
 //%}
-//%PDDM-DEFINE BOOL_SET_GPBVALUE_FOR_KEY_OBJECT(VALUE_NAME, VALUE_TYPE, VisP)
+//%PDDM-DEFINE BOOL_SET_LCIMValue_FOR_KEY_OBJECT(VALUE_NAME, VALUE_TYPE, VisP)
 //%- (void)setGPBGenericValue:(GPBGenericValue *)value
 //%     forGPBGenericValueKey:(GPBGenericValue *)key {
 //%  int idx = (key->valueBool ? 1 : 0);
@@ -2975,7 +2975,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 @implementation LCIMUInt32EnumDictionary {
  @package
   NSMutableDictionary *_dictionary;
-  GPBEnumValidationFunc _validationFunc;
+  LCIMEnumValidationFunc _validationFunc;
 }
 
 @synthesize validationFunc = _validationFunc;
@@ -2987,14 +2987,14 @@ void LCIMDictionaryReadEntry(id mapDictionary,
                                              count:0] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func {
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func {
   return [[[self alloc] initWithValidationFunction:func
                                          rawValues:NULL
                                            forKeys:NULL
                                              count:0] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
                                         rawValue:(int32_t)rawValue
                                           forKey:(uint32_t)key {
   // Cast is needed so the compiler knows what class we are invoking initWithValues:forKeys:count:
@@ -3005,7 +3005,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
                                                                        count:1] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
                                        rawValues:(const int32_t [])rawValues
                                          forKeys:(const uint32_t [])keys
                                            count:(NSUInteger)count {
@@ -3023,7 +3023,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
   return [[(LCIMUInt32EnumDictionary*)[self alloc] initWithDictionary:dictionary] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
                                         capacity:(NSUInteger)numItems {
   return [[[self alloc] initWithValidationFunction:func capacity:numItems] autorelease];
 }
@@ -3032,11 +3032,11 @@ void LCIMDictionaryReadEntry(id mapDictionary,
   return [self initWithValidationFunction:NULL rawValues:NULL forKeys:NULL count:0];
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func {
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func {
   return [self initWithValidationFunction:func rawValues:NULL forKeys:NULL count:0];
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func
                                  rawValues:(const int32_t [])rawValues
                                    forKeys:(const uint32_t [])keys
                                      count:(NSUInteger)count {
@@ -3066,7 +3066,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
   return self;
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func
                                   capacity:(NSUInteger)numItems {
   #pragma unused(numItems)
   return [self initWithValidationFunction:func rawValues:NULL forKeys:NULL count:0];
@@ -3205,7 +3205,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 
 - (void)enumerateKeysAndEnumsUsingBlock:
     (void (^)(uint32_t key, int32_t value, BOOL *stop))block {
-  GPBEnumValidationFunc func = _validationFunc;
+  LCIMEnumValidationFunc func = _validationFunc;
   [_dictionary enumerateKeysAndObjectsUsingBlock:^(NSNumber *aKey,
                                                    NSNumber *aValue,
                                                    BOOL *stop) {
@@ -4948,7 +4948,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 @implementation LCIMInt32EnumDictionary {
  @package
   NSMutableDictionary *_dictionary;
-  GPBEnumValidationFunc _validationFunc;
+  LCIMEnumValidationFunc _validationFunc;
 }
 
 @synthesize validationFunc = _validationFunc;
@@ -4960,14 +4960,14 @@ void LCIMDictionaryReadEntry(id mapDictionary,
                                              count:0] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func {
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func {
   return [[[self alloc] initWithValidationFunction:func
                                          rawValues:NULL
                                            forKeys:NULL
                                              count:0] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
                                         rawValue:(int32_t)rawValue
                                           forKey:(int32_t)key {
   // Cast is needed so the compiler knows what class we are invoking initWithValues:forKeys:count:
@@ -4978,7 +4978,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
                                                                       count:1] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
                                        rawValues:(const int32_t [])rawValues
                                          forKeys:(const int32_t [])keys
                                            count:(NSUInteger)count {
@@ -4996,7 +4996,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
   return [[(LCIMInt32EnumDictionary*)[self alloc] initWithDictionary:dictionary] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
                                         capacity:(NSUInteger)numItems {
   return [[[self alloc] initWithValidationFunction:func capacity:numItems] autorelease];
 }
@@ -5005,11 +5005,11 @@ void LCIMDictionaryReadEntry(id mapDictionary,
   return [self initWithValidationFunction:NULL rawValues:NULL forKeys:NULL count:0];
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func {
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func {
   return [self initWithValidationFunction:func rawValues:NULL forKeys:NULL count:0];
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func
                                  rawValues:(const int32_t [])rawValues
                                    forKeys:(const int32_t [])keys
                                      count:(NSUInteger)count {
@@ -5039,7 +5039,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
   return self;
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func
                                   capacity:(NSUInteger)numItems {
   #pragma unused(numItems)
   return [self initWithValidationFunction:func rawValues:NULL forKeys:NULL count:0];
@@ -5178,7 +5178,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 
 - (void)enumerateKeysAndEnumsUsingBlock:
     (void (^)(int32_t key, int32_t value, BOOL *stop))block {
-  GPBEnumValidationFunc func = _validationFunc;
+  LCIMEnumValidationFunc func = _validationFunc;
   [_dictionary enumerateKeysAndObjectsUsingBlock:^(NSNumber *aKey,
                                                    NSNumber *aValue,
                                                    BOOL *stop) {
@@ -6921,7 +6921,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 @implementation LCIMUInt64EnumDictionary {
  @package
   NSMutableDictionary *_dictionary;
-  GPBEnumValidationFunc _validationFunc;
+  LCIMEnumValidationFunc _validationFunc;
 }
 
 @synthesize validationFunc = _validationFunc;
@@ -6933,14 +6933,14 @@ void LCIMDictionaryReadEntry(id mapDictionary,
                                              count:0] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func {
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func {
   return [[[self alloc] initWithValidationFunction:func
                                          rawValues:NULL
                                            forKeys:NULL
                                              count:0] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
                                         rawValue:(int32_t)rawValue
                                           forKey:(uint64_t)key {
   // Cast is needed so the compiler knows what class we are invoking initWithValues:forKeys:count:
@@ -6951,7 +6951,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
                                                                        count:1] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
                                        rawValues:(const int32_t [])rawValues
                                          forKeys:(const uint64_t [])keys
                                            count:(NSUInteger)count {
@@ -6969,7 +6969,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
   return [[(LCIMUInt64EnumDictionary*)[self alloc] initWithDictionary:dictionary] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
                                         capacity:(NSUInteger)numItems {
   return [[[self alloc] initWithValidationFunction:func capacity:numItems] autorelease];
 }
@@ -6978,11 +6978,11 @@ void LCIMDictionaryReadEntry(id mapDictionary,
   return [self initWithValidationFunction:NULL rawValues:NULL forKeys:NULL count:0];
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func {
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func {
   return [self initWithValidationFunction:func rawValues:NULL forKeys:NULL count:0];
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func
                                  rawValues:(const int32_t [])rawValues
                                    forKeys:(const uint64_t [])keys
                                      count:(NSUInteger)count {
@@ -7012,7 +7012,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
   return self;
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func
                                   capacity:(NSUInteger)numItems {
   #pragma unused(numItems)
   return [self initWithValidationFunction:func rawValues:NULL forKeys:NULL count:0];
@@ -7151,7 +7151,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 
 - (void)enumerateKeysAndEnumsUsingBlock:
     (void (^)(uint64_t key, int32_t value, BOOL *stop))block {
-  GPBEnumValidationFunc func = _validationFunc;
+  LCIMEnumValidationFunc func = _validationFunc;
   [_dictionary enumerateKeysAndObjectsUsingBlock:^(NSNumber *aKey,
                                                    NSNumber *aValue,
                                                    BOOL *stop) {
@@ -8894,7 +8894,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 @implementation LCIMInt64EnumDictionary {
  @package
   NSMutableDictionary *_dictionary;
-  GPBEnumValidationFunc _validationFunc;
+  LCIMEnumValidationFunc _validationFunc;
 }
 
 @synthesize validationFunc = _validationFunc;
@@ -8906,14 +8906,14 @@ void LCIMDictionaryReadEntry(id mapDictionary,
                                              count:0] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func {
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func {
   return [[[self alloc] initWithValidationFunction:func
                                          rawValues:NULL
                                            forKeys:NULL
                                              count:0] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
                                         rawValue:(int32_t)rawValue
                                           forKey:(int64_t)key {
   // Cast is needed so the compiler knows what class we are invoking initWithValues:forKeys:count:
@@ -8924,7 +8924,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
                                                                       count:1] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
                                        rawValues:(const int32_t [])rawValues
                                          forKeys:(const int64_t [])keys
                                            count:(NSUInteger)count {
@@ -8942,7 +8942,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
   return [[(LCIMInt64EnumDictionary*)[self alloc] initWithDictionary:dictionary] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
                                         capacity:(NSUInteger)numItems {
   return [[[self alloc] initWithValidationFunction:func capacity:numItems] autorelease];
 }
@@ -8951,11 +8951,11 @@ void LCIMDictionaryReadEntry(id mapDictionary,
   return [self initWithValidationFunction:NULL rawValues:NULL forKeys:NULL count:0];
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func {
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func {
   return [self initWithValidationFunction:func rawValues:NULL forKeys:NULL count:0];
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func
                                  rawValues:(const int32_t [])rawValues
                                    forKeys:(const int64_t [])keys
                                      count:(NSUInteger)count {
@@ -8985,7 +8985,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
   return self;
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func
                                   capacity:(NSUInteger)numItems {
   #pragma unused(numItems)
   return [self initWithValidationFunction:func rawValues:NULL forKeys:NULL count:0];
@@ -9124,7 +9124,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 
 - (void)enumerateKeysAndEnumsUsingBlock:
     (void (^)(int64_t key, int32_t value, BOOL *stop))block {
-  GPBEnumValidationFunc func = _validationFunc;
+  LCIMEnumValidationFunc func = _validationFunc;
   [_dictionary enumerateKeysAndObjectsUsingBlock:^(NSNumber *aKey,
                                                    NSNumber *aValue,
                                                    BOOL *stop) {
@@ -10923,7 +10923,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 @implementation LCIMStringEnumDictionary {
  @package
   NSMutableDictionary *_dictionary;
-  GPBEnumValidationFunc _validationFunc;
+  LCIMEnumValidationFunc _validationFunc;
 }
 
 @synthesize validationFunc = _validationFunc;
@@ -10935,14 +10935,14 @@ void LCIMDictionaryReadEntry(id mapDictionary,
                                              count:0] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func {
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func {
   return [[[self alloc] initWithValidationFunction:func
                                          rawValues:NULL
                                            forKeys:NULL
                                              count:0] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
                                         rawValue:(int32_t)rawValue
                                           forKey:(NSString *)key {
   // Cast is needed so the compiler knows what class we are invoking initWithValues:forKeys:count:
@@ -10953,7 +10953,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
                                                                        count:1] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
                                        rawValues:(const int32_t [])rawValues
                                          forKeys:(const NSString * [])keys
                                            count:(NSUInteger)count {
@@ -10971,7 +10971,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
   return [[(LCIMStringEnumDictionary*)[self alloc] initWithDictionary:dictionary] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
                                         capacity:(NSUInteger)numItems {
   return [[[self alloc] initWithValidationFunction:func capacity:numItems] autorelease];
 }
@@ -10980,11 +10980,11 @@ void LCIMDictionaryReadEntry(id mapDictionary,
   return [self initWithValidationFunction:NULL rawValues:NULL forKeys:NULL count:0];
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func {
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func {
   return [self initWithValidationFunction:func rawValues:NULL forKeys:NULL count:0];
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func
                                  rawValues:(const int32_t [])rawValues
                                    forKeys:(const NSString * [])keys
                                      count:(NSUInteger)count {
@@ -11018,7 +11018,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
   return self;
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func
                                   capacity:(NSUInteger)numItems {
   #pragma unused(numItems)
   return [self initWithValidationFunction:func rawValues:NULL forKeys:NULL count:0];
@@ -11157,7 +11157,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 
 - (void)enumerateKeysAndEnumsUsingBlock:
     (void (^)(NSString *key, int32_t value, BOOL *stop))block {
-  GPBEnumValidationFunc func = _validationFunc;
+  LCIMEnumValidationFunc func = _validationFunc;
   [_dictionary enumerateKeysAndObjectsUsingBlock:^(NSString *aKey,
                                                    NSNumber *aValue,
                                                    BOOL *stop) {
@@ -13182,7 +13182,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 
 @implementation LCIMBoolEnumDictionary {
  @package
-  GPBEnumValidationFunc _validationFunc;
+  LCIMEnumValidationFunc _validationFunc;
   int32_t _values[2];
   BOOL _valueSet[2];
 }
@@ -13196,14 +13196,14 @@ void LCIMDictionaryReadEntry(id mapDictionary,
                                              count:0] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func {
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func {
   return [[[self alloc] initWithValidationFunction:func
                                          rawValues:NULL
                                            forKeys:NULL
                                              count:0] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
                                        rawValue:(int32_t)rawValue
                                           forKey:(BOOL)key {
   // Cast is needed so the compiler knows what class we are invoking initWithValues:forKeys:count:
@@ -13214,7 +13214,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
                                                                      count:1] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
                                        rawValues:(const int32_t [])values
                                          forKeys:(const BOOL [])keys
                                            count:(NSUInteger)count {
@@ -13232,7 +13232,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
   return [[(LCIMBoolEnumDictionary*)[self alloc] initWithDictionary:dictionary] autorelease];
 }
 
-+ (instancetype)dictionaryWithValidationFunction:(GPBEnumValidationFunc)func
++ (instancetype)dictionaryWithValidationFunction:(LCIMEnumValidationFunc)func
                                         capacity:(NSUInteger)numItems {
   return [[[self alloc] initWithValidationFunction:func capacity:numItems] autorelease];
 }
@@ -13241,11 +13241,11 @@ void LCIMDictionaryReadEntry(id mapDictionary,
   return [self initWithValidationFunction:NULL rawValues:NULL forKeys:NULL count:0];
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func {
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func {
   return [self initWithValidationFunction:func rawValues:NULL forKeys:NULL count:0];
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func
                                 rawValues:(const int32_t [])rawValues
                                    forKeys:(const BOOL [])keys
                                      count:(NSUInteger)count {
@@ -13279,7 +13279,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
   return self;
 }
 
-- (instancetype)initWithValidationFunction:(GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(LCIMEnumValidationFunc)func
                                   capacity:(NSUInteger)numItems {
 #pragma unused(numItems)
   return [self initWithValidationFunction:func rawValues:NULL forKeys:NULL count:0];
@@ -13377,7 +13377,7 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 - (void)enumerateKeysAndEnumsUsingBlock:
     (void (^)(BOOL key, int32_t rawValue, BOOL *stop))block {
   BOOL stop = NO;
-  GPBEnumValidationFunc func = _validationFunc;
+  LCIMEnumValidationFunc func = _validationFunc;
   int32_t validatedValue;
   if (_valueSet[0]) {
     validatedValue = _values[0];

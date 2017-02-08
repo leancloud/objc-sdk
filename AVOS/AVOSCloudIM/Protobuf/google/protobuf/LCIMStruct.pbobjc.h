@@ -101,25 +101,25 @@ typedef GPB_ENUM(LCIMStruct_FieldNumber) {
 
 @end
 
-#pragma mark - GPBValue
+#pragma mark - LCIMValue
 
-typedef GPB_ENUM(GPBValue_FieldNumber) {
-  GPBValue_FieldNumber_NullValue = 1,
-  GPBValue_FieldNumber_NumberValue = 2,
-  GPBValue_FieldNumber_StringValue = 3,
-  GPBValue_FieldNumber_BoolValue = 4,
-  GPBValue_FieldNumber_StructValue = 5,
-  GPBValue_FieldNumber_ListValue = 6,
+typedef GPB_ENUM(LCIMValue_FieldNumber) {
+  LCIMValue_FieldNumber_NullValue = 1,
+  LCIMValue_FieldNumber_NumberValue = 2,
+  LCIMValue_FieldNumber_StringValue = 3,
+  LCIMValue_FieldNumber_BoolValue = 4,
+  LCIMValue_FieldNumber_StructValue = 5,
+  LCIMValue_FieldNumber_ListValue = 6,
 };
 
-typedef GPB_ENUM(GPBValue_Kind_OneOfCase) {
-  GPBValue_Kind_OneOfCase_GPBUnsetOneOfCase = 0,
-  GPBValue_Kind_OneOfCase_NullValue = 1,
-  GPBValue_Kind_OneOfCase_NumberValue = 2,
-  GPBValue_Kind_OneOfCase_StringValue = 3,
-  GPBValue_Kind_OneOfCase_BoolValue = 4,
-  GPBValue_Kind_OneOfCase_StructValue = 5,
-  GPBValue_Kind_OneOfCase_ListValue = 6,
+typedef GPB_ENUM(LCIMValue_Kind_OneOfCase) {
+  LCIMValue_Kind_OneOfCase_GPBUnsetOneOfCase = 0,
+  LCIMValue_Kind_OneOfCase_NullValue = 1,
+  LCIMValue_Kind_OneOfCase_NumberValue = 2,
+  LCIMValue_Kind_OneOfCase_StringValue = 3,
+  LCIMValue_Kind_OneOfCase_BoolValue = 4,
+  LCIMValue_Kind_OneOfCase_StructValue = 5,
+  LCIMValue_Kind_OneOfCase_ListValue = 6,
 };
 
 /**
@@ -133,7 +133,7 @@ typedef GPB_ENUM(GPBValue_Kind_OneOfCase) {
 @interface LCIMValue : LCIMMessage
 
 /** The kind of value. */
-@property(nonatomic, readonly) GPBValue_Kind_OneOfCase kindOneOfCase;
+@property(nonatomic, readonly) LCIMValue_Kind_OneOfCase kindOneOfCase;
 
 /** Represents a null value. */
 @property(nonatomic, readwrite) GPBNullValue nullValue;
@@ -156,21 +156,21 @@ typedef GPB_ENUM(GPBValue_Kind_OneOfCase) {
 @end
 
 /**
- * Fetches the raw value of a @c GPBValue's @c nullValue property, even
+ * Fetches the raw value of a @c LCIMValue's @c nullValue property, even
  * if the value was not defined by the enum at the time the code was generated.
  **/
-int32_t GPBValue_NullValue_RawValue(LCIMValue *message);
+int32_t LCIMValue_NullValue_RawValue(LCIMValue *message);
 /**
- * Sets the raw value of an @c GPBValue's @c nullValue property, allowing
+ * Sets the raw value of an @c LCIMValue's @c nullValue property, allowing
  * it to be set to a value that was not defined by the enum at the time the code
  * was generated.
  **/
-void SetGPBValue_NullValue_RawValue(LCIMValue *message, int32_t value);
+void SetLCIMValue_NullValue_RawValue(LCIMValue *message, int32_t value);
 
 /**
  * Clears whatever value was set for the oneof 'kind'.
  **/
-void GPBValue_ClearKindOneOfCase(LCIMValue *message);
+void LCIMValue_ClearKindOneOfCase(LCIMValue *message);
 
 #pragma mark - GPBListValue
 

@@ -84,7 +84,7 @@ typedef struct GPBMessageFieldDescription {
     // For enums only: If EnumDescriptors are compiled in, it will be that,
     // otherwise it will be the verifier.
     LCIMEnumDescriptorFunc enumDescFunc;
-    GPBEnumValidationFunc enumVerifier;
+    LCIMEnumValidationFunc enumVerifier;
   } dataTypeSpecific;
   // The field number for the ivar.
   uint32_t number;
@@ -217,20 +217,20 @@ typedef NS_OPTIONS(uint32_t, LCIMDescriptorInitializationFlags) {
                 valueNames:(const char *)valueNames
                     values:(const int32_t *)values
                      count:(uint32_t)valueCount
-              enumVerifier:(GPBEnumValidationFunc)enumVerifier;
+              enumVerifier:(LCIMEnumValidationFunc)enumVerifier;
 + (instancetype)
     allocDescriptorForName:(NSString *)name
                 valueNames:(const char *)valueNames
                     values:(const int32_t *)values
                      count:(uint32_t)valueCount
-              enumVerifier:(GPBEnumValidationFunc)enumVerifier
+              enumVerifier:(LCIMEnumValidationFunc)enumVerifier
        extraTextFormatInfo:(const char *)extraTextFormatInfo;
 
 - (instancetype)initWithName:(NSString *)name
                   valueNames:(const char *)valueNames
                       values:(const int32_t *)values
                        count:(uint32_t)valueCount
-                enumVerifier:(GPBEnumValidationFunc)enumVerifier;
+                enumVerifier:(LCIMEnumValidationFunc)enumVerifier;
 @end
 
 @interface LCIMExtensionDescriptor () {

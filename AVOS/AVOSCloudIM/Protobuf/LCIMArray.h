@@ -1254,7 +1254,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** The number of elements contained in the array. */
 @property(nonatomic, readonly) NSUInteger count;
 /** The validation function to check if the enums are valid. */
-@property(nonatomic, readonly) GPBEnumValidationFunc validationFunc;
+@property(nonatomic, readonly) LCIMEnumValidationFunc validationFunc;
 
 /**
  * @return A newly instanced and empty LCIMEnumArray.
@@ -1269,7 +1269,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced LCIMEnumArray.
  **/
-+ (instancetype)arrayWithValidationFunction:(nullable GPBEnumValidationFunc)func;
++ (instancetype)arrayWithValidationFunction:(nullable LCIMEnumValidationFunc)func;
 
 /**
  * Creates and initializes a LCIMEnumArray with the enum validation function
@@ -1280,7 +1280,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced LCIMEnumArray.
  **/
-+ (instancetype)arrayWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)arrayWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                    rawValue:(int32_t)value;
 
 /**
@@ -1302,7 +1302,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly instanced LCIMEnumArray with a capacity of count.
  **/
-+ (instancetype)arrayWithValidationFunction:(nullable GPBEnumValidationFunc)func
++ (instancetype)arrayWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                    capacity:(NSUInteger)count;
 
 /**
@@ -1312,7 +1312,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized LCIMEnumArray with a copy of the values.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
     NS_DESIGNATED_INITIALIZER;
 
 /**
@@ -1324,7 +1324,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized LCIMEnumArray with a copy of the values.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                  rawValues:(const int32_t [])values
                                      count:(NSUInteger)count;
 
@@ -1345,7 +1345,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return A newly initialized LCIMEnumArray with a capacity of count.
  **/
-- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
                                   capacity:(NSUInteger)count;
 
 // These will return kGPBUnrecognizedEnumeratorValue if the value at index is not a
@@ -1659,7 +1659,7 @@ NS_ASSUME_NONNULL_END
 //%/** The number of elements contained in the array. */
 //%@property(nonatomic, readonly) NSUInteger count;
 //%/** The validation function to check if the enums are valid. */
-//%@property(nonatomic, readonly) GPBEnumValidationFunc validationFunc;
+//%@property(nonatomic, readonly) LCIMEnumValidationFunc validationFunc;
 //%
 //%/**
 //% * @return A newly instanced and empty LCIM##NAME##Array.
@@ -1674,7 +1674,7 @@ NS_ASSUME_NONNULL_END
 //% *
 //% * @return A newly instanced LCIM##NAME##Array.
 //% **/
-//%+ (instancetype)arrayWithValidationFunction:(nullable GPBEnumValidationFunc)func;
+//%+ (instancetype)arrayWithValidationFunction:(nullable LCIMEnumValidationFunc)func;
 //%
 //%/**
 //% * Creates and initializes a LCIM##NAME##Array with the enum validation function
@@ -1685,7 +1685,7 @@ NS_ASSUME_NONNULL_END
 //% *
 //% * @return A newly instanced LCIM##NAME##Array.
 //% **/
-//%+ (instancetype)arrayWithValidationFunction:(nullable GPBEnumValidationFunc)func
+//%+ (instancetype)arrayWithValidationFunction:(nullable LCIMEnumValidationFunc)func
 //%                                   rawValue:(TYPE)value;
 //%
 //%/**
@@ -1707,7 +1707,7 @@ NS_ASSUME_NONNULL_END
 //% *
 //% * @return A newly instanced LCIM##NAME##Array with a capacity of count.
 //% **/
-//%+ (instancetype)arrayWithValidationFunction:(nullable GPBEnumValidationFunc)func
+//%+ (instancetype)arrayWithValidationFunction:(nullable LCIMEnumValidationFunc)func
 //%                                   capacity:(NSUInteger)count;
 //%
 //%/**
@@ -1717,7 +1717,7 @@ NS_ASSUME_NONNULL_END
 //% *
 //% * @return A newly initialized LCIM##NAME##Array with a copy of the values.
 //% **/
-//%- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+//%- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
 //%    NS_DESIGNATED_INITIALIZER;
 //%
 //%/**
@@ -1729,7 +1729,7 @@ NS_ASSUME_NONNULL_END
 //% *
 //% * @return A newly initialized LCIM##NAME##Array with a copy of the values.
 //% **/
-//%- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+//%- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
 //%                                 rawValues:(const TYPE [])values
 //%                                     count:(NSUInteger)count;
 //%
@@ -1750,7 +1750,7 @@ NS_ASSUME_NONNULL_END
 //% *
 //% * @return A newly initialized LCIM##NAME##Array with a capacity of count.
 //% **/
-//%- (instancetype)initWithValidationFunction:(nullable GPBEnumValidationFunc)func
+//%- (instancetype)initWithValidationFunction:(nullable LCIMEnumValidationFunc)func
 //%                                  capacity:(NSUInteger)count;
 //%
 //%// These will return kGPBUnrecognizedEnumeratorValue if the value at index is not a

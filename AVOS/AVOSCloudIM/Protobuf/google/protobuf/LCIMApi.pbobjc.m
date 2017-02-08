@@ -27,7 +27,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-#pragma mark - GPBApiRoot
+#pragma mark - LCIMApiRoot
 
 @implementation LCIMApiRoot
 
@@ -46,9 +46,9 @@
 
 @end
 
-#pragma mark - GPBApiRoot_FileDescriptor
+#pragma mark - LCIMApiRoot_FileDescriptor
 
-static LCIMFileDescriptor *GPBApiRoot_FileDescriptor(void) {
+static LCIMFileDescriptor *LCIMApiRoot_FileDescriptor(void) {
   // This is called by +initialize so there is no need to worry
   // about thread safety of the singleton.
   static LCIMFileDescriptor *descriptor = NULL;
@@ -60,7 +60,7 @@ static LCIMFileDescriptor *GPBApiRoot_FileDescriptor(void) {
   return descriptor;
 }
 
-#pragma mark - GPBApi
+#pragma mark - LCIMApi
 
 @implementation LCIMApi
 
@@ -92,7 +92,7 @@ typedef struct LCIMApi__storage_ {
       {
         .name = "name",
         .dataTypeSpecific.className = NULL,
-        .number = GPBApi_FieldNumber_Name,
+        .number = LCIMApi_FieldNumber_Name,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCIMApi__storage_, name),
         .flags = LCIMFieldOptional,
@@ -101,7 +101,7 @@ typedef struct LCIMApi__storage_ {
       {
         .name = "methodsArray",
         .dataTypeSpecific.className = GPBStringifySymbol(LCIMMethod),
-        .number = GPBApi_FieldNumber_MethodsArray,
+        .number = LCIMApi_FieldNumber_MethodsArray,
         .hasIndex = GPBNoHasBit,
         .offset = (uint32_t)offsetof(LCIMApi__storage_, methodsArray),
         .flags = LCIMFieldRepeated,
@@ -110,7 +110,7 @@ typedef struct LCIMApi__storage_ {
       {
         .name = "optionsArray",
         .dataTypeSpecific.className = GPBStringifySymbol(LCIMOption),
-        .number = GPBApi_FieldNumber_OptionsArray,
+        .number = LCIMApi_FieldNumber_OptionsArray,
         .hasIndex = GPBNoHasBit,
         .offset = (uint32_t)offsetof(LCIMApi__storage_, optionsArray),
         .flags = LCIMFieldRepeated,
@@ -119,7 +119,7 @@ typedef struct LCIMApi__storage_ {
       {
         .name = "version",
         .dataTypeSpecific.className = NULL,
-        .number = GPBApi_FieldNumber_Version,
+        .number = LCIMApi_FieldNumber_Version,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(LCIMApi__storage_, version),
         .flags = LCIMFieldOptional,
@@ -128,7 +128,7 @@ typedef struct LCIMApi__storage_ {
       {
         .name = "sourceContext",
         .dataTypeSpecific.className = GPBStringifySymbol(LCIMSourceContext),
-        .number = GPBApi_FieldNumber_SourceContext,
+        .number = LCIMApi_FieldNumber_SourceContext,
         .hasIndex = 2,
         .offset = (uint32_t)offsetof(LCIMApi__storage_, sourceContext),
         .flags = LCIMFieldOptional,
@@ -137,7 +137,7 @@ typedef struct LCIMApi__storage_ {
       {
         .name = "mixinsArray",
         .dataTypeSpecific.className = GPBStringifySymbol(LCIMMixin),
-        .number = GPBApi_FieldNumber_MixinsArray,
+        .number = LCIMApi_FieldNumber_MixinsArray,
         .hasIndex = GPBNoHasBit,
         .offset = (uint32_t)offsetof(LCIMApi__storage_, mixinsArray),
         .flags = LCIMFieldRepeated,
@@ -146,7 +146,7 @@ typedef struct LCIMApi__storage_ {
       {
         .name = "syntax",
         .dataTypeSpecific.enumDescFunc = LCIMSyntax_EnumDescriptor,
-        .number = GPBApi_FieldNumber_Syntax,
+        .number = LCIMApi_FieldNumber_Syntax,
         .hasIndex = 3,
         .offset = (uint32_t)offsetof(LCIMApi__storage_, syntax),
         .flags = LCIMFieldOptional | LCIMFieldHasEnumDescriptor,
@@ -156,7 +156,7 @@ typedef struct LCIMApi__storage_ {
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[LCIMApi class]
                                      rootClass:[LCIMApiRoot class]
-                                          file:GPBApiRoot_FileDescriptor()
+                                          file:LCIMApiRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(LCIMApi__storage_)
@@ -169,19 +169,19 @@ typedef struct LCIMApi__storage_ {
 
 @end
 
-int32_t GPBApi_Syntax_RawValue(LCIMApi *message) {
+int32_t LCIMApi_Syntax_RawValue(LCIMApi *message) {
   LCIMDescriptor *descriptor = [LCIMApi descriptor];
-  LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBApi_FieldNumber_Syntax];
+  LCIMFieldDescriptor *field = [descriptor fieldWithNumber:LCIMApi_FieldNumber_Syntax];
   return LCIMGetMessageInt32Field(message, field);
 }
 
-void SetGPBApi_Syntax_RawValue(LCIMApi *message, int32_t value) {
+void SetLCIMApi_Syntax_RawValue(LCIMApi *message, int32_t value) {
   LCIMDescriptor *descriptor = [LCIMApi descriptor];
-  LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBApi_FieldNumber_Syntax];
+  LCIMFieldDescriptor *field = [descriptor fieldWithNumber:LCIMApi_FieldNumber_Syntax];
   LCIMSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
 }
 
-#pragma mark - GPBMethod
+#pragma mark - LCIMMethod
 
 @implementation LCIMMethod
 
@@ -211,7 +211,7 @@ typedef struct LCIMMethod__storage_ {
       {
         .name = "name",
         .dataTypeSpecific.className = NULL,
-        .number = GPBMethod_FieldNumber_Name,
+        .number = LCIMMethod_FieldNumber_Name,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCIMMethod__storage_, name),
         .flags = LCIMFieldOptional,
@@ -220,7 +220,7 @@ typedef struct LCIMMethod__storage_ {
       {
         .name = "requestTypeURL",
         .dataTypeSpecific.className = NULL,
-        .number = GPBMethod_FieldNumber_RequestTypeURL,
+        .number = LCIMMethod_FieldNumber_RequestTypeURL,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(LCIMMethod__storage_, requestTypeURL),
         .flags = LCIMFieldOptional | LCIMFieldTextFormatNameCustom,
@@ -229,7 +229,7 @@ typedef struct LCIMMethod__storage_ {
       {
         .name = "requestStreaming",
         .dataTypeSpecific.className = NULL,
-        .number = GPBMethod_FieldNumber_RequestStreaming,
+        .number = LCIMMethod_FieldNumber_RequestStreaming,
         .hasIndex = 2,
         .offset = 3,  // Stored in _has_storage_ to save space.
         .flags = LCIMFieldOptional,
@@ -238,7 +238,7 @@ typedef struct LCIMMethod__storage_ {
       {
         .name = "responseTypeURL",
         .dataTypeSpecific.className = NULL,
-        .number = GPBMethod_FieldNumber_ResponseTypeURL,
+        .number = LCIMMethod_FieldNumber_ResponseTypeURL,
         .hasIndex = 4,
         .offset = (uint32_t)offsetof(LCIMMethod__storage_, responseTypeURL),
         .flags = LCIMFieldOptional | LCIMFieldTextFormatNameCustom,
@@ -247,7 +247,7 @@ typedef struct LCIMMethod__storage_ {
       {
         .name = "responseStreaming",
         .dataTypeSpecific.className = NULL,
-        .number = GPBMethod_FieldNumber_ResponseStreaming,
+        .number = LCIMMethod_FieldNumber_ResponseStreaming,
         .hasIndex = 5,
         .offset = 6,  // Stored in _has_storage_ to save space.
         .flags = LCIMFieldOptional,
@@ -256,7 +256,7 @@ typedef struct LCIMMethod__storage_ {
       {
         .name = "optionsArray",
         .dataTypeSpecific.className = GPBStringifySymbol(LCIMOption),
-        .number = GPBMethod_FieldNumber_OptionsArray,
+        .number = LCIMMethod_FieldNumber_OptionsArray,
         .hasIndex = GPBNoHasBit,
         .offset = (uint32_t)offsetof(LCIMMethod__storage_, optionsArray),
         .flags = LCIMFieldRepeated,
@@ -265,7 +265,7 @@ typedef struct LCIMMethod__storage_ {
       {
         .name = "syntax",
         .dataTypeSpecific.enumDescFunc = LCIMSyntax_EnumDescriptor,
-        .number = GPBMethod_FieldNumber_Syntax,
+        .number = LCIMMethod_FieldNumber_Syntax,
         .hasIndex = 7,
         .offset = (uint32_t)offsetof(LCIMMethod__storage_, syntax),
         .flags = LCIMFieldOptional | LCIMFieldHasEnumDescriptor,
@@ -275,7 +275,7 @@ typedef struct LCIMMethod__storage_ {
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[LCIMMethod class]
                                      rootClass:[LCIMApiRoot class]
-                                          file:GPBApiRoot_FileDescriptor()
+                                          file:LCIMApiRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(LCIMMethod__storage_)
@@ -293,15 +293,15 @@ typedef struct LCIMMethod__storage_ {
 
 @end
 
-int32_t GPBMethod_Syntax_RawValue(LCIMMethod *message) {
+int32_t LCIMMethod_Syntax_RawValue(LCIMMethod *message) {
   LCIMDescriptor *descriptor = [LCIMMethod descriptor];
-  LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBMethod_FieldNumber_Syntax];
+  LCIMFieldDescriptor *field = [descriptor fieldWithNumber:LCIMMethod_FieldNumber_Syntax];
   return LCIMGetMessageInt32Field(message, field);
 }
 
-void SetGPBMethod_Syntax_RawValue(LCIMMethod *message, int32_t value) {
+void SetLCIMMethod_Syntax_RawValue(LCIMMethod *message, int32_t value) {
   LCIMDescriptor *descriptor = [LCIMMethod descriptor];
-  LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBMethod_FieldNumber_Syntax];
+  LCIMFieldDescriptor *field = [descriptor fieldWithNumber:LCIMMethod_FieldNumber_Syntax];
   LCIMSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
 }
 
@@ -346,7 +346,7 @@ typedef struct LCIMMixin__storage_ {
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[LCIMMixin class]
                                      rootClass:[LCIMApiRoot class]
-                                          file:GPBApiRoot_FileDescriptor()
+                                          file:LCIMApiRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(LCIMMixin__storage_)

@@ -35,7 +35,7 @@ GPB_ENUM_FWD_DECLARE(GPBSyntax);
 
 NS_ASSUME_NONNULL_BEGIN
 
-#pragma mark - GPBApiRoot
+#pragma mark - LCIMApiRoot
 
 /**
  * Exposes the extension registry for this file.
@@ -50,16 +50,16 @@ NS_ASSUME_NONNULL_BEGIN
 @interface LCIMApiRoot : LCIMRootObject
 @end
 
-#pragma mark - GPBApi
+#pragma mark - LCIMApi
 
-typedef GPB_ENUM(GPBApi_FieldNumber) {
-  GPBApi_FieldNumber_Name = 1,
-  GPBApi_FieldNumber_MethodsArray = 2,
-  GPBApi_FieldNumber_OptionsArray = 3,
-  GPBApi_FieldNumber_Version = 4,
-  GPBApi_FieldNumber_SourceContext = 5,
-  GPBApi_FieldNumber_MixinsArray = 6,
-  GPBApi_FieldNumber_Syntax = 7,
+typedef GPB_ENUM(LCIMApi_FieldNumber) {
+  LCIMApi_FieldNumber_Name = 1,
+  LCIMApi_FieldNumber_MethodsArray = 2,
+  LCIMApi_FieldNumber_OptionsArray = 3,
+  LCIMApi_FieldNumber_Version = 4,
+  LCIMApi_FieldNumber_SourceContext = 5,
+  LCIMApi_FieldNumber_MixinsArray = 6,
+  LCIMApi_FieldNumber_Syntax = 7,
 };
 
 /**
@@ -126,27 +126,27 @@ typedef GPB_ENUM(GPBApi_FieldNumber) {
 @end
 
 /**
- * Fetches the raw value of a @c GPBApi's @c syntax property, even
+ * Fetches the raw value of a @c LCIMApi's @c syntax property, even
  * if the value was not defined by the enum at the time the code was generated.
  **/
-int32_t GPBApi_Syntax_RawValue(LCIMApi *message);
+int32_t LCIMApi_Syntax_RawValue(LCIMApi *message);
 /**
- * Sets the raw value of an @c GPBApi's @c syntax property, allowing
+ * Sets the raw value of an @c LCIMApi's @c syntax property, allowing
  * it to be set to a value that was not defined by the enum at the time the code
  * was generated.
  **/
-void SetGPBApi_Syntax_RawValue(LCIMApi *message, int32_t value);
+void SetLCIMApi_Syntax_RawValue(LCIMApi *message, int32_t value);
 
-#pragma mark - GPBMethod
+#pragma mark - LCIMMethod
 
-typedef GPB_ENUM(GPBMethod_FieldNumber) {
-  GPBMethod_FieldNumber_Name = 1,
-  GPBMethod_FieldNumber_RequestTypeURL = 2,
-  GPBMethod_FieldNumber_RequestStreaming = 3,
-  GPBMethod_FieldNumber_ResponseTypeURL = 4,
-  GPBMethod_FieldNumber_ResponseStreaming = 5,
-  GPBMethod_FieldNumber_OptionsArray = 6,
-  GPBMethod_FieldNumber_Syntax = 7,
+typedef GPB_ENUM(LCIMMethod_FieldNumber) {
+  LCIMMethod_FieldNumber_Name = 1,
+  LCIMMethod_FieldNumber_RequestTypeURL = 2,
+  LCIMMethod_FieldNumber_RequestStreaming = 3,
+  LCIMMethod_FieldNumber_ResponseTypeURL = 4,
+  LCIMMethod_FieldNumber_ResponseStreaming = 5,
+  LCIMMethod_FieldNumber_OptionsArray = 6,
+  LCIMMethod_FieldNumber_Syntax = 7,
 };
 
 /**
@@ -180,16 +180,16 @@ typedef GPB_ENUM(GPBMethod_FieldNumber) {
 @end
 
 /**
- * Fetches the raw value of a @c GPBMethod's @c syntax property, even
+ * Fetches the raw value of a @c LCIMMethod's @c syntax property, even
  * if the value was not defined by the enum at the time the code was generated.
  **/
-int32_t GPBMethod_Syntax_RawValue(LCIMMethod *message);
+int32_t LCIMMethod_Syntax_RawValue(LCIMMethod *message);
 /**
- * Sets the raw value of an @c GPBMethod's @c syntax property, allowing
+ * Sets the raw value of an @c LCIMMethod's @c syntax property, allowing
  * it to be set to a value that was not defined by the enum at the time the code
  * was generated.
  **/
-void SetGPBMethod_Syntax_RawValue(LCIMMethod *message, int32_t value);
+void SetLCIMMethod_Syntax_RawValue(LCIMMethod *message, int32_t value);
 
 #pragma mark - GPBMixin
 
