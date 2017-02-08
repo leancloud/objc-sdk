@@ -29,7 +29,7 @@ CF_EXTERN_C_BEGIN
 
 NS_ASSUME_NONNULL_BEGIN
 
-#pragma mark - GPBFieldMaskRoot
+#pragma mark - LCIMFieldMaskRoot
 
 /**
  * Exposes the extension registry for this file.
@@ -44,10 +44,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface LCIMFieldMaskRoot : LCIMRootObject
 @end
 
-#pragma mark - GPBFieldMask
+#pragma mark - LCIMFieldMask
 
-typedef GPB_ENUM(GPBFieldMask_FieldNumber) {
-  GPBFieldMask_FieldNumber_PathsArray = 1,
+typedef GPB_ENUM(LCIMFieldMask_FieldNumber) {
+  LCIMFieldMask_FieldNumber_PathsArray = 1,
 };
 
 /**

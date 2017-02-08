@@ -122,7 +122,7 @@ typedef struct LCIMStruct__storage_ {
 
 @end
 
-#pragma mark - GPBValue
+#pragma mark - LCIMValue
 
 @implementation LCIMValue
 
@@ -152,7 +152,7 @@ typedef struct LCIMValue__storage_ {
       {
         .name = "nullValue",
         .dataTypeSpecific.enumDescFunc = LCIMNullValue_EnumDescriptor,
-        .number = GPBValue_FieldNumber_NullValue,
+        .number = LCIMValue_FieldNumber_NullValue,
         .hasIndex = -1,
         .offset = (uint32_t)offsetof(LCIMValue__storage_, nullValue),
         .flags = LCIMFieldOptional | LCIMFieldHasEnumDescriptor,
@@ -161,7 +161,7 @@ typedef struct LCIMValue__storage_ {
       {
         .name = "numberValue",
         .dataTypeSpecific.className = NULL,
-        .number = GPBValue_FieldNumber_NumberValue,
+        .number = LCIMValue_FieldNumber_NumberValue,
         .hasIndex = -1,
         .offset = (uint32_t)offsetof(LCIMValue__storage_, numberValue),
         .flags = LCIMFieldOptional,
@@ -170,7 +170,7 @@ typedef struct LCIMValue__storage_ {
       {
         .name = "stringValue",
         .dataTypeSpecific.className = NULL,
-        .number = GPBValue_FieldNumber_StringValue,
+        .number = LCIMValue_FieldNumber_StringValue,
         .hasIndex = -1,
         .offset = (uint32_t)offsetof(LCIMValue__storage_, stringValue),
         .flags = LCIMFieldOptional,
@@ -179,7 +179,7 @@ typedef struct LCIMValue__storage_ {
       {
         .name = "boolValue",
         .dataTypeSpecific.className = NULL,
-        .number = GPBValue_FieldNumber_BoolValue,
+        .number = LCIMValue_FieldNumber_BoolValue,
         .hasIndex = -1,
         .offset = 0,  // Stored in _has_storage_ to save space.
         .flags = LCIMFieldOptional,
@@ -188,7 +188,7 @@ typedef struct LCIMValue__storage_ {
       {
         .name = "structValue",
         .dataTypeSpecific.className = GPBStringifySymbol(LCIMStruct),
-        .number = GPBValue_FieldNumber_StructValue,
+        .number = LCIMValue_FieldNumber_StructValue,
         .hasIndex = -1,
         .offset = (uint32_t)offsetof(LCIMValue__storage_, structValue),
         .flags = LCIMFieldOptional,
@@ -197,7 +197,7 @@ typedef struct LCIMValue__storage_ {
       {
         .name = "listValue",
         .dataTypeSpecific.className = GPBStringifySymbol(LCIMListValue),
-        .number = GPBValue_FieldNumber_ListValue,
+        .number = LCIMValue_FieldNumber_ListValue,
         .hasIndex = -1,
         .offset = (uint32_t)offsetof(LCIMValue__storage_, listValue),
         .flags = LCIMFieldOptional,
@@ -226,19 +226,19 @@ typedef struct LCIMValue__storage_ {
 
 @end
 
-int32_t GPBValue_NullValue_RawValue(LCIMValue *message) {
+int32_t LCIMValue_NullValue_RawValue(LCIMValue *message) {
   LCIMDescriptor *descriptor = [LCIMValue descriptor];
-  LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBValue_FieldNumber_NullValue];
+  LCIMFieldDescriptor *field = [descriptor fieldWithNumber:LCIMValue_FieldNumber_NullValue];
   return LCIMGetMessageInt32Field(message, field);
 }
 
-void SetGPBValue_NullValue_RawValue(LCIMValue *message, int32_t value) {
+void SetLCIMValue_NullValue_RawValue(LCIMValue *message, int32_t value) {
   LCIMDescriptor *descriptor = [LCIMValue descriptor];
-  LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBValue_FieldNumber_NullValue];
+  LCIMFieldDescriptor *field = [descriptor fieldWithNumber:LCIMValue_FieldNumber_NullValue];
   LCIMSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
 }
 
-void GPBValue_ClearKindOneOfCase(LCIMValue *message) {
+void LCIMValue_ClearKindOneOfCase(LCIMValue *message) {
   LCIMDescriptor *descriptor = [message descriptor];
   LCIMOneofDescriptor *oneof = descriptor->oneofs_[0];
   LCIMMaybeClearOneof(message, oneof, -1, 0);

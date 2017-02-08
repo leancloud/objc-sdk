@@ -39,7 +39,7 @@
 /**
  * Verifies that a given value can be represented by an enum type.
  * */
-typedef BOOL (*GPBEnumValidationFunc)(int32_t);
+typedef BOOL (*LCIMEnumValidationFunc)(int32_t);
 
 /**
  * Fetches an EnumDescriptor.

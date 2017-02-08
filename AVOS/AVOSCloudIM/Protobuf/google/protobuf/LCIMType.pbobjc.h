@@ -60,72 +60,72 @@ LCIMEnumDescriptor *LCIMSyntax_EnumDescriptor(void);
  **/
 BOOL LCIMSyntax_IsValidValue(int32_t value);
 
-#pragma mark - Enum GPBField_Kind
+#pragma mark - Enum LCIMField_Kind
 
 /** Basic field types. */
-typedef GPB_ENUM(GPBField_Kind) {
+typedef GPB_ENUM(LCIMField_Kind) {
   /**
    * Value used if any message's field encounters a value that is not defined
    * by this enum. The message will also have C functions to get/set the rawValue
    * of the field.
    **/
-  GPBField_Kind_GPBUnrecognizedEnumeratorValue = kGPBUnrecognizedEnumeratorValue,
+  LCIMField_Kind_GPBUnrecognizedEnumeratorValue = kGPBUnrecognizedEnumeratorValue,
   /** Field type unknown. */
-  GPBField_Kind_TypeUnknown = 0,
+  LCIMField_Kind_TypeUnknown = 0,
 
   /** Field type double. */
-  GPBField_Kind_TypeDouble = 1,
+  LCIMField_Kind_TypeDouble = 1,
 
   /** Field type float. */
-  GPBField_Kind_TypeFloat = 2,
+  LCIMField_Kind_TypeFloat = 2,
 
   /** Field type int64. */
-  GPBField_Kind_TypeInt64 = 3,
+  LCIMField_Kind_TypeInt64 = 3,
 
   /** Field type uint64. */
-  GPBField_Kind_TypeUint64 = 4,
+  LCIMField_Kind_TypeUint64 = 4,
 
   /** Field type int32. */
-  GPBField_Kind_TypeInt32 = 5,
+  LCIMField_Kind_TypeInt32 = 5,
 
   /** Field type fixed64. */
-  GPBField_Kind_TypeFixed64 = 6,
+  LCIMField_Kind_TypeFixed64 = 6,
 
   /** Field type fixed32. */
-  GPBField_Kind_TypeFixed32 = 7,
+  LCIMField_Kind_TypeFixed32 = 7,
 
   /** Field type bool. */
-  GPBField_Kind_TypeBool = 8,
+  LCIMField_Kind_TypeBool = 8,
 
   /** Field type string. */
-  GPBField_Kind_TypeString = 9,
+  LCIMField_Kind_TypeString = 9,
 
   /** Field type group. Proto2 syntax only, and deprecated. */
-  GPBField_Kind_TypeGroup = 10,
+  LCIMField_Kind_TypeGroup = 10,
 
   /** Field type message. */
-  GPBField_Kind_TypeMessage = 11,
+  LCIMField_Kind_TypeMessage = 11,
 
   /** Field type bytes. */
-  GPBField_Kind_TypeBytes = 12,
+  LCIMField_Kind_TypeBytes = 12,
 
   /** Field type uint32. */
-  GPBField_Kind_TypeUint32 = 13,
+  LCIMField_Kind_TypeUint32 = 13,
 
   /** Field type enum. */
-  GPBField_Kind_TypeEnum = 14,
+  LCIMField_Kind_TypeEnum = 14,
 
   /** Field type sfixed32. */
-  GPBField_Kind_TypeSfixed32 = 15,
+  LCIMField_Kind_TypeSfixed32 = 15,
 
   /** Field type sfixed64. */
-  GPBField_Kind_TypeSfixed64 = 16,
+  LCIMField_Kind_TypeSfixed64 = 16,
 
   /** Field type sint32. */
-  GPBField_Kind_TypeSint32 = 17,
+  LCIMField_Kind_TypeSint32 = 17,
 
   /** Field type sint64. */
-  GPBField_Kind_TypeSint64 = 18,
+  LCIMField_Kind_TypeSint64 = 18,
 };
 
 LCIMEnumDescriptor *LCIMField_Kind_EnumDescriptor(void);
@@ -136,27 +136,27 @@ LCIMEnumDescriptor *LCIMField_Kind_EnumDescriptor(void);
  **/
 BOOL LCIMField_Kind_IsValidValue(int32_t value);
 
-#pragma mark - Enum GPBField_Cardinality
+#pragma mark - Enum LCIMField_Cardinality
 
 /** Whether a field is optional, required, or repeated. */
-typedef GPB_ENUM(GPBField_Cardinality) {
+typedef GPB_ENUM(LCIMField_Cardinality) {
   /**
    * Value used if any message's field encounters a value that is not defined
    * by this enum. The message will also have C functions to get/set the rawValue
    * of the field.
    **/
-  GPBField_Cardinality_GPBUnrecognizedEnumeratorValue = kGPBUnrecognizedEnumeratorValue,
+  LCIMField_Cardinality_GPBUnrecognizedEnumeratorValue = kGPBUnrecognizedEnumeratorValue,
   /** For fields with unknown cardinality. */
-  GPBField_Cardinality_CardinalityUnknown = 0,
+  LCIMField_Cardinality_CardinalityUnknown = 0,
 
   /** For optional fields. */
-  GPBField_Cardinality_CardinalityOptional = 1,
+  LCIMField_Cardinality_CardinalityOptional = 1,
 
   /** For required fields. Proto2 syntax only. */
-  GPBField_Cardinality_CardinalityRequired = 2,
+  LCIMField_Cardinality_CardinalityRequired = 2,
 
   /** For repeated fields. */
-  GPBField_Cardinality_CardinalityRepeated = 3,
+  LCIMField_Cardinality_CardinalityRepeated = 3,
 };
 
 LCIMEnumDescriptor *LCIMField_Cardinality_EnumDescriptor(void);
@@ -167,7 +167,7 @@ LCIMEnumDescriptor *LCIMField_Cardinality_EnumDescriptor(void);
  **/
 BOOL LCIMField_Cardinality_IsValidValue(int32_t value);
 
-#pragma mark - GPBTypeRoot
+#pragma mark - LCIMTypeRoot
 
 /**
  * Exposes the extension registry for this file.
@@ -182,15 +182,15 @@ BOOL LCIMField_Cardinality_IsValidValue(int32_t value);
 @interface LCIMTypeRoot : LCIMRootObject
 @end
 
-#pragma mark - GPBType
+#pragma mark - LCIMType
 
-typedef GPB_ENUM(GPBType_FieldNumber) {
-  GPBType_FieldNumber_Name = 1,
-  GPBType_FieldNumber_FieldsArray = 2,
-  GPBType_FieldNumber_OneofsArray = 3,
-  GPBType_FieldNumber_OptionsArray = 4,
-  GPBType_FieldNumber_SourceContext = 5,
-  GPBType_FieldNumber_Syntax = 6,
+typedef GPB_ENUM(LCIMType_FieldNumber) {
+  LCIMType_FieldNumber_Name = 1,
+  LCIMType_FieldNumber_FieldsArray = 2,
+  LCIMType_FieldNumber_OneofsArray = 3,
+  LCIMType_FieldNumber_OptionsArray = 4,
+  LCIMType_FieldNumber_SourceContext = 5,
+  LCIMType_FieldNumber_Syntax = 6,
 };
 
 /**
@@ -227,30 +227,30 @@ typedef GPB_ENUM(GPBType_FieldNumber) {
 @end
 
 /**
- * Fetches the raw value of a @c GPBType's @c syntax property, even
+ * Fetches the raw value of a @c LCIMType's @c syntax property, even
  * if the value was not defined by the enum at the time the code was generated.
  **/
-int32_t GPBType_Syntax_RawValue(LCIMType *message);
+int32_t LCIMType_Syntax_RawValue(LCIMType *message);
 /**
- * Sets the raw value of an @c GPBType's @c syntax property, allowing
+ * Sets the raw value of an @c LCIMType's @c syntax property, allowing
  * it to be set to a value that was not defined by the enum at the time the code
  * was generated.
  **/
-void SetGPBType_Syntax_RawValue(LCIMType *message, int32_t value);
+void SetLCIMType_Syntax_RawValue(LCIMType *message, int32_t value);
 
-#pragma mark - GPBField
+#pragma mark - LCIMField
 
-typedef GPB_ENUM(GPBField_FieldNumber) {
-  GPBField_FieldNumber_Kind = 1,
-  GPBField_FieldNumber_Cardinality = 2,
-  GPBField_FieldNumber_Number = 3,
-  GPBField_FieldNumber_Name = 4,
-  GPBField_FieldNumber_TypeURL = 6,
-  GPBField_FieldNumber_OneofIndex = 7,
-  GPBField_FieldNumber_Packed = 8,
-  GPBField_FieldNumber_OptionsArray = 9,
-  GPBField_FieldNumber_JsonName = 10,
-  GPBField_FieldNumber_DefaultValue = 11,
+typedef GPB_ENUM(LCIMField_FieldNumber) {
+  LCIMField_FieldNumber_Kind = 1,
+  LCIMField_FieldNumber_Cardinality = 2,
+  LCIMField_FieldNumber_Number = 3,
+  LCIMField_FieldNumber_Name = 4,
+  LCIMField_FieldNumber_TypeURL = 6,
+  LCIMField_FieldNumber_OneofIndex = 7,
+  LCIMField_FieldNumber_Packed = 8,
+  LCIMField_FieldNumber_OptionsArray = 9,
+  LCIMField_FieldNumber_JsonName = 10,
+  LCIMField_FieldNumber_DefaultValue = 11,
 };
 
 /**
@@ -259,10 +259,10 @@ typedef GPB_ENUM(GPBField_FieldNumber) {
 @interface LCIMField : LCIMMessage
 
 /** The field type. */
-@property(nonatomic, readwrite) GPBField_Kind kind;
+@property(nonatomic, readwrite) LCIMField_Kind kind;
 
 /** The field cardinality. */
-@property(nonatomic, readwrite) GPBField_Cardinality cardinality;
+@property(nonatomic, readwrite) LCIMField_Cardinality cardinality;
 
 /** The field number. */
 @property(nonatomic, readwrite) int32_t number;
@@ -299,37 +299,37 @@ typedef GPB_ENUM(GPBField_FieldNumber) {
 @end
 
 /**
- * Fetches the raw value of a @c GPBField's @c kind property, even
+ * Fetches the raw value of a @c LCIMField's @c kind property, even
  * if the value was not defined by the enum at the time the code was generated.
  **/
-int32_t GPBField_Kind_RawValue(LCIMField *message);
+int32_t LCIMField_Kind_RawValue(LCIMField *message);
 /**
- * Sets the raw value of an @c GPBField's @c kind property, allowing
+ * Sets the raw value of an @c LCIMField's @c kind property, allowing
  * it to be set to a value that was not defined by the enum at the time the code
  * was generated.
  **/
-void SetGPBField_Kind_RawValue(LCIMField *message, int32_t value);
+void SetLCIMField_Kind_RawValue(LCIMField *message, int32_t value);
 
 /**
- * Fetches the raw value of a @c GPBField's @c cardinality property, even
+ * Fetches the raw value of a @c LCIMField's @c cardinality property, even
  * if the value was not defined by the enum at the time the code was generated.
  **/
-int32_t GPBField_Cardinality_RawValue(LCIMField *message);
+int32_t LCIMField_Cardinality_RawValue(LCIMField *message);
 /**
- * Sets the raw value of an @c GPBField's @c cardinality property, allowing
+ * Sets the raw value of an @c LCIMField's @c cardinality property, allowing
  * it to be set to a value that was not defined by the enum at the time the code
  * was generated.
  **/
-void SetGPBField_Cardinality_RawValue(LCIMField *message, int32_t value);
+void SetLCIMField_Cardinality_RawValue(LCIMField *message, int32_t value);
 
-#pragma mark - GPBEnum
+#pragma mark - LCIMEnum
 
-typedef GPB_ENUM(GPBEnum_FieldNumber) {
-  GPBEnum_FieldNumber_Name = 1,
-  GPBEnum_FieldNumber_EnumvalueArray = 2,
-  GPBEnum_FieldNumber_OptionsArray = 3,
-  GPBEnum_FieldNumber_SourceContext = 4,
-  GPBEnum_FieldNumber_Syntax = 5,
+typedef GPB_ENUM(LCIMEnum_FieldNumber) {
+  LCIMEnum_FieldNumber_Name = 1,
+  LCIMEnum_FieldNumber_EnumvalueArray = 2,
+  LCIMEnum_FieldNumber_OptionsArray = 3,
+  LCIMEnum_FieldNumber_SourceContext = 4,
+  LCIMEnum_FieldNumber_Syntax = 5,
 };
 
 /**
@@ -361,23 +361,23 @@ typedef GPB_ENUM(GPBEnum_FieldNumber) {
 @end
 
 /**
- * Fetches the raw value of a @c GPBEnum's @c syntax property, even
+ * Fetches the raw value of a @c LCIMEnum's @c syntax property, even
  * if the value was not defined by the enum at the time the code was generated.
  **/
-int32_t GPBEnum_Syntax_RawValue(LCIMEnum *message);
+int32_t LCIMEnum_Syntax_RawValue(LCIMEnum *message);
 /**
- * Sets the raw value of an @c GPBEnum's @c syntax property, allowing
+ * Sets the raw value of an @c LCIMEnum's @c syntax property, allowing
  * it to be set to a value that was not defined by the enum at the time the code
  * was generated.
  **/
-void SetGPBEnum_Syntax_RawValue(LCIMEnum *message, int32_t value);
+void SetLCIMEnum_Syntax_RawValue(LCIMEnum *message, int32_t value);
 
-#pragma mark - GPBEnumValue
+#pragma mark - LCIMEnumValue
 
-typedef GPB_ENUM(GPBEnumValue_FieldNumber) {
-  GPBEnumValue_FieldNumber_Name = 1,
-  GPBEnumValue_FieldNumber_Number = 2,
-  GPBEnumValue_FieldNumber_OptionsArray = 3,
+typedef GPB_ENUM(LCIMEnumValue_FieldNumber) {
+  LCIMEnumValue_FieldNumber_Name = 1,
+  LCIMEnumValue_FieldNumber_Number = 2,
+  LCIMEnumValue_FieldNumber_OptionsArray = 3,
 };
 
 /**
@@ -398,11 +398,11 @@ typedef GPB_ENUM(GPBEnumValue_FieldNumber) {
 
 @end
 
-#pragma mark - GPBOption
+#pragma mark - LCIMOption
 
-typedef GPB_ENUM(GPBOption_FieldNumber) {
-  GPBOption_FieldNumber_Name = 1,
-  GPBOption_FieldNumber_Value = 2,
+typedef GPB_ENUM(LCIMOption_FieldNumber) {
+  LCIMOption_FieldNumber_Name = 1,
+  LCIMOption_FieldNumber_Value = 2,
 };
 
 /**

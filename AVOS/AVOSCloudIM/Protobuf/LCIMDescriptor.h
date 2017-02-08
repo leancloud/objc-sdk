@@ -218,7 +218,7 @@ typedef NS_ENUM(uint8_t, LCIMFieldType) {
 /** Name of the enum. */
 @property(nonatomic, readonly, copy) NSString *name;
 /** Function that validates that raw values are valid enum values. */
-@property(nonatomic, readonly) GPBEnumValidationFunc enumVerifier;
+@property(nonatomic, readonly) LCIMEnumValidationFunc enumVerifier;
 
 /**
  * Returns the enum value name for the given raw enum.
