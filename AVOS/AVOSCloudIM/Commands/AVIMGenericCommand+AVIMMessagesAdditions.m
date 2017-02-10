@@ -97,6 +97,9 @@ static uint16_t _searial_id = 0;
         case AVIMCommandType_Report:
             self.reportMessage = (AVIMReportCommand *)command;
             break;
+
+        case AVIMCommandType_Echo:
+            break;
     }
 }
 
@@ -433,6 +436,9 @@ static uint16_t _searial_id = 0;
             
         case AVIMCommandType_Report:
             result = self.reportMessage;
+            break;
+            
+        case AVIMCommandType_Echo:
             break;
     }
     return result;

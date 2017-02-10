@@ -26,6 +26,7 @@
 #import "LCIMConversationCache.h"
 #import "MessagesProtoOrig.pbobjc.h"
 #import "AVUtils.h"
+#import "LCIMMessageReceiptCacheStore.h"
 
 #define LCIM_VALID_LIMIT(limit) ({      \
     int32_t limit_ = (int32_t)(limit);  \
@@ -390,8 +391,27 @@
 }
 
 - (void)markAsReadInBackground {
+    [self markAsReadInBackgroundWithTriggerReceipt:NO callback:^(BOOL succeeded, NSError * _Nullable error) {
+        //ignore callback
+    }];
+}
+
+- (void)markAsReadInBackgroundForLastMessage {
+    [self markAsReadInBackgroundForLastMessage:YES];
+}
+
+- (void)markAsReadInBackgroundForLastMessageWithCallback:(AVIMBooleanResultBlock)callback {
+    [self markAsReadInBackgroundWithTriggerReceipt:YES callback:callback];
+}
+
+- (void)markAsReadInBackgroundForLastMessage:(BOOL)isForLastMessage {
+    [self markAsReadInBackgroundWithTriggerReceipt:YES callback:^(BOOL succeeded, NSError * _Nullable error) {
+        //ignore callback
+    }];
+}
+
+- (void)markAsReadInBackgroundWithTriggerReceipt:(BOOL)triggerReceipt callback:(AVIMBooleanResultBlock)callback {
     __weak typeof(self) ws = self;
-    
     dispatch_async([AVIMClient imClientQueue], ^{
         [ws.imClient sendCommand:({
             AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
@@ -399,9 +419,22 @@
             genericCommand.cmd = AVIMCommandType_Read;
             genericCommand.peerId = ws.imClient.clientId;
             
+            AVIMReadTuple *readTuple = [[AVIMReadTuple alloc] init];
+            readTuple.cid = ws.conversationId;
+            if (triggerReceipt) {
+                readTuple.mid = self.lastMessage.messageId;
+                readTuple.timestamp = self.lastMessage.sendTimestamp;
+            }
+            
+            NSMutableArray *convsArray = [@[readTuple] mutableCopy];
+
             AVIMReadCommand *readCommand = [[AVIMReadCommand alloc] init];
-            readCommand.cid = ws.conversationId;
+            readCommand.convsArray = convsArray;
+            readCommand.triggerReceipt = triggerReceipt;
             [genericCommand avim_addRequiredKeyWithCommand:readCommand];
+            [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
+                [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+            }];
             genericCommand;
         })];
     });
@@ -751,6 +784,13 @@
     return clientId ? [[LCIMConversationCache alloc] initWithClientId:clientId] : nil;
 }
 
+- (LCIMMessageReceiptCacheStore *)messageReceiptCacheStore {
+    NSString *clientId = self.clientId;
+    NSString *conversationId = self.conversationId;
+    
+    return clientId && conversationId ? [[LCIMMessageReceiptCacheStore alloc] initWithClientId:clientId conversationId:conversationId] : nil;
+}
+
 - (void)cacheContinuousMessages:(NSArray *)messages {
     [self cacheContinuousMessages:messages withBreakpoint:YES];
 }
@@ -835,6 +875,7 @@
                     message.sendTimestamp = [logsItem timestamp];
                     message.clientId = [logsItem from];
                     message.messageId = [logsItem msgId];
+                    [self addReceiptStatusForMessage:message];
                     [messages addObject:message];
                 }
                 self.lastMessage = messages.lastObject;
@@ -1087,9 +1128,103 @@
 
 - (void)postprocessMessages:(NSArray *)messages {
     for (AVIMMessage *message in messages) {
-        message.status = AVIMMessageStatusSent;
         message.localClientId = self.imClient.clientId;
     }
+}
+
+- (int64_t)latestReadTimestampFromPeerFromPeer {
+    if (_latestReadTimestampFromPeer) {
+        return _latestReadTimestampFromPeer;
+    }
+    _latestReadTimestampFromPeer = [self.messageReceiptCacheStore latestReadTimestampFromPeer];
+    return _latestReadTimestampFromPeer;
+}
+
+- (int64_t)latestDeliveredTimestampFromPeer {
+    if (_latestDeliveredTimestampFromPeer) {
+        return _latestDeliveredTimestampFromPeer;
+    }
+    _latestDeliveredTimestampFromPeer = [self.messageReceiptCacheStore latestDeliveredTimestampFromPeer];
+    return _latestDeliveredTimestampFromPeer;
+}
+
+- (void)addReceiptStatusForMessage:(AVIMMessage *)message {
+    if (message.clientId != self.clientId) {
+        return;
+    }
+    message.status = AVIMMessageStatusSent;
+    
+    int64_t readTimestamp = self.latestReadTimestampFromPeer;
+    int64_t deliveredTimestamp = self.latestDeliveredTimestampFromPeer;
+    
+    if (deliveredTimestamp > 0) {
+        message.deliveredTimestamp = deliveredTimestamp;
+        if (message.sendTimestamp <= deliveredTimestamp) {
+            message.status = AVIMMessageStatusDelivered;
+        }
+    }
+    if (readTimestamp > 0) {
+        message.readTimestamp = readTimestamp;
+        if (message.sendTimestamp <= readTimestamp){
+            message.status = AVIMMessageStatusRead;
+        }
+    }
+}
+
+- (void)fetchLatestReceiptTimestampIfNeededWithCallback:(AVIMBooleanResultBlock)callback {
+    if (self.members.count != 2) {
+        NSError *error = [AVErrorUtils errorWithCode:0 errorText:@"`-[AVIMConversation fetchLatestReceiptTimestampIfNeededWithCallback:]` is only available for conversation with 2 members"];
+        [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+        return;
+    }
+    [self fetchLatestReceiptTimestampWithCallback:callback];
+}
+
+- (void)fetchLatestReceiptTimestampWithCallback:(AVIMBooleanResultBlock)callback {
+    dispatch_async([AVIMClient imClientQueue], ^{
+        AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
+        genericCommand.needResponse = YES;
+        genericCommand.cmd = AVIMCommandType_Conv;
+        genericCommand.peerId = _imClient.clientId;
+        genericCommand.op = AVIMOpType_MaxRead;
+        
+        AVIMConvCommand *command = [[AVIMConvCommand alloc] init];
+        command.cid = self.conversationId;
+        [genericCommand avim_addRequiredKeyWithCommand:command];
+        
+        [genericCommand setCallback:^(AVIMGenericCommand *outCommand_, AVIMGenericCommand *inCommand, NSError *error) {
+            if (!error) {
+                AVIMConvCommand *conversationInCommand = inCommand.convMessage;
+                
+                int64_t deliveredTimestamp = conversationInCommand.maxAckTimestamp;
+                int64_t readTimestamp = conversationInCommand.maxReadTimestamp;
+                AVIMMessage *rcpMessage = [[AVIMMessage alloc] init];
+                rcpMessage.status = AVIMMessageStatusDelivered;
+                rcpMessage.deliveredTimestamp = deliveredTimestamp;
+                rcpMessage.conversationId = self.conversationId;
+                rcpMessage.clientId = self.clientId;
+                LCIMMessageReceiptCacheStore *messageStatusCacheStore = self.messageReceiptCacheStore;
+                
+                if (deliveredTimestamp > 0) {
+                    [messageStatusCacheStore insertMessage:rcpMessage];
+                    self.latestDeliveredTimestampFromPeer = deliveredTimestamp;
+                }
+                
+                if (readTimestamp > 0) {
+                    rcpMessage.readTimestamp = readTimestamp;
+                    rcpMessage.status = AVIMMessageStatusRead;
+                    [messageStatusCacheStore insertMessage:rcpMessage];
+                    self.latestReadTimestampFromPeer = readTimestamp;
+                }
+                
+                [AVIMBlockHelper callBooleanResultBlock:callback error:nil];
+            } else {
+                [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+            }
+        }];
+        
+        [_imClient sendCommand:genericCommand];
+    });
 }
 
 #pragma mark - Keyed Conversation

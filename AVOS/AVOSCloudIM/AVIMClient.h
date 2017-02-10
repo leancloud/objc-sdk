@@ -247,6 +247,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)conversation:(AVIMConversation *)conversation messageDelivered:(AVIMMessage *)message;
 
 /*!
+ 消息对方已读。
+ @param conversation － 所属对话
+ @param message - 具体的消息
+ */
+- (void)conversation:(AVIMConversation *)conversation messageRead:(AVIMMessage *)message;
+/*!
  对话中有新成员加入时所有成员都会收到这一通知。
  @param conversation － 所属对话
  @param clientIds - 加入的新成员列表
@@ -277,7 +283,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)conversation:(AVIMConversation *)conversation kickedByClientId:(NSString *)clientId;
 
 /*!
-  收到未读通知。在该终端上线的时候，服务器会将对话的未读数发送过来。未读数可通过 -[AVIMConversation markAsReadInBackground] 清零，服务端不会自动清零。
+  收到未读通知。在该终端上线的时候，服务器会将对话的未读数发送过来。未读数可通过 -[AVIMConversation markAsReadInBackgroundForMessage:callback:] 清零，服务端不会自动清零。
  @param conversation 所属会话。
  @param unread 未读消息数量。
  */

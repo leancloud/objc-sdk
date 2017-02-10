@@ -10,6 +10,7 @@
 #import "LCIMConversationCacheStore.h"
 #import "LCIMConversationQueryCacheStore.h"
 #import "AVIMConversation.h"
+#import "LCIMMessageReceiptCacheStore.h"
 
 @interface LCIMConversationCache ()
 
@@ -83,7 +84,12 @@
 }
 
 - (void)cleanAllExpiredConversations {
-    [self.cacheStore allExpiredConversations];
+    [self.cacheStore cleanAllExpiredConversations];
+    LCIMMessageReceiptCacheStore *messageReceiptCacheStore = [[LCIMMessageReceiptCacheStore alloc] initWithClientId:self.clientId];
+    NSArray<AVIMConversation *> *allExpiredConversations = [self.cacheStore allExpiredConversations];
+    for (AVIMConversation *conversation in allExpiredConversations) {
+        [messageReceiptCacheStore deleteConversation:conversation];
+    }
 }
 
 - (void)updateConversationForLastMessageAt:(NSDate *)lastMessageAt conversationId:(NSString *)conversationId {

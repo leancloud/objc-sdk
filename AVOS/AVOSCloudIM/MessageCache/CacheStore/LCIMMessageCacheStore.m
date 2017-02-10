@@ -8,7 +8,6 @@
 
 #import "LCIMMessageCacheStore.h"
 #import "LCIMMessageCacheStoreSQL.h"
-#import "AVIMMessage.h"
 #import "AVIMMessage_Internal.h"
 #import "AVIMTypedMessage.h"
 #import "AVIMTypedMessage_Internal.h"
@@ -35,9 +34,12 @@
 
 - (void)migrateDatabaseIfNeeded:(NSString *)databasePath {
     LCDatabaseMigrator *migrator = [[LCDatabaseMigrator alloc] initWithDatabasePath:databasePath];
-
     [migrator executeMigrations:@[
         // Migrations of each database version
+        /* Version 1: Add read_timestamp column. */
+        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
+            [db executeUpdate:@"ALTER TABLE message ADD COLUMN read_timestamp NUMBERIC"];
+        }]
     ]];
 }
 
@@ -60,6 +62,10 @@
     return [NSNumber numberWithDouble:message.deliveredTimestamp];
 }
 
+- (NSNumber *)readTimestampForMessage:(AVIMMessage *)message {
+    return [NSNumber numberWithDouble:message.readTimestamp];
+}
+
 - (NSTimeInterval)currentTimestamp {
     return [[NSDate date] timeIntervalSince1970] * 1000;
 }
@@ -69,6 +75,7 @@
         message.clientId,
         [self timestampForMessage:message],
         [self receiptTimestampForMessage:message],
+        [self readTimestampForMessage:message],
         [message.payload dataUsingEncoding:NSUTF8StringEncoding],
         @(message.status),
         self.conversationId,
@@ -83,6 +90,7 @@
         message.clientId,
         [self timestampForMessage:message],
         [self receiptTimestampForMessage:message],
+        [self readTimestampForMessage:message],
         [message.payload dataUsingEncoding:NSUTF8StringEncoding],
         @(message.status),
         @(NO)
@@ -96,6 +104,7 @@
         message.clientId,
         [self timestampForMessage:message],
         [self receiptTimestampForMessage:message],
+        [self readTimestampForMessage:message],
         [message.payload dataUsingEncoding:NSUTF8StringEncoding],
         @(message.status),
         @(breakpoint)
@@ -140,6 +149,42 @@
     [self updateBreakpoint:breakpoint forMessages:@[message]];
 }
 
+
+- (void)updateReceiptTimestamp:(int64_t)timestamp
+                        status:(AVIMMessageStatus)status
+                   forMessages:(NSArray *)messages {
+    if (!messages || messages.count == 0) {
+        return;
+    }
+    NSNumber *timestampNumber = [NSNumber numberWithDouble:timestamp];
+    if (!timestampNumber) {
+        return;
+    }
+    NSString *updateSQL;
+    switch (status) {
+        case AVIMMessageStatusDelivered:
+            updateSQL = LCIM_SQL_UPDATE_MESSAGE_DELIVERED;
+            break;
+        case AVIMMessageStatusRead:
+            updateSQL = LCIM_SQL_UPDATE_MESSAGE_READ;
+            break;
+        default:
+            break;
+    }
+    
+    LCIM_OPEN_DATABASE(db, ({
+        for (AVIMMessage *message in messages) {
+            NSArray *args = @[
+                              timestampNumber,
+                              @(status),
+                              self.conversationId,
+                              message.messageId
+                              ];
+            [db executeUpdate:updateSQL withArgumentsInArray:args];
+        }
+    }));
+}
+
 - (void)updateMessageWithoutBreakpoint:(AVIMMessage *)message {
     LCIM_OPEN_DATABASE(db, ({
         NSArray *args = [self updationRecordForMessage:message];
@@ -182,6 +227,26 @@
         [result close];
     }));
 
+    return messages;
+}
+
+- (NSArray *)messagesBeforeTimestamp:(int64_t)timestamp
+                              status:(AVIMMessageStatus)status {
+    NSMutableArray *messages = [NSMutableArray array];
+    
+    LCIM_OPEN_DATABASE(db, ({
+        LCResultSet *result = nil;
+        
+        NSArray *args = @[self.conversationId, @(timestamp), @(timestamp), @(status), self.clientId];
+        result = [db executeQuery:LCIM_SQL_SELECT_RECEIPT_MESSAGE_LESS_THAN_TIMESTAMP_AND_ID withArgumentsInArray:args];
+        
+        while ([result next]) {
+            [messages insertObject:[self messageForRecord:result] atIndex:0];
+        }
+        
+        [result close];
+    }));
+    
     return messages;
 }
 
@@ -246,6 +311,7 @@
     message.clientId           = [record stringForColumn:LCIM_FIELD_FROM_PEER_ID];
     message.sendTimestamp      = [record longLongIntForColumn:LCIM_FIELD_TIMESTAMP];
     message.deliveredTimestamp = [record longLongIntForColumn:LCIM_FIELD_RECEIPT_TIMESTAMP];
+    message.readTimestamp      = [record longLongIntForColumn:LCIM_FIELD_READ_TIMESTAMP];
     message.content            = payload;
     message.status             = [record intForColumn:LCIM_FIELD_STATUS];
     message.breakpoint         = [record boolForColumn:LCIM_FIELD_BREAKPOINT];

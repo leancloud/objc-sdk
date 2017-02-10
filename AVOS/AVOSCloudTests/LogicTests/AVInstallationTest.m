@@ -68,6 +68,13 @@
     NSError *error;
     [[AVInstallation currentInstallation] delete:&error];
     XCTAssertNil(error);
+    
+    [[AVInstallation currentInstallation] removeObjectForKey:@"name"];
+    [[AVInstallation currentInstallation] save:&error];
+    XCTAssertNil(error);
+    id object = [[AVInstallation currentInstallation]  objectForKey:@"name"];
+    [[AVInstallation currentInstallation] fetch:&error];
+    XCTAssertNil(object);
 }
 
 // https://ticket.leancloud.cn/tickets/8487

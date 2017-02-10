@@ -230,13 +230,13 @@ typedef GPB_ENUM(GPBType_FieldNumber) {
  * Fetches the raw value of a @c GPBType's @c syntax property, even
  * if the value was not defined by the enum at the time the code was generated.
  **/
-int32_t GPBType_Syntax_RawValue(LCIMType *message);
+int32_t LCIMType_Syntax_RawValue(LCIMType *message);
 /**
  * Sets the raw value of an @c GPBType's @c syntax property, allowing
  * it to be set to a value that was not defined by the enum at the time the code
  * was generated.
  **/
-void SetGPBType_Syntax_RawValue(LCIMType *message, int32_t value);
+void SetLCIMType_Syntax_RawValue(LCIMType *message, int32_t value);
 
 #pragma mark - GPBField
 
@@ -302,25 +302,25 @@ typedef GPB_ENUM(GPBField_FieldNumber) {
  * Fetches the raw value of a @c GPBField's @c kind property, even
  * if the value was not defined by the enum at the time the code was generated.
  **/
-int32_t GPBField_Kind_RawValue(LCIMField *message);
+int32_t LCIMField_Kind_RawValue(LCIMField *message);
 /**
  * Sets the raw value of an @c GPBField's @c kind property, allowing
  * it to be set to a value that was not defined by the enum at the time the code
  * was generated.
  **/
-void SetGPBField_Kind_RawValue(LCIMField *message, int32_t value);
+void SetLCIMField_Kind_RawValue(LCIMField *message, int32_t value);
 
 /**
  * Fetches the raw value of a @c GPBField's @c cardinality property, even
  * if the value was not defined by the enum at the time the code was generated.
  **/
-int32_t GPBField_Cardinality_RawValue(LCIMField *message);
+int32_t LCIMField_Cardinality_RawValue(LCIMField *message);
 /**
  * Sets the raw value of an @c GPBField's @c cardinality property, allowing
  * it to be set to a value that was not defined by the enum at the time the code
  * was generated.
  **/
-void SetGPBField_Cardinality_RawValue(LCIMField *message, int32_t value);
+void SetLCIMField_Cardinality_RawValue(LCIMField *message, int32_t value);
 
 #pragma mark - GPBEnum
 
@@ -364,13 +364,13 @@ typedef GPB_ENUM(GPBEnum_FieldNumber) {
  * Fetches the raw value of a @c GPBEnum's @c syntax property, even
  * if the value was not defined by the enum at the time the code was generated.
  **/
-int32_t GPBEnum_Syntax_RawValue(LCIMEnum *message);
+int32_t LCIMEnum_Syntax_RawValue(LCIMEnum *message);
 /**
  * Sets the raw value of an @c GPBEnum's @c syntax property, allowing
  * it to be set to a value that was not defined by the enum at the time the code
  * was generated.
  **/
-void SetGPBEnum_Syntax_RawValue(LCIMEnum *message, int32_t value);
+void SetLCIMEnum_Syntax_RawValue(LCIMEnum *message, int32_t value);
 
 #pragma mark - GPBEnumValue
 

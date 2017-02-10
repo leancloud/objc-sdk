@@ -170,6 +170,19 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)markAsReadInBackground;
 
 /*!
+ 标记该消息已读。
+ @attention 服务端会将对话最后一条消息之前的消息状态都标记为已读。
+ */
+- (void)markAsReadInBackgroundForLastMessage;
+
+/*!
+ 标记该消息已读。
+ @param callback － 结果回调
+ @attention 服务端会将对话最后一条消息之前的消息状态都标记为已读。
+ */
+- (void)markAsReadInBackgroundForLastMessageWithCallback:(AVIMBooleanResultBlock)callback;
+
+/*!
  邀请新成员加入对话。
  @param clientIds － 成员列表
  @param callback － 结果回调
@@ -276,6 +289,11 @@ NS_ASSUME_NONNULL_BEGIN
                     timestamp:(int64_t)timestamp
                         limit:(NSUInteger)limit
                      callback:(AVIMArrayResultBlock)callback;
+/*!
+ * 拉取服务器最新的回执数据。
+ * 该方法仅对“单聊”(也即：成员数为2的对话)有效
+ */
+- (void)fetchLatestReceiptTimestampIfNeededWithCallback:(AVIMBooleanResultBlock)callback;
 
 @end
 

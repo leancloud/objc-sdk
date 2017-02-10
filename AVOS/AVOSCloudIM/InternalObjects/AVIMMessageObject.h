@@ -18,5 +18,6 @@
 @property(nonatomic, strong)NSString *content;
 @property(nonatomic)int64_t sendTimestamp;
 @property(nonatomic)int64_t deliveredTimestamp;
+@property(nonatomic)int64_t readTimestamp;
 
 @end

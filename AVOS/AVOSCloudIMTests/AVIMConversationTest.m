@@ -256,6 +256,17 @@
     WAIT;
 }
 
+- (void)testMarkAsRead {
+    __weak AVIMConversation *conversation = self.conversation;
+    [conversation queryMessagesFromServerWithLimit:10 callback:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+        XCTAssertTrue(objects.count > 0);
+        AVIMMessage *message = [objects lastObject];
+        [conversation markAsReadInBackgroundForLastMessage];
+        NOTIFY
+    }];
+    WAIT;
+}
+
 - (void)testConversationMembersUpdate {
     AVIMConversation *conversation = [self conversationForUpdate];
     __weak typeof(conversation) weakConversation = conversation;

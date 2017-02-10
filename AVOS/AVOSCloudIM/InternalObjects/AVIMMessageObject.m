@@ -9,5 +9,5 @@
 #import "AVIMMessageObject.h"
 
 @implementation AVIMMessageObject
-@dynamic ioType, status, messageId, clientId, conversationId, content, sendTimestamp, deliveredTimestamp;
+@dynamic ioType, status, messageId, clientId, conversationId, content, sendTimestamp, deliveredTimestamp, readTimestamp;
 @end

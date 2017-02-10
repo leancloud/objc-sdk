@@ -19,6 +19,7 @@ typedef NS_ENUM(int8_t, AVIMMessageStatus) {
     AVIMMessageStatusSent,
     AVIMMessageStatusDelivered,
     AVIMMessageStatusFailed,
+    AVIMMessageStatusRead
 };
 
 NS_ASSUME_NONNULL_BEGIN
@@ -65,6 +66,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign) int64_t deliveredTimestamp;
 
+/*!
+ * 已读时间（精确到毫秒）
+ */
+@property (nonatomic, assign) int64_t readTimestamp;
 /*!
  * 是否是暂态消息
  */
