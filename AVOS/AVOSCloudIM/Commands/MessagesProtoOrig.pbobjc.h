@@ -197,6 +197,8 @@ typedef GPB_ENUM(AVIMUnreadTuple_FieldNumber) {
   AVIMUnreadTuple_FieldNumber_Unread = 2,
   AVIMUnreadTuple_FieldNumber_Mid = 3,
   AVIMUnreadTuple_FieldNumber_Timestamp = 4,
+  AVIMUnreadTuple_FieldNumber_From = 5,
+  AVIMUnreadTuple_FieldNumber_Data_p = 6,
 };
 
 @interface AVIMUnreadTuple : LCIMMessage
@@ -215,6 +217,14 @@ typedef GPB_ENUM(AVIMUnreadTuple_FieldNumber) {
 @property(nonatomic, readwrite) int64_t timestamp;
 
 @property(nonatomic, readwrite) BOOL hasTimestamp;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *from;
+/** Test to see if @c from has been set. */
+@property(nonatomic, readwrite) BOOL hasFrom;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *data_p;
+/** Test to see if @c data_p has been set. */
+@property(nonatomic, readwrite) BOOL hasData_p;
+
 @end
 
 #pragma mark - AVIMLogItem
@@ -225,6 +235,7 @@ typedef GPB_ENUM(AVIMLogItem_FieldNumber) {
   AVIMLogItem_FieldNumber_Timestamp = 3,
   AVIMLogItem_FieldNumber_MsgId = 4,
   AVIMLogItem_FieldNumber_AckAt = 5,
+  AVIMLogItem_FieldNumber_ReadAt = 6,
 };
 
 @interface AVIMLogItem : LCIMMessage
@@ -247,6 +258,9 @@ typedef GPB_ENUM(AVIMLogItem_FieldNumber) {
 @property(nonatomic, readwrite) int64_t ackAt;
 
 @property(nonatomic, readwrite) BOOL hasAckAt;
+@property(nonatomic, readwrite) int64_t readAt;
+
+@property(nonatomic, readwrite) BOOL hasReadAt;
 @end
 
 #pragma mark - AVIMLoginCommand
@@ -297,6 +311,7 @@ typedef GPB_ENUM(AVIMSessionCommand_FieldNumber) {
   AVIMSessionCommand_FieldNumber_DeviceToken = 14,
   AVIMSessionCommand_FieldNumber_Sp = 15,
   AVIMSessionCommand_FieldNumber_Detail = 16,
+  AVIMSessionCommand_FieldNumber_LastUnreadNotifTime = 17,
 };
 
 @interface AVIMSessionCommand : LCIMMessage
@@ -360,6 +375,9 @@ typedef GPB_ENUM(AVIMSessionCommand_FieldNumber) {
 /** Test to see if @c detail has been set. */
 @property(nonatomic, readwrite) BOOL hasDetail;
 
+@property(nonatomic, readwrite) int64_t lastUnreadNotifTime;
+
+@property(nonatomic, readwrite) BOOL hasLastUnreadNotifTime;
 @end
 
 #pragma mark - AVIMErrorCommand
@@ -406,6 +424,7 @@ typedef GPB_ENUM(AVIMDirectCommand_FieldNumber) {
   AVIMDirectCommand_FieldNumber_Dt = 14,
   AVIMDirectCommand_FieldNumber_RoomId = 15,
   AVIMDirectCommand_FieldNumber_PushData = 16,
+  AVIMDirectCommand_FieldNumber_Will = 17,
 };
 
 @interface AVIMDirectCommand : LCIMMessage
@@ -461,6 +480,9 @@ typedef GPB_ENUM(AVIMDirectCommand_FieldNumber) {
 /** Test to see if @c pushData has been set. */
 @property(nonatomic, readwrite) BOOL hasPushData;
 
+@property(nonatomic, readwrite) BOOL will;
+
+@property(nonatomic, readwrite) BOOL hasWill;
 @end
 
 #pragma mark - AVIMAckCommand
@@ -526,6 +548,7 @@ typedef GPB_ENUM(AVIMAckCommand_FieldNumber) {
 
 typedef GPB_ENUM(AVIMUnreadCommand_FieldNumber) {
   AVIMUnreadCommand_FieldNumber_ConvsArray = 1,
+  AVIMUnreadCommand_FieldNumber_NotifTime = 2,
 };
 
 @interface AVIMUnreadCommand : LCIMMessage
@@ -534,6 +557,9 @@ typedef GPB_ENUM(AVIMUnreadCommand_FieldNumber) {
 /** The number of items in @c convsArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger convsArray_Count;
 
+@property(nonatomic, readwrite) int64_t notifTime;
+
+@property(nonatomic, readwrite) BOOL hasNotifTime;
 @end
 
 #pragma mark - AVIMConvCommand
@@ -630,7 +656,6 @@ typedef GPB_ENUM(AVIMConvCommand_FieldNumber) {
 @property(nonatomic, readwrite) int32_t statusTtl;
 
 @property(nonatomic, readwrite) BOOL hasStatusTtl;
-/** repeated string members = 19; */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *targetClientId;
 /** Test to see if @c targetClientId has been set. */
 @property(nonatomic, readwrite) BOOL hasTargetClientId;
@@ -811,7 +836,6 @@ typedef GPB_ENUM(AVIMReadCommand_FieldNumber) {
   AVIMReadCommand_FieldNumber_Cid = 1,
   AVIMReadCommand_FieldNumber_CidsArray = 2,
   AVIMReadCommand_FieldNumber_ConvsArray = 3,
-  AVIMReadCommand_FieldNumber_TriggerReceipt = 4,
 };
 
 @interface AVIMReadCommand : LCIMMessage
@@ -828,9 +852,6 @@ typedef GPB_ENUM(AVIMReadCommand_FieldNumber) {
 /** The number of items in @c convsArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger convsArray_Count;
 
-@property(nonatomic, readwrite) BOOL triggerReceipt;
-
-@property(nonatomic, readwrite) BOOL hasTriggerReceipt;
 @end
 
 #pragma mark - AVIMPresenceCommand

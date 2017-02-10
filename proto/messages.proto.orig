@@ -93,6 +93,8 @@ message UnreadTuple {
   required int32 unread = 2;
   optional string mid = 3;
   optional int64 timestamp = 4;
+  optional string from = 5;
+  optional string data = 6;
 }
 
 message LogItem {
@@ -101,6 +103,7 @@ message LogItem {
   optional int64 timestamp = 3;
   optional string msgId = 4;
   optional int64 ackAt = 5;
+  optional int64 readAt = 6;
 }
 
 message LoginCommand {
@@ -129,6 +132,7 @@ message SessionCommand {
   optional string deviceToken = 14;
   optional bool sp = 15;
   optional string detail = 16;
+  optional int64 lastUnreadNotifTime = 17;
 }
 
 message ErrorCommand {
@@ -153,6 +157,7 @@ message DirectCommand {
   optional string dt = 14;
   optional string roomId = 15;
   optional string pushData = 16;
+  optional bool will = 17;
 }
 
 message AckCommand {
@@ -171,6 +176,7 @@ message AckCommand {
 
 message UnreadCommand {
   repeated UnreadTuple convs = 1;
+  optional int64 notifTime = 2;
 }
 
 message ConvCommand {
@@ -194,11 +200,10 @@ message ConvCommand {
   optional bool statusPub = 17;
   optional int32 statusTTL = 18;
 
-  //repeated string members = 19;
   optional string targetClientId = 20;
   optional int64 maxReadTimestamp = 21;
   optional int64 maxAckTimestamp = 22;
-  
+
   optional JsonObjectMessage results = 100;
   optional JsonObjectMessage where = 101;
   optional JsonObjectMessage attr = 103;
@@ -246,7 +251,6 @@ message ReadCommand {
   optional string cid = 1;
   repeated string cids = 2;
   repeated ReadTuple convs = 3;
-  optional bool triggerReceipt = 4;
 }
 
 message PresenceCommand {
