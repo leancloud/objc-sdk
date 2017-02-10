@@ -3,14 +3,14 @@
 
 // This CPP symbol can be defined to use imports that match up to the framework
 // imports needed when using CocoaPods.
-#if !defined(GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS)
- #define GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS 0
+#if !defined(LCIM_USE_PROTOBUF_FRAMEWORK_IMPORTS)
+ #define LCIM_USE_PROTOBUF_FRAMEWORK_IMPORTS 0
 #endif
 
-#if GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <Protobuf/GPBProtocolBuffers.h>
+#if LCIM_USE_PROTOBUF_FRAMEWORK_IMPORTS
+ #import <Protobuf/LCIMProtocolBuffers.h>
 #else
- #import "GPBProtocolBuffers.h"
+ #import "LCIMProtocolBuffers.h"
 #endif
 
 #if GOOGLE_PROTOBUF_OBJC_VERSION < 30002
@@ -68,7 +68,7 @@ typedef GPB_ENUM(AVIMCommandType) {
   AVIMCommandType_Echo = 14,
 };
 
-GPBEnumDescriptor *AVIMCommandType_EnumDescriptor(void);
+LCIMEnumDescriptor *AVIMCommandType_EnumDescriptor(void);
 
 /**
  * Checks to see if the given value is defined by the enum or was not known at
@@ -138,7 +138,7 @@ typedef GPB_ENUM(AVIMOpType) {
   AVIMOpType_Uploaded = 101,
 };
 
-GPBEnumDescriptor *AVIMOpType_EnumDescriptor(void);
+LCIMEnumDescriptor *AVIMOpType_EnumDescriptor(void);
 
 /**
  * Checks to see if the given value is defined by the enum or was not known at
@@ -153,7 +153,7 @@ typedef GPB_ENUM(AVIMStatusType) {
   AVIMStatusType_Off = 2,
 };
 
-GPBEnumDescriptor *AVIMStatusType_EnumDescriptor(void);
+LCIMEnumDescriptor *AVIMStatusType_EnumDescriptor(void);
 
 /**
  * Checks to see if the given value is defined by the enum or was not known at
@@ -168,12 +168,12 @@ BOOL AVIMStatusType_IsValidValue(int32_t value);
  *
  * The base class provides:
  * @code
- *   + (GPBExtensionRegistry *)extensionRegistry;
+ *   + (LCIMExtensionRegistry *)extensionRegistry;
  * @endcode
- * which is a @c GPBExtensionRegistry that includes all the extensions defined by
+ * which is a @c LCIMExtensionRegistry that includes all the extensions defined by
  * this file and all files that it depends on.
  **/
-@interface AVIMMessagesProtoOrigRoot : GPBRootObject
+@interface AVIMMessagesProtoOrigRoot : LCIMRootObject
 @end
 
 #pragma mark - AVIMJsonObjectMessage
@@ -182,7 +182,7 @@ typedef GPB_ENUM(AVIMJsonObjectMessage_FieldNumber) {
   AVIMJsonObjectMessage_FieldNumber_Data_p = 1,
 };
 
-@interface AVIMJsonObjectMessage : GPBMessage
+@interface AVIMJsonObjectMessage : LCIMMessage
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *data_p;
 /** Test to see if @c data_p has been set. */
@@ -201,7 +201,7 @@ typedef GPB_ENUM(AVIMUnreadTuple_FieldNumber) {
   AVIMUnreadTuple_FieldNumber_Data_p = 6,
 };
 
-@interface AVIMUnreadTuple : GPBMessage
+@interface AVIMUnreadTuple : LCIMMessage
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *cid;
 /** Test to see if @c cid has been set. */
@@ -238,7 +238,7 @@ typedef GPB_ENUM(AVIMLogItem_FieldNumber) {
   AVIMLogItem_FieldNumber_ReadAt = 6,
 };
 
-@interface AVIMLogItem : GPBMessage
+@interface AVIMLogItem : LCIMMessage
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *from;
 /** Test to see if @c from has been set. */
@@ -265,7 +265,7 @@ typedef GPB_ENUM(AVIMLogItem_FieldNumber) {
 
 #pragma mark - AVIMLoginCommand
 
-@interface AVIMLoginCommand : GPBMessage
+@interface AVIMLoginCommand : LCIMMessage
 
 @end
 
@@ -277,7 +277,7 @@ typedef GPB_ENUM(AVIMDataCommand_FieldNumber) {
   AVIMDataCommand_FieldNumber_Offline = 3,
 };
 
-@interface AVIMDataCommand : GPBMessage
+@interface AVIMDataCommand : LCIMMessage
 
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *idsArray;
 /** The number of items in @c idsArray without causing the array to be created. */
@@ -314,7 +314,7 @@ typedef GPB_ENUM(AVIMSessionCommand_FieldNumber) {
   AVIMSessionCommand_FieldNumber_LastUnreadNotifTime = 17,
 };
 
-@interface AVIMSessionCommand : GPBMessage
+@interface AVIMSessionCommand : LCIMMessage
 
 @property(nonatomic, readwrite) int64_t t;
 
@@ -389,7 +389,7 @@ typedef GPB_ENUM(AVIMErrorCommand_FieldNumber) {
   AVIMErrorCommand_FieldNumber_Detail = 4,
 };
 
-@interface AVIMErrorCommand : GPBMessage
+@interface AVIMErrorCommand : LCIMMessage
 
 @property(nonatomic, readwrite) int32_t code;
 
@@ -427,7 +427,7 @@ typedef GPB_ENUM(AVIMDirectCommand_FieldNumber) {
   AVIMDirectCommand_FieldNumber_Will = 17,
 };
 
-@interface AVIMDirectCommand : GPBMessage
+@interface AVIMDirectCommand : LCIMMessage
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *msg;
 /** Test to see if @c msg has been set. */
@@ -501,7 +501,7 @@ typedef GPB_ENUM(AVIMAckCommand_FieldNumber) {
   AVIMAckCommand_FieldNumber_AppCode = 11,
 };
 
-@interface AVIMAckCommand : GPBMessage
+@interface AVIMAckCommand : LCIMMessage
 
 @property(nonatomic, readwrite) int32_t code;
 
@@ -551,7 +551,7 @@ typedef GPB_ENUM(AVIMUnreadCommand_FieldNumber) {
   AVIMUnreadCommand_FieldNumber_NotifTime = 2,
 };
 
-@interface AVIMUnreadCommand : GPBMessage
+@interface AVIMUnreadCommand : LCIMMessage
 
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<AVIMUnreadTuple*> *convsArray;
 /** The number of items in @c convsArray without causing the array to be created. */
@@ -591,7 +591,7 @@ typedef GPB_ENUM(AVIMConvCommand_FieldNumber) {
   AVIMConvCommand_FieldNumber_Attr = 103,
 };
 
-@interface AVIMConvCommand : GPBMessage
+@interface AVIMConvCommand : LCIMMessage
 
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *mArray;
 /** The number of items in @c mArray without causing the array to be created. */
@@ -692,7 +692,7 @@ typedef GPB_ENUM(AVIMRoomCommand_FieldNumber) {
   AVIMRoomCommand_FieldNumber_ByPeerId = 7,
 };
 
-@interface AVIMRoomCommand : GPBMessage
+@interface AVIMRoomCommand : LCIMMessage
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *roomId;
 /** Test to see if @c roomId has been set. */
@@ -738,7 +738,7 @@ typedef GPB_ENUM(AVIMLogsCommand_FieldNumber) {
   AVIMLogsCommand_FieldNumber_LogsArray = 105,
 };
 
-@interface AVIMLogsCommand : GPBMessage
+@interface AVIMLogsCommand : LCIMMessage
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *cid;
 /** Test to see if @c cid has been set. */
@@ -789,7 +789,7 @@ typedef GPB_ENUM(AVIMRcpCommand_FieldNumber) {
   AVIMRcpCommand_FieldNumber_Read = 4,
 };
 
-@interface AVIMRcpCommand : GPBMessage
+@interface AVIMRcpCommand : LCIMMessage
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *id_p;
 /** Test to see if @c id_p has been set. */
@@ -815,7 +815,7 @@ typedef GPB_ENUM(AVIMReadTuple_FieldNumber) {
   AVIMReadTuple_FieldNumber_Mid = 3,
 };
 
-@interface AVIMReadTuple : GPBMessage
+@interface AVIMReadTuple : LCIMMessage
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *cid;
 /** Test to see if @c cid has been set. */
@@ -838,7 +838,7 @@ typedef GPB_ENUM(AVIMReadCommand_FieldNumber) {
   AVIMReadCommand_FieldNumber_ConvsArray = 3,
 };
 
-@interface AVIMReadCommand : GPBMessage
+@interface AVIMReadCommand : LCIMMessage
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *cid;
 /** Test to see if @c cid has been set. */
@@ -862,7 +862,7 @@ typedef GPB_ENUM(AVIMPresenceCommand_FieldNumber) {
   AVIMPresenceCommand_FieldNumber_Cid = 3,
 };
 
-@interface AVIMPresenceCommand : GPBMessage
+@interface AVIMPresenceCommand : LCIMMessage
 
 @property(nonatomic, readwrite) AVIMStatusType status;
 
@@ -885,7 +885,7 @@ typedef GPB_ENUM(AVIMReportCommand_FieldNumber) {
   AVIMReportCommand_FieldNumber_Data_p = 3,
 };
 
-@interface AVIMReportCommand : GPBMessage
+@interface AVIMReportCommand : LCIMMessage
 
 @property(nonatomic, readwrite) BOOL initiative;
 
@@ -926,7 +926,7 @@ typedef GPB_ENUM(AVIMGenericCommand_FieldNumber) {
   AVIMGenericCommand_FieldNumber_ReportMessage = 113,
 };
 
-@interface AVIMGenericCommand : GPBMessage
+@interface AVIMGenericCommand : LCIMMessage
 
 @property(nonatomic, readwrite) AVIMCommandType cmd;
 
