@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign)           BOOL                 receipt;
 @property (nonatomic, assign)           BOOL                 transient;
+@property (nonatomic, assign)           BOOL                 will;
 @property (nonatomic, assign)           AVIMMessagePriority  priority;
 @property (nonatomic, strong, nullable) NSDictionary        *pushData;
 
