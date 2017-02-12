@@ -182,13 +182,13 @@ typedef struct GPBType__storage_ {
 
 @end
 
-int32_t GPBType_Syntax_RawValue(LCIMType *message) {
+int32_t LCIMGPBType_Syntax_RawValue(LCIMType *message) {
   LCIMDescriptor *descriptor = [LCIMType descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBType_FieldNumber_Syntax];
   return LCIMGetMessageInt32Field(message, field);
 }
 
-void SetGPBType_Syntax_RawValue(LCIMType *message, int32_t value) {
+void LCIMSetGPBType_Syntax_RawValue(LCIMType *message, int32_t value) {
   LCIMDescriptor *descriptor = [LCIMType descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBType_FieldNumber_Syntax];
   LCIMSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
@@ -340,25 +340,25 @@ typedef struct LCIMField__storage_ {
 
 @end
 
-int32_t GPBField_Kind_RawValue(LCIMField *message) {
+int32_t LCIMGPBField_Kind_RawValue(LCIMField *message) {
   LCIMDescriptor *descriptor = [LCIMField descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBField_FieldNumber_Kind];
   return LCIMGetMessageInt32Field(message, field);
 }
 
-void SetGPBField_Kind_RawValue(LCIMField *message, int32_t value) {
+void LCIMSetGPBField_Kind_RawValue(LCIMField *message, int32_t value) {
   LCIMDescriptor *descriptor = [LCIMField descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBField_FieldNumber_Kind];
   LCIMSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
 }
 
-int32_t GPBField_Cardinality_RawValue(LCIMField *message) {
+int32_t LCIMGPBField_Cardinality_RawValue(LCIMField *message) {
   LCIMDescriptor *descriptor = [LCIMField descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBField_FieldNumber_Cardinality];
   return LCIMGetMessageInt32Field(message, field);
 }
 
-void SetGPBField_Cardinality_RawValue(LCIMField *message, int32_t value) {
+void LCIMSetGPBField_Cardinality_RawValue(LCIMField *message, int32_t value) {
   LCIMDescriptor *descriptor = [LCIMField descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBField_FieldNumber_Cardinality];
   LCIMSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
@@ -564,13 +564,13 @@ typedef struct LCIMEnum__storage_ {
 
 @end
 
-int32_t GPBEnum_Syntax_RawValue(LCIMEnum *message) {
+int32_t LCIMGPBEnum_Syntax_RawValue(LCIMEnum *message) {
   LCIMDescriptor *descriptor = [LCIMEnum descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBEnum_FieldNumber_Syntax];
   return LCIMGetMessageInt32Field(message, field);
 }
 
-void SetGPBEnum_Syntax_RawValue(LCIMEnum *message, int32_t value) {
+void LCIMSetGPBEnum_Syntax_RawValue(LCIMEnum *message, int32_t value) {
   LCIMDescriptor *descriptor = [LCIMEnum descriptor];
   LCIMFieldDescriptor *field = [descriptor fieldWithNumber:GPBEnum_FieldNumber_Syntax];
   LCIMSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);

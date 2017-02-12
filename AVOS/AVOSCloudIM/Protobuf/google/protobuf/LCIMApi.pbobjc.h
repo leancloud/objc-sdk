@@ -129,13 +129,13 @@ typedef GPB_ENUM(GPBApi_FieldNumber) {
  * Fetches the raw value of a @c GPBApi's @c syntax property, even
  * if the value was not defined by the enum at the time the code was generated.
  **/
-int32_t GPBApi_Syntax_RawValue(LCIMApi *message);
+int32_t LCIMGPBApi_Syntax_RawValue(LCIMApi *message);
 /**
  * Sets the raw value of an @c GPBApi's @c syntax property, allowing
  * it to be set to a value that was not defined by the enum at the time the code
  * was generated.
  **/
-void SetGPBApi_Syntax_RawValue(LCIMApi *message, int32_t value);
+void LCIMSetGPBApi_Syntax_RawValue(LCIMApi *message, int32_t value);
 
 #pragma mark - GPBMethod
 
@@ -183,13 +183,13 @@ typedef GPB_ENUM(GPBMethod_FieldNumber) {
  * Fetches the raw value of a @c GPBMethod's @c syntax property, even
  * if the value was not defined by the enum at the time the code was generated.
  **/
-int32_t GPBMethod_Syntax_RawValue(LCIMMethod *message);
+int32_t LCIMGPBMethod_Syntax_RawValue(LCIMMethod *message);
 /**
  * Sets the raw value of an @c GPBMethod's @c syntax property, allowing
  * it to be set to a value that was not defined by the enum at the time the code
  * was generated.
  **/
-void SetGPBMethod_Syntax_RawValue(LCIMMethod *message, int32_t value);
+void LCIMSetGPBMethod_Syntax_RawValue(LCIMMethod *message, int32_t value);
 
 #pragma mark - GPBMixin
 

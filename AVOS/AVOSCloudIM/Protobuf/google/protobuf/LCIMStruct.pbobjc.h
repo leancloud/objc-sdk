@@ -159,18 +159,18 @@ typedef GPB_ENUM(GPBValue_Kind_OneOfCase) {
  * Fetches the raw value of a @c GPBValue's @c nullValue property, even
  * if the value was not defined by the enum at the time the code was generated.
  **/
-int32_t GPBValue_NullValue_RawValue(LCIMValue *message);
+int32_t LCIMGPBValue_NullValue_RawValue(LCIMValue *message);
 /**
  * Sets the raw value of an @c GPBValue's @c nullValue property, allowing
  * it to be set to a value that was not defined by the enum at the time the code
  * was generated.
  **/
-void SetGPBValue_NullValue_RawValue(LCIMValue *message, int32_t value);
+void LCIMSetGPBValue_NullValue_RawValue(LCIMValue *message, int32_t value);
 
 /**
  * Clears whatever value was set for the oneof 'kind'.
  **/
-void GPBValue_ClearKindOneOfCase(LCIMValue *message);
+void LCIMGPBValue_ClearKindOneOfCase(LCIMValue *message);
 
 #pragma mark - GPBListValue
 
