@@ -161,7 +161,7 @@ NS_ASSUME_NONNULL_BEGIN
  - `application/xml`
  - `text/xml`
  */
-@interface AFXMLDocumentResponseSerializer : LCHTTPResponseSerializer
+@interface LCXMLDocumentResponseSerializer : LCHTTPResponseSerializer
 
 - (instancetype)init;
 
