@@ -10,7 +10,7 @@
 #if LCIM_USE_PROTOBUF_FRAMEWORK_IMPORTS
  #import <Protobuf/LCIMProtocolBuffers_RuntimeSupport.h>
 #else
-#import "LCIMProtocolBuffers_RuntimeSupport.h"
+ #import "LCIMProtocolBuffers_RuntimeSupport.h"
 #endif
 
  #import "MessagesProtoOrig.pbobjc.h"
@@ -117,9 +117,9 @@ LCIMEnumDescriptor *AVIMOpType_EnumDescriptor(void) {
         "y\000QueryResult\000Conflict\000Added\000Removed\000Sta"
         "rt\000Started\000Joined\000MembersJoined\000Left\000Mem"
         "bersLeft\000Results\000Count\000Result\000Update\000Upd"
-        "ated\000Mute\000Unmute\000Status\000Members\000Join\000Inv"
-        "ite\000Leave\000Kick\000Reject\000Invited\000Kicked\000Upl"
-        "oad\000Uploaded\000";
+        "ated\000Mute\000Unmute\000Status\000Members\000MaxRead\000"
+        "Join\000Invite\000Leave\000Kick\000Reject\000Invited\000Ki"
+        "cked\000Upload\000Uploaded\000";
     static const int32_t values[] = {
         AVIMOpType_Open,
         AVIMOpType_Add,
@@ -147,6 +147,7 @@ LCIMEnumDescriptor *AVIMOpType_EnumDescriptor(void) {
         AVIMOpType_Unmute,
         AVIMOpType_Status,
         AVIMOpType_Members,
+        AVIMOpType_MaxRead,
         AVIMOpType_Join,
         AVIMOpType_Invite,
         AVIMOpType_Leave,
@@ -157,7 +158,7 @@ LCIMEnumDescriptor *AVIMOpType_EnumDescriptor(void) {
         AVIMOpType_Upload,
         AVIMOpType_Uploaded,
     };
-    static const char *extraTextFormatInfo = "#\000$\000\001#\000\002&\000\003%\000\004&\000\005&\000\006%\000\007%\246\000\010(\000\t%\000\n\'\000\013%\000\014\'\000\r&\000\016\'\246\000\017$\000\020\'\244\000\021\'\000\022%\000\023&\000\024&\000\025\'\000\026$\000\027&\000\030&\000\031\'\000\032$\000\033&\000\034%\000\035$\000\036&\000\037\'\000 &\000!&\000\"(\000";
+    static const char *extraTextFormatInfo = "$\000$\000\001#\000\002&\000\003%\000\004&\000\005&\000\006%\000\007%\246\000\010(\000\t%\000\n\'\000\013%\000\014\'\000\r&\000\016\'\246\000\017$\000\020\'\244\000\021\'\000\022%\000\023&\000\024&\000\025\'\000\026$\000\027&\000\030&\000\031\'\000\032#\244\000\033$\000\034&\000\035%\000\036$\000\037&\000 \'\000!&\000\"&\000#(\000";
     LCIMEnumDescriptor *worker =
         [LCIMEnumDescriptor allocDescriptorForName:GPBNSStringifySymbol(AVIMOpType)
                                        valueNames:valueNames
@@ -200,6 +201,7 @@ BOOL AVIMOpType_IsValidValue(int32_t value__) {
     case AVIMOpType_Unmute:
     case AVIMOpType_Status:
     case AVIMOpType_Members:
+    case AVIMOpType_MaxRead:
     case AVIMOpType_Join:
     case AVIMOpType_Invite:
     case AVIMOpType_Leave:
@@ -302,12 +304,16 @@ typedef struct AVIMJsonObjectMessage__storage_ {
 @dynamic hasUnread, unread;
 @dynamic hasMid, mid;
 @dynamic hasTimestamp, timestamp;
+@dynamic hasFrom, from;
+@dynamic hasData_p, data_p;
 
 typedef struct AVIMUnreadTuple__storage_ {
   uint32_t _has_storage_[1];
   int32_t unread;
   NSString *cid;
   NSString *mid;
+  NSString *from;
+  NSString *data_p;
   int64_t timestamp;
 } AVIMUnreadTuple__storage_;
 
@@ -353,6 +359,24 @@ typedef struct AVIMUnreadTuple__storage_ {
         .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeInt64,
       },
+      {
+        .name = "from",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMUnreadTuple_FieldNumber_From,
+        .hasIndex = 4,
+        .offset = (uint32_t)offsetof(AVIMUnreadTuple__storage_, from),
+        .flags = LCIMFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "data_p",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMUnreadTuple_FieldNumber_Data_p,
+        .hasIndex = 5,
+        .offset = (uint32_t)offsetof(AVIMUnreadTuple__storage_, data_p),
+        .flags = LCIMFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
     };
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[AVIMUnreadTuple class]
@@ -379,6 +403,7 @@ typedef struct AVIMUnreadTuple__storage_ {
 @dynamic hasTimestamp, timestamp;
 @dynamic hasMsgId, msgId;
 @dynamic hasAckAt, ackAt;
+@dynamic hasReadAt, readAt;
 
 typedef struct AVIMLogItem__storage_ {
   uint32_t _has_storage_[1];
@@ -387,6 +412,7 @@ typedef struct AVIMLogItem__storage_ {
   NSString *msgId;
   int64_t timestamp;
   int64_t ackAt;
+  int64_t readAt;
 } AVIMLogItem__storage_;
 
 // This method is threadsafe because it is initially called
@@ -440,6 +466,15 @@ typedef struct AVIMLogItem__storage_ {
         .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,
       },
+      {
+        .name = "readAt",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMLogItem_FieldNumber_ReadAt,
+        .hasIndex = 5,
+        .offset = (uint32_t)offsetof(AVIMLogItem__storage_, readAt),
+        .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeInt64,
+      },
     };
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[AVIMLogItem class]
@@ -451,7 +486,7 @@ typedef struct AVIMLogItem__storage_ {
                                          flags:LCIMDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\002\004\005\000\005\005\000";
+        "\003\004\005\000\005\005\000\006\006\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
@@ -576,6 +611,7 @@ typedef struct AVIMDataCommand__storage_ {
 @dynamic hasDeviceToken, deviceToken;
 @dynamic hasSp, sp;
 @dynamic hasDetail, detail;
+@dynamic hasLastUnreadNotifTime, lastUnreadNotifTime;
 
 typedef struct AVIMSessionCommand__storage_ {
   uint32_t _has_storage_[1];
@@ -593,6 +629,7 @@ typedef struct AVIMSessionCommand__storage_ {
   NSString *deviceToken;
   NSString *detail;
   int64_t t;
+  int64_t lastUnreadNotifTime;
 } AVIMSessionCommand__storage_;
 
 // This method is threadsafe because it is initially called
@@ -745,6 +782,15 @@ typedef struct AVIMSessionCommand__storage_ {
         .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeString,
       },
+      {
+        .name = "lastUnreadNotifTime",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMSessionCommand_FieldNumber_LastUnreadNotifTime,
+        .hasIndex = 16,
+        .offset = (uint32_t)offsetof(AVIMSessionCommand__storage_, lastUnreadNotifTime),
+        .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeInt64,
+      },
     };
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[AVIMSessionCommand class]
@@ -756,8 +802,8 @@ typedef struct AVIMSessionCommand__storage_ {
                                          flags:LCIMDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\005\007\010\000\010\000sessionPeerIds\000\t\000onlineSessionPeer"
-        "Ids\000\013\005\000\016\013\000";
+        "\006\007\010\000\010\000sessionPeerIds\000\t\000onlineSessionPeer"
+        "Ids\000\013\005\000\016\013\000\021\023\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
@@ -867,6 +913,7 @@ typedef struct AVIMErrorCommand__storage_ {
 @dynamic hasDt, dt;
 @dynamic hasRoomId, roomId;
 @dynamic hasPushData, pushData;
+@dynamic hasWill, will;
 
 typedef struct AVIMDirectCommand__storage_ {
   uint32_t _has_storage_[1];
@@ -1013,6 +1060,15 @@ typedef struct AVIMDirectCommand__storage_ {
         .offset = (uint32_t)offsetof(AVIMDirectCommand__storage_, pushData),
         .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
         .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "will",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMDirectCommand_FieldNumber_Will,
+        .hasIndex = 17,
+        .offset = 18,  // Stored in _has_storage_ to save space.
+        .flags = LCIMFieldOptional,
+        .dataType = GPBDataTypeBool,
       },
     };
     LCIMDescriptor *localDescriptor =
@@ -1199,10 +1255,12 @@ typedef struct AVIMAckCommand__storage_ {
 @implementation AVIMUnreadCommand
 
 @dynamic convsArray, convsArray_Count;
+@dynamic hasNotifTime, notifTime;
 
 typedef struct AVIMUnreadCommand__storage_ {
   uint32_t _has_storage_[1];
   NSMutableArray *convsArray;
+  int64_t notifTime;
 } AVIMUnreadCommand__storage_;
 
 // This method is threadsafe because it is initially called
@@ -1220,6 +1278,15 @@ typedef struct AVIMUnreadCommand__storage_ {
         .flags = LCIMFieldRepeated,
         .dataType = GPBDataTypeMessage,
       },
+      {
+        .name = "notifTime",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMUnreadCommand_FieldNumber_NotifTime,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(AVIMUnreadCommand__storage_, notifTime),
+        .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeInt64,
+      },
     };
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[AVIMUnreadCommand class]
@@ -1229,6 +1296,11 @@ typedef struct AVIMUnreadCommand__storage_ {
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(AVIMUnreadCommand__storage_)
                                          flags:LCIMDescriptorInitializationFlag_None];
+#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    static const char *extraTextFormatInfo =
+        "\001\002\t\000";
+    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
+#endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
   }
@@ -1259,7 +1331,9 @@ typedef struct AVIMUnreadCommand__storage_ {
 @dynamic hasStatusSub, statusSub;
 @dynamic hasStatusPub, statusPub;
 @dynamic hasStatusTtl, statusTtl;
-@dynamic membersArray, membersArray_Count;
+@dynamic hasTargetClientId, targetClientId;
+@dynamic hasMaxReadTimestamp, maxReadTimestamp;
+@dynamic hasMaxAckTimestamp, maxAckTimestamp;
 @dynamic hasResults, results;
 @dynamic hasWhere, where;
 @dynamic hasAttr, attr;
@@ -1279,11 +1353,13 @@ typedef struct AVIMConvCommand__storage_ {
   NSString *udate;
   NSString *n;
   NSString *s;
-  NSMutableArray *membersArray;
+  NSString *targetClientId;
   AVIMJsonObjectMessage *results;
   AVIMJsonObjectMessage *where;
   AVIMJsonObjectMessage *attr;
   int64_t t;
+  int64_t maxReadTimestamp;
+  int64_t maxAckTimestamp;
 } AVIMConvCommand__storage_;
 
 // This method is threadsafe because it is initially called
@@ -1455,19 +1531,37 @@ typedef struct AVIMConvCommand__storage_ {
         .dataType = GPBDataTypeInt32,
       },
       {
-        .name = "membersArray",
+        .name = "targetClientId",
         .dataTypeSpecific.className = NULL,
-        .number = AVIMConvCommand_FieldNumber_MembersArray,
-        .hasIndex = GPBNoHasBit,
-        .offset = (uint32_t)offsetof(AVIMConvCommand__storage_, membersArray),
-        .flags = LCIMFieldRepeated,
+        .number = AVIMConvCommand_FieldNumber_TargetClientId,
+        .hasIndex = 21,
+        .offset = (uint32_t)offsetof(AVIMConvCommand__storage_, targetClientId),
+        .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
         .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "maxReadTimestamp",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMConvCommand_FieldNumber_MaxReadTimestamp,
+        .hasIndex = 22,
+        .offset = (uint32_t)offsetof(AVIMConvCommand__storage_, maxReadTimestamp),
+        .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "maxAckTimestamp",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMConvCommand_FieldNumber_MaxAckTimestamp,
+        .hasIndex = 23,
+        .offset = (uint32_t)offsetof(AVIMConvCommand__storage_, maxAckTimestamp),
+        .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeInt64,
       },
       {
         .name = "results",
         .dataTypeSpecific.className = GPBStringifySymbol(AVIMJsonObjectMessage),
         .number = AVIMConvCommand_FieldNumber_Results,
-        .hasIndex = 21,
+        .hasIndex = 24,
         .offset = (uint32_t)offsetof(AVIMConvCommand__storage_, results),
         .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeMessage,
@@ -1476,7 +1570,7 @@ typedef struct AVIMConvCommand__storage_ {
         .name = "where",
         .dataTypeSpecific.className = GPBStringifySymbol(AVIMJsonObjectMessage),
         .number = AVIMConvCommand_FieldNumber_Where,
-        .hasIndex = 22,
+        .hasIndex = 25,
         .offset = (uint32_t)offsetof(AVIMConvCommand__storage_, where),
         .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeMessage,
@@ -1485,7 +1579,7 @@ typedef struct AVIMConvCommand__storage_ {
         .name = "attr",
         .dataTypeSpecific.className = GPBStringifySymbol(AVIMJsonObjectMessage),
         .number = AVIMConvCommand_FieldNumber_Attr,
-        .hasIndex = 23,
+        .hasIndex = 26,
         .offset = (uint32_t)offsetof(AVIMConvCommand__storage_, attr),
         .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeMessage,
@@ -1501,7 +1595,7 @@ typedef struct AVIMConvCommand__storage_ {
                                          flags:LCIMDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\004\006\006\000\020\t\000\021\t\000\022\007b\000";
+        "\007\006\006\000\020\t\000\021\t\000\022\007b\000\024\016\000\025\020\000\026\017\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");

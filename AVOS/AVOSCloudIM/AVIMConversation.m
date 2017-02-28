@@ -602,8 +602,9 @@
 
 - (void)sendRealMessage:(AVIMMessage *)message option:(AVIMMessageOption *)option callback:(AVIMBooleanResultBlock)callback {
     dispatch_async([AVIMClient imClientQueue], ^{
-        bool transient = option.transient;
-        bool requestReceipt = option.receipt;
+        BOOL will = option.will;
+        BOOL transient = option.transient;
+        BOOL receipt = option.receipt;
 
         if ([message isKindOfClass:[AVIMTypedMessage class]]) {
             AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)message;
@@ -628,11 +629,14 @@
         [genericCommand avim_addRequiredKeyWithCommand:directCommand];
         [genericCommand avim_addRequiredKeyForDirectMessageWithMessage:message transient:NO];
 
+        if (will) {
+            directCommand.will = YES;
+        }
         if (transient) {
             directCommand.transient = YES;
             genericCommand.needResponse = NO;
         }
-        if (requestReceipt) {
+        if (receipt) {
             directCommand.r = YES;
         }
         if (option.pushData) {
