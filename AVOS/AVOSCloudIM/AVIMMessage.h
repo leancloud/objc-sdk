@@ -19,6 +19,7 @@ typedef NS_ENUM(int8_t, AVIMMessageStatus) {
     AVIMMessageStatusSent,
     AVIMMessageStatusDelivered,
     AVIMMessageStatusFailed,
+    AVIMMessageStatusRead
 };
 
 NS_ASSUME_NONNULL_BEGIN
