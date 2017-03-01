@@ -970,16 +970,40 @@ static BOOL AVIMClientHasInstantiated = NO;
 
 - (void)processReceiptCommand:(AVIMGenericCommand *)genericCommand {
     AVIMRcpCommand *rcpCommand = genericCommand.rcpMessage;
+
+    int64_t timestamp = rcpCommand.t;
     NSString *messageId = rcpCommand.id_p;
-     AVIMMessage *message = [self messageById:messageId];
-    if (message) {
-        message.deliveredTimestamp = rcpCommand.t;
-        message.status = AVIMMessageStatusDelivered;
-        
-        LCIMMessageCacheStore *cacheStore = [[LCIMMessageCacheStore alloc] initWithClientId:self.clientId conversationId:message.conversationId];
-        [cacheStore updateMessageWithoutBreakpoint:message];
-        
-        [self receiveMessageDelivered:message];
+    NSString *conversationId = rcpCommand.cid;
+
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:timestamp / 1000.0];
+    AVIMMessage *message = [self localMessageForId:messageId conversationId:conversationId];
+    AVIMConversation *conversation = [self conversationWithId:conversationId];
+
+    /*
+     NOTE:
+     We need check the nullability of message.
+     User may relaunch application before ack and receipt did receive, in which case,
+     the sent message will be lost.
+     */
+
+    if (rcpCommand.read) {
+        if (message) {
+            /* TODO: cache read timestamp. */
+            message.status = AVIMMessageStatusRead;
+            [self cacheMessageWithoutBreakpoint:message conversationId:conversationId];
+        }
+
+        conversation.lastReadAt = date;
+    } else {
+        if (message) {
+            message.deliveredTimestamp = timestamp;
+            message.status = AVIMMessageStatusDelivered;
+
+            [self cacheMessageWithoutBreakpoint:message conversationId:conversationId];
+            [self receiveMessageDelivered:message];
+        }
+
+        conversation.lastDeliveredAt = date;
     }
 }
 
