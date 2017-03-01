@@ -923,6 +923,33 @@ static BOOL AVIMClientHasInstantiated = NO;
     }];
 }
 
+/**
+ Get local message for given message ID and conversation ID.
+
+ @param messageId      The message ID.
+ @param conversationId The conversation ID.
+
+ It will first find message from memory, if not found, find in cache store.
+
+ @return A local message, or nil if not found.
+ */
+- (AVIMMessage *)localMessageForId:(NSString *)messageId
+                    conversationId:(NSString *)conversationId
+{
+    if (!messageId)
+        return nil;
+
+    AVIMMessage *message = [self messageById:messageId];
+
+    if (message)
+        return message;
+
+    LCIMMessageCacheStore *cacheStore = [[LCIMMessageCacheStore alloc] initWithClientId:self.clientId conversationId:conversationId];
+    message = [cacheStore messageForId:messageId];
+
+    return message;
+}
+
 - (void)processReceiptCommand:(AVIMGenericCommand *)genericCommand {
     AVIMRcpCommand *rcpCommand = genericCommand.rcpMessage;
     NSString *messageId = rcpCommand.id_p;
