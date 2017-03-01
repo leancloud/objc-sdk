@@ -247,6 +247,20 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)conversation:(AVIMConversation *)conversation messageDelivered:(AVIMMessage *)message;
 
 /*!
+ 你的消息被其他成员阅读的通知。
+ @param conversation - 所属对话
+ @param lastReadAt   - 你的消息被其他成员阅读的最近回执时间
+ */
+- (void)conversation:(AVIMConversation *)conversation lastReadAtDidChangeTo:(NSDate *)lastReadAt;
+
+/*!
+ 你的消息抵达其他成员设备上的通知。
+ @param conversation    - 所属对话
+ @param lastDeliveredAt - 你的消息抵达其他成员设备上的最近回执时间
+ */
+- (void)conversation:(AVIMConversation *)conversation lastDeliveredAtDidChangeTo:(NSDate *)lastDeliveredAt;
+
+/*!
  对话中有新成员加入时所有成员都会收到这一通知。
  @param conversation － 所属对话
  @param clientIds - 加入的新成员列表

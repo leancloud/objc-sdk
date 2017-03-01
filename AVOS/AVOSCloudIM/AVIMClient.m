@@ -993,7 +993,9 @@ static BOOL AVIMClientHasInstantiated = NO;
             [self cacheMessageWithoutBreakpoint:message conversationId:conversationId];
         }
 
-        conversation.lastReadAt = date;
+        [self updateReceipt:date
+             ofConversation:conversation
+                     forKey:NSStringFromSelector(@selector(lastReadAt))];
     } else {
         if (message) {
             message.deliveredTimestamp = timestamp;
@@ -1003,7 +1005,33 @@ static BOOL AVIMClientHasInstantiated = NO;
             [self receiveMessageDelivered:message];
         }
 
-        conversation.lastDeliveredAt = date;
+        [self updateReceipt:date
+             ofConversation:conversation
+                     forKey:NSStringFromSelector(@selector(lastDeliveredAt))];
+    }
+}
+
+- (void)updateReceipt:(NSDate *)date
+       ofConversation:(AVIMConversation *)conversation
+               forKey:(NSString *)key
+{
+    if (!date || !conversation || !key)
+        return;
+
+    NSDate *oldDate = [conversation valueForKey:key];
+
+    if (!oldDate || [oldDate compare:date] == NSOrderedAscending) {
+        [conversation setValue:date forKey:key];
+
+        SEL selector = NSSelectorFromString([NSString stringWithFormat:@"conversation:%@DidChangeTo:", key]);
+
+        if ([self.delegate respondsToSelector:selector]) {
+            NSArray *arguments = @[conversation, date];
+
+            [AVIMRuntimeHelper callMethodInMainThreadWithTarget:self.delegate
+                                                       selector:selector
+                                                      arguments:arguments];
+        }
     }
 }
 
