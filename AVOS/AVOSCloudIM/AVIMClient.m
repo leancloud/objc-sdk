@@ -923,6 +923,14 @@ static BOOL AVIMClientHasInstantiated = NO;
     }];
 }
 
+- (LCIMMessageCacheStore *)messageCacheStoreForConversationId:(NSString *)conversationId {
+    if (!conversationId)
+        return nil;
+
+    LCIMMessageCacheStore *cacheStore = [[LCIMMessageCacheStore alloc] initWithClientId:self.clientId conversationId:conversationId];
+    return cacheStore;
+}
+
 /**
  Get local message for given message ID and conversation ID.
 
@@ -944,7 +952,7 @@ static BOOL AVIMClientHasInstantiated = NO;
     if (message)
         return message;
 
-    LCIMMessageCacheStore *cacheStore = [[LCIMMessageCacheStore alloc] initWithClientId:self.clientId conversationId:conversationId];
+    LCIMMessageCacheStore *cacheStore = [self messageCacheStoreForConversationId:conversationId];
     message = [cacheStore messageForId:messageId];
 
     return message;
