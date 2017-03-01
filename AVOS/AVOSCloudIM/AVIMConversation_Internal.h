@@ -25,14 +25,16 @@
 
 @interface AVIMConversation ()
 
-@property (nonatomic, copy)   NSString     *name;            /**< 对话名字 */
-@property (nonatomic, strong) NSDate       *createAt;        /**< 创建时间 */
-@property (nonatomic, strong) NSDate       *updateAt;        /**< 最后更新时间 */
-@property (nonatomic, strong) NSDate       *lastMessageAt;   /**< 对话中最后一条消息的发送时间 */
-@property (nonatomic, strong) NSDictionary *attributes;      /**< 自定义属性 */
-@property (nonatomic, assign) BOOL          muted;           /**< 静音状态 */
-@property (nonatomic, assign) BOOL          transient;       /**< 是否为临时会话（开放群组） */
-@property (nonatomic, strong) AVIMMessage  *lastMessage;     /**< 对话中最后一条消息 */
+@property (nonatomic, copy)   NSString     *name;
+@property (nonatomic, strong) NSDate       *createAt;
+@property (nonatomic, strong) NSDate       *updateAt;
+@property (nonatomic, strong) AVIMMessage  *lastMessage;
+@property (nonatomic, strong) NSDate       *lastMessageAt;
+@property (nonatomic, strong) NSDate       *lastReadAt;
+@property (nonatomic, strong) NSDate       *lastDeliveredAt;
+@property (nonatomic, strong) NSDictionary *attributes;
+@property (nonatomic, assign) BOOL          muted;
+@property (nonatomic, assign) BOOL          transient;
 
 @property (nonatomic, strong) NSMutableDictionary *properties;
 

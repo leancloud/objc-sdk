@@ -68,6 +68,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly, nullable) NSDate       *lastMessageAt;
 
 /**
+ *  The last timestamp your message read by other.
+ */
+@property (nonatomic, strong, readonly, nullable) NSDate       *lastReadAt;
+
+/**
+ *  The last timestamp your message delivered to other.
+ */
+@property (nonatomic, strong, readonly, nullable) NSDate       *lastDeliveredAt;
+
+/**
  *  The name of this conversation. Can be changed by update:callback: .
  */
 @property (nonatomic, copy, readonly, nullable) NSString     *name;
