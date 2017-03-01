@@ -958,6 +958,16 @@ static BOOL AVIMClientHasInstantiated = NO;
     return message;
 }
 
+- (void)cacheMessageWithoutBreakpoint:(AVIMMessage *)message
+                       conversationId:(NSString *)conversationId
+{
+    if (!message.messageId)
+        return;
+
+    LCIMMessageCacheStore *cacheStore = [self messageCacheStoreForConversationId:conversationId];
+    [cacheStore updateMessageWithoutBreakpoint:message];
+}
+
 - (void)processReceiptCommand:(AVIMGenericCommand *)genericCommand {
     AVIMRcpCommand *rcpCommand = genericCommand.rcpMessage;
     NSString *messageId = rcpCommand.id_p;
