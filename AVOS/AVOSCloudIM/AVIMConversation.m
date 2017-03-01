@@ -459,6 +459,51 @@
     });
 }
 
+- (void)readInBackground:(AVIMBooleanResultBlock)callback {
+    dispatch_async([AVIMClient imClientQueue], ^{
+        int64_t lastTimestamp = 0;
+        NSString *lastMessageId = nil;
+
+        /* NOTE:
+           We do not care about the owner of last message.
+           Server will do the right thing.
+         */
+        AVIMMessage *lastMessage = self.lastMessage;
+
+        if (lastMessage) {
+            lastTimestamp = lastMessage.sendTimestamp;
+            lastMessageId = lastMessage.messageId;
+        } else if (self.lastMessageAt)
+            lastTimestamp = [self.lastMessageAt timeIntervalSince1970] * 1000;
+
+        if (lastTimestamp <= 0) {
+            NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorMessageNotFound reason:@"No message to read."];
+            [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+            return;
+        }
+
+        AVIMReadTuple *readTuple = [[AVIMReadTuple alloc] init];
+        AVIMReadCommand *readCommand = [[AVIMReadCommand alloc] init];
+        AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
+
+        readTuple.cid = self.conversationId;
+        readTuple.mid = lastMessageId;
+        readTuple.timestamp = lastTimestamp;
+
+        readCommand.convsArray = [NSMutableArray arrayWithObject:readTuple];
+
+        genericCommand.cmd = AVIMCommandType_Read;
+        genericCommand.peerId = self.imClient.clientId;
+        genericCommand.needResponse = YES;
+
+        [genericCommand avim_addRequiredKeyWithCommand:readCommand];
+
+        [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
+            [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+        }];
+    });
+}
+
 - (void)sendMessage:(AVIMMessage *)message
            callback:(AVIMBooleanResultBlock)callback
 {

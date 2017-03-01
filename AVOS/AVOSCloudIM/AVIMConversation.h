@@ -186,6 +186,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)markAsReadInBackground;
 
 /*!
+ 将对话标记为已读。
+ 该方法将本地对话中其他成员发出的最新消息标记为已读，该消息的发送者会收到已读通知。
+ @param callback - 结果回调
+ */
+- (void)readInBackground:(AVIMBooleanResultBlock)callback;
+
+/*!
  邀请新成员加入对话。
  @param clientIds － 成员列表
  @param callback － 结果回调
