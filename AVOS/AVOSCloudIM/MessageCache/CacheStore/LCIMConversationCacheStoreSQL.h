@@ -37,6 +37,10 @@
         LCIM_FIELD_CREATE_AT            @" REAL, "                \
         LCIM_FIELD_UPDATE_AT            @" REAL, "                \
         LCIM_FIELD_LAST_MESSAGE_AT      @" REAL, "                \
+        LCIM_FIELD_LAST_DELIVERED_AT    @" REAL, "                \
+        LCIM_FIELD_LAST_READ_AT         @" REAL, "                \
+        LCIM_FIELD_LAST_MESSAGE         @" BLOB, "                \
+        LCIM_FIELD_MUTED                @" INTEGER, "             \
         LCIM_FIELD_EXPIRE_AT            @" REAL, "                \
         @"PRIMARY KEY(" LCIM_FIELD_CONVERSATION_ID @")"           \
     @")"
