@@ -155,6 +155,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)fetchWithCallback:(AVIMBooleanResultBlock)callback;
 
 /*!
+ 拉取对话最近的回执时间。
+ @param callback - 回调结果
+ */
+- (void)fetchReceiptTimestampsWithCallback:(AVIMBooleanResultBlock)callback;
+
+/*!
  发送更新。
  @param callback － 结果回调
  @return None.

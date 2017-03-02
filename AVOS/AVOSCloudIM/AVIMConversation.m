@@ -217,6 +217,38 @@
     }];
 }
 
+- (void)fetchReceiptTimestampsWithCallback:(AVIMBooleanResultBlock)callback {
+    dispatch_async([AVIMClient imClientQueue], ^{
+        AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
+
+        genericCommand.cmd = AVIMCommandType_Conv;
+        genericCommand.op = AVIMOpType_MaxRead;
+        genericCommand.peerId = self.imClient.clientId;
+        genericCommand.needResponse = YES;
+
+        [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
+            if (error) {
+                [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+                return;
+            }
+
+            AVIMConvCommand *convCommand = inCommand.convMessage;
+            NSDate *lastDeliveredAt = [NSDate dateWithTimeIntervalSince1970:convCommand.maxAckTimestamp / 1000.0];
+            NSDate *lastReadAt = [NSDate dateWithTimeIntervalSince1970:convCommand.maxReadTimestamp / 1000.0];
+
+            [self.imClient updateReceipt:lastDeliveredAt
+                          ofConversation:self
+                                  forKey:NSStringFromSelector(@selector(lastDeliveredAt))];
+
+            [self.imClient updateReceipt:lastReadAt
+                          ofConversation:self
+                                  forKey:NSStringFromSelector(@selector(lastReadAt))];
+        }];
+
+        [self.imClient sendCommand:genericCommand];
+    });
+}
+
 - (void)joinWithCallback:(AVIMBooleanResultBlock)callback {
     [self addMembersWithClientIds:@[_imClient.clientId] callback:callback];
 }

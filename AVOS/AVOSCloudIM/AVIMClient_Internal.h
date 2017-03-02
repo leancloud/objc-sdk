@@ -42,4 +42,8 @@
 
 - (void)cacheConversationsIfNeeded:(NSArray *)conversations;
 
+- (void)updateReceipt:(NSDate *)date
+       ofConversation:(AVIMConversation *)conversation
+               forKey:(NSString *)key;
+
 @end
