@@ -979,38 +979,40 @@ static BOOL AVIMClientHasInstantiated = NO;
     AVIMMessage *message = [self localMessageForId:messageId conversationId:conversationId];
     AVIMConversation *conversation = [self conversationWithId:conversationId];
 
-    NSString *receiptKey = nil;
+    [self fetchConversationIfNeeded:conversation withBlock:^(AVIMConversation *conversation) {
+        NSString *receiptKey = nil;
 
-    /*
-     NOTE:
-     We need check the nullability of message.
-     User may relaunch application before ack and receipt did receive, in which case,
-     the sent message will be lost.
-     */
+        /*
+         NOTE:
+         We need check the nullability of message.
+         User may relaunch application before ack and receipt did receive, in which case,
+         the sent message will be lost.
+         */
 
-    if (rcpCommand.read) {
-        if (message) {
-            /* TODO: cache read timestamp. */
-            message.status = AVIMMessageStatusRead;
-            [self cacheMessageWithoutBreakpoint:message conversationId:conversationId];
+        if (rcpCommand.read) {
+            if (message) {
+                /* TODO: cache read timestamp. */
+                message.status = AVIMMessageStatusRead;
+                [self cacheMessageWithoutBreakpoint:message conversationId:conversationId];
+            }
+
+            receiptKey = NSStringFromSelector(@selector(lastReadAt));
+        } else {
+            if (message) {
+                message.deliveredTimestamp = timestamp;
+                message.status = AVIMMessageStatusDelivered;
+
+                [self cacheMessageWithoutBreakpoint:message conversationId:conversationId];
+                [self receiveMessageDelivered:message];
+            }
+
+            receiptKey = NSStringFromSelector(@selector(lastDeliveredAt));
         }
 
-        receiptKey = NSStringFromSelector(@selector(lastReadAt));
-    } else {
-        if (message) {
-            message.deliveredTimestamp = timestamp;
-            message.status = AVIMMessageStatusDelivered;
-
-            [self cacheMessageWithoutBreakpoint:message conversationId:conversationId];
-            [self receiveMessageDelivered:message];
-        }
-
-        receiptKey = NSStringFromSelector(@selector(lastDeliveredAt));
-    }
-
-    [self updateReceipt:date
-         ofConversation:conversation
-                 forKey:receiptKey];
+        [self updateReceipt:date
+             ofConversation:conversation
+                     forKey:receiptKey];
+    }];
 }
 
 - (void)updateReceipt:(NSDate *)date
