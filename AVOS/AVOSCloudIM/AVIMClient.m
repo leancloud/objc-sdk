@@ -979,6 +979,8 @@ static BOOL AVIMClientHasInstantiated = NO;
     AVIMMessage *message = [self localMessageForId:messageId conversationId:conversationId];
     AVIMConversation *conversation = [self conversationWithId:conversationId];
 
+    NSString *receiptKey = nil;
+
     /*
      NOTE:
      We need check the nullability of message.
@@ -993,9 +995,7 @@ static BOOL AVIMClientHasInstantiated = NO;
             [self cacheMessageWithoutBreakpoint:message conversationId:conversationId];
         }
 
-        [self updateReceipt:date
-             ofConversation:conversation
-                     forKey:NSStringFromSelector(@selector(lastReadAt))];
+        receiptKey = NSStringFromSelector(@selector(lastReadAt));
     } else {
         if (message) {
             message.deliveredTimestamp = timestamp;
@@ -1005,10 +1005,12 @@ static BOOL AVIMClientHasInstantiated = NO;
             [self receiveMessageDelivered:message];
         }
 
-        [self updateReceipt:date
-             ofConversation:conversation
-                     forKey:NSStringFromSelector(@selector(lastDeliveredAt))];
+        receiptKey = NSStringFromSelector(@selector(lastDeliveredAt));
     }
+
+    [self updateReceipt:date
+         ofConversation:conversation
+                 forKey:receiptKey];
 }
 
 - (void)updateReceipt:(NSDate *)date
