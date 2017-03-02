@@ -28,8 +28,8 @@
         LCIM_FIELD_MESSAGE_ID           @" TEXT, "           \
         LCIM_FIELD_CONVERSATION_ID      @" TEXT, "           \
         LCIM_FIELD_FROM_PEER_ID         @" TEXT, "           \
-        LCIM_FIELD_TIMESTAMP            @" NUMBERIC, "       \
-        LCIM_FIELD_RECEIPT_TIMESTAMP    @" NUMBERIC, "       \
+        LCIM_FIELD_TIMESTAMP            @" REAL, "           \
+        LCIM_FIELD_RECEIPT_TIMESTAMP    @" REAL, "           \
         LCIM_FIELD_PAYLOAD              @" BLOB, "           \
         LCIM_FIELD_STATUS               @" INTEGER, "        \
         LCIM_FIELD_BREAKPOINT           @" BOOL, "           \

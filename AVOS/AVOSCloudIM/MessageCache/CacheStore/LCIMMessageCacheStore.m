@@ -39,7 +39,7 @@
     [migrator executeMigrations:@[
         // Migrations of each database version
         [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
-            [db executeUpdate:@"ALTER TABLE message ADD COLUMN read_timestamp NUMBERIC"];
+            [db executeUpdate:@"ALTER TABLE message ADD COLUMN read_timestamp REAL"];
         }]
     ]];
 }
