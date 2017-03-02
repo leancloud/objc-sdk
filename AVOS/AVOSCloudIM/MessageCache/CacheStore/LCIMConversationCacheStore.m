@@ -37,6 +37,12 @@
         /* Version 2: Add lastMessage column. */
         [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
             [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN last_message BLOB"];
+        }],
+
+        /* Version 3: Add last_delivered_at and last_read_at column. */
+        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
+            [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN last_delivered_at REAL"];
+            [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN last_read_at REAL"];
         }]
         
     ]];
@@ -53,6 +59,8 @@
         [NSNumber numberWithDouble:[conversation.createAt timeIntervalSince1970]],
         [NSNumber numberWithDouble:[conversation.updateAt timeIntervalSince1970]],
         [NSNumber numberWithDouble:[conversation.lastMessageAt timeIntervalSince1970]],
+        [NSNumber numberWithDouble:[conversation.lastDeliveredAt timeIntervalSince1970]],
+        [NSNumber numberWithDouble:[conversation.lastReadAt timeIntervalSince1970]],
         conversation.lastMessage ? [NSKeyedArchiver archivedDataWithRootObject:conversation.lastMessage] : [NSNull null],
         [NSNumber numberWithInteger:conversation.muted],
         [NSNumber numberWithDouble:expireAt]
@@ -180,6 +188,8 @@
     conversation.createAt       = [self dateFromTimeInterval:[result doubleForColumn:LCIM_FIELD_CREATE_AT]];
     conversation.updateAt       = [self dateFromTimeInterval:[result doubleForColumn:LCIM_FIELD_UPDATE_AT]];
     conversation.lastMessageAt  = [self dateFromTimeInterval:[result doubleForColumn:LCIM_FIELD_LAST_MESSAGE_AT]];
+    conversation.lastDeliveredAt = [self dateFromTimeInterval:[result doubleForColumn:LCIM_FIELD_LAST_DELIVERED_AT]];
+    conversation.lastReadAt     = [self dateFromTimeInterval:[result doubleForColumn:LCIM_FIELD_LAST_READ_AT]];
     conversation.lastMessage    = ({
         NSData *data = [result dataForColumn:LCIM_FIELD_LAST_MESSAGE];
         data ? [NSKeyedUnarchiver unarchiveObjectWithData:data] : nil;
