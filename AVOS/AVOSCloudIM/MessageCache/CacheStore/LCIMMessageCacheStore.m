@@ -38,6 +38,9 @@
 
     [migrator executeMigrations:@[
         // Migrations of each database version
+        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
+            [db executeUpdate:@"ALTER TABLE message ADD COLUMN read_timestamp NUMBERIC"];
+        }]
     ]];
 }
 
@@ -60,6 +63,10 @@
     return [NSNumber numberWithDouble:message.deliveredTimestamp];
 }
 
+- (NSNumber *)readTimestampForMessage:(AVIMMessage *)message {
+    return [NSNumber numberWithDouble:message.readTimestamp];
+}
+
 - (NSTimeInterval)currentTimestamp {
     return [[NSDate date] timeIntervalSince1970] * 1000;
 }
@@ -69,6 +76,7 @@
         message.clientId,
         [self timestampForMessage:message],
         [self receiptTimestampForMessage:message],
+        [self readTimestampForMessage:message],
         [message.payload dataUsingEncoding:NSUTF8StringEncoding],
         @(message.status),
         self.conversationId,
@@ -83,6 +91,7 @@
         message.clientId,
         [self timestampForMessage:message],
         [self receiptTimestampForMessage:message],
+        [self readTimestampForMessage:message],
         [message.payload dataUsingEncoding:NSUTF8StringEncoding],
         @(message.status),
         @(NO)
@@ -96,6 +105,7 @@
         message.clientId,
         [self timestampForMessage:message],
         [self receiptTimestampForMessage:message],
+        [self readTimestampForMessage:message],
         [message.payload dataUsingEncoding:NSUTF8StringEncoding],
         @(message.status),
         @(breakpoint)

@@ -991,7 +991,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 
         if (rcpCommand.read) {
             if (message) {
-                /* TODO: cache read timestamp. */
+                message.readTimestamp = timestamp;
                 message.status = AVIMMessageStatusRead;
                 [self cacheMessageWithoutBreakpoint:message conversationId:conversationId];
             }
