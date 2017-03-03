@@ -82,9 +82,9 @@
 #define LCIM_SQL_CONVERSATION_WHERE_CLAUSE          \
     @"WHERE " LCIM_FIELD_CONVERSATION_ID @" = ? "  
 
-#define LCIM_SQL_UPDATE_CONVERSATION                \
-    @"UPDATE " LCIM_TABLE_CONVERSATION @" "         \
-    @"SET " LCIM_FIELD_LAST_MESSAGE_AT @" = ? "           \
+#define LCIM_SQL_UPDATE_CONVERSATION_LAST_MESSAGE_AT    \
+    @"UPDATE " LCIM_TABLE_CONVERSATION @" "             \
+    @"SET " LCIM_FIELD_LAST_MESSAGE_AT @" = ? "         \
     LCIM_SQL_CONVERSATION_WHERE_CLAUSE
 
 #endif

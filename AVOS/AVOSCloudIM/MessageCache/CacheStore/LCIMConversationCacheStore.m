@@ -122,11 +122,8 @@
     NSNumber *lastMessageAtNumber = [NSNumber numberWithDouble:[lastMessageAt timeIntervalSince1970]];
     
     LCIM_OPEN_DATABASE(db, ({
-        NSArray *args = @[
-                          lastMessageAtNumber,
-                          conversationId,
-                          ];
-        [db executeUpdate:LCIM_SQL_UPDATE_CONVERSATION withArgumentsInArray:args];
+        NSArray *args = @[lastMessageAtNumber, conversationId];
+        [db executeUpdate:LCIM_SQL_UPDATE_CONVERSATION_LAST_MESSAGE_AT withArgumentsInArray:args];
     }));
 }
 
