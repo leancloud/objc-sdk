@@ -256,6 +256,7 @@
     message.clientId           = [record stringForColumn:LCIM_FIELD_FROM_PEER_ID];
     message.sendTimestamp      = [record longLongIntForColumn:LCIM_FIELD_TIMESTAMP];
     message.deliveredTimestamp = [record longLongIntForColumn:LCIM_FIELD_RECEIPT_TIMESTAMP];
+    message.readTimestamp      = [record longLongIntForColumn:LCIM_FIELD_READ_TIMESTAMP];
     message.content            = payload;
     message.status             = [record intForColumn:LCIM_FIELD_STATUS];
     message.breakpoint         = [record boolForColumn:LCIM_FIELD_BREAKPOINT];
