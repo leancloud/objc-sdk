@@ -127,6 +127,38 @@
     }));
 }
 
+- (void)setValue:(id)value forField:(NSString *)field conversationId:(NSString *)conversationId {
+    if (!field || !conversationId)
+        return;
+
+    if (!value)
+        value = [NSNull null];
+
+    LCIM_OPEN_DATABASE(db, ({
+        NSArray *args = @[field, value, conversationId];
+        [db executeUpdate:LCIM_SQL_UPDATE_CONVERSATION_FIELD withArgumentsInArray:args];
+    }));
+}
+
+- (id)valueForField:(NSString *)field conversationId:(NSString *)conversationId {
+    if (!field || !conversationId)
+        return nil;
+
+    __block id value = nil;
+
+    LCIM_OPEN_DATABASE(db, ({
+        NSArray *args = @[conversationId];
+        LCResultSet *result = [db executeQuery:LCIM_SQL_SELECT_CONVERSATION withArgumentsInArray:args];
+
+        if ([result next])
+            value = [result objectForColumnName:field];
+
+        [result close];
+    }));
+
+    return value;
+}
+
 - (AVIMConversation *)conversationForId:(NSString *)conversationId timestamp:(NSTimeInterval)timestamp {
     __block AVIMConversation *conversation = nil;
 
