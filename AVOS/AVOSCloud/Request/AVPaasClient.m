@@ -647,14 +647,17 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
                         [mutableRequest setValue:@"" forHTTPHeaderField:@"If-Modified-Since"];
                         [self performRequest:mutableRequest saveResult:saveResult block:block retryTimes:retryTimes + 1];
                     } else {
-                        block(object, error);
+                        if (block)
+                            block(object, error);
                     }
                 } else {
-                    block(object, error);
+                    if (block)
+                        block(object, error);
                 }
             }];
         } else {
-            block(responseObject, [AVErrorUtils errorFromJSON:responseObject] ?: error);
+            if (block)
+                block(responseObject, [AVErrorUtils errorFromJSON:responseObject] ?: error);
         }
     }];
 }
