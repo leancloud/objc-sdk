@@ -125,6 +125,10 @@
     [self.properties setObject:object forKey:key];
 }
 
+- (void)setObject:(id)object forKeyedSubscript:(NSString *)key {
+    [self setObject:object forKey:key];
+}
+
 - (nullable id)objectForKey:(NSString *)key {
     id object = (
         [self.propertiesForUpdate objectForKey:key] ?:
@@ -132,6 +136,10 @@
     );
 
     return object;
+}
+
+- (id)objectForKeyedSubscript:(NSString *)key {
+    return [self objectForKey:key];
 }
 
 - (void)cleanAttributesForUpdate {

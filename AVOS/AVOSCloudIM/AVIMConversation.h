@@ -108,12 +108,28 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)setObject:(nullable id)object forKey:(NSString *)key;
 
+/**
+ * Support to use subscript to set custom property.
+ *
+ * @see -[AVIMConversation setObject:forKey:]
+ */
+- (void)setObject:(nullable id)object forKeyedSubscript:(NSString *)key;
+
 /*!
  * Get custom property value for conversation.
+ *
  * @param key The custom property name.
+ *
  * @return The custom property value.
  */
 - (nullable id)objectForKey:(NSString *)key;
+
+/**
+ * Support to use subscript to set custom property.
+ *
+ * @see -[AVIMConversation objectForKey:]
+ */
+- (nullable id)objectForKeyedSubscript:(NSString *)key;
 
 /*!
  创建一个 AVIMKeyedConversation 对象。用于序列化，方便保存在本地。
