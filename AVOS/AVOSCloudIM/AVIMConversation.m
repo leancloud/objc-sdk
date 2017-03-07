@@ -328,12 +328,14 @@
 
 - (void)update:(NSDictionary *)updateDict callback:(AVIMBooleanResultBlock)callback {
     dispatch_async([AVIMClient imClientQueue], ^{
-        NSDictionary *updateBuilderDataSource = updateDict;
-        AVIMGenericCommand *genericCommand = [self generateGenericCommandWithAttributes:updateBuilderDataSource];
+        NSDictionary *attributes = [updateDict copy];
+        AVIMGenericCommand *genericCommand = [self generateGenericCommandWithAttributes:attributes];
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             if (!error) {
-                NSDictionary *customAttributes = [updateBuilderDataSource objectForKey:KEY_ATTR];
-                [self updateAttributesWithUpdateBuilderDataSource:updateBuilderDataSource customAttributes:customAttributes];
+                self.name = [attributes objectForKey:KEY_NAME];
+                self.attributes = [attributes objectForKey:KEY_ATTR];
+
+                [self removeCachedConversation];
             }
             [AVIMBlockHelper callBooleanResultBlock:callback error:error];
         }];
