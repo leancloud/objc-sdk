@@ -49,7 +49,7 @@
 
 @interface AVIMConversation()
 
-@property (nonatomic, strong) NSMutableDictionary *mutableAttributes;
+@property (nonatomic, strong) NSMutableDictionary *propertiesForUpdate;
 
 @end
 
@@ -76,7 +76,7 @@
 }
 
 - (void)doInitialize {
-    _mutableAttributes = [NSMutableDictionary dictionary];
+    _propertiesForUpdate = [NSMutableDictionary dictionary];
 }
 
 - (NSString *)clientId {
@@ -113,15 +113,15 @@
 }
 
 - (void)setObject:(nullable id)object forKey:(NSString *)key {
-    [self.mutableAttributes setObject:object forKey:key];
+    [self.propertiesForUpdate setObject:object forKey:key];
 }
 
 - (nullable id)objectForKey:(NSString *)key {
-    return [self.mutableAttributes objectForKey:key];
+    return [self.propertiesForUpdate objectForKey:key];
 }
 
 - (void)cleanAttributesForUpdate {
-    [self.mutableAttributes removeAllObjects];
+    [self.propertiesForUpdate removeAllObjects];
 }
 
 - (AVIMConversationUpdateBuilder *)newUpdateBuilder {
@@ -166,19 +166,19 @@
 }
 
 - (NSString *)name {
-    return [self.mutableAttributes objectForKey:KEY_NAME];
+    return [self.propertiesForUpdate objectForKey:KEY_NAME];
 }
 
 - (void)setName:(NSString *)name {
-    [self.mutableAttributes setObject:name forKey:KEY_NAME];
+    [self.propertiesForUpdate setObject:name forKey:KEY_NAME];
 }
 
 - (NSDictionary *)attributes {
-    return [self.mutableAttributes objectForKey:KEY_ATTR];
+    return [self.propertiesForUpdate objectForKey:KEY_ATTR];
 }
 
 - (void)setAttributes:(NSDictionary *)attributes {
-    [self.mutableAttributes setObject:attributes forKey:KEY_ATTR];
+    [self.propertiesForUpdate setObject:attributes forKey:KEY_ATTR];
 }
 
 - (void)fetchWithCallback:(AVIMBooleanResultBlock)callback {
@@ -340,7 +340,7 @@
 }
 
 - (void)updateWithCallback:(AVIMBooleanResultBlock)callback {
-    [self updateAttributes:self.mutableAttributes callback:callback];
+    [self updateAttributes:self.propertiesForUpdate callback:callback];
 }
 
 - (void)update:(NSDictionary *)updateDict callback:(AVIMBooleanResultBlock)callback {
