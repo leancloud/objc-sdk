@@ -55,19 +55,28 @@
 
 @implementation AVIMConversation
 
-- (instancetype)initWithConversationId:(NSString *)conversationId {
-    if (self = [super init]) {
-        self.conversationId = conversationId;
+- (instancetype)init {
+    self = [super init];
+
+    if (self) {
+        [self doInitialize];
     }
+
     return self;
 }
 
-- (NSMutableDictionary *)mutableAttributes {
-    if (_mutableAttributes == nil) {
-        _mutableAttributes = [[NSMutableDictionary alloc] init];
-        [_mutableAttributes addEntriesFromDictionary:self.attributes];
+- (instancetype)initWithConversationId:(NSString *)conversationId {
+    self = [self init];
+
+    if (self) {
+        _conversationId = [conversationId copy];
     }
-    return _mutableAttributes;
+
+    return self;
+}
+
+- (void)doInitialize {
+    _mutableAttributes = [NSMutableDictionary dictionary];
 }
 
 - (NSString *)clientId {
@@ -150,6 +159,22 @@
 
 - (void)setCreator:(NSString *)creator {
     _creator = creator;
+}
+
+- (NSString *)name {
+    return [self.mutableAttributes objectForKey:KEY_NAME];
+}
+
+- (void)setName:(NSString *)name {
+    [self.mutableAttributes setObject:name forKey:KEY_NAME];
+}
+
+- (NSDictionary *)attributes {
+    return [self.mutableAttributes objectForKey:KEY_ATTR];
+}
+
+- (void)setAttributes:(NSDictionary *)attributes {
+    [self.mutableAttributes setObject:attributes forKey:KEY_ATTR];
 }
 
 - (void)fetchWithCallback:(AVIMBooleanResultBlock)callback {
@@ -311,24 +336,17 @@
 }
 
 - (void)updateWithCallback:(AVIMBooleanResultBlock)callback {
-    dispatch_async([AVIMClient imClientQueue], ^{
-        NSDictionary *updateBuilderDataSource = [self.mutableAttributes copy];
-        NSDictionary *customAttributes = [[self class] filterCustomAttributesFromDictionary:updateBuilderDataSource];
-        AVIMGenericCommand *genericCommand = [self generateGenericCommandWithAttributes:customAttributes];
-        [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
-            if (!error) {
-                [self updateAttributesWithUpdateBuilderDataSource:updateBuilderDataSource customAttributes:updateBuilderDataSource];
-            }
-            self.mutableAttributes = nil;
-            [AVIMBlockHelper callBooleanResultBlock:callback error:error];
-        }];
-        [_imClient sendCommand:genericCommand];
-    });
+    [self updateAttributes:self.mutableAttributes callback:callback];
 }
 
 - (void)update:(NSDictionary *)updateDict callback:(AVIMBooleanResultBlock)callback {
+    [self updateAttributes:updateDict callback:callback];
+}
+
+- (void)updateAttributes:(NSDictionary *)attributes callback:(AVIMBooleanResultBlock)callback {
+    attributes = [attributes copy];
+
     dispatch_async([AVIMClient imClientQueue], ^{
-        NSDictionary *attributes = [updateDict copy];
         AVIMGenericCommand *genericCommand = [self generateGenericCommandWithAttributes:attributes];
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             if (!error) {
