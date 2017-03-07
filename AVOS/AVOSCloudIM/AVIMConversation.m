@@ -335,30 +335,37 @@
     return genericCommand;
 }
 
-- (void)updateAttributesWithUpdateBuilderDataSource:(NSDictionary *)dataSource customAttributes:(NSDictionary *)customAttributes {
-    NSString *name = [dataSource objectForKey:KEY_NAME];
-    if (name) {
+- (void)updateLocalAttributes:(NSDictionary *)attributes {
+    NSString *name = attributes[KEY_NAME];
+    NSDictionary *attr = attributes[KEY_ATTR];
+
+    if (name)
         self.name = name;
+
+    if (attr) {
+        NSMutableDictionary *attributes = (
+            self.attributes ?
+            [NSMutableDictionary dictionaryWithDictionary:self.attributes] :
+            [NSMutableDictionary dictionary]
+        );
+
+        [attributes addEntriesFromDictionary:attr];
+
+        self.attributes = attributes;
     }
-    
-    if (customAttributes) {
-        NSMutableDictionary *attributes = [self.attributes mutableCopy];
-        if (!attributes) {
-            attributes = [[NSMutableDictionary alloc] init];
-        }
-        [attributes addEntriesFromDictionary:customAttributes];
-        self.attributes = [attributes copy];
-    }
-    
-    [self removeCachedConversation];
 }
 
 - (void)updateWithCallback:(AVIMBooleanResultBlock)callback {
     [self updateAttributes:self.propertiesForUpdate callback:callback];
 }
 
-- (void)update:(NSDictionary *)updateDict callback:(AVIMBooleanResultBlock)callback {
-    [self updateAttributes:updateDict callback:callback];
+- (void)update:(NSDictionary *)attributes callback:(AVIMBooleanResultBlock)callback {
+    [self updateAttributes:attributes callback:^(BOOL succeeded, NSError * _Nullable error) {
+        if (!error)
+            [self updateLocalAttributes:attributes];
+
+        [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+    }];
 }
 
 - (void)updateAttributes:(NSDictionary *)attributes callback:(AVIMBooleanResultBlock)callback {
@@ -368,13 +375,11 @@
         AVIMGenericCommand *genericCommand = [self generateGenericCommandWithAttributes:attributes];
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             if (!error) {
-                self.name = [attributes objectForKey:KEY_NAME];
-                self.attributes = [attributes objectForKey:KEY_ATTR];
-
                 [self cleanAttributesForUpdate];
                 [self removeCachedConversation];
             }
-            [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+            if (callback)
+                callback(error == nil, error);
         }];
         [_imClient sendCommand:genericCommand];
     });
