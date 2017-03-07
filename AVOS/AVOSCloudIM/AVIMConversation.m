@@ -76,6 +76,7 @@
 }
 
 - (void)doInitialize {
+    _properties = [NSMutableDictionary dictionary];
     _propertiesForUpdate = [NSMutableDictionary dictionary];
 }
 
@@ -112,12 +113,25 @@
     _members = members;
 }
 
+- (void)setProperties:(NSMutableDictionary *)properties {
+    if (properties)
+        _properties = properties;
+    else
+        _properties = [NSMutableDictionary dictionary];
+}
+
 - (void)setObject:(nullable id)object forKey:(NSString *)key {
     [self.propertiesForUpdate setObject:object forKey:key];
+    [self.properties setObject:object forKey:key];
 }
 
 - (nullable id)objectForKey:(NSString *)key {
-    return [self.propertiesForUpdate objectForKey:key];
+    id object = (
+        [self.propertiesForUpdate objectForKey:key] ?:
+        [self.properties objectForKey:key]
+    );
+
+    return object;
 }
 
 - (void)cleanAttributesForUpdate {
@@ -166,19 +180,19 @@
 }
 
 - (NSString *)name {
-    return [self.propertiesForUpdate objectForKey:KEY_NAME];
+    return self.properties[KEY_NAME];
 }
 
 - (void)setName:(NSString *)name {
-    [self.propertiesForUpdate setObject:name forKey:KEY_NAME];
+    self.properties[KEY_NAME] = name;
 }
 
 - (NSDictionary *)attributes {
-    return [self.propertiesForUpdate objectForKey:KEY_ATTR];
+    return self.properties[KEY_ATTR];
 }
 
 - (void)setAttributes:(NSDictionary *)attributes {
-    [self.propertiesForUpdate setObject:attributes forKey:KEY_ATTR];
+    self.properties[KEY_ATTR] = attributes;
 }
 
 - (void)fetchWithCallback:(AVIMBooleanResultBlock)callback {
