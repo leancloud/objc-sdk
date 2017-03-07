@@ -120,6 +120,10 @@
     return [self.mutableAttributes objectForKey:key];
 }
 
+- (void)cleanAttributesForUpdate {
+    [self.mutableAttributes removeAllObjects];
+}
+
 - (AVIMConversationUpdateBuilder *)newUpdateBuilder {
     AVIMConversationUpdateBuilder *builder = [[AVIMConversationUpdateBuilder alloc] init];
     return builder;
@@ -353,6 +357,7 @@
                 self.name = [attributes objectForKey:KEY_NAME];
                 self.attributes = [attributes objectForKey:KEY_ATTR];
 
+                [self cleanAttributesForUpdate];
                 [self removeCachedConversation];
             }
             [AVIMBlockHelper callBooleanResultBlock:callback error:error];
