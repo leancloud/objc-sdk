@@ -394,6 +394,12 @@ NSString *const kAVIMKeyConversationId = @"objectId";
     for (NSDictionary *dict in results) {
         AVIMConversation *conversation = [[AVIMConversation alloc] init];
 
+        /* Note:
+         * We store all properties into conversation for custom attributes access.
+         * But the custom attributes will not be cached at present.
+         */
+        conversation.properties = [dict mutableCopy];
+
         NSString *createdAt = dict[@"createdAt"];
         NSString *updatedAt = dict[@"updatedAt"];
         NSDictionary *lastMessageAt = dict[KEY_LAST_MESSAGE_AT];
@@ -402,7 +408,7 @@ NSString *const kAVIMKeyConversationId = @"objectId";
         NSString *conversationId = [dict objectForKey:@"objectId"];
         conversation.conversationId = conversationId;
         conversation.name = [dict objectForKey:KEY_NAME];
-        conversation.attributes = [AVIMConversation filterCustomAttributesFromDictionary:dict];
+        conversation.attributes = [dict objectForKey:KEY_ATTR];
         conversation.creator = [dict objectForKey:@"c"];
         if (createdAt) conversation.createAt = [AVObjectUtils dateFromString:createdAt];
         if (updatedAt) conversation.updateAt = [AVObjectUtils dateFromString:updatedAt];

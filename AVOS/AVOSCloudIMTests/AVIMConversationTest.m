@@ -256,6 +256,32 @@
     WAIT;
 }
 
+- (void)updateConversation:(AVIMConversation *)conversation {
+    [conversation updateWithCallback:^(BOOL succeeded, NSError * _Nullable error) {
+        XCTAssertTrue(succeeded);
+        XCTAssertNil(error);
+        NOTIFY;
+    }];
+    WAIT;
+}
+
+- (void)testCustomAttributeUpdate {
+    AVIMConversation *conversation;
+
+    conversation = [self conversationForUpdate];
+    XCTAssertNotNil(conversation);
+
+    conversation[@"fizz"] = @"buzz";
+    [self updateConversation:conversation];
+    conversation = [self conversationForUpdate];
+    XCTAssertEqualObjects(conversation[@"fizz"], @"buzz");
+
+    conversation[@"fizz"] = @"quzz";
+    [self updateConversation:conversation];
+    conversation = [self conversationForUpdate];
+    XCTAssertEqualObjects(conversation[@"fizz"], @"quzz");
+}
+
 - (void)testConversationMembersUpdate {
     AVIMConversation *conversation = [self conversationForUpdate];
     __weak typeof(conversation) weakConversation = conversation;

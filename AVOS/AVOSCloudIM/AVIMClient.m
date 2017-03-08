@@ -609,18 +609,18 @@ static BOOL AVIMClientHasInstantiated = NO;
     [self createConversationWithName:name clientIds:clientIds attributes:nil options:AVIMConversationOptionNone callback:callback];
 }
 
-- (void)createConversationWithName:(NSString *)name clientIds:(NSArray *)clientIds attributes:(NSDictionary *)attributes options:(AVIMConversationOption)options callback:(AVIMConversationResultBlock)callback {
+- (void)createConversationWithName:(NSString *)name clientIds:(NSArray *)clientIds attributes:(NSDictionary *)attr options:(AVIMConversationOption)options callback:(AVIMConversationResultBlock)callback {
     [[self class] _assertClientIdsIsValid:clientIds];
     dispatch_async(imClientQueue, ^{
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
         genericCommand.needResponse = YES;
-        NSMutableDictionary *attr = nil;
+        NSMutableDictionary *attributes = nil;
         
-        if (name || attributes) {
-            attr = [[NSMutableDictionary alloc] init];
+        if (name || attr) {
+            attributes = [[NSMutableDictionary alloc] init];
             
-            if (name) [attr setObject:name forKey:KEY_NAME];
-            if (attributes) [attr setObject:attributes forKey:KEY_ATTR];
+            if (name) [attributes setObject:name forKey:KEY_NAME];
+            if (attr) [attributes setObject:attr forKey:KEY_ATTR];
         }
         
         BOOL transient = options & AVIMConversationOptionTransient;
@@ -630,7 +630,9 @@ static BOOL AVIMClientHasInstantiated = NO;
         genericCommand.op = AVIMOpType_Start;
 
         AVIMConvCommand *convCommand = [[AVIMConvCommand alloc] init];
-        convCommand.attr = [AVIMCommandFormatter JSONObjectWithDictionary:[attr copy]];
+
+        if (attributes)
+            convCommand.attr = [AVIMCommandFormatter JSONObjectWithDictionary:attributes];
 
         if (transient) {
             convCommand.transient = YES;
@@ -660,9 +662,8 @@ static BOOL AVIMClientHasInstantiated = NO;
                 AVIMConvCommand *conversationInCommand = inCommand.convMessage;
                 AVIMConvCommand *conversationOutCommand = outCommand.convMessage;
                 AVIMConversation *conversation = [self conversationWithId:conversationInCommand.cid];
-                NSDictionary *dict = [self parseJsonFromMessage:conversationOutCommand.attr];
-                conversation.name = [dict objectForKey:KEY_NAME];
-                conversation.attributes = [AVIMConversation filterCustomAttributesFromDictionary:dict];
+                conversation.name = name;
+                conversation.attributes = attr;
                 conversation.creator = self.clientId;
                 conversation.createAt = [AVObjectUtils dateFromString:[conversationInCommand cdate]];
                 conversation.transient = conversationOutCommand.transient;
@@ -677,15 +678,6 @@ static BOOL AVIMClientHasInstantiated = NO;
 
         [self sendCommand:genericCommand];
     });
-}
-
-- (NSDictionary *)parseJsonFromMessage:(AVIMJsonObjectMessage *)jsonObjectMessage {
-    NSString *jsonString = [jsonObjectMessage data_p];
-    NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data
-                                                         options:0
-                                                           error:NULL];
-    return dict;
 }
 
 - (AVIMConversation *)conversationWithKeyedConversation:(AVIMKeyedConversation *)keyedConversation {
