@@ -84,6 +84,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// The channels for the AVInstallation.
 @property (nonatomic, strong, nullable) NSArray *channels;
 
+/// The apns topic for universal push notification.
+@property (nonatomic, copy, nullable) NSString *apnsTopic;
+
 @end
 
 NS_ASSUME_NONNULL_END
