@@ -45,6 +45,7 @@
 - (AVIMConversation *)conversationForUpdate {
     __block AVIMConversation *conversation = nil;
     AVIMConversationQuery *query1 = [[AVIMClient defaultClient] conversationQuery];
+    query1.cachePolicy = kAVIMCachePolicyIgnoreCache;
     [query1 findConversationsWithCallback:^(NSArray * _Nullable objects, NSError * _Nullable error) {
         XCTAssertTrue(objects.count >0 );
         conversation = objects[0];
