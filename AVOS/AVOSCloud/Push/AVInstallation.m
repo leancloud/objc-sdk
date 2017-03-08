@@ -65,6 +65,7 @@
         self.className  = [AVInstallation className];
         self.deviceType = [AVInstallation deviceType];
         self.timeZone   = [[NSTimeZone systemTimeZone] name];
+        self.apnsTopic  = [NSBundle mainBundle].bundleIdentifier;
         
         NSString *path = [AVPersistenceUtils currentInstallationArchivePath];
         if ([AVPersistenceUtils fileExist:path]) {
@@ -156,7 +157,6 @@
         badgeTag: @(self.badge),
         deviceTypeTag: [AVInstallation deviceType],
         timeZoneTag: self.timeZone,
-        topicTag: [NSBundle mainBundle].bundleIdentifier ?: @""
     }];
 
     if (self.objectId) {
@@ -177,6 +177,9 @@
     if (self.deviceProfile)
     {
         [data setObject:self.deviceProfile forKey:deviceProfileTag];
+    }
+    if (self.apnsTopic) {
+        [data setObject:self.apnsTopic forKey:topicTag];
     }
 
     NSDictionary *updationData = [AVObjectUtils dictionaryFromObject:self.localData];
