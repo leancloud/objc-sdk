@@ -19,6 +19,8 @@
 
 - (BOOL)hasKey:(NSString *)key;
 - (id)objectForKey:(NSString *)key;
+- (id)objectForKeyedSubscript:(NSString *)key;
 - (void)setObject:(id)object forKey:(NSString *)key;
+- (void)setObject:(id)object forKeyedSubscript:(NSString *)key;
 - (void)removeObjectForKey:(NSString *)key;
 @end

@@ -10,19 +10,67 @@
 #import "AVIMTypedMessage_Internal.h"
 
 @implementation AVIMTypedMessageObject
-@dynamic _lctype, _lctext, _lcattrs, _lcfile, _lcloc;
+
+- (int8_t)_lctype {
+    NSString *key = NSStringFromSelector(@selector(_lctype));
+    return [self[key] charValue];
+}
+
+- (void)set_lctype:(int8_t)_lctype {
+    NSString *key = NSStringFromSelector(@selector(_lctype));
+    self[key] = [NSNumber numberWithChar:_lctype];
+}
+
+- (NSString *)_lctext {
+    NSString *key = NSStringFromSelector(@selector(_lctext));
+    return self[key];
+}
+
+- (void)set_lctext:(NSString *)_lctext {
+    NSString *key = NSStringFromSelector(@selector(_lctext));
+    self[key] = [_lctext copy];
+}
+
+- (NSDictionary *)_lcfile {
+    NSString *key = NSStringFromSelector(@selector(_lcfile));
+    return self[key];
+}
+
+- (void)set_lcfile:(NSDictionary *)_lcfile {
+    NSString *key = NSStringFromSelector(@selector(_lcfile));
+    self[key] = _lcfile;
+}
+
+- (NSDictionary *)_lcloc {
+    NSString *key = NSStringFromSelector(@selector(_lcloc));
+    return self[key];
+}
+
+- (void)set_lcloc:(NSDictionary *)_lcloc {
+    NSString *key = NSStringFromSelector(@selector(_lcloc));
+    self[key] = _lcloc;
+}
+
+- (NSDictionary *)_lcattrs {
+    NSString *key = NSStringFromSelector(@selector(_lcattrs));
+    return self[key];
+}
+
+- (void)set_lcattrs:(NSDictionary *)_lcattrs {
+    NSString *key = NSStringFromSelector(@selector(_lcattrs));
+    self[key] = _lcattrs;
+}
 
 - (BOOL)isValidTypedMessageObject {
     BOOL hasTypeKey = [self hasKey:@"_lctype"];
     if (!hasTypeKey) {
         return NO;
     }
-    BOOL __block isSupportedThisVersion = NO;
     id type = [self objectForKey:@"_lctype"];
-    //使用REST API发送时type可能为string类型
     if (![type isKindOfClass:[NSNumber class]]) {
         return NO;
     }
+    __block BOOL isSupportedThisVersion = NO;
     [_typeDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if ([key intValue] == [type intValue]) {
             isSupportedThisVersion = YES;
