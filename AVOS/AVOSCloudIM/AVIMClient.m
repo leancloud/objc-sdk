@@ -142,7 +142,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 - (void)doInitialization {
     _status = AVIMClientStatusNone;
     _conversations = [[NSMutableDictionary alloc] init];
-    _messages = [[NSMutableDictionary alloc] init];
+    _stagedMessages = [[NSMutableDictionary alloc] init];
     _messageQueryCacheEnabled = YES;
 
     /* Observe push notification device token and websocket open event. */
@@ -171,7 +171,7 @@ static BOOL AVIMClientHasInstantiated = NO;
     _clientId = [clientId copy];
     
     [_conversations removeAllObjects];
-    [_messages removeAllObjects];
+    [_stagedMessages removeAllObjects];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         LCIMConversationCache *cache = [self conversationCache];
@@ -221,19 +221,27 @@ static BOOL AVIMClientHasInstantiated = NO;
     return conversation;
 }
 
-- (void)addMessage:(AVIMMessage *)message {
+- (void)stageMessage:(AVIMMessage *)message {
     NSString *messageId = message.messageId;
-    if (messageId) {
-        [_messages setObject:message forKey:messageId];
-    }
+
+    if (!messageId)
+        return;
+
+    [_stagedMessages setObject:message forKey:messageId];
 }
 
-- (void)removeMessageById:(NSString *)messageId {
-    [_messages removeObjectForKey:messageId];
+- (AVIMMessage *)stagedMessageForId:(NSString *)messageId {
+    if (!messageId)
+        return nil;
+
+    return [_stagedMessages objectForKey:messageId];
 }
 
-- (AVIMMessage *)messageById:(NSString *)messageId {
-    return [_messages objectForKey:messageId];
+- (void)unstageMessageForId:(NSString *)messageId {
+    if (!messageId)
+        return;
+
+    [_stagedMessages removeObjectForKey:messageId];
 }
 
 - (AVIMConversation *)conversationWithId:(NSString *)conversationId {
@@ -947,7 +955,7 @@ static BOOL AVIMClientHasInstantiated = NO;
     if (!messageId)
         return nil;
 
-    AVIMMessage *message = [self messageById:messageId];
+    AVIMMessage *message = [self stagedMessageForId:messageId];
 
     if (message)
         return message;

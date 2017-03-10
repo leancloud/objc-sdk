@@ -803,7 +803,7 @@
                 }
                 if (!transient) {
                     if (directOutCommand.r) {
-                        [_imClient addMessage:message];
+                        [_imClient stageMessage:message];
                     }
                     [self updateConversationAfterSendMessage:message];
                 }
