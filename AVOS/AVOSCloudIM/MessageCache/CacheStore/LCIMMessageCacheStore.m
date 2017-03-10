@@ -22,28 +22,6 @@
 
 @implementation LCIMMessageCacheStore
 
-- (void)databaseQueueDidLoad {
-    [self.databaseQueue inDatabase:^(LCDatabase *db) {
-        db.logsErrors = LCIM_SHOULD_LOG_ERRORS;
-
-        [db executeUpdate:LCIM_SQL_CREATE_MESSAGE_TABLE];
-        [db executeUpdate:LCIM_SQL_CREATE_MESSAGE_UNIQUE_INDEX];
-    }];
-
-    [self migrateDatabaseIfNeeded:self.databaseQueue.path];
-}
-
-- (void)migrateDatabaseIfNeeded:(NSString *)databasePath {
-    LCDatabaseMigrator *migrator = [[LCDatabaseMigrator alloc] initWithDatabasePath:databasePath];
-
-    [migrator executeMigrations:@[
-        // Migrations of each database version
-        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
-            [db executeUpdate:@"ALTER TABLE message ADD COLUMN read_timestamp REAL"];
-        }]
-    ]];
-}
-
 - (instancetype)initWithClientId:(NSString *)clientId conversationId:(NSString *)conversationId {
     self = [super initWithClientId:clientId];
 

@@ -34,6 +34,4 @@
 
 - (LCDatabaseQueue *)databaseQueue;
 
-- (void)databaseQueueDidLoad;
-
 @end
