@@ -11,55 +11,11 @@
 
 @implementation AVIMTypedMessageObject
 
-- (int8_t)_lctype {
-    NSString *key = NSStringFromSelector(@selector(_lctype));
-    return [self[key] charValue];
-}
-
-- (void)set_lctype:(int8_t)_lctype {
-    NSString *key = NSStringFromSelector(@selector(_lctype));
-    self[key] = [NSNumber numberWithChar:_lctype];
-}
-
-- (NSString *)_lctext {
-    NSString *key = NSStringFromSelector(@selector(_lctext));
-    return self[key];
-}
-
-- (void)set_lctext:(NSString *)_lctext {
-    NSString *key = NSStringFromSelector(@selector(_lctext));
-    self[key] = [_lctext copy];
-}
-
-- (NSDictionary *)_lcfile {
-    NSString *key = NSStringFromSelector(@selector(_lcfile));
-    return self[key];
-}
-
-- (void)set_lcfile:(NSDictionary *)_lcfile {
-    NSString *key = NSStringFromSelector(@selector(_lcfile));
-    self[key] = _lcfile;
-}
-
-- (NSDictionary *)_lcloc {
-    NSString *key = NSStringFromSelector(@selector(_lcloc));
-    return self[key];
-}
-
-- (void)set_lcloc:(NSDictionary *)_lcloc {
-    NSString *key = NSStringFromSelector(@selector(_lcloc));
-    self[key] = _lcloc;
-}
-
-- (NSDictionary *)_lcattrs {
-    NSString *key = NSStringFromSelector(@selector(_lcattrs));
-    return self[key];
-}
-
-- (void)set_lcattrs:(NSDictionary *)_lcattrs {
-    NSString *key = NSStringFromSelector(@selector(_lcattrs));
-    self[key] = _lcattrs;
-}
+LC_FORWARD_PROPERTY_ACCESSOR_NUMBER         (_lctype,  set_lctype, int8_t)
+LC_FORWARD_PROPERTY_ACCESSOR_OBJECT_COPY    (_lctext,  set_lctext)
+LC_FORWARD_PROPERTY_ACCESSOR_OBJECT         (_lcfile,  set_lcfile)
+LC_FORWARD_PROPERTY_ACCESSOR_OBJECT         (_lcattrs, set_lcattrs)
+LC_FORWARD_PROPERTY_ACCESSOR_OBJECT         (_lcloc,   set_lcloc)
 
 - (BOOL)isValidTypedMessageObject {
     BOOL hasTypeKey = [self hasKey:@"_lctype"];
