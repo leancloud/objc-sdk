@@ -528,7 +528,7 @@
     });
 }
 
-- (void)readInBackground:(AVIMBooleanResultBlock)callback {
+- (void)readInBackground {
     dispatch_async([AVIMClient imClientQueue], ^{
         int64_t lastTimestamp = 0;
         NSString *lastMessageId = nil;
@@ -546,8 +546,7 @@
             lastTimestamp = [self.lastMessageAt timeIntervalSince1970] * 1000;
 
         if (lastTimestamp <= 0) {
-            NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorMessageNotFound reason:@"No message to read."];
-            [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+            AVLoggerInfo(AVLoggerDomainIM, @"No message to read.");
             return;
         }
 
@@ -566,10 +565,6 @@
         genericCommand.needResponse = YES;
 
         [genericCommand avim_addRequiredKeyWithCommand:readCommand];
-
-        [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
-            [AVIMBlockHelper callBooleanResultBlock:callback error:error];
-        }];
 
         [self.imClient sendCommand:genericCommand];
     });
