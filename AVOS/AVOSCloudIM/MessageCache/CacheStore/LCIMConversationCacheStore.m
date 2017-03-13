@@ -86,14 +86,7 @@
 }
 
 - (void)updateConversationForLastMessageAt:(NSDate *)lastMessageAt conversationId:(NSString *)conversationId {
-    if (!conversationId || !lastMessageAt) return;
-    
-    NSNumber *lastMessageAtNumber = [NSNumber numberWithDouble:[lastMessageAt timeIntervalSince1970]];
-    
-    LCIM_OPEN_DATABASE(db, ({
-        NSArray *args = @[lastMessageAtNumber, conversationId];
-        [db executeUpdate:LCIM_SQL_UPDATE_CONVERSATION_LAST_MESSAGE_AT withArgumentsInArray:args];
-    }));
+    [self setValue:lastMessageAt forField:LCIM_FIELD_LAST_MESSAGE_AT conversationId:conversationId];
 }
 
 - (void)setValue:(id)value forField:(NSString *)field conversationId:(NSString *)conversationId {
@@ -103,9 +96,12 @@
     if (!value)
         value = [NSNull null];
 
+    field = [field stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    NSString *statement = [NSString stringWithFormat:LCIM_SQL_UPDATE_CONVERSATION_FIELD_FORMAT, field];
+
     LCIM_OPEN_DATABASE(db, ({
-        NSArray *args = @[field, value, conversationId];
-        [db executeUpdate:LCIM_SQL_UPDATE_CONVERSATION_FIELD withArgumentsInArray:args];
+        NSArray *args = @[value, conversationId];
+        [db executeUpdate:statement withArgumentsInArray:args];
     }));
 }
 
