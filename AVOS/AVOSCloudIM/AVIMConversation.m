@@ -570,6 +570,8 @@
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             [AVIMBlockHelper callBooleanResultBlock:callback error:error];
         }];
+
+        [self.imClient sendCommand:genericCommand];
     });
 }
 
