@@ -104,10 +104,13 @@
 }
 
 - (void)updateDateColumnIfNewerThanCached:(NSString *)column newDate:(NSDate *)newDate oldDate:(NSDate *)oldDate {
-    if (!newDate)
-        return;
+    if (newDate && ![newDate isKindOfClass:[NSDate class]])
+        newDate = nil;
 
-    if (!oldDate || [oldDate compare:newDate] == NSOrderedAscending) {
+    if (oldDate && ![oldDate isKindOfClass:[NSDate class]])
+        oldDate = nil;
+
+    if (newDate && (!oldDate || [oldDate compare:newDate] == NSOrderedAscending)) {
         [[self conversationCache].cacheStore setValue:@([newDate timeIntervalSince1970])
                                              forField:column
                                        conversationId:self.conversationId];
