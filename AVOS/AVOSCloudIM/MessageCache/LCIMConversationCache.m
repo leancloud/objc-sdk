@@ -7,7 +7,6 @@
 //
 
 #import "LCIMConversationCache.h"
-#import "LCIMConversationCacheStore.h"
 #import "LCIMConversationQueryCacheStore.h"
 #import "AVIMConversation.h"
 

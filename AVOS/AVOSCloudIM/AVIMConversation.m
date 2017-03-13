@@ -26,6 +26,7 @@
 #import "LCIMConversationCache.h"
 #import "MessagesProtoOrig.pbobjc.h"
 #import "AVUtils.h"
+#import "LCObserver.h"
 
 #define LCIM_VALID_LIMIT(limit) ({      \
     int32_t limit_ = (int32_t)(limit);  \
@@ -78,6 +79,44 @@
 - (void)doInitialize {
     _properties = [NSMutableDictionary dictionary];
     _propertiesForUpdate = [NSMutableDictionary dictionary];
+
+    LCObserver *observer = [LCObserver observerForObject:self];
+
+    [observer addTarget:self
+             forKeyPath:NSStringFromSelector(@selector(lastReadAt))
+                options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
+                  block:^(id object, id target, NSDictionary *change)
+    {
+        NSDate *oldValue = change[NSKeyValueChangeOldKey];
+        NSDate *newValue = change[NSKeyValueChangeNewKey];
+
+        if (!newValue)
+            return;
+
+        if (!oldValue || [oldValue compare:newValue] == NSOrderedAscending) {
+            [[self conversationCache].cacheStore setValue:@([newValue timeIntervalSince1970])
+                                                 forField:@"last_read_at"
+                                           conversationId:self.conversationId];
+        }
+    }];
+
+    [observer addTarget:self
+             forKeyPath:NSStringFromSelector(@selector(lastDeliveredAt))
+                options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
+                  block:^(id object, id target, NSDictionary *change)
+    {
+        NSDate *oldValue = change[NSKeyValueChangeOldKey];
+        NSDate *newValue = change[NSKeyValueChangeNewKey];
+
+        if (!newValue)
+            return;
+
+        if (!oldValue || [oldValue compare:newValue] == NSOrderedAscending) {
+            [[self conversationCache].cacheStore setValue:@([newValue timeIntervalSince1970])
+                                                 forField:@"last_delivered_at"
+                                           conversationId:self.conversationId];
+        }
+    }];
 }
 
 - (NSString *)clientId {

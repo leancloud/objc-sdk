@@ -7,13 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "LCIMConversationCacheStore.h"
 
 @class AVIMConversation;
 @class AVIMConversationOutCommand;
 
 @interface LCIMConversationCache : NSObject
 
-@property (nonatomic, copy, readonly) NSString *clientId;
+@property (nonatomic,   copy, readonly) NSString *clientId;
+@property (nonatomic, strong, readonly) LCIMConversationCacheStore *cacheStore;
 
 - (instancetype)initWithClientId:(NSString *)clientId;
 
