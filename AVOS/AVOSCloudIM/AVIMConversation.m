@@ -87,17 +87,9 @@
                 options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
                   block:^(id object, id target, NSDictionary *change)
     {
-        NSDate *oldValue = change[NSKeyValueChangeOldKey];
-        NSDate *newValue = change[NSKeyValueChangeNewKey];
-
-        if (!newValue)
-            return;
-
-        if (!oldValue || [oldValue compare:newValue] == NSOrderedAscending) {
-            [[self conversationCache].cacheStore setValue:@([newValue timeIntervalSince1970])
-                                                 forField:@"last_read_at"
-                                           conversationId:self.conversationId];
-        }
+        NSDate *newDate = change[NSKeyValueChangeNewKey];
+        NSDate *oldDate = change[NSKeyValueChangeOldKey];
+        [self updateDateColumnIfNewerThanCached:@"last_read_at" newDate:newDate oldDate:oldDate];
     }];
 
     [observer addTarget:self
@@ -105,18 +97,21 @@
                 options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
                   block:^(id object, id target, NSDictionary *change)
     {
-        NSDate *oldValue = change[NSKeyValueChangeOldKey];
-        NSDate *newValue = change[NSKeyValueChangeNewKey];
-
-        if (!newValue)
-            return;
-
-        if (!oldValue || [oldValue compare:newValue] == NSOrderedAscending) {
-            [[self conversationCache].cacheStore setValue:@([newValue timeIntervalSince1970])
-                                                 forField:@"last_delivered_at"
-                                           conversationId:self.conversationId];
-        }
+        NSDate *newDate = change[NSKeyValueChangeNewKey];
+        NSDate *oldDate = change[NSKeyValueChangeOldKey];
+        [self updateDateColumnIfNewerThanCached:@"last_delivered_at" newDate:newDate oldDate:oldDate];
     }];
+}
+
+- (void)updateDateColumnIfNewerThanCached:(NSString *)column newDate:(NSDate *)newDate oldDate:(NSDate *)oldDate {
+    if (!newDate)
+        return;
+
+    if (!oldDate || [oldDate compare:newDate] == NSOrderedAscending) {
+        [[self conversationCache].cacheStore setValue:@([newDate timeIntervalSince1970])
+                                             forField:column
+                                       conversationId:self.conversationId];
+    }
 }
 
 - (NSString *)clientId {
