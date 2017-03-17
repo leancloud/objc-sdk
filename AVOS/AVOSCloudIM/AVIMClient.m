@@ -517,7 +517,7 @@ static BOOL AVIMClientHasInstantiated = NO;
     dispatch_async(imClientQueue, ^{
         @strongify(self);
 
-        if (self.status == AVIMClientStatusNone || self.status == AVIMClientStatusClosed) {
+        if (self.status != AVIMClientStatusOpened) {
             self.clientId = clientId;
             self.tag = tag;
             self.socketWrapper = [self socketWrapperForSecurity:security];
@@ -587,6 +587,11 @@ static BOOL AVIMClientHasInstantiated = NO;
 
 - (void)closeWithCallback:(AVIMBooleanResultBlock)callback {
     dispatch_async(imClientQueue, ^{
+        if (self.status == AVIMClientStatusClosed) {
+            [AVIMBlockHelper callBooleanResultBlock:callback error:nil];
+            return;
+        }
+
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
         genericCommand.needResponse = YES;
         genericCommand.cmd = AVIMCommandType_Session;
