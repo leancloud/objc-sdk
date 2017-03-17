@@ -947,12 +947,9 @@ static BOOL AVIMClientHasInstantiated = NO;
     AVIMOpType op = genericCommand.op;
     AVIMSessionCommand *sessionCommand = genericCommand.sessionMessage;
     if (op == AVIMOpType_Closed) {
+        [self changeStatus:AVIMClientStatusClosed];
         /* If the closed command has a code, it's an offline command. */
         if (sessionCommand.code > 0) {
-            /* Close socket connect anyway. */
-            [self.socketWrapper closeWebSocketConnectionRetry:NO];
-            /* openClient only work when status is AVIMClientStatusClosed or AVIMClientStatusNone */
-            [self changeStatus:AVIMClientStatusClosed];
             if ([self.delegate respondsToSelector:@selector(client:didOfflineWithError:)]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self processClientStatusAfterWebSocketOffline];
