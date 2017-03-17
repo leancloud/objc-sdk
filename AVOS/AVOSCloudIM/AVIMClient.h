@@ -123,7 +123,6 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  开启某个账户的聊天
  @param callback － 聊天开启之后的回调
- @return None.
  */
 - (void)openWithCallback:(AVIMBooleanResultBlock)callback;
 
@@ -138,7 +137,6 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  结束某个账户的聊天
  @param callback － 聊天关闭之后的回调
- @return None.
  */
 - (void)closeWithCallback:(AVIMBooleanResultBlock)callback;
 
@@ -148,7 +146,6 @@ NS_ASSUME_NONNULL_BEGIN
  @param name - 会话名称。
  @param clientIds - 聊天参与者（发起人除外）的 clientId 列表。
  @param callback － 对话建立之后的回调
- @return None.
  */
 - (void)createConversationWithName:(NSString *)name
                          clientIds:(NSArray *)clientIds
@@ -162,7 +159,6 @@ NS_ASSUME_NONNULL_BEGIN
  @param attributes - 会话的自定义属性。
  @param options － 可选参数，可以使用或 “|” 操作表示多个选项
  @param callback － 对话建立之后的回调
- @return None.
  */
 - (void)createConversationWithName:(NSString *)name
                          clientIds:(NSArray *)clientIds

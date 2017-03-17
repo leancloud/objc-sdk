@@ -35,14 +35,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  *  @see orderByAscending:withMode:andMissing:
- *  @param key
- *  @param mode
  */
 - (void)orderByAscending:(NSString *)key withMode:(NSString *)mode;
 
 /*!
  *  @see orderByAscending:withMode:andMissing:
- *  @param key
  */
 - (void)orderByAscending:(NSString *)key;
 
@@ -57,14 +54,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  *  @see orderByDescending:withMode:andMissing:
- *  @param key
- *  @param mode
  */
 - (void)orderByDescending:(NSString *)key withMode:(NSString *)mode;
 
 /*!
  *  @see orderByDescending:withMode:andMissing:
- *  @param key
  */
 - (void)orderByDescending:(NSString *)key;
 
@@ -81,16 +75,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  *  @see whereNear:point:inOrder:withMode:andUnit
- *  @param key
- *  @param point
- *  @param order
  */
 - (void)whereNear:(NSString *)key point:(AVGeoPoint *)point inOrder:(NSString *)order;
 
 /*!
  *  @see whereNear:point:inOrder:withMode:andUnit
- *  @param key
- *  @param point
  */
 - (void)whereNear:(NSString *)key point:(AVGeoPoint *)point;
 

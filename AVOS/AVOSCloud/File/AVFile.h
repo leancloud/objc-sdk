@@ -121,7 +121,6 @@ The name of the file.
 
 /*!
  Saves the file asynchronously.
- @return whether the save succeeded.
  */
 - (void)saveInBackground;
 
