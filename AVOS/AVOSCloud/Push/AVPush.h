@@ -357,7 +357,6 @@ extern NSString *const kAVPushTargetPlatformWindowsPhone;
  Asynchronously get all the channels that this device is subscribed to.
  @param target The object to call selector on.
  @param selector The selector to call. It should have the following signature: (void)callbackWithResult:(NSSet *)result error:(NSError *)error. error will be nil on success and set if there was an error.
- @return an NSSet containing all the channel names this device is subscribed to.
  */
 + (void)getSubscribedChannelsInBackgroundWithTarget:(id)target
                                            selector:(SEL)selector;

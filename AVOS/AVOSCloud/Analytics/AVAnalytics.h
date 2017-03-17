@@ -74,7 +74,6 @@ NS_ASSUME_NONNULL_BEGIN
 /** 开启CrashReport收集, 默认是关闭状态.
  
  @param value 设置成 YES,就可以开启CrashReport收集.
- @return void.
  */
 + (void)setCrashReportEnabled:(BOOL)value AV_DEPRECATED("使用 AVOSCloudCrashReporting.framework");
 
@@ -82,7 +81,6 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param value 设置成 YES,就可以开启CrashReport收集.
  @param completion 设置完成后回调.
- @return void.
  */
 + (void)setCrashReportEnabled:(BOOL)value completion:(nullable void (^)(void))completion AV_DEPRECATED("使用 AVOSCloudCrashReporting.framework");
 
@@ -111,8 +109,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 设置是否打印sdk的log信息,默认不开启
  @param value 设置为YES, SDK 会输出log信息,记得release产品时要设置回NO.
- @return .
- @exception .
  */
 
 + (void)setLogEnabled:(BOOL)value;
@@ -146,21 +142,18 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param pageName 需要记录时长的view名称.
  @param seconds 秒数，int型.
- @return void.
  */
 
 + (void)logPageView:(NSString *)pageName seconds:(int)seconds;
 
 /** 页面时长统计,记录页面开始事件。
  @param pageName 需要记录时长的view名称.
- @return void.
  */
 
 + (void)beginLogPageView:(NSString *)pageName;
 
 /** 页面时长统计,记录页面结束事件。
  @param pageName 需要记录时长的view名称.
- @return void.
  */
 + (void)endLogPageView:(NSString *)pageName;
 
@@ -174,7 +167,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 自定义事件,数量统计.
  @param  eventId 自定义的事件Id.
- @return void.
  */
 + (void)event:(NSString *)eventId;
 
@@ -183,14 +175,12 @@ NS_ASSUME_NONNULL_BEGIN
  /** 自定义事件,数量统计.
  @param  eventId 自定义的事件Id.
  @param  label 分类标签。不同的标签会分别进行统计，方便同一事件的不同标签的对比,为nil或空字符串时后台会生成和eventId同名的标签.
- @return void.
  */
 + (void)event:(NSString *)eventId label:(nullable NSString *)label;
 
 /** 自定义事件,数量统计.
  @param  eventId 自定义的事件Id.
  @param  accumulation 事件的累计发生次数，可以将相同事件合并在一起发送节省网络流量.
- @return void.
  */
 + (void)event:(NSString *)eventId acc:(NSInteger)accumulation;
 
@@ -278,8 +268,6 @@ NS_ASSUME_NONNULL_BEGIN
  检查并更新服务器端配置的在线参数,缓存在NSUserDefaults里,
  调用此方法您将自动拥有在线更改SDK端发送策略的功能,您需要先在服务器端设置好在线参数.
  请在[AVAnalytics start]方法之后调用;
- @param 无.
- @return void.
  */
 
 + (void)updateOnlineConfig;
@@ -289,7 +277,6 @@ NS_ASSUME_NONNULL_BEGIN
  调用此方法您将自动拥有在线更改SDK端发送策略的功能,您需要先在服务器端设置好在线参数.
  请在[AVAnalytics start]方法之后调用;
  @param block 自定义的接收block，您的配置参数会通过block传给您的应用.
- @return void.
  */
 + (void)updateOnlineConfigWithBlock:(nullable AVDictionaryResultBlock)block;
 
@@ -320,8 +307,6 @@ NS_ASSUME_NONNULL_BEGIN
  需要链接 CoreLocation.framework 并且 #import <CoreLocation/CoreLocation.h>
  @param latitude 纬度.
  @param longitude 经度.
- 
- @return void
  */
 
 + (void)setLatitude:(double)latitude longitude:(double)longitude;

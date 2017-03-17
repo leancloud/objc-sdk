@@ -10,35 +10,16 @@
 
 @class AVQuery;
 
+NS_ASSUME_NONNULL_BEGIN
+
 /*!
  <h3>Subclassing Notes</h3>
  
  Developers can subclass AVObject for a more native object-oriented class structure. Strongly-typed subclasses of AVObject must conform to the AVSubclassing protocol and must call registerSubclass to be returned by AVQuery and other AVObject factories. All methods in AVSubclassing except for [AVSubclassing parseClassName] are already implemented in the AVObject(Subclass) category. Inculding AVObject+Subclass.h in your implementation file provides these implementations automatically.
  
- Subclasses support simpler initializers, query syntax, and dynamic synthesizers. The following shows an example subclass:
- 
- ```
- @interface MYGame : AVObject< AVSubclassing >
- // Accessing this property is the same as objectForKey:@"title"
- @property (retain) NSString *title;
- + (NSString *)parseClassName;
- @end
- 
- @implementation MYGame
- @dynamic title;
- + (NSString *)parseClassName {
- return @"Game";
- }
- @end
- 
- MYGame *game = [[MYGame alloc] init];
- game.title = @"Bughouse";
- [game saveInBackground];
- ```
+ Subclasses support simpler initializers, query syntax, and dynamic synthesizers.
  
  */
-
-NS_ASSUME_NONNULL_BEGIN
 
 @interface AVObject(Subclass)
 
