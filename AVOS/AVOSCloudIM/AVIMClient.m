@@ -37,12 +37,16 @@ static AVIMClient *defaultClient = nil;
 static dispatch_queue_t imClientQueue = NULL;
 static dispatch_queue_t defaultClientAccessQueue = NULL;
 
+static const NSUInteger kDistinctMessageIdArraySize = 10;
+
 NS_INLINE
 BOOL isValidTag(NSString *tag) {
     return tag && ![tag isEqualToString:LCIMTagDefault];
 }
 
-@implementation AVIMClient
+@implementation AVIMClient {
+    NSMutableArray *_distinctMessageIdArray;
+}
 
 static BOOL AVIMClientHasInstantiated = NO;
 
@@ -144,6 +148,8 @@ static BOOL AVIMClientHasInstantiated = NO;
     _conversations = [[NSMutableDictionary alloc] init];
     _messages = [[NSMutableDictionary alloc] init];
     _messageQueryCacheEnabled = YES;
+
+    _distinctMessageIdArray = [NSMutableArray arrayWithCapacity:kDistinctMessageIdArraySize + 1];
 
     /* Observe push notification device token and websocket open event. */
 
@@ -718,14 +724,6 @@ static BOOL AVIMClientHasInstantiated = NO;
     [self changeStatus:AVIMClientStatusResuming];
 }
 
-- (void)addMessageId:(NSString *)messageId {
-    [_socketWrapper addMessageId:messageId];
-}
-
-- (BOOL)messageIdExists:(NSString *)messageId {
-    return [_socketWrapper messageIdExists:messageId];
-}
-
 #pragma mark - process received messages
 
 - (void)receiveCommand:(NSNotification *)notification {
@@ -762,15 +760,27 @@ static BOOL AVIMClientHasInstantiated = NO;
     }
 }
 
+- (BOOL)insertDistinctMessageId:(NSString *)messageId {
+    if ([_distinctMessageIdArray containsObject:messageId])
+        return NO;
+
+    [_distinctMessageIdArray addObject:messageId];
+
+    NSUInteger count = _distinctMessageIdArray.count;
+
+    if (count > kDistinctMessageIdArraySize)
+        [_distinctMessageIdArray removeObjectsInRange:NSMakeRange(0, count - kDistinctMessageIdArraySize)];
+
+    return YES;
+}
+
 - (void)processDirectCommand:(AVIMGenericCommand *)genericCommand {
     AVIMDirectCommand *directCommand = genericCommand.directMessage;
-    
-    if (directCommand.id_p && [self messageIdExists:directCommand.id_p]) {
+
+    /* Filter out the duplicated message. */
+    if (directCommand.id_p && ![self insertDistinctMessageId:directCommand.id_p])
         return;
-    }
-    if (directCommand.id_p) {
-        [self addMessageId:directCommand.id_p];
-    }
+
     AVIMMessage *message = nil;
     if (![directCommand.msg isKindOfClass:[NSString class]]) {
         AVLoggerError(AVOSCloudIMErrorDomain, @"Received an invalid message.");

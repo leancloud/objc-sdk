@@ -39,9 +39,6 @@ FOUNDATION_EXPORT NSString *const AVIMProtocolPROTOBUF2;
 - (void)closeWebSocketConnection;
 - (void)closeWebSocketConnectionRetry:(BOOL)retry;
 - (void)sendCommand:(AVIMGenericCommand *)genericCommand;
-//- (void)sendMessage:(id)data;
 - (void)sendPing;
 - (BOOL)isConnectionOpen;
-- (BOOL)messageIdExists:(NSString *)messageId;
-- (void)addMessageId:(NSString *)messageId;
 @end
