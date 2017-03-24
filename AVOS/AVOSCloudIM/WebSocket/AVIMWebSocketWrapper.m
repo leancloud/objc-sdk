@@ -91,7 +91,6 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
     BOOL _waitingForPong;
     NSMutableDictionary *_commandDictionary;
     NSMutableArray *_serialIdArray;
-    NSMutableArray *_messageIdArray;
 }
 
 @property (nonatomic, assign) BOOL security;
@@ -137,11 +136,8 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 - (id)init {
     self = [super init];
     if (self) {
-        //        _dataQueue = [[NSMutableArray alloc] init];
-        //        _commandQueue = [[NSMutableArray alloc] init];
         _commandDictionary = [[NSMutableDictionary alloc] init];
         _serialIdArray = [[NSMutableArray alloc] init];
-        _messageIdArray = [[NSMutableArray alloc] init];
         _ttl = -1;
         _observerCount = 0;
         _timeout = AVIMWebSocketDefaultTimeoutInterval;
@@ -233,49 +229,30 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
     }
 }
 
-- (void)addMessageId:(NSString *)messageId {
-    if (![_messageIdArray containsObject:messageId]) {
-        [_messageIdArray addObject:messageId];
-    }
-    while (1) {
-        if (_messageIdArray.count > 5) {
-            [_messageIdArray removeObjectAtIndex:0];
-        } else {
-            break;
-        }
-    }
-}
-
-- (BOOL)messageIdExists:(NSString *)messageId {
-    return [_messageIdArray containsObject:messageId];
-}
-
 #pragma mark - process application notification
+
 - (void)applicationDidFinishLaunching:(id)sender {
-    _messageIdArray = [[[NSUserDefaults standardUserDefaults] arrayForKey:@"AVIMMessageIdArray"] mutableCopy];
+    /* Nothing to do. */
 }
 
 - (void)applicationDidEnterBackground:(id)sender {
     [self closeWebSocketConnectionRetry:NO];
-    [[NSUserDefaults standardUserDefaults] setObject:_messageIdArray forKey:@"AVIMMessageIdArray"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)applicationWillEnterForeground:(id)sender {
-    _messageIdArray = [[[NSUserDefaults standardUserDefaults] arrayForKey:@"AVIMMessageIdArray"] mutableCopy];
     _reconnectInterval = 1;
+
     if (_observerCount > 0) {
         [self openWebSocketConnection];
     }
 }
 
 - (void)applicationWillResignActive:(id)sender {
-    [[NSUserDefaults standardUserDefaults] setObject:_messageIdArray forKey:@"AVIMMessageIdArray"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    /* Nothing to do. */
 }
 
 - (void)applicationDidBecomeActive:(id)sender {
-    _messageIdArray = [[[NSUserDefaults standardUserDefaults] arrayForKey:@"AVIMMessageIdArray"] mutableCopy];
+    /* Nothing to do. */
 }
 
 - (void)applicationWillTerminate:(id)sender {
