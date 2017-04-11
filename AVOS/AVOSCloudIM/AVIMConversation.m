@@ -55,6 +55,16 @@
 
 @implementation AVIMConversation
 
+static dispatch_queue_t messageCacheOperationQueue;
+
++ (void)initialize {
+    static dispatch_once_t onceToken;
+
+    dispatch_once(&onceToken, ^{
+        messageCacheOperationQueue = dispatch_queue_create("leancloud.message-cache-operation-queue", DISPATCH_QUEUE_CONCURRENT);
+    });
+}
+
 - (instancetype)init {
     self = [super init];
 
@@ -932,9 +942,13 @@
                                  callback:^(NSArray *messages, NSError *error)
      {
          if (self.imClient.messageQueryCacheEnabled) {
-             [self cacheContinuousMessages:messages];
+             dispatch_async(messageCacheOperationQueue, ^{
+                 [self cacheContinuousMessages:messages];
+                 [AVIMBlockHelper callArrayResultBlock:callback array:messages error:error];
+             });
+         } else {
+             [AVIMBlockHelper callArrayResultBlock:callback array:messages error:error];
          }
-         [AVIMBlockHelper callArrayResultBlock:callback array:messages error:error];
      }];
 }
 
@@ -973,11 +987,13 @@
          {
              if (!error) {
                  /* Everything is OK, we cache messages and return */
-                 BOOL truncated = [messages count] < limit;
-                 [self cacheContinuousMessages:messages withBreakpoint:!truncated];
-                 
-                 NSArray *cachedMessages = [self queryMessagesFromCacheWithLimit:limit];
-                 [AVIMBlockHelper callArrayResultBlock:callback array:cachedMessages error:nil];
+                 dispatch_async(messageCacheOperationQueue, ^{
+                     BOOL truncated = [messages count] < limit;
+                     [self cacheContinuousMessages:messages withBreakpoint:!truncated];
+                     
+                     NSArray *cachedMessages = [self queryMessagesFromCacheWithLimit:limit];
+                     [AVIMBlockHelper callArrayResultBlock:callback array:cachedMessages error:nil];
+                 });
              } else if ([error.domain isEqualToString:NSURLErrorDomain]) {
                  /* If network has an error, fallback to query from cache */
                  NSArray *messages = [self queryMessagesFromCacheWithLimit:limit];
@@ -1001,8 +1017,9 @@
 {
     limit     = LCIM_VALID_LIMIT(limit);
     timestamp = LCIM_VALID_TIMESTAMP(timestamp);
+
     /*
-     * Firstly,if message query cache is not enabled,just forward query request.
+     * Firstly, if message query cache is not enabled, just forward query request.
      */
     if (!self.imClient.messageQueryCacheEnabled) {
         [self queryMessagesFromServerBeforeId:messageId
@@ -1014,77 +1031,96 @@
          }];
         return;
     }
+
     /*
-     * Secondly,if message query cache is enabled, fetch message from cache.
+     * Secondly, if message query cache is enabled, fetch message from cache.
      */
-    BOOL continuous = YES;
-    LCIMMessageCache *cache = [self messageCache];
-    LCIMMessageCacheStore *cacheStore = [self messageCacheStore];
-    AVIMMessage *fromMessage = [cacheStore messageForId:messageId];
-    NSArray *cachedMessages = [cache messagesBeforeTimestamp:timestamp
-                                                   messageId:messageId
-                                              conversationId:self.conversationId
-                                                       limit:limit
-                                                  continuous:&continuous];
-    
-    [self postprocessMessages:cachedMessages];
-    
-    /*
-     * If message is continuous or socket connect is not opened, return fetched messages directly.
-     */
-    BOOL socketOpened = self.imClient.status == AVIMClientStatusOpened;
-    
-    if ((continuous && [cachedMessages count] == limit) || !socketOpened) {
-        [AVIMBlockHelper callArrayResultBlock:callback array:cachedMessages error:nil];
-        return;
-    }
-    
-    /*
-     * If cached messages exist, only fetch the rest uncontinuous messages.
-     */
-    if ([cachedMessages count] > 0) {
-        NSArray *continuousMessages = [self takeContinuousMessages:cachedMessages];
+    dispatch_async(messageCacheOperationQueue, ^{
+        BOOL continuous = YES;
+        LCIMMessageCache *cache = [self messageCache];
+        LCIMMessageCacheStore *cacheStore = [self messageCacheStore];
+        AVIMMessage *fromMessage = [cacheStore messageForId:messageId];
+        NSArray *cachedMessages = [cache messagesBeforeTimestamp:timestamp
+                                                       messageId:messageId
+                                                  conversationId:self.conversationId
+                                                           limit:limit
+                                                      continuous:&continuous];
         
-        BOOL hasContinuous = [continuousMessages count] > 0;
+        [self postprocessMessages:cachedMessages];
         
         /*
-         * Then, fetch rest of messages from remote server.
+         * If message is continuous or socket connect is not opened, return fetched messages directly.
          */
-        NSUInteger restCount = 0;
-        AVIMMessage *startMessage = nil;
+        BOOL socketOpened = self.imClient.status == AVIMClientStatusOpened;
         
-        if (hasContinuous) {
-            restCount = limit - [continuousMessages count];
-            startMessage = [continuousMessages firstObject];
-        } else {
-            restCount = limit;
-            AVIMMessage *last = [cachedMessages lastObject];
-            startMessage = [cache nextMessageForMessage:last
-                                         conversationId:self.conversationId];
+        if ((continuous && [cachedMessages count] == limit) || !socketOpened) {
+            [AVIMBlockHelper callArrayResultBlock:callback array:cachedMessages error:nil];
+            return;
         }
         
         /*
-         * If start message not nil, query messages before it.
+         * If cached messages exist, only fetch the rest uncontinuous messages.
          */
-        if (startMessage) {
-            [self queryMessagesFromServerBeforeId:startMessage.messageId
-                                        timestamp:startMessage.sendTimestamp
-                                            limit:restCount
-                                         callback:^(NSArray *messages, NSError *error)
-             {
-                 if (!messages) {
-                     messages = @[];
-                 }
-                 
-                 NSMutableArray *fetchedMessages = [NSMutableArray arrayWithArray:messages];
-                 
-                 if (hasContinuous) {
-                     [fetchedMessages addObjectsFromArray:continuousMessages];
-                 }
-                 
-                 [self cacheContinuousMessages:fetchedMessages plusMessage:fromMessage];
-                 [AVIMBlockHelper callArrayResultBlock:callback array:fetchedMessages error:nil];
-             }];
+        if ([cachedMessages count] > 0) {
+            NSArray *continuousMessages = [self takeContinuousMessages:cachedMessages];
+            
+            BOOL hasContinuous = [continuousMessages count] > 0;
+            
+            /*
+             * Then, fetch rest of messages from remote server.
+             */
+            NSUInteger restCount = 0;
+            AVIMMessage *startMessage = nil;
+            
+            if (hasContinuous) {
+                restCount = limit - [continuousMessages count];
+                startMessage = [continuousMessages firstObject];
+            } else {
+                restCount = limit;
+                AVIMMessage *last = [cachedMessages lastObject];
+                startMessage = [cache nextMessageForMessage:last
+                                             conversationId:self.conversationId];
+            }
+            
+            /*
+             * If start message not nil, query messages before it.
+             */
+            if (startMessage) {
+                [self queryMessagesFromServerBeforeId:startMessage.messageId
+                                            timestamp:startMessage.sendTimestamp
+                                                limit:restCount
+                                             callback:^(NSArray *messages, NSError *error)
+                 {
+                     if (!messages) {
+                         messages = @[];
+                     }
+                     
+                     NSMutableArray *fetchedMessages = [NSMutableArray arrayWithArray:messages];
+                     
+                     if (hasContinuous) {
+                         [fetchedMessages addObjectsFromArray:continuousMessages];
+                     }
+                     
+                     dispatch_async(messageCacheOperationQueue, ^{
+                         [self cacheContinuousMessages:fetchedMessages plusMessage:fromMessage];
+                         [AVIMBlockHelper callArrayResultBlock:callback array:fetchedMessages error:nil];
+                     });
+                 }];
+            } else {
+                /*
+                 * Otherwise, just forward query request.
+                 */
+                [self queryMessagesFromServerBeforeId:messageId
+                                            timestamp:timestamp
+                                                limit:limit
+                                             callback:^(NSArray *messages, NSError *error)
+                 {
+                     dispatch_async(messageCacheOperationQueue, ^{
+                         [self cacheContinuousMessages:messages plusMessage:fromMessage];
+                         [AVIMBlockHelper callArrayResultBlock:callback array:messages error:error];
+                     });
+                 }];
+            }
         } else {
             /*
              * Otherwise, just forward query request.
@@ -1094,23 +1130,13 @@
                                             limit:limit
                                          callback:^(NSArray *messages, NSError *error)
              {
-                 [self cacheContinuousMessages:messages plusMessage:fromMessage];
-                 [AVIMBlockHelper callArrayResultBlock:callback array:messages error:error];
+                 dispatch_async(messageCacheOperationQueue, ^{
+                     [self cacheContinuousMessages:messages plusMessage:fromMessage];
+                     [AVIMBlockHelper callArrayResultBlock:callback array:messages error:error];
+                 });
              }];
         }
-    } else {
-        /*
-         * Otherwise, just forward query request.
-         */
-        [self queryMessagesFromServerBeforeId:messageId
-                                    timestamp:timestamp
-                                        limit:limit
-                                     callback:^(NSArray *messages, NSError *error)
-         {
-             [self cacheContinuousMessages:messages plusMessage:fromMessage];
-             [AVIMBlockHelper callArrayResultBlock:callback array:messages error:error];
-         }];
-    }
+    });
 }
 
 - (void)postprocessMessages:(NSArray *)messages {
