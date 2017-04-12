@@ -11,14 +11,14 @@
 
 @interface AVIMMessageObject : AVIMDynamicObject
 
-@property(nonatomic, assign) AVIMMessageIOType ioType;
-@property(nonatomic, assign) AVIMMessageStatus status;
-@property(nonatomic, strong) NSString *messageId;
-@property(nonatomic, strong) NSString *clientId;
-@property(nonatomic, strong) NSString *conversationId;
-@property(nonatomic, strong) NSString *content;
-@property(nonatomic, assign) int64_t sendTimestamp;
-@property(nonatomic, assign) int64_t deliveredTimestamp;
-@property(nonatomic, assign) int64_t readTimestamp;
+@property (nonatomic, assign) AVIMMessageIOType ioType;
+@property (nonatomic, assign) AVIMMessageStatus status;
+@property (nonatomic, strong) NSString *        messageId;
+@property (nonatomic, strong) NSString *        clientId;
+@property (nonatomic, strong) NSString *        conversationId;
+@property (nonatomic, strong) NSString *        content;
+@property (nonatomic, assign) int64_t           sendTimestamp;
+@property (nonatomic, assign) int64_t           deliveredTimestamp;
+@property (nonatomic, assign) int64_t           readTimestamp;
 
 @end
