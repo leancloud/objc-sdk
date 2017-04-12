@@ -26,7 +26,6 @@
 #import "LCIMConversationCache.h"
 #import "MessagesProtoOrig.pbobjc.h"
 #import "AVUtils.h"
-#import "LCObserver.h"
 
 #define LCIM_VALID_LIMIT(limit) ({      \
     int32_t limit_ = (int32_t)(limit);  \
@@ -79,42 +78,6 @@
 - (void)doInitialize {
     _properties = [NSMutableDictionary dictionary];
     _propertiesForUpdate = [NSMutableDictionary dictionary];
-
-    LCObserver *observer = [LCObserver observerForObject:self];
-
-    [observer addTarget:self
-             forKeyPath:NSStringFromSelector(@selector(lastReadAt))
-                options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
-                  block:^(id object, id target, NSDictionary *change)
-    {
-        NSDate *newDate = change[NSKeyValueChangeNewKey];
-        NSDate *oldDate = change[NSKeyValueChangeOldKey];
-        [self updateDateColumnIfNewerThanCached:@"last_read_at" newDate:newDate oldDate:oldDate];
-    }];
-
-    [observer addTarget:self
-             forKeyPath:NSStringFromSelector(@selector(lastDeliveredAt))
-                options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
-                  block:^(id object, id target, NSDictionary *change)
-    {
-        NSDate *newDate = change[NSKeyValueChangeNewKey];
-        NSDate *oldDate = change[NSKeyValueChangeOldKey];
-        [self updateDateColumnIfNewerThanCached:@"last_delivered_at" newDate:newDate oldDate:oldDate];
-    }];
-}
-
-- (void)updateDateColumnIfNewerThanCached:(NSString *)column newDate:(NSDate *)newDate oldDate:(NSDate *)oldDate {
-    if (newDate && ![newDate isKindOfClass:[NSDate class]])
-        newDate = nil;
-
-    if (oldDate && ![oldDate isKindOfClass:[NSDate class]])
-        oldDate = nil;
-
-    if (newDate && (!oldDate || [oldDate compare:newDate] == NSOrderedAscending)) {
-        [[self conversationCache].cacheStore setValue:@([newDate timeIntervalSince1970])
-                                             forField:column
-                                       conversationId:self.conversationId];
-    }
 }
 
 - (NSString *)clientId {

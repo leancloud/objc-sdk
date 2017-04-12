@@ -50,25 +50,6 @@
 - (void)updateConversationForLastMessageAt:(NSDate *)lastMessageAt conversationId:(NSString *)conversationId;
 
 /*!
- * Get value of a conversation field.
- *
- * @param field          The field name.
- * @param conversationId The ID of conversation.
- *
- * @return The value of the conversation field.
- */
-- (id)valueForField:(NSString *)field conversationId:(NSString *)conversationId;
-
-/*!
- * Update a conversation field.
- *
- * @param value          The field value.
- * @param field          The field name.
- * @param conversationId The ID of conversation which will be updated.
- */
-- (void)setValue:(id)value forField:(NSString *)field conversationId:(NSString *)conversationId;
-
-/*!
  * Get conversation from cache by id.
  * @param conversationId Conversation id.
  * @param A conversation or nil if conversation not found or expired.

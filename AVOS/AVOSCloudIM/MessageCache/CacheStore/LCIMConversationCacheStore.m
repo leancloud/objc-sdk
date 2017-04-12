@@ -17,6 +17,31 @@
 
 @implementation LCIMConversationCacheStore
 
+- (void)databaseQueueDidLoad {
+    LCIM_OPEN_DATABASE(db, ({
+        [db executeUpdate:LCIM_SQL_CREATE_CONVERSATION_TABLE];
+    }));
+
+    [self migrateDatabaseIfNeeded:self.databaseQueue.path];
+}
+
+- (void)migrateDatabaseIfNeeded:(NSString *)databasePath {
+    LCDatabaseMigrator *migrator = [[LCDatabaseMigrator alloc] initWithDatabasePath:databasePath];
+
+    [migrator executeMigrations:@[
+        /* Version 1: Add muted column. */
+        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
+            [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN muted INTEGER"];
+        }],
+        
+        /* Version 2: Add lastMessage column. */
+        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
+            [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN last_message BLOB"];
+        }]
+        
+    ]];
+}
+
 - (NSArray *)insertionRecordForConversation:(AVIMConversation *)conversation expireAt:(NSTimeInterval)expireAt {
     return @[
         conversation.conversationId,
@@ -28,8 +53,6 @@
         [NSNumber numberWithDouble:[conversation.createAt timeIntervalSince1970]],
         [NSNumber numberWithDouble:[conversation.updateAt timeIntervalSince1970]],
         [NSNumber numberWithDouble:[conversation.lastMessageAt timeIntervalSince1970]],
-        [NSNumber numberWithDouble:[conversation.lastDeliveredAt timeIntervalSince1970]],
-        [NSNumber numberWithDouble:[conversation.lastReadAt timeIntervalSince1970]],
         conversation.lastMessage ? [NSKeyedArchiver archivedDataWithRootObject:conversation.lastMessage] : [NSNull null],
         [NSNumber numberWithInteger:conversation.muted],
         [NSNumber numberWithDouble:expireAt]
@@ -86,42 +109,17 @@
 }
 
 - (void)updateConversationForLastMessageAt:(NSDate *)lastMessageAt conversationId:(NSString *)conversationId {
-    [self setValue:lastMessageAt forField:LCIM_FIELD_LAST_MESSAGE_AT conversationId:conversationId];
-}
-
-- (void)setValue:(id)value forField:(NSString *)field conversationId:(NSString *)conversationId {
-    if (!field || !conversationId)
-        return;
-
-    if (!value)
-        value = [NSNull null];
-
-    field = [field stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
-    NSString *statement = [NSString stringWithFormat:LCIM_SQL_UPDATE_CONVERSATION_FIELD_FORMAT, field];
-
+    if (!conversationId || !lastMessageAt) return;
+    
+    NSNumber *lastMessageAtNumber = [NSNumber numberWithDouble:[lastMessageAt timeIntervalSince1970]];
+    
     LCIM_OPEN_DATABASE(db, ({
-        NSArray *args = @[value, conversationId];
-        [db executeUpdate:statement withArgumentsInArray:args];
+        NSArray *args = @[
+                          lastMessageAtNumber,
+                          conversationId,
+                          ];
+        [db executeUpdate:LCIM_SQL_UPDATE_CONVERSATION withArgumentsInArray:args];
     }));
-}
-
-- (id)valueForField:(NSString *)field conversationId:(NSString *)conversationId {
-    if (!field || !conversationId)
-        return nil;
-
-    __block id value = nil;
-
-    LCIM_OPEN_DATABASE(db, ({
-        NSArray *args = @[conversationId];
-        LCResultSet *result = [db executeQuery:LCIM_SQL_SELECT_CONVERSATION withArgumentsInArray:args];
-
-        if ([result next])
-            value = [result objectForColumnName:field];
-
-        [result close];
-    }));
-
-    return value;
 }
 
 - (AVIMConversation *)conversationForId:(NSString *)conversationId timestamp:(NSTimeInterval)timestamp {
@@ -182,8 +180,6 @@
     conversation.createAt       = [self dateFromTimeInterval:[result doubleForColumn:LCIM_FIELD_CREATE_AT]];
     conversation.updateAt       = [self dateFromTimeInterval:[result doubleForColumn:LCIM_FIELD_UPDATE_AT]];
     conversation.lastMessageAt  = [self dateFromTimeInterval:[result doubleForColumn:LCIM_FIELD_LAST_MESSAGE_AT]];
-    conversation.lastDeliveredAt = [self dateFromTimeInterval:[result doubleForColumn:LCIM_FIELD_LAST_DELIVERED_AT]];
-    conversation.lastReadAt     = [self dateFromTimeInterval:[result doubleForColumn:LCIM_FIELD_LAST_READ_AT]];
     conversation.lastMessage    = ({
         NSData *data = [result dataForColumn:LCIM_FIELD_LAST_MESSAGE];
         data ? [NSKeyedUnarchiver unarchiveObjectWithData:data] : nil;

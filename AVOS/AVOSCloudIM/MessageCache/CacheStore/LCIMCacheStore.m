@@ -8,9 +8,6 @@
 
 #import "LCIMCacheStore.h"
 #import "AVPersistenceUtils.h"
-#import "LCIMMessageCacheStoreSQL.h"
-#import "LCIMConversationCacheStoreSQL.h"
-#import "LCDatabaseMigrator.h"
 
 @interface LCIMCacheStore ()
 
@@ -47,7 +44,6 @@
 
             if (_databaseQueue) {
                 [self databaseQueueDidLoad];
-                [self migrateDatabaseIfNeeded:path];
             }
         }
     }
@@ -56,37 +52,7 @@
 }
 
 - (void)databaseQueueDidLoad {
-    LCIM_OPEN_DATABASE(db, ({
-        db.logsErrors = LCIM_SHOULD_LOG_ERRORS;
-
-        [db executeUpdate:LCIM_SQL_CREATE_MESSAGE_TABLE];
-        [db executeUpdate:LCIM_SQL_CREATE_MESSAGE_UNIQUE_INDEX];
-
-        [db executeUpdate:LCIM_SQL_CREATE_CONVERSATION_TABLE];
-    }));
-}
-
-- (void)migrateDatabaseIfNeeded:(NSString *)databasePath {
-    LCDatabaseMigrator *migrator = [[LCDatabaseMigrator alloc] initWithDatabasePath:databasePath];
-
-    [migrator executeMigrations:@[
-        /* Version 1: Add muted column. */
-        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
-            [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN muted INTEGER"];
-        }],
-
-        /* Version 2: Add lastMessage column. */
-        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
-            [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN last_message BLOB"];
-        }],
-
-        /* Version 3: Support read receipt. */
-        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
-            [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN last_delivered_at REAL"];
-            [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN last_read_at REAL"];
-            [db executeUpdate:@"ALTER TABLE message ADD COLUMN read_timestamp REAL"];
-        }]
-    ]];
+    // Stub
 }
 
 - (void)dealloc {
