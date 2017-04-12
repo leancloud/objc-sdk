@@ -204,7 +204,7 @@ NS_ASSUME_NONNULL_BEGIN
  标记该会话已读。
  将服务端该会话的未读消息数置零。
  */
-- (void)markAsReadInBackground;
+- (void)markAsReadInBackground AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 4.3.0. Use -[AVIMConversation readInBackground] instead.");
 
 /*!
  将对话标记为已读。
