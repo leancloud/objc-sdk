@@ -78,6 +78,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly, nullable) NSDate       *lastDeliveredAt;
 
 /**
+ *  The count of unread messages in current conversation.
+ */
+@property (nonatomic, assign, readonly)           NSUInteger    unreadMessagesCount;
+
+/**
  *  The name of this conversation. Can be changed by update:callback: .
  */
 @property (nonatomic, copy, readonly, nullable) NSString     *name;

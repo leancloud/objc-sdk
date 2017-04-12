@@ -529,6 +529,7 @@
 
         [genericCommand avim_addRequiredKeyWithCommand:readCommand];
 
+        [self.imClient resetUnreadMessagesCountForConversation:self];
         [self.imClient sendCommand:genericCommand];
     });
 }

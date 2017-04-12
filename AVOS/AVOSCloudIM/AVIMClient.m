@@ -858,13 +858,23 @@ static BOOL AVIMClientHasInstantiated = NO;
 
 - (void)passUnread:(NSInteger)unread toConversation:(AVIMConversation *)conversation {
     if (!conversation) return;
-    if (![self.delegate respondsToSelector:@selector(conversation:didReceiveUnread:)]) return;
+
+    conversation.unreadMessagesCount = unread;
     
     __weak typeof(self) ws = self;
     
     [self fetchConversationIfNeeded:conversation withBlock:^(AVIMConversation *conversation) {
-        [ws.delegate conversation:conversation didReceiveUnread:unread];
+        if ([ws.delegate respondsToSelector:@selector(conversationUnreadMessagesCountDidChange:)])
+            [ws.delegate conversationUnreadMessagesCountDidChange:conversation];
+
+        /* For compatibility, we reserve this callback. It should be removed in future. */
+        if ([ws.delegate respondsToSelector:@selector(conversation:didReceiveUnread:)])
+            [ws.delegate conversation:conversation didReceiveUnread:unread];
     }];
+}
+
+- (void)resetUnreadMessagesCountForConversation:(AVIMConversation *)conversation {
+    [self passUnread:0 toConversation:conversation];
 }
 
 - (void)removeCachedConversationForId:(NSString *)conversationId {

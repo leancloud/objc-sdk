@@ -32,6 +32,7 @@
 @property (nonatomic, strong) NSDate       *lastMessageAt;
 @property (nonatomic, strong) NSDate       *lastReadAt;
 @property (nonatomic, strong) NSDate       *lastDeliveredAt;
+@property (nonatomic, assign) NSUInteger    unreadMessagesCount;
 @property (nonatomic, strong) NSDictionary *attributes;
 @property (nonatomic, assign) BOOL          muted;
 @property (nonatomic, assign) BOOL          transient;
