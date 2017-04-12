@@ -862,9 +862,6 @@ static BOOL AVIMClientHasInstantiated = NO;
     __weak typeof(self) ws = self;
     
     [self fetchConversationIfNeeded:conversation withBlock:^(AVIMConversation *conversation) {
-        if ([ws.delegate respondsToSelector:@selector(conversationUnreadMessagesCountDidChange:)])
-            [ws.delegate conversationUnreadMessagesCountDidChange:conversation];
-
         /* For compatibility, we reserve this callback. It should be removed in future. */
         if ([ws.delegate respondsToSelector:@selector(conversation:didReceiveUnread:)])
             [ws.delegate conversation:conversation didReceiveUnread:unread];
@@ -1042,17 +1039,6 @@ static BOOL AVIMClientHasInstantiated = NO;
 
     if (!oldDate || [oldDate compare:date] == NSOrderedAscending) {
         [conversation setValue:date forKey:key];
-
-        NSString *firstLetterUppercaseKey = [key stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:[[key substringToIndex:1] uppercaseString]];
-        SEL selector = NSSelectorFromString([NSString stringWithFormat:@"conversation%@DidChange:", firstLetterUppercaseKey]);
-
-        if ([self.delegate respondsToSelector:selector]) {
-            NSArray *arguments = @[conversation];
-
-            [AVIMRuntimeHelper callMethodInMainThreadWithTarget:self.delegate
-                                                       selector:selector
-                                                      arguments:arguments];
-        }
     }
 }
 

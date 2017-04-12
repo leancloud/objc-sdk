@@ -247,24 +247,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)conversation:(AVIMConversation *)conversation messageDelivered:(AVIMMessage *)message;
 
 /*!
- 消息被其他成员阅读的通知。
- @param conversation - 产生事件的对话
- */
-- (void)conversationLastReadAtDidChange:(AVIMConversation *)conversation;
-
-/*!
- 消息抵达其他成员设备上的通知。
- @param conversation - 产生事件的对话
- */
-- (void)conversationLastDeliveredAtDidChange:(AVIMConversation *)conversation;
-
-/*!
- 未读消息数量改变的通知。
- @param conversation - 产生事件的对话
- */
-- (void)conversationUnreadMessagesCountDidChange:(AVIMConversation *)conversation;
-
-/*!
  对话中有新成员加入时所有成员都会收到这一通知。
  @param conversation － 所属对话
  @param clientIds - 加入的新成员列表
@@ -299,7 +281,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param conversation 所属会话。
  @param unread 未读消息数量。
  */
-- (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 4.3.0. Use -[AVIMClientDelegate conversationUnreadMessagesCountDidChange:] instead.");
+- (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 4.3.0. Instead, use KVO to observe `conversation.unreadMessagesCount` property.");
 
 /*!
  客户端下线通知。
