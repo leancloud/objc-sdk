@@ -1045,7 +1045,8 @@ static BOOL AVIMClientHasInstantiated = NO;
     if (!oldDate || [oldDate compare:date] == NSOrderedAscending) {
         [conversation setValue:date forKey:key];
 
-        SEL selector = NSSelectorFromString([NSString stringWithFormat:@"conversation%@DidChange:", [key capitalizedString]]);
+        NSString *firstLetterUppercaseKey = [key stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:[[key substringToIndex:1] uppercaseString]];
+        SEL selector = NSSelectorFromString([NSString stringWithFormat:@"conversation%@DidChange:", firstLetterUppercaseKey]);
 
         if ([self.delegate respondsToSelector:selector]) {
             NSArray *arguments = @[conversation];
