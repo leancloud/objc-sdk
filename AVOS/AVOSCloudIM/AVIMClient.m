@@ -1035,10 +1035,10 @@ static BOOL AVIMClientHasInstantiated = NO;
     if (!oldDate || [oldDate compare:date] == NSOrderedAscending) {
         [conversation setValue:date forKey:key];
 
-        SEL selector = NSSelectorFromString([NSString stringWithFormat:@"conversation:%@DidChangeTo:", key]);
+        SEL selector = NSSelectorFromString([NSString stringWithFormat:@"conversation%@DidChange:", [key capitalizedString]]);
 
         if ([self.delegate respondsToSelector:selector]) {
-            NSArray *arguments = @[conversation, date];
+            NSArray *arguments = @[conversation];
 
             [AVIMRuntimeHelper callMethodInMainThreadWithTarget:self.delegate
                                                        selector:selector
