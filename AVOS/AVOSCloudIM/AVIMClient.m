@@ -845,8 +845,6 @@ static BOOL AVIMClientHasInstantiated = NO;
 
 - (void)processUnreadCommand:(AVIMGenericCommand *)genericCommand {
     AVIMUnreadCommand *unreadCommand = genericCommand.unreadMessage;
-    /* Filter out command matches current client */
-    if (![genericCommand.peerId isEqualToString:self.clientId]) return;
     
     for (AVIMUnreadTuple *unreadTuple in unreadCommand.convsArray) {
         NSString *conversationId = unreadTuple.cid;
