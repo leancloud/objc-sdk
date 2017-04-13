@@ -240,11 +240,7 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 }
 
 - (void)applicationWillEnterForeground:(id)sender {
-    _reconnectInterval = 1;
-
-    if (_observerCount > 0) {
-        [self openWebSocketConnection];
-    }
+    /* Nothing to do. */
 }
 
 - (void)applicationWillResignActive:(id)sender {
@@ -252,7 +248,7 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 }
 
 - (void)applicationDidBecomeActive:(id)sender {
-    /* Nothing to do. */
+    [self reopenWebSocketConnection];
 }
 
 - (void)applicationWillTerminate:(id)sender {
@@ -345,17 +341,7 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 #pragma mark - API to use websocket
 
 - (void)networkDidBecomeReachable {
-    BOOL shouldOpen = YES;
-
-#if TARGET_OS_IOS
-    if (!getenv("LCIM_BACKGROUND_CONNECT_ENABLED") && [UIApplication sharedApplication].applicationState != UIApplicationStateActive)
-        shouldOpen = NO;
-#endif
-
-    if (shouldOpen) {
-        _reconnectInterval = 1;
-        [self openWebSocketConnection];
-    }
+    [self reopenWebSocketConnection];
 }
 
 - (void)networkDidBecomeUnreachable {
@@ -364,6 +350,25 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 
 - (void)openWebSocketConnection {
     [self openWebSocketConnectionWithCallback:nil];
+}
+
+/**
+ Reopen websocket connection if application state is normal.
+ */
+- (void)reopenWebSocketConnection {
+    BOOL shouldOpen = YES;
+
+#if TARGET_OS_IOS
+    UIApplicationState state = [UIApplication sharedApplication].applicationState;
+
+    if (!getenv("LCIM_BACKGROUND_CONNECT_ENABLED") && state == UIApplicationStateBackground)
+        shouldOpen = NO;
+#endif
+
+    if (shouldOpen) {
+        _reconnectInterval = 1;
+        [self openWebSocketConnection];
+    }
 }
 
 - (void)openWebSocketConnectionWithCallback:(AVIMBooleanResultBlock)callback {
