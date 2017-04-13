@@ -843,33 +843,79 @@ static BOOL AVIMClientHasInstantiated = NO;
     }
 }
 
+- (AVIMMessage *)messageWithUnreadTuple:(AVIMUnreadTuple *)unreadTuple {
+    AVIMMessage *message = nil;
+
+    NSString *messageId = unreadTuple.mid;
+    NSString *messageBody = unreadTuple.data_p;
+    NSString *conversationId = unreadTuple.cid;
+
+    if (!messageId || !messageBody || !conversationId)
+        return nil;
+
+    NSString *fromPeerId = unreadTuple.from;
+    int64_t timestemp = unreadTuple.timestamp;
+
+    AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:messageBody];
+
+    if ([messageObject isValidTypedMessageObject])
+        message = [AVIMTypedMessage messageWithMessageObject:messageObject];
+    else
+        message = [[AVIMMessage alloc] init];
+
+    message.content = messageBody;
+    message.sendTimestamp = timestemp;
+    message.conversationId = conversationId;
+    message.clientId = fromPeerId;
+    message.messageId = messageId;
+    message.status = AVIMMessageStatusDelivered;
+    message.localClientId = self.clientId;
+
+    return message;
+}
+
 - (void)processUnreadCommand:(AVIMGenericCommand *)genericCommand {
     AVIMUnreadCommand *unreadCommand = genericCommand.unreadMessage;
     
-    for (AVIMUnreadTuple *unreadTuple in unreadCommand.convsArray) {
-        NSString *conversationId = unreadTuple.cid;
-        AVIMConversation *conversation = [self conversationWithId:conversationId];
-        
-        [self passUnread:unreadTuple.unread toConversation:conversation];
-    }
+    for (AVIMUnreadTuple *unreadTuple in unreadCommand.convsArray)
+        [self processUnreadTuple:unreadTuple];
 }
 
-- (void)passUnread:(NSInteger)unread toConversation:(AVIMConversation *)conversation {
-    if (!conversation) return;
+- (void)processUnreadTuple:(AVIMUnreadTuple *)unreadTuple {
+    NSString *conversationId = unreadTuple.cid;
+    AVIMConversation *conversation = [self conversationWithId:conversationId];
 
-    conversation.unreadMessagesCount = unread;
-    
-    __weak typeof(self) ws = self;
+    if (!conversation) return;
     
     [self fetchConversationIfNeeded:conversation withBlock:^(AVIMConversation *conversation) {
-        /* For compatibility, we reserve this callback. It should be removed in future. */
-        if ([ws.delegate respondsToSelector:@selector(conversation:didReceiveUnread:)])
-            [ws.delegate conversation:conversation didReceiveUnread:unread];
+        AVIMMessage *lastMessage = [self messageWithUnreadTuple:unreadTuple];
+        [self updateConversation:conversation unreadMessagesCount:unreadTuple.unread lastMessage:lastMessage];
     }];
 }
 
+- (void)updateConversation:(AVIMConversation *)conversation unreadMessagesCount:(NSUInteger)unreadMessagesCount lastMessage:(AVIMMessage *)lastMessage {
+    LCIM_NOTIFY_PROPERTY_UPDATE(
+        self.clientId,
+        conversation.conversationId,
+        NSStringFromSelector(@selector(unreadMessagesCount)),
+        @(unreadMessagesCount));
+
+    AVIMMessage *originLastMessage = conversation.lastMessage;
+
+    if (lastMessage && (!originLastMessage || lastMessage.sendTimestamp > originLastMessage.sendTimestamp))
+        LCIM_NOTIFY_PROPERTY_UPDATE(
+            self.clientId,
+            conversation.conversationId,
+            NSStringFromSelector(@selector(lastMessage)),
+            lastMessage);
+
+    /* For compatibility, we reserve this callback. It should be removed in future. */
+    if ([self.delegate respondsToSelector:@selector(conversation:didReceiveUnread:)])
+        [self.delegate conversation:conversation didReceiveUnread:unreadMessagesCount];
+}
+
 - (void)resetUnreadMessagesCountForConversation:(AVIMConversation *)conversation {
-    [self passUnread:0 toConversation:conversation];
+    [self updateConversation:conversation unreadMessagesCount:0 lastMessage:nil];
 }
 
 - (void)removeCachedConversationForId:(NSString *)conversationId {
@@ -1038,7 +1084,7 @@ static BOOL AVIMClientHasInstantiated = NO;
     NSDate *oldDate = [conversation valueForKey:key];
 
     if (!oldDate || [oldDate compare:date] == NSOrderedAscending) {
-        [conversation setValue:date forKey:key];
+        LCIM_NOTIFY_PROPERTY_UPDATE(self.clientId, conversation.conversationId, key, date);
     }
 }
 
@@ -1097,7 +1143,11 @@ static BOOL AVIMClientHasInstantiated = NO;
             if (!conversation.lastMessageAt || [conversation.lastMessageAt compare:messageSentAt] == NSOrderedAscending) {
                 conversation.lastMessageAt = messageSentAt;
             }
-            conversation.lastMessage = message;
+            LCIM_NOTIFY_PROPERTY_UPDATE(
+                ws.clientId,
+                conversationId,
+                NSStringFromSelector(@selector(lastMessage)),
+                message);
         }
         [ws passMessage:message toConversation:conversation];
     }];
