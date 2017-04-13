@@ -94,7 +94,6 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 }
 
 @property (nonatomic, assign) BOOL security;
-@property (nonatomic, assign) BOOL isOpening;
 @property (nonatomic, assign) BOOL useSecondary;
 @property (nonatomic, assign) BOOL needRetry;
 @property (nonatomic, strong) LCNetworkReachabilityManager *reachabilityMonitor;
@@ -145,7 +144,6 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
         _lastPongTimestamp = [[NSDate date] timeIntervalSince1970];
         
         _reconnectInterval = 1;
-        _isOpening = NO;
         _needRetry = YES;
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(routerDidUpdate:) name:LCRouterDidUpdateNotification object:nil];
@@ -240,11 +238,7 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 }
 
 - (void)applicationWillEnterForeground:(id)sender {
-    _reconnectInterval = 1;
-
-    if (_observerCount > 0) {
-        [self openWebSocketConnection];
-    }
+    /* Nothing to do. */
 }
 
 - (void)applicationWillResignActive:(id)sender {
@@ -252,7 +246,7 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 }
 
 - (void)applicationDidBecomeActive:(id)sender {
-    /* Nothing to do. */
+    [self reopenWebSocketConnection];
 }
 
 - (void)applicationWillTerminate:(id)sender {
@@ -345,17 +339,7 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 #pragma mark - API to use websocket
 
 - (void)networkDidBecomeReachable {
-    BOOL shouldOpen = YES;
-
-#if TARGET_OS_IOS
-    if (!getenv("LCIM_BACKGROUND_CONNECT_ENABLED") && [UIApplication sharedApplication].applicationState != UIApplicationStateActive)
-        shouldOpen = NO;
-#endif
-
-    if (shouldOpen) {
-        _reconnectInterval = 1;
-        [self openWebSocketConnection];
-    }
+    [self reopenWebSocketConnection];
 }
 
 - (void)networkDidBecomeUnreachable {
@@ -366,6 +350,25 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
     [self openWebSocketConnectionWithCallback:nil];
 }
 
+/**
+ Reopen websocket connection if application state is normal.
+ */
+- (void)reopenWebSocketConnection {
+    BOOL shouldOpen = YES;
+
+#if TARGET_OS_IOS
+    UIApplicationState state = [UIApplication sharedApplication].applicationState;
+
+    if (!getenv("LCIM_BACKGROUND_CONNECT_ENABLED") && state == UIApplicationStateBackground)
+        shouldOpen = NO;
+#endif
+
+    if (shouldOpen) {
+        _reconnectInterval = 1;
+        [self openWebSocketConnection];
+    }
+}
+
 - (void)openWebSocketConnectionWithCallback:(AVIMBooleanResultBlock)callback {
     @weakify(self);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -373,14 +376,8 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 
         AVLoggerInfo(AVLoggerDomainIM, @"Open websocket connection.");
         self.openCallback = callback;
-
-        if (self.isOpening) {
-            AVLoggerError(AVLoggerDomainIM, @"Return because websocket is opening.");
-            return;
-        }
         
         self.needRetry = YES;
-        self.isOpening = YES;
         [self.reconnectTimer invalidate];
         
         if (!(self.webSocket && (self.webSocket.readyState == AVIM_OPEN || self.webSocket.readyState == AVIM_CONNECTING))) {
@@ -430,7 +427,6 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
                         [self cacheRouterInformationIfPossible:object];
                     });
                 } else if (code == 404) { /* 404, stop reconnection. */
-                    self.isOpening = NO;
                     NSError *httpError = [AVIMErrorUtil errorWithCode:code reason:[NSHTTPURLResponse localizedStringForStatusCode:code]];
                     if (self.openCallback) {
                         [AVIMBlockHelper callBooleanResultBlock:self.openCallback error:httpError];
@@ -439,7 +435,6 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
                         [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED object:self userInfo:@{@"error": error}];
                     }
                 } else if ((!object && !error) || code >= 400 || error) { /* Something error, try to reconnect. */
-                    self.isOpening = NO;
                     if (!error) {
                         if (code >= 404) {
                             error = [AVIMErrorUtil errorWithCode:code reason:[NSHTTPURLResponse localizedStringForStatusCode:code]];
@@ -633,7 +628,6 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 - (void)closeWebSocketConnection {
     AVLoggerInfo(AVLoggerDomainIM, @"Close websocket connection.");
     [_pingTimer invalidate];
-    _isOpening = NO;
     [_webSocket close];
     [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED object:self userInfo:nil];
     _isClosed = YES;
@@ -643,7 +637,6 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
     AVLoggerInfo(AVLoggerDomainIM, @"Close websocket connection.");
     [_pingTimer invalidate];
     _needRetry = retry;
-    _isOpening = NO;
     [_webSocket close];
     [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED object:self userInfo:nil];
     _isClosed = YES;
@@ -779,7 +772,6 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 #pragma mark - SRWebSocketDelegate
 - (void)webSocketDidOpen:(AVIMWebSocket *)webSocket {
     AVLoggerInfo(AVLoggerDomainIM, @"Websocket connection opened.");
-    _isOpening = NO;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_OPENED object:self userInfo:nil];
     
@@ -851,7 +843,6 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 
 - (void)webSocket:(AVIMWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
     AVLoggerDebug(AVLoggerDomainIM, @"Websocket closed with code:%ld, reason:%@.", (long)code, reason);
-    _isOpening = NO;
     
     NSError *error = [AVIMErrorUtil errorWithCode:code reason:reason];
     for (NSNumber *num in _serialIdArray) {
@@ -877,7 +868,6 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 - (void)forwardError:(NSError *)error forWebSocket:(AVIMWebSocket *)webSocket {
     AVLoggerError(AVLoggerDomainIM, @"Websocket open failed with error:%@.", error);
 
-    _isOpening = NO;
     _useSecondary = YES;
 
     for (NSNumber *num in _serialIdArray) {
