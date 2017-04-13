@@ -556,7 +556,6 @@ NSNotificationName LCIMConversationPropertyUpdateNotification = @"LCIMConversati
 
         genericCommand.cmd = AVIMCommandType_Read;
         genericCommand.peerId = self.imClient.clientId;
-        genericCommand.needResponse = YES;
 
         [genericCommand avim_addRequiredKeyWithCommand:readCommand];
 
