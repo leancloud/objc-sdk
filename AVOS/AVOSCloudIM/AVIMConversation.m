@@ -251,20 +251,17 @@ NSNotificationName LCIMConversationPropertyUpdateNotification = @"LCIMConversati
     }];
 }
 
-- (void)fetchReceiptTimestampsWithCallback:(AVIMBooleanResultBlock)callback {
+- (void)fetchReceiptTimestampsInBackground {
     dispatch_async([AVIMClient imClientQueue], ^{
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
 
         genericCommand.cmd = AVIMCommandType_Conv;
         genericCommand.op = AVIMOpType_MaxRead;
         genericCommand.peerId = self.imClient.clientId;
-        genericCommand.needResponse = YES;
 
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
-            if (error) {
-                [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+            if (error)
                 return;
-            }
 
             AVIMConvCommand *convCommand = inCommand.convMessage;
             NSDate *lastDeliveredAt = [NSDate dateWithTimeIntervalSince1970:convCommand.maxAckTimestamp / 1000.0];
