@@ -20,6 +20,27 @@
 #define KEY_LAST_MESSAGE_MID @"msg_mid"
 #define KEY_LAST_MESSAGE_TIMESTAMP @"msg_timestamp"
 
+FOUNDATION_EXPORT NSString *LCIMClientIdKey;
+FOUNDATION_EXPORT NSString *LCIMConversationIdKey;
+FOUNDATION_EXPORT NSString *LCIMConversationPropertyNameKey;
+FOUNDATION_EXPORT NSString *LCIMConversationPropertyValueKey;
+FOUNDATION_EXPORT NSNotificationName LCIMConversationPropertyUpdateNotification;
+
+#define LCIM_NOTIFY_PROPERTY_UPDATE(clientId, conversationId, propname, propvalue)  \
+do {                                                                                \
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];               \
+                                                                                    \
+    userInfo[LCIMClientIdKey]                  = (clientId);                        \
+    userInfo[LCIMConversationIdKey]            = (conversationId);                  \
+    userInfo[LCIMConversationPropertyNameKey]  = (propname);                        \
+    userInfo[LCIMConversationPropertyValueKey] = (propvalue);                       \
+                                                                                    \
+    [[NSNotificationCenter defaultCenter]                                           \
+      postNotificationName:LCIMConversationPropertyUpdateNotification               \
+      object:nil                                                                    \
+      userInfo:userInfo];                                                           \
+} while(0)
+
 @interface AVIMConversation ()
 
 @property (nonatomic, copy)   NSString     *name;

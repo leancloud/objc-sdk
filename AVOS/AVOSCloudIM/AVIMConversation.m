@@ -47,6 +47,12 @@
     timestamp_;  \
 })
 
+NSString *LCIMClientIdKey = @"clientId";
+NSString *LCIMConversationIdKey = @"conversationId";
+NSString *LCIMConversationPropertyNameKey = @"propertyName";
+NSString *LCIMConversationPropertyValueKey = @"propertyValue";
+NSNotificationName LCIMConversationPropertyUpdateNotification = @"LCIMConversationPropertyUpdateNotification";
+
 @interface AVIMConversation()
 
 @property (nonatomic, strong) NSMutableDictionary *propertiesForUpdate;
@@ -78,6 +84,34 @@
 - (void)doInitialize {
     _properties = [NSMutableDictionary dictionary];
     _propertiesForUpdate = [NSMutableDictionary dictionary];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(propertyDidUpdate:)
+                                                 name:LCIMConversationPropertyUpdateNotification
+                                               object:nil];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)propertyDidUpdate:(NSNotification *)notification {
+    if (!self.conversationId)
+        return;
+
+    NSDictionary *userInfo = notification.userInfo;
+
+    NSString *clientId = userInfo[LCIMClientIdKey];
+    NSString *conversationId = userInfo[LCIMConversationIdKey];
+    NSString *propertyName = userInfo[LCIMConversationPropertyNameKey];
+    NSString *propertyValue = userInfo[LCIMConversationPropertyValueKey];
+
+    if (!propertyName
+        || (!clientId || ![clientId isEqualToString:self.imClient.clientId])
+        || (!conversationId || ![conversationId isEqualToString:self.conversationId]))
+        return;
+
+    [self setValue:propertyValue forKey:propertyName];
 }
 
 - (NSString *)clientId {
