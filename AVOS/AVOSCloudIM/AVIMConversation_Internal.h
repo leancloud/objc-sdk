@@ -20,9 +20,6 @@
 #define KEY_LAST_MESSAGE_MID @"msg_mid"
 #define KEY_LAST_MESSAGE_TIMESTAMP @"msg_timestamp"
 
-
-@class AVIMConversationUpdateBuilder;
-
 @interface AVIMConversation ()
 
 @property (nonatomic, copy)   NSString     *name;
