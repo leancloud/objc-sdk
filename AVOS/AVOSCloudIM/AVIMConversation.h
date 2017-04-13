@@ -58,6 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  The last message in this conversation.
+ *  You can use KVO to observe this property's change to update UI.
  *  @attention Getter method may query lastMessage from SQL, this may take a long time, be careful to use getter method in main thread.
  */
 @property (nonatomic, strong, readonly, nullable) AVIMMessage  *lastMessage;
@@ -69,16 +70,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  The last timestamp your message read by other.
+ *  You can use KVO to observe this property's change to update UI.
  */
 @property (nonatomic, strong, readonly, nullable) NSDate       *lastReadAt;
 
 /**
  *  The last timestamp your message delivered to other.
+ *  You can use KVO to observe this property's change to update UI.
  */
 @property (nonatomic, strong, readonly, nullable) NSDate       *lastDeliveredAt;
 
 /**
  *  The count of unread messages in current conversation.
+ *  You can use KVO to observe this property's change to update UI.
  */
 @property (nonatomic, assign, readonly)           NSUInteger    unreadMessagesCount;
 
