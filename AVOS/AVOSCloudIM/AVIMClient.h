@@ -281,7 +281,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param conversation 所属会话。
  @param unread 未读消息数量。
  */
-- (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 4.3.0. Instead, use KVO to observe `conversation.unreadMessagesCount` property.");
+- (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread;
 
 /*!
  客户端下线通知。
