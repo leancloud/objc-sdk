@@ -112,6 +112,11 @@ NSNotificationName LCIMConversationPropertyUpdateNotification = @"LCIMConversati
         return;
 
     [self setValue:propertyValue forKey:propertyName];
+
+    AVIMClient *client = self.imClient;
+
+    if ([client.delegate respondsToSelector:@selector(conversation:didUpdateForKey:)])
+        [client.delegate conversation:self didUpdateForKey:propertyName];
 }
 
 - (NSString *)clientId {
