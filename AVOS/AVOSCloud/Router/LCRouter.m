@@ -161,7 +161,7 @@ extern AVServiceRegion LCEffectiveServiceRegion;
 }
 
 - (NSString *)versionedAPIURLString {
-    return [[NSURL URLWithString:[self APIURLString]] URLByAppendingPathComponent:API_VERSION].absoluteString;
+    return [[NSURL URLWithString:[self APIURLString]] URLByAppendingPathComponent:APIVersion].absoluteString;
 }
 
 - (NSURL *)versionedAPIURL {

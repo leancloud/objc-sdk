@@ -25,6 +25,16 @@
 - (NSString *)URLStringForPath:(NSString *)path;
 
 /**
+ Get batch path for the given path.
+
+ @brief Add a version prefix to the path.
+        For example, if the path given by you is "book", this method will return "/1.1/book".
+
+ @param path The API endpoint.
+ */
+- (NSString *)batchPathForPath:(NSString *)path;
+
+/**
  Get API URL string.
 
  @return API URL string.
