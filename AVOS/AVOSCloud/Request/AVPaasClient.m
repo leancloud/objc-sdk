@@ -136,7 +136,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 @interface AVPaasClient()
 
 @property (nonatomic, readwrite, copy) NSString * apiVersion;
-@property (nonatomic, readwrite, strong) AVHTTPClient * clientImpl;
 @property (nonatomic, strong) LCURLSessionManager *sessionManager;
 
 // The client is singleton, so the queue doesn't need release
@@ -179,7 +178,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     self = [super init];
 
     if (self) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(routerDidUpdate:) name:LCRouterDidUpdateNotification object:nil];
         _requestTable = [NSMapTable strongToWeakObjectsMapTable];
         _completionQueue = dispatch_queue_create("avos.paas.completionQueue", DISPATCH_QUEUE_CONCURRENT);
         _sessionManager = ({
@@ -209,15 +207,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     return self;
 }
 
-- (void)setBaseURL:(NSString *)baseURL {
-    _baseURL = [baseURL copy];
-    _clientImpl = nil;
-}
-
-- (void)routerDidUpdate:(NSNotification *)notification {
-    self.baseURL = [LCRouter sharedInstance].APIURLString;
-}
-
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_sessionManager invalidateSessionCancelingTasks:YES];
@@ -245,37 +234,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         
         [self.lastModify removeAllObjects];
     }
-}
-
-- (NSURL *)RESTBaseURL {
-    return [[LCRouter sharedInstance] versionedAPIURL];
-}
-
-- (AVHTTPClient *)clientImpl {
-    if (!_clientImpl) {
-        NSURL *url = [self RESTBaseURL];
-        _clientImpl = [AVHTTPClient clientWithBaseURL:url];
-
-        //最大并发请求数 4
-        _clientImpl.operationQueue.maxConcurrentOperationCount=4;
-        
-        [_clientImpl registerHTTPOperationClass:[AVJSONRequestOperation class]];
-        [_clientImpl setParameterEncoding:AVJSONParameterEncoding];
-        
-#if !TARGET_OS_WATCH
-        //revert the offline request
-        __weak id wealSelf=self;
-        [_clientImpl setReachabilityStatusChangeBlock:^(AVNetworkReachabilityStatus status) {
-            AVLoggerI(@"network status change :%d",status);
-            
-            if (status > AVNetworkReachabilityStatusNotReachable) {
-                [wealSelf handleAllArchivedRequests];
-            }
-        }];
-#endif
-    }
-
-    return _clientImpl;
 }
 
 - (NSString *)signatureHeaderFieldValue {
@@ -319,13 +277,8 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
                                  headers:(NSDictionary *)headers
                               parameters:(NSDictionary *)parameters
 {
-    NSURL *baseURL = [self RESTBaseURL];
-
-    if (![baseURL.absoluteString hasSuffix:@"/"]) {
-        baseURL = [baseURL URLByAppendingPathComponent:@"/"];
-    }
-
-    NSURL *URL = [NSURL URLWithString:path relativeToURL:baseURL];
+    NSString *URLString = [[LCRouter sharedInstance] URLStringForPath:path];
+    NSURL *URL = [NSURL URLWithString:URLString];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
 
     [request setHTTPMethod:method];

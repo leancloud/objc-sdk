@@ -28,9 +28,6 @@ static NSString *const fallbackAPIHost = @"api.leancloud.cn";
 /// Fallback push router path for service region if host not found.
 static NSString *const fallbackPushRouterHost = @"router-g0-push.leancloud.cn";
 
-/// Notification name for router update.
-NSString *const LCRouterDidUpdateNotification = @"LCRouterDidUpdateNotification";
-
 /// Keys of router response.
 NSString *LCAPIHostEntryKey        = @"api_server";
 NSString *LCPushRouterHostEntryKey = @"push_router_server";
@@ -130,8 +127,6 @@ extern AVServiceRegion LCEffectiveServiceRegion;
 
     self.APIHost = APIHost;
     self.pushRouterHost = pushRouterHost;
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:LCRouterDidUpdateNotification object:self];
 }
 
 - (NSString *)APIHost {

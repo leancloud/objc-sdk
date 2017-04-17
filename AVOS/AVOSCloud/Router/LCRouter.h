@@ -8,11 +8,21 @@
 
 #import <Foundation/Foundation.h>
 
-FOUNDATION_EXPORT NSString *const LCRouterDidUpdateNotification;
-
 @interface LCRouter : NSObject
 
 + (instancetype)sharedInstance;
+
+/**
+ Get URL string for RTM router.
+ */
+- (NSString *)RTMRouterURLString;
+
+/**
+ Get URL string for storage server.
+
+ @param path The API endpoint.
+ */
+- (NSString *)URLStringForPath:(NSString *)path;
 
 /**
  Get API URL string.

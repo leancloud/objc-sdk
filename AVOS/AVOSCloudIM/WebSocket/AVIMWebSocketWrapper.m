@@ -101,7 +101,6 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 @property (nonatomic, strong) AVIMWebSocket *webSocket;
 @property (nonatomic, copy)   AVIMBooleanResultBlock openCallback;
 @property (nonatomic, strong) NSMutableDictionary *IPTable;
-@property (nonatomic, copy) NSString *routerPath;
 
 @end
 
@@ -145,10 +144,6 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
         
         _reconnectInterval = 1;
         _needRetry = YES;
-
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(routerDidUpdate:) name:LCRouterDidUpdateNotification object:nil];
-
-        _routerPath = [self absoluteRouterPath:[LCRouter sharedInstance].pushRouterURLString];
         
 #if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
         // Register for notification when the app shuts down
@@ -174,14 +169,6 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
         [self startNotifyReachability];
     }
     return self;
-}
-
-- (void)routerDidUpdate:(NSNotification *)notification {
-    self.routerPath = [self absoluteRouterPath:[LCRouter sharedInstance].pushRouterURLString];
-}
-
-- (NSString *)absoluteRouterPath:(NSString *)routerHost {
-    return [[[NSURL URLWithString:routerHost] URLByAppendingPathComponent:@"v1/route"] absoluteString];
 }
 
 - (void)startNotifyReachability {
@@ -417,7 +404,9 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
                 parameters[@"debug"] = @"true";
             }
 
-            [[AVPaasClient sharedInstance] getObject:self.routerPath withParameters:parameters block:^(id object, NSError *error) {
+            NSString *RTMRouter = [[LCRouter sharedInstance] RTMRouterURLString];
+
+            [[AVPaasClient sharedInstance] getObject:RTMRouter withParameters:parameters block:^(id object, NSError *error) {
                 NSInteger code = error.code;
 
                 if (object && !error) { /* Everything is OK. */

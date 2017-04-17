@@ -36,7 +36,6 @@ FOUNDATION_EXPORT NSString *const LCHeaderFieldNameProduction;
 
 @property (nonatomic, readwrite, copy) NSString * applicationId;
 @property (nonatomic, readwrite, copy) NSString * clientKey;
-@property (nonatomic, readonly, copy) NSString * baseURL;
 @property (nonatomic, readonly, copy) NSString * apiVersion;
 @property (nonatomic, readwrite, copy) NSString * applicationIdField;
 @property (nonatomic, readwrite, copy) NSString * applicationKeyField;
