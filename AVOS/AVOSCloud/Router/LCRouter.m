@@ -93,10 +93,6 @@ extern AVServiceRegion LCEffectiveServiceRegion;
     return self;
 }
 
-- (void)cacheAPIHostWithHost:(NSString *)host lastModified:(NSTimeInterval)lastModified TTL:(NSTimeInterval)TTL {
-    [[LCRouterCache sharedInstance] cacheAPIHostWithServiceRegion:self.serviceRegion host:host lastModified:lastModified TTL:TTL];
-}
-
 - (void)cachePushRouterHostWithHost:(NSString *)host lastModified:(NSTimeInterval)lastModified TTL:(NSTimeInterval)TTL {
     [[LCRouterCache sharedInstance] cachePushRouterHostWithServiceRegion:self.serviceRegion host:host lastModified:lastModified TTL:TTL];
 }
@@ -154,22 +150,6 @@ extern AVServiceRegion LCEffectiveServiceRegion;
         defaultPushRouterHostTable[@(self.serviceRegion)] ?:
         fallbackPushRouterHost
     );
-}
-
-- (NSString *)APIURLString {
-    return [NSString stringWithFormat:@"https://%@", self.APIHost];
-}
-
-- (NSString *)versionedAPIURLString {
-    return [[NSURL URLWithString:[self APIURLString]] URLByAppendingPathComponent:APIVersion].absoluteString;
-}
-
-- (NSURL *)versionedAPIURL {
-    return [NSURL URLWithString:[self versionedAPIURLString]];
-}
-
-- (NSString *)pushRouterURLString {
-    return [NSString stringWithFormat:@"https://%@", self.pushRouterHost];
 }
 
 @end

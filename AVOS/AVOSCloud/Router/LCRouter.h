@@ -35,45 +35,6 @@
 - (NSString *)batchPathForPath:(NSString *)path;
 
 /**
- Get API URL string.
-
- @return API URL string.
- */
-- (NSString *)APIURLString;
-
-/**
- Get versioned API URL string.
-
- @return Versioned API URL string.
- */
-- (NSString *)versionedAPIURLString;
-
-/**
- Get versioned API URL.
-
- @return Versioned API URL.
- */
-- (NSURL *)versionedAPIURL;
-
-/**
- Get push router URL string.
-
- @return push router URL string.
- */
-- (NSString *)pushRouterURLString;
-
-/**
- Cache API host for service region.
-
- @param host          The API host to be cached.
- @param lastModified  The last modified timestamp since 1970 in seconds.
- @param TTL           The time-to-live timestamp in seconds.
- */
-- (void)cacheAPIHostWithHost:(NSString *)host
-                lastModified:(NSTimeInterval)lastModified
-                         TTL:(NSTimeInterval)TTL;
-
-/**
  Cache push router host for service region.
 
  @param host          The push router host to be cached.
