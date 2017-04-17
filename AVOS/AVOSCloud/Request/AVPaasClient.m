@@ -29,7 +29,6 @@
 
 #define MAX_LAG_TIME 5.0
 
-NSString *const API_VERSION = @"1.1";
 NSString *const LCHeaderFieldNameId = @"X-LC-Id";
 NSString *const LCHeaderFieldNameKey = @"X-LC-Key";
 NSString *const LCHeaderFieldNameSign = @"X-LC-Sign";
@@ -135,7 +134,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 @interface AVPaasClient()
 
-@property (nonatomic, readwrite, copy) NSString * apiVersion;
 @property (nonatomic, strong) LCURLSessionManager *sessionManager;
 
 // The client is singleton, so the queue doesn't need release
@@ -159,7 +157,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     static AVPaasClient * sharedInstance;
     dispatch_once(&once, ^{
         sharedInstance = [[self alloc] init];
-        sharedInstance.apiVersion = API_VERSION;
         sharedInstance.productionMode = YES;
         sharedInstance.timeoutInterval = kAVDefaultNetworkTimeoutInterval;
         
@@ -249,16 +246,18 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
                                body:(NSDictionary *)body
                          parameters:(NSDictionary *)parameters
 {
-    NSString * myPath = [NSString stringWithFormat:@"/%@/%@", [AVPaasClient sharedInstance].apiVersion, path];
     NSMutableDictionary * result = [[NSMutableDictionary alloc] init];
+    NSString *batchPath = [[LCRouter sharedInstance] batchPathForPath:path];
+
     [result setObject:method forKey:@"method"];
-    [result setObject:myPath forKey:@"path"];
+    [result setObject:batchPath forKey:@"path"];
     if (body) {
          [result setObject:body forKey:@"body"];
     }
     if (parameters) {
         [result setObject:parameters forKey:@"params"];
     }
+
     return result;
 }
 

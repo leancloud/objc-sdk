@@ -12,6 +12,7 @@
 #import "AVObjectUtils.h"
 #import "AVPersistenceUtils.h"
 #import "AVErrorUtils.h"
+#import "LCRouter.h"
 
 @implementation AVInstallation
 
@@ -229,12 +230,12 @@
 }
 
 - (void)postProcessBatchRequests:(NSMutableArray *)requests {
-    NSString *classEndpoint = [NSString stringWithFormat:@"/%@/%@", API_VERSION, [[self class] endPoint]];
+    NSString *path = [[self class] endPoint];
+    NSString *batchPath = [[LCRouter sharedInstance] batchPathForPath:path];
 
     for (NSMutableDictionary *request in [requests copy]) {
-        if ([request_path(request) hasPrefix:classEndpoint] && [request_method(request) isEqualToString:@"PUT"]) {
+        if ([request_path(request) hasPrefix:batchPath] && [request_method(request) isEqualToString:@"PUT"]) {
             request[@"method"] = @"POST";
-            request[@"path"]   = classEndpoint;
             request[@"body"][@"objectId"]    = self.objectId;
             request[@"body"][@"deviceType"]  = self.deviceType;
             request[@"body"][@"deviceToken"] = self.deviceToken;

@@ -14,8 +14,6 @@
 #import "AVObjectUtils.h"
 #import "AVPaasClient.h"
 #import "AVErrorUtils.h"
-#import "AVOSCloud_Internal.h"
-
 #import "AVFriendQuery.h"
 #import "AVUtils.h"
 
@@ -315,8 +313,7 @@ static BOOL enableAutomatic = NO;
 
 - (void)updatePassword:(NSString *)oldPassword newPassword:(NSString *)newPassword block:(AVIdResultBlock)block {
     if (self.isAuthDataExistInMemory && oldPassword && newPassword) {
-        NSString *pathComponent = [NSString stringWithFormat:@"users/%@/updatePassword", self.objectId];
-        NSString *path = [[[AVOSCloud RESTBaseURL] URLByAppendingPathComponent:pathComponent] absoluteString];
+        NSString *path = [NSString stringWithFormat:@"users/%@/updatePassword", self.objectId];
         NSDictionary *params = @{@"old_password":oldPassword,
                                  @"new_password":newPassword};
         [[AVPaasClient sharedInstance] putObject:path withParameters:params sessionToken:self.sessionToken block:^(id object, NSError *error) {

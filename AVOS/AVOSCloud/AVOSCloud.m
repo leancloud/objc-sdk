@@ -224,10 +224,6 @@ AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
     return pushGroup;
 }
 
-+ (NSURL *)RESTBaseURL {
-    return [[NSURL URLWithString:[LCRouter sharedInstance].APIURLString] URLByAppendingPathComponent:API_VERSION];
-}
-
 + (void)setServiceRegion:(AVServiceRegion)serviceRegion {
     if (LCInitialized) {
         [NSException raise:NSInternalInconsistencyException format:@"Service region should be set before +[AVOSCloud setApplicationId:clientKey:]."];

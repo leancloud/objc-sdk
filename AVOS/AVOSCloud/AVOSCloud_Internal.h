@@ -20,12 +20,6 @@ FOUNDATION_EXPORT NSString *const LCRootCertificate;
 
 @interface AVOSCloud ()
 
-/**
- * Get versioned REST endpoint.
- * @return A versioned REST URL string, for example, "https://api.leancloud.cn/1.1".
- */
-+ (NSURL *)RESTBaseURL;
-
 + (void)enableAVOSCloudModule:(Class<AVOSCloudModule>)cls;
 
 @end

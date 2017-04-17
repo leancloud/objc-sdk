@@ -201,10 +201,9 @@ static NSString * currentSessionId;
 }
 
 + (void)updateOnlineConfigWithBlock:(AVDictionaryResultBlock)block {
-    NSString *pathComponent = [NSString stringWithFormat:@"statistics/apps/%@/sendPolicy", [AVOSCloud getApplicationId]];
-    NSString *endpoint = [[[AVOSCloud RESTBaseURL] URLByAppendingPathComponent:pathComponent] absoluteString];
+    NSString *path = [NSString stringWithFormat:@"statistics/apps/%@/sendPolicy", [AVOSCloud getApplicationId]];
     
-    [[AVPaasClient sharedInstance] getObject:endpoint withParameters:nil block:^(id object, NSError *error) {
+    [[AVPaasClient sharedInstance] getObject:path withParameters:nil block:^(id object, NSError *error) {
         if (error == nil) {
             // make sure we call the onlineConfigChanged in main thread
             // otherwise timer may not work correctly.

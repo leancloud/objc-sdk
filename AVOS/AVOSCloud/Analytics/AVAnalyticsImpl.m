@@ -13,9 +13,8 @@
 #import "AVAnalyticsUtils.h"
 #import "AVGlobal.h"
 #import "AVUtils.h"
-
-#import "AVOSCloud_Internal.h"
 #import "AVErrorUtils.h"
+#import "LCRouter.h"
 
 static NSString *const kAVOnlineConfig = @"AVOS_ONLINE_CONFIG";
 
@@ -384,7 +383,7 @@ static NSString *const kAVOnlineConfig = @"AVOS_ONLINE_CONFIG";
 
 +(NSString *)myObjectPath
 {
-    return [[[AVOSCloud RESTBaseURL] URLByAppendingPathComponent:@"stats"] absoluteString];
+    return [[LCRouter sharedInstance] URLStringForPath:@"stats"];
 }
 
 -(void)sendSessions {

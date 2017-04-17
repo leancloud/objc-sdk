@@ -19,8 +19,6 @@
 #define USER_AGENT [NSString stringWithFormat:@"AVOS Cloud OSX-%@ SDK", SDK_VERSION]
 #endif
 
-FOUNDATION_EXPORT NSString *const API_VERSION;
-
 FOUNDATION_EXPORT NSString *const LCHeaderFieldNameId;
 FOUNDATION_EXPORT NSString *const LCHeaderFieldNameKey;
 FOUNDATION_EXPORT NSString *const LCHeaderFieldNameSign;
