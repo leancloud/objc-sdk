@@ -40,7 +40,7 @@
     @"\n"
 
 static NSTimeInterval AVIMWebSocketDefaultTimeoutInterval = 15.0;
-static NSString *const LCPushRouterCacheKey = @"LCPushRouterCacheKey";
+static NSString *const LCRTMRouterCacheKey = @"LCRTMRouterCacheKey";
 
 typedef enum : NSUInteger {
     //mutually exclusive
@@ -101,6 +101,7 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 @property (nonatomic, strong) AVIMWebSocket *webSocket;
 @property (nonatomic, copy)   AVIMBooleanResultBlock openCallback;
 @property (nonatomic, strong) NSMutableDictionary *IPTable;
+@property (nonatomic, strong) LCKeyValueStore *userDefaults;
 
 @end
 
@@ -144,6 +145,8 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
         
         _reconnectInterval = 1;
         _needRetry = YES;
+
+        _userDefaults = [LCKeyValueStore userDefaultsKeyValueStore];
         
 #if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
         // Register for notification when the app shuts down
@@ -526,11 +529,11 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
         return;
     }
 
-    [[LCKeyValueStore sharedInstance] setData:data forKey:LCPushRouterCacheKey];
+    [_userDefaults setData:data forKey:LCRTMRouterCacheKey];
 }
 
 - (NSDictionary *)cachedRouterInformation {
-    NSData *data = [[LCKeyValueStore sharedInstance] dataForKey:LCPushRouterCacheKey];
+    NSData *data = [_userDefaults dataForKey:LCRTMRouterCacheKey];
 
     if (!data)
         return nil;
@@ -562,7 +565,7 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 }
 
 - (void)clearRouterInformationCache {
-    [[LCKeyValueStore sharedInstance] deleteKey:LCPushRouterCacheKey];
+    [_userDefaults deleteKey:LCRTMRouterCacheKey];
 }
 
 SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);

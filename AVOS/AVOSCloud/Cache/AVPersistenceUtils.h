@@ -26,6 +26,8 @@
 + (NSString *)commandCacheDatabasePath;
 + (NSString *)clientSessionTokenCacheDatabasePath;
 
++ (NSString *)userDefaultsPath;
+
 + (BOOL)saveJSON:(id)JSON toPath:(NSString *)path;
 + (id)getJSONFromPath:(NSString *)path;
 

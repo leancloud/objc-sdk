@@ -74,6 +74,30 @@
     return [[self leanDocumentPath] stringByAppendingPathComponent:@"ClientSessionToken"];
 }
 
+// ~/Library/Caches/LeanCloud/{applicationId}
++ (NSString *)cacheSandboxPath {
+    NSString *applicationId = [AVOSCloud getApplicationId];
+
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *sandboxPath = [paths firstObject];
+
+    sandboxPath = [sandboxPath stringByAppendingPathComponent:LCRootDirName];
+    sandboxPath = [sandboxPath stringByAppendingPathComponent:applicationId];
+
+    [self createDirectoryIfNeeded:sandboxPath];
+
+    return sandboxPath;
+}
+
+// ~/Library/Caches/LeanCloud/{applicationId}/UserDefaults
++ (NSString *)userDefaultsPath {
+    NSString *path = [self cacheSandboxPath];
+
+    [path stringByAppendingPathComponent:@"UserDefaults"];
+
+    return path;
+}
+
 #pragma mark - ~/Library/Caches
 
 // ~/Library/Caches

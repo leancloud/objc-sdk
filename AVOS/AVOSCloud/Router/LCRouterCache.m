@@ -10,7 +10,7 @@
 #import "LCKeyValueStore.h"
 #import "EXTScope.h"
 
-static NSString *LCRouterKey = @"LCRouterKey";
+static NSString *LCAppRouterCacheKey = @"LCAppRouterCacheKey";
 
 static NSString *LCURLKey = @"url";
 static NSString *LCLastModifiedKey = @"last_modified";
@@ -21,6 +21,7 @@ extern NSString *LCTTLKey;
 
 @interface LCRouterCache ()
 
+@property (nonatomic, strong) LCKeyValueStore     *userDefaults;
 /// The table of router info indexed by service region.
 @property (nonatomic, strong) NSMutableDictionary *routerInfoTable;
 @property (nonatomic, strong) NSRecursiveLock     *routerInfoTableLock;
@@ -51,6 +52,7 @@ extern NSString *LCTTLKey;
     self = [super init];
 
     if (self) {
+        _userDefaults = [LCKeyValueStore userDefaultsKeyValueStore];
         _routerInfoTableLock = [[NSRecursiveLock alloc] init];
         [self loadRouterInfoTableFromCache];
     }
@@ -59,7 +61,7 @@ extern NSString *LCTTLKey;
 }
 
 - (void)loadRouterInfoTableFromCache {
-    NSData *data = [[LCKeyValueStore sharedInstance] dataForKey:LCRouterKey];
+    NSData *data = [_userDefaults dataForKey:LCAppRouterCacheKey];
 
     if (data) {
         _routerInfoTable = [[NSKeyedUnarchiver unarchiveObjectWithData:data] mutableCopy];
@@ -121,7 +123,7 @@ extern NSString *LCTTLKey;
     LOCK_ROUTER_INFO_TABLE();
 
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.routerInfoTable];
-    [[LCKeyValueStore sharedInstance] setData:data forKey:LCRouterKey];
+    [_userDefaults setData:data forKey:LCAppRouterCacheKey];
 }
 
 - (NSString *)APIHostForServiceRegion:(AVServiceRegion)serviceRegion {

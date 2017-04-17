@@ -54,6 +54,17 @@ static OSSpinLock dbQueueLock = OS_SPINLOCK_INIT;
     return instance;
 }
 
++ (instancetype)userDefaultsKeyValueStore {
+    static LCKeyValueStore *instance;
+    static dispatch_once_t onceToken;
+
+    dispatch_once(&onceToken, ^{
+        instance = [[self alloc] initWithDatabasePath:[AVPersistenceUtils userDefaultsPath]];
+    });
+
+    return instance;
+}
+
 - (instancetype)initWithDatabasePath:(NSString *)databasePath {
     self = [super init];
 
