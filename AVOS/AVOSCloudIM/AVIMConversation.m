@@ -26,6 +26,7 @@
 #import "LCIMConversationCache.h"
 #import "MessagesProtoOrig.pbobjc.h"
 #import "AVUtils.h"
+#import "AVIMRuntimeHelper.h"
 
 #define LCIM_VALID_LIMIT(limit) ({      \
     int32_t limit_ = (int32_t)(limit);  \
@@ -114,9 +115,12 @@ NSNotificationName LCIMConversationPropertyUpdateNotification = @"LCIMConversati
     [self setValue:propertyValue forKey:propertyName];
 
     AVIMClient *client = self.imClient;
+    SEL delegateMethod = @selector(conversation:didUpdateForKey:);
 
-    if ([client.delegate respondsToSelector:@selector(conversation:didUpdateForKey:)])
-        [client.delegate conversation:self didUpdateForKey:propertyName];
+    if ([client.delegate respondsToSelector:delegateMethod])
+        [AVIMRuntimeHelper callMethodInMainThreadWithTarget:client.delegate
+                                                   selector:delegateMethod
+                                                  arguments:@[self, propertyName]];
 }
 
 - (NSString *)clientId {
