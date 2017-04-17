@@ -746,20 +746,8 @@ static BOOL enableAutomatic = NO;
     return theResult;
 }
 
-+(void)removeCookies {
-    // delete cookies
-    NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-    for (NSHTTPCookie *cookie in [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies]) {
-        if ([[AVPaasClient sharedInstance].baseURL rangeOfString:cookie.domain].location != NSNotFound) {
-            [storage deleteCookie:cookie];
-        }
-    }
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
 + (void)logOut {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:AnonymousIdKey];
-    [AVUser removeCookies];
     [[self class] changeCurrentUser:nil save:YES];
 }
 
