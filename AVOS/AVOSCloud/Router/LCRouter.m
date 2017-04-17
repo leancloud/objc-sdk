@@ -93,7 +93,8 @@ extern AVServiceRegion LCEffectiveServiceRegion;
     return self;
 }
 
-- (void)cachePushRouterHostWithHost:(NSString *)host lastModified:(NSTimeInterval)lastModified TTL:(NSTimeInterval)TTL {
+- (void)cacheRTMRouter:(NSString *)host TTL:(NSTimeInterval)TTL {
+    NSTimeInterval lastModified = [[NSDate date] timeIntervalSince1970];
     [[LCRouterCache sharedInstance] cachePushRouterHostWithServiceRegion:self.serviceRegion host:host lastModified:lastModified TTL:TTL];
 }
 

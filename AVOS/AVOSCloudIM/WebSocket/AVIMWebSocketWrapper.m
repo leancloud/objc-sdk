@@ -501,17 +501,14 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 }
 
 - (void)cachePushRouter:(NSDictionary *)routerInformation TTL:(NSTimeInterval)TTL {
-    NSString *routerUrl = routerInformation[@"groupUrl"];
-    NSString *routerHost = [[NSURL URLWithString:routerUrl] host];
+    NSString *RTMRouter = routerInformation[@"groupUrl"];
 
-    if (!routerHost) {
+    if (!RTMRouter) {
         AVLoggerInfo(AVLoggerDomainIM, @"Push router not found, nothing to cache.");
         return;
     }
 
-    NSTimeInterval lastModified = [[NSDate date] timeIntervalSince1970];
-
-    [[LCRouter sharedInstance] cachePushRouterHostWithHost:routerHost lastModified:lastModified TTL:TTL];
+    [[LCRouter sharedInstance] cacheRTMRouter:RTMRouter TTL:TTL];
 }
 
 - (void)cacheRouterInformation:(NSDictionary *)routerInformation TTL:(NSTimeInterval)TTL {

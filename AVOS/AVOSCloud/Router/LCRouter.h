@@ -37,13 +37,10 @@
 /**
  Cache push router host for service region.
 
- @param host          The push router host to be cached.
- @param lastModified  The last modified timestamp since 1970 in seconds.
- @param TTL           The time-to-live timestamp in seconds.
+ @param host The push router host to be cached.
+ @param TTL  The time-to-live timestamp in seconds.
  */
-- (void)cachePushRouterHostWithHost:(NSString *)host
-                       lastModified:(NSTimeInterval)lastModified
-                                TTL:(NSTimeInterval)TTL;
+- (void)cacheRTMRouter:(NSString *)host TTL:(NSTimeInterval)TTL;
 
 /**
  Update router asynchronously.
