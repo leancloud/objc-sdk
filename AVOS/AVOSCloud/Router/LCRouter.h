@@ -13,9 +13,18 @@
 + (instancetype)sharedInstance;
 
 /**
- Get URL string for RTM router.
+ Get cached RTM server table.
  */
-- (NSString *)RTMRouterURLString;
+- (NSDictionary *)cachedRTMServerTable;
+
+/**
+ Fetch RTM server table asynchronously.
+
+ If fetching did succeed, it will cache the RTM server table for later use.
+
+ @param block The callback of fetching result.
+ */
+- (void)fetchRTMServerTableInBackground:(void(^)(NSDictionary *RTMServerTable, NSError *error))block;
 
 /**
  Get URL string for storage server.
@@ -33,14 +42,6 @@
  @param path The API endpoint.
  */
 - (NSString *)batchPathForPath:(NSString *)path;
-
-/**
- Cache push router host for service region.
-
- @param host The push router host to be cached.
- @param TTL  The time-to-live timestamp in seconds.
- */
-- (void)cacheRTMRouter:(NSString *)host TTL:(NSTimeInterval)TTL;
 
 /**
  Update router asynchronously.
