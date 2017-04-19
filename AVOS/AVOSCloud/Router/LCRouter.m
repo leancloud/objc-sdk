@@ -8,7 +8,6 @@
 
 #import "LCRouter.h"
 #import "LCRouter_internal.h"
-#import "LCRouterCache.h"
 #import "AVPaasClient.h"
 
 static NSString *const APIVersion = @"1.1";
@@ -93,11 +92,6 @@ extern AVServiceRegion LCEffectiveServiceRegion;
     return self;
 }
 
-- (void)cacheRTMRouter:(NSString *)host TTL:(NSTimeInterval)TTL {
-    NSTimeInterval lastModified = [[NSDate date] timeIntervalSince1970];
-    [[LCRouterCache sharedInstance] cachePushRouterHostWithServiceRegion:self.serviceRegion host:host lastModified:lastModified TTL:TTL];
-}
-
 - (void)updateInBackground {
     [[self class] doInitialize];
     NSString *router = routerURLTable[@(_serviceRegion)];
@@ -113,44 +107,7 @@ extern AVServiceRegion LCEffectiveServiceRegion;
 }
 
 - (void)handleResult:(NSDictionary *)result {
-    NSString *APIHost = result[LCAPIHostEntryKey];
-    NSString *pushRouterHost = result[LCPushRouterHostEntryKey];
-
-    NSTimeInterval lastModified = [[NSDate date] timeIntervalSince1970];
-    NSTimeInterval TTL = [result[LCTTLKey] doubleValue];
-
-    [[LCRouterCache sharedInstance] cacheAPIHostWithServiceRegion:self.serviceRegion host:APIHost lastModified:lastModified TTL:TTL];
-    [[LCRouterCache sharedInstance] cachePushRouterHostWithServiceRegion:self.serviceRegion host:pushRouterHost lastModified:lastModified TTL:TTL];
-
-    self.APIHost = APIHost;
-    self.pushRouterHost = pushRouterHost;
-}
-
-- (NSString *)APIHost {
-    /* Pardon me for the quick and dirty code.
-       All QCloud application ends with suffix "-9Nh9j0Va"
-     */
-    if ([[AVOSCloud getApplicationId] hasSuffix:@"-9Nh9j0Va"]) {
-        return @"e1-api.leancloud.cn";
-    }
-
-    NSString *cachedAPIHost = [[LCRouterCache sharedInstance] APIHostForServiceRegion:self.serviceRegion];
-
-    return (
-        cachedAPIHost ?:
-        defaultAPIHostTable[@(self.serviceRegion)] ?:
-        fallbackAPIHost
-    );
-}
-
-- (NSString *)pushRouterHost {
-    NSString *cachedPushRouterHost = [[LCRouterCache sharedInstance] pushRouterHostForServiceRegion:self.serviceRegion];
-
-    return (
-        cachedPushRouterHost ?:
-        defaultPushRouterHostTable[@(self.serviceRegion)] ?:
-        fallbackPushRouterHost
-    );
+    /* TODO */
 }
 
 @end
