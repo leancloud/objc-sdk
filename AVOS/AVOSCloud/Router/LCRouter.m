@@ -288,7 +288,8 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
 }
 
 - (NSString *)batchPathForPath:(NSString *)path {
-    return [NSString stringWithFormat:@"/%@/%@", APIVersion, path];
+    NSString *result = [self prefixVersionForPath:path];
+    return result;
 }
 
 @end
