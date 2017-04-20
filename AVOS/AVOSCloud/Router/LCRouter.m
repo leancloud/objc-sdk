@@ -239,7 +239,7 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
         server = [self fallbackRTMRouterURLString];
     }
 
-    NSString *URLString = [self absoluteURLStringForServer:server path:nil];
+    NSString *URLString = [self absoluteURLStringForServer:server path:@"/v1/route"];
 
     return URLString;
 }
