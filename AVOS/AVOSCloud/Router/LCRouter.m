@@ -164,6 +164,7 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
 
     if (!serverTable || ttl <= 0 || (now < lastModified || now >= (lastModified + ttl))) {
         [self cleanRouterCacheForKey:key];
+        [self updateInBackground];
         return nil;
     }
 
@@ -278,6 +279,11 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
 
 - (NSDictionary *)cachedRTMServerTable {
     NSDictionary *RTMServerTable = [self cachedServerTableForKey:LCRTMRouterCacheKey];
+
+    if (!RTMServerTable) {
+        [self fetchRTMServerTableInBackground:nil];
+    }
+
     return RTMServerTable;
 }
 
