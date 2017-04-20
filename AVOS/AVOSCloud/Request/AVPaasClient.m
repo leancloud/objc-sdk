@@ -276,8 +276,13 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
                                  headers:(NSDictionary *)headers
                               parameters:(NSDictionary *)parameters
 {
-    NSString *URLString = [[LCRouter sharedInstance] URLStringForPath:path];
-    NSURL *URL = [NSURL URLWithString:URLString];
+    NSURL *URL = [NSURL URLWithString:path];
+
+    if (!URL.scheme.length) {
+        NSString *URLString = [[LCRouter sharedInstance] URLStringForPath:path];
+        URL = [NSURL URLWithString:URLString];
+    }
+
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
 
     [request setHTTPMethod:method];
