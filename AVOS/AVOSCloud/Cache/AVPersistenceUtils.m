@@ -93,7 +93,7 @@
 + (NSString *)userDefaultsPath {
     NSString *path = [self cacheSandboxPath];
 
-    [path stringByAppendingPathComponent:@"UserDefaults"];
+    path = [path stringByAppendingPathComponent:@"UserDefaults"];
 
     return path;
 }
