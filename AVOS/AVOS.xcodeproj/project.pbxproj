@@ -520,7 +520,6 @@
 		838AF12A1AFE58F600B8965E /* LCIMMessageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 838AF1221AFE58F600B8965E /* LCIMMessageCache.h */; };
 		838AF12B1AFE58F600B8965E /* LCIMMessageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 838AF1231AFE58F600B8965E /* LCIMMessageCache.m */; };
 		838B32EE1CE1953800CAEBF8 /* LCRouterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 838B32ED1CE1953800CAEBF8 /* LCRouterTest.m */; };
-		838B32F01CE1B0C500CAEBF8 /* LCRouter_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 838B32EF1CE1B0C500CAEBF8 /* LCRouter_internal.h */; };
 		838DD7961B3D309F00C95897 /* LCNetworkStatistics.h in Headers */ = {isa = PBXBuildFile; fileRef = 838DD7941B3D309F00C95897 /* LCNetworkStatistics.h */; };
 		838DD7971B3D309F00C95897 /* LCNetworkStatistics.m in Sources */ = {isa = PBXBuildFile; fileRef = 838DD7951B3D309F00C95897 /* LCNetworkStatistics.m */; };
 		838DD7A01B3D3FB600C95897 /* LCKeyValueStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 838DD79E1B3D3FB600C95897 /* LCKeyValueStore.h */; };
@@ -1216,11 +1215,8 @@
 		9A404DD41CE5A9B700DEB3DC /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F9A2C51CE014430002E21B /* LCRouter.h */; };
 		9A404DD51CE5A9BA00DEB3DC /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F9A2C51CE014430002E21B /* LCRouter.h */; };
 		9A404DD61CE5A9BB00DEB3DC /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F9A2C51CE014430002E21B /* LCRouter.h */; };
-		9A404DD71CE5A9C200DEB3DC /* LCRouter_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 838B32EF1CE1B0C500CAEBF8 /* LCRouter_internal.h */; };
 		9A404DD81CE5A9C200DEB3DC /* LCRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F9A2C61CE014430002E21B /* LCRouter.m */; };
-		9A404DDB1CE5A9C300DEB3DC /* LCRouter_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 838B32EF1CE1B0C500CAEBF8 /* LCRouter_internal.h */; };
 		9A404DDC1CE5A9C300DEB3DC /* LCRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F9A2C61CE014430002E21B /* LCRouter.m */; };
-		9A404DDF1CE5A9C400DEB3DC /* LCRouter_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 838B32EF1CE1B0C500CAEBF8 /* LCRouter_internal.h */; };
 		9A404DE01CE5A9C400DEB3DC /* LCRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F9A2C61CE014430002E21B /* LCRouter.m */; };
 		9A62AE591DF8145400EE0973 /* TestTypedMessage.json in Resources */ = {isa = PBXBuildFile; fileRef = 9A62AE551DF813C100EE0973 /* TestTypedMessage.json */; };
 		9A62AE5B1DF8145900EE0973 /* TestTypedMessage.json in Resources */ = {isa = PBXBuildFile; fileRef = 9A62AE551DF813C100EE0973 /* TestTypedMessage.json */; };
@@ -1439,7 +1435,6 @@
 		838AF1221AFE58F600B8965E /* LCIMMessageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageCache.h; sourceTree = "<group>"; };
 		838AF1231AFE58F600B8965E /* LCIMMessageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMMessageCache.m; sourceTree = "<group>"; };
 		838B32ED1CE1953800CAEBF8 /* LCRouterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCRouterTest.m; sourceTree = "<group>"; };
-		838B32EF1CE1B0C500CAEBF8 /* LCRouter_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCRouter_internal.h; sourceTree = "<group>"; };
 		838DD7941B3D309F00C95897 /* LCNetworkStatistics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCNetworkStatistics.h; sourceTree = "<group>"; };
 		838DD7951B3D309F00C95897 /* LCNetworkStatistics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCNetworkStatistics.m; sourceTree = "<group>"; };
 		838DD79E1B3D3FB600C95897 /* LCKeyValueStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCKeyValueStore.h; sourceTree = "<group>"; };
@@ -2294,7 +2289,6 @@
 			isa = PBXGroup;
 			children = (
 				83F9A2C51CE014430002E21B /* LCRouter.h */,
-				838B32EF1CE1B0C500CAEBF8 /* LCRouter_internal.h */,
 				83F9A2C61CE014430002E21B /* LCRouter.m */,
 			);
 			path = Router;
@@ -3215,7 +3209,6 @@
 				70CA7FDB1BDE42F5000A3B21 /* AVACL.h in Headers */,
 				70CA7FDD1BDE42F5000A3B21 /* AVRole.h in Headers */,
 				70CA7FDF1BDE42F5000A3B21 /* AVAnalytics.h in Headers */,
-				9A404DD71CE5A9C200DEB3DC /* LCRouter_internal.h in Headers */,
 				70CA7FEA1BDE42F6000A3B21 /* AVOSCloud.h in Headers */,
 				70CA7FEE1BDE42F6000A3B21 /* AVCloud.h in Headers */,
 				70CA7FF01BDE42F6000A3B21 /* AVFile.h in Headers */,
@@ -3407,7 +3400,6 @@
 				8320F9511C1918C60024B45E /* AVCloudQueryResult_Internal.h in Headers */,
 				8320F9541C1918C60024B45E /* AVPush_Internal.h in Headers */,
 				83FCB9AD1CEDC57C007D8712 /* LCNetworking.h in Headers */,
-				9A404DDF1CE5A9C400DEB3DC /* LCRouter_internal.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3496,7 +3488,6 @@
 				83BE730F1D810651008ED3CF /* metamacros.h in Headers */,
 				83D8CF1E1C17DAF50094279D /* AVAckCommand.h in Headers */,
 				83D8CF201C17DAF50094279D /* SDMacros.h in Headers */,
-				9A404DDB1CE5A9C300DEB3DC /* LCRouter_internal.h in Headers */,
 				830EB9C31C3E4BFA00BA917F /* LCObserver.h in Headers */,
 				83D8CF211C17DAF50094279D /* AVFriendQuery.h in Headers */,
 				83D8CF221C17DAF50094279D /* AVObject_Internal.h in Headers */,
@@ -3665,7 +3656,6 @@
 				836705AB1BA1358D0050E968 /* SDMacros.h in Headers */,
 				83BE730D1D810651008ED3CF /* metamacros.h in Headers */,
 				83FCB9C21CEDC57C007D8712 /* LCURLRequestSerialization.h in Headers */,
-				838B32F01CE1B0C500CAEBF8 /* LCRouter_internal.h in Headers */,
 				830EB9C01C3E4BFA00BA917F /* LCObserver.h in Headers */,
 				8C841B2A1A5A7A0000C5C6C4 /* AVFriendQuery.h in Headers */,
 				8C841B1A1A5A7A0000C5C6C4 /* AVObject_Internal.h in Headers */,

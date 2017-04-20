@@ -7,107 +7,282 @@
 //
 
 #import "LCRouter.h"
-#import "LCRouter_internal.h"
+#import "AVOSCloud.h"
 #import "AVPaasClient.h"
+#import "LCKeyValueStore.h"
 
-static NSString *const APIVersion = @"1.1";
+#define APIVersion @"1.1"
 
-/// Table of router indexed by service region.
-static NSDictionary *routerURLTable = nil;
+static NSString *const routerURLString = @"https://app-router.leancloud.cn/2/route";
 
-/// Table of default API host indexed by service region.
-static NSDictionary *defaultAPIHostTable = nil;
+static NSString *const moduleAPIServer       = @"api_server";
+static NSString *const moduleEngineServer    = @"engine_server";
+static NSString *const modulePushServer      = @"push_server";
+static NSString *const moduleRTMRouterServer = @"rtm_router_server";
+static NSString *const moduleStatsServer     = @"stats_server";
 
-/// Table of default push router host indexed by service region.
-static NSDictionary *defaultPushRouterHostTable = nil;
+static NSString *const ttlKey                = @"ttl";
+static NSString *const lastModifiedKey       = @"last_modified";
+static NSString *const serverTableKey        = @"server_table";
 
-/// Fallback API host for service region if host not found.
-static NSString *const fallbackAPIHost = @"api.leancloud.cn";
-
-/// Fallback push router path for service region if host not found.
-static NSString *const fallbackPushRouterHost = @"router-g0-push.leancloud.cn";
-
-/// Keys of router response.
-NSString *LCAPIHostEntryKey        = @"api_server";
-NSString *LCPushRouterHostEntryKey = @"push_router_server";
-NSString *LCTTLKey                 = @"ttl";
+static NSString *const LCAppRouterCacheKey   = @"LCAppRouterCacheKey";
+static NSString *const LCRTMRouterCacheKey   = @"LCRTMRouterCacheKey";
 
 extern AVServiceRegion LCEffectiveServiceRegion;
 
+typedef NS_ENUM(NSInteger, LCServerLocation) {
+    LCServerLocationUnknown,
+    LCServerLocationUCloud,
+    LCServerLocationQCloud,
+    LCServerLocationUS
+};
+
 @interface LCRouter ()
 
-@property (nonatomic, copy) NSString *APIHost;
-@property (nonatomic, copy) NSString *pushRouterHost;
+@property (nonatomic, assign) LCServerLocation serverLocation;
+
+@property (nonatomic, strong) NSDictionary *candidateAPIURLStringTable;
+@property (nonatomic, strong) NSDictionary *candidateRTMRouterURLStringTable;
+
+@property (nonatomic,   copy) NSString *lifesavingAPIURLString;
+@property (nonatomic,   copy) NSString *lifesavingRTMRouterURLString;
+
+@property (nonatomic, strong) LCKeyValueStore *userDefaults;
 
 @end
 
 @implementation LCRouter
 
-+ (void)load {
-    static dispatch_once_t onceToken;
-
-    dispatch_once(&onceToken, ^{
-        [self doInitialize];
-    });
-}
-
-+ (void)doInitialize {
-    defaultAPIHostTable = @{
-        @(AVServiceRegionCN): @"api.leancloud.cn",
-        @(AVServiceRegionUS): @"us-api.leancloud.cn",
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        @(AVServiceRegionUrulu): @"cn-stg1.leancloud.cn"
-#pragma clang diagnostic pop
-    };
-
-    defaultPushRouterHostTable = @{
-        @(AVServiceRegionCN): @"router-g0-push.leancloud.cn",
-        @(AVServiceRegionUS): @"router-a0-push.leancloud.cn"
-    };
-
-    routerURLTable = @{
-        @(AVServiceRegionCN): @"https://app-router.leancloud.cn/1/route"
-    };
-}
-
 + (instancetype)sharedInstance {
+    static LCRouter *instance;
     static dispatch_once_t onceToken;
-    static LCRouter *sharedInstance;
 
     dispatch_once(&onceToken, ^{
-        sharedInstance = [[LCRouter alloc] init];
+        instance = [[LCRouter alloc] init];
     });
 
-    return sharedInstance;
+    return instance;
 }
 
 - (instancetype)init {
     self = [super init];
 
     if (self) {
-        _serviceRegion = LCEffectiveServiceRegion;
+        [self doInitialize];
     }
 
     return self;
 }
 
-- (void)updateInBackground {
-    [[self class] doInitialize];
-    NSString *router = routerURLTable[@(_serviceRegion)];
+- (void)doInitialize {
+    _serverLocation = [self currentServerLocation];
 
-    if (router) {
-        NSDictionary *parameters = @{@"appId": [AVOSCloud getApplicationId]};
+    _candidateAPIURLStringTable = @{
+        @(LCServerLocationUCloud) : @"api.leancloud.cn",
+        @(LCServerLocationQCloud) : @"e1-api.leancloud.cn",
+        @(LCServerLocationUS)     : @"us-api.leancloud.cn",
+    };
 
-        [[AVPaasClient sharedInstance] getObject:router withParameters:parameters block:^(NSDictionary *result, NSError *error) {
-            if (!error && result)
-                [self handleResult:result];
-        }];
-    }
+    _candidateRTMRouterURLStringTable = @{
+        @(LCServerLocationUCloud) : @"router-g0-push.leancloud.cn",
+        @(LCServerLocationQCloud) : @"router-q0-push.leancloud.cn",
+        @(LCServerLocationUS)     : @"router-a0-push.leancloud.cn"
+    };
+
+    _lifesavingAPIURLString       = @"api.leancloud.cn";
+    _lifesavingRTMRouterURLString = @"router-g0-push.leancloud.cn";
+
+    _userDefaults = [LCKeyValueStore userDefaultsKeyValueStore];
 }
 
-- (void)handleResult:(NSDictionary *)result {
-    /* TODO */
+- (LCServerLocation)currentServerLocation {
+    NSString *appId = [AVOSCloud getApplicationId];
+
+    /* Application is an UCloud if the application id has no suffix. */
+    if ([appId rangeOfString:@"-"].location == NSNotFound)
+        return LCServerLocationUCloud;
+
+    if ([appId hasSuffix:@"-gzGzoHsz"])
+        return LCServerLocationUCloud;
+    else if ([appId hasSuffix:@"-9Nh9j0Va"])
+        return LCServerLocationQCloud;
+    else if ([appId hasSuffix:@"-MdYXbMMI"])
+        return LCServerLocationUS;
+    else
+        return LCServerLocationUnknown;
+}
+
+- (NSString *)moduleForPath:(NSString *)path {
+    if ([path hasPrefix:@"call"] || [path hasPrefix:@"functions"])
+        return moduleEngineServer;
+    else if ([path hasPrefix:@"push"] || [path hasPrefix:@"installations"])
+        return modulePushServer;
+    else if ([path hasPrefix:@"stats"] || [path hasPrefix:@"statistics"] || [path hasPrefix:@"always_collect"])
+        return moduleStatsServer;
+    else
+        return moduleAPIServer;
+}
+
+- (NSString *)fallbackAPIURLString {
+    return _candidateAPIURLStringTable[@(_serverLocation)] ?: _lifesavingAPIURLString;
+}
+
+- (NSString *)fallbackRTMRouterURLString {
+    return _candidateRTMRouterURLStringTable[@(_serverLocation)] ?: _lifesavingRTMRouterURLString;
+}
+
+- (void)cacheServerTable:(NSDictionary *)APIServerTable forKey:(NSString *)key {
+    NSDictionary *cacheObject = @{
+        serverTableKey: APIServerTable,
+
+        /* Insert last modified timestamp into router table.
+         It will be used to check the expiration of itself. */
+        lastModifiedKey: @([[NSDate date] timeIntervalSince1970])
+    };
+
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:cacheObject];
+
+    [self.userDefaults setData:data forKey:key];
+}
+
+- (NSDictionary *)cachedServerTableForKey:(NSString *)key {
+    NSData *data = [self.userDefaults dataForKey:key];
+
+    if (!data)
+        return nil;
+
+    NSDictionary *cacheObject = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+
+    if (!cacheObject)
+        return nil;
+
+    NSDictionary *serverTable = cacheObject[serverTableKey];
+
+    NSTimeInterval ttl          = [serverTable[ttlKey] doubleValue];
+    NSTimeInterval lastModified = [cacheObject[lastModifiedKey] doubleValue];
+    NSTimeInterval now          = [[NSDate date] timeIntervalSince1970];
+
+    if (!serverTable || ttl <= 0 || (now < lastModified || now >= (lastModified + ttl))) {
+        [self cleanRouterCacheForKey:key];
+        return nil;
+    }
+
+    return serverTable;
+}
+
+- (void)cleanRouterCacheForKey:(NSString *)key {
+    [self.userDefaults deleteKey:key];
+}
+
+- (void)updateInBackground {
+    /* App router 2 is unavailable in US node. */
+    if (LCEffectiveServiceRegion == AVServiceRegionUS)
+        return;
+
+    NSDictionary *parameters = @{@"appId": [AVOSCloud getApplicationId]};
+
+    [[AVPaasClient sharedInstance] getObject:routerURLString withParameters:parameters block:^(NSDictionary *result, NSError *error) {
+        if (!error && result)
+            [self cacheServerTable:result forKey:LCAppRouterCacheKey];
+    }];
+}
+
+- (NSString *)prefixVersionForPath:(NSString *)path {
+    if ([path hasPrefix:APIVersion] || [path hasPrefix:@"/" APIVersion])
+        return path;
+
+    NSString *result = [[@"/" stringByAppendingPathComponent:APIVersion] stringByAppendingPathComponent:path];
+
+    return result;
+}
+
+- (NSString *)absoluteURLStringForServer:(NSString *)server path:(NSString *)path {
+    NSURLComponents *URLComponents = [[NSURLComponents alloc] init];
+
+    URLComponents.scheme = @"https";
+    URLComponents.host   = server;
+
+    if (path.length)
+        URLComponents.path = path;
+
+    NSURL *URL = [URLComponents URL];
+    NSString *URLString = [URL absoluteString];
+
+    return URLString;
+}
+
+- (NSString *)URLStringForPath:(NSString *)path {
+    NSString *server = nil;
+    NSDictionary *APIServerTable = [self cachedServerTableForKey:LCAppRouterCacheKey];
+
+    if (APIServerTable) {
+        NSString *module = [self moduleForPath:path];
+        server = APIServerTable[module] ?: [self fallbackAPIURLString];
+    } else {
+        server = [self fallbackAPIURLString];
+    }
+
+    NSString *versionPrefixedPath = [self prefixVersionForPath:path];
+    NSString *URLString = [self absoluteURLStringForServer:server path:versionPrefixedPath];
+
+    return URLString;
+}
+
+- (NSString *)RTMRouterURLString {
+    NSString *server = nil;
+    NSDictionary *APIServerTable = [self cachedServerTableForKey:LCAppRouterCacheKey];
+
+    if (APIServerTable) {
+        server = APIServerTable[moduleRTMRouterServer] ?: [self fallbackRTMRouterURLString];
+    } else {
+        server = [self fallbackRTMRouterURLString];
+    }
+
+    NSString *URLString = [self absoluteURLStringForServer:server path:nil];
+
+    return URLString;
+}
+
+- (NSDictionary *)RTMRouterParameters {
+    NSString *appId = [AVOSCloud getApplicationId];
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+
+    parameters[@"appId"] = appId;
+    parameters[@"secure"] = @"1";
+
+    /*
+     * iOS SDK *must* use IP address to access IM server to prevent DNS hijacking.
+     * And IM server *must* issue the pinned certificate.
+     */
+    parameters[@"ip"] = @"true";
+
+    /* Back door for user to connect to puppet environment. */
+    if (getenv("LC_IM_PUPPET_ENABLED") && getenv("SIMULATOR_UDID")) {
+        parameters[@"debug"] = @"true";
+    }
+
+    return parameters;
+}
+
+- (void)fetchRTMServerTableInBackground:(void (^)(NSDictionary *RTMServerTable, NSError *error))block {
+    NSString *URLString = [self RTMRouterURLString];
+    NSDictionary *parameters = [self RTMRouterParameters];
+
+    [[AVPaasClient sharedInstance] getObject:URLString withParameters:parameters block:^(NSDictionary *result, NSError *error) {
+        if (!error && result)
+            [self cacheServerTable:result forKey:LCRTMRouterCacheKey];
+        if (block)
+            block(result, error);
+    }];
+}
+
+- (NSDictionary *)cachedRTMServerTable {
+    NSDictionary *RTMServerTable = [self cachedServerTableForKey:LCRTMRouterCacheKey];
+    return RTMServerTable;
+}
+
+- (NSString *)batchPathForPath:(NSString *)path {
+    return [NSString stringWithFormat:@"/%@/%@", APIVersion, path];
 }
 
 @end
