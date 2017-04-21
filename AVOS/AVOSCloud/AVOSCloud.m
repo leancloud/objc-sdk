@@ -347,10 +347,6 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
     }];
 }
 
-+(void)verifySmsCode:(NSString *)code callback:(AVBooleanResultBlock)callback {
-    @throw [NSException exceptionWithName:@"Interface not supported" reason:@"This interface is altered by +[verifySmsCode:mobilePhoneNumber:callback:]" userInfo:nil];
-}
-
 +(void)verifySmsCode:(NSString *)code mobilePhoneNumber:(NSString *)phoneNumber callback:(AVBooleanResultBlock)callback {
     NSParameterAssert(code);
     NSParameterAssert(phoneNumber);
