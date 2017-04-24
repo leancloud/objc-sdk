@@ -55,13 +55,9 @@ typedef enum : NSUInteger {
     AVIMURLQueryOptionSortKeys = 16
 } AVIMURLQueryOptions;
 
-NSString *const AVIMProtocolJSON1 = @"lc.json.1";
-NSString *const AVIMProtocolMessagePack1 = @"lc.msgpack.1";
 NSString *const AVIMProtocolPROTOBUF1 = @"lc.protobuf.1";
-
-NSString *const AVIMProtocolJSON2 = @"lc.json.2";
-NSString *const AVIMProtocolMessagePack2 = @"lc.msgpack.2";
 NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
+NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
 
 @interface AVIMCommandCarrier : NSObject
 @property(nonatomic, strong) AVIMGenericCommand *command;
@@ -598,7 +594,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
     NSDictionary *userOptions = [AVIMClient userOptions];
 
     if ([userOptions[AVIMUserOptionUseUnread] boolValue]) {
-        [protocols addObject:AVIMProtocolPROTOBUF2];
+        [protocols addObject:AVIMProtocolPROTOBUF3];
     } else {
         [protocols addObject:AVIMProtocolPROTOBUF1];
     }

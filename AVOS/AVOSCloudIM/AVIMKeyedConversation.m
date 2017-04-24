@@ -26,6 +26,8 @@
         self.createAt       = [aDecoder decodeObjectForKey:LC_SEL_STR(createAt)];
         self.updateAt       = [aDecoder decodeObjectForKey:LC_SEL_STR(updateAt)];
         self.lastMessageAt  = [aDecoder decodeObjectForKey:LC_SEL_STR(lastMessageAt)];
+        self.lastDeliveredAt = [aDecoder decodeObjectForKey:LC_SEL_STR(lastDeliveredAt)];
+        self.lastReadAt     = [aDecoder decodeObjectForKey:LC_SEL_STR(lastReadAt)];
         self.lastMessage    = [aDecoder decodeObjectForKey:LC_SEL_STR(lastMessage)];
         self.name           = [aDecoder decodeObjectForKey:LC_SEL_STR(name)];
         self.members        = [aDecoder decodeObjectForKey:LC_SEL_STR(members)];
@@ -44,6 +46,8 @@
     [aCoder encodeObject:self.createAt       forKey:LC_SEL_STR(createAt)];
     [aCoder encodeObject:self.updateAt       forKey:LC_SEL_STR(updateAt)];
     [aCoder encodeObject:self.lastMessageAt  forKey:LC_SEL_STR(lastMessageAt)];
+    [aCoder encodeObject:self.lastDeliveredAt forKey:LC_SEL_STR(lastDeliveredAt)];
+    [aCoder encodeObject:self.lastReadAt     forKey:LC_SEL_STR(lastReadAt)];
     [aCoder encodeObject:self.lastMessage    forKey:LC_SEL_STR(lastMessage)];
     [aCoder encodeObject:self.name           forKey:LC_SEL_STR(name)];
     [aCoder encodeObject:self.members        forKey:LC_SEL_STR(members)];

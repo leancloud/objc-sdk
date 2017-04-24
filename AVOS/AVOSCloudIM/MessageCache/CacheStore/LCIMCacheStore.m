@@ -8,6 +8,9 @@
 
 #import "LCIMCacheStore.h"
 #import "AVPersistenceUtils.h"
+#import "LCIMMessageCacheStoreSQL.h"
+#import "LCIMConversationCacheStoreSQL.h"
+#import "LCDatabaseMigrator.h"
 
 @interface LCIMCacheStore ()
 
@@ -44,6 +47,7 @@
 
             if (_databaseQueue) {
                 [self databaseQueueDidLoad];
+                [self migrateDatabaseIfNeeded:path];
             }
         }
     }
@@ -52,7 +56,32 @@
 }
 
 - (void)databaseQueueDidLoad {
-    // Stub
+    LCIM_OPEN_DATABASE(db, ({
+        db.logsErrors = LCIM_SHOULD_LOG_ERRORS;
+
+        [db executeUpdate:LCIM_SQL_CREATE_MESSAGE_TABLE];
+        [db executeUpdate:LCIM_SQL_CREATE_MESSAGE_UNIQUE_INDEX];
+
+        [db executeUpdate:LCIM_SQL_CREATE_CONVERSATION_TABLE];
+    }));
+}
+
+- (void)migrateDatabaseIfNeeded:(NSString *)databasePath {
+    LCDatabaseMigrator *migrator = [[LCDatabaseMigrator alloc] initWithDatabasePath:databasePath];
+
+    [migrator executeMigrations:@[
+        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
+            [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN muted INTEGER"];
+        }],
+
+        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
+            [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN last_message BLOB"];
+        }],
+
+        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
+            [db executeUpdate:@"ALTER TABLE message ADD COLUMN read_timestamp REAL"];
+        }]
+    ]];
 }
 
 - (void)dealloc {

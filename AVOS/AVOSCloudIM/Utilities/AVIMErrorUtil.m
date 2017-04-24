@@ -11,23 +11,6 @@
 
 NSString *AVOSCloudIMErrorDomain = @"AVOSCloudIMErrorDomain";
 
-NSInteger const kAVIMErrorInvalidCommand = 1;
-NSInteger const kAVIMErrorInvalidArguments = 2;
-NSInteger const kAVIMErrorConversationNotFound = 3;
-NSInteger const kAVIMErrorTimeout = 4;
-NSInteger const kAVIMErrorConnectionLost = 5;
-NSInteger const kAVIMErrorInvalidData = 6;
-NSInteger const kAVIMErrorMessageTooLong = 7;
-NSInteger const kAVIMErrorClientNotOpen = 8;
-
-//NSInteger const kAVErrorObjectNotFound = 101;
-//NSInteger const kAVErrorInvalidQuery = 102;
-//NSInteger const kAVErrorInvalidClassName = 103;
-//NSInteger const kAVErrorMissingObjectId = 104;
-//NSInteger const kAVErrorInvalidKeyName = 105;
-//NSInteger const kAVErrorInvalidPointer = 106;
-//NSInteger const kAVErrorInvalidJSON = 107;
-
 @implementation AVIMErrorUtil
 + (NSError *)errorWithCode:(NSInteger)code reason:(NSString *)reason {
     NSMutableDictionary *dict = nil;

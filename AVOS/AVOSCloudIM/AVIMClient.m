@@ -146,7 +146,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 - (void)doInitialization {
     _status = AVIMClientStatusNone;
     _conversations = [[NSMutableDictionary alloc] init];
-    _messages = [[NSMutableDictionary alloc] init];
+    _stagedMessages = [[NSMutableDictionary alloc] init];
     _messageQueryCacheEnabled = YES;
 
     _distinctMessageIdArray = [NSMutableArray arrayWithCapacity:kDistinctMessageIdArraySize + 1];
@@ -177,7 +177,7 @@ static BOOL AVIMClientHasInstantiated = NO;
     _clientId = [clientId copy];
     
     [_conversations removeAllObjects];
-    [_messages removeAllObjects];
+    [_stagedMessages removeAllObjects];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         LCIMConversationCache *cache = [self conversationCache];
@@ -227,19 +227,27 @@ static BOOL AVIMClientHasInstantiated = NO;
     return conversation;
 }
 
-- (void)addMessage:(AVIMMessage *)message {
+- (void)stageMessage:(AVIMMessage *)message {
     NSString *messageId = message.messageId;
-    if (messageId) {
-        [_messages setObject:message forKey:messageId];
-    }
+
+    if (!messageId)
+        return;
+
+    [_stagedMessages setObject:message forKey:messageId];
 }
 
-- (void)removeMessageById:(NSString *)messageId {
-    [_messages removeObjectForKey:messageId];
+- (AVIMMessage *)stagedMessageForId:(NSString *)messageId {
+    if (!messageId)
+        return nil;
+
+    return [_stagedMessages objectForKey:messageId];
 }
 
-- (AVIMMessage *)messageById:(NSString *)messageId {
-    return [_messages objectForKey:messageId];
+- (void)unstageMessageForId:(NSString *)messageId {
+    if (!messageId)
+        return;
+
+    [_stagedMessages removeObjectForKey:messageId];
 }
 
 - (AVIMConversation *)conversationWithId:(NSString *)conversationId {
@@ -850,28 +858,79 @@ static BOOL AVIMClientHasInstantiated = NO;
     }
 }
 
-- (void)processUnreadCommand:(AVIMGenericCommand *)genericCommand {
-    AVIMUnreadCommand *unreadCommand = genericCommand.unreadMessage;
-    /* Filter out command matches current client */
-    if (![genericCommand.peerId isEqualToString:self.clientId]) return;
-    
-    for (AVIMUnreadTuple *unreadTuple in unreadCommand.convsArray) {
-        NSString *conversationId = unreadTuple.cid;
-        AVIMConversation *conversation = [self conversationWithId:conversationId];
-        
-        [self passUnread:unreadTuple.unread toConversation:conversation];
-    }
+- (AVIMMessage *)messageWithUnreadTuple:(AVIMUnreadTuple *)unreadTuple {
+    AVIMMessage *message = nil;
+
+    NSString *messageId = unreadTuple.mid;
+    NSString *messageBody = unreadTuple.data_p;
+    NSString *conversationId = unreadTuple.cid;
+
+    if (!messageId || !messageBody || !conversationId)
+        return nil;
+
+    NSString *fromPeerId = unreadTuple.from;
+    int64_t timestemp = unreadTuple.timestamp;
+
+    AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:messageBody];
+
+    if ([messageObject isValidTypedMessageObject])
+        message = [AVIMTypedMessage messageWithMessageObject:messageObject];
+    else
+        message = [[AVIMMessage alloc] init];
+
+    message.content = messageBody;
+    message.sendTimestamp = timestemp;
+    message.conversationId = conversationId;
+    message.clientId = fromPeerId;
+    message.messageId = messageId;
+    message.status = AVIMMessageStatusDelivered;
+    message.localClientId = self.clientId;
+
+    return message;
 }
 
-- (void)passUnread:(NSInteger)unread toConversation:(AVIMConversation *)conversation {
-    if (!conversation) return;
-    if (![self.delegate respondsToSelector:@selector(conversation:didReceiveUnread:)]) return;
+- (void)processUnreadCommand:(AVIMGenericCommand *)genericCommand {
+    AVIMUnreadCommand *unreadCommand = genericCommand.unreadMessage;
     
-    __weak typeof(self) ws = self;
+    for (AVIMUnreadTuple *unreadTuple in unreadCommand.convsArray)
+        [self processUnreadTuple:unreadTuple];
+}
+
+- (void)processUnreadTuple:(AVIMUnreadTuple *)unreadTuple {
+    NSString *conversationId = unreadTuple.cid;
+    AVIMConversation *conversation = [self conversationWithId:conversationId];
+
+    if (!conversation) return;
     
     [self fetchConversationIfNeeded:conversation withBlock:^(AVIMConversation *conversation) {
-        [ws.delegate conversation:conversation didReceiveUnread:unread];
+        AVIMMessage *lastMessage = [self messageWithUnreadTuple:unreadTuple];
+        [self updateConversation:conversation unreadMessagesCount:unreadTuple.unread lastMessage:lastMessage];
     }];
+}
+
+- (void)updateConversation:(AVIMConversation *)conversation unreadMessagesCount:(NSUInteger)unreadMessagesCount lastMessage:(AVIMMessage *)lastMessage {
+    LCIM_NOTIFY_PROPERTY_UPDATE(
+        self.clientId,
+        conversation.conversationId,
+        NSStringFromSelector(@selector(unreadMessagesCount)),
+        @(unreadMessagesCount));
+
+    AVIMMessage *originLastMessage = conversation.lastMessage;
+
+    if (lastMessage && (!originLastMessage || lastMessage.sendTimestamp > originLastMessage.sendTimestamp))
+        LCIM_NOTIFY_PROPERTY_UPDATE(
+            self.clientId,
+            conversation.conversationId,
+            NSStringFromSelector(@selector(lastMessage)),
+            lastMessage);
+
+    /* For compatibility, we reserve this callback. It should be removed in future. */
+    if ([self.delegate respondsToSelector:@selector(conversation:didReceiveUnread:)])
+        [self.delegate conversation:conversation didReceiveUnread:unreadMessagesCount];
+}
+
+- (void)resetUnreadMessagesCountForConversation:(AVIMConversation *)conversation {
+    [self updateConversation:conversation unreadMessagesCount:0 lastMessage:nil];
 }
 
 - (void)removeCachedConversationForId:(NSString *)conversationId {
@@ -938,18 +997,109 @@ static BOOL AVIMClientHasInstantiated = NO;
     }];
 }
 
+- (LCIMMessageCacheStore *)messageCacheStoreForConversationId:(NSString *)conversationId {
+    if (!conversationId)
+        return nil;
+
+    LCIMMessageCacheStore *cacheStore = [[LCIMMessageCacheStore alloc] initWithClientId:self.clientId conversationId:conversationId];
+    return cacheStore;
+}
+
+/**
+ Get local message for given message ID and conversation ID.
+
+ @param messageId      The message ID.
+ @param conversationId The conversation ID.
+
+ It will first find message from memory, if not found, find in cache store.
+
+ @return A local message, or nil if not found.
+ */
+- (AVIMMessage *)localMessageForId:(NSString *)messageId
+                    conversationId:(NSString *)conversationId
+{
+    if (!messageId)
+        return nil;
+
+    AVIMMessage *message = [self stagedMessageForId:messageId];
+
+    if (message)
+        return message;
+
+    LCIMMessageCacheStore *cacheStore = [self messageCacheStoreForConversationId:conversationId];
+    message = [cacheStore messageForId:messageId];
+
+    return message;
+}
+
+- (void)cacheMessageWithoutBreakpoint:(AVIMMessage *)message
+                       conversationId:(NSString *)conversationId
+{
+    if (!message.messageId)
+        return;
+
+    LCIMMessageCacheStore *cacheStore = [self messageCacheStoreForConversationId:conversationId];
+    [cacheStore updateMessageWithoutBreakpoint:message];
+}
+
 - (void)processReceiptCommand:(AVIMGenericCommand *)genericCommand {
     AVIMRcpCommand *rcpCommand = genericCommand.rcpMessage;
+
+    int64_t timestamp = rcpCommand.t;
     NSString *messageId = rcpCommand.id_p;
-     AVIMMessage *message = [self messageById:messageId];
-    if (message) {
-        message.deliveredTimestamp = rcpCommand.t;
-        message.status = AVIMMessageStatusDelivered;
-        
-        LCIMMessageCacheStore *cacheStore = [[LCIMMessageCacheStore alloc] initWithClientId:self.clientId conversationId:message.conversationId];
-        [cacheStore updateMessageWithoutBreakpoint:message];
-        
-        [self receiveMessageDelivered:message];
+    NSString *conversationId = rcpCommand.cid;
+
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:timestamp / 1000.0];
+    AVIMMessage *message = [self localMessageForId:messageId conversationId:conversationId];
+    AVIMConversation *conversation = [self conversationWithId:conversationId];
+
+    [self fetchConversationIfNeeded:conversation withBlock:^(AVIMConversation *conversation) {
+        NSString *receiptKey = nil;
+
+        /*
+         NOTE:
+         We need check the nullability of message.
+         User may relaunch application before ack and receipt did receive, in which case,
+         the sent message will be lost.
+         */
+
+        if (rcpCommand.read) {
+            if (message) {
+                message.readTimestamp = timestamp;
+                message.status = AVIMMessageStatusRead;
+                [self cacheMessageWithoutBreakpoint:message conversationId:conversationId];
+            }
+
+            receiptKey = NSStringFromSelector(@selector(lastReadAt));
+        } else {
+            if (message) {
+                message.deliveredTimestamp = timestamp;
+                message.status = AVIMMessageStatusDelivered;
+
+                [self cacheMessageWithoutBreakpoint:message conversationId:conversationId];
+                [self receiveMessageDelivered:message];
+            }
+
+            receiptKey = NSStringFromSelector(@selector(lastDeliveredAt));
+        }
+
+        [self updateReceipt:date
+             ofConversation:conversation
+                     forKey:receiptKey];
+    }];
+}
+
+- (void)updateReceipt:(NSDate *)date
+       ofConversation:(AVIMConversation *)conversation
+               forKey:(NSString *)key
+{
+    if (!date || !conversation || !key)
+        return;
+
+    NSDate *oldDate = [conversation valueForKey:key];
+
+    if (!oldDate || [oldDate compare:date] == NSOrderedAscending) {
+        LCIM_NOTIFY_PROPERTY_UPDATE(self.clientId, conversation.conversationId, key, date);
     }
 }
 
@@ -1005,7 +1155,11 @@ static BOOL AVIMClientHasInstantiated = NO;
             if (!conversation.lastMessageAt || [conversation.lastMessageAt compare:messageSentAt] == NSOrderedAscending) {
                 conversation.lastMessageAt = messageSentAt;
             }
-            conversation.lastMessage = message;
+            LCIM_NOTIFY_PROPERTY_UPDATE(
+                ws.clientId,
+                conversationId,
+                NSStringFromSelector(@selector(lastMessage)),
+                message);
         }
         [ws passMessage:message toConversation:conversation];
     }];

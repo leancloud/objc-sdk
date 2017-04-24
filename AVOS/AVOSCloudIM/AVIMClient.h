@@ -277,7 +277,17 @@ NS_ASSUME_NONNULL_BEGIN
  @param conversation 所属会话。
  @param unread 未读消息数量。
  */
-- (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread;
+- (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 4.3.0. Instead, use `-[AVIMClientDelegate conversation:propertyDidUpdate:]` instead.");
+
+/*!
+ Notification for conversation property update.
+ You can use this method to handle the properties that will be updated dynamicly during conversation's lifetime,
+ for example, unread message count, last message and receipt timestamp, etc.
+
+ @param conversation The updated conversation.
+ @param key          The property name of updated conversation.
+ */
+- (void)conversation:(AVIMConversation *)conversation didUpdateForKey:(NSString *)key;
 
 /*!
  客户端下线通知。

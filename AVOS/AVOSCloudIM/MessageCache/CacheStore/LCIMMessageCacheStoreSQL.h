@@ -16,6 +16,7 @@
 #define LCIM_FIELD_FROM_PEER_ID         @"from_peer_id"
 #define LCIM_FIELD_TIMESTAMP            @"timestamp"
 #define LCIM_FIELD_RECEIPT_TIMESTAMP    @"receipt_timestamp"
+#define LCIM_FIELD_READ_TIMESTAMP       @"read_timestamp"
 #define LCIM_FIELD_PAYLOAD              @"payload"
 #define LCIM_FIELD_BREAKPOINT           @"breakpoint"
 #define LCIM_FIELD_STATUS               @"status"
@@ -27,8 +28,8 @@
         LCIM_FIELD_MESSAGE_ID           @" TEXT, "           \
         LCIM_FIELD_CONVERSATION_ID      @" TEXT, "           \
         LCIM_FIELD_FROM_PEER_ID         @" TEXT, "           \
-        LCIM_FIELD_TIMESTAMP            @" NUMBERIC, "       \
-        LCIM_FIELD_RECEIPT_TIMESTAMP    @" NUMBERIC, "       \
+        LCIM_FIELD_TIMESTAMP            @" REAL, "           \
+        LCIM_FIELD_RECEIPT_TIMESTAMP    @" REAL, "           \
         LCIM_FIELD_PAYLOAD              @" BLOB, "           \
         LCIM_FIELD_STATUS               @" INTEGER, "        \
         LCIM_FIELD_BREAKPOINT           @" BOOL, "           \
@@ -50,10 +51,11 @@
         LCIM_FIELD_FROM_PEER_ID         @", "             \
         LCIM_FIELD_TIMESTAMP            @", "             \
         LCIM_FIELD_RECEIPT_TIMESTAMP    @", "             \
+        LCIM_FIELD_READ_TIMESTAMP       @", "             \
         LCIM_FIELD_PAYLOAD              @", "             \
         LCIM_FIELD_STATUS               @", "             \
         LCIM_FIELD_BREAKPOINT                             \
-    @") VALUES(?, ?, ?, ?, ?, ?, ?, ?)"
+    @") VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
 #define LCIM_SQL_UPDATE_MESSAGE                     \
     @"UPDATE " LCIM_TABLE_MESSAGE        @" "       \
@@ -61,6 +63,7 @@
         LCIM_FIELD_FROM_PEER_ID          @" = ?, "  \
         LCIM_FIELD_TIMESTAMP             @" = ?, "  \
         LCIM_FIELD_RECEIPT_TIMESTAMP     @" = ?, "  \
+        LCIM_FIELD_READ_TIMESTAMP        @" = ?, "  \
         LCIM_FIELD_PAYLOAD               @" = ?, "  \
         LCIM_FIELD_STATUS                @" = ? "   \
     @"WHERE " LCIM_FIELD_CONVERSATION_ID @" = ? "   \

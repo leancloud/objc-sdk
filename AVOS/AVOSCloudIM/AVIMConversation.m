@@ -26,6 +26,7 @@
 #import "LCIMConversationCache.h"
 #import "MessagesProtoOrig.pbobjc.h"
 #import "AVUtils.h"
+#import "AVIMRuntimeHelper.h"
 
 #define LCIM_VALID_LIMIT(limit) ({      \
     int32_t limit_ = (int32_t)(limit);  \
@@ -46,6 +47,12 @@
     if (timestamp_ <= 0) timestamp_ = LCIM_DISTANT_FUTURE_TIMESTAMP;  \
     timestamp_;  \
 })
+
+NSString *LCIMClientIdKey = @"clientId";
+NSString *LCIMConversationIdKey = @"conversationId";
+NSString *LCIMConversationPropertyNameKey = @"propertyName";
+NSString *LCIMConversationPropertyValueKey = @"propertyValue";
+NSNotificationName LCIMConversationPropertyUpdateNotification = @"LCIMConversationPropertyUpdateNotification";
 
 @interface AVIMConversation()
 
@@ -78,6 +85,42 @@
 - (void)doInitialize {
     _properties = [NSMutableDictionary dictionary];
     _propertiesForUpdate = [NSMutableDictionary dictionary];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(propertyDidUpdate:)
+                                                 name:LCIMConversationPropertyUpdateNotification
+                                               object:nil];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)propertyDidUpdate:(NSNotification *)notification {
+    if (!self.conversationId)
+        return;
+
+    NSDictionary *userInfo = notification.userInfo;
+
+    NSString *clientId = userInfo[LCIMClientIdKey];
+    NSString *conversationId = userInfo[LCIMConversationIdKey];
+    NSString *propertyName = userInfo[LCIMConversationPropertyNameKey];
+    NSString *propertyValue = userInfo[LCIMConversationPropertyValueKey];
+
+    if (!propertyName
+        || (!clientId || ![clientId isEqualToString:self.imClient.clientId])
+        || (!conversationId || ![conversationId isEqualToString:self.conversationId]))
+        return;
+
+    [self setValue:propertyValue forKey:propertyName];
+
+    AVIMClient *client = self.imClient;
+    SEL delegateMethod = @selector(conversation:didUpdateForKey:);
+
+    if ([client.delegate respondsToSelector:delegateMethod])
+        [AVIMRuntimeHelper callMethodInMainThreadWithTarget:client.delegate
+                                                   selector:delegateMethod
+                                                  arguments:@[self, propertyName]];
 }
 
 - (NSString *)clientId {
@@ -215,6 +258,35 @@
             [AVIMBlockHelper callBooleanResultBlock:callback error:error];
         });
     }];
+}
+
+- (void)fetchReceiptTimestampsInBackground {
+    dispatch_async([AVIMClient imClientQueue], ^{
+        AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
+
+        genericCommand.cmd = AVIMCommandType_Conv;
+        genericCommand.op = AVIMOpType_MaxRead;
+        genericCommand.peerId = self.imClient.clientId;
+
+        [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
+            if (error)
+                return;
+
+            AVIMConvCommand *convCommand = inCommand.convMessage;
+            NSDate *lastDeliveredAt = [NSDate dateWithTimeIntervalSince1970:convCommand.maxAckTimestamp / 1000.0];
+            NSDate *lastReadAt = [NSDate dateWithTimeIntervalSince1970:convCommand.maxReadTimestamp / 1000.0];
+
+            [self.imClient updateReceipt:lastDeliveredAt
+                          ofConversation:self
+                                  forKey:NSStringFromSelector(@selector(lastDeliveredAt))];
+
+            [self.imClient updateReceipt:lastReadAt
+                          ofConversation:self
+                                  forKey:NSStringFromSelector(@selector(lastReadAt))];
+        }];
+
+        [self.imClient sendCommand:genericCommand];
+    });
 }
 
 - (void)joinWithCallback:(AVIMBooleanResultBlock)callback {
@@ -456,6 +528,48 @@
             [genericCommand avim_addRequiredKeyWithCommand:readCommand];
             genericCommand;
         })];
+    });
+}
+
+- (void)readInBackground {
+    dispatch_async([AVIMClient imClientQueue], ^{
+        int64_t lastTimestamp = 0;
+        NSString *lastMessageId = nil;
+
+        /* NOTE:
+           We do not care about the owner of last message.
+           Server will do the right thing.
+         */
+        AVIMMessage *lastMessage = self.lastMessage;
+
+        if (lastMessage) {
+            lastTimestamp = lastMessage.sendTimestamp;
+            lastMessageId = lastMessage.messageId;
+        } else if (self.lastMessageAt)
+            lastTimestamp = [self.lastMessageAt timeIntervalSince1970] * 1000;
+
+        if (lastTimestamp <= 0) {
+            AVLoggerInfo(AVLoggerDomainIM, @"No message to read.");
+            return;
+        }
+
+        AVIMReadTuple *readTuple = [[AVIMReadTuple alloc] init];
+        AVIMReadCommand *readCommand = [[AVIMReadCommand alloc] init];
+        AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
+
+        readTuple.cid = self.conversationId;
+        readTuple.mid = lastMessageId;
+        readTuple.timestamp = lastTimestamp;
+
+        readCommand.convsArray = [NSMutableArray arrayWithObject:readTuple];
+
+        genericCommand.cmd = AVIMCommandType_Read;
+        genericCommand.peerId = self.imClient.clientId;
+
+        [genericCommand avim_addRequiredKeyWithCommand:readCommand];
+
+        [self.imClient resetUnreadMessagesCountForConversation:self];
+        [self.imClient sendCommand:genericCommand];
     });
 }
 
@@ -726,7 +840,7 @@
                 }
                 if (!transient) {
                     if (directOutCommand.r) {
-                        [_imClient addMessage:message];
+                        [_imClient stageMessage:message];
                     }
                     [self updateConversationAfterSendMessage:message];
                 }

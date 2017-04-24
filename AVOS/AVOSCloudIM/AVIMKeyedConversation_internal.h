@@ -17,6 +17,8 @@
 @property (nonatomic, strong) NSDate       *createAt;
 @property (nonatomic, strong) NSDate       *updateAt;
 @property (nonatomic, strong) NSDate       *lastMessageAt;
+@property (nonatomic, strong) NSDate       *lastDeliveredAt;
+@property (nonatomic, strong) NSDate       *lastReadAt;
 @property (nonatomic, strong) AVIMMessage  *lastMessage;
 @property (nonatomic, copy)   NSString     *name;
 @property (nonatomic, strong) NSArray      *members;

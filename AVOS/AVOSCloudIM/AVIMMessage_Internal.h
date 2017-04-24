@@ -55,4 +55,8 @@
 /*消息所属对话的 id*/
 @property (nonatomic, copy) NSString *conversationId;
 
+@property (nonatomic, assign) int64_t sendTimestamp;
+@property (nonatomic, assign) int64_t deliveredTimestamp;
+@property (nonatomic, assign) int64_t readTimestamp;
+
 @end

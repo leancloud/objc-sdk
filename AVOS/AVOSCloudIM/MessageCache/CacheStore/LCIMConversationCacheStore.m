@@ -17,31 +17,6 @@
 
 @implementation LCIMConversationCacheStore
 
-- (void)databaseQueueDidLoad {
-    LCIM_OPEN_DATABASE(db, ({
-        [db executeUpdate:LCIM_SQL_CREATE_CONVERSATION_TABLE];
-    }));
-
-    [self migrateDatabaseIfNeeded:self.databaseQueue.path];
-}
-
-- (void)migrateDatabaseIfNeeded:(NSString *)databasePath {
-    LCDatabaseMigrator *migrator = [[LCDatabaseMigrator alloc] initWithDatabasePath:databasePath];
-
-    [migrator executeMigrations:@[
-        /* Version 1: Add muted column. */
-        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
-            [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN muted INTEGER"];
-        }],
-        
-        /* Version 2: Add lastMessage column. */
-        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
-            [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN last_message BLOB"];
-        }]
-        
-    ]];
-}
-
 - (NSArray *)insertionRecordForConversation:(AVIMConversation *)conversation expireAt:(NSTimeInterval)expireAt {
     return @[
         conversation.conversationId,

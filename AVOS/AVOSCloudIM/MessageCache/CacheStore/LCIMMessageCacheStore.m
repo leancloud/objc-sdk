@@ -22,25 +22,6 @@
 
 @implementation LCIMMessageCacheStore
 
-- (void)databaseQueueDidLoad {
-    [self.databaseQueue inDatabase:^(LCDatabase *db) {
-        db.logsErrors = LCIM_SHOULD_LOG_ERRORS;
-
-        [db executeUpdate:LCIM_SQL_CREATE_MESSAGE_TABLE];
-        [db executeUpdate:LCIM_SQL_CREATE_MESSAGE_UNIQUE_INDEX];
-    }];
-
-    [self migrateDatabaseIfNeeded:self.databaseQueue.path];
-}
-
-- (void)migrateDatabaseIfNeeded:(NSString *)databasePath {
-    LCDatabaseMigrator *migrator = [[LCDatabaseMigrator alloc] initWithDatabasePath:databasePath];
-
-    [migrator executeMigrations:@[
-        // Migrations of each database version
-    ]];
-}
-
 - (instancetype)initWithClientId:(NSString *)clientId conversationId:(NSString *)conversationId {
     self = [super initWithClientId:clientId];
 
@@ -60,6 +41,10 @@
     return [NSNumber numberWithDouble:message.deliveredTimestamp];
 }
 
+- (NSNumber *)readTimestampForMessage:(AVIMMessage *)message {
+    return [NSNumber numberWithDouble:message.readTimestamp];
+}
+
 - (NSTimeInterval)currentTimestamp {
     return [[NSDate date] timeIntervalSince1970] * 1000;
 }
@@ -69,6 +54,7 @@
         message.clientId,
         [self timestampForMessage:message],
         [self receiptTimestampForMessage:message],
+        [self readTimestampForMessage:message],
         [message.payload dataUsingEncoding:NSUTF8StringEncoding],
         @(message.status),
         self.conversationId,
@@ -83,6 +69,7 @@
         message.clientId,
         [self timestampForMessage:message],
         [self receiptTimestampForMessage:message],
+        [self readTimestampForMessage:message],
         [message.payload dataUsingEncoding:NSUTF8StringEncoding],
         @(message.status),
         @(NO)
@@ -96,6 +83,7 @@
         message.clientId,
         [self timestampForMessage:message],
         [self receiptTimestampForMessage:message],
+        [self readTimestampForMessage:message],
         [message.payload dataUsingEncoding:NSUTF8StringEncoding],
         @(message.status),
         @(breakpoint)
@@ -246,6 +234,7 @@
     message.clientId           = [record stringForColumn:LCIM_FIELD_FROM_PEER_ID];
     message.sendTimestamp      = [record longLongIntForColumn:LCIM_FIELD_TIMESTAMP];
     message.deliveredTimestamp = [record longLongIntForColumn:LCIM_FIELD_RECEIPT_TIMESTAMP];
+    message.readTimestamp      = [record longLongIntForColumn:LCIM_FIELD_READ_TIMESTAMP];
     message.content            = payload;
     message.status             = [record intForColumn:LCIM_FIELD_STATUS];
     message.breakpoint         = [record boolForColumn:LCIM_FIELD_BREAKPOINT];

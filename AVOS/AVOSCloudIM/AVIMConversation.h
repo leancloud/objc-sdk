@@ -68,6 +68,21 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly, nullable) NSDate       *lastMessageAt;
 
 /**
+ *  The last timestamp your message read by other.
+ */
+@property (nonatomic, strong, readonly, nullable) NSDate       *lastReadAt;
+
+/**
+ *  The last timestamp your message delivered to other.
+ */
+@property (nonatomic, strong, readonly, nullable) NSDate       *lastDeliveredAt;
+
+/**
+ *  The count of unread messages in current conversation.
+ */
+@property (nonatomic, assign, readonly)           NSUInteger    unreadMessagesCount;
+
+/**
  *  The name of this conversation. Can be changed by update:callback: .
  */
 @property (nonatomic, copy, readonly, nullable) NSString     *name;
@@ -144,6 +159,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)fetchWithCallback:(AVIMBooleanResultBlock)callback;
 
 /*!
+ 拉取对话最近的回执时间。
+ @param callback - 回调结果
+ */
+- (void)fetchReceiptTimestampsInBackground;
+
+/*!
  发送更新。
  @param callback － 结果回调
  */
@@ -177,7 +198,13 @@ NS_ASSUME_NONNULL_BEGIN
  标记该会话已读。
  将服务端该会话的未读消息数置零。
  */
-- (void)markAsReadInBackground;
+- (void)markAsReadInBackground AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 4.3.0. Use -[AVIMConversation readInBackground] instead.");
+
+/*!
+ 将对话标记为已读。
+ 该方法将本地对话中其他成员发出的最新消息标记为已读，该消息的发送者会收到已读通知。
+ */
+- (void)readInBackground;
 
 /*!
  邀请新成员加入对话。
