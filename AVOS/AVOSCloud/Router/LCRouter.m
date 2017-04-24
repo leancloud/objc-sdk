@@ -43,6 +43,7 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
 
 @property (nonatomic, strong) NSDictionary *candidateAPIURLStringTable;
 @property (nonatomic, strong) NSDictionary *candidateRTMRouterURLStringTable;
+@property (nonatomic, strong) NSDictionary *module2dn;
 
 @property (nonatomic,   copy) NSString *lifesavingAPIURLString;
 @property (nonatomic,   copy) NSString *lifesavingRTMRouterURLString;
@@ -91,6 +92,14 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
 
     _lifesavingAPIURLString       = @"api.leancloud.cn";
     _lifesavingRTMRouterURLString = @"router-g0-push.leancloud.cn";
+
+    _module2dn = @{
+        moduleAPIServer       : @"api",
+        moduleEngineServer    : @"engine",
+        modulePushServer      : @"push",
+        moduleRTMRouterServer : @"rtm",
+        moduleStatsServer     : @"stats"
+    };
 
     _userDefaults = [LCKeyValueStore userDefaultsKeyValueStore];
 }
@@ -212,15 +221,34 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
     return URLString;
 }
 
+- (NSString *)lncldServerForModule:(NSString *)module {
+    NSString *dn = self.module2dn[module];
+
+    if (!dn.length)
+        return nil;
+
+    NSString *appId = [AVOSCloud getApplicationId];
+    NSString *server = [NSString stringWithFormat:@"%@.%@.lncld.net", [appId substringToIndex:8], dn];
+
+    return server;
+}
+
 - (NSString *)URLStringForPath:(NSString *)path {
     NSString *server = nil;
+    NSString *module = [self moduleForPath:path];
     NSDictionary *APIServerTable = [self cachedServerTableForKey:LCAppRouterCacheKey];
 
-    if (APIServerTable) {
-        NSString *module = [self moduleForPath:path];
-        server = APIServerTable[module] ?: [self fallbackAPIURLString];
-    } else {
-        server = [self fallbackAPIURLString];
+    if (module && APIServerTable) {
+        server = APIServerTable[module];
+    }
+
+    if (!server.length) {
+        switch (self.serverLocation) {
+        case LCServerLocationUCloud:
+            server = [self lncldServerForModule:module] ?: [self fallbackAPIURLString]; break;
+        default:
+            server = [self fallbackAPIURLString]; break;
+        }
     }
 
     NSString *versionPrefixedPath = [self prefixVersionForPath:path];
@@ -234,9 +262,16 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
     NSDictionary *APIServerTable = [self cachedServerTableForKey:LCAppRouterCacheKey];
 
     if (APIServerTable) {
-        server = APIServerTable[moduleRTMRouterServer] ?: [self fallbackRTMRouterURLString];
-    } else {
-        server = [self fallbackRTMRouterURLString];
+        server = APIServerTable[moduleRTMRouterServer];
+    }
+
+    if (!server.length) {
+        switch (self.serverLocation) {
+        case LCServerLocationUCloud:
+            server = [self lncldServerForModule:moduleRTMRouterServer] ?: [self fallbackRTMRouterURLString]; break;
+        default:
+            server = [self fallbackRTMRouterURLString]; break;
+        }
     }
 
     NSString *URLString = [self absoluteURLStringForServer:server path:@"/v1/route"];
