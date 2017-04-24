@@ -727,14 +727,20 @@ static void setter_fAtomic(id self, SEL _cmd, float value) {
     return [_localData objectForKey:key];
 }
 
+- (id)objectForKeyedSubscript:(NSString *)key {
+    return [self objectForKey:key];
+}
+
 - (void)setObject:(id)object forKey:(NSString *)key {
-    //    [self willChangeValueForKey:key];
     if (object) {
         [_localData setObject:object forKey:key];
     } else {
         [self removeObjectForKey:key];
     }
-    //    [self didChangeValueForKey:key];
+}
+
+- (void)setObject:(id)object forKeyedSubscript:(NSString *)key {
+    [self setObject:object forKey:key];
 }
 
 - (void)removeObjectForKey:(NSString *)key {
