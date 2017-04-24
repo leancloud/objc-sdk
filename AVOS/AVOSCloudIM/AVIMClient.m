@@ -1141,7 +1141,7 @@ static BOOL AVIMClientHasInstantiated = NO;
         }
         
         /* Otherwise, add message to cache and notify it to user */
-        [cacheStore insertMessage:message withBreakpoint:message.offline && message.hasMore];
+        [cacheStore insertMessage:message withBreakpoint:YES];
     }
     
     AVIMConversation *conversation = [self conversationWithId:conversationId];
