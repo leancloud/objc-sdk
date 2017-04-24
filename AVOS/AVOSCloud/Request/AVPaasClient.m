@@ -29,7 +29,6 @@
 
 #define MAX_LAG_TIME 5.0
 
-NSString *const API_VERSION = @"1.1";
 NSString *const LCHeaderFieldNameId = @"X-LC-Id";
 NSString *const LCHeaderFieldNameKey = @"X-LC-Key";
 NSString *const LCHeaderFieldNameSign = @"X-LC-Sign";
@@ -135,8 +134,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 @interface AVPaasClient()
 
-@property (nonatomic, readwrite, copy) NSString * apiVersion;
-@property (nonatomic, readwrite, strong) AVHTTPClient * clientImpl;
 @property (nonatomic, strong) LCURLSessionManager *sessionManager;
 
 // The client is singleton, so the queue doesn't need release
@@ -160,7 +157,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     static AVPaasClient * sharedInstance;
     dispatch_once(&once, ^{
         sharedInstance = [[self alloc] init];
-        sharedInstance.apiVersion = API_VERSION;
         sharedInstance.productionMode = YES;
         sharedInstance.timeoutInterval = kAVDefaultNetworkTimeoutInterval;
         
@@ -179,7 +175,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     self = [super init];
 
     if (self) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(routerDidUpdate:) name:LCRouterDidUpdateNotification object:nil];
         _requestTable = [NSMapTable strongToWeakObjectsMapTable];
         _completionQueue = dispatch_queue_create("avos.paas.completionQueue", DISPATCH_QUEUE_CONCURRENT);
         _sessionManager = ({
@@ -207,15 +202,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     }
 
     return self;
-}
-
-- (void)setBaseURL:(NSString *)baseURL {
-    _baseURL = [baseURL copy];
-    _clientImpl = nil;
-}
-
-- (void)routerDidUpdate:(NSNotification *)notification {
-    self.baseURL = [LCRouter sharedInstance].APIURLString;
 }
 
 - (void)dealloc {
@@ -247,37 +233,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     }
 }
 
-- (NSURL *)RESTBaseURL {
-    return [[LCRouter sharedInstance] versionedAPIURL];
-}
-
-- (AVHTTPClient *)clientImpl {
-    if (!_clientImpl) {
-        NSURL *url = [self RESTBaseURL];
-        _clientImpl = [AVHTTPClient clientWithBaseURL:url];
-
-        //最大并发请求数 4
-        _clientImpl.operationQueue.maxConcurrentOperationCount=4;
-        
-        [_clientImpl registerHTTPOperationClass:[AVJSONRequestOperation class]];
-        [_clientImpl setParameterEncoding:AVJSONParameterEncoding];
-        
-#if !TARGET_OS_WATCH
-        //revert the offline request
-        __weak id wealSelf=self;
-        [_clientImpl setReachabilityStatusChangeBlock:^(AVNetworkReachabilityStatus status) {
-            AVLoggerI(@"network status change :%d",status);
-            
-            if (status > AVNetworkReachabilityStatusNotReachable) {
-                [wealSelf handleAllArchivedRequests];
-            }
-        }];
-#endif
-    }
-
-    return _clientImpl;
-}
-
 - (NSString *)signatureHeaderFieldValue {
     NSString *timestamp=[NSString stringWithFormat:@"%.0f",1000*[[NSDate date] timeIntervalSince1970]];
     NSString *sign=[[[NSString stringWithFormat:@"%@%@",timestamp,self.clientKey] AVMD5String] lowercaseString];
@@ -291,16 +246,18 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
                                body:(NSDictionary *)body
                          parameters:(NSDictionary *)parameters
 {
-    NSString * myPath = [NSString stringWithFormat:@"/%@/%@", [AVPaasClient sharedInstance].apiVersion, path];
     NSMutableDictionary * result = [[NSMutableDictionary alloc] init];
+    NSString *batchPath = [[LCRouter sharedInstance] batchPathForPath:path];
+
     [result setObject:method forKey:@"method"];
-    [result setObject:myPath forKey:@"path"];
+    [result setObject:batchPath forKey:@"path"];
     if (body) {
          [result setObject:body forKey:@"body"];
     }
     if (parameters) {
         [result setObject:parameters forKey:@"params"];
     }
+
     return result;
 }
 
@@ -319,13 +276,13 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
                                  headers:(NSDictionary *)headers
                               parameters:(NSDictionary *)parameters
 {
-    NSURL *baseURL = [self RESTBaseURL];
+    NSURL *URL = [NSURL URLWithString:path];
 
-    if (![baseURL.absoluteString hasSuffix:@"/"]) {
-        baseURL = [baseURL URLByAppendingPathComponent:@"/"];
+    if (!URL.scheme.length) {
+        NSString *URLString = [[LCRouter sharedInstance] URLStringForPath:path];
+        URL = [NSURL URLWithString:URLString];
     }
 
-    NSURL *URL = [NSURL URLWithString:path relativeToURL:baseURL];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
 
     [request setHTTPMethod:method];

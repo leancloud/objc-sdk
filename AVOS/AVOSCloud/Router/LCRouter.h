@@ -8,61 +8,40 @@
 
 #import <Foundation/Foundation.h>
 
-FOUNDATION_EXPORT NSString *const LCRouterDidUpdateNotification;
-
 @interface LCRouter : NSObject
 
 + (instancetype)sharedInstance;
 
 /**
- Get API URL string.
-
- @return API URL string.
+ Get cached RTM server table.
  */
-- (NSString *)APIURLString;
+- (NSDictionary *)cachedRTMServerTable;
 
 /**
- Get versioned API URL string.
+ Fetch RTM server table asynchronously.
 
- @return Versioned API URL string.
+ If fetching did succeed, it will cache the RTM server table for later use.
+
+ @param block The callback of fetching result.
  */
-- (NSString *)versionedAPIURLString;
+- (void)fetchRTMServerTableInBackground:(void(^)(NSDictionary *RTMServerTable, NSError *error))block;
 
 /**
- Get versioned API URL.
+ Get URL string for storage server.
 
- @return Versioned API URL.
+ @param path The API endpoint.
  */
-- (NSURL *)versionedAPIURL;
+- (NSString *)URLStringForPath:(NSString *)path;
 
 /**
- Get push router URL string.
+ Get batch path for the given path.
 
- @return push router URL string.
+ @brief Add a version prefix to the path.
+        For example, if the path given by you is "book", this method will return "/1.1/book".
+
+ @param path The API endpoint.
  */
-- (NSString *)pushRouterURLString;
-
-/**
- Cache API host for service region.
-
- @param host          The API host to be cached.
- @param lastModified  The last modified timestamp since 1970 in seconds.
- @param TTL           The time-to-live timestamp in seconds.
- */
-- (void)cacheAPIHostWithHost:(NSString *)host
-                lastModified:(NSTimeInterval)lastModified
-                         TTL:(NSTimeInterval)TTL;
-
-/**
- Cache push router host for service region.
-
- @param host          The push router host to be cached.
- @param lastModified  The last modified timestamp since 1970 in seconds.
- @param TTL           The time-to-live timestamp in seconds.
- */
-- (void)cachePushRouterHostWithHost:(NSString *)host
-                       lastModified:(NSTimeInterval)lastModified
-                                TTL:(NSTimeInterval)TTL;
+- (NSString *)batchPathForPath:(NSString *)path;
 
 /**
  Update router asynchronously.

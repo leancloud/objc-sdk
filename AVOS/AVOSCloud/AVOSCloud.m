@@ -30,7 +30,6 @@
 #endif
 
 #import "LCRouter.h"
-#import "LCRouter_internal.h"
 #import "SDMacros.h"
 
 #define PUSH_GROUP_CN @"g0"
@@ -80,8 +79,6 @@ AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
 
 + (void)updateRouterInBackground {
     LCRouter *router = [LCRouter sharedInstance];
-    router.serviceRegion = LCEffectiveServiceRegion;
-
     [router updateInBackground];
 }
 
@@ -222,10 +219,6 @@ AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
     }
 
     return pushGroup;
-}
-
-+ (NSURL *)RESTBaseURL {
-    return [[NSURL URLWithString:[LCRouter sharedInstance].APIURLString] URLByAppendingPathComponent:API_VERSION];
 }
 
 + (void)setServiceRegion:(AVServiceRegion)serviceRegion {

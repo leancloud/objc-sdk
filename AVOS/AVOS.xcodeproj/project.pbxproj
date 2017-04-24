@@ -519,10 +519,7 @@
 		837CC71F1B568431001333AD /* NSDictionary+LCHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 837CC71D1B568431001333AD /* NSDictionary+LCHash.m */; };
 		838AF12A1AFE58F600B8965E /* LCIMMessageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 838AF1221AFE58F600B8965E /* LCIMMessageCache.h */; };
 		838AF12B1AFE58F600B8965E /* LCIMMessageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 838AF1231AFE58F600B8965E /* LCIMMessageCache.m */; };
-		838B32EB1CE032F800CAEBF8 /* LCRouterCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 838B32E91CE032F800CAEBF8 /* LCRouterCache.h */; };
-		838B32EC1CE032F800CAEBF8 /* LCRouterCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 838B32EA1CE032F800CAEBF8 /* LCRouterCache.m */; };
 		838B32EE1CE1953800CAEBF8 /* LCRouterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 838B32ED1CE1953800CAEBF8 /* LCRouterTest.m */; };
-		838B32F01CE1B0C500CAEBF8 /* LCRouter_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 838B32EF1CE1B0C500CAEBF8 /* LCRouter_internal.h */; };
 		838DD7961B3D309F00C95897 /* LCNetworkStatistics.h in Headers */ = {isa = PBXBuildFile; fileRef = 838DD7941B3D309F00C95897 /* LCNetworkStatistics.h */; };
 		838DD7971B3D309F00C95897 /* LCNetworkStatistics.m in Sources */ = {isa = PBXBuildFile; fileRef = 838DD7951B3D309F00C95897 /* LCNetworkStatistics.m */; };
 		838DD7A01B3D3FB600C95897 /* LCKeyValueStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 838DD79E1B3D3FB600C95897 /* LCKeyValueStore.h */; };
@@ -1218,18 +1215,9 @@
 		9A404DD41CE5A9B700DEB3DC /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F9A2C51CE014430002E21B /* LCRouter.h */; };
 		9A404DD51CE5A9BA00DEB3DC /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F9A2C51CE014430002E21B /* LCRouter.h */; };
 		9A404DD61CE5A9BB00DEB3DC /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F9A2C51CE014430002E21B /* LCRouter.h */; };
-		9A404DD71CE5A9C200DEB3DC /* LCRouter_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 838B32EF1CE1B0C500CAEBF8 /* LCRouter_internal.h */; };
 		9A404DD81CE5A9C200DEB3DC /* LCRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F9A2C61CE014430002E21B /* LCRouter.m */; };
-		9A404DD91CE5A9C200DEB3DC /* LCRouterCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 838B32E91CE032F800CAEBF8 /* LCRouterCache.h */; };
-		9A404DDA1CE5A9C200DEB3DC /* LCRouterCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 838B32EA1CE032F800CAEBF8 /* LCRouterCache.m */; };
-		9A404DDB1CE5A9C300DEB3DC /* LCRouter_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 838B32EF1CE1B0C500CAEBF8 /* LCRouter_internal.h */; };
 		9A404DDC1CE5A9C300DEB3DC /* LCRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F9A2C61CE014430002E21B /* LCRouter.m */; };
-		9A404DDD1CE5A9C300DEB3DC /* LCRouterCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 838B32E91CE032F800CAEBF8 /* LCRouterCache.h */; };
-		9A404DDE1CE5A9C300DEB3DC /* LCRouterCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 838B32EA1CE032F800CAEBF8 /* LCRouterCache.m */; };
-		9A404DDF1CE5A9C400DEB3DC /* LCRouter_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 838B32EF1CE1B0C500CAEBF8 /* LCRouter_internal.h */; };
 		9A404DE01CE5A9C400DEB3DC /* LCRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F9A2C61CE014430002E21B /* LCRouter.m */; };
-		9A404DE11CE5A9C400DEB3DC /* LCRouterCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 838B32E91CE032F800CAEBF8 /* LCRouterCache.h */; };
-		9A404DE21CE5A9C400DEB3DC /* LCRouterCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 838B32EA1CE032F800CAEBF8 /* LCRouterCache.m */; };
 		9A62AE591DF8145400EE0973 /* TestTypedMessage.json in Resources */ = {isa = PBXBuildFile; fileRef = 9A62AE551DF813C100EE0973 /* TestTypedMessage.json */; };
 		9A62AE5B1DF8145900EE0973 /* TestTypedMessage.json in Resources */ = {isa = PBXBuildFile; fileRef = 9A62AE551DF813C100EE0973 /* TestTypedMessage.json */; };
 		9A7C67D71C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A7C67D51C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.h */; };
@@ -1446,10 +1434,7 @@
 		837CC71D1B568431001333AD /* NSDictionary+LCHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+LCHash.m"; sourceTree = "<group>"; };
 		838AF1221AFE58F600B8965E /* LCIMMessageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageCache.h; sourceTree = "<group>"; };
 		838AF1231AFE58F600B8965E /* LCIMMessageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMMessageCache.m; sourceTree = "<group>"; };
-		838B32E91CE032F800CAEBF8 /* LCRouterCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCRouterCache.h; sourceTree = "<group>"; };
-		838B32EA1CE032F800CAEBF8 /* LCRouterCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCRouterCache.m; sourceTree = "<group>"; };
 		838B32ED1CE1953800CAEBF8 /* LCRouterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCRouterTest.m; sourceTree = "<group>"; };
-		838B32EF1CE1B0C500CAEBF8 /* LCRouter_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCRouter_internal.h; sourceTree = "<group>"; };
 		838DD7941B3D309F00C95897 /* LCNetworkStatistics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCNetworkStatistics.h; sourceTree = "<group>"; };
 		838DD7951B3D309F00C95897 /* LCNetworkStatistics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCNetworkStatistics.m; sourceTree = "<group>"; };
 		838DD79E1B3D3FB600C95897 /* LCKeyValueStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCKeyValueStore.h; sourceTree = "<group>"; };
@@ -2304,10 +2289,7 @@
 			isa = PBXGroup;
 			children = (
 				83F9A2C51CE014430002E21B /* LCRouter.h */,
-				838B32EF1CE1B0C500CAEBF8 /* LCRouter_internal.h */,
 				83F9A2C61CE014430002E21B /* LCRouter.m */,
-				838B32E91CE032F800CAEBF8 /* LCRouterCache.h */,
-				838B32EA1CE032F800CAEBF8 /* LCRouterCache.m */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -3227,7 +3209,6 @@
 				70CA7FDB1BDE42F5000A3B21 /* AVACL.h in Headers */,
 				70CA7FDD1BDE42F5000A3B21 /* AVRole.h in Headers */,
 				70CA7FDF1BDE42F5000A3B21 /* AVAnalytics.h in Headers */,
-				9A404DD71CE5A9C200DEB3DC /* LCRouter_internal.h in Headers */,
 				70CA7FEA1BDE42F6000A3B21 /* AVOSCloud.h in Headers */,
 				70CA7FEE1BDE42F6000A3B21 /* AVCloud.h in Headers */,
 				70CA7FF01BDE42F6000A3B21 /* AVFile.h in Headers */,
@@ -3249,7 +3230,6 @@
 				83FCB9BA1CEDC57C007D8712 /* LCSecurityPolicy.h in Headers */,
 				70CA80091BDE4314000A3B21 /* AVQuery_Internal.h in Headers */,
 				70CA800A1BDE4314000A3B21 /* AFNetworkingFix.h in Headers */,
-				9A404DD91CE5A9C200DEB3DC /* LCRouterCache.h in Headers */,
 				70CA800B1BDE4314000A3B21 /* AVRequestOperation.h in Headers */,
 				70CA800C1BDE4314000A3B21 /* AVPaasClient.h in Headers */,
 				70CA800F1BDE4314000A3B21 /* LCNetworkStatistics.h in Headers */,
@@ -3357,7 +3337,6 @@
 				8320F8FB1C1918C60024B45E /* LCDatabaseCoordinator.h in Headers */,
 				8320F8FC1C1918C60024B45E /* AVSearchSortBuilder.h in Headers */,
 				8320F8FD1C1918C60024B45E /* AVStatus.h in Headers */,
-				9A404DE11CE5A9C400DEB3DC /* LCRouterCache.h in Headers */,
 				83FCB9A31CEDC57C007D8712 /* LCHTTPSessionManager.h in Headers */,
 				83FCB9B21CEDC57C007D8712 /* LCNetworkReachabilityManager.h in Headers */,
 				83BE73071D8105AF008ED3CF /* EXTScope.h in Headers */,
@@ -3421,7 +3400,6 @@
 				8320F9511C1918C60024B45E /* AVCloudQueryResult_Internal.h in Headers */,
 				8320F9541C1918C60024B45E /* AVPush_Internal.h in Headers */,
 				83FCB9AD1CEDC57C007D8712 /* LCNetworking.h in Headers */,
-				9A404DDF1CE5A9C400DEB3DC /* LCRouter_internal.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3510,7 +3488,6 @@
 				83BE730F1D810651008ED3CF /* metamacros.h in Headers */,
 				83D8CF1E1C17DAF50094279D /* AVAckCommand.h in Headers */,
 				83D8CF201C17DAF50094279D /* SDMacros.h in Headers */,
-				9A404DDB1CE5A9C300DEB3DC /* LCRouter_internal.h in Headers */,
 				830EB9C31C3E4BFA00BA917F /* LCObserver.h in Headers */,
 				83D8CF211C17DAF50094279D /* AVFriendQuery.h in Headers */,
 				83D8CF221C17DAF50094279D /* AVObject_Internal.h in Headers */,
@@ -3526,7 +3503,6 @@
 				83D8CF2B1C17DAF50094279D /* AVOSCloud_Internal.h in Headers */,
 				83D8CF2C1C17DAF50094279D /* AVCommandCommon.h in Headers */,
 				83D8CF2D1C17DAF50094279D /* AVPresenceCommand.h in Headers */,
-				9A404DDD1CE5A9C300DEB3DC /* LCRouterCache.h in Headers */,
 				83D8CF2E1C17DAF50094279D /* AVCacheManager.h in Headers */,
 				83D8CF2F1C17DAF50094279D /* AVWebSocketWrapper.h in Headers */,
 				83D8CF301C17DAF50094279D /* AVUser_Internal.h in Headers */,
@@ -3678,10 +3654,8 @@
 				8C841AF01A5A7A0000C5C6C4 /* AVGroup_Internal.h in Headers */,
 				8C841AFE1A5A7A0000C5C6C4 /* AVAckCommand.h in Headers */,
 				836705AB1BA1358D0050E968 /* SDMacros.h in Headers */,
-				838B32EB1CE032F800CAEBF8 /* LCRouterCache.h in Headers */,
 				83BE730D1D810651008ED3CF /* metamacros.h in Headers */,
 				83FCB9C21CEDC57C007D8712 /* LCURLRequestSerialization.h in Headers */,
-				838B32F01CE1B0C500CAEBF8 /* LCRouter_internal.h in Headers */,
 				830EB9C01C3E4BFA00BA917F /* LCObserver.h in Headers */,
 				8C841B2A1A5A7A0000C5C6C4 /* AVFriendQuery.h in Headers */,
 				8C841B1A1A5A7A0000C5C6C4 /* AVObject_Internal.h in Headers */,
@@ -4331,7 +4305,6 @@
 				70CA7FB01BDE374C000A3B21 /* LCDatabaseMigrator.m in Sources */,
 				70CA7FB21BDE374C000A3B21 /* LCKeyValueStore.m in Sources */,
 				70CA7FB31BDE374C000A3B21 /* LCSSLChallenger.m in Sources */,
-				9A404DDA1CE5A9C200DEB3DC /* LCRouterCache.m in Sources */,
 				70CA7FB41BDE374C000A3B21 /* NSDictionary+LCHash.m in Sources */,
 				70CA7F721BDE3721000A3B21 /* AVACL.m in Sources */,
 				83E13C161D4B4FC60009CB6F /* AVConfiguration.m in Sources */,
@@ -4479,7 +4452,6 @@
 				8320F8C81C1918C60024B45E /* AVLogger.m in Sources */,
 				8320F8CA1C1918C60024B45E /* AVScheduler.m in Sources */,
 				830EB9C91C3E4BFA00BA917F /* LCObserver.m in Sources */,
-				9A404DE21CE5A9C400DEB3DC /* LCRouterCache.m in Sources */,
 				8320F8CC1C1918C60024B45E /* AVCloudQueryResult.m in Sources */,
 				8320F8CE1C1918C60024B45E /* AVImageRequestOperation.m in Sources */,
 				8320F8CF1C1918C60024B45E /* AVNetworkActivityIndicatorManager.m in Sources */,
@@ -4540,7 +4512,6 @@
 				830EB9C81C3E4BFA00BA917F /* LCObserver.m in Sources */,
 				83D8CEA41C17DAF50094279D /* AVCommandDictionary.m in Sources */,
 				83D8CEA51C17DAF50094279D /* LCNetworkStatistics.m in Sources */,
-				9A404DDE1CE5A9C300DEB3DC /* LCRouterCache.m in Sources */,
 				83D8CEA61C17DAF50094279D /* AVDuration.m in Sources */,
 				83E13C171D4B4FC60009CB6F /* AVConfiguration.m in Sources */,
 				83D8CEA71C17DAF50094279D /* AVExceptionHandler.m in Sources */,
@@ -4670,7 +4641,6 @@
 				830EB9C51C3E4BFA00BA917F /* LCObserver.m in Sources */,
 				8C841AED1A5A7A0000C5C6C4 /* AVCommandDictionary.m in Sources */,
 				838DD7971B3D309F00C95897 /* LCNetworkStatistics.m in Sources */,
-				838B32EC1CE032F800CAEBF8 /* LCRouterCache.m in Sources */,
 				8C841ABF1A5A7A0000C5C6C4 /* AVDuration.m in Sources */,
 				83E13C151D4B4FC60009CB6F /* AVConfiguration.m in Sources */,
 				8C841AC11A5A7A0000C5C6C4 /* AVExceptionHandler.m in Sources */,
@@ -5895,7 +5865,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = "-lz";
@@ -5936,7 +5906,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "-lz";
@@ -6099,7 +6069,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -6149,7 +6119,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (

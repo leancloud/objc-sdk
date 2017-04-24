@@ -16,7 +16,6 @@
 #import "AVPaasClient.h"
 #import "AVOSCloud_Internal.h"
 #import "LCRouter.h"
-#import "LCKeyValueStore.h"
 #import "SDMacros.h"
 #import <arpa/inet.h>
 
@@ -40,7 +39,7 @@
     @"\n"
 
 static NSTimeInterval AVIMWebSocketDefaultTimeoutInterval = 15.0;
-static NSString *const LCPushRouterCacheKey = @"LCPushRouterCacheKey";
+static NSString *const LCRTMRouterCacheKey = @"LCRTMRouterCacheKey";
 
 typedef enum : NSUInteger {
     //mutually exclusive
@@ -97,7 +96,6 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
 @property (nonatomic, strong) AVIMWebSocket *webSocket;
 @property (nonatomic, copy)   AVIMBooleanResultBlock openCallback;
 @property (nonatomic, strong) NSMutableDictionary *IPTable;
-@property (nonatomic, copy) NSString *routerPath;
 
 @end
 
@@ -141,10 +139,6 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
         
         _reconnectInterval = 1;
         _needRetry = YES;
-
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(routerDidUpdate:) name:LCRouterDidUpdateNotification object:nil];
-
-        _routerPath = [self absoluteRouterPath:[LCRouter sharedInstance].pushRouterURLString];
         
 #if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
         // Register for notification when the app shuts down
@@ -170,14 +164,6 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
         [self startNotifyReachability];
     }
     return self;
-}
-
-- (void)routerDidUpdate:(NSNotification *)notification {
-    self.routerPath = [self absoluteRouterPath:[LCRouter sharedInstance].pushRouterURLString];
-}
-
-- (NSString *)absoluteRouterPath:(NSString *)routerHost {
-    return [[[NSURL URLWithString:routerHost] URLByAppendingPathComponent:@"v1/route"] absoluteString];
 }
 
 - (void)startNotifyReachability {
@@ -381,47 +367,26 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
                 [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT object:self userInfo:nil];
             }
 
-            NSDictionary *cachedRouterInformation = [self cachedRouterInformation];
+            LCRouter *router = [LCRouter sharedInstance];
+            NSDictionary *RTMServerTable = [router cachedRTMServerTable];
 
-            if (cachedRouterInformation) {
-                [self openConnectionForRouterInformation:cachedRouterInformation];
+            if (RTMServerTable) {
+                [self openConnectionForRTMServerTable:RTMServerTable];
                 return;
             }
 
             NSString *appId = [AVOSCloud getApplicationId];
 
             if (!appId) {
-                @throw [NSException exceptionWithName:@"AVOSCloudIM Exception" reason:@"Application id is nil." userInfo:nil];
+                @throw [NSException exceptionWithName:@"AVOSCloudIM Exception" reason:@"Application ID not found." userInfo:nil];
             }
 
-            NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-
-            parameters[@"appId"] = appId;
-
-            /*
-             * iOS SDK *must* use IP address to access IM server to prevent DNS hijacking.
-             * And IM server *must* issue the pinned certificate.
-             */
-            parameters[@"ip"] = @"true";
-
-            if (self.security) {
-                parameters[@"secure"] = @"1";
-            }
-
-            /* Back door for user to connect to puppet environment. */
-            if (getenv("LC_IM_PUPPET_ENABLED") && getenv("SIMULATOR_UDID")) {
-                parameters[@"debug"] = @"true";
-            }
-
-            [[AVPaasClient sharedInstance] getObject:self.routerPath withParameters:parameters block:^(id object, NSError *error) {
+            [[LCRouter sharedInstance] fetchRTMServerTableInBackground:^(NSDictionary *object, NSError *error) {
                 NSInteger code = error.code;
 
                 if (object && !error) { /* Everything is OK. */
                     self.useSecondary = NO;
-                    [self openConnectionForRouterInformation:object];
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                        [self cacheRouterInformationIfPossible:object];
-                    });
+                    [self openConnectionForRTMServerTable:object];
                 } else if (code == 404) { /* 404, stop reconnection. */
                     NSError *httpError = [AVIMErrorUtil errorWithCode:code reason:[NSHTTPURLResponse localizedStringForStatusCode:code]];
                     if (self.openCallback) {
@@ -451,15 +416,15 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
 }
 
 /**
- Open connection for router information.
+ Open connection for RTM server table.
 
- It will choose a RTM server from router infomation firstly,
+ It will choose a RTM server from RTM server table firstly,
  then, create connection to that server.
 
  If RTM server not found, it will retry from scratch.
  */
-- (void)openConnectionForRouterInformation:(NSDictionary *)routerInformation {
-    NSString *server = [self chooseServerFromRouterInformation:routerInformation];
+- (void)openConnectionForRTMServerTable:(NSDictionary *)RTMServerTable {
+    NSString *server = [self chooseServerFromRTMServerTable:RTMServerTable];
 
     if (server) {
         [self internalOpenWebSocketConnection:server];
@@ -470,17 +435,17 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
 }
 
 /**
- Choose a RTM server from router information.
- Router information may contain both primary server and secondary server.
+ Choose a RTM server from RTM server table.
+ RTM server table may contain both primary server and secondary server.
 
  If `_useSecondary` is true, it will choose secondary server preferentially.
  Otherwise, it will choose primary server preferentially.
  */
-- (NSString *)chooseServerFromRouterInformation:(NSDictionary *)routerInformation {
+- (NSString *)chooseServerFromRTMServerTable:(NSDictionary *)RTMServerTable {
     NSString *server = nil;
 
-    NSString *primary   = routerInformation[@"server"];
-    NSString *secondary = routerInformation[@"secondary"];
+    NSString *primary   = RTMServerTable[@"server"];
+    NSString *secondary = RTMServerTable[@"secondary"];
 
     if (_useSecondary)
         server = secondary ?: primary;
@@ -488,91 +453,6 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
         server = primary ?: secondary;
 
     return server;
-}
-
-/**
- Cache router infomation if possible. It will cache two things:
-     1. Push router
-     2. Response of push router
-
- Currently, SDK will not cache the router information if `ttl` is not given by server.
- */
-- (void)cacheRouterInformationIfPossible:(NSDictionary *)routerInformation {
-    NSTimeInterval TTL = [routerInformation[@"ttl"] doubleValue];
-
-    if (TTL <= 0)
-        return;
-
-    [self cachePushRouter:routerInformation TTL:TTL];
-    [self cacheRouterInformation:routerInformation TTL:TTL];
-}
-
-- (void)cachePushRouter:(NSDictionary *)routerInformation TTL:(NSTimeInterval)TTL {
-    NSString *routerUrl = routerInformation[@"groupUrl"];
-    NSString *routerHost = [[NSURL URLWithString:routerUrl] host];
-
-    if (!routerHost) {
-        AVLoggerInfo(AVLoggerDomainIM, @"Push router not found, nothing to cache.");
-        return;
-    }
-
-    NSTimeInterval lastModified = [[NSDate date] timeIntervalSince1970];
-
-    [[LCRouter sharedInstance] cachePushRouterHostWithHost:routerHost lastModified:lastModified TTL:TTL];
-}
-
-- (void)cacheRouterInformation:(NSDictionary *)routerInformation TTL:(NSTimeInterval)TTL {
-    NSDictionary *cacheItem = @{
-        @"ttl": @(TTL),
-        @"lastModified": @([[NSDate date] timeIntervalSince1970]),
-        @"router": routerInformation
-    };
-
-    NSError *error = nil;
-    NSData *data = [NSJSONSerialization dataWithJSONObject:cacheItem options:0 error:&error];
-
-    if (error || !data) {
-        AVLoggerError(AVLoggerDomainIM, @"Cannot serialize push router information, error: %@", error);
-        return;
-    }
-
-    [[LCKeyValueStore sharedInstance] setData:data forKey:LCPushRouterCacheKey];
-}
-
-- (NSDictionary *)cachedRouterInformation {
-    NSData *data = [[LCKeyValueStore sharedInstance] dataForKey:LCPushRouterCacheKey];
-
-    if (!data)
-        return nil;
-
-    /* If connect has failed  3 times (2^3) continuously, we assume that the router information is expired. */
-    if (_reconnectInterval >= 8) {
-        [self clearRouterInformationCache];
-        return nil;
-    }
-
-    NSError *error = nil;
-    NSDictionary *cacheItem = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-
-    if (error || !cacheItem) {
-        [self clearRouterInformationCache];
-        return nil;
-    }
-
-    NSTimeInterval TTL = [cacheItem[@"ttl"] doubleValue];
-    NSTimeInterval lastModified = [cacheItem[@"lastModified"] doubleValue];
-    NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
-
-    if (now < lastModified || now >= lastModified + TTL) {
-        [self clearRouterInformationCache];
-        return nil;
-    }
-
-    return cacheItem[@"router"];
-}
-
-- (void)clearRouterInformationCache {
-    [[LCKeyValueStore sharedInstance] deleteKey:LCPushRouterCacheKey];
 }
 
 SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);

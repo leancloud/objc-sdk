@@ -12,6 +12,8 @@
 
 + (instancetype)sharedInstance;
 
++ (instancetype)userDefaultsKeyValueStore;
+
 - (instancetype)initWithDatabasePath:(NSString *)databasePath;
 
 - (instancetype)initWithDatabasePath:(NSString *)databasePath tableName:(NSString *)tableName;
