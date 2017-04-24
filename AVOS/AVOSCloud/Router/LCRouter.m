@@ -105,6 +105,9 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
 }
 
 - (LCServerLocation)currentServerLocation {
+    if (LCEffectiveServiceRegion == AVServiceRegionUS)
+        return LCServerLocationUS;
+
     NSString *appId = [AVOSCloud getApplicationId];
 
     /* Application is an UCloud if the application id has no suffix. */
