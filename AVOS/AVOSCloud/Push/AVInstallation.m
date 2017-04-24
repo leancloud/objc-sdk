@@ -236,6 +236,7 @@
     for (NSMutableDictionary *request in [requests copy]) {
         if ([request_path(request) hasPrefix:batchPath] && [request_method(request) isEqualToString:@"PUT"]) {
             request[@"method"] = @"POST";
+            request[@"path"]   = batchPath;
             request[@"body"][@"objectId"]    = self.objectId;
             request[@"body"][@"deviceType"]  = self.deviceType;
             request[@"body"][@"deviceToken"] = self.deviceToken;
