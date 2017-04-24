@@ -23,28 +23,23 @@
     [super tearDown];
 }
 
-- (void)assertPath:(NSString *)path equalToRelativePath:(NSString *)relativePath {
-    NSString *home = NSHomeDirectory();
-#if AV_OSX_ONLY
-    home = [home stringByAppendingPathComponent:[NSString stringWithFormat:@"Library/Application Support/LeanCloud/%@", [AVOSCloud getApplicationId]]];
-#endif
-    path = [path stringByReplacingOccurrencesOfString:home withString:@"~"];
-    XCTAssertEqualObjects(path, relativePath);
+- (void)assertPath:(NSString *)path hasSuffix:(NSString *)suffix {
+    XCTAssertTrue([path hasSuffix:suffix]);
 }
 
 - (void)testCurrentUserArchivePath {
     NSString *path = [AVPersistenceUtils currentUserArchivePath];
-    [self assertPath:path equalToRelativePath:@"~/Library/Private Documents/AVPaas/currentUser"];
+    [self assertPath:path hasSuffix:@"Private Documents/AVPaas/currentUser"];
 }
 
 - (void)testMessageCacheDatabasePath {
-    NSString *path = [AVPersistenceUtils messageCacheDatabasePathWithName:@"chat"];
-    [self assertPath:path equalToRelativePath:@"~/Library/Caches/LeanCloud/MessageCache/chat"];
+    NSString *path = [AVPersistenceUtils messageCacheDatabasePathWithName:@"Chat"];
+    [self assertPath:path hasSuffix:@"Caches/MessageCache/Chat"];
 }
 
 - (void)testCommandCacheDatabasePath {
     NSString *path = [AVPersistenceUtils commandCacheDatabasePath];
-    [self assertPath:path equalToRelativePath:@"~/Documents/LeanCloud/CommandCache"];
+    [self assertPath:path hasSuffix:@"Caches/CommandCache"];
 }
 
 @end
