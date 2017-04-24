@@ -212,8 +212,13 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
     URLComponents.scheme = @"https";
     URLComponents.host   = server;
 
-    if (path.length)
-        URLComponents.path = path;
+    if (path.length) {
+        NSURL *url = [NSURL URLWithString:path];
+
+        URLComponents.path = url.path;
+        URLComponents.query = url.query;
+        URLComponents.fragment = url.fragment;
+    }
 
     NSURL *URL = [URLComponents URL];
     NSString *URLString = [URL absoluteString];
