@@ -47,7 +47,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     @"\n\n" \
     @"------ BEGIN LeanCloud REST Response ------\n" \
     @"path: %@\n" \
-    @"cost: %.3fs\n" \
+    @"cost: %.3fms\n" \
     @"response: %@\n" \
     @"------ END --------------------------------\n" \
     @"\n"
