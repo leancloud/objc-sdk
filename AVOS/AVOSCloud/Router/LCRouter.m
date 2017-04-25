@@ -211,8 +211,10 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
 }
 
 - (NSString *)prefixVersionForPath:(NSString *)path {
-    if ([path hasPrefix:APIVersion] || [path hasPrefix:@"/" APIVersion])
+    if ([path hasPrefix:@"/" APIVersion])
         return path;
+    else if ([path hasPrefix:APIVersion])
+        return [@"/" stringByAppendingPathComponent:path];
 
     NSString *result = [[@"/" stringByAppendingPathComponent:APIVersion] stringByAppendingPathComponent:path];
 
