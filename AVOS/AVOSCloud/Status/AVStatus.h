@@ -131,6 +131,13 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
 +(void)getUnreadStatusesCountWithType:(AVStatusType*)type andCallback:(AVIntegerResultBlock)callback;
 
 /**
+ *  Reset unread count of specific status type (inbox).
+ *  @param type     Status type.
+ *  @param callback Callback of reset request.
+ */
++(void)resetUnreadStatusesCountWithType:(AVStatusType*)type andCallback:(AVBooleanResultBlock)callback;
+
+/**
  *  获取当前用户接收到的状态
  *  @param type     状态类型,默认是kAVStatusTypeTimeline, 可以是任意自定义字符串
  *  @param skip     跳过条数

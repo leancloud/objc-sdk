@@ -324,8 +324,9 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
 
 +(void)getUnreadStatusesCountWithType:(AVStatusType*)type andCallback:(AVIntegerResultBlock)callback{
     NSError *error=[self permissionCheck];
+
     if (error) {
-        callback(0,error);
+        [AVUtils callIntegerResultBlock:callback number:0 error:error];
         return;
     }
     
@@ -337,6 +338,21 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
             error=[AVErrorUtils errorFromAVError:error];
         }
         [AVUtils callIntegerResultBlock:callback number:count error:error];
+    }];
+}
+
++ (void)resetUnreadStatusesCountWithType:(AVStatusType *)type andCallback:(AVBooleanResultBlock)callback {
+    NSError *error = [self permissionCheck];
+
+    if (error) {
+        [AVUtils callBooleanResultBlock:callback error:error];
+        return;
+    }
+
+    NSString *owner = [AVStatus stringOfStatusOwner:[AVUser currentUser].objectId];
+
+    [[AVPaasClient sharedInstance] postObject:@"subscribe/statuses/resetUnreadCount" withParameters:@{@"owner": owner, @"inboxType": type} block:^(id object, NSError *error) {
+        [AVUtils callBooleanResultBlock:callback error:error];
     }];
 }
 
