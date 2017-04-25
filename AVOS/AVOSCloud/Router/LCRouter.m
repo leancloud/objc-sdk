@@ -28,6 +28,8 @@ static NSString *const serverTableKey        = @"server_table";
 static NSString *const LCAppRouterCacheKey   = @"LCAppRouterCacheKey";
 static NSString *const LCRTMRouterCacheKey   = @"LCRTMRouterCacheKey";
 
+NSString *LCRouterDidUpdateNotification      = @"LCRouterDidUpdateNotification";
+
 extern AVServiceRegion LCEffectiveServiceRegion;
 
 typedef NS_ENUM(NSInteger, LCServerLocation) {
@@ -143,6 +145,10 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
     return _candidateRTMRouterURLStringTable[@(_serverLocation)] ?: _lifesavingRTMRouterURLString;
 }
 
+- (void)postUpdateNotification {
+    [[NSNotificationCenter defaultCenter] postNotificationName:LCRouterDidUpdateNotification object:nil];
+}
+
 - (void)cacheServerTable:(NSDictionary *)APIServerTable forKey:(NSString *)key {
     NSDictionary *cacheObject = @{
         serverTableKey: APIServerTable,
@@ -155,6 +161,8 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:cacheObject];
 
     [self.userDefaults setData:data forKey:key];
+
+    [self postUpdateNotification];
 }
 
 - (NSDictionary *)cachedServerTableForKey:(NSString *)key {
@@ -185,6 +193,8 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
 
 - (void)cleanRouterCacheForKey:(NSString *)key {
     [self.userDefaults deleteKey:key];
+
+    [self postUpdateNotification];
 }
 
 - (void)updateInBackground {

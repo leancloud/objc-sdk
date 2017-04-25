@@ -8,11 +8,11 @@
 
 #import "AVOSCloudCrashReporting.h"
 #import "AVOSCloudCrashReporting_Internal.h"
-#import "AVOSCloud_Internal.h"
 #import <CommonCrypto/CommonCrypto.h>
 #import "UserAgent.h"
 #import "AVAnalyticsUtils.h"
 #import "AVPaasClient.h"
+#import "LCRouter.h"
 
 static BOOL crashReportingEnabled = NO;
 
@@ -59,11 +59,35 @@ static BOOL crashReportingEnabled = NO;
 }
 
 + (NSString *)uploadingURL {
-    return [[[AVOSCloud RESTBaseURL] URLByAppendingPathComponent:@"stats/breakpad/minidump"] absoluteString];
+    NSString *URLString = [[LCRouter sharedInstance] URLStringForPath:@"stats/breakpad/minidump"];
+    return URLString;
 }
 
 + (void)AVOSCloudDidInitializeWithApplicationId:(NSString *)applicationId clientKey:(NSString *)clientKey {
     [[self sharedInstance] enableCrashReportingWithApplicationId:applicationId clientKey:clientKey];
+}
+
+- (instancetype)init {
+    self = [super init];
+
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(routerDidUpdate:)
+                                                     name:LCRouterDidUpdateNotification
+                                                   object:nil];
+    }
+
+    return self;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)routerDidUpdate:(NSNotification *)notification {
+    [_crashReporter stop];
+    [_crashReporter setUploadingURL:[[self class] uploadingURL]];
+    [_crashReporter start:NO];
 }
 
 - (void)enableCrashReportingWithApplicationId:(NSString *)applicationId clientKey:(NSString *)clientKey {
