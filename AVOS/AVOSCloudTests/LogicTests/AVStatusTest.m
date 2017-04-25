@@ -237,14 +237,28 @@
     WAIT;
     [self addDeleteStatus:status];
     [AVUser logInWithUsername:@"zeng" password:@"123456"];
+
     [AVStatus getUnreadStatusesCountWithType:kAVStatusTypeTimeline andCallback:^(NSInteger number, NSError *error) {
-        
-        NSLog(@"============ Get %d Inbox unread", number);
-        XCTAssertNil(error, @"%@",[error description]);
+        XCTAssertTrue(number > 0);
+        XCTAssertNil(error, @"%@", [error description]);
         NOTIFY
     }];
-    
     WAIT;
+
+    [AVStatus resetUnreadStatusesCountWithType:kAVStatusTypeTimeline andCallback:^(BOOL succeeded, NSError * _Nullable error) {
+        XCTAssertTrue(succeeded);
+        XCTAssertNil(error, @"%@", [error description]);
+        NOTIFY
+    }];
+    WAIT;
+
+    [AVStatus getUnreadStatusesCountWithType:kAVStatusTypeTimeline andCallback:^(NSInteger number, NSError *error) {
+        XCTAssertTrue(number == 0);
+        XCTAssertNil(error, @"%@", [error description]);
+        NOTIFY
+    }];
+    WAIT;
+
     [self user:@"zeng" unfollow:@"travis"];
     [self user:@"travis" unfollow:@"zeng"];
 }
