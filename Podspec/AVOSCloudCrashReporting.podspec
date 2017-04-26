@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AVOSCloudCrashReporting'
-  s.version  = '4.3.0'
+  s.version  = '4.3.1'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud Crash Reporting Objective-C SDK'
   s.authors  = 'LeanCloud'
@@ -43,7 +43,6 @@ Pod::Spec.new do |s|
       'Breakpad/src/common/mac/macho_utilities.h',
       'Breakpad/src/client/ios/Breakpad.h',
       'Breakpad/src/client/ios/handler/ios_exception_minidump_generator.h',
-      'AVOS/AVOSCloudCrashReporting/AVOSCloudCrashReporting_Internal.h',
       'Breakpad/src/client/minidump_file_writer.h',
       'Breakpad/src/common/mac/file_id.h',
       'Breakpad/src/common/mac/macho_id.h',
