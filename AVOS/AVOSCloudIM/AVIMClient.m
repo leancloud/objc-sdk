@@ -735,6 +735,35 @@ static BOOL AVIMClientHasInstantiated = NO;
     return query;
 }
 
+- (void)queryOnlineClientsInClients:(NSArray<NSString *> *)clients callback:(AVIMArrayResultBlock)callback {
+    dispatch_async(imClientQueue, ^{
+        AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
+
+        genericCommand.needResponse = YES;
+        genericCommand.cmd = AVIMCommandType_Session;
+        genericCommand.op = AVIMOpType_Query;
+        genericCommand.peerId = _clientId;
+
+        [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
+            if (!error) {
+                AVIMSessionCommand *sessionMessage = inCommand.sessionMessage;
+                NSArray *onlineClients = sessionMessage.onlineSessionPeerIdsArray ?: @[];
+
+                [AVIMBlockHelper callArrayResultBlock:callback array:onlineClients error:nil];
+            } else {
+                [AVIMBlockHelper callArrayResultBlock:callback array:@[] error:error];
+            }
+        }];
+
+        AVIMSessionCommand *sessionCommand = [[AVIMSessionCommand alloc] init];
+        sessionCommand.sessionPeerIdsArray = clients ?: @[];
+
+        [genericCommand avim_addRequiredKeyWithCommand:sessionCommand];
+
+        [self sendCommand:genericCommand];
+    });
+}
+
 - (void)websocketOpened:(NSNotification *)notification {
     dispatch_async(imClientQueue, ^{
         [self sendOpenCommand];
