@@ -187,6 +187,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (AVIMConversationQuery *)conversationQuery;
 
+/*!
+ Query online clients within the given array of clients.
+
+ @note Currently, It only supports to query 20 clients at most.
+
+ @param clients  An array of clients you want to query.
+ @param callback The callback of query.
+ */
+- (void)queryOnlineClientsInClients:(NSArray<NSString *> *)clients callback:(AVIMArrayResultBlock)callback;
+
 @end
 
 /**
