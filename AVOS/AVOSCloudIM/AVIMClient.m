@@ -625,8 +625,9 @@ static BOOL AVIMClientHasInstantiated = NO;
             }
             [AVIMBlockHelper callBooleanResultBlock:callback error:error];
         }];
-        [self sendCommand:genericCommand];
-        [self changeStatus:AVIMClientStatusClosing];
+        [self sendCommand:genericCommand withBeforeSendingBlock:^{
+            [self changeStatus:AVIMClientStatusClosing];
+        }];
     });
 }
 
