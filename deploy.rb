@@ -59,7 +59,7 @@ module Podspec
         ok = false
 
         20.times do
-          ok = system("pod trunk push --allow-warnings #{file}")
+          ok = system("pod repo update && pod trunk push --allow-warnings #{file}")
 
           if ok
             log("succeed to push #{file}")
