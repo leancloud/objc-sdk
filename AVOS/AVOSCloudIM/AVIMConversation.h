@@ -160,7 +160,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  拉取对话最近的回执时间。
- @param callback - 回调结果
  */
 - (void)fetchReceiptTimestampsInBackground;
 
