@@ -16,15 +16,19 @@
 
 static BOOL crashReportingEnabled = NO;
 
-@implementation AVOSCloudCrashReporting
+@implementation AVOSCloudCrashReporting {
+    dispatch_queue_t _configurationQueue;
+}
 
 + (instancetype)sharedInstance {
-    static AVOSCloudCrashReporting *_instance = nil;
     static dispatch_once_t onceToken;
+    static AVOSCloudCrashReporting *instance;
+
     dispatch_once(&onceToken, ^{
-        _instance = [[self alloc] init];
+        instance = [[self alloc] init];
     });
-    return _instance;
+
+    return instance;
 }
 
 + (BOOL)isCrashReportingEnabled {
@@ -52,6 +56,8 @@ static BOOL crashReportingEnabled = NO;
     self = [super init];
 
     if (self) {
+        _configurationQueue = dispatch_queue_create("leancloud.crash-reporting-configuration", DISPATCH_QUEUE_SERIAL);
+
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(routerDidUpdate:)
                                                      name:LCRouterDidUpdateNotification
@@ -66,15 +72,15 @@ static BOOL crashReportingEnabled = NO;
 }
 
 - (void)routerDidUpdate:(NSNotification *)notification {
-    @synchronized (self) {
+    dispatch_async(_configurationQueue, ^{
         [self configureAndStart];
-    }
+    });
 }
 
 - (void)enableCrashReportingWithApplicationId:(NSString *)applicationId clientKey:(NSString *)clientKey {
-    @synchronized (self) {
+    dispatch_async(_configurationQueue, ^{
         [self configureAndStart];
-    }
+    });
 }
 
 - (void)configureAndStart {
