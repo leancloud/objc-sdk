@@ -265,6 +265,10 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 - (void)sendCommand:(AVIMGenericCommand *)command {
+    [self sendCommand:command withBeforeSendingBlock:nil];
+}
+
+- (void)sendCommand:(AVIMGenericCommand *)command withBeforeSendingBlock:(void(^)(void))beforeSendingBlock {
     BOOL sendable = (
         _socketWrapper != nil &&
         _status != AVIMClientStatusClosing &&
@@ -272,6 +276,8 @@ static BOOL AVIMClientHasInstantiated = NO;
     );
 
     if (sendable) {
+        if (beforeSendingBlock)
+            beforeSendingBlock();
         [_socketWrapper sendCommand:command];
     } else {
         AVIMCommandResultBlock callback = command.callback;
