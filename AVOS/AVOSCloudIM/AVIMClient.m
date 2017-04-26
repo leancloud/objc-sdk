@@ -269,24 +269,35 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 - (void)sendCommand:(AVIMGenericCommand *)command withBeforeSendingBlock:(void(^)(void))beforeSendingBlock {
-    BOOL sendable = (
-        _socketWrapper != nil &&
-        _status != AVIMClientStatusClosing &&
-        _status != AVIMClientStatusClosed
-    );
+    do {
+        if (!_socketWrapper)
+            break;
 
-    if (sendable) {
+        if (_status == AVIMClientStatusClosing || _status == AVIMClientStatusClosed) {
+            /* Allow to login in any case. */
+            BOOL isSessionOpen = command.cmd == AVIMCommandType_Session && command.op == AVIMOpType_Open;
+
+            if (!isSessionOpen)
+                break;
+        }
+
         if (beforeSendingBlock)
             beforeSendingBlock();
+
         [_socketWrapper sendCommand:command];
-    } else {
-        AVIMCommandResultBlock callback = command.callback;
-        if (callback) {
-            NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorClientNotOpen reason:@"Client not open when send a message."];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                callback(command, nil, error);
-            });
-        }
+
+        return;
+    } while(0);
+
+    AVIMCommandResultBlock callback = command.callback;
+
+    if (callback) {
+        NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorClientNotOpen
+                                               reason:@"Client not open when send a message."];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            callback(command, nil, error);
+        });
     }
 }
 
