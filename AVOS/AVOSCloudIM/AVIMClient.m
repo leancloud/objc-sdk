@@ -265,22 +265,39 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 - (void)sendCommand:(AVIMGenericCommand *)command {
-    BOOL sendable = (
-        _socketWrapper != nil &&
-        _status != AVIMClientStatusClosing &&
-        _status != AVIMClientStatusClosed
-    );
+    [self sendCommand:command withBeforeSendingBlock:nil];
+}
 
-    if (sendable) {
-        [_socketWrapper sendCommand:command];
-    } else {
-        AVIMCommandResultBlock callback = command.callback;
-        if (callback) {
-            NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorClientNotOpen reason:@"Client not open when send a message."];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                callback(command, nil, error);
-            });
+- (void)sendCommand:(AVIMGenericCommand *)command withBeforeSendingBlock:(void(^)(void))beforeSendingBlock {
+    do {
+        if (!_socketWrapper)
+            break;
+
+        if (_status == AVIMClientStatusClosing || _status == AVIMClientStatusClosed) {
+            /* Allow to login in any case. */
+            BOOL isSessionOpen = command.cmd == AVIMCommandType_Session && command.op == AVIMOpType_Open;
+
+            if (!isSessionOpen)
+                break;
         }
+
+        if (beforeSendingBlock)
+            beforeSendingBlock();
+
+        [_socketWrapper sendCommand:command];
+
+        return;
+    } while(0);
+
+    AVIMCommandResultBlock callback = command.callback;
+
+    if (callback) {
+        NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorClientNotOpen
+                                               reason:@"Client not open when send a message."];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            callback(command, nil, error);
+        });
     }
 }
 
@@ -619,8 +636,9 @@ static BOOL AVIMClientHasInstantiated = NO;
             }
             [AVIMBlockHelper callBooleanResultBlock:callback error:error];
         }];
-        [self sendCommand:genericCommand];
-        [self changeStatus:AVIMClientStatusClosing];
+        [self sendCommand:genericCommand withBeforeSendingBlock:^{
+            [self changeStatus:AVIMClientStatusClosing];
+        }];
     });
 }
 
