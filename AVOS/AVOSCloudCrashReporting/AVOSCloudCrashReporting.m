@@ -7,8 +7,8 @@
 //
 
 #import "AVOSCloudCrashReporting.h"
-#import "AVOSCloudCrashReporting_Internal.h"
-#import <CommonCrypto/CommonCrypto.h>
+#import "BreakpadController.h"
+#import "AVOSCloud_Internal.h"
 #import "UserAgent.h"
 #import "AVAnalyticsUtils.h"
 #import "AVPaasClient.h"
@@ -16,25 +16,6 @@
 
 static BOOL crashReportingEnabled = NO;
 
-@interface NSString (MD5)
-- (NSString *)AVCRMD5String;
-@end
-@implementation NSString (MD5)
-- (NSString *)AVCRMD5String {
-    const char *cstr = [self UTF8String];
-    unsigned char result[16];
-    CC_MD5(cstr, (CC_LONG)strlen(cstr), result);
-    
-    //???: 为什么要返回大写MD5 一般都是小写
-    return [NSString stringWithFormat:
-            @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
-            result[0], result[1], result[2], result[3],
-            result[4], result[5], result[6], result[7],
-            result[8], result[9], result[10], result[11],
-            result[12], result[13], result[14], result[15]
-            ];
-}
-@end
 @implementation AVOSCloudCrashReporting
 
 + (instancetype)sharedInstance {
@@ -85,21 +66,29 @@ static BOOL crashReportingEnabled = NO;
 }
 
 - (void)routerDidUpdate:(NSNotification *)notification {
-    [_crashReporter stop];
-    [_crashReporter setUploadingURL:[[self class] uploadingURL]];
-    [_crashReporter start:NO];
+    @synchronized (self) {
+        [self configureAndStart];
+    }
 }
 
 - (void)enableCrashReportingWithApplicationId:(NSString *)applicationId clientKey:(NSString *)clientKey {
-    if (!_crashReporter) {
-        _crashReporter = [BreakpadController sharedInstance];
+    @synchronized (self) {
+        [self configureAndStart];
     }
+}
 
-    [_crashReporter setUploadingURL:[[self class] uploadingURL]];
-    [_crashReporter setUploadInterval:30];
+- (void)configureAndStart {
+    BreakpadController *crashReporter = [BreakpadController sharedInstance];
+
+    /* Stop before configration. */
+    [crashReporter stop];
+
+    [crashReporter setUploadInterval:30];
+    [crashReporter setUploadingURL:[[self class] uploadingURL]];
 
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
 
+    NSString *applicationId = [AVOSCloud getApplicationId];
     NSString *signature = [[AVPaasClient sharedInstance] signatureHeaderFieldValue];
 
     [dict setValue:applicationId forKey:[@BREAKPAD_SERVER_HEADER_PREFIX stringByAppendingString:LCHeaderFieldNameId]];
@@ -107,13 +96,12 @@ static BOOL crashReportingEnabled = NO;
     [dict setValue:USER_AGENT    forKey:[@BREAKPAD_SERVER_HEADER_PREFIX stringByAppendingString:@"User-Agent"]];
 
     [dict addEntriesFromDictionary:[AVAnalyticsUtils deviceInfo]];
-    
-    [_crashReporter setParametersToAddAtUploadTime:dict];
-    
-    [_crashReporter start:NO];
-    
-    [_crashReporter setUploadingEnabled:YES];
-    
+
+    [crashReporter setParametersToAddAtUploadTime:dict];
+
+    [crashReporter start:NO];
+
+    [crashReporter setUploadingEnabled:YES];
 }
 
 @end

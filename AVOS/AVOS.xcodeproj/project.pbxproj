@@ -886,7 +886,6 @@
 		83FCB9DF1CEDC57C007D8712 /* LCURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FCB99E1CEDC57C007D8712 /* LCURLSessionManager.m */; };
 		8C255D2B1AE9F817008A6FFC /* AVOSCloudCrashReporting.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C255D2A1AE9F817008A6FFC /* AVOSCloudCrashReporting.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C255D421AE9FD91008A6FFC /* AVOSCloudCrashReporting.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C255D411AE9FD91008A6FFC /* AVOSCloudCrashReporting.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		8C255D441AE9FD9D008A6FFC /* AVOSCloudCrashReporting_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C255D431AE9FD9D008A6FFC /* AVOSCloudCrashReporting_Internal.h */; };
 		8C2FED541A67C2DA0056F945 /* AVIMGeneralObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C2FED521A67C2DA0056F945 /* AVIMGeneralObject.h */; };
 		8C2FED551A67C2DA0056F945 /* AVIMGeneralObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2FED531A67C2DA0056F945 /* AVIMGeneralObject.m */; };
 		8C630C811A6EB259008F1B00 /* AVIMErrorUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C630C7F1A6EB259008F1B00 /* AVIMErrorUtil.h */; };
@@ -1548,7 +1547,6 @@
 		8C255D291AE9F817008A6FFC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C255D2A1AE9F817008A6FFC /* AVOSCloudCrashReporting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloudCrashReporting.h; sourceTree = "<group>"; };
 		8C255D411AE9FD91008A6FFC /* AVOSCloudCrashReporting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVOSCloudCrashReporting.m; sourceTree = "<group>"; };
-		8C255D431AE9FD9D008A6FFC /* AVOSCloudCrashReporting_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVOSCloudCrashReporting_Internal.h; sourceTree = "<group>"; };
 		8C2FED521A67C2DA0056F945 /* AVIMGeneralObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMGeneralObject.h; sourceTree = "<group>"; };
 		8C2FED531A67C2DA0056F945 /* AVIMGeneralObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMGeneralObject.m; sourceTree = "<group>"; };
 		8C630C7F1A6EB259008F1B00 /* AVIMErrorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMErrorUtil.h; sourceTree = "<group>"; };
@@ -2318,7 +2316,6 @@
 			isa = PBXGroup;
 			children = (
 				83B5FF071B7C7678000C3923 /* Breakpad */,
-				8C255D431AE9FD9D008A6FFC /* AVOSCloudCrashReporting_Internal.h */,
 				8C255D2A1AE9F817008A6FFC /* AVOSCloudCrashReporting.h */,
 				8C255D411AE9FD91008A6FFC /* AVOSCloudCrashReporting.m */,
 				8C255D281AE9F817008A6FFC /* Supporting Files */,
@@ -3554,7 +3551,6 @@
 				83B5FF6B1B7C768B000C3923 /* macho_utilities.h in Headers */,
 				83B5FF4A1B7C768B000C3923 /* Breakpad.h in Headers */,
 				83B5FF491B7C768B000C3923 /* ios_exception_minidump_generator.h in Headers */,
-				8C255D441AE9FD9D008A6FFC /* AVOSCloudCrashReporting_Internal.h in Headers */,
 				83B5FF5E1B7C768B000C3923 /* minidump_file_writer.h in Headers */,
 				83B5FF671B7C768B000C3923 /* file_id.h in Headers */,
 				83B5FF691B7C768B000C3923 /* macho_id.h in Headers */,
