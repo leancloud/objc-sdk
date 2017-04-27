@@ -515,6 +515,14 @@
 		835092021EB1BDD0000DA884 /* AVSMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 835091FC1EB1BDD0000DA884 /* AVSMS.m */; };
 		835092031EB1BDD0000DA884 /* AVSMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 835091FC1EB1BDD0000DA884 /* AVSMS.m */; };
 		835092041EB1BDD0000DA884 /* AVSMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 835091FC1EB1BDD0000DA884 /* AVSMS.m */; };
+		835092121EB1ECB7000DA884 /* AVDynamicObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 835092101EB1ECB7000DA884 /* AVDynamicObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		835092131EB1ECB7000DA884 /* AVDynamicObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 835092101EB1ECB7000DA884 /* AVDynamicObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		835092141EB1ECB7000DA884 /* AVDynamicObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 835092101EB1ECB7000DA884 /* AVDynamicObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		835092151EB1ECB7000DA884 /* AVDynamicObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 835092101EB1ECB7000DA884 /* AVDynamicObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		835092161EB1ECB7000DA884 /* AVDynamicObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 835092111EB1ECB7000DA884 /* AVDynamicObject.m */; };
+		835092171EB1ECB7000DA884 /* AVDynamicObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 835092111EB1ECB7000DA884 /* AVDynamicObject.m */; };
+		835092181EB1ECB7000DA884 /* AVDynamicObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 835092111EB1ECB7000DA884 /* AVDynamicObject.m */; };
+		835092191EB1ECB7000DA884 /* AVDynamicObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 835092111EB1ECB7000DA884 /* AVDynamicObject.m */; };
 		835C5F711D25929600EF0EBB /* AVFriendQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A651A5A79FF00C5C6C4 /* AVFriendQuery.h */; };
 		835C5F721D2594EA00EF0EBB /* AVAnalyticsActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419E71A5A79FF00C5C6C4 /* AVAnalyticsActivity.h */; };
 		835E015A1B3192240025F99A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 835E01591B3192240025F99A /* CoreLocation.framework */; };
@@ -1433,6 +1441,8 @@
 		834B4A9B1B94080500A7ADBC /* LCIMConversationQueryCacheStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMConversationQueryCacheStore.m; sourceTree = "<group>"; };
 		835091FB1EB1BDD0000DA884 /* AVSMS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVSMS.h; sourceTree = "<group>"; };
 		835091FC1EB1BDD0000DA884 /* AVSMS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVSMS.m; sourceTree = "<group>"; };
+		835092101EB1ECB7000DA884 /* AVDynamicObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVDynamicObject.h; sourceTree = "<group>"; };
+		835092111EB1ECB7000DA884 /* AVDynamicObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVDynamicObject.m; sourceTree = "<group>"; };
 		835E01591B3192240025F99A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		835E015B1B31922B0025F99A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		835E015D1B31922F0025F99A /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
@@ -2860,6 +2870,8 @@
 				837CC71D1B568431001333AD /* NSDictionary+LCHash.m */,
 				8302AED31C192A0600E13F8A /* LCURLConnection.h */,
 				8302AED41C192A0600E13F8A /* LCURLConnection.m */,
+				835092101EB1ECB7000DA884 /* AVDynamicObject.h */,
+				835092111EB1ECB7000DA884 /* AVDynamicObject.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -3208,6 +3220,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				835092131EB1ECB7000DA884 /* AVDynamicObject.h in Headers */,
 				835091FE1EB1BDD0000DA884 /* AVSMS.h in Headers */,
 				70CA800D1BDE4314000A3B21 /* AVSearchQuery.h in Headers */,
 				70CA800E1BDE4314000A3B21 /* AVSearchSortBuilder.h in Headers */,
@@ -3321,6 +3334,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				835092151EB1ECB7000DA884 /* AVDynamicObject.h in Headers */,
 				835092001EB1BDD0000DA884 /* AVSMS.h in Headers */,
 				8320F8D91C1918C60024B45E /* AVACL.h in Headers */,
 				8320F8DA1C1918C60024B45E /* LCDB.h in Headers */,
@@ -3426,6 +3440,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				835092141EB1ECB7000DA884 /* AVDynamicObject.h in Headers */,
 				835091FF1EB1BDD0000DA884 /* AVSMS.h in Headers */,
 				83D8CED21C17DAF50094279D /* AVACL.h in Headers */,
 				83FCB9CF1CEDC57C007D8712 /* LCURLResponseSerialization.h in Headers */,
@@ -3596,6 +3611,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				835092121EB1ECB7000DA884 /* AVDynamicObject.h in Headers */,
 				835091FD1EB1BDD0000DA884 /* AVSMS.h in Headers */,
 				8C841AAD1A5A7A0000C5C6C4 /* AVACL.h in Headers */,
 				83DF02B81AF86032000E289C /* LCDB.h in Headers */,
@@ -4350,6 +4366,7 @@
 				70CA7F861BDE3721000A3B21 /* AVLocationManager.m in Sources */,
 				70CA7F871BDE3721000A3B21 /* AVObject.m in Sources */,
 				70CA7F881BDE3721000A3B21 /* AVObjectUtils.m in Sources */,
+				835092171EB1ECB7000DA884 /* AVDynamicObject.m in Sources */,
 				70CA7F891BDE3721000A3B21 /* AVRelation.m in Sources */,
 				83FCB9DD1CEDC57C007D8712 /* LCURLSessionManager.m in Sources */,
 				9A404DD81CE5A9C200DEB3DC /* LCRouter.m in Sources */,
@@ -4475,6 +4492,7 @@
 				8320F8CA1C1918C60024B45E /* AVScheduler.m in Sources */,
 				830EB9C91C3E4BFA00BA917F /* LCObserver.m in Sources */,
 				8320F8CC1C1918C60024B45E /* AVCloudQueryResult.m in Sources */,
+				835092191EB1ECB7000DA884 /* AVDynamicObject.m in Sources */,
 				8320F8CE1C1918C60024B45E /* AVImageRequestOperation.m in Sources */,
 				8320F8CF1C1918C60024B45E /* AVNetworkActivityIndicatorManager.m in Sources */,
 				8320F8D01C1918C60024B45E /* LCKeyValueStore.m in Sources */,
@@ -4558,6 +4576,7 @@
 				83D8CEB71C17DAF50094279D /* AVFriendQuery.m in Sources */,
 				83D8CEB81C17DAF50094279D /* AVPartialInputStream.m in Sources */,
 				83D8CEB91C17DAF50094279D /* AVPush.m in Sources */,
+				835092181EB1ECB7000DA884 /* AVDynamicObject.m in Sources */,
 				83D8CEBA1C17DAF50094279D /* LCDatabaseCoordinator.m in Sources */,
 				83D8CEBB1C17DAF50094279D /* AVGroup.m in Sources */,
 				83D8CEBC1C17DAF50094279D /* AVAckCommand.m in Sources */,
@@ -4688,6 +4707,7 @@
 				8C841B2B1A5A7A0000C5C6C4 /* AVFriendQuery.m in Sources */,
 				8C841AE41A5A7A0000C5C6C4 /* AVPartialInputStream.m in Sources */,
 				8C841B251A5A7A0000C5C6C4 /* AVPush.m in Sources */,
+				835092161EB1ECB7000DA884 /* AVDynamicObject.m in Sources */,
 				830E7CF91B1CA2A2005F4B22 /* LCDatabaseCoordinator.m in Sources */,
 				8C841AEF1A5A7A0000C5C6C4 /* AVGroup.m in Sources */,
 				8C841AFF1A5A7A0000C5C6C4 /* AVAckCommand.m in Sources */,
