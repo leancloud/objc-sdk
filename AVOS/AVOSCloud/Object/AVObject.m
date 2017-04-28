@@ -114,14 +114,22 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     return [AVObjectUtils objectSnapshot:self recursive:NO];
 }
 
-- (NSString *)description {
-    NSDictionary *snapshot = [self snapshot];
+- (void)setDescription:(id)value {
+    [self setObject:value forKey:@"description"];
+}
 
-    return [NSString stringWithFormat:@"<%@, %@, %@, %@>",
-            NSStringFromClass([self class]),
-            self.className,
-            self.objectId,
-            snapshot];
+- (id)description {
+    if ([self objectForKey:@"description"] != nil) {
+        return [self objectForKey:@"description"];
+    } else {
+        NSDictionary *snapshot = [self snapshot];
+        
+        return [NSString stringWithFormat:@"<%@, %@, %@, %@>",
+                NSStringFromClass([self class]),
+                self.className,
+                self.objectId,
+                snapshot];
+    }
 }
 
 #pragma mark - Accessor
