@@ -56,6 +56,9 @@
 #import "AVACL.h"
 #import "AVRole.h"
 
+// SMS
+#import "AVSMS.h"
+
 #if AV_IOS_ONLY && !TARGET_OS_WATCH
 // IM 1.0
 #import "AVSession.h"
