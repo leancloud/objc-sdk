@@ -234,6 +234,14 @@ void prepareDynamicProperties(Class aClass) {
     }
 }
 
+- (void)setObject:(id)object forKeyedSubscript:(NSString *)key {
+    [self setObject:object forKey:key];
+}
+
+- (id)objectForKeyedSubscript:(NSString *)key {
+    return [self objectForKey:key];
+}
+
 - (void)setObject:(id)object forKey:(NSString *)key {
     [self propertyTable][key] = object;
 }
