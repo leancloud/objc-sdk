@@ -9,132 +9,267 @@
 #import "AVDynamicObject.h"
 #import <objc/runtime.h>
 
-static NSString *getterNameFromSetter(SEL selector);
-static NSString *setterNameFromGetterName(NSString *getterName);
+@interface AVDynamicObject ()
 
-static id getter(id self, SEL _cmd) {
-    return [self objectForKey:NSStringFromSelector(_cmd)];
+- (id)objectForSelector:(SEL)selector;
+
+- (void)setObject:(id)object forSelector:(SEL)selector;
+
+@end
+
+
+static char getter_char(id self, SEL _cmd) {
+    return [[self objectForSelector:_cmd] charValue];
 }
 
-static void setter(id self, SEL _cmd, id value) {
-    [self setObject:value forKey:getterNameFromSetter(_cmd)];
+static void setter_char(id self, SEL _cmd, char value) {
+    [self setObject:@(value) forSelector:_cmd];
 }
 
-static void setterWithCopy(id self, SEL _cmd, id value) {
-    [self setObject:[value copy] forKey:getterNameFromSetter(_cmd)];
+static int getter_int(id self, SEL _cmd) {
+    return [[self objectForSelector:_cmd] intValue];
 }
 
-static BOOL getter_b(id self, SEL _cmd) {
-    return [[self objectForKey:NSStringFromSelector(_cmd)] boolValue];
+static void setter_int(id self, SEL _cmd, int value) {
+    [self setObject:@(value) forSelector:_cmd];
 }
 
-static void setter_b(id self, SEL _cmd, BOOL value) {
-    [self setObject:@(value) forKey:getterNameFromSetter(_cmd)];
+static short getter_short(id self, SEL _cmd) {
+    return [[self objectForSelector:_cmd] shortValue];
 }
 
-static long getter_l(id self, SEL _cmd) {
-    return [[self objectForKey:NSStringFromSelector(_cmd)] longValue];
+static void setter_short(id self, SEL _cmd, short value) {
+    [self setObject:@(value) forSelector:_cmd];
 }
 
-static void setter_l(id self, SEL _cmd, long value) {
-    [self setObject:@(value) forKey:getterNameFromSetter(_cmd)];
+static long getter_long(id self, SEL _cmd) {
+    return [[self objectForSelector:_cmd] longValue];
 }
 
-static long long getter_ll(id self, SEL _cmd) {
-    return [[self objectForKey:NSStringFromSelector(_cmd)] longLongValue];
+static void setter_long(id self, SEL _cmd, long value) {
+    [self setObject:@(value) forSelector:_cmd];
 }
 
-static void setter_ll(id self, SEL _cmd, long long value) {
-    [self setObject:@(value) forKey:getterNameFromSetter(_cmd)];
+static long long getter_long_long(id self, SEL _cmd) {
+    return [[self objectForSelector:_cmd] longLongValue];
 }
 
-static unsigned long long getter_ull(id self, SEL _cmd) {
-    return [[self objectForKey:NSStringFromSelector(_cmd)] unsignedLongLongValue];
+static void setter_long_long(id self, SEL _cmd, long long value) {
+    [self setObject:@(value) forSelector:_cmd];
 }
 
-static void setter_ull(id self, SEL _cmd, unsigned long long value) {
-    [self setObject:@(value) forKey:getterNameFromSetter(_cmd)];
+static unsigned char getter_unsigned_char(id self, SEL _cmd) {
+    return [[self objectForSelector:_cmd] unsignedCharValue];
 }
 
-static double getter_d(id self, SEL _cmd) {
-    return [[self objectForKey:NSStringFromSelector(_cmd)] doubleValue];
+static void setter_unsigned_char(id self, SEL _cmd, unsigned char value) {
+    [self setObject:@(value) forSelector:_cmd];
 }
 
-static void setter_d(id self, SEL _cmd, double value) {
-    [self setObject:[NSNumber numberWithDouble:value] forKey:getterNameFromSetter(_cmd)];
+static unsigned int getter_unsigned_int(id self, SEL _cmd) {
+    return [[self objectForSelector:_cmd] unsignedIntValue];
 }
 
-static float getter_f(id self, SEL _cmd) {
-    return [[self objectForKey:NSStringFromSelector(_cmd)] floatValue];
+static void setter_unsigned_int(id self, SEL _cmd, unsigned int value) {
+    [self setObject:@(value) forSelector:_cmd];
 }
 
-static void setter_f(id self, SEL _cmd, float value) {
-    [self setObject:[NSNumber numberWithFloat:value] forKey:getterNameFromSetter(_cmd)];
+static unsigned short getter_unsigned_short(id self, SEL _cmd) {
+    return [[self objectForSelector:_cmd] unsignedShortValue];
 }
 
-static
-NSString *getterNameFromSetter(SEL selector) {
-    NSString *string = NSStringFromSelector(selector);
-    NSString *key = [string substringWithRange:NSMakeRange(3, string.length - 4)];
-
-    NSString *firstLetter = [[key substringToIndex:1] lowercaseString];
-    key = [firstLetter stringByAppendingString:[key substringFromIndex:1]];
-
-    return key;
+static void setter_unsigned_short(id self, SEL _cmd, unsigned short value) {
+    [self setObject:@(value) forSelector:_cmd];
 }
 
-static
-NSString *setterNameFromGetterName(NSString *getterName) {
-    NSString *setterName = [NSString stringWithFormat:@"set%@%@:",
-                            [[getterName substringToIndex:1] uppercaseString],
-                            [getterName substringFromIndex:1]];
-    return setterName;
+static unsigned long getter_unsigned_long(id self, SEL _cmd) {
+    return [[self objectForSelector:_cmd] unsignedLongValue];
+}
+
+static void setter_unsigned_long(id self, SEL _cmd, unsigned long value) {
+    [self setObject:@(value) forSelector:_cmd];
+}
+
+static unsigned long long getter_unsigned_long_long(id self, SEL _cmd) {
+    return [[self objectForSelector:_cmd] unsignedLongLongValue];
+}
+
+static void setter_unsigned_long_long(id self, SEL _cmd, unsigned long long value) {
+    [self setObject:@(value) forSelector:_cmd];
+}
+
+static float getter_float(id self, SEL _cmd) {
+    return [[self objectForSelector:_cmd] floatValue];
+}
+
+static void setter_float(id self, SEL _cmd, float value) {
+    [self setObject:@(value) forSelector:_cmd];
+}
+
+static double getter_double(id self, SEL _cmd) {
+    return [[self objectForSelector:_cmd] doubleValue];
+}
+
+static void setter_double(id self, SEL _cmd, double value) {
+    [self setObject:@(value) forSelector:_cmd];
+}
+
+static BOOL getter_bool(id self, SEL _cmd) {
+    return [[self objectForSelector:_cmd] boolValue];
+}
+
+static void setter_bool(id self, SEL _cmd, BOOL value) {
+    [self setObject:@(value) forSelector:_cmd];
+}
+
+static char *getter_char_pointer(id self, SEL _cmd) {
+    return (char *)[[self objectForSelector:_cmd] unsignedLongLongValue];
+}
+
+static void setter_char_pointer(id self, SEL _cmd, char *value) {
+    [self setObject:@((unsigned long long)value) forSelector:_cmd];
+}
+static id getter_object(id self, SEL _cmd) {
+    return [self objectForSelector:_cmd];
+}
+
+static void setter_object(id self, SEL _cmd, id value) {
+    [self setObject:value forSelector:_cmd];
+}
+
+static void setter_object_copy(id self, SEL _cmd, id value) {
+    [self setObject:[value copy] forSelector:_cmd];
+}
+
+static Class getter_class(id self, SEL _cmd) {
+    return [self objectForSelector:_cmd];
+}
+
+static void setter_class(id self, SEL _cmd, Class value) {
+    [self setObject:value forSelector:_cmd];
+}
+
+static SEL getter_selector(id self, SEL _cmd) {
+    NSString *string = [self objectForSelector:_cmd];
+
+    if (string)
+        return NSSelectorFromString(string);
+    else
+        return NULL;
+}
+
+static void setter_selector(id self, SEL _cmd, SEL value) {
+    if (value)
+        [self setObject:NSStringFromSelector(value) forSelector:_cmd];
+    else
+        [self setObject:nil forSelector:_cmd];
+}
+
+
+NS_INLINE
+BOOL hasProperty(id object, NSString *name) {
+    return class_getProperty(object_getClass(object), name.UTF8String);
+}
+
+NS_INLINE
+NSString *firstLowercaseString(NSString *string) {
+    NSString *firstLetter = [[string substringToIndex:1] lowercaseString];
+    string = [firstLetter stringByAppendingString:[string substringFromIndex:1]];
+
+    return string;
+}
+
+NS_INLINE
+NSString *firstUppercaseString(NSString *string) {
+    NSString *firstLetter = [[string substringToIndex:1] uppercaseString];
+    string = [firstLetter stringByAppendingString:[string substringFromIndex:1]];
+
+    return string;
 }
 
 NS_INLINE
 void synthesizeDynamicProperty(Class aClass, NSString *getterName, const char *type, BOOL isCopy) {
-    NSString *setterName = [NSString stringWithFormat:@"set%@%@:",
-                            [[getterName substringToIndex:1] uppercaseString],
-                            [getterName substringFromIndex:1]];
+    if (!getterName.length)
+        return;
+
+    NSString *setterName = [NSString stringWithFormat:@"set%@:", firstUppercaseString(getterName)];
+
+    SEL getter = NSSelectorFromString(getterName);
+    SEL setter = NSSelectorFromString(setterName);
 
     switch (type[0]) {
-    case '@':
-        class_addMethod(aClass, NSSelectorFromString(getterName), (IMP)getter, "@@:");
-        if (isCopy) {
-            class_addMethod(aClass, NSSelectorFromString(setterName), (IMP)setterWithCopy, "v@:@");
-        } else {
-            class_addMethod(aClass, NSSelectorFromString(setterName), (IMP)setter, "v@:@");
-        }
+    case 'c':
+        class_addMethod(aClass, getter, (IMP)getter_char, "c@:");
+        class_addMethod(aClass, setter, (IMP)setter_char, "v@:c");
         break;
-    case 'f':
-        class_addMethod(aClass, NSSelectorFromString(getterName), (IMP)getter_f, "f@:");
-        class_addMethod(aClass, NSSelectorFromString(setterName), (IMP)setter_f, "v@:f");
+    case 'i':
+        class_addMethod(aClass, getter, (IMP)getter_int, "i@:");
+        class_addMethod(aClass, setter, (IMP)setter_int, "v@:i");
         break;
-    case 'd':
-        class_addMethod(aClass, NSSelectorFromString(getterName), (IMP)getter_d, "d@:");
-        class_addMethod(aClass, NSSelectorFromString(setterName), (IMP)setter_d, "v@:d");
+    case 's':
+        class_addMethod(aClass, getter, (IMP)getter_short, "s@:");
+        class_addMethod(aClass, setter, (IMP)setter_short, "v@:s");
+        break;
+    case 'l':
+        class_addMethod(aClass, getter, (IMP)getter_long, "l@:");
+        class_addMethod(aClass, setter, (IMP)setter_long, "v@:l");
         break;
     case 'q':
-        class_addMethod(aClass, NSSelectorFromString(getterName), (IMP)getter_ll, "q@:");
-        class_addMethod(aClass, NSSelectorFromString(setterName), (IMP)setter_ll, "v@:q");
+        class_addMethod(aClass, getter, (IMP)getter_long_long, "q@:");
+        class_addMethod(aClass, setter, (IMP)setter_long_long, "v@:q");
+        break;
+    case 'C':
+        class_addMethod(aClass, getter, (IMP)getter_unsigned_char, "C@:");
+        class_addMethod(aClass, setter, (IMP)setter_unsigned_char, "v@:C");
+        break;
+    case 'I':
+        class_addMethod(aClass, getter, (IMP)getter_unsigned_int, "I@:");
+        class_addMethod(aClass, setter, (IMP)setter_unsigned_int, "v@:I");
+        break;
+    case 'S':
+        class_addMethod(aClass, getter, (IMP)getter_unsigned_short, "S@:");
+        class_addMethod(aClass, setter, (IMP)setter_unsigned_short, "v@:S");
+        break;
+    case 'L':
+        class_addMethod(aClass, getter, (IMP)getter_unsigned_long, "L@:");
+        class_addMethod(aClass, setter, (IMP)setter_unsigned_long, "v@:L");
         break;
     case 'Q':
-        class_addMethod(aClass, NSSelectorFromString(getterName), (IMP)getter_ull, "Q@:");
-        class_addMethod(aClass, NSSelectorFromString(setterName), (IMP)setter_ull, "v@:Q");
+        class_addMethod(aClass, getter, (IMP)getter_unsigned_long_long, "Q@:");
+        class_addMethod(aClass, setter, (IMP)setter_unsigned_long_long, "v@:Q");
+        break;
+    case 'f':
+        class_addMethod(aClass, getter, (IMP)getter_float, "f@:");
+        class_addMethod(aClass, setter, (IMP)setter_float, "v@:f");
+        break;
+    case 'd':
+        class_addMethod(aClass, getter, (IMP)getter_double, "d@:");
+        class_addMethod(aClass, setter, (IMP)setter_double, "v@:d");
         break;
     case 'B':
-        class_addMethod(aClass, NSSelectorFromString(getterName), (IMP)getter_b, "B@:");
-        class_addMethod(aClass, NSSelectorFromString(setterName), (IMP)setter_b, "v@:B");
+        class_addMethod(aClass, getter, (IMP)getter_bool, "B@:");
+        class_addMethod(aClass, setter, (IMP)setter_bool, "v@:B");
         break;
-    case 'c':
-        if (@encode(BOOL)[0] == 'c') {
-            class_addMethod(aClass, NSSelectorFromString(getterName), (IMP)getter_b, "B@:");
-            class_addMethod(aClass, NSSelectorFromString(setterName), (IMP)setter_b, "v@:B");
-            break;
-        }
-    default:
-        class_addMethod(aClass, NSSelectorFromString(getterName), (IMP)getter_l, "l@:");
-        class_addMethod(aClass, NSSelectorFromString(setterName), (IMP)setter_l, "v@:l");
+    case '*':
+        class_addMethod(aClass, getter, (IMP)getter_char_pointer, "*@:");
+        class_addMethod(aClass, setter, (IMP)setter_char_pointer, "v@:*");
+        break;
+    case '@':
+        class_addMethod(aClass, getter, (IMP)getter_object, "@@:");
+
+        if (isCopy)
+            class_addMethod(aClass, setter, (IMP)setter_object_copy, "v@:@");
+        else
+            class_addMethod(aClass, setter, (IMP)setter_object, "v@:@");
+
+        break;
+    case '#':
+        class_addMethod(aClass, getter, (IMP)getter_class, "#@:");
+        class_addMethod(aClass, setter, (IMP)setter_class, "v@:#");
+        break;
+    case ':':
+        class_addMethod(aClass, getter, (IMP)getter_selector, ":@:");
+        class_addMethod(aClass, setter, (IMP)setter_selector, "v@::");
         break;
     }
 }
@@ -159,6 +294,10 @@ void synthesizeDynamicProperties(Class aClass) {
             free(dynamic);
 
             const char* name = property_getName(property);
+
+            if (!name)
+                continue;
+
             char *type = property_copyAttributeValue(property, "T");
             char *copy = property_copyAttributeValue(property, "C");
 
@@ -176,7 +315,7 @@ void synthesizeDynamicProperties(Class aClass) {
 }
 
 NS_INLINE
-NSMutableDictionary *synthesizedClassTable() {
+NSMutableDictionary *preparedClassTable() {
     static NSMutableDictionary *dictionary = nil;
 
     if (!dictionary)
@@ -186,23 +325,27 @@ NSMutableDictionary *synthesizedClassTable() {
 }
 
 NS_INLINE
-void prepareDynamicPropertiesForEachClass(Class aClass) {
-    NSMutableDictionary *classTable = synthesizedClassTable();
-    NSString *address = [NSString stringWithFormat:@"%p", aClass];
+void prepareEachDynamicClass(Class aClass) {
+    if (!aClass)
+        return;
 
-    if (!classTable[address]) {
-        classTable[address] = @(1);
-        synthesizeDynamicProperties(aClass);
-    }
+    NSMutableDictionary *classTable = preparedClassTable();
+    NSString *key = [NSString stringWithFormat:@"%p", aClass];
+
+    if (classTable[key])
+        return;
+
+    classTable[key] = @(1);
+    synthesizeDynamicProperties(aClass);
 }
 
 NS_INLINE
-void prepareDynamicProperties(Class aClass) {
+void prepareDynamicClass(Class aClass) {
     Class eachClass = aClass;
     Class rootClass = [AVDynamicObject class];
 
     do {
-        prepareDynamicPropertiesForEachClass(eachClass);
+        prepareEachDynamicClass(eachClass);
         if (eachClass == rootClass)
             break;
     } while((eachClass = class_getSuperclass(eachClass)));
@@ -211,10 +354,10 @@ void prepareDynamicProperties(Class aClass) {
 @implementation AVDynamicObject
 
 + (void)initialize {
-    id lockObject = [AVDynamicObject class];
+    id lockAround = [AVDynamicObject class];
 
-    @synchronized (lockObject) {
-        prepareDynamicProperties(self);
+    @synchronized (lockAround) {
+        prepareDynamicClass(self);
     }
 }
 
@@ -240,6 +383,29 @@ void prepareDynamicProperties(Class aClass) {
 
 - (id)objectForKeyedSubscript:(NSString *)key {
     return [self objectForKey:key];
+}
+
+- (void)setObject:(id)object forSelector:(SEL)selector {
+    NSString *name = NSStringFromSelector(selector);
+    name = [name substringWithRange:NSMakeRange(3, name.length - 4)];
+
+    if (hasProperty(self, name)) {
+        [self setObject:object forKey:name];
+    } else {
+        name = firstLowercaseString(name);
+        [self setObject:object forKey:name];
+    }
+}
+
+- (id)objectForSelector:(SEL)selector {
+    NSString *name = NSStringFromSelector(selector);
+
+    if (hasProperty(self, name)) {
+        return [self objectForKey:name];
+    } else {
+        name = firstLowercaseString(name);
+        return [self objectForKey:name];
+    }
 }
 
 - (void)setObject:(id)object forKey:(NSString *)key {
