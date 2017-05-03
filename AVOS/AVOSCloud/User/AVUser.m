@@ -273,11 +273,22 @@ static BOOL enableAutomatic = NO;
     }];
 }
 
-+(void)requestMobilePhoneVerify:(NSString *)phoneNumber withBlock:(AVBooleanResultBlock)block {
++ (void)requestMobilePhoneVerify:(NSString *)phoneNumber withBlock:(AVBooleanResultBlock)block {
+    [self requestVerificationCodeForPhoneNumber:phoneNumber options:nil callback:block];
+}
+
++ (void)requestVerificationCodeForPhoneNumber:(NSString *)phoneNumber
+                                      options:(AVUserShortMessageRequestOptions *)options
+                                     callback:(AVBooleanResultBlock)callback
+{
     NSParameterAssert(phoneNumber);
-    
-    [[AVPaasClient sharedInstance] postObject:@"requestMobilePhoneVerify" withParameters:@{ @"mobilePhoneNumber" : phoneNumber } block:^(id object, NSError *error) {
-        [AVUtils callBooleanResultBlock:block error:error];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+
+    parameters[@"mobilePhoneNumber"] = phoneNumber;
+    parameters[@"validate_token"] = options.validationToken;
+
+    [[AVPaasClient sharedInstance] postObject:@"requestMobilePhoneVerify" withParameters:parameters block:^(id object, NSError *error) {
+        [AVUtils callBooleanResultBlock:callback error:error];
     }];
 }
 
@@ -568,11 +579,22 @@ static BOOL enableAutomatic = NO;
     return user;
 }
 
-+(void)requestLoginSmsCode:(NSString *)phoneNumber withBlock:(AVBooleanResultBlock)block {
++ (void)requestLoginSmsCode:(NSString *)phoneNumber withBlock:(AVBooleanResultBlock)block {
+    [self requestLoginCodeForPhoneNumber:phoneNumber options:nil callback:block];
+}
+
++ (void)requestLoginCodeForPhoneNumber:(NSString *)phoneNumber
+                               options:(AVUserShortMessageRequestOptions *)options
+                              callback:(AVBooleanResultBlock)callback
+{
     NSParameterAssert(phoneNumber);
-    
-    [[AVPaasClient sharedInstance] postObject:@"requestLoginSmsCode" withParameters:@{ @"mobilePhoneNumber" : phoneNumber } block:^(id object, NSError *error) {
-        [AVUtils callBooleanResultBlock:block error:error];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+
+    parameters[@"mobilePhoneNumber"] = phoneNumber;
+    parameters[@"validate_token"] = options.validationToken;
+
+    [[AVPaasClient sharedInstance] postObject:@"requestLoginSmsCode" withParameters:parameters block:^(id object, NSError *error) {
+        [AVUtils callBooleanResultBlock:callback error:error];
     }];
 }
 
@@ -814,11 +836,22 @@ static BOOL enableAutomatic = NO;
     }];
 }
 
-+(void)requestPasswordResetWithPhoneNumber:(NSString *)phoneNumber block:(AVBooleanResultBlock)block {
++ (void)requestPasswordResetWithPhoneNumber:(NSString *)phoneNumber block:(AVBooleanResultBlock)block {
+    [self requestPasswordResetCodeForPhoneNumber:phoneNumber options:nil callback:block];
+}
+
++ (void)requestPasswordResetCodeForPhoneNumber:(NSString *)phoneNumber
+                                       options:(AVUserShortMessageRequestOptions *)options
+                                      callback:(AVBooleanResultBlock)callback
+{
     NSParameterAssert(phoneNumber);
-    
-    [[AVPaasClient sharedInstance] postObject:@"requestPasswordResetBySmsCode" withParameters:@{ @"mobilePhoneNumber" : phoneNumber } block:^(id object, NSError *error) {
-        [AVUtils callBooleanResultBlock:block error:error];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+
+    parameters[@"mobilePhoneNumber"] = phoneNumber;
+    parameters[@"validate_token"] = options.validationToken;
+
+    [[AVPaasClient sharedInstance] postObject:@"requestPasswordResetBySmsCode" withParameters:parameters block:^(id object, NSError *error) {
+        [AVUtils callBooleanResultBlock:callback error:error];
     }];
 }
 
@@ -1000,15 +1033,17 @@ static BOOL enableAutomatic = NO;
             @finally {
                 [AVUtils callIdResultBlock:callback object:dict error:error];
             }
-            
         } else {
             [AVUtils callIdResultBlock:callback object:object error:error];
         }
-        
     }];
 }
 
-
-
 @end
 
+
+@implementation AVUserShortMessageRequestOptions
+
+@dynamic validationToken;
+
+@end
