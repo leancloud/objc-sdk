@@ -58,4 +58,25 @@
     }];
 }
 
++ (void)verifyCaptchaCode:(NSString *)captchaCode
+          forCaptchaToken:(NSString *)captchaToken
+                 callback:(AVCaptchaVerificationCallback)callback
+{
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+
+    parameters[@"captcha_code"]  = captchaCode;
+    parameters[@"captcha_token"] = captchaToken;
+
+    [[AVPaasClient sharedInstance] postObject:@"verifyCaptcha" withParameters:parameters block:^(id object, NSError *error) {
+        if (error) {
+            [AVUtils callIdResultBlock:callback object:object error:error];
+            return;
+        }
+
+        NSString *validationToken = object[@"validate_token"];
+
+        [AVUtils callIdResultBlock:callback object:validationToken error:nil];
+    }];
+}
+
 @end

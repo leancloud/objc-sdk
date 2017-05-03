@@ -58,6 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 typedef void(^AVCaptchaRequestCallback)(AVCaptchaInformation * _Nullable captchaInformation, NSError * _Nullable error);
+typedef void(^AVCaptchaVerificationCallback)(NSString * _Nullable validationToken, NSError * _Nullable error);
 
 @interface AVCaptcha : NSObject
 
@@ -69,6 +70,16 @@ typedef void(^AVCaptchaRequestCallback)(AVCaptchaInformation * _Nullable captcha
  */
 + (void)requestCaptchaWithOptions:(nullable AVCaptchaRequestOptions *)options
                          callback:(AVCaptchaRequestCallback)callback;
+
+/**
+ Verify a captcha code for captcha token that you've requested before.
+
+ @param captchaCode  The symbols user recognized from captcha image.
+ @param captchaToken The token that you requested before.
+ */
++ (void)verifyCaptchaCode:(NSString *)captchaCode
+          forCaptchaToken:(NSString *)captchaToken
+                 callback:(AVCaptchaVerificationCallback)callback;
 
 @end
 
