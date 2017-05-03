@@ -33,6 +33,11 @@ typedef NS_ENUM(NSInteger, AVShortMessageType) {
 @property (nonatomic, assign) AVShortMessageType type;
 
 /**
+ Token used to validate short message request.
+ */
+@property (nonatomic, copy, nullable) NSString *validationToken;
+
+/**
  Template name of text short message.
 
  @note If not specified, the default validation message will be requested.

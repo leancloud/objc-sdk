@@ -54,6 +54,7 @@
     parameters[@"mobilePhoneNumber"] = phoneNumber;
     parameters[@"ttl"]               = @(options.TTL);
     parameters[@"smsType"]           = [self shortMessageTypeString:options.type];
+    parameters[@"validate_token"]    = options.validationToken;
     parameters[@"template"]          = options.templateName;
     parameters[@"sign"]              = options.signatureName;
     parameters[@"name"]              = options.applicationName;
