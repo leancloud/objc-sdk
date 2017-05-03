@@ -7,6 +7,7 @@
 //
 
 #import "AVDynamicObject.h"
+#import "AVDynamicObject_Internal.h"
 #import <objc/runtime.h>
 
 @interface AVDynamicObject ()
@@ -361,20 +362,42 @@ void prepareDynamicClass(Class aClass) {
     }
 }
 
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary {
+    self = [super init];
+
+    if (self) {
+        [self setPropertyTable:[dictionary mutableCopy]];
+    }
+
+    return self;
+}
+
+static const char *PropertyTableAssociationKey = "property-table";
+
 - (NSMutableDictionary *)propertyTable {
     @synchronized (self) {
-        const char *key = "property-table";
         NSMutableDictionary *propertyTable = nil;
-        propertyTable = objc_getAssociatedObject(self, key);
+        propertyTable = objc_getAssociatedObject(self, PropertyTableAssociationKey);
 
         if (propertyTable)
             return propertyTable;
 
         propertyTable = [NSMutableDictionary dictionary];
-        objc_setAssociatedObject(self, key, propertyTable, OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, PropertyTableAssociationKey, propertyTable, OBJC_ASSOCIATION_RETAIN);
 
         return propertyTable;
     }
+}
+
+- (void)setPropertyTable:(NSMutableDictionary *)propertyTable {
+    @synchronized (self) {
+        objc_setAssociatedObject(self, PropertyTableAssociationKey, propertyTable, OBJC_ASSOCIATION_RETAIN);
+    }
+}
+
+- (NSDictionary *)properties {
+    NSDictionary *properties = [NSDictionary dictionaryWithDictionary:[self propertyTable]];
+    return properties;
 }
 
 - (void)setObject:(id)object forKeyedSubscript:(NSString *)key {
@@ -414,6 +437,14 @@ void prepareDynamicClass(Class aClass) {
 
 - (id)objectForKey:(NSString *)key {
     return [self propertyTable][key];
+}
+
+- (NSString *)debugDescription {
+    return [[self propertyTable] debugDescription];
+}
+
+- (NSString *)description {
+    return [[self propertyTable] description];
 }
 
 @end
