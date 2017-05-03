@@ -43,6 +43,14 @@
 
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
 
+    NSDictionary *templateVariables = options.templateVariables;
+
+    if (templateVariables) {
+        /* Template variables and message options are twisted together.
+           It's a deficiency of REST API, and it should be improved in future. */
+        [parameters addEntriesFromDictionary:templateVariables];
+    }
+
     parameters[@"mobilePhoneNumber"] = phoneNumber;
     parameters[@"ttl"]               = @(options.TTL);
     parameters[@"smsType"]           = [self shortMessageTypeString:options.type];
