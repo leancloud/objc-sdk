@@ -56,6 +56,9 @@
 #import "AVACL.h"
 #import "AVRole.h"
 
+// Captcha
+#import "AVCaptcha.h"
+
 // SMS
 #import "AVSMS.h"
 
