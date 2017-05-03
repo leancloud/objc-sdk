@@ -10,25 +10,64 @@
 #import "AVDynamicObject.h"
 #import "AVConstants.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
+/**
+ Enumeration of short message types.
+ */
+typedef NS_ENUM(NSInteger, AVShortMessageType) {
+    AVShortMessageTypeText = 0,
+    AVShortMessageTypeVoice
+};
+
 @interface AVShortMessageRequestOptions : AVDynamicObject
 
-/// Time to live of short message, in minutes.
+/**
+ Time to live of validation information, in minutes. Defaults to 10 minutes.
+ */
 @property (nonatomic, assign) NSInteger TTL;
 
-/// Type of short message. Currently support two types: "voice" and "sms", defaults to "sms".
-@property (nonatomic, copy) NSString *type;
+/**
+ The representation or form of short message.
+ */
+@property (nonatomic, assign) AVShortMessageType type;
 
-/// Template of short message.
-@property (nonatomic, copy) NSString *template;
+/**
+ Template name of text short message.
 
-/// Signature of short message template.
-@property (nonatomic, copy) NSString *signature;
+ @note If not specified, the default validation message will be requested.
+ */
+@property (nonatomic, copy, nullable) NSString *templateName;
 
-/// Application name displayed in short message. If not given, the application name in console will be used.
-@property (nonatomic, copy) NSString *applicationName;
+/**
+ A set of key value pairs that will fill in template placeholders.
 
-/// Operation name of short message.
-@property (nonatomic, copy) NSString *operationName;
+ @note You should not use the placeholders listed here in your template:
+ `mobilePhoneNumber`, `ttl`, `smsType`, `template` and `sign`.
+ */
+@property (nonatomic, strong, nullable) NSDictionary *templateVariables;
+
+/**
+ Signature name of text short message.
+
+ It will be placed ahead of text short message.
+ */
+@property (nonatomic, copy, nullable) NSString *signatureName;
+
+/**
+ Application name showed in validation message.
+
+ It fills the placeholder <code>{{name}}</code> in default validation message template.
+ If not given, the application name in LeanCloud console will be used.
+ */
+@property (nonatomic, copy, nullable) NSString *applicationName;
+
+/**
+ The operation description showed in validation message.
+
+ It fills the placeholder <code>{{op}}</code> in default validation message template.
+ */
+@property (nonatomic, copy, nullable) NSString *operation;
 
 @end
 
@@ -43,7 +82,9 @@
  @param callback    The callback of request.
  */
 + (void)requestShortMessageForPhoneNumber:(NSString *)phoneNumber
-                                  options:(AVShortMessageRequestOptions *)options
+                                  options:(nullable AVShortMessageRequestOptions *)options
                                  callback:(AVBooleanResultBlock)callback;
 
 @end
+
+NS_ASSUME_NONNULL_END

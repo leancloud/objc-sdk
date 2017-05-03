@@ -14,14 +14,26 @@
 
 @dynamic TTL;
 @dynamic type;
-@dynamic template;
-@dynamic signature;
+@dynamic templateName;
+@dynamic templateVariables;
+@dynamic signatureName;
 @dynamic applicationName;
-@dynamic operationName;
+@dynamic operation;
 
 @end
 
 @implementation AVSMS
+
++ (NSString *)shortMessageTypeString:(AVShortMessageType)type {
+    switch (type) {
+    case AVShortMessageTypeText:
+        return @"sms";
+    case AVShortMessageTypeVoice:
+        return @"voice";
+    }
+
+    return nil;
+}
 
 + (void)requestShortMessageForPhoneNumber:(NSString *)phoneNumber
                                   options:(AVShortMessageRequestOptions *)options
@@ -33,11 +45,11 @@
 
     parameters[@"mobilePhoneNumber"] = phoneNumber;
     parameters[@"ttl"]               = @(options.TTL);
-    parameters[@"smsType"]           = options.type;
-    parameters[@"template"]          = options.template;
-    parameters[@"sign"]              = options.signature;
+    parameters[@"smsType"]           = [self shortMessageTypeString:options.type];
+    parameters[@"template"]          = options.templateName;
+    parameters[@"sign"]              = options.signatureName;
     parameters[@"name"]              = options.applicationName;
-    parameters[@"op"]                = options.operationName;
+    parameters[@"op"]                = options.operation;
 
     [[AVPaasClient sharedInstance] postObject:@"requestSmsCode" withParameters:parameters block:^(id object, NSError *error) {
         [AVUtils callBooleanResultBlock:callback error:error];
