@@ -7,7 +7,55 @@
 //
 
 #import "AVCaptcha.h"
+#import "AVDynamicObject_Internal.h"
+#import "NSDictionary+LeanCloud.h"
+#import "AVPaasClient.h"
+#import "AVUtils.h"
+
+@implementation AVCaptchaInformation
+
+@dynamic token;
+@dynamic URLString;
+
+@end
+
+@implementation AVCaptchaRequestOptions
+
+@dynamic TTL;
+@dynamic size;
+@dynamic width;
+@dynamic height;
+
+@end
 
 @implementation AVCaptcha
+
++ (void)requestCaptchaWithOptions:(AVCaptchaRequestOptions *)options
+                         callback:(AVCaptchaRequestCallback)callback
+{
+    NSDictionary *optionTable = options.properties;
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+
+    parameters[@"ttl"]    = optionTable[@"TTL"];
+    parameters[@"size"]   = optionTable[@"size"];
+    parameters[@"width"]  = optionTable[@"width"];
+    parameters[@"height"] = optionTable[@"height"];
+
+    [[AVPaasClient sharedInstance] getObject:@"requestCaptcha" withParameters:parameters block:^(id object, NSError *error) {
+        if (error) {
+            [AVUtils callIdResultBlock:callback object:nil error:error];
+            return;
+        }
+
+        NSDictionary *dictionary = [object lc_selectEntriesWithKeyMappings:@{
+            @"captcha_token" : @"token",
+            @"captcha_url"   : @"URLString"
+        }];
+
+        AVCaptchaInformation *captchaInformation = [[AVCaptchaInformation alloc] initWithDictionary:dictionary];
+
+        [AVUtils callIdResultBlock:callback object:captchaInformation error:nil];
+    }];
+}
 
 @end
