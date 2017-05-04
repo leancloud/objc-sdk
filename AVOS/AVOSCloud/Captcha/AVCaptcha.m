@@ -33,13 +33,12 @@
 + (void)requestCaptchaWithOptions:(AVCaptchaRequestOptions *)options
                          callback:(AVCaptchaRequestCallback)callback
 {
-    NSDictionary *optionTable = options.properties;
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
 
-    parameters[@"ttl"]    = optionTable[@"TTL"];
-    parameters[@"size"]   = optionTable[@"size"];
-    parameters[@"width"]  = optionTable[@"width"];
-    parameters[@"height"] = optionTable[@"height"];
+    parameters[@"ttl"]    = options[@"TTL"];
+    parameters[@"size"]   = options[@"size"];
+    parameters[@"width"]  = options[@"width"];
+    parameters[@"height"] = options[@"height"];
 
     [[AVPaasClient sharedInstance] getObject:@"requestCaptcha" withParameters:parameters block:^(id object, NSError *error) {
         if (error) {

@@ -9,6 +9,13 @@
 #import "AVSMS.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"
+#import "AVDynamicObject_Internal.h"
+
+@interface AVShortMessageRequestOptions ()
+
+@property (nonatomic, copy, readonly) NSString *typeDescription;
+
+@end
 
 @implementation AVShortMessageRequestOptions
 
@@ -20,12 +27,8 @@
 @dynamic applicationName;
 @dynamic operation;
 
-@end
-
-@implementation AVSMS
-
-+ (NSString *)shortMessageTypeString:(AVShortMessageType)type {
-    switch (type) {
+- (NSString *)typeDescription {
+    switch (self.type) {
     case AVShortMessageTypeText:
         return @"sms";
     case AVShortMessageTypeVoice:
@@ -34,6 +37,10 @@
 
     return nil;
 }
+
+@end
+
+@implementation AVSMS
 
 + (void)requestShortMessageForPhoneNumber:(NSString *)phoneNumber
                                   options:(AVShortMessageRequestOptions *)options
@@ -52,8 +59,8 @@
     }
 
     parameters[@"mobilePhoneNumber"] = phoneNumber;
-    parameters[@"ttl"]               = @(options.TTL);
-    parameters[@"smsType"]           = [self shortMessageTypeString:options.type];
+    parameters[@"ttl"]               = options[@"TTL"];
+    parameters[@"smsType"]           = options.typeDescription;
     parameters[@"validate_token"]    = options.validationToken;
     parameters[@"template"]          = options.templateName;
     parameters[@"sign"]              = options.signatureName;

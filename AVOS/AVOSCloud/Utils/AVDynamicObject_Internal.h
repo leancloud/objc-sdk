@@ -10,8 +10,6 @@
 
 @interface AVDynamicObject ()
 
-@property (nonatomic, strong, readonly) NSDictionary *properties;
-
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 
 @end
