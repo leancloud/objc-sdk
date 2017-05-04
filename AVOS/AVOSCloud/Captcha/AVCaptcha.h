@@ -11,12 +11,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AVCaptchaInformation : AVDynamicObject
+@interface AVCaptchaDigest : AVDynamicObject
 
 /**
- Token used to verify captcha.
+ A nonce used to verify captcha.
  */
-@property (nonatomic, copy, readonly) NSString *token;
+@property (nonatomic, copy, readonly) NSString *nonce;
 
 /**
  URL string of captcha image.
@@ -57,13 +57,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-typedef void(^AVCaptchaRequestCallback)(AVCaptchaInformation * _Nullable captchaInformation, NSError * _Nullable error);
+typedef void(^AVCaptchaRequestCallback)(AVCaptchaDigest * _Nullable captchaDigest, NSError * _Nullable error);
 typedef void(^AVCaptchaVerificationCallback)(NSString * _Nullable validationToken, NSError * _Nullable error);
 
 @interface AVCaptcha : NSObject
 
 /**
  Request a captcha.
+
+ This method get a captcha digest from server.
+ You can use the captcha digest to verify a captcha code that recognized by user.
 
  @param options  The options that configure the captcha.
  @param callback The callback of request.
@@ -72,14 +75,14 @@ typedef void(^AVCaptchaVerificationCallback)(NSString * _Nullable validationToke
                          callback:(AVCaptchaRequestCallback)callback;
 
 /**
- Verify a captcha code for captcha token that you've requested before.
+ Verify a captcha code for captcha digest that you've requested before.
 
- @param captchaCode  The symbols user recognized from captcha image.
- @param captchaToken The token that you requested before.
- @param callback     The callback of request.
+ @param captchaCode   The symbols user recognized from captcha image.
+ @param captchaDigest The captcha digest that you've requested before.
+ @param callback      The callback of request.
  */
 + (void)verifyCaptchaCode:(NSString *)captchaCode
-          forCaptchaToken:(NSString *)captchaToken
+         forCaptchaDigest:(AVCaptchaDigest *)captchaDigest
                  callback:(AVCaptchaVerificationCallback)callback;
 
 @end

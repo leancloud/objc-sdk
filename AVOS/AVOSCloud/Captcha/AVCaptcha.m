@@ -12,9 +12,9 @@
 #import "AVPaasClient.h"
 #import "AVUtils.h"
 
-@implementation AVCaptchaInformation
+@implementation AVCaptchaDigest
 
-@dynamic token;
+@dynamic nonce;
 @dynamic URLString;
 
 @end
@@ -47,27 +47,27 @@
         }
 
         NSDictionary *dictionary = [object lc_selectEntriesWithKeyMappings:@{
-            @"captcha_token" : @"token",
+            @"captcha_token" : @"nonce",
             @"captcha_url"   : @"URLString"
         }];
 
-        AVCaptchaInformation *captchaInformation = [[AVCaptchaInformation alloc] initWithDictionary:dictionary];
+        AVCaptchaDigest *captchaDigest = [[AVCaptchaDigest alloc] initWithDictionary:dictionary];
 
-        [AVUtils callIdResultBlock:callback object:captchaInformation error:nil];
+        [AVUtils callIdResultBlock:callback object:captchaDigest error:nil];
     }];
 }
 
 + (void)verifyCaptchaCode:(NSString *)captchaCode
-          forCaptchaToken:(NSString *)captchaToken
+         forCaptchaDigest:(AVCaptchaDigest *)captchaDigest
                  callback:(AVCaptchaVerificationCallback)callback
 {
     NSParameterAssert(captchaCode);
-    NSParameterAssert(captchaToken);
+    NSParameterAssert(captchaDigest);
 
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
 
     parameters[@"captcha_code"]  = captchaCode;
-    parameters[@"captcha_token"] = captchaToken;
+    parameters[@"captcha_token"] = captchaDigest.nonce;
 
     [[AVPaasClient sharedInstance] postObject:@"verifyCaptcha" withParameters:parameters block:^(id object, NSError *error) {
         if (error) {
