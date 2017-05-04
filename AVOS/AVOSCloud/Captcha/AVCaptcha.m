@@ -61,6 +61,9 @@
           forCaptchaToken:(NSString *)captchaToken
                  callback:(AVCaptchaVerificationCallback)callback
 {
+    NSParameterAssert(captchaCode);
+    NSParameterAssert(captchaToken);
+
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
 
     parameters[@"captcha_code"]  = captchaCode;
