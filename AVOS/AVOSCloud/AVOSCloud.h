@@ -56,10 +56,7 @@
 #import "AVACL.h"
 #import "AVRole.h"
 
-// Captcha
 #import "AVCaptcha.h"
-
-// SMS
 #import "AVSMS.h"
 
 #if AV_IOS_ONLY && !TARGET_OS_WATCH
