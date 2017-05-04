@@ -76,6 +76,7 @@ typedef void(^AVCaptchaVerificationCallback)(NSString * _Nullable validationToke
 
  @param captchaCode  The symbols user recognized from captcha image.
  @param captchaToken The token that you requested before.
+ @param callback     The callback of request.
  */
 + (void)verifyCaptchaCode:(NSString *)captchaCode
           forCaptchaToken:(NSString *)captchaToken
