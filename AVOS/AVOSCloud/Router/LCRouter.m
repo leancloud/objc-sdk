@@ -202,7 +202,14 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
     if (LCEffectiveServiceRegion == AVServiceRegionUS)
         return;
 
-    NSDictionary *parameters = @{@"appId": [AVOSCloud getApplicationId]};
+    NSString *applicationId = [AVOSCloud getApplicationId];
+
+    if (!applicationId) {
+        AVLoggerError(AVLoggerDomainStorage, @"LeanCloud SDK not initialized.");
+        return;
+    }
+
+    NSDictionary *parameters = @{@"appId": applicationId};
 
     [[AVPaasClient sharedInstance] getObject:routerURLString withParameters:parameters block:^(NSDictionary *result, NSError *error) {
         if (!error && result)
