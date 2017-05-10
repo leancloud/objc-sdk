@@ -157,21 +157,6 @@ AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
     [[AVPaasClient sharedInstance] clearLastModifyCache];
 }
 
-+ (void)useAVCloud
-{
-    [self setServiceRegion:AVServiceRegionUrulu];
-}
-
-+ (void)useAVCloudUS
-{
-    [self setServiceRegion:AVServiceRegionUS];
-}
-
-+ (void)useAVCloudCN
-{
-    [self setServiceRegion:AVServiceRegionCN];
-}
-
 + (void)setStorageType:(AVStorageType)storageType
 {
     [AVUploaderManager sharedInstance].storageType = storageType;
@@ -187,11 +172,6 @@ AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
     case AVServiceRegionUS:
         storageType = AVStorageTypeS3;
         break;
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    case AVServiceRegionUrulu:
-        break;
-#pragma clang diagnostic pop
     }
 
     return storageType;
@@ -207,11 +187,6 @@ AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
     case AVServiceRegionUS:
         pushGroup = @"a0";
         break;
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    case AVServiceRegionUrulu:
-        break;
-#pragma clang diagnostic pop
     }
 
     if (!pushGroup) {

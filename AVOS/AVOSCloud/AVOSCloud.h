@@ -98,7 +98,6 @@ typedef enum AVLogLevel : NSUInteger {
 typedef NS_ENUM(NSInteger, AVServiceRegion) {
     AVServiceRegionCN = 1,
     AVServiceRegionUS,
-    AVServiceRegionUrulu AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.3. You should not use this value."),
 
     /* Default service region */
     AVServiceRegionDefault = AVServiceRegionCN
@@ -290,18 +289,6 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Deprecated API
 
 @interface AVOSCloud (AVDeprecated)
-
-+ (void)useAVCloud AV_DEPRECATED("Deprecated in AVOSCloud SDK 2.3.3.");
-
-/**
- * Use LeanCloud US server.
- */
-+ (void)useAVCloudUS AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.3. Use +[AVOSCloud setServiceRegion:] instead.");
-
-/**
- * Use LeanCloud China Sever. Default option.
- */
-+ (void)useAVCloudCN AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.3. Use +[AVOSCloud setServiceRegion:] instead.");
 
 /*!
  *  请求短信验证码，需要开启手机短信验证 API 选项。
