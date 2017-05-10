@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AVOSCloudIM'
-  s.version  = '4.4.0'
+  s.version  = '4.5.0'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud IM Objective-C SDK'
   s.authors  = 'LeanCloud'

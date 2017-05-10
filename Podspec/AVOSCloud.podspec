@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AVOSCloud'
-  s.version  = '4.4.0'
+  s.version  = '4.5.0'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud Objective-C SDK'
   s.authors  = 'LeanCloud'
@@ -27,6 +27,9 @@ Pod::Spec.new do |s|
     'AVOS/AVOSCloud/**/*.{h,m}'
 
   s.public_header_files =
+    'AVOS/AVOSCloud/Captcha/AVCaptcha.h',
+    'AVOS/AVOSCloud/Utils/AVDynamicObject.h',
+    'AVOS/AVOSCloud/SMS/AVSMS.h',
     'AVOS/AVOSCloud/ACL/AVACL.h',
     'AVOS/AVOSCloud/ACL/AVRole.h',
     'AVOS/AVOSCloud/Object/AVSaveOption.h',
@@ -196,7 +199,6 @@ Pod::Spec.new do |s|
     'CoreGraphics',
     'CoreLocation',
     'MobileCoreServices',
-    'QuartzCore',
     'Security'
 
   s.libraries =
