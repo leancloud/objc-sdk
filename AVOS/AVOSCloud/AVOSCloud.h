@@ -103,6 +103,14 @@ typedef NS_ENUM(NSInteger, AVServiceRegion) {
     AVServiceRegionDefault = AVServiceRegionCN
 };
 
+typedef NS_ENUM(NSInteger, AVServiceModule) {
+    AVServiceModuleAPI = 1,
+    AVServiceModuleEngine,
+    AVServiceModulePush,
+    AVServiceModuleRTM,
+    AVServiceModuleStatistics
+};
+
 #define kAVDefaultNetworkTimeoutInterval 10.0
 
 NS_ASSUME_NONNULL_BEGIN
@@ -176,6 +184,15 @@ NS_ASSUME_NONNULL_BEGIN
  * If not specified, AVServiceRegionCN will be used.
  */
 + (void)setServiceRegion:(AVServiceRegion)region;
+
+/**
+ Custom server URL for specific service module.
+
+ @param URLString     The URL string of service module.
+ @param serviceModule The service module which you want to customize.
+ */
++ (void)setServerURLString:(NSString *)URLString
+          forServiceModule:(AVServiceModule)serviceModule;
 
 /**
  *  Get the timeout interval for network requests. Default is kAVDefaultNetworkTimeoutInterval (10 seconds)

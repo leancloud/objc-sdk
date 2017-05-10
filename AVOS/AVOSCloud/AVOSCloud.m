@@ -212,6 +212,30 @@ AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
     [AVUploaderManager sharedInstance].serviceRegion = serviceRegion;
 }
 
++ (NSString *)stringFromServiceModule:(AVServiceModule)serviceModule {
+    switch (serviceModule) {
+    case AVServiceModuleAPI:
+        return LCServiceModuleAPI;
+    case AVServiceModuleEngine:
+        return LCServiceModuleEngine;
+    case AVServiceModulePush:
+        return LCServiceModulePush;
+    case AVServiceModuleRTM:
+        return LCServiceModuleRTM;
+    case AVServiceModuleStatistics:
+        return LCServiceModuleStatistics;
+    }
+
+    return nil;
+}
+
++ (void)setServerURLString:(NSString *)URLString
+          forServiceModule:(AVServiceModule)serviceModule
+{
+    NSString *key = [self stringFromServiceModule:serviceModule];
+    [[LCRouter sharedInstance] presetURLString:URLString forServiceModule:key];
+}
+
 #pragma mark - Network
 
 + (NSTimeInterval)networkTimeoutInterval
