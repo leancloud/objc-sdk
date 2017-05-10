@@ -76,12 +76,6 @@
     return [type isEqualToString:@"Bytes"];
 }
 
-+(BOOL)isFileFromUrulu:(NSDictionary *)dict
-{
-    // ugly way to check dict whether is avfile
-    return ([dict objectForKey:@"mime_type"] != nil);
-}
-
 +(BOOL)isFile:(NSString *)type
 {
     return [type isEqualToString:@"File"];
@@ -193,11 +187,6 @@
         AVFile * file = [AVFile fileFromDictionary:dict];
         return file;
     }
-    else if ([AVObjectUtils isFileFromUrulu:dict])
-    {
-        AVFile * file = [AVFile fileFromDictionary:dict];
-        return file;
-    }
     else if ([AVObjectUtils isGeoPoint:type])
     {
         AVGeoPoint * point = [AVObjectUtils geoPointFromDictionary:dict];
@@ -254,11 +243,6 @@
         [target setObject:[AVObjectUtils objectFromDictionary:dict] forKey:key submit:NO];
     }
     else if ([AVObjectUtils isFile:type])
-    {
-        AVFile * file = [AVFile fileFromDictionary:dict];
-        [target setObject:file forKey:key submit:NO];
-    }
-    else if ([AVObjectUtils isFileFromUrulu:dict])
     {
         AVFile * file = [AVFile fileFromDictionary:dict];
         [target setObject:file forKey:key submit:NO];
