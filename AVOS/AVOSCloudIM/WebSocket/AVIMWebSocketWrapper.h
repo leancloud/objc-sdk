@@ -9,8 +9,6 @@
 #import "AVIMCommon.h"
 #import "AVIMCommandCommon.h"
 
-#define PUSH_GROUP_CN @"g0"
-#define PUSH_GROUP_US @"a0"
 #define USE_DEBUG_SERVER 0
 #define DEBUG_SERVER @"ws://puppet.leancloud.cn:5779/"
 
