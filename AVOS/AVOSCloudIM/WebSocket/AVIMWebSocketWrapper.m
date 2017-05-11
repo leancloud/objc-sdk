@@ -39,7 +39,6 @@
     @"\n"
 
 static NSTimeInterval AVIMWebSocketDefaultTimeoutInterval = 15.0;
-static NSString *const LCRTMRouterCacheKey = @"LCRTMRouterCacheKey";
 
 typedef enum : NSUInteger {
     //mutually exclusive
