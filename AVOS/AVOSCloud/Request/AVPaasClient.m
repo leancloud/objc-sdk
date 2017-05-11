@@ -529,22 +529,16 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     }
 
     @weakify(self);
-    NSDate *operationEnqueueDate = [NSDate date];
 
     [self performRequest:mutableRequest
                  success:^(NSHTTPURLResponse *response, id responseObject)
     {
         @strongify(self);
 
-        NSInteger statusCode = response.statusCode;
-        NSTimeInterval costTime = -([operationEnqueueDate timeIntervalSinceNow] * 1000);
-
         if (block) {
             NSError *error = [AVErrorUtils errorFromJSON:responseObject];
             block(responseObject, error);
         }
-
-        AVLoggerDebug(AVLoggerDomainNetwork, LC_REST_RESPONSE_LOG_FORMAT, path, costTime, responseObject);
 
         if (self.isLastModifyEnabled && [request.HTTPMethod isEqualToString:@"GET"]) {
             NSString *URLMD5 = [URLString AVMD5String];
@@ -557,40 +551,12 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         } else if (saveResult) {
             [[AVCacheManager sharedInstance] saveJSON:responseObject forKey:URLString];
         }
-
-        // Doing network statistics
-        if ([self shouldStatisticsForUrl:URLString statusCode:statusCode]) {
-            LCNetworkStatistics *statistician = [LCNetworkStatistics sharedInstance];
-
-            if ((NSInteger)(statusCode / 100) == 2) {
-                [statistician addAverageAttribute:costTime forKey:@"avg"];
-            }
-
-            [statistician addIncrementalAttribute:1 forKey:[NSString stringWithFormat:@"%ld", (long)statusCode]];
-            [statistician addIncrementalAttribute:1 forKey:@"total"];
-        }
     }
               failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error)
     {
         @strongify(self);
 
         NSInteger statusCode = response.statusCode;
-        NSTimeInterval costTime = -([operationEnqueueDate timeIntervalSinceNow] * 1000);
-
-        AVLoggerDebug(AVLoggerDomainNetwork, LC_REST_RESPONSE_LOG_FORMAT, path, costTime, error);
-
-        // Doing network statistics
-        if ([self shouldStatisticsForUrl:URLString statusCode:statusCode]) {
-            LCNetworkStatistics *statistician = [LCNetworkStatistics sharedInstance];
-
-            if (error.code == NSURLErrorTimedOut) {
-                [statistician addIncrementalAttribute:1 forKey:@"timeout"];
-            } else {
-                [statistician addIncrementalAttribute:1 forKey:[NSString stringWithFormat:@"%ld", (long)statusCode]];
-            }
-
-            [statistician addIncrementalAttribute:1 forKey:@"total"];
-        }
 
         if (statusCode == 304) {
             // 304 is not error
@@ -626,6 +592,8 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     NSString *path = request.URL.path;
     AVLoggerDebug(AVLoggerDomainNetwork, LC_REST_REQUEST_LOG_FORMAT, path, [request cURLCommand]);
 
+    NSDate *operationEnqueueDate = [NSDate date];
+
     NSURLSessionDataTask *dataTask = [self.sessionManager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         /* As Apple say:
          > Whenever you make an HTTP request,
@@ -637,9 +605,44 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             if (failureBlock) {
                 failureBlock(HTTPResponse, responseObject, error);
             }
+
+            NSInteger statusCode = HTTPResponse.statusCode;
+            NSTimeInterval costTime = -([operationEnqueueDate timeIntervalSinceNow] * 1000);
+
+            AVLoggerDebug(AVLoggerDomainNetwork, LC_REST_RESPONSE_LOG_FORMAT, path, costTime, error);
+
+            // Doing network statistics
+            if ([self shouldStatisticsForPath:path statusCode:statusCode]) {
+                LCNetworkStatistics *statistician = [LCNetworkStatistics sharedInstance];
+
+                if (error.code == NSURLErrorTimedOut) {
+                    [statistician addIncrementalAttribute:1 forKey:@"timeout"];
+                } else {
+                    [statistician addIncrementalAttribute:1 forKey:[NSString stringWithFormat:@"%ld", (long)statusCode]];
+                }
+
+                [statistician addIncrementalAttribute:1 forKey:@"total"];
+            }
         } else {
             if (successBlock) {
                 successBlock(HTTPResponse, responseObject);
+            }
+
+            NSInteger statusCode = HTTPResponse.statusCode;
+            NSTimeInterval costTime = -([operationEnqueueDate timeIntervalSinceNow] * 1000);
+
+            AVLoggerDebug(AVLoggerDomainNetwork, LC_REST_RESPONSE_LOG_FORMAT, path, costTime, responseObject);
+
+            // Doing network statistics
+            if ([self shouldStatisticsForPath:path statusCode:statusCode]) {
+                LCNetworkStatistics *statistician = [LCNetworkStatistics sharedInstance];
+
+                if ((NSInteger)(statusCode / 100) == 2) {
+                    [statistician addAverageAttribute:costTime forKey:@"avg"];
+                }
+
+                [statistician addIncrementalAttribute:1 forKey:[NSString stringWithFormat:@"%ld", (long)statusCode]];
+                [statistician addIncrementalAttribute:1 forKey:@"total"];
             }
         }
     }];
@@ -656,7 +659,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     return NO;
 }
 
-- (BOOL)shouldStatisticsForUrl:(NSString *)url statusCode:(NSInteger)statusCode {
+- (BOOL)shouldStatisticsForPath:(NSString *)url statusCode:(NSInteger)statusCode {
     if (![self validateStatusCode:statusCode]) {
         return NO;
     }
