@@ -255,6 +255,11 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
     NSURLComponents *URLComponents = [[NSURLComponents alloc] initWithString:unifiedHost];
 
     if (path.length) {
+        NSString *head = URLComponents.path;
+
+        if (head.length)
+            path = [head stringByAppendingPathComponent:path];
+
         NSURL *pathURL = [NSURL URLWithString:path];
 
         URLComponents.path = pathURL.path;
