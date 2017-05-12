@@ -28,20 +28,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface AVCaptchaRequestOptions : AVDynamicObject
 
 /**
- Time to live of captcha, in seconds.
-
- Defaults to 60 seconds. Minimum is 10, maximum is 180.
- */
-@property (nonatomic, assign) NSInteger TTL;
-
-/**
- Count of characters in catpcha image.
-
- Defaults to 4. Minimum is 3, maximum is 6.
- */
-@property (nonatomic, assign) NSInteger size;
-
-/**
  Width of captcha image, in pixels.
 
  Defaults to 85. Minimum is 85, maximum is 200.

@@ -21,8 +21,6 @@
 
 @implementation AVCaptchaRequestOptions
 
-@dynamic TTL;
-@dynamic size;
 @dynamic width;
 @dynamic height;
 
@@ -35,8 +33,6 @@
 {
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
 
-    parameters[@"ttl"]    = options[@"TTL"];
-    parameters[@"size"]   = options[@"size"];
     parameters[@"width"]  = options[@"width"];
     parameters[@"height"] = options[@"height"];
 
