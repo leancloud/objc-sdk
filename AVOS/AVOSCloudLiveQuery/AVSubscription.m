@@ -10,4 +10,17 @@
 
 @implementation AVSubscription
 
+- (instancetype)initWithQuery:(AVQuery *)query
+                      options:(AVSubscriptionOptions *)options
+{
+    self = [super init];
+
+    if (self) {
+        _query = query;
+        _options = options;
+    }
+
+    return self;
+}
+
 @end
