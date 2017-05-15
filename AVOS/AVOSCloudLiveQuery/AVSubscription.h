@@ -12,11 +12,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol AVSubscriptionDelegate <NSObject>
+
+@end
+
 @interface AVSubscriptionOptions : AVDynamicObject
 
 @end
 
 @interface AVSubscription : NSObject
+
+@property (nonatomic, weak, nullable) id<AVSubscriptionDelegate> delegate;
 
 @property (nonatomic, strong, readonly) AVQuery *query;
 @property (nonatomic, strong, readonly, nullable) AVSubscriptionOptions *options;
