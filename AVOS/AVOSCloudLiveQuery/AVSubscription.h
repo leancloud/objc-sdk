@@ -10,9 +10,20 @@
 #import "AVQuery.h"
 #import "AVDynamicObject.h"
 
+@class AVSubscription;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol AVSubscriptionDelegate <NSObject>
+
+- (void)subscription:(AVSubscription *)subscription objectDidEnter:(id)object;
+- (void)subscription:(AVSubscription *)subscription objectDidLeave:(id)object;
+
+- (void)subscription:(AVSubscription *)subscription objectDidCreate:(id)object;
+- (void)subscription:(AVSubscription *)subscription objectDidUpdate:(id)object;
+- (void)subscription:(AVSubscription *)subscription objectDidDelete:(id)object;
+
+- (void)subscription:(AVSubscription *)subscription userDidLogin:(AVUser *)user;
 
 @end
 
