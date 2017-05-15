@@ -568,6 +568,10 @@
 		838CE3491EC980E000B24F5B /* AVOSCloudLiveQuery-iOSTests.Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 838CE3341EC980AA00B24F5B /* AVOSCloudLiveQuery-iOSTests.Info.plist */; };
 		838CE34F1EC9829E00B24F5B /* AVOSCloudLiveQuery-macOS.Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 838CE34E1EC9829E00B24F5B /* AVOSCloudLiveQuery-macOS.Info.plist */; };
 		838CE3511EC982A500B24F5B /* AVOSCloudLiveQuery-macOSTests.Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 838CE3501EC982A500B24F5B /* AVOSCloudLiveQuery-macOSTests.Info.plist */; };
+		838CE3541EC9838500B24F5B /* AVSubscription.h in Headers */ = {isa = PBXBuildFile; fileRef = 838CE3521EC9838500B24F5B /* AVSubscription.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		838CE3551EC9838500B24F5B /* AVSubscription.h in Headers */ = {isa = PBXBuildFile; fileRef = 838CE3521EC9838500B24F5B /* AVSubscription.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		838CE3561EC9838500B24F5B /* AVSubscription.m in Sources */ = {isa = PBXBuildFile; fileRef = 838CE3531EC9838500B24F5B /* AVSubscription.m */; };
+		838CE3571EC9838500B24F5B /* AVSubscription.m in Sources */ = {isa = PBXBuildFile; fileRef = 838CE3531EC9838500B24F5B /* AVSubscription.m */; };
 		838DD7961B3D309F00C95897 /* LCNetworkStatistics.h in Headers */ = {isa = PBXBuildFile; fileRef = 838DD7941B3D309F00C95897 /* LCNetworkStatistics.h */; };
 		838DD7971B3D309F00C95897 /* LCNetworkStatistics.m in Sources */ = {isa = PBXBuildFile; fileRef = 838DD7951B3D309F00C95897 /* LCNetworkStatistics.m */; };
 		838DD7A01B3D3FB600C95897 /* LCKeyValueStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 838DD79E1B3D3FB600C95897 /* LCKeyValueStore.h */; };
@@ -1515,6 +1519,8 @@
 		838CE34D1EC980E000B24F5B /* AVOSCloudLiveQuery-macOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AVOSCloudLiveQuery-macOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		838CE34E1EC9829E00B24F5B /* AVOSCloudLiveQuery-macOS.Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AVOSCloudLiveQuery-macOS.Info.plist"; sourceTree = "<group>"; };
 		838CE3501EC982A500B24F5B /* AVOSCloudLiveQuery-macOSTests.Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AVOSCloudLiveQuery-macOSTests.Info.plist"; sourceTree = "<group>"; };
+		838CE3521EC9838500B24F5B /* AVSubscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVSubscription.h; sourceTree = "<group>"; };
+		838CE3531EC9838500B24F5B /* AVSubscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVSubscription.m; sourceTree = "<group>"; };
 		838DD7941B3D309F00C95897 /* LCNetworkStatistics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCNetworkStatistics.h; sourceTree = "<group>"; };
 		838DD7951B3D309F00C95897 /* LCNetworkStatistics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCNetworkStatistics.m; sourceTree = "<group>"; };
 		838DD79E1B3D3FB600C95897 /* LCKeyValueStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCKeyValueStore.h; sourceTree = "<group>"; };
@@ -2177,6 +2183,8 @@
 			isa = PBXGroup;
 			children = (
 				838CE31D1EC97E6E00B24F5B /* AVOSCloudLiveQuery.h */,
+				838CE3521EC9838500B24F5B /* AVSubscription.h */,
+				838CE3531EC9838500B24F5B /* AVSubscription.m */,
 			);
 			path = AVOSCloudLiveQuery;
 			sourceTree = "<group>";
@@ -3576,6 +3584,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				838CE3541EC9838500B24F5B /* AVSubscription.h in Headers */,
 				838CE32B1EC97E6F00B24F5B /* AVOSCloudLiveQuery.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3584,6 +3593,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				838CE3551EC9838500B24F5B /* AVSubscription.h in Headers */,
 				838CE33A1EC980DE00B24F5B /* AVOSCloudLiveQuery.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4784,6 +4794,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				838CE3561EC9838500B24F5B /* AVSubscription.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4799,6 +4810,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				838CE3571EC9838500B24F5B /* AVSubscription.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
