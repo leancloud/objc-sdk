@@ -23,4 +23,12 @@
     return self;
 }
 
+- (void)subscribeWithCallback:(AVBooleanResultBlock)callback {
+    /* TODO */
+}
+
+- (void)unsubscribeWithCallback:(AVBooleanResultBlock)callback {
+    /* TODO */
+}
+
 @end

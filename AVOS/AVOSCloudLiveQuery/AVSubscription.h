@@ -41,6 +41,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithQuery:(AVQuery *)query
                       options:(nullable AVSubscriptionOptions *)options;
 
+- (void)subscribeWithCallback:(AVBooleanResultBlock)callback;
+
+- (void)unsubscribeWithCallback:(AVBooleanResultBlock)callback;
+
 @end
 
 NS_ASSUME_NONNULL_END
