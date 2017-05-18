@@ -1,17 +1,17 @@
 //
-//  AVSubscription.m
+//  AVLiveQuery.m
 //  AVOS
 //
 //  Created by Tang Tianyong on 15/05/2017.
 //  Copyright © 2017 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVSubscription.h"
+#import "AVLiveQuery.h"
 
-@implementation AVSubscription
+@implementation AVLiveQuery
 
 - (instancetype)initWithQuery:(AVQuery *)query
-                      options:(AVSubscriptionOptions *)options
+                      options:(AVLiveQueryOptions *)options
 {
     self = [super init];
 
