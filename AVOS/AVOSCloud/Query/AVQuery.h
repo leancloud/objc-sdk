@@ -5,13 +5,12 @@
 #import "AVGeoPoint.h"
 #import "AVObject.h"
 #import "AVCloudQueryResult.h"
-/*!
-  A class that defines a query that is used to query for AVObjects.
- */
-@class AVRequestOperation;
 
 NS_ASSUME_NONNULL_BEGIN
 
+/*!
+ A class that defines a query that is used to query for AVObjects.
+ */
 @interface AVQuery : NSObject
 
 /*!
@@ -673,6 +672,11 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
  The number of objects to skip before returning any.
  */
 @property (nonatomic, assign) NSInteger skip;
+
+/**
+ Include ACL for object.
+ */
+@property (nonatomic, assign) BOOL includeACL;
 
 #pragma mark -
 #pragma mark Cache methods
