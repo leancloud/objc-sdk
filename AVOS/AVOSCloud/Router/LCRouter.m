@@ -363,12 +363,6 @@ found:
     parameters[@"appId"] = appId;
     parameters[@"secure"] = @"1";
 
-    /*
-     * iOS SDK *must* use IP address to access IM server to prevent DNS hijacking.
-     * And IM server *must* issue the pinned certificate.
-     */
-    parameters[@"ip"] = @"true";
-
     /* Back door for user to connect to puppet environment. */
     if (getenv("LC_IM_PUPPET_ENABLED") && getenv("SIMULATOR_UDID")) {
         parameters[@"debug"] = @"true";
