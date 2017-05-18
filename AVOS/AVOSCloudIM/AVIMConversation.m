@@ -670,9 +670,11 @@ static dispatch_queue_t messageCacheOperationQueue;
                 [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                     if (succeeded) {
                         /* If uploading is success, bind file to message */
-                        [self fillTypedMessage:typedMessage withFile:file];
-                        [self fillTypedMessageForLocationIfNeeded:typedMessage];
-                        [self sendRealMessage:message option:option callback:callback];
+                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                            [self fillTypedMessage:typedMessage withFile:file];
+                            [self fillTypedMessageForLocationIfNeeded:typedMessage];
+                            [self sendRealMessage:message option:option callback:callback];
+                        });
                     } else {
                         message.status = AVIMMessageStatusFailed;
                         [AVIMBlockHelper callBooleanResultBlock:callback error:error];
