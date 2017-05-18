@@ -1097,6 +1097,10 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
         NSString * keys = [[self.selectedKeys allObjects] componentsJoinedByString:@","];
         [self.parameters setObject:keys forKey:@"keys"];
     }
+    if (self.includeACL)
+    {
+        [self.parameters setObject:@"true" forKey:@"returnACL"];
+    }
     if ([self.extraParameters allKeys].count > 0) {
         [self.parameters addEntriesFromDictionary:self.extraParameters];
     }
