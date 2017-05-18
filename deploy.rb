@@ -6,6 +6,7 @@
 
 require 'clactive'
 require './podspec.rb'
+require './build-doc.rb'
 
 module Podspec
   class Pusher
@@ -93,6 +94,13 @@ CLActive do
       version = STDIN.gets.strip
       abort 'Invalid version number.' unless Gem::Version.correct? version
 
+      print 'API docs repository: '
+      api_docs_repo = STDIN.gets.strip
+      abort 'API docs repository not found.' unless File.directory? api_docs_repo
+
+      api_doc_output = File.join(api_docs_repo, 'api', 'iOS')
+      abort 'API doc output path not found.' unless File.directory? api_doc_output
+
       print "Are you sure to deploy version #{version} (yes or no): "
       abort 'Canceled.' unless STDIN.gets.strip == 'yes'
 
@@ -115,6 +123,32 @@ CLActive do
         user_agent = File.read('AVOS/AVOSCloud/Utils/UserAgent.h')
         user_agent_version = user_agent[/SDK_VERSION @"v(.*?)"/, 1]
         abort "Version mismatched with user agent (#{user_agent_version})." unless version == user_agent_version
+
+        generator = Podspec::Generator.new(version, 'Podspec')
+        generator.generate
+
+        pusher = Podspec::Pusher.new('Podspec')
+        pusher.push
+
+        Dir.mktmpdir do |tmpdir|
+          tmp_output = File.join tmpdir
+
+          docgen = DocGen.new(version, tmp_output)
+          docgen.generate
+
+          FileUtils.rm_rf api_doc_output
+          FileUtils.cp_r  File.join(tmp_output, 'html'), api_doc_output
+
+          Dir.chdir api_docs_repo do
+            command = <<-EOC
+            git add -A api/iOS/
+            git commit -m "Update iOS API doc for version #{version}"
+            git push origin master
+            EOC
+
+            system command
+          end
+        end
       ensure
         execute_command <<-CMD.gsub(/^[ \t]+/, '')
         git checkout - >/dev/null 2>&1
@@ -122,12 +156,6 @@ CLActive do
         git remote remove #{temp_remote} >/dev/null 2>&1
         CMD
       end
-
-      generator = Podspec::Generator.new(version, 'Podspec')
-      generator.generate
-
-      pusher = Podspec::Pusher.new('Podspec')
-      pusher.push
     end
   end
 end
