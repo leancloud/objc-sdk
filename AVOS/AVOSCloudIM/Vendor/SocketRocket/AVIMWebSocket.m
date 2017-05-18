@@ -1437,7 +1437,8 @@ SecKeyRef LCGetPublicKeyFromCertificate(SecCertificateRef cert);
  * @param certs Certificate array, it should be an array of SecCertificateRef.
  * @return An array of public keys.
  */
-- (NSArray *)publicKeysFromCerts:(NSArray *)certs {
+NS_INLINE
+NSArray *LCPublicKeysFromCerts(NSArray *certs) {
     NSMutableArray *publicKeys = [NSMutableArray array];
     
     for (id cert in certs) {
@@ -1459,7 +1460,7 @@ SecKeyRef LCGetPublicKeyFromCertificate(SecCertificateRef cert);
     
     SecPolicyRef policy = SecPolicyCreateBasicX509();
     NSInteger numCerts = SecTrustGetCertificateCount(secTrust);
-    NSArray *pinnedPublicKeys = [self publicKeysFromCerts:sslCerts];
+    NSArray *pinnedPublicKeys = LCPublicKeysFromCerts(sslCerts);
     
     for (NSInteger i = 0; i < numCerts; i++) {
         SecCertificateRef cert = SecTrustGetCertificateAtIndex(secTrust, i);
