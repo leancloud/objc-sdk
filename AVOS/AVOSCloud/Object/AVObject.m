@@ -26,6 +26,7 @@
 
 #import "AVUser_Internal.h"
 #import "SDMacros.h"
+#import "EXTScope.h"
 
 #define AV_BATCH_SAVE_SIZE 100
 #define AV_BATCH_CONCURRENT_SIZE 20
@@ -725,6 +726,10 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
     [self.requestLock lock];
 
+    @onExit {
+        [self.requestLock unlock];
+    };
+
     /* Perform save request. */
     do {
         /* If object is clean, ignore save request. */
@@ -757,8 +762,6 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     if (error) {
         *error = requestError;
     }
-
-    [self.requestLock unlock];
 
     return !requestError;
 }
