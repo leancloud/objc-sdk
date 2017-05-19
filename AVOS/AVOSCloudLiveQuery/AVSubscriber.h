@@ -14,4 +14,6 @@
 
 + (instancetype)sharedInstance;
 
+- (void)start;
+
 @end
