@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+FOUNDATION_EXPORT NSString *const    AVLiveQueryEventKey;
+FOUNDATION_EXPORT NSNotificationName AVLiveQueryEventNotification;
+
 @interface AVSubscriber : NSObject
 
 @property (nonatomic, copy, readonly) NSString *identifier;

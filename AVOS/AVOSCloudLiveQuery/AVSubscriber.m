@@ -12,6 +12,7 @@
 /* AVOSCloud headers */
 #import "AVConfiguration.h"
 #import "AVUtils.h"
+#import "AVObjectUtils.h"
 
 /* AVOSCloudIM headers */
 #import "AVIMWebSocketWrapper.h"
@@ -25,6 +26,9 @@ static NSString *const AVIdentifierPrefix = @"LiveQuery";
 
 static const NSTimeInterval AVBackoffInitialTime = 0.618;
 static const NSTimeInterval AVBackoffMaximumTime = 60;
+
+NSString *const AVLiveQueryEventKey = @"AVLiveQueryEventKey";
+NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification";
 
 @interface AVSubscriber ()
 
@@ -90,7 +94,47 @@ static const NSTimeInterval AVBackoffMaximumTime = 60;
 }
 
 - (void)webSocketDidReceiveCommand:(NSNotification *)notification {
-    /* TODO */
+    NSDictionary *dict = notification.userInfo;
+    AVIMGenericCommand *command = [dict objectForKey:@"command"];
+
+    /* Filter out non-live-query commands. */
+    if (command.service != AVServiceTypeLiveQuery)
+        return;
+
+    switch (command.cmd) {
+    case AVIMCommandType_Data:
+        [self handleDataCommand:command];
+        break;
+    }
+}
+
+- (void)handleDataCommand:(AVIMGenericCommand *)command {
+    NSArray<AVIMJsonObjectMessage*> *messages = command.dataMessage.msgArray;
+
+    for (AVIMJsonObjectMessage *message in messages)
+        [self handleDataMessage:message];
+}
+
+- (void)handleDataMessage:(AVIMJsonObjectMessage *)message {
+    NSString *JSONString = message.data_p;
+
+    if (!JSONString)
+        return;
+
+    NSError *error = nil;
+    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding]
+                                                               options:0
+                                                                 error:&error];
+
+    if (error || !dictionary)
+        return;
+
+    NSDictionary *event = [AVObjectUtils objectFromDictionary:dictionary recursive:YES];
+    NSDictionary *userInfo = @{ AVLiveQueryEventKey: event };
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:AVLiveQueryEventNotification
+                                                        object:self
+                                                      userInfo:userInfo];
 }
 
 - (void)webSocketDidReceiveError:(NSNotification *)notification {
