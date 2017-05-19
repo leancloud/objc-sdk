@@ -16,11 +16,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol AVLiveQueryDelegate <NSObject>
 
+@optional
+
 - (void)liveQuery:(AVLiveQuery *)liveQuery objectDidEnter:(id)object;
 - (void)liveQuery:(AVLiveQuery *)liveQuery objectDidLeave:(id)object;
 
 - (void)liveQuery:(AVLiveQuery *)liveQuery objectDidCreate:(id)object;
-- (void)liveQuery:(AVLiveQuery *)liveQuery objectDidUpdate:(id)object;
+- (void)liveQuery:(AVLiveQuery *)liveQuery objectDidUpdate:(id)object updatedKeys:(NSArray<NSString *> *)updatedKeys;
 - (void)liveQuery:(AVLiveQuery *)liveQuery objectDidDelete:(id)object;
 
 - (void)liveQuery:(AVLiveQuery *)liveQuery userDidLogin:(AVUser *)user;
