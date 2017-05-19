@@ -570,7 +570,6 @@
 		838CE3331EC9809F00B24F5B /* AVOSCloudLiveQuery-iOS.Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 838CE3321EC9809F00B24F5B /* AVOSCloudLiveQuery-iOS.Info.plist */; };
 		838CE3351EC980AA00B24F5B /* AVOSCloudLiveQuery-iOSTests.Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 838CE3341EC980AA00B24F5B /* AVOSCloudLiveQuery-iOSTests.Info.plist */; };
 		838CE33A1EC980DE00B24F5B /* AVOSCloudLiveQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 838CE31D1EC97E6E00B24F5B /* AVOSCloudLiveQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		838CE33C1EC980DE00B24F5B /* AVOSCloudLiveQuery-iOS.Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 838CE3321EC9809F00B24F5B /* AVOSCloudLiveQuery-iOS.Info.plist */; };
 		838CE3451EC980E000B24F5B /* AVOSCloudLiveQueryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 838CE3281EC97E6F00B24F5B /* AVOSCloudLiveQueryTests.m */; };
 		838CE3471EC980E000B24F5B /* AVOSCloudLiveQuery.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 838CE31B1EC97E6E00B24F5B /* AVOSCloudLiveQuery.framework */; };
 		838CE3491EC980E000B24F5B /* AVOSCloudLiveQuery-iOSTests.Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 838CE3341EC980AA00B24F5B /* AVOSCloudLiveQuery-iOSTests.Info.plist */; };
@@ -4456,7 +4455,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				838CE33C1EC980DE00B24F5B /* AVOSCloudLiveQuery-iOS.Info.plist in Resources */,
 				838CE34F1EC9829E00B24F5B /* AVOSCloudLiveQuery-macOS.Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
