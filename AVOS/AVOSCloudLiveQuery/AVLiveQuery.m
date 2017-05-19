@@ -7,17 +7,18 @@
 //
 
 #import "AVLiveQuery.h"
+#import "AVSubscriber.h"
+
+#import "AVUser.h"
+#import "AVQuery.h"
 
 @implementation AVLiveQuery
 
-- (instancetype)initWithQuery:(AVQuery *)query
-                      options:(AVLiveQueryOptions *)options
-{
+- (instancetype)initWithQuery:(AVQuery *)query {
     self = [super init];
 
     if (self) {
         _query = query;
-        _options = options;
     }
 
     return self;

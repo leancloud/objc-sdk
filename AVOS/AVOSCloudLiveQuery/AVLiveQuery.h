@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVQuery.h"
-#import "AVDynamicObject.h"
 
+@class AVUser;
+@class AVQuery;
 @class AVLiveQuery;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -27,23 +27,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface AVLiveQueryOptions : AVDynamicObject
-
-@end
-
 @interface AVLiveQuery : NSObject
 
 @property (nonatomic, weak, nullable) id<AVLiveQueryDelegate> delegate;
 
 @property (nonatomic, strong, readonly) AVQuery *query;
-@property (nonatomic, strong, readonly, nullable) AVLiveQueryOptions *options;
 
-- (instancetype)initWithQuery:(AVQuery *)query
-                      options:(nullable AVLiveQueryOptions *)options;
+- (instancetype)initWithQuery:(AVQuery *)query;
 
-- (void)subscribeWithCallback:(AVBooleanResultBlock)callback;
+- (void)subscribeWithCallback:(void(^)(BOOL succeeded, NSError *error))callback;
 
-- (void)unsubscribeWithCallback:(AVBooleanResultBlock)callback;
+- (void)unsubscribeWithCallback:(void(^)(BOOL succeeded, NSError *error))callback;
 
 @end
 
