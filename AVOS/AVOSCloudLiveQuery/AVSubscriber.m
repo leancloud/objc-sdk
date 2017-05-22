@@ -22,7 +22,7 @@ typedef NS_ENUM(NSInteger, AVServiceType) {
     AVServiceTypeLiveQuery = 1
 };
 
-static NSString *const AVIdentifierPrefix = @"LiveQuery";
+static NSString *const AVIdentifierPrefix = @"livequery";
 
 static const NSTimeInterval AVBackoffInitialTime = 0.618;
 static const NSTimeInterval AVBackoffMaximumTime = 60;
