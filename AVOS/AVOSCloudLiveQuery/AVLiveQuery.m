@@ -161,6 +161,9 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
     query[@"where"]     = [self.query whereJSONDictionary];
     query[@"keys"]      = self.query.selectedKeys;
 
+    if (self.query.includeACL)
+        query[@"returnACL"] = @(YES);
+
     parameters[@"query"] = query;
     parameters[@"sessionToken"] = [AVUser currentUser].sessionToken;
     parameters[@"id"] = self.subscriber.identifier;
