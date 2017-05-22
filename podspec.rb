@@ -223,8 +223,8 @@ module Podspec
 
       podspec = Mustache.render template, {
         'version' => version,
-        'source_files'   => file_list_string(source_files, 4),
-        'public_header_files' => file_list_string(header_files, 4)
+        'source_files' => "'AVOS/AVOSCloudLiveQuery/**/*.{h,m}'",
+        'public_header_files' => file_list_string(public_header_files, 4)
       }
 
       write 'AVOSCloudLiveQuery.podspec', podspec

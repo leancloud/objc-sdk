@@ -20,15 +20,11 @@ Pod::Spec.new do |s|
   }
 
   s.source_files =
-    'AVOS/AVOSCloudLiveQuery/AVSubscriber.m',
-    'AVOS/AVOSCloudLiveQuery/AVLiveQuery.m',
-    'AVOS/AVOSCloudLiveQuery/AVExponentialTimer.m'
+    'AVOS/AVOSCloudLiveQuery/**/*.{h,m}'
 
   s.public_header_files =
     'AVOS/AVOSCloudLiveQuery/AVLiveQuery.h',
-    'AVOS/AVOSCloudLiveQuery/AVExponentialTimer.h',
-    'AVOS/AVOSCloudLiveQuery/AVOSCloudLiveQuery.h',
-    'AVOS/AVOSCloudLiveQuery/AVSubscriber.h'
+    'AVOS/AVOSCloudLiveQuery/AVOSCloudLiveQuery.h'
 
   s.dependency 'AVOSCloud', "#{s.version}"
   s.dependency 'AVOSCloudIM', "#{s.version}"
