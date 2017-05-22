@@ -36,6 +36,7 @@ CF_EXTERN_C_BEGIN
 @class AVIMLogItem;
 @class AVIMLoginCommand;
 @class AVIMLogsCommand;
+@class AVIMMaxReadTuple;
 @class AVIMPresenceCommand;
 @class AVIMRcpCommand;
 @class AVIMReadCommand;
@@ -118,6 +119,7 @@ typedef GPB_ENUM(AVIMOpType) {
   AVIMOpType_Status = 49,
   AVIMOpType_Members = 50,
   AVIMOpType_MaxRead = 51,
+  AVIMOpType_IsMember = 52,
 
   /** room */
   AVIMOpType_Join = 80,
@@ -145,6 +147,23 @@ LCIMEnumDescriptor *AVIMOpType_EnumDescriptor(void);
  * the time this source was generated.
  **/
 BOOL AVIMOpType_IsValidValue(int32_t value);
+
+#pragma mark - Enum AVIMExtendLoginCommandType
+
+typedef GPB_ENUM(AVIMExtendLoginCommandType) {
+  AVIMExtendLoginCommandType_Unknown = 0,
+  AVIMExtendLoginCommandType_Loggedin = 1,
+  AVIMExtendLoginCommandType_Logout = 2,
+  AVIMExtendLoginCommandType_Loggedout = 3,
+};
+
+LCIMEnumDescriptor *AVIMExtendLoginCommandType_EnumDescriptor(void);
+
+/**
+ * Checks to see if the given value is defined by the enum or was not known at
+ * the time this source was generated.
+ **/
+BOOL AVIMExtendLoginCommandType_IsValidValue(int32_t value);
 
 #pragma mark - Enum AVIMStatusType
 
@@ -265,8 +284,15 @@ typedef GPB_ENUM(AVIMLogItem_FieldNumber) {
 
 #pragma mark - AVIMLoginCommand
 
+typedef GPB_ENUM(AVIMLoginCommand_FieldNumber) {
+  AVIMLoginCommand_FieldNumber_ExtendCmd = 1,
+};
+
 @interface AVIMLoginCommand : LCIMMessage
 
+@property(nonatomic, readwrite) AVIMExtendLoginCommandType extendCmd;
+
+@property(nonatomic, readwrite) BOOL hasExtendCmd;
 @end
 
 #pragma mark - AVIMDataCommand
@@ -583,9 +609,13 @@ typedef GPB_ENUM(AVIMConvCommand_FieldNumber) {
   AVIMConvCommand_FieldNumber_StatusSub = 16,
   AVIMConvCommand_FieldNumber_StatusPub = 17,
   AVIMConvCommand_FieldNumber_StatusTtl = 18,
+  AVIMConvCommand_FieldNumber_UniqueId = 19,
   AVIMConvCommand_FieldNumber_TargetClientId = 20,
   AVIMConvCommand_FieldNumber_MaxReadTimestamp = 21,
   AVIMConvCommand_FieldNumber_MaxAckTimestamp = 22,
+  AVIMConvCommand_FieldNumber_QueryAllMembers = 23,
+  AVIMConvCommand_FieldNumber_MaxReadTuplesArray = 24,
+  AVIMConvCommand_FieldNumber_CidsArray = 25,
   AVIMConvCommand_FieldNumber_Results = 100,
   AVIMConvCommand_FieldNumber_Where = 101,
   AVIMConvCommand_FieldNumber_Attr = 103,
@@ -656,6 +686,10 @@ typedef GPB_ENUM(AVIMConvCommand_FieldNumber) {
 @property(nonatomic, readwrite) int32_t statusTtl;
 
 @property(nonatomic, readwrite) BOOL hasStatusTtl;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *uniqueId;
+/** Test to see if @c uniqueId has been set. */
+@property(nonatomic, readwrite) BOOL hasUniqueId;
+
 @property(nonatomic, readwrite, copy, null_resettable) NSString *targetClientId;
 /** Test to see if @c targetClientId has been set. */
 @property(nonatomic, readwrite) BOOL hasTargetClientId;
@@ -666,6 +700,17 @@ typedef GPB_ENUM(AVIMConvCommand_FieldNumber) {
 @property(nonatomic, readwrite) int64_t maxAckTimestamp;
 
 @property(nonatomic, readwrite) BOOL hasMaxAckTimestamp;
+@property(nonatomic, readwrite) BOOL queryAllMembers;
+
+@property(nonatomic, readwrite) BOOL hasQueryAllMembers;
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<AVIMMaxReadTuple*> *maxReadTuplesArray;
+/** The number of items in @c maxReadTuplesArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger maxReadTuplesArray_Count;
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *cidsArray;
+/** The number of items in @c cidsArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger cidsArray_Count;
+
 @property(nonatomic, readwrite, strong, null_resettable) AVIMJsonObjectMessage *results;
 /** Test to see if @c results has been set. */
 @property(nonatomic, readwrite) BOOL hasResults;
@@ -830,6 +875,28 @@ typedef GPB_ENUM(AVIMReadTuple_FieldNumber) {
 
 @end
 
+#pragma mark - AVIMMaxReadTuple
+
+typedef GPB_ENUM(AVIMMaxReadTuple_FieldNumber) {
+  AVIMMaxReadTuple_FieldNumber_Pid = 1,
+  AVIMMaxReadTuple_FieldNumber_MaxAckTimestamp = 2,
+  AVIMMaxReadTuple_FieldNumber_MaxReadTimestamp = 3,
+};
+
+@interface AVIMMaxReadTuple : LCIMMessage
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *pid;
+/** Test to see if @c pid has been set. */
+@property(nonatomic, readwrite) BOOL hasPid;
+
+@property(nonatomic, readwrite) int64_t maxAckTimestamp;
+
+@property(nonatomic, readwrite) BOOL hasMaxAckTimestamp;
+@property(nonatomic, readwrite) int64_t maxReadTimestamp;
+
+@property(nonatomic, readwrite) BOOL hasMaxReadTimestamp;
+@end
+
 #pragma mark - AVIMReadCommand
 
 typedef GPB_ENUM(AVIMReadCommand_FieldNumber) {
@@ -910,6 +977,7 @@ typedef GPB_ENUM(AVIMGenericCommand_FieldNumber) {
   AVIMGenericCommand_FieldNumber_I = 5,
   AVIMGenericCommand_FieldNumber_InstallationId = 6,
   AVIMGenericCommand_FieldNumber_Priority = 7,
+  AVIMGenericCommand_FieldNumber_Service = 8,
   AVIMGenericCommand_FieldNumber_LoginMessage = 100,
   AVIMGenericCommand_FieldNumber_DataMessage = 101,
   AVIMGenericCommand_FieldNumber_SessionMessage = 102,
@@ -952,6 +1020,9 @@ typedef GPB_ENUM(AVIMGenericCommand_FieldNumber) {
 @property(nonatomic, readwrite) int32_t priority;
 
 @property(nonatomic, readwrite) BOOL hasPriority;
+@property(nonatomic, readwrite) int32_t service;
+
+@property(nonatomic, readwrite) BOOL hasService;
 @property(nonatomic, readwrite, strong, null_resettable) AVIMLoginCommand *loginMessage;
 /** Test to see if @c loginMessage has been set. */
 @property(nonatomic, readwrite) BOOL hasLoginMessage;

@@ -23,6 +23,7 @@
 +(AVGeoPoint *)geoPointFromDictionary:(NSDictionary *)dict;
 +(AVACL *)aclFromDictionary:(NSDictionary *)dict;
 +(NSObject *)objectFromDictionary:(NSDictionary *)dict;
++ (NSObject *)objectFromDictionary:(NSDictionary *)dict recursive:(BOOL)recursive;
 +(NSArray *)arrayFromArray:(NSArray *)array;
 
 #pragma mark - Update Objecitive-c object from server side dictionary
