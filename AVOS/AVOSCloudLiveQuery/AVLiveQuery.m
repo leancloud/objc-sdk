@@ -146,7 +146,7 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
 }
 
 - (void)handleEventLogin:(NSDictionary *)event {
-    AVUser *user = event[@"user"];
+    AVUser *user = event[@"object"];
 
     [self callDelegateMethod:@selector(liveQuery:userDidLogin:)
                       object:user
