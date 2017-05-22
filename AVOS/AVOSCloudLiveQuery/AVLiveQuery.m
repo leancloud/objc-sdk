@@ -131,18 +131,20 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
 
 - (void)handleEventEnter:(NSDictionary *)event {
     AVObject *object = event[@"object"];
+    NSArray *updatedKeys = event[@"updatedKeys"] ?: @[];
 
-    [self callDelegateMethod:@selector(liveQuery:objectDidEnter:)
+    [self callDelegateMethod:@selector(liveQuery:objectDidEnter:updatedKeys:)
                       object:object
-               withArguments:nil];
+               withArguments:@[updatedKeys]];
 }
 
 - (void)handleEventLeave:(NSDictionary *)event {
     AVObject *object = event[@"object"];
+    NSArray *updatedKeys = event[@"updatedKeys"] ?: @[];
 
-    [self callDelegateMethod:@selector(liveQuery:objectDidLeave:)
+    [self callDelegateMethod:@selector(liveQuery:objectDidLeave:updatedKeys:)
                       object:object
-               withArguments:nil];
+               withArguments:@[updatedKeys]];
 }
 
 - (void)handleEventLogin:(NSDictionary *)event {

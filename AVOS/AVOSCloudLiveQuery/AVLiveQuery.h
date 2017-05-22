@@ -22,22 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 
 /**
- Called when an object matches query after updated.
-
- @param liveQuery The live query object.
- @param object    The object that matches live query.
- */
-- (void)liveQuery:(AVLiveQuery *)liveQuery objectDidEnter:(id)object;
-
-/**
- Called when an object mismatches query after updated.
-
- @param liveQuery The live query object.
- @param object    The object that matches live query.
- */
-- (void)liveQuery:(AVLiveQuery *)liveQuery objectDidLeave:(id)object;
-
-/**
  Called when an object created and it matches the query.
 
  @param liveQuery The live query object.
@@ -61,6 +45,22 @@ NS_ASSUME_NONNULL_BEGIN
  @param object    The object that matches live query.
  */
 - (void)liveQuery:(AVLiveQuery *)liveQuery objectDidDelete:(id)object;
+
+/**
+ Called when an object matches query after updated.
+
+ @param liveQuery The live query object.
+ @param object    The object that matches live query.
+ */
+- (void)liveQuery:(AVLiveQuery *)liveQuery objectDidEnter:(id)object updatedKeys:(NSArray<NSString *> *)updatedKeys;
+
+/**
+ Called when an object mismatches query after updated.
+
+ @param liveQuery The live query object.
+ @param object    The object that matches live query.
+ */
+- (void)liveQuery:(AVLiveQuery *)liveQuery objectDidLeave:(id)object updatedKeys:(NSArray<NSString *> *)updatedKeys;
 
 /**
  Called when an user did login and who matches the query.
