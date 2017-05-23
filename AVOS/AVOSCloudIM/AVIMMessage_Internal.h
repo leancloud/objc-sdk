@@ -10,6 +10,8 @@
 
 @interface AVIMMessage ()
 
+@property (nonatomic, assign) AVIMMessageMediaType mediaType;
+
 /*!
  * Wether message has breakpoint or not
  */

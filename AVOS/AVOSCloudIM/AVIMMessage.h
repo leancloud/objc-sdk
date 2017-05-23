@@ -8,6 +8,16 @@
 
 #import "AVIMCommon.h"
 
+typedef NS_ENUM(int8_t, AVIMMessageMediaType) {
+    kAVIMMessageMediaTypeNone = 0,
+    kAVIMMessageMediaTypeText = -1,
+    kAVIMMessageMediaTypeImage = -2,
+    kAVIMMessageMediaTypeAudio = -3,
+    kAVIMMessageMediaTypeVideo = -4,
+    kAVIMMessageMediaTypeLocation = -5,
+    kAVIMMessageMediaTypeFile = -6
+};
+
 typedef NS_ENUM(int8_t, AVIMMessageIOType) {
     AVIMMessageIOTypeIn = 1,
     AVIMMessageIOTypeOut,
@@ -25,6 +35,8 @@ typedef NS_ENUM(int8_t, AVIMMessageStatus) {
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AVIMMessage : NSObject <NSCopying, NSCoding>
+
+@property (nonatomic, assign, readonly) AVIMMessageMediaType mediaType;
 
 /*!
  * 表示接收和发出的消息
