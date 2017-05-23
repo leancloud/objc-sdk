@@ -18,13 +18,6 @@
     return kAVIMMessageMediaTypeCustom;
 }
 
-- (instancetype)init {
-    if ((self = [super init])) {
-        self.mediaType = [[self class] classMediaType];
-    }
-    return self;
-}
-
 + (instancetype)messageWithAttributes:(NSDictionary *)attributes {
     AVIMCustomMessage *message = [[self alloc] init];
     message.attributes = attributes;
