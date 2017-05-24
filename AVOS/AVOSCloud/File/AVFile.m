@@ -7,6 +7,7 @@
 #import "AVPaasClient.h"
 #import "AVUtils.h"
 #import "AVNetworking.h"
+#import "LCNetworking.h"
 #import "AVErrorUtils.h"
 #import "AVPersistenceUtils.h"
 #import "AVObjectUtils.h"
@@ -19,6 +20,8 @@ static NSString * fileSizeTag = @"size";
 static NSString * fileMd5Tag =@"_checksum";
 
 static NSMutableDictionary *downloadingMap = nil;
+
+static LCHTTPSessionManager *imageSessionManager = nil;
 
 @interface _CallBack : NSObject
 @property(nonatomic, strong) AVBooleanResultBlock resultBlock;
@@ -35,6 +38,22 @@ static NSMutableDictionary *downloadingMap = nil;
 @end
 
 @implementation AVFile
+
++ (void)initialize {
+    static dispatch_once_t onceToken;
+
+    dispatch_once(&onceToken, ^{
+        [self doInitialize];
+    });
+}
+
++ (void)doInitialize {
+    imageSessionManager = ({
+        LCHTTPSessionManager *sessionManager = [[LCHTTPSessionManager alloc] init];
+        sessionManager.responseSerializer = [[LCImageResponseSerializer alloc] init];
+        sessionManager;
+    });
+}
 
 - (NSMutableDictionary *)metadata {
     return _metaData;
@@ -847,12 +866,12 @@ typedef void (^AVFileSizeBlock)(long long fileSize);
 {
     NSString *url = [self getThumbnailURLWithScaleToFit:scaleToFit width:width height:height];
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-    AVImageRequestOperation * operation = [AVImageRequestOperation imageRequestOperationWithRequest:request imageProcessingBlock:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-        [AVUtils callImageResultBlock:block image:image error:nil];
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-        [AVUtils callImageResultBlock:block image:nil error:error];
-    }];
-    [[AVPaasClient sharedInstance].clientImpl enqueueHTTPRequestOperation:operation];
+    NSURLSessionDataTask *task = [imageSessionManager
+                                  dataTaskWithRequest:request
+                                  completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+                                      [AVUtils callImageResultBlock:block image:responseObject error:error];
+                                  }];
+    [task resume];
 }
 
 -(void)setOwnerId:(NSString *)ownerId
