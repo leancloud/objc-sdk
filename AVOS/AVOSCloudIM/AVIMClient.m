@@ -436,6 +436,11 @@ static BOOL AVIMClientHasInstantiated = NO;
 
     command.sessionMessage.r = !force;
 
+    NSString *deviceToken = [AVInstallation currentInstallation].deviceToken;
+
+    if (deviceToken)
+        command.sessionMessage.deviceToken = deviceToken;
+
     OSAtomicIncrement32(&_openTimes);
 
     [self sendCommand:command];
