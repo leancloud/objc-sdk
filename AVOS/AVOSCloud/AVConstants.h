@@ -169,7 +169,11 @@ typedef void (^AVObjectResultBlock)(AVObject * _Nullable object, NSError * _Null
 typedef void (^AVSetResultBlock)(NSSet * _Nullable channels, NSError * _Nullable error);
 typedef void (^AVUserResultBlock)(AVUser * _Nullable user, NSError * _Nullable error);
 typedef void (^AVDataResultBlock)(NSData * _Nullable data, NSError * _Nullable error);
+#if AV_TARGET_OS_OSX
+typedef void (^AVImageResultBlock)(NSImage * _Nullable image, NSError * _Nullable error);
+#else
 typedef void (^AVImageResultBlock)(UIImage * _Nullable image, NSError * _Nullable error);
+#endif
 typedef void (^AVDataStreamResultBlock)(NSInputStream * _Nullable stream, NSError * _Nullable error);
 typedef void (^AVStringResultBlock)(NSString * _Nullable string, NSError * _Nullable error);
 typedef void (^AVIdResultBlock)(id _Nullable object, NSError * _Nullable error);
