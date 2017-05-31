@@ -328,6 +328,14 @@ The name of the file.
 - (void)deleteInBackgroundWithBlock:(AVBooleanResultBlock)block;
 
 /*!
+ Delete an array of files asynchronously.
+
+ @param files The files to be deleted.
+ @param block The callback of deletion request.
+ */
++ (void)deleteFiles:(NSArray<AVFile *> *)files inBackgroundWithBlock:(AVBooleanResultBlock)block;
+
+/*!
  Remove file in background.
  */
 - (void)deleteInBackground;

@@ -22,6 +22,8 @@
 
 @property(nonatomic, strong) NSString *cachePath;
 
+@property (nonatomic, copy, readonly) NSString *objectEndpoint;
+
 +(AVFile *)fileFromDictionary:(NSDictionary *)dict;
 +(NSDictionary *)dictionaryFromFile:(AVFile *)file;
 
