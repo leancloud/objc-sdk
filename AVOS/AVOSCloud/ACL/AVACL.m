@@ -63,16 +63,25 @@ static NSString * writeTag = @"write";
     return @"*";
 }
 
--(NSMutableDictionary * )dictionaryForKey:(NSString *)key
+- (NSMutableDictionary *)dictionaryForKey:(NSString *)key
                                    create:(BOOL)create
 {
-    NSMutableDictionary * data = [self.permissionsById objectForKey:key];
-    if (data == nil && create)
-    {
-        data = [[NSMutableDictionary alloc] init];
-        [self.permissionsById setObject:data forKey:key];
+    NSMutableDictionary *dictionary = nil;
+    id object = self.permissionsById[key];
+
+    if (object) {
+        if ([object isKindOfClass:[NSMutableDictionary class]]) {
+            dictionary = (NSMutableDictionary *)object;
+        } else {
+            dictionary = [object mutableCopy];
+            self.permissionsById[key] = dictionary;
+        }
+    } else if (create) {
+        dictionary = [NSMutableDictionary dictionary];
+        self.permissionsById[key] = dictionary;
     }
-    return data;
+
+    return dictionary;
 }
 
 -(void)allowRead:(BOOL)allowed
