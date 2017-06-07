@@ -25,7 +25,6 @@
 		7047179A1B4A60CC00F6ADDC /* AVIMClientTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 704717991B4A60CC00F6ADDC /* AVIMClientTest.m */; };
 		7047179C1B4A60E100F6ADDC /* AVIMMessageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7047179B1B4A60E100F6ADDC /* AVIMMessageTest.m */; };
 		704717A51B4A620900F6ADDC /* AVIMTestBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 704717A41B4A620900F6ADDC /* AVIMTestBase.m */; };
-		704717A91B4A639400F6ADDC /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 704717A81B4A639400F6ADDC /* libsqlite3.dylib */; };
 		704F3B781BE0D0180033245C /* AVOSCloudIM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 704F3B6E1BE0D0180033245C /* AVOSCloudIM.framework */; };
 		704F3B851BE0D05C0033245C /* AVIMClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841BCD1A5A84C600C5C6C4 /* AVIMClient.m */; };
 		704F3B861BE0D05C0033245C /* AVIMCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841BCF1A5A84C600C5C6C4 /* AVIMCommon.m */; };
@@ -125,12 +124,6 @@
 		7068A7241BA3614D0004623A /* AVRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7068A7221BA3614D0004623A /* AVRequestManager.m */; };
 		706F85A11B82E4E00079CC55 /* AVOSCloudTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 706F85A01B82E4E00079CC55 /* AVOSCloudTest.m */; };
 		707352781B4A8E08005466CE /* AVOSCloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8419861A5A791300C5C6C4 /* AVOSCloud.framework */; };
-		7073527A1B4A8E4D005466CE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 707352791B4A8E4D005466CE /* SystemConfiguration.framework */; };
-		7073527C1B4A8E54005466CE /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7073527B1B4A8E54005466CE /* MobileCoreServices.framework */; };
-		7073527D1B4A8E5C005466CE /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 835E015B1B31922B0025F99A /* CoreTelephony.framework */; };
-		7073527E1B4A8E63005466CE /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 835E015D1B31922F0025F99A /* libicucore.dylib */; };
-		7073527F1B4A8E68005466CE /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 704717A81B4A639400F6ADDC /* libsqlite3.dylib */; };
-		707352801B4A8E70005466CE /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 835E01591B3192240025F99A /* CoreLocation.framework */; };
 		7085D5241BEA237A00449DC1 /* AVTestUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA86661A77817B00864211 /* AVTestUtil.m */; };
 		7085D52D1BEA245600449DC1 /* AVOSCloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7F681BDE2DC3000A3B21 /* AVOSCloud.framework */; };
 		708F554D1B86121A0071CA48 /* TestDescriptionKey.json in Resources */ = {isa = PBXBuildFile; fileRef = 708F554C1B86121A0071CA48 /* TestDescriptionKey.json */; };
@@ -202,13 +195,6 @@
 		70CA7FB21BDE374C000A3B21 /* LCKeyValueStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 838DD79F1B3D3FB600C95897 /* LCKeyValueStore.m */; };
 		70CA7FB31BDE374C000A3B21 /* LCSSLChallenger.m in Sources */ = {isa = PBXBuildFile; fileRef = 838DD7C11B42630400C95897 /* LCSSLChallenger.m */; };
 		70CA7FB41BDE374C000A3B21 /* NSDictionary+LCHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 837CC71D1B568431001333AD /* NSDictionary+LCHash.m */; };
-		70CA7FB71BDE37A0000A3B21 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7FB61BDE37A0000A3B21 /* SystemConfiguration.framework */; };
-		70CA7FBB1BDE37AF000A3B21 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7FBA1BDE37AF000A3B21 /* CoreLocation.framework */; };
-		70CA7FBD1BDE38D4000A3B21 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7FBC1BDE38D4000A3B21 /* CoreServices.framework */; };
-		70CA7FBF1BDE3933000A3B21 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7FBE1BDE3933000A3B21 /* libicucore.tbd */; };
-		70CA7FC11BDE3940000A3B21 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7FC01BDE3940000A3B21 /* libz.tbd */; };
-		70CA7FC31BDE3CDF000A3B21 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7FC21BDE3CDF000A3B21 /* libsqlite3.tbd */; };
-		70CA7FC51BDE3CF9000A3B21 /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7FC41BDE3CF9000A3B21 /* libcurl.tbd */; };
 		70CA7FDB1BDE42F5000A3B21 /* AVACL.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419DD1A5A79FF00C5C6C4 /* AVACL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		70CA7FDC1BDE42F5000A3B21 /* AVACL_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419DF1A5A79FF00C5C6C4 /* AVACL_Internal.h */; };
 		70CA7FDD1BDE42F5000A3B21 /* AVRole.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419E01A5A79FF00C5C6C4 /* AVRole.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -549,9 +535,6 @@
 		835092191EB1ECB7000DA884 /* AVDynamicObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 835092111EB1ECB7000DA884 /* AVDynamicObject.m */; };
 		835C5F711D25929600EF0EBB /* AVFriendQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A651A5A79FF00C5C6C4 /* AVFriendQuery.h */; };
 		835C5F721D2594EA00EF0EBB /* AVAnalyticsActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419E71A5A79FF00C5C6C4 /* AVAnalyticsActivity.h */; };
-		835E015A1B3192240025F99A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 835E01591B3192240025F99A /* CoreLocation.framework */; };
-		835E015C1B31922B0025F99A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 835E015B1B31922B0025F99A /* CoreTelephony.framework */; };
-		835E015E1B31922F0025F99A /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 835E015D1B31922F0025F99A /* libicucore.dylib */; };
 		8366BD071ECE0FF2008A5264 /* AVExponentialTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8366BD051ECE0FF2008A5264 /* AVExponentialTimer.h */; };
 		8366BD081ECE0FF2008A5264 /* AVExponentialTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8366BD051ECE0FF2008A5264 /* AVExponentialTimer.h */; };
 		8366BD091ECE0FF2008A5264 /* AVExponentialTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8366BD061ECE0FF2008A5264 /* AVExponentialTimer.m */; };
@@ -1427,7 +1410,6 @@
 		7047179B1B4A60E100F6ADDC /* AVIMMessageTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMMessageTest.m; sourceTree = "<group>"; };
 		704717A31B4A620900F6ADDC /* AVIMTestBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMTestBase.h; sourceTree = "<group>"; };
 		704717A41B4A620900F6ADDC /* AVIMTestBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMTestBase.m; sourceTree = "<group>"; };
-		704717A81B4A639400F6ADDC /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		704F3B6E1BE0D0180033245C /* AVOSCloudIM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudIM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		704F3B771BE0D0180033245C /* AVOSCloudIM-macOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AVOSCloudIM-macOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		704F8DAD1BF49292007CB560 /* AVUtilsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVUtilsTest.m; sourceTree = "<group>"; };
@@ -1437,12 +1419,6 @@
 		7068A7211BA3614D0004623A /* AVRequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVRequestManager.h; sourceTree = "<group>"; };
 		7068A7221BA3614D0004623A /* AVRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVRequestManager.m; sourceTree = "<group>"; };
 		706F85A01B82E4E00079CC55 /* AVOSCloudTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVOSCloudTest.m; sourceTree = "<group>"; };
-		707352791B4A8E4D005466CE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		7073527B1B4A8E54005466CE /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		7085D4361BEA179700449DC1 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
-		7085D43A1BEA181D00449DC1 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
-		7085D43C1BEA182C00449DC1 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		7085D4F41BEA1D1E00449DC1 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		7085D5371BEA2BE000449DC1 /* AVOSCloud-macOS.Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AVOSCloud-macOS.Info.plist"; sourceTree = "<group>"; };
 		7085D5381BEA2BE000449DC1 /* AVOSCloudIM-macOS.Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AVOSCloudIM-macOS.Info.plist"; sourceTree = "<group>"; };
 		7085D5391BEA2BE000449DC1 /* AVOSCloudIM-macOSTests.Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AVOSCloudIM-macOSTests.Info.plist"; sourceTree = "<group>"; };
@@ -1456,14 +1432,6 @@
 		70B05B391B909BD3009F6696 /* TestSaveAll.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestSaveAll.json; sourceTree = "<group>"; };
 		70C288B01BB55E0300A4773C /* TestInstallationSave.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestInstallationSave.json; sourceTree = "<group>"; };
 		70CA7F681BDE2DC3000A3B21 /* AVOSCloud.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloud.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		70CA7FB61BDE37A0000A3B21 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
-		70CA7FB81BDE37A8000A3B21 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/CoreTelephony.framework; sourceTree = DEVELOPER_DIR; };
-		70CA7FBA1BDE37AF000A3B21 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
-		70CA7FBC1BDE38D4000A3B21 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/CoreServices.framework; sourceTree = DEVELOPER_DIR; };
-		70CA7FBE1BDE3933000A3B21 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/lib/libicucore.tbd; sourceTree = DEVELOPER_DIR; };
-		70CA7FC01BDE3940000A3B21 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/lib/libz.tbd; sourceTree = DEVELOPER_DIR; };
-		70CA7FC21BDE3CDF000A3B21 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
-		70CA7FC41BDE3CF9000A3B21 /* libcurl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/lib/libcurl.tbd; sourceTree = DEVELOPER_DIR; };
 		70DA62471B4BD21B00D95D4D /* testImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testImage.png; sourceTree = "<group>"; };
 		70DA62491B4BD7D100D95D4D /* testAudio.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = testAudio.mp3; sourceTree = "<group>"; };
 		70DA624B1B4BDC8300D95D4D /* AVIMCustomMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMCustomMessage.h; sourceTree = "<group>"; };
@@ -1507,9 +1475,6 @@
 		835091FC1EB1BDD0000DA884 /* AVSMS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVSMS.m; sourceTree = "<group>"; };
 		835092101EB1ECB7000DA884 /* AVDynamicObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVDynamicObject.h; sourceTree = "<group>"; };
 		835092111EB1ECB7000DA884 /* AVDynamicObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVDynamicObject.m; sourceTree = "<group>"; };
-		835E01591B3192240025F99A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		835E015B1B31922B0025F99A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		835E015D1B31922F0025F99A /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		8366BD051ECE0FF2008A5264 /* AVExponentialTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVExponentialTimer.h; sourceTree = "<group>"; };
 		8366BD061ECE0FF2008A5264 /* AVExponentialTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVExponentialTimer.m; sourceTree = "<group>"; };
 		836705AA1BA1358D0050E968 /* SDMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMacros.h; sourceTree = "<group>"; };
@@ -1999,13 +1964,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				70CA7FC51BDE3CF9000A3B21 /* libcurl.tbd in Frameworks */,
-				70CA7FC31BDE3CDF000A3B21 /* libsqlite3.tbd in Frameworks */,
-				70CA7FC11BDE3940000A3B21 /* libz.tbd in Frameworks */,
-				70CA7FBF1BDE3933000A3B21 /* libicucore.tbd in Frameworks */,
-				70CA7FBD1BDE38D4000A3B21 /* CoreServices.framework in Frameworks */,
-				70CA7FB71BDE37A0000A3B21 /* SystemConfiguration.framework in Frameworks */,
-				70CA7FBB1BDE37AF000A3B21 /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2080,10 +2038,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				70AACA931B4A74A5007C5FFD /* AVOSCloud.framework in Frameworks */,
-				704717A91B4A639400F6ADDC /* libsqlite3.dylib in Frameworks */,
-				835E015E1B31922F0025F99A /* libicucore.dylib in Frameworks */,
-				835E015C1B31922B0025F99A /* CoreTelephony.framework in Frameworks */,
-				835E015A1B3192240025F99A /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2098,12 +2052,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				707352801B4A8E70005466CE /* CoreLocation.framework in Frameworks */,
-				7073527F1B4A8E68005466CE /* libsqlite3.dylib in Frameworks */,
-				7073527E1B4A8E63005466CE /* libicucore.dylib in Frameworks */,
-				7073527D1B4A8E5C005466CE /* CoreTelephony.framework in Frameworks */,
-				7073527C1B4A8E54005466CE /* MobileCoreServices.framework in Frameworks */,
-				7073527A1B4A8E4D005466CE /* SystemConfiguration.framework in Frameworks */,
 				707352781B4A8E08005466CE /* AVOSCloud.framework in Frameworks */,
 				8C8419CE1A5A796000C5C6C4 /* AVOSCloudIM.framework in Frameworks */,
 			);
@@ -2503,31 +2451,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		8C255D3F1AE9FA1A008A6FFC /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				7085D4F41BEA1D1E00449DC1 /* libc++.tbd */,
-				7085D43C1BEA182C00449DC1 /* libz.tbd */,
-				7085D43A1BEA181D00449DC1 /* libicucore.tbd */,
-				7085D4361BEA179700449DC1 /* libsqlite3.tbd */,
-				70CA7FC41BDE3CF9000A3B21 /* libcurl.tbd */,
-				70CA7FC21BDE3CDF000A3B21 /* libsqlite3.tbd */,
-				70CA7FC01BDE3940000A3B21 /* libz.tbd */,
-				70CA7FBE1BDE3933000A3B21 /* libicucore.tbd */,
-				70CA7FBC1BDE38D4000A3B21 /* CoreServices.framework */,
-				70CA7FBA1BDE37AF000A3B21 /* CoreLocation.framework */,
-				70CA7FB81BDE37A8000A3B21 /* CoreTelephony.framework */,
-				70CA7FB61BDE37A0000A3B21 /* SystemConfiguration.framework */,
-				7073527B1B4A8E54005466CE /* MobileCoreServices.framework */,
-				707352791B4A8E4D005466CE /* SystemConfiguration.framework */,
-				704717A81B4A639400F6ADDC /* libsqlite3.dylib */,
-				835E015D1B31922F0025F99A /* libicucore.dylib */,
-				835E015B1B31922B0025F99A /* CoreTelephony.framework */,
-				835E01591B3192240025F99A /* CoreLocation.framework */,
-			);
-			path = Frameworks;
-			sourceTree = "<group>";
-		};
 		8C84197A1A5A78E100C5C6C4 = {
 			isa = PBXGroup;
 			children = (
@@ -2539,7 +2462,6 @@
 				7085D5321BEA2A0A00449DC1 /* Resources */,
 				838CE31C1EC97E6E00B24F5B /* AVOSCloudLiveQuery */,
 				838CE3271EC97E6F00B24F5B /* AVOSCloudLiveQueryTests */,
-				8C255D3F1AE9FA1A008A6FFC /* Frameworks */,
 				8C8419871A5A791300C5C6C4 /* Products */,
 				8CEA86581A777A7900864211 /* TestBase */,
 			);
@@ -5525,7 +5447,10 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lsqlite3",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.AVOSCloud-macOS";
 				PRODUCT_NAME = AVOSCloud;
 				PROVISIONING_PROFILE = "";
@@ -5581,7 +5506,10 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lsqlite3",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.AVOSCloud-macOS";
 				PRODUCT_NAME = AVOSCloud;
 				PROVISIONING_PROFILE = "";
@@ -5732,7 +5660,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-lz",
+					"-lsqlite3",
 				);
 				PRODUCT_NAME = AVOSCloud;
 				PROVISIONING_PROFILE = "";
@@ -5790,7 +5718,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-lz",
+					"-lsqlite3",
 				);
 				PRODUCT_NAME = AVOSCloud;
 				PROVISIONING_PROFILE = "";
@@ -6285,7 +6213,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-lz",
+					"-lsqlite3",
 				);
 				PRODUCT_NAME = AVOSCloud;
 				PROVISIONING_PROFILE = "";
@@ -6344,7 +6272,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-lz",
+					"-lsqlite3",
 				);
 				PRODUCT_NAME = AVOSCloud;
 				PROVISIONING_PROFILE = "";
@@ -6585,7 +6513,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-lz",
+					"-lsqlite3",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.AVOSCloud-iOS";
 				PRODUCT_NAME = AVOSCloud;
@@ -6644,7 +6572,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-lz",
+					"-lsqlite3",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.AVOSCloud-iOS";
 				PRODUCT_NAME = AVOSCloud;
