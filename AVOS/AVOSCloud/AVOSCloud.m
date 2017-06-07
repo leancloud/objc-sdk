@@ -25,10 +25,6 @@
 #import "LCNetworkStatistics.h"
 #import "AVObjectUtils.h"
 
-#if AV_IOS_ONLY && !TARGET_OS_WATCH
-#import "AVWebSocketWrapper.h"
-#endif
-
 #import "LCRouter.h"
 #import "SDMacros.h"
 
@@ -203,12 +199,6 @@ AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
     /* Setup file uploading service. */
     [self setStorageType:[self storageTypeForServiceRegion:serviceRegion]];
 
-    NSString *pushGroup = [self pushGroupForServiceRegion:serviceRegion];
-
-#if AV_IOS_ONLY && !TARGET_OS_WATCH
-    /* Setup push group for IM 1.0. */
-    [AVWebSocketWrapper setDefaultPushGroup:pushGroup];
-#endif
     [AVUploaderManager sharedInstance].serviceRegion = serviceRegion;
 }
 
