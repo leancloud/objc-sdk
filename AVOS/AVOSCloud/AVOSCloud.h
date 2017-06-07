@@ -60,16 +60,6 @@
 #import "AVSMS.h"
 
 #if AV_IOS_ONLY && !TARGET_OS_WATCH
-// IM 1.0
-#import "AVSession.h"
-#import "AVSignature.h"
-#import "AVMessage.h"
-#import "AVGroup.h"
-#import "AVHistoryMessage.h"
-#import "AVHistoryMessageQuery.h"
-#endif
-
-#if AV_IOS_ONLY && !TARGET_OS_WATCH
 // Analytics
 #import "AVAnalytics.h"
 #endif
