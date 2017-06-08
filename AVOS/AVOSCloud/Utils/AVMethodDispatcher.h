@@ -41,6 +41,14 @@
             asyncronously:(BOOL)asyncronously;
 
 /**
+ Call method with arguments in main queue.
+
+ @see <code>-[AVMethodDispatcher callWithArguments:inDispatchQueue:asyncronously:]</code>
+ */
+- (void)callInMainQueueWithArguments:(NSArray *)arguments
+                       asyncronously:(BOOL)asyncronously;
+
+/**
  Call method with arguments.
  */
 - (void)callWithArguments:(NSArray *)arguments;

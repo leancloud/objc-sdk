@@ -39,6 +39,16 @@
     }
 }
 
+- (void)callInMainQueueWithArguments:(NSArray *)arguments
+                       asyncronously:(BOOL)asyncronously
+{
+    dispatch_queue_t mainQueue = dispatch_get_main_queue();
+
+    [self callWithArguments:arguments
+            inDispatchQueue:mainQueue
+              asyncronously:asyncronously];
+}
+
 - (void)callWithArguments:(NSArray *)arguments {
     id  target   = self.target;
     SEL selector = self.selector;
