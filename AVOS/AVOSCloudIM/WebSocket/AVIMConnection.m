@@ -41,19 +41,6 @@
 
 static NSTimeInterval AVIMWebSocketDefaultTimeoutInterval = 15.0;
 
-typedef enum : NSUInteger {
-    //mutually exclusive
-    AVIMURLQueryOptionDefault = 0,
-    AVIMURLQueryOptionKeepLastValue,
-    AVIMURLQueryOptionKeepFirstValue,
-    AVIMURLQueryOptionUseArrays,
-    AVIMURLQueryOptionAlwaysUseArrays,
-    
-    //can be |ed with other values
-    AVIMURLQueryOptionUseArraySyntax = 8,
-    AVIMURLQueryOptionSortKeys = 16
-} AVIMURLQueryOptions;
-
 NSString *const AVIMProtocolPROTOBUF1 = @"lc.protobuf.1";
 NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
@@ -249,77 +236,6 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
     if (_webSocket.readyState == AVIM_OPEN) {
         [self sendPing];
     }
-}
-
-+ (NSString *)URLEncodedString:(NSString *)string {
-    CFStringRef encoded = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                  (__bridge CFStringRef)string,
-                                                                  NULL,
-                                                                  CFSTR("!*'\"();:@&=+$,/?%#[]% "),
-                                                                  kCFStringEncodingUTF8);
-    return CFBridgingRelease(encoded);
-}
-
-+ (NSString *)URLQueryWithParameters:(NSDictionary *)parameters {
-    return [self URLQueryWithParameters:parameters options:AVIMURLQueryOptionDefault];
-}
-
-+ (NSString *)URLQueryWithParameters:(NSDictionary *)parameters options:(AVIMURLQueryOptions)options {
-    options = options ?: AVIMURLQueryOptionUseArrays;
-    
-    BOOL sortKeys = !!(options & AVIMURLQueryOptionSortKeys);
-    if (sortKeys) {
-        options -= AVIMURLQueryOptionSortKeys;
-    }
-    
-    BOOL useArraySyntax = !!(options & AVIMURLQueryOptionUseArraySyntax);
-    if (useArraySyntax) {
-        options -= AVIMURLQueryOptionUseArraySyntax;
-        NSAssert(options == AVIMURLQueryOptionUseArrays || options == AVIMURLQueryOptionAlwaysUseArrays,
-                 @"AVIMURLQueryOptionUseArraySyntax has no effect unless combined with AVIMURLQueryOptionUseArrays or AVIMURLQueryOptionAlwaysUseArrays option");
-    }
-    
-    NSMutableString *result = [NSMutableString string];
-    NSArray *keys = [parameters allKeys];
-    if (sortKeys) keys = [keys sortedArrayUsingSelector:@selector(compare:)];
-    for (NSString *key in keys) {
-        id value = parameters[key];
-        NSString *encodedKey = [self URLEncodedString:[key description]];
-        if ([value isKindOfClass:[NSArray class]]) {
-            if (options == AVIMURLQueryOptionKeepFirstValue && [(NSArray *)value count]) {
-                if ([result length]) {
-                    [result appendString:@"&"];
-                }
-                [result appendFormat:@"%@=%@", encodedKey, [self URLEncodedString:[[value firstObject] description]]];
-            } else if (options == AVIMURLQueryOptionKeepLastValue && [(NSArray *)value count]) {
-                if ([result length]) {
-                    [result appendString:@"&"];
-                }
-                [result appendFormat:@"%@=%@", encodedKey, [self URLEncodedString:[[value lastObject] description]]];
-            } else {
-                for (NSString *element in value) {
-                    if ([result length]) {
-                        [result appendString:@"&"];
-                    }
-                    if (useArraySyntax) {
-                        [result appendFormat:@"%@[]=%@", encodedKey, [self URLEncodedString:[element description]]];
-                    } else {
-                        [result appendFormat:@"%@=%@", encodedKey, [self URLEncodedString:[element description]]];
-                    }
-                }
-            }
-        } else {
-            if ([result length]) {
-                [result appendString:@"&"];
-            }
-            if (useArraySyntax && options == AVIMURLQueryOptionAlwaysUseArrays) {
-                [result appendFormat:@"%@[]=%@", encodedKey, [self URLEncodedString:[value description]]];
-            } else {
-                [result appendFormat:@"%@=%@", encodedKey, [self URLEncodedString:[value description]]];
-            }
-        }
-    }
-    return result;
 }
 
 #pragma mark - API to use websocket
