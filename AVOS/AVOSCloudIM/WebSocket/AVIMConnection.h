@@ -9,9 +9,6 @@
 #import "AVIMCommon.h"
 #import "AVIMCommandCommon.h"
 
-#define USE_DEBUG_SERVER 0
-#define DEBUG_SERVER @"ws://puppet.leancloud.cn:5779/"
-
 FOUNDATION_EXPORT NSString *const AVIMProtocolPROTOBUF1;
 FOUNDATION_EXPORT NSString *const AVIMProtocolPROTOBUF2;
 FOUNDATION_EXPORT NSString *const AVIMProtocolPROTOBUF3;

@@ -384,9 +384,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 - (void)internalOpenWebSocketConnection:(NSString *)server {
     _webSocket.delegate = nil;
     [_webSocket close];
-#if USE_DEBUG_SERVER
-    server = DEBUG_SERVER;
-#endif
+
     AVLoggerInfo(AVLoggerDomainIM, @"Open websocket with url: %@", server);
     
     NSMutableSet *protocols = [NSMutableSet set];
