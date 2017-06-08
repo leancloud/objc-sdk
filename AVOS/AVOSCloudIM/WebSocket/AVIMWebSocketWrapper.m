@@ -87,7 +87,6 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
     NSMutableArray *_serialIdArray;
 }
 
-@property (nonatomic, assign) BOOL security;
 @property (nonatomic, assign) BOOL useSecondary;
 @property (nonatomic, assign) BOOL needRetry;
 @property (nonatomic, strong) LCNetworkReachabilityManager *reachabilityMonitor;
@@ -99,24 +98,16 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
 @end
 
 @implementation AVIMWebSocketWrapper
+
 + (instancetype)sharedInstance {
     static dispatch_once_t onceToken;
-    static AVIMWebSocketWrapper *sharedInstance = nil;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] init];
-    });
-    return sharedInstance;
-}
+    static AVIMWebSocketWrapper *instance = nil;
 
-+ (instancetype)sharedSecurityInstance {
-    static dispatch_once_t onceToken;
-    static AVIMWebSocketWrapper *sharedInstance = nil;
     dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] init];
-        sharedInstance.security = YES;
+        instance = [[self alloc] init];
     });
-    
-    return sharedInstance;
+
+    return instance;
 }
 
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds {
@@ -491,10 +482,8 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
         _webSocket = [[AVIMWebSocket alloc] initWithURLRequest:request];
     }
 
-    if (self.security) {
-        request.AVIM_SSLPinnedCertificates = [self pinnedCertificates];
-        _webSocket.SSLPinningMode = AVIMSSLPinningModePublicKey;
-    }
+    request.AVIM_SSLPinnedCertificates = [self pinnedCertificates];
+    _webSocket.SSLPinningMode = AVIMSSLPinningModePublicKey;
 
     _webSocket.delegate = self;
     [_webSocket open];

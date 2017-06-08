@@ -335,13 +335,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 - (AVIMWebSocketWrapper *)socketWrapperForSecurity:(BOOL)security {
-    AVIMWebSocketWrapper *socketWrapper = nil;
-    
-    if (security) {
-        socketWrapper = [AVIMWebSocketWrapper sharedSecurityInstance];
-    } else {
-        socketWrapper = [AVIMWebSocketWrapper sharedInstance];
-    }
+    AVIMWebSocketWrapper *socketWrapper = [AVIMWebSocketWrapper sharedInstance];
     
     if (socketWrapper) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(websocketOpened:) name:AVIM_NOTIFICATION_WEBSOCKET_OPENED object:socketWrapper];

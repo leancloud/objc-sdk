@@ -27,7 +27,6 @@ FOUNDATION_EXPORT NSString *const AVIMProtocolPROTOBUF3;
 @property(nonatomic, assign) CGFloat timeout;
 
 + (instancetype)sharedInstance;
-+ (instancetype)sharedSecurityInstance;
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds;
 - (void)increaseObserverCount;
 - (void)decreaseObserverCount;
