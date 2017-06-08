@@ -17,7 +17,6 @@
 #import "AVOSCloud_Internal.h"
 #import "LCRouter.h"
 #import "SDMacros.h"
-#import <arpa/inet.h>
 #import "AVMethodDispatcher.h"
 
 #define PING_INTERVAL 60*3
@@ -688,52 +687,6 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
             [self retryIfNeeded];
         }
     }
-}
-
-- (BOOL)isValidIPAddress:(NSString *)address {
-    if (!address)
-        return NO;
-
-    const char *str = [address UTF8String];
-
-    struct in_addr dst;
-    int success = inet_pton(AF_INET, str, &dst);
-
-    if (success != 1) {
-        struct in6_addr dst6;
-        success = inet_pton(AF_INET6, str, &dst6);
-    }
-
-    return success == 1;
-}
-
-- (BOOL)shouldTryIP:(NSString *)IP forHost:(NSString *)host {
-    if (!IP)
-        return NO;
-
-    NSMutableSet *IPs = self.IPTable[host];
-
-    if (IPs) {
-        if ([IPs containsObject:IP]) {
-            return NO;
-        } else {
-            [IPs addObject:IP];
-        }
-    } else {
-        self.IPTable[host] = [NSMutableSet setWithObject:IP];
-    }
-
-    return YES;
-}
-
-- (NSString *)selectIP:(NSArray *)IPs forHost:(NSString *)host {
-    for (NSString *IP in IPs) {
-        if ([self shouldTryIP:IP forHost:host]) {
-            return IP;
-        }
-    }
-
-    return nil;
 }
 
 - (void)webSocket:(AVIMWebSocket *)webSocket didFailWithError:(NSError *)error {
