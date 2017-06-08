@@ -596,16 +596,6 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
             AVIMCommandResultBlock callback = outCommand.callback;
             if (callback) {
                 callback(outCommand, command, error);
-                /* 另外，对于情景：单点登录, 由于未上传 deviceToken 就 open，如果用户没有 force 登录，会报错,
-                 详见 https://leanticket.cn/t/leancloud/925
-                 
-                 sessionMessage {
-                    code: 4111
-                    reason: "SESSION_CONFLICT"
-                 }
-                 这种情况不仅要告知用户登录失败，同时也要也要在 `-[AVIMClient processSessionCommand:]` 中统一进行异常处理，
-                 触发代理方法 `-client:didOfflineWithError:` 告知用户需要将 force 设为 YES。
-                 */
                 if (command.hasSessionMessage && error) {
                     [self notifyCommand:command];
                 }
