@@ -94,6 +94,7 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
 @property (nonatomic, strong) AVIMWebSocket *webSocket;
 @property (nonatomic, copy)   AVIMBooleanResultBlock openCallback;
 @property (nonatomic, strong) NSMutableDictionary *IPTable;
+@property (nonatomic, strong) NSHashTable *delegates;
 
 @end
 
@@ -129,6 +130,8 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
         
         _reconnectInterval = 1;
         _needRetry = YES;
+
+        _delegates = [NSHashTable weakObjectsHashTable];
         
 #if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
         // Register for notification when the app shuts down
@@ -200,9 +203,11 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
 }
 
 - (void)addDelegate:(id<AVIMConnectionDelegate>)delegate {
+    [_delegates addObject:delegate];
 }
 
 - (void)removeDelegate:(id<AVIMConnectionDelegate>)delegate {
+    [_delegates removeObject:delegate];
 }
 
 #pragma mark - process application notification
