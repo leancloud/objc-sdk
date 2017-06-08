@@ -1,5 +1,5 @@
 //
-//  AVIMWebSocketWrapper.h
+//  AVIMConnection.h
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 12/4/14.
@@ -22,7 +22,7 @@ FOUNDATION_EXPORT NSString *const AVIMProtocolPROTOBUF1;
 FOUNDATION_EXPORT NSString *const AVIMProtocolPROTOBUF2;
 FOUNDATION_EXPORT NSString *const AVIMProtocolPROTOBUF3;
 
-@interface AVIMWebSocketWrapper : NSObject
+@interface AVIMConnection : NSObject
 
 @property(nonatomic, assign) CGFloat timeout;
 

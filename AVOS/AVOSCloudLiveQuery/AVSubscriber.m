@@ -15,7 +15,7 @@
 #import "AVObjectUtils.h"
 
 /* AVOSCloudIM headers */
-#import "AVIMWebSocketWrapper.h"
+#import "AVIMConnection.h"
 #import "MessagesProtoOrig.pbobjc.h"
 
 typedef NS_ENUM(NSInteger, AVServiceType) {
@@ -35,7 +35,7 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 @property (nonatomic, assign) BOOL alive;
 @property (nonatomic, assign) BOOL inKeepAlive;
 @property (nonatomic, assign) dispatch_once_t loginOnceToken;
-@property (nonatomic,   weak) AVIMWebSocketWrapper *webSocket;
+@property (nonatomic,   weak) AVIMConnection *webSocket;
 @property (nonatomic, strong) AVExponentialTimer   *backoffTimer;
 
 @end
@@ -66,7 +66,7 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 - (void)doInitialize {
     NSString *deviceUUID = [AVUtils deviceUUID];
 
-    _webSocket = [AVIMWebSocketWrapper sharedSecurityInstance];
+    _webSocket = [AVIMConnection sharedSecurityInstance];
     _identifier = [NSString stringWithFormat:@"%@-%@", AVIdentifierPrefix, deviceUUID];
     _backoffTimer = [AVExponentialTimer exponentialTimerWithInitialTime:AVBackoffInitialTime
                                                                 maxTime:AVBackoffMaximumTime];
@@ -74,7 +74,7 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
     [self observeWebSocket:_webSocket];
 }
 
-- (void)observeWebSocket:(AVIMWebSocketWrapper *)webSocket {
+- (void)observeWebSocket:(AVIMConnection *)webSocket {
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 
     [notificationCenter addObserver:self selector:@selector(webSocketDidOpen:)            name:AVIM_NOTIFICATION_WEBSOCKET_OPENED   object:_webSocket];

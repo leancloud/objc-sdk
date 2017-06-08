@@ -1,12 +1,12 @@
 //
-//  AVIMWebSocketWrapper.m
+//  AVIMConnection.m
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 12/4/14.
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMWebSocketWrapper.h"
+#import "AVIMConnection.h"
 #import "AVIMWebSocket.h"
 #import "LCNetworkReachabilityManager.h"
 #import "AVIMErrorUtil.h"
@@ -70,7 +70,7 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
 }
 @end
 
-@interface AVIMWebSocketWrapper () <NSURLConnectionDelegate, AVIMWebSocketDelegate> {
+@interface AVIMConnection () <NSURLConnectionDelegate, AVIMWebSocketDelegate> {
     BOOL _isClosed;
     NSTimer *_pingTimer;
     NSTimer *_timeoutCheckTimer;
@@ -97,11 +97,11 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
 
 @end
 
-@implementation AVIMWebSocketWrapper
+@implementation AVIMConnection
 
 + (instancetype)sharedInstance {
     static dispatch_once_t onceToken;
-    static AVIMWebSocketWrapper *instance = nil;
+    static AVIMConnection *instance = nil;
 
     dispatch_once(&onceToken, ^{
         instance = [[self alloc] init];

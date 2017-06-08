@@ -76,7 +76,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds {
-    [AVIMWebSocketWrapper setTimeoutIntervalInSeconds:seconds];
+    [AVIMConnection setTimeoutIntervalInSeconds:seconds];
 }
 
 + (void)resetDefaultClient {
@@ -334,8 +334,8 @@ static BOOL AVIMClientHasInstantiated = NO;
     return signature;
 }
 
-- (AVIMWebSocketWrapper *)socketWrapperForSecurity:(BOOL)security {
-    AVIMWebSocketWrapper *socketWrapper = [AVIMWebSocketWrapper sharedInstance];
+- (AVIMConnection *)socketWrapperForSecurity:(BOOL)security {
+    AVIMConnection *socketWrapper = [AVIMConnection sharedInstance];
     
     if (socketWrapper) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(websocketOpened:) name:AVIM_NOTIFICATION_WEBSOCKET_OPENED object:socketWrapper];
