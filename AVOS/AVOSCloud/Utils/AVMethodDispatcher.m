@@ -46,7 +46,7 @@ static id nilPlaceholder;
     return [components count] - 1;
 }
 
-- (NSArray *)arrayFromVaList:(va_list)list
+- (NSArray *)arrayFromVaList:(va_list)vaList
                        start:(id)start
 {
     NSInteger arity = self.arity;
@@ -59,10 +59,15 @@ static id nilPlaceholder;
 
     [arguments addObject:firstArgument];
 
+    va_list args;
+    va_copy(args, vaList);
+
     for (NSInteger i = 0, size = arity - 1; i < size; i++) {
-        id argument = va_arg(list, id) ?: nilPlaceholder;
+        id argument = va_arg(args, id) ?: nilPlaceholder;
         [arguments addObject:argument];
     }
+
+    va_end(args);
 
     return arguments;
 }
