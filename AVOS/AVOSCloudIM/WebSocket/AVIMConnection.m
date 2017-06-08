@@ -199,6 +199,12 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
     }
 }
 
+- (void)addDelegate:(id<AVIMConnectionDelegate>)delegate {
+}
+
+- (void)removeDelegate:(id<AVIMConnectionDelegate>)delegate {
+}
+
 #pragma mark - process application notification
 
 - (void)applicationDidFinishLaunching:(id)sender {
