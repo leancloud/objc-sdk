@@ -51,8 +51,6 @@ FOUNDATION_EXPORT NSString *const AVIMProtocolPROTOBUF3;
  */
 - (void)removeDelegate:(id<AVIMConnectionDelegate>)delegate;
 
-- (void)increaseObserverCount;
-- (void)decreaseObserverCount;
 - (void)openWebSocketConnection;
 - (void)openWebSocketConnectionWithCallback:(AVIMBooleanResultBlock)callback;
 - (void)closeWebSocketConnection;

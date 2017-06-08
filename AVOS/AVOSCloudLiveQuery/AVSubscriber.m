@@ -73,14 +73,7 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
     _backoffTimer = [AVExponentialTimer exponentialTimerWithInitialTime:AVBackoffInitialTime
                                                                 maxTime:AVBackoffMaximumTime];
 
-    [self observeWebSocket:_webSocket];
-}
-
-- (void)observeWebSocket:(AVIMConnection *)webSocket {
-    [webSocket addDelegate:self];
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-
-    [_webSocket increaseObserverCount];
+    [_webSocket addDelegate:self];
 }
 
 #pragma mark - AVIMConnectionDelegate

@@ -207,8 +207,6 @@ static BOOL AVIMClientHasInstantiated = NO;
 
 - (void)dealloc {
     AVLoggerInfo(AVLoggerDomainIM, @"AVIMClient dealloc.");
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self.socketWrapper decreaseObserverCount];
 }
 
 - (void)addConversation:(AVIMConversation *)conversation {

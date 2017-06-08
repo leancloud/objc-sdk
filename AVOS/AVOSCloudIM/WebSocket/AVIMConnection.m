@@ -191,18 +191,6 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
     }
 }
 
-- (void)increaseObserverCount {
-    ++_observerCount;
-}
-
-- (void)decreaseObserverCount {
-    --_observerCount;
-    if (_observerCount <= 0) {
-        _observerCount = 0;
-        [self closeWebSocketConnectionRetry:NO];
-    }
-}
-
 - (void)addDelegate:(id<AVIMConnectionDelegate>)delegate {
     [_delegates addObject:delegate];
 }
