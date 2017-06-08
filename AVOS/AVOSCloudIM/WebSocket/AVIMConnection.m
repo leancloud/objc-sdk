@@ -18,6 +18,7 @@
 #import "LCRouter.h"
 #import "SDMacros.h"
 #import <arpa/inet.h>
+#import "AVMethodDispatcher.h"
 
 #define PING_INTERVAL 60*3
 #define TIMEOUT_CHECK_INTERVAL 1
@@ -208,6 +209,13 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
 
 - (void)removeDelegate:(id<AVIMConnectionDelegate>)delegate {
     [_delegates removeObject:delegate];
+}
+
+- (void)callDelegateMethod:(SEL)selector withArguments:(NSArray *)arguments {
+    for (id delegate in _delegates) {
+        AVMethodDispatcher *dispatcher = [[AVMethodDispatcher alloc] initWithTarget:delegate selector:selector];
+        [dispatcher callWithArguments:arguments];
+    }
 }
 
 #pragma mark - process application notification
