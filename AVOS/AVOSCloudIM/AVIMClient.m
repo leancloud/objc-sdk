@@ -44,6 +44,12 @@ BOOL isValidTag(NSString *tag) {
     return tag && ![tag isEqualToString:LCIMTagDefault];
 }
 
+@interface AVIMClient ()
+
+<AVIMConnectionDelegate>
+
+@end
+
 @implementation AVIMClient {
     NSMutableArray *_distinctMessageIdArray;
 }
@@ -167,6 +173,20 @@ static BOOL AVIMClientHasInstantiated = NO;
      }];
 }
 
+- (AVIMConnection *)socketWrapper {
+    if (_socketWrapper)
+        return _socketWrapper;
+
+    @synchronized (self) {
+        if (_socketWrapper)
+            return _socketWrapper;
+
+        _socketWrapper = [AVIMConnection sharedInstance];
+
+        return _socketWrapper;
+    }
+}
+
 - (LCIMConversationCache *)conversationCache {
     NSString *clientId = self.clientId;
 
@@ -188,7 +208,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 - (void)dealloc {
     AVLoggerInfo(AVLoggerDomainIM, @"AVIMClient dealloc.");
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [_socketWrapper decreaseObserverCount];
+    [self.socketWrapper decreaseObserverCount];
 }
 
 - (void)addConversation:(AVIMConversation *)conversation {
@@ -270,7 +290,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 
 - (void)sendCommand:(AVIMGenericCommand *)command withBeforeSendingBlock:(void(^)(void))beforeSendingBlock {
     do {
-        if (!_socketWrapper)
+        if (!self.socketWrapper)
             break;
 
         if (_status == AVIMClientStatusClosing || _status == AVIMClientStatusClosed) {
@@ -284,7 +304,7 @@ static BOOL AVIMClientHasInstantiated = NO;
         if (beforeSendingBlock)
             beforeSendingBlock();
 
-        [_socketWrapper sendCommand:command];
+        [self.socketWrapper sendCommand:command];
 
         return;
     } while(0);
@@ -332,22 +352,6 @@ static BOOL AVIMClientHasInstantiated = NO;
         signature = [_signatureDataSource signatureWithClientId:clientId conversationId:conversationId action:action actionOnClientIds:clientIds];
     }
     return signature;
-}
-
-- (AVIMConnection *)socketWrapperForSecurity:(BOOL)security {
-    AVIMConnection *socketWrapper = [AVIMConnection sharedInstance];
-    
-    if (socketWrapper) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(websocketOpened:) name:AVIM_NOTIFICATION_WEBSOCKET_OPENED object:socketWrapper];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(websocketClosed:) name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED object:socketWrapper];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(websocketReconnect:) name:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT object:socketWrapper];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveCommand:) name:AVIM_NOTIFICATION_WEBSOCKET_COMMAND object:socketWrapper];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveError:) name:AVIM_NOTIFICATION_WEBSOCKET_ERROR object:socketWrapper];
-        
-        [socketWrapper increaseObserverCount];
-    }
-    
-    return socketWrapper;
 }
 
 - (AVIMGenericCommand *)openCommandWithAppId:(NSString *)appId
@@ -543,6 +547,8 @@ static BOOL AVIMClientHasInstantiated = NO;
 
     callback = [AVIMBlockHelper calledOnceBlockWithBooleanResultBlock:callback];
 
+    [self.socketWrapper addDelegate:self];
+
     @weakify(self);
     dispatch_async(imClientQueue, ^{
         @strongify(self);
@@ -550,7 +556,6 @@ static BOOL AVIMClientHasInstantiated = NO;
         if (self.status != AVIMClientStatusOpened) {
             self.clientId = clientId;
             self.tag = tag;
-            self.socketWrapper = [self socketWrapperForSecurity:YES];
             self.openTimes = 0;
             self.openCommand = [self openCommandWithAppId:appId
                                                  clientId:clientId
@@ -598,20 +603,45 @@ static BOOL AVIMClientHasInstantiated = NO;
     });
 }
 
-- (void)removeWebSocketNotification {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVIM_NOTIFICATION_WEBSOCKET_OPENED object:_socketWrapper];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVIM_NOTIFICATION_WEBSOCKET_COMMAND object:_socketWrapper];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT object:_socketWrapper];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED object:_socketWrapper];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVIM_NOTIFICATION_WEBSOCKET_ERROR object:_socketWrapper];
+#pragma mark - AVIMConnectionDelegate
+
+- (void)connectionDidOpen:(AVIMConnection *)connection {
+    dispatch_async(imClientQueue, ^{
+        [self sendOpenCommand];
+    });
+    [self changeStatus:AVIMClientStatusOpened];
 }
 
+- (void)connection:(AVIMConnection *)connection didReceiveCommand:(AVIMGenericCommand *)command {
+    [self processCommand:command];
+}
+
+- (void)connection:(AVIMConnection *)connection didReceiveError:(NSError *)error {
+    if ([_delegate respondsToSelector:@selector(imClientPaused:error:)]) {
+        [self receivePausedWithError:error];
+    } else if ([_delegate respondsToSelector:@selector(imClientPaused:)]) {
+        [self receivePaused];
+    }
+}
+
+- (void)connection:(AVIMConnection *)connection didCloseWithError:(NSError *)error {
+    [self changeStatus:AVIMClientStatusPaused];
+}
+
+- (void)connectionDidReconnect:(AVIMConnection *)connection {
+    [self changeStatus:AVIMClientStatusResuming];
+}
+
+#pragma mark -
+
 - (void)processClientStatusAfterWebSocketOffline {
-    [self removeWebSocketNotification];
+    [self.socketWrapper removeDelegate:self];
+
     [[AVInstallation currentInstallation] removeObject:_clientId forKey:@"channels"];
     if ([[AVInstallation currentInstallation] deviceToken]) {
         [[AVInstallation currentInstallation] saveInBackground];
     }
+
     [self changeStatus:AVIMClientStatusClosed];
 }
 
@@ -763,54 +793,37 @@ static BOOL AVIMClientHasInstantiated = NO;
     });
 }
 
-- (void)websocketOpened:(NSNotification *)notification {
-    dispatch_async(imClientQueue, ^{
-        [self sendOpenCommand];
-    });
-    [self changeStatus:AVIMClientStatusOpened];
-}
-
-- (void)websocketClosed:(NSNotification *)notification {
-    [self changeStatus:AVIMClientStatusPaused];
-}
-
-- (void)websocketReconnect:(NSNotification *)notification {
-    [self changeStatus:AVIMClientStatusResuming];
-}
-
 #pragma mark - process received messages
 
-- (void)receiveCommand:(NSNotification *)notification {
-    NSDictionary *dict = notification.userInfo;
+- (void)processCommand:(AVIMGenericCommand *)command {
+    NSString *peerId = command.peerId;
 
-    AVIMGenericCommand *command = [dict objectForKey:@"command"];
-    // 因为是 notification ，可能收到其它 client 的广播
-    // 根据文档，每条消息都带有 peerId
-    /* Filter out other client's command */
-    if ([command.peerId isEqualToString:self.clientId] == NO) {
+    if (!peerId)
         return;
-    }
+    /* Filter out command that current client does not care about. */
+    if (![peerId isEqualToString:self.clientId])
+        return;
     
     AVIMCommandType commandType = command.cmd;
+
     switch (commandType) {
-        case AVIMCommandType_Session:
-            [self processSessionCommand:command];
-            break;
-        case AVIMCommandType_Direct:
-            [self processDirectCommand:command];
-            break;
-        case AVIMCommandType_Unread:
-            [self processUnreadCommand:command];
-            break;
-        case AVIMCommandType_Conv:
-            [self processConvCommand:command];
-            break;
-        case AVIMCommandType_Rcp:
-            [self processReceiptCommand:command];
-            break;
-            
-        default:
-            break;
+    case AVIMCommandType_Session:
+        [self processSessionCommand:command];
+        break;
+    case AVIMCommandType_Direct:
+        [self processDirectCommand:command];
+        break;
+    case AVIMCommandType_Unread:
+        [self processUnreadCommand:command];
+        break;
+    case AVIMCommandType_Conv:
+        [self processConvCommand:command];
+        break;
+    case AVIMCommandType_Rcp:
+        [self processReceiptCommand:command];
+        break;
+    default:
+        break;
     }
 }
 
@@ -1283,16 +1296,6 @@ static BOOL AVIMClientHasInstantiated = NO;
     NSMutableArray *arguments = [[NSMutableArray alloc] init];
     [self array:arguments addObject:self];
     [AVIMRuntimeHelper callMethodInMainThreadWithTarget:_delegate selector:@selector(imClientResumed:) arguments:arguments];
-}
-
-- (void)receiveError:(NSNotification *)notification {
-    if ([_delegate respondsToSelector:@selector(imClientPaused:error:)]) {
-        NSError *error = [notification.userInfo objectForKey:@"error"];
-        
-        [self receivePausedWithError:error];
-    } else if ([_delegate respondsToSelector:@selector(imClientPaused:)]) {
-        [self receivePaused];
-    }
 }
 
 static NSDictionary *AVIMUserOptions = nil;

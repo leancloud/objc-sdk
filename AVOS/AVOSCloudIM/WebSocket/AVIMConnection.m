@@ -211,11 +211,18 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
     [_delegates removeObject:delegate];
 }
 
-- (void)callDelegateMethod:(SEL)selector withArguments:(NSArray *)arguments {
+- (void)callDelegateMethod:(SEL)selector
+             withArguments:(id)argument1, ...
+{
+    va_list args;
+    va_start(args, argument1);
+
     for (id delegate in _delegates) {
         AVMethodDispatcher *dispatcher = [[AVMethodDispatcher alloc] initWithTarget:delegate selector:selector];
-        [dispatcher callWithArguments:arguments];
+        [dispatcher callWithArgument:argument1 vaList:args];
     }
+
+    va_end(args);
 }
 
 #pragma mark - process application notification
@@ -373,7 +380,7 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
         
         if (!(self.webSocket && (self.webSocket.readyState == AVIM_OPEN || self.webSocket.readyState == AVIM_CONNECTING))) {
             if (!self.openCallback) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT object:self userInfo:nil];
+                [self callDelegateMethod:@selector(connectionDidReconnect:) withArguments:self];
             }
 
             LCRouter *router = [LCRouter sharedInstance];
@@ -402,7 +409,7 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
                         [AVIMBlockHelper callBooleanResultBlock:self.openCallback error:httpError];
                         self.openCallback = nil;
                     } else {
-                        [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED object:self userInfo:@{@"error": error}];
+                        [self callDelegateMethod:@selector(connection:didCloseWithError:) withArguments:self, error];
                     }
                 } else if ((!object && !error) || code >= 400 || error) { /* Something error, try to reconnect. */
                     if (!error) {
@@ -512,7 +519,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
     AVLoggerInfo(AVLoggerDomainIM, @"Close websocket connection.");
     [_pingTimer invalidate];
     [_webSocket close];
-    [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED object:self userInfo:nil];
+    [self callDelegateMethod:@selector(connection:didCloseWithError:) withArguments:self, nil];
     _isClosed = YES;
 }
 
@@ -521,7 +528,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
     [_pingTimer invalidate];
     _needRetry = retry;
     [_webSocket close];
-    [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED object:self userInfo:nil];
+    [self callDelegateMethod:@selector(connection:didCloseWithError:) withArguments:self, nil];
     _isClosed = YES;
 }
 
@@ -630,7 +637,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
         if (callback) {
             callback(genericCommand, nil, error);
         } else {
-            [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_ERROR object:self userInfo:@{@"error": error}];
+            [self callDelegateMethod:@selector(connection:didReceiveError:) withArguments:self, error];
         }
     }
     AVLoggerInfo(AVLoggerDomainIM, LCIM_OUT_COMMAND_LOG_FORMAT, [AVIMCommandFormatter commandType:genericCommand.cmd], [genericCommand avim_messageClass], [genericCommand avim_description] );
@@ -656,7 +663,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 - (void)webSocketDidOpen:(AVIMWebSocket *)webSocket {
     AVLoggerInfo(AVLoggerDomainIM, @"Websocket connection opened.");
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_OPENED object:self userInfo:nil];
+    [self callDelegateMethod:@selector(connectionDidOpen:) withArguments:self];
     
     [_reconnectTimer invalidate];
     
@@ -711,7 +718,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 }
 
 - (void)notifyCommand:(AVIMGenericCommand *)command {
-    [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_COMMAND object:self userInfo:@{@"command": command}];
+    [self callDelegateMethod:@selector(connection:didReceiveCommand:) withArguments:self, command];
 }
 
 - (void)webSocket:(AVIMWebSocket *)webSocket didReceivePong:(id)data {
@@ -741,7 +748,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
     }
     [_serialIdArray removeAllObjects];
     if (_webSocket.readyState != AVIM_CLOSED) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED object:self userInfo:@{@"error": error}];
+        [self callDelegateMethod:@selector(connection:didCloseWithError:) withArguments:self, error];
     }
     if ([self isReachable]) {
         [self retryIfNeeded];
@@ -767,7 +774,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 
     [_serialIdArray removeAllObjects];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_ERROR object:self userInfo:@{@"error": error}];
+    [self callDelegateMethod:@selector(connection:didReceiveError:) withArguments:self, error];
     
     if (self.openCallback) {
         [AVIMBlockHelper callBooleanResultBlock:self.openCallback error:error];

@@ -32,11 +32,13 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 
 @interface AVSubscriber ()
 
+<AVIMConnectionDelegate>
+
 @property (nonatomic, assign) BOOL alive;
 @property (nonatomic, assign) BOOL inKeepAlive;
 @property (nonatomic, assign) dispatch_once_t loginOnceToken;
 @property (nonatomic,   weak) AVIMConnection *webSocket;
-@property (nonatomic, strong) AVExponentialTimer   *backoffTimer;
+@property (nonatomic, strong) AVExponentialTimer *backoffTimer;
 
 @end
 
@@ -75,28 +77,39 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 }
 
 - (void)observeWebSocket:(AVIMConnection *)webSocket {
+    [webSocket addDelegate:self];
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-
-    [notificationCenter addObserver:self selector:@selector(webSocketDidOpen:)            name:AVIM_NOTIFICATION_WEBSOCKET_OPENED   object:_webSocket];
-    [notificationCenter addObserver:self selector:@selector(webSocketDidReceiveCommand:)  name:AVIM_NOTIFICATION_WEBSOCKET_COMMAND  object:_webSocket];
-    [notificationCenter addObserver:self selector:@selector(webSocketDidReceiveError:)    name:AVIM_NOTIFICATION_WEBSOCKET_ERROR    object:_webSocket];
-    [notificationCenter addObserver:self selector:@selector(webSocketDidClose:)           name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED   object:_webSocket];
 
     [_webSocket increaseObserverCount];
 }
+
+#pragma mark - AVIMConnectionDelegate
+
+- (void)connectionDidOpen:(AVIMConnection *)connection {
+    [self keepAlive];
+}
+
+- (void)connection:(AVIMConnection *)connection didReceiveCommand:(AVIMGenericCommand *)command {
+    [self processCommand:command];
+}
+
+- (void)connection:(AVIMConnection *)connection didReceiveError:(NSError *)error {
+    self.alive = NO;
+    [self keepAlive];
+}
+
+- (void)connection:(AVIMConnection *)connection didCloseWithError:(NSError *)error {
+    self.alive = NO;
+    [self keepAlive];
+}
+
+#pragma mark -
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)webSocketDidOpen:(NSNotification *)notification {
-    [self keepAlive];
-}
-
-- (void)webSocketDidReceiveCommand:(NSNotification *)notification {
-    NSDictionary *dict = notification.userInfo;
-    AVIMGenericCommand *command = [dict objectForKey:@"command"];
-
+- (void)processCommand:(AVIMGenericCommand *)command {
     /* Filter out non-live-query commands. */
     if (command.service != AVServiceTypeLiveQuery)
         return;
@@ -135,16 +148,6 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
     [[NSNotificationCenter defaultCenter] postNotificationName:AVLiveQueryEventNotification
                                                         object:self
                                                       userInfo:userInfo];
-}
-
-- (void)webSocketDidReceiveError:(NSNotification *)notification {
-    self.alive = NO;
-    [self keepAlive];
-}
-
-- (void)webSocketDidClose:(NSNotification *)notification {
-    self.alive = NO;
-    [self keepAlive];
 }
 
 - (AVIMGenericCommand *)makeLoginCommand {
