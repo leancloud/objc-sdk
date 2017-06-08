@@ -10,6 +10,12 @@
 
 static id nilPlaceholder;
 
+@interface AVMethodDispatcher ()
+
+@property (nonatomic, assign, readonly) NSInteger arity;
+
+@end
+
 @implementation AVMethodDispatcher
 
 + (void)initialize {
@@ -35,7 +41,69 @@ static id nilPlaceholder;
     return self;
 }
 
-- (void)callWithArguments:(NSArray *)arguments {
+- (NSInteger)arity {
+    NSArray *components = [NSStringFromSelector(self.selector) componentsSeparatedByString:@":"];
+    return [components count] - 1;
+}
+
+- (NSArray *)arrayFromVaList:(va_list)list
+                       start:(id)start
+{
+    NSInteger arity = self.arity;
+    NSMutableArray *arguments = [NSMutableArray arrayWithCapacity:arity];
+
+    if (!arity)
+        return arguments;
+
+    id firstArgument = start ?: nilPlaceholder;
+
+    [arguments addObject:firstArgument];
+
+    for (NSInteger i = 0, size = arity - 1; i < size; i++) {
+        id argument = va_arg(list, id) ?: nilPlaceholder;
+        [arguments addObject:argument];
+    }
+
+    return arguments;
+}
+
+- (void)callInDispatchQueue:(dispatch_queue_t)dispatchQueue
+             asynchronously:(BOOL)asynchronously
+               withArgument:(id)argument
+                     vaList:(va_list)vaList
+{
+    if (!dispatchQueue)
+        return;
+
+    if (asynchronously) {
+        dispatch_async(dispatchQueue, ^{
+            [self callWithArgument:argument vaList:vaList];
+        });
+    } else {
+        dispatch_sync(dispatchQueue, ^{
+            [self callWithArgument:argument vaList:vaList];
+        });
+    }
+}
+
+- (void)callInDispatchQueue:(dispatch_queue_t)dispatchQueue
+             asynchronously:(BOOL)asynchronously
+              withArguments:(id)argument1, ...
+{
+    va_list args;
+    va_start(args, argument1);
+
+    [self callInDispatchQueue:dispatchQueue
+               asynchronously:asynchronously
+                 withArgument:argument1
+                       vaList:args];
+
+    va_end(args);
+}
+
+- (void)callWithArgument:(id)argument
+                  vaList:(va_list)vaList
+{
     id  target   = self.target;
     SEL selector = self.selector;
 
@@ -59,6 +127,8 @@ static id nilPlaceholder;
     /* The first two arguments is already occupied by target itself and selector. */
     const NSInteger argumentStartIndex = 2;
 
+    NSArray *arguments = [self arrayFromVaList:vaList start:argument];
+
     for (NSInteger i = 0, argc = arguments.count; i < argc; ++i) {
         id argument = arguments[i];
 
@@ -74,82 +144,13 @@ static id nilPlaceholder;
     [invocation invoke];
 }
 
-- (NSArray *)argumentsFromVaList:(va_list)list
-                           arity:(NSInteger)arity
-{
-    NSMutableArray *arguments = [NSMutableArray arrayWithCapacity:arity];
-
-    for (NSInteger i = 0; i < arity; i++) {
-        id argument = va_arg(list, id) ?: nilPlaceholder;
-        [arguments addObject:argument];
-    }
-
-    return arguments;
-}
-
-- (void)callInDispatchQueue:(dispatch_queue_t)dispatchQueue
-             asynchronously:(BOOL)asynchronously
-              withArguments:(NSArray *)arguments
-{
-    if (!dispatchQueue)
-        return;
-
-    if (asynchronously) {
-        dispatch_async(dispatchQueue, ^{
-            [self callWithArguments:arguments];
-        });
-    } else {
-        dispatch_sync(dispatchQueue, ^{
-            [self callWithArguments:arguments];
-        });
-    }
-}
-
-- (void)callInDispatchQueue:(dispatch_queue_t)dispatchQueue
-             asynchronously:(BOOL)asynchronously
-                  withArity:(NSInteger)arity
-                  arguments:(id)argument1, ...
-{
+- (void)callWithArguments:(id)argument1, ... {
     va_list args;
     va_start(args, argument1);
 
-    [self callInDispatchQueue:dispatchQueue
-               asynchronously:asynchronously
-                    withArity:arity
-                         args:args];
+    [self callWithArgument:argument1 vaList:args];
 
     va_end(args);
-}
-
-- (void)callInDispatchQueue:(dispatch_queue_t)dispatchQueue
-             asynchronously:(BOOL)asynchronously
-                  withArity:(NSInteger)arity
-                       args:(va_list)args
-{
-    NSArray *arguments = [self argumentsFromVaList:args arity:arity];
-
-    [self callInDispatchQueue:dispatchQueue
-               asynchronously:asynchronously
-                withArguments:arguments];
-}
-
-- (void)callWithArity:(NSInteger)arity
-            arguments:(id)argument1, ...
-{
-    va_list args;
-    va_start(args, argument1);
-
-    [self callWithArity:arity args:args];
-
-    va_end(args);
-}
-
-- (void)callWithArity:(NSInteger)arity
-                 args:(va_list)args
-{
-    NSArray *arguments = [self argumentsFromVaList:args arity:arity];
-
-    [self callWithArguments:arguments];
 }
 
 @end

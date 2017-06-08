@@ -36,13 +36,13 @@
 
  @param dispatchQueue  The dispatch queue in which method will be called.
  @param asynchronously A flag indicates whether the dispatch is asynchronous or not.
- @param arity          Size of argument list.
- @param arguments      An argument list.
+ @param argument       The first argument.
+ @param vaList         A va_list.
  */
 - (void)callInDispatchQueue:(dispatch_queue_t)dispatchQueue
              asynchronously:(BOOL)asynchronously
-                  withArity:(NSInteger)arity
-                  arguments:(id)argument1, ...;
+               withArgument:(id)argument
+                     vaList:(va_list)vaList;
 
 /**
  Call method with arguments in specified dispatch queue.
@@ -51,30 +51,26 @@
 
  @param dispatchQueue  The dispatch queue in which method will be called.
  @param asynchronously A flag indicates whether the dispatch is asynchronous or not.
- @param arity          Size of va_list.
- @param args           A va_list.
+ @param arguments      An argument list.
  */
 - (void)callInDispatchQueue:(dispatch_queue_t)dispatchQueue
              asynchronously:(BOOL)asynchronously
-                  withArity:(NSInteger)arity
-                       args:(va_list)args;
+              withArguments:(id)argument1, ...;
 
 /**
  Call method with arguments.
 
- @param arity     Size of argument list.
+ @param argument The first argument.
+ @param vaList   A va_list.
+ */
+- (void)callWithArgument:(id)argument
+                  vaList:(va_list)vaList;
+
+/**
+ Call method with arguments.
+
  @param arguments An argument list.
  */
-- (void)callWithArity:(NSInteger)arity
-            arguments:(id)argument1, ...;
-
-/**
- Call method with arguments.
-
- @param arity Size of va_list.
- @param args  A va_list.
- */
-- (void)callWithArity:(NSInteger)arity
-                 args:(va_list)args;
+- (void)callWithArguments:(id)argument1, ...;
 
 @end
