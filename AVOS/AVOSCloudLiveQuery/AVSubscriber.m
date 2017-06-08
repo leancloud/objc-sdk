@@ -170,12 +170,12 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
         [AVUtils callBooleanResultBlock:callback error:error];
     };
 
-    if ([self.webSocket isConnectionOpen]) {
+    if ([self.webSocket isOpen]) {
         [self.webSocket sendCommand:command];
         return;
     }
 
-    [self.webSocket openWebSocketConnectionWithCallback:^(BOOL succeeded, NSError *error) {
+    [self.webSocket openWithCallback:^(BOOL succeeded, NSError *error) {
         if (error) {
             [AVUtils callBooleanResultBlock:callback error:error];
         } else {

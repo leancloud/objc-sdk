@@ -30,6 +30,7 @@ FOUNDATION_EXPORT NSString *const AVIMProtocolPROTOBUF3;
 @property(nonatomic, assign) CGFloat timeout;
 
 + (instancetype)sharedInstance;
+
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds;
 
 /**
@@ -48,11 +49,10 @@ FOUNDATION_EXPORT NSString *const AVIMProtocolPROTOBUF3;
  */
 - (void)removeDelegate:(id<AVIMConnectionDelegate>)delegate;
 
-- (void)openWebSocketConnection;
-- (void)openWebSocketConnectionWithCallback:(AVIMBooleanResultBlock)callback;
-- (void)closeWebSocketConnection;
-- (void)closeWebSocketConnectionRetry:(BOOL)retry;
+- (void)openWithCallback:(AVIMBooleanResultBlock)callback;
+
 - (void)sendCommand:(AVIMGenericCommand *)genericCommand;
-- (void)sendPing;
-- (BOOL)isConnectionOpen;
+
+- (BOOL)isOpen;
+
 @end

@@ -247,10 +247,6 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
     [self closeWebSocketConnectionRetry:NO];
 }
 
-- (void)openWebSocketConnection {
-    [self openWebSocketConnectionWithCallback:nil];
-}
-
 /**
  Reopen websocket connection if application state is normal.
  */
@@ -266,11 +262,15 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
 
     if (shouldOpen) {
         _reconnectInterval = 1;
-        [self openWebSocketConnection];
+        [self open];
     }
 }
 
-- (void)openWebSocketConnectionWithCallback:(AVIMBooleanResultBlock)callback {
+- (void)open {
+    [self openWithCallback:nil];
+}
+
+- (void)openWithCallback:(AVIMBooleanResultBlock)callback {
     @weakify(self);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @strongify(self);
@@ -545,7 +545,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 }
 
 - (void)sendPing {
-    if ([self isConnectionOpen]) {
+    if ([self isOpen]) {
         AVLoggerInfo(AVLoggerDomainIM, @"Websocket send ping.");
         _lastPingTimestamp = [[NSDate date] timeIntervalSince1970];
         _waitingForPong = YES;
@@ -556,7 +556,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
     }
 }
 
-- (BOOL)isConnectionOpen {
+- (BOOL)isOpen {
     return _webSocket.readyState == AVIM_OPEN;
 }
 

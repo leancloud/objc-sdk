@@ -586,10 +586,10 @@ static BOOL AVIMClientHasInstantiated = NO;
 
             [self changeStatus:AVIMClientStatusOpening];
 
-            if ([self.socketWrapper isConnectionOpen]) {
+            if ([self.socketWrapper isOpen]) {
                 [self sendOpenCommand];
             } else {
-                [self.socketWrapper openWebSocketConnectionWithCallback:^(BOOL succeeded, NSError *error) {
+                [self.socketWrapper openWithCallback:^(BOOL succeeded, NSError *error) {
                     [self changeStatus:AVIMClientStatusNone];
                     [AVIMBlockHelper callBooleanResultBlock:callback error:error];
                     self.openCommand.callback = nil;
