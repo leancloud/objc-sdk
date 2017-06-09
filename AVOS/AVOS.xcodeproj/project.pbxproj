@@ -2456,7 +2456,7 @@
 				8C9A92651A70AF1800CA4912 /* TypedMessages */,
 				8C841BFF1A5A84C600C5C6C4 /* Utilities */,
 				83BE43911D242905000C7AC3 /* Vendor */,
-				8C841C041A5A84C600C5C6C4 /* WebSocket */,
+				8C841C041A5A84C600C5C6C4 /* Connection */,
 			);
 			path = AVOSCloudIM;
 			sourceTree = "<group>";
@@ -2784,13 +2784,13 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
-		8C841C041A5A84C600C5C6C4 /* WebSocket */ = {
+		8C841C041A5A84C600C5C6C4 /* Connection */ = {
 			isa = PBXGroup;
 			children = (
 				8C841C091A5A84C600C5C6C4 /* AVIMConnection.h */,
 				8C841C0A1A5A84C600C5C6C4 /* AVIMConnection.m */,
 			);
-			path = WebSocket;
+			path = Connection;
 			sourceTree = "<group>";
 		};
 		8C895DC51A78A5D900992A8F /* AVMPMessagePack */ = {
