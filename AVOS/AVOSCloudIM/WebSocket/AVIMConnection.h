@@ -31,6 +31,11 @@ FOUNDATION_EXPORT NSString *const AVIMProtocolPROTOBUF3;
 
 + (instancetype)sharedInstance;
 
+/**
+ Set the default timeout interval.
+
+ @param seconds Timeout length, in seconds.
+ */
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds;
 
 /**
