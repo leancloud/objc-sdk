@@ -173,17 +173,17 @@ static BOOL AVIMClientHasInstantiated = NO;
      }];
 }
 
-- (AVIMConnection *)socketWrapper {
-    if (_socketWrapper)
-        return _socketWrapper;
+- (AVIMConnection *)connection {
+    if (_connection)
+        return _connection;
 
     @synchronized (self) {
-        if (_socketWrapper)
-            return _socketWrapper;
+        if (_connection)
+            return _connection;
 
-        _socketWrapper = [AVIMConnection sharedInstance];
+        _connection = [AVIMConnection sharedInstance];
 
-        return _socketWrapper;
+        return _connection;
     }
 }
 
@@ -288,7 +288,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 
 - (void)sendCommand:(AVIMGenericCommand *)command withBeforeSendingBlock:(void(^)(void))beforeSendingBlock {
     do {
-        if (!self.socketWrapper)
+        if (!self.connection)
             break;
 
         if (_status == AVIMClientStatusClosing || _status == AVIMClientStatusClosed) {
@@ -302,7 +302,7 @@ static BOOL AVIMClientHasInstantiated = NO;
         if (beforeSendingBlock)
             beforeSendingBlock();
 
-        [self.socketWrapper sendCommand:command];
+        [self.connection sendCommand:command];
 
         return;
     } while(0);
@@ -545,7 +545,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 
     callback = [AVIMBlockHelper calledOnceBlockWithBooleanResultBlock:callback];
 
-    [self.socketWrapper addDelegate:self];
+    [self.connection addDelegate:self];
 
     @weakify(self);
     dispatch_async(imClientQueue, ^{
@@ -586,10 +586,10 @@ static BOOL AVIMClientHasInstantiated = NO;
 
             [self changeStatus:AVIMClientStatusOpening];
 
-            if ([self.socketWrapper isOpen]) {
+            if ([self.connection isOpen]) {
                 [self sendOpenCommand];
             } else {
-                [self.socketWrapper openWithCallback:^(BOOL succeeded, NSError *error) {
+                [self.connection openWithCallback:^(BOOL succeeded, NSError *error) {
                     [self changeStatus:AVIMClientStatusNone];
                     [AVIMBlockHelper callBooleanResultBlock:callback error:error];
                     self.openCommand.callback = nil;
@@ -633,7 +633,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 #pragma mark -
 
 - (void)processClientStatusAfterWebSocketOffline {
-    [self.socketWrapper removeDelegate:self];
+    [self.connection removeDelegate:self];
 
     [[AVInstallation currentInstallation] removeObject:_clientId forKey:@"channels"];
     if ([[AVInstallation currentInstallation] deviceToken]) {

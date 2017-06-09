@@ -18,7 +18,7 @@
 
 @property (nonatomic, copy)   NSString              *clientId;
 @property (nonatomic, assign) AVIMClientStatus       status;
-@property (nonatomic, strong) AVIMConnection  *socketWrapper;
+@property (nonatomic, strong) AVIMConnection        *connection;
 @property (nonatomic, strong) NSMutableDictionary   *conversations;
 
 /// Hold the staged message, which is sent by current client and waiting for receipt.

@@ -37,7 +37,7 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 @property (nonatomic, assign) BOOL alive;
 @property (nonatomic, assign) BOOL inKeepAlive;
 @property (nonatomic, assign) dispatch_once_t loginOnceToken;
-@property (nonatomic,   weak) AVIMConnection *webSocket;
+@property (nonatomic,   weak) AVIMConnection *connection;
 @property (nonatomic, strong) AVExponentialTimer *backoffTimer;
 
 @end
@@ -68,12 +68,12 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 - (void)doInitialize {
     NSString *deviceUUID = [AVUtils deviceUUID];
 
-    _webSocket = [AVIMConnection sharedInstance];
+    _connection = [AVIMConnection sharedInstance];
     _identifier = [NSString stringWithFormat:@"%@-%@", AVIdentifierPrefix, deviceUUID];
     _backoffTimer = [AVExponentialTimer exponentialTimerWithInitialTime:AVBackoffInitialTime
                                                                 maxTime:AVBackoffMaximumTime];
 
-    [_webSocket addDelegate:self];
+    [_connection addDelegate:self];
 }
 
 #pragma mark - AVIMConnectionDelegate
@@ -170,16 +170,16 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
         [AVUtils callBooleanResultBlock:callback error:error];
     };
 
-    if ([self.webSocket isOpen]) {
-        [self.webSocket sendCommand:command];
+    if ([self.connection isOpen]) {
+        [self.connection sendCommand:command];
         return;
     }
 
-    [self.webSocket openWithCallback:^(BOOL succeeded, NSError *error) {
+    [self.connection openWithCallback:^(BOOL succeeded, NSError *error) {
         if (error) {
             [AVUtils callBooleanResultBlock:callback error:error];
         } else {
-            [self.webSocket sendCommand:command];
+            [self.connection sendCommand:command];
         }
     }];
 }
