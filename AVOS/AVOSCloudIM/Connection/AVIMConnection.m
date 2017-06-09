@@ -40,9 +40,8 @@
 
 static NSTimeInterval AVIMWebSocketDefaultTimeoutInterval = 15.0;
 
-static NSString *const AVIMProtocolPROTOBUF1 = @"lc.protobuf.1";
-static NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
-static NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
+static NSString *const AVIMProtocolProtobuf1 = @"lc.protobuf.1";
+static NSString *const AVIMProtocolProtobuf3 = @"lc.protobuf.3";
 
 @interface AVIMCommandCarrier : NSObject
 
@@ -397,9 +396,9 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
     NSDictionary *userOptions = [AVIMClient userOptions];
 
     if ([userOptions[AVIMUserOptionUseUnread] boolValue]) {
-        [protocols addObject:AVIMProtocolPROTOBUF3];
+        [protocols addObject:AVIMProtocolProtobuf3];
     } else {
-        [protocols addObject:AVIMProtocolPROTOBUF1];
+        [protocols addObject:AVIMProtocolProtobuf1];
     }
 
     if (userOptions[AVIMUserOptionCustomProtocols]) {
