@@ -8,6 +8,12 @@
 
 #import "AVIMConnection.h"
 
+@interface AVIMConnection ()
+
+@property (nonatomic, strong) NSHashTable *delegates;
+
+@end
+
 @implementation AVIMConnection
 
 + (instancetype)sharedInstance {
@@ -19,6 +25,28 @@
     });
 
     return instance;
+}
+
+- (instancetype)init {
+    self = [super init];
+
+    if (self) {
+        [self doInitialize];
+    }
+
+    return self;
+}
+
+- (void)doInitialize {
+    _delegates = [NSHashTable weakObjectsHashTable];
+}
+
+- (void)addDelegate:(id<AVIMConnectionDelegate>)delegate {
+    [_delegates addObject:delegate];
+}
+
+- (void)removeDelegate:(id<AVIMConnectionDelegate>)delegate {
+    [_delegates removeObject:delegate];
 }
 
 @end
