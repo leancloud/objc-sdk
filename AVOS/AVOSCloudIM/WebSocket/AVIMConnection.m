@@ -63,7 +63,6 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
     NSTimer *_timeoutCheckTimer;
     NSTimer *_pingTimeoutCheckTimer;
 
-    int _observerCount;
     int32_t _ttl;
     NSTimeInterval _lastPingTimestamp;
     NSTimeInterval _lastPongTimestamp;
@@ -110,7 +109,6 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
         _commandDictionary = [[NSMutableDictionary alloc] init];
         _serialIdArray = [[NSMutableArray alloc] init];
         _ttl = -1;
-        _observerCount = 0;
         _timeout = AVIMWebSocketDefaultTimeoutInterval;
         
         _lastPongTimestamp = [[NSDate date] timeIntervalSince1970];
