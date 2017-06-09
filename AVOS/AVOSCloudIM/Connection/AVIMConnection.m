@@ -109,44 +109,44 @@ static NSString *const AVIMProtocolProtobuf3 = @"lc.protobuf.3";
     }
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
-    if (self) {
-        _commandDictionary = [[NSMutableDictionary alloc] init];
-        _serialIdArray = [[NSMutableArray alloc] init];
-        _timeout = AVIMWebSocketDefaultTimeoutInterval;
-        
-        _lastPongTimestamp = [[NSDate date] timeIntervalSince1970];
-        
-        _reconnectInterval = 1;
-        _needRetry = YES;
 
-        _delegates = [NSHashTable weakObjectsHashTable];
-        
-#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
-        // Register for notification when the app shuts down
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-        
-#else
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:) name:NSApplicationDidResignActiveNotification object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:NSApplicationDidBecomeActiveNotification object:nil];
-#endif
-        [self startNotifyReachability];
+    if (self) {
+        [self doInitialize];
     }
+
     return self;
+}
+
+- (void)doInitialize {
+    _commandDictionary = [[NSMutableDictionary alloc] init];
+    _serialIdArray = [[NSMutableArray alloc] init];
+    _timeout = AVIMWebSocketDefaultTimeoutInterval;
+
+    _lastPongTimestamp = [[NSDate date] timeIntervalSince1970];
+
+    _reconnectInterval = 1;
+    _needRetry = YES;
+
+    _delegates = [NSHashTable weakObjectsHashTable];
+
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+
+#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
+    [notificationCenter addObserver:self selector:@selector(applicationDidFinishLaunching:)     name:UIApplicationDidFinishLaunchingNotification    object:nil];
+    [notificationCenter addObserver:self selector:@selector(applicationDidEnterBackground:)     name:UIApplicationDidEnterBackgroundNotification    object:nil];
+    [notificationCenter addObserver:self selector:@selector(applicationWillEnterForeground:)    name:UIApplicationWillEnterForegroundNotification   object:nil];
+    [notificationCenter addObserver:self selector:@selector(applicationWillResignActive:)       name:UIApplicationWillResignActiveNotification      object:nil];
+    [notificationCenter addObserver:self selector:@selector(applicationDidBecomeActive:)        name:UIApplicationDidBecomeActiveNotification       object:nil];
+    [notificationCenter addObserver:self selector:@selector(applicationWillTerminate:)          name:UIApplicationWillTerminateNotification         object:nil];
+#else
+    [notificationCenter addObserver:self selector:@selector(applicationDidEnterBackground:)     name:NSApplicationDidResignActiveNotification       object:nil];
+    [notificationCenter addObserver:self selector:@selector(applicationWillEnterForeground:)    name:NSApplicationDidBecomeActiveNotification       object:nil];
+    [notificationCenter addObserver:self selector:@selector(applicationWillTerminate:)          name:NSApplicationWillTerminateNotification         object:nil];
+#endif
+
+    [self startNotifyReachability];
 }
 
 - (void)startNotifyReachability {
@@ -174,6 +174,7 @@ static NSString *const AVIMProtocolProtobuf3 = @"lc.protobuf.3";
 }
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_reachabilityMonitor stopMonitoring];
     if (!_isClosed) {
         [self closeWebSocketConnectionRetry:NO];
