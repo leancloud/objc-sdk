@@ -18,16 +18,20 @@ FOUNDATION_EXPORT NSString *const AVIMProtocolPROTOBUF3;
 @protocol AVIMConnectionDelegate <NSObject>
 
 - (void)connectionDidOpen:(AVIMConnection *)connection;
+
 - (void)connection:(AVIMConnection *)connection didReceiveCommand:(AVIMGenericCommand *)command;
+
 - (void)connection:(AVIMConnection *)connection didReceiveError:(NSError *)error;
+
 - (void)connection:(AVIMConnection *)connection didCloseWithError:(NSError *)error;
+
 - (void)connectionDidReconnect:(AVIMConnection *)connection;
 
 @end
 
 @interface AVIMConnection : NSObject
 
-@property(nonatomic, assign) CGFloat timeout;
+@property (nonatomic, assign) CGFloat timeout;
 
 + (instancetype)sharedInstance;
 
