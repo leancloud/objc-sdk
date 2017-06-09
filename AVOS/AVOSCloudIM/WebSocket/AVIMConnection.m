@@ -45,19 +45,27 @@ NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
 NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
 
 @interface AVIMCommandCarrier : NSObject
-@property(nonatomic, strong) AVIMGenericCommand *command;
-@property(nonatomic)NSTimeInterval timestamp;
+
+@property (nonatomic, strong) AVIMGenericCommand *command;
+@property (nonatomic, assign) NSTimeInterval timestamp;
 
 @end
+
 @implementation AVIMCommandCarrier
+
 - (void)timeoutInSeconds:(NSTimeInterval)seconds {
     NSTimeInterval timestamp = [[NSDate date] timeIntervalSince1970];
     timestamp += seconds;
     self.timestamp = timestamp;
 }
+
 @end
 
-@interface AVIMConnection () <NSURLConnectionDelegate, AVIMWebSocketDelegate> {
+@interface AVIMConnection ()
+
+<NSURLConnectionDelegate, AVIMWebSocketDelegate>
+
+{
     BOOL _isClosed;
     NSTimer *_pingTimer;
     NSTimer *_timeoutCheckTimer;
