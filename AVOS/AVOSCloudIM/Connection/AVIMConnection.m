@@ -40,9 +40,9 @@
 
 static NSTimeInterval AVIMWebSocketDefaultTimeoutInterval = 15.0;
 
-NSString *const AVIMProtocolPROTOBUF1 = @"lc.protobuf.1";
-NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
-NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
+static NSString *const AVIMProtocolPROTOBUF1 = @"lc.protobuf.1";
+static NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
+static NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
 
 @interface AVIMCommandCarrier : NSObject
 
