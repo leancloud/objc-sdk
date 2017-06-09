@@ -10,4 +10,6 @@
 
 @interface AVIMConnection : NSObject
 
++ (instancetype)sharedInstance;
+
 @end
