@@ -696,7 +696,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 - (void)reconnect {
     AVLoggerDebug(AVLoggerDomainIM, @"Websocket connection reconnect in %ld seconds.", (long)_reconnectInterval);
     dispatch_async(dispatch_get_main_queue(), ^{
-        _reconnectTimer = [NSTimer scheduledTimerWithTimeInterval:_reconnectInterval target:self selector:@selector(openWebSocketConnection) userInfo:nil repeats:NO];
+        _reconnectTimer = [NSTimer scheduledTimerWithTimeInterval:_reconnectInterval target:self selector:@selector(open) userInfo:nil repeats:NO];
     });
     _reconnectInterval *= 2;
 }
