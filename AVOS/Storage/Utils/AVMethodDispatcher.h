@@ -51,7 +51,7 @@
 
  @param dispatchQueue  The dispatch queue in which method will be called.
  @param asynchronously A flag indicates whether the dispatch is asynchronous or not.
- @param arguments      An argument list.
+ @param argument1 The start of argument list.
  */
 - (void)callInDispatchQueue:(dispatch_queue_t)dispatchQueue
              asynchronously:(BOOL)asynchronously
@@ -69,7 +69,7 @@
 /**
  Call method with arguments.
 
- @param arguments An argument list.
+ @param argument1 The start of argument list.
  */
 - (void)callWithArguments:(id)argument1, ...;
 
