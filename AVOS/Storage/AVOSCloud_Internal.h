@@ -7,7 +7,7 @@
 //
 
 
-#import <AVOSCloud/AVOSCloud.h>
+#import "AVOSCloud.h"
 
 FOUNDATION_EXPORT NSString *const LCRootDomain;
 FOUNDATION_EXPORT NSString *const LCRootCertificate;
