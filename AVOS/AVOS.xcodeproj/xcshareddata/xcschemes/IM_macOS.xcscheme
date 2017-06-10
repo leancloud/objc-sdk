@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "704F3B6D1BE0D0180033245C"
-               BuildableName = "AVOSCloudIM.framework"
+               BuildableName = "IM_macOS.framework"
                BlueprintName = "IM_macOS"
                ReferencedContainer = "container:AVOS.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "704F3B6D1BE0D0180033245C"
-            BuildableName = "AVOSCloudIM.framework"
+            BuildableName = "IM_macOS.framework"
             BlueprintName = "IM_macOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "704F3B6D1BE0D0180033245C"
-            BuildableName = "AVOSCloudIM.framework"
+            BuildableName = "IM_macOS.framework"
             BlueprintName = "IM_macOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
