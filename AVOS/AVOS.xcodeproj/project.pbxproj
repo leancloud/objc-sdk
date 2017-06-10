@@ -1477,6 +1477,8 @@
 		83C7D3FB1EEC4E4700AD7EDE /* ConnectionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConnectionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		83C7D4001EEC4E4700AD7EDE /* ConnectionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConnectionTests.m; sourceTree = "<group>"; };
 		83C7D4021EEC4E4700AD7EDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		83C7D40C1EEC4F6F00AD7EDE /* SRWebSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SRWebSocket.h; sourceTree = "<group>"; };
+		83C7D40D1EEC4F6F00AD7EDE /* SRWebSocket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SRWebSocket.m; sourceTree = "<group>"; };
 		83CFCB5E1B2A5D2700F97C92 /* AVIMKeyedConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMKeyedConversation.h; sourceTree = "<group>"; };
 		83CFCB5F1B2A5D2700F97C92 /* AVIMKeyedConversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMKeyedConversation.m; sourceTree = "<group>"; };
 		83D8CF551C17DAF50094279D /* AVOSCloud.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloud.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2232,6 +2234,7 @@
 		83C7D3F41EEC4E4700AD7EDE /* Connection */ = {
 			isa = PBXGroup;
 			children = (
+				83C7D40A1EEC4EF500AD7EDE /* ThirdParty */,
 				83C7D3F51EEC4E4700AD7EDE /* Connection.h */,
 				83C7D3F61EEC4E4700AD7EDE /* Info.plist */,
 			);
@@ -2245,6 +2248,23 @@
 				83C7D4021EEC4E4700AD7EDE /* Info.plist */,
 			);
 			path = ConnectionTests;
+			sourceTree = "<group>";
+		};
+		83C7D40A1EEC4EF500AD7EDE /* ThirdParty */ = {
+			isa = PBXGroup;
+			children = (
+				83C7D40B1EEC4F6F00AD7EDE /* SocketRocket */,
+			);
+			path = ThirdParty;
+			sourceTree = "<group>";
+		};
+		83C7D40B1EEC4F6F00AD7EDE /* SocketRocket */ = {
+			isa = PBXGroup;
+			children = (
+				83C7D40C1EEC4F6F00AD7EDE /* SRWebSocket.h */,
+				83C7D40D1EEC4F6F00AD7EDE /* SRWebSocket.m */,
+			);
+			path = SocketRocket;
 			sourceTree = "<group>";
 		};
 		83DF02A41AF86032000E289C /* LCDB */ = {
