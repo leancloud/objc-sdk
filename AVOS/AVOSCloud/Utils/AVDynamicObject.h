@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AVDynamicObject : NSObject
+@interface AVDynamicObject : NSObject <NSCopying>
 
 - (nullable id)objectForKeyedSubscript:(NSString *)key;
 

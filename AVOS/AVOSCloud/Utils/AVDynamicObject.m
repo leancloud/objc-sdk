@@ -372,6 +372,13 @@ void prepareDynamicClass(Class aClass) {
     return self;
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+    Class clazz = [self class];
+    NSDictionary *properties = [self properties];
+
+    return [[clazz alloc] initWithDictionary:properties];
+}
+
 static const char *PropertyTableAssociationKey = "property-table";
 
 - (NSMutableDictionary *)propertyTable {
