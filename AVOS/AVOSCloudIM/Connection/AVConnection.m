@@ -83,4 +83,8 @@
     va_end(args);
 }
 
+- (void)sendFrame:(id<AVConnectionFrame>)frame {
+    /* TODO */
+}
+
 @end

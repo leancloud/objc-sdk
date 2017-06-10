@@ -10,6 +10,13 @@
 #import "AVDynamicObject.h"
 
 /**
+ A protocol defines a frame that can be sent by connection.
+ */
+@protocol AVConnectionFrame <NSObject>
+
+@end
+
+/**
  A protocol for handling connection events.
  */
 @protocol AVConnectionDelegate <NSObject>
@@ -49,5 +56,12 @@
  @param delegate The object you want to stop to receive connection events.
  */
 - (void)removeDelegate:(id<AVConnectionDelegate>)delegate;
+
+/**
+ Send a frame to current connection.
+
+ @param frame The frame you want to send.
+ */
+- (void)sendFrame:(id<AVConnectionFrame>)frame;
 
 @end
