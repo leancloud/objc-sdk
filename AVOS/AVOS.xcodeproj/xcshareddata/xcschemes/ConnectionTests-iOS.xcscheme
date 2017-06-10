@@ -17,8 +17,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "83C7D3FA1EEC4E4700AD7EDE"
-               BuildableName = "ConnectionTests.xctest"
-               BlueprintName = "ConnectionTests"
+               BuildableName = "ConnectionTests-iOS.xctest"
+               BlueprintName = "ConnectionTests-iOS"
                ReferencedContainer = "container:AVOS.xcodeproj">
             </BuildableReference>
          </TestableReference>

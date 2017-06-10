@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "83C7D3F21EEC4E4700AD7EDE"
                BuildableName = "AVOSCloudConnection.framework"
-               BlueprintName = "Connection"
+               BlueprintName = "Connection-iOS"
                ReferencedContainer = "container:AVOS.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,26 +28,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "83C7D3FA1EEC4E4700AD7EDE"
-               BuildableName = "ConnectionTests.xctest"
-               BlueprintName = "ConnectionTests"
-               ReferencedContainer = "container:AVOS.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "83C7D3F21EEC4E4700AD7EDE"
-            BuildableName = "AVOSCloudConnection.framework"
-            BlueprintName = "Connection"
-            ReferencedContainer = "container:AVOS.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -66,7 +47,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "83C7D3F21EEC4E4700AD7EDE"
             BuildableName = "AVOSCloudConnection.framework"
-            BlueprintName = "Connection"
+            BlueprintName = "Connection-iOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -84,7 +65,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "83C7D3F21EEC4E4700AD7EDE"
             BuildableName = "AVOSCloudConnection.framework"
-            BlueprintName = "Connection"
+            BlueprintName = "Connection-iOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

@@ -1474,7 +1474,7 @@
 		83C7D3ED1EEC4BBB00AD7EDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83C7D3F31EEC4E4700AD7EDE /* AVOSCloudConnection.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudConnection.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		83C7D3F61EEC4E4700AD7EDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		83C7D3FB1EEC4E4700AD7EDE /* ConnectionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConnectionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		83C7D3FB1EEC4E4700AD7EDE /* ConnectionTests-iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ConnectionTests-iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		83C7D4001EEC4E4700AD7EDE /* ConnectionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConnectionTests.m; sourceTree = "<group>"; };
 		83C7D4021EEC4E4700AD7EDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83C7D40C1EEC4F6F00AD7EDE /* LCSRWebSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCSRWebSocket.h; sourceTree = "<group>"; };
@@ -2382,7 +2382,7 @@
 				838CE3401EC980DE00B24F5B /* AVOSCloudLiveQuery.framework */,
 				838CE34D1EC980E000B24F5B /* LiveQueryTests-macOS.xctest */,
 				83C7D3F31EEC4E4700AD7EDE /* AVOSCloudConnection.framework */,
-				83C7D3FB1EEC4E4700AD7EDE /* ConnectionTests.xctest */,
+				83C7D3FB1EEC4E4700AD7EDE /* ConnectionTests-iOS.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3891,9 +3891,9 @@
 			productReference = 838CE34D1EC980E000B24F5B /* LiveQueryTests-macOS.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		83C7D3F21EEC4E4700AD7EDE /* Connection */ = {
+		83C7D3F21EEC4E4700AD7EDE /* Connection-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 83C7D4041EEC4E4700AD7EDE /* Build configuration list for PBXNativeTarget "Connection" */;
+			buildConfigurationList = 83C7D4041EEC4E4700AD7EDE /* Build configuration list for PBXNativeTarget "Connection-iOS" */;
 			buildPhases = (
 				83C7D3EE1EEC4E4700AD7EDE /* Sources */,
 				83C7D3EF1EEC4E4700AD7EDE /* Frameworks */,
@@ -3904,14 +3904,14 @@
 			);
 			dependencies = (
 			);
-			name = Connection;
+			name = "Connection-iOS";
 			productName = Connection;
 			productReference = 83C7D3F31EEC4E4700AD7EDE /* AVOSCloudConnection.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		83C7D3FA1EEC4E4700AD7EDE /* ConnectionTests */ = {
+		83C7D3FA1EEC4E4700AD7EDE /* ConnectionTests-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 83C7D4071EEC4E4700AD7EDE /* Build configuration list for PBXNativeTarget "ConnectionTests" */;
+			buildConfigurationList = 83C7D4071EEC4E4700AD7EDE /* Build configuration list for PBXNativeTarget "ConnectionTests-iOS" */;
 			buildPhases = (
 				83C7D3F71EEC4E4700AD7EDE /* Sources */,
 				83C7D3F81EEC4E4700AD7EDE /* Frameworks */,
@@ -3922,9 +3922,9 @@
 			dependencies = (
 				83C7D3FE1EEC4E4700AD7EDE /* PBXTargetDependency */,
 			);
-			name = ConnectionTests;
+			name = "ConnectionTests-iOS";
 			productName = ConnectionTests;
-			productReference = 83C7D3FB1EEC4E4700AD7EDE /* ConnectionTests.xctest */;
+			productReference = 83C7D3FB1EEC4E4700AD7EDE /* ConnectionTests-iOS.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		83D8CE731C17DAF50094279D /* Storage-tvOS */ = {
@@ -4107,8 +4107,8 @@
 				70F315311BDE503B00D691B3 /* StorageTests-macOS */,
 				83D8CE731C17DAF50094279D /* Storage-tvOS */,
 				8320F87A1C1918C60024B45E /* Storage-watchOS */,
-				83C7D3F21EEC4E4700AD7EDE /* Connection */,
-				83C7D3FA1EEC4E4700AD7EDE /* ConnectionTests */,
+				83C7D3F21EEC4E4700AD7EDE /* Connection-iOS */,
+				83C7D3FA1EEC4E4700AD7EDE /* ConnectionTests-iOS */,
 				8C8419C21A5A796000C5C6C4 /* IM-iOS */,
 				8C8419CC1A5A796000C5C6C4 /* IMTests-iOS */,
 				704F3B6D1BE0D0180033245C /* IM-macOS */,
@@ -4964,7 +4964,7 @@
 		};
 		83C7D3FE1EEC4E4700AD7EDE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 83C7D3F21EEC4E4700AD7EDE /* Connection */;
+			target = 83C7D3F21EEC4E4700AD7EDE /* Connection-iOS */;
 			targetProxy = 83C7D3FD1EEC4E4700AD7EDE /* PBXContainerItemProxy */;
 		};
 		8C8419941A5A791300C5C6C4 /* PBXTargetDependency */ = {
@@ -7042,7 +7042,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83C7D4041EEC4E4700AD7EDE /* Build configuration list for PBXNativeTarget "Connection" */ = {
+		83C7D4041EEC4E4700AD7EDE /* Build configuration list for PBXNativeTarget "Connection-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83C7D4051EEC4E4700AD7EDE /* Debug */,
@@ -7051,7 +7051,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83C7D4071EEC4E4700AD7EDE /* Build configuration list for PBXNativeTarget "ConnectionTests" */ = {
+		83C7D4071EEC4E4700AD7EDE /* Build configuration list for PBXNativeTarget "ConnectionTests-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83C7D4081EEC4E4700AD7EDE /* Debug */,
