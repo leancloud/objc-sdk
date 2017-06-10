@@ -9,30 +9,34 @@
 #import "AVIMConnection.h"
 #import "AVMethodDispatcher.h"
 
+@implementation AVIMConnectionConfiguration
+
+@end
+
 @interface AVIMConnection ()
 
+@property (nonatomic,   copy) AVIMConnectionConfiguration *configuration;
 @property (nonatomic, strong) NSHashTable *delegates;
 
 @end
 
 @implementation AVIMConnection
 
-+ (instancetype)sharedInstance {
-    static AVIMConnection *instance;
-    static dispatch_once_t onceToken;
-
-    dispatch_once(&onceToken, ^{
-        instance = [[self alloc] init];
-    });
-
-    return instance;
-}
-
 - (instancetype)init {
     self = [super init];
 
     if (self) {
         [self doInitialize];
+    }
+
+    return self;
+}
+
+- (instancetype)initWithConfiguration:(AVIMConnectionConfiguration *)configuration {
+    self = [self init];
+
+    if (self) {
+        _configuration = [configuration copy];
     }
 
     return self;

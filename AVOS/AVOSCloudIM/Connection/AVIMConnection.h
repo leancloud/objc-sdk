@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AVDynamicObject.h"
 
 /**
  A protocol for handling connection events.
@@ -15,9 +16,23 @@
 
 @end
 
+/**
+ A type defines an object that used to tune up behaviors of connection.
+ */
+@interface AVIMConnectionConfiguration: AVDynamicObject
+
+@end
+
 @interface AVIMConnection : NSObject
 
-+ (instancetype)sharedInstance;
+@property (nonatomic, copy, readonly) AVIMConnectionConfiguration *configuration;
+
+/**
+ Initialize connection with configuration.
+
+ @param configuration The connection configuration.
+ */
+- (instancetype)initWithConfiguration:(AVIMConnectionConfiguration *)configuration;
 
 /**
  Add a delegate for receiving events on connection.
