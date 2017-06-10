@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0800"
+   LastUpgradeVersion = "0900"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -16,9 +16,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8C8419CC1A5A796000C5C6C4"
-               BuildableName = "AVOSCloudIM-iOSTests.xctest"
-               BlueprintName = "AVOSCloudIM-iOSTests"
+               BlueprintIdentifier = "838CE3221EC97E6E00B24F5B"
+               BuildableName = "LiveQueryTests-iOS.xctest"
+               BlueprintName = "LiveQueryTests-iOS"
                ReferencedContainer = "container:AVOS.xcodeproj">
             </BuildableReference>
          </TestableReference>
