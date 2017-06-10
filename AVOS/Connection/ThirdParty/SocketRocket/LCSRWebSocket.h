@@ -48,10 +48,10 @@ typedef enum SRStatusCode : NSInteger {
     // 4000–4999: Available for use by applications.
 } SRStatusCode;
 
-@class SRWebSocket;
+@class LCSRWebSocket;
 
-extern NSString *const SRWebSocketErrorDomain;
-extern NSString *const SRHTTPResponseErrorKey;
+extern NSString *const LCSRWebSocketErrorDomain;
+extern NSString *const LCSRHTTPResponseErrorKey;
 
 #pragma mark - SRWebSocketDelegate
 
@@ -59,7 +59,7 @@ extern NSString *const SRHTTPResponseErrorKey;
 
 #pragma mark - SRWebSocket
 
-@interface SRWebSocket : NSObject <NSStreamDelegate>
+@interface LCSRWebSocket : NSObject <NSStreamDelegate>
 
 @property (nonatomic, weak) id <SRWebSocketDelegate> delegate;
 
@@ -115,17 +115,17 @@ extern NSString *const SRHTTPResponseErrorKey;
 
 // message will either be an NSString if the server is using text
 // or NSData if the server is using binary.
-- (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message;
+- (void)webSocket:(LCSRWebSocket *)webSocket didReceiveMessage:(id)message;
 
 @optional
 
-- (void)webSocketDidOpen:(SRWebSocket *)webSocket;
-- (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error;
-- (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
-- (void)webSocket:(SRWebSocket *)webSocket didReceivePong:(NSData *)pongPayload;
+- (void)webSocketDidOpen:(LCSRWebSocket *)webSocket;
+- (void)webSocket:(LCSRWebSocket *)webSocket didFailWithError:(NSError *)error;
+- (void)webSocket:(LCSRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
+- (void)webSocket:(LCSRWebSocket *)webSocket didReceivePong:(NSData *)pongPayload;
 
 // Return YES to convert messages sent as Text to an NSString. Return NO to skip NSData -> NSString conversion for Text messages. Defaults to YES.
-- (BOOL)webSocketShouldConvertTextFrameToString:(SRWebSocket *)webSocket;
+- (BOOL)webSocketShouldConvertTextFrameToString:(LCSRWebSocket *)webSocket;
 
 @end
 

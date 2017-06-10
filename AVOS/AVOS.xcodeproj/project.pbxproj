@@ -638,8 +638,8 @@
 		83C7D3FC1EEC4E4700AD7EDE /* Connection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83C7D3F31EEC4E4700AD7EDE /* Connection.framework */; };
 		83C7D4011EEC4E4700AD7EDE /* ConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C7D4001EEC4E4700AD7EDE /* ConnectionTests.m */; };
 		83C7D4031EEC4E4700AD7EDE /* Connection.h in Headers */ = {isa = PBXBuildFile; fileRef = 83C7D3F51EEC4E4700AD7EDE /* Connection.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		83C7D4681EEC535400AD7EDE /* SRWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 83C7D40C1EEC4F6F00AD7EDE /* SRWebSocket.h */; };
-		83C7D4691EEC535800AD7EDE /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C7D40D1EEC4F6F00AD7EDE /* SRWebSocket.m */; };
+		83C7D4681EEC535400AD7EDE /* LCSRWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 83C7D40C1EEC4F6F00AD7EDE /* LCSRWebSocket.h */; };
+		83C7D4691EEC535800AD7EDE /* LCSRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C7D40D1EEC4F6F00AD7EDE /* LCSRWebSocket.m */; };
 		83CFCB601B2A5D2700F97C92 /* AVIMKeyedConversation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83CFCB5E1B2A5D2700F97C92 /* AVIMKeyedConversation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83CFCB611B2A5D2700F97C92 /* AVIMKeyedConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83CFCB5F1B2A5D2700F97C92 /* AVIMKeyedConversation.m */; };
 		83D8CE751C17DAF50094279D /* AVRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A6D1A5A79FF00C5C6C4 /* AVRequestOperation.m */; };
@@ -1479,8 +1479,8 @@
 		83C7D3FB1EEC4E4700AD7EDE /* ConnectionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConnectionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		83C7D4001EEC4E4700AD7EDE /* ConnectionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConnectionTests.m; sourceTree = "<group>"; };
 		83C7D4021EEC4E4700AD7EDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		83C7D40C1EEC4F6F00AD7EDE /* SRWebSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SRWebSocket.h; sourceTree = "<group>"; };
-		83C7D40D1EEC4F6F00AD7EDE /* SRWebSocket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SRWebSocket.m; sourceTree = "<group>"; };
+		83C7D40C1EEC4F6F00AD7EDE /* LCSRWebSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCSRWebSocket.h; sourceTree = "<group>"; };
+		83C7D40D1EEC4F6F00AD7EDE /* LCSRWebSocket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCSRWebSocket.m; sourceTree = "<group>"; };
 		83CFCB5E1B2A5D2700F97C92 /* AVIMKeyedConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMKeyedConversation.h; sourceTree = "<group>"; };
 		83CFCB5F1B2A5D2700F97C92 /* AVIMKeyedConversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMKeyedConversation.m; sourceTree = "<group>"; };
 		83D8CF551C17DAF50094279D /* AVOSCloud.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloud.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2263,8 +2263,8 @@
 		83C7D40B1EEC4F6F00AD7EDE /* SocketRocket */ = {
 			isa = PBXGroup;
 			children = (
-				83C7D40C1EEC4F6F00AD7EDE /* SRWebSocket.h */,
-				83C7D40D1EEC4F6F00AD7EDE /* SRWebSocket.m */,
+				83C7D40C1EEC4F6F00AD7EDE /* LCSRWebSocket.h */,
+				83C7D40D1EEC4F6F00AD7EDE /* LCSRWebSocket.m */,
 			);
 			path = SocketRocket;
 			sourceTree = "<group>";
@@ -3350,7 +3350,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83C7D4031EEC4E4700AD7EDE /* Connection.h in Headers */,
-				83C7D4681EEC535400AD7EDE /* SRWebSocket.h in Headers */,
+				83C7D4681EEC535400AD7EDE /* LCSRWebSocket.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4591,7 +4591,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83C7D4691EEC535800AD7EDE /* SRWebSocket.m in Sources */,
+				83C7D4691EEC535800AD7EDE /* LCSRWebSocket.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
