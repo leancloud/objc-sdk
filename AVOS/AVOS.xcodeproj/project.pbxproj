@@ -481,7 +481,6 @@
 		8320F94F1C1918C60024B45E /* AVCloud_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A031A5A79FF00C5C6C4 /* AVCloud_Internal.h */; };
 		8320F9511C1918C60024B45E /* AVCloudQueryResult_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A641A5A79FF00C5C6C4 /* AVCloudQueryResult_Internal.h */; };
 		8320F9541C1918C60024B45E /* AVPush_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A601A5A79FF00C5C6C4 /* AVPush_Internal.h */; };
-		8320F95E1C1918FE0024B45E /* AVOSCloud-watchOS.Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8320F95D1C1918FE0024B45E /* AVOSCloud-watchOS.Info.plist */; };
 		83331D451EB9A25F00CADC9C /* AVCaptcha.h in Headers */ = {isa = PBXBuildFile; fileRef = 83331D431EB9A25F00CADC9C /* AVCaptcha.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83331D461EB9A25F00CADC9C /* AVCaptcha.h in Headers */ = {isa = PBXBuildFile; fileRef = 83331D431EB9A25F00CADC9C /* AVCaptcha.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83331D471EB9A25F00CADC9C /* AVCaptcha.h in Headers */ = {isa = PBXBuildFile; fileRef = 83331D431EB9A25F00CADC9C /* AVCaptcha.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -550,14 +549,9 @@
 		838CE3241EC97E6F00B24F5B /* AVOSCloudLiveQuery.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 838CE31B1EC97E6E00B24F5B /* AVOSCloudLiveQuery.framework */; };
 		838CE3291EC97E6F00B24F5B /* AVOSCloudLiveQueryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 838CE3281EC97E6F00B24F5B /* AVOSCloudLiveQueryTests.m */; };
 		838CE32B1EC97E6F00B24F5B /* AVOSCloudLiveQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 838CE31D1EC97E6E00B24F5B /* AVOSCloudLiveQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		838CE3331EC9809F00B24F5B /* AVOSCloudLiveQuery-iOS.Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 838CE3321EC9809F00B24F5B /* AVOSCloudLiveQuery-iOS.Info.plist */; };
-		838CE3351EC980AA00B24F5B /* AVOSCloudLiveQuery-iOSTests.Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 838CE3341EC980AA00B24F5B /* AVOSCloudLiveQuery-iOSTests.Info.plist */; };
 		838CE33A1EC980DE00B24F5B /* AVOSCloudLiveQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 838CE31D1EC97E6E00B24F5B /* AVOSCloudLiveQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		838CE3451EC980E000B24F5B /* AVOSCloudLiveQueryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 838CE3281EC97E6F00B24F5B /* AVOSCloudLiveQueryTests.m */; };
 		838CE3471EC980E000B24F5B /* AVOSCloudLiveQuery.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 838CE31B1EC97E6E00B24F5B /* AVOSCloudLiveQuery.framework */; };
-		838CE3491EC980E000B24F5B /* AVOSCloudLiveQuery-iOSTests.Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 838CE3341EC980AA00B24F5B /* AVOSCloudLiveQuery-iOSTests.Info.plist */; };
-		838CE34F1EC9829E00B24F5B /* AVOSCloudLiveQuery-macOS.Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 838CE34E1EC9829E00B24F5B /* AVOSCloudLiveQuery-macOS.Info.plist */; };
-		838CE3511EC982A500B24F5B /* AVOSCloudLiveQuery-macOSTests.Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 838CE3501EC982A500B24F5B /* AVOSCloudLiveQuery-macOSTests.Info.plist */; };
 		838CE3541EC9838500B24F5B /* AVLiveQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 838CE3521EC9838500B24F5B /* AVLiveQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		838CE3551EC9838500B24F5B /* AVLiveQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 838CE3521EC9838500B24F5B /* AVLiveQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		838CE3561EC9838500B24F5B /* AVLiveQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 838CE3531EC9838500B24F5B /* AVLiveQuery.m */; };
@@ -789,7 +783,6 @@
 		83D8CF4A1C17DAF50094279D /* AVCloudQueryResult_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A641A5A79FF00C5C6C4 /* AVCloudQueryResult_Internal.h */; };
 		83D8CF4B1C17DAF50094279D /* AVAnalyticsActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419E71A5A79FF00C5C6C4 /* AVAnalyticsActivity.h */; };
 		83D8CF4D1C17DAF50094279D /* AVPush_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A601A5A79FF00C5C6C4 /* AVPush_Internal.h */; };
-		83D8CF571C17DB4A0094279D /* AVOSCloud-tvOS.Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 83D8CF561C17DB4A0094279D /* AVOSCloud-tvOS.Info.plist */; };
 		83DBBDDD1BD0963000E69BDC /* LCIMClientSessionTokenCacheStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DBBDDB1BD0963000E69BDC /* LCIMClientSessionTokenCacheStore.h */; };
 		83DBBDDE1BD0963000E69BDC /* LCIMClientSessionTokenCacheStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DBBDDC1BD0963000E69BDC /* LCIMClientSessionTokenCacheStore.m */; };
 		83DD6A711B83103C00DACA27 /* AVIMUserOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DD6A6F1B83103C00DACA27 /* AVIMUserOptions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1335,15 +1328,6 @@
 		7068A7211BA3614D0004623A /* AVRequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVRequestManager.h; sourceTree = "<group>"; };
 		7068A7221BA3614D0004623A /* AVRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVRequestManager.m; sourceTree = "<group>"; };
 		706F85A01B82E4E00079CC55 /* AVOSCloudTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVOSCloudTest.m; sourceTree = "<group>"; };
-		7085D5371BEA2BE000449DC1 /* AVOSCloud-macOS.Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AVOSCloud-macOS.Info.plist"; sourceTree = "<group>"; };
-		7085D5381BEA2BE000449DC1 /* AVOSCloudIM-macOS.Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AVOSCloudIM-macOS.Info.plist"; sourceTree = "<group>"; };
-		7085D5391BEA2BE000449DC1 /* AVOSCloudIM-macOSTests.Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AVOSCloudIM-macOSTests.Info.plist"; sourceTree = "<group>"; };
-		7085D53A1BEA2BE000449DC1 /* AVOSCloud-macOSTests.Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AVOSCloud-macOSTests.Info.plist"; sourceTree = "<group>"; };
-		7085D53B1BEA2BE000449DC1 /* AVOSCloud-iOS.Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AVOSCloud-iOS.Info.plist"; sourceTree = "<group>"; };
-		7085D53C1BEA2BE000449DC1 /* AVOSCloudCrashReporting-iOS.Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AVOSCloudCrashReporting-iOS.Info.plist"; sourceTree = "<group>"; };
-		7085D53D1BEA2BE000449DC1 /* AVOSCloudIM-iOS.Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AVOSCloudIM-iOS.Info.plist"; sourceTree = "<group>"; };
-		7085D53E1BEA2BE000449DC1 /* AVOSCloud-iOSTests.Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AVOSCloud-iOSTests.Info.plist"; sourceTree = "<group>"; };
-		7085D5401BEA2E2300449DC1 /* AVOSCloudIM-iOSTests.Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AVOSCloudIM-iOSTests.Info.plist"; sourceTree = "<group>"; };
 		708F554C1B86121A0071CA48 /* TestDescriptionKey.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestDescriptionKey.json; sourceTree = "<group>"; };
 		70B05B391B909BD3009F6696 /* TestSaveAll.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestSaveAll.json; sourceTree = "<group>"; };
 		70C288B01BB55E0300A4773C /* TestInstallationSave.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestInstallationSave.json; sourceTree = "<group>"; };
@@ -1372,7 +1356,6 @@
 		831E29581D882CBB006E502B /* AVIMMessageOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMMessageOption.h; sourceTree = "<group>"; };
 		831E29591D882CBB006E502B /* AVIMMessageOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMMessageOption.m; sourceTree = "<group>"; };
 		8320F95C1C1918C60024B45E /* AVOSCloud.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloud.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8320F95D1C1918FE0024B45E /* AVOSCloud-watchOS.Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AVOSCloud-watchOS.Info.plist"; sourceTree = "<group>"; };
 		83331D431EB9A25F00CADC9C /* AVCaptcha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCaptcha.h; sourceTree = "<group>"; };
 		83331D441EB9A25F00CADC9C /* AVCaptcha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVCaptcha.m; sourceTree = "<group>"; };
 		83331D4D1EB9A34000CADC9C /* AVDynamicObject_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVDynamicObject_Internal.h; sourceTree = "<group>"; };
@@ -1405,12 +1388,8 @@
 		838CE31D1EC97E6E00B24F5B /* AVOSCloudLiveQuery.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloudLiveQuery.h; sourceTree = "<group>"; };
 		838CE3231EC97E6E00B24F5B /* AVOSCloudLiveQuery-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AVOSCloudLiveQuery-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		838CE3281EC97E6F00B24F5B /* AVOSCloudLiveQueryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVOSCloudLiveQueryTests.m; sourceTree = "<group>"; };
-		838CE3321EC9809F00B24F5B /* AVOSCloudLiveQuery-iOS.Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AVOSCloudLiveQuery-iOS.Info.plist"; sourceTree = "<group>"; };
-		838CE3341EC980AA00B24F5B /* AVOSCloudLiveQuery-iOSTests.Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AVOSCloudLiveQuery-iOSTests.Info.plist"; sourceTree = "<group>"; };
 		838CE3401EC980DE00B24F5B /* AVOSCloudLiveQuery.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudLiveQuery.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		838CE34D1EC980E000B24F5B /* AVOSCloudLiveQuery-macOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AVOSCloudLiveQuery-macOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		838CE34E1EC9829E00B24F5B /* AVOSCloudLiveQuery-macOS.Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AVOSCloudLiveQuery-macOS.Info.plist"; sourceTree = "<group>"; };
-		838CE3501EC982A500B24F5B /* AVOSCloudLiveQuery-macOSTests.Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AVOSCloudLiveQuery-macOSTests.Info.plist"; sourceTree = "<group>"; };
 		838CE3521EC9838500B24F5B /* AVLiveQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVLiveQuery.h; sourceTree = "<group>"; };
 		838CE3531EC9838500B24F5B /* AVLiveQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVLiveQuery.m; sourceTree = "<group>"; };
 		838DD7941B3D309F00C95897 /* LCNetworkStatistics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCNetworkStatistics.h; sourceTree = "<group>"; };
@@ -1476,10 +1455,15 @@
 		83BE73021D8105AF008ED3CF /* EXTScope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTScope.h; sourceTree = "<group>"; };
 		83BE73031D8105AF008ED3CF /* EXTScope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTScope.m; sourceTree = "<group>"; };
 		83BE730C1D810651008ED3CF /* metamacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = metamacros.h; sourceTree = "<group>"; };
+		83C7D3E81EEC490200AD7EDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		83C7D3E91EEC4A1700AD7EDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		83C7D3EA1EEC4A5C00AD7EDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		83C7D3EB1EEC4B2800AD7EDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		83C7D3EC1EEC4B7A00AD7EDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		83C7D3ED1EEC4BBB00AD7EDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83CFCB5E1B2A5D2700F97C92 /* AVIMKeyedConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMKeyedConversation.h; sourceTree = "<group>"; };
 		83CFCB5F1B2A5D2700F97C92 /* AVIMKeyedConversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMKeyedConversation.m; sourceTree = "<group>"; };
 		83D8CF551C17DAF50094279D /* AVOSCloud.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloud.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		83D8CF561C17DB4A0094279D /* AVOSCloud-tvOS.Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AVOSCloud-tvOS.Info.plist"; sourceTree = "<group>"; };
 		83DBBDDB1BD0963000E69BDC /* LCIMClientSessionTokenCacheStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMClientSessionTokenCacheStore.h; sourceTree = "<group>"; };
 		83DBBDDC1BD0963000E69BDC /* LCIMClientSessionTokenCacheStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMClientSessionTokenCacheStore.m; sourceTree = "<group>"; };
 		83DD6A6F1B83103C00DACA27 /* AVIMUserOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMUserOptions.h; sourceTree = "<group>"; };
@@ -1525,7 +1509,6 @@
 		83FCB99E1CEDC57C007D8712 /* LCURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCURLSessionManager.m; sourceTree = "<group>"; };
 		8C1F675E1A8B379F00310E65 /* AVIMConversationQuery_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVIMConversationQuery_Internal.h; sourceTree = "<group>"; };
 		8C255D261AE9F815008A6FFC /* AVOSCloudCrashReporting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudCrashReporting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8C255D291AE9F817008A6FFC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C255D2A1AE9F817008A6FFC /* AVOSCloudCrashReporting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloudCrashReporting.h; sourceTree = "<group>"; };
 		8C255D411AE9FD91008A6FFC /* AVOSCloudCrashReporting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVOSCloudCrashReporting.m; sourceTree = "<group>"; };
 		8C2FED521A67C2DA0056F945 /* AVIMGeneralObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMGeneralObject.h; sourceTree = "<group>"; };
@@ -1535,9 +1518,7 @@
 		8C8419861A5A791300C5C6C4 /* AVOSCloud.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloud.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C84198B1A5A791300C5C6C4 /* AVOSCloud.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloud.h; sourceTree = "<group>"; };
 		8C8419911A5A791300C5C6C4 /* AVOSCloud-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AVOSCloud-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8C8419971A5A791300C5C6C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C8419C31A5A796000C5C6C4 /* AVOSCloudIM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudIM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8C8419C61A5A796000C5C6C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C8419C71A5A796000C5C6C4 /* AVOSCloudIM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloudIM.h; sourceTree = "<group>"; };
 		8C8419CD1A5A796000C5C6C4 /* AVOSCloudIM-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AVOSCloudIM-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C8419D31A5A796000C5C6C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1931,28 +1912,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		7085D5321BEA2A0A00449DC1 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				7085D53B1BEA2BE000449DC1 /* AVOSCloud-iOS.Info.plist */,
-				7085D53E1BEA2BE000449DC1 /* AVOSCloud-iOSTests.Info.plist */,
-				7085D5371BEA2BE000449DC1 /* AVOSCloud-macOS.Info.plist */,
-				7085D53A1BEA2BE000449DC1 /* AVOSCloud-macOSTests.Info.plist */,
-				83D8CF561C17DB4A0094279D /* AVOSCloud-tvOS.Info.plist */,
-				8320F95D1C1918FE0024B45E /* AVOSCloud-watchOS.Info.plist */,
-				7085D53D1BEA2BE000449DC1 /* AVOSCloudIM-iOS.Info.plist */,
-				7085D5401BEA2E2300449DC1 /* AVOSCloudIM-iOSTests.Info.plist */,
-				7085D5381BEA2BE000449DC1 /* AVOSCloudIM-macOS.Info.plist */,
-				7085D5391BEA2BE000449DC1 /* AVOSCloudIM-macOSTests.Info.plist */,
-				7085D53C1BEA2BE000449DC1 /* AVOSCloudCrashReporting-iOS.Info.plist */,
-				838CE3321EC9809F00B24F5B /* AVOSCloudLiveQuery-iOS.Info.plist */,
-				838CE3341EC980AA00B24F5B /* AVOSCloudLiveQuery-iOSTests.Info.plist */,
-				838CE34E1EC9829E00B24F5B /* AVOSCloudLiveQuery-macOS.Info.plist */,
-				838CE3501EC982A500B24F5B /* AVOSCloudLiveQuery-macOSTests.Info.plist */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
 		830EB9BD1C3E4BFA00BA917F /* COSObserver */ = {
 			isa = PBXGroup;
 			children = (
@@ -2017,6 +1976,7 @@
 				838CE3531EC9838500B24F5B /* AVLiveQuery.m */,
 				834A54811ECAF3A0006C8F4B /* AVSubscriber.h */,
 				834A54821ECAF3A0006C8F4B /* AVSubscriber.m */,
+				83C7D3EC1EEC4B7A00AD7EDE /* Info.plist */,
 			);
 			path = LiveQuery;
 			sourceTree = "<group>";
@@ -2025,6 +1985,7 @@
 			isa = PBXGroup;
 			children = (
 				838CE3281EC97E6F00B24F5B /* AVOSCloudLiveQueryTests.m */,
+				83C7D3ED1EEC4BBB00AD7EDE /* Info.plist */,
 			);
 			path = LiveQueryTests;
 			sourceTree = "<group>";
@@ -2307,17 +2268,9 @@
 				83B5FF071B7C7678000C3923 /* Breakpad */,
 				8C255D2A1AE9F817008A6FFC /* AVOSCloudCrashReporting.h */,
 				8C255D411AE9FD91008A6FFC /* AVOSCloudCrashReporting.m */,
-				8C255D281AE9F817008A6FFC /* Supporting Files */,
+				83C7D3EB1EEC4B2800AD7EDE /* Info.plist */,
 			);
 			path = CrashReporting;
-			sourceTree = "<group>";
-		};
-		8C255D281AE9F817008A6FFC /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				8C255D291AE9F817008A6FFC /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		8C84197A1A5A78E100C5C6C4 = {
@@ -2330,9 +2283,8 @@
 				838CE31C1EC97E6E00B24F5B /* LiveQuery */,
 				838CE3271EC97E6F00B24F5B /* LiveQueryTests */,
 				8C255D271AE9F817008A6FFC /* CrashReporting */,
-				7085D5321BEA2A0A00449DC1 /* Resources */,
-				8C8419871A5A791300C5C6C4 /* Products */,
 				8CEA86581A777A7900864211 /* TestBase */,
+				8C8419871A5A791300C5C6C4 /* Products */,
 			);
 			indentWidth = 4;
 			sourceTree = "<group>";
@@ -2392,6 +2344,7 @@
 				8C841AA11A5A7A0000C5C6C4 /* Utils */,
 				83331D421EB9A24D00CADC9C /* Captcha */,
 				835091FA1EB1BD90000DA884 /* SMS */,
+				83C7D3E81EEC490200AD7EDE /* Info.plist */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -2400,17 +2353,9 @@
 			isa = PBXGroup;
 			children = (
 				8CEEABA71ABC179300B9E757 /* LogicTests */,
-				8C8419961A5A791300C5C6C4 /* Supporting Files */,
+				83C7D3E91EEC4A1700AD7EDE /* Info.plist */,
 			);
 			path = StorageTests;
-			sourceTree = "<group>";
-		};
-		8C8419961A5A791300C5C6C4 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				8C8419971A5A791300C5C6C4 /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		8C8419C41A5A796000C5C6C4 /* IM */ = {
@@ -2454,21 +2399,13 @@
 				8C841BD71A5A84C600C5C6C4 /* Commands */,
 				8CA1571C1A5E8556003C2532 /* InternalObjects */,
 				838AF11D1AFE58F600B8965E /* MessageCache */,
-				8C8419C51A5A796000C5C6C4 /* Supporting Files */,
 				8C9A92651A70AF1800CA4912 /* TypedMessages */,
 				8C841BFF1A5A84C600C5C6C4 /* Utilities */,
 				83BE43911D242905000C7AC3 /* Vendor */,
 				8C841C041A5A84C600C5C6C4 /* Connection */,
+				83C7D3EA1EEC4A5C00AD7EDE /* Info.plist */,
 			);
 			path = IM;
-			sourceTree = "<group>";
-		};
-		8C8419C51A5A796000C5C6C4 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				8C8419C61A5A796000C5C6C4 /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		8C8419D11A5A796000C5C6C4 /* IMTests */ = {
@@ -2483,17 +2420,9 @@
 				704717991B4A60CC00F6ADDC /* AVIMClientTest.m */,
 				704717971B4A606D00F6ADDC /* AVIMConversationTest.m */,
 				7047179B1B4A60E100F6ADDC /* AVIMMessageTest.m */,
-				8C8419D21A5A796000C5C6C4 /* Supporting Files */,
-			);
-			path = IMTests;
-			sourceTree = "<group>";
-		};
-		8C8419D21A5A796000C5C6C4 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
 				8C8419D31A5A796000C5C6C4 /* Info.plist */,
 			);
-			name = "Supporting Files";
+			path = IMTests;
 			sourceTree = "<group>";
 		};
 		8C8419DC1A5A79FF00C5C6C4 /* ACL */ = {
@@ -4110,7 +4039,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8320F95E1C1918FE0024B45E /* AVOSCloud-watchOS.Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4118,7 +4046,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				838CE3331EC9809F00B24F5B /* AVOSCloudLiveQuery-iOS.Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4126,7 +4053,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				838CE3351EC980AA00B24F5B /* AVOSCloudLiveQuery-iOSTests.Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4134,7 +4060,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				838CE34F1EC9829E00B24F5B /* AVOSCloudLiveQuery-macOS.Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4142,8 +4067,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				838CE3491EC980E000B24F5B /* AVOSCloudLiveQuery-iOSTests.Info.plist in Resources */,
-				838CE3511EC982A500B24F5B /* AVOSCloudLiveQuery-macOSTests.Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4151,7 +4074,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83D8CF571C17DB4A0094279D /* AVOSCloud-tvOS.Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4948,7 +4870,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/AVOSCloudIM/Protobuf";
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = IM/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
@@ -5006,7 +4928,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/AVOSCloudIM/Protobuf";
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = IM/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
@@ -5061,7 +4983,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = IMTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
@@ -5104,7 +5026,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = IMTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
@@ -5164,7 +5086,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = Storage/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
@@ -5224,7 +5146,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = Storage/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
@@ -5282,7 +5204,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = StorageTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.leancloud.AVOSCloudOSXTests;
@@ -5323,7 +5245,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = StorageTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.leancloud.AVOSCloudOSXTests;
@@ -5373,7 +5295,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = Storage/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -5433,7 +5355,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = Storage/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -5507,7 +5429,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = LiveQuery/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -5564,7 +5486,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = LiveQuery/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -5621,7 +5543,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = LiveQueryTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
@@ -5666,7 +5588,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = LiveQueryTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
@@ -5724,7 +5646,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = LiveQuery/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -5782,7 +5704,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = LiveQuery/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -5840,7 +5762,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = LiveQueryTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
@@ -5886,7 +5808,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = LiveQueryTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
@@ -5938,7 +5860,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = Storage/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -5999,7 +5921,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = Storage/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -6078,7 +6000,7 @@
 					../Breakpad/src/client/apple/Framework,
 					../Breakpad/src/common/mac,
 				);
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = CrashReporting/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -6145,7 +6067,7 @@
 					../Breakpad/src/client/apple/Framework,
 					../Breakpad/src/common/mac,
 				);
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = CrashReporting/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -6243,7 +6165,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = Storage/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -6303,7 +6225,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = Storage/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -6368,7 +6290,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = StorageTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -6409,7 +6331,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = StorageTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -6462,7 +6384,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/AVOSCloudIM/Protobuf";
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = IM/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -6516,7 +6438,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/AVOSCloudIM/Protobuf";
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = IM/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -6574,7 +6496,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = IMTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -6624,7 +6546,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
+				INFOPLIST_FILE = IMTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
