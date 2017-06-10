@@ -2009,7 +2009,7 @@
 			path = MessageCache;
 			sourceTree = "<group>";
 		};
-		838CE31C1EC97E6E00B24F5B /* AVOSCloudLiveQuery */ = {
+		838CE31C1EC97E6E00B24F5B /* LiveQuery */ = {
 			isa = PBXGroup;
 			children = (
 				838CE31D1EC97E6E00B24F5B /* AVOSCloudLiveQuery.h */,
@@ -2018,15 +2018,15 @@
 				834A54811ECAF3A0006C8F4B /* AVSubscriber.h */,
 				834A54821ECAF3A0006C8F4B /* AVSubscriber.m */,
 			);
-			path = AVOSCloudLiveQuery;
+			path = LiveQuery;
 			sourceTree = "<group>";
 		};
-		838CE3271EC97E6F00B24F5B /* AVOSCloudLiveQueryTests */ = {
+		838CE3271EC97E6F00B24F5B /* LiveQueryTests */ = {
 			isa = PBXGroup;
 			children = (
 				838CE3281EC97E6F00B24F5B /* AVOSCloudLiveQueryTests.m */,
 			);
-			path = AVOSCloudLiveQueryTests;
+			path = LiveQueryTests;
 			sourceTree = "<group>";
 		};
 		838DD7931B3D308100C95897 /* Statistics */ = {
@@ -2301,7 +2301,7 @@
 			path = LCNetworking;
 			sourceTree = "<group>";
 		};
-		8C255D271AE9F817008A6FFC /* AVOSCloudCrashReporting */ = {
+		8C255D271AE9F817008A6FFC /* CrashReporting */ = {
 			isa = PBXGroup;
 			children = (
 				83B5FF071B7C7678000C3923 /* Breakpad */,
@@ -2309,7 +2309,7 @@
 				8C255D411AE9FD91008A6FFC /* AVOSCloudCrashReporting.m */,
 				8C255D281AE9F817008A6FFC /* Supporting Files */,
 			);
-			path = AVOSCloudCrashReporting;
+			path = CrashReporting;
 			sourceTree = "<group>";
 		};
 		8C255D281AE9F817008A6FFC /* Supporting Files */ = {
@@ -2323,14 +2323,14 @@
 		8C84197A1A5A78E100C5C6C4 = {
 			isa = PBXGroup;
 			children = (
-				8C8419881A5A791300C5C6C4 /* AVOSCloud */,
-				8C255D271AE9F817008A6FFC /* AVOSCloudCrashReporting */,
-				8C8419C41A5A796000C5C6C4 /* AVOSCloudIM */,
-				8C8419D11A5A796000C5C6C4 /* AVOSCloudIMTests */,
-				8C8419951A5A791300C5C6C4 /* AVOSCloudTests */,
+				8C8419881A5A791300C5C6C4 /* Storage */,
+				8C8419951A5A791300C5C6C4 /* StorageTests */,
+				8C8419C41A5A796000C5C6C4 /* IM */,
+				8C8419D11A5A796000C5C6C4 /* IMTests */,
+				838CE31C1EC97E6E00B24F5B /* LiveQuery */,
+				838CE3271EC97E6F00B24F5B /* LiveQueryTests */,
+				8C255D271AE9F817008A6FFC /* CrashReporting */,
 				7085D5321BEA2A0A00449DC1 /* Resources */,
-				838CE31C1EC97E6E00B24F5B /* AVOSCloudLiveQuery */,
-				838CE3271EC97E6F00B24F5B /* AVOSCloudLiveQueryTests */,
 				8C8419871A5A791300C5C6C4 /* Products */,
 				8CEA86581A777A7900864211 /* TestBase */,
 			);
@@ -2360,7 +2360,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		8C8419881A5A791300C5C6C4 /* AVOSCloud */ = {
+		8C8419881A5A791300C5C6C4 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
 				8C8419DC1A5A79FF00C5C6C4 /* ACL */,
@@ -2393,16 +2393,16 @@
 				83331D421EB9A24D00CADC9C /* Captcha */,
 				835091FA1EB1BD90000DA884 /* SMS */,
 			);
-			path = AVOSCloud;
+			path = Storage;
 			sourceTree = "<group>";
 		};
-		8C8419951A5A791300C5C6C4 /* AVOSCloudTests */ = {
+		8C8419951A5A791300C5C6C4 /* StorageTests */ = {
 			isa = PBXGroup;
 			children = (
 				8CEEABA71ABC179300B9E757 /* LogicTests */,
 				8C8419961A5A791300C5C6C4 /* Supporting Files */,
 			);
-			path = AVOSCloudTests;
+			path = StorageTests;
 			sourceTree = "<group>";
 		};
 		8C8419961A5A791300C5C6C4 /* Supporting Files */ = {
@@ -2413,7 +2413,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		8C8419C41A5A796000C5C6C4 /* AVOSCloudIM */ = {
+		8C8419C41A5A796000C5C6C4 /* IM */ = {
 			isa = PBXGroup;
 			children = (
 				8C8419C71A5A796000C5C6C4 /* AVOSCloudIM.h */,
@@ -2460,7 +2460,7 @@
 				83BE43911D242905000C7AC3 /* Vendor */,
 				8C841C041A5A84C600C5C6C4 /* Connection */,
 			);
-			path = AVOSCloudIM;
+			path = IM;
 			sourceTree = "<group>";
 		};
 		8C8419C51A5A796000C5C6C4 /* Supporting Files */ = {
@@ -2471,7 +2471,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		8C8419D11A5A796000C5C6C4 /* AVOSCloudIMTests */ = {
+		8C8419D11A5A796000C5C6C4 /* IMTests */ = {
 			isa = PBXGroup;
 			children = (
 				70DA62491B4BD7D100D95D4D /* testAudio.mp3 */,
@@ -2485,7 +2485,7 @@
 				7047179B1B4A60E100F6ADDC /* AVIMMessageTest.m */,
 				8C8419D21A5A796000C5C6C4 /* Supporting Files */,
 			);
-			path = AVOSCloudIMTests;
+			path = IMTests;
 			sourceTree = "<group>";
 		};
 		8C8419D21A5A796000C5C6C4 /* Supporting Files */ = {
