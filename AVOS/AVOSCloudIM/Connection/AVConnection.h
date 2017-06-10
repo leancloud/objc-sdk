@@ -64,4 +64,9 @@
  */
 - (void)sendFrame:(id<AVConnectionFrame>)frame;
 
+/**
+ Close connection.
+ */
+- (void)close;
+
 @end

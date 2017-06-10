@@ -87,4 +87,8 @@
     /* TODO */
 }
 
+- (void)close {
+    /* TODO */
+}
+
 @end
