@@ -1,5 +1,5 @@
 //
-//  AVIMConnection.h
+//  AVConnection.h
 //  AVOS
 //
 //  Created by Tang Tianyong on 09/06/2017.
@@ -12,27 +12,27 @@
 /**
  A protocol for handling connection events.
  */
-@protocol AVIMConnectionDelegate <NSObject>
+@protocol AVConnectionDelegate <NSObject>
 
 @end
 
 /**
  A type defines an object that used to tune up behaviors of connection.
  */
-@interface AVIMConnectionConfiguration: AVDynamicObject
+@interface AVConnectionConfiguration: AVDynamicObject
 
 @end
 
-@interface AVIMConnection : NSObject
+@interface AVConnection : NSObject
 
-@property (nonatomic, copy, readonly) AVIMConnectionConfiguration *configuration;
+@property (nonatomic, copy, readonly) AVConnectionConfiguration *configuration;
 
 /**
  Initialize connection with configuration.
 
  @param configuration The connection configuration.
  */
-- (instancetype)initWithConfiguration:(AVIMConnectionConfiguration *)configuration;
+- (instancetype)initWithConfiguration:(AVConnectionConfiguration *)configuration;
 
 /**
  Add a delegate for receiving events on connection.
@@ -41,13 +41,13 @@
 
  @param delegate The object to receive connection events.
  */
-- (void)addDelegate:(id<AVIMConnectionDelegate>)delegate;
+- (void)addDelegate:(id<AVConnectionDelegate>)delegate;
 
 /**
  Remove a delegate that added previously.
 
  @param delegate The object you want to stop to receive connection events.
  */
-- (void)removeDelegate:(id<AVIMConnectionDelegate>)delegate;
+- (void)removeDelegate:(id<AVConnectionDelegate>)delegate;
 
 @end

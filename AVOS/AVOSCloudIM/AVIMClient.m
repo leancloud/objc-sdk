@@ -46,7 +46,7 @@ BOOL isValidTag(NSString *tag) {
 
 @interface AVIMClient ()
 
-<AVIMConnectionDelegate>
+<AVConnectionDelegate>
 
 @end
 
@@ -82,7 +82,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds {
-    [AVIMConnection setTimeoutIntervalInSeconds:seconds];
+    [AVConnection setTimeoutIntervalInSeconds:seconds];
 }
 
 + (void)resetDefaultClient {
@@ -173,7 +173,7 @@ static BOOL AVIMClientHasInstantiated = NO;
      }];
 }
 
-- (AVIMConnection *)connection {
+- (AVConnection *)connection {
     if (_connection)
         return _connection;
 
@@ -181,7 +181,7 @@ static BOOL AVIMClientHasInstantiated = NO;
         if (_connection)
             return _connection;
 
-        _connection = [AVIMConnection sharedInstance];
+        _connection = [AVConnection sharedInstance];
 
         return _connection;
     }
@@ -601,20 +601,20 @@ static BOOL AVIMClientHasInstantiated = NO;
     });
 }
 
-#pragma mark - AVIMConnectionDelegate
+#pragma mark - AVConnectionDelegate
 
-- (void)connectionDidOpen:(AVIMConnection *)connection {
+- (void)connectionDidOpen:(AVConnection *)connection {
     dispatch_async(imClientQueue, ^{
         [self sendOpenCommand];
     });
     [self changeStatus:AVIMClientStatusOpened];
 }
 
-- (void)connection:(AVIMConnection *)connection didReceiveCommand:(AVIMGenericCommand *)command {
+- (void)connection:(AVConnection *)connection didReceiveCommand:(AVIMGenericCommand *)command {
     [self processCommand:command];
 }
 
-- (void)connection:(AVIMConnection *)connection didReceiveError:(NSError *)error {
+- (void)connection:(AVConnection *)connection didReceiveError:(NSError *)error {
     if ([_delegate respondsToSelector:@selector(imClientPaused:error:)]) {
         [self receivePausedWithError:error];
     } else if ([_delegate respondsToSelector:@selector(imClientPaused:)]) {
@@ -622,11 +622,11 @@ static BOOL AVIMClientHasInstantiated = NO;
     }
 }
 
-- (void)connection:(AVIMConnection *)connection didCloseWithError:(NSError *)error {
+- (void)connection:(AVConnection *)connection didCloseWithError:(NSError *)error {
     [self changeStatus:AVIMClientStatusPaused];
 }
 
-- (void)connectionDidReconnect:(AVIMConnection *)connection {
+- (void)connectionDidReconnect:(AVConnection *)connection {
     [self changeStatus:AVIMClientStatusResuming];
 }
 

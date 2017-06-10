@@ -15,7 +15,7 @@
 #import "AVObjectUtils.h"
 
 /* AVOSCloudIM headers */
-#import "AVIMConnection.h"
+#import "AVConnection.h"
 #import "MessagesProtoOrig.pbobjc.h"
 
 typedef NS_ENUM(NSInteger, AVServiceType) {
@@ -32,12 +32,12 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 
 @interface AVSubscriber ()
 
-<AVIMConnectionDelegate>
+<AVConnectionDelegate>
 
 @property (nonatomic, assign) BOOL alive;
 @property (nonatomic, assign) BOOL inKeepAlive;
 @property (nonatomic, assign) dispatch_once_t loginOnceToken;
-@property (nonatomic,   weak) AVIMConnection *connection;
+@property (nonatomic,   weak) AVConnection *connection;
 @property (nonatomic, strong) AVExponentialTimer *backoffTimer;
 
 @end
@@ -68,7 +68,7 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 - (void)doInitialize {
     NSString *deviceUUID = [AVUtils deviceUUID];
 
-    _connection = [AVIMConnection sharedInstance];
+    _connection = [AVConnection sharedInstance];
     _identifier = [NSString stringWithFormat:@"%@-%@", AVIdentifierPrefix, deviceUUID];
     _backoffTimer = [AVExponentialTimer exponentialTimerWithInitialTime:AVBackoffInitialTime
                                                                 maxTime:AVBackoffMaximumTime];
@@ -76,22 +76,22 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
     [_connection addDelegate:self];
 }
 
-#pragma mark - AVIMConnectionDelegate
+#pragma mark - AVConnectionDelegate
 
-- (void)connectionDidOpen:(AVIMConnection *)connection {
+- (void)connectionDidOpen:(AVConnection *)connection {
     [self keepAlive];
 }
 
-- (void)connection:(AVIMConnection *)connection didReceiveCommand:(AVIMGenericCommand *)command {
+- (void)connection:(AVConnection *)connection didReceiveCommand:(AVIMGenericCommand *)command {
     [self processCommand:command];
 }
 
-- (void)connection:(AVIMConnection *)connection didReceiveError:(NSError *)error {
+- (void)connection:(AVConnection *)connection didReceiveError:(NSError *)error {
     self.alive = NO;
     [self keepAlive];
 }
 
-- (void)connection:(AVIMConnection *)connection didCloseWithError:(NSError *)error {
+- (void)connection:(AVConnection *)connection didCloseWithError:(NSError *)error {
     self.alive = NO;
     [self keepAlive];
 }

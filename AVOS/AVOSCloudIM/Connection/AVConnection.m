@@ -1,26 +1,26 @@
 //
-//  AVIMConnection.m
+//  AVConnection.m
 //  AVOS
 //
 //  Created by Tang Tianyong on 09/06/2017.
 //  Copyright © 2017 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMConnection.h"
+#import "AVConnection.h"
 #import "AVMethodDispatcher.h"
 
-@implementation AVIMConnectionConfiguration
+@implementation AVConnectionConfiguration
 
 @end
 
-@interface AVIMConnection ()
+@interface AVConnection ()
 
-@property (nonatomic,   copy) AVIMConnectionConfiguration *configuration;
+@property (nonatomic,   copy) AVConnectionConfiguration *configuration;
 @property (nonatomic, strong) NSHashTable *delegates;
 
 @end
 
-@implementation AVIMConnection
+@implementation AVConnection
 
 - (instancetype)init {
     self = [super init];
@@ -32,7 +32,7 @@
     return self;
 }
 
-- (instancetype)initWithConfiguration:(AVIMConnectionConfiguration *)configuration {
+- (instancetype)initWithConfiguration:(AVConnectionConfiguration *)configuration {
     self = [self init];
 
     if (self) {
@@ -46,13 +46,13 @@
     _delegates = [NSHashTable weakObjectsHashTable];
 }
 
-- (void)addDelegate:(id<AVIMConnectionDelegate>)delegate {
+- (void)addDelegate:(id<AVConnectionDelegate>)delegate {
     @synchronized(_delegates) {
         [_delegates addObject:delegate];
     }
 }
 
-- (void)removeDelegate:(id<AVIMConnectionDelegate>)delegate {
+- (void)removeDelegate:(id<AVConnectionDelegate>)delegate {
     @synchronized(_delegates) {
         [_delegates removeObject:delegate];
     }
