@@ -47,19 +47,27 @@
 }
 
 - (void)addDelegate:(id<AVIMConnectionDelegate>)delegate {
-    [_delegates addObject:delegate];
+    @synchronized(_delegates) {
+        [_delegates addObject:delegate];
+    }
 }
 
 - (void)removeDelegate:(id<AVIMConnectionDelegate>)delegate {
-    [_delegates removeObject:delegate];
+    @synchronized(_delegates) {
+        [_delegates removeObject:delegate];
+    }
 }
 
 - (void)callDelegateMethod:(SEL)selector
              withArguments:(id)argument1, ...
 {
+    NSArray *delegates = nil;
+
     /* NOTE: We convert the hash table to an array
              to avoid some quirks of hash table. */
-    NSArray *delegates = [self.delegates allObjects];
+    @synchronized(_delegates) {
+        delegates = [_delegates allObjects];
+    }
 
     if (!delegates.count)
         return;
