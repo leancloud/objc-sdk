@@ -16,9 +16,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "838CE3411EC980E000B24F5B"
-               BuildableName = "LiveQueryTests-macOS.xctest"
-               BlueprintName = "LiveQueryTests-macOS"
+               BlueprintIdentifier = "838CE3221EC97E6E00B24F5B"
+               BuildableName = "LiveQueryTests_iOS.xctest"
+               BlueprintName = "LiveQueryTests_iOS"
                ReferencedContainer = "container:AVOS.xcodeproj">
             </BuildableReference>
          </TestableReference>

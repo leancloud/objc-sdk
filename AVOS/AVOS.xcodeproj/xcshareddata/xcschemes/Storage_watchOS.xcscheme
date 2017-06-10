@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "83C7D3F21EEC4E4700AD7EDE"
-               BuildableName = "AVOSCloudConnection.framework"
-               BlueprintName = "Connection-iOS"
+               BlueprintIdentifier = "8320F87A1C1918C60024B45E"
+               BuildableName = "AVOSCloud.framework"
+               BlueprintName = "Storage_watchOS"
                ReferencedContainer = "container:AVOS.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "83C7D3F21EEC4E4700AD7EDE"
-            BuildableName = "AVOSCloudConnection.framework"
-            BlueprintName = "Connection-iOS"
+            BlueprintIdentifier = "8320F87A1C1918C60024B45E"
+            BuildableName = "AVOSCloud.framework"
+            BlueprintName = "Storage_watchOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,9 +63,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "83C7D3F21EEC4E4700AD7EDE"
-            BuildableName = "AVOSCloudConnection.framework"
-            BlueprintName = "Connection-iOS"
+            BlueprintIdentifier = "8320F87A1C1918C60024B45E"
+            BuildableName = "AVOSCloud.framework"
+            BlueprintName = "Storage_watchOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
