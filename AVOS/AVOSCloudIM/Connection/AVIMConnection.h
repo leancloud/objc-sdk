@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ A protocol for handling connection events.
+ */
 @protocol AVIMConnectionDelegate <NSObject>
 
 @end
