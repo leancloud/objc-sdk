@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "83C7D3F21EEC4E4700AD7EDE"
-               BuildableName = "Connection.framework"
+               BuildableName = "AVOSCloudConnection.framework"
                BlueprintName = "Connection"
                ReferencedContainer = "container:AVOS.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "83C7D3F21EEC4E4700AD7EDE"
-            BuildableName = "Connection.framework"
+            BuildableName = "AVOSCloudConnection.framework"
             BlueprintName = "Connection"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
@@ -65,7 +65,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "83C7D3F21EEC4E4700AD7EDE"
-            BuildableName = "Connection.framework"
+            BuildableName = "AVOSCloudConnection.framework"
             BlueprintName = "Connection"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
@@ -83,7 +83,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "83C7D3F21EEC4E4700AD7EDE"
-            BuildableName = "Connection.framework"
+            BuildableName = "AVOSCloudConnection.framework"
             BlueprintName = "Connection"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
