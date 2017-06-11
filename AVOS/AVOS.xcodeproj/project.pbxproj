@@ -25,7 +25,7 @@
 		7047179A1B4A60CC00F6ADDC /* AVIMClientTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 704717991B4A60CC00F6ADDC /* AVIMClientTest.m */; };
 		7047179C1B4A60E100F6ADDC /* AVIMMessageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7047179B1B4A60E100F6ADDC /* AVIMMessageTest.m */; };
 		704717A51B4A620900F6ADDC /* AVIMTestBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 704717A41B4A620900F6ADDC /* AVIMTestBase.m */; };
-		704F3B781BE0D0180033245C /* IM_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 704F3B6E1BE0D0180033245C /* IM_macOS.framework */; };
+		704F3B781BE0D0180033245C /* Message_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 704F3B6E1BE0D0180033245C /* Message_macOS.framework */; };
 		704F3B851BE0D05C0033245C /* AVIMClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841BCD1A5A84C600C5C6C4 /* AVIMClient.m */; };
 		704F3B861BE0D05C0033245C /* AVIMCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841BCF1A5A84C600C5C6C4 /* AVIMCommon.m */; };
 		704F3B871BE0D05C0033245C /* AVIMConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841BD21A5A84C600C5C6C4 /* AVIMConversation.m */; };
@@ -895,7 +895,7 @@
 		8C630C821A6EB259008F1B00 /* AVIMErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C630C801A6EB259008F1B00 /* AVIMErrorUtil.m */; };
 		8C84198C1A5A791300C5C6C4 /* AVOSCloud.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C84198B1A5A791300C5C6C4 /* AVOSCloud.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C8419C81A5A796000C5C6C4 /* AVOSCloudIM.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419C71A5A796000C5C6C4 /* AVOSCloudIM.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8C8419CE1A5A796000C5C6C4 /* IM_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8419C31A5A796000C5C6C4 /* IM_iOS.framework */; };
+		8C8419CE1A5A796000C5C6C4 /* Message_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8419C31A5A796000C5C6C4 /* Message_iOS.framework */; };
 		8C841AAD1A5A7A0000C5C6C4 /* AVACL.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419DD1A5A79FF00C5C6C4 /* AVACL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C841AAE1A5A7A0000C5C6C4 /* AVACL.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419DE1A5A79FF00C5C6C4 /* AVACL.m */; };
 		8C841AAF1A5A7A0000C5C6C4 /* AVACL_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419DF1A5A79FF00C5C6C4 /* AVACL_Internal.h */; };
@@ -1329,8 +1329,8 @@
 		7047179B1B4A60E100F6ADDC /* AVIMMessageTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMMessageTest.m; sourceTree = "<group>"; };
 		704717A31B4A620900F6ADDC /* AVIMTestBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMTestBase.h; sourceTree = "<group>"; };
 		704717A41B4A620900F6ADDC /* AVIMTestBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMTestBase.m; sourceTree = "<group>"; };
-		704F3B6E1BE0D0180033245C /* IM_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = IM_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		704F3B771BE0D0180033245C /* IMTests_macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IMTests_macOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		704F3B6E1BE0D0180033245C /* Message_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Message_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		704F3B771BE0D0180033245C /* MessageTests_macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MessageTests_macOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		704F8DAD1BF49292007CB560 /* AVUtilsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVUtilsTest.m; sourceTree = "<group>"; };
 		705A38991BDF605C00864B72 /* AVPersistentUtilsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVPersistentUtilsTest.m; sourceTree = "<group>"; };
 		705EEF5F1BD8C4E600A29083 /* AVCustomUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCustomUser.h; sourceTree = "<group>"; };
@@ -1536,9 +1536,9 @@
 		8C8419861A5A791300C5C6C4 /* Storage_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Storage_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C84198B1A5A791300C5C6C4 /* AVOSCloud.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloud.h; sourceTree = "<group>"; };
 		8C8419911A5A791300C5C6C4 /* StorageTests_iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StorageTests_iOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		8C8419C31A5A796000C5C6C4 /* IM_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = IM_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C8419C31A5A796000C5C6C4 /* Message_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Message_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C8419C71A5A796000C5C6C4 /* AVOSCloudIM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloudIM.h; sourceTree = "<group>"; };
-		8C8419CD1A5A796000C5C6C4 /* IMTests_iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IMTests_iOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C8419CD1A5A796000C5C6C4 /* MessageTests_iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MessageTests_iOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C8419D31A5A796000C5C6C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C8419DD1A5A79FF00C5C6C4 /* AVACL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVACL.h; sourceTree = "<group>"; };
 		8C8419DE1A5A79FF00C5C6C4 /* AVACL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVACL.m; sourceTree = "<group>"; };
@@ -1826,7 +1826,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7085D52D1BEA245600449DC1 /* Storage_macOS.framework in Frameworks */,
-				704F3B781BE0D0180033245C /* IM_macOS.framework in Frameworks */,
+				704F3B781BE0D0180033245C /* Message_macOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1938,7 +1938,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				707352781B4A8E08005466CE /* Storage_iOS.framework in Frameworks */,
-				8C8419CE1A5A796000C5C6C4 /* IM_iOS.framework in Frameworks */,
+				8C8419CE1A5A796000C5C6C4 /* Message_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2351,8 +2351,8 @@
 				8C8419951A5A791300C5C6C4 /* StorageTests */,
 				83C7D3F41EEC4E4700AD7EDE /* Connection */,
 				83C7D3FF1EEC4E4700AD7EDE /* ConnectionTests */,
-				8C8419C41A5A796000C5C6C4 /* IM */,
-				8C8419D11A5A796000C5C6C4 /* IMTests */,
+				8C8419C41A5A796000C5C6C4 /* Message */,
+				8C8419D11A5A796000C5C6C4 /* MessageTests */,
 				838CE31C1EC97E6E00B24F5B /* LiveQuery */,
 				838CE3271EC97E6F00B24F5B /* LiveQueryTests */,
 				8C255D271AE9F817008A6FFC /* CrashReporting */,
@@ -2368,13 +2368,13 @@
 			children = (
 				8C8419861A5A791300C5C6C4 /* Storage_iOS.framework */,
 				8C8419911A5A791300C5C6C4 /* StorageTests_iOS.xctest */,
-				8C8419C31A5A796000C5C6C4 /* IM_iOS.framework */,
-				8C8419CD1A5A796000C5C6C4 /* IMTests_iOS.xctest */,
+				8C8419C31A5A796000C5C6C4 /* Message_iOS.framework */,
+				8C8419CD1A5A796000C5C6C4 /* MessageTests_iOS.xctest */,
 				8C255D261AE9F815008A6FFC /* CrashReporting_iOS.framework */,
 				70CA7F681BDE2DC3000A3B21 /* Storage_macOS.framework */,
 				70F315321BDE503B00D691B3 /* StorageTests_macOS.xctest */,
-				704F3B6E1BE0D0180033245C /* IM_macOS.framework */,
-				704F3B771BE0D0180033245C /* IMTests_macOS.xctest */,
+				704F3B6E1BE0D0180033245C /* Message_macOS.framework */,
+				704F3B771BE0D0180033245C /* MessageTests_macOS.xctest */,
 				83D8CF551C17DAF50094279D /* Storage_tvOS.framework */,
 				8320F95C1C1918C60024B45E /* Storage_watchOS.framework */,
 				838CE31B1EC97E6E00B24F5B /* LiveQuery_iOS.framework */,
@@ -2433,7 +2433,7 @@
 			path = StorageTests;
 			sourceTree = "<group>";
 		};
-		8C8419C41A5A796000C5C6C4 /* IM */ = {
+		8C8419C41A5A796000C5C6C4 /* Message */ = {
 			isa = PBXGroup;
 			children = (
 				8C8419C71A5A796000C5C6C4 /* AVOSCloudIM.h */,
@@ -2480,10 +2480,10 @@
 				8C841C041A5A84C600C5C6C4 /* Connection */,
 				83C7D3EA1EEC4A5C00AD7EDE /* Info.plist */,
 			);
-			path = IM;
+			path = Message;
 			sourceTree = "<group>";
 		};
-		8C8419D11A5A796000C5C6C4 /* IMTests */ = {
+		8C8419D11A5A796000C5C6C4 /* MessageTests */ = {
 			isa = PBXGroup;
 			children = (
 				70DA62491B4BD7D100D95D4D /* testAudio.mp3 */,
@@ -2497,7 +2497,7 @@
 				7047179B1B4A60E100F6ADDC /* AVIMMessageTest.m */,
 				8C8419D31A5A796000C5C6C4 /* Info.plist */,
 			);
-			path = IMTests;
+			path = MessageTests;
 			sourceTree = "<group>";
 		};
 		8C8419DC1A5A79FF00C5C6C4 /* ACL */ = {
@@ -3727,9 +3727,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		704F3B6D1BE0D0180033245C /* IM_macOS */ = {
+		704F3B6D1BE0D0180033245C /* Message_macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 704F3B831BE0D0180033245C /* Build configuration list for PBXNativeTarget "IM_macOS" */;
+			buildConfigurationList = 704F3B831BE0D0180033245C /* Build configuration list for PBXNativeTarget "Message_macOS" */;
 			buildPhases = (
 				704F3B691BE0D0180033245C /* Sources */,
 				704F3B6A1BE0D0180033245C /* Frameworks */,
@@ -3741,14 +3741,14 @@
 			dependencies = (
 				704F3C041BE0D5170033245C /* PBXTargetDependency */,
 			);
-			name = IM_macOS;
+			name = Message_macOS;
 			productName = AVOSCloudIM;
-			productReference = 704F3B6E1BE0D0180033245C /* IM_macOS.framework */;
+			productReference = 704F3B6E1BE0D0180033245C /* Message_macOS.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		704F3B761BE0D0180033245C /* IMTests_macOS */ = {
+		704F3B761BE0D0180033245C /* MessageTests_macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 704F3B841BE0D0180033245C /* Build configuration list for PBXNativeTarget "IMTests_macOS" */;
+			buildConfigurationList = 704F3B841BE0D0180033245C /* Build configuration list for PBXNativeTarget "MessageTests_macOS" */;
 			buildPhases = (
 				704F3B731BE0D0180033245C /* Sources */,
 				704F3B741BE0D0180033245C /* Frameworks */,
@@ -3760,9 +3760,9 @@
 				7085D52C1BEA244900449DC1 /* PBXTargetDependency */,
 				704F3B7A1BE0D0180033245C /* PBXTargetDependency */,
 			);
-			name = IMTests_macOS;
+			name = MessageTests_macOS;
 			productName = "AVOSCloudIM-OSXTests";
-			productReference = 704F3B771BE0D0180033245C /* IMTests_macOS.xctest */;
+			productReference = 704F3B771BE0D0180033245C /* MessageTests_macOS.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		70CA7F671BDE2DC3000A3B21 /* Storage_macOS */ = {
@@ -3999,9 +3999,9 @@
 			productReference = 8C8419911A5A791300C5C6C4 /* StorageTests_iOS.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		8C8419C21A5A796000C5C6C4 /* IM_iOS */ = {
+		8C8419C21A5A796000C5C6C4 /* Message_iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8C8419D61A5A796000C5C6C4 /* Build configuration list for PBXNativeTarget "IM_iOS" */;
+			buildConfigurationList = 8C8419D61A5A796000C5C6C4 /* Build configuration list for PBXNativeTarget "Message_iOS" */;
 			buildPhases = (
 				8C8419BE1A5A796000C5C6C4 /* Sources */,
 				8C8419BF1A5A796000C5C6C4 /* Frameworks */,
@@ -4012,14 +4012,14 @@
 			);
 			dependencies = (
 			);
-			name = IM_iOS;
+			name = Message_iOS;
 			productName = AVOSCloudIM;
-			productReference = 8C8419C31A5A796000C5C6C4 /* IM_iOS.framework */;
+			productReference = 8C8419C31A5A796000C5C6C4 /* Message_iOS.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		8C8419CC1A5A796000C5C6C4 /* IMTests_iOS */ = {
+		8C8419CC1A5A796000C5C6C4 /* MessageTests_iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8C8419D91A5A796000C5C6C4 /* Build configuration list for PBXNativeTarget "IMTests_iOS" */;
+			buildConfigurationList = 8C8419D91A5A796000C5C6C4 /* Build configuration list for PBXNativeTarget "MessageTests_iOS" */;
 			buildPhases = (
 				8C8419C91A5A796000C5C6C4 /* Sources */,
 				8C8419CA1A5A796000C5C6C4 /* Frameworks */,
@@ -4031,9 +4031,9 @@
 				704717A71B4A626800F6ADDC /* PBXTargetDependency */,
 				8C8419D01A5A796000C5C6C4 /* PBXTargetDependency */,
 			);
-			name = IMTests_iOS;
+			name = MessageTests_iOS;
 			productName = AVOSCloudIMTests;
-			productReference = 8C8419CD1A5A796000C5C6C4 /* IMTests_iOS.xctest */;
+			productReference = 8C8419CD1A5A796000C5C6C4 /* MessageTests_iOS.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -4109,10 +4109,10 @@
 				8320F87A1C1918C60024B45E /* Storage_watchOS */,
 				83C7D3F21EEC4E4700AD7EDE /* Connection_iOS */,
 				83C7D3FA1EEC4E4700AD7EDE /* ConnectionTests_iOS */,
-				8C8419C21A5A796000C5C6C4 /* IM_iOS */,
-				8C8419CC1A5A796000C5C6C4 /* IMTests_iOS */,
-				704F3B6D1BE0D0180033245C /* IM_macOS */,
-				704F3B761BE0D0180033245C /* IMTests_macOS */,
+				8C8419C21A5A796000C5C6C4 /* Message_iOS */,
+				8C8419CC1A5A796000C5C6C4 /* MessageTests_iOS */,
+				704F3B6D1BE0D0180033245C /* Message_macOS */,
+				704F3B761BE0D0180033245C /* MessageTests_macOS */,
 				838CE31A1EC97E6E00B24F5B /* LiveQuery_iOS */,
 				838CE3221EC97E6E00B24F5B /* LiveQueryTests_iOS */,
 				838CE3361EC980DE00B24F5B /* LiveQuery_macOS */,
@@ -4934,7 +4934,7 @@
 		};
 		704F3B7A1BE0D0180033245C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 704F3B6D1BE0D0180033245C /* IM_macOS */;
+			target = 704F3B6D1BE0D0180033245C /* Message_macOS */;
 			targetProxy = 704F3B791BE0D0180033245C /* PBXContainerItemProxy */;
 		};
 		704F3C041BE0D5170033245C /* PBXTargetDependency */ = {
@@ -4974,7 +4974,7 @@
 		};
 		8C8419D01A5A796000C5C6C4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8C8419C21A5A796000C5C6C4 /* IM_iOS */;
+			target = 8C8419C21A5A796000C5C6C4 /* Message_iOS */;
 			targetProxy = 8C8419CF1A5A796000C5C6C4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -7031,7 +7031,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		704F3B831BE0D0180033245C /* Build configuration list for PBXNativeTarget "IM_macOS" */ = {
+		704F3B831BE0D0180033245C /* Build configuration list for PBXNativeTarget "Message_macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				704F3B7F1BE0D0180033245C /* Debug */,
@@ -7040,7 +7040,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		704F3B841BE0D0180033245C /* Build configuration list for PBXNativeTarget "IMTests_macOS" */ = {
+		704F3B841BE0D0180033245C /* Build configuration list for PBXNativeTarget "MessageTests_macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				704F3B811BE0D0180033245C /* Debug */,
@@ -7175,7 +7175,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8C8419D61A5A796000C5C6C4 /* Build configuration list for PBXNativeTarget "IM_iOS" */ = {
+		8C8419D61A5A796000C5C6C4 /* Build configuration list for PBXNativeTarget "Message_iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8C8419D71A5A796000C5C6C4 /* Debug */,
@@ -7184,7 +7184,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8C8419D91A5A796000C5C6C4 /* Build configuration list for PBXNativeTarget "IMTests_iOS" */ = {
+		8C8419D91A5A796000C5C6C4 /* Build configuration list for PBXNativeTarget "MessageTests_iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8C8419DA1A5A796000C5C6C4 /* Debug */,

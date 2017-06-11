@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8C8419C21A5A796000C5C6C4"
-               BuildableName = "IM_iOS.framework"
-               BlueprintName = "IM_iOS"
+               BlueprintIdentifier = "704F3B6D1BE0D0180033245C"
+               BuildableName = "Message_macOS.framework"
+               BlueprintName = "Message_macOS"
                ReferencedContainer = "container:AVOS.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8C8419C21A5A796000C5C6C4"
-            BuildableName = "IM_iOS.framework"
-            BlueprintName = "IM_iOS"
+            BlueprintIdentifier = "704F3B6D1BE0D0180033245C"
+            BuildableName = "Message_macOS.framework"
+            BlueprintName = "Message_macOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,9 +63,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8C8419C21A5A796000C5C6C4"
-            BuildableName = "IM_iOS.framework"
-            BlueprintName = "IM_iOS"
+            BlueprintIdentifier = "704F3B6D1BE0D0180033245C"
+            BuildableName = "Message_macOS.framework"
+            BlueprintName = "Message_macOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
