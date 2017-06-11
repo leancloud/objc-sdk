@@ -517,6 +517,19 @@
 		833391411EE91AC200D46D5C /* AVMethodDispatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 833391391EE91AC100D46D5C /* AVMethodDispatcher.m */; };
 		833E1F631B69F629002A691C /* AVIMFileMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 833E1F611B69F629002A691C /* AVIMFileMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		833E1F641B69F629002A691C /* AVIMFileMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 833E1F621B69F629002A691C /* AVIMFileMessage.m */; };
+		83435FAB1EEDB03500F10A07 /* LCHTTPSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 83435F9E1EEDAFEE00F10A07 /* LCHTTPSessionManager.h */; };
+		83435FAC1EEDB03500F10A07 /* LCHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 83435F9F1EEDAFEE00F10A07 /* LCHTTPSessionManager.m */; };
+		83435FAD1EEDB03500F10A07 /* LCNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 83435FA01EEDAFEE00F10A07 /* LCNetworking.h */; };
+		83435FAE1EEDB03500F10A07 /* LCNetworkReachabilityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 83435FA11EEDAFEE00F10A07 /* LCNetworkReachabilityManager.h */; };
+		83435FAF1EEDB03500F10A07 /* LCNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 83435FA21EEDAFEE00F10A07 /* LCNetworkReachabilityManager.m */; };
+		83435FB01EEDB03500F10A07 /* LCSecurityPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = 83435FA31EEDAFEE00F10A07 /* LCSecurityPolicy.h */; };
+		83435FB11EEDB03500F10A07 /* LCSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 83435FA41EEDAFEE00F10A07 /* LCSecurityPolicy.m */; };
+		83435FB21EEDB03500F10A07 /* LCURLRequestSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 83435FA51EEDAFEE00F10A07 /* LCURLRequestSerialization.h */; };
+		83435FB31EEDB03500F10A07 /* LCURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 83435FA61EEDAFEE00F10A07 /* LCURLRequestSerialization.m */; };
+		83435FB41EEDB03500F10A07 /* LCURLResponseSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 83435FA71EEDAFEE00F10A07 /* LCURLResponseSerialization.h */; };
+		83435FB51EEDB03500F10A07 /* LCURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 83435FA81EEDAFEE00F10A07 /* LCURLResponseSerialization.m */; };
+		83435FB61EEDB03500F10A07 /* LCURLSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 83435FA91EEDAFEE00F10A07 /* LCURLSessionManager.h */; };
+		83435FB71EEDB03500F10A07 /* LCURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 83435FAA1EEDAFEE00F10A07 /* LCURLSessionManager.m */; };
 		834775DC1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 834775DB1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h */; };
 		834A54831ECAF3A0006C8F4B /* AVSubscriber.h in Headers */ = {isa = PBXBuildFile; fileRef = 834A54811ECAF3A0006C8F4B /* AVSubscriber.h */; };
 		834A54841ECAF3A0006C8F4B /* AVSubscriber.h in Headers */ = {isa = PBXBuildFile; fileRef = 834A54811ECAF3A0006C8F4B /* AVSubscriber.h */; };
@@ -1390,6 +1403,19 @@
 		833E1F611B69F629002A691C /* AVIMFileMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMFileMessage.h; sourceTree = "<group>"; };
 		833E1F621B69F629002A691C /* AVIMFileMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMFileMessage.m; sourceTree = "<group>"; };
 		83435F801EEDAABA00F10A07 /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
+		83435F9E1EEDAFEE00F10A07 /* LCHTTPSessionManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCHTTPSessionManager.h; sourceTree = "<group>"; };
+		83435F9F1EEDAFEE00F10A07 /* LCHTTPSessionManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCHTTPSessionManager.m; sourceTree = "<group>"; };
+		83435FA01EEDAFEE00F10A07 /* LCNetworking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCNetworking.h; sourceTree = "<group>"; };
+		83435FA11EEDAFEE00F10A07 /* LCNetworkReachabilityManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCNetworkReachabilityManager.h; sourceTree = "<group>"; };
+		83435FA21EEDAFEE00F10A07 /* LCNetworkReachabilityManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCNetworkReachabilityManager.m; sourceTree = "<group>"; };
+		83435FA31EEDAFEE00F10A07 /* LCSecurityPolicy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCSecurityPolicy.h; sourceTree = "<group>"; };
+		83435FA41EEDAFEE00F10A07 /* LCSecurityPolicy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCSecurityPolicy.m; sourceTree = "<group>"; };
+		83435FA51EEDAFEE00F10A07 /* LCURLRequestSerialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCURLRequestSerialization.h; sourceTree = "<group>"; };
+		83435FA61EEDAFEE00F10A07 /* LCURLRequestSerialization.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCURLRequestSerialization.m; sourceTree = "<group>"; };
+		83435FA71EEDAFEE00F10A07 /* LCURLResponseSerialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCURLResponseSerialization.h; sourceTree = "<group>"; };
+		83435FA81EEDAFEE00F10A07 /* LCURLResponseSerialization.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCURLResponseSerialization.m; sourceTree = "<group>"; };
+		83435FA91EEDAFEE00F10A07 /* LCURLSessionManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCURLSessionManager.h; sourceTree = "<group>"; };
+		83435FAA1EEDAFEE00F10A07 /* LCURLSessionManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCURLSessionManager.m; sourceTree = "<group>"; };
 		834775DB1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMKeyedConversation_internal.h; sourceTree = "<group>"; };
 		834A54811ECAF3A0006C8F4B /* AVSubscriber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVSubscriber.h; sourceTree = "<group>"; };
 		834A54821ECAF3A0006C8F4B /* AVSubscriber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVSubscriber.m; sourceTree = "<group>"; };
@@ -2011,6 +2037,34 @@
 			path = Supporting;
 			sourceTree = "<group>";
 		};
+		83435F9C1EEDAF9E00F10A07 /* ThirdParty */ = {
+			isa = PBXGroup;
+			children = (
+				83435F9D1EEDAFEE00F10A07 /* AFNetworking */,
+			);
+			path = ThirdParty;
+			sourceTree = "<group>";
+		};
+		83435F9D1EEDAFEE00F10A07 /* AFNetworking */ = {
+			isa = PBXGroup;
+			children = (
+				83435F9E1EEDAFEE00F10A07 /* LCHTTPSessionManager.h */,
+				83435F9F1EEDAFEE00F10A07 /* LCHTTPSessionManager.m */,
+				83435FA01EEDAFEE00F10A07 /* LCNetworking.h */,
+				83435FA11EEDAFEE00F10A07 /* LCNetworkReachabilityManager.h */,
+				83435FA21EEDAFEE00F10A07 /* LCNetworkReachabilityManager.m */,
+				83435FA31EEDAFEE00F10A07 /* LCSecurityPolicy.h */,
+				83435FA41EEDAFEE00F10A07 /* LCSecurityPolicy.m */,
+				83435FA51EEDAFEE00F10A07 /* LCURLRequestSerialization.h */,
+				83435FA61EEDAFEE00F10A07 /* LCURLRequestSerialization.m */,
+				83435FA71EEDAFEE00F10A07 /* LCURLResponseSerialization.h */,
+				83435FA81EEDAFEE00F10A07 /* LCURLResponseSerialization.m */,
+				83435FA91EEDAFEE00F10A07 /* LCURLSessionManager.h */,
+				83435FAA1EEDAFEE00F10A07 /* LCURLSessionManager.m */,
+			);
+			path = AFNetworking;
+			sourceTree = "<group>";
+		};
 		835091FA1EB1BD90000DA884 /* SMS */ = {
 			isa = PBXGroup;
 			children = (
@@ -2338,6 +2392,7 @@
 		83F599C91EED0F610013AF6B /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
+				83435F9C1EEDAF9E00F10A07 /* ThirdParty */,
 				83F599CA1EED0F610013AF6B /* AVOSCloudFoundation.h */,
 				83F599CB1EED0F610013AF6B /* Info.plist */,
 			);
@@ -3542,7 +3597,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83435FB21EEDB03500F10A07 /* LCURLRequestSerialization.h in Headers */,
+				83435FB41EEDB03500F10A07 /* LCURLResponseSerialization.h in Headers */,
+				83435FAD1EEDB03500F10A07 /* LCNetworking.h in Headers */,
+				83435FAE1EEDB03500F10A07 /* LCNetworkReachabilityManager.h in Headers */,
+				83435FB61EEDB03500F10A07 /* LCURLSessionManager.h in Headers */,
+				83435FAB1EEDB03500F10A07 /* LCHTTPSessionManager.h in Headers */,
 				83F599CC1EED0F610013AF6B /* AVOSCloudFoundation.h in Headers */,
+				83435FB01EEDB03500F10A07 /* LCSecurityPolicy.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4832,6 +4894,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83435FAF1EEDB03500F10A07 /* LCNetworkReachabilityManager.m in Sources */,
+				83435FB51EEDB03500F10A07 /* LCURLResponseSerialization.m in Sources */,
+				83435FAC1EEDB03500F10A07 /* LCHTTPSessionManager.m in Sources */,
+				83435FB71EEDB03500F10A07 /* LCURLSessionManager.m in Sources */,
+				83435FB11EEDB03500F10A07 /* LCSecurityPolicy.m in Sources */,
+				83435FB31EEDB03500F10A07 /* LCURLRequestSerialization.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
