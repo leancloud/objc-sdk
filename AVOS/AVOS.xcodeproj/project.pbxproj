@@ -25,7 +25,7 @@
 		7047179A1B4A60CC00F6ADDC /* AVIMClientTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 704717991B4A60CC00F6ADDC /* AVIMClientTest.m */; };
 		7047179C1B4A60E100F6ADDC /* AVIMMessageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7047179B1B4A60E100F6ADDC /* AVIMMessageTest.m */; };
 		704717A51B4A620900F6ADDC /* AVIMTestBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 704717A41B4A620900F6ADDC /* AVIMTestBase.m */; };
-		704F3B781BE0D0180033245C /* Message_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 704F3B6E1BE0D0180033245C /* Message_macOS.framework */; };
+		704F3B781BE0D0180033245C /* Message.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 704F3B6E1BE0D0180033245C /* Message.framework */; };
 		704F3B851BE0D05C0033245C /* AVIMClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841BCD1A5A84C600C5C6C4 /* AVIMClient.m */; };
 		704F3B861BE0D05C0033245C /* AVIMCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841BCF1A5A84C600C5C6C4 /* AVIMCommon.m */; };
 		704F3B871BE0D05C0033245C /* AVIMConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841BD21A5A84C600C5C6C4 /* AVIMConversation.m */; };
@@ -101,7 +101,7 @@
 		704F3BFB1BE0D0830033245C /* AVIMBlockHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841C001A5A84C600C5C6C4 /* AVIMBlockHelper.h */; };
 		704F3BFC1BE0D0830033245C /* AVIMRuntimeHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841C021A5A84C600C5C6C4 /* AVIMRuntimeHelper.h */; };
 		704F3BFD1BE0D0830033245C /* AVIMErrorUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C630C7F1A6EB259008F1B00 /* AVIMErrorUtil.h */; };
-		704F3C051BE0D5400033245C /* Storage_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7F681BDE2DC3000A3B21 /* Storage_macOS.framework */; };
+		704F3C051BE0D5400033245C /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7F681BDE2DC3000A3B21 /* Storage.framework */; };
 		704F3C061BE0D5650033245C /* avmp.c in Sources */ = {isa = PBXBuildFile; fileRef = 8C895DC61A78A5D900992A8F /* avmp.c */; };
 		704F3C071BE0D5F50033245C /* AVIMTestBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 704717A41B4A620900F6ADDC /* AVIMTestBase.m */; };
 		704F3C081BE0D5F50033245C /* AVIMCustomMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 70DA624C1B4BDC8300D95D4D /* AVIMCustomMessage.m */; };
@@ -119,11 +119,11 @@
 		7068A7231BA3614D0004623A /* AVRequestManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7068A7211BA3614D0004623A /* AVRequestManager.h */; };
 		7068A7241BA3614D0004623A /* AVRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7068A7221BA3614D0004623A /* AVRequestManager.m */; };
 		706F85A11B82E4E00079CC55 /* AVOSCloudTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 706F85A01B82E4E00079CC55 /* AVOSCloudTest.m */; };
-		707352781B4A8E08005466CE /* Storage_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8419861A5A791300C5C6C4 /* Storage_iOS.framework */; };
+		707352781B4A8E08005466CE /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8419861A5A791300C5C6C4 /* Storage.framework */; };
 		7085D5241BEA237A00449DC1 /* AVTestUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA86661A77817B00864211 /* AVTestUtil.m */; };
-		7085D52D1BEA245600449DC1 /* Storage_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7F681BDE2DC3000A3B21 /* Storage_macOS.framework */; };
+		7085D52D1BEA245600449DC1 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7F681BDE2DC3000A3B21 /* Storage.framework */; };
 		708F554D1B86121A0071CA48 /* TestDescriptionKey.json in Resources */ = {isa = PBXBuildFile; fileRef = 708F554C1B86121A0071CA48 /* TestDescriptionKey.json */; };
-		70AACA931B4A74A5007C5FFD /* Storage_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8419861A5A791300C5C6C4 /* Storage_iOS.framework */; };
+		70AACA931B4A74A5007C5FFD /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8419861A5A791300C5C6C4 /* Storage.framework */; };
 		70AF993D1BE1D0FA0091F46F /* AVCustomUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 705EEF601BD8C4E600A29083 /* AVCustomUser.m */; };
 		70B05B3A1B909BD3009F6696 /* TestSaveAll.json in Resources */ = {isa = PBXBuildFile; fileRef = 70B05B391B909BD3009F6696 /* TestSaveAll.json */; };
 		70BA7A691BE2041200C3EB70 /* AVKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 836705DD1BA1C1710050E968 /* AVKeychain.m */; };
@@ -300,7 +300,7 @@
 		70F315521BDE510D00D691B3 /* UserBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEEABC21ABC179300B9E757 /* UserBar.m */; };
 		70F315531BDE510D00D691B3 /* UserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEEABC41ABC179300B9E757 /* UserInfo.m */; };
 		70F315541BDE510D00D691B3 /* XCTestCase+AsyncTesting.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA865C1A777A7900864211 /* XCTestCase+AsyncTesting.m */; };
-		70FD6DF11BE07C8A00897138 /* Storage_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7F681BDE2DC3000A3B21 /* Storage_macOS.framework */; };
+		70FD6DF11BE07C8A00897138 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7F681BDE2DC3000A3B21 /* Storage.framework */; };
 		8302AED51C192A0700E13F8A /* LCURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 8302AED31C192A0600E13F8A /* LCURLConnection.h */; };
 		8302AED71C192A0700E13F8A /* LCURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 8302AED31C192A0600E13F8A /* LCURLConnection.h */; };
 		8302AED81C192A0700E13F8A /* LCURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 8302AED31C192A0600E13F8A /* LCURLConnection.h */; };
@@ -547,12 +547,12 @@
 		838AF12A1AFE58F600B8965E /* LCIMMessageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 838AF1221AFE58F600B8965E /* LCIMMessageCache.h */; };
 		838AF12B1AFE58F600B8965E /* LCIMMessageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 838AF1231AFE58F600B8965E /* LCIMMessageCache.m */; };
 		838B32EE1CE1953800CAEBF8 /* LCRouterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 838B32ED1CE1953800CAEBF8 /* LCRouterTest.m */; };
-		838CE3241EC97E6F00B24F5B /* LiveQuery_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 838CE31B1EC97E6E00B24F5B /* LiveQuery_iOS.framework */; };
+		838CE3241EC97E6F00B24F5B /* LiveQuery.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 838CE31B1EC97E6E00B24F5B /* LiveQuery.framework */; };
 		838CE3291EC97E6F00B24F5B /* AVOSCloudLiveQueryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 838CE3281EC97E6F00B24F5B /* AVOSCloudLiveQueryTests.m */; };
 		838CE32B1EC97E6F00B24F5B /* AVOSCloudLiveQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 838CE31D1EC97E6E00B24F5B /* AVOSCloudLiveQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		838CE33A1EC980DE00B24F5B /* AVOSCloudLiveQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 838CE31D1EC97E6E00B24F5B /* AVOSCloudLiveQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		838CE3451EC980E000B24F5B /* AVOSCloudLiveQueryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 838CE3281EC97E6F00B24F5B /* AVOSCloudLiveQueryTests.m */; };
-		838CE3471EC980E000B24F5B /* LiveQuery_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 838CE31B1EC97E6E00B24F5B /* LiveQuery_iOS.framework */; };
+		838CE3471EC980E000B24F5B /* LiveQuery.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 838CE31B1EC97E6E00B24F5B /* LiveQuery.framework */; };
 		838CE3541EC9838500B24F5B /* AVLiveQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 838CE3521EC9838500B24F5B /* AVLiveQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		838CE3551EC9838500B24F5B /* AVLiveQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 838CE3521EC9838500B24F5B /* AVLiveQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		838CE3561EC9838500B24F5B /* AVLiveQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 838CE3531EC9838500B24F5B /* AVLiveQuery.m */; };
@@ -636,7 +636,7 @@
 		83BE730E1D810651008ED3CF /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BE730C1D810651008ED3CF /* metamacros.h */; };
 		83BE730F1D810651008ED3CF /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BE730C1D810651008ED3CF /* metamacros.h */; };
 		83BE73101D810651008ED3CF /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BE730C1D810651008ED3CF /* metamacros.h */; };
-		83C7D3FC1EEC4E4700AD7EDE /* Connection_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83C7D3F31EEC4E4700AD7EDE /* Connection_iOS.framework */; };
+		83C7D3FC1EEC4E4700AD7EDE /* Connection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83C7D3F31EEC4E4700AD7EDE /* Connection.framework */; };
 		83C7D4011EEC4E4700AD7EDE /* ConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C7D4001EEC4E4700AD7EDE /* ConnectionTests.m */; };
 		83C7D4681EEC535400AD7EDE /* LCSRWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 83C7D40C1EEC4F6F00AD7EDE /* LCSRWebSocket.h */; };
 		83C7D4691EEC535800AD7EDE /* LCSRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C7D40D1EEC4F6F00AD7EDE /* LCSRWebSocket.m */; };
@@ -895,7 +895,7 @@
 		8C630C821A6EB259008F1B00 /* AVIMErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C630C801A6EB259008F1B00 /* AVIMErrorUtil.m */; };
 		8C84198C1A5A791300C5C6C4 /* AVOSCloud.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C84198B1A5A791300C5C6C4 /* AVOSCloud.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C8419C81A5A796000C5C6C4 /* AVOSCloudIM.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419C71A5A796000C5C6C4 /* AVOSCloudIM.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8C8419CE1A5A796000C5C6C4 /* Message_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8419C31A5A796000C5C6C4 /* Message_iOS.framework */; };
+		8C8419CE1A5A796000C5C6C4 /* Message.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8419C31A5A796000C5C6C4 /* Message.framework */; };
 		8C841AAD1A5A7A0000C5C6C4 /* AVACL.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419DD1A5A79FF00C5C6C4 /* AVACL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C841AAE1A5A7A0000C5C6C4 /* AVACL.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419DE1A5A79FF00C5C6C4 /* AVACL.m */; };
 		8C841AAF1A5A7A0000C5C6C4 /* AVACL_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419DF1A5A79FF00C5C6C4 /* AVACL_Internal.h */; };
@@ -1329,7 +1329,7 @@
 		7047179B1B4A60E100F6ADDC /* AVIMMessageTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMMessageTest.m; sourceTree = "<group>"; };
 		704717A31B4A620900F6ADDC /* AVIMTestBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMTestBase.h; sourceTree = "<group>"; };
 		704717A41B4A620900F6ADDC /* AVIMTestBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMTestBase.m; sourceTree = "<group>"; };
-		704F3B6E1BE0D0180033245C /* Message_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Message_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		704F3B6E1BE0D0180033245C /* Message.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Message.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		704F3B771BE0D0180033245C /* MessageTests_macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MessageTests_macOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		704F8DAD1BF49292007CB560 /* AVUtilsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVUtilsTest.m; sourceTree = "<group>"; };
 		705A38991BDF605C00864B72 /* AVPersistentUtilsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVPersistentUtilsTest.m; sourceTree = "<group>"; };
@@ -1341,7 +1341,7 @@
 		708F554C1B86121A0071CA48 /* TestDescriptionKey.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestDescriptionKey.json; sourceTree = "<group>"; };
 		70B05B391B909BD3009F6696 /* TestSaveAll.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestSaveAll.json; sourceTree = "<group>"; };
 		70C288B01BB55E0300A4773C /* TestInstallationSave.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestInstallationSave.json; sourceTree = "<group>"; };
-		70CA7F681BDE2DC3000A3B21 /* Storage_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Storage_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		70CA7F681BDE2DC3000A3B21 /* Storage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Storage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		70DA62471B4BD21B00D95D4D /* testImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testImage.png; sourceTree = "<group>"; };
 		70DA62491B4BD7D100D95D4D /* testAudio.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = testAudio.mp3; sourceTree = "<group>"; };
 		70DA624B1B4BDC8300D95D4D /* AVIMCustomMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMCustomMessage.h; sourceTree = "<group>"; };
@@ -1365,7 +1365,7 @@
 		8311CD841C3D25B9007DEFF8 /* AVAvailability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVAvailability.h; sourceTree = "<group>"; };
 		831E29581D882CBB006E502B /* AVIMMessageOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMMessageOption.h; sourceTree = "<group>"; };
 		831E29591D882CBB006E502B /* AVIMMessageOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMMessageOption.m; sourceTree = "<group>"; };
-		8320F95C1C1918C60024B45E /* Storage_watchOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Storage_watchOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8320F95C1C1918C60024B45E /* Storage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Storage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		832677761EEC6B3200004C66 /* AVOSCloudConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloudConnection.h; sourceTree = "<group>"; };
 		83331D431EB9A25F00CADC9C /* AVCaptcha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCaptcha.h; sourceTree = "<group>"; };
 		83331D441EB9A25F00CADC9C /* AVCaptcha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVCaptcha.m; sourceTree = "<group>"; };
@@ -1395,11 +1395,11 @@
 		838AF1221AFE58F600B8965E /* LCIMMessageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageCache.h; sourceTree = "<group>"; };
 		838AF1231AFE58F600B8965E /* LCIMMessageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMMessageCache.m; sourceTree = "<group>"; };
 		838B32ED1CE1953800CAEBF8 /* LCRouterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCRouterTest.m; sourceTree = "<group>"; };
-		838CE31B1EC97E6E00B24F5B /* LiveQuery_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LiveQuery_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		838CE31B1EC97E6E00B24F5B /* LiveQuery.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LiveQuery.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		838CE31D1EC97E6E00B24F5B /* AVOSCloudLiveQuery.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloudLiveQuery.h; sourceTree = "<group>"; };
 		838CE3231EC97E6E00B24F5B /* LiveQueryTests_iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LiveQueryTests_iOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		838CE3281EC97E6F00B24F5B /* AVOSCloudLiveQueryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVOSCloudLiveQueryTests.m; sourceTree = "<group>"; };
-		838CE3401EC980DE00B24F5B /* LiveQuery_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LiveQuery_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		838CE3401EC980DE00B24F5B /* LiveQuery.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LiveQuery.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		838CE34D1EC980E000B24F5B /* LiveQueryTests_macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LiveQueryTests_macOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		838CE3521EC9838500B24F5B /* AVLiveQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVLiveQuery.h; sourceTree = "<group>"; };
 		838CE3531EC9838500B24F5B /* AVLiveQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVLiveQuery.m; sourceTree = "<group>"; };
@@ -1472,7 +1472,7 @@
 		83C7D3EB1EEC4B2800AD7EDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83C7D3EC1EEC4B7A00AD7EDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83C7D3ED1EEC4BBB00AD7EDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		83C7D3F31EEC4E4700AD7EDE /* Connection_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Connection_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		83C7D3F31EEC4E4700AD7EDE /* Connection.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Connection.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		83C7D3F61EEC4E4700AD7EDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83C7D3FB1EEC4E4700AD7EDE /* ConnectionTests_iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConnectionTests_iOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		83C7D4001EEC4E4700AD7EDE /* ConnectionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConnectionTests.m; sourceTree = "<group>"; };
@@ -1481,7 +1481,7 @@
 		83C7D40D1EEC4F6F00AD7EDE /* LCSRWebSocket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCSRWebSocket.m; sourceTree = "<group>"; };
 		83CFCB5E1B2A5D2700F97C92 /* AVIMKeyedConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMKeyedConversation.h; sourceTree = "<group>"; };
 		83CFCB5F1B2A5D2700F97C92 /* AVIMKeyedConversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMKeyedConversation.m; sourceTree = "<group>"; };
-		83D8CF551C17DAF50094279D /* Storage_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Storage_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		83D8CF551C17DAF50094279D /* Storage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Storage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		83DBBDDB1BD0963000E69BDC /* LCIMClientSessionTokenCacheStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMClientSessionTokenCacheStore.h; sourceTree = "<group>"; };
 		83DBBDDC1BD0963000E69BDC /* LCIMClientSessionTokenCacheStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMClientSessionTokenCacheStore.m; sourceTree = "<group>"; };
 		83DD6A6F1B83103C00DACA27 /* AVIMUserOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMUserOptions.h; sourceTree = "<group>"; };
@@ -1526,17 +1526,17 @@
 		83FCB99D1CEDC57C007D8712 /* LCURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCURLSessionManager.h; sourceTree = "<group>"; };
 		83FCB99E1CEDC57C007D8712 /* LCURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCURLSessionManager.m; sourceTree = "<group>"; };
 		8C1F675E1A8B379F00310E65 /* AVIMConversationQuery_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVIMConversationQuery_Internal.h; sourceTree = "<group>"; };
-		8C255D261AE9F815008A6FFC /* CrashReporting_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CrashReporting_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C255D261AE9F815008A6FFC /* CrashReporting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CrashReporting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C255D2A1AE9F817008A6FFC /* AVOSCloudCrashReporting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloudCrashReporting.h; sourceTree = "<group>"; };
 		8C255D411AE9FD91008A6FFC /* AVOSCloudCrashReporting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVOSCloudCrashReporting.m; sourceTree = "<group>"; };
 		8C2FED521A67C2DA0056F945 /* AVIMGeneralObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMGeneralObject.h; sourceTree = "<group>"; };
 		8C2FED531A67C2DA0056F945 /* AVIMGeneralObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMGeneralObject.m; sourceTree = "<group>"; };
 		8C630C7F1A6EB259008F1B00 /* AVIMErrorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMErrorUtil.h; sourceTree = "<group>"; };
 		8C630C801A6EB259008F1B00 /* AVIMErrorUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMErrorUtil.m; sourceTree = "<group>"; };
-		8C8419861A5A791300C5C6C4 /* Storage_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Storage_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C8419861A5A791300C5C6C4 /* Storage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Storage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C84198B1A5A791300C5C6C4 /* AVOSCloud.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloud.h; sourceTree = "<group>"; };
 		8C8419911A5A791300C5C6C4 /* StorageTests_iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StorageTests_iOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		8C8419C31A5A796000C5C6C4 /* Message_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Message_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C8419C31A5A796000C5C6C4 /* Message.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Message.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C8419C71A5A796000C5C6C4 /* AVOSCloudIM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloudIM.h; sourceTree = "<group>"; };
 		8C8419CD1A5A796000C5C6C4 /* MessageTests_iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MessageTests_iOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C8419D31A5A796000C5C6C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1817,7 +1817,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				704F3C051BE0D5400033245C /* Storage_macOS.framework in Frameworks */,
+				704F3C051BE0D5400033245C /* Storage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1825,8 +1825,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7085D52D1BEA245600449DC1 /* Storage_macOS.framework in Frameworks */,
-				704F3B781BE0D0180033245C /* Message_macOS.framework in Frameworks */,
+				7085D52D1BEA245600449DC1 /* Storage.framework in Frameworks */,
+				704F3B781BE0D0180033245C /* Message.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1841,7 +1841,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				70FD6DF11BE07C8A00897138 /* Storage_macOS.framework in Frameworks */,
+				70FD6DF11BE07C8A00897138 /* Storage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1863,7 +1863,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				838CE3241EC97E6F00B24F5B /* LiveQuery_iOS.framework in Frameworks */,
+				838CE3241EC97E6F00B24F5B /* LiveQuery.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1878,7 +1878,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				838CE3471EC980E000B24F5B /* LiveQuery_iOS.framework in Frameworks */,
+				838CE3471EC980E000B24F5B /* LiveQuery.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1893,7 +1893,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83C7D3FC1EEC4E4700AD7EDE /* Connection_iOS.framework in Frameworks */,
+				83C7D3FC1EEC4E4700AD7EDE /* Connection.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1922,7 +1922,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				70AACA931B4A74A5007C5FFD /* Storage_iOS.framework in Frameworks */,
+				70AACA931B4A74A5007C5FFD /* Storage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1937,8 +1937,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				707352781B4A8E08005466CE /* Storage_iOS.framework in Frameworks */,
-				8C8419CE1A5A796000C5C6C4 /* Message_iOS.framework in Frameworks */,
+				707352781B4A8E08005466CE /* Storage.framework in Frameworks */,
+				8C8419CE1A5A796000C5C6C4 /* Message.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2366,22 +2366,22 @@
 		8C8419871A5A791300C5C6C4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8C8419861A5A791300C5C6C4 /* Storage_iOS.framework */,
+				8C8419861A5A791300C5C6C4 /* Storage.framework */,
 				8C8419911A5A791300C5C6C4 /* StorageTests_iOS.xctest */,
-				8C8419C31A5A796000C5C6C4 /* Message_iOS.framework */,
+				8C8419C31A5A796000C5C6C4 /* Message.framework */,
 				8C8419CD1A5A796000C5C6C4 /* MessageTests_iOS.xctest */,
-				8C255D261AE9F815008A6FFC /* CrashReporting_iOS.framework */,
-				70CA7F681BDE2DC3000A3B21 /* Storage_macOS.framework */,
+				8C255D261AE9F815008A6FFC /* CrashReporting.framework */,
+				70CA7F681BDE2DC3000A3B21 /* Storage.framework */,
 				70F315321BDE503B00D691B3 /* StorageTests_macOS.xctest */,
-				704F3B6E1BE0D0180033245C /* Message_macOS.framework */,
+				704F3B6E1BE0D0180033245C /* Message.framework */,
 				704F3B771BE0D0180033245C /* MessageTests_macOS.xctest */,
-				83D8CF551C17DAF50094279D /* Storage_tvOS.framework */,
-				8320F95C1C1918C60024B45E /* Storage_watchOS.framework */,
-				838CE31B1EC97E6E00B24F5B /* LiveQuery_iOS.framework */,
+				83D8CF551C17DAF50094279D /* Storage.framework */,
+				8320F95C1C1918C60024B45E /* Storage.framework */,
+				838CE31B1EC97E6E00B24F5B /* LiveQuery.framework */,
 				838CE3231EC97E6E00B24F5B /* LiveQueryTests_iOS.xctest */,
-				838CE3401EC980DE00B24F5B /* LiveQuery_macOS.framework */,
+				838CE3401EC980DE00B24F5B /* LiveQuery.framework */,
 				838CE34D1EC980E000B24F5B /* LiveQueryTests_macOS.xctest */,
-				83C7D3F31EEC4E4700AD7EDE /* Connection_iOS.framework */,
+				83C7D3F31EEC4E4700AD7EDE /* Connection.framework */,
 				83C7D3FB1EEC4E4700AD7EDE /* ConnectionTests_iOS.xctest */,
 			);
 			name = Products;
@@ -3743,7 +3743,7 @@
 			);
 			name = Message_macOS;
 			productName = AVOSCloudIM;
-			productReference = 704F3B6E1BE0D0180033245C /* Message_macOS.framework */;
+			productReference = 704F3B6E1BE0D0180033245C /* Message.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		704F3B761BE0D0180033245C /* MessageTests_macOS */ = {
@@ -3780,7 +3780,7 @@
 			);
 			name = Storage_macOS;
 			productName = AVOSCloud;
-			productReference = 70CA7F681BDE2DC3000A3B21 /* Storage_macOS.framework */;
+			productReference = 70CA7F681BDE2DC3000A3B21 /* Storage.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		70F315311BDE503B00D691B3 /* StorageTests_macOS */ = {
@@ -3816,7 +3816,7 @@
 			);
 			name = Storage_watchOS;
 			productName = AVOSCloud;
-			productReference = 8320F95C1C1918C60024B45E /* Storage_watchOS.framework */;
+			productReference = 8320F95C1C1918C60024B45E /* Storage.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		838CE31A1EC97E6E00B24F5B /* LiveQuery_iOS */ = {
@@ -3834,7 +3834,7 @@
 			);
 			name = LiveQuery_iOS;
 			productName = AVOSCloudLiveQuery;
-			productReference = 838CE31B1EC97E6E00B24F5B /* LiveQuery_iOS.framework */;
+			productReference = 838CE31B1EC97E6E00B24F5B /* LiveQuery.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		838CE3221EC97E6E00B24F5B /* LiveQueryTests_iOS */ = {
@@ -3870,7 +3870,7 @@
 			);
 			name = LiveQuery_macOS;
 			productName = AVOSCloudLiveQuery;
-			productReference = 838CE3401EC980DE00B24F5B /* LiveQuery_macOS.framework */;
+			productReference = 838CE3401EC980DE00B24F5B /* LiveQuery.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		838CE3411EC980E000B24F5B /* LiveQueryTests_macOS */ = {
@@ -3906,7 +3906,7 @@
 			);
 			name = Connection_iOS;
 			productName = Connection;
-			productReference = 83C7D3F31EEC4E4700AD7EDE /* Connection_iOS.framework */;
+			productReference = 83C7D3F31EEC4E4700AD7EDE /* Connection.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		83C7D3FA1EEC4E4700AD7EDE /* ConnectionTests_iOS */ = {
@@ -3942,7 +3942,7 @@
 			);
 			name = Storage_tvOS;
 			productName = AVOSCloud;
-			productReference = 83D8CF551C17DAF50094279D /* Storage_tvOS.framework */;
+			productReference = 83D8CF551C17DAF50094279D /* Storage.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		8C255D251AE9F815008A6FFC /* CrashReporting_iOS */ = {
@@ -3960,7 +3960,7 @@
 			);
 			name = CrashReporting_iOS;
 			productName = AVOSCloudCrashReporting;
-			productReference = 8C255D261AE9F815008A6FFC /* CrashReporting_iOS.framework */;
+			productReference = 8C255D261AE9F815008A6FFC /* CrashReporting.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		8C8419851A5A791300C5C6C4 /* Storage_iOS */ = {
@@ -3978,7 +3978,7 @@
 			);
 			name = Storage_iOS;
 			productName = AVOSCloud;
-			productReference = 8C8419861A5A791300C5C6C4 /* Storage_iOS.framework */;
+			productReference = 8C8419861A5A791300C5C6C4 /* Storage.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		8C8419901A5A791300C5C6C4 /* StorageTests_iOS */ = {
@@ -4014,7 +4014,7 @@
 			);
 			name = Message_iOS;
 			productName = AVOSCloudIM;
-			productReference = 8C8419C31A5A796000C5C6C4 /* Message_iOS.framework */;
+			productReference = 8C8419C31A5A796000C5C6C4 /* Message.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		8C8419CC1A5A796000C5C6C4 /* MessageTests_iOS */ = {
@@ -5038,7 +5038,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.IM;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Message;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -5097,7 +5097,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.IM;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Message;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -5259,7 +5259,7 @@
 					"-lsqlite3",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.Storage;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Storage;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -5320,7 +5320,7 @@
 					"-lsqlite3",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.Storage;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Storage;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -5475,7 +5475,7 @@
 					"-lsqlite3",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.Storage;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Storage;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -5537,7 +5537,7 @@
 					"-lsqlite3",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.Storage;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Storage;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -5604,7 +5604,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.LiveQuery;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = LiveQuery;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -5661,7 +5661,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.LiveQuery;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = LiveQuery;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -5821,7 +5821,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.LiveQuery;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = LiveQuery;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5879,7 +5879,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.LiveQuery;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = LiveQuery;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -6048,7 +6048,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.Connection;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Connection;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -6111,7 +6111,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.Connection;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Connection;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -6286,7 +6286,7 @@
 					"-lsqlite3",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.Storage;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Storage;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -6349,7 +6349,7 @@
 					"-lsqlite3",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.Storage;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Storage;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -6427,7 +6427,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.CrashReporting;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = CrashReporting;
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -6495,7 +6495,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.CrashReporting;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = CrashReporting;
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -6644,7 +6644,7 @@
 					"-lsqlite3",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.Storage;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Storage;
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -6704,7 +6704,7 @@
 					"-lsqlite3",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.Storage;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Storage;
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -6857,7 +6857,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.IM;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Message;
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -6912,7 +6912,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.IM;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Message;
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
