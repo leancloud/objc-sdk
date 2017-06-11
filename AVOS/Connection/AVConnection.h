@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVDynamicObject.h"
 
 /**
  A protocol defines a frame that can be sent by connection.
@@ -24,22 +23,22 @@
 @end
 
 /**
- A type defines an object that used to tune up behaviors of connection.
+ A protocol defines an object that used to tune up behaviors of connection.
  */
-@interface AVConnectionConfiguration: AVDynamicObject
+@protocol AVConnectionConfigurable <NSObject, NSCopying>
 
 @end
 
 @interface AVConnection : NSObject
 
-@property (nonatomic, copy, readonly) AVConnectionConfiguration *configuration;
+@property (nonatomic, copy, readonly) id<AVConnectionConfigurable> configuration;
 
 /**
  Initialize connection with configuration.
 
  @param configuration The connection configuration.
  */
-- (instancetype)initWithConfiguration:(AVConnectionConfiguration *)configuration;
+- (instancetype)initWithConfiguration:(id<AVConnectionConfigurable>)configuration;
 
 /**
  Add a delegate for receiving events on connection.

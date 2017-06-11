@@ -9,13 +9,9 @@
 #import "AVConnection.h"
 #import "AVMethodDispatcher.h"
 
-@implementation AVConnectionConfiguration
-
-@end
-
 @interface AVConnection ()
 
-@property (nonatomic,   copy) AVConnectionConfiguration *configuration;
+@property (nonatomic,   copy) id<AVConnectionConfigurable> configuration;
 @property (nonatomic, strong) NSHashTable *delegates;
 
 @end
@@ -32,11 +28,11 @@
     return self;
 }
 
-- (instancetype)initWithConfiguration:(AVConnectionConfiguration *)configuration {
+- (instancetype)initWithConfiguration:(id<AVConnectionConfigurable>)configuration {
     self = [self init];
 
     if (self) {
-        _configuration = [configuration copy];
+        _configuration = [configuration copyWithZone:nil];
     }
 
     return self;
