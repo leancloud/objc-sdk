@@ -832,6 +832,7 @@
 		83F2405D1EEA89650041D2E2 /* AVExponentialTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F240571EEA89640041D2E2 /* AVExponentialTimer.m */; };
 		83F2405E1EEA89650041D2E2 /* AVExponentialTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F240571EEA89640041D2E2 /* AVExponentialTimer.m */; };
 		83F2405F1EEA89650041D2E2 /* AVExponentialTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F240571EEA89640041D2E2 /* AVExponentialTimer.m */; };
+		83F599CC1EED0F610013AF6B /* AVOSCloudFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F599CA1EED0F610013AF6B /* AVOSCloudFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83F745F11B91732D00437259 /* LCIMMessageCacheStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F745EE1B91732D00437259 /* LCIMMessageCacheStore.h */; };
 		83F745F21B91732D00437259 /* LCIMMessageCacheStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F745EF1B91732D00437259 /* LCIMMessageCacheStore.m */; };
 		83F745F31B91732D00437259 /* LCIMMessageCacheStoreSQL.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F745F01B91732D00437259 /* LCIMMessageCacheStoreSQL.h */; };
@@ -1514,6 +1515,9 @@
 		83E13C191D4B509E0009CB6F /* AVConfiguration_extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVConfiguration_extension.h; sourceTree = "<group>"; };
 		83F240561EEA89640041D2E2 /* AVExponentialTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVExponentialTimer.h; sourceTree = "<group>"; };
 		83F240571EEA89640041D2E2 /* AVExponentialTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVExponentialTimer.m; sourceTree = "<group>"; };
+		83F599C81EED0F610013AF6B /* AVOSCloudFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		83F599CA1EED0F610013AF6B /* AVOSCloudFoundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloudFoundation.h; sourceTree = "<group>"; };
+		83F599CB1EED0F610013AF6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83F745EE1B91732D00437259 /* LCIMMessageCacheStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageCacheStore.h; sourceTree = "<group>"; };
 		83F745EF1B91732D00437259 /* LCIMMessageCacheStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMMessageCacheStore.m; sourceTree = "<group>"; };
 		83F745F01B91732D00437259 /* LCIMMessageCacheStoreSQL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageCacheStoreSQL.h; sourceTree = "<group>"; };
@@ -1923,6 +1927,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		83F599C41EED0F610013AF6B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8C255D221AE9F815008A6FFC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -2315,6 +2326,15 @@
 			path = LCDB;
 			sourceTree = "<group>";
 		};
+		83F599C91EED0F610013AF6B /* Foundation */ = {
+			isa = PBXGroup;
+			children = (
+				83F599CA1EED0F610013AF6B /* AVOSCloudFoundation.h */,
+				83F599CB1EED0F610013AF6B /* Info.plist */,
+			);
+			path = Foundation;
+			sourceTree = "<group>";
+		};
 		83F745ED1B91732D00437259 /* CacheStore */ = {
 			isa = PBXGroup;
 			children = (
@@ -2375,6 +2395,7 @@
 		8C84197A1A5A78E100C5C6C4 = {
 			isa = PBXGroup;
 			children = (
+				83F599C91EED0F610013AF6B /* Foundation */,
 				8C8419881A5A791300C5C6C4 /* Storage */,
 				8C8419951A5A791300C5C6C4 /* StorageTests */,
 				83C7D3F41EEC4E4700AD7EDE /* Connection */,
@@ -2413,6 +2434,7 @@
 				83C7D3F31EEC4E4700AD7EDE /* AVOSCloudConnection.framework */,
 				83C7D3FB1EEC4E4700AD7EDE /* ConnectionTests_iOS.xctest */,
 				832677C91EED0B5B00004C66 /* AVOSCloudMessageProtocol.framework */,
+				83F599C81EED0F610013AF6B /* AVOSCloudFoundation.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3506,6 +3528,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		83F599C51EED0F610013AF6B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83F599CC1EED0F610013AF6B /* AVOSCloudFoundation.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8C255D231AE9F815008A6FFC /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -4001,6 +4031,24 @@
 			productReference = 83D8CF551C17DAF50094279D /* AVOSCloudStorage.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		83F599C71EED0F610013AF6B /* Foundation */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 83F599CF1EED0F610013AF6B /* Build configuration list for PBXNativeTarget "Foundation" */;
+			buildPhases = (
+				83F599C31EED0F610013AF6B /* Sources */,
+				83F599C41EED0F610013AF6B /* Frameworks */,
+				83F599C51EED0F610013AF6B /* Headers */,
+				83F599C61EED0F610013AF6B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Foundation;
+			productName = Foundation;
+			productReference = 83F599C81EED0F610013AF6B /* AVOSCloudFoundation.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		8C255D251AE9F815008A6FFC /* CrashReporting_iOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8C255D3D1AE9F818008A6FFC /* Build configuration list for PBXNativeTarget "CrashReporting_iOS" */;
@@ -4131,6 +4179,9 @@
 					83C7D3FA1EEC4E4700AD7EDE = {
 						CreatedOnToolsVersion = 9.0;
 					};
+					83F599C71EED0F610013AF6B = {
+						CreatedOnToolsVersion = 9.0;
+					};
 					8C255D251AE9F815008A6FFC = {
 						CreatedOnToolsVersion = 6.3.1;
 					};
@@ -4160,6 +4211,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				83F599C71EED0F610013AF6B /* Foundation */,
 				8C8419851A5A791300C5C6C4 /* Storage_iOS */,
 				8C8419901A5A791300C5C6C4 /* StorageTests_iOS */,
 				70CA7F671BDE2DC3000A3B21 /* Storage_macOS */,
@@ -4277,6 +4329,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		83D8CF501C17DAF50094279D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83F599C61EED0F610013AF6B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -4756,6 +4815,13 @@
 				83D8CEC91C17DAF50094279D /* LCKeyValueStore.m in Sources */,
 				83D8CECA1C17DAF50094279D /* AVURLConnectionOperation.m in Sources */,
 				830EB9FC1C44D68400BA917F /* AVSaveOption.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83F599C31EED0F610013AF6B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6521,6 +6587,92 @@
 			};
 			name = Release;
 		};
+		83F599CD1EED0F610013AF6B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = Foundation/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.Foundation;
+				PRODUCT_NAME = AVOSCloudFoundation;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		83F599CE1EED0F610013AF6B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = Foundation/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.Foundation;
+				PRODUCT_NAME = AVOSCloudFoundation;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		8C255D391AE9F818008A6FFC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -7304,6 +7456,15 @@
 			buildConfigurations = (
 				83D8CF531C17DAF50094279D /* Debug */,
 				83D8CF541C17DAF50094279D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		83F599CF1EED0F610013AF6B /* Build configuration list for PBXNativeTarget "Foundation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83F599CD1EED0F610013AF6B /* Debug */,
+				83F599CE1EED0F610013AF6B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
