@@ -2043,11 +2043,11 @@
 		838CE31C1EC97E6E00B24F5B /* LiveQuery */ = {
 			isa = PBXGroup;
 			children = (
-				838CE31D1EC97E6E00B24F5B /* AVOSCloudLiveQuery.h */,
 				838CE3521EC9838500B24F5B /* AVLiveQuery.h */,
 				838CE3531EC9838500B24F5B /* AVLiveQuery.m */,
 				834A54811ECAF3A0006C8F4B /* AVSubscriber.h */,
 				834A54821ECAF3A0006C8F4B /* AVSubscriber.m */,
+				838CE31D1EC97E6E00B24F5B /* AVOSCloudLiveQuery.h */,
 				83C7D3EC1EEC4B7A00AD7EDE /* Info.plist */,
 			);
 			path = LiveQuery;
