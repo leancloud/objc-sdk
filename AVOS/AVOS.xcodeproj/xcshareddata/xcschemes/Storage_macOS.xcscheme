@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "70CA7F671BDE2DC3000A3B21"
-               BuildableName = "Storage_macOS.framework"
+               BuildableName = "AVOSCloudStorage.framework"
                BlueprintName = "Storage_macOS"
                ReferencedContainer = "container:AVOS.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "70CA7F671BDE2DC3000A3B21"
-            BuildableName = "Storage_macOS.framework"
+            BuildableName = "AVOSCloudStorage.framework"
             BlueprintName = "Storage_macOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "70CA7F671BDE2DC3000A3B21"
-            BuildableName = "Storage_macOS.framework"
+            BuildableName = "AVOSCloudStorage.framework"
             BlueprintName = "Storage_macOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>

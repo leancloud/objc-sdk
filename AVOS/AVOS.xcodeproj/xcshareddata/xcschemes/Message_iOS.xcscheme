@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8C8419C21A5A796000C5C6C4"
-               BuildableName = "Message_iOS.framework"
+               BuildableName = "AVOSCloudMessage.framework"
                BlueprintName = "Message_iOS"
                ReferencedContainer = "container:AVOS.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8C8419C21A5A796000C5C6C4"
-            BuildableName = "Message_iOS.framework"
+            BuildableName = "AVOSCloudMessage.framework"
             BlueprintName = "Message_iOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8C8419C21A5A796000C5C6C4"
-            BuildableName = "Message_iOS.framework"
+            BuildableName = "AVOSCloudMessage.framework"
             BlueprintName = "Message_iOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>

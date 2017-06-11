@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8C255D251AE9F815008A6FFC"
-               BuildableName = "CrashReporting_iOS.framework"
+               BuildableName = "AVOSCloudCrashReporting.framework"
                BlueprintName = "CrashReporting_iOS"
                ReferencedContainer = "container:AVOS.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8C255D251AE9F815008A6FFC"
-            BuildableName = "CrashReporting_iOS.framework"
+            BuildableName = "AVOSCloudCrashReporting.framework"
             BlueprintName = "CrashReporting_iOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8C255D251AE9F815008A6FFC"
-            BuildableName = "CrashReporting_iOS.framework"
+            BuildableName = "AVOSCloudCrashReporting.framework"
             BlueprintName = "CrashReporting_iOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
          </BuildableReference>
