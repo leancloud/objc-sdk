@@ -541,6 +541,8 @@
 		83435FE31EEDB35400F10A07 /* LCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 83435FD81EEDB34000F10A07 /* LCDB.h */; };
 		83435FE41EEDB35400F10A07 /* LCResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 83435FD91EEDB34000F10A07 /* LCResultSet.h */; };
 		83435FE51EEDB35400F10A07 /* LCResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 83435FDA1EEDB34000F10A07 /* LCResultSet.m */; };
+		83435FF51EEDB62F00F10A07 /* LCKeychain.h in Headers */ = {isa = PBXBuildFile; fileRef = 83435FF31EEDB62800F10A07 /* LCKeychain.h */; };
+		83435FF61EEDB62F00F10A07 /* LCKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 83435FF41EEDB62800F10A07 /* LCKeychain.m */; };
 		834775DC1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 834775DB1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h */; };
 		834A54831ECAF3A0006C8F4B /* AVSubscriber.h in Headers */ = {isa = PBXBuildFile; fileRef = 834A54811ECAF3A0006C8F4B /* AVSubscriber.h */; };
 		834A54841ECAF3A0006C8F4B /* AVSubscriber.h in Headers */ = {isa = PBXBuildFile; fileRef = 834A54811ECAF3A0006C8F4B /* AVSubscriber.h */; };
@@ -1438,6 +1440,8 @@
 		83435FD81EEDB34000F10A07 /* LCDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCDB.h; sourceTree = "<group>"; };
 		83435FD91EEDB34000F10A07 /* LCResultSet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCResultSet.h; sourceTree = "<group>"; };
 		83435FDA1EEDB34000F10A07 /* LCResultSet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCResultSet.m; sourceTree = "<group>"; };
+		83435FF31EEDB62800F10A07 /* LCKeychain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCKeychain.h; sourceTree = "<group>"; };
+		83435FF41EEDB62800F10A07 /* LCKeychain.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCKeychain.m; sourceTree = "<group>"; };
 		834775DB1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMKeyedConversation_internal.h; sourceTree = "<group>"; };
 		834A54811ECAF3A0006C8F4B /* AVSubscriber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVSubscriber.h; sourceTree = "<group>"; };
 		834A54821ECAF3A0006C8F4B /* AVSubscriber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVSubscriber.m; sourceTree = "<group>"; };
@@ -2063,6 +2067,7 @@
 			isa = PBXGroup;
 			children = (
 				83435FCF1EEDB34000F10A07 /* FMDB */,
+				83435FF11EEDB62800F10A07 /* JNKeychain */,
 				83435F9D1EEDAFEE00F10A07 /* AFNetworking */,
 			);
 			path = ThirdParty;
@@ -2104,6 +2109,15 @@
 				83435FDA1EEDB34000F10A07 /* LCResultSet.m */,
 			);
 			path = FMDB;
+			sourceTree = "<group>";
+		};
+		83435FF11EEDB62800F10A07 /* JNKeychain */ = {
+			isa = PBXGroup;
+			children = (
+				83435FF31EEDB62800F10A07 /* LCKeychain.h */,
+				83435FF41EEDB62800F10A07 /* LCKeychain.m */,
+			);
+			path = JNKeychain;
 			sourceTree = "<group>";
 		};
 		835091FA1EB1BD90000DA884 /* SMS */ = {
@@ -3643,6 +3657,7 @@
 				83435FB21EEDB03500F10A07 /* LCURLRequestSerialization.h in Headers */,
 				83435FB41EEDB03500F10A07 /* LCURLResponseSerialization.h in Headers */,
 				83435FAD1EEDB03500F10A07 /* LCNetworking.h in Headers */,
+				83435FF51EEDB62F00F10A07 /* LCKeychain.h in Headers */,
 				83435FE41EEDB35400F10A07 /* LCResultSet.h in Headers */,
 				83435FE11EEDB35400F10A07 /* LCDatabaseQueue.h in Headers */,
 				83435FAE1EEDB03500F10A07 /* LCNetworkReachabilityManager.h in Headers */,
@@ -4944,6 +4959,7 @@
 				83435FAF1EEDB03500F10A07 /* LCNetworkReachabilityManager.m in Sources */,
 				83435FB51EEDB03500F10A07 /* LCURLResponseSerialization.m in Sources */,
 				83435FAC1EEDB03500F10A07 /* LCHTTPSessionManager.m in Sources */,
+				83435FF61EEDB62F00F10A07 /* LCKeychain.m in Sources */,
 				83435FDE1EEDB35400F10A07 /* LCDatabaseAdditions.m in Sources */,
 				83435FB71EEDB03500F10A07 /* LCURLSessionManager.m in Sources */,
 				83435FE51EEDB35400F10A07 /* LCResultSet.m in Sources */,
