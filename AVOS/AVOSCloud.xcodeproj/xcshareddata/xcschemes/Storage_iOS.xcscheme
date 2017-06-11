@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8C255D251AE9F815008A6FFC"
-               BuildableName = "AVOSCloudCrashReporting.framework"
-               BlueprintName = "CrashReporting_iOS"
-               ReferencedContainer = "container:AVOS.xcodeproj">
+               BlueprintIdentifier = "8C8419851A5A791300C5C6C4"
+               BuildableName = "AVOSCloudStorage.framework"
+               BlueprintName = "Storage_iOS"
+               ReferencedContainer = "container:AVOSCloud.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,10 +45,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8C255D251AE9F815008A6FFC"
-            BuildableName = "AVOSCloudCrashReporting.framework"
-            BlueprintName = "CrashReporting_iOS"
-            ReferencedContainer = "container:AVOS.xcodeproj">
+            BlueprintIdentifier = "8C8419851A5A791300C5C6C4"
+            BuildableName = "AVOSCloudStorage.framework"
+            BlueprintName = "Storage_iOS"
+            ReferencedContainer = "container:AVOSCloud.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -63,10 +63,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8C255D251AE9F815008A6FFC"
-            BuildableName = "AVOSCloudCrashReporting.framework"
-            BlueprintName = "CrashReporting_iOS"
-            ReferencedContainer = "container:AVOS.xcodeproj">
+            BlueprintIdentifier = "8C8419851A5A791300C5C6C4"
+            BuildableName = "AVOSCloudStorage.framework"
+            BlueprintName = "Storage_iOS"
+            ReferencedContainer = "container:AVOSCloud.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

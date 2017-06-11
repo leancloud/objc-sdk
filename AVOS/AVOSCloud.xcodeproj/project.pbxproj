@@ -4199,7 +4199,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 8C84197E1A5A78E100C5C6C4 /* Build configuration list for PBXProject "AVOS" */;
+			buildConfigurationList = 8C84197E1A5A78E100C5C6C4 /* Build configuration list for PBXProject "AVOSCloud" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -7478,7 +7478,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8C84197E1A5A78E100C5C6C4 /* Build configuration list for PBXProject "AVOS" */ = {
+		8C84197E1A5A78E100C5C6C4 /* Build configuration list for PBXProject "AVOSCloud" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8C84197F1A5A78E100C5C6C4 /* Debug */,

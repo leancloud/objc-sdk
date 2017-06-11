@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "83D8CE731C17DAF50094279D"
+               BlueprintIdentifier = "8320F87A1C1918C60024B45E"
                BuildableName = "AVOSCloudStorage.framework"
-               BlueprintName = "Storage_tvOS"
-               ReferencedContainer = "container:AVOS.xcodeproj">
+               BlueprintName = "Storage_watchOS"
+               ReferencedContainer = "container:AVOSCloud.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,10 +45,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "83D8CE731C17DAF50094279D"
+            BlueprintIdentifier = "8320F87A1C1918C60024B45E"
             BuildableName = "AVOSCloudStorage.framework"
-            BlueprintName = "Storage_tvOS"
-            ReferencedContainer = "container:AVOS.xcodeproj">
+            BlueprintName = "Storage_watchOS"
+            ReferencedContainer = "container:AVOSCloud.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -63,10 +63,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "83D8CE731C17DAF50094279D"
+            BlueprintIdentifier = "8320F87A1C1918C60024B45E"
             BuildableName = "AVOSCloudStorage.framework"
-            BlueprintName = "Storage_tvOS"
-            ReferencedContainer = "container:AVOS.xcodeproj">
+            BlueprintName = "Storage_watchOS"
+            ReferencedContainer = "container:AVOSCloud.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

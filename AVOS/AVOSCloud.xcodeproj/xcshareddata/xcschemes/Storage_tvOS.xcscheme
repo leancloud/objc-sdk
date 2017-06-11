@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "704F3B6D1BE0D0180033245C"
-               BuildableName = "AVOSCloudMessage.framework"
-               BlueprintName = "Message_macOS"
-               ReferencedContainer = "container:AVOS.xcodeproj">
+               BlueprintIdentifier = "83D8CE731C17DAF50094279D"
+               BuildableName = "AVOSCloudStorage.framework"
+               BlueprintName = "Storage_tvOS"
+               ReferencedContainer = "container:AVOSCloud.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,10 +45,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "704F3B6D1BE0D0180033245C"
-            BuildableName = "AVOSCloudMessage.framework"
-            BlueprintName = "Message_macOS"
-            ReferencedContainer = "container:AVOS.xcodeproj">
+            BlueprintIdentifier = "83D8CE731C17DAF50094279D"
+            BuildableName = "AVOSCloudStorage.framework"
+            BlueprintName = "Storage_tvOS"
+            ReferencedContainer = "container:AVOSCloud.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -63,10 +63,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "704F3B6D1BE0D0180033245C"
-            BuildableName = "AVOSCloudMessage.framework"
-            BlueprintName = "Message_macOS"
-            ReferencedContainer = "container:AVOS.xcodeproj">
+            BlueprintIdentifier = "83D8CE731C17DAF50094279D"
+            BuildableName = "AVOSCloudStorage.framework"
+            BlueprintName = "Storage_tvOS"
+            ReferencedContainer = "container:AVOSCloud.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

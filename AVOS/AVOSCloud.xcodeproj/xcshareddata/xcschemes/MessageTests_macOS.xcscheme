@@ -19,7 +19,7 @@
                BlueprintIdentifier = "704F3B761BE0D0180033245C"
                BuildableName = "MessageTests_macOS.xctest"
                BlueprintName = "MessageTests_macOS"
-               ReferencedContainer = "container:AVOS.xcodeproj">
+               ReferencedContainer = "container:AVOSCloud.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>

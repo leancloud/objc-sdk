@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "70CA7F671BDE2DC3000A3B21"
-               BuildableName = "AVOSCloudStorage.framework"
-               BlueprintName = "Storage_macOS"
-               ReferencedContainer = "container:AVOS.xcodeproj">
+               BlueprintIdentifier = "83C7D3F21EEC4E4700AD7EDE"
+               BuildableName = "AVOSCloudConnection.framework"
+               BlueprintName = "Connection_iOS"
+               ReferencedContainer = "container:AVOSCloud.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,10 +45,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "70CA7F671BDE2DC3000A3B21"
-            BuildableName = "AVOSCloudStorage.framework"
-            BlueprintName = "Storage_macOS"
-            ReferencedContainer = "container:AVOS.xcodeproj">
+            BlueprintIdentifier = "83C7D3F21EEC4E4700AD7EDE"
+            BuildableName = "AVOSCloudConnection.framework"
+            BlueprintName = "Connection_iOS"
+            ReferencedContainer = "container:AVOSCloud.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -63,10 +63,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "70CA7F671BDE2DC3000A3B21"
-            BuildableName = "AVOSCloudStorage.framework"
-            BlueprintName = "Storage_macOS"
-            ReferencedContainer = "container:AVOS.xcodeproj">
+            BlueprintIdentifier = "83C7D3F21EEC4E4700AD7EDE"
+            BuildableName = "AVOSCloudConnection.framework"
+            BlueprintName = "Connection_iOS"
+            ReferencedContainer = "container:AVOSCloud.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
