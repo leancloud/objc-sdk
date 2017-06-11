@@ -1389,7 +1389,7 @@
 		833391391EE91AC100D46D5C /* AVMethodDispatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVMethodDispatcher.m; sourceTree = "<group>"; };
 		833E1F611B69F629002A691C /* AVIMFileMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMFileMessage.h; sourceTree = "<group>"; };
 		833E1F621B69F629002A691C /* AVIMFileMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMFileMessage.m; sourceTree = "<group>"; };
-		83435E231EED387500F10A07 /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
+		83435F801EEDAABA00F10A07 /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		834775DB1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMKeyedConversation_internal.h; sourceTree = "<group>"; };
 		834A54811ECAF3A0006C8F4B /* AVSubscriber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVSubscriber.h; sourceTree = "<group>"; };
 		834A54821ECAF3A0006C8F4B /* AVSubscriber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVSubscriber.m; sourceTree = "<group>"; };
@@ -2003,12 +2003,12 @@
 			path = Captcha;
 			sourceTree = "<group>";
 		};
-		83435E221EED380B00F10A07 /* Supporting */ = {
+		83435F7F1EEDAABA00F10A07 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
-				83435E231EED387500F10A07 /* Common.xcconfig */,
+				83435F801EEDAABA00F10A07 /* Common.xcconfig */,
 			);
-			name = Supporting;
+			path = Supporting;
 			sourceTree = "<group>";
 		};
 		835091FA1EB1BD90000DA884 /* SMS */ = {
@@ -2404,7 +2404,6 @@
 		8C84197A1A5A78E100C5C6C4 = {
 			isa = PBXGroup;
 			children = (
-				83435E221EED380B00F10A07 /* Supporting */,
 				83F599C91EED0F610013AF6B /* Foundation */,
 				8C8419881A5A791300C5C6C4 /* Storage */,
 				8C8419951A5A791300C5C6C4 /* StorageTests */,
@@ -2417,6 +2416,7 @@
 				838CE3271EC97E6F00B24F5B /* LiveQueryTests */,
 				8C255D271AE9F817008A6FFC /* CrashReporting */,
 				8CEA86581A777A7900864211 /* TestBase */,
+				83435F7F1EEDAABA00F10A07 /* Supporting */,
 				8C8419871A5A791300C5C6C4 /* Products */,
 			);
 			indentWidth = 4;
@@ -6829,7 +6829,7 @@
 		};
 		8C84197F1A5A78E100C5C6C4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435E231EED387500F10A07 /* Common.xcconfig */;
+			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -6872,7 +6872,7 @@
 		};
 		8C8419801A5A78E100C5C6C4 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435E231EED387500F10A07 /* Common.xcconfig */;
+			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
