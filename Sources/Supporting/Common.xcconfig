@@ -1,1 +1,2 @@
 OTHER_LDFLAGS = -lsqlite3
+HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Foundation/ThirdParty/Protobuf"
