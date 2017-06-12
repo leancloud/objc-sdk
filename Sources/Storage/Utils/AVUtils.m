@@ -24,7 +24,7 @@
 #import "AVPaasClient.h"
 #import "AVGlobal.h"
 #import "AVCloudQueryResult.h"
-#import "AVKeychain.h"
+#import "LCKeychain.h"
 #import "LCURLConnection.h"
 
 #import <CommonCrypto/CommonDigest.h>
@@ -400,7 +400,7 @@ static const char *getPropertyType(objc_property_t property)
         dispatch_sync(AVUtilsDefaultSerialQueue, ^{
             NSString *key = [self deviceUUIDKey];
 
-            NSString *savedUUID = [AVKeychain loadValueForKey:key];
+            NSString *savedUUID = [LCKeychain loadValueForKey:key];
 
             if (savedUUID) {
                 UUID = savedUUID;
@@ -408,7 +408,7 @@ static const char *getPropertyType(objc_property_t property)
                 NSString *tempUUID = [self generateUUID];
 
                 if (tempUUID) {
-                    [AVKeychain saveValue:tempUUID forKey:key];
+                    [LCKeychain saveValue:tempUUID forKey:key];
                     UUID = tempUUID;
                 }
             }
