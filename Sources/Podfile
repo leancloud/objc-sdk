@@ -1,0 +1,23 @@
+target 'Foundation-iOS' do
+  platform :ios, '8.0'
+
+  pod 'AFNetworking', '3.1.0'
+end
+
+target 'Foundation-macOS' do
+  platform :osx, '10.9'
+
+  pod 'AFNetworking', '3.1.0'
+end
+
+target 'Foundation-tvOS' do
+  platform :tvos, '9.0'
+
+  pod 'AFNetworking', '3.1.0'
+end
+
+target 'Foundation-watchOS' do
+  platform :watchos, '2.0'
+
+  pod 'AFNetworking', '3.1.0'
+end
