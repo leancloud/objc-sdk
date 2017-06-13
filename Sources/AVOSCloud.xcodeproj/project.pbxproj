@@ -735,8 +735,6 @@
 		83E13C1B1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */ = {isa = PBXBuildFile; fileRef = 83E13C191D4B509E0009CB6F /* AVConfiguration_extension.h */; };
 		83E13C1C1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */ = {isa = PBXBuildFile; fileRef = 83E13C191D4B509E0009CB6F /* AVConfiguration_extension.h */; };
 		83E13C1D1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */ = {isa = PBXBuildFile; fileRef = 83E13C191D4B509E0009CB6F /* AVConfiguration_extension.h */; };
-		83E5D9521C1AA7C000E61E37 /* AVAnalyticsUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419EE1A5A79FF00C5C6C4 /* AVAnalyticsUtils.m */; };
-		83E5D9531C1AA7D200E61E37 /* AVAnalyticsUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419ED1A5A79FF00C5C6C4 /* AVAnalyticsUtils.h */; };
 		83F240581EEA89650041D2E2 /* AVExponentialTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F240561EEA89640041D2E2 /* AVExponentialTimer.h */; };
 		83F240591EEA89650041D2E2 /* AVExponentialTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F240561EEA89640041D2E2 /* AVExponentialTimer.h */; };
 		83F2405A1EEA89650041D2E2 /* AVExponentialTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F240561EEA89640041D2E2 /* AVExponentialTimer.h */; };
@@ -3053,7 +3051,6 @@
 				8320F8F41C1918C60024B45E /* AVFileQuery.h in Headers */,
 				8333913D1EE91AC100D46D5C /* AVMethodDispatcher.h in Headers */,
 				8302AED91C192A0700E13F8A /* LCURLConnection.h in Headers */,
-				83E5D9531C1AA7D200E61E37 /* AVAnalyticsUtils.h in Headers */,
 				83E13C141D4B4FC60009CB6F /* AVConfiguration.h in Headers */,
 				8320F8F51C1918C60024B45E /* AVPush.h in Headers */,
 				8320F8F61C1918C60024B45E /* AVCloudQueryResult.h in Headers */,
@@ -4519,7 +4516,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83E5D9521C1AA7C000E61E37 /* AVAnalyticsUtils.m in Sources */,
 				8320F87C1C1918C60024B45E /* AVRequestOperation.m in Sources */,
 				8320F87D1C1918C60024B45E /* AVFile.m in Sources */,
 				8320F8801C1918C60024B45E /* AVRequestManager.m in Sources */,
