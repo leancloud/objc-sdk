@@ -498,10 +498,10 @@
 		8352BEBD1EEFB4E100C513B6 /* LCDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 8352BEB71EEFB4E100C513B6 /* LCDevice.m */; };
 		8352BEBE1EEFB4E100C513B6 /* LCDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 8352BEB71EEFB4E100C513B6 /* LCDevice.m */; };
 		8352BEBF1EEFB4E100C513B6 /* LCDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 8352BEB71EEFB4E100C513B6 /* LCDevice.m */; };
-		835BC2681EEFCC23006B56C6 /* AVSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2661EEFCC23006B56C6 /* AVSDK.h */; };
-		835BC2691EEFCC23006B56C6 /* AVSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2661EEFCC23006B56C6 /* AVSDK.h */; };
-		835BC26A1EEFCC23006B56C6 /* AVSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2661EEFCC23006B56C6 /* AVSDK.h */; };
-		835BC26B1EEFCC24006B56C6 /* AVSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2661EEFCC23006B56C6 /* AVSDK.h */; };
+		835BC2681EEFCC23006B56C6 /* AVSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2661EEFCC23006B56C6 /* AVSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		835BC2691EEFCC23006B56C6 /* AVSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2661EEFCC23006B56C6 /* AVSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		835BC26A1EEFCC23006B56C6 /* AVSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2661EEFCC23006B56C6 /* AVSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		835BC26B1EEFCC24006B56C6 /* AVSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2661EEFCC23006B56C6 /* AVSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		835BC26C1EEFCC24006B56C6 /* AVSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 835BC2671EEFCC23006B56C6 /* AVSDK.m */; };
 		835BC26D1EEFCC24006B56C6 /* AVSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 835BC2671EEFCC23006B56C6 /* AVSDK.m */; };
 		835BC26E1EEFCC24006B56C6 /* AVSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 835BC2671EEFCC23006B56C6 /* AVSDK.m */; };
