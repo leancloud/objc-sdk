@@ -1,8 +1,11 @@
+inhibit_all_warnings!
+
 target 'Foundation-iOS' do
   platform :ios, '8.0'
 
   pod 'FMDB', '2.7.2'
   pod 'AFNetworking/NSURLSession', '3.1.0'
+  pod 'Protobuf', '3.3.0'
 end
 
 target 'Foundation-macOS' do
@@ -10,6 +13,7 @@ target 'Foundation-macOS' do
 
   pod 'FMDB', '2.7.2'
   pod 'AFNetworking/NSURLSession', '3.1.0'
+  pod 'Protobuf', '3.3.0'
 end
 
 target 'Foundation-tvOS' do
@@ -24,4 +28,5 @@ target 'Foundation-watchOS' do
 
   pod 'FMDB', '2.7.2'
   pod 'AFNetworking/NSURLSession', '3.1.0'
+  pod 'Protobuf', '3.3.0'
 end

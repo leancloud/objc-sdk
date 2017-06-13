@@ -9,15 +9,18 @@ PODS:
   - FMDB (2.7.2):
     - FMDB/standard (= 2.7.2)
   - FMDB/standard (2.7.2)
+  - Protobuf (3.3.0)
 
 DEPENDENCIES:
   - AFNetworking/NSURLSession (= 3.1.0)
   - FMDB (= 2.7.2)
+  - Protobuf (= 3.3.0)
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   FMDB: 6198a90e7b6900cfc046e6bc0ef6ebb7be9236aa
+  Protobuf: d582fecf68201eac3d79ed61369ef45734394b9c
 
-PODFILE CHECKSUM: 0c0c85a3064bc4cd012abe75957e3c2c3f596329
+PODFILE CHECKSUM: f360dee9bb1ca9a63a034f9b20601c0ddf753026
 
 COCOAPODS: 1.2.1
