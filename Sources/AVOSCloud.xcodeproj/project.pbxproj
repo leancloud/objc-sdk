@@ -513,6 +513,18 @@
 		835C5F711D25929600EF0EBB /* AVFriendQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A651A5A79FF00C5C6C4 /* AVFriendQuery.h */; };
 		835C5F721D2594EA00EF0EBB /* AVAnalyticsActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419E71A5A79FF00C5C6C4 /* AVAnalyticsActivity.h */; };
 		836705AB1BA1358D0050E968 /* SDMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705AA1BA1358D0050E968 /* SDMacros.h */; };
+		8376B2291EF041E7006ED4C2 /* EXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 8376B2261EF041DE006ED4C2 /* EXTScope.h */; };
+		8376B22A1EF041E7006ED4C2 /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 8376B2271EF041DE006ED4C2 /* EXTScope.m */; };
+		8376B22B1EF041E7006ED4C2 /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 8376B2281EF041DE006ED4C2 /* metamacros.h */; };
+		8376B22C1EF041E7006ED4C2 /* EXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 8376B2261EF041DE006ED4C2 /* EXTScope.h */; };
+		8376B22D1EF041E7006ED4C2 /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 8376B2271EF041DE006ED4C2 /* EXTScope.m */; };
+		8376B22E1EF041E7006ED4C2 /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 8376B2281EF041DE006ED4C2 /* metamacros.h */; };
+		8376B22F1EF041E8006ED4C2 /* EXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 8376B2261EF041DE006ED4C2 /* EXTScope.h */; };
+		8376B2301EF041E8006ED4C2 /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 8376B2271EF041DE006ED4C2 /* EXTScope.m */; };
+		8376B2311EF041E8006ED4C2 /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 8376B2281EF041DE006ED4C2 /* metamacros.h */; };
+		8376B2321EF041E8006ED4C2 /* EXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 8376B2261EF041DE006ED4C2 /* EXTScope.h */; };
+		8376B2331EF041E8006ED4C2 /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 8376B2271EF041DE006ED4C2 /* EXTScope.m */; };
+		8376B2341EF041E8006ED4C2 /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 8376B2281EF041DE006ED4C2 /* metamacros.h */; };
 		837CC71E1B568431001333AD /* NSDictionary+LCHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 837CC71C1B568431001333AD /* NSDictionary+LCHash.h */; };
 		837CC71F1B568431001333AD /* NSDictionary+LCHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 837CC71D1B568431001333AD /* NSDictionary+LCHash.m */; };
 		8385EC3F1EEC63EF00686CE0 /* AVConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841C091A5A84C600C5C6C4 /* AVConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1276,6 +1288,9 @@
 		835BC2671EEFCC23006B56C6 /* AVSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVSDK.m; sourceTree = "<group>"; };
 		835BC2701EF02B5A006B56C6 /* LCFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCFoundation.h; sourceTree = "<group>"; };
 		836705AA1BA1358D0050E968 /* SDMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMacros.h; sourceTree = "<group>"; };
+		8376B2261EF041DE006ED4C2 /* EXTScope.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXTScope.h; sourceTree = "<group>"; };
+		8376B2271EF041DE006ED4C2 /* EXTScope.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EXTScope.m; sourceTree = "<group>"; };
+		8376B2281EF041DE006ED4C2 /* metamacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = metamacros.h; sourceTree = "<group>"; };
 		837CC71C1B568431001333AD /* NSDictionary+LCHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+LCHash.h"; sourceTree = "<group>"; };
 		837CC71D1B568431001333AD /* NSDictionary+LCHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+LCHash.m"; sourceTree = "<group>"; };
 		838AF1221AFE58F600B8965E /* LCIMMessageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageCache.h; sourceTree = "<group>"; };
@@ -1906,6 +1921,24 @@
 			path = SDMacros;
 			sourceTree = "<group>";
 		};
+		8376B2241EF0418C006ED4C2 /* ThirdParty */ = {
+			isa = PBXGroup;
+			children = (
+				8376B2251EF041DE006ED4C2 /* extobjc */,
+			);
+			path = ThirdParty;
+			sourceTree = "<group>";
+		};
+		8376B2251EF041DE006ED4C2 /* extobjc */ = {
+			isa = PBXGroup;
+			children = (
+				8376B2261EF041DE006ED4C2 /* EXTScope.h */,
+				8376B2271EF041DE006ED4C2 /* EXTScope.m */,
+				8376B2281EF041DE006ED4C2 /* metamacros.h */,
+			);
+			path = extobjc;
+			sourceTree = "<group>";
+		};
 		838AF11D1AFE58F600B8965E /* MessageCache */ = {
 			isa = PBXGroup;
 			children = (
@@ -2171,6 +2204,7 @@
 		83F599C91EED0F610013AF6B /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
+				8376B2241EF0418C006ED4C2 /* ThirdParty */,
 				835BC2661EEFCC23006B56C6 /* AVSDK.h */,
 				835BC2671EEFCC23006B56C6 /* AVSDK.m */,
 				8352BEB61EEFB4E100C513B6 /* LCDevice.h */,
@@ -3144,6 +3178,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8376B22E1EF041E7006ED4C2 /* metamacros.h in Headers */,
+				8376B22C1EF041E7006ED4C2 /* EXTScope.h in Headers */,
 				835BC2691EEFCC23006B56C6 /* AVSDK.h in Headers */,
 				8352BDDD1EEF6F1800C513B6 /* AVOSCloudFoundation.h in Headers */,
 				835BC2721EF02B5A006B56C6 /* LCFoundation.h in Headers */,
@@ -3155,6 +3191,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8376B2341EF041E8006ED4C2 /* metamacros.h in Headers */,
+				8376B2321EF041E8006ED4C2 /* EXTScope.h in Headers */,
 				835BC26B1EEFCC24006B56C6 /* AVSDK.h in Headers */,
 				8352BE401EEF70E300C513B6 /* AVOSCloudFoundation.h in Headers */,
 				835BC2741EF02B5A006B56C6 /* LCFoundation.h in Headers */,
@@ -3166,6 +3204,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8376B2311EF041E8006ED4C2 /* metamacros.h in Headers */,
+				8376B22F1EF041E8006ED4C2 /* EXTScope.h in Headers */,
 				835BC26A1EEFCC23006B56C6 /* AVSDK.h in Headers */,
 				8352BEA31EEF713400C513B6 /* AVOSCloudFoundation.h in Headers */,
 				835BC2731EF02B5A006B56C6 /* LCFoundation.h in Headers */,
@@ -3303,6 +3343,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8376B22B1EF041E7006ED4C2 /* metamacros.h in Headers */,
+				8376B2291EF041E7006ED4C2 /* EXTScope.h in Headers */,
 				835BC2681EEFCC23006B56C6 /* AVSDK.h in Headers */,
 				83F599CC1EED0F610013AF6B /* AVOSCloudFoundation.h in Headers */,
 				835BC2711EF02B5A006B56C6 /* LCFoundation.h in Headers */,
@@ -4608,6 +4650,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8376B22D1EF041E7006ED4C2 /* EXTScope.m in Sources */,
 				8352BEBD1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 				835BC26D1EEFCC24006B56C6 /* AVSDK.m in Sources */,
 			);
@@ -4617,6 +4660,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8376B2331EF041E8006ED4C2 /* EXTScope.m in Sources */,
 				8352BEBF1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 				835BC26F1EEFCC24006B56C6 /* AVSDK.m in Sources */,
 			);
@@ -4626,6 +4670,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8376B2301EF041E8006ED4C2 /* EXTScope.m in Sources */,
 				8352BEBE1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 				835BC26E1EEFCC24006B56C6 /* AVSDK.m in Sources */,
 			);
@@ -4751,6 +4796,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8376B22A1EF041E7006ED4C2 /* EXTScope.m in Sources */,
 				8352BEBC1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 				835BC26C1EEFCC24006B56C6 /* AVSDK.m in Sources */,
 			);
