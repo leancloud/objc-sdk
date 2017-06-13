@@ -1300,8 +1300,8 @@
 		835092101EB1ECB7000DA884 /* AVDynamicObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVDynamicObject.h; sourceTree = "<group>"; };
 		835092111EB1ECB7000DA884 /* AVDynamicObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVDynamicObject.m; sourceTree = "<group>"; };
 		8352BDE61EEF6F1800C513B6 /* AVOSCloudFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8352BE491EEF70E300C513B6 /* Foundation-watchOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Foundation-watchOS.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8352BEAC1EEF713400C513B6 /* Foundation-tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Foundation-tvOS.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8352BE491EEF70E300C513B6 /* AVOSCloudFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8352BEAC1EEF713400C513B6 /* AVOSCloudFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		836705AA1BA1358D0050E968 /* SDMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMacros.h; sourceTree = "<group>"; };
 		837CC71C1B568431001333AD /* NSDictionary+LCHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+LCHash.h"; sourceTree = "<group>"; };
 		837CC71D1B568431001333AD /* NSDictionary+LCHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+LCHash.m"; sourceTree = "<group>"; };
@@ -2286,8 +2286,8 @@
 				832677C91EED0B5B00004C66 /* AVOSCloudMessageProtocol.framework */,
 				83F599C81EED0F610013AF6B /* AVOSCloudFoundation.framework */,
 				8352BDE61EEF6F1800C513B6 /* AVOSCloudFoundation.framework */,
-				8352BE491EEF70E300C513B6 /* Foundation-watchOS.framework */,
-				8352BEAC1EEF713400C513B6 /* Foundation-tvOS.framework */,
+				8352BE491EEF70E300C513B6 /* AVOSCloudFoundation.framework */,
+				8352BEAC1EEF713400C513B6 /* AVOSCloudFoundation.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3756,7 +3756,7 @@
 			);
 			name = "Foundation-watchOS";
 			productName = Foundation;
-			productReference = 8352BE491EEF70E300C513B6 /* Foundation-watchOS.framework */;
+			productReference = 8352BE491EEF70E300C513B6 /* AVOSCloudFoundation.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		8352BE4B1EEF713400C513B6 /* Foundation-tvOS */ = {
@@ -3774,7 +3774,7 @@
 			);
 			name = "Foundation-tvOS";
 			productName = Foundation;
-			productReference = 8352BEAC1EEF713400C513B6 /* Foundation-tvOS.framework */;
+			productReference = 8352BEAC1EEF713400C513B6 /* AVOSCloudFoundation.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		838CE31A1EC97E6E00B24F5B /* LiveQuery-iOS */ = {
@@ -5763,13 +5763,13 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "Foundation-macOS copy-Info.plist";
+				INFOPLIST_FILE = Foundation/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.Foundation;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = AVOSCloudFoundation;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5804,13 +5804,13 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "Foundation-macOS copy-Info.plist";
+				INFOPLIST_FILE = Foundation/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.Foundation;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = AVOSCloudFoundation;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5851,13 +5851,13 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "Foundation-watchOS copy-Info.plist";
+				INFOPLIST_FILE = Foundation/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.Foundation;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = AVOSCloudFoundation;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5892,13 +5892,13 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "Foundation-watchOS copy-Info.plist";
+				INFOPLIST_FILE = Foundation/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.Foundation;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = AVOSCloudFoundation;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";

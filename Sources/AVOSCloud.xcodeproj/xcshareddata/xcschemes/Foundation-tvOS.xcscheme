@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8352BE4B1EEF713400C513B6"
-               BuildableName = "Foundation-tvOS.framework"
+               BuildableName = "AVOSCloudFoundation.framework"
                BlueprintName = "Foundation-tvOS"
                ReferencedContainer = "container:AVOSCloud.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8352BE4B1EEF713400C513B6"
-            BuildableName = "Foundation-tvOS.framework"
+            BuildableName = "AVOSCloudFoundation.framework"
             BlueprintName = "Foundation-tvOS"
             ReferencedContainer = "container:AVOSCloud.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8352BE4B1EEF713400C513B6"
-            BuildableName = "Foundation-tvOS.framework"
+            BuildableName = "AVOSCloudFoundation.framework"
             BlueprintName = "Foundation-tvOS"
             ReferencedContainer = "container:AVOSCloud.xcodeproj">
          </BuildableReference>

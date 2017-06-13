@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8352BDE81EEF70E300C513B6"
-               BuildableName = "Foundation-watchOS.framework"
+               BuildableName = "AVOSCloudFoundation.framework"
                BlueprintName = "Foundation-watchOS"
                ReferencedContainer = "container:AVOSCloud.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8352BDE81EEF70E300C513B6"
-            BuildableName = "Foundation-watchOS.framework"
+            BuildableName = "AVOSCloudFoundation.framework"
             BlueprintName = "Foundation-watchOS"
             ReferencedContainer = "container:AVOSCloud.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8352BDE81EEF70E300C513B6"
-            BuildableName = "Foundation-watchOS.framework"
+            BuildableName = "AVOSCloudFoundation.framework"
             BlueprintName = "Foundation-watchOS"
             ReferencedContainer = "container:AVOSCloud.xcodeproj">
          </BuildableReference>
