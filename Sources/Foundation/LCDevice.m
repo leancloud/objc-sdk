@@ -7,6 +7,9 @@
 //
 
 #import "LCDevice.h"
+#import "EXTScope.h"
+
+#import <sys/sysctl.h>
 
 @implementation LCDevice
 
@@ -34,6 +37,33 @@
 
     return NO;
 #endif
+}
+
+- (NSString *)model {
+    size_t size = 0;
+
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+
+    if (!size)
+        return nil;
+
+    char *modelptr = malloc(size);
+
+    if (!modelptr)
+        return nil;
+
+    @onExit {
+        free(modelptr);
+    };
+
+    int error = sysctlbyname("hw.machine", modelptr, &size, NULL, 0);
+
+    if (error)
+        return nil;
+
+    NSString *model = [NSString stringWithCString:modelptr encoding:NSUTF8StringEncoding];
+
+    return model;
 }
 
 @end

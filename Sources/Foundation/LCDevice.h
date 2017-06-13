@@ -22,6 +22,11 @@
 @property (nonatomic, readonly, assign) BOOL jailbroken;
 
 /**
+ The model of current device.
+ */
+@property (nonatomic, readonly, strong) NSString *model;
+
+/**
  Get an LCDevice singleton instance.
 
  @return An LCDevice singleton instance.
