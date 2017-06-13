@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0900"
+   LastUpgradeVersion = "0830"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -16,9 +16,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "83C7D3FA1EEC4E4700AD7EDE"
-               BuildableName = "ConnectionTests_iOS.xctest"
-               BlueprintName = "ConnectionTests_iOS"
+               BlueprintIdentifier = "70F315311BDE503B00D691B3"
+               BuildableName = "StorageTests-macOS.xctest"
+               BlueprintName = "StorageTests-macOS"
                ReferencedContainer = "container:AVOSCloud.xcodeproj">
             </BuildableReference>
          </TestableReference>

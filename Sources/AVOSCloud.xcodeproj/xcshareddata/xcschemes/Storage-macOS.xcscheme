@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0900"
+   LastUpgradeVersion = "0830"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "83C7D3F21EEC4E4700AD7EDE"
-               BuildableName = "AVOSCloudConnection.framework"
-               BlueprintName = "Connection_iOS"
+               BlueprintIdentifier = "70CA7F671BDE2DC3000A3B21"
+               BuildableName = "AVOSCloudStorage.framework"
+               BlueprintName = "Storage-macOS"
                ReferencedContainer = "container:AVOSCloud.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "83C7D3F21EEC4E4700AD7EDE"
-            BuildableName = "AVOSCloudConnection.framework"
-            BlueprintName = "Connection_iOS"
+            BlueprintIdentifier = "70CA7F671BDE2DC3000A3B21"
+            BuildableName = "AVOSCloudStorage.framework"
+            BlueprintName = "Storage-macOS"
             ReferencedContainer = "container:AVOSCloud.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,9 +63,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "83C7D3F21EEC4E4700AD7EDE"
-            BuildableName = "AVOSCloudConnection.framework"
-            BlueprintName = "Connection_iOS"
+            BlueprintIdentifier = "70CA7F671BDE2DC3000A3B21"
+            BuildableName = "AVOSCloudStorage.framework"
+            BlueprintName = "Storage-macOS"
             ReferencedContainer = "container:AVOSCloud.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

@@ -1322,7 +1322,7 @@
 		704717A31B4A620900F6ADDC /* AVIMTestBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMTestBase.h; sourceTree = "<group>"; };
 		704717A41B4A620900F6ADDC /* AVIMTestBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMTestBase.m; sourceTree = "<group>"; };
 		704F3B6E1BE0D0180033245C /* AVOSCloudMessage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudMessage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		704F3B771BE0D0180033245C /* MessageTests_macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MessageTests_macOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		704F3B771BE0D0180033245C /* MessageTests-macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MessageTests-macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		704F8DAD1BF49292007CB560 /* AVUtilsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVUtilsTest.m; sourceTree = "<group>"; };
 		705A38991BDF605C00864B72 /* AVPersistentUtilsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVPersistentUtilsTest.m; sourceTree = "<group>"; };
 		705EEF5F1BD8C4E600A29083 /* AVCustomUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCustomUser.h; sourceTree = "<group>"; };
@@ -1338,7 +1338,7 @@
 		70DA62491B4BD7D100D95D4D /* testAudio.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = testAudio.mp3; sourceTree = "<group>"; };
 		70DA624B1B4BDC8300D95D4D /* AVIMCustomMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMCustomMessage.h; sourceTree = "<group>"; };
 		70DA624C1B4BDC8300D95D4D /* AVIMCustomMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMCustomMessage.m; sourceTree = "<group>"; };
-		70F315321BDE503B00D691B3 /* StorageTests_macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StorageTests_macOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		70F315321BDE503B00D691B3 /* StorageTests-macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "StorageTests-macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8302AED31C192A0600E13F8A /* LCURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCURLConnection.h; sourceTree = "<group>"; };
 		8302AED41C192A0600E13F8A /* LCURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCURLConnection.m; sourceTree = "<group>"; };
 		830E7CF61B1CA2A2005F4B22 /* LCDatabaseCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCDatabaseCoordinator.h; sourceTree = "<group>"; };
@@ -1481,10 +1481,10 @@
 		838B32ED1CE1953800CAEBF8 /* LCRouterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCRouterTest.m; sourceTree = "<group>"; };
 		838CE31B1EC97E6E00B24F5B /* AVOSCloudLiveQuery.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudLiveQuery.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		838CE31D1EC97E6E00B24F5B /* AVOSCloudLiveQuery.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloudLiveQuery.h; sourceTree = "<group>"; };
-		838CE3231EC97E6E00B24F5B /* LiveQueryTests_iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LiveQueryTests_iOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		838CE3231EC97E6E00B24F5B /* LiveQueryTests-iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "LiveQueryTests-iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		838CE3281EC97E6F00B24F5B /* AVOSCloudLiveQueryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVOSCloudLiveQueryTests.m; sourceTree = "<group>"; };
 		838CE3401EC980DE00B24F5B /* AVOSCloudLiveQuery.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudLiveQuery.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		838CE34D1EC980E000B24F5B /* LiveQueryTests_macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LiveQueryTests_macOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		838CE34D1EC980E000B24F5B /* LiveQueryTests-macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "LiveQueryTests-macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		838CE3521EC9838500B24F5B /* AVLiveQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVLiveQuery.h; sourceTree = "<group>"; };
 		838CE3531EC9838500B24F5B /* AVLiveQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVLiveQuery.m; sourceTree = "<group>"; };
 		838DD7941B3D309F00C95897 /* LCNetworkStatistics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCNetworkStatistics.h; sourceTree = "<group>"; };
@@ -1558,7 +1558,7 @@
 		83C7D3ED1EEC4BBB00AD7EDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83C7D3F31EEC4E4700AD7EDE /* AVOSCloudConnection.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudConnection.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		83C7D3F61EEC4E4700AD7EDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		83C7D3FB1EEC4E4700AD7EDE /* ConnectionTests_iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConnectionTests_iOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		83C7D3FB1EEC4E4700AD7EDE /* ConnectionTests-iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ConnectionTests-iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		83C7D4001EEC4E4700AD7EDE /* ConnectionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConnectionTests.m; sourceTree = "<group>"; };
 		83C7D4021EEC4E4700AD7EDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83C7D40C1EEC4F6F00AD7EDE /* LCSRWebSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCSRWebSocket.h; sourceTree = "<group>"; };
@@ -1598,10 +1598,10 @@
 		8C630C801A6EB259008F1B00 /* AVIMErrorUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMErrorUtil.m; sourceTree = "<group>"; };
 		8C8419861A5A791300C5C6C4 /* AVOSCloudStorage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudStorage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C84198B1A5A791300C5C6C4 /* AVOSCloud.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloud.h; sourceTree = "<group>"; };
-		8C8419911A5A791300C5C6C4 /* StorageTests_iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StorageTests_iOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C8419911A5A791300C5C6C4 /* StorageTests-iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "StorageTests-iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C8419C31A5A796000C5C6C4 /* AVOSCloudMessage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudMessage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C8419C71A5A796000C5C6C4 /* AVOSCloudIM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloudIM.h; sourceTree = "<group>"; };
-		8C8419CD1A5A796000C5C6C4 /* MessageTests_iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MessageTests_iOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C8419CD1A5A796000C5C6C4 /* MessageTests-iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MessageTests-iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C8419D31A5A796000C5C6C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C8419DD1A5A79FF00C5C6C4 /* AVACL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVACL.h; sourceTree = "<group>"; };
 		8C8419DE1A5A79FF00C5C6C4 /* AVACL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVACL.m; sourceTree = "<group>"; };
@@ -2570,22 +2570,22 @@
 			isa = PBXGroup;
 			children = (
 				8C8419861A5A791300C5C6C4 /* AVOSCloudStorage.framework */,
-				8C8419911A5A791300C5C6C4 /* StorageTests_iOS.xctest */,
+				8C8419911A5A791300C5C6C4 /* StorageTests-iOS.xctest */,
 				8C8419C31A5A796000C5C6C4 /* AVOSCloudMessage.framework */,
-				8C8419CD1A5A796000C5C6C4 /* MessageTests_iOS.xctest */,
+				8C8419CD1A5A796000C5C6C4 /* MessageTests-iOS.xctest */,
 				8C255D261AE9F815008A6FFC /* AVOSCloudCrashReporting.framework */,
 				70CA7F681BDE2DC3000A3B21 /* AVOSCloudStorage.framework */,
-				70F315321BDE503B00D691B3 /* StorageTests_macOS.xctest */,
+				70F315321BDE503B00D691B3 /* StorageTests-macOS.xctest */,
 				704F3B6E1BE0D0180033245C /* AVOSCloudMessage.framework */,
-				704F3B771BE0D0180033245C /* MessageTests_macOS.xctest */,
+				704F3B771BE0D0180033245C /* MessageTests-macOS.xctest */,
 				83D8CF551C17DAF50094279D /* AVOSCloudStorage.framework */,
 				8320F95C1C1918C60024B45E /* AVOSCloudStorage.framework */,
 				838CE31B1EC97E6E00B24F5B /* AVOSCloudLiveQuery.framework */,
-				838CE3231EC97E6E00B24F5B /* LiveQueryTests_iOS.xctest */,
+				838CE3231EC97E6E00B24F5B /* LiveQueryTests-iOS.xctest */,
 				838CE3401EC980DE00B24F5B /* AVOSCloudLiveQuery.framework */,
-				838CE34D1EC980E000B24F5B /* LiveQueryTests_macOS.xctest */,
+				838CE34D1EC980E000B24F5B /* LiveQueryTests-macOS.xctest */,
 				83C7D3F31EEC4E4700AD7EDE /* AVOSCloudConnection.framework */,
-				83C7D3FB1EEC4E4700AD7EDE /* ConnectionTests_iOS.xctest */,
+				83C7D3FB1EEC4E4700AD7EDE /* ConnectionTests-iOS.xctest */,
 				832677C91EED0B5B00004C66 /* AVOSCloudMessageProtocol.framework */,
 				83F599C81EED0F610013AF6B /* AVOSCloudFoundation.framework */,
 			);
@@ -3941,9 +3941,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		704F3B6D1BE0D0180033245C /* Message_macOS */ = {
+		704F3B6D1BE0D0180033245C /* Message-macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 704F3B831BE0D0180033245C /* Build configuration list for PBXNativeTarget "Message_macOS" */;
+			buildConfigurationList = 704F3B831BE0D0180033245C /* Build configuration list for PBXNativeTarget "Message-macOS" */;
 			buildPhases = (
 				704F3B691BE0D0180033245C /* Sources */,
 				704F3B6A1BE0D0180033245C /* Frameworks */,
@@ -3955,14 +3955,14 @@
 			dependencies = (
 				704F3C041BE0D5170033245C /* PBXTargetDependency */,
 			);
-			name = Message_macOS;
+			name = "Message-macOS";
 			productName = AVOSCloudIM;
 			productReference = 704F3B6E1BE0D0180033245C /* AVOSCloudMessage.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		704F3B761BE0D0180033245C /* MessageTests_macOS */ = {
+		704F3B761BE0D0180033245C /* MessageTests-macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 704F3B841BE0D0180033245C /* Build configuration list for PBXNativeTarget "MessageTests_macOS" */;
+			buildConfigurationList = 704F3B841BE0D0180033245C /* Build configuration list for PBXNativeTarget "MessageTests-macOS" */;
 			buildPhases = (
 				704F3B731BE0D0180033245C /* Sources */,
 				704F3B741BE0D0180033245C /* Frameworks */,
@@ -3974,14 +3974,14 @@
 				7085D52C1BEA244900449DC1 /* PBXTargetDependency */,
 				704F3B7A1BE0D0180033245C /* PBXTargetDependency */,
 			);
-			name = MessageTests_macOS;
+			name = "MessageTests-macOS";
 			productName = "AVOSCloudIM-OSXTests";
-			productReference = 704F3B771BE0D0180033245C /* MessageTests_macOS.xctest */;
+			productReference = 704F3B771BE0D0180033245C /* MessageTests-macOS.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		70CA7F671BDE2DC3000A3B21 /* Storage_macOS */ = {
+		70CA7F671BDE2DC3000A3B21 /* Storage-macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 70CA7F6D1BDE2DC3000A3B21 /* Build configuration list for PBXNativeTarget "Storage_macOS" */;
+			buildConfigurationList = 70CA7F6D1BDE2DC3000A3B21 /* Build configuration list for PBXNativeTarget "Storage-macOS" */;
 			buildPhases = (
 				70CA7F631BDE2DC3000A3B21 /* Sources */,
 				70CA7F641BDE2DC3000A3B21 /* Frameworks */,
@@ -3992,14 +3992,14 @@
 			);
 			dependencies = (
 			);
-			name = Storage_macOS;
+			name = "Storage-macOS";
 			productName = AVOSCloud;
 			productReference = 70CA7F681BDE2DC3000A3B21 /* AVOSCloudStorage.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		70F315311BDE503B00D691B3 /* StorageTests_macOS */ = {
+		70F315311BDE503B00D691B3 /* StorageTests-macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 70F3153A1BDE503B00D691B3 /* Build configuration list for PBXNativeTarget "StorageTests_macOS" */;
+			buildConfigurationList = 70F3153A1BDE503B00D691B3 /* Build configuration list for PBXNativeTarget "StorageTests-macOS" */;
 			buildPhases = (
 				70F3152E1BDE503B00D691B3 /* Sources */,
 				70F3152F1BDE503B00D691B3 /* Frameworks */,
@@ -4010,14 +4010,14 @@
 			dependencies = (
 				70F315391BDE503B00D691B3 /* PBXTargetDependency */,
 			);
-			name = StorageTests_macOS;
+			name = "StorageTests-macOS";
 			productName = AVOSCloudOSXTests;
-			productReference = 70F315321BDE503B00D691B3 /* StorageTests_macOS.xctest */;
+			productReference = 70F315321BDE503B00D691B3 /* StorageTests-macOS.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		8320F87A1C1918C60024B45E /* Storage_watchOS */ = {
+		8320F87A1C1918C60024B45E /* Storage-watchOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8320F9591C1918C60024B45E /* Build configuration list for PBXNativeTarget "Storage_watchOS" */;
+			buildConfigurationList = 8320F9591C1918C60024B45E /* Build configuration list for PBXNativeTarget "Storage-watchOS" */;
 			buildPhases = (
 				8320F87B1C1918C60024B45E /* Sources */,
 				8320F8D41C1918C60024B45E /* Frameworks */,
@@ -4028,14 +4028,14 @@
 			);
 			dependencies = (
 			);
-			name = Storage_watchOS;
+			name = "Storage-watchOS";
 			productName = AVOSCloud;
 			productReference = 8320F95C1C1918C60024B45E /* AVOSCloudStorage.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		832677C81EED0B5B00004C66 /* MessageProtocol */ = {
+		832677C81EED0B5B00004C66 /* MessageProtocol-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 832677D01EED0B5C00004C66 /* Build configuration list for PBXNativeTarget "MessageProtocol" */;
+			buildConfigurationList = 832677D01EED0B5C00004C66 /* Build configuration list for PBXNativeTarget "MessageProtocol-iOS" */;
 			buildPhases = (
 				832677C41EED0B5B00004C66 /* Sources */,
 				832677C51EED0B5B00004C66 /* Frameworks */,
@@ -4046,14 +4046,14 @@
 			);
 			dependencies = (
 			);
-			name = MessageProtocol;
+			name = "MessageProtocol-iOS";
 			productName = MessageProtocol;
 			productReference = 832677C91EED0B5B00004C66 /* AVOSCloudMessageProtocol.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		838CE31A1EC97E6E00B24F5B /* LiveQuery_iOS */ = {
+		838CE31A1EC97E6E00B24F5B /* LiveQuery-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 838CE3301EC97E6F00B24F5B /* Build configuration list for PBXNativeTarget "LiveQuery_iOS" */;
+			buildConfigurationList = 838CE3301EC97E6F00B24F5B /* Build configuration list for PBXNativeTarget "LiveQuery-iOS" */;
 			buildPhases = (
 				838CE3161EC97E6E00B24F5B /* Sources */,
 				838CE3171EC97E6E00B24F5B /* Frameworks */,
@@ -4064,14 +4064,14 @@
 			);
 			dependencies = (
 			);
-			name = LiveQuery_iOS;
+			name = "LiveQuery-iOS";
 			productName = AVOSCloudLiveQuery;
 			productReference = 838CE31B1EC97E6E00B24F5B /* AVOSCloudLiveQuery.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		838CE3221EC97E6E00B24F5B /* LiveQueryTests_iOS */ = {
+		838CE3221EC97E6E00B24F5B /* LiveQueryTests-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 838CE3311EC97E6F00B24F5B /* Build configuration list for PBXNativeTarget "LiveQueryTests_iOS" */;
+			buildConfigurationList = 838CE3311EC97E6F00B24F5B /* Build configuration list for PBXNativeTarget "LiveQueryTests-iOS" */;
 			buildPhases = (
 				838CE31F1EC97E6E00B24F5B /* Sources */,
 				838CE3201EC97E6E00B24F5B /* Frameworks */,
@@ -4082,14 +4082,14 @@
 			dependencies = (
 				838CE3261EC97E6F00B24F5B /* PBXTargetDependency */,
 			);
-			name = LiveQueryTests_iOS;
+			name = "LiveQueryTests-iOS";
 			productName = AVOSCloudLiveQueryTests;
-			productReference = 838CE3231EC97E6E00B24F5B /* LiveQueryTests_iOS.xctest */;
+			productReference = 838CE3231EC97E6E00B24F5B /* LiveQueryTests-iOS.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		838CE3361EC980DE00B24F5B /* LiveQuery_macOS */ = {
+		838CE3361EC980DE00B24F5B /* LiveQuery-macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 838CE33D1EC980DE00B24F5B /* Build configuration list for PBXNativeTarget "LiveQuery_macOS" */;
+			buildConfigurationList = 838CE33D1EC980DE00B24F5B /* Build configuration list for PBXNativeTarget "LiveQuery-macOS" */;
 			buildPhases = (
 				838CE3371EC980DE00B24F5B /* Sources */,
 				838CE3381EC980DE00B24F5B /* Frameworks */,
@@ -4100,14 +4100,14 @@
 			);
 			dependencies = (
 			);
-			name = LiveQuery_macOS;
+			name = "LiveQuery-macOS";
 			productName = AVOSCloudLiveQuery;
 			productReference = 838CE3401EC980DE00B24F5B /* AVOSCloudLiveQuery.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		838CE3411EC980E000B24F5B /* LiveQueryTests_macOS */ = {
+		838CE3411EC980E000B24F5B /* LiveQueryTests-macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 838CE34A1EC980E000B24F5B /* Build configuration list for PBXNativeTarget "LiveQueryTests_macOS" */;
+			buildConfigurationList = 838CE34A1EC980E000B24F5B /* Build configuration list for PBXNativeTarget "LiveQueryTests-macOS" */;
 			buildPhases = (
 				838CE3441EC980E000B24F5B /* Sources */,
 				838CE3461EC980E000B24F5B /* Frameworks */,
@@ -4118,14 +4118,14 @@
 			dependencies = (
 				838CE3421EC980E000B24F5B /* PBXTargetDependency */,
 			);
-			name = LiveQueryTests_macOS;
+			name = "LiveQueryTests-macOS";
 			productName = AVOSCloudLiveQueryTests;
-			productReference = 838CE34D1EC980E000B24F5B /* LiveQueryTests_macOS.xctest */;
+			productReference = 838CE34D1EC980E000B24F5B /* LiveQueryTests-macOS.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		83C7D3F21EEC4E4700AD7EDE /* Connection_iOS */ = {
+		83C7D3F21EEC4E4700AD7EDE /* Connection-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 83C7D4041EEC4E4700AD7EDE /* Build configuration list for PBXNativeTarget "Connection_iOS" */;
+			buildConfigurationList = 83C7D4041EEC4E4700AD7EDE /* Build configuration list for PBXNativeTarget "Connection-iOS" */;
 			buildPhases = (
 				83C7D3EE1EEC4E4700AD7EDE /* Sources */,
 				83C7D3EF1EEC4E4700AD7EDE /* Frameworks */,
@@ -4136,14 +4136,14 @@
 			);
 			dependencies = (
 			);
-			name = Connection_iOS;
+			name = "Connection-iOS";
 			productName = Connection;
 			productReference = 83C7D3F31EEC4E4700AD7EDE /* AVOSCloudConnection.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		83C7D3FA1EEC4E4700AD7EDE /* ConnectionTests_iOS */ = {
+		83C7D3FA1EEC4E4700AD7EDE /* ConnectionTests-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 83C7D4071EEC4E4700AD7EDE /* Build configuration list for PBXNativeTarget "ConnectionTests_iOS" */;
+			buildConfigurationList = 83C7D4071EEC4E4700AD7EDE /* Build configuration list for PBXNativeTarget "ConnectionTests-iOS" */;
 			buildPhases = (
 				83C7D3F71EEC4E4700AD7EDE /* Sources */,
 				83C7D3F81EEC4E4700AD7EDE /* Frameworks */,
@@ -4154,14 +4154,14 @@
 			dependencies = (
 				83C7D3FE1EEC4E4700AD7EDE /* PBXTargetDependency */,
 			);
-			name = ConnectionTests_iOS;
+			name = "ConnectionTests-iOS";
 			productName = ConnectionTests;
-			productReference = 83C7D3FB1EEC4E4700AD7EDE /* ConnectionTests_iOS.xctest */;
+			productReference = 83C7D3FB1EEC4E4700AD7EDE /* ConnectionTests-iOS.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		83D8CE731C17DAF50094279D /* Storage_tvOS */ = {
+		83D8CE731C17DAF50094279D /* Storage-tvOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 83D8CF521C17DAF50094279D /* Build configuration list for PBXNativeTarget "Storage_tvOS" */;
+			buildConfigurationList = 83D8CF521C17DAF50094279D /* Build configuration list for PBXNativeTarget "Storage-tvOS" */;
 			buildPhases = (
 				83D8CE741C17DAF50094279D /* Sources */,
 				83D8CECD1C17DAF50094279D /* Frameworks */,
@@ -4172,14 +4172,14 @@
 			);
 			dependencies = (
 			);
-			name = Storage_tvOS;
+			name = "Storage-tvOS";
 			productName = AVOSCloud;
 			productReference = 83D8CF551C17DAF50094279D /* AVOSCloudStorage.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		83F599C71EED0F610013AF6B /* Foundation */ = {
+		83F599C71EED0F610013AF6B /* Foundation-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 83F599CF1EED0F610013AF6B /* Build configuration list for PBXNativeTarget "Foundation" */;
+			buildConfigurationList = 83F599CF1EED0F610013AF6B /* Build configuration list for PBXNativeTarget "Foundation-iOS" */;
 			buildPhases = (
 				83F599C31EED0F610013AF6B /* Sources */,
 				83F599C41EED0F610013AF6B /* Frameworks */,
@@ -4190,14 +4190,14 @@
 			);
 			dependencies = (
 			);
-			name = Foundation;
+			name = "Foundation-iOS";
 			productName = Foundation;
 			productReference = 83F599C81EED0F610013AF6B /* AVOSCloudFoundation.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		8C255D251AE9F815008A6FFC /* CrashReporting_iOS */ = {
+		8C255D251AE9F815008A6FFC /* CrashReporting-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8C255D3D1AE9F818008A6FFC /* Build configuration list for PBXNativeTarget "CrashReporting_iOS" */;
+			buildConfigurationList = 8C255D3D1AE9F818008A6FFC /* Build configuration list for PBXNativeTarget "CrashReporting-iOS" */;
 			buildPhases = (
 				8C255D211AE9F815008A6FFC /* Sources */,
 				8C255D221AE9F815008A6FFC /* Frameworks */,
@@ -4208,14 +4208,14 @@
 			);
 			dependencies = (
 			);
-			name = CrashReporting_iOS;
+			name = "CrashReporting-iOS";
 			productName = AVOSCloudCrashReporting;
 			productReference = 8C255D261AE9F815008A6FFC /* AVOSCloudCrashReporting.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		8C8419851A5A791300C5C6C4 /* Storage_iOS */ = {
+		8C8419851A5A791300C5C6C4 /* Storage-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8C84199A1A5A791300C5C6C4 /* Build configuration list for PBXNativeTarget "Storage_iOS" */;
+			buildConfigurationList = 8C84199A1A5A791300C5C6C4 /* Build configuration list for PBXNativeTarget "Storage-iOS" */;
 			buildPhases = (
 				8C8419811A5A791300C5C6C4 /* Sources */,
 				8C8419821A5A791300C5C6C4 /* Frameworks */,
@@ -4226,14 +4226,14 @@
 			);
 			dependencies = (
 			);
-			name = Storage_iOS;
+			name = "Storage-iOS";
 			productName = AVOSCloud;
 			productReference = 8C8419861A5A791300C5C6C4 /* AVOSCloudStorage.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		8C8419901A5A791300C5C6C4 /* StorageTests_iOS */ = {
+		8C8419901A5A791300C5C6C4 /* StorageTests-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8C84199D1A5A791300C5C6C4 /* Build configuration list for PBXNativeTarget "StorageTests_iOS" */;
+			buildConfigurationList = 8C84199D1A5A791300C5C6C4 /* Build configuration list for PBXNativeTarget "StorageTests-iOS" */;
 			buildPhases = (
 				8C84198D1A5A791300C5C6C4 /* Sources */,
 				8C84198E1A5A791300C5C6C4 /* Frameworks */,
@@ -4244,14 +4244,14 @@
 			dependencies = (
 				8C8419941A5A791300C5C6C4 /* PBXTargetDependency */,
 			);
-			name = StorageTests_iOS;
+			name = "StorageTests-iOS";
 			productName = AVOSCloudTests;
-			productReference = 8C8419911A5A791300C5C6C4 /* StorageTests_iOS.xctest */;
+			productReference = 8C8419911A5A791300C5C6C4 /* StorageTests-iOS.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		8C8419C21A5A796000C5C6C4 /* Message_iOS */ = {
+		8C8419C21A5A796000C5C6C4 /* Message-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8C8419D61A5A796000C5C6C4 /* Build configuration list for PBXNativeTarget "Message_iOS" */;
+			buildConfigurationList = 8C8419D61A5A796000C5C6C4 /* Build configuration list for PBXNativeTarget "Message-iOS" */;
 			buildPhases = (
 				8C8419BE1A5A796000C5C6C4 /* Sources */,
 				8C8419BF1A5A796000C5C6C4 /* Frameworks */,
@@ -4262,14 +4262,14 @@
 			);
 			dependencies = (
 			);
-			name = Message_iOS;
+			name = "Message-iOS";
 			productName = AVOSCloudIM;
 			productReference = 8C8419C31A5A796000C5C6C4 /* AVOSCloudMessage.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		8C8419CC1A5A796000C5C6C4 /* MessageTests_iOS */ = {
+		8C8419CC1A5A796000C5C6C4 /* MessageTests-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8C8419D91A5A796000C5C6C4 /* Build configuration list for PBXNativeTarget "MessageTests_iOS" */;
+			buildConfigurationList = 8C8419D91A5A796000C5C6C4 /* Build configuration list for PBXNativeTarget "MessageTests-iOS" */;
 			buildPhases = (
 				8C8419C91A5A796000C5C6C4 /* Sources */,
 				8C8419CA1A5A796000C5C6C4 /* Frameworks */,
@@ -4281,9 +4281,9 @@
 				704717A71B4A626800F6ADDC /* PBXTargetDependency */,
 				8C8419D01A5A796000C5C6C4 /* PBXTargetDependency */,
 			);
-			name = MessageTests_iOS;
+			name = "MessageTests-iOS";
 			productName = AVOSCloudIMTests;
-			productReference = 8C8419CD1A5A796000C5C6C4 /* MessageTests_iOS.xctest */;
+			productReference = 8C8419CD1A5A796000C5C6C4 /* MessageTests-iOS.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -4357,25 +4357,25 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				83F599C71EED0F610013AF6B /* Foundation */,
-				8C8419851A5A791300C5C6C4 /* Storage_iOS */,
-				8C8419901A5A791300C5C6C4 /* StorageTests_iOS */,
-				70CA7F671BDE2DC3000A3B21 /* Storage_macOS */,
-				70F315311BDE503B00D691B3 /* StorageTests_macOS */,
-				83D8CE731C17DAF50094279D /* Storage_tvOS */,
-				8320F87A1C1918C60024B45E /* Storage_watchOS */,
-				83C7D3F21EEC4E4700AD7EDE /* Connection_iOS */,
-				83C7D3FA1EEC4E4700AD7EDE /* ConnectionTests_iOS */,
-				832677C81EED0B5B00004C66 /* MessageProtocol */,
-				8C8419C21A5A796000C5C6C4 /* Message_iOS */,
-				8C8419CC1A5A796000C5C6C4 /* MessageTests_iOS */,
-				704F3B6D1BE0D0180033245C /* Message_macOS */,
-				704F3B761BE0D0180033245C /* MessageTests_macOS */,
-				838CE31A1EC97E6E00B24F5B /* LiveQuery_iOS */,
-				838CE3221EC97E6E00B24F5B /* LiveQueryTests_iOS */,
-				838CE3361EC980DE00B24F5B /* LiveQuery_macOS */,
-				838CE3411EC980E000B24F5B /* LiveQueryTests_macOS */,
-				8C255D251AE9F815008A6FFC /* CrashReporting_iOS */,
+				83F599C71EED0F610013AF6B /* Foundation-iOS */,
+				8C8419851A5A791300C5C6C4 /* Storage-iOS */,
+				8C8419901A5A791300C5C6C4 /* StorageTests-iOS */,
+				70CA7F671BDE2DC3000A3B21 /* Storage-macOS */,
+				70F315311BDE503B00D691B3 /* StorageTests-macOS */,
+				83D8CE731C17DAF50094279D /* Storage-tvOS */,
+				8320F87A1C1918C60024B45E /* Storage-watchOS */,
+				83C7D3F21EEC4E4700AD7EDE /* Connection-iOS */,
+				83C7D3FA1EEC4E4700AD7EDE /* ConnectionTests-iOS */,
+				832677C81EED0B5B00004C66 /* MessageProtocol-iOS */,
+				8C8419C21A5A796000C5C6C4 /* Message-iOS */,
+				8C8419CC1A5A796000C5C6C4 /* MessageTests-iOS */,
+				704F3B6D1BE0D0180033245C /* Message-macOS */,
+				704F3B761BE0D0180033245C /* MessageTests-macOS */,
+				838CE31A1EC97E6E00B24F5B /* LiveQuery-iOS */,
+				838CE3221EC97E6E00B24F5B /* LiveQueryTests-iOS */,
+				838CE3361EC980DE00B24F5B /* LiveQuery-macOS */,
+				838CE3411EC980E000B24F5B /* LiveQueryTests-macOS */,
+				8C255D251AE9F815008A6FFC /* CrashReporting-iOS */,
 			);
 		};
 /* End PBXProject section */
@@ -5203,52 +5203,52 @@
 /* Begin PBXTargetDependency section */
 		704717A71B4A626800F6ADDC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8C8419851A5A791300C5C6C4 /* Storage_iOS */;
+			target = 8C8419851A5A791300C5C6C4 /* Storage-iOS */;
 			targetProxy = 704717A61B4A626800F6ADDC /* PBXContainerItemProxy */;
 		};
 		704F3B7A1BE0D0180033245C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 704F3B6D1BE0D0180033245C /* Message_macOS */;
+			target = 704F3B6D1BE0D0180033245C /* Message-macOS */;
 			targetProxy = 704F3B791BE0D0180033245C /* PBXContainerItemProxy */;
 		};
 		704F3C041BE0D5170033245C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 70CA7F671BDE2DC3000A3B21 /* Storage_macOS */;
+			target = 70CA7F671BDE2DC3000A3B21 /* Storage-macOS */;
 			targetProxy = 704F3C031BE0D5170033245C /* PBXContainerItemProxy */;
 		};
 		7085D52C1BEA244900449DC1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 70CA7F671BDE2DC3000A3B21 /* Storage_macOS */;
+			target = 70CA7F671BDE2DC3000A3B21 /* Storage-macOS */;
 			targetProxy = 7085D52B1BEA244900449DC1 /* PBXContainerItemProxy */;
 		};
 		70F315391BDE503B00D691B3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 70CA7F671BDE2DC3000A3B21 /* Storage_macOS */;
+			target = 70CA7F671BDE2DC3000A3B21 /* Storage-macOS */;
 			targetProxy = 70F315381BDE503B00D691B3 /* PBXContainerItemProxy */;
 		};
 		838CE3261EC97E6F00B24F5B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 838CE31A1EC97E6E00B24F5B /* LiveQuery_iOS */;
+			target = 838CE31A1EC97E6E00B24F5B /* LiveQuery-iOS */;
 			targetProxy = 838CE3251EC97E6F00B24F5B /* PBXContainerItemProxy */;
 		};
 		838CE3421EC980E000B24F5B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 838CE31A1EC97E6E00B24F5B /* LiveQuery_iOS */;
+			target = 838CE31A1EC97E6E00B24F5B /* LiveQuery-iOS */;
 			targetProxy = 838CE3431EC980E000B24F5B /* PBXContainerItemProxy */;
 		};
 		83C7D3FE1EEC4E4700AD7EDE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 83C7D3F21EEC4E4700AD7EDE /* Connection_iOS */;
+			target = 83C7D3F21EEC4E4700AD7EDE /* Connection-iOS */;
 			targetProxy = 83C7D3FD1EEC4E4700AD7EDE /* PBXContainerItemProxy */;
 		};
 		8C8419941A5A791300C5C6C4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8C8419851A5A791300C5C6C4 /* Storage_iOS */;
+			target = 8C8419851A5A791300C5C6C4 /* Storage-iOS */;
 			targetProxy = 8C8419931A5A791300C5C6C4 /* PBXContainerItemProxy */;
 		};
 		8C8419D01A5A796000C5C6C4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8C8419C21A5A796000C5C6C4 /* Message_iOS */;
+			target = 8C8419C21A5A796000C5C6C4 /* Message-iOS */;
 			targetProxy = 8C8419CF1A5A796000C5C6C4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -7517,7 +7517,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		704F3B831BE0D0180033245C /* Build configuration list for PBXNativeTarget "Message_macOS" */ = {
+		704F3B831BE0D0180033245C /* Build configuration list for PBXNativeTarget "Message-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				704F3B7F1BE0D0180033245C /* Debug */,
@@ -7526,7 +7526,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		704F3B841BE0D0180033245C /* Build configuration list for PBXNativeTarget "MessageTests_macOS" */ = {
+		704F3B841BE0D0180033245C /* Build configuration list for PBXNativeTarget "MessageTests-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				704F3B811BE0D0180033245C /* Debug */,
@@ -7535,7 +7535,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		70CA7F6D1BDE2DC3000A3B21 /* Build configuration list for PBXNativeTarget "Storage_macOS" */ = {
+		70CA7F6D1BDE2DC3000A3B21 /* Build configuration list for PBXNativeTarget "Storage-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				70CA7F6E1BDE2DC3000A3B21 /* Debug */,
@@ -7544,7 +7544,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		70F3153A1BDE503B00D691B3 /* Build configuration list for PBXNativeTarget "StorageTests_macOS" */ = {
+		70F3153A1BDE503B00D691B3 /* Build configuration list for PBXNativeTarget "StorageTests-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				70F3153B1BDE503B00D691B3 /* Debug */,
@@ -7553,7 +7553,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8320F9591C1918C60024B45E /* Build configuration list for PBXNativeTarget "Storage_watchOS" */ = {
+		8320F9591C1918C60024B45E /* Build configuration list for PBXNativeTarget "Storage-watchOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8320F95A1C1918C60024B45E /* Debug */,
@@ -7562,7 +7562,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		832677D01EED0B5C00004C66 /* Build configuration list for PBXNativeTarget "MessageProtocol" */ = {
+		832677D01EED0B5C00004C66 /* Build configuration list for PBXNativeTarget "MessageProtocol-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				832677CE1EED0B5C00004C66 /* Debug */,
@@ -7571,7 +7571,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		838CE3301EC97E6F00B24F5B /* Build configuration list for PBXNativeTarget "LiveQuery_iOS" */ = {
+		838CE3301EC97E6F00B24F5B /* Build configuration list for PBXNativeTarget "LiveQuery-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				838CE32C1EC97E6F00B24F5B /* Debug */,
@@ -7580,7 +7580,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		838CE3311EC97E6F00B24F5B /* Build configuration list for PBXNativeTarget "LiveQueryTests_iOS" */ = {
+		838CE3311EC97E6F00B24F5B /* Build configuration list for PBXNativeTarget "LiveQueryTests-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				838CE32E1EC97E6F00B24F5B /* Debug */,
@@ -7589,7 +7589,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		838CE33D1EC980DE00B24F5B /* Build configuration list for PBXNativeTarget "LiveQuery_macOS" */ = {
+		838CE33D1EC980DE00B24F5B /* Build configuration list for PBXNativeTarget "LiveQuery-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				838CE33E1EC980DE00B24F5B /* Debug */,
@@ -7598,7 +7598,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		838CE34A1EC980E000B24F5B /* Build configuration list for PBXNativeTarget "LiveQueryTests_macOS" */ = {
+		838CE34A1EC980E000B24F5B /* Build configuration list for PBXNativeTarget "LiveQueryTests-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				838CE34B1EC980E000B24F5B /* Debug */,
@@ -7607,7 +7607,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83C7D4041EEC4E4700AD7EDE /* Build configuration list for PBXNativeTarget "Connection_iOS" */ = {
+		83C7D4041EEC4E4700AD7EDE /* Build configuration list for PBXNativeTarget "Connection-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83C7D4051EEC4E4700AD7EDE /* Debug */,
@@ -7616,7 +7616,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83C7D4071EEC4E4700AD7EDE /* Build configuration list for PBXNativeTarget "ConnectionTests_iOS" */ = {
+		83C7D4071EEC4E4700AD7EDE /* Build configuration list for PBXNativeTarget "ConnectionTests-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83C7D4081EEC4E4700AD7EDE /* Debug */,
@@ -7625,7 +7625,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83D8CF521C17DAF50094279D /* Build configuration list for PBXNativeTarget "Storage_tvOS" */ = {
+		83D8CF521C17DAF50094279D /* Build configuration list for PBXNativeTarget "Storage-tvOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83D8CF531C17DAF50094279D /* Debug */,
@@ -7634,7 +7634,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83F599CF1EED0F610013AF6B /* Build configuration list for PBXNativeTarget "Foundation" */ = {
+		83F599CF1EED0F610013AF6B /* Build configuration list for PBXNativeTarget "Foundation-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83F599CD1EED0F610013AF6B /* Debug */,
@@ -7643,7 +7643,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8C255D3D1AE9F818008A6FFC /* Build configuration list for PBXNativeTarget "CrashReporting_iOS" */ = {
+		8C255D3D1AE9F818008A6FFC /* Build configuration list for PBXNativeTarget "CrashReporting-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8C255D391AE9F818008A6FFC /* Debug */,
@@ -7661,7 +7661,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8C84199A1A5A791300C5C6C4 /* Build configuration list for PBXNativeTarget "Storage_iOS" */ = {
+		8C84199A1A5A791300C5C6C4 /* Build configuration list for PBXNativeTarget "Storage-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8C84199B1A5A791300C5C6C4 /* Debug */,
@@ -7670,7 +7670,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8C84199D1A5A791300C5C6C4 /* Build configuration list for PBXNativeTarget "StorageTests_iOS" */ = {
+		8C84199D1A5A791300C5C6C4 /* Build configuration list for PBXNativeTarget "StorageTests-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8C84199E1A5A791300C5C6C4 /* Debug */,
@@ -7679,7 +7679,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8C8419D61A5A796000C5C6C4 /* Build configuration list for PBXNativeTarget "Message_iOS" */ = {
+		8C8419D61A5A796000C5C6C4 /* Build configuration list for PBXNativeTarget "Message-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8C8419D71A5A796000C5C6C4 /* Debug */,
@@ -7688,7 +7688,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8C8419D91A5A796000C5C6C4 /* Build configuration list for PBXNativeTarget "MessageTests_iOS" */ = {
+		8C8419D91A5A796000C5C6C4 /* Build configuration list for PBXNativeTarget "MessageTests-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8C8419DA1A5A796000C5C6C4 /* Debug */,

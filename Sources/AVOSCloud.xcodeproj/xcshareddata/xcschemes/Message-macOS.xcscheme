@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0900"
+   LastUpgradeVersion = "0830"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8320F87A1C1918C60024B45E"
-               BuildableName = "AVOSCloudStorage.framework"
-               BlueprintName = "Storage_watchOS"
+               BlueprintIdentifier = "704F3B6D1BE0D0180033245C"
+               BuildableName = "AVOSCloudMessage.framework"
+               BlueprintName = "Message-macOS"
                ReferencedContainer = "container:AVOSCloud.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8320F87A1C1918C60024B45E"
-            BuildableName = "AVOSCloudStorage.framework"
-            BlueprintName = "Storage_watchOS"
+            BlueprintIdentifier = "704F3B6D1BE0D0180033245C"
+            BuildableName = "AVOSCloudMessage.framework"
+            BlueprintName = "Message-macOS"
             ReferencedContainer = "container:AVOSCloud.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,9 +63,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8320F87A1C1918C60024B45E"
-            BuildableName = "AVOSCloudStorage.framework"
-            BlueprintName = "Storage_watchOS"
+            BlueprintIdentifier = "704F3B6D1BE0D0180033245C"
+            BuildableName = "AVOSCloudMessage.framework"
+            BlueprintName = "Message-macOS"
             ReferencedContainer = "container:AVOSCloud.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
