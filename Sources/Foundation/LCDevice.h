@@ -8,8 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ The LCDevice class provides a singleton instance representing the current device.
+ From this instance you can obtain current states of device, such as networking provider, platform, etc.
+ */
 @interface LCDevice : NSObject
 
-+ (NSDictionary *)information;
+/**
+ Get an LCDevice singleton instance.
+
+ @return An LCDevice singleton instance.
+ */
++ (instancetype)current;
 
 @end
