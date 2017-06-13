@@ -30,7 +30,7 @@
  */
 #define onExit \
     ext_keywordify \
-    __strong ext_cleanupBlock_t metamacro_concat(ext_exitBlock_, __LINE__) __attribute__((cleanup(ext_executeCleanupBlock), unused)) = ^
+    __strong ext_cleanupBlock_t metamacro_concat(ext_exitBlock_, __LINE__) __attribute__((cleanup(lc_executeCleanupBlock), unused)) = ^
 
 /**
  * Creates \c __weak shadow variables for each of the variables provided as
@@ -93,7 +93,7 @@ typedef void (^ext_cleanupBlock_t)(void);
 #if defined(__cplusplus)
 extern "C" {
 #endif
-    void ext_executeCleanupBlock (__strong ext_cleanupBlock_t *block);
+    void lc_executeCleanupBlock (__strong ext_cleanupBlock_t *block);
 #if defined(__cplusplus)
 }
 #endif
