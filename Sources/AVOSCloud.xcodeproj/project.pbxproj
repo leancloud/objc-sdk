@@ -1640,7 +1640,6 @@
 		833391391EE91AC100D46D5C /* AVMethodDispatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVMethodDispatcher.m; sourceTree = "<group>"; };
 		833E1F611B69F629002A691C /* AVIMFileMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMFileMessage.h; sourceTree = "<group>"; };
 		833E1F621B69F629002A691C /* AVIMFileMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMFileMessage.m; sourceTree = "<group>"; };
-		83435F801EEDAABA00F10A07 /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		83435F9E1EEDAFEE00F10A07 /* LCHTTPSessionManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCHTTPSessionManager.h; sourceTree = "<group>"; };
 		83435F9F1EEDAFEE00F10A07 /* LCHTTPSessionManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCHTTPSessionManager.m; sourceTree = "<group>"; };
 		83435FA01EEDAFEE00F10A07 /* LCNetworking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCNetworking.h; sourceTree = "<group>"; };
@@ -2340,14 +2339,6 @@
 			path = Captcha;
 			sourceTree = "<group>";
 		};
-		83435F7F1EEDAABA00F10A07 /* Supporting */ = {
-			isa = PBXGroup;
-			children = (
-				83435F801EEDAABA00F10A07 /* Common.xcconfig */,
-			);
-			path = Supporting;
-			sourceTree = "<group>";
-		};
 		83435F9C1EEDAF9E00F10A07 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
@@ -2850,7 +2841,6 @@
 				838CE3271EC97E6F00B24F5B /* LiveQueryTests */,
 				8C255D271AE9F817008A6FFC /* CrashReporting */,
 				8CEA86581A777A7900864211 /* TestBase */,
-				83435F7F1EEDAABA00F10A07 /* Supporting */,
 				8C8419871A5A791300C5C6C4 /* Products */,
 			);
 			indentWidth = 4;
@@ -5937,7 +5927,6 @@
 /* Begin XCBuildConfiguration section */
 		704F3B7F1BE0D0180033245C /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BITCODE_GENERATION_MODE = marker;
@@ -6005,7 +5994,6 @@
 		};
 		704F3B801BE0D0180033245C /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BITCODE_GENERATION_MODE = bitcode;
@@ -6065,7 +6053,6 @@
 		};
 		704F3B811BE0D0180033245C /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -6116,7 +6103,6 @@
 		};
 		704F3B821BE0D0180033245C /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -6160,7 +6146,6 @@
 		};
 		70CA7F6E1BDE2DC3000A3B21 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BITCODE_GENERATION_MODE = marker;
@@ -6230,7 +6215,6 @@
 		};
 		70CA7F6F1BDE2DC3000A3B21 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BITCODE_GENERATION_MODE = bitcode;
@@ -6292,7 +6276,6 @@
 		};
 		70F3153B1BDE503B00D691B3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -6341,7 +6324,6 @@
 		};
 		70F3153C1BDE503B00D691B3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -6383,7 +6365,6 @@
 		};
 		8320F95A1C1918C60024B45E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BITCODE_GENERATION_MODE = marker;
@@ -6452,7 +6433,6 @@
 		};
 		8320F95B1C1918C60024B45E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BITCODE_GENERATION_MODE = bitcode;
@@ -6516,7 +6496,6 @@
 		};
 		832677CE1EED0B5C00004C66 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -6562,7 +6541,6 @@
 		};
 		832677CF1EED0B5C00004C66 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -6604,7 +6582,6 @@
 		};
 		8352BDE41EEF6F1800C513B6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -6651,7 +6628,6 @@
 		};
 		8352BDE51EEF6F1800C513B6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -6694,7 +6670,6 @@
 		};
 		8352BE471EEF70E300C513B6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -6741,7 +6716,6 @@
 		};
 		8352BE481EEF70E300C513B6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -6784,7 +6758,6 @@
 		};
 		8352BEAA1EEF713400C513B6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -6831,7 +6804,6 @@
 		};
 		8352BEAB1EEF713400C513B6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -6874,7 +6846,6 @@
 		};
 		838CE32C1EC97E6F00B24F5B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -6938,7 +6909,6 @@
 		};
 		838CE32D1EC97E6F00B24F5B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -6997,7 +6967,6 @@
 		};
 		838CE32E1EC97E6F00B24F5B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -7048,7 +7017,6 @@
 		};
 		838CE32F1EC97E6F00B24F5B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -7095,7 +7063,6 @@
 		};
 		838CE33E1EC980DE00B24F5B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -7160,7 +7127,6 @@
 		};
 		838CE33F1EC980DE00B24F5B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -7220,7 +7186,6 @@
 		};
 		838CE34B1EC980E000B24F5B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -7272,7 +7237,6 @@
 		};
 		838CE34C1EC980E000B24F5B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -7320,7 +7284,6 @@
 		};
 		83C7D4051EEC4E4700AD7EDE /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -7390,7 +7353,6 @@
 		};
 		83C7D4061EEC4E4700AD7EDE /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -7455,7 +7417,6 @@
 		};
 		83C7D4081EEC4E4700AD7EDE /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -7513,7 +7474,6 @@
 		};
 		83C7D4091EEC4E4700AD7EDE /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -7566,7 +7526,6 @@
 		};
 		83D8CF531C17DAF50094279D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BITCODE_GENERATION_MODE = marker;
@@ -7635,7 +7594,6 @@
 		};
 		83D8CF541C17DAF50094279D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BITCODE_GENERATION_MODE = bitcode;
@@ -7700,7 +7658,6 @@
 		};
 		83F599CD1EED0F610013AF6B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -7746,7 +7703,6 @@
 		};
 		83F599CE1EED0F610013AF6B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -7788,7 +7744,6 @@
 		};
 		8C255D391AE9F818008A6FFC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BITCODE_GENERATION_MODE = marker;
@@ -7864,7 +7819,6 @@
 		};
 		8C255D3A1AE9F818008A6FFC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BITCODE_GENERATION_MODE = bitcode;
@@ -7934,7 +7888,6 @@
 		};
 		8C84197F1A5A78E100C5C6C4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -7977,7 +7930,6 @@
 		};
 		8C8419801A5A78E100C5C6C4 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -8017,7 +7969,6 @@
 		};
 		8C84199B1A5A791300C5C6C4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BITCODE_GENERATION_MODE = marker;
@@ -8085,7 +8036,6 @@
 		};
 		8C84199C1A5A791300C5C6C4 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BITCODE_GENERATION_MODE = bitcode;
@@ -8147,7 +8097,6 @@
 		};
 		8C84199E1A5A791300C5C6C4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -8197,7 +8146,6 @@
 		};
 		8C84199F1A5A791300C5C6C4 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -8239,7 +8187,6 @@
 		};
 		8C8419D71A5A796000C5C6C4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BITCODE_GENERATION_MODE = marker;
@@ -8302,7 +8249,6 @@
 		};
 		8C8419D81A5A796000C5C6C4 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BITCODE_GENERATION_MODE = bitcode;
@@ -8359,7 +8305,6 @@
 		};
 		8C8419DA1A5A796000C5C6C4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -8416,7 +8361,6 @@
 		};
 		8C8419DB1A5A796000C5C6C4 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 83435F801EEDAABA00F10A07 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
