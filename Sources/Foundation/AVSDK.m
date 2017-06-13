@@ -12,7 +12,7 @@
 
 @implementation AVSDK
 
-+ (instancetype)sharedInstance {
++ (instancetype)current {
     static AVSDK *instance;
     static dispatch_once_t onceToken;
 
