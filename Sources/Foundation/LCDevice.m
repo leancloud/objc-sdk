@@ -24,7 +24,7 @@
 - (BOOL)jailbroken {
 #if TARGET_OS_SIMULATOR
     return NO;
-#endif
+#else
     FILE *bash = fopen("/bin/bash", "r");
 
     if (bash) {
@@ -33,6 +33,7 @@
     }
 
     return NO;
+#endif
 }
 
 @end
