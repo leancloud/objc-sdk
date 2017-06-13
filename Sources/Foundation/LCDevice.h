@@ -15,6 +15,13 @@
 @interface LCDevice : NSObject
 
 /**
+ Detect whether an device is jailbroken.
+
+ @note There's no reliable way to check whether a device is truely jailbroken.
+ */
+@property (nonatomic, readonly, assign) BOOL jailbroken;
+
+/**
  Get an LCDevice singleton instance.
 
  @return An LCDevice singleton instance.

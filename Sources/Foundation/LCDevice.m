@@ -21,4 +21,18 @@
     return instance;
 }
 
+- (BOOL)jailbroken {
+#if TARGET_OS_SIMULATOR
+    return NO;
+#endif
+    FILE *bash = fopen("/bin/bash", "r");
+
+    if (bash) {
+        fclose(bash);
+        return YES;
+    }
+
+    return NO;
+}
+
 @end
