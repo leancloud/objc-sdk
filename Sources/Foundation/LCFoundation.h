@@ -8,3 +8,4 @@
 
 #import "AVSDK.h"
 #import "LCDevice.h"
+#import "EXTScope.h"
