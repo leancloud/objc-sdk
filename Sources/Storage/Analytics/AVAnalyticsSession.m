@@ -10,6 +10,7 @@
 #import "AVAnalyticsImpl.h"
 #import "AVAnalyticsSession.h"
 #import "AVAnalyticsUtils.h"
+#import "LCDevice.h"
 
 
 
@@ -226,7 +227,7 @@
 
 -(NSDictionary *)jsonDictionary:(NSDictionary *)additionalDeviceInfo
 {
-    NSMutableDictionary * deviceInfo = [AVAnalyticsUtils deviceInfo];
+    NSMutableDictionary * deviceInfo = [[LCDevice information] mutableCopy];
     [deviceInfo addEntriesFromDictionary:additionalDeviceInfo];
     NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithDictionary:@{@"events": @{@"launch": [self launchDictionary],
                                                                                               @"terminate": [self activitiesDictionary],

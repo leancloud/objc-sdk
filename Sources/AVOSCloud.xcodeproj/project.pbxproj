@@ -490,6 +490,14 @@
 		8352BDDD1EEF6F1800C513B6 /* AVOSCloudFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F599CA1EED0F610013AF6B /* AVOSCloudFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8352BE401EEF70E300C513B6 /* AVOSCloudFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F599CA1EED0F610013AF6B /* AVOSCloudFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8352BEA31EEF713400C513B6 /* AVOSCloudFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F599CA1EED0F610013AF6B /* AVOSCloudFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8352BEB81EEFB4E100C513B6 /* LCDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 8352BEB61EEFB4E100C513B6 /* LCDevice.h */; };
+		8352BEB91EEFB4E100C513B6 /* LCDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 8352BEB61EEFB4E100C513B6 /* LCDevice.h */; };
+		8352BEBA1EEFB4E100C513B6 /* LCDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 8352BEB61EEFB4E100C513B6 /* LCDevice.h */; };
+		8352BEBB1EEFB4E100C513B6 /* LCDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 8352BEB61EEFB4E100C513B6 /* LCDevice.h */; };
+		8352BEBC1EEFB4E100C513B6 /* LCDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 8352BEB71EEFB4E100C513B6 /* LCDevice.m */; };
+		8352BEBD1EEFB4E100C513B6 /* LCDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 8352BEB71EEFB4E100C513B6 /* LCDevice.m */; };
+		8352BEBE1EEFB4E100C513B6 /* LCDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 8352BEB71EEFB4E100C513B6 /* LCDevice.m */; };
+		8352BEBF1EEFB4E100C513B6 /* LCDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 8352BEB71EEFB4E100C513B6 /* LCDevice.m */; };
 		835C5F711D25929600EF0EBB /* AVFriendQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A651A5A79FF00C5C6C4 /* AVFriendQuery.h */; };
 		835C5F721D2594EA00EF0EBB /* AVAnalyticsActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419E71A5A79FF00C5C6C4 /* AVAnalyticsActivity.h */; };
 		836705AB1BA1358D0050E968 /* SDMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705AA1BA1358D0050E968 /* SDMacros.h */; };
@@ -1252,6 +1260,8 @@
 		8352BDE61EEF6F1800C513B6 /* AVOSCloudFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8352BE491EEF70E300C513B6 /* AVOSCloudFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8352BEAC1EEF713400C513B6 /* AVOSCloudFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8352BEB61EEFB4E100C513B6 /* LCDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCDevice.h; sourceTree = "<group>"; };
+		8352BEB71EEFB4E100C513B6 /* LCDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCDevice.m; sourceTree = "<group>"; };
 		836705AA1BA1358D0050E968 /* SDMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMacros.h; sourceTree = "<group>"; };
 		837CC71C1B568431001333AD /* NSDictionary+LCHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+LCHash.h"; sourceTree = "<group>"; };
 		837CC71D1B568431001333AD /* NSDictionary+LCHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+LCHash.m"; sourceTree = "<group>"; };
@@ -2148,6 +2158,8 @@
 		83F599C91EED0F610013AF6B /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
+				8352BEB61EEFB4E100C513B6 /* LCDevice.h */,
+				8352BEB71EEFB4E100C513B6 /* LCDevice.m */,
 				83F599CA1EED0F610013AF6B /* AVOSCloudFoundation.h */,
 				83F599CB1EED0F610013AF6B /* Info.plist */,
 			);
@@ -3118,6 +3130,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8352BDDD1EEF6F1800C513B6 /* AVOSCloudFoundation.h in Headers */,
+				8352BEB91EEFB4E100C513B6 /* LCDevice.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3126,6 +3139,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8352BE401EEF70E300C513B6 /* AVOSCloudFoundation.h in Headers */,
+				8352BEBB1EEFB4E100C513B6 /* LCDevice.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3134,6 +3148,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8352BEA31EEF713400C513B6 /* AVOSCloudFoundation.h in Headers */,
+				8352BEBA1EEFB4E100C513B6 /* LCDevice.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3268,6 +3283,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83F599CC1EED0F610013AF6B /* AVOSCloudFoundation.h in Headers */,
+				8352BEB81EEFB4E100C513B6 /* LCDevice.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4570,6 +4586,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8352BEBD1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4577,6 +4594,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8352BEBF1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4584,6 +4602,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8352BEBE1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4707,6 +4726,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8352BEBC1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

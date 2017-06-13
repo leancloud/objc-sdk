@@ -28,8 +28,6 @@
 
 @interface AVAnalyticsUtils : NSObject
 
-
-+(NSMutableDictionary *)deviceInfo;
 +(NSString *)randomString:(int)length;
 +(NSTimeInterval)currentTimestamp;
 

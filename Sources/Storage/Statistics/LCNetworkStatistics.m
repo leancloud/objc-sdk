@@ -8,11 +8,11 @@
 
 #import "LCNetworkStatistics.h"
 #import "LCKeyValueStore.h"
-#import "AVAnalyticsUtils.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"
 #import <libkern/OSAtomic.h>
 #import "EXTScope.h"
+#import "LCDevice.h"
 
 #define LC_INTERVAL_HALF_AN_HOUR 30 * 60
 
@@ -137,7 +137,7 @@ static NSInteger LCNetworkStatisticsCacheSize     = 20;
 }
 
 - (void)uploadStatisticsInfo:(NSDictionary *)statisticsInfo {
-    NSDictionary *deviceInfo = [AVAnalyticsUtils deviceInfo];
+    NSDictionary *deviceInfo = [LCDevice information];
     NSDictionary *payload = @{
         @"attributes": statisticsInfo,
         @"client": @{

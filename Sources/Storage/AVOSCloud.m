@@ -21,7 +21,7 @@
 
 #import "AVUtils.h"
 #include "AVOSCloud_Art.inc"
-#import "AVAnalyticsUtils.h"
+#import "LCDevice.h"
 #import "LCNetworkStatistics.h"
 #import "AVObjectUtils.h"
 
@@ -62,7 +62,7 @@ AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
     const char *s = (const char *)AVOSCloud_Art_inc;
     printf("%s\n", s);
     printf("appid: %s\n", [[self getApplicationId] UTF8String]);
-    NSDictionary *dict = [AVAnalyticsUtils deviceInfo];
+    NSDictionary *dict = [LCDevice information];
     for (NSString *key in dict) {
         id value = [dict objectForKey:key];
         printf("%s: %s\n", [key UTF8String], [[NSString stringWithFormat:@"%@", value] UTF8String]);

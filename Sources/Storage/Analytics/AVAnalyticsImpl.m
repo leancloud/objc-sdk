@@ -15,6 +15,7 @@
 #import "AVUtils.h"
 #import "AVErrorUtils.h"
 #import "LCRouter.h"
+#import "LCDevice.h"
 
 static NSString *const kAVOnlineConfig = @"AVOS_ONLINE_CONFIG";
 
@@ -142,7 +143,7 @@ static NSString *const kAVOnlineConfig = @"AVOS_ONLINE_CONFIG";
         strace=@"";
     }
     
-    NSMutableDictionary * dict = [AVAnalyticsUtils deviceInfo];
+    NSMutableDictionary * dict = [[LCDevice information] mutableCopy];
     
     [dict addEntriesFromDictionary:@{
                                      @"type": [exception name],
