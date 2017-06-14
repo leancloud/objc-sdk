@@ -28,6 +28,8 @@
 #import "LCRouter.h"
 #import "SDMacros.h"
 
+#import "LCFoundation.h"
+
 static AVVerbosePolicy _verbosePolicy       = kAVVerboseShow;
 NSString * const LCRootDomain      = @"leancloud.cn";
 NSString * const LCRootCertificate = @"MIIFDzCCA/egAwIBAgIQECg10GmSYWMKtzx/By5NMTANBgkqhkiG9w0BAQsFADBEMQswCQYDVQQGEwJVUzEWMBQGA1UEChMNR2VvVHJ1c3QgSW5jLjEdMBsGA1UEAxMUR2VvVHJ1c3QgU1NMIENBIC0gRzMwHhcNMTQxMTI4MDAwMDAwWhcNMTYwOTI0MjM1OTU5WjCBjDELMAkGA1UEBhMCQ04xEDAOBgNVBAgTB0JlaWppbmcxEDAOBgNVBAcUB0JlaWppbmcxMjAwBgNVBAoUKU1laSBXZWkgU2h1IFFpYW4gKCBCZWlqaW5nICkgSVQgQ28uLCBMdGQuMQwwCgYDVQQLFANPUFMxFzAVBgNVBAMUDioubGVhbmNsb3VkLmNuMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzHX5I4zHZcHerO3x0l5pScvqKE8MlK/6hzrDONDsBuMnfkAPRpkPPGB6HfaAAGjyStsi5hZrPgOA3r+6lActiapjnRnfTSo57tJyF/5XexLOdzU45fhNO41mJYiSlGAK0L+EUQSlnSClxixPDIwkkpbF8XYrrpPnZeSCzm62Jk38Lx6GUheZH3UzmC5JPmcqBgmAidmi36wFk7UWT2c6fmmDA+DWJBxdt5+/MhLG7OcFEP0YeiSDXwirnSlQphMswIn1d+XprX/BHqnvlQgnTPZeIrYraVmTlA2qjOWZLKlZExhLaSnOqT/XLQN9q0fAHrKswhrBAzOycvvbt/9HswIDAQABo4IBsjCCAa4wJwYDVR0RBCAwHoIOKi5sZWFuY2xvdWQuY26CDGxlYW5jbG91ZC5jbjAJBgNVHRMEAjAAMA4GA1UdDwEB/wQEAwIFoDArBgNVHR8EJDAiMCCgHqAchhpodHRwOi8vZ24uc3ltY2IuY29tL2duLmNybDCBoQYDVR0gBIGZMIGWMIGTBgpghkgBhvhFAQc2MIGEMD8GCCsGAQUFBwIBFjNodHRwczovL3d3dy5nZW90cnVzdC5jb20vcmVzb3VyY2VzL3JlcG9zaXRvcnkvbGVnYWwwQQYIKwYBBQUHAgIwNQwzaHR0cHM6Ly93d3cuZ2VvdHJ1c3QuY29tL3Jlc291cmNlcy9yZXBvc2l0b3J5L2xlZ2FsMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjAfBgNVHSMEGDAWgBTSb/eW9IU/cjwwfSPahXibo3xafDBXBggrBgEFBQcBAQRLMEkwHwYIKwYBBQUHMAGGE2h0dHA6Ly9nbi5zeW1jZC5jb20wJgYIKwYBBQUHMAKGGmh0dHA6Ly9nbi5zeW1jYi5jb20vZ24uY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQDdrrEg1t+LtyE5Roy5dhe7yM0tb5pcy+hEP1ZXncwv4SMldTWPejuomwF5vt2lX0FEhzrd1k9Ndk5LJq5x5SrCHos1kTO/MxkRvg7eUkErOYM0AK3j3I37xZv/rRN4UOJVKh1i4e88hgrAXhxLLQn96d8zzMJbpRYiBz3cW6I8w+bR5BtwVpgzJU5Z3gLDDJLVqwSDUjNpFrlmBor0kh7izPc5WAg5xkZ5ovQgp5Mwc1l9FByIqNZvY/pfGZBkEzeSP73rfccWg3Y7vz+mORgHDpSxAqmyna2hXn8aiEl3FW1v0w1PgJAskNmxt8zNAg38Jpuv7I1sDNjX/tyC1je0";
@@ -62,7 +64,7 @@ AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
     const char *s = (const char *)AVOSCloud_Art_inc;
     printf("%s\n", s);
     printf("appid: %s\n", [[self getApplicationId] UTF8String]);
-    NSDictionary *dict = [LCDevice information];
+    NSDictionary *dict = [[AVSDK current] statisticsData];
     for (NSString *key in dict) {
         id value = [dict objectForKey:key];
         printf("%s: %s\n", [key UTF8String], [[NSString stringWithFormat:@"%@", value] UTF8String]);
