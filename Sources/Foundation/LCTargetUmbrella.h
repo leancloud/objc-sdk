@@ -6,4 +6,14 @@
 //  Copyright © 2017 LeanCloud Inc. All rights reserved.
 //
 
+#import "LCTargetConditionals.h"
 
+#if LC_TARGET_OS_IOS
+    #import <UIKit/UIKit.h>
+#elif LC_TARGET_OS_MAC
+    #import <AppKit/AppKit.h>
+#elif LC_TARGET_OS_TV
+    #import <UIKit/UIKit.h>
+#elif LC_TARGET_OS_WATCH
+    #import <WatchKit/WatchKit.h>
+#endif
