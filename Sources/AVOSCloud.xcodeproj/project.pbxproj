@@ -510,6 +510,14 @@
 		835BC2721EF02B5A006B56C6 /* LCFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2701EF02B5A006B56C6 /* LCFoundation.h */; };
 		835BC2731EF02B5A006B56C6 /* LCFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2701EF02B5A006B56C6 /* LCFoundation.h */; };
 		835BC2741EF02B5A006B56C6 /* LCFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2701EF02B5A006B56C6 /* LCFoundation.h */; };
+		835BC2871EF0D945006B56C6 /* LCTargetConditionals.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2861EF0D945006B56C6 /* LCTargetConditionals.h */; };
+		835BC2881EF0D945006B56C6 /* LCTargetConditionals.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2861EF0D945006B56C6 /* LCTargetConditionals.h */; };
+		835BC2891EF0D945006B56C6 /* LCTargetConditionals.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2861EF0D945006B56C6 /* LCTargetConditionals.h */; };
+		835BC28A1EF0D945006B56C6 /* LCTargetConditionals.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2861EF0D945006B56C6 /* LCTargetConditionals.h */; };
+		835BC28C1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC28B1EF0DDC8006B56C6 /* LCTargetUmbrella.h */; };
+		835BC28D1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC28B1EF0DDC8006B56C6 /* LCTargetUmbrella.h */; };
+		835BC28E1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC28B1EF0DDC8006B56C6 /* LCTargetUmbrella.h */; };
+		835BC28F1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC28B1EF0DDC8006B56C6 /* LCTargetUmbrella.h */; };
 		835C5F711D25929600EF0EBB /* AVFriendQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A651A5A79FF00C5C6C4 /* AVFriendQuery.h */; };
 		835C5F721D2594EA00EF0EBB /* AVAnalyticsActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419E71A5A79FF00C5C6C4 /* AVAnalyticsActivity.h */; };
 		836705AB1BA1358D0050E968 /* SDMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705AA1BA1358D0050E968 /* SDMacros.h */; };
@@ -1287,6 +1295,8 @@
 		835BC2661EEFCC23006B56C6 /* AVSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVSDK.h; sourceTree = "<group>"; };
 		835BC2671EEFCC23006B56C6 /* AVSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVSDK.m; sourceTree = "<group>"; };
 		835BC2701EF02B5A006B56C6 /* LCFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCFoundation.h; sourceTree = "<group>"; };
+		835BC2861EF0D945006B56C6 /* LCTargetConditionals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCTargetConditionals.h; sourceTree = "<group>"; };
+		835BC28B1EF0DDC8006B56C6 /* LCTargetUmbrella.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCTargetUmbrella.h; sourceTree = "<group>"; };
 		836705AA1BA1358D0050E968 /* SDMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMacros.h; sourceTree = "<group>"; };
 		8376B2261EF041DE006ED4C2 /* EXTScope.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXTScope.h; sourceTree = "<group>"; };
 		8376B2271EF041DE006ED4C2 /* EXTScope.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EXTScope.m; sourceTree = "<group>"; };
@@ -2209,6 +2219,8 @@
 				835BC2671EEFCC23006B56C6 /* AVSDK.m */,
 				8352BEB61EEFB4E100C513B6 /* LCDevice.h */,
 				8352BEB71EEFB4E100C513B6 /* LCDevice.m */,
+				835BC2861EF0D945006B56C6 /* LCTargetConditionals.h */,
+				835BC28B1EF0DDC8006B56C6 /* LCTargetUmbrella.h */,
 				835BC2701EF02B5A006B56C6 /* LCFoundation.h */,
 				83F599CA1EED0F610013AF6B /* AVOSCloudFoundation.h */,
 				83F599CB1EED0F610013AF6B /* Info.plist */,
@@ -3180,8 +3192,10 @@
 			files = (
 				8376B22E1EF041E7006ED4C2 /* metamacros.h in Headers */,
 				8376B22C1EF041E7006ED4C2 /* EXTScope.h in Headers */,
+				835BC28D1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
 				835BC2691EEFCC23006B56C6 /* AVSDK.h in Headers */,
 				8352BDDD1EEF6F1800C513B6 /* AVOSCloudFoundation.h in Headers */,
+				835BC2881EF0D945006B56C6 /* LCTargetConditionals.h in Headers */,
 				835BC2721EF02B5A006B56C6 /* LCFoundation.h in Headers */,
 				8352BEB91EEFB4E100C513B6 /* LCDevice.h in Headers */,
 			);
@@ -3193,8 +3207,10 @@
 			files = (
 				8376B2341EF041E8006ED4C2 /* metamacros.h in Headers */,
 				8376B2321EF041E8006ED4C2 /* EXTScope.h in Headers */,
+				835BC28F1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
 				835BC26B1EEFCC24006B56C6 /* AVSDK.h in Headers */,
 				8352BE401EEF70E300C513B6 /* AVOSCloudFoundation.h in Headers */,
+				835BC28A1EF0D945006B56C6 /* LCTargetConditionals.h in Headers */,
 				835BC2741EF02B5A006B56C6 /* LCFoundation.h in Headers */,
 				8352BEBB1EEFB4E100C513B6 /* LCDevice.h in Headers */,
 			);
@@ -3206,8 +3222,10 @@
 			files = (
 				8376B2311EF041E8006ED4C2 /* metamacros.h in Headers */,
 				8376B22F1EF041E8006ED4C2 /* EXTScope.h in Headers */,
+				835BC28E1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
 				835BC26A1EEFCC23006B56C6 /* AVSDK.h in Headers */,
 				8352BEA31EEF713400C513B6 /* AVOSCloudFoundation.h in Headers */,
+				835BC2891EF0D945006B56C6 /* LCTargetConditionals.h in Headers */,
 				835BC2731EF02B5A006B56C6 /* LCFoundation.h in Headers */,
 				8352BEBA1EEFB4E100C513B6 /* LCDevice.h in Headers */,
 			);
@@ -3345,8 +3363,10 @@
 			files = (
 				8376B22B1EF041E7006ED4C2 /* metamacros.h in Headers */,
 				8376B2291EF041E7006ED4C2 /* EXTScope.h in Headers */,
+				835BC28C1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
 				835BC2681EEFCC23006B56C6 /* AVSDK.h in Headers */,
 				83F599CC1EED0F610013AF6B /* AVOSCloudFoundation.h in Headers */,
+				835BC2871EF0D945006B56C6 /* LCTargetConditionals.h in Headers */,
 				835BC2711EF02B5A006B56C6 /* LCFoundation.h in Headers */,
 				8352BEB81EEFB4E100C513B6 /* LCDevice.h in Headers */,
 			);

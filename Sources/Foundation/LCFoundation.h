@@ -6,6 +6,11 @@
 //  Copyright © 2017 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVSDK.h"
+/* Public headers */
+#import "AVOSCloudFoundation.h"
+
+/* Non-public headers */
+#import "LCTargetConditionals.h"
+#import "LCTargetUmbrella.h"
 #import "LCDevice.h"
 #import "EXTScope.h"
