@@ -119,4 +119,20 @@
     return [NSString stringWithFormat:@"%ld", (long)(localTime.secondsFromGMT / 3600)];
 }
 
+- (NSString *)bundleVersion {
+    return [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
+}
+
+- (NSString *)bundleShortVersion {
+    return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+}
+
+- (NSString *)bundleIdentifier {
+    return [NSBundle mainBundle].bundleIdentifier;
+}
+
+- (NSString *)executableName {
+    return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleExecutable"];
+}
+
 @end

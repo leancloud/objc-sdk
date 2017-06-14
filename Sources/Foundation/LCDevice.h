@@ -48,6 +48,26 @@
 @property (nonatomic, readonly, strong) NSString *timezone;
 
 /**
+ Bundle version string.
+ */
+@property (nonatomic, readonly, strong) NSString *bundleVersion;
+
+/**
+ Bundle short version string.
+ */
+@property (nonatomic, readonly, strong) NSString *bundleShortVersion;
+
+/**
+ Bundle identifier.
+ */
+@property (nonatomic, readonly, strong) NSString *bundleIdentifier;
+
+/**
+ The executable name, aka. the display name.
+ */
+@property (nonatomic, readonly, strong) NSString *executableName;
+
+/**
  Get an LCDevice singleton instance.
 
  @return An LCDevice singleton instance.
