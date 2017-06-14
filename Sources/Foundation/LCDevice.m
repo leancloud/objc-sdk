@@ -102,7 +102,7 @@
 }
 
 - (NSString *)systemVersion {
-    NSString *version = @"Unknown";
+    NSString *version = nil;
 
 #if LC_TARGET_OS_IOS
     version = [UIDevice currentDevice].systemVersion;
@@ -118,7 +118,7 @@
 }
 
 - (NSString *)systemName {
-    NSString *name = @"Unknown";
+    NSString *name = nil;
 
 #if LC_TARGET_OS_IOS
     name = @"iOS";
@@ -177,9 +177,9 @@
     CTCarrier *phoneCarrier = phoneInfo.subscriberCellularProvider;
     NSString *carrierName = phoneCarrier.carrierName;
 
-    return carrierName ?: @"";
+    return carrierName;
 #else
-    return @"";
+    return nil;
 #endif
 }
 
