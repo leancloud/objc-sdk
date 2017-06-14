@@ -9,6 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <CoreGraphics/CoreGraphics.h>
 
+typedef NS_ENUM(NSInteger, LCNetworkReachabilityStatus)
+{
+    LCNetworkReachabilityStatusUnknown          = -1,
+    LCNetworkReachabilityStatusNotReachable     = 0,
+    LCNetworkReachabilityStatusReachableViaWWAN = 1,
+    LCNetworkReachabilityStatusReachableViaWiFi = 2,
+};
+
 /**
  The LCDevice class provides a singleton instance representing the current device.
  From this instance you can obtain current states of device, such as networking provider, platform, etc.
@@ -71,6 +79,13 @@
  The executable name, aka. the display name.
  */
 @property (nonatomic, readonly, strong) NSString *executableName;
+
+/**
+ Current reachability status.
+
+ @note For watchOS, it always return `LCNetworkReachabilityStatusUnknown`.
+ */
+@property (nonatomic, readonly, assign) LCNetworkReachabilityStatus networkReachabilityStatus;
 
 /**
  Get an LCDevice singleton instance.

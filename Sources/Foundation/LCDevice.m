@@ -10,6 +10,7 @@
 #import "EXTScope.h"
 #import "LCTargetConditionals.h"
 #import "LCTargetUmbrella.h"
+#import "AFNetworkReachabilityManager.h"
 
 #import <sys/sysctl.h>
 
@@ -149,6 +150,34 @@
 
 - (NSString *)executableName {
     return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleExecutable"];
+}
+
+- (LCNetworkReachabilityStatus)networkReachabilityStatus {
+    LCNetworkReachabilityStatus status = LCNetworkReachabilityStatusUnknown;
+#if LC_TARGET_OS_WATCH
+    return status;
+#else
+    AFNetworkReachabilityManager *reachabilityManager = [AFNetworkReachabilityManager sharedManager];
+
+    [reachabilityManager startMonitoring];
+
+    switch (reachabilityManager.networkReachabilityStatus) {
+    case AFNetworkReachabilityStatusUnknown:
+        status = LCNetworkReachabilityStatusUnknown;
+        break;
+    case AFNetworkReachabilityStatusNotReachable:
+        status = LCNetworkReachabilityStatusNotReachable;
+        break;
+    case AFNetworkReachabilityStatusReachableViaWWAN:
+        status = LCNetworkReachabilityStatusReachableViaWWAN;
+        break;
+    case AFNetworkReachabilityStatusReachableViaWiFi:
+        status = LCNetworkReachabilityStatusReachableViaWiFi;
+        break;
+    }
+
+    return status;
+#endif
 }
 
 @end
