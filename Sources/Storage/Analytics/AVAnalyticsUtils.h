@@ -27,7 +27,7 @@
 
 @interface AVAnalyticsUtils : NSObject
 
-+ (NSDictionary *)analyticsData;
++ (NSDictionary *)statisticsData;
 +(NSString *)randomString:(int)length;
 +(NSTimeInterval)currentTimestamp;
 

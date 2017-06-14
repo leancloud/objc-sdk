@@ -33,63 +33,15 @@ static NSString * identifierForVendorTag = @"identifierForVendor";
     return seconds * 1000;
 }
 
-NS_INLINE
-NSString *LCStringFromCGSize(CGSize size) {
-    NSString *result = [NSString stringWithFormat:@"%ld x %ld", (long)size.width, (long)size.height];
-
-    return result;
-}
-
-NS_INLINE
-NSString *LCStringFromReachabilityStatus(LCNetworkReachabilityStatus status) {
-    NSString *result = nil;
-
-    switch (status) {
-    case LCNetworkReachabilityStatusUnknown:
-        break;
-    case LCNetworkReachabilityStatusNotReachable:
-        break;
-    case LCNetworkReachabilityStatusReachableViaWWAN:
-        result = @"WWAN";
-        break;
-    case LCNetworkReachabilityStatusReachableViaWiFi:
-        result = @"WiFi";
-        break;
-    }
-
-    return result;
-}
-
-+ (NSDictionary *)analyticsData {
++ (NSDictionary *)statisticsData {
     AVSDK *SDK = [AVSDK current];
-    LCDevice *device = [LCDevice current];
-    LCApplication *application = [LCApplication current];
 
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+    NSMutableDictionary *statisticsData = [[SDK statisticsData] mutableCopy];
 
-    dictionary[@"sdk_type"]             = @"Objective-C";
-    dictionary[@"sdk_version"]          = SDK.version;
+    statisticsData[@"uid"] = [AVUser currentUser].objectId;
+    statisticsData[@"iid"] = [AVInstallation currentInstallation].objectId;
 
-    dictionary[@"device_model"]         = device.model;
-    dictionary[@"language"]             = device.language;
-    dictionary[@"timezone"]             = device.timezone;
-    dictionary[@"os"]                   = device.systemName;
-    dictionary[@"os_version"]           = device.systemVersion;
-    dictionary[@"is_jailbroken"]        = @(device.jailbroken);
-    dictionary[@"resolution"]           = LCStringFromCGSize(device.screenSize);
-    dictionary[@"access"]               = LCStringFromReachabilityStatus(device.networkReachabilityStatus);
-#if LC_TARGET_OS_IOS
-    dictionary[@"device_id"]            = device.UDID;
-#endif
-
-    dictionary[@"display_name"]         = application.name;
-    dictionary[@"app_version"]          = application.shortVersion;
-    dictionary[@"package_name"]         = application.identifier;
-
-    dictionary[@"uid"]                  = [AVUser currentUser].objectId;
-    dictionary[@"iid"]                  = [AVInstallation currentInstallation].objectId;
-
-    return dictionary;
+    return statisticsData;
 }
 
 +(BOOL)inSimulator
