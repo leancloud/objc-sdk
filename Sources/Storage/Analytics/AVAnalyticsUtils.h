@@ -38,7 +38,4 @@
 
 +(NSString *)safeString:(NSString *)string;
 
-+(BOOL)isWiFiConnection AV_WATCH_UNAVAILABLE;
-+(NSString *)deviceId AV_WATCH_UNAVAILABLE AV_OSX_UNAVAILABLE;
-
 @end
