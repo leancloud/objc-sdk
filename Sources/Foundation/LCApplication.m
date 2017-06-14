@@ -11,7 +11,7 @@
 @implementation LCApplication
 
 + (instancetype)current {
-    static LCDevice *instance;
+    static LCApplication *instance;
     static dispatch_once_t onceToken;
 
     dispatch_once(&onceToken, ^{

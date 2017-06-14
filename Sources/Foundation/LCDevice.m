@@ -10,6 +10,7 @@
 #import "EXTScope.h"
 #import "LCTargetConditionals.h"
 #import "LCTargetUmbrella.h"
+#import "LCApplication.h"
 #import "AFNetworkReachabilityManager.h"
 
 #if LC_TARGET_OS_IOS
@@ -193,7 +194,7 @@
     NSString *key = nil;
     static NSString *const suffix = @"@leancloud";
 
-    NSString *bundleIdentifier = self.bundleIdentifier;
+    NSString *bundleIdentifier = [LCApplication current].identifier;
 
     /* Bundle identifier may be nil for unit test. */
     if (bundleIdentifier) {
