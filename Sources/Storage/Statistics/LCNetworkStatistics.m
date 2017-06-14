@@ -12,7 +12,8 @@
 #import "AVUtils.h"
 #import <libkern/OSAtomic.h>
 #import "EXTScope.h"
-#import "LCDevice.h"
+
+#import "LCFoundation.h"
 
 #define LC_INTERVAL_HALF_AN_HOUR 30 * 60
 
@@ -136,21 +137,29 @@ static NSInteger LCNetworkStatisticsCacheSize     = 20;
     [self saveStatisticsDict:statisticsInfo];
 }
 
+- (NSDictionary *)clientInfo {
+    AVSDK *SDK = [AVSDK current];
+    LCDevice *device = [LCDevice current];
+    LCApplication *application = [LCApplication current];
+
+    NSMutableDictionary *clientInfo = [NSMutableDictionary dictionary];
+
+    clientInfo[@"platform"]     = device.systemName;
+    clientInfo[@"app_version"]  = application.shortVersion;
+    clientInfo[@"sdk_version"]  = SDK.version;
+#if LC_TARGET_OS_IOS
+    clientInfo[@"id"]           = device.UDID;
+#endif
+
+    return clientInfo;
+}
+
 - (void)uploadStatisticsInfo:(NSDictionary *)statisticsInfo {
-    NSDictionary *deviceInfo = [LCDevice information];
-    NSDictionary *payload = @{
-        @"attributes": statisticsInfo,
-        @"client": @{
-#if !TARGET_OS_WATCH
-#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
-            @"id": deviceInfo[@"device_id"],
-#endif
-#endif
-            @"platform": deviceInfo[@"os"],
-            @"app_version": deviceInfo[@"app_version"],
-            @"sdk_version": deviceInfo[@"sdk_version"]
-        }
-    };
+    NSDictionary *clientInfo = [self clientInfo];
+    NSMutableDictionary *payload = [NSMutableDictionary dictionary];
+
+    payload[@"client"]      = clientInfo;
+    payload[@"attributes"]  = statisticsInfo;
 
     AVPaasClient *client = [AVPaasClient sharedInstance];
     NSURLRequest *request = [client requestWithPath:@"always_collect" method:@"POST" headers:nil parameters:payload];
