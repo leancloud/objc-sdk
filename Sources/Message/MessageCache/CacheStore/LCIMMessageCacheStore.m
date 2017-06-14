@@ -153,7 +153,7 @@
     NSMutableArray *messages = [NSMutableArray array];
 
     LCIM_OPEN_DATABASE(db, ({
-        LCResultSet *result = nil;
+        FMResultSet *result = nil;
 
         if (messageId) {
             NSArray *args = @[self.conversationId, @(timestamp), @(timestamp), messageId, @(limit)];
@@ -180,7 +180,7 @@
 
     LCIM_OPEN_DATABASE(db, ({
         NSArray *args = @[self.conversationId, messageId];
-        LCResultSet *result = [db executeQuery:LCIM_SQL_SELECT_MESSAGE_BY_ID withArgumentsInArray:args];
+        FMResultSet *result = [db executeQuery:LCIM_SQL_SELECT_MESSAGE_BY_ID withArgumentsInArray:args];
 
         if ([result next]) {
             message = [self messageForRecord:result];
@@ -203,7 +203,7 @@
             messageId
         ];
 
-        LCResultSet *result = [db executeQuery:LCIM_SQL_SELECT_NEXT_MESSAGE withArgumentsInArray:args];
+        FMResultSet *result = [db executeQuery:LCIM_SQL_SELECT_NEXT_MESSAGE withArgumentsInArray:args];
 
         if ([result next]) {
             message = [self messageForRecord:result];
@@ -215,7 +215,7 @@
     return message;
 }
 
-- (id)messageForRecord:(LCResultSet *)record {
+- (id)messageForRecord:(FMResultSet *)record {
     AVIMMessage *message = nil;
 
     NSData *data = [record dataForColumn:LCIM_FIELD_PAYLOAD];
@@ -247,7 +247,7 @@
 
     LCIM_OPEN_DATABASE(db, ({
         NSArray *args = @[self.conversationId, @(limit)];
-        LCResultSet *result = [db executeQuery:LCIM_SQL_LATEST_MESSAGE withArgumentsInArray:args];
+        FMResultSet *result = [db executeQuery:LCIM_SQL_LATEST_MESSAGE withArgumentsInArray:args];
 
         while ([result next]) {
             [messages insertObject:[self messageForRecord:result] atIndex:0];
@@ -264,7 +264,7 @@
 
     LCIM_OPEN_DATABASE(db, ({
         NSArray *args = @[self.conversationId];
-        LCResultSet *result = [db executeQuery:LCIM_SQL_LATEST_NO_BREAKPOINT_MESSAGE withArgumentsInArray:args];
+        FMResultSet *result = [db executeQuery:LCIM_SQL_LATEST_NO_BREAKPOINT_MESSAGE withArgumentsInArray:args];
 
         if ([result next]) {
             message = [self messageForRecord:result];

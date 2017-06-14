@@ -8,8 +8,8 @@
 
 #import "LCDatabaseMigrator.h"
 #import "LCDatabaseCoordinator.h"
-#import "LCDatabase.h"
-#import "LCDatabaseAdditions.h"
+#import "FMDatabase.h"
+#import "FMDatabaseAdditions.h"
 
 #import <libkern/OSAtomic.h>
 
@@ -47,7 +47,7 @@
 - (NSInteger)versionOfDatabase {
     __block NSInteger version = 0;
 
-    [self.coordinator executeJob:^(LCDatabase *db) {
+    [self.coordinator executeJob:^(FMDatabase *db) {
         version = (NSInteger)[db userVersion];
     }];
 
@@ -56,7 +56,7 @@
 
 - (void)applyMigrations:(NSArray *)migrations
             fromVersion:(uint32_t)fromVersion
-               database:(LCDatabase *)database
+               database:(FMDatabase *)database
 {
     for (LCDatabaseMigration *migration in migrations) {
         if (migration.block) {
@@ -75,10 +75,10 @@
         NSArray *restMigrations = [migrations subarrayWithRange:NSMakeRange(oldVersion, newVersion - oldVersion)];
 
         [self.coordinator
-         executeTransaction:^(LCDatabase *db) {
+         executeTransaction:^(FMDatabase *db) {
              [self applyMigrations:restMigrations fromVersion:oldVersion database:db];
          }
-         fail:^(LCDatabase *db) {
+         fail:^(FMDatabase *db) {
              [db setUserVersion:oldVersion];
          }];
     }

@@ -19,7 +19,7 @@
 @end
 
 @implementation LCIMCacheStore {
-    LCDatabaseQueue *_databaseQueue;
+    FMDatabaseQueue *_databaseQueue;
 }
 
 + (NSString *)databasePathWithName:(NSString *)name {
@@ -36,14 +36,14 @@
     return self;
 }
 
-- (LCDatabaseQueue *)databaseQueue {
+- (FMDatabaseQueue *)databaseQueue {
     @synchronized(self) {
         if (_databaseQueue)
             return _databaseQueue;
 
         if (self.clientId) {
             NSString *path = [[self class] databasePathWithName:self.clientId];
-            _databaseQueue = [LCDatabaseQueue databaseQueueWithPath:path];
+            _databaseQueue = [FMDatabaseQueue databaseQueueWithPath:path];
 
             if (_databaseQueue) {
                 [self databaseQueueDidLoad];
@@ -70,15 +70,15 @@
     LCDatabaseMigrator *migrator = [[LCDatabaseMigrator alloc] initWithDatabasePath:databasePath];
 
     [migrator executeMigrations:@[
-        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
+        [LCDatabaseMigration migrationWithBlock:^(FMDatabase *db) {
             [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN muted INTEGER"];
         }],
 
-        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
+        [LCDatabaseMigration migrationWithBlock:^(FMDatabase *db) {
             [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN last_message BLOB"];
         }],
 
-        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
+        [LCDatabaseMigration migrationWithBlock:^(FMDatabase *db) {
             [db executeUpdate:@"ALTER TABLE message ADD COLUMN read_timestamp REAL"];
         }]
     ]];

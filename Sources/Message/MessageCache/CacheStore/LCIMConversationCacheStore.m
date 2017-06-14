@@ -107,13 +107,13 @@
     return conversation;
 }
 
-- (AVIMConversation *)conversationForId:(NSString *)conversationId database:(LCDatabase *)database timestamp:(NSTimeInterval)timestamp {
+- (AVIMConversation *)conversationForId:(NSString *)conversationId database:(FMDatabase *)database timestamp:(NSTimeInterval)timestamp {
     if (!conversationId) return nil;
 
     AVIMConversation *conversation = nil;
 
     NSArray *args = @[conversationId];
-    LCResultSet *result = [database executeQuery:LCIM_SQL_SELECT_CONVERSATION withArgumentsInArray:args];
+    FMResultSet *result = [database executeQuery:LCIM_SQL_SELECT_CONVERSATION withArgumentsInArray:args];
 
     if ([result next]) {
         NSTimeInterval expireAt = [result doubleForColumn:LCIM_FIELD_EXPIRE_AT];
@@ -140,7 +140,7 @@
     return timeInterval ? [NSDate dateWithTimeIntervalSince1970:timeInterval] : nil;
 }
 
-- (AVIMConversation *)conversationWithResult:(LCResultSet *)result {
+- (AVIMConversation *)conversationWithResult:(FMResultSet *)result {
     AVIMConversation *conversation = [[AVIMConversation alloc] init];
 
     conversation.conversationId = [result stringForColumn:LCIM_FIELD_CONVERSATION_ID];
@@ -190,7 +190,7 @@
 
     LCIM_OPEN_DATABASE(db, ({
         NSArray *args = @[[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
-        LCResultSet *result = [db executeQuery:LCIM_SQL_SELECT_ALIVE_CONVERSATIONS withArgumentsInArray:args];
+        FMResultSet *result = [db executeQuery:LCIM_SQL_SELECT_ALIVE_CONVERSATIONS withArgumentsInArray:args];
 
         while ([result next]) {
             [conversations addObject:[self conversationWithResult:result]];
@@ -207,7 +207,7 @@
 
     LCIM_OPEN_DATABASE(db, ({
         NSArray *args = @[[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
-        LCResultSet *result = [db executeQuery:LCIM_SQL_SELECT_EXPIRED_CONVERSATIONS withArgumentsInArray:args];
+        FMResultSet *result = [db executeQuery:LCIM_SQL_SELECT_EXPIRED_CONVERSATIONS withArgumentsInArray:args];
 
         while ([result next]) {
             [conversations addObject:[self conversationWithResult:result]];

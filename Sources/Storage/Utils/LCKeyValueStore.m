@@ -8,8 +8,8 @@
 
 #import "LCKeyValueStore.h"
 #import "LCKeyValueSQL.h"
-#import "LCDatabase.h"
-#import "LCDatabaseQueue.h"
+#import "FMDatabase.h"
+#import "FMDatabaseQueue.h"
 #import "AVPersistenceUtils.h"
 
 #import <libkern/OSAtomic.h>
@@ -21,7 +21,7 @@ static BOOL shouldLogError = NO;
 #endif
 
 #define LC_OPEN_DATABASE(db, routine) do {        \
-    [self.dbQueue inDatabase:^(LCDatabase *db) {  \
+    [self.dbQueue inDatabase:^(FMDatabase *db) {  \
         db.logsErrors = shouldLogError;           \
         routine;                                  \
     }];                                           \
@@ -32,12 +32,12 @@ static OSSpinLock dbQueueLock = OS_SPINLOCK_INIT;
 @interface LCKeyValueStore () {
     NSString *_dbPath;
     NSString *_tableName;
-    LCDatabaseQueue *_dbQueue;
+    FMDatabaseQueue *_dbQueue;
 }
 
 - (NSString *)dbPath;
 - (NSString *)tableName;
-- (LCDatabaseQueue *)dbQueue;
+- (FMDatabaseQueue *)dbQueue;
 
 @end
 
@@ -95,7 +95,7 @@ static OSSpinLock dbQueueLock = OS_SPINLOCK_INIT;
     LC_OPEN_DATABASE(db, ({
         NSArray *args = @[key];
         NSString *SQL = [self formatSQL:LC_SQL_SELECT_KEY_VALUE_FMT withTableName:[self tableName]];
-        LCResultSet *result = [db executeQuery:SQL withArgumentsInArray:args];
+        FMResultSet *result = [db executeQuery:SQL withArgumentsInArray:args];
 
         if ([result next]) {
             data = [result dataForColumn:LC_FIELD_VALUE];
@@ -123,8 +123,8 @@ static OSSpinLock dbQueueLock = OS_SPINLOCK_INIT;
     }));
 }
 
-- (void)createSchemeForDatabaseQueue:(LCDatabaseQueue *)dbQueue {
-    [dbQueue inDatabase:^(LCDatabase *db) {
+- (void)createSchemeForDatabaseQueue:(FMDatabaseQueue *)dbQueue {
+    [dbQueue inDatabase:^(FMDatabase *db) {
         db.logsErrors = shouldLogError;
 
         NSString *SQL = [self formatSQL:LC_SQL_CREATE_KEY_VALUE_TABLE_FMT withTableName:[self tableName]];
@@ -140,11 +140,11 @@ static OSSpinLock dbQueueLock = OS_SPINLOCK_INIT;
     return _tableName ?: LC_TABLE_KEY_VALUE;
 }
 
-- (LCDatabaseQueue *)dbQueue {
+- (FMDatabaseQueue *)dbQueue {
     OSSpinLockLock(&dbQueueLock);
 
     if (!_dbQueue) {
-        _dbQueue = [LCDatabaseQueue databaseQueueWithPath:[self dbPath]];
+        _dbQueue = [FMDatabaseQueue databaseQueueWithPath:[self dbPath]];
 
         [self createSchemeForDatabaseQueue:_dbQueue];
     }

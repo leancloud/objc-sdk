@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@class LCDatabase;
+@class FMDatabase;
 
-typedef void(^LCDatabaseJob)(LCDatabase *db);
+typedef void(^LCDatabaseJob)(FMDatabase *db);

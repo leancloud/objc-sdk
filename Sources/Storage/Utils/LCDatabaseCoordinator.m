@@ -7,8 +7,8 @@
 //
 
 #import "LCDatabaseCoordinator.h"
-#import "LCDatabase.h"
-#import "LCDatabaseQueue.h"
+#import "FMDatabase.h"
+#import "FMDatabaseQueue.h"
 #import "AVLogger.h"
 #import "AVErrorUtils.h"
 
@@ -21,11 +21,11 @@
 #endif
 
 @interface LCDatabaseCoordinator () {
-    LCDatabaseQueue *_dbQueue;
+    FMDatabaseQueue *_dbQueue;
     OSSpinLock _dbQueueLock;
 }
 
-- (LCDatabaseQueue *)dbQueue;
+- (FMDatabaseQueue *)dbQueue;
 
 @end
 
@@ -52,7 +52,7 @@
 }
 
 - (void)executeTransaction:(LCDatabaseJob)job fail:(LCDatabaseJob)fail {
-    [self executeJob:^(LCDatabase *db) {
+    [self executeJob:^(FMDatabase *db) {
         [db beginTransaction];
         @try {
             job(db);
@@ -65,7 +65,7 @@
 }
 
 - (void)executeJob:(LCDatabaseJob)job {
-    [self.dbQueue inDatabase:^(LCDatabase *db) {
+    [self.dbQueue inDatabase:^(FMDatabase *db) {
         db.logsErrors = LC_SHOULD_LOG_ERRORS;
         job(db);
     }];
@@ -73,7 +73,7 @@
 
 #pragma mark - Lazy loading
 
-- (LCDatabaseQueue *)dbQueue {
+- (FMDatabaseQueue *)dbQueue {
     if (!_databasePath) {
         AVLoggerError(kAVErrorDomain, @"%@: Database path not found.", [[self class] description]);
         return nil;
@@ -82,7 +82,7 @@
     OSSpinLockLock(&_dbQueueLock);
 
     if (!_dbQueue) {
-        _dbQueue = [LCDatabaseQueue databaseQueueWithPath:_databasePath];
+        _dbQueue = [FMDatabaseQueue databaseQueueWithPath:_databasePath];
     }
 
     OSSpinLockUnlock(&_dbQueueLock);

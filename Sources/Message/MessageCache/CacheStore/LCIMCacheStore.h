@@ -16,9 +16,9 @@
 #endif
 
 #define LCIM_OPEN_DATABASE(db, routine) do {    \
-    LCDatabaseQueue *dbQueue = [self databaseQueue]; \
+    FMDatabaseQueue *dbQueue = [self databaseQueue]; \
                                                 \
-    [dbQueue inDatabase:^(LCDatabase *db) {     \
+    [dbQueue inDatabase:^(FMDatabase *db) {     \
         db.logsErrors = LCIM_SHOULD_LOG_ERRORS; \
         routine;                                \
     }];                                         \
@@ -32,6 +32,6 @@
 
 - (instancetype)initWithClientId:(NSString *)clientId;
 
-- (LCDatabaseQueue *)databaseQueue;
+- (FMDatabaseQueue *)databaseQueue;
 
 @end
