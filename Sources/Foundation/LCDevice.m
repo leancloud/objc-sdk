@@ -93,4 +93,20 @@
     return pixelSize;
 }
 
+- (NSString *)systemVersion {
+    NSString *version = @"Unknown";
+
+#if LC_TARGET_OS_IOS
+    version = [UIDevice currentDevice].systemVersion;
+#elif LC_TARGET_OS_MAC
+    version = [NSProcessInfo processInfo].operatingSystemVersionString;
+#elif LC_TARGET_OS_WATCH
+    version = [WKInterfaceDevice currentDevice].systemVersion;
+#elif LC_TARGET_OS_TV
+    version = [UIDevice currentDevice].systemVersion;
+#endif
+
+    return version;
+}
+
 @end

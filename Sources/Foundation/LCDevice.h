@@ -33,6 +33,11 @@
 @property (nonatomic, readonly, assign) CGSize screenSize;
 
 /**
+ System version of current OS.
+ */
+@property (nonatomic, readonly, strong) NSString *systemVersion;
+
+/**
  Get an LCDevice singleton instance.
 
  @return An LCDevice singleton instance.
