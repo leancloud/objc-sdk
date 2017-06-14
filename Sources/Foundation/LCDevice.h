@@ -68,6 +68,11 @@ typedef NS_ENUM(NSInteger, LCNetworkReachabilityStatus)
 @property (nonatomic, readonly, assign) LCNetworkReachabilityStatus networkReachabilityStatus;
 
 /**
+ Whether current device is in WiFi.
+ */
+@property (nonatomic, readonly, assign) BOOL inWiFi;
+
+/**
  Network carrier name.
 
  @note For systems other than iOS, it always return an empty string.

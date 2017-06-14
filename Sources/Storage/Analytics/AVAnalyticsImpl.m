@@ -471,7 +471,7 @@ static NSString *const kAVOnlineConfig = @"AVOS_ONLINE_CONFIG";
     } else if (self.reportPolicy == AV_BATCH) {
         [self sendWithBatch];
     } else if (self.reportPolicy == AV_SENDWIFIONLY) {
-        if ([AVAnalyticsUtils isWiFiConnection]) {
+        if ([LCDevice current].inWiFi) {
             [self sendWithBatch];
         }
     } else if (self.reportPolicy == AV_SEND_INTERVAL) {

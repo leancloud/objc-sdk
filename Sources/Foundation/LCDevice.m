@@ -171,6 +171,10 @@
 #endif
 }
 
+- (BOOL)inWiFi {
+    return self.networkReachabilityStatus == LCNetworkReachabilityStatusReachableViaWiFi;
+}
+
 - (NSString *)networkCarrierName {
 #if LC_TARGET_OS_IOS
     CTTelephonyNetworkInfo *phoneInfo = [[CTTelephonyNetworkInfo alloc] init];
