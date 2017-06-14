@@ -38,6 +38,11 @@
 @property (nonatomic, readonly, strong) NSString *systemVersion;
 
 /**
+ Language of current system.
+ */
+@property (nonatomic, readonly, strong) NSString *language;
+
+/**
  Get an LCDevice singleton instance.
 
  @return An LCDevice singleton instance.

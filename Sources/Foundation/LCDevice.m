@@ -109,4 +109,9 @@
     return version;
 }
 
+- (NSString *)language {
+    NSString *currentLanguage = [[NSLocale preferredLanguages] firstObject];
+    return currentLanguage;
+}
+
 @end
