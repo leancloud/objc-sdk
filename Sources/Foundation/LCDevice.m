@@ -114,4 +114,9 @@
     return currentLanguage;
 }
 
+- (NSString *)timezone {
+    NSTimeZone *localTime = [NSTimeZone systemTimeZone];
+    return [NSString stringWithFormat:@"%ld", (long)(localTime.secondsFromGMT / 3600)];
+}
+
 @end
