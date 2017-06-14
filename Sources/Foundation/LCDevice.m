@@ -109,6 +109,22 @@
     return version;
 }
 
+- (NSString *)systemName {
+    NSString *name = @"Unknown";
+
+#if LC_TARGET_OS_IOS
+    name = @"iOS";
+#elif LC_TARGET_OS_MAC
+    name = @"OSX";
+#elif LC_TARGET_OS_WATCH
+    name = @"watchOS";
+#elif LC_TARGET_OS_TV
+    name = @"tvOS";
+#endif
+
+    return name;
+}
+
 - (NSString *)language {
     NSString *currentLanguage = [[NSLocale preferredLanguages] firstObject];
     return currentLanguage;

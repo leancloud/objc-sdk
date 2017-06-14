@@ -38,6 +38,11 @@
 @property (nonatomic, readonly, strong) NSString *systemVersion;
 
 /**
+ System name of current OS.
+ */
+@property (nonatomic, readonly, strong) NSString *systemName;
+
+/**
  Language of current system.
  */
 @property (nonatomic, readonly, strong) NSString *language;
