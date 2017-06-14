@@ -6,34 +6,9 @@
 //  Copyright (c) 2013 AVOS. All rights reserved.
 //
 
-#import "AVAvailability.h"
-
-#if TARGET_OS_WATCH
-    #import <WatchKit/WatchKit.h>
-#endif
-
-#if AV_TARGET_OS_IOS
-    #import <CoreTelephony/CTTelephonyNetworkInfo.h>
-    #import <CoreTelephony/CTCarrier.h>
-#endif
-
-#import <sys/sysctl.h>
-#include <unistd.h>
-#include <sys/ioctl.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#include <sys/sockio.h>
-#include <net/if.h>
-#include <errno.h>
-#include <net/if_dl.h>
-
 #import "AVAnalyticsUtils.h"
-#import "UserAgent.h"
-#import "AVUtils.h"
 #import "AVUser.h"
+#import "AVInstallation.h"
 
 #import "LCFoundation.h"
 
