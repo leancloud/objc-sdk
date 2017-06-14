@@ -10,8 +10,9 @@
 #import "AVOSCloudFoundation.h"
 
 /* Non-public headers */
+#import "EXTScope.h"
 #import "LCTargetConditionals.h"
 #import "LCTargetUmbrella.h"
+#import "AVSDK+Internal.h"
 #import "LCDevice.h"
 #import "LCApplication.h"
-#import "EXTScope.h"
