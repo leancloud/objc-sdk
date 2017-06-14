@@ -60,7 +60,7 @@ NSString *LCStringFromReachabilityStatus(LCNetworkReachabilityStatus status) {
     return result;
 }
 
-+ (NSDictionary *)deviceInfo {
++ (NSDictionary *)analyticsData {
     AVSDK *SDK = [AVSDK current];
     LCDevice *device = [LCDevice current];
     LCApplication *application = [LCApplication current];

@@ -227,7 +227,7 @@
 
 -(NSDictionary *)jsonDictionary:(NSDictionary *)additionalDeviceInfo
 {
-    NSMutableDictionary * deviceInfo = [[LCDevice information] mutableCopy];
+    NSMutableDictionary * deviceInfo = [[AVAnalyticsUtils analyticsData] mutableCopy];
     [deviceInfo addEntriesFromDictionary:additionalDeviceInfo];
     NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithDictionary:@{@"events": @{@"launch": [self launchDictionary],
                                                                                               @"terminate": [self activitiesDictionary],

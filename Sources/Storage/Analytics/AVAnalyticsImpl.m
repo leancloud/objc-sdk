@@ -143,7 +143,7 @@ static NSString *const kAVOnlineConfig = @"AVOS_ONLINE_CONFIG";
         strace=@"";
     }
     
-    NSMutableDictionary * dict = [[LCDevice information] mutableCopy];
+    NSMutableDictionary * dict = [[AVAnalyticsUtils analyticsData] mutableCopy];
     
     [dict addEntriesFromDictionary:@{
                                      @"type": [exception name],
