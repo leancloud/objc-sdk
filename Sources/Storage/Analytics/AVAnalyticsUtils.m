@@ -37,6 +37,8 @@
 #import "AVUtils.h"
 #import "AVUser.h"
 
+#import "LCFoundation.h"
+
 static NSString * identifierForVendorTag = @"identifierForVendor";
 
 @implementation AVAnalyticsUtils
@@ -226,90 +228,63 @@ static NSString *const WWANType = @"WWAN";
     return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleExecutable"];
 }
 
-/*
- {"timezone":"8",
- "sdk_type":"iOS",
- "resolution":"960 x 640",
- "package_name":"com.avos.iconview",
- "sv":"1.0",
- "is_jailbroken":"NO",
- "carrier":"",
- "access":"WiFi",
- "channel":"App Store",
- "os":"iOS",
- "display_name":"iconview",
- "os_version":"6.1",
- "device_model":"x86_64",
- "app_version":"1.0",
- "country":"US",
- "language":"en",
- "sdk_version":"2.2.0.OpenUDID",
- "appkey":"5151742a56240b91ab001217",
- "mc":"54:26:96:CF:D8:7D",
- "device_id":"e50a768b2d55e7c9bdc07AV5c95f2eb23ce57a76",
- "is_pirated":"NO"}
- */
-+(NSMutableDictionary *)deviceInfo
-{
-    
-    static NSMutableDictionary *staticDict=nil;
-    if (staticDict==nil) {
-	    staticDict = [@{@"sdk_version": SDK_VERSION,
-#if !TARGET_OS_WATCH
-#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
-		           @"device_id": [AVAnalyticsUtils deviceId],
-#endif
-#endif
-		           @"is_jailbroken": @([AVAnalyticsUtils isJailbroken]),
-		           @"device_model": [AVAnalyticsUtils deviceModel],
-		           @"resolution": [AVAnalyticsUtils screenResolution],
-		           @"os_version": [AVAnalyticsUtils systemVersion],
-		           @"language": [AVAnalyticsUtils language],
-		           @"timezone": [AVAnalyticsUtils timezone]} mutableCopy];
-        // 单元测试的时候，下面属性可能为 nil
-        if ([AVAnalyticsUtils buildVersion]) {
-            staticDict[@"sv"] = [AVAnalyticsUtils buildVersion];
-        }
-        if ([AVAnalyticsUtils appVersion]) {
-            staticDict[@"app_version"] = [AVAnalyticsUtils appVersion];
-        } else {
-            // need for unit test
-            staticDict[@"app_version"] = @"";
-        }
-        if ([AVAnalyticsUtils packageName]) {
-            staticDict[@"package_name"] = [AVAnalyticsUtils packageName];
-        }
-        if ([AVAnalyticsUtils displayName]) {
-            staticDict[@"display_name"] = [AVAnalyticsUtils displayName];
-        }
+NS_INLINE
+NSString *LCStringFromCGSize(CGSize size) {
+    NSString *result = [NSString stringWithFormat:@"%ld x %ld", (long)size.width, (long)size.height];
+
+    return result;
+}
+
+NS_INLINE
+NSString *LCStringFromReachabilityStatus(LCNetworkReachabilityStatus status) {
+    NSString *result = nil;
+
+    switch (status) {
+    case LCNetworkReachabilityStatusUnknown:
+        break;
+    case LCNetworkReachabilityStatusNotReachable:
+        break;
+    case LCNetworkReachabilityStatusReachableViaWWAN:
+        result = @"WWAN";
+        break;
+    case LCNetworkReachabilityStatusReachableViaWiFi:
+        result = @"WiFi";
+        break;
     }
-    
-    //只有这几个数据是变动的
-    NSDictionary *dynamicDict=@{
-        @"os": [self sdkType],
-#if !TARGET_OS_WATCH
-        @"access": [AVAnalyticsUtils connectionType],
-        @"carrier": [AVAnalyticsUtils carrier],
+
+    return result;
+}
+
++ (NSDictionary *)deviceInfo {
+    AVSDK *SDK = [AVSDK current];
+    LCDevice *device = [LCDevice current];
+    LCApplication *application = [LCApplication current];
+
+    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+
+    dictionary[@"sdk_type"]             = @"Objective-C";
+    dictionary[@"sdk_version"]          = SDK.version;
+
+    dictionary[@"device_model"]         = device.model;
+    dictionary[@"language"]             = device.language;
+    dictionary[@"timezone"]             = device.timezone;
+    dictionary[@"os"]                   = device.systemName;
+    dictionary[@"os_version"]           = device.systemVersion;
+    dictionary[@"is_jailbroken"]        = @(device.jailbroken);
+    dictionary[@"resolution"]           = LCStringFromCGSize(device.screenSize);
+    dictionary[@"access"]               = LCStringFromReachabilityStatus(device.networkReachabilityStatus);
+#if LC_TARGET_OS_IOS
+    dictionary[@"device_id"]            = device.UDID;
 #endif
-    };
-    
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithDictionary:staticDict];
-    [dict addEntriesFromDictionary:dynamicDict];
-    
-    //currentUser and currentInstallation
-    AVUser *currentUser = [AVUser currentUser];
-    AVInstallation *currentInstallation = [AVInstallation currentInstallation];
-    if (currentUser && currentUser.objectId) {
-        NSDictionary *currentUserDict = @{@"uid" : currentUser.objectId};
-        [dict addEntriesFromDictionary:currentUserDict];
-    }
-    
-    if (currentInstallation && currentInstallation.objectId) {
-        NSDictionary *currentInstallationDict = @{@"iid": currentInstallation.objectId};
-        [dict addEntriesFromDictionary:currentInstallationDict];
-    }
-    
-    return dict;
+
+    dictionary[@"display_name"]         = application.name;
+    dictionary[@"app_version"]          = application.shortVersion;
+    dictionary[@"package_name"]         = application.identifier;
+
+    dictionary[@"uid"]                  = [AVUser currentUser].objectId;
+    dictionary[@"iid"]                  = [AVInstallation currentInstallation].objectId;
+
+    return dictionary;
 }
 
 +(BOOL)inSimulator
