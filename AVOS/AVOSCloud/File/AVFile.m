@@ -249,12 +249,15 @@ static LCHTTPSessionManager *imageSessionManager = nil;
 - (void)feedbackUploadResult:(BOOL)succeeded {
     NSString *token = self.token;
 
-    if (!token)
-        return;
+    if (token) {
+        NSDictionary *parameters = @{@"token":token, @"result":@(succeeded)};
+        [[AVPaasClient sharedInstance] postObject:@"fileCallback" withParameters:parameters block:nil];
+    }
 
-    NSDictionary *parameters = @{@"token":token, @"result":@(succeeded)};
-
-    [[AVPaasClient sharedInstance] postObject:@"fileCallback" withParameters:parameters block:nil];
+    /* If upload did fail, reset the objectId for later upload. */
+    if (!succeeded) {
+        self.objectId = nil;
+    }
 }
 
 - (void)updateURLWithResultBlock:(AVBooleanResultBlock)resultBlock progressBlock:(AVProgressBlock)progressBlock {
