@@ -10,6 +10,8 @@
 
 #if LC_TARGET_OS_IOS
     #import <UIKit/UIKit.h>
+    #import <CoreTelephony/CTTelephonyNetworkInfo.h>
+    #import <CoreTelephony/CTCarrier.h>
 #elif LC_TARGET_OS_MAC
     #import <AppKit/AppKit.h>
 #elif LC_TARGET_OS_TV

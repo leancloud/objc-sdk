@@ -180,4 +180,16 @@
 #endif
 }
 
+- (NSString *)networkCarrierName {
+#if LC_TARGET_OS_IOS
+    CTTelephonyNetworkInfo *phoneInfo = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier *phoneCarrier = phoneInfo.subscriberCellularProvider;
+    NSString *carrierName = phoneCarrier.carrierName;
+
+    return carrierName ?: @"";
+#else
+    return @"";
+#endif
+}
+
 @end

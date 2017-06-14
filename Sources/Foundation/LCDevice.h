@@ -88,6 +88,13 @@ typedef NS_ENUM(NSInteger, LCNetworkReachabilityStatus)
 @property (nonatomic, readonly, assign) LCNetworkReachabilityStatus networkReachabilityStatus;
 
 /**
+ Network carrier name.
+
+ @note For systems other than iOS, it always return an empty string.
+ */
+@property (nonatomic, readonly, strong) NSString *networkCarrierName;
+
+/**
  Get an LCDevice singleton instance.
 
  @return An LCDevice singleton instance.
