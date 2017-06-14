@@ -562,6 +562,14 @@
 		83A2BD311CF33CDA0047B230 /* AVPaasClient_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 83A2BD2E1CF33CDA0047B230 /* AVPaasClient_internal.h */; };
 		83A2BD321CF33CDA0047B230 /* AVPaasClient_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 83A2BD2E1CF33CDA0047B230 /* AVPaasClient_internal.h */; };
 		83A2BD331CF33CDA0047B230 /* AVPaasClient_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 83A2BD2E1CF33CDA0047B230 /* AVPaasClient_internal.h */; };
+		83A46FA71EF11DB0009E9380 /* LCUUID.h in Headers */ = {isa = PBXBuildFile; fileRef = 83A46FA51EF11DB0009E9380 /* LCUUID.h */; };
+		83A46FA81EF11DB0009E9380 /* LCUUID.h in Headers */ = {isa = PBXBuildFile; fileRef = 83A46FA51EF11DB0009E9380 /* LCUUID.h */; };
+		83A46FA91EF11DB0009E9380 /* LCUUID.h in Headers */ = {isa = PBXBuildFile; fileRef = 83A46FA51EF11DB0009E9380 /* LCUUID.h */; };
+		83A46FAA1EF11DB0009E9380 /* LCUUID.h in Headers */ = {isa = PBXBuildFile; fileRef = 83A46FA51EF11DB0009E9380 /* LCUUID.h */; };
+		83A46FAB1EF11DB0009E9380 /* LCUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 83A46FA61EF11DB0009E9380 /* LCUUID.m */; };
+		83A46FAC1EF11DB0009E9380 /* LCUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 83A46FA61EF11DB0009E9380 /* LCUUID.m */; };
+		83A46FAD1EF11DB0009E9380 /* LCUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 83A46FA61EF11DB0009E9380 /* LCUUID.m */; };
+		83A46FAE1EF11DB0009E9380 /* LCUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 83A46FA61EF11DB0009E9380 /* LCUUID.m */; };
 		83AB6DF81C3CFEA70064BE17 /* AVOSCloudIM.m in Sources */ = {isa = PBXBuildFile; fileRef = 83AB6DF71C3CFEA70064BE17 /* AVOSCloudIM.m */; };
 		83AB6DFA1C3CFEA70064BE17 /* AVOSCloudIM.m in Sources */ = {isa = PBXBuildFile; fileRef = 83AB6DF71C3CFEA70064BE17 /* AVOSCloudIM.m */; };
 		83B5FF451B7C768B000C3923 /* BreakpadDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF081B7C768B000C3923 /* BreakpadDefines.h */; };
@@ -1322,6 +1330,8 @@
 		838DD7C01B42630400C95897 /* LCSSLChallenger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCSSLChallenger.h; sourceTree = "<group>"; };
 		838DD7C11B42630400C95897 /* LCSSLChallenger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCSSLChallenger.m; sourceTree = "<group>"; };
 		83A2BD2E1CF33CDA0047B230 /* AVPaasClient_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVPaasClient_internal.h; sourceTree = "<group>"; };
+		83A46FA51EF11DB0009E9380 /* LCUUID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCUUID.h; sourceTree = "<group>"; };
+		83A46FA61EF11DB0009E9380 /* LCUUID.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCUUID.m; sourceTree = "<group>"; };
 		83AB6DF71C3CFEA70064BE17 /* AVOSCloudIM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVOSCloudIM.m; sourceTree = "<group>"; };
 		83B5FF081B7C768B000C3923 /* BreakpadDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpadDefines.h; sourceTree = "<group>"; };
 		83B5FF0B1B7C768B000C3923 /* BreakpadController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpadController.h; sourceTree = "<group>"; };
@@ -2219,6 +2229,8 @@
 				835BC2671EEFCC23006B56C6 /* AVSDK.m */,
 				8352BEB61EEFB4E100C513B6 /* LCDevice.h */,
 				8352BEB71EEFB4E100C513B6 /* LCDevice.m */,
+				83A46FA51EF11DB0009E9380 /* LCUUID.h */,
+				83A46FA61EF11DB0009E9380 /* LCUUID.m */,
 				835BC2861EF0D945006B56C6 /* LCTargetConditionals.h */,
 				835BC28B1EF0DDC8006B56C6 /* LCTargetUmbrella.h */,
 				835BC2701EF02B5A006B56C6 /* LCFoundation.h */,
@@ -3196,6 +3208,7 @@
 				835BC2691EEFCC23006B56C6 /* AVSDK.h in Headers */,
 				8352BDDD1EEF6F1800C513B6 /* AVOSCloudFoundation.h in Headers */,
 				835BC2881EF0D945006B56C6 /* LCTargetConditionals.h in Headers */,
+				83A46FA81EF11DB0009E9380 /* LCUUID.h in Headers */,
 				835BC2721EF02B5A006B56C6 /* LCFoundation.h in Headers */,
 				8352BEB91EEFB4E100C513B6 /* LCDevice.h in Headers */,
 			);
@@ -3211,6 +3224,7 @@
 				835BC26B1EEFCC24006B56C6 /* AVSDK.h in Headers */,
 				8352BE401EEF70E300C513B6 /* AVOSCloudFoundation.h in Headers */,
 				835BC28A1EF0D945006B56C6 /* LCTargetConditionals.h in Headers */,
+				83A46FAA1EF11DB0009E9380 /* LCUUID.h in Headers */,
 				835BC2741EF02B5A006B56C6 /* LCFoundation.h in Headers */,
 				8352BEBB1EEFB4E100C513B6 /* LCDevice.h in Headers */,
 			);
@@ -3226,6 +3240,7 @@
 				835BC26A1EEFCC23006B56C6 /* AVSDK.h in Headers */,
 				8352BEA31EEF713400C513B6 /* AVOSCloudFoundation.h in Headers */,
 				835BC2891EF0D945006B56C6 /* LCTargetConditionals.h in Headers */,
+				83A46FA91EF11DB0009E9380 /* LCUUID.h in Headers */,
 				835BC2731EF02B5A006B56C6 /* LCFoundation.h in Headers */,
 				8352BEBA1EEFB4E100C513B6 /* LCDevice.h in Headers */,
 			);
@@ -3367,6 +3382,7 @@
 				835BC2681EEFCC23006B56C6 /* AVSDK.h in Headers */,
 				83F599CC1EED0F610013AF6B /* AVOSCloudFoundation.h in Headers */,
 				835BC2871EF0D945006B56C6 /* LCTargetConditionals.h in Headers */,
+				83A46FA71EF11DB0009E9380 /* LCUUID.h in Headers */,
 				835BC2711EF02B5A006B56C6 /* LCFoundation.h in Headers */,
 				8352BEB81EEFB4E100C513B6 /* LCDevice.h in Headers */,
 			);
@@ -4671,6 +4687,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8376B22D1EF041E7006ED4C2 /* EXTScope.m in Sources */,
+				83A46FAC1EF11DB0009E9380 /* LCUUID.m in Sources */,
 				8352BEBD1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 				835BC26D1EEFCC24006B56C6 /* AVSDK.m in Sources */,
 			);
@@ -4681,6 +4698,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8376B2331EF041E8006ED4C2 /* EXTScope.m in Sources */,
+				83A46FAE1EF11DB0009E9380 /* LCUUID.m in Sources */,
 				8352BEBF1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 				835BC26F1EEFCC24006B56C6 /* AVSDK.m in Sources */,
 			);
@@ -4691,6 +4709,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8376B2301EF041E8006ED4C2 /* EXTScope.m in Sources */,
+				83A46FAD1EF11DB0009E9380 /* LCUUID.m in Sources */,
 				8352BEBE1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 				835BC26E1EEFCC24006B56C6 /* AVSDK.m in Sources */,
 			);
@@ -4817,6 +4836,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8376B22A1EF041E7006ED4C2 /* EXTScope.m in Sources */,
+				83A46FAB1EF11DB0009E9380 /* LCUUID.m in Sources */,
 				8352BEBC1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 				835BC26C1EEFCC24006B56C6 /* AVSDK.m in Sources */,
 			);
