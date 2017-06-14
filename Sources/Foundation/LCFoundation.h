@@ -11,6 +11,7 @@
 
 /* Non-public headers */
 #import "EXTScope.h"
+#import "SDMacros.h"
 #import "LCTargetConditionals.h"
 #import "LCTargetUmbrella.h"
 #import "AVSDK+Internal.h"
