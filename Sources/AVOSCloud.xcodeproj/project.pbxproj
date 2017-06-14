@@ -570,6 +570,14 @@
 		83A46FAC1EF11DB0009E9380 /* LCUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 83A46FA61EF11DB0009E9380 /* LCUUID.m */; };
 		83A46FAD1EF11DB0009E9380 /* LCUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 83A46FA61EF11DB0009E9380 /* LCUUID.m */; };
 		83A46FAE1EF11DB0009E9380 /* LCUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 83A46FA61EF11DB0009E9380 /* LCUUID.m */; };
+		83A46FE91EF12F81009E9380 /* LCApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 83A46FE71EF12F81009E9380 /* LCApplication.h */; };
+		83A46FEA1EF12F81009E9380 /* LCApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 83A46FE71EF12F81009E9380 /* LCApplication.h */; };
+		83A46FEB1EF12F81009E9380 /* LCApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 83A46FE71EF12F81009E9380 /* LCApplication.h */; };
+		83A46FEC1EF12F81009E9380 /* LCApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 83A46FE71EF12F81009E9380 /* LCApplication.h */; };
+		83A46FED1EF12F81009E9380 /* LCApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 83A46FE81EF12F81009E9380 /* LCApplication.m */; };
+		83A46FEE1EF12F81009E9380 /* LCApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 83A46FE81EF12F81009E9380 /* LCApplication.m */; };
+		83A46FEF1EF12F81009E9380 /* LCApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 83A46FE81EF12F81009E9380 /* LCApplication.m */; };
+		83A46FF01EF12F81009E9380 /* LCApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 83A46FE81EF12F81009E9380 /* LCApplication.m */; };
 		83AB6DF81C3CFEA70064BE17 /* AVOSCloudIM.m in Sources */ = {isa = PBXBuildFile; fileRef = 83AB6DF71C3CFEA70064BE17 /* AVOSCloudIM.m */; };
 		83AB6DFA1C3CFEA70064BE17 /* AVOSCloudIM.m in Sources */ = {isa = PBXBuildFile; fileRef = 83AB6DF71C3CFEA70064BE17 /* AVOSCloudIM.m */; };
 		83B5FF451B7C768B000C3923 /* BreakpadDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF081B7C768B000C3923 /* BreakpadDefines.h */; };
@@ -1332,6 +1340,8 @@
 		83A2BD2E1CF33CDA0047B230 /* AVPaasClient_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVPaasClient_internal.h; sourceTree = "<group>"; };
 		83A46FA51EF11DB0009E9380 /* LCUUID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCUUID.h; sourceTree = "<group>"; };
 		83A46FA61EF11DB0009E9380 /* LCUUID.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCUUID.m; sourceTree = "<group>"; };
+		83A46FE71EF12F81009E9380 /* LCApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCApplication.h; sourceTree = "<group>"; };
+		83A46FE81EF12F81009E9380 /* LCApplication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCApplication.m; sourceTree = "<group>"; };
 		83AB6DF71C3CFEA70064BE17 /* AVOSCloudIM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVOSCloudIM.m; sourceTree = "<group>"; };
 		83B5FF081B7C768B000C3923 /* BreakpadDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpadDefines.h; sourceTree = "<group>"; };
 		83B5FF0B1B7C768B000C3923 /* BreakpadController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpadController.h; sourceTree = "<group>"; };
@@ -2231,6 +2241,8 @@
 				8352BEB71EEFB4E100C513B6 /* LCDevice.m */,
 				83A46FA51EF11DB0009E9380 /* LCUUID.h */,
 				83A46FA61EF11DB0009E9380 /* LCUUID.m */,
+				83A46FE71EF12F81009E9380 /* LCApplication.h */,
+				83A46FE81EF12F81009E9380 /* LCApplication.m */,
 				835BC2861EF0D945006B56C6 /* LCTargetConditionals.h */,
 				835BC28B1EF0DDC8006B56C6 /* LCTargetUmbrella.h */,
 				835BC2701EF02B5A006B56C6 /* LCFoundation.h */,
@@ -3202,6 +3214,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83A46FEA1EF12F81009E9380 /* LCApplication.h in Headers */,
 				8376B22E1EF041E7006ED4C2 /* metamacros.h in Headers */,
 				8376B22C1EF041E7006ED4C2 /* EXTScope.h in Headers */,
 				835BC28D1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
@@ -3218,6 +3231,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83A46FEC1EF12F81009E9380 /* LCApplication.h in Headers */,
 				8376B2341EF041E8006ED4C2 /* metamacros.h in Headers */,
 				8376B2321EF041E8006ED4C2 /* EXTScope.h in Headers */,
 				835BC28F1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
@@ -3234,6 +3248,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83A46FEB1EF12F81009E9380 /* LCApplication.h in Headers */,
 				8376B2311EF041E8006ED4C2 /* metamacros.h in Headers */,
 				8376B22F1EF041E8006ED4C2 /* EXTScope.h in Headers */,
 				835BC28E1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
@@ -3376,6 +3391,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83A46FE91EF12F81009E9380 /* LCApplication.h in Headers */,
 				8376B22B1EF041E7006ED4C2 /* metamacros.h in Headers */,
 				8376B2291EF041E7006ED4C2 /* EXTScope.h in Headers */,
 				835BC28C1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
@@ -4686,6 +4702,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83A46FEE1EF12F81009E9380 /* LCApplication.m in Sources */,
 				8376B22D1EF041E7006ED4C2 /* EXTScope.m in Sources */,
 				83A46FAC1EF11DB0009E9380 /* LCUUID.m in Sources */,
 				8352BEBD1EEFB4E100C513B6 /* LCDevice.m in Sources */,
@@ -4697,6 +4714,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83A46FF01EF12F81009E9380 /* LCApplication.m in Sources */,
 				8376B2331EF041E8006ED4C2 /* EXTScope.m in Sources */,
 				83A46FAE1EF11DB0009E9380 /* LCUUID.m in Sources */,
 				8352BEBF1EEFB4E100C513B6 /* LCDevice.m in Sources */,
@@ -4708,6 +4726,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83A46FEF1EF12F81009E9380 /* LCApplication.m in Sources */,
 				8376B2301EF041E8006ED4C2 /* EXTScope.m in Sources */,
 				83A46FAD1EF11DB0009E9380 /* LCUUID.m in Sources */,
 				8352BEBE1EEFB4E100C513B6 /* LCDevice.m in Sources */,
@@ -4835,6 +4854,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83A46FED1EF12F81009E9380 /* LCApplication.m in Sources */,
 				8376B22A1EF041E7006ED4C2 /* EXTScope.m in Sources */,
 				83A46FAB1EF11DB0009E9380 /* LCUUID.m in Sources */,
 				8352BEBC1EEFB4E100C513B6 /* LCDevice.m in Sources */,

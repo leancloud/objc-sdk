@@ -13,4 +13,5 @@
 #import "LCTargetConditionals.h"
 #import "LCTargetUmbrella.h"
 #import "LCDevice.h"
+#import "LCApplication.h"
 #import "EXTScope.h"
