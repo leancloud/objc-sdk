@@ -12,6 +12,13 @@
 #import "LCTargetUmbrella.h"
 #import "AFNetworkReachabilityManager.h"
 
+#if LC_TARGET_OS_IOS
+
+#import "LCUUID.h"
+#import "JNKeychain.h"
+
+#endif
+
 #import <sys/sysctl.h>
 
 @implementation LCDevice
@@ -191,5 +198,48 @@
     return @"";
 #endif
 }
+
+#if LC_TARGET_OS_IOS
+
+- (NSString *)UDIDKey {
+    NSString *key = nil;
+    static NSString *const suffix = @"@leancloud";
+
+    NSString *bundleIdentifier = self.bundleIdentifier;
+
+    /* Bundle identifier may be nil for unit test. */
+    if (bundleIdentifier) {
+        key = [bundleIdentifier stringByAppendingString:suffix];
+    } else {
+        key = [@"~" stringByAppendingString:suffix];
+    }
+
+    return key;
+}
+
+- (NSString *)UDID {
+    static NSString *UDID = nil;
+
+    if (UDID)
+        return UDID;
+
+    @synchronized([LCDevice class]) {
+        if (UDID)
+            return UDID;
+
+        NSString *key = [self UDIDKey];
+        UDID = [JNKeychain loadValueForKey:key];
+
+        if (UDID)
+            return UDID;
+
+        UDID = [LCUUID createUUID];
+        [JNKeychain saveValue:UDID forKey:key];
+
+        return UDID;
+    }
+}
+
+#endif
 
 @end
