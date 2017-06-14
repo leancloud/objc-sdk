@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreGraphics/CoreGraphics.h>
 
 /**
  The LCDevice class provides a singleton instance representing the current device.
@@ -25,6 +26,11 @@
  The model of current device.
  */
 @property (nonatomic, readonly, strong) NSString *model;
+
+/**
+ Screen size of current device, in pixels.
+ */
+@property (nonatomic, readonly, assign) CGSize screenSize;
 
 /**
  Get an LCDevice singleton instance.

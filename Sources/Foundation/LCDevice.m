@@ -8,6 +8,8 @@
 
 #import "LCDevice.h"
 #import "EXTScope.h"
+#import "LCTargetConditionals.h"
+#import "LCTargetUmbrella.h"
 
 #import <sys/sysctl.h>
 
@@ -64,6 +66,31 @@
     NSString *model = [NSString stringWithCString:modelptr encoding:NSUTF8StringEncoding];
 
     return model;
+}
+
+- (CGSize)screenSize {
+    CGSize size = CGSizeZero;
+    CGFloat scale = 1;
+
+#if LC_TARGET_OS_IOS
+    UIScreen *screen = [UIScreen mainScreen];
+    size = screen.bounds.size;
+    scale = screen.scale;
+#elif LC_TARGET_OS_MAC
+    NSScreen *screen = [NSScreen mainScreen];
+    size = screen.frame.size;
+#elif LC_TARGET_OS_WATCH
+    WKInterfaceDevice *device = [WKInterfaceDevice currentDevice];
+    size = device.screenBounds.size;
+    scale = device.screenScale;
+#elif LC_TARGET_OS_TV
+    UIScreen *screen = [UIScreen mainScreen];
+    size = screen.bounds.size;
+    scale = screen.scale;
+#endif
+
+    CGSize pixelSize = CGSizeMake(size.width * scale, size.height * scale);
+    return pixelSize;
 }
 
 @end
