@@ -270,6 +270,66 @@
 		70F315531BDE510D00D691B3 /* UserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEEABC41ABC179300B9E757 /* UserInfo.m */; };
 		70F315541BDE510D00D691B3 /* XCTestCase+AsyncTesting.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA865C1A777A7900864211 /* XCTestCase+AsyncTesting.m */; };
 		70FD6DF11BE07C8A00897138 /* AVOSCloudStorage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7F681BDE2DC3000A3B21 /* AVOSCloudStorage.framework */; };
+		83020AB71EF23A5D00B649BC /* AVHTTPClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AA81EF23A5700B649BC /* AVHTTPClient.h */; };
+		83020AB81EF23A5D00B649BC /* AVHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AA91EF23A5700B649BC /* AVHTTPClient.m */; };
+		83020AB91EF23A5D00B649BC /* AVHTTPRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AAA1EF23A5700B649BC /* AVHTTPRequestOperation.h */; };
+		83020ABA1EF23A5D00B649BC /* AVHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AAB1EF23A5700B649BC /* AVHTTPRequestOperation.m */; };
+		83020ABB1EF23A5D00B649BC /* AVImageRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AAC1EF23A5700B649BC /* AVImageRequestOperation.h */; };
+		83020ABC1EF23A5D00B649BC /* AVImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AAD1EF23A5700B649BC /* AVImageRequestOperation.m */; };
+		83020ABD1EF23A5D00B649BC /* AVJSONRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AAE1EF23A5700B649BC /* AVJSONRequestOperation.h */; };
+		83020ABE1EF23A5D00B649BC /* AVJSONRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AAF1EF23A5700B649BC /* AVJSONRequestOperation.m */; };
+		83020ABF1EF23A5D00B649BC /* AVNetworkActivityIndicatorManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AB01EF23A5700B649BC /* AVNetworkActivityIndicatorManager.h */; };
+		83020AC01EF23A5D00B649BC /* AVNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AB11EF23A5700B649BC /* AVNetworkActivityIndicatorManager.m */; };
+		83020AC11EF23A5D00B649BC /* AVNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AB21EF23A5700B649BC /* AVNetworking.h */; };
+		83020AC21EF23A5D00B649BC /* AVURLConnectionOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AB31EF23A5700B649BC /* AVURLConnectionOperation.h */; };
+		83020AC31EF23A5D00B649BC /* AVURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AB41EF23A5700B649BC /* AVURLConnectionOperation.m */; };
+		83020AC41EF23A5D00B649BC /* AVXMLRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AB51EF23A5700B649BC /* AVXMLRequestOperation.h */; };
+		83020AC51EF23A5D00B649BC /* AVXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AB61EF23A5700B649BC /* AVXMLRequestOperation.m */; };
+		83020AC61EF23A5F00B649BC /* AVHTTPClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AA81EF23A5700B649BC /* AVHTTPClient.h */; };
+		83020AC71EF23A5F00B649BC /* AVHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AA91EF23A5700B649BC /* AVHTTPClient.m */; };
+		83020AC81EF23A5F00B649BC /* AVHTTPRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AAA1EF23A5700B649BC /* AVHTTPRequestOperation.h */; };
+		83020AC91EF23A5F00B649BC /* AVHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AAB1EF23A5700B649BC /* AVHTTPRequestOperation.m */; };
+		83020ACA1EF23A5F00B649BC /* AVImageRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AAC1EF23A5700B649BC /* AVImageRequestOperation.h */; };
+		83020ACB1EF23A5F00B649BC /* AVImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AAD1EF23A5700B649BC /* AVImageRequestOperation.m */; };
+		83020ACC1EF23A5F00B649BC /* AVJSONRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AAE1EF23A5700B649BC /* AVJSONRequestOperation.h */; };
+		83020ACD1EF23A5F00B649BC /* AVJSONRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AAF1EF23A5700B649BC /* AVJSONRequestOperation.m */; };
+		83020ACE1EF23A5F00B649BC /* AVNetworkActivityIndicatorManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AB01EF23A5700B649BC /* AVNetworkActivityIndicatorManager.h */; };
+		83020ACF1EF23A5F00B649BC /* AVNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AB11EF23A5700B649BC /* AVNetworkActivityIndicatorManager.m */; };
+		83020AD01EF23A5F00B649BC /* AVNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AB21EF23A5700B649BC /* AVNetworking.h */; };
+		83020AD11EF23A5F00B649BC /* AVURLConnectionOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AB31EF23A5700B649BC /* AVURLConnectionOperation.h */; };
+		83020AD21EF23A5F00B649BC /* AVURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AB41EF23A5700B649BC /* AVURLConnectionOperation.m */; };
+		83020AD31EF23A5F00B649BC /* AVXMLRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AB51EF23A5700B649BC /* AVXMLRequestOperation.h */; };
+		83020AD41EF23A5F00B649BC /* AVXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AB61EF23A5700B649BC /* AVXMLRequestOperation.m */; };
+		83020AD51EF23A6100B649BC /* AVHTTPClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AA81EF23A5700B649BC /* AVHTTPClient.h */; };
+		83020AD61EF23A6100B649BC /* AVHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AA91EF23A5700B649BC /* AVHTTPClient.m */; };
+		83020AD71EF23A6100B649BC /* AVHTTPRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AAA1EF23A5700B649BC /* AVHTTPRequestOperation.h */; };
+		83020AD81EF23A6100B649BC /* AVHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AAB1EF23A5700B649BC /* AVHTTPRequestOperation.m */; };
+		83020AD91EF23A6100B649BC /* AVImageRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AAC1EF23A5700B649BC /* AVImageRequestOperation.h */; };
+		83020ADA1EF23A6100B649BC /* AVImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AAD1EF23A5700B649BC /* AVImageRequestOperation.m */; };
+		83020ADB1EF23A6100B649BC /* AVJSONRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AAE1EF23A5700B649BC /* AVJSONRequestOperation.h */; };
+		83020ADC1EF23A6100B649BC /* AVJSONRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AAF1EF23A5700B649BC /* AVJSONRequestOperation.m */; };
+		83020ADD1EF23A6100B649BC /* AVNetworkActivityIndicatorManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AB01EF23A5700B649BC /* AVNetworkActivityIndicatorManager.h */; };
+		83020ADE1EF23A6100B649BC /* AVNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AB11EF23A5700B649BC /* AVNetworkActivityIndicatorManager.m */; };
+		83020ADF1EF23A6100B649BC /* AVNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AB21EF23A5700B649BC /* AVNetworking.h */; };
+		83020AE01EF23A6100B649BC /* AVURLConnectionOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AB31EF23A5700B649BC /* AVURLConnectionOperation.h */; };
+		83020AE11EF23A6100B649BC /* AVURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AB41EF23A5700B649BC /* AVURLConnectionOperation.m */; };
+		83020AE21EF23A6100B649BC /* AVXMLRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AB51EF23A5700B649BC /* AVXMLRequestOperation.h */; };
+		83020AE31EF23A6100B649BC /* AVXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AB61EF23A5700B649BC /* AVXMLRequestOperation.m */; };
+		83020AE41EF23A6200B649BC /* AVHTTPClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AA81EF23A5700B649BC /* AVHTTPClient.h */; };
+		83020AE51EF23A6200B649BC /* AVHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AA91EF23A5700B649BC /* AVHTTPClient.m */; };
+		83020AE61EF23A6200B649BC /* AVHTTPRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AAA1EF23A5700B649BC /* AVHTTPRequestOperation.h */; };
+		83020AE71EF23A6200B649BC /* AVHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AAB1EF23A5700B649BC /* AVHTTPRequestOperation.m */; };
+		83020AE81EF23A6200B649BC /* AVImageRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AAC1EF23A5700B649BC /* AVImageRequestOperation.h */; };
+		83020AE91EF23A6200B649BC /* AVImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AAD1EF23A5700B649BC /* AVImageRequestOperation.m */; };
+		83020AEA1EF23A6200B649BC /* AVJSONRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AAE1EF23A5700B649BC /* AVJSONRequestOperation.h */; };
+		83020AEB1EF23A6200B649BC /* AVJSONRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AAF1EF23A5700B649BC /* AVJSONRequestOperation.m */; };
+		83020AEC1EF23A6200B649BC /* AVNetworkActivityIndicatorManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AB01EF23A5700B649BC /* AVNetworkActivityIndicatorManager.h */; };
+		83020AED1EF23A6200B649BC /* AVNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AB11EF23A5700B649BC /* AVNetworkActivityIndicatorManager.m */; };
+		83020AEE1EF23A6200B649BC /* AVNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AB21EF23A5700B649BC /* AVNetworking.h */; };
+		83020AEF1EF23A6200B649BC /* AVURLConnectionOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AB31EF23A5700B649BC /* AVURLConnectionOperation.h */; };
+		83020AF01EF23A6200B649BC /* AVURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AB41EF23A5700B649BC /* AVURLConnectionOperation.m */; };
+		83020AF11EF23A6200B649BC /* AVXMLRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AB51EF23A5700B649BC /* AVXMLRequestOperation.h */; };
+		83020AF21EF23A6200B649BC /* AVXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AB61EF23A5700B649BC /* AVXMLRequestOperation.m */; };
 		8302AED51C192A0700E13F8A /* LCURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 8302AED31C192A0600E13F8A /* LCURLConnection.h */; };
 		8302AED71C192A0700E13F8A /* LCURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 8302AED31C192A0600E13F8A /* LCURLConnection.h */; };
 		8302AED81C192A0700E13F8A /* LCURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 8302AED31C192A0600E13F8A /* LCURLConnection.h */; };
@@ -1242,6 +1302,21 @@
 		70DA624C1B4BDC8300D95D4D /* AVIMCustomMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMCustomMessage.m; sourceTree = "<group>"; };
 		70F315321BDE503B00D691B3 /* StorageTests-macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "StorageTests-macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		78C62E697B7E6876BA68B0B8 /* Pods-Foundation-watchOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Foundation-watchOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-Foundation-watchOS/Pods-Foundation-watchOS.release.xcconfig"; sourceTree = "<group>"; };
+		83020AA81EF23A5700B649BC /* AVHTTPClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVHTTPClient.h; sourceTree = "<group>"; };
+		83020AA91EF23A5700B649BC /* AVHTTPClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVHTTPClient.m; sourceTree = "<group>"; };
+		83020AAA1EF23A5700B649BC /* AVHTTPRequestOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVHTTPRequestOperation.h; sourceTree = "<group>"; };
+		83020AAB1EF23A5700B649BC /* AVHTTPRequestOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVHTTPRequestOperation.m; sourceTree = "<group>"; };
+		83020AAC1EF23A5700B649BC /* AVImageRequestOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVImageRequestOperation.h; sourceTree = "<group>"; };
+		83020AAD1EF23A5700B649BC /* AVImageRequestOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVImageRequestOperation.m; sourceTree = "<group>"; };
+		83020AAE1EF23A5700B649BC /* AVJSONRequestOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVJSONRequestOperation.h; sourceTree = "<group>"; };
+		83020AAF1EF23A5700B649BC /* AVJSONRequestOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVJSONRequestOperation.m; sourceTree = "<group>"; };
+		83020AB01EF23A5700B649BC /* AVNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
+		83020AB11EF23A5700B649BC /* AVNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
+		83020AB21EF23A5700B649BC /* AVNetworking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVNetworking.h; sourceTree = "<group>"; };
+		83020AB31EF23A5700B649BC /* AVURLConnectionOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVURLConnectionOperation.h; sourceTree = "<group>"; };
+		83020AB41EF23A5700B649BC /* AVURLConnectionOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVURLConnectionOperation.m; sourceTree = "<group>"; };
+		83020AB51EF23A5700B649BC /* AVXMLRequestOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVXMLRequestOperation.h; sourceTree = "<group>"; };
+		83020AB61EF23A5700B649BC /* AVXMLRequestOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVXMLRequestOperation.m; sourceTree = "<group>"; };
 		8302AED31C192A0600E13F8A /* LCURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCURLConnection.h; sourceTree = "<group>"; };
 		8302AED41C192A0600E13F8A /* LCURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCURLConnection.m; sourceTree = "<group>"; };
 		830E7CF61B1CA2A2005F4B22 /* LCDatabaseCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCDatabaseCoordinator.h; sourceTree = "<group>"; };
@@ -1887,6 +1962,28 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		83020AA71EF23A5700B649BC /* AFNetworking */ = {
+			isa = PBXGroup;
+			children = (
+				83020AA81EF23A5700B649BC /* AVHTTPClient.h */,
+				83020AA91EF23A5700B649BC /* AVHTTPClient.m */,
+				83020AAA1EF23A5700B649BC /* AVHTTPRequestOperation.h */,
+				83020AAB1EF23A5700B649BC /* AVHTTPRequestOperation.m */,
+				83020AAC1EF23A5700B649BC /* AVImageRequestOperation.h */,
+				83020AAD1EF23A5700B649BC /* AVImageRequestOperation.m */,
+				83020AAE1EF23A5700B649BC /* AVJSONRequestOperation.h */,
+				83020AAF1EF23A5700B649BC /* AVJSONRequestOperation.m */,
+				83020AB01EF23A5700B649BC /* AVNetworkActivityIndicatorManager.h */,
+				83020AB11EF23A5700B649BC /* AVNetworkActivityIndicatorManager.m */,
+				83020AB21EF23A5700B649BC /* AVNetworking.h */,
+				83020AB31EF23A5700B649BC /* AVURLConnectionOperation.h */,
+				83020AB41EF23A5700B649BC /* AVURLConnectionOperation.m */,
+				83020AB51EF23A5700B649BC /* AVXMLRequestOperation.h */,
+				83020AB61EF23A5700B649BC /* AVXMLRequestOperation.m */,
+			);
+			path = AFNetworking;
+			sourceTree = "<group>";
+		};
 		830EB9BD1C3E4BFA00BA917F /* COSObserver */ = {
 			isa = PBXGroup;
 			children = (
@@ -2489,6 +2586,7 @@
 		8C841A121A5A79FF00C5C6C4 /* File */ = {
 			isa = PBXGroup;
 			children = (
+				83020AA71EF23A5700B649BC /* AFNetworking */,
 				8C841A131A5A79FF00C5C6C4 /* AVFile.h */,
 				8C841A141A5A79FF00C5C6C4 /* AVFile.m */,
 				701881F41BC6777200432D43 /* AVFileQuery.h */,
@@ -3000,6 +3098,7 @@
 				70CA80031BDE4313000A3B21 /* AVPush.h in Headers */,
 				70CA80051BDE4313000A3B21 /* AVCloudQueryResult.h in Headers */,
 				70CA80081BDE4313000A3B21 /* AVQuery.h in Headers */,
+				83020AC61EF23A5F00B649BC /* AVHTTPClient.h in Headers */,
 				70CA80101BDE4314000A3B21 /* AVStatus.h in Headers */,
 				70CA80321BDE4318000A3B21 /* AVAnonymousUtils.h in Headers */,
 				70CA80331BDE4318000A3B21 /* AVUser.h in Headers */,
@@ -3008,10 +3107,13 @@
 				70CA7FDB1BDE42F5000A3B21 /* AVACL.h in Headers */,
 				70CA7FDD1BDE42F5000A3B21 /* AVRole.h in Headers */,
 				70CA7FDF1BDE42F5000A3B21 /* AVAnalytics.h in Headers */,
+				83020ACE1EF23A5F00B649BC /* AVNetworkActivityIndicatorManager.h in Headers */,
 				70CA7FEA1BDE42F6000A3B21 /* AVOSCloud.h in Headers */,
 				70CA7FEE1BDE42F6000A3B21 /* AVCloud.h in Headers */,
 				70CA7FF01BDE42F6000A3B21 /* AVFile.h in Headers */,
+				83020ACC1EF23A5F00B649BC /* AVJSONRequestOperation.h in Headers */,
 				70CA7FF11BDE42F6000A3B21 /* AVFileQuery.h in Headers */,
+				83020AD11EF23A5F00B649BC /* AVURLConnectionOperation.h in Headers */,
 				70CA7FF61BDE42F6000A3B21 /* AVGeoPoint.h in Headers */,
 				70CA7FFA1BDE4313000A3B21 /* AVObject.h in Headers */,
 				835C5F721D2594EA00EF0EBB /* AVAnalyticsActivity.h in Headers */,
@@ -3037,6 +3139,7 @@
 				83F240591EEA89650041D2E2 /* AVExponentialTimer.h in Headers */,
 				70CA80351BDE4318000A3B21 /* AVErrorUtils.h in Headers */,
 				70CA80361BDE4318000A3B21 /* AVHelpers.h in Headers */,
+				83020AC81EF23A5F00B649BC /* AVHTTPRequestOperation.h in Headers */,
 				70CA80391BDE4319000A3B21 /* AVReachability.h in Headers */,
 				70CA803A1BDE4319000A3B21 /* AVUtils.h in Headers */,
 				70CA803B1BDE4319000A3B21 /* UserAgent.h in Headers */,
@@ -3045,6 +3148,7 @@
 				70CA803D1BDE4319000A3B21 /* LCDatabaseCoordinator.h in Headers */,
 				70CA803E1BDE431A000A3B21 /* LCDatabaseMigrator.h in Headers */,
 				70CA80401BDE431A000A3B21 /* LCKeyValueSQL.h in Headers */,
+				83020ACA1EF23A5F00B649BC /* AVImageRequestOperation.h in Headers */,
 				70CA80411BDE431A000A3B21 /* LCKeyValueStore.h in Headers */,
 				70CA80421BDE431A000A3B21 /* LCSSLChallenger.h in Headers */,
 				70CA80431BDE431A000A3B21 /* NSDictionary+LCHash.h in Headers */,
@@ -3054,6 +3158,7 @@
 				70CA7FE01BDE42F5000A3B21 /* AVAnalytics_Internal.h in Headers */,
 				70CA7FE21BDE42F5000A3B21 /* AVAnalyticsImpl.h in Headers */,
 				70CA7FE31BDE42F5000A3B21 /* AVAnalyticsSession.h in Headers */,
+				83020AD31EF23A5F00B649BC /* AVXMLRequestOperation.h in Headers */,
 				70CA7FE41BDE42F5000A3B21 /* AVAnalyticsUtils.h in Headers */,
 				830EB9C21C3E4BFA00BA917F /* LCObserver.h in Headers */,
 				70CA7FE51BDE42F5000A3B21 /* AVDuration.h in Headers */,
@@ -3071,6 +3176,7 @@
 				830EB9F61C44D68400BA917F /* AVSaveOption.h in Headers */,
 				70CA7FF51BDE42F6000A3B21 /* AVUploaderManager.h in Headers */,
 				8302AED71C192A0700E13F8A /* LCURLConnection.h in Headers */,
+				83020AD01EF23A5F00B649BC /* AVNetworking.h in Headers */,
 				70CA7FF71BDE42F6000A3B21 /* AVGeoPoint_Internal.h in Headers */,
 				70CA7FF81BDE42F6000A3B21 /* AVLocationManager.h in Headers */,
 			);
@@ -3091,6 +3197,7 @@
 				8320F8E11C1918C60024B45E /* NSDictionary+LCHash.h in Headers */,
 				8320F8E21C1918C60024B45E /* LCKeyValueStore.h in Headers */,
 				8320F8E41C1918C60024B45E /* AVFile.h in Headers */,
+				83020AF11EF23A6200B649BC /* AVXMLRequestOperation.h in Headers */,
 				8320F8E61C1918C60024B45E /* AVGeoPoint.h in Headers */,
 				8320F8EF1C1918C60024B45E /* AVObject+Subclass.h in Headers */,
 				8326779B1EECF2C400004C66 /* AVOSCloudStorage.h in Headers */,
@@ -3098,7 +3205,9 @@
 				8320F8F11C1918C60024B45E /* AVRelation.h in Headers */,
 				83331D571EB9D55100CADC9C /* NSDictionary+LeanCloud.h in Headers */,
 				8320F8F21C1918C60024B45E /* AVSubclassing.h in Headers */,
+				83020AEE1EF23A6200B649BC /* AVNetworking.h in Headers */,
 				8320F8F31C1918C60024B45E /* AVInstallation.h in Headers */,
+				83020AEC1EF23A6200B649BC /* AVNetworkActivityIndicatorManager.h in Headers */,
 				8320F8F41C1918C60024B45E /* AVFileQuery.h in Headers */,
 				8333913D1EE91AC100D46D5C /* AVMethodDispatcher.h in Headers */,
 				8302AED91C192A0700E13F8A /* LCURLConnection.h in Headers */,
@@ -3108,6 +3217,9 @@
 				83E13C1D1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */,
 				8320F8F71C1918C60024B45E /* AVQuery.h in Headers */,
 				9A404DD61CE5A9BB00DEB3DC /* LCRouter.h in Headers */,
+				83020AEA1EF23A6200B649BC /* AVJSONRequestOperation.h in Headers */,
+				83020AE41EF23A6200B649BC /* AVHTTPClient.h in Headers */,
+				83020AE61EF23A6200B649BC /* AVHTTPRequestOperation.h in Headers */,
 				8320F8F81C1918C60024B45E /* AVSearchQuery.h in Headers */,
 				8320F8FB1C1918C60024B45E /* LCDatabaseCoordinator.h in Headers */,
 				8320F8FC1C1918C60024B45E /* AVSearchSortBuilder.h in Headers */,
@@ -3145,6 +3257,7 @@
 				8320F9381C1918C60024B45E /* AVInstallation_Internal.h in Headers */,
 				8320F9391C1918C60024B45E /* AVPersistenceUtils.h in Headers */,
 				8320F93B1C1918C60024B45E /* AVUtils.h in Headers */,
+				83020AE81EF23A6200B649BC /* AVImageRequestOperation.h in Headers */,
 				8320F93D1C1918C60024B45E /* LCSSLChallenger.h in Headers */,
 				8320F93E1C1918C60024B45E /* AVScheduler.h in Headers */,
 				8320F9401C1918C60024B45E /* AVGeoPoint_Internal.h in Headers */,
@@ -3157,6 +3270,7 @@
 				8320F94F1C1918C60024B45E /* AVCloud_Internal.h in Headers */,
 				8320F9511C1918C60024B45E /* AVCloudQueryResult_Internal.h in Headers */,
 				8320F9541C1918C60024B45E /* AVPush_Internal.h in Headers */,
+				83020AEF1EF23A6200B649BC /* AVURLConnectionOperation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3270,6 +3384,7 @@
 				83D8CED81C17DAF50094279D /* AVCloud.h in Headers */,
 				83D8CEDA1C17DAF50094279D /* NSDictionary+LCHash.h in Headers */,
 				83D8CEDB1C17DAF50094279D /* LCKeyValueStore.h in Headers */,
+				83020AD51EF23A6100B649BC /* AVHTTPClient.h in Headers */,
 				83D8CEDD1C17DAF50094279D /* AVFile.h in Headers */,
 				83D8CEDF1C17DAF50094279D /* AVGeoPoint.h in Headers */,
 				83D8CEE81C17DAF50094279D /* AVObject+Subclass.h in Headers */,
@@ -3278,10 +3393,13 @@
 				83D8CEEB1C17DAF50094279D /* AVSubclassing.h in Headers */,
 				83D8CEEC1C17DAF50094279D /* AVInstallation.h in Headers */,
 				83D8CEED1C17DAF50094279D /* AVFileQuery.h in Headers */,
+				83020ADD1EF23A6100B649BC /* AVNetworkActivityIndicatorManager.h in Headers */,
 				8302AED81C192A0700E13F8A /* LCURLConnection.h in Headers */,
 				83D8CEEE1C17DAF50094279D /* AVPush.h in Headers */,
 				83D8CEEF1C17DAF50094279D /* AVCloudQueryResult.h in Headers */,
+				83020ADB1EF23A6100B649BC /* AVJSONRequestOperation.h in Headers */,
 				83D8CEF01C17DAF50094279D /* AVQuery.h in Headers */,
+				83020AE01EF23A6100B649BC /* AVURLConnectionOperation.h in Headers */,
 				83D8CEF11C17DAF50094279D /* AVSearchQuery.h in Headers */,
 				83D8CEF41C17DAF50094279D /* LCDatabaseCoordinator.h in Headers */,
 				83D8CEF51C17DAF50094279D /* AVSearchSortBuilder.h in Headers */,
@@ -3307,6 +3425,7 @@
 				83D8CF181C17DAF50094279D /* AVExceptionHandler.h in Headers */,
 				83E13C131D4B4FC60009CB6F /* AVConfiguration.h in Headers */,
 				83D8CF1B1C17DAF50094279D /* AVPartialInputStream.h in Headers */,
+				83020AD71EF23A6100B649BC /* AVHTTPRequestOperation.h in Headers */,
 				83F2405A1EEA89650041D2E2 /* AVExponentialTimer.h in Headers */,
 				830EB9C31C3E4BFA00BA917F /* LCObserver.h in Headers */,
 				83D8CF211C17DAF50094279D /* AVFriendQuery.h in Headers */,
@@ -3315,6 +3434,7 @@
 				83D8CF241C17DAF50094279D /* AVACL_Internal.h in Headers */,
 				83D8CF251C17DAF50094279D /* LCNetworkStatistics.h in Headers */,
 				83D8CF271C17DAF50094279D /* AVErrorUtils.h in Headers */,
+				83020AD91EF23A6100B649BC /* AVImageRequestOperation.h in Headers */,
 				83D8CF281C17DAF50094279D /* AVRequestManager.h in Headers */,
 				83D8CF2A1C17DAF50094279D /* AVUploaderManager.h in Headers */,
 				83E13C1C1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */,
@@ -3324,6 +3444,7 @@
 				83D8CF311C17DAF50094279D /* AVInstallation_Internal.h in Headers */,
 				83D8CF321C17DAF50094279D /* AVPersistenceUtils.h in Headers */,
 				83D8CF341C17DAF50094279D /* AVUtils.h in Headers */,
+				83020AE21EF23A6100B649BC /* AVXMLRequestOperation.h in Headers */,
 				83D8CF351C17DAF50094279D /* AVAnalyticsSession.h in Headers */,
 				83331D501EB9A34000CADC9C /* AVDynamicObject_Internal.h in Headers */,
 				83A2BD321CF33CDA0047B230 /* AVPaasClient_internal.h in Headers */,
@@ -3341,6 +3462,7 @@
 				83D8CF481C17DAF50094279D /* AVCloud_Internal.h in Headers */,
 				83D8CF491C17DAF50094279D /* AVAnalytics_Internal.h in Headers */,
 				83D8CF4A1C17DAF50094279D /* AVCloudQueryResult_Internal.h in Headers */,
+				83020ADF1EF23A6100B649BC /* AVNetworking.h in Headers */,
 				83D8CF4B1C17DAF50094279D /* AVAnalyticsActivity.h in Headers */,
 				83D8CF4D1C17DAF50094279D /* AVPush_Internal.h in Headers */,
 			);
@@ -3415,6 +3537,7 @@
 				8C841ACE1A5A7A0000C5C6C4 /* AVCloud.h in Headers */,
 				837CC71E1B568431001333AD /* NSDictionary+LCHash.h in Headers */,
 				838DD7A01B3D3FB600C95897 /* LCKeyValueStore.h in Headers */,
+				83020AB71EF23A5D00B649BC /* AVHTTPClient.h in Headers */,
 				8C841ADE1A5A7A0000C5C6C4 /* AVFile.h in Headers */,
 				8C841AE71A5A7A0000C5C6C4 /* AVGeoPoint.h in Headers */,
 				8C841B171A5A7A0000C5C6C4 /* AVObject+Subclass.h in Headers */,
@@ -3423,10 +3546,13 @@
 				8C841B201A5A7A0000C5C6C4 /* AVSubclassing.h in Headers */,
 				8C841B211A5A7A0000C5C6C4 /* AVInstallation.h in Headers */,
 				701881F61BC6777200432D43 /* AVFileQuery.h in Headers */,
+				83020ABF1EF23A5D00B649BC /* AVNetworkActivityIndicatorManager.h in Headers */,
 				8302AED51C192A0700E13F8A /* LCURLConnection.h in Headers */,
 				8C841B241A5A7A0000C5C6C4 /* AVPush.h in Headers */,
 				8C841B271A5A7A0000C5C6C4 /* AVCloudQueryResult.h in Headers */,
+				83020ABD1EF23A5D00B649BC /* AVJSONRequestOperation.h in Headers */,
 				8C841B2C1A5A7A0000C5C6C4 /* AVQuery.h in Headers */,
+				83020AC21EF23A5D00B649BC /* AVURLConnectionOperation.h in Headers */,
 				8C841B361A5A7A0000C5C6C4 /* AVSearchQuery.h in Headers */,
 				830E7CF81B1CA2A2005F4B22 /* LCDatabaseCoordinator.h in Headers */,
 				8C841B381A5A7A0000C5C6C4 /* AVSearchSortBuilder.h in Headers */,
@@ -3452,6 +3578,7 @@
 				83E13C111D4B4FC60009CB6F /* AVConfiguration.h in Headers */,
 				8C841AE31A5A7A0000C5C6C4 /* AVPartialInputStream.h in Headers */,
 				83F240581EEA89650041D2E2 /* AVExponentialTimer.h in Headers */,
+				83020AB91EF23A5D00B649BC /* AVHTTPRequestOperation.h in Headers */,
 				830EB9C01C3E4BFA00BA917F /* LCObserver.h in Headers */,
 				8C841B2A1A5A7A0000C5C6C4 /* AVFriendQuery.h in Headers */,
 				8C841B1A1A5A7A0000C5C6C4 /* AVObject_Internal.h in Headers */,
@@ -3460,6 +3587,7 @@
 				838DD7961B3D309F00C95897 /* LCNetworkStatistics.h in Headers */,
 				8C841B5C1A5A7A0000C5C6C4 /* AVErrorUtils.h in Headers */,
 				7068A7231BA3614D0004623A /* AVRequestManager.h in Headers */,
+				83020ABB1EF23A5D00B649BC /* AVImageRequestOperation.h in Headers */,
 				8C841AE51A5A7A0000C5C6C4 /* AVUploaderManager.h in Headers */,
 				8C841AC51A5A7A0000C5C6C4 /* AVOSCloud_Internal.h in Headers */,
 				83E13C1A1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */,
@@ -3469,6 +3597,7 @@
 				8C841B231A5A7A0000C5C6C4 /* AVInstallation_Internal.h in Headers */,
 				8C841ACA1A5A7A0000C5C6C4 /* AVPersistenceUtils.h in Headers */,
 				8C841B641A5A7A0000C5C6C4 /* AVUtils.h in Headers */,
+				83020AC41EF23A5D00B649BC /* AVXMLRequestOperation.h in Headers */,
 				83F9A2C71CE014430002E21B /* LCRouter.h in Headers */,
 				8C841ABA1A5A7A0000C5C6C4 /* AVAnalyticsSession.h in Headers */,
 				83331D4E1EB9A34000CADC9C /* AVDynamicObject_Internal.h in Headers */,
@@ -3486,6 +3615,7 @@
 				8C841AD01A5A7A0000C5C6C4 /* AVCloud_Internal.h in Headers */,
 				8C841AB51A5A7A0000C5C6C4 /* AVAnalytics_Internal.h in Headers */,
 				8C841B291A5A7A0000C5C6C4 /* AVCloudQueryResult_Internal.h in Headers */,
+				83020AC11EF23A5D00B649BC /* AVNetworking.h in Headers */,
 				8C841AB61A5A7A0000C5C6C4 /* AVAnalyticsActivity.h in Headers */,
 				8C841B261A5A7A0000C5C6C4 /* AVPush_Internal.h in Headers */,
 			);
@@ -4503,7 +4633,9 @@
 				70CA7FAE1BDE374C000A3B21 /* AVUtils.m in Sources */,
 				70CA7FAF1BDE374C000A3B21 /* LCDatabaseCoordinator.m in Sources */,
 				70CA7FB01BDE374C000A3B21 /* LCDatabaseMigrator.m in Sources */,
+				83020AC91EF23A5F00B649BC /* AVHTTPRequestOperation.m in Sources */,
 				70CA7FB21BDE374C000A3B21 /* LCKeyValueStore.m in Sources */,
+				83020ACB1EF23A5F00B649BC /* AVImageRequestOperation.m in Sources */,
 				70CA7FB31BDE374C000A3B21 /* LCSSLChallenger.m in Sources */,
 				70CA7FB41BDE374C000A3B21 /* NSDictionary+LCHash.m in Sources */,
 				70CA7F721BDE3721000A3B21 /* AVACL.m in Sources */,
@@ -4511,9 +4643,12 @@
 				70CA7F731BDE3721000A3B21 /* AVRole.m in Sources */,
 				70CA7F741BDE3721000A3B21 /* AVAnalytics.m in Sources */,
 				70CA7F751BDE3721000A3B21 /* AVAnalyticsActivity.m in Sources */,
+				83020AD41EF23A5F00B649BC /* AVXMLRequestOperation.m in Sources */,
 				70CA7F761BDE3721000A3B21 /* AVAnalyticsImpl.m in Sources */,
 				70CA7F771BDE3721000A3B21 /* AVAnalyticsSession.m in Sources */,
+				83020ACF1EF23A5F00B649BC /* AVNetworkActivityIndicatorManager.m in Sources */,
 				70CA7F781BDE3721000A3B21 /* AVAnalyticsUtils.m in Sources */,
+				83020AC71EF23A5F00B649BC /* AVHTTPClient.m in Sources */,
 				70CA7F791BDE3721000A3B21 /* AVDuration.m in Sources */,
 				70CA7F7A1BDE3721000A3B21 /* AVExceptionHandler.m in Sources */,
 				70CA7F7B1BDE3721000A3B21 /* AVOSCloud.m in Sources */,
@@ -4534,6 +4669,7 @@
 				835092171EB1ECB7000DA884 /* AVDynamicObject.m in Sources */,
 				70CA7F891BDE3721000A3B21 /* AVRelation.m in Sources */,
 				9A404DD81CE5A9C200DEB3DC /* LCRouter.m in Sources */,
+				83020AD21EF23A5F00B649BC /* AVURLConnectionOperation.m in Sources */,
 				83F2405D1EEA89650041D2E2 /* AVExponentialTimer.m in Sources */,
 				70CA7F8A1BDE3721000A3B21 /* AVRequestManager.m in Sources */,
 				70CA7F8B1BDE3721000A3B21 /* AVInstallation.m in Sources */,
@@ -4547,6 +4683,7 @@
 				83331D4A1EB9A25F00CADC9C /* AVCaptcha.m in Sources */,
 				70CA7F921BDE3721000A3B21 /* AVSearchQuery.m in Sources */,
 				70CA7F931BDE3721000A3B21 /* AVSearchSortBuilder.m in Sources */,
+				83020ACD1EF23A5F00B649BC /* AVJSONRequestOperation.m in Sources */,
 				70CA7F941BDE3721000A3B21 /* LCNetworkStatistics.m in Sources */,
 				70CA7F951BDE3721000A3B21 /* AVStatus.m in Sources */,
 				835092021EB1BDD0000DA884 /* AVSMS.m in Sources */,
@@ -4592,6 +4729,7 @@
 			files = (
 				8320F87D1C1918C60024B45E /* AVFile.m in Sources */,
 				8320F8801C1918C60024B45E /* AVRequestManager.m in Sources */,
+				83020AEB1EF23A6200B649BC /* AVJSONRequestOperation.m in Sources */,
 				8320F8811C1918C60024B45E /* AVFileQuery.m in Sources */,
 				8320F8831C1918C60024B45E /* AVUtils.m in Sources */,
 				8320F88A1C1918C60024B45E /* AVSearchQuery.m in Sources */,
@@ -4606,12 +4744,15 @@
 				8320F89B1C1918C60024B45E /* AVInstallation.m in Sources */,
 				830EB9FD1C44D68400BA917F /* AVSaveOption.m in Sources */,
 				83E13C181D4B4FC60009CB6F /* AVConfiguration.m in Sources */,
+				83020AE71EF23A6200B649BC /* AVHTTPRequestOperation.m in Sources */,
 				8320F89E1C1918C60024B45E /* AVOSCloud.m in Sources */,
 				8320F8A01C1918C60024B45E /* AVObjectUtils.m in Sources */,
 				8320F8A11C1918C60024B45E /* LCSSLChallenger.m in Sources */,
 				8320F8A51C1918C60024B45E /* AVCloud.m in Sources */,
 				8320F8A61C1918C60024B45E /* AVObject.m in Sources */,
 				8320F8A91C1918C60024B45E /* AVUploaderManager.m in Sources */,
+				83020AF21EF23A6200B649BC /* AVXMLRequestOperation.m in Sources */,
+				83020AF01EF23A6200B649BC /* AVURLConnectionOperation.m in Sources */,
 				8320F8AA1C1918C60024B45E /* AVSearchSortBuilder.m in Sources */,
 				8320F8AC1C1918C60024B45E /* LCNetworkStatistics.m in Sources */,
 				8320F8AD1C1918C60024B45E /* AVDuration.m in Sources */,
@@ -4619,12 +4760,15 @@
 				8320F8B01C1918C60024B45E /* AVPaasClient.m in Sources */,
 				8302AEDE1C192A0700E13F8A /* LCURLConnection.m in Sources */,
 				8320F8B21C1918C60024B45E /* AVErrorUtils.m in Sources */,
+				83020AED1EF23A6200B649BC /* AVNetworkActivityIndicatorManager.m in Sources */,
 				8320F8B31C1918C60024B45E /* LCDatabaseMigrator.m in Sources */,
+				83020AE91EF23A6200B649BC /* AVImageRequestOperation.m in Sources */,
 				8320F8B71C1918C60024B45E /* AVLocationManager.m in Sources */,
 				8320F8B81C1918C60024B45E /* AVStatus.m in Sources */,
 				8320F8BB1C1918C60024B45E /* AVGeoPoint.m in Sources */,
 				8320F8BC1C1918C60024B45E /* AVCacheManager.m in Sources */,
 				8320F8BD1C1918C60024B45E /* AVACL.m in Sources */,
+				83020AE51EF23A6200B649BC /* AVHTTPClient.m in Sources */,
 				8320F8BE1C1918C60024B45E /* AVFriendQuery.m in Sources */,
 				8320F8BF1C1918C60024B45E /* AVPartialInputStream.m in Sources */,
 				8320F8C01C1918C60024B45E /* AVPush.m in Sources */,
@@ -4753,7 +4897,9 @@
 				83D8CE871C17DAF50094279D /* NSDictionary+LCHash.m in Sources */,
 				83D8CE891C17DAF50094279D /* AVQuery.m in Sources */,
 				83D8CE8B1C17DAF50094279D /* AVAnalyticsSession.m in Sources */,
+				83020AD81EF23A6100B649BC /* AVHTTPRequestOperation.m in Sources */,
 				83D8CE8C1C17DAF50094279D /* AVAnalyticsImpl.m in Sources */,
+				83020ADA1EF23A6100B649BC /* AVImageRequestOperation.m in Sources */,
 				83D8CE8F1C17DAF50094279D /* AVPersistenceUtils.m in Sources */,
 				83D8CE911C17DAF50094279D /* AVAnonymousUtils.m in Sources */,
 				83D8CE921C17DAF50094279D /* AVUser.m in Sources */,
@@ -4761,9 +4907,12 @@
 				83D8CE971C17DAF50094279D /* AVOSCloud.m in Sources */,
 				83D8CE991C17DAF50094279D /* AVObjectUtils.m in Sources */,
 				83D8CE9A1C17DAF50094279D /* LCSSLChallenger.m in Sources */,
+				83020AE31EF23A6100B649BC /* AVXMLRequestOperation.m in Sources */,
 				83D8CE9E1C17DAF50094279D /* AVCloud.m in Sources */,
 				83D8CE9F1C17DAF50094279D /* AVObject.m in Sources */,
+				83020ADE1EF23A6100B649BC /* AVNetworkActivityIndicatorManager.m in Sources */,
 				83D8CEA01C17DAF50094279D /* AVAnalyticsActivity.m in Sources */,
+				83020AD61EF23A6100B649BC /* AVHTTPClient.m in Sources */,
 				83D8CEA21C17DAF50094279D /* AVUploaderManager.m in Sources */,
 				83D8CEA31C17DAF50094279D /* AVSearchSortBuilder.m in Sources */,
 				830EB9C81C3E4BFA00BA917F /* LCObserver.m in Sources */,
@@ -4784,6 +4933,7 @@
 				83D8CEB51C17DAF50094279D /* AVCacheManager.m in Sources */,
 				83D8CEB61C17DAF50094279D /* AVACL.m in Sources */,
 				83F2405E1EEA89650041D2E2 /* AVExponentialTimer.m in Sources */,
+				83020AE11EF23A6100B649BC /* AVURLConnectionOperation.m in Sources */,
 				83D8CEB71C17DAF50094279D /* AVFriendQuery.m in Sources */,
 				83D8CEB81C17DAF50094279D /* AVPartialInputStream.m in Sources */,
 				83D8CEB91C17DAF50094279D /* AVPush.m in Sources */,
@@ -4797,6 +4947,7 @@
 				83D8CEC11C17DAF50094279D /* AVLogger.m in Sources */,
 				83D8CEC31C17DAF50094279D /* AVScheduler.m in Sources */,
 				83D8CEC51C17DAF50094279D /* AVCloudQueryResult.m in Sources */,
+				83020ADC1EF23A6100B649BC /* AVJSONRequestOperation.m in Sources */,
 				83D8CEC61C17DAF50094279D /* AVAnalytics.m in Sources */,
 				83D8CEC91C17DAF50094279D /* LCKeyValueStore.m in Sources */,
 				830EB9FC1C44D68400BA917F /* AVSaveOption.m in Sources */,
@@ -4859,7 +5010,9 @@
 				837CC71F1B568431001333AD /* NSDictionary+LCHash.m in Sources */,
 				8C841B2D1A5A7A0000C5C6C4 /* AVQuery.m in Sources */,
 				8C841ABB1A5A7A0000C5C6C4 /* AVAnalyticsSession.m in Sources */,
+				83020ABA1EF23A5D00B649BC /* AVHTTPRequestOperation.m in Sources */,
 				8C841AB91A5A7A0000C5C6C4 /* AVAnalyticsImpl.m in Sources */,
+				83020ABC1EF23A5D00B649BC /* AVImageRequestOperation.m in Sources */,
 				8C841ACB1A5A7A0000C5C6C4 /* AVPersistenceUtils.m in Sources */,
 				8C841B581A5A7A0000C5C6C4 /* AVAnonymousUtils.m in Sources */,
 				8C841B5A1A5A7A0000C5C6C4 /* AVUser.m in Sources */,
@@ -4867,9 +5020,12 @@
 				8C841AC71A5A7A0000C5C6C4 /* AVOSCloud.m in Sources */,
 				8C841B1C1A5A7A0000C5C6C4 /* AVObjectUtils.m in Sources */,
 				838DD7C31B42630400C95897 /* LCSSLChallenger.m in Sources */,
+				83020AC51EF23A5D00B649BC /* AVXMLRequestOperation.m in Sources */,
 				8C841ACF1A5A7A0000C5C6C4 /* AVCloud.m in Sources */,
 				8C841B191A5A7A0000C5C6C4 /* AVObject.m in Sources */,
+				83020AC01EF23A5D00B649BC /* AVNetworkActivityIndicatorManager.m in Sources */,
 				8C841AB71A5A7A0000C5C6C4 /* AVAnalyticsActivity.m in Sources */,
+				83020AB81EF23A5D00B649BC /* AVHTTPClient.m in Sources */,
 				8C841AE61A5A7A0000C5C6C4 /* AVUploaderManager.m in Sources */,
 				8C841B391A5A7A0000C5C6C4 /* AVSearchSortBuilder.m in Sources */,
 				830EB9C51C3E4BFA00BA917F /* LCObserver.m in Sources */,
@@ -4890,6 +5046,7 @@
 				8C841AC91A5A7A0000C5C6C4 /* AVCacheManager.m in Sources */,
 				8C841AAE1A5A7A0000C5C6C4 /* AVACL.m in Sources */,
 				83F2405C1EEA89650041D2E2 /* AVExponentialTimer.m in Sources */,
+				83020AC31EF23A5D00B649BC /* AVURLConnectionOperation.m in Sources */,
 				8C841B2B1A5A7A0000C5C6C4 /* AVFriendQuery.m in Sources */,
 				8C841AE41A5A7A0000C5C6C4 /* AVPartialInputStream.m in Sources */,
 				8C841B251A5A7A0000C5C6C4 /* AVPush.m in Sources */,
@@ -4903,6 +5060,7 @@
 				8C841B611A5A7A0000C5C6C4 /* AVLogger.m in Sources */,
 				8C841ACD1A5A7A0000C5C6C4 /* AVScheduler.m in Sources */,
 				8C841B281A5A7A0000C5C6C4 /* AVCloudQueryResult.m in Sources */,
+				83020ABE1EF23A5D00B649BC /* AVJSONRequestOperation.m in Sources */,
 				8C841AB41A5A7A0000C5C6C4 /* AVAnalytics.m in Sources */,
 				838DD7A11B3D3FB600C95897 /* LCKeyValueStore.m in Sources */,
 				830EB9F91C44D68400BA917F /* AVSaveOption.m in Sources */,
