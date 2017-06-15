@@ -114,23 +114,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 }
 @end
 
-@implementation AVHTTPClient (CancelMethods)
-- (void)cancelAllHTTPOperationsWithMethod:(NSString *)method absolutePath:(NSString *)path {
-    for (NSOperation *operation in [self.operationQueue operations]) {
-        if (![operation isKindOfClass:[AVHTTPRequestOperation class]]) {
-            continue;
-        }
-        
-        BOOL hasMatchingMethod = !method || [method isEqualToString:[[(AVHTTPRequestOperation *)operation request] HTTPMethod]];
-        BOOL hasMatchingURL = [[[[(AVHTTPRequestOperation *)operation request] URL] absoluteString] isEqualToString:path];
-        
-        if (hasMatchingMethod && hasMatchingURL) {
-            [operation cancel];
-        }
-    }
-}
-@end
-
 @interface AVPaasClient()
 
 @property (nonatomic, strong) AFURLSessionManager *sessionManager;
