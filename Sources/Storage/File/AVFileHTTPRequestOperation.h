@@ -9,5 +9,7 @@
 #import "AVJSONRequestOperation.h"
 
 @interface AVFileHTTPRequestOperation : AVJSONRequestOperation
-@property (copy) NSString *localPath;
+
+@property (nonatomic, copy) NSString *localPath;
+
 @end

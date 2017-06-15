@@ -11,7 +11,11 @@
 @implementation AVFileHTTPRequestOperation
 
 + (BOOL)canProcessRequest:(NSURLRequest *)request {
-    return [[self class] isEqual:[AVFileHTTPRequestOperation class]] || [super canProcessRequest:request];
+    return YES;
+}
+
+- (BOOL)hasAcceptableContentType {
+    return YES;
 }
 
 @end
