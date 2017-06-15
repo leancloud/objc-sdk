@@ -7,7 +7,6 @@
 //
 
 #import "AVObject.h"
-#import "AVRequestOperation.h"
 #import "AVRequestManager.h"
 
 FOUNDATION_EXPORT NSString *const internalIdTag;
@@ -46,7 +45,6 @@ NSString *request_object_id(NSDictionary *request) {
 @property (nonatomic,   copy, readonly) NSString *uuid;
 @property (nonatomic, assign) BOOL isPointer;
 @property (nonatomic, assign) BOOL running;
-@property (nonatomic, strong) AVRequestOperationQueue *operationQueue;
 @property (nonatomic, strong) AVRequestManager *requestManager;
 
 @property (nonatomic, assign) BOOL submit;

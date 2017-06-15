@@ -214,7 +214,6 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         _localData = [[NSMutableDictionary alloc] init];
         _estimatedData = [[NSMutableDictionary alloc] init];
         _relationData = [[NSMutableDictionary alloc] init];
-        _operationQueue = [[AVRequestOperationQueue alloc] init];
         _requestManager = [[AVRequestManager alloc] init];
         _submit = YES;
     }
