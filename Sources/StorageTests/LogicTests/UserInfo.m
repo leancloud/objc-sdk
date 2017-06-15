@@ -7,7 +7,6 @@
 //
 
 #import "UserInfo.h"
-#import <AVOSCloud/AVObject+Subclass.h>
 
 @implementation UserInfo
 

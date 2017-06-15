@@ -330,6 +330,7 @@
 		83020AF01EF23A6200B649BC /* AVURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AB41EF23A5700B649BC /* AVURLConnectionOperation.m */; };
 		83020AF11EF23A6200B649BC /* AVXMLRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83020AB51EF23A5700B649BC /* AVXMLRequestOperation.h */; };
 		83020AF21EF23A6200B649BC /* AVXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83020AB61EF23A5700B649BC /* AVXMLRequestOperation.m */; };
+		83020AF51EF2413600B649BC /* AVOSCloudFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83F599C81EED0F610013AF6B /* AVOSCloudFoundation.framework */; };
 		8302AED51C192A0700E13F8A /* LCURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 8302AED31C192A0600E13F8A /* LCURLConnection.h */; };
 		8302AED71C192A0700E13F8A /* LCURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 8302AED31C192A0600E13F8A /* LCURLConnection.h */; };
 		8302AED81C192A0700E13F8A /* LCURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 8302AED31C192A0600E13F8A /* LCURLConnection.h */; };
@@ -1225,6 +1226,13 @@
 			remoteGlobalIDString = 70CA7F671BDE2DC3000A3B21;
 			remoteInfo = AVOSCloudOSX;
 		};
+		83020AF31EF2412C00B649BC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 83F599C71EED0F610013AF6B;
+			remoteInfo = "Foundation-iOS";
+		};
 		838CE3251EC97E6F00B24F5B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
@@ -1913,6 +1921,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83020AF51EF2413600B649BC /* AVOSCloudFoundation.framework in Frameworks */,
 				70AACA931B4A74A5007C5FFD /* AVOSCloudStorage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4090,6 +4099,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				83020AF41EF2412C00B649BC /* PBXTargetDependency */,
 				8C8419941A5A791300C5C6C4 /* PBXTargetDependency */,
 			);
 			name = "StorageTests-iOS";
@@ -5219,6 +5229,11 @@
 			isa = PBXTargetDependency;
 			target = 70CA7F671BDE2DC3000A3B21 /* Storage-macOS */;
 			targetProxy = 70F315381BDE503B00D691B3 /* PBXContainerItemProxy */;
+		};
+		83020AF41EF2412C00B649BC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 83F599C71EED0F610013AF6B /* Foundation-iOS */;
+			targetProxy = 83020AF31EF2412C00B649BC /* PBXContainerItemProxy */;
 		};
 		838CE3261EC97E6F00B24F5B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

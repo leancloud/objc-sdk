@@ -7,16 +7,9 @@
 //
 
 
-#import "AVSubclassing.h"
-#import <AVOSCloud/AVOSCloud.h>
-#import "AVSubclassing.h"
-
-
-//@class User;
+#import "AVOSCloud.h"
 
 @interface UserInfo : AVObject <AVSubclassing>
-
-//@property (nonatomic, retain) User *user;
 
 @property (nonatomic, retain) NSDate *brithday;//生日
 

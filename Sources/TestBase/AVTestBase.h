@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AVOSCloud/AVOSCloud.h>
+#import "LCFoundation.h"
+#import "AVOSCloud.h"
 #import "XCTestCase+AsyncTesting.h"
 #import "AVTestUtil.h"
 #import "AVObjectUtils.h"

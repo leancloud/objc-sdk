@@ -6,8 +6,7 @@
 //
 //
 
-#import <AVOSCloud/AVOSCloud.h>
-#import "AVSubclassing.h"
+#import "AVOSCloud.h"
 
 @interface UserBar : AVUser<AVSubclassing>
 

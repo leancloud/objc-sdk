@@ -6,7 +6,7 @@
 //  Copyright © 2015年 LeanCloud Inc. All rights reserved.
 //
 
-#import <AVOSCloud/AVOSCloud.h>
+#import "AVOSCloud.h"
 
 @interface AVCustomUser : AVUser<AVSubclassing>
 

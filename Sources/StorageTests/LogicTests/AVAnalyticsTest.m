@@ -53,7 +53,7 @@ typedef void(^SessionsBlock)(NSArray *sessions);
 }
 
 - (void)testDeviceInfo {
-    NSDictionary* info = [AVAnalyticsUtils deviceInfo];
+    NSDictionary* info = [[AVSDK current] statisticsData];
     assertEqualObjects(info[@"os"], @"iOS");
     assertEqualObjects(info[@"is_jailbroken"], @(NO));
     assertEqualObjects(info[@"timezone"], @"8");
