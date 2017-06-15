@@ -27,14 +27,6 @@
 
 #import <Availability.h>
 
-#define LC_REST_REQUEST_LOG_FORMAT \
-    @"\n\n" \
-    @"------ BEGIN LeanCloud REST Request ------\n" \
-    @"path: %@\n" \
-    @"curl: %@\n" \
-    @"------ END --------------------------------\n" \
-    @"\n"
-
 #ifdef _SYSTEMCONFIGURATION_H
     #import <netinet/in.h>
     #import <netinet6/in6.h>
@@ -544,11 +536,6 @@ static void AVNetworkReachabilityReleaseCallback(const void *info) {
 #pragma mark -
 
 - (void)enqueueHTTPRequestOperation:(AVHTTPRequestOperation *)operation {
-    if (getenv("LOG_CURL")) {
-        NSLog(@"%@",[operation.request cURLCommand]);
-    }
-    NSString *path = operation.request.URL.path;
-    AVLoggerDebug(AVLoggerDomainCURL, LC_REST_REQUEST_LOG_FORMAT, path, [operation.request cURLCommand]);
     [self.operationQueue addOperation:operation];
 }
 

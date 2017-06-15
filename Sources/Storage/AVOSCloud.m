@@ -152,26 +152,6 @@ AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
     [[AVPaasClient sharedInstance] clearLastModifyCache];
 }
 
-+ (void)setStorageType:(AVStorageType)storageType
-{
-    [AVUploaderManager sharedInstance].storageType = storageType;
-}
-
-+ (AVStorageType)storageTypeForServiceRegion:(AVServiceRegion)serviceRegion {
-    AVStorageType storageType = AVStorageTypeDefault;
-
-    switch (serviceRegion) {
-    case AVServiceRegionCN:
-        storageType = AVStorageTypeQiniu;
-        break;
-    case AVServiceRegionUS:
-        storageType = AVStorageTypeS3;
-        break;
-    }
-
-    return storageType;
-}
-
 + (NSString *)pushGroupForServiceRegion:(AVServiceRegion)serviceRegion {
     NSString *pushGroup = nil;
 
@@ -197,9 +177,6 @@ AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
     }
 
     LCEffectiveServiceRegion = serviceRegion;
-
-    /* Setup file uploading service. */
-    [self setStorageType:[self storageTypeForServiceRegion:serviceRegion]];
 
     [AVUploaderManager sharedInstance].serviceRegion = serviceRegion;
 }

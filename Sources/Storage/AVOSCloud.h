@@ -64,18 +64,6 @@
 #import "AVAnalytics.h"
 #endif
 
-/**
- *  Storage Type
- */
-typedef NS_ENUM(NSInteger, AVStorageType) {
-    AVStorageTypeQiniu = 0,
-    AVStorageTypeParse,
-    AVStorageTypeS3,
-    AVStorageTypeQCloud,
-    /* Default service region */
-    AVStorageTypeDefault = AVStorageTypeQiniu
-} ;
-
 typedef enum AVLogLevel : NSUInteger {
     AVLogLevelNone      = 0,
     AVLogLevelError     = 1 << 0,
@@ -162,12 +150,6 @@ NS_ASSUME_NONNULL_BEGIN
  *  清空LastModify缓存
  */
 +(void)clearLastModifyCache;
-
-/**
- *  Set third party file storage service. If uses China server, you can use QCloud or Qiniu, the default is Qiniu, if uses US server, the default is AWS S3.
- *  @param type Qiniu, QCloud or AWS S3.
- */
-+ (void)setStorageType:(AVStorageType)type;
 
 /**
  * Use specified region.

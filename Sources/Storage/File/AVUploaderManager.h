@@ -11,7 +11,6 @@
 
 @interface AVUploaderManager : NSObject
 
-@property (nonatomic, assign) AVStorageType storageType;
 @property (nonatomic, assign) AVServiceRegion serviceRegion;
 
 +(AVUploaderManager *)sharedInstance;
