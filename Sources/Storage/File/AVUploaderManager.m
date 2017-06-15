@@ -62,7 +62,7 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
             }
                 break;
             case AVStorageTypeParse:
-                _httpClient = [AVPaasClient sharedInstance].clientImpl;
+                /* We use AVPaasClient to construct request. */
                 break;
             case AVStorageTypeS3:
                 _httpClient = [[AVHTTPClient alloc] init];
@@ -146,7 +146,7 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
     NSData *uploadData = file.data;
     
     NSString *path = [@"files/" stringByAppendingString:file.name];
-    NSMutableURLRequest *request = [self.httpClient requestWithMethod:@"POST" path:path parameters:nil];
+    NSMutableURLRequest *request = [[AVPaasClient sharedInstance] requestWithPath:path method:@"POST" headers:nil parameters:nil];
     [request setHTTPBody:uploadData];
     
     AVFileHTTPRequestOperation *operation = [[AVFileHTTPRequestOperation alloc] initWithRequest:request];
