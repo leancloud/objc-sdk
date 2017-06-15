@@ -116,15 +116,6 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 + (NSString*)MD5ForFile:(NSString*)filePath;
 + (NSString*)SHAForFile:(NSString*)filePath;
 
-
-#pragma mark - Network Util
-
-#if !TARGET_OS_WATCH
-+ (BOOL)networkIsReachableOrBetter;
-+ (BOOL)networkIs3GOrBetter;
-+ (BOOL)networkIsWifiOrBetter;
-#endif
-
 #pragma mark - Something about log
 
 // the level is only for NSLogger

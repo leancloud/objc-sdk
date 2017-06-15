@@ -672,28 +672,6 @@ if (block) { \
     return result;
 }
 
-#pragma mark - Network Util
-
-#if !TARGET_OS_WATCH
-
-+ (BOOL)networkIsReachableOrBetter {
-    return [[self class] networkEqualOrHigherThan:AVNetworkReachabilityStatusReachableViaWWAN];
-}
-
-+ (BOOL)networkIs3GOrBetter {
-    return [[self class] networkEqualOrHigherThan:AVNetworkReachabilityStatusReachableViaWWAN];
-}
-
-+ (BOOL)networkIsWifiOrBetter {
-    return [[self class] networkEqualOrHigherThan:AVNetworkReachabilityStatusReachableViaWiFi];
-}
-
-+ (BOOL)networkEqualOrHigherThan:(AVNetworkReachabilityStatus)status {
-    return [AVPaasClient sharedInstance].clientImpl.networkReachabilityStatus >= status;
-}
-
-#endif
-
 @end
 
 

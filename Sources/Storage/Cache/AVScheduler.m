@@ -11,7 +11,7 @@
 #import "AVFile_Internal.h"
 #import "AVCacheManager.h"
 #import "AVPaasClient.h"
-#import "AVUtils.h"
+#import "LCFoundation.h"
 
 static NSUInteger const ExpiredDays = 30;
 
@@ -85,12 +85,12 @@ static NSUInteger const AVHourCount = 3600 / AVTimerInterval;
 }
 
 - (void)willEnterForeground:(NSNotification *)notification {
-    if ([AVUtils networkIsWifiOrBetter])
+    if ([LCDevice current].inWiFi)
         [self handleArchivedRequests];
 }
 
 - (void)didFinishLaunching:(NSNotification *)notification {
-    if ([AVUtils networkIsWifiOrBetter])
+    if ([LCDevice current].inWiFi)
         [self handleArchivedRequests];
 }
 
