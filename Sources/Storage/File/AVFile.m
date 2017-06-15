@@ -6,8 +6,7 @@
 #import "AVUploaderManager.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"
-#import "AVNetworking.h"
-#import "LCNetworking.h"
+#import "AFHTTPSessionManager.h"
 #import "AVErrorUtils.h"
 #import "AVPersistenceUtils.h"
 #import "AVObjectUtils.h"
@@ -21,7 +20,7 @@ static NSString * fileMd5Tag =@"_checksum";
 
 static NSMutableDictionary *downloadingMap = nil;
 
-static LCHTTPSessionManager *imageSessionManager = nil;
+static AFHTTPSessionManager *imageSessionManager = nil;
 
 @interface _CallBack : NSObject
 @property(nonatomic, strong) AVBooleanResultBlock resultBlock;
@@ -49,8 +48,8 @@ static LCHTTPSessionManager *imageSessionManager = nil;
 
 + (void)doInitialize {
     imageSessionManager = ({
-        LCHTTPSessionManager *sessionManager = [[LCHTTPSessionManager alloc] init];
-        sessionManager.responseSerializer = [[LCImageResponseSerializer alloc] init];
+        AFHTTPSessionManager *sessionManager = [[AFHTTPSessionManager alloc] init];
+        sessionManager.responseSerializer = [[AFImageResponseSerializer alloc] init];
         sessionManager;
     });
 }
