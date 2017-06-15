@@ -98,7 +98,6 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 @synthesize uuid = _uuid;
 @synthesize isPointer = _isPointer;
-@synthesize operationQueue = _operationQueue;
 @synthesize running = _running;
 @synthesize requestLock = _requestLock;
 
