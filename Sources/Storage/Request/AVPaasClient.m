@@ -8,8 +8,6 @@
 
 #import "AVPaasClient.h"
 #import "AVPaasClient_internal.h"
-#import "AVNetworking.h"
-#import "LCNetworking.h"
 #import "AVUtils.h"
 #import "AVUser_Internal.h"
 #import "AVObject_Internal.h"
@@ -26,6 +24,7 @@
 #import "SDMacros.h"
 #import "AVOSCloud_Internal.h"
 #import "LCSSLChallenger.h"
+#import "AFHTTPSessionManager.h"
 
 #define MAX_LAG_TIME 5.0
 
@@ -134,7 +133,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 @interface AVPaasClient()
 
-@property (nonatomic, strong) LCURLSessionManager *sessionManager;
+@property (nonatomic, strong) AFURLSessionManager *sessionManager;
 
 // The client is singleton, so the queue doesn't need release
 #if OS_OBJECT_USE_OBJC
@@ -179,7 +178,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         _completionQueue = dispatch_queue_create("avos.paas.completionQueue", DISPATCH_QUEUE_CONCURRENT);
         _sessionManager = ({
             NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-            LCURLSessionManager *manager = [[LCURLSessionManager alloc] initWithSessionConfiguration:configuration];
+            AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
             manager.completionQueue = _completionQueue;
 
 #if LC_SSL_PINNING_ENABLED
@@ -194,7 +193,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 #endif
 
             /* Remove all null value of result. */
-            LCJSONResponseSerializer *responseSerializer = (LCJSONResponseSerializer *)manager.responseSerializer;
+            AFJSONResponseSerializer *responseSerializer = (AFJSONResponseSerializer *)manager.responseSerializer;
             responseSerializer.removesKeysWithNullValues = YES;
 
             manager;
@@ -302,7 +301,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     }
 
     NSError *error = nil;
-    LCJSONRequestSerializer *serializer = [[LCJSONRequestSerializer alloc] init];
+    AFJSONRequestSerializer *serializer = [[AFJSONRequestSerializer alloc] init];
     request = [[serializer requestBySerializingRequest:request withParameters:parameters error:&error] mutableCopy];
 
     if (headers) {
@@ -517,7 +516,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 - (void)performRequest:(NSURLRequest *)request saveResult:(BOOL)saveResult block:(AVIdResultBlock)block retryTimes:(NSInteger)retryTimes {
     NSURL *URL = request.URL;
-    NSString *path = URL.path;
     NSString *URLString = URL.absoluteString;
     NSMutableURLRequest *mutableRequest = [request mutableCopy];
 
