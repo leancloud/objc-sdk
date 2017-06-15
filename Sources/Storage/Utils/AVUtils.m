@@ -24,7 +24,6 @@
 #import "AVPaasClient.h"
 #import "AVGlobal.h"
 #import "AVCloudQueryResult.h"
-#import "LCKeychain.h"
 #import "LCURLConnection.h"
 
 #import <CommonCrypto/CommonDigest.h>
@@ -380,42 +379,6 @@ static const char *getPropertyType(objc_property_t property)
     int len = b62_encode(buf, &bytes, sizeof(bytes));
     assert(len == 23);
     return [[NSString alloc] initWithFormat:@"%s", buf];
-}
-
-+ (NSString *)deviceUUIDKey {
-    static NSString *const suffix = @"@leancloud";
-    NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
-
-    if (bundleIdentifier) {
-        return [bundleIdentifier stringByAppendingString:suffix];
-    } else {
-        return suffix; /* Bundle identifier is nil in unit test. */
-    }
-}
-
-+ (NSString *)deviceUUID {
-    static NSString *UUID = nil;
-
-    if (!UUID) {
-        dispatch_sync(AVUtilsDefaultSerialQueue, ^{
-            NSString *key = [self deviceUUIDKey];
-
-            NSString *savedUUID = [LCKeychain loadValueForKey:key];
-
-            if (savedUUID) {
-                UUID = savedUUID;
-            } else {
-                NSString *tempUUID = [self generateUUID];
-
-                if (tempUUID) {
-                    [LCKeychain saveValue:tempUUID forKey:key];
-                    UUID = tempUUID;
-                }
-            }
-        });
-    }
-
-    return UUID;
 }
 
 #pragma mark - Safe way to call block

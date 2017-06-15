@@ -57,7 +57,6 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 
 + (NSString *)generateUUID;
 + (NSString *)generateCompactUUID;
-+ (NSString *)deviceUUID;
 
 #pragma mark - Block
 + (void)callBooleanResultBlock:(AVBooleanResultBlock)block
