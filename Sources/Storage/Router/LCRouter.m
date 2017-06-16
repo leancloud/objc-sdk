@@ -291,12 +291,19 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
     NSString *presetHost = nil;
     NSString *cachedHost = nil;
     NSString *versionPrefixedPath = nil;
+    LCServerLocation serverLocation = self.serverLocation;
     NSString *module = [self serviceModuleForPath:path];
 
     presetHost = _presetURLStringTable[module];
 
     if (presetHost) {
         host = presetHost;
+        goto found;
+    }
+
+    /* For US node, we ignore app router cache. */
+    if (serverLocation == LCServerLocationUS) {
+        host = [self fallbackAPIURLString];
         goto found;
     }
 
@@ -327,11 +334,18 @@ found:
     NSString *host = nil;
     NSString *presetHost = nil;
     NSString *cachedHost = nil;
+    LCServerLocation serverLocation = self.serverLocation;
 
     presetHost = _presetURLStringTable[LCServiceModuleRTM];
 
     if (presetHost) {
         host = presetHost;
+        goto found;
+    }
+
+    /* For US node, we ignore app router cache. */
+    if (serverLocation == LCServerLocationUS) {
+        host = [self fallbackRTMRouterURLString];
         goto found;
     }
 
