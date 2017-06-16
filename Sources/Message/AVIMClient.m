@@ -974,12 +974,21 @@ static BOOL AVIMClientHasInstantiated = NO;
 
     AVIMMessage *originLastMessage = conversation.lastMessage;
 
-    if (lastMessage && (!originLastMessage || lastMessage.sendTimestamp > originLastMessage.sendTimestamp))
+    if (lastMessage && (!originLastMessage || lastMessage.sendTimestamp > originLastMessage.sendTimestamp)) {
         LCIM_NOTIFY_PROPERTY_UPDATE(
             self.clientId,
             conversation.conversationId,
             NSStringFromSelector(@selector(lastMessage)),
             lastMessage);
+
+        NSDate *lastMessageAt = [NSDate dateWithTimeIntervalSince1970:(lastMessage.sendTimestamp / 1000.0)];
+
+        LCIM_NOTIFY_PROPERTY_UPDATE(
+            self.clientId,
+            self.conversationId,
+            NSStringFromSelector(@selector(lastMessageAt)),
+            lastMessageAt);
+    }
 
     /* For compatibility, we reserve this callback. It should be removed in future. */
     if ([self.delegate respondsToSelector:@selector(conversation:didReceiveUnread:)])
