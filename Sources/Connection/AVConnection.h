@@ -57,6 +57,11 @@
 - (void)removeDelegate:(id<AVConnectionDelegate>)delegate;
 
 /**
+ Keep connection alive.
+ */
+- (void)keepAlive;
+
+/**
  Send a frame to current connection.
 
  @param frame The frame you want to send.

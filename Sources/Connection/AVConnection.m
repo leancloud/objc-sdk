@@ -8,9 +8,11 @@
 
 #import "AVConnection.h"
 #import "AVMethodDispatcher.h"
+#import "SRWebSocket.h"
 
 @interface AVConnection ()
 
+@property (nonatomic, strong) SRWebSocket *webSocket;
 @property (nonatomic,   copy) id<AVConnectionConfigurable> configuration;
 @property (nonatomic, strong) NSHashTable *delegates;
 
@@ -77,6 +79,10 @@
     }
 
     va_end(args);
+}
+
+- (void)keepAlive {
+    /* TODO */
 }
 
 - (void)sendFrame:(id<AVConnectionFrame>)frame {
