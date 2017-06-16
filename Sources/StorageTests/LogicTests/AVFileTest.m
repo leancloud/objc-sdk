@@ -366,20 +366,6 @@
     WAIT
 }
 
-- (void)testProgressWhenNoContentLength {
-    AVFile *file = [AVFile fileWithURL:@"http://ac-3k995jpi.clouddn.com/XN1xKPyC3MuIdmSzOhLo5sIsujvLiPuLNCsvbJqc.zip"];
-    file.bucket = @"3k995jpi";
-    [file clearCachedFile];
-    [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-        XCTAssertNil(error);
-        XCTAssertTrue(data.length == 2224413);
-        NOTIFY
-    } progressBlock:^(NSInteger percentDone) {
-        [self checkPercentDone:percentDone];
-    }];
-    WAIT
-}
-
 - (void)checkPercentDone:(NSInteger)percentDone {
     NSLog(@"percentDone: %ld%%", percentDone);
     XCTAssertTrue(percentDone >= 0 && percentDone <= 100);
