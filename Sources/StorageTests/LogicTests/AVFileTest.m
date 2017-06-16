@@ -308,12 +308,14 @@
 }
 
 - (void)testAVFileQuery {
+    NSError *error = nil;
     AVFile *file=[AVFile fileWithName:@"Attention" data:[@"PHP is the best language." dataUsingEncoding:NSUTF8StringEncoding]];
-    [file save];
+
+    [file save:&error];
+    XCTAssertNil(error);
     
     AVFileQuery *query = [AVFile query];
     [query whereKey:@"objectId" equalTo:file.objectId];
-    NSError *error;
     NSArray *foundFiles = [query findFiles:&error];
     XCTAssertNil(error);
     XCTAssertEqual(foundFiles.count, 1);
