@@ -10,4 +10,6 @@
 
 @interface LCUserDefaults : NSObject
 
++ (instancetype)sharedInstance;
+
 @end
