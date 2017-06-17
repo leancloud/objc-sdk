@@ -20,6 +20,4 @@ FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldNameSignature;
 
 - (instancetype)initWithConfiguration:(id<AVRESTClientConfiguration>)configuration;
 
-+ (instancetype)sharedInstance;
-
 @end
