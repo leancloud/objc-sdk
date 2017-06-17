@@ -7,3 +7,5 @@
 //
 
 #import <Foundation/Foundation.h>
+
+#import "AVOSCloudRESTClient.h"

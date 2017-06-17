@@ -597,6 +597,14 @@
 		837D1B4A1EF5035A00C3F93A /* AVOSCloudRESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 839119471EF3C28F00A232FF /* AVOSCloudRESTClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		837D1B4B1EF5035C00C3F93A /* LCRESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BC01D41EF3BD6200B7E680 /* LCRESTClient.h */; };
 		837D1B4C1EF5035C00C3F93A /* AVOSCloudRESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 839119471EF3C28F00A232FF /* AVOSCloudRESTClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		837D1B4F1EF5046F00C3F93A /* AVRESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 837D1B4D1EF5046F00C3F93A /* AVRESTClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		837D1B501EF5046F00C3F93A /* AVRESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 837D1B4D1EF5046F00C3F93A /* AVRESTClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		837D1B511EF5046F00C3F93A /* AVRESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 837D1B4D1EF5046F00C3F93A /* AVRESTClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		837D1B521EF5046F00C3F93A /* AVRESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 837D1B4D1EF5046F00C3F93A /* AVRESTClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		837D1B531EF5046F00C3F93A /* AVRESTClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 837D1B4E1EF5046F00C3F93A /* AVRESTClient.m */; };
+		837D1B541EF5046F00C3F93A /* AVRESTClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 837D1B4E1EF5046F00C3F93A /* AVRESTClient.m */; };
+		837D1B551EF5046F00C3F93A /* AVRESTClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 837D1B4E1EF5046F00C3F93A /* AVRESTClient.m */; };
+		837D1B561EF5046F00C3F93A /* AVRESTClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 837D1B4E1EF5046F00C3F93A /* AVRESTClient.m */; };
 		8385EC3F1EEC63EF00686CE0 /* AVConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841C091A5A84C600C5C6C4 /* AVConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8385EC401EEC63F500686CE0 /* AVConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841C0A1A5A84C600C5C6C4 /* AVConnection.m */; };
 		838AF12A1AFE58F600B8965E /* LCIMMessageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 838AF1221AFE58F600B8965E /* LCIMMessageCache.h */; };
@@ -1425,6 +1433,8 @@
 		837D1B211EF4FCE300C3F93A /* AVOSCloudRESTClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudRESTClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		837D1B291EF4FCE300C3F93A /* RESTClientTests-tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RESTClientTests-tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		837D1B3D1EF4FCFE00C3F93A /* AVOSCloudRESTClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudRESTClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		837D1B4D1EF5046F00C3F93A /* AVRESTClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVRESTClient.h; sourceTree = "<group>"; };
+		837D1B4E1EF5046F00C3F93A /* AVRESTClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVRESTClient.m; sourceTree = "<group>"; };
 		838AF1221AFE58F600B8965E /* LCIMMessageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageCache.h; sourceTree = "<group>"; };
 		838AF1231AFE58F600B8965E /* LCIMMessageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMMessageCache.m; sourceTree = "<group>"; };
 		838B32ED1CE1953800CAEBF8 /* LCRouterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCRouterTest.m; sourceTree = "<group>"; };
@@ -2364,6 +2374,8 @@
 		83BC01D31EF3BD6200B7E680 /* RESTClient */ = {
 			isa = PBXGroup;
 			children = (
+				837D1B4D1EF5046F00C3F93A /* AVRESTClient.h */,
+				837D1B4E1EF5046F00C3F93A /* AVRESTClient.m */,
 				83BC01D41EF3BD6200B7E680 /* LCRESTClient.h */,
 				839119471EF3C28F00A232FF /* AVOSCloudRESTClient.h */,
 				83BC01D51EF3BD6200B7E680 /* Info.plist */,
@@ -3479,6 +3491,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				837D1B501EF5046F00C3F93A /* AVRESTClient.h in Headers */,
 				837D1B481EF5035400C3F93A /* AVOSCloudRESTClient.h in Headers */,
 				837D1B471EF5035400C3F93A /* LCRESTClient.h in Headers */,
 			);
@@ -3488,6 +3501,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				837D1B511EF5046F00C3F93A /* AVRESTClient.h in Headers */,
 				837D1B4A1EF5035A00C3F93A /* AVOSCloudRESTClient.h in Headers */,
 				837D1B491EF5035A00C3F93A /* LCRESTClient.h in Headers */,
 			);
@@ -3497,6 +3511,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				837D1B521EF5046F00C3F93A /* AVRESTClient.h in Headers */,
 				837D1B4C1EF5035C00C3F93A /* AVOSCloudRESTClient.h in Headers */,
 				837D1B4B1EF5035C00C3F93A /* LCRESTClient.h in Headers */,
 			);
@@ -3526,6 +3541,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				837D1B4F1EF5046F00C3F93A /* AVRESTClient.h in Headers */,
 				839119481EF3C28F00A232FF /* AVOSCloudRESTClient.h in Headers */,
 				83BC01E21EF3BD6300B7E680 /* LCRESTClient.h in Headers */,
 			);
@@ -5213,6 +5229,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				837D1B541EF5046F00C3F93A /* AVRESTClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5228,6 +5245,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				837D1B551EF5046F00C3F93A /* AVRESTClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5243,6 +5261,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				837D1B561EF5046F00C3F93A /* AVRESTClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5284,6 +5303,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				837D1B531EF5046F00C3F93A /* AVRESTClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
