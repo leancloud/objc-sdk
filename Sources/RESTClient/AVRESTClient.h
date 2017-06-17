@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldId;
+FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldKey;
+FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldSign;
+FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldSession;
+FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldProduction;
+
 @interface AVRESTClient : NSObject
 
 @end
