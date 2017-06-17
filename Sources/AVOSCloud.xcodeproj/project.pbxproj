@@ -591,11 +591,11 @@
 		837D1B2A1EF4FCE300C3F93A /* AVOSCloudRESTClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 837D1B211EF4FCE300C3F93A /* AVOSCloudRESTClient.framework */; };
 		837D1B451EF5028A00C3F93A /* RESTClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 83BC01DF1EF3BD6300B7E680 /* RESTClientTests.m */; };
 		837D1B461EF5028C00C3F93A /* RESTClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 83BC01DF1EF3BD6300B7E680 /* RESTClientTests.m */; };
-		837D1B471EF5035400C3F93A /* RESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BC01D41EF3BD6200B7E680 /* RESTClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		837D1B471EF5035400C3F93A /* LCRESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BC01D41EF3BD6200B7E680 /* LCRESTClient.h */; };
 		837D1B481EF5035400C3F93A /* AVOSCloudRESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 839119471EF3C28F00A232FF /* AVOSCloudRESTClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		837D1B491EF5035A00C3F93A /* RESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BC01D41EF3BD6200B7E680 /* RESTClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		837D1B491EF5035A00C3F93A /* LCRESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BC01D41EF3BD6200B7E680 /* LCRESTClient.h */; };
 		837D1B4A1EF5035A00C3F93A /* AVOSCloudRESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 839119471EF3C28F00A232FF /* AVOSCloudRESTClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		837D1B4B1EF5035C00C3F93A /* RESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BC01D41EF3BD6200B7E680 /* RESTClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		837D1B4B1EF5035C00C3F93A /* LCRESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BC01D41EF3BD6200B7E680 /* LCRESTClient.h */; };
 		837D1B4C1EF5035C00C3F93A /* AVOSCloudRESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 839119471EF3C28F00A232FF /* AVOSCloudRESTClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8385EC3F1EEC63EF00686CE0 /* AVConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841C091A5A84C600C5C6C4 /* AVConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8385EC401EEC63F500686CE0 /* AVConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841C0A1A5A84C600C5C6C4 /* AVConnection.m */; };
@@ -704,7 +704,7 @@
 		83B5FF741B7C768B000C3923 /* Breakpad_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF431B7C768B000C3923 /* Breakpad_Prefix.pch */; };
 		83BC01DB1EF3BD6300B7E680 /* AVOSCloudRESTClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83BC01D21EF3BD6200B7E680 /* AVOSCloudRESTClient.framework */; };
 		83BC01E01EF3BD6300B7E680 /* RESTClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 83BC01DF1EF3BD6300B7E680 /* RESTClientTests.m */; };
-		83BC01E21EF3BD6300B7E680 /* RESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BC01D41EF3BD6200B7E680 /* RESTClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		83BC01E21EF3BD6300B7E680 /* LCRESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BC01D41EF3BD6200B7E680 /* LCRESTClient.h */; };
 		83BE43971D242905000C7AC3 /* SDMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BE43931D242905000C7AC3 /* SDMacros.h */; };
 		83BE43991D242905000C7AC3 /* SDMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BE43931D242905000C7AC3 /* SDMacros.h */; };
 		83BE439A1D242905000C7AC3 /* AVIMWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BE43951D242905000C7AC3 /* AVIMWebSocket.h */; };
@@ -1502,7 +1502,7 @@
 		83B5FF401B7C768B000C3923 /* string_conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = string_conversion.h; sourceTree = "<group>"; };
 		83B5FF431B7C768B000C3923 /* Breakpad_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Breakpad_Prefix.pch; sourceTree = "<group>"; };
 		83BC01D21EF3BD6200B7E680 /* AVOSCloudRESTClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudRESTClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		83BC01D41EF3BD6200B7E680 /* RESTClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RESTClient.h; sourceTree = "<group>"; };
+		83BC01D41EF3BD6200B7E680 /* LCRESTClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCRESTClient.h; sourceTree = "<group>"; };
 		83BC01D51EF3BD6200B7E680 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83BC01DA1EF3BD6200B7E680 /* RESTClientTests-iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RESTClientTests-iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		83BC01DF1EF3BD6300B7E680 /* RESTClientTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RESTClientTests.m; sourceTree = "<group>"; };
@@ -2364,7 +2364,7 @@
 		83BC01D31EF3BD6200B7E680 /* RESTClient */ = {
 			isa = PBXGroup;
 			children = (
-				83BC01D41EF3BD6200B7E680 /* RESTClient.h */,
+				83BC01D41EF3BD6200B7E680 /* LCRESTClient.h */,
 				839119471EF3C28F00A232FF /* AVOSCloudRESTClient.h */,
 				83BC01D51EF3BD6200B7E680 /* Info.plist */,
 			);
@@ -3480,7 +3480,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				837D1B481EF5035400C3F93A /* AVOSCloudRESTClient.h in Headers */,
-				837D1B471EF5035400C3F93A /* RESTClient.h in Headers */,
+				837D1B471EF5035400C3F93A /* LCRESTClient.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3489,7 +3489,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				837D1B4A1EF5035A00C3F93A /* AVOSCloudRESTClient.h in Headers */,
-				837D1B491EF5035A00C3F93A /* RESTClient.h in Headers */,
+				837D1B491EF5035A00C3F93A /* LCRESTClient.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3498,7 +3498,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				837D1B4C1EF5035C00C3F93A /* AVOSCloudRESTClient.h in Headers */,
-				837D1B4B1EF5035C00C3F93A /* RESTClient.h in Headers */,
+				837D1B4B1EF5035C00C3F93A /* LCRESTClient.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3527,7 +3527,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				839119481EF3C28F00A232FF /* AVOSCloudRESTClient.h in Headers */,
-				83BC01E21EF3BD6300B7E680 /* RESTClient.h in Headers */,
+				83BC01E21EF3BD6300B7E680 /* LCRESTClient.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
