@@ -44,4 +44,21 @@ NSString *const AVHTTPHeaderFieldNameSignature  = @"X-LC-Sign";
     /* TODO */
 }
 
+- (NSMutableURLRequest *)requestWithPath:(NSString *)path
+                                  method:(NSString *)method
+                              parameters:(NSDictionary *)parameters
+{
+    /* TODO */
+}
+
+- (NSURLSessionDataTask *)sessionDataTaskWithMethod:(NSString *)method
+                                           endpoint:(NSString *)endpoint
+                                         parameters:(NSDictionary *)parameters
+                       constructingRequestWithBlock:(void (^)(NSMutableURLRequest *request))requestConstructor
+                                            success:(void (^)(NSHTTPURLResponse *response, id responseObject))successCallback
+                                            failure:(void (^)(NSHTTPURLResponse *response, id responseObject, NSError *error))successCallback
+{
+    /* TODO */
+}
+
 @end

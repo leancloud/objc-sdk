@@ -20,4 +20,11 @@ FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldNameSignature;
 
 - (instancetype)initWithConfiguration:(id<AVRESTClientConfiguration>)configuration;
 
+- (NSURLSessionDataTask *)sessionDataTaskWithMethod:(NSString *)method
+                                           endpoint:(NSString *)endpoint
+                                         parameters:(NSDictionary *)parameters
+                       constructingRequestWithBlock:(void (^)(NSMutableURLRequest *request))requestConstructor
+                                            success:(void (^)(NSHTTPURLResponse *response, id responseObject))successCallback
+                                            failure:(void (^)(NSHTTPURLResponse *response, id responseObject, NSError *error))successCallback;
+
 @end
