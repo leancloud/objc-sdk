@@ -16,4 +16,6 @@ FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldProduction;
 
 @interface AVRESTClient : NSObject
 
++ (instancetype)sharedInstance;
+
 @end
