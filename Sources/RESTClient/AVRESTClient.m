@@ -8,11 +8,9 @@
 
 #import "AVRESTClient.h"
 
-NSString *const AVHTTPHeaderFieldId         = @"X-LC-Id";
-NSString *const AVHTTPHeaderFieldKey        = @"X-LC-Key";
-NSString *const AVHTTPHeaderFieldSign       = @"X-LC-Sign";
-NSString *const AVHTTPHeaderFieldSession    = @"X-LC-Session";
-NSString *const AVHTTPHeaderFieldProduction = @"X-LC-Prod";
+NSString *const AVHTTPHeaderFieldNameId         = @"X-LC-Id";
+NSString *const AVHTTPHeaderFieldNameKey        = @"X-LC-Key";
+NSString *const AVHTTPHeaderFieldNameSignature  = @"X-LC-Sign";
 
 @implementation AVRESTClient
 
