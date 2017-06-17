@@ -737,6 +737,14 @@
 		83D742111EF55B890016BB63 /* AVOSCloudCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 837D1B821EF53CF800C3F93A /* AVOSCloudCache.framework */; };
 		83D742141EF55BA10016BB63 /* AVOSCloudCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 837D1B9E1EF53D1400C3F93A /* AVOSCloudCache.framework */; };
 		83D742171EF55BAF0016BB63 /* AVOSCloudCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 837D1BBA1EF53D2900C3F93A /* AVOSCloudCache.framework */; };
+		83D7421A1EF55F850016BB63 /* LCUserDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = 83D742181EF55F850016BB63 /* LCUserDefaults.h */; };
+		83D7421B1EF55F850016BB63 /* LCUserDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = 83D742181EF55F850016BB63 /* LCUserDefaults.h */; };
+		83D7421C1EF55F850016BB63 /* LCUserDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = 83D742181EF55F850016BB63 /* LCUserDefaults.h */; };
+		83D7421D1EF55F850016BB63 /* LCUserDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = 83D742181EF55F850016BB63 /* LCUserDefaults.h */; };
+		83D7421E1EF55F850016BB63 /* LCUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D742191EF55F850016BB63 /* LCUserDefaults.m */; };
+		83D7421F1EF55F850016BB63 /* LCUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D742191EF55F850016BB63 /* LCUserDefaults.m */; };
+		83D742201EF55F850016BB63 /* LCUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D742191EF55F850016BB63 /* LCUserDefaults.m */; };
+		83D742211EF55F850016BB63 /* LCUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D742191EF55F850016BB63 /* LCUserDefaults.m */; };
 		83D8CE761C17DAF50094279D /* AVFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A141A5A79FF00C5C6C4 /* AVFile.m */; };
 		83D8CE791C17DAF50094279D /* AVRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7068A7221BA3614D0004623A /* AVRequestManager.m */; };
 		83D8CE7A1C17DAF50094279D /* AVFileQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 701881F31BC6777200432D43 /* AVFileQuery.m */; };
@@ -1607,6 +1615,8 @@
 		83C7D4021EEC4E4700AD7EDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83CFCB5E1B2A5D2700F97C92 /* AVIMKeyedConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMKeyedConversation.h; sourceTree = "<group>"; };
 		83CFCB5F1B2A5D2700F97C92 /* AVIMKeyedConversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMKeyedConversation.m; sourceTree = "<group>"; };
+		83D742181EF55F850016BB63 /* LCUserDefaults.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCUserDefaults.h; sourceTree = "<group>"; };
+		83D742191EF55F850016BB63 /* LCUserDefaults.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCUserDefaults.m; sourceTree = "<group>"; };
 		83D8CF551C17DAF50094279D /* AVOSCloudStorage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudStorage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		83DBBDDB1BD0963000E69BDC /* LCIMClientSessionTokenCacheStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMClientSessionTokenCacheStore.h; sourceTree = "<group>"; };
 		83DBBDDC1BD0963000E69BDC /* LCIMClientSessionTokenCacheStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMClientSessionTokenCacheStore.m; sourceTree = "<group>"; };
@@ -2290,6 +2300,8 @@
 		837D1B671EF53CDC00C3F93A /* Cache */ = {
 			isa = PBXGroup;
 			children = (
+				83D742181EF55F850016BB63 /* LCUserDefaults.h */,
+				83D742191EF55F850016BB63 /* LCUserDefaults.m */,
 				837D1B681EF53CDC00C3F93A /* AVOSCloudCache.h */,
 				837D1B691EF53CDC00C3F93A /* Info.plist */,
 			);
@@ -3678,6 +3690,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83D7421A1EF55F850016BB63 /* LCUserDefaults.h in Headers */,
 				837D1B761EF53CDC00C3F93A /* AVOSCloudCache.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3686,6 +3699,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83D7421B1EF55F850016BB63 /* LCUserDefaults.h in Headers */,
 				837D1BC21EF53D7300C3F93A /* AVOSCloudCache.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3694,6 +3708,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83D7421C1EF55F850016BB63 /* LCUserDefaults.h in Headers */,
 				837D1BC31EF53D7300C3F93A /* AVOSCloudCache.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3702,6 +3717,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83D7421D1EF55F850016BB63 /* LCUserDefaults.h in Headers */,
 				837D1BC41EF53D7400C3F93A /* AVOSCloudCache.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5665,6 +5681,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83D7421E1EF55F850016BB63 /* LCUserDefaults.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5680,6 +5697,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83D7421F1EF55F850016BB63 /* LCUserDefaults.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5695,6 +5713,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83D742201EF55F850016BB63 /* LCUserDefaults.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5710,6 +5729,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83D742211EF55F850016BB63 /* LCUserDefaults.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
