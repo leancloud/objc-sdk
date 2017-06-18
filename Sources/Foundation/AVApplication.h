@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface AVApplication : NSObject
+@interface AVApplication : NSObject <NSCopying, NSSecureCoding>
 
 @property (nonatomic, readonly, strong) NSString *ID;
 @property (nonatomic, readonly, strong) NSString *key;
