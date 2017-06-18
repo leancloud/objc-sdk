@@ -50,20 +50,12 @@ static NSString *const LCUserDefaultsRootKeyPrefix = @"LeanCloud/UserDefaults";
 }
 
 - (NSString *)rootKey {
-    AVApplication *application = self.application;
+    NSString *relativePath = self.application.relativePath;
 
-    NSString *ID = application.ID;
-    NSString *environment = application.environment;
-
-    NSAssert(ID != nil, @"Application ID not specified.");
-    NSAssert(environment != nil, @"Application environment not specified.");
-
-    if (!ID)
-        return nil;
-    if (!environment)
+    if (!relativePath)
         return nil;
 
-    NSString *result = [NSString stringWithFormat:@"%@/%@/%@", LCUserDefaultsRootKeyPrefix, ID, environment];
+    NSString *result = [NSString stringWithFormat:@"%@/%@", LCUserDefaultsRootKeyPrefix, relativePath];
 
     return result;
 }

@@ -10,4 +10,18 @@
 
 @implementation AVApplication (Internal)
 
+- (NSString *)relativePath {
+    NSString *ID = self.ID;
+    NSString *environment = self.environment;
+
+    if (!ID)
+        return nil;
+    if (!environment)
+        return nil;
+
+    NSString *path = [NSString stringWithFormat:@"%@/%@", ID, environment];
+
+    return path;
+}
+
 @end
