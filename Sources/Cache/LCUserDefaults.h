@@ -7,9 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AVOSCloudFoundation.h"
 
 @interface LCUserDefaults : NSObject
 
-+ (instancetype)sharedInstance;
+@property (nonatomic, readonly, copy) AVApplication *application;
+
+- (instancetype)initWithApplication:(AVApplication *)application;
+
+- (id<NSSecureCoding>)objectForKey:(NSString *)key;
+
+- (void)setObject:(id<NSSecureCoding>)object forKey:(NSString *)key;
 
 @end
