@@ -9,7 +9,7 @@
 #import "LCUserDefaults.h"
 #import "AVApplication+Internal.h"
 
-static *const LCUserDefaultsRootKeyPrefix = @"LeanCloud/UserDefaults";
+static NSString *const LCUserDefaultsRootKeyPrefix = @"LeanCloud/UserDefaults";
 
 @interface LCUserDefaults ()
 
