@@ -16,4 +16,4 @@
 #import "LCTargetUmbrella.h"
 #import "AVSDK+Internal.h"
 #import "LCDevice.h"
-#import "LCApplication.h"
+#import "LCBundle.h"

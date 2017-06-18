@@ -140,12 +140,12 @@ static NSInteger LCNetworkStatisticsCacheSize     = 20;
 - (NSDictionary *)clientInfo {
     AVSDK *SDK = [AVSDK current];
     LCDevice *device = [LCDevice current];
-    LCApplication *application = [LCApplication current];
+    LCBundle *bundle = [LCBundle current];
 
     NSMutableDictionary *clientInfo = [NSMutableDictionary dictionary];
 
     clientInfo[@"platform"]     = device.systemName;
-    clientInfo[@"app_version"]  = application.shortVersion;
+    clientInfo[@"app_version"]  = bundle.shortVersion;
     clientInfo[@"sdk_version"]  = SDK.version;
 #if LC_TARGET_OS_IOS
     clientInfo[@"id"]           = device.UDID;

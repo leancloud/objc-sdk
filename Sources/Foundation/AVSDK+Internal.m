@@ -8,7 +8,7 @@
 
 #import "AVSDK+Internal.h"
 #import "LCDevice.h"
-#import "LCApplication.h"
+#import "LCBundle.h"
 
 #define LC_SDK_TYPE @"Objective-C"
 
@@ -45,7 +45,7 @@ NSString *LCStringFromReachabilityStatus(LCNetworkReachabilityStatus status) {
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
 
     LCDevice *device = [LCDevice current];
-    LCApplication *application = [LCApplication current];
+    LCBundle *bundle = [LCBundle current];
 
     /* SDK basic data. */
     data[@"sdk_type"]       = LC_SDK_TYPE;
@@ -65,9 +65,9 @@ NSString *LCStringFromReachabilityStatus(LCNetworkReachabilityStatus status) {
 #endif
 
     /* Application related data. */
-    data[@"display_name"]   = application.name;
-    data[@"app_version"]    = application.shortVersion;
-    data[@"package_name"]   = application.identifier;
+    data[@"display_name"]   = bundle.name;
+    data[@"app_version"]    = bundle.shortVersion;
+    data[@"package_name"]   = bundle.identifier;
 
     return data;
 }

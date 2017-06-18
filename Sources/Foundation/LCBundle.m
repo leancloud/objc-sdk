@@ -1,17 +1,17 @@
 //
-//  LCApplication.m
+//  LCBundle.m
 //  AVOSCloud
 //
 //  Created by Tang Tianyong on 14/06/2017.
 //  Copyright © 2017 LeanCloud Inc. All rights reserved.
 //
 
-#import "LCApplication.h"
+#import "LCBundle.h"
 
-@implementation LCApplication
+@implementation LCBundle
 
 + (instancetype)current {
-    static LCApplication *instance;
+    static LCBundle *instance;
     static dispatch_once_t onceToken;
 
     dispatch_once(&onceToken, ^{

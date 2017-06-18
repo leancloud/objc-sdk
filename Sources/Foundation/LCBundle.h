@@ -1,5 +1,5 @@
 //
-//  LCApplication.h
+//  LCBundle.h
 //  AVOSCloud
 //
 //  Created by Tang Tianyong on 14/06/2017.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface LCApplication : NSObject
+@interface LCBundle : NSObject
 
 /**
  Bundle version string.
@@ -31,9 +31,9 @@
 @property (nonatomic, readonly, strong) NSString *name;
 
 /**
- Get an LCApplication singleton instance.
+ Get an LCBundle singleton instance.
 
- @return An LCApplication singleton instance.
+ @return An LCBundle singleton instance.
  */
 + (instancetype)current;
 
