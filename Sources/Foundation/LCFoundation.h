@@ -15,5 +15,6 @@
 #import "LCTargetConditionals.h"
 #import "LCTargetUmbrella.h"
 #import "AVSDK+Internal.h"
+#import "AVApplication+Internal.h"
 #import "LCDevice.h"
 #import "LCBundle.h"

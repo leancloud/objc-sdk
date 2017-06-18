@@ -7,3 +7,4 @@
 //
 
 #import "AVSDK.h"
+#import "AVApplication.h"
