@@ -773,6 +773,16 @@
 		83D742491EF674850016BB63 /* AVApplication+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D742431EF674850016BB63 /* AVApplication+Internal.m */; };
 		83D7424A1EF674850016BB63 /* AVApplication+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D742431EF674850016BB63 /* AVApplication+Internal.m */; };
 		83D7424B1EF674850016BB63 /* AVApplication+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D742431EF674850016BB63 /* AVApplication+Internal.m */; };
+		83D7424E1EF6971A0016BB63 /* LCPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 83D7424C1EF6971A0016BB63 /* LCPath.h */; };
+		83D7424F1EF6971A0016BB63 /* LCPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 83D7424C1EF6971A0016BB63 /* LCPath.h */; };
+		83D742501EF6971A0016BB63 /* LCPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 83D7424C1EF6971A0016BB63 /* LCPath.h */; };
+		83D742511EF6971A0016BB63 /* LCPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 83D7424C1EF6971A0016BB63 /* LCPath.h */; };
+		83D742521EF6971A0016BB63 /* LCPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D7424D1EF6971A0016BB63 /* LCPath.m */; };
+		83D742531EF6971A0016BB63 /* LCPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D7424D1EF6971A0016BB63 /* LCPath.m */; };
+		83D742541EF6971A0016BB63 /* LCPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D7424D1EF6971A0016BB63 /* LCPath.m */; };
+		83D742551EF6971A0016BB63 /* LCPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D7424D1EF6971A0016BB63 /* LCPath.m */; };
+		83D742581EF6DE060016BB63 /* AVOSCloudFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8352BDE61EEF6F1800C513B6 /* AVOSCloudFoundation.framework */; };
+		83D7425B1EF6E5B30016BB63 /* AVOSCloudFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8352BEAC1EEF713400C513B6 /* AVOSCloudFoundation.framework */; };
 		83D8CE761C17DAF50094279D /* AVFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A141A5A79FF00C5C6C4 /* AVFile.m */; };
 		83D8CE791C17DAF50094279D /* AVRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7068A7221BA3614D0004623A /* AVRequestManager.m */; };
 		83D8CE7A1C17DAF50094279D /* AVFileQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 701881F31BC6777200432D43 /* AVFileQuery.m */; };
@@ -1424,6 +1434,20 @@
 			remoteGlobalIDString = 8352BDE81EEF70E300C513B6;
 			remoteInfo = "Foundation-watchOS";
 		};
+		83D742561EF6DDFD0016BB63 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8352BD851EEF6F1800C513B6;
+			remoteInfo = "Foundation-macOS";
+		};
+		83D742591EF6E5AE0016BB63 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8352BE4B1EEF713400C513B6;
+			remoteInfo = "Foundation-tvOS";
+		};
 		8C8419931A5A791300C5C6C4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
@@ -1679,6 +1703,8 @@
 		83D742391EF671B40016BB63 /* AVApplication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVApplication.m; sourceTree = "<group>"; };
 		83D742421EF674850016BB63 /* AVApplication+Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVApplication+Internal.h"; sourceTree = "<group>"; };
 		83D742431EF674850016BB63 /* AVApplication+Internal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AVApplication+Internal.m"; sourceTree = "<group>"; };
+		83D7424C1EF6971A0016BB63 /* LCPath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCPath.h; sourceTree = "<group>"; };
+		83D7424D1EF6971A0016BB63 /* LCPath.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCPath.m; sourceTree = "<group>"; };
 		83D8CF551C17DAF50094279D /* AVOSCloudStorage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudStorage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		83DBBDDB1BD0963000E69BDC /* LCIMClientSessionTokenCacheStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMClientSessionTokenCacheStore.h; sourceTree = "<group>"; };
 		83DBBDDC1BD0963000E69BDC /* LCIMClientSessionTokenCacheStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMClientSessionTokenCacheStore.m; sourceTree = "<group>"; };
@@ -2114,6 +2140,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83D742581EF6DE060016BB63 /* AVOSCloudFoundation.framework in Frameworks */,
 				837D1B8B1EF53CF800C3F93A /* AVOSCloudCache.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2130,6 +2157,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83D7425B1EF6E5B30016BB63 /* AVOSCloudFoundation.framework in Frameworks */,
 				837D1BA71EF53D1500C3F93A /* AVOSCloudCache.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2684,6 +2712,8 @@
 				8352BEB71EEFB4E100C513B6 /* LCDevice.m */,
 				83A46FE71EF12F81009E9380 /* LCBundle.h */,
 				83A46FE81EF12F81009E9380 /* LCBundle.m */,
+				83D7424C1EF6971A0016BB63 /* LCPath.h */,
+				83D7424D1EF6971A0016BB63 /* LCPath.m */,
 				835BC2861EF0D945006B56C6 /* LCTargetConditionals.h */,
 				835BC28B1EF0DDC8006B56C6 /* LCTargetUmbrella.h */,
 				835BC2701EF02B5A006B56C6 /* LCFoundation.h */,
@@ -3679,6 +3709,7 @@
 				83D742451EF674850016BB63 /* AVApplication+Internal.h in Headers */,
 				8376B22E1EF041E7006ED4C2 /* metamacros.h in Headers */,
 				8376B22C1EF041E7006ED4C2 /* EXTScope.h in Headers */,
+				83D7424F1EF6971A0016BB63 /* LCPath.h in Headers */,
 				835BC28D1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
 				83A46FFF1EF1A6FE009E9380 /* SDMacros.h in Headers */,
 				835BC2691EEFCC23006B56C6 /* AVSDK.h in Headers */,
@@ -3700,6 +3731,7 @@
 				83D742471EF674850016BB63 /* AVApplication+Internal.h in Headers */,
 				8376B2341EF041E8006ED4C2 /* metamacros.h in Headers */,
 				8376B2321EF041E8006ED4C2 /* EXTScope.h in Headers */,
+				83D742511EF6971A0016BB63 /* LCPath.h in Headers */,
 				835BC28F1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
 				83A470011EF1A6FF009E9380 /* SDMacros.h in Headers */,
 				835BC26B1EEFCC24006B56C6 /* AVSDK.h in Headers */,
@@ -3721,6 +3753,7 @@
 				83D742461EF674850016BB63 /* AVApplication+Internal.h in Headers */,
 				8376B2311EF041E8006ED4C2 /* metamacros.h in Headers */,
 				8376B22F1EF041E8006ED4C2 /* EXTScope.h in Headers */,
+				83D742501EF6971A0016BB63 /* LCPath.h in Headers */,
 				835BC28E1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
 				83A470001EF1A6FE009E9380 /* SDMacros.h in Headers */,
 				835BC26A1EEFCC23006B56C6 /* AVSDK.h in Headers */,
@@ -3951,6 +3984,7 @@
 				83D742441EF674850016BB63 /* AVApplication+Internal.h in Headers */,
 				8376B22B1EF041E7006ED4C2 /* metamacros.h in Headers */,
 				8376B2291EF041E7006ED4C2 /* EXTScope.h in Headers */,
+				83D7424E1EF6971A0016BB63 /* LCPath.h in Headers */,
 				835BC28C1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
 				83A46FFE1EF1A6FD009E9380 /* SDMacros.h in Headers */,
 				835BC2681EEFCC23006B56C6 /* AVSDK.h in Headers */,
@@ -4534,6 +4568,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				83D742571EF6DDFD0016BB63 /* PBXTargetDependency */,
 				837D1B8D1EF53CF800C3F93A /* PBXTargetDependency */,
 			);
 			name = "CacheTests-macOS";
@@ -4571,6 +4606,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				83D7425A1EF6E5AE0016BB63 /* PBXTargetDependency */,
 				837D1BA91EF53D1500C3F93A /* PBXTargetDependency */,
 			);
 			name = "CacheTests-tvOS";
@@ -5695,6 +5731,7 @@
 				83A46FAC1EF11DB0009E9380 /* LCUUID.m in Sources */,
 				8352BEBD1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 				83A46FF91EF1997A009E9380 /* AVSDK+Internal.m in Sources */,
+				83D742531EF6971A0016BB63 /* LCPath.m in Sources */,
 				83D7423F1EF671B40016BB63 /* AVApplication.m in Sources */,
 				83D742491EF674850016BB63 /* AVApplication+Internal.m in Sources */,
 				835BC26D1EEFCC24006B56C6 /* AVSDK.m in Sources */,
@@ -5710,6 +5747,7 @@
 				83A46FAE1EF11DB0009E9380 /* LCUUID.m in Sources */,
 				8352BEBF1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 				83A46FFB1EF1997A009E9380 /* AVSDK+Internal.m in Sources */,
+				83D742551EF6971A0016BB63 /* LCPath.m in Sources */,
 				83D742411EF671B40016BB63 /* AVApplication.m in Sources */,
 				83D7424B1EF674850016BB63 /* AVApplication+Internal.m in Sources */,
 				835BC26F1EEFCC24006B56C6 /* AVSDK.m in Sources */,
@@ -5725,6 +5763,7 @@
 				83A46FAD1EF11DB0009E9380 /* LCUUID.m in Sources */,
 				8352BEBE1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 				83A46FFA1EF1997A009E9380 /* AVSDK+Internal.m in Sources */,
+				83D742541EF6971A0016BB63 /* LCPath.m in Sources */,
 				83D742401EF671B40016BB63 /* AVApplication.m in Sources */,
 				83D7424A1EF674850016BB63 /* AVApplication+Internal.m in Sources */,
 				835BC26E1EEFCC24006B56C6 /* AVSDK.m in Sources */,
@@ -5977,6 +6016,7 @@
 				83A46FAB1EF11DB0009E9380 /* LCUUID.m in Sources */,
 				8352BEBC1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 				83A46FF81EF1997A009E9380 /* AVSDK+Internal.m in Sources */,
+				83D742521EF6971A0016BB63 /* LCPath.m in Sources */,
 				83D7423E1EF671B40016BB63 /* AVApplication.m in Sources */,
 				83D742481EF674850016BB63 /* AVApplication+Internal.m in Sources */,
 				835BC26C1EEFCC24006B56C6 /* AVSDK.m in Sources */,
@@ -6325,6 +6365,16 @@
 			isa = PBXTargetDependency;
 			target = 8352BDE81EEF70E300C513B6 /* Foundation-watchOS */;
 			targetProxy = 83D7422B1EF569160016BB63 /* PBXContainerItemProxy */;
+		};
+		83D742571EF6DDFD0016BB63 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8352BD851EEF6F1800C513B6 /* Foundation-macOS */;
+			targetProxy = 83D742561EF6DDFD0016BB63 /* PBXContainerItemProxy */;
+		};
+		83D7425A1EF6E5AE0016BB63 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8352BE4B1EEF713400C513B6 /* Foundation-tvOS */;
+			targetProxy = 83D742591EF6E5AE0016BB63 /* PBXContainerItemProxy */;
 		};
 		8C8419941A5A791300C5C6C4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
