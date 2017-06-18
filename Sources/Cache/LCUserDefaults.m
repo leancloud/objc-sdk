@@ -113,6 +113,14 @@ static *const LCUserDefaultsRootKeyPrefix = @"LeanCloud/UserDefaults";
     }
 }
 
+- (id<NSSecureCoding>)objectForKeyedSubscript:(NSString *)key {
+    return [self objectForKey:key];
+}
+
+- (void)setObject:(id<NSSecureCoding>)object forKeyedSubscript:(NSString *)key {
+    [self setObject:object forKeyedSubscript:key];
+}
+
 - (void)synchronize {
     NSString *rootKey = self.rootKey;
     NSDictionary *rootObject = [self.rootObject copy];
