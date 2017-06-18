@@ -7,6 +7,7 @@
 //
 
 #import "LCBundle.h"
+#import "LCUUID.h"
 
 @implementation LCBundle
 
@@ -30,7 +31,22 @@
 }
 
 - (NSString *)identifier {
-    return [NSBundle mainBundle].bundleIdentifier;
+    static NSString *identifier;
+    static dispatch_once_t onceToken;
+
+    dispatch_once(&onceToken, ^{
+        identifier = [NSBundle mainBundle].bundleIdentifier;
+
+        /* For unit test, identifier is nil.
+           So, we create a one-time use bundle identifier. */
+        if (!identifier) {
+            NSString *UUID = [LCUUID createUUID];
+            NSString *domain = @"cn.leancloud.pseudo-bundle-identifier";
+            identifier = [NSString stringWithFormat:@"%@.%@", domain, UUID];
+        }
+    });
+
+    return identifier;
 }
 
 - (NSString *)name {
