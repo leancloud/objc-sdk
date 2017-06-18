@@ -13,7 +13,7 @@ static NSString *const LCUserDefaultsRootKeyPrefix = @"LeanCloud/UserDefaults";
 
 @interface LCUserDefaults ()
 
-@property (nonatomic, strong) AVApplication *application;
+@property (nonatomic,   copy) AVApplication *application;
 @property (nonatomic, strong) NSUserDefaults *userDefaults;
 
 @property (nonatomic, readonly, strong) NSString *rootKey;
