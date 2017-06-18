@@ -757,10 +757,10 @@
 		83D742351EF56E490016BB63 /* LCPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D7422F1EF56E490016BB63 /* LCPreferences.m */; };
 		83D742361EF56E490016BB63 /* LCPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D7422F1EF56E490016BB63 /* LCPreferences.m */; };
 		83D742371EF56E490016BB63 /* LCPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D7422F1EF56E490016BB63 /* LCPreferences.m */; };
-		83D7423A1EF671B40016BB63 /* AVApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 83D742381EF671B40016BB63 /* AVApplication.h */; };
-		83D7423B1EF671B40016BB63 /* AVApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 83D742381EF671B40016BB63 /* AVApplication.h */; };
-		83D7423C1EF671B40016BB63 /* AVApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 83D742381EF671B40016BB63 /* AVApplication.h */; };
-		83D7423D1EF671B40016BB63 /* AVApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 83D742381EF671B40016BB63 /* AVApplication.h */; };
+		83D7423A1EF671B40016BB63 /* AVApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 83D742381EF671B40016BB63 /* AVApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		83D7423B1EF671B40016BB63 /* AVApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 83D742381EF671B40016BB63 /* AVApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		83D7423C1EF671B40016BB63 /* AVApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 83D742381EF671B40016BB63 /* AVApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		83D7423D1EF671B40016BB63 /* AVApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 83D742381EF671B40016BB63 /* AVApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83D7423E1EF671B40016BB63 /* AVApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D742391EF671B40016BB63 /* AVApplication.m */; };
 		83D7423F1EF671B40016BB63 /* AVApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D742391EF671B40016BB63 /* AVApplication.m */; };
 		83D742401EF671B40016BB63 /* AVApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D742391EF671B40016BB63 /* AVApplication.m */; };
