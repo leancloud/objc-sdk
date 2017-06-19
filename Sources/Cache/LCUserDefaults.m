@@ -9,7 +9,7 @@
 #import "LCUserDefaults.h"
 #import "AVApplication+Internal.h"
 
-static NSString *const LCUserDefaultsRootKeyPrefix = @"LeanCloud/UserDefaults";
+static NSString *const LCRootKeyPrefix = @"LeanCloud";
 
 @interface LCUserDefaults ()
 
@@ -55,9 +55,13 @@ static NSString *const LCUserDefaultsRootKeyPrefix = @"LeanCloud/UserDefaults";
     if (!relativePath)
         return nil;
 
-    NSString *result = [NSString stringWithFormat:@"%@/%@", LCUserDefaultsRootKeyPrefix, relativePath];
+    NSURL *URL = [[[NSURL fileURLWithPath:LCRootKeyPrefix]
+                   URLByAppendingPathComponent:relativePath]
+                   URLByAppendingPathComponent:@"UserDefaults"];
 
-    return result;
+    NSString *rootKey = [URL path];
+
+    return rootKey;
 }
 
 - (NSMutableDictionary *)rootObject {
@@ -110,7 +114,7 @@ static NSString *const LCUserDefaultsRootKeyPrefix = @"LeanCloud/UserDefaults";
 }
 
 - (void)setObject:(id<NSSecureCoding>)object forKeyedSubscript:(NSString *)key {
-    [self setObject:object forKeyedSubscript:key];
+    [self setObject:object forKey:key];
 }
 
 - (void)synchronize {
