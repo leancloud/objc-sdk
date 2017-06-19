@@ -15,7 +15,7 @@ NSString *const AVHTTPHeaderFieldNameSignature  = @"X-LC-Sign";
 @interface AVRESTClient ()
 
 @property (nonatomic, copy) AVApplication *application;
-@property (nonatomic, copy) id<AVRESTClientConfiguration> configuration;
+@property (nonatomic, copy) id<AVRESTClientConfigurable> configuration;
 
 @end
 
@@ -26,7 +26,7 @@ NSString *const AVHTTPHeaderFieldNameSignature  = @"X-LC-Sign";
 }
 
 - (instancetype)initWithApplication:(AVApplication *)application
-                      configuration:(id<AVRESTClientConfiguration>)configuration
+                      configuration:(id<AVRESTClientConfigurable>)configuration
 {
     self = [self init];
 

@@ -13,17 +13,17 @@ FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldNameId;
 FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldNameKey;
 FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldNameSignature;
 
-@protocol AVRESTClientConfiguration <NSObject, NSCopying>
+@protocol AVRESTClientConfigurable <NSObject, NSCopying>
 
 @end
 
 @interface AVRESTClient : NSObject
 
 @property (nonatomic, readonly, copy) AVApplication *application;
-@property (nonatomic, readonly, copy) id<AVRESTClientConfiguration> configuration;
+@property (nonatomic, readonly, copy) id<AVRESTClientConfigurable> configuration;
 
 - (instancetype)initWithApplication:(AVApplication *)application
-                      configuration:(id<AVRESTClientConfiguration>)configuration;
+                      configuration:(id<AVRESTClientConfigurable>)configuration;
 
 - (NSURLSessionDataTask *)sessionDataTaskWithMethod:(NSString *)method
                                            endpoint:(NSString *)endpoint
