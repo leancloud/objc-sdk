@@ -48,7 +48,7 @@ NSString *LCLibraryPath(void) {
         if (directory)
             path = [directory path];
         else
-            path = [LCHomePath() stringByAppendingPathComponent:@"Library"];
+            path = [[[NSURL fileURLWithPath:LCHomePath()] URLByAppendingPathComponent:@"Library"] path];
 
         LCCreateDirectory(path);
     });
@@ -69,7 +69,7 @@ NSString *LCApplicationSupportPath(void) {
         if (directory)
             path = [directory path];
         else
-            path = [LCLibraryPath() stringByAppendingPathComponent:@"Application Support"];
+            path = [[[NSURL fileURLWithPath:LCLibraryPath()] URLByAppendingPathComponent:@"Application Support"] path];
 
         LCCreateDirectory(path);
     });
@@ -89,11 +89,12 @@ NSString *LCSDKRoot(void) {
         LCBundle *bundle = [LCBundle current];
         /* On macOS, by convention, all of application support items should be
            put in a subdirectory whose name matches the bundle identifier of the app. */
-        path = [[applicationSupport
-                 stringByAppendingPathComponent:bundle.identifier]
-                 stringByAppendingPathComponent:@"LeanCloud"];
+        path = [[[[NSURL fileURLWithPath:applicationSupport]
+                  URLByAppendingPathComponent:bundle.identifier]
+                  URLByAppendingPathComponent:@"LeanCloud"]
+                  path];
 #else
-        path = [applicationSupport stringByAppendingPathComponent:@"LeanCloud"];
+        path = [[[NSURL fileURLWithPath:applicationSupport] URLByAppendingPathComponent:@"LeanCloud"] path];
 #endif
 
         LCCreateDirectory(path);
@@ -144,7 +145,7 @@ NSString *LCSDKRoot(void) {
 
     NSString *SDKRoot = LCSDKRoot();
 
-    NSString *path = [NSString stringWithFormat:@"%@/%@", SDKRoot, relativePath];
+    NSString *path = [[[NSURL fileURLWithPath:SDKRoot] URLByAppendingPathComponent:relativePath] path];
 
     LCCreateDirectory(path);
 
@@ -157,7 +158,7 @@ NSString *LCSDKRoot(void) {
     if (!sandbox)
         return nil;
 
-    NSString *path = [NSString stringWithFormat:@"%@/UserDefaults", sandbox];
+    NSString *path = [[[NSURL fileURLWithPath:sandbox] URLByAppendingPathComponent:@"UserDefaults"] path];
 
     LCCreateDirectory(path);
 
