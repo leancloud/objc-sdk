@@ -980,7 +980,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 
         LCIM_NOTIFY_PROPERTY_UPDATE(
             self.clientId,
-            self.conversationId,
+            conversation.conversationId,
             NSStringFromSelector(@selector(lastMessageAt)),
             lastMessageAt);
     }
