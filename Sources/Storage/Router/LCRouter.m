@@ -9,7 +9,7 @@
 #import "LCRouter.h"
 #import "AVOSCloud.h"
 #import "AVPaasClient.h"
-#import "LCKeyValueStore.h"
+#import "LCPreferences.h"
 
 #define APIVersion @"1.1"
 
@@ -25,12 +25,10 @@ static NSString *const ttlKey                = @"ttl";
 static NSString *const lastModifiedKey       = @"last_modified";
 static NSString *const serverTableKey        = @"server_table";
 
-static NSString *const LCAppRouterCacheKey   = @"LCAppRouterCacheKey";
-static NSString *const LCRTMRouterCacheKey   = @"LCRTMRouterCacheKey";
+static NSString *const LCAppRouterCacheKey   = @"appRouter";
+static NSString *const LCRTMRouterCacheKey   = @"RTMRouter";
 
 NSString *const LCRouterDidUpdateNotification = @"LCRouterDidUpdateNotification";
-
-extern AVServiceRegion LCEffectiveServiceRegion;
 
 typedef NS_ENUM(NSInteger, LCServerLocation) {
     LCServerLocationUnknown,
@@ -43,37 +41,33 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
 
 @property (nonatomic, assign) LCServerLocation serverLocation;
 
-@property (nonatomic, strong) NSDictionary *candidateAPIURLStringTable;
-@property (nonatomic, strong) NSDictionary *candidateRTMRouterURLStringTable;
-@property (nonatomic, strong) NSDictionary *module2dn;
+@property (nonatomic, strong) LCPreferences *preferences;
 
 /// A dictionary holds the preset URLString of each service module.
 @property (nonatomic, strong) NSMutableDictionary *presetURLStringTable;
 
+@property (nonatomic, strong) NSDictionary *candidateAPIURLStringTable;
+@property (nonatomic, strong) NSDictionary *candidateRTMRouterURLStringTable;
+
 @property (nonatomic,   copy) NSString *lifesavingAPIURLString;
 @property (nonatomic,   copy) NSString *lifesavingRTMRouterURLString;
 
-@property (nonatomic, strong) LCKeyValueStore *userDefaults;
+@property (nonatomic, strong) NSDictionary *module2dn;
 
 @end
 
 @implementation LCRouter
 
-+ (instancetype)sharedInstance {
-    static LCRouter *instance;
-    static dispatch_once_t onceToken;
-
-    dispatch_once(&onceToken, ^{
-        instance = [[LCRouter alloc] init];
-    });
-
-    return instance;
+- (instancetype)init {
+    return [self initWithApplication:nil];
 }
 
-- (instancetype)init {
+- (instancetype)initWithApplication:(AVApplication *)application {
     self = [super init];
 
     if (self) {
+        _application = [application copy];
+
         [self doInitialize];
     }
 
@@ -82,6 +76,10 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
 
 - (void)doInitialize {
     _serverLocation = [self currentServerLocation];
+
+    _preferences = [[LCPreferences alloc] initWithApplication:_application];
+
+    _presetURLStringTable = [NSMutableDictionary dictionary];
 
     _candidateAPIURLStringTable = @{
         @(LCServerLocationUCloud) : @"api.leancloud.cn",
@@ -105,17 +103,15 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
         LCServiceModuleRTM        : @"rtm",
         LCServiceModuleStatistics : @"stats"
     };
-
-    _presetURLStringTable = [NSMutableDictionary dictionary];
-
-    _userDefaults = [LCKeyValueStore userDefaultsKeyValueStore];
 }
 
 - (LCServerLocation)currentServerLocation {
-    if (LCEffectiveServiceRegion == AVServiceRegionUS)
+    AVApplication *application = self.application;
+
+    if (application.region == AVApplicationRegionUS)
         return LCServerLocationUS;
 
-    NSString *appId = [AVOSCloud getApplicationId];
+    NSString *appId = application.ID;
 
     /* Application is an UCloud if the application id has no suffix. */
     if ([appId rangeOfString:@"-"].location == NSNotFound)
@@ -154,29 +150,22 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
     [[NSNotificationCenter defaultCenter] postNotificationName:LCRouterDidUpdateNotification object:nil];
 }
 
-- (void)cacheServerTable:(NSDictionary *)APIServerTable forKey:(NSString *)key {
+- (void)cacheServerTable:(NSDictionary *)serverTable forKey:(NSString *)key {
     NSDictionary *cacheObject = @{
-        serverTableKey: APIServerTable,
+        serverTableKey: serverTable,
 
         /* Insert last modified timestamp into router table.
          It will be used to check the expiration of itself. */
         lastModifiedKey: @([[NSDate date] timeIntervalSince1970])
     };
 
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:cacheObject];
-
-    [self.userDefaults setData:data forKey:key];
+    self.preferences[key] = cacheObject;
 
     [self postUpdateNotification];
 }
 
 - (NSDictionary *)cachedServerTableForKey:(NSString *)key {
-    NSData *data = [self.userDefaults dataForKey:key];
-
-    if (!data)
-        return nil;
-
-    NSDictionary *cacheObject = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    NSDictionary *cacheObject = (NSDictionary *)self.preferences[key];
 
     if (!cacheObject)
         return nil;
@@ -197,20 +186,22 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
 }
 
 - (void)cleanRouterCacheForKey:(NSString *)key {
-    [self.userDefaults deleteKey:key];
+    self.preferences[key] = nil;
 
     [self postUpdateNotification];
 }
 
 - (void)updateInBackground {
+    AVApplication *application = self.application;
+
     /* App router 2 is unavailable in US node. */
-    if (LCEffectiveServiceRegion == AVServiceRegionUS)
+    if (application.region == AVApplicationRegionUS)
         return;
 
-    NSString *applicationId = [AVOSCloud getApplicationId];
+    NSString *applicationId = application.ID;
 
     if (!applicationId) {
-        AVLoggerError(AVLoggerDomainStorage, @"LeanCloud SDK not initialized.");
+        AVLoggerError(AVLoggerDomainStorage, @"Cannot update router due to application id not found.");
         return;
     }
 

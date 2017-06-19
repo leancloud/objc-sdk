@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "LCFoundation.h"
 
 FOUNDATION_EXPORT NSString *const LCServiceModuleAPI;
 FOUNDATION_EXPORT NSString *const LCServiceModuleEngine;
@@ -18,7 +19,9 @@ FOUNDATION_EXPORT NSString *const LCRouterDidUpdateNotification;
 
 @interface LCRouter : NSObject
 
-+ (instancetype)sharedInstance;
+@property (nonatomic, readonly, copy) AVApplication *application;
+
+- (instancetype)initWithApplication:(AVApplication *)application;
 
 /**
  Get cached RTM server table.
