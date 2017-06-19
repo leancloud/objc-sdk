@@ -61,7 +61,7 @@
 }
 
 - (void)doInitialize {
-    _environment = @"production";
+    _environment = @"Production";
 }
 
 @end
