@@ -10,9 +10,8 @@
 
 @interface LCKeyValueStore : NSObject
 
-+ (instancetype)sharedInstance;
-
-+ (instancetype)userDefaultsKeyValueStore;
+@property (nonatomic, readonly, copy) NSString *databasePath;
+@property (nonatomic, readonly, copy) NSString *tableName;
 
 - (instancetype)initWithDatabasePath:(NSString *)databasePath;
 
@@ -22,6 +21,6 @@
 
 - (void)setData:(NSData *)data forKey:(NSString *)key;
 
-- (void)deleteKey:(NSString *)key;
+- (void)removeDataForKey:(NSString *)key;
 
 @end
