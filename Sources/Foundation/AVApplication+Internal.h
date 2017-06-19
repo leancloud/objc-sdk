@@ -10,7 +10,7 @@
 
 @interface AVApplication ()
 
-@property (nonatomic, readonly, copy) NSString *environment;
+@property (nonatomic, copy) NSString *environment;
 @property (nonatomic, readonly, copy) NSString *relativePath;
 
 @end

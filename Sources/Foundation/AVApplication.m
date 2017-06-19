@@ -12,17 +12,11 @@
 @implementation AVApplication
 
 - (instancetype)init {
-    self = [super init];
-
-    if (self) {
-        [self doInitialize];
-    }
-
-    return self;
+    return [self initWithID:nil key:nil];
 }
 
 - (instancetype)initWithID:(NSString *)ID key:(NSString *)key {
-    self = [self init];
+    self = [super init];
 
     if (self) {
         _ID = [ID copy];
@@ -33,11 +27,12 @@
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [self init];
+    NSString *ID = [aDecoder decodeObjectForKey:@"ID"];
+    NSString *key = [aDecoder decodeObjectForKey:@"key"];
+
+    self = [self initWithID:ID key:key];
 
     if (self) {
-        _ID = [aDecoder decodeObjectForKey:@"ID"];
-        _key = [aDecoder decodeObjectForKey:@"key"];
         _environment = [aDecoder decodeObjectForKey:@"environment"];
     }
 
@@ -55,7 +50,12 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    AVApplication *application = [[[self class] alloc] initWithID:self.ID key:self.key];
+    NSString *ID = self.ID;
+    NSString *key = self.key;
+    NSString *environment = self.environment;
+
+    AVApplication *application = [[[self class] alloc] initWithID:ID key:key];
+    application.environment = environment;
 
     return application;
 }
