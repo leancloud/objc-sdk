@@ -67,7 +67,7 @@
     NSString *userDefaultsPath = path.userDefaults;
     NSString *databasePath = [[[NSURL fileURLWithPath:userDefaultsPath] URLByAppendingPathComponent:@"UserDefaults.db"] path];
 
-    _userDefaultsStore = [[LCKeyValueStore alloc] initWithDatabasePath:databasePath];
+    _userDefaultsStore = [[LCKeyValueStore alloc] initWithDatabasePath:databasePath tableName:@"UserDefaults"];
 }
 
 - (id<NSSecureCoding>)objectForKey:(NSString *)key {

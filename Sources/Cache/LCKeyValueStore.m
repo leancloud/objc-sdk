@@ -10,9 +10,8 @@
 #import "FMDatabase.h"
 #import "FMDatabaseQueue.h"
 
-#define LC_TABLE_DEFAULT    @"default"
-#define LC_FIELD_KEY        @"key"
-#define LC_FIELD_VALUE      @"value"
+#define LC_FIELD_KEY    @"key"
+#define LC_FIELD_VALUE  @"value"
 
 #define LC_SQL_CREATE_TABLE_FMT             \
     @"CREATE TABLE IF NOT EXISTS %@ ("      \
@@ -59,10 +58,6 @@
 
 - (instancetype)init {
     return [self initWithDatabasePath:nil tableName:nil];
-}
-
-- (instancetype)initWithDatabasePath:(NSString *)databasePath {
-    return [self initWithDatabasePath:databasePath tableName:nil];
 }
 
 - (instancetype)initWithDatabasePath:(NSString *)databasePath tableName:(NSString *)tableName {
@@ -141,10 +136,6 @@
 
         return _databaseQueue;
     }
-}
-
-- (NSString *)tableName {
-    return _tableName ?: LC_TABLE_DEFAULT;
 }
 
 @end

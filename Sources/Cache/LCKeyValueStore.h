@@ -13,8 +13,6 @@
 @property (nonatomic, readonly, copy) NSString *databasePath;
 @property (nonatomic, readonly, copy) NSString *tableName;
 
-- (instancetype)initWithDatabasePath:(NSString *)databasePath;
-
 - (instancetype)initWithDatabasePath:(NSString *)databasePath tableName:(NSString *)tableName;
 
 - (NSData *)dataForKey:(NSString *)key;
