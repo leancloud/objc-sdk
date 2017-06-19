@@ -907,6 +907,8 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (void)cacheContinuousMessages:(NSArray *)messages {
     [self cacheContinuousMessages:messages withBreakpoint:YES];
+
+    [self messagesDidCache];
 }
 
 - (void)cacheContinuousMessages:(NSArray *)messages plusMessage:(AVIMMessage *)message {
@@ -916,6 +918,8 @@ static dispatch_queue_t messageCacheOperationQueue;
     if (message)  [cachedMessages addObject:message];
     
     [self cacheContinuousMessages:cachedMessages withBreakpoint:YES];
+
+    [self messagesDidCache];
 }
 
 - (void)cacheContinuousMessages:(NSArray *)messages withBreakpoint:(BOOL)breakpoint {
@@ -923,6 +927,28 @@ static dispatch_queue_t messageCacheOperationQueue;
         [[self messageCache] addContinuousMessages:messages forConversationId:self.conversationId];
     } else {
         [[self messageCacheStore] insertMessages:messages];
+    }
+
+    [self messagesDidCache];
+}
+
+- (void)messagesDidCache {
+    AVIMMessage *lastMessage = [[self queryMessagesFromCacheWithLimit:1] firstObject];
+
+    if (lastMessage) {
+        LCIM_NOTIFY_PROPERTY_UPDATE(
+            self.clientId,
+            self.conversationId,
+            NSStringFromSelector(@selector(lastMessage)),
+            lastMessage);
+
+        NSDate *lastMessageAt = [NSDate dateWithTimeIntervalSince1970:(lastMessage.sendTimestamp / 1000.0)];
+
+        LCIM_NOTIFY_PROPERTY_UPDATE(
+            self.clientId,
+            self.conversationId,
+            NSStringFromSelector(@selector(lastMessageAt)),
+            lastMessageAt);
     }
 }
 
