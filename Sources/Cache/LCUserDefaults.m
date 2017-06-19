@@ -59,7 +59,7 @@ static NSString *const LCRootKeyPrefix = @"LeanCloud";
                    URLByAppendingPathComponent:relativePath]
                    URLByAppendingPathComponent:@"UserDefaults"];
 
-    NSString *rootKey = [URL path];
+    NSString *rootKey = [URL relativePath];
 
     return rootKey;
 }
