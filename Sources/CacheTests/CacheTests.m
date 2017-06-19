@@ -7,6 +7,8 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "LCPreferences.h"
+#import "LCUUID.h"
 
 @interface CacheTests : XCTestCase
 
@@ -24,9 +26,15 @@
     [super tearDown];
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
+- (void)testPreferences {
+    NSString *pseudoApplicationId  = [LCUUID createUUID];
+    NSString *pseudoApplicationKey = [LCUUID createUUID];
+
+    AVApplication *application = [[AVApplication alloc] initWithID:pseudoApplicationId key:pseudoApplicationKey];
+    LCPreferences *preferences = [[LCPreferences alloc] initWithApplication:application];
+
+    preferences[@"foo"] = @"bar";
+    XCTAssertEqualObjects(preferences[@"foo"], @"bar");
 }
 
 - (void)testPerformanceExample {
