@@ -10,42 +10,45 @@
 #import "LCFoundation.h"
 
 #if LC_TARGET_OS_TV
-#import "LCUserDefaults.h"
+    #import "LCUserDefaults.h"
+#else
+    #import "LCKeyValueStore.h"
+    #import "LCPath.h"
 #endif
 
 @interface LCPreferences ()
 
 @property (nonatomic, copy) AVApplication *application;
 
+#if !LC_TARGET_OS_TV
+@property (nonatomic, strong) LCKeyValueStore *userDefaultsStore;
+#endif
+
 @end
 
 @implementation LCPreferences
 
 - (instancetype)init {
+    return [self initWithApplication:nil];
+}
+
+- (instancetype)initWithApplication:(AVApplication *)application {
     self = [super init];
 
     if (self) {
+        _application = [application copy];
+
         [self doInitialize];
     }
 
     return self;
 }
 
-- (instancetype)initWithApplication:(AVApplication *)application {
-    self = [self init];
-
-    if (self) {
-        _application = [application copy];
-    }
-
-    return self;
-}
+#if LC_TARGET_OS_TV
 
 - (void)doInitialize {
-    /* TODO */
+    /* Do nothing for tvOS target. */
 }
-
-#if LC_TARGET_OS_TV
 
 - (id<NSSecureCoding>)objectForKey:(NSString *)key {
     LCUserDefaults *userDefaults = [[LCUserDefaults alloc] initWithApplication:self.application];
@@ -55,6 +58,36 @@
 - (void)setObject:(id<NSSecureCoding>)object forKey:(NSString *)key {
     LCUserDefaults *userDefaults = [[LCUserDefaults alloc] initWithApplication:self.application];
     userDefaults[key] = object;
+}
+
+#else
+
+- (void)doInitialize {
+    LCPath *path = [[LCPath alloc] initWithApplication:_application];
+    NSString *userDefaultsPath = path.userDefaults;
+    NSString *databasePath = [[[NSURL fileURLWithPath:userDefaultsPath] URLByAppendingPathComponent:@"UserDefaults.db"] path];
+
+    _userDefaultsStore = [[LCKeyValueStore alloc] initWithDatabasePath:databasePath];
+}
+
+- (id<NSSecureCoding>)objectForKey:(NSString *)key {
+    NSData *data = [self.userDefaultsStore dataForKey:key];
+
+    if (!data)
+        return nil;
+
+    id object = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+
+    return object;
+}
+
+- (void)setObject:(id<NSSecureCoding>)object forKey:(NSString *)key {
+    if (object) {
+        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object];
+        [self.userDefaultsStore setData:data forKey:key];
+    } else {
+        [self.userDefaultsStore removeDataForKey:key];
+    }
 }
 
 #endif
