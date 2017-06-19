@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "LCFoundation.h"
 
 FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldNameId;
 FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldNameKey;
@@ -18,7 +19,11 @@ FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldNameSignature;
 
 @interface AVRESTClient : NSObject
 
-- (instancetype)initWithConfiguration:(id<AVRESTClientConfiguration>)configuration;
+@property (nonatomic, readonly, copy) AVApplication *application;
+@property (nonatomic, readonly, copy) id<AVRESTClientConfiguration> configuration;
+
+- (instancetype)initWithApplication:(AVApplication *)application
+                      configuration:(id<AVRESTClientConfiguration>)configuration;
 
 - (NSURLSessionDataTask *)sessionDataTaskWithMethod:(NSString *)method
                                            endpoint:(NSString *)endpoint

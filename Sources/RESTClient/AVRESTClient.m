@@ -14,27 +14,27 @@ NSString *const AVHTTPHeaderFieldNameSignature  = @"X-LC-Sign";
 
 @interface AVRESTClient ()
 
-@property (nonatomic, strong) id<AVRESTClientConfiguration> configuration;
+@property (nonatomic, copy) AVApplication *application;
+@property (nonatomic, copy) id<AVRESTClientConfiguration> configuration;
 
 @end
 
 @implementation AVRESTClient
 
 - (instancetype)init {
-    self = [super init];
-
-    if (self) {
-        [self doInitialize];
-    }
-
-    return self;
+    return [self initWithApplication:nil configuration:nil];
 }
 
-- (instancetype)initWithConfiguration:(id<AVRESTClientConfiguration>)configuration {
+- (instancetype)initWithApplication:(AVApplication *)application
+                      configuration:(id<AVRESTClientConfiguration>)configuration
+{
     self = [self init];
 
     if (self) {
+        _application = [application copy];
         _configuration = [configuration copyWithZone:nil];
+
+        [self doInitialize];
     }
 
     return self;
