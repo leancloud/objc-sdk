@@ -8,11 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, AVApplicationRegion) {
+    AVApplicationRegionCN = 1,
+    AVApplicationRegionUS
+};
+
 @interface AVApplication : NSObject <NSCopying, NSSecureCoding>
 
-@property (nonatomic, readonly, copy) NSString *ID;
-@property (nonatomic, readonly, copy) NSString *key;
+@property (nonatomic, readonly,   copy) NSString *ID;
+@property (nonatomic, readonly,   copy) NSString *key;
+@property (nonatomic, readonly, assign) AVApplicationRegion region;
 
-- (instancetype)initWithID:(NSString *)ID key:(NSString *)key;
+- (instancetype)initWithID:(NSString *)ID key:(NSString *)key region:(AVApplicationRegion)region;
 
 @end

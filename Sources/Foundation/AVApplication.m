@@ -12,15 +12,19 @@
 @implementation AVApplication
 
 - (instancetype)init {
-    return [self initWithID:nil key:nil];
+    return [self initWithID:nil key:nil region:0];
 }
 
-- (instancetype)initWithID:(NSString *)ID key:(NSString *)key {
+- (instancetype)initWithID:(NSString *)ID
+                       key:(NSString *)key
+                    region:(AVApplicationRegion)region
+{
     self = [super init];
 
     if (self) {
         _ID = [ID copy];
         _key = [key copy];
+        _region = region;
     }
 
     return self;
@@ -29,8 +33,9 @@
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     NSString *ID = [aDecoder decodeObjectForKey:@"ID"];
     NSString *key = [aDecoder decodeObjectForKey:@"key"];
+    AVApplicationRegion region = [aDecoder decodeIntegerForKey:@"region"];
 
-    self = [self initWithID:ID key:key];
+    self = [self initWithID:ID key:key region:region];
 
     if (self) {
         _environment = [aDecoder decodeObjectForKey:@"environment"];
@@ -43,6 +48,7 @@
     [aCoder encodeObject:self.ID forKey:@"ID"];
     [aCoder encodeObject:self.key forKey:@"key"];
     [aCoder encodeObject:self.environment forKey:@"environment"];
+    [aCoder encodeInteger:self.region forKey:@"region"];
 }
 
 + (BOOL)supportsSecureCoding {
@@ -53,8 +59,9 @@
     NSString *ID = self.ID;
     NSString *key = self.key;
     NSString *environment = self.environment;
+    AVApplicationRegion region = self.region;
 
-    AVApplication *application = [[[self class] alloc] initWithID:ID key:key];
+    AVApplication *application = [[[self class] alloc] initWithID:ID key:key region:region];
     application.environment = environment;
 
     return application;
