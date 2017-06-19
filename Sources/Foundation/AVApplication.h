@@ -10,8 +10,8 @@
 
 @interface AVApplication : NSObject <NSCopying, NSSecureCoding>
 
-@property (nonatomic, readonly, strong) NSString *ID;
-@property (nonatomic, readonly, strong) NSString *key;
+@property (nonatomic, readonly, copy) NSString *ID;
+@property (nonatomic, readonly, copy) NSString *key;
 
 - (instancetype)initWithID:(NSString *)ID key:(NSString *)key;
 
