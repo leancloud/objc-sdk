@@ -387,6 +387,22 @@
 		83177CBB1EF83FAC004FB12A /* LCRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CB41EF83F99004FB12A /* LCRouter.m */; };
 		83177CBC1EF83FAD004FB12A /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83177CB51EF83F99004FB12A /* LCRouter.h */; };
 		83177CBD1EF83FAD004FB12A /* LCRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CB41EF83F99004FB12A /* LCRouter.m */; };
+		83177CC11EF8E665004FB12A /* AVApplication+RESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83177CBF1EF8E665004FB12A /* AVApplication+RESTClient.h */; };
+		83177CC21EF8E665004FB12A /* AVApplication+RESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83177CBF1EF8E665004FB12A /* AVApplication+RESTClient.h */; };
+		83177CC31EF8E665004FB12A /* AVApplication+RESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83177CBF1EF8E665004FB12A /* AVApplication+RESTClient.h */; };
+		83177CC41EF8E665004FB12A /* AVApplication+RESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83177CBF1EF8E665004FB12A /* AVApplication+RESTClient.h */; };
+		83177CC51EF8E665004FB12A /* AVApplication+RESTClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CC01EF8E665004FB12A /* AVApplication+RESTClient.m */; };
+		83177CC61EF8E665004FB12A /* AVApplication+RESTClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CC01EF8E665004FB12A /* AVApplication+RESTClient.m */; };
+		83177CC71EF8E665004FB12A /* AVApplication+RESTClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CC01EF8E665004FB12A /* AVApplication+RESTClient.m */; };
+		83177CC81EF8E665004FB12A /* AVApplication+RESTClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CC01EF8E665004FB12A /* AVApplication+RESTClient.m */; };
+		83177CCB1EF8E959004FB12A /* LCUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 83177CC91EF8E959004FB12A /* LCUtility.h */; };
+		83177CCC1EF8E959004FB12A /* LCUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 83177CC91EF8E959004FB12A /* LCUtility.h */; };
+		83177CCD1EF8E959004FB12A /* LCUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 83177CC91EF8E959004FB12A /* LCUtility.h */; };
+		83177CCE1EF8E959004FB12A /* LCUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 83177CC91EF8E959004FB12A /* LCUtility.h */; };
+		83177CCF1EF8E959004FB12A /* LCUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CCA1EF8E959004FB12A /* LCUtility.m */; };
+		83177CD01EF8E959004FB12A /* LCUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CCA1EF8E959004FB12A /* LCUtility.m */; };
+		83177CD11EF8E959004FB12A /* LCUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CCA1EF8E959004FB12A /* LCUtility.m */; };
+		83177CD21EF8E959004FB12A /* LCUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CCA1EF8E959004FB12A /* LCUtility.m */; };
 		831E295A1D882CBB006E502B /* AVIMMessageOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 831E29581D882CBB006E502B /* AVIMMessageOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		831E295B1D882CBB006E502B /* AVIMMessageOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 831E29581D882CBB006E502B /* AVIMMessageOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		831E295C1D882CBB006E502B /* AVIMMessageOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 831E29591D882CBB006E502B /* AVIMMessageOption.m */; };
@@ -1535,6 +1551,10 @@
 		83177CAB1EF7A400004FB12A /* LCKeyValueStore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCKeyValueStore.h; sourceTree = "<group>"; };
 		83177CB41EF83F99004FB12A /* LCRouter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCRouter.m; sourceTree = "<group>"; };
 		83177CB51EF83F99004FB12A /* LCRouter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCRouter.h; sourceTree = "<group>"; };
+		83177CBF1EF8E665004FB12A /* AVApplication+RESTClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVApplication+RESTClient.h"; sourceTree = "<group>"; };
+		83177CC01EF8E665004FB12A /* AVApplication+RESTClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AVApplication+RESTClient.m"; sourceTree = "<group>"; };
+		83177CC91EF8E959004FB12A /* LCUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCUtility.h; sourceTree = "<group>"; };
+		83177CCA1EF8E959004FB12A /* LCUtility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCUtility.m; sourceTree = "<group>"; };
 		831E29581D882CBB006E502B /* AVIMMessageOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMMessageOption.h; sourceTree = "<group>"; };
 		831E29591D882CBB006E502B /* AVIMMessageOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMMessageOption.m; sourceTree = "<group>"; };
 		8320F95C1C1918C60024B45E /* AVOSCloudStorage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudStorage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2629,6 +2649,8 @@
 			children = (
 				837D1B4D1EF5046F00C3F93A /* AVRESTClient.h */,
 				837D1B4E1EF5046F00C3F93A /* AVRESTClient.m */,
+				83177CBF1EF8E665004FB12A /* AVApplication+RESTClient.h */,
+				83177CC01EF8E665004FB12A /* AVApplication+RESTClient.m */,
 				83177CB51EF83F99004FB12A /* LCRouter.h */,
 				83177CB41EF83F99004FB12A /* LCRouter.m */,
 				83BC01D41EF3BD6200B7E680 /* LCRESTClient.h */,
@@ -2713,6 +2735,8 @@
 				83A46FE81EF12F81009E9380 /* LCBundle.m */,
 				83D7424C1EF6971A0016BB63 /* LCPath.h */,
 				83D7424D1EF6971A0016BB63 /* LCPath.m */,
+				83177CC91EF8E959004FB12A /* LCUtility.h */,
+				83177CCA1EF8E959004FB12A /* LCUtility.m */,
 				835BC2861EF0D945006B56C6 /* LCTargetConditionals.h */,
 				835BC28B1EF0DDC8006B56C6 /* LCTargetUmbrella.h */,
 				835BC2701EF02B5A006B56C6 /* LCFoundation.h */,
@@ -3689,6 +3713,7 @@
 				83D742451EF674850016BB63 /* AVApplication+Internal.h in Headers */,
 				8376B22E1EF041E7006ED4C2 /* metamacros.h in Headers */,
 				8376B22C1EF041E7006ED4C2 /* EXTScope.h in Headers */,
+				83177CCC1EF8E959004FB12A /* LCUtility.h in Headers */,
 				83D7424F1EF6971A0016BB63 /* LCPath.h in Headers */,
 				835BC28D1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
 				83A46FFF1EF1A6FE009E9380 /* SDMacros.h in Headers */,
@@ -3711,6 +3736,7 @@
 				83D742471EF674850016BB63 /* AVApplication+Internal.h in Headers */,
 				8376B2341EF041E8006ED4C2 /* metamacros.h in Headers */,
 				8376B2321EF041E8006ED4C2 /* EXTScope.h in Headers */,
+				83177CCE1EF8E959004FB12A /* LCUtility.h in Headers */,
 				83D742511EF6971A0016BB63 /* LCPath.h in Headers */,
 				835BC28F1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
 				83A470011EF1A6FF009E9380 /* SDMacros.h in Headers */,
@@ -3733,6 +3759,7 @@
 				83D742461EF674850016BB63 /* AVApplication+Internal.h in Headers */,
 				8376B2311EF041E8006ED4C2 /* metamacros.h in Headers */,
 				8376B22F1EF041E8006ED4C2 /* EXTScope.h in Headers */,
+				83177CCD1EF8E959004FB12A /* LCUtility.h in Headers */,
 				83D742501EF6971A0016BB63 /* LCPath.h in Headers */,
 				835BC28E1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
 				83A470001EF1A6FE009E9380 /* SDMacros.h in Headers */,
@@ -3752,6 +3779,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83177CB81EF83FA9004FB12A /* LCRouter.h in Headers */,
+				83177CC21EF8E665004FB12A /* AVApplication+RESTClient.h in Headers */,
 				837D1B501EF5046F00C3F93A /* AVRESTClient.h in Headers */,
 				837D1B481EF5035400C3F93A /* AVOSCloudRESTClient.h in Headers */,
 				837D1B471EF5035400C3F93A /* LCRESTClient.h in Headers */,
@@ -3763,6 +3791,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83177CBA1EF83FAC004FB12A /* LCRouter.h in Headers */,
+				83177CC31EF8E665004FB12A /* AVApplication+RESTClient.h in Headers */,
 				837D1B511EF5046F00C3F93A /* AVRESTClient.h in Headers */,
 				837D1B4A1EF5035A00C3F93A /* AVOSCloudRESTClient.h in Headers */,
 				837D1B491EF5035A00C3F93A /* LCRESTClient.h in Headers */,
@@ -3774,6 +3803,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83177CBC1EF83FAD004FB12A /* LCRouter.h in Headers */,
+				83177CC41EF8E665004FB12A /* AVApplication+RESTClient.h in Headers */,
 				837D1B521EF5046F00C3F93A /* AVRESTClient.h in Headers */,
 				837D1B4C1EF5035C00C3F93A /* AVOSCloudRESTClient.h in Headers */,
 				837D1B4B1EF5035C00C3F93A /* LCRESTClient.h in Headers */,
@@ -3849,6 +3879,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83177CB61EF83FA8004FB12A /* LCRouter.h in Headers */,
+				83177CC11EF8E665004FB12A /* AVApplication+RESTClient.h in Headers */,
 				837D1B4F1EF5046F00C3F93A /* AVRESTClient.h in Headers */,
 				839119481EF3C28F00A232FF /* AVOSCloudRESTClient.h in Headers */,
 				83BC01E21EF3BD6300B7E680 /* LCRESTClient.h in Headers */,
@@ -3969,6 +4000,7 @@
 				83D742441EF674850016BB63 /* AVApplication+Internal.h in Headers */,
 				8376B22B1EF041E7006ED4C2 /* metamacros.h in Headers */,
 				8376B2291EF041E7006ED4C2 /* EXTScope.h in Headers */,
+				83177CCB1EF8E959004FB12A /* LCUtility.h in Headers */,
 				83D7424E1EF6971A0016BB63 /* LCPath.h in Headers */,
 				835BC28C1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
 				83A46FFE1EF1A6FD009E9380 /* SDMacros.h in Headers */,
@@ -5711,6 +5743,7 @@
 				83A46FF91EF1997A009E9380 /* AVSDK+Internal.m in Sources */,
 				83D742531EF6971A0016BB63 /* LCPath.m in Sources */,
 				83D7423F1EF671B40016BB63 /* AVApplication.m in Sources */,
+				83177CD01EF8E959004FB12A /* LCUtility.m in Sources */,
 				83D742491EF674850016BB63 /* AVApplication+Internal.m in Sources */,
 				835BC26D1EEFCC24006B56C6 /* AVSDK.m in Sources */,
 			);
@@ -5727,6 +5760,7 @@
 				83A46FFB1EF1997A009E9380 /* AVSDK+Internal.m in Sources */,
 				83D742551EF6971A0016BB63 /* LCPath.m in Sources */,
 				83D742411EF671B40016BB63 /* AVApplication.m in Sources */,
+				83177CD21EF8E959004FB12A /* LCUtility.m in Sources */,
 				83D7424B1EF674850016BB63 /* AVApplication+Internal.m in Sources */,
 				835BC26F1EEFCC24006B56C6 /* AVSDK.m in Sources */,
 			);
@@ -5743,6 +5777,7 @@
 				83A46FFA1EF1997A009E9380 /* AVSDK+Internal.m in Sources */,
 				83D742541EF6971A0016BB63 /* LCPath.m in Sources */,
 				83D742401EF671B40016BB63 /* AVApplication.m in Sources */,
+				83177CD11EF8E959004FB12A /* LCUtility.m in Sources */,
 				83D7424A1EF674850016BB63 /* AVApplication+Internal.m in Sources */,
 				835BC26E1EEFCC24006B56C6 /* AVSDK.m in Sources */,
 			);
@@ -5753,6 +5788,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				837D1B541EF5046F00C3F93A /* AVRESTClient.m in Sources */,
+				83177CC61EF8E665004FB12A /* AVApplication+RESTClient.m in Sources */,
 				83177CB91EF83FA9004FB12A /* LCRouter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5770,6 +5806,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				837D1B551EF5046F00C3F93A /* AVRESTClient.m in Sources */,
+				83177CC71EF8E665004FB12A /* AVApplication+RESTClient.m in Sources */,
 				83177CBB1EF83FAC004FB12A /* LCRouter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5787,6 +5824,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				837D1B561EF5046F00C3F93A /* AVRESTClient.m in Sources */,
+				83177CC81EF8E665004FB12A /* AVApplication+RESTClient.m in Sources */,
 				83177CBD1EF83FAD004FB12A /* LCRouter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5894,6 +5932,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				837D1B531EF5046F00C3F93A /* AVRESTClient.m in Sources */,
+				83177CC51EF8E665004FB12A /* AVApplication+RESTClient.m in Sources */,
 				83177CB71EF83FA8004FB12A /* LCRouter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6002,6 +6041,7 @@
 				83A46FF81EF1997A009E9380 /* AVSDK+Internal.m in Sources */,
 				83D742521EF6971A0016BB63 /* LCPath.m in Sources */,
 				83D7423E1EF671B40016BB63 /* AVApplication.m in Sources */,
+				83177CCF1EF8E959004FB12A /* LCUtility.m in Sources */,
 				83D742481EF674850016BB63 /* AVApplication+Internal.m in Sources */,
 				835BC26C1EEFCC24006B56C6 /* AVSDK.m in Sources */,
 			);

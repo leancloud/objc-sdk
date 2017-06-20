@@ -18,3 +18,4 @@
 #import "AVApplication+Internal.h"
 #import "LCDevice.h"
 #import "LCBundle.h"
+#import "LCUtility.h"
