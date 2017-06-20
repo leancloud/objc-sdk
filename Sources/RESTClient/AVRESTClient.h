@@ -30,6 +30,6 @@ FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldNameSignature;
                                          parameters:(NSDictionary *)parameters
                        constructingRequestWithBlock:(void (^)(NSMutableURLRequest *request))requestConstructor
                                             success:(void (^)(NSHTTPURLResponse *response, id responseObject))successCallback
-                                            failure:(void (^)(NSHTTPURLResponse *response, id responseObject, NSError *error))successCallback;
+                                            failure:(void (^)(NSHTTPURLResponse *response, id responseObject, NSError *error))failureCallback;
 
 @end

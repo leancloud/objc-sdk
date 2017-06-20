@@ -8,7 +8,7 @@
 
 #import "AVSDK.h"
 
-#define LC_SDK_VERSION "v6.0.0"
+#define LC_SDK_VERSION "6.0.0"
 
 @implementation AVSDK
 

@@ -403,6 +403,14 @@
 		83177CD01EF8E959004FB12A /* LCUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CCA1EF8E959004FB12A /* LCUtility.m */; };
 		83177CD11EF8E959004FB12A /* LCUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CCA1EF8E959004FB12A /* LCUtility.m */; };
 		83177CD21EF8E959004FB12A /* LCUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CCA1EF8E959004FB12A /* LCUtility.m */; };
+		83177CD51EF8EDAC004FB12A /* AVSDK+RESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83177CD31EF8EDAC004FB12A /* AVSDK+RESTClient.h */; };
+		83177CD61EF8EDAC004FB12A /* AVSDK+RESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83177CD31EF8EDAC004FB12A /* AVSDK+RESTClient.h */; };
+		83177CD71EF8EDAC004FB12A /* AVSDK+RESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83177CD31EF8EDAC004FB12A /* AVSDK+RESTClient.h */; };
+		83177CD81EF8EDAC004FB12A /* AVSDK+RESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83177CD31EF8EDAC004FB12A /* AVSDK+RESTClient.h */; };
+		83177CD91EF8EDAC004FB12A /* AVSDK+RESTClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CD41EF8EDAC004FB12A /* AVSDK+RESTClient.m */; };
+		83177CDA1EF8EDAC004FB12A /* AVSDK+RESTClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CD41EF8EDAC004FB12A /* AVSDK+RESTClient.m */; };
+		83177CDB1EF8EDAC004FB12A /* AVSDK+RESTClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CD41EF8EDAC004FB12A /* AVSDK+RESTClient.m */; };
+		83177CDC1EF8EDAC004FB12A /* AVSDK+RESTClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CD41EF8EDAC004FB12A /* AVSDK+RESTClient.m */; };
 		831E295A1D882CBB006E502B /* AVIMMessageOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 831E29581D882CBB006E502B /* AVIMMessageOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		831E295B1D882CBB006E502B /* AVIMMessageOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 831E29581D882CBB006E502B /* AVIMMessageOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		831E295C1D882CBB006E502B /* AVIMMessageOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 831E29591D882CBB006E502B /* AVIMMessageOption.m */; };
@@ -1555,6 +1563,8 @@
 		83177CC01EF8E665004FB12A /* AVApplication+RESTClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AVApplication+RESTClient.m"; sourceTree = "<group>"; };
 		83177CC91EF8E959004FB12A /* LCUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCUtility.h; sourceTree = "<group>"; };
 		83177CCA1EF8E959004FB12A /* LCUtility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCUtility.m; sourceTree = "<group>"; };
+		83177CD31EF8EDAC004FB12A /* AVSDK+RESTClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVSDK+RESTClient.h"; sourceTree = "<group>"; };
+		83177CD41EF8EDAC004FB12A /* AVSDK+RESTClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AVSDK+RESTClient.m"; sourceTree = "<group>"; };
 		831E29581D882CBB006E502B /* AVIMMessageOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMMessageOption.h; sourceTree = "<group>"; };
 		831E29591D882CBB006E502B /* AVIMMessageOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMMessageOption.m; sourceTree = "<group>"; };
 		8320F95C1C1918C60024B45E /* AVOSCloudStorage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudStorage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2651,6 +2661,8 @@
 				837D1B4E1EF5046F00C3F93A /* AVRESTClient.m */,
 				83177CBF1EF8E665004FB12A /* AVApplication+RESTClient.h */,
 				83177CC01EF8E665004FB12A /* AVApplication+RESTClient.m */,
+				83177CD31EF8EDAC004FB12A /* AVSDK+RESTClient.h */,
+				83177CD41EF8EDAC004FB12A /* AVSDK+RESTClient.m */,
 				83177CB51EF83F99004FB12A /* LCRouter.h */,
 				83177CB41EF83F99004FB12A /* LCRouter.m */,
 				83BC01D41EF3BD6200B7E680 /* LCRESTClient.h */,
@@ -3781,6 +3793,7 @@
 				83177CB81EF83FA9004FB12A /* LCRouter.h in Headers */,
 				83177CC21EF8E665004FB12A /* AVApplication+RESTClient.h in Headers */,
 				837D1B501EF5046F00C3F93A /* AVRESTClient.h in Headers */,
+				83177CD61EF8EDAC004FB12A /* AVSDK+RESTClient.h in Headers */,
 				837D1B481EF5035400C3F93A /* AVOSCloudRESTClient.h in Headers */,
 				837D1B471EF5035400C3F93A /* LCRESTClient.h in Headers */,
 			);
@@ -3793,6 +3806,7 @@
 				83177CBA1EF83FAC004FB12A /* LCRouter.h in Headers */,
 				83177CC31EF8E665004FB12A /* AVApplication+RESTClient.h in Headers */,
 				837D1B511EF5046F00C3F93A /* AVRESTClient.h in Headers */,
+				83177CD71EF8EDAC004FB12A /* AVSDK+RESTClient.h in Headers */,
 				837D1B4A1EF5035A00C3F93A /* AVOSCloudRESTClient.h in Headers */,
 				837D1B491EF5035A00C3F93A /* LCRESTClient.h in Headers */,
 			);
@@ -3805,6 +3819,7 @@
 				83177CBC1EF83FAD004FB12A /* LCRouter.h in Headers */,
 				83177CC41EF8E665004FB12A /* AVApplication+RESTClient.h in Headers */,
 				837D1B521EF5046F00C3F93A /* AVRESTClient.h in Headers */,
+				83177CD81EF8EDAC004FB12A /* AVSDK+RESTClient.h in Headers */,
 				837D1B4C1EF5035C00C3F93A /* AVOSCloudRESTClient.h in Headers */,
 				837D1B4B1EF5035C00C3F93A /* LCRESTClient.h in Headers */,
 			);
@@ -3881,6 +3896,7 @@
 				83177CB61EF83FA8004FB12A /* LCRouter.h in Headers */,
 				83177CC11EF8E665004FB12A /* AVApplication+RESTClient.h in Headers */,
 				837D1B4F1EF5046F00C3F93A /* AVRESTClient.h in Headers */,
+				83177CD51EF8EDAC004FB12A /* AVSDK+RESTClient.h in Headers */,
 				839119481EF3C28F00A232FF /* AVOSCloudRESTClient.h in Headers */,
 				83BC01E21EF3BD6300B7E680 /* LCRESTClient.h in Headers */,
 			);
@@ -5789,6 +5805,7 @@
 			files = (
 				837D1B541EF5046F00C3F93A /* AVRESTClient.m in Sources */,
 				83177CC61EF8E665004FB12A /* AVApplication+RESTClient.m in Sources */,
+				83177CDA1EF8EDAC004FB12A /* AVSDK+RESTClient.m in Sources */,
 				83177CB91EF83FA9004FB12A /* LCRouter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5807,6 +5824,7 @@
 			files = (
 				837D1B551EF5046F00C3F93A /* AVRESTClient.m in Sources */,
 				83177CC71EF8E665004FB12A /* AVApplication+RESTClient.m in Sources */,
+				83177CDB1EF8EDAC004FB12A /* AVSDK+RESTClient.m in Sources */,
 				83177CBB1EF83FAC004FB12A /* LCRouter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5825,6 +5843,7 @@
 			files = (
 				837D1B561EF5046F00C3F93A /* AVRESTClient.m in Sources */,
 				83177CC81EF8E665004FB12A /* AVApplication+RESTClient.m in Sources */,
+				83177CDC1EF8EDAC004FB12A /* AVSDK+RESTClient.m in Sources */,
 				83177CBD1EF83FAD004FB12A /* LCRouter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5933,6 +5952,7 @@
 			files = (
 				837D1B531EF5046F00C3F93A /* AVRESTClient.m in Sources */,
 				83177CC51EF8E665004FB12A /* AVApplication+RESTClient.m in Sources */,
+				83177CD91EF8EDAC004FB12A /* AVSDK+RESTClient.m in Sources */,
 				83177CB71EF83FA8004FB12A /* LCRouter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
