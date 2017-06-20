@@ -75,6 +75,30 @@
 
 @end
 
+@implementation AVApplicationConfiguration
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super init];
+
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    /* TODO */
+}
+
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
+- (id)copyWithZone:(NSZone *)zone {
+    AVApplication *configuration = [[[self class] alloc] init];
+
+    return configuration;
+}
+
+@end
+
 @implementation AVApplication
 
 - (instancetype)init {
