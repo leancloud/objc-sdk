@@ -7,7 +7,7 @@
 //
 
 #import "LCRouter.h"
-#import "AVPaasClient.h"
+#import "AVRESTClient.h"
 #import "LCPreferences.h"
 
 #define APIVersion @"1.1"
@@ -206,16 +206,23 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
     NSString *applicationId = identity.ID;
 
     if (!applicationId) {
-        AVLoggerError(AVLoggerDomainStorage, @"Cannot update router due to application id not found.");
+        /* TODO
+           Log error: "Cannot update router due to application id not found." */
         return;
     }
 
     NSDictionary *parameters = @{@"appId": applicationId};
 
-    [[AVPaasClient sharedInstance] getObject:routerURLString withParameters:parameters block:^(NSDictionary *result, NSError *error) {
-        if (!error && result)
-            [self cacheServerTable:result forKey:LCAppRouterCacheKey];
-    }];
+    [self.RESTClient sessionDataTaskWithMethod:@"GET"
+                                      endpoint:routerURLString
+                                    parameters:parameters
+                  constructingRequestWithBlock:nil
+                                       success:^(NSHTTPURLResponse *response, id responseObject) {
+                                           if (responseObject) {
+                                               [self cacheServerTable:responseObject forKey:LCAppRouterCacheKey];
+                                           }
+                                       }
+                                       failure:nil];
 }
 
 - (NSString *)prefixVersionForPath:(NSString *)path {
@@ -275,7 +282,7 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
     if (!dn.length)
         return nil;
 
-    NSString *appId = [AVOSCloud getApplicationId];
+    NSString *appId = self.application.identity.ID;
     NSString *server = [NSString stringWithFormat:@"%@.%@.lncld.net", [appId substringToIndex:8], dn];
 
     return server;
@@ -367,7 +374,7 @@ found:
 }
 
 - (NSDictionary *)RTMRouterParameters {
-    NSString *appId = [AVOSCloud getApplicationId];
+    NSString *appId = self.application.identity.ID;
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
 
     parameters[@"appId"] = appId;
@@ -385,12 +392,23 @@ found:
     NSString *URLString = [self RTMRouterURLString];
     NSDictionary *parameters = [self RTMRouterParameters];
 
-    [[AVPaasClient sharedInstance] getObject:URLString withParameters:parameters block:^(NSDictionary *result, NSError *error) {
-        if (!error && result)
-            [self cacheServerTable:result forKey:LCRTMRouterCacheKey];
-        if (block)
-            block(result, error);
-    }];
+    [self.RESTClient sessionDataTaskWithMethod:@"GET"
+                                      endpoint:URLString
+                                    parameters:parameters
+                  constructingRequestWithBlock:nil
+                                       success:^(NSHTTPURLResponse *response, id responseObject) {
+                                           if (responseObject) {
+                                               [self cacheServerTable:responseObject forKey:LCRTMRouterCacheKey];
+                                           }
+                                           if (block) {
+                                               block(responseObject, nil);
+                                           }
+                                       }
+                                       failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error) {
+                                           if (block) {
+                                               block(nil, error);
+                                           }
+                                       }];
 }
 
 - (NSDictionary *)cachedRTMServerTable {

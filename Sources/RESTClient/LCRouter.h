@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "AVApplication.h"
 
+@class AVRESTClient;
+
 FOUNDATION_EXPORT NSString *const LCServiceModuleAPI;
 FOUNDATION_EXPORT NSString *const LCServiceModuleEngine;
 FOUNDATION_EXPORT NSString *const LCServiceModulePush;
@@ -19,6 +21,7 @@ FOUNDATION_EXPORT NSString *const LCRouterDidUpdateNotification;
 
 @interface LCRouter : NSObject
 
+@property (nonatomic, weak) AVRESTClient *RESTClient;
 @property (nonatomic, readonly, copy) AVApplication *application;
 
 - (instancetype)initWithApplication:(AVApplication *)application;
