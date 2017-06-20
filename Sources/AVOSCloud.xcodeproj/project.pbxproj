@@ -411,6 +411,10 @@
 		83177CDA1EF8EDAC004FB12A /* AVSDK+RESTClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CD41EF8EDAC004FB12A /* AVSDK+RESTClient.m */; };
 		83177CDB1EF8EDAC004FB12A /* AVSDK+RESTClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CD41EF8EDAC004FB12A /* AVSDK+RESTClient.m */; };
 		83177CDC1EF8EDAC004FB12A /* AVSDK+RESTClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83177CD41EF8EDAC004FB12A /* AVSDK+RESTClient.m */; };
+		83177CDF1EF900A5004FB12A /* AVOSCloudFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83F599C81EED0F610013AF6B /* AVOSCloudFoundation.framework */; };
+		83177CE21EF900B0004FB12A /* AVOSCloudFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8352BDE61EEF6F1800C513B6 /* AVOSCloudFoundation.framework */; };
+		83177CE51EF900C3004FB12A /* AVOSCloudFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8352BEAC1EEF713400C513B6 /* AVOSCloudFoundation.framework */; };
+		83177CE81EF900CE004FB12A /* AVOSCloudFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8352BE491EEF70E300C513B6 /* AVOSCloudFoundation.framework */; };
 		831E295A1D882CBB006E502B /* AVIMMessageOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 831E29581D882CBB006E502B /* AVIMMessageOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		831E295B1D882CBB006E502B /* AVIMMessageOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 831E29581D882CBB006E502B /* AVIMMessageOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		831E295C1D882CBB006E502B /* AVIMMessageOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 831E29591D882CBB006E502B /* AVIMMessageOption.m */; };
@@ -1335,6 +1339,34 @@
 			remoteGlobalIDString = 83F599C71EED0F610013AF6B;
 			remoteInfo = "Foundation-iOS";
 		};
+		83177CDD1EF9009F004FB12A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 83F599C71EED0F610013AF6B;
+			remoteInfo = "Foundation-iOS";
+		};
+		83177CE01EF900AC004FB12A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8352BD851EEF6F1800C513B6;
+			remoteInfo = "Foundation-macOS";
+		};
+		83177CE31EF900B8004FB12A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8352BE4B1EEF713400C513B6;
+			remoteInfo = "Foundation-tvOS";
+		};
+		83177CE61EF900C9004FB12A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8352BDE81EEF70E300C513B6;
+			remoteInfo = "Foundation-watchOS";
+		};
 		837D1B0F1EF4FCBF00C3F93A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
@@ -2101,6 +2133,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83177CE21EF900B0004FB12A /* AVOSCloudFoundation.framework in Frameworks */,
 				83D742111EF55B890016BB63 /* AVOSCloudCache.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2117,6 +2150,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83177CE51EF900C3004FB12A /* AVOSCloudFoundation.framework in Frameworks */,
 				83D742141EF55BA10016BB63 /* AVOSCloudCache.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2133,6 +2167,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83177CE81EF900CE004FB12A /* AVOSCloudFoundation.framework in Frameworks */,
 				83D742171EF55BAF0016BB63 /* AVOSCloudCache.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2229,6 +2264,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83177CDF1EF900A5004FB12A /* AVOSCloudFoundation.framework in Frameworks */,
 				83D7420E1EF55B720016BB63 /* AVOSCloudCache.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4450,6 +4486,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				83177CE11EF900AC004FB12A /* PBXTargetDependency */,
 				83D742101EF55B7C0016BB63 /* PBXTargetDependency */,
 			);
 			name = "RESTClient-macOS";
@@ -4487,6 +4524,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				83177CE41EF900B8004FB12A /* PBXTargetDependency */,
 				83D742131EF55B950016BB63 /* PBXTargetDependency */,
 			);
 			name = "RESTClient-tvOS";
@@ -4524,6 +4562,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				83177CE71EF900C9004FB12A /* PBXTargetDependency */,
 				83D742161EF55BAA0016BB63 /* PBXTargetDependency */,
 			);
 			name = "RESTClient-watchOS";
@@ -4747,6 +4786,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				83177CDE1EF9009F004FB12A /* PBXTargetDependency */,
 				83D7420D1EF55B690016BB63 /* PBXTargetDependency */,
 			);
 			name = "RESTClient-iOS";
@@ -6322,6 +6362,26 @@
 			isa = PBXTargetDependency;
 			target = 83F599C71EED0F610013AF6B /* Foundation-iOS */;
 			targetProxy = 83020AF31EF2412C00B649BC /* PBXContainerItemProxy */;
+		};
+		83177CDE1EF9009F004FB12A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 83F599C71EED0F610013AF6B /* Foundation-iOS */;
+			targetProxy = 83177CDD1EF9009F004FB12A /* PBXContainerItemProxy */;
+		};
+		83177CE11EF900AC004FB12A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8352BD851EEF6F1800C513B6 /* Foundation-macOS */;
+			targetProxy = 83177CE01EF900AC004FB12A /* PBXContainerItemProxy */;
+		};
+		83177CE41EF900B8004FB12A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8352BE4B1EEF713400C513B6 /* Foundation-tvOS */;
+			targetProxy = 83177CE31EF900B8004FB12A /* PBXContainerItemProxy */;
+		};
+		83177CE71EF900C9004FB12A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8352BDE81EEF70E300C513B6 /* Foundation-watchOS */;
+			targetProxy = 83177CE61EF900C9004FB12A /* PBXContainerItemProxy */;
 		};
 		837D1B101EF4FCBF00C3F93A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
