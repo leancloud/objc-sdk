@@ -7,7 +7,6 @@
 //
 
 #import "LCRouter.h"
-#import "AVOSCloud.h"
 #import "AVPaasClient.h"
 #import "LCPreferences.h"
 
@@ -81,6 +80,12 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
 
     _presetURLStringTable = [NSMutableDictionary dictionary];
 
+    _presetURLStringTable[LCServiceModuleAPI]           = _application.configuration.moduleHosts.API;
+    _presetURLStringTable[LCServiceModuleEngine]        = _application.configuration.moduleHosts.engine;
+    _presetURLStringTable[LCServiceModulePush]          = _application.configuration.moduleHosts.push;
+    _presetURLStringTable[LCServiceModuleRTM]           = _application.configuration.moduleHosts.RTM;
+    _presetURLStringTable[LCServiceModuleStatistics]    = _application.configuration.moduleHosts.statistics;
+
     _candidateAPIURLStringTable = @{
         @(LCServerLocationUCloud) : @"api.leancloud.cn",
         @(LCServerLocationQCloud) : @"e1-api.leancloud.cn",
@@ -106,12 +111,12 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
 }
 
 - (LCServerLocation)currentServerLocation {
-    AVApplication *application = self.application;
+    AVApplicationIdentity *identity = self.application.identity;
 
-    if (application.region == AVApplicationRegionUS)
+    if (identity.region == AVApplicationRegionUS)
         return LCServerLocationUS;
 
-    NSString *appId = application.ID;
+    NSString *appId = identity.ID;
 
     /* Application is an UCloud if the application id has no suffix. */
     if ([appId rangeOfString:@"-"].location == NSNotFound)
@@ -192,13 +197,13 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
 }
 
 - (void)updateInBackground {
-    AVApplication *application = self.application;
+    AVApplicationIdentity *identity = self.application.identity;
 
     /* App router 2 is unavailable in US node. */
-    if (application.region == AVApplicationRegionUS)
+    if (identity.region == AVApplicationRegionUS)
         return;
 
-    NSString *applicationId = application.ID;
+    NSString *applicationId = identity.ID;
 
     if (!applicationId) {
         AVLoggerError(AVLoggerDomainStorage, @"Cannot update router due to application id not found.");
@@ -401,15 +406,6 @@ found:
 - (NSString *)batchPathForPath:(NSString *)path {
     NSString *result = [self prefixVersionForPath:path];
     return result;
-}
-
-- (void)presetURLString:(NSString *)URLString
-       forServiceModule:(NSString *)serviceModule
-{
-    if (!serviceModule)
-        return;
-
-    _presetURLStringTable[serviceModule] = URLString;
 }
 
 @end
