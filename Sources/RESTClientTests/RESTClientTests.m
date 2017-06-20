@@ -7,6 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "AVRESTClient.h"
 
 @interface RESTClientTests : XCTestCase
 
@@ -24,16 +25,30 @@
     [super tearDown];
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
+- (void)testRequest {
+    NSString *applicationId  = @"nq0awk3lh1dpmbkziz54377mryii8ny4xvp6njoygle5nlyg";
+    NSString *applicationKey = @"6vdnmdkdi4fva9i06lt50s4mcsfhppjpzm3zf5zjc9ty4pdz";
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    AVApplicationIdentity *identity = [[AVApplicationIdentity alloc] initWithID:applicationId key:applicationKey region:AVApplicationRegionCN];
+
+    AVApplication *application = [[AVApplication alloc] initWithIdentity:identity configuration:nil];
+    AVRESTClient *RESTClient = [[AVRESTClient alloc] initWithApplication:application configuration:nil];
+
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    NSURLSessionDataTask *dataTask = [RESTClient sessionDataTaskWithMethod:@"GET"
+                                                                  endpoint:@"date"
+                                                                parameters:nil
+                                              constructingRequestWithBlock:nil
+                                                                   success:^(NSHTTPURLResponse *response, id responseObject) {
+                                                                       XCTAssertEqualObjects(responseObject[@"__type"], @"Date");
+                                                                       dispatch_semaphore_signal(semaphore);
+                                                                   }
+                                                                   failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error) {
+                                                                       XCTFail("Request failed.");
+                                                                       dispatch_semaphore_signal(semaphore);
+                                                                   }];
+    [dataTask resume];
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 }
 
 @end
