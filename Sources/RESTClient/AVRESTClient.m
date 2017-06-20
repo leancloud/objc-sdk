@@ -11,6 +11,7 @@
 #import "AVSDK+RESTClient.h"
 #import "LCRouter.h"
 #import "AFURLSessionManager.h"
+#import "LCFoundation.h"
 
 NSString *const AVHTTPHeaderFieldNameId         = @"X-LC-Id";
 NSString *const AVHTTPHeaderFieldNameKey        = @"X-LC-Key";

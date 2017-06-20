@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LCFoundation.h"
+#import "AVApplication.h"
 
 FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldNameId;
 FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldNameKey;

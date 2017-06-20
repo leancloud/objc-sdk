@@ -8,6 +8,7 @@
 
 #import "AVApplication+RESTClient.h"
 #import "AVRESTClient.h"
+#import "LCFoundation.h"
 
 @implementation AVApplication (RESTClient)
 
