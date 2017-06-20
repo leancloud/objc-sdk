@@ -8,18 +8,42 @@
 
 #import "AVApplication+Internal.h"
 
+NS_INLINE
+NSString *LCStringFromRegion(AVApplicationRegion region) {
+    NSString *result = nil;
+
+    switch (region) {
+    case AVApplicationRegionCN:
+        result = @"CN";
+        break;
+    case AVApplicationRegionUS:
+        result = @"US";
+        break;
+    }
+
+    return result;
+}
+
 @implementation AVApplication (Internal)
 
 - (NSString *)relativePath {
-    NSString *ID = self.ID;
-    NSString *environment = self.environment;
+    AVApplicationIdentity *identity = self.identity;
+
+    NSString *ID = identity.ID;
+    NSString *region = LCStringFromRegion(identity.region);
+    NSString *environment = identity.environment;
 
     if (!ID)
+        return nil;
+    if (!region)
         return nil;
     if (!environment)
         return nil;
 
-    NSString *path = [NSString stringWithFormat:@"%@/%@", ID, environment];
+    NSString *path = [[[[NSURL fileURLWithPath:ID]
+                        URLByAppendingPathComponent:region]
+                        URLByAppendingPathComponent:environment]
+                        relativePath];
 
     return path;
 }

@@ -13,12 +13,28 @@ typedef NS_ENUM(NSInteger, AVApplicationRegion) {
     AVApplicationRegionUS
 };
 
-@interface AVApplication : NSObject <NSCopying, NSSecureCoding>
+@interface AVApplicationIdentity : NSObject <NSCopying, NSSecureCoding>
 
 @property (nonatomic, readonly,   copy) NSString *ID;
 @property (nonatomic, readonly,   copy) NSString *key;
 @property (nonatomic, readonly, assign) AVApplicationRegion region;
 
-- (instancetype)initWithID:(NSString *)ID key:(NSString *)key region:(AVApplicationRegion)region;
+- (instancetype)initWithID:(NSString *)ID
+                       key:(NSString *)key
+                    region:(AVApplicationRegion)region;
+
+@end
+
+@interface AVApplicationConfiguration : NSObject <NSCopying, NSSecureCoding>
+
+@end
+
+@interface AVApplication : NSObject <NSCopying, NSSecureCoding>
+
+@property (nonatomic, readonly, copy) AVApplicationIdentity *identity;
+@property (nonatomic, readonly, copy) AVApplicationConfiguration *configuration;
+
+- (instancetype)initWithIdentity:(AVApplicationIdentity *)identity
+                   configuration:(AVApplicationConfiguration *)configuration;
 
 @end

@@ -8,9 +8,14 @@
 
 #import "AVApplication.h"
 
-@interface AVApplication ()
+@interface AVApplicationIdentity ()
 
 @property (nonatomic, copy) NSString *environment;
+
+@end
+
+@interface AVApplication ()
+
 @property (nonatomic, readonly, copy) NSString *relativePath;
 
 @end
