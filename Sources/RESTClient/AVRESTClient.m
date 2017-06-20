@@ -28,7 +28,7 @@ NSString *const AVHTTPHeaderFieldNameSignature  = @"X-LC-Sign";
 - (instancetype)initWithApplication:(AVApplication *)application
                       configuration:(id<AVRESTClientConfigurable>)configuration
 {
-    self = [self init];
+    self = [super init];
 
     if (self) {
         _application = [application copy];
