@@ -415,6 +415,12 @@
 		83177CE21EF900B0004FB12A /* AVOSCloudFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8352BDE61EEF6F1800C513B6 /* AVOSCloudFoundation.framework */; };
 		83177CE51EF900C3004FB12A /* AVOSCloudFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8352BEAC1EEF713400C513B6 /* AVOSCloudFoundation.framework */; };
 		83177CE81EF900CE004FB12A /* AVOSCloudFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8352BE491EEF70E300C513B6 /* AVOSCloudFoundation.framework */; };
+		83177CEB1EF90106004FB12A /* AVOSCloudFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83F599C81EED0F610013AF6B /* AVOSCloudFoundation.framework */; };
+		83177CEE1EF90118004FB12A /* AVOSCloudCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 837D1B661EF53CDC00C3F93A /* AVOSCloudCache.framework */; };
+		83177CF31EF903BC004FB12A /* AVOSCloudFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8352BDE61EEF6F1800C513B6 /* AVOSCloudFoundation.framework */; };
+		83177CF61EF903D6004FB12A /* AVOSCloudCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 837D1B821EF53CF800C3F93A /* AVOSCloudCache.framework */; };
+		83177CF91EF903E5004FB12A /* AVOSCloudFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8352BEAC1EEF713400C513B6 /* AVOSCloudFoundation.framework */; };
+		83177CFC1EF903F1004FB12A /* AVOSCloudCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 837D1B9E1EF53D1400C3F93A /* AVOSCloudCache.framework */; };
 		831E295A1D882CBB006E502B /* AVIMMessageOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 831E29581D882CBB006E502B /* AVIMMessageOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		831E295B1D882CBB006E502B /* AVIMMessageOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 831E29581D882CBB006E502B /* AVIMMessageOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		831E295C1D882CBB006E502B /* AVIMMessageOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 831E29591D882CBB006E502B /* AVIMMessageOption.m */; };
@@ -1367,6 +1373,48 @@
 			remoteGlobalIDString = 8352BDE81EEF70E300C513B6;
 			remoteInfo = "Foundation-watchOS";
 		};
+		83177CE91EF900FB004FB12A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 83F599C71EED0F610013AF6B;
+			remoteInfo = "Foundation-iOS";
+		};
+		83177CEC1EF90111004FB12A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 837D1B651EF53CDC00C3F93A;
+			remoteInfo = "Cache-iOS";
+		};
+		83177CF11EF903B7004FB12A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8352BD851EEF6F1800C513B6;
+			remoteInfo = "Foundation-macOS";
+		};
+		83177CF41EF903CE004FB12A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 837D1B811EF53CF800C3F93A;
+			remoteInfo = "Cache-macOS";
+		};
+		83177CF71EF903DE004FB12A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8352BE4B1EEF713400C513B6;
+			remoteInfo = "Foundation-tvOS";
+		};
+		83177CFA1EF903EC004FB12A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 837D1B9D1EF53D1400C3F93A;
+			remoteInfo = "Cache-tvOS";
+		};
 		837D1B0F1EF4FCBF00C3F93A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
@@ -2142,6 +2190,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83177CF61EF903D6004FB12A /* AVOSCloudCache.framework in Frameworks */,
+				83177CF31EF903BC004FB12A /* AVOSCloudFoundation.framework in Frameworks */,
 				837D1B0E1EF4FCBF00C3F93A /* AVOSCloudRESTClient.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2159,6 +2209,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83177CFC1EF903F1004FB12A /* AVOSCloudCache.framework in Frameworks */,
+				83177CF91EF903E5004FB12A /* AVOSCloudFoundation.framework in Frameworks */,
 				837D1B2A1EF4FCE300C3F93A /* AVOSCloudRESTClient.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2273,6 +2325,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83177CEE1EF90118004FB12A /* AVOSCloudCache.framework in Frameworks */,
+				83177CEB1EF90106004FB12A /* AVOSCloudFoundation.framework in Frameworks */,
 				83BC01DB1EF3BD6300B7E680 /* AVOSCloudRESTClient.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4505,6 +4559,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				83177CF51EF903CE004FB12A /* PBXTargetDependency */,
+				83177CF21EF903B7004FB12A /* PBXTargetDependency */,
 				837D1B101EF4FCBF00C3F93A /* PBXTargetDependency */,
 			);
 			name = "RESTClientTests-macOS";
@@ -4543,6 +4599,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				83177CFB1EF903EC004FB12A /* PBXTargetDependency */,
+				83177CF81EF903DE004FB12A /* PBXTargetDependency */,
 				837D1B2C1EF4FCE300C3F93A /* PBXTargetDependency */,
 			);
 			name = "RESTClientTests-tvOS";
@@ -4805,6 +4863,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				83177CED1EF90111004FB12A /* PBXTargetDependency */,
+				83177CEA1EF900FB004FB12A /* PBXTargetDependency */,
 				83BC01DD1EF3BD6300B7E680 /* PBXTargetDependency */,
 			);
 			name = "RESTClientTests-iOS";
@@ -6382,6 +6442,36 @@
 			isa = PBXTargetDependency;
 			target = 8352BDE81EEF70E300C513B6 /* Foundation-watchOS */;
 			targetProxy = 83177CE61EF900C9004FB12A /* PBXContainerItemProxy */;
+		};
+		83177CEA1EF900FB004FB12A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 83F599C71EED0F610013AF6B /* Foundation-iOS */;
+			targetProxy = 83177CE91EF900FB004FB12A /* PBXContainerItemProxy */;
+		};
+		83177CED1EF90111004FB12A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 837D1B651EF53CDC00C3F93A /* Cache-iOS */;
+			targetProxy = 83177CEC1EF90111004FB12A /* PBXContainerItemProxy */;
+		};
+		83177CF21EF903B7004FB12A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8352BD851EEF6F1800C513B6 /* Foundation-macOS */;
+			targetProxy = 83177CF11EF903B7004FB12A /* PBXContainerItemProxy */;
+		};
+		83177CF51EF903CE004FB12A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 837D1B811EF53CF800C3F93A /* Cache-macOS */;
+			targetProxy = 83177CF41EF903CE004FB12A /* PBXContainerItemProxy */;
+		};
+		83177CF81EF903DE004FB12A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8352BE4B1EEF713400C513B6 /* Foundation-tvOS */;
+			targetProxy = 83177CF71EF903DE004FB12A /* PBXContainerItemProxy */;
+		};
+		83177CFB1EF903EC004FB12A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 837D1B9D1EF53D1400C3F93A /* Cache-tvOS */;
+			targetProxy = 83177CFA1EF903EC004FB12A /* PBXContainerItemProxy */;
 		};
 		837D1B101EF4FCBF00C3F93A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
