@@ -25,7 +25,19 @@ typedef NS_ENUM(NSInteger, AVApplicationRegion) {
 
 @end
 
+@interface AVApplicationModuleHosts : NSObject <NSCopying, NSSecureCoding>
+
+@property (nonatomic, copy) NSString *API;
+@property (nonatomic, copy) NSString *engine;
+@property (nonatomic, copy) NSString *push;
+@property (nonatomic, copy) NSString *RTM;
+@property (nonatomic, copy) NSString *statistics;
+
+@end
+
 @interface AVApplicationConfiguration : NSObject <NSCopying, NSSecureCoding>
+
+@property (nonatomic, readonly, copy) AVApplicationModuleHosts *moduleHosts;
 
 @end
 

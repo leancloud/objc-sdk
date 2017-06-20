@@ -75,16 +75,28 @@
 
 @end
 
-@implementation AVApplicationConfiguration
+@implementation AVApplicationModuleHosts
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super init];
+
+    if (self) {
+        _API        = [aDecoder decodeObjectForKey:@"API"];
+        _engine     = [aDecoder decodeObjectForKey:@"engine"];
+        _push       = [aDecoder decodeObjectForKey:@"push"];
+        _RTM        = [aDecoder decodeObjectForKey:@"RTM"];
+        _statistics = [aDecoder decodeObjectForKey:@"statistics"];
+    }
 
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    /* TODO */
+    [aCoder encodeObject:self.API           forKey:@"API"];
+    [aCoder encodeObject:self.engine        forKey:@"engine"];
+    [aCoder encodeObject:self.push          forKey:@"push"];
+    [aCoder encodeObject:self.RTM           forKey:@"RTM"];
+    [aCoder encodeObject:self.statistics    forKey:@"statistics"];
 }
 
 + (BOOL)supportsSecureCoding {
@@ -92,7 +104,59 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    AVApplication *configuration = [[[self class] alloc] init];
+    AVApplicationModuleHosts *moduleHosts = [[[self class] alloc] init];
+
+    moduleHosts.API         = self.API;
+    moduleHosts.engine      = self.engine;
+    moduleHosts.push        = self.push;
+    moduleHosts.RTM         = self.RTM;
+    moduleHosts.statistics = self.statistics;
+
+    return moduleHosts;
+}
+
+@end
+
+@interface AVApplicationConfiguration ()
+
+@property (nonatomic, copy) AVApplicationModuleHosts *moduleHosts;
+
+@end
+
+@implementation AVApplicationConfiguration
+
+- (instancetype)init {
+    self = [super init];
+
+    if (self) {
+        _moduleHosts = [[AVApplicationModuleHosts alloc] init];
+    }
+
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super init];
+
+    if (self) {
+        _moduleHosts = [aDecoder decodeObjectForKey:@"moduleHosts"];
+    }
+
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:self.moduleHosts forKey:@"moduleHosts"];
+}
+
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
+- (id)copyWithZone:(NSZone *)zone {
+    AVApplicationConfiguration *configuration = [[[self class] alloc] init];
+
+    configuration.moduleHosts = self.moduleHosts;
 
     return configuration;
 }
