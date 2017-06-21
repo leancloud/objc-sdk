@@ -53,9 +53,9 @@ typedef enum : NSUInteger {
     AVIMURLQueryOptionSortKeys = 16
 } AVIMURLQueryOptions;
 
-NSString *const AVIMProtocolPROTOBUF1 = @"lc.protobuf.1";
-NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf.2";
-NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf.3";
+NSString *const AVIMProtocolPROTOBUF1 = @"lc.protobuf2.1";
+NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf2.2";
+NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 
 @interface AVIMCommandCarrier : NSObject
 @property(nonatomic, strong) AVIMGenericCommand *command;
