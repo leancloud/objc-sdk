@@ -9,6 +9,13 @@ Pod::Spec.new do |s|
     :file => 'LICENSE'
   }
 
+  s.platform = :ios, :osx, :tvos, :watchos
+
+  s.ios.deployment_target     = '7.0'
+  s.osx.deployment_target     = '10.9'
+  s.tvos.deployment_target    = '9.0'
+  s.watchos.deployment_target = '2.0'
+
   s.requires_arc = true
 
   s.source = {
@@ -16,166 +23,66 @@ Pod::Spec.new do |s|
     :tag => "#{s.version}"
   }
 
-  s.ios.deployment_target     = '7.0'
-  s.osx.deployment_target     = '10.9'
-  s.tvos.deployment_target    = '9.0'
-  s.watchos.deployment_target = '2.0'
+  {{#source_files}}
+  s.source_files =
+    {{{source_files}}}
+  {{/source_files}}
 
-  {{#Storage}}
-  s.subspec 'Storage' do |ss|
-    ss.platform = :ios, :osx, :tvos, :watchos
+  {{#public_header_files}}
+  s.public_header_files =
+    {{{public_header_files}}}
+  {{/public_header_files}}
 
-    ss.ios.deployment_target     = '7.0'
-    ss.osx.deployment_target     = '10.9'
-    ss.tvos.deployment_target    = '9.0'
-    ss.watchos.deployment_target = '2.0'
+  {{#osx_exclude_files}}
+  s.osx.exclude_files =
+    {{{osx_exclude_files}}}
+  {{/osx_exclude_files}}
 
-    {{#source_files}}
-    ss.source_files =
-      {{{source_files}}}
-    {{/source_files}}
+  {{#watchos_exclude_files}}
+  s.watchos.exclude_files =
+    {{{watchos_exclude_files}}}
+  {{/watchos_exclude_files}}
 
-    {{#public_header_files}}
-    ss.public_header_files =
-      {{{public_header_files}}}
-    {{/public_header_files}}
+  {{#resources}}
+  s.resources =
+    {{{resources}}}
+  {{/resources}}
 
-    {{#osx_exclude_files}}
-    ss.osx.exclude_files =
-      {{{osx_exclude_files}}}
-    {{/osx_exclude_files}}
+  {{#xcconfig}}
+  s.xcconfig = {{{xcconfig}}}
+  {{/xcconfig}}
 
-    {{#watchos_exclude_files}}
-    ss.watchos.exclude_files =
-      {{{watchos_exclude_files}}}
-    {{/watchos_exclude_files}}
+  s.ios.frameworks =
+    'CFNetwork',
+    'CoreGraphics',
+    'CoreLocation',
+    'CoreTelephony',
+    'MobileCoreServices',
+    'QuartzCore',
+    'Security',
+    'SystemConfiguration'
 
-    {{#resources}}
-    ss.resources =
-      {{{resources}}}
-    {{/resources}}
+  s.osx.frameworks =
+    'CoreLocation',
+    'CoreServices',
+    'SystemConfiguration'
 
-    {{#xcconfig}}
-    ss.xcconfig = {{{xcconfig}}}
-    {{/xcconfig}}
+  s.tvos.frameworks =
+    'CFNetwork',
+    'CoreGraphics',
+    'CoreLocation',
+    'MobileCoreServices',
+    'QuartzCore',
+    'Security'
 
-    ss.ios.frameworks =
-      'CFNetwork',
-      'CoreGraphics',
-      'CoreLocation',
-      'CoreTelephony',
-      'MobileCoreServices',
-      'QuartzCore',
-      'Security',
-      'SystemConfiguration'
+  s.watchos.frameworks =
+    'CoreGraphics',
+    'CoreLocation',
+    'MobileCoreServices',
+    'Security'
 
-    ss.osx.frameworks =
-      'CoreLocation',
-      'CoreServices',
-      'SystemConfiguration'
-
-    ss.tvos.frameworks =
-      'CFNetwork',
-      'CoreGraphics',
-      'CoreLocation',
-      'MobileCoreServices',
-      'QuartzCore',
-      'Security'
-
-    ss.watchos.frameworks =
-      'CoreGraphics',
-      'CoreLocation',
-      'MobileCoreServices',
-      'Security'
-
-    ss.libraries =
-      'icucore',
-      'sqlite3',
-      'z'
-  end
-  {{/Storage}}
-
-  {{#IM}}
-  s.subspec 'IM' do |ss|
-    ss.platform = :ios, :osx
-
-    ss.ios.deployment_target = '7.0'
-    ss.osx.deployment_target = '10.9'
-
-    {{#_ARC}}
-    ss.subspec '_ARC' do |ss|
-      ss.requires_arc = true
-      ss.dependency 'AVOSCloud/IM/_NOARC', "#{s.version}"
-
-      {{#source_files}}
-      ss.source_files =
-        {{{source_files}}}
-      {{/source_files}}
-
-      {{#public_header_files}}
-      ss.public_header_files =
-        {{{public_header_files}}}
-      {{/public_header_files}}
-
-      {{#exclude_files}}
-      ss.exclude_files =
-        {{{exclude_files}}}
-      {{/exclude_files}}
-    end
-    {{/_ARC}}
-
-    ss.subspec '_NOARC' do |ss|
-      ss.requires_arc = false
-
-      ss.source_files =
-        'AVOS/AVOSCloudIM/Protobuf/*.{h,m}',
-        'AVOS/AVOSCloudIM/Protobuf/google/protobuf/*.{h,m}',
-        'AVOS/AVOSCloudIM/Commands/MessagesProtoOrig.pbobjc.{h,m}'
-
-      ss.private_header_files =
-        'AVOS/AVOSCloudIM/Protobuf/*.h',
-        'AVOS/AVOSCloudIM/Protobuf/google/protobuf/*.h',
-        'AVOS/AVOSCloudIM/Commands/MessagesProtoOrig.pbobjc.h'
-
-      ss.preserve_paths =
-        'AVOS/AVOSCloudIM/Protobuf/google'
-
-      ss.pod_target_xcconfig = {
-        'HEADER_SEARCH_PATHS' => '"$(PODS_ROOT)/AVOSCloud/AVOS/AVOSCloudIM/Protobuf"'
-      }
-    end
-
-    ss.dependency 'AVOSCloud/Storage', "#{s.version}"
-
-    ss.libraries =
-      'icucore'
-  end
-  {{/IM}}
-
-  {{#LiveQuery}}
-  s.subspec 'LiveQuery' do |ss|
-    ss.platform = :ios, :osx
-
-    ss.ios.deployment_target = '7.0'
-    ss.osx.deployment_target = '10.9'
-
-    {{#source_files}}
-    ss.source_files =
-      {{{source_files}}}
-    {{/source_files}}
-
-    {{#public_header_files}}
-    ss.public_header_files =
-      {{{public_header_files}}}
-    {{/public_header_files}}
-
-    ss.dependency 'AVOSCloud/Storage', "#{s.version}"
-    ss.dependency 'AVOSCloud/IM', "#{s.version}"
-  end
-  {{/LiveQuery}}
-
-  s.default_subspecs =
-    'Storage',
-    'IM',
-    'LiveQuery'
+  s.libraries =
+    'icucore',
+    'sqlite3',
+    'z'
 end

@@ -125,8 +125,8 @@ module Podspec
       File.write(path, content)
     end
 
-    # Data of storage module.
-    def storageData()
+    # Generate foundtion podspec.
+    def generateAVOSCloud()
       ios_header_files      = header_files('AVOSCloud-iOS')
       osx_header_files      = header_files('AVOSCloud-macOS')
       watchos_header_files  = header_files('AVOSCloud-watchOS')
@@ -139,18 +139,23 @@ module Podspec
       osx_exclude_files     = (ios_header_files - osx_header_files)     + (ios_source_files - osx_source_files)
       watchos_exclude_files = (ios_header_files - watchos_header_files) + (ios_source_files - watchos_source_files)
 
-      {
+      template = File.read('Podspec/AVOSCloud.podspec.mustache')
+
+      podspec = Mustache.render template, {
+        'version'               => version,
         'source_files'          => "'AVOS/AVOSCloud/**/*.{h,m}'",
         'resources'             => "'AVOS/AVOSCloud/AVOSCloud_Art.inc'",
-        'public_header_files'   => file_list_string(public_header_files, 6),
-        'osx_exclude_files'     => file_list_string(osx_exclude_files, 6),
-        'watchos_exclude_files' => file_list_string(watchos_exclude_files, 6),
+        'public_header_files'   => file_list_string(public_header_files, 4),
+        'osx_exclude_files'     => file_list_string(osx_exclude_files, 4),
+        'watchos_exclude_files' => file_list_string(watchos_exclude_files, 4),
         'xcconfig'              => "{'OTHER_LDFLAGS' => '-ObjC'}"
       }
+
+      write 'AVOSCloud.podspec', podspec
     end
 
-    # Data of IM module
-    def imData()
+    # Generate IM podspec.
+    def generateAVOSCloudIM()
       header_files        = header_files('AVOSCloudIM-iOS')
       source_files        = source_files('AVOSCloudIM-iOS')
       no_arc_files        = [
@@ -160,26 +165,18 @@ module Podspec
       ]
       public_header_files = public_header_files('AVOSCloudIM-iOS')
 
-      {
+      template = File.read('Podspec/AVOSCloudIM.podspec.mustache')
+
+      podspec = Mustache.render template, {
+        'version' => version,
         '_ARC' => {
-          'source_files' => file_list_string(header_files + source_files, 8),
-          'public_header_files' => file_list_string(public_header_files, 8),
-          'exclude_files' => file_list_string(no_arc_files, 8)
+          'source_files' => file_list_string(header_files + source_files, 6),
+          'public_header_files' => file_list_string(public_header_files, 6),
+          'exclude_files' => file_list_string(no_arc_files, 6)
         }
       }
-    end
 
-    # Data of live query module.
-    def liveQueryData()
-      header_files = header_files('AVOSCloudLiveQuery-iOS')
-      source_files = source_files('AVOSCloudLiveQuery-macOS')
-
-      public_header_files = public_header_files('AVOSCloudLiveQuery-iOS')
-
-      {
-        'source_files' => "'AVOS/AVOSCloudLiveQuery/**/*.{h,m}'",
-        'public_header_files' => file_list_string(public_header_files, 6)
-      }
+      write 'AVOSCloudIM.podspec', podspec
     end
 
     # Generate crash reporting podspec.
@@ -215,22 +212,29 @@ module Podspec
       write 'AVOSCloudCrashReporting.podspec', podspec
     end
 
-    def generateAVOSCloud
-      template = File.read('Podspec/AVOSCloud.podspec.mustache')
+    # Generate live query podspec.
+    def generateAVOSCloudLiveQuery()
+      header_files = header_files('AVOSCloudLiveQuery-iOS')
+      source_files = source_files('AVOSCloudLiveQuery-macOS')
+
+      public_header_files = public_header_files('AVOSCloudLiveQuery-iOS')
+
+      template = File.read('Podspec/AVOSCloudLiveQuery.podspec.mustache')
 
       podspec = Mustache.render template, {
         'version' => version,
-        'Storage' => storageData,
-        'IM' => imData,
-        'LiveQuery' => liveQueryData
+        'source_files' => "'AVOS/AVOSCloudLiveQuery/**/*.{h,m}'",
+        'public_header_files' => file_list_string(public_header_files, 4)
       }
 
-      write 'AVOSCloud.podspec', podspec
+      write 'AVOSCloudLiveQuery.podspec', podspec
     end
 
     def generate()
       generateAVOSCloud
+      generateAVOSCloudIM
       generateAVOSCloudCrashReporting
+      generateAVOSCloudLiveQuery
     end
   end
 end
