@@ -106,7 +106,16 @@ NS_ASSUME_NONNULL_BEGIN
  * 该接口用于控制 AVIMClient 的一些细节行为。
  * @param userOptions 用户选项。
  */
-+ (void)setUserOptions:(NSDictionary *)userOptions;
++ (void)setUserOptions:(NSDictionary *)userOptions AVIM_DEPRECATED("Deprecated in v5.1.0. Do not use it any more.");
+
+/*!
+ Set what server will issues for offline messages when client did login.
+
+ @param enabled Set `YES` if you want server issues concrete offline messages.
+                Set `NO` if you want server just issues the count of offline messages in each conversation.
+                Defaults to `NO`.
+ */
++ (void)setUnreadNotificationEnabled:(BOOL)enabled;
 
 /*!
  * 设置实时通信的超时时间，默认 15 秒。

@@ -11,7 +11,7 @@
 
 @interface AVIMClient ()
 
-+ (NSDictionary *)userOptions;
++ (NSMutableDictionary *)userOptions;
 + (dispatch_queue_t)imClientQueue;
 + (BOOL)checkErrorForSignature:(AVIMSignature *)signature command:(AVIMGenericCommand *)command;
 + (void)_assertClientIdsIsValid:(NSArray *)clientIds;

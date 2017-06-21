@@ -27,6 +27,7 @@
 #import "AVIMCommandCommon.h"
 #import "LCObserver.h"
 #import "SDMacros.h"
+#import "AVIMUserOptions.h"
 
 #import <objc/runtime.h>
 #import <libkern/OSAtomic.h>
@@ -1305,17 +1306,42 @@ static BOOL AVIMClientHasInstantiated = NO;
     [AVIMRuntimeHelper callMethodInMainThreadWithTarget:_delegate selector:@selector(imClientResumed:) arguments:arguments];
 }
 
-static NSDictionary *AVIMUserOptions = nil;
+- (void)receiveError:(NSNotification *)notification {
+    if ([_delegate respondsToSelector:@selector(imClientPaused:error:)]) {
+        NSError *error = [notification.userInfo objectForKey:@"error"];
+        
+        [self receivePausedWithError:error];
+    } else if ([_delegate respondsToSelector:@selector(imClientPaused:)]) {
+        [self receivePaused];
+    }
+}
+
++ (NSMutableDictionary *)userOptions {
+    static dispatch_once_t onceToken;
+    static NSMutableDictionary *userOptions;
+
+    dispatch_once(&onceToken, ^{
+        userOptions = [NSMutableDictionary dictionary];
+    });
+
+    return userOptions;
+}
 
 + (void)setUserOptions:(NSDictionary *)userOptions {
     if (AVIMClientHasInstantiated) {
         [NSException raise:NSInternalInconsistencyException format:@"AVIMClient user options should be set before instantiation"];
     }
-    AVIMUserOptions = userOptions;
+
+    if (!userOptions)
+        return;
+
+    [[self userOptions] addEntriesFromDictionary:userOptions];
 }
 
-+ (NSDictionary *)userOptions {
-    return AVIMUserOptions;
++ (void)setUnreadNotificationEnabled:(BOOL)enabled {
+    [self setUserOptions:@{
+        AVIMUserOptionUseUnread: @(enabled)
+    }];
 }
 
 @end
