@@ -268,6 +268,23 @@ NS_ASSUME_NONNULL_BEGIN
            callback:(AVIMBooleanResultBlock)callback;
 
 /*!
+ Replace a message you sent with a new message.
+
+ @param oldMessage The message you've sent which will be replaced by newMessage.
+ @param newMessage A new message.
+ @param callback   Callback of message update.
+ */
+- (void)updateMessage:(AVIMMessage *)oldMessage toNewMessage:(AVIMMessage *)newMessage callback:(AVIMBooleanResultBlock)callback;
+
+/*!
+ Recall a message.
+
+ @param oldMessage The message you've sent which will be replaced by newMessage.
+ @param callback   Callback of message update.
+ */
+- (void)recallMessage:(AVIMMessage *)oldMessage callback:(AVIMBooleanResultBlock)callback;
+
+/*!
  从服务端拉取该会话的最近 limit 条消息。
  @param limit 返回结果的数量，默认 20 条，最多 1000 条。
  @param callback 查询结果回调。
