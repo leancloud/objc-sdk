@@ -38,7 +38,7 @@
     @"------ END --------------------------------\n" \
     @"\n"
 
-static NSTimeInterval AVIMWebSocketDefaultTimeoutInterval = 15.0;
+static NSTimeInterval AVIMWebSocketDefaultTimeoutInterval = 30.0;
 
 typedef enum : NSUInteger {
     //mutually exclusive
