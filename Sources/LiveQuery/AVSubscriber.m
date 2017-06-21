@@ -145,20 +145,18 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 
 - (AVIMGenericCommand *)makeLoginCommand {
     AVIMGenericCommand *command = [[AVIMGenericCommand alloc] init];
-    AVIMLoginCommand *loginCommand = [[AVIMLoginCommand alloc] init];
 
     command.cmd             = AVIMCommandType_Login;
     command.appId           = [AVConfiguration sharedInstance].applicationId;
     command.installationId  = self.identifier;
     command.service         = AVServiceTypeLiveQuery;
-    command.loginMessage    = loginCommand;
     command.needResponse    = YES;
 
     return command;
 }
 
 - (BOOL)isLoggedInCommand:(AVIMGenericCommand *)command {
-    BOOL isLoggedIn = (command && command.loginMessage.extendCmd == AVIMExtendLoginCommandType_Loggedin);
+    BOOL isLoggedIn = (command && command.cmd == AVIMCommandType_Loggedin);
     return isLoggedIn;
 }
 
