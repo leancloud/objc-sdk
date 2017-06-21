@@ -88,7 +88,7 @@
 
 + (void)callFunctionInBackground:(NSString *)function withParameters:(NSDictionary *)parameters block:(AVIdResultBlock)block
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSError *error;
         id result = [[self class] callFunction:function withParameters:parameters error:&error];
         [AVUtils callIdResultBlock:block object:result error:error];
