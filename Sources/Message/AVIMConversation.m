@@ -864,6 +864,19 @@ static dispatch_queue_t messageCacheOperationQueue;
     });
 }
 
+- (void)updateMessage:(AVIMMessage *)oldMessage
+         toNewMessage:(AVIMMessage *)newMessage
+             callback:(AVIMBooleanResultBlock)callback
+{
+    /* TODO */
+}
+
+- (void)recallMessage:(AVIMMessage *)oldMessage
+             callback:(AVIMBooleanResultBlock)callback
+{
+    /* TODO */
+}
+
 - (void)updateConversationAfterSendMessage:(AVIMMessage *)message {
     NSDate *messageSentAt = [NSDate dateWithTimeIntervalSince1970:(message.sendTimestamp / 1000.0)];
     self.lastMessageAt = messageSentAt;
