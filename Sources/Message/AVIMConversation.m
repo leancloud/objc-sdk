@@ -864,11 +864,63 @@ static dispatch_queue_t messageCacheOperationQueue;
     });
 }
 
+- (void)sendCommand:(AVIMGenericCommand *)command {
+    [self.imClient sendCommand:command];
+}
+
+- (AVIMGenericCommand *)patchCommandWithOldMessage:(AVIMMessage *)oldMessage
+                                        newMessage:(AVIMMessage *)newMessage
+{
+    AVIMGenericCommand *command = [[AVIMGenericCommand alloc] init];
+
+    command.needResponse = YES;
+    command.cmd = AVIMCommandType_Patch;
+    command.op = AVIMOpType_Modify;
+    command.peerId = self.clientId;
+
+    AVIMPatchItem *patchItem = [[AVIMPatchItem alloc] init];
+
+    patchItem.cid = self.conversationId;
+    patchItem.mid = oldMessage.messageId;
+    patchItem.timestamp = oldMessage.sendTimestamp;
+    patchItem.data_p = newMessage.payload;
+
+    NSMutableArray *patchesArray = @[patchItem];
+    AVIMPatchCommand *patchMessage = [[AVIMPatchCommand alloc] init];
+
+    patchMessage.patchesArray = patchesArray;
+    command.patchMessage = patchMessage;
+
+    return command;
+}
+
 - (void)updateMessage:(AVIMMessage *)oldMessage
          toNewMessage:(AVIMMessage *)newMessage
              callback:(AVIMBooleanResultBlock)callback
 {
-    /* TODO */
+    if (!newMessage) {
+        NSError *error = [AVErrorUtils errorWithCode:kAVIMErrorMessageNotFound errorText:@"Cannot update a message to nil."];
+        [AVUtils callBooleanResultBlock:callback error:error];
+        return;
+    }
+    if (!oldMessage.messageId) {
+        NSError *error = [AVErrorUtils errorWithCode:kAVIMErrorMessageNotFound errorText:@"Cannot find a message to update."];
+        [AVUtils callBooleanResultBlock:callback error:error];
+        return;
+    }
+
+    AVIMGenericCommand *patchCommand = [self patchCommandWithOldMessage:oldMessage
+                                                             newMessage:newMessage];
+
+    patchCommand.callback = ^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
+        if (error) {
+            [AVUtils callBooleanResultBlock:callback error:error];
+            return;
+        }
+        [AVUtils callBooleanResultBlock:callback error:nil];
+    };
+
+    [self sendCommand:patchCommand];
 }
 
 - (void)recallMessage:(AVIMMessage *)oldMessage
@@ -887,7 +939,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (NSArray *)takeContinuousMessages:(NSArray *)messages {
     NSMutableArray *continuousMessages = [NSMutableArray array];
-    
+
     for (AVIMMessage *message in messages.reverseObjectEnumerator) {
         if (!message.breakpoint) {
             [continuousMessages insertObject:message atIndex:0];
