@@ -39,6 +39,10 @@ static dispatch_queue_t defaultClientAccessQueue = NULL;
 
 static const NSUInteger kDistinctMessageIdArraySize = 10;
 
+typedef NS_ENUM(NSUInteger, LCIMClientSessionOptions) {
+    LCIMClientSessionEnableMessagePatch = 1 << 0
+};
+
 NS_INLINE
 BOOL isValidTag(NSString *tag) {
     return tag && ![tag isEqualToString:LCIMTagDefault];
@@ -390,8 +394,12 @@ static BOOL AVIMClientHasInstantiated = NO;
             sessionCommand.tag = tag;
         }
     }
-    [genericCommand avim_addRequiredKeyWithCommand:sessionCommand];
+
+    sessionCommand.configBitmap = LCIMClientSessionEnableMessagePatch;
+
+    genericCommand.sessionMessage = sessionCommand;
     genericCommand.callback = callback;
+
     return genericCommand;
 }
 
