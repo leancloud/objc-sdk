@@ -903,6 +903,23 @@ static dispatch_queue_t messageCacheOperationQueue;
     return [self.conversationId isEqualToString:message.conversationId];
 }
 
+- (void)didUpdateMessage:(AVIMMessage *)oldMessage
+            toNewMessage:(AVIMMessage *)newMessage
+{
+    newMessage.messageId            = oldMessage.messageId;
+    newMessage.clientId             = oldMessage.clientId;
+    newMessage.localClientId        = oldMessage.localClientId;
+    newMessage.conversationId       = oldMessage.conversationId;
+    newMessage.sendTimestamp        = oldMessage.sendTimestamp;
+    newMessage.readTimestamp        = oldMessage.readTimestamp;
+    newMessage.deliveredTimestamp   = oldMessage.deliveredTimestamp;
+    newMessage.offline              = oldMessage.offline;
+    newMessage.status               = oldMessage.status;
+
+    LCIMMessageCache *messageCache = [self messageCache];
+    [messageCache updateMessage:newMessage forConversationId:self.conversationId];
+}
+
 - (void)updateMessage:(AVIMMessage *)oldMessage
          toNewMessage:(AVIMMessage *)newMessage
              callback:(AVIMBooleanResultBlock)callback
@@ -926,6 +943,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             [AVUtils callBooleanResultBlock:callback error:error];
             return;
         }
+        [self didUpdateMessage:oldMessage toNewMessage:newMessage];
         [AVUtils callBooleanResultBlock:callback error:nil];
     };
 
