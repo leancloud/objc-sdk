@@ -360,6 +360,23 @@ static BOOL AVIMClientHasInstantiated = NO;
     return socketWrapper;
 }
 
+- (int64_t)lastPatchTimestamp {
+    @synchronized (self) {
+        if (_lastPatchTimestamp > 0)
+            return _lastPatchTimestamp;
+
+        _lastPatchTimestamp = [[NSDate date] timeIntervalSince1970] * 1000;
+        return _lastPatchTimestamp;
+    }
+}
+
+- (void)updateLastPatchTimestamp:(int64_t)patchTimestamp {
+    @synchronized (self) {
+        if (patchTimestamp > _lastPatchTimestamp)
+            _lastPatchTimestamp = patchTimestamp;
+    }
+}
+
 - (AVIMGenericCommand *)openCommandWithAppId:(NSString *)appId
                                     clientId:(NSString *)clientId
                                          tag:(NSString *)tag
@@ -396,6 +413,7 @@ static BOOL AVIMClientHasInstantiated = NO;
     }
 
     sessionCommand.configBitmap = LCIMClientSessionEnableMessagePatch;
+    sessionCommand.lastPatchTime = self.lastPatchTimestamp;
 
     genericCommand.sessionMessage = sessionCommand;
     genericCommand.callback = callback;
