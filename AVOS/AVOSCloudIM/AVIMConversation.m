@@ -894,6 +894,15 @@ static dispatch_queue_t messageCacheOperationQueue;
     return command;
 }
 
+- (BOOL)containsMessage:(AVIMMessage *)message {
+    if (!message.messageId)
+        return NO;
+    if (!message.conversationId)
+        return NO;
+
+    return [self.conversationId isEqualToString:message.conversationId];
+}
+
 - (void)updateMessage:(AVIMMessage *)oldMessage
          toNewMessage:(AVIMMessage *)newMessage
              callback:(AVIMBooleanResultBlock)callback
@@ -903,7 +912,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         [AVUtils callBooleanResultBlock:callback error:error];
         return;
     }
-    if (!oldMessage.messageId) {
+    if (![self containsMessage:oldMessage]) {
         NSError *error = [AVErrorUtils errorWithCode:kAVIMErrorMessageNotFound errorText:@"Cannot find a message to update."];
         [AVUtils callBooleanResultBlock:callback error:error];
         return;
