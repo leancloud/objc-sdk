@@ -29,6 +29,14 @@ enum : AVIMMessageSendOption {
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol AVIMConversationDelegate <NSObject>
+
+- (void)conversation:(AVIMConversation *)conversation
+             message:(AVIMMessage *)originalMessage
+    hasBeenUpdatedTo:(AVIMMessage *)newMessage;
+
+@end
+
 @interface AVIMConversation : NSObject
 
 /**
@@ -114,6 +122,10 @@ NS_ASSUME_NONNULL_BEGIN
  *  The AVIMClient object which this conversation belongs to.
  */
 @property (nonatomic, weak, readonly, nullable)   AVIMClient   *imClient;
+
+- (void)addDelegate:(id<AVIMConversationDelegate>)delegate;
+
+- (void)removeDelegate:(id<AVIMConversationDelegate>)delegate;
 
 /**
  * Add custom property for conversation.
