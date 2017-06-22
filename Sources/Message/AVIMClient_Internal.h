@@ -29,6 +29,8 @@
 @property (nonatomic, copy)   NSString              *tag;
 @property (nonatomic, assign) BOOL                   onceOpened;
 
+@property (nonatomic, assign) int64_t                lastPatchTimestamp;
+
 - (void)setStatus:(AVIMClientStatus)status;
 - (AVIMConversation *)conversationWithId:(NSString *)conversationId;
 - (void)sendCommand:(AVIMGenericCommand *)command;
