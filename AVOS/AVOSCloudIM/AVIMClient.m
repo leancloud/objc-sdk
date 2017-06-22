@@ -840,6 +840,9 @@ static BOOL AVIMClientHasInstantiated = NO;
         case AVIMCommandType_Rcp:
             [self processReceiptCommand:command];
             break;
+        case AVIMCommandType_Patch:
+            [self processPatchCommand:command];
+            break;
             
         default:
             break;
@@ -1204,6 +1207,22 @@ static BOOL AVIMClientHasInstantiated = NO;
                 });
             }
         }
+    }
+}
+
+- (void)processPatchCommand:(AVIMGenericCommand *)command {
+    AVIMOpType op = command.op;
+
+    if (op == AVIMOpType_Modify) {
+        [self processMessagePatchCommand:command.patchMessage];
+    }
+}
+
+- (void)processMessagePatchCommand:(AVIMPatchCommand *)command {
+    NSArray<AVIMPatchItem *> *patchItems = command.patchesArray;
+
+    for (AVIMPatchItem *patchItem in patchItems) {
+        [self updateLastPatchTimestamp:patchItem.patchTimestamp];
     }
 }
 
