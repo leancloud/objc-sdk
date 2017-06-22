@@ -57,6 +57,8 @@ do {                                                                            
 
 @property (nonatomic, strong) NSMutableDictionary *properties;
 
+@property (nonatomic, strong) NSHashTable<id<AVIMConversationDelegate>> *delegates;
+
 - (instancetype)initWithConversationId:(NSString *)conversationId;
 - (void)setConversationId:(NSString *)conversationId;
 - (void)setMembers:(NSArray *)members;

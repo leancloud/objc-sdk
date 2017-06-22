@@ -96,10 +96,24 @@ static dispatch_queue_t messageCacheOperationQueue;
     _properties = [NSMutableDictionary dictionary];
     _propertiesForUpdate = [NSMutableDictionary dictionary];
 
+    _delegates = [NSHashTable weakObjectsHashTable];
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(propertyDidUpdate:)
                                                  name:LCIMConversationPropertyUpdateNotification
                                                object:nil];
+}
+
+- (void)addDelegate:(id<AVIMConversationDelegate>)delegate {
+    @synchronized(_delegates) {
+        [_delegates addObject:delegate];
+    }
+}
+
+- (void)removeDelegate:(id<AVIMConversationDelegate>)delegate {
+    @synchronized(_delegates) {
+        [_delegates removeObject:delegate];
+    }
 }
 
 - (void)dealloc {
