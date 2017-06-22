@@ -25,8 +25,6 @@
 #define LCIM_OUT_COMMAND_LOG_FORMAT \
     @"\n\n" \
     @"------ BEGIN LeanCloud IM Out Command ------\n" \
-    @"cmd: %@\n"                                      \
-    @"type: %@\n"                                     \
     @"content: %@\n"                                  \
     @"------ END ---------------------------------\n" \
     @"\n"
@@ -590,9 +588,8 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 }
 
 - (void)sendCommand:(AVIMGenericCommand *)genericCommand {
-    LCIMMessage *messageCommand = [genericCommand avim_messageCommand];
     BOOL needResponse = genericCommand.needResponse;
-    if (messageCommand && _webSocket.readyState == AVIM_OPEN) {
+    if (_webSocket.readyState == AVIM_OPEN) {
         if (needResponse) {
             [genericCommand avim_addOrRefreshSerialId];
             [self enqueueCommand:genericCommand];
@@ -625,7 +622,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
             [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_ERROR object:self userInfo:@{@"error": error}];
         }
     }
-    AVLoggerInfo(AVLoggerDomainIM, LCIM_OUT_COMMAND_LOG_FORMAT, [AVIMCommandFormatter commandType:genericCommand.cmd], [genericCommand avim_messageClass], [genericCommand avim_description] );
+    AVLoggerInfo(AVLoggerDomainIM, LCIM_OUT_COMMAND_LOG_FORMAT, [genericCommand avim_description] );
 }
 
 - (void)sendPing {
