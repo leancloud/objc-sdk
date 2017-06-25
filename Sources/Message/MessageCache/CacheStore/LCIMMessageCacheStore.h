@@ -25,6 +25,8 @@
 
 - (void)updateMessageWithoutBreakpoint:(AVIMMessage *)message;
 
+- (void)updateEntries:(NSDictionary<NSString *, id> *)entries forMessageId:(NSString *)messageId;
+
 - (void)deleteMessageForId:(NSString *)messageId;
 
 - (BOOL)containMessage:(AVIMMessage *)message;

@@ -80,6 +80,10 @@
 
         [LCDatabaseMigration migrationWithBlock:^(FMDatabase *db) {
             [db executeUpdate:@"ALTER TABLE message ADD COLUMN read_timestamp REAL"];
+        }],
+
+        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
+            [db executeUpdate:@"ALTER TABLE message ADD COLUMN patch_timestamp REAL"];
         }]
     ]];
 }

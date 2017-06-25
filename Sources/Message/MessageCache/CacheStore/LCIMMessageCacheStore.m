@@ -45,6 +45,22 @@
     return [NSNumber numberWithDouble:message.readTimestamp];
 }
 
+- (NSNumber *)patchTimestampForMessage:(AVIMMessage *)message {
+    double timestamp = 0;
+
+    if (message.updatedAt)
+        timestamp = [message.updatedAt timeIntervalSince1970] * 1000.0;
+
+    return [NSNumber numberWithDouble:timestamp];
+}
+
+- (NSDate *)dateFromTimestamp:(double)timestamp {
+    if (!timestamp)
+        return nil;
+
+    return [NSDate dateWithTimeIntervalSince1970:timestamp / 1000.0];
+}
+
 - (NSTimeInterval)currentTimestamp {
     return [[NSDate date] timeIntervalSince1970] * 1000;
 }
@@ -55,6 +71,7 @@
         [self timestampForMessage:message],
         [self receiptTimestampForMessage:message],
         [self readTimestampForMessage:message],
+        [self patchTimestampForMessage:message],
         [message.payload dataUsingEncoding:NSUTF8StringEncoding],
         @(message.status),
         self.conversationId,
@@ -70,6 +87,7 @@
         [self timestampForMessage:message],
         [self receiptTimestampForMessage:message],
         [self readTimestampForMessage:message],
+        [self patchTimestampForMessage:message],
         [message.payload dataUsingEncoding:NSUTF8StringEncoding],
         @(message.status),
         @(NO)
@@ -132,6 +150,37 @@
     LCIM_OPEN_DATABASE(db, ({
         NSArray *args = [self updationRecordForMessage:message];
         [db executeUpdate:LCIM_SQL_UPDATE_MESSAGE withArgumentsInArray:args];
+    }));
+}
+
+- (void)updateEntries:(NSDictionary<NSString *,id> *)entries forMessageId:(NSString *)messageId {
+    if (!messageId)
+        return;
+    if (!entries.count)
+        return;
+
+    NSMutableArray *keys   = [NSMutableArray array];
+    NSMutableArray *values = [NSMutableArray array];
+
+    for (NSString *key in entries) {
+        [keys addObject:key];
+        [values addObject:entries[key]];
+    }
+
+    NSArray *assignmentPairs = ({
+        NSMutableArray *pairs = [NSMutableArray array];
+        for (NSString *key in keys)
+            [pairs addObject:[NSString stringWithFormat:@"%@ = ?", key]];
+        pairs;
+    });
+    NSString *assignmentClause = [assignmentPairs componentsJoinedByString:@", "];
+    NSString *statement = [NSString stringWithFormat:LCIM_SQL_UPDATE_MESSAGE_ENTRIES_FMT, assignmentClause];
+
+    [values addObject:self.conversationId];
+    [values addObject:messageId];
+
+    LCIM_OPEN_DATABASE(db, ({
+        [db executeUpdate:statement withArgumentsInArray:values];
     }));
 }
 
@@ -235,6 +284,7 @@
     message.sendTimestamp      = [record longLongIntForColumn:LCIM_FIELD_TIMESTAMP];
     message.deliveredTimestamp = [record longLongIntForColumn:LCIM_FIELD_RECEIPT_TIMESTAMP];
     message.readTimestamp      = [record longLongIntForColumn:LCIM_FIELD_READ_TIMESTAMP];
+    message.updatedAt          = [self dateFromTimestamp:[record doubleForColumn:LCIM_FIELD_PATCH_TIMESTAMP]];
     message.content            = payload;
     message.status             = [record intForColumn:LCIM_FIELD_STATUS];
     message.breakpoint         = [record boolForColumn:LCIM_FIELD_BREAKPOINT];

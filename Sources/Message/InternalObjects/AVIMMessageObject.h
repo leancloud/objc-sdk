@@ -19,6 +19,7 @@
 @property (nonatomic,   copy) NSString          *content;
 @property (nonatomic, assign) int64_t            sendTimestamp;
 @property (nonatomic, assign) int64_t            deliveredTimestamp;
-@property (nonatomic, assign) int64_t           readTimestamp;
+@property (nonatomic, assign) int64_t            readTimestamp;
+@property (nonatomic,   copy) NSDate            *updatedAt;
 
 @end

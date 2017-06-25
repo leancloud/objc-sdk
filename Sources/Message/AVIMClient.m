@@ -21,6 +21,7 @@
 #import "AVIMConversationQuery_Internal.h"
 #import "AVObjectUtils.h"
 #import "AVUtils.h"
+#import "LCIMMessageCacheStoreSQL.h"
 #import "LCIMMessageCacheStore.h"
 #import "LCIMConversationCache.h"
 #import "LCIMClientSessionTokenCacheStore.h"
@@ -898,6 +899,9 @@ static BOOL AVIMClientHasInstantiated = NO;
     message.hasMore = directCommand.hasMore;
     message.localClientId = self.clientId;
     message.transient = directCommand.transient;
+
+    if (directCommand.hasPatchTimestamp)
+        message.updatedAt = [NSDate dateWithTimeIntervalSince1970:(directCommand.patchTimestamp / 1000.0)];
     
     [self receiveMessage:message];
     [self sendAckCommandAccordingToDirectCommand:directCommand andGenericCommand:genericCommand];
@@ -1229,7 +1233,27 @@ static BOOL AVIMClientHasInstantiated = NO;
 
     for (AVIMPatchItem *patchItem in patchItems) {
         [self updateLastPatchTimestamp:patchItem.patchTimestamp];
+        [self updateMessageCacheForPatchItem:patchItem];
     }
+}
+
+- (void)updateMessageCacheForPatchItem:(AVIMPatchItem *)patchItem {
+    NSString *conversationId = patchItem.cid;
+    NSString *messageId      = patchItem.mid;
+
+    LCIMMessageCacheStore *messageCacheStore = [self messageCacheStoreForConversationId:conversationId];
+    AVIMMessage *message = [messageCacheStore messageForId:messageId];
+
+    if (!message)
+        return;
+
+    NSDictionary<NSString *, id> *entries = @{
+        LCIM_FIELD_PAYLOAD: patchItem.data_p,
+        LCIM_FIELD_PATCH_TIMESTAMP: @((double)patchItem.patchTimestamp)
+    };
+
+    [messageCacheStore updateEntries:entries
+                        forMessageId:messageId];
 }
 
 - (void)array:(NSMutableArray *)array addObject:(id)object {
