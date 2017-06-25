@@ -1234,6 +1234,7 @@ static BOOL AVIMClientHasInstantiated = NO;
     for (AVIMPatchItem *patchItem in patchItems) {
         [self updateLastPatchTimestamp:patchItem.patchTimestamp];
         [self updateMessageCacheForPatchItem:patchItem];
+        [self sendACKForPatchItem:patchItem];
     }
 }
 
@@ -1254,6 +1255,23 @@ static BOOL AVIMClientHasInstantiated = NO;
 
     [messageCacheStore updateEntries:entries
                         forMessageId:messageId];
+}
+
+- (void)sendACKForPatchItem:(AVIMPatchItem *)patchItem {
+    AVIMGenericCommand *command = [[AVIMGenericCommand alloc] init];
+
+    command.appId  = [AVOSCloud getApplicationId];
+    command.peerId = self.clientId;
+
+    command.cmd = AVIMCommandType_Patch;
+    command.op  = AVIMOpType_Modified;
+
+    AVIMPatchCommand *patchMessage = [[AVIMPatchCommand alloc] init];
+    patchMessage.lastPatchTime = self.lastPatchTimestamp;
+
+    command.patchMessage = patchMessage;
+
+    [self sendCommand:command];
 }
 
 - (void)array:(NSMutableArray *)array addObject:(id)object {
