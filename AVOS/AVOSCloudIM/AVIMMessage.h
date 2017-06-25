@@ -88,6 +88,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign, readonly) BOOL transient;
 
+/*!
+ The message update time.
+ */
+@property (nonatomic, strong, readonly) NSDate *updatedAt;
+
 - (nullable NSString *)payload;
 
 /*!

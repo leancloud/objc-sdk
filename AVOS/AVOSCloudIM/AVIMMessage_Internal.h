@@ -38,6 +38,11 @@
 @property (nonatomic, assign) BOOL transient;
 
 /*!
+ The message update time.
+ */
+@property (nonatomic, strong) NSDate *updatedAt;
+
+/*!
  * Payload of current message, it is a JSON string or plain text message
  */
 - (NSString *)payload;

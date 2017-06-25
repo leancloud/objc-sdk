@@ -1121,6 +1121,10 @@ static dispatch_queue_t messageCacheOperationQueue;
                     message.sendTimestamp = [logsItem timestamp];
                     message.clientId = [logsItem from];
                     message.messageId = [logsItem msgId];
+
+                    if (logsItem.hasPatchTimestamp)
+                        message.updatedAt = [NSDate dateWithTimeIntervalSince1970:(logsItem.patchTimestamp / 1000.0)];
+
                     [messages addObject:message];
                 }
                 self.lastMessage = messages.lastObject;
