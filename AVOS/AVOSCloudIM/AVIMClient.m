@@ -1219,6 +1219,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 
     if (op == AVIMOpType_Modify) {
         [self processMessagePatchCommand:command.patchMessage];
+        [self sendACKForPatchCommand:command];
     }
 }
 
@@ -1229,7 +1230,6 @@ static BOOL AVIMClientHasInstantiated = NO;
         [self updateLastPatchTimestamp:patchItem.patchTimestamp];
         [self updateMessageCacheForPatchItem:patchItem];
         [self postNotificationForPatchItem:patchItem];
-        [self sendACKForPatchItem:patchItem];
     }
 }
 
@@ -1260,7 +1260,7 @@ static BOOL AVIMClientHasInstantiated = NO;
                                                       userInfo:userInfo];
 }
 
-- (void)sendACKForPatchItem:(AVIMPatchItem *)patchItem {
+- (void)sendACKForPatchCommand:(AVIMGenericCommand *)inCommand {
     AVIMGenericCommand *command = [[AVIMGenericCommand alloc] init];
 
     command.appId  = [AVOSCloud getApplicationId];
