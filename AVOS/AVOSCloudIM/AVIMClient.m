@@ -1228,6 +1228,7 @@ static BOOL AVIMClientHasInstantiated = NO;
     for (AVIMPatchItem *patchItem in patchItems) {
         [self updateLastPatchTimestamp:patchItem.patchTimestamp];
         [self updateMessageCacheForPatchItem:patchItem];
+        [self postNotificationForPatchItem:patchItem];
         [self sendACKForPatchItem:patchItem];
     }
 }
@@ -1249,6 +1250,14 @@ static BOOL AVIMClientHasInstantiated = NO;
 
     [messageCacheStore updateEntries:entries
                         forMessageId:messageId];
+}
+
+- (void)postNotificationForPatchItem:(AVIMPatchItem *)patchItem {
+    NSDictionary *userInfo = @{ @"patchItem": patchItem };
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:LCIMConversationMessagePatchNotification
+                                                        object:self
+                                                      userInfo:userInfo];
 }
 
 - (void)sendACKForPatchItem:(AVIMPatchItem *)patchItem {

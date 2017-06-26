@@ -54,6 +54,8 @@ NSString *LCIMConversationPropertyNameKey = @"propertyName";
 NSString *LCIMConversationPropertyValueKey = @"propertyValue";
 NSNotificationName LCIMConversationPropertyUpdateNotification = @"LCIMConversationPropertyUpdateNotification";
 
+NSNotificationName LCIMConversationMessagePatchNotification = @"LCIMConversationMessagePatchNotification";
+
 @interface AVIMConversation()
 
 @property (nonatomic, strong) NSMutableDictionary *propertiesForUpdate;
@@ -102,6 +104,11 @@ static dispatch_queue_t messageCacheOperationQueue;
                                              selector:@selector(propertyDidUpdate:)
                                                  name:LCIMConversationPropertyUpdateNotification
                                                object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceivePatchItem:)
+                                                 name:LCIMConversationMessagePatchNotification
+                                               object:nil];
 }
 
 - (void)addDelegate:(id<AVIMConversationDelegate>)delegate {
@@ -145,6 +152,43 @@ static dispatch_queue_t messageCacheOperationQueue;
         [AVIMRuntimeHelper callMethodInMainThreadWithTarget:client.delegate
                                                    selector:delegateMethod
                                                   arguments:@[self, propertyName]];
+}
+
+- (void)didReceivePatchItem:(NSNotification *)notification {
+    if (!self.conversationId)
+        return;
+    if (notification.object != self.imClient)
+        return;
+
+    NSDictionary *userInfo = notification.userInfo;
+    AVIMPatchItem *patchItem = userInfo[@"patchItem"];
+
+    if (![patchItem.cid isEqualToString:self.conversationId])
+        return;
+
+    NSString *messageId = patchItem.mid;
+    LCIMMessageCacheStore *messageCacheStore = [self messageCacheStore];
+
+    AVIMMessage *message = [messageCacheStore messageForId:messageId];
+
+    if (!message)
+        return;
+
+    if ([message.messageId isEqualToString:self.lastMessage.messageId])
+        self.lastMessage = message;
+
+    [self callDelegateMethod:@selector(conversation:messageHasBeenUpdated:)
+               withArguments:@[self, message]];
+}
+
+- (void)callDelegateMethod:(SEL)method withArguments:(NSArray *)arguments {
+    NSArray<id<AVIMConversationDelegate>> *delegates = [self.delegates allObjects];
+
+    for (id<AVIMConversationDelegate> delegate in delegates) {
+        [AVIMRuntimeHelper callMethodInMainThreadWithTarget:delegate
+                                                   selector:method
+                                                  arguments:arguments];
+    }
 }
 
 - (NSString *)clientId {
