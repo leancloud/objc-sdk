@@ -963,6 +963,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (void)didUpdateMessage:(AVIMMessage *)oldMessage
             toNewMessage:(AVIMMessage *)newMessage
+            patchCommand:(AVIMPatchCommand *)command
 {
     newMessage.messageId            = oldMessage.messageId;
     newMessage.clientId             = oldMessage.clientId;
@@ -973,6 +974,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     newMessage.deliveredTimestamp   = oldMessage.deliveredTimestamp;
     newMessage.offline              = oldMessage.offline;
     newMessage.status               = oldMessage.status;
+    newMessage.updatedAt            = [NSDate dateWithTimeIntervalSince1970:command.lastPatchTime / 1000.0];
 
     LCIMMessageCache *messageCache = [self messageCache];
     [messageCache updateMessage:newMessage forConversationId:self.conversationId];
@@ -1001,7 +1003,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             [AVUtils callBooleanResultBlock:callback error:error];
             return;
         }
-        [self didUpdateMessage:oldMessage toNewMessage:newMessage];
+        [self didUpdateMessage:oldMessage toNewMessage:newMessage patchCommand:inCommand.patchMessage];
         [AVUtils callBooleanResultBlock:callback error:nil];
     };
 
