@@ -41,6 +41,8 @@ do {                                                                            
       userInfo:userInfo];                                                           \
 } while(0)
 
+FOUNDATION_EXPORT NSNotificationName LCIMConversationMessagePatchNotification;
+
 @interface AVIMConversation ()
 
 @property (nonatomic, copy)   NSString     *name;

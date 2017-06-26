@@ -31,9 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol AVIMConversationDelegate <NSObject>
 
-- (void)conversation:(AVIMConversation *)conversation
-             message:(AVIMMessage *)originalMessage
-    hasBeenUpdatedTo:(AVIMMessage *)newMessage;
+- (void)conversation:(AVIMConversation *)conversation messageHasBeenUpdated:(AVIMMessage *)message;
 
 @end
 
