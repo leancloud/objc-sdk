@@ -15,7 +15,8 @@ typedef NS_ENUM(int8_t, AVIMMessageMediaType) {
     kAVIMMessageMediaTypeAudio = -3,
     kAVIMMessageMediaTypeVideo = -4,
     kAVIMMessageMediaTypeLocation = -5,
-    kAVIMMessageMediaTypeFile = -6
+    kAVIMMessageMediaTypeFile = -6,
+    kAVIMMessageMediaTypeRecalled = -101
 };
 
 typedef NS_ENUM(int8_t, AVIMMessageIOType) {
