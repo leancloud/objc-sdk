@@ -365,6 +365,10 @@
 		830EBA011C44F3D600BA917F /* AVSaveOption_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 830EB9FE1C44F3D600BA917F /* AVSaveOption_internal.h */; };
 		830EBA021C44F3D600BA917F /* AVSaveOption_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 830EB9FE1C44F3D600BA917F /* AVSaveOption_internal.h */; };
 		830EBA031C44F3D600BA917F /* AVSaveOption_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 830EB9FE1C44F3D600BA917F /* AVSaveOption_internal.h */; };
+		830F15A01F010F260009B4D0 /* AVIMRecalledMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 830F159E1F010F260009B4D0 /* AVIMRecalledMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		830F15A11F010F260009B4D0 /* AVIMRecalledMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 830F159E1F010F260009B4D0 /* AVIMRecalledMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		830F15A21F010F260009B4D0 /* AVIMRecalledMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 830F159F1F010F260009B4D0 /* AVIMRecalledMessage.m */; };
+		830F15A31F010F260009B4D0 /* AVIMRecalledMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 830F159F1F010F260009B4D0 /* AVIMRecalledMessage.m */; };
 		8311CD811C3D24A6007DEFF8 /* AVIMAvailability.h in Headers */ = {isa = PBXBuildFile; fileRef = 8311CD801C3D24A6007DEFF8 /* AVIMAvailability.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8311CD831C3D24A6007DEFF8 /* AVIMAvailability.h in Headers */ = {isa = PBXBuildFile; fileRef = 8311CD801C3D24A6007DEFF8 /* AVIMAvailability.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8311CD851C3D25B9007DEFF8 /* AVAvailability.h in Headers */ = {isa = PBXBuildFile; fileRef = 8311CD841C3D25B9007DEFF8 /* AVAvailability.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1633,6 +1637,8 @@
 		830EB9F21C44D68400BA917F /* AVSaveOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVSaveOption.h; sourceTree = "<group>"; };
 		830EB9F31C44D68400BA917F /* AVSaveOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVSaveOption.m; sourceTree = "<group>"; };
 		830EB9FE1C44F3D600BA917F /* AVSaveOption_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVSaveOption_internal.h; sourceTree = "<group>"; };
+		830F159E1F010F260009B4D0 /* AVIMRecalledMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMRecalledMessage.h; sourceTree = "<group>"; };
+		830F159F1F010F260009B4D0 /* AVIMRecalledMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMRecalledMessage.m; sourceTree = "<group>"; };
 		8311CD801C3D24A6007DEFF8 /* AVIMAvailability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMAvailability.h; sourceTree = "<group>"; };
 		8311CD841C3D25B9007DEFF8 /* AVAvailability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVAvailability.h; sourceTree = "<group>"; };
 		83177CAA1EF7A400004FB12A /* LCKeyValueStore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCKeyValueStore.m; sourceTree = "<group>"; };
@@ -3353,6 +3359,8 @@
 				8C9A92711A70AF1800CA4912 /* AVIMVideoMessage.m */,
 				833E1F611B69F629002A691C /* AVIMFileMessage.h */,
 				833E1F621B69F629002A691C /* AVIMFileMessage.m */,
+				830F159E1F010F260009B4D0 /* AVIMRecalledMessage.h */,
+				830F159F1F010F260009B4D0 /* AVIMRecalledMessage.m */,
 			);
 			path = TypedMessages;
 			sourceTree = "<group>";
@@ -3522,6 +3530,7 @@
 				704F3BC01BE0D07E0033245C /* AVIMConversation.h in Headers */,
 				704F3BC11BE0D07E0033245C /* AVIMKeyedConversation.h in Headers */,
 				83BE439C1D242905000C7AC3 /* AVIMWebSocket.h in Headers */,
+				830F15A11F010F260009B4D0 /* AVIMRecalledMessage.h in Headers */,
 				704F3BC41BE0D07E0033245C /* AVIMConversationQuery.h in Headers */,
 				704F3BC61BE0D07E0033245C /* AVIMConversationUpdateBuilder.h in Headers */,
 				704F3BC81BE0D07E0033245C /* AVIMMessage.h in Headers */,
@@ -4264,6 +4273,7 @@
 				8C9A92781A70AF1800CA4912 /* AVIMTextMessage.h in Headers */,
 				9A2F1B1C1CF6F6FA00BE52F2 /* LCIMDescriptor.h in Headers */,
 				83BE439A1D242905000C7AC3 /* AVIMWebSocket.h in Headers */,
+				830F15A01F010F260009B4D0 /* AVIMRecalledMessage.h in Headers */,
 				9A2F1B251CF6F6FA00BE52F2 /* LCIMDictionary.h in Headers */,
 				9A2F1B761CF6F6FA00BE52F2 /* LCIMWireFormat.h in Headers */,
 				8C9A92761A70AF1800CA4912 /* AVIMLocationMessage.h in Headers */,
@@ -5630,6 +5640,7 @@
 				704F3BA91BE0D05C0033245C /* LCIMMessageCache.m in Sources */,
 				9A2F1B2A1CF6F6FA00BE52F2 /* LCIMDictionary.m in Sources */,
 				704F3BAA1BE0D05C0033245C /* LCIMConversationCache.m in Sources */,
+				830F15A31F010F260009B4D0 /* AVIMRecalledMessage.m in Sources */,
 				9AD27C521E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m in Sources */,
 				9AE76C521C3F7CC600325902 /* AVIMGenericCommand+AVIMMessagesAdditions.m in Sources */,
 				83AB6DFA1C3CFEA70064BE17 /* AVOSCloudIM.m in Sources */,
@@ -6342,6 +6353,7 @@
 				8C9A927B1A70AF1800CA4912 /* AVIMTypedMessage.m in Sources */,
 				9A2F1B281CF6F6FA00BE52F2 /* LCIMDictionary.m in Sources */,
 				9ACE83DD1BD6420E00CE2103 /* AVIMCommandFormatter.m in Sources */,
+				830F15A21F010F260009B4D0 /* AVIMRecalledMessage.m in Sources */,
 				9AD27C511E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m in Sources */,
 				834B4A8F1B93ED3F00A7ADBC /* LCIMConversationCache.m in Sources */,
 				8CBDFDE31A808EA500D67FBE /* AVIMConversationQuery.m in Sources */,

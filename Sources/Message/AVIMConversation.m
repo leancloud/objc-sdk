@@ -27,6 +27,7 @@
 #import "MessagesProtoOrig.pbobjc.h"
 #import "AVUtils.h"
 #import "AVIMRuntimeHelper.h"
+#import "AVIMRecalledMessage.h"
 
 #define LCIM_VALID_LIMIT(limit) ({      \
     int32_t limit_ = (int32_t)(limit);  \
@@ -1011,9 +1012,19 @@ static dispatch_queue_t messageCacheOperationQueue;
 }
 
 - (void)recallMessage:(AVIMMessage *)oldMessage
-             callback:(AVIMBooleanResultBlock)callback
+             callback:(nonnull void (^)(BOOL, NSError * _Nullable, AVIMRecalledMessage * _Nullable))callback
 {
-    /* TODO */
+    AVIMRecalledMessage *recalledMessage = [[AVIMRecalledMessage alloc] init];
+
+    [self updateMessage:oldMessage
+           toNewMessage:recalledMessage
+               callback:^(BOOL succeeded, NSError * _Nullable error) {
+                   if (!callback)
+                       return;
+                   dispatch_async(dispatch_get_main_queue(), ^{
+                       callback(succeeded, error, (succeeded ? recalledMessage : nil));
+                   });
+               }];
 }
 
 - (void)updateConversationAfterSendMessage:(AVIMMessage *)message {

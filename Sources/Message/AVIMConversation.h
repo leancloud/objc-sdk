@@ -13,6 +13,7 @@
 #import "AVIMKeyedConversation.h"
 #import "AVIMAvailability.h"
 #import "AVIMMessageOption.h"
+#import "AVIMRecalledMessage.h"
 
 @class AVIMClient;
 
@@ -292,7 +293,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param oldMessage The message you've sent which will be replaced by newMessage.
  @param callback   Callback of message update.
  */
-- (void)recallMessage:(AVIMMessage *)oldMessage callback:(AVIMBooleanResultBlock)callback;
+- (void)recallMessage:(AVIMMessage *)oldMessage callback:(void(^)(BOOL succeeded, NSError * _Nullable error, AVIMRecalledMessage * _Nullable recalledMessage))callback;
 
 /*!
  从服务端拉取该会话的最近 limit 条消息。
