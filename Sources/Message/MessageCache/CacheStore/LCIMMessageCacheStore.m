@@ -102,6 +102,7 @@
         [self timestampForMessage:message],
         [self receiptTimestampForMessage:message],
         [self readTimestampForMessage:message],
+        [self patchTimestampForMessage:message],
         [message.payload dataUsingEncoding:NSUTF8StringEncoding],
         @(message.status),
         @(breakpoint)
