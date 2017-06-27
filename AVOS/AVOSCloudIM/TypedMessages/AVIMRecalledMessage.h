@@ -10,6 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ This class is a type of messages that have been recalled by its sender.
+ */
 @interface AVIMRecalledMessage : AVIMTypedMessage <AVIMTypedMessageSubclassing>
 
 @end
