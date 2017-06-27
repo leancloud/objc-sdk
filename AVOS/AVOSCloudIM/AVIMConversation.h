@@ -30,8 +30,17 @@ enum : AVIMMessageSendOption {
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ A protocol defines callbacks of events related to conversation.
+ */
 @protocol AVIMConversationDelegate <NSObject>
 
+/**
+ Callback which called when a message has been updated.
+
+ @param conversation The conversation which the message belongs to.
+ @param message      The new message which has been updated.
+ */
 - (void)conversation:(AVIMConversation *)conversation messageHasBeenUpdated:(AVIMMessage *)message;
 
 @end
@@ -122,8 +131,18 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, weak, readonly, nullable)   AVIMClient   *imClient;
 
+/**
+ Add a delegate which listens conversation events.
+
+ @param delegate An object which listens conversation events.
+ */
 - (void)addDelegate:(id<AVIMConversationDelegate>)delegate;
 
+/**
+ Remove a delegate which is listening conversation events.
+
+ @param delegate The delegate object you want to remove.
+ */
 - (void)removeDelegate:(id<AVIMConversationDelegate>)delegate;
 
 /**
