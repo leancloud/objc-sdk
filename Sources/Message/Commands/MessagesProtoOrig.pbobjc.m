@@ -321,6 +321,7 @@ typedef struct AVIMJsonObjectMessage__storage_ {
 @dynamic hasTimestamp, timestamp;
 @dynamic hasFrom, from;
 @dynamic hasData_p, data_p;
+@dynamic hasPatchTimestamp, patchTimestamp;
 
 typedef struct AVIMUnreadTuple__storage_ {
   uint32_t _has_storage_[1];
@@ -330,6 +331,7 @@ typedef struct AVIMUnreadTuple__storage_ {
   NSString *from;
   NSString *data_p;
   int64_t timestamp;
+  int64_t patchTimestamp;
 } AVIMUnreadTuple__storage_;
 
 // This method is threadsafe because it is initially called
@@ -392,6 +394,15 @@ typedef struct AVIMUnreadTuple__storage_ {
         .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeString,
       },
+      {
+        .name = "patchTimestamp",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMUnreadTuple_FieldNumber_PatchTimestamp,
+        .hasIndex = 6,
+        .offset = (uint32_t)offsetof(AVIMUnreadTuple__storage_, patchTimestamp),
+        .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeInt64,
+      },
     };
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[AVIMUnreadTuple class]
@@ -401,6 +412,11 @@ typedef struct AVIMUnreadTuple__storage_ {
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(AVIMUnreadTuple__storage_)
                                          flags:LCIMDescriptorInitializationFlag_None];
+#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    static const char *extraTextFormatInfo =
+        "\001\007\016\000";
+    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
+#endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
   }

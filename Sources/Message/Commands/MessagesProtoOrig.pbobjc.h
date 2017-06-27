@@ -210,6 +210,7 @@ typedef GPB_ENUM(AVIMUnreadTuple_FieldNumber) {
   AVIMUnreadTuple_FieldNumber_Timestamp = 4,
   AVIMUnreadTuple_FieldNumber_From = 5,
   AVIMUnreadTuple_FieldNumber_Data_p = 6,
+  AVIMUnreadTuple_FieldNumber_PatchTimestamp = 7,
 };
 
 @interface AVIMUnreadTuple : LCIMMessage
@@ -236,6 +237,9 @@ typedef GPB_ENUM(AVIMUnreadTuple_FieldNumber) {
 /** Test to see if @c data_p has been set. */
 @property(nonatomic, readwrite) BOOL hasData_p;
 
+@property(nonatomic, readwrite) int64_t patchTimestamp;
+
+@property(nonatomic, readwrite) BOOL hasPatchTimestamp;
 @end
 
 #pragma mark - AVIMLogItem
