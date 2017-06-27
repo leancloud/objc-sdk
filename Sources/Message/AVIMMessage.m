@@ -145,6 +145,12 @@
     message.clientId = from;
     message.messageId = messageId;
     message.status = AVIMMessageStatusDelivered;
+
+    NSNumber *patchTimestamp = result[@"patch_timestamp"];
+
+    if (patchTimestamp)
+        message.updatedAt = [NSDate dateWithTimeIntervalSince1970:[patchTimestamp doubleValue] / 1000.0];
+
     return message;
 }
 
