@@ -971,6 +971,9 @@ static BOOL AVIMClientHasInstantiated = NO;
     message.status = AVIMMessageStatusDelivered;
     message.localClientId = self.clientId;
 
+    if (unreadTuple.hasPatchTimestamp)
+        message.updatedAt = [NSDate dateWithTimeIntervalSince1970:unreadTuple.patchTimestamp / 1000.0];
+
     return message;
 }
 
