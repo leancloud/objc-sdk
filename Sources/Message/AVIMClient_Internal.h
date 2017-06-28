@@ -30,6 +30,7 @@
 @property (nonatomic, assign) BOOL                   onceOpened;
 
 @property (nonatomic, assign) int64_t                lastPatchTimestamp;
+@property (nonatomic, assign) int64_t                lastUnreadTimestamp;
 
 - (void)setStatus:(AVIMClientStatus)status;
 - (AVIMConversation *)conversationWithId:(NSString *)conversationId;

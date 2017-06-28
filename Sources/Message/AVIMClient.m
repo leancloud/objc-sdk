@@ -375,6 +375,23 @@ static BOOL AVIMClientHasInstantiated = NO;
     }
 }
 
+- (int64_t)lastUnreadTimestamp {
+    @synchronized (self) {
+        if (_lastUnreadTimestamp > 0)
+            return _lastUnreadTimestamp;
+
+        _lastUnreadTimestamp = [[NSDate date] timeIntervalSince1970] * 1000;
+        return _lastUnreadTimestamp;
+    }
+}
+
+- updateLastUnreadTimestamp:(int64_t)unreadTimestamp {
+    @synchronized (self) {
+        if (unreadTimestamp > _lastUnreadTimestamp)
+            _lastUnreadTimestamp = unreadTimestamp;
+    }
+}
+
 - (AVIMGenericCommand *)openCommandWithAppId:(NSString *)appId
                                     clientId:(NSString *)clientId
                                          tag:(NSString *)tag
@@ -412,6 +429,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 
     sessionCommand.configBitmap = LCIMClientSessionEnableMessagePatch;
     sessionCommand.lastPatchTime = self.lastPatchTimestamp;
+    sessionCommand.lastUnreadNotifTime = self.lastUnreadTimestamp;
 
     genericCommand.sessionMessage = sessionCommand;
     genericCommand.callback = callback;
@@ -985,7 +1003,9 @@ static BOOL AVIMClientHasInstantiated = NO;
 
 - (void)processUnreadCommand:(AVIMGenericCommand *)genericCommand {
     AVIMUnreadCommand *unreadCommand = genericCommand.unreadMessage;
-    
+
+    [self updateLastUnreadTimestamp:unreadCommand.notifTime];
+
     for (AVIMUnreadTuple *unreadTuple in unreadCommand.convsArray)
         [self processUnreadTuple:unreadTuple];
 }
