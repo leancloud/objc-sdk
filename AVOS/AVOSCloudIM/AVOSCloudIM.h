@@ -27,6 +27,7 @@
 #import "AVIMVideoMessage.h"
 #import "AVIMLocationMessage.h"
 #import "AVIMFileMessage.h"
+#import "AVIMRecalledMessage.h"
 #import "AVIMSignature.h"
 #import "AVIMUserOptions.h"
 

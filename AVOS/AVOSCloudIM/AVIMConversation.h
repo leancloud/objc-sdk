@@ -13,6 +13,7 @@
 #import "AVIMKeyedConversation.h"
 #import "AVIMAvailability.h"
 #import "AVIMMessageOption.h"
+#import "AVIMRecalledMessage.h"
 
 @class AVIMClient;
 
@@ -28,6 +29,21 @@ enum : AVIMMessageSendOption {
 } AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.4.0. Use AVIMMessageOption instead.");
 
 NS_ASSUME_NONNULL_BEGIN
+
+/**
+ A protocol defines callbacks of events related to conversation.
+ */
+@protocol AVIMConversationDelegate <NSObject>
+
+/**
+ Callback which called when a message has been updated.
+
+ @param conversation The conversation which the message belongs to.
+ @param message      The new message which has been updated.
+ */
+- (void)conversation:(AVIMConversation *)conversation messageHasBeenUpdated:(AVIMMessage *)message;
+
+@end
 
 @interface AVIMConversation : NSObject
 
@@ -114,6 +130,20 @@ NS_ASSUME_NONNULL_BEGIN
  *  The AVIMClient object which this conversation belongs to.
  */
 @property (nonatomic, weak, readonly, nullable)   AVIMClient   *imClient;
+
+/**
+ Add a delegate which listens conversation events.
+
+ @param delegate An object which listens conversation events.
+ */
+- (void)addDelegate:(id<AVIMConversationDelegate>)delegate;
+
+/**
+ Remove a delegate which is listening conversation events.
+
+ @param delegate The delegate object you want to remove.
+ */
+- (void)removeDelegate:(id<AVIMConversationDelegate>)delegate;
 
 /**
  * Add custom property for conversation.
@@ -266,6 +296,23 @@ NS_ASSUME_NONNULL_BEGIN
              option:(nullable AVIMMessageOption *)option
       progressBlock:(nullable AVIMProgressBlock)progressBlock
            callback:(AVIMBooleanResultBlock)callback;
+
+/*!
+ Replace a message you sent with a new message.
+
+ @param oldMessage The message you've sent which will be replaced by newMessage.
+ @param newMessage A new message.
+ @param callback   Callback of message update.
+ */
+- (void)updateMessage:(AVIMMessage *)oldMessage toNewMessage:(AVIMMessage *)newMessage callback:(AVIMBooleanResultBlock)callback;
+
+/*!
+ Recall a message.
+
+ @param oldMessage The message you've sent which will be replaced by newMessage.
+ @param callback   Callback of message update.
+ */
+- (void)recallMessage:(AVIMMessage *)oldMessage callback:(void(^)(BOOL succeeded, NSError * _Nullable error, AVIMRecalledMessage * _Nullable recalledMessage))callback;
 
 /*!
  从服务端拉取该会话的最近 limit 条消息。

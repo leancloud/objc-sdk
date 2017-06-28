@@ -66,6 +66,7 @@
     if (self.readTimestamp != 0) {
         object.readTimestamp = self.readTimestamp;
     }
+    object.updatedAt = self.updatedAt;
     NSData *data = [object messagePack];
     [coder encodeObject:data forKey:@"data"];
     [coder encodeObject:self.localClientId forKey:NSStringFromSelector(@selector(localClientId))];
@@ -83,6 +84,7 @@
         self.sendTimestamp = object.sendTimestamp;
         self.deliveredTimestamp = object.deliveredTimestamp;
         self.readTimestamp = object.readTimestamp;
+        self.updatedAt = object.updatedAt;
         self.localClientId = [coder decodeObjectForKey:NSStringFromSelector(@selector(localClientId))];
     }
     return self;
@@ -143,6 +145,12 @@
     message.clientId = from;
     message.messageId = messageId;
     message.status = AVIMMessageStatusDelivered;
+
+    NSNumber *patchTimestamp = result[@"patch_timestamp"];
+
+    if (patchTimestamp)
+        message.updatedAt = [NSDate dateWithTimeIntervalSince1970:[patchTimestamp doubleValue] / 1000.0];
+
     return message;
 }
 

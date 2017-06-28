@@ -19,5 +19,6 @@ LC_FORWARD_PROPERTY_ACCESSOR_OBJECT_COPY    (content,               setContent)
 LC_FORWARD_PROPERTY_ACCESSOR_NUMBER         (sendTimestamp,         setSendTimestamp,       int64_t)
 LC_FORWARD_PROPERTY_ACCESSOR_NUMBER         (deliveredTimestamp,    setDeliveredTimestamp,  int64_t)
 LC_FORWARD_PROPERTY_ACCESSOR_NUMBER         (readTimestamp,         setReadTimestamp,       int64_t)
+LC_FORWARD_PROPERTY_ACCESSOR_OBJECT_COPY    (updatedAt,             setUpdatedAt)
 
 @end

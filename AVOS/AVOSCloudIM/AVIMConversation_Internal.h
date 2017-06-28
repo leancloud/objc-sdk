@@ -41,6 +41,8 @@ do {                                                                            
       userInfo:userInfo];                                                           \
 } while(0)
 
+FOUNDATION_EXPORT NSNotificationName LCIMConversationMessagePatchNotification;
+
 @interface AVIMConversation ()
 
 @property (nonatomic, copy)   NSString     *name;
@@ -56,6 +58,8 @@ do {                                                                            
 @property (nonatomic, assign) BOOL          transient;
 
 @property (nonatomic, strong) NSMutableDictionary *properties;
+
+@property (nonatomic, strong) NSHashTable<id<AVIMConversationDelegate>> *delegates;
 
 - (instancetype)initWithConversationId:(NSString *)conversationId;
 - (void)setConversationId:(NSString *)conversationId;

@@ -27,6 +27,7 @@
 #import "MessagesProtoOrig.pbobjc.h"
 #import "AVUtils.h"
 #import "AVIMRuntimeHelper.h"
+#import "AVIMRecalledMessage.h"
 
 #define LCIM_VALID_LIMIT(limit) ({      \
     int32_t limit_ = (int32_t)(limit);  \
@@ -53,6 +54,8 @@ NSString *LCIMConversationIdKey = @"conversationId";
 NSString *LCIMConversationPropertyNameKey = @"propertyName";
 NSString *LCIMConversationPropertyValueKey = @"propertyValue";
 NSNotificationName LCIMConversationPropertyUpdateNotification = @"LCIMConversationPropertyUpdateNotification";
+
+NSNotificationName LCIMConversationMessagePatchNotification = @"LCIMConversationMessagePatchNotification";
 
 @interface AVIMConversation()
 
@@ -96,10 +99,29 @@ static dispatch_queue_t messageCacheOperationQueue;
     _properties = [NSMutableDictionary dictionary];
     _propertiesForUpdate = [NSMutableDictionary dictionary];
 
+    _delegates = [NSHashTable weakObjectsHashTable];
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(propertyDidUpdate:)
                                                  name:LCIMConversationPropertyUpdateNotification
                                                object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceivePatchItem:)
+                                                 name:LCIMConversationMessagePatchNotification
+                                               object:nil];
+}
+
+- (void)addDelegate:(id<AVIMConversationDelegate>)delegate {
+    @synchronized(_delegates) {
+        [_delegates addObject:delegate];
+    }
+}
+
+- (void)removeDelegate:(id<AVIMConversationDelegate>)delegate {
+    @synchronized(_delegates) {
+        [_delegates removeObject:delegate];
+    }
 }
 
 - (void)dealloc {
@@ -131,6 +153,43 @@ static dispatch_queue_t messageCacheOperationQueue;
         [AVIMRuntimeHelper callMethodInMainThreadWithTarget:client.delegate
                                                    selector:delegateMethod
                                                   arguments:@[self, propertyName]];
+}
+
+- (void)didReceivePatchItem:(NSNotification *)notification {
+    if (!self.conversationId)
+        return;
+    if (notification.object != self.imClient)
+        return;
+
+    NSDictionary *userInfo = notification.userInfo;
+    AVIMPatchItem *patchItem = userInfo[@"patchItem"];
+
+    if (![patchItem.cid isEqualToString:self.conversationId])
+        return;
+
+    NSString *messageId = patchItem.mid;
+    LCIMMessageCacheStore *messageCacheStore = [self messageCacheStore];
+
+    AVIMMessage *message = [messageCacheStore messageForId:messageId];
+
+    if (!message)
+        return;
+
+    if ([message.messageId isEqualToString:self.lastMessage.messageId])
+        self.lastMessage = message;
+
+    [self callDelegateMethod:@selector(conversation:messageHasBeenUpdated:)
+               withArguments:@[self, message]];
+}
+
+- (void)callDelegateMethod:(SEL)method withArguments:(NSArray *)arguments {
+    NSArray<id<AVIMConversationDelegate>> *delegates = [self.delegates allObjects];
+
+    for (id<AVIMConversationDelegate> delegate in delegates) {
+        [AVIMRuntimeHelper callMethodInMainThreadWithTarget:delegate
+                                                   selector:method
+                                                  arguments:arguments];
+    }
 }
 
 - (NSString *)clientId {
@@ -864,6 +923,110 @@ static dispatch_queue_t messageCacheOperationQueue;
     });
 }
 
+- (void)sendCommand:(AVIMGenericCommand *)command {
+    [self.imClient sendCommand:command];
+}
+
+- (AVIMGenericCommand *)patchCommandWithOldMessage:(AVIMMessage *)oldMessage
+                                        newMessage:(AVIMMessage *)newMessage
+{
+    AVIMGenericCommand *command = [[AVIMGenericCommand alloc] init];
+
+    command.needResponse = YES;
+    command.cmd = AVIMCommandType_Patch;
+    command.op = AVIMOpType_Modify;
+    command.peerId = self.clientId;
+
+    AVIMPatchItem *patchItem = [[AVIMPatchItem alloc] init];
+
+    patchItem.cid = self.conversationId;
+    patchItem.mid = oldMessage.messageId;
+    patchItem.timestamp = oldMessage.sendTimestamp;
+    patchItem.data_p = newMessage.payload;
+
+    NSMutableArray *patchesArray = @[patchItem];
+    AVIMPatchCommand *patchMessage = [[AVIMPatchCommand alloc] init];
+
+    patchMessage.patchesArray = patchesArray;
+    command.patchMessage = patchMessage;
+
+    return command;
+}
+
+- (BOOL)containsMessage:(AVIMMessage *)message {
+    if (!message.messageId)
+        return NO;
+    if (!message.conversationId)
+        return NO;
+
+    return [self.conversationId isEqualToString:message.conversationId];
+}
+
+- (void)didUpdateMessage:(AVIMMessage *)oldMessage
+            toNewMessage:(AVIMMessage *)newMessage
+            patchCommand:(AVIMPatchCommand *)command
+{
+    newMessage.messageId            = oldMessage.messageId;
+    newMessage.clientId             = oldMessage.clientId;
+    newMessage.localClientId        = oldMessage.localClientId;
+    newMessage.conversationId       = oldMessage.conversationId;
+    newMessage.sendTimestamp        = oldMessage.sendTimestamp;
+    newMessage.readTimestamp        = oldMessage.readTimestamp;
+    newMessage.deliveredTimestamp   = oldMessage.deliveredTimestamp;
+    newMessage.offline              = oldMessage.offline;
+    newMessage.status               = oldMessage.status;
+    newMessage.updatedAt            = [NSDate dateWithTimeIntervalSince1970:command.lastPatchTime / 1000.0];
+
+    LCIMMessageCache *messageCache = [self messageCache];
+    [messageCache updateMessage:newMessage forConversationId:self.conversationId];
+}
+
+- (void)updateMessage:(AVIMMessage *)oldMessage
+         toNewMessage:(AVIMMessage *)newMessage
+             callback:(AVIMBooleanResultBlock)callback
+{
+    if (!newMessage) {
+        NSError *error = [AVErrorUtils errorWithCode:kAVIMErrorMessageNotFound errorText:@"Cannot update a message to nil."];
+        [AVUtils callBooleanResultBlock:callback error:error];
+        return;
+    }
+    if (![self containsMessage:oldMessage]) {
+        NSError *error = [AVErrorUtils errorWithCode:kAVIMErrorMessageNotFound errorText:@"Cannot find a message to update."];
+        [AVUtils callBooleanResultBlock:callback error:error];
+        return;
+    }
+
+    AVIMGenericCommand *patchCommand = [self patchCommandWithOldMessage:oldMessage
+                                                             newMessage:newMessage];
+
+    patchCommand.callback = ^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
+        if (error) {
+            [AVUtils callBooleanResultBlock:callback error:error];
+            return;
+        }
+        [self didUpdateMessage:oldMessage toNewMessage:newMessage patchCommand:inCommand.patchMessage];
+        [AVUtils callBooleanResultBlock:callback error:nil];
+    };
+
+    [self sendCommand:patchCommand];
+}
+
+- (void)recallMessage:(AVIMMessage *)oldMessage
+             callback:(nonnull void (^)(BOOL, NSError * _Nullable, AVIMRecalledMessage * _Nullable))callback
+{
+    AVIMRecalledMessage *recalledMessage = [[AVIMRecalledMessage alloc] init];
+
+    [self updateMessage:oldMessage
+           toNewMessage:recalledMessage
+               callback:^(BOOL succeeded, NSError * _Nullable error) {
+                   if (!callback)
+                       return;
+                   dispatch_async(dispatch_get_main_queue(), ^{
+                       callback(succeeded, error, (succeeded ? recalledMessage : nil));
+                   });
+               }];
+}
+
 - (void)updateConversationAfterSendMessage:(AVIMMessage *)message {
     NSDate *messageSentAt = [NSDate dateWithTimeIntervalSince1970:(message.sendTimestamp / 1000.0)];
     self.lastMessageAt = messageSentAt;
@@ -874,7 +1037,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (NSArray *)takeContinuousMessages:(NSArray *)messages {
     NSMutableArray *continuousMessages = [NSMutableArray array];
-    
+
     for (AVIMMessage *message in messages.reverseObjectEnumerator) {
         if (!message.breakpoint) {
             [continuousMessages insertObject:message atIndex:0];
@@ -1015,6 +1178,10 @@ static dispatch_queue_t messageCacheOperationQueue;
                     message.sendTimestamp = [logsItem timestamp];
                     message.clientId = [logsItem from];
                     message.messageId = [logsItem msgId];
+
+                    if (logsItem.hasPatchTimestamp)
+                        message.updatedAt = [NSDate dateWithTimeIntervalSince1970:(logsItem.patchTimestamp / 1000.0)];
+
                     [messages addObject:message];
                 }
                 self.lastMessage = messages.lastObject;

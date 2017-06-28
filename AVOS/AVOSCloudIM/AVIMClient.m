@@ -21,6 +21,7 @@
 #import "AVIMConversationQuery_Internal.h"
 #import "AVObjectUtils.h"
 #import "AVUtils.h"
+#import "LCIMMessageCacheStoreSQL.h"
 #import "LCIMMessageCacheStore.h"
 #import "LCIMConversationCache.h"
 #import "LCIMClientSessionTokenCacheStore.h"
@@ -39,6 +40,10 @@ static dispatch_queue_t imClientQueue = NULL;
 static dispatch_queue_t defaultClientAccessQueue = NULL;
 
 static const NSUInteger kDistinctMessageIdArraySize = 10;
+
+typedef NS_ENUM(NSUInteger, LCIMClientSessionOptions) {
+    LCIMClientSessionEnableMessagePatch = 1 << 0
+};
 
 NS_INLINE
 BOOL isValidTag(NSString *tag) {
@@ -357,6 +362,23 @@ static BOOL AVIMClientHasInstantiated = NO;
     return socketWrapper;
 }
 
+- (int64_t)lastPatchTimestamp {
+    @synchronized (self) {
+        if (_lastPatchTimestamp > 0)
+            return _lastPatchTimestamp;
+
+        _lastPatchTimestamp = [[NSDate date] timeIntervalSince1970] * 1000;
+        return _lastPatchTimestamp;
+    }
+}
+
+- (void)updateLastPatchTimestamp:(int64_t)patchTimestamp {
+    @synchronized (self) {
+        if (patchTimestamp > _lastPatchTimestamp)
+            _lastPatchTimestamp = patchTimestamp;
+    }
+}
+
 - (AVIMGenericCommand *)openCommandWithAppId:(NSString *)appId
                                     clientId:(NSString *)clientId
                                          tag:(NSString *)tag
@@ -391,8 +413,13 @@ static BOOL AVIMClientHasInstantiated = NO;
             sessionCommand.tag = tag;
         }
     }
-    [genericCommand avim_addRequiredKeyWithCommand:sessionCommand];
+
+    sessionCommand.configBitmap = LCIMClientSessionEnableMessagePatch;
+    sessionCommand.lastPatchTime = self.lastPatchTimestamp;
+
+    genericCommand.sessionMessage = sessionCommand;
     genericCommand.callback = callback;
+
     return genericCommand;
 }
 
@@ -815,6 +842,9 @@ static BOOL AVIMClientHasInstantiated = NO;
         case AVIMCommandType_Rcp:
             [self processReceiptCommand:command];
             break;
+        case AVIMCommandType_Patch:
+            [self processPatchCommand:command];
+            break;
             
         default:
             break;
@@ -864,6 +894,9 @@ static BOOL AVIMClientHasInstantiated = NO;
     message.hasMore = directCommand.hasMore;
     message.localClientId = self.clientId;
     message.transient = directCommand.transient;
+
+    if (directCommand.hasPatchTimestamp)
+        message.updatedAt = [NSDate dateWithTimeIntervalSince1970:(directCommand.patchTimestamp / 1000.0)];
     
     [self receiveMessage:message];
     [self sendAckCommandAccordingToDirectCommand:directCommand andGenericCommand:genericCommand];
@@ -938,6 +971,9 @@ static BOOL AVIMClientHasInstantiated = NO;
     message.messageId = messageId;
     message.status = AVIMMessageStatusDelivered;
     message.localClientId = self.clientId;
+
+    if (unreadTuple.hasPatchTimestamp)
+        message.updatedAt = [NSDate dateWithTimeIntervalSince1970:unreadTuple.patchTimestamp / 1000.0];
 
     return message;
 }
@@ -1180,6 +1216,69 @@ static BOOL AVIMClientHasInstantiated = NO;
             }
         }
     }
+}
+
+- (void)processPatchCommand:(AVIMGenericCommand *)command {
+    AVIMOpType op = command.op;
+
+    if (op == AVIMOpType_Modify) {
+        [self processMessagePatchCommand:command.patchMessage];
+        [self sendACKForPatchCommand:command];
+    }
+}
+
+- (void)processMessagePatchCommand:(AVIMPatchCommand *)command {
+    NSArray<AVIMPatchItem *> *patchItems = command.patchesArray;
+
+    for (AVIMPatchItem *patchItem in patchItems) {
+        [self updateLastPatchTimestamp:patchItem.patchTimestamp];
+        [self updateMessageCacheForPatchItem:patchItem];
+        [self postNotificationForPatchItem:patchItem];
+    }
+}
+
+- (void)updateMessageCacheForPatchItem:(AVIMPatchItem *)patchItem {
+    NSString *conversationId = patchItem.cid;
+    NSString *messageId      = patchItem.mid;
+
+    LCIMMessageCacheStore *messageCacheStore = [self messageCacheStoreForConversationId:conversationId];
+    AVIMMessage *message = [messageCacheStore messageForId:messageId];
+
+    if (!message)
+        return;
+
+    NSDictionary<NSString *, id> *entries = @{
+        LCIM_FIELD_PAYLOAD: patchItem.data_p,
+        LCIM_FIELD_PATCH_TIMESTAMP: @((double)patchItem.patchTimestamp)
+    };
+
+    [messageCacheStore updateEntries:entries
+                        forMessageId:messageId];
+}
+
+- (void)postNotificationForPatchItem:(AVIMPatchItem *)patchItem {
+    NSDictionary *userInfo = @{ @"patchItem": patchItem };
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:LCIMConversationMessagePatchNotification
+                                                        object:self
+                                                      userInfo:userInfo];
+}
+
+- (void)sendACKForPatchCommand:(AVIMGenericCommand *)inCommand {
+    AVIMGenericCommand *command = [[AVIMGenericCommand alloc] init];
+
+    command.appId  = [AVOSCloud getApplicationId];
+    command.peerId = self.clientId;
+
+    command.cmd = AVIMCommandType_Patch;
+    command.op  = AVIMOpType_Modified;
+
+    AVIMPatchCommand *patchMessage = [[AVIMPatchCommand alloc] init];
+    patchMessage.lastPatchTime = self.lastPatchTimestamp;
+
+    command.patchMessage = patchMessage;
+
+    [self sendCommand:command];
 }
 
 - (void)array:(NSMutableArray *)array addObject:(id)object {
