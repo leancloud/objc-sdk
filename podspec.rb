@@ -106,8 +106,13 @@ module Podspec
     # Convert pathnames to file list string.
     def file_list_string(pathnames, indent)
       spaces = ' ' * indent
-      paths  = pathnames.map { |pathname| "'#{pathname.to_s}'" }
-      paths.join(",\n#{spaces}")
+
+      unless pathnames.empty?
+        paths  = pathnames.map { |pathname| "'#{pathname.to_s}'" }
+        paths.join(",\n#{spaces}")
+      else
+        spaces += '[]'
+      end
     end
 
     # Write content to file.

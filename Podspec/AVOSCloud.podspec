@@ -57,7 +57,7 @@ Pod::Spec.new do |s|
     'AVOS/AVOSCloud/AVAvailability.h'
 
   s.osx.exclude_files =
-    
+        []
 
   s.watchos.exclude_files =
     'AVOS/AVOSCloud/Analytics/AVAnalytics.h',
