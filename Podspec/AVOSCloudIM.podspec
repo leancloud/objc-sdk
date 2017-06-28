@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AVOSCloudIM'
-  s.version  = '5.0.2'
+  s.version  = '6.0.0'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud IM Objective-C SDK'
   s.authors  = 'LeanCloud'
@@ -31,6 +31,7 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/TypedMessages/AVIMTextMessage.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMDescriptor.h',
       'AVOS/AVOSCloudIM/Vendor/SocketRocket/AVIMWebSocket.h',
+      'AVOS/AVOSCloudIM/TypedMessages/AVIMRecalledMessage.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMDictionary.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMWireFormat.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMLocationMessage.h',
@@ -159,6 +160,7 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/TypedMessages/AVIMTypedMessage.m',
       'AVOS/AVOSCloudIM/Protobuf/LCIMDictionary.m',
       'AVOS/AVOSCloudIM/Commands/AVIMCommandFormatter.m',
+      'AVOS/AVOSCloudIM/TypedMessages/AVIMRecalledMessage.m',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMFieldMask.pbobjc.m',
       'AVOS/AVOSCloudIM/MessageCache/LCIMConversationCache.m',
       'AVOS/AVOSCloudIM/AVIMConversationQuery.m',
@@ -196,6 +198,7 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/AVIMKeyedConversation.h',
       'AVOS/AVOSCloudIM/AVIMConversationQuery.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMTextMessage.h',
+      'AVOS/AVOSCloudIM/TypedMessages/AVIMRecalledMessage.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMLocationMessage.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMAudioMessage.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMVideoMessage.h',
