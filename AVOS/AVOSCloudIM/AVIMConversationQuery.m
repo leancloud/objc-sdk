@@ -400,25 +400,33 @@ NSString *const kAVIMKeyConversationId = @"objectId";
          */
         conversation.properties = [dict mutableCopy];
 
-        NSString *createdAt = dict[@"createdAt"];
-        NSString *updatedAt = dict[@"updatedAt"];
-        NSDictionary *lastMessageAt = dict[KEY_LAST_MESSAGE_AT];
-
         conversation.imClient = self.client;
         NSString *conversationId = [dict objectForKey:@"objectId"];
         conversation.conversationId = conversationId;
         conversation.name = [dict objectForKey:KEY_NAME];
         conversation.attributes = [dict objectForKey:KEY_ATTR];
         conversation.creator = [dict objectForKey:@"c"];
-        if (createdAt) conversation.createAt = [AVObjectUtils dateFromString:createdAt];
-        if (updatedAt) conversation.updateAt = [AVObjectUtils dateFromString:updatedAt];
-        if (lastMessageAt) {
-            conversation.lastMessageAt = [AVObjectUtils dateFromDictionary:lastMessageAt];
-            conversation.lastMessage = [AVIMMessage parseMessageWithConversationId:conversationId result:dict];
-        }
+        conversation.lastMessage = [AVIMMessage parseMessageWithConversationId:conversationId result:dict];
         conversation.members = [dict objectForKey:@"m"];
         conversation.muted = [[dict objectForKey:@"muted"] boolValue];
         conversation.transient = [[dict objectForKey:@"tr"] boolValue];
+
+        NSDictionary    *lastMessageDate        = dict[@"lm"];
+        NSNumber        *lastMessageTimestamp   = dict[@"msg_timestamp"];
+        NSString        *createdAt              = dict[@"createdAt"];
+        NSString        *updatedAt              = dict[@"updatedAt"];
+
+        /* For system conversation, there's no `lm` field.
+           Instead, we read `msg_timestamp`field. */
+        if (lastMessageDate)
+            conversation.lastMessageAt = [AVObjectUtils dateFromDictionary:lastMessageDate];
+        else if (lastMessageTimestamp)
+            conversation.lastMessageAt = [NSDate dateWithTimeIntervalSince1970:([lastMessageTimestamp doubleValue] / 1000.0)];
+
+        if (createdAt)
+            conversation.createAt = [AVObjectUtils dateFromString:createdAt];
+        if (updatedAt)
+            conversation.updateAt = [AVObjectUtils dateFromString:updatedAt];
 
         [conversations addObject:conversation];
     }
