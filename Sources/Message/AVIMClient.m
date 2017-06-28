@@ -517,7 +517,6 @@ static BOOL AVIMClientHasInstantiated = NO;
     AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
     genericCommand.cmd = AVIMCommandType_Report;
     genericCommand.op = AVIMOpType_Upload;
-    genericCommand.appId = [AVOSCloud getApplicationId];
     genericCommand.peerId = _clientId;
 
     AVIMReportCommand *reportCommand = [[AVIMReportCommand alloc] init];
@@ -1292,7 +1291,6 @@ static BOOL AVIMClientHasInstantiated = NO;
 - (void)sendACKForPatchCommand:(AVIMGenericCommand *)inCommand {
     AVIMGenericCommand *command = [[AVIMGenericCommand alloc] init];
 
-    command.appId  = [AVOSCloud getApplicationId];
     command.peerId = self.clientId;
 
     command.cmd = AVIMCommandType_Patch;
