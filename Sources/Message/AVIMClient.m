@@ -385,7 +385,7 @@ static BOOL AVIMClientHasInstantiated = NO;
     }
 }
 
-- updateLastUnreadTimestamp:(int64_t)unreadTimestamp {
+- (void)updateLastUnreadTimestamp:(int64_t)unreadTimestamp {
     @synchronized (self) {
         if (unreadTimestamp > _lastUnreadTimestamp)
             _lastUnreadTimestamp = unreadTimestamp;
