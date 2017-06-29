@@ -186,6 +186,13 @@ A LeanCloud Framework User Object that is a local representation of a user persi
 - (void)updatePassword:(NSString *)oldPassword newPassword:(NSString *)newPassword block:(AVIdResultBlock)block;
 
 /*!
+ Refresh user session token asynchronously.
+
+ @param block The callback of request.
+ */
+- (void)refreshSessionTokenWithBlock:(AVBooleanResultBlock)block;
+
+/*!
  Makes a request to login a user with specified credentials. Returns an
  instance of the successfully logged in AVUser. This will also cache the user 
  locally so that calls to userFromCurrentUser will use the latest logged in user.
