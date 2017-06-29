@@ -428,4 +428,20 @@
     XCTAssertNotNil(user.sessionToken);
 }
 
+- (void)testRefreshSessionToken {
+    AVUser *user = [self signUpRandomUser];
+    NSString *firstSessionToken = user.sessionToken;
+    XCTAssertNotNil(firstSessionToken);
+
+    [user refreshSessionTokenWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        XCTAssertTrue(succeeded);
+        NSString *secondSessionToken = user.sessionToken;
+
+        XCTAssertNotEqualObjects(firstSessionToken, secondSessionToken);
+        XCTAssertNotNil(secondSessionToken);
+        NOTIFY;
+    }];
+    WAIT;
+}
+
 @end
