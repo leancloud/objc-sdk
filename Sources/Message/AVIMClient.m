@@ -428,8 +428,6 @@ static BOOL AVIMClientHasInstantiated = NO;
     }
 
     sessionCommand.configBitmap = LCIMClientSessionEnableMessagePatch;
-    sessionCommand.lastPatchTime = self.lastPatchTimestamp;
-    sessionCommand.lastUnreadNotifTime = self.lastUnreadTimestamp;
 
     genericCommand.sessionMessage = sessionCommand;
     genericCommand.callback = callback;
@@ -444,6 +442,9 @@ static BOOL AVIMClientHasInstantiated = NO;
         AVLoggerError(AVLoggerDomainIM, @"Command not found, can not open client.");
         return;
     }
+
+    command.sessionMessage.lastPatchTime = self.lastPatchTimestamp;
+    command.sessionMessage.lastUnreadNotifTime = self.lastUnreadTimestamp;
 
     NSString *actionString = [AVIMCommandFormatter signatureActionForKey:command.op];
     AVIMSignature *signature = [self signatureWithClientId:command.peerId conversationId:nil action:actionString actionOnClientIds:nil];
