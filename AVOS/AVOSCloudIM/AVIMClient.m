@@ -362,30 +362,10 @@ static BOOL AVIMClientHasInstantiated = NO;
     return socketWrapper;
 }
 
-- (int64_t)lastPatchTimestamp {
-    @synchronized (self) {
-        if (_lastPatchTimestamp > 0)
-            return _lastPatchTimestamp;
-
-        _lastPatchTimestamp = [[NSDate date] timeIntervalSince1970] * 1000;
-        return _lastPatchTimestamp;
-    }
-}
-
 - (void)updateLastPatchTimestamp:(int64_t)patchTimestamp {
     @synchronized (self) {
         if (patchTimestamp > _lastPatchTimestamp)
             _lastPatchTimestamp = patchTimestamp;
-    }
-}
-
-- (int64_t)lastUnreadTimestamp {
-    @synchronized (self) {
-        if (_lastUnreadTimestamp > 0)
-            return _lastUnreadTimestamp;
-
-        _lastUnreadTimestamp = [[NSDate date] timeIntervalSince1970] * 1000;
-        return _lastUnreadTimestamp;
     }
 }
 
@@ -447,8 +427,13 @@ static BOOL AVIMClientHasInstantiated = NO;
         return;
     }
 
-    command.sessionMessage.lastPatchTime = self.lastPatchTimestamp;
-    command.sessionMessage.lastUnreadNotifTime = self.lastUnreadTimestamp;
+    int64_t lastPatchTimestamp  = self.lastPatchTimestamp;
+    int64_t lastUnreadTimestamp = self.lastUnreadTimestamp;
+
+    if (lastPatchTimestamp)
+        command.sessionMessage.lastPatchTime = lastPatchTimestamp;
+    if (lastUnreadTimestamp)
+        command.sessionMessage.lastUnreadNotifTime = lastUnreadTimestamp;
 
     NSString *actionString = [AVIMCommandFormatter signatureActionForKey:command.op];
     AVIMSignature *signature = [self signatureWithClientId:command.peerId conversationId:nil action:actionString actionOnClientIds:nil];
@@ -1285,6 +1270,11 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 - (void)sendACKForPatchCommand:(AVIMGenericCommand *)inCommand {
+    int64_t lastPatchTimestamp = self.lastPatchTimestamp;
+
+    if (!lastPatchTimestamp)
+        return;
+
     AVIMGenericCommand *command = [[AVIMGenericCommand alloc] init];
 
     command.peerId = self.clientId;
