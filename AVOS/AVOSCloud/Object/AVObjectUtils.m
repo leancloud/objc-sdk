@@ -491,10 +491,12 @@
     NSMutableDictionary * result = [NSMutableDictionary dictionary];
     [result setObject:@"Object" forKey:kAVTypeTag];
 
-    for(NSDictionary * dict in objects) {
-        NSArray * keys = [dict allKeys];
+    for (NSDictionary *object in objects) {
+        NSDictionary *dictionary = [object copy];
+        NSArray *keys = [dictionary allKeys];
+
         for(NSString * key in keys) {
-            id valueObject = [self snapshotDictionary:[dict objectForKey:key] recursive:recursive];
+            id valueObject = [self snapshotDictionary:dictionary[key] recursive:recursive];
             if (valueObject != nil) {
                 [result setObject:valueObject forKey:key];
             }
