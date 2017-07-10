@@ -21,20 +21,16 @@
 @implementation AVConnection
 
 - (instancetype)init {
-    self = [super init];
-
-    if (self) {
-        [self doInitialize];
-    }
-
-    return self;
+    return [self initWithConfiguration:nil];
 }
 
 - (instancetype)initWithConfiguration:(id<AVConnectionConfigurable>)configuration {
-    self = [self init];
+    self = [super init];
 
     if (self) {
         _configuration = [configuration copyWithZone:nil];
+
+        [self doInitialize];
     }
 
     return self;
