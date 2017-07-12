@@ -8,3 +8,4 @@
 
 #import "AVSDK.h"
 #import "AVApplication.h"
+#import "AVNamedTable.h"
