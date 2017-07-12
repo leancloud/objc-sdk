@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AVNamedTable.h"
 
 /**
  A protocol defines a frame that can be sent by connection.
@@ -23,22 +24,22 @@
 @end
 
 /**
- A protocol defines an object that used to tune up behaviors of connection.
+ This class defines some options which can tune up behaviors of connection.
  */
-@protocol AVConnectionConfigurable <NSObject, NSCopying>
+@interface AVConnectionOptions : AVNamedTable
 
 @end
 
 @interface AVConnection : NSObject
 
-@property (nonatomic, copy, readonly) id<AVConnectionConfigurable> configuration;
+@property (nonatomic, copy, readonly) AVConnectionOptions *options;
 
 /**
- Initialize connection with configuration.
+ Initialize connection with options.
 
- @param configuration The connection configuration.
+ @param options The connection options.
  */
-- (instancetype)initWithConfiguration:(id<AVConnectionConfigurable>)configuration;
+- (instancetype)initWithOptions:(AVConnectionOptions *)options;
 
 /**
  Add a delegate for receiving events on connection.

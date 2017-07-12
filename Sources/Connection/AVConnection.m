@@ -13,22 +13,26 @@
 @interface AVConnection ()
 
 @property (nonatomic, strong) SRWebSocket *webSocket;
-@property (nonatomic,   copy) id<AVConnectionConfigurable> configuration;
+@property (nonatomic,   copy) AVConnectionOptions *options;
 @property (nonatomic, strong) NSHashTable *delegates;
+
+@end
+
+@implementation AVConnectionOptions
 
 @end
 
 @implementation AVConnection
 
 - (instancetype)init {
-    return [self initWithConfiguration:nil];
+    return [self initWithOptions:nil];
 }
 
-- (instancetype)initWithConfiguration:(id<AVConnectionConfigurable>)configuration {
+- (instancetype)initWithOptions:(AVConnectionOptions *)options {
     self = [super init];
 
     if (self) {
-        _configuration = [configuration copyWithZone:nil];
+        _options = [options copy];
 
         [self doInitialize];
     }
