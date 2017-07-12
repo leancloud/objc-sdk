@@ -370,7 +370,7 @@ static const char *propertyTableKey = "property-table";
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     NSDictionary *propertyTable = [aDecoder decodeObjectForKey:@(propertyTableKey)];
-    NSMutableDictionary *mutablePropertyTable = [[NSMutableDictionary alloc] initWithDictionary:propertyTable copyItems:YES];
+    NSMutableDictionary *mutablePropertyTable = [[NSMutableDictionary alloc] initWithDictionary:propertyTable];
 
     return [self initWithPropertyTable:mutablePropertyTable];
 }
@@ -418,7 +418,7 @@ static const char *propertyTableKey = "property-table";
 }
 
 - (NSMutableDictionary *)propertyTableMutableCopy {
-    return [[NSMutableDictionary alloc] initWithDictionary:[self propertyTable] copyItems:YES];
+    return [[NSMutableDictionary alloc] initWithDictionary:[self propertyTable]];
 }
 
 - (void)setObject:(id)object forKeyedSubscript:(NSString *)key {
