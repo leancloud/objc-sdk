@@ -352,6 +352,9 @@ void prepareDynamicClass(Class aClass) {
     } while((eachClass = class_getSuperclass(eachClass)));
 }
 
+static const char *propertyTableKey = "property-table";
+
+
 @implementation AVDynamicObject
 
 + (void)initialize {
@@ -362,35 +365,50 @@ void prepareDynamicClass(Class aClass) {
     }
 }
 
-- (instancetype)initWithDictionary:(NSDictionary *)dictionary {
+- (instancetype)initWithPropertyTable:(NSMutableDictionary *)propertyTable {
     self = [super init];
 
     if (self) {
-        [self setPropertyTable:[dictionary mutableCopy]];
+        [self setPropertyTable:propertyTable];
     }
 
     return self;
 }
 
-- (id)copyWithZone:(NSZone *)zone {
-    Class clazz = [self class];
-    NSDictionary *properties = [self properties];
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    NSDictionary *propertyTable = [aDecoder decodeObjectForKey:@(propertyTableKey)];
+    NSMutableDictionary *mutablePropertyTable = [[NSMutableDictionary alloc] initWithDictionary:propertyTable copyItems:YES];
 
-    return [[clazz alloc] initWithDictionary:properties];
+    return [self initWithPropertyTable:mutablePropertyTable];
 }
 
-static const char *PropertyTableAssociationKey = "property-table";
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    NSDictionary *propertyTable = [self propertyTableCopy];
+
+    [aCoder encodeObject:propertyTable forKey:@(propertyTableKey)];
+}
+
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
+- (id)copyWithZone:(NSZone *)zone {
+    Class clazz = [self class];
+    NSMutableDictionary *propertyTable = [self propertyTableMutableCopy];
+
+    return [[clazz alloc] initWithPropertyTable:propertyTable];
+}
 
 - (NSMutableDictionary *)propertyTable {
     @synchronized (self) {
         NSMutableDictionary *propertyTable = nil;
-        propertyTable = objc_getAssociatedObject(self, PropertyTableAssociationKey);
+        propertyTable = objc_getAssociatedObject(self, propertyTableKey);
 
         if (propertyTable)
             return propertyTable;
 
         propertyTable = [NSMutableDictionary dictionary];
-        objc_setAssociatedObject(self, PropertyTableAssociationKey, propertyTable, OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, propertyTableKey, propertyTable, OBJC_ASSOCIATION_RETAIN);
 
         return propertyTable;
     }
@@ -398,13 +416,16 @@ static const char *PropertyTableAssociationKey = "property-table";
 
 - (void)setPropertyTable:(NSMutableDictionary *)propertyTable {
     @synchronized (self) {
-        objc_setAssociatedObject(self, PropertyTableAssociationKey, propertyTable, OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, propertyTableKey, propertyTable, OBJC_ASSOCIATION_RETAIN);
     }
 }
 
-- (NSDictionary *)properties {
-    NSDictionary *properties = [NSDictionary dictionaryWithDictionary:[self propertyTable]];
-    return properties;
+- (NSDictionary *)propertyTableCopy {
+    return [[self propertyTable] copy];
+}
+
+- (NSMutableDictionary *)propertyTableMutableCopy {
+    return [[NSMutableDictionary alloc] initWithDictionary:[self propertyTable] copyItems:YES];
 }
 
 - (void)setObject:(id)object forKeyedSubscript:(NSString *)key {

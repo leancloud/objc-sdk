@@ -10,7 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AVDynamicObject : NSObject <NSCopying>
+@interface AVDynamicObject : NSObject <NSCopying, NSSecureCoding>
+
+- (nullable id)objectForKey:(NSString *)key;
+
+- (void)setObject:(nullable id)object forKey:(NSString *)key;
 
 - (nullable id)objectForKeyedSubscript:(NSString *)key;
 
