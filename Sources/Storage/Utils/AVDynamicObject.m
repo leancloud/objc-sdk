@@ -7,7 +7,6 @@
 //
 
 #import "AVDynamicObject.h"
-#import "AVDynamicObject_Internal.h"
 #import <objc/runtime.h>
 
 @interface AVDynamicObject ()
