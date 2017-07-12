@@ -9,7 +9,6 @@
 #import "AVSMS.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"
-#import "AVDynamicObject_Internal.h"
 
 @interface AVShortMessageRequestOptions ()
 

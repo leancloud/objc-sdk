@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVDynamicObject.h"
+#import "AVNamedTable.h"
 #import "AVConstants.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, AVShortMessageType) {
     AVShortMessageTypeVoice
 };
 
-@interface AVShortMessageRequestOptions : AVDynamicObject
+@interface AVShortMessageRequestOptions : AVNamedTable
 
 /**
  Time to live of validation information, in minutes. Defaults to 10 minutes.

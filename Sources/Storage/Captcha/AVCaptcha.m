@@ -7,7 +7,6 @@
 //
 
 #import "AVCaptcha.h"
-#import "AVDynamicObject_Internal.h"
 #import "NSDictionary+LeanCloud.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"
@@ -42,12 +41,14 @@
             return;
         }
 
+        AVCaptchaDigest *captchaDigest = [[AVCaptchaDigest alloc] init];
+
         NSDictionary *dictionary = [object lc_selectEntriesWithKeyMappings:@{
             @"captcha_token" : @"nonce",
             @"captcha_url"   : @"URLString"
         }];
 
-        AVCaptchaDigest *captchaDigest = [[AVCaptchaDigest alloc] initWithDictionary:dictionary];
+        [captchaDigest setValuesForKeysWithDictionary:dictionary];
 
         [AVUtils callIdResultBlock:callback object:captchaDigest error:nil];
     }];

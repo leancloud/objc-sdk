@@ -1,15 +1,15 @@
 //
-//  AVDynamicObject.m
+//  AVNamedTable.m
 //  AVOS
 //
 //  Created by Tang Tianyong on 27/04/2017.
 //  Copyright © 2017 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVDynamicObject.h"
+#import "AVNamedTable.h"
 #import <objc/runtime.h>
 
-@interface AVDynamicObject ()
+@interface AVNamedTable ()
 
 - (id)objectForSelector:(SEL)selector;
 
@@ -342,7 +342,7 @@ void prepareEachDynamicClass(Class aClass) {
 NS_INLINE
 void prepareDynamicClass(Class aClass) {
     Class eachClass = aClass;
-    Class rootClass = [AVDynamicObject class];
+    Class rootClass = [AVNamedTable class];
 
     do {
         prepareEachDynamicClass(eachClass);
@@ -354,10 +354,10 @@ void prepareDynamicClass(Class aClass) {
 static const char *propertyTableKey = "property-table";
 
 
-@implementation AVDynamicObject
+@implementation AVNamedTable
 
 + (void)initialize {
-    id lockAround = [AVDynamicObject class];
+    id lockAround = [AVNamedTable class];
 
     @synchronized (lockAround) {
         prepareDynamicClass(self);

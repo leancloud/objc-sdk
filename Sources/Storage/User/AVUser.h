@@ -5,7 +5,7 @@
 #import "AVConstants.h"
 #import "AVObject.h"
 #import "AVSubclassing.h"
-#import "AVDynamicObject.h"
+#import "AVNamedTable.h"
 
 @class AVRole;
 @class AVQuery;
@@ -385,7 +385,7 @@ A LeanCloud Framework User Object that is a local representation of a user persi
 
 @end
 
-@interface AVUserShortMessageRequestOptions : AVDynamicObject
+@interface AVUserShortMessageRequestOptions : AVNamedTable
 
 @property (nonatomic, copy, nullable) NSString *validationToken;
 

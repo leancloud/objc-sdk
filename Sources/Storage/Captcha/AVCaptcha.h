@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVDynamicObject.h"
+#import "AVNamedTable.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AVCaptchaDigest : AVDynamicObject
+@interface AVCaptchaDigest : AVNamedTable
 
 /**
  A nonce used to verify captcha.
@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface AVCaptchaRequestOptions : AVDynamicObject
+@interface AVCaptchaRequestOptions : AVNamedTable
 
 /**
  Width of captcha image, in pixels.
