@@ -172,6 +172,11 @@ BOOL hasProperty(id object, NSString *name) {
 }
 
 NS_INLINE
+NSString *getPropertyName(objc_property_t property) {
+    return @(property_getName(property));
+}
+
+NS_INLINE
 NSString *firstLowercaseString(NSString *string) {
     NSString *firstLetter = [[string substringToIndex:1] lowercaseString];
     string = [firstLetter stringByAppendingString:[string substringFromIndex:1]];
@@ -345,6 +350,50 @@ void prepareClass(Class aClass) {
     } while((eachClass = class_getSuperclass(eachClass)));
 }
 
+NS_INLINE
+void iterateProperties(AVNamedTable *object, void(^block)(objc_property_t property)) {
+    Class rootClass = [AVNamedTable class];
+
+    if (![object isKindOfClass:rootClass])
+        return;
+
+    Class eachClass = object_getClass(object);
+    NSMutableSet *visitedPropertyNames = [NSMutableSet set];
+
+    do {
+        unsigned int propertyCount = 0;
+        objc_property_t *properties = class_copyPropertyList(eachClass, &propertyCount);
+
+        if (!properties)
+            continue;
+
+        for (unsigned int i = 0; i < propertyCount; ++i) {
+            objc_property_t property = properties[i];
+            char *ivarName = property_copyAttributeValue(property, "V");
+
+            if (!ivarName)
+                continue;
+
+            free(ivarName);
+
+            NSString *propertyName = getPropertyName(property);
+
+            if (!propertyName)
+                continue;
+            if ([visitedPropertyNames containsObject:propertyName])
+                continue;
+
+            [visitedPropertyNames addObject:propertyName];
+
+            block(property);
+        }
+
+        free(properties);
+
+        eachClass = class_getSuperclass(eachClass);
+    } while (eachClass != rootClass);
+}
+
 static const char *propertyTableKey = "property-table";
 
 
@@ -401,6 +450,11 @@ static const char *propertyTableKey = "property-table";
             return propertyTable;
 
         propertyTable = [NSMutableDictionary dictionary];
+
+        /* Merge instance variables into property table. */
+        NSDictionary *ivarTable = [self getIvarTable];
+        [propertyTable addEntriesFromDictionary:ivarTable];
+
         objc_setAssociatedObject(self, propertyTableKey, propertyTable, OBJC_ASSOCIATION_RETAIN);
 
         return propertyTable;
@@ -457,16 +511,21 @@ static const char *propertyTableKey = "property-table";
 }
 
 - (id)objectForKey:(NSString *)key {
-    return [self propertyTable][key] ?: [self instanceVariableValueForKey:key];
+    return [self propertyTable][key] ?: [self getIvarForKey:key];
 }
 
-- (id)instanceVariableValueForKey:(NSString *)key {
+- (id)getIvarForKey:(NSString *)key {
     Class clazz = object_getClass(self);
     objc_property_t property = class_getProperty(clazz, key.UTF8String);
 
     if (!property)
         return nil;
 
+    return [self getIvarForProperty:property];
+}
+
+- (id)getIvarForProperty:(objc_property_t)property {
+    Class clazz = object_getClass(self);
     char *ivarName = property_copyAttributeValue(property, "V");
 
     if (!ivarName)
@@ -506,6 +565,24 @@ static const char *propertyTableKey = "property-table";
     free(type);
 
     return result;
+}
+
+/**
+ Get an table, which the key is property name,
+ and the value is the instance variable of that property.
+ */
+- (NSDictionary *)getIvarTable {
+    NSMutableDictionary *ivarTable = [NSMutableDictionary dictionary];
+
+    iterateProperties(self, ^(objc_property_t property) {
+        id ivar = [self getIvarForProperty:property];
+        if (ivar) {
+            NSString *propertyName = getPropertyName(property);
+            ivarTable[propertyName] = ivar;
+        }
+    });
+
+    return ivarTable;
 }
 
 - (NSString *)debugDescription {
