@@ -90,8 +90,10 @@
     XCTAssertEqualObjects(namedTableCopy.string, string);
     XCTAssertEqualObjects(namedTableCopy.object, object);
 
+    NSData *archivedData = nil;
+
     /* Test encode and decode. */
-    NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:namedTable];
+    archivedData = [NSKeyedArchiver archivedDataWithRootObject:namedTable];
     AVNamedTableSubclass *decodedNamedTable = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
 
     XCTAssertEqual(decodedNamedTable.number, number);
@@ -109,6 +111,21 @@
     XCTAssertEqual(yaNamedTable.AnotherNumber, AnotherNumber);
     XCTAssertEqualObjects(yaNamedTable.string, string);
     XCTAssertEqualObjects(yaNamedTable.object, object);
+
+    AVNamedTableSubclass *yaNamedTableCopy = [yaNamedTable copy];
+
+    XCTAssertEqual(yaNamedTableCopy.number, number);
+    XCTAssertEqual(yaNamedTableCopy.AnotherNumber, AnotherNumber);
+    XCTAssertEqualObjects(yaNamedTableCopy.string, string);
+    XCTAssertEqualObjects(yaNamedTableCopy.object, object);
+
+    archivedData = [NSKeyedArchiver archivedDataWithRootObject:yaNamedTable];
+    AVNamedTableSubclass *encodedYaNamedTable = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
+
+    XCTAssertEqual(encodedYaNamedTable.number, number);
+    XCTAssertEqual(encodedYaNamedTable.AnotherNumber, AnotherNumber);
+    XCTAssertEqualObjects(encodedYaNamedTable.string, string);
+    XCTAssertEqualObjects(encodedYaNamedTable.object, object);
 }
 
 @end
