@@ -16,10 +16,13 @@
 @interface AVNamedTableSubclass : AVNamedTable
 
 @property (nonatomic, assign) NSInteger number;
+/* Test capitalized property. */
+@property (nonatomic, assign) NSInteger AnotherNumber;
 @property (nonatomic,   copy) NSString *string;
 @property (nonatomic, strong) id<NSCopying, NSSecureCoding> object;
 
 - (instancetype)initWithNumber:(NSInteger)number
+                 AnotherNumber:(NSInteger)AnotherNumber
                         string:(NSString *)string
                         object:(id<NSCopying, NSSecureCoding>)object;
 
@@ -28,6 +31,7 @@
 @implementation AVNamedTableSubclass
 
 - (instancetype)initWithNumber:(NSInteger)number
+                 AnotherNumber:(NSInteger)AnotherNumber
                         string:(NSString *)string
                         object:(id<NSCopying,NSSecureCoding>)object
 {
@@ -35,6 +39,7 @@
 
     if (self) {
         _number = number;
+        _AnotherNumber = AnotherNumber;
         _string = [string copy];
         _object = object;
     }
@@ -58,6 +63,7 @@
 
 - (void)testNamedTable {
     NSInteger number = 42;
+    NSInteger AnotherNumber = 1024;
     /* Use mutable string to make sure that it can be copied. */
     NSString *string = [[NSMutableString alloc] initWithFormat:@"foo and bar"];
     id        object = [NSArray array];
@@ -65,10 +71,12 @@
     AVNamedTableSubclass *namedTable = [[AVNamedTableSubclass alloc] init];
 
     namedTable.number = number;
+    namedTable.AnotherNumber = AnotherNumber;
     namedTable.string = string;
     namedTable.object = object;
 
     XCTAssertEqual(namedTable.number, number);
+    XCTAssertEqual(namedTable.AnotherNumber, AnotherNumber);
     XCTAssertEqualObjects(namedTable.string, string);
     XCTAssertEqualObjects(namedTable.object, object);
 
@@ -78,6 +86,7 @@
     AVNamedTableSubclass *namedTableCopy = [namedTable copy];
 
     XCTAssertEqual(namedTableCopy.number, number);
+    XCTAssertEqual(namedTableCopy.AnotherNumber, AnotherNumber);
     XCTAssertEqualObjects(namedTableCopy.string, string);
     XCTAssertEqualObjects(namedTableCopy.object, object);
 
@@ -86,15 +95,18 @@
     AVNamedTableSubclass *decodedNamedTable = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
 
     XCTAssertEqual(decodedNamedTable.number, number);
+    XCTAssertEqual(decodedNamedTable.AnotherNumber, AnotherNumber);
     XCTAssertEqualObjects(decodedNamedTable.string, string);
     XCTAssertEqualObjects(decodedNamedTable.object, object);
 
     /* Test instance variables work as expected. */
     AVNamedTableSubclass *yaNamedTable = [[AVNamedTableSubclass alloc] initWithNumber:number
+                                                                        AnotherNumber:AnotherNumber
                                                                                string:string
                                                                                object:object];
 
     XCTAssertEqual(yaNamedTable.number, number);
+    XCTAssertEqual(yaNamedTable.AnotherNumber, AnotherNumber);
     XCTAssertEqualObjects(yaNamedTable.string, string);
     XCTAssertEqualObjects(yaNamedTable.object, object);
 }
