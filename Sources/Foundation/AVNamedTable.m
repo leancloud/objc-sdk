@@ -457,7 +457,55 @@ static const char *propertyTableKey = "property-table";
 }
 
 - (id)objectForKey:(NSString *)key {
-    return [self propertyTable][key];
+    return [self propertyTable][key] ?: [self instanceVariableValueForKey:key];
+}
+
+- (id)instanceVariableValueForKey:(NSString *)key {
+    Class clazz = object_getClass(self);
+    objc_property_t property = class_getProperty(clazz, key.UTF8String);
+
+    if (!property)
+        return nil;
+
+    char *ivarName = property_copyAttributeValue(property, "V");
+
+    if (!ivarName)
+        return nil;
+
+    Ivar ivar = class_getInstanceVariable(clazz, ivarName);
+
+    free(ivarName);
+
+    if (!ivar)
+        return nil;
+
+    char *type = property_copyAttributeValue(property, "T");
+
+    if (!type)
+        return nil;
+
+    id result = nil;
+
+    switch (type[0]) {
+    case '@':
+        result = object_getIvar(self, ivar);
+        break;
+    case 'f':
+    case 'd': {
+        double number = ((double(*)(id, Ivar))object_getIvar)(self, ivar);
+        result = @(number);
+    }
+        break;
+    default: {
+        uint64_t number = ((uint64_t(*)(id, Ivar))object_getIvar)(self, ivar);
+        result = @(number);
+    }
+        break;
+    }
+
+    free(type);
+
+    return result;
 }
 
 - (NSString *)debugDescription {
