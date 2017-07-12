@@ -320,6 +320,8 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 }
 
 - (void)updateValue:(id)value forKey:(NSString *)key {
+    if (!key)
+        return;
     if ([AVUtils containsProperty:key inClass:[self class] containSuper:YES filterDynamic:YES]) {
         self.inSetter = YES;
         [self setValue:value forKey:key];
