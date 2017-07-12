@@ -188,7 +188,7 @@ NSString *firstUppercaseString(NSString *string) {
 }
 
 NS_INLINE
-void synthesizeDynamicProperty(Class aClass, NSString *getterName, const char *type, BOOL isCopy) {
+void synthesizeProperty(Class aClass, NSString *getterName, const char *type, BOOL isCopy) {
     if (!getterName.length)
         return;
 
@@ -199,83 +199,83 @@ void synthesizeDynamicProperty(Class aClass, NSString *getterName, const char *t
 
     switch (type[0]) {
     case 'c':
-        class_addMethod(aClass, getter, (IMP)getter_char, "c@:");
-        class_addMethod(aClass, setter, (IMP)setter_char, "v@:c");
+        class_replaceMethod(aClass, getter, (IMP)getter_char, "c@:");
+        class_replaceMethod(aClass, setter, (IMP)setter_char, "v@:c");
         break;
     case 'i':
-        class_addMethod(aClass, getter, (IMP)getter_int, "i@:");
-        class_addMethod(aClass, setter, (IMP)setter_int, "v@:i");
+        class_replaceMethod(aClass, getter, (IMP)getter_int, "i@:");
+        class_replaceMethod(aClass, setter, (IMP)setter_int, "v@:i");
         break;
     case 's':
-        class_addMethod(aClass, getter, (IMP)getter_short, "s@:");
-        class_addMethod(aClass, setter, (IMP)setter_short, "v@:s");
+        class_replaceMethod(aClass, getter, (IMP)getter_short, "s@:");
+        class_replaceMethod(aClass, setter, (IMP)setter_short, "v@:s");
         break;
     case 'l':
-        class_addMethod(aClass, getter, (IMP)getter_long, "l@:");
-        class_addMethod(aClass, setter, (IMP)setter_long, "v@:l");
+        class_replaceMethod(aClass, getter, (IMP)getter_long, "l@:");
+        class_replaceMethod(aClass, setter, (IMP)setter_long, "v@:l");
         break;
     case 'q':
-        class_addMethod(aClass, getter, (IMP)getter_long_long, "q@:");
-        class_addMethod(aClass, setter, (IMP)setter_long_long, "v@:q");
+        class_replaceMethod(aClass, getter, (IMP)getter_long_long, "q@:");
+        class_replaceMethod(aClass, setter, (IMP)setter_long_long, "v@:q");
         break;
     case 'C':
-        class_addMethod(aClass, getter, (IMP)getter_unsigned_char, "C@:");
-        class_addMethod(aClass, setter, (IMP)setter_unsigned_char, "v@:C");
+        class_replaceMethod(aClass, getter, (IMP)getter_unsigned_char, "C@:");
+        class_replaceMethod(aClass, setter, (IMP)setter_unsigned_char, "v@:C");
         break;
     case 'I':
-        class_addMethod(aClass, getter, (IMP)getter_unsigned_int, "I@:");
-        class_addMethod(aClass, setter, (IMP)setter_unsigned_int, "v@:I");
+        class_replaceMethod(aClass, getter, (IMP)getter_unsigned_int, "I@:");
+        class_replaceMethod(aClass, setter, (IMP)setter_unsigned_int, "v@:I");
         break;
     case 'S':
-        class_addMethod(aClass, getter, (IMP)getter_unsigned_short, "S@:");
-        class_addMethod(aClass, setter, (IMP)setter_unsigned_short, "v@:S");
+        class_replaceMethod(aClass, getter, (IMP)getter_unsigned_short, "S@:");
+        class_replaceMethod(aClass, setter, (IMP)setter_unsigned_short, "v@:S");
         break;
     case 'L':
-        class_addMethod(aClass, getter, (IMP)getter_unsigned_long, "L@:");
-        class_addMethod(aClass, setter, (IMP)setter_unsigned_long, "v@:L");
+        class_replaceMethod(aClass, getter, (IMP)getter_unsigned_long, "L@:");
+        class_replaceMethod(aClass, setter, (IMP)setter_unsigned_long, "v@:L");
         break;
     case 'Q':
-        class_addMethod(aClass, getter, (IMP)getter_unsigned_long_long, "Q@:");
-        class_addMethod(aClass, setter, (IMP)setter_unsigned_long_long, "v@:Q");
+        class_replaceMethod(aClass, getter, (IMP)getter_unsigned_long_long, "Q@:");
+        class_replaceMethod(aClass, setter, (IMP)setter_unsigned_long_long, "v@:Q");
         break;
     case 'f':
-        class_addMethod(aClass, getter, (IMP)getter_float, "f@:");
-        class_addMethod(aClass, setter, (IMP)setter_float, "v@:f");
+        class_replaceMethod(aClass, getter, (IMP)getter_float, "f@:");
+        class_replaceMethod(aClass, setter, (IMP)setter_float, "v@:f");
         break;
     case 'd':
-        class_addMethod(aClass, getter, (IMP)getter_double, "d@:");
-        class_addMethod(aClass, setter, (IMP)setter_double, "v@:d");
+        class_replaceMethod(aClass, getter, (IMP)getter_double, "d@:");
+        class_replaceMethod(aClass, setter, (IMP)setter_double, "v@:d");
         break;
     case 'B':
-        class_addMethod(aClass, getter, (IMP)getter_bool, "B@:");
-        class_addMethod(aClass, setter, (IMP)setter_bool, "v@:B");
+        class_replaceMethod(aClass, getter, (IMP)getter_bool, "B@:");
+        class_replaceMethod(aClass, setter, (IMP)setter_bool, "v@:B");
         break;
     case '*':
-        class_addMethod(aClass, getter, (IMP)getter_char_pointer, "*@:");
-        class_addMethod(aClass, setter, (IMP)setter_char_pointer, "v@:*");
+        class_replaceMethod(aClass, getter, (IMP)getter_char_pointer, "*@:");
+        class_replaceMethod(aClass, setter, (IMP)setter_char_pointer, "v@:*");
         break;
     case '@':
-        class_addMethod(aClass, getter, (IMP)getter_object, "@@:");
+        class_replaceMethod(aClass, getter, (IMP)getter_object, "@@:");
 
         if (isCopy)
-            class_addMethod(aClass, setter, (IMP)setter_object_copy, "v@:@");
+            class_replaceMethod(aClass, setter, (IMP)setter_object_copy, "v@:@");
         else
-            class_addMethod(aClass, setter, (IMP)setter_object, "v@:@");
+            class_replaceMethod(aClass, setter, (IMP)setter_object, "v@:@");
 
         break;
     case '#':
-        class_addMethod(aClass, getter, (IMP)getter_class, "#@:");
-        class_addMethod(aClass, setter, (IMP)setter_class, "v@:#");
+        class_replaceMethod(aClass, getter, (IMP)getter_class, "#@:");
+        class_replaceMethod(aClass, setter, (IMP)setter_class, "v@:#");
         break;
     case ':':
-        class_addMethod(aClass, getter, (IMP)getter_selector, ":@:");
-        class_addMethod(aClass, setter, (IMP)setter_selector, "v@::");
+        class_replaceMethod(aClass, getter, (IMP)getter_selector, ":@:");
+        class_replaceMethod(aClass, setter, (IMP)setter_selector, "v@::");
         break;
     }
 }
 
 NS_INLINE
-void synthesizeDynamicProperties(Class aClass) {
+void synthesizeProperties(Class aClass) {
     unsigned int propertyCount = 0;
     objc_property_t *properties = class_copyPropertyList(aClass, &propertyCount);
 
@@ -288,26 +288,20 @@ void synthesizeDynamicProperties(Class aClass) {
 
     for (unsigned int i = 0; i < propertyCount; ++i) {
         objc_property_t property = properties[i];
-        char *dynamic = property_copyAttributeValue(property, "D");
+        const char *name = property_getName(property);
 
-        if (dynamic) {
-            free(dynamic);
+        if (!name)
+            continue;
 
-            const char* name = property_getName(property);
+        char *type = property_copyAttributeValue(property, "T");
+        char *copy = property_copyAttributeValue(property, "C");
 
-            if (!name)
-                continue;
+        synthesizeProperty(aClass, @(name), type, copy != NULL);
 
-            char *type = property_copyAttributeValue(property, "T");
-            char *copy = property_copyAttributeValue(property, "C");
-
-            synthesizeDynamicProperty(aClass, @(name), type, copy != NULL);
-
-            if (type)
-                free(type);
-            if (copy)
-                free(copy);
-        }
+        if (type)
+            free(type);
+        if (copy)
+            free(copy);
     }
 
     if (properties)
@@ -325,7 +319,7 @@ NSMutableDictionary *preparedClassTable() {
 }
 
 NS_INLINE
-void prepareEachDynamicClass(Class aClass) {
+void prepareEachClass(Class aClass) {
     if (!aClass)
         return;
 
@@ -336,16 +330,16 @@ void prepareEachDynamicClass(Class aClass) {
         return;
 
     classTable[key] = @(1);
-    synthesizeDynamicProperties(aClass);
+    synthesizeProperties(aClass);
 }
 
 NS_INLINE
-void prepareDynamicClass(Class aClass) {
+void prepareClass(Class aClass) {
     Class eachClass = aClass;
     Class rootClass = [AVNamedTable class];
 
     do {
-        prepareEachDynamicClass(eachClass);
+        prepareEachClass(eachClass);
         if (eachClass == rootClass)
             break;
     } while((eachClass = class_getSuperclass(eachClass)));
@@ -360,7 +354,7 @@ static const char *propertyTableKey = "property-table";
     id lockAround = [AVNamedTable class];
 
     @synchronized (lockAround) {
-        prepareDynamicClass(self);
+        prepareClass(self);
     }
 }
 
