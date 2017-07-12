@@ -7,13 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AVNamedTable.h"
 
 typedef NS_ENUM(NSInteger, AVApplicationRegion) {
     AVApplicationRegionCN = 1,
     AVApplicationRegionUS
 };
 
-@interface AVApplicationIdentity : NSObject <NSCopying, NSSecureCoding>
+@interface AVApplicationIdentity : AVNamedTable
 
 @property (nonatomic, readonly,   copy) NSString *ID;
 @property (nonatomic, readonly,   copy) NSString *key;
@@ -25,7 +26,7 @@ typedef NS_ENUM(NSInteger, AVApplicationRegion) {
 
 @end
 
-@interface AVApplicationModuleHosts : NSObject <NSCopying, NSSecureCoding>
+@interface AVApplicationModuleHosts : AVNamedTable
 
 @property (nonatomic, copy) NSString *API;
 @property (nonatomic, copy) NSString *engine;
@@ -35,13 +36,13 @@ typedef NS_ENUM(NSInteger, AVApplicationRegion) {
 
 @end
 
-@interface AVApplicationConfiguration : NSObject <NSCopying, NSSecureCoding>
+@interface AVApplicationConfiguration : AVNamedTable
 
 @property (nonatomic, readonly, copy) AVApplicationModuleHosts *moduleHosts;
 
 @end
 
-@interface AVApplication : NSObject <NSCopying, NSSecureCoding>
+@interface AVApplication : AVNamedTable
 
 @property (nonatomic, readonly, copy) AVApplicationIdentity *identity;
 @property (nonatomic, readonly, copy) AVApplicationConfiguration *configuration;
