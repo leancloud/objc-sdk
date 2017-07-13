@@ -10,6 +10,8 @@
 #import "AVNamedTable.h"
 #import "AVApplication.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  A protocol defines a frame that can be sent by connection.
  */
@@ -34,7 +36,9 @@
 @interface AVConnection : NSObject
 
 @property (nonatomic, strong, readonly) AVApplication *application;
-@property (nonatomic,   copy, readonly) AVConnectionOptions *options;
+@property (nonatomic,   copy, readonly, nullable) AVConnectionOptions *options;
+
+- (instancetype)init NS_UNAVAILABLE;
 
 /**
  Initialize connection with options.
@@ -42,7 +46,7 @@
  @param options The connection options.
  */
 - (instancetype)initWithApplication:(AVApplication *)application
-                            options:(AVConnectionOptions *)options;
+                            options:(nullable AVConnectionOptions *)options NS_DESIGNATED_INITIALIZER;
 
 /**
  Add a delegate for receiving events on connection.
@@ -78,3 +82,5 @@
 - (void)close;
 
 @end
+
+NS_ASSUME_NONNULL_END
