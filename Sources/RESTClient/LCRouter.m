@@ -222,7 +222,9 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
                                                [self cacheServerTable:responseObject forKey:LCAppRouterCacheKey];
                                            }
                                        }
-                                       failure:nil];
+                                       failure:^(NSHTTPURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nonnull error) {
+                                           /* Do nothing. */
+                                       }];
 }
 
 - (NSString *)prefixVersionForPath:(NSString *)path {

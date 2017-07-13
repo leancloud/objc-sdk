@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "AVApplication.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldNameId;
 FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldNameKey;
 FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldNameSignature;
@@ -20,16 +22,20 @@ FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldNameSignature;
 @interface AVRESTClient : NSObject
 
 @property (nonatomic, readonly, copy) AVApplication *application;
-@property (nonatomic, readonly, copy) id<AVRESTClientConfigurable> configuration;
+@property (nonatomic, readonly, copy, nullable) id<AVRESTClientConfigurable> configuration;
+
+- (instancetype)init NS_UNAVAILABLE;
 
 - (instancetype)initWithApplication:(AVApplication *)application
-                      configuration:(id<AVRESTClientConfigurable>)configuration;
+                      configuration:(nullable id<AVRESTClientConfigurable>)configuration;
 
 - (NSURLSessionDataTask *)sessionDataTaskWithMethod:(NSString *)method
                                            endpoint:(NSString *)endpoint
-                                         parameters:(NSDictionary *)parameters
-                       constructingRequestWithBlock:(void (^)(NSMutableURLRequest *request))requestConstructor
-                                            success:(void (^)(NSHTTPURLResponse *response, id responseObject))successCallback
-                                            failure:(void (^)(NSHTTPURLResponse *response, id responseObject, NSError *error))failureCallback;
+                                         parameters:(nullable NSDictionary *)parameters
+                       constructingRequestWithBlock:(nullable void (^)(NSMutableURLRequest *request))requestConstructor
+                                            success:(void (^)(NSHTTPURLResponse *response, _Nullable id responseObject))successCallback
+                                            failure:(void (^)(NSHTTPURLResponse *response, _Nullable id responseObject, NSError *error))failureCallback;
 
 @end
+
+NS_ASSUME_NONNULL_END
