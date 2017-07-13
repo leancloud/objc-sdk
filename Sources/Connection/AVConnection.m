@@ -25,13 +25,16 @@
 @implementation AVConnection
 
 - (instancetype)init {
-    return [self initWithOptions:nil];
+    return [self initWithApplication:nil options:nil];
 }
 
-- (instancetype)initWithOptions:(AVConnectionOptions *)options {
+- (instancetype)initWithApplication:(AVApplication *)application
+                            options:(AVConnectionOptions *)options
+{
     self = [super init];
 
     if (self) {
+        _application = [application copy];
         _options = [options copy];
 
         [self doInitialize];

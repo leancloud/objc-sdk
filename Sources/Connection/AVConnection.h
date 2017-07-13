@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "AVNamedTable.h"
+#import "AVApplication.h"
 
 /**
  A protocol defines a frame that can be sent by connection.
@@ -32,14 +33,16 @@
 
 @interface AVConnection : NSObject
 
-@property (nonatomic, copy, readonly) AVConnectionOptions *options;
+@property (nonatomic, strong, readonly) AVApplication *application;
+@property (nonatomic,   copy, readonly) AVConnectionOptions *options;
 
 /**
  Initialize connection with options.
 
  @param options The connection options.
  */
-- (instancetype)initWithOptions:(AVConnectionOptions *)options;
+- (instancetype)initWithApplication:(AVApplication *)application
+                            options:(AVConnectionOptions *)options;
 
 /**
  Add a delegate for receiving events on connection.
