@@ -33,8 +33,8 @@ FOUNDATION_EXPORT NSString *const AVHTTPHeaderFieldNameSignature;
                                            endpoint:(NSString *)endpoint
                                          parameters:(nullable NSDictionary *)parameters
                        constructingRequestWithBlock:(nullable void (^)(NSMutableURLRequest *request))requestConstructor
-                                            success:(void (^)(NSHTTPURLResponse *response, _Nullable id responseObject))successCallback
-                                            failure:(void (^)(NSHTTPURLResponse *response, _Nullable id responseObject, NSError *error))failureCallback;
+                                            success:(void (^)(NSHTTPURLResponse *response, id responseObject))successCallback
+                                            failure:(void (^)(NSHTTPURLResponse *response, id responseObject, NSError *error))failureCallback;
 
 @end
 
