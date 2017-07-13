@@ -1091,6 +1091,4 @@ static BOOL enableAutomatic = NO;
 
 @implementation AVUserShortMessageRequestOptions
 
-@dynamic validationToken;
-
 @end

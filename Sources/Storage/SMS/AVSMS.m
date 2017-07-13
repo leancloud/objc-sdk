@@ -18,14 +18,6 @@
 
 @implementation AVShortMessageRequestOptions
 
-@dynamic TTL;
-@dynamic type;
-@dynamic templateName;
-@dynamic templateVariables;
-@dynamic signatureName;
-@dynamic applicationName;
-@dynamic operation;
-
 - (NSString *)typeDescription {
     switch (self.type) {
     case AVShortMessageTypeText:

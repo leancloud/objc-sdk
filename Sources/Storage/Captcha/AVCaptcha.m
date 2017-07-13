@@ -13,15 +13,9 @@
 
 @implementation AVCaptchaDigest
 
-@dynamic nonce;
-@dynamic URLString;
-
 @end
 
 @implementation AVCaptchaRequestOptions
-
-@dynamic width;
-@dynamic height;
 
 @end
 
