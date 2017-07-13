@@ -411,6 +411,15 @@ found:
                                        }];
 }
 
+- (void)getRTMServerTableWithBlock:(void (^)(NSDictionary *RTMServerTable, NSError *error))block {
+    NSDictionary *RTMServerTable = [self cachedRTMServerTable];
+
+    if (RTMServerTable)
+        block(RTMServerTable, nil);
+    else
+        [self fetchRTMServerTableInBackground:block];
+}
+
 - (NSDictionary *)cachedRTMServerTable {
     NSDictionary *RTMServerTable = [self cachedServerTableForKey:LCRTMRouterCacheKey];
 

@@ -42,6 +42,13 @@ FOUNDATION_EXPORT NSString *const LCRouterDidUpdateNotification;
 - (void)fetchRTMServerTableInBackground:(void(^)(NSDictionary *RTMServerTable, NSError *error))block;
 
 /**
+ Get cached RTM server table, if not found, fetch from server.
+
+ @param block The callback to handle result.
+ */
+- (void)getRTMServerTableWithBlock:(void(^)(NSDictionary *RTMServerTable, NSError *error))block;
+
+/**
  Get URL string for storage server.
 
  @param path The API endpoint.

@@ -9,3 +9,5 @@
 #import <Foundation/Foundation.h>
 
 #import "AVOSCloudRESTClient.h"
+
+#import "AVRESTClient+Internal.h"

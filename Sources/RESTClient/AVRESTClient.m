@@ -7,6 +7,7 @@
 //
 
 #import "AVRESTClient.h"
+#import "AVRESTClient+Internal.h"
 #import "AVApplication+RESTClient.h"
 #import "AVSDK+RESTClient.h"
 #import "LCRouter.h"
@@ -21,8 +22,6 @@ NSString *const AVHTTPHeaderFieldNameSignature  = @"X-LC-Sign";
 
 @property (nonatomic, copy) AVApplication *application;
 @property (nonatomic, copy) id<AVRESTClientConfigurable> configuration;
-
-@property (nonatomic, strong) LCRouter *router;
 
 #if OS_OBJECT_USE_OBJC
 @property (nonatomic, strong) dispatch_queue_t completionQueue;
