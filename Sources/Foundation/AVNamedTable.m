@@ -546,8 +546,24 @@ static const char *propertyTableKey = "property-table";
     id result = nil;
 
     switch (type[0]) {
-    case '@':
-        result = object_getIvar(self, ivar);
+    case 'c':
+    case 'i':
+    case 's':
+    case 'l':
+    case 'q': {
+        int64_t number = ((int64_t(*)(id, Ivar))object_getIvar)(self, ivar);
+        result = @(number);
+    }
+        break;
+    case 'C':
+    case 'I':
+    case 'S':
+    case 'L':
+    case 'Q':
+    case '*': {
+        uint64_t number = ((uint64_t(*)(id, Ivar))object_getIvar)(self, ivar);
+        result = @(number);
+    }
         break;
     case 'f':
     case 'd': {
@@ -555,10 +571,21 @@ static const char *propertyTableKey = "property-table";
         result = @(number);
     }
         break;
-    default: {
-        uint64_t number = ((uint64_t(*)(id, Ivar))object_getIvar)(self, ivar);
-        result = @(number);
+    case 'B': {
+        BOOL booleanValue = ((BOOL(*)(id, Ivar))object_getIvar)(self, ivar);
+        result = @(booleanValue);
     }
+        break;
+    case '@':
+    case '#':
+        result = object_getIvar(self, ivar);
+        break;
+    case ':': {
+        SEL selector = ((SEL(*)(id, Ivar))object_getIvar)(self, ivar);
+        result = NSStringFromSelector(selector);
+    }
+        break;
+    default:
         break;
     }
 
