@@ -66,7 +66,18 @@
     NSInteger AnotherNumber = 1024;
     /* Use mutable string to make sure that it can be copied. */
     NSString *string = [[NSMutableString alloc] initWithFormat:@"foo and bar"];
-    id        object = [NSArray array];
+    id<NSCopying, NSSecureCoding> object = [NSArray array];
+
+#define TEST_NAMED_TABLE_PROPERTY_EQUALITY(namedTable) do {     \
+    XCTAssertEqual(namedTable.number, number);                  \
+    XCTAssertEqual(namedTable.AnotherNumber, AnotherNumber);    \
+    XCTAssertEqualObjects(namedTable.string, string);           \
+    XCTAssertEqualObjects(namedTable.object, object);           \
+    /* Make sure that the copy property works as expected. */   \
+    XCTAssertNotEqual(namedTable.string, string);               \
+} while (0)
+
+    NSData *archivedData = nil;
 
     AVNamedTableSubclass *namedTable = [[AVNamedTableSubclass alloc] init];
 
@@ -75,57 +86,29 @@
     namedTable.string = string;
     namedTable.object = object;
 
-    XCTAssertEqual(namedTable.number, number);
-    XCTAssertEqual(namedTable.AnotherNumber, AnotherNumber);
-    XCTAssertEqualObjects(namedTable.string, string);
-    XCTAssertEqualObjects(namedTable.object, object);
-
-    /* Make sure that the copy property works as expected. */
-    XCTAssertNotEqual(namedTable.string, string);
+    TEST_NAMED_TABLE_PROPERTY_EQUALITY(namedTable);
 
     AVNamedTableSubclass *namedTableCopy = [namedTable copy];
-
-    XCTAssertEqual(namedTableCopy.number, number);
-    XCTAssertEqual(namedTableCopy.AnotherNumber, AnotherNumber);
-    XCTAssertEqualObjects(namedTableCopy.string, string);
-    XCTAssertEqualObjects(namedTableCopy.object, object);
-
-    NSData *archivedData = nil;
+    TEST_NAMED_TABLE_PROPERTY_EQUALITY(namedTableCopy);
 
     /* Test encode and decode. */
     archivedData = [NSKeyedArchiver archivedDataWithRootObject:namedTable];
     AVNamedTableSubclass *decodedNamedTable = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
-
-    XCTAssertEqual(decodedNamedTable.number, number);
-    XCTAssertEqual(decodedNamedTable.AnotherNumber, AnotherNumber);
-    XCTAssertEqualObjects(decodedNamedTable.string, string);
-    XCTAssertEqualObjects(decodedNamedTable.object, object);
+    TEST_NAMED_TABLE_PROPERTY_EQUALITY(decodedNamedTable);
 
     /* Test instance variables work as expected. */
     AVNamedTableSubclass *yaNamedTable = [[AVNamedTableSubclass alloc] initWithNumber:number
                                                                         AnotherNumber:AnotherNumber
                                                                                string:string
                                                                                object:object];
-
-    XCTAssertEqual(yaNamedTable.number, number);
-    XCTAssertEqual(yaNamedTable.AnotherNumber, AnotherNumber);
-    XCTAssertEqualObjects(yaNamedTable.string, string);
-    XCTAssertEqualObjects(yaNamedTable.object, object);
+    TEST_NAMED_TABLE_PROPERTY_EQUALITY(yaNamedTable);
 
     AVNamedTableSubclass *yaNamedTableCopy = [yaNamedTable copy];
-
-    XCTAssertEqual(yaNamedTableCopy.number, number);
-    XCTAssertEqual(yaNamedTableCopy.AnotherNumber, AnotherNumber);
-    XCTAssertEqualObjects(yaNamedTableCopy.string, string);
-    XCTAssertEqualObjects(yaNamedTableCopy.object, object);
+    TEST_NAMED_TABLE_PROPERTY_EQUALITY(yaNamedTableCopy);
 
     archivedData = [NSKeyedArchiver archivedDataWithRootObject:yaNamedTable];
     AVNamedTableSubclass *encodedYaNamedTable = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
-
-    XCTAssertEqual(encodedYaNamedTable.number, number);
-    XCTAssertEqual(encodedYaNamedTable.AnotherNumber, AnotherNumber);
-    XCTAssertEqualObjects(encodedYaNamedTable.string, string);
-    XCTAssertEqualObjects(encodedYaNamedTable.object, object);
+    TEST_NAMED_TABLE_PROPERTY_EQUALITY(encodedYaNamedTable);
 }
 
 @end
