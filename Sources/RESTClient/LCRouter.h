@@ -21,10 +21,11 @@ FOUNDATION_EXPORT NSString *const LCRouterDidUpdateNotification;
 
 @interface LCRouter : NSObject
 
-@property (nonatomic, weak) AVRESTClient *RESTClient;
-@property (nonatomic, readonly, copy) AVApplication *application;
+@property (nonatomic, readonly, weak) AVRESTClient *RESTClient;
 
-- (instancetype)initWithApplication:(AVApplication *)application;
+- (instancetype)init NS_UNAVAILABLE;
+
+- (instancetype)initWithRESTClient:(AVRESTClient *)RESTClient;
 
 /**
  Get cached RTM server table.

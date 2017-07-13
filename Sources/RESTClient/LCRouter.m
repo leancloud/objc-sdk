@@ -38,6 +38,7 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
 
 @interface LCRouter ()
 
+@property (nonatomic,   weak) AVApplication *application;
 @property (nonatomic, assign) LCServerLocation serverLocation;
 
 @property (nonatomic, strong) LCPreferences *preferences;
@@ -57,15 +58,12 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
 
 @implementation LCRouter
 
-- (instancetype)init {
-    return [self initWithApplication:nil];
-}
-
-- (instancetype)initWithApplication:(AVApplication *)application {
+- (instancetype)initWithRESTClient:(AVRESTClient *)RESTClient {
     self = [super init];
 
     if (self) {
-        _application = [application copy];
+        _RESTClient = RESTClient;
+        _application = RESTClient.application;
 
         [self doInitialize];
     }

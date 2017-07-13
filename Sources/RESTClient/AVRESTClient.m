@@ -52,8 +52,7 @@ NSString *const AVHTTPHeaderFieldNameSignature  = @"X-LC-Sign";
 }
 
 - (void)doInitialize {
-    _router = [[LCRouter alloc] initWithApplication:_application];
-    _router.RESTClient = self;
+    _router = [[LCRouter alloc] initWithRESTClient:self];
 
     _completionQueue = dispatch_queue_create("cn.leancloud.REST-client", DISPATCH_QUEUE_CONCURRENT);
 
