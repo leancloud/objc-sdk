@@ -753,6 +753,8 @@
 		83B5FF721B7C768B000C3923 /* string_conversion.cc in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF3F1B7C768B000C3923 /* string_conversion.cc */; };
 		83B5FF731B7C768B000C3923 /* string_conversion.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF401B7C768B000C3923 /* string_conversion.h */; };
 		83B5FF741B7C768B000C3923 /* Breakpad_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF431B7C768B000C3923 /* Breakpad_Prefix.pch */; };
+		83B7A1821F18BDBF00843D41 /* AVOSCloudFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8352BDE61EEF6F1800C513B6 /* AVOSCloudFoundation.framework */; };
+		83B7A1881F18BE6300843D41 /* FoundationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F87CA51F16211B00649C73 /* FoundationTests.m */; };
 		83BC01DB1EF3BD6300B7E680 /* AVOSCloudRESTClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83BC01D21EF3BD6200B7E680 /* AVOSCloudRESTClient.framework */; };
 		83BC01E01EF3BD6300B7E680 /* RESTClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 83BC01DF1EF3BD6300B7E680 /* RESTClientTests.m */; };
 		83BC01E21EF3BD6300B7E680 /* LCRESTClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BC01D41EF3BD6200B7E680 /* LCRESTClient.h */; };
@@ -1474,6 +1476,13 @@
 			remoteGlobalIDString = 838CE31A1EC97E6E00B24F5B;
 			remoteInfo = AVOSCloudLiveQuery;
 		};
+		83B7A1831F18BDBF00843D41 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8352BD851EEF6F1800C513B6;
+			remoteInfo = "Foundation-macOS";
+		};
 		83BC01DC1EF3BD6300B7E680 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
@@ -1796,6 +1805,7 @@
 		83B5FF3F1B7C768B000C3923 /* string_conversion.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = string_conversion.cc; sourceTree = "<group>"; };
 		83B5FF401B7C768B000C3923 /* string_conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = string_conversion.h; sourceTree = "<group>"; };
 		83B5FF431B7C768B000C3923 /* Breakpad_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Breakpad_Prefix.pch; sourceTree = "<group>"; };
+		83B7A17D1F18BDBF00843D41 /* FoundationTests-macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FoundationTests-macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		83BC01D21EF3BD6200B7E680 /* AVOSCloudRESTClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudRESTClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		83BC01D41EF3BD6200B7E680 /* LCRESTClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCRESTClient.h; sourceTree = "<group>"; };
 		83BC01D51EF3BD6200B7E680 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -2332,6 +2342,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				838CE3471EC980E000B24F5B /* AVOSCloudLiveQuery.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83B7A17A1F18BDBF00843D41 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83B7A1821F18BDBF00843D41 /* AVOSCloudFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2988,6 +3006,7 @@
 				837D1BA61EF53D1500C3F93A /* CacheTests-tvOS.xctest */,
 				837D1BBA1EF53D2900C3F93A /* AVOSCloudCache.framework */,
 				83F87CA31F16211B00649C73 /* FoundationTests-iOS.xctest */,
+				83B7A17D1F18BDBF00843D41 /* FoundationTests-macOS.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -4879,6 +4898,24 @@
 			productReference = 838CE34D1EC980E000B24F5B /* LiveQueryTests-macOS.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		83B7A17C1F18BDBF00843D41 /* FoundationTests-macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 83B7A1871F18BDBF00843D41 /* Build configuration list for PBXNativeTarget "FoundationTests-macOS" */;
+			buildPhases = (
+				83B7A1791F18BDBF00843D41 /* Sources */,
+				83B7A17A1F18BDBF00843D41 /* Frameworks */,
+				83B7A17B1F18BDBF00843D41 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				83B7A1841F18BDBF00843D41 /* PBXTargetDependency */,
+			);
+			name = "FoundationTests-macOS";
+			productName = FoundationTests;
+			productReference = 83B7A17D1F18BDBF00843D41 /* FoundationTests-macOS.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		83BC01D11EF3BD6200B7E680 /* RESTClient-iOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 83BC01E71EF3BD6300B7E680 /* Build configuration list for PBXNativeTarget "RESTClient-iOS" */;
@@ -5172,6 +5209,9 @@
 						CreatedOnToolsVersion = 8.3.2;
 						ProvisioningStyle = Automatic;
 					};
+					83B7A17C1F18BDBF00843D41 = {
+						CreatedOnToolsVersion = 9.0;
+					};
 					83BC01D11EF3BD6200B7E680 = {
 						CreatedOnToolsVersion = 9.0;
 					};
@@ -5223,6 +5263,7 @@
 				83F599C71EED0F610013AF6B /* Foundation-iOS */,
 				83F87CA21F16211B00649C73 /* FoundationTests-iOS */,
 				8352BD851EEF6F1800C513B6 /* Foundation-macOS */,
+				83B7A17C1F18BDBF00843D41 /* FoundationTests-macOS */,
 				8352BE4B1EEF713400C513B6 /* Foundation-tvOS */,
 				8352BDE81EEF70E300C513B6 /* Foundation-watchOS */,
 				837D1B651EF53CDC00C3F93A /* Cache-iOS */,
@@ -5440,6 +5481,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		838CE3481EC980E000B24F5B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83B7A17B1F18BDBF00843D41 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -6128,6 +6176,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		83B7A1791F18BDBF00843D41 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83B7A1881F18BE6300843D41 /* FoundationTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		83BC01CD1EF3BD6200B7E680 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -6598,6 +6654,11 @@
 			isa = PBXTargetDependency;
 			target = 838CE31A1EC97E6E00B24F5B /* LiveQuery-iOS */;
 			targetProxy = 838CE3431EC980E000B24F5B /* PBXContainerItemProxy */;
+		};
+		83B7A1841F18BDBF00843D41 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8352BD851EEF6F1800C513B6 /* Foundation-macOS */;
+			targetProxy = 83B7A1831F18BDBF00843D41 /* PBXContainerItemProxy */;
 		};
 		83BC01DD1EF3BD6300B7E680 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -9018,6 +9079,75 @@
 			};
 			name = Release;
 		};
+		83B7A1851F18BDBF00843D41 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = FoundationTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.FoundationTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		83B7A1861F18BDBF00843D41 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = FoundationTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.FoundationTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
 		83BC01E31EF3BD6300B7E680 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -10598,6 +10728,14 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		83B7A1871F18BDBF00843D41 /* Build configuration list for PBXNativeTarget "FoundationTests-macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83B7A1851F18BDBF00843D41 /* Debug */,
+				83B7A1861F18BDBF00843D41 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		83BC01E71EF3BD6300B7E680 /* Build configuration list for PBXNativeTarget "RESTClient-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -10659,6 +10797,7 @@
 				83F87CAC1F16211B00649C73 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8C255D3D1AE9F818008A6FFC /* Build configuration list for PBXNativeTarget "CrashReporting-iOS" */ = {
 			isa = XCConfigurationList;
