@@ -12,19 +12,8 @@
 #import "LCTargetUmbrella.h"
 #import "LCBundle.h"
 #import "AFNetworkReachabilityManager.h"
-
-#if LC_TARGET_OS_IOS
-
 #import "LCUUID.h"
-#import "JNKeychain.h"
-
-#endif
-
-#if LC_TARGET_OS_MAC
-
-#import <IOKit/IOKitLib.h>
-
-#endif
+#import "UICKeyChainStore.h"
 
 #import <sys/sysctl.h>
 
@@ -194,20 +183,11 @@
 #endif
 }
 
-#if LC_TARGET_OS_IOS
-
 - (NSString *)UDIDKey {
-    NSString *key = nil;
     static NSString *const suffix = @"@leancloud";
 
     NSString *bundleIdentifier = [LCBundle current].identifier;
-
-    /* Bundle identifier may be nil for unit test. */
-    if (bundleIdentifier) {
-        key = [bundleIdentifier stringByAppendingString:suffix];
-    } else {
-        key = [@"~" stringByAppendingString:suffix];
-    }
+    NSString *key = [bundleIdentifier stringByAppendingString:suffix];
 
     return key;
 }
@@ -223,43 +203,18 @@
             return UDID;
 
         NSString *key = [self UDIDKey];
-        UDID = [JNKeychain loadValueForKey:key];
+        UICKeyChainStore *keyChainStore = [UICKeyChainStore keyChainStore];
+
+        UDID = keyChainStore[key];
 
         if (UDID)
             return UDID;
 
         UDID = [LCUUID createUUID];
-        [JNKeychain saveValue:UDID forKey:key];
+        keyChainStore[key] = UDID;
 
         return UDID;
     }
 }
-
-#endif
-
-#if LC_TARGET_OS_MAC
-
-- (NSString *)UDID {
-    io_service_t platformExpert = IOServiceGetMatchingService(kIOMasterPortDefault,
-                                                              IOServiceMatching("IOPlatformExpertDevice"));
-
-    if (!platformExpert)
-        return nil;
-
-    CFStringRef UDIDRef = IORegistryEntryCreateCFProperty(platformExpert,
-                                                          CFSTR(kIOPlatformSerialNumberKey),
-                                                          kCFAllocatorDefault,
-                                                          0);
-    IOObjectRelease(platformExpert);
-
-    if (!UDIDRef)
-        return nil;
-
-    NSString *UDID = (NSString *)CFBridgingRelease(UDIDRef);
-
-    return UDID;
-}
-
-#endif
 
 @end

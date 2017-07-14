@@ -80,14 +80,10 @@ typedef NS_ENUM(NSInteger, LCNetworkReachabilityStatus)
  */
 @property (nonatomic, readonly, strong) NSString *networkCarrierName;
 
-#if LC_TARGET_OS_IOS || LC_TARGET_OS_MAC
-
 /**
  Unique ID of current device.
  */
 @property (nonatomic, readonly, strong) NSString *UDID;
-
-#endif
 
 /**
  Get an LCDevice singleton instance.
