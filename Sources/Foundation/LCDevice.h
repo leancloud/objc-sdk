@@ -79,7 +79,7 @@ typedef NS_ENUM(NSInteger, LCNetworkReachabilityStatus)
  */
 @property (nonatomic, readonly, strong) NSString *networkCarrierName;
 
-#if LC_TARGET_OS_IOS
+#if LC_TARGET_OS_IOS || LC_TARGET_OS_MAC
 
 /**
  Unique ID of current device.

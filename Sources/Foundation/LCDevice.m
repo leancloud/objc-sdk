@@ -20,6 +20,12 @@
 
 #endif
 
+#if LC_TARGET_OS_MAC
+
+#import <IOKit/IOKitLib.h>
+
+#endif
+
 #import <sys/sysctl.h>
 
 @implementation LCDevice
@@ -227,6 +233,31 @@
 
         return UDID;
     }
+}
+
+#endif
+
+#if LC_TARGET_OS_MAC
+
+- (NSString *)UDID {
+    io_service_t platformExpert = IOServiceGetMatchingService(kIOMasterPortDefault,
+                                                              IOServiceMatching("IOPlatformExpertDevice"));
+
+    if (!platformExpert)
+        return nil;
+
+    CFStringRef UDIDRef = IORegistryEntryCreateCFProperty(platformExpert,
+                                                          CFSTR(kIOPlatformSerialNumberKey),
+                                                          kCFAllocatorDefault,
+                                                          0);
+    IOObjectRelease(platformExpert);
+
+    if (!UDIDRef)
+        return nil;
+
+    NSString *UDID = (NSString *)CFBridgingRelease(UDIDRef);
+
+    return UDID;
 }
 
 #endif
