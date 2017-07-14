@@ -6,6 +6,8 @@
 //  Copyright © 2017 LeanCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 #ifdef TARGET_OS_IOS
     #define LC_TARGET_OS_IOS TARGET_OS_IOS
 #else
