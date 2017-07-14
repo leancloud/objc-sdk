@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "AVNamedTable.h"
+#import "LCFoundation.h"
 
 @interface FoundationTests : XCTestCase
 
@@ -110,5 +110,19 @@
     AVNamedTableSubclass *encodedYaNamedTable = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
     TEST_NAMED_TABLE_PROPERTY_EQUALITY(encodedYaNamedTable);
 }
+
+#if LC_TARGET_OS_IOS || LC_TARGET_OS_MAC
+
+- (void)testUDID {
+    NSString *UDID1 = [LCDevice current].UDID;
+    NSString *UDID2 = [LCDevice current].UDID;
+
+    XCTAssertNotNil(UDID1);
+    XCTAssertNotNil(UDID2);
+
+    XCTAssertEqualObjects(UDID1, UDID2);
+}
+
+#endif
 
 @end
