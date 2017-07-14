@@ -599,10 +599,10 @@
 		835BC2721EF02B5A006B56C6 /* LCFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2701EF02B5A006B56C6 /* LCFoundation.h */; };
 		835BC2731EF02B5A006B56C6 /* LCFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2701EF02B5A006B56C6 /* LCFoundation.h */; };
 		835BC2741EF02B5A006B56C6 /* LCFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2701EF02B5A006B56C6 /* LCFoundation.h */; };
-		835BC2871EF0D945006B56C6 /* LCTargetConditionals.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2861EF0D945006B56C6 /* LCTargetConditionals.h */; };
-		835BC2881EF0D945006B56C6 /* LCTargetConditionals.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2861EF0D945006B56C6 /* LCTargetConditionals.h */; };
-		835BC2891EF0D945006B56C6 /* LCTargetConditionals.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2861EF0D945006B56C6 /* LCTargetConditionals.h */; };
-		835BC28A1EF0D945006B56C6 /* LCTargetConditionals.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2861EF0D945006B56C6 /* LCTargetConditionals.h */; };
+		835BC2871EF0D945006B56C6 /* AVTargetConditionals.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2861EF0D945006B56C6 /* AVTargetConditionals.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		835BC2881EF0D945006B56C6 /* AVTargetConditionals.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2861EF0D945006B56C6 /* AVTargetConditionals.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		835BC2891EF0D945006B56C6 /* AVTargetConditionals.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2861EF0D945006B56C6 /* AVTargetConditionals.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		835BC28A1EF0D945006B56C6 /* AVTargetConditionals.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC2861EF0D945006B56C6 /* AVTargetConditionals.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		835BC28C1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC28B1EF0DDC8006B56C6 /* LCTargetUmbrella.h */; };
 		835BC28D1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC28B1EF0DDC8006B56C6 /* LCTargetUmbrella.h */; };
 		835BC28E1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC28B1EF0DDC8006B56C6 /* LCTargetUmbrella.h */; };
@@ -1707,7 +1707,7 @@
 		835BC2661EEFCC23006B56C6 /* AVSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVSDK.h; sourceTree = "<group>"; };
 		835BC2671EEFCC23006B56C6 /* AVSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVSDK.m; sourceTree = "<group>"; };
 		835BC2701EF02B5A006B56C6 /* LCFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCFoundation.h; sourceTree = "<group>"; };
-		835BC2861EF0D945006B56C6 /* LCTargetConditionals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCTargetConditionals.h; sourceTree = "<group>"; };
+		835BC2861EF0D945006B56C6 /* AVTargetConditionals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVTargetConditionals.h; sourceTree = "<group>"; };
 		835BC28B1EF0DDC8006B56C6 /* LCTargetUmbrella.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCTargetUmbrella.h; sourceTree = "<group>"; };
 		8376B2261EF041DE006ED4C2 /* EXTScope.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXTScope.h; sourceTree = "<group>"; };
 		8376B2271EF041DE006ED4C2 /* EXTScope.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EXTScope.m; sourceTree = "<group>"; };
@@ -2872,6 +2872,7 @@
 			isa = PBXGroup;
 			children = (
 				8376B2241EF0418C006ED4C2 /* ThirdParty */,
+				835BC2861EF0D945006B56C6 /* AVTargetConditionals.h */,
 				835BC2661EEFCC23006B56C6 /* AVSDK.h */,
 				835BC2671EEFCC23006B56C6 /* AVSDK.m */,
 				83A46FF21EF1997A009E9380 /* AVSDK+Internal.h */,
@@ -2892,7 +2893,6 @@
 				83D7424D1EF6971A0016BB63 /* LCPath.m */,
 				83177CC91EF8E959004FB12A /* LCUtility.h */,
 				83177CCA1EF8E959004FB12A /* LCUtility.m */,
-				835BC2861EF0D945006B56C6 /* LCTargetConditionals.h */,
 				835BC28B1EF0DDC8006B56C6 /* LCTargetUmbrella.h */,
 				835BC2701EF02B5A006B56C6 /* LCFoundation.h */,
 				83F599CA1EED0F610013AF6B /* AVOSCloudFoundation.h */,
@@ -3883,7 +3883,7 @@
 				83A46FFF1EF1A6FE009E9380 /* SDMacros.h in Headers */,
 				835BC2691EEFCC23006B56C6 /* AVSDK.h in Headers */,
 				8352BDDD1EEF6F1800C513B6 /* AVOSCloudFoundation.h in Headers */,
-				835BC2881EF0D945006B56C6 /* LCTargetConditionals.h in Headers */,
+				835BC2881EF0D945006B56C6 /* AVTargetConditionals.h in Headers */,
 				83A46FA81EF11DB0009E9380 /* LCUUID.h in Headers */,
 				835BC2721EF02B5A006B56C6 /* LCFoundation.h in Headers */,
 				83A46FF51EF1997A009E9380 /* AVSDK+Internal.h in Headers */,
@@ -3907,7 +3907,7 @@
 				83A470011EF1A6FF009E9380 /* SDMacros.h in Headers */,
 				835BC26B1EEFCC24006B56C6 /* AVSDK.h in Headers */,
 				8352BE401EEF70E300C513B6 /* AVOSCloudFoundation.h in Headers */,
-				835BC28A1EF0D945006B56C6 /* LCTargetConditionals.h in Headers */,
+				835BC28A1EF0D945006B56C6 /* AVTargetConditionals.h in Headers */,
 				83A46FAA1EF11DB0009E9380 /* LCUUID.h in Headers */,
 				835BC2741EF02B5A006B56C6 /* LCFoundation.h in Headers */,
 				83A46FF71EF1997A009E9380 /* AVSDK+Internal.h in Headers */,
@@ -3931,7 +3931,7 @@
 				83A470001EF1A6FE009E9380 /* SDMacros.h in Headers */,
 				835BC26A1EEFCC23006B56C6 /* AVSDK.h in Headers */,
 				8352BEA31EEF713400C513B6 /* AVOSCloudFoundation.h in Headers */,
-				835BC2891EF0D945006B56C6 /* LCTargetConditionals.h in Headers */,
+				835BC2891EF0D945006B56C6 /* AVTargetConditionals.h in Headers */,
 				83A46FA91EF11DB0009E9380 /* LCUUID.h in Headers */,
 				835BC2731EF02B5A006B56C6 /* LCFoundation.h in Headers */,
 				83A46FF61EF1997A009E9380 /* AVSDK+Internal.h in Headers */,
@@ -4179,7 +4179,7 @@
 				83A46FFE1EF1A6FD009E9380 /* SDMacros.h in Headers */,
 				835BC2681EEFCC23006B56C6 /* AVSDK.h in Headers */,
 				83F599CC1EED0F610013AF6B /* AVOSCloudFoundation.h in Headers */,
-				835BC2871EF0D945006B56C6 /* LCTargetConditionals.h in Headers */,
+				835BC2871EF0D945006B56C6 /* AVTargetConditionals.h in Headers */,
 				83A46FA71EF11DB0009E9380 /* LCUUID.h in Headers */,
 				835BC2711EF02B5A006B56C6 /* LCFoundation.h in Headers */,
 				83A46FF41EF1997A009E9380 /* AVSDK+Internal.h in Headers */,

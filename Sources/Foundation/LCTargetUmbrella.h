@@ -6,7 +6,7 @@
 //  Copyright © 2017 LeanCloud Inc. All rights reserved.
 //
 
-#import "LCTargetConditionals.h"
+#import "AVTargetConditionals.h"
 
 #if LC_TARGET_OS_IOS
     #import <UIKit/UIKit.h>

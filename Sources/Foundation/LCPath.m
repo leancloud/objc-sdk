@@ -8,7 +8,7 @@
 
 #import "LCPath.h"
 #import "AVApplication+Internal.h"
-#import "LCTargetConditionals.h"
+#import "AVTargetConditionals.h"
 
 #if LC_TARGET_OS_MAC
 #import "LCBundle.h"

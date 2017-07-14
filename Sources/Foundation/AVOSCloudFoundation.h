@@ -6,6 +6,7 @@
 //  Copyright © 2017 LeanCloud Inc. All rights reserved.
 //
 
+#import "AVTargetConditionals.h"
 #import "AVSDK.h"
 #import "AVApplication.h"
 #import "AVNamedTable.h"

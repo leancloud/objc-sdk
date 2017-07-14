@@ -1,5 +1,5 @@
 //
-//  LCTargetConditionals.h
+//  AVTargetConditionals.h
 //  AVOSCloud
 //
 //  Created by Tang Tianyong on 14/06/2017.

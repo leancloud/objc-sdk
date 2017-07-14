@@ -8,7 +8,7 @@
 
 #import "LCDevice.h"
 #import "EXTScope.h"
-#import "LCTargetConditionals.h"
+#import "AVTargetConditionals.h"
 #import "LCTargetUmbrella.h"
 #import "LCBundle.h"
 #import "AFNetworkReachabilityManager.h"
