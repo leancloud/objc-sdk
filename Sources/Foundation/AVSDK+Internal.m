@@ -9,6 +9,7 @@
 #import "AVSDK+Internal.h"
 #import "LCDevice.h"
 #import "LCBundle.h"
+#import "AVTargetConditionals.h"
 
 #define LC_SDK_TYPE @"Objective-C"
 
