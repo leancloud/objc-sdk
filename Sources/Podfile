@@ -5,8 +5,8 @@ target 'Foundation-iOS' do
 
   pod 'FMDB', '2.7.2'
   pod 'AFNetworking/NSURLSession', '3.1.0'
+  pod 'UICKeyChainStore', '2.1.1'
   pod 'Protobuf', '3.3.0'
-  pod 'JNKeychain', '0.1.4'
   pod 'SocketRocket', '0.5.1'
 end
 
@@ -15,6 +15,7 @@ target 'Foundation-macOS' do
 
   pod 'FMDB', '2.7.2'
   pod 'AFNetworking/NSURLSession', '3.1.0'
+  pod 'UICKeyChainStore', '2.1.1'
   pod 'Protobuf', '3.3.0'
   pod 'SocketRocket', '0.5.1'
 end
@@ -24,6 +25,7 @@ target 'Foundation-tvOS' do
 
   pod 'FMDB', '2.7.2'
   pod 'AFNetworking/NSURLSession', '3.1.0'
+  pod 'UICKeyChainStore', '2.1.1'
 end
 
 target 'Foundation-watchOS' do
@@ -31,4 +33,5 @@ target 'Foundation-watchOS' do
 
   pod 'FMDB', '2.7.2'
   pod 'AFNetworking/NSURLSession', '3.1.0'
+  pod 'UICKeyChainStore', '2.1.1'
 end
