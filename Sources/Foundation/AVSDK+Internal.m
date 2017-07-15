@@ -61,9 +61,7 @@ NSString *LCStringFromReachabilityStatus(LCNetworkReachabilityStatus status) {
     data[@"timezone"]       = device.timezone;
     data[@"access"]         = LCStringFromReachabilityStatus(device.networkReachabilityStatus);
     data[@"is_jailbroken"]  = @(device.jailbroken);
-#if LC_TARGET_OS_IOS
     data[@"device_id"]      = device.UDID;
-#endif
 
     /* Application related data. */
     data[@"display_name"]   = bundle.name;
