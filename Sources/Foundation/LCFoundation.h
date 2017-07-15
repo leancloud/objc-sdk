@@ -10,6 +10,7 @@
 #import "AVOSCloudFoundation.h"
 
 /* Non-public headers */
+#import "LCMacros.h"
 #import "EXTScope.h"
 #import "SDMacros.h"
 #import "LCTargetUmbrella.h"

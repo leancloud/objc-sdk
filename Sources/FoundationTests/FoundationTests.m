@@ -62,6 +62,12 @@
     [super tearDown];
 }
 
+- (void)testMacro {
+    XCTAssertEqual(_LC_NUM_ARGS(), 0);
+    XCTAssertEqual(_LC_NUM_ARGS(1), 1);
+    XCTAssertEqual(_LC_NUM_ARGS(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), 10);
+}
+
 - (void)testNamedTable {
     NSInteger number = 42;
     NSInteger AnotherNumber = 1024;
