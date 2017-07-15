@@ -10,3 +10,4 @@
 #import "AVSDK.h"
 #import "AVApplication.h"
 #import "AVNamedTable.h"
+#import "AVSomethingWrong.h"

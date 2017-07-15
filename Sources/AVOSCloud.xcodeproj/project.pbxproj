@@ -609,6 +609,14 @@
 		835BC28F1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 835BC28B1EF0DDC8006B56C6 /* LCTargetUmbrella.h */; };
 		835C5F711D25929600EF0EBB /* AVFriendQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A651A5A79FF00C5C6C4 /* AVFriendQuery.h */; };
 		835C5F721D2594EA00EF0EBB /* AVAnalyticsActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419E71A5A79FF00C5C6C4 /* AVAnalyticsActivity.h */; };
+		8363D6A21F1A3FA4009AFEEF /* AVSomethingWrong.h in Headers */ = {isa = PBXBuildFile; fileRef = 8363D6A01F1A3FA4009AFEEF /* AVSomethingWrong.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8363D6A31F1A3FA4009AFEEF /* AVSomethingWrong.h in Headers */ = {isa = PBXBuildFile; fileRef = 8363D6A01F1A3FA4009AFEEF /* AVSomethingWrong.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8363D6A41F1A3FA4009AFEEF /* AVSomethingWrong.h in Headers */ = {isa = PBXBuildFile; fileRef = 8363D6A01F1A3FA4009AFEEF /* AVSomethingWrong.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8363D6A51F1A3FA4009AFEEF /* AVSomethingWrong.h in Headers */ = {isa = PBXBuildFile; fileRef = 8363D6A01F1A3FA4009AFEEF /* AVSomethingWrong.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8363D6A61F1A3FA4009AFEEF /* AVSomethingWrong.m in Sources */ = {isa = PBXBuildFile; fileRef = 8363D6A11F1A3FA4009AFEEF /* AVSomethingWrong.m */; };
+		8363D6A71F1A3FA4009AFEEF /* AVSomethingWrong.m in Sources */ = {isa = PBXBuildFile; fileRef = 8363D6A11F1A3FA4009AFEEF /* AVSomethingWrong.m */; };
+		8363D6A81F1A3FA4009AFEEF /* AVSomethingWrong.m in Sources */ = {isa = PBXBuildFile; fileRef = 8363D6A11F1A3FA4009AFEEF /* AVSomethingWrong.m */; };
+		8363D6A91F1A3FA4009AFEEF /* AVSomethingWrong.m in Sources */ = {isa = PBXBuildFile; fileRef = 8363D6A11F1A3FA4009AFEEF /* AVSomethingWrong.m */; };
 		8376B2291EF041E7006ED4C2 /* EXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 8376B2261EF041DE006ED4C2 /* EXTScope.h */; };
 		8376B22A1EF041E7006ED4C2 /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 8376B2271EF041DE006ED4C2 /* EXTScope.m */; };
 		8376B22B1EF041E7006ED4C2 /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 8376B2281EF041DE006ED4C2 /* metamacros.h */; };
@@ -1726,6 +1734,8 @@
 		835BC2701EF02B5A006B56C6 /* LCFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCFoundation.h; sourceTree = "<group>"; };
 		835BC2861EF0D945006B56C6 /* AVTargetConditionals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVTargetConditionals.h; sourceTree = "<group>"; };
 		835BC28B1EF0DDC8006B56C6 /* LCTargetUmbrella.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCTargetUmbrella.h; sourceTree = "<group>"; };
+		8363D6A01F1A3FA4009AFEEF /* AVSomethingWrong.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVSomethingWrong.h; sourceTree = "<group>"; };
+		8363D6A11F1A3FA4009AFEEF /* AVSomethingWrong.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVSomethingWrong.m; sourceTree = "<group>"; };
 		8376B2261EF041DE006ED4C2 /* EXTScope.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXTScope.h; sourceTree = "<group>"; };
 		8376B2271EF041DE006ED4C2 /* EXTScope.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EXTScope.m; sourceTree = "<group>"; };
 		8376B2281EF041DE006ED4C2 /* metamacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = metamacros.h; sourceTree = "<group>"; };
@@ -2928,6 +2938,8 @@
 				83D742431EF674850016BB63 /* AVApplication+Internal.m */,
 				83F87C771F1613E500649C73 /* AVNamedTable.h */,
 				83F87C781F1613E500649C73 /* AVNamedTable.m */,
+				8363D6A01F1A3FA4009AFEEF /* AVSomethingWrong.h */,
+				8363D6A11F1A3FA4009AFEEF /* AVSomethingWrong.m */,
 				83A46FA51EF11DB0009E9380 /* LCUUID.h */,
 				83A46FA61EF11DB0009E9380 /* LCUUID.m */,
 				8352BEB61EEFB4E100C513B6 /* LCDevice.h */,
@@ -3936,6 +3948,7 @@
 				835BC2721EF02B5A006B56C6 /* LCFoundation.h in Headers */,
 				83A46FF51EF1997A009E9380 /* AVSDK+Internal.h in Headers */,
 				8352BEB91EEFB4E100C513B6 /* LCDevice.h in Headers */,
+				8363D6A31F1A3FA4009AFEEF /* AVSomethingWrong.h in Headers */,
 				83D7423B1EF671B40016BB63 /* AVApplication.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3960,6 +3973,7 @@
 				835BC2741EF02B5A006B56C6 /* LCFoundation.h in Headers */,
 				83A46FF71EF1997A009E9380 /* AVSDK+Internal.h in Headers */,
 				8352BEBB1EEFB4E100C513B6 /* LCDevice.h in Headers */,
+				8363D6A51F1A3FA4009AFEEF /* AVSomethingWrong.h in Headers */,
 				83D7423D1EF671B40016BB63 /* AVApplication.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3984,6 +3998,7 @@
 				835BC2731EF02B5A006B56C6 /* LCFoundation.h in Headers */,
 				83A46FF61EF1997A009E9380 /* AVSDK+Internal.h in Headers */,
 				8352BEBA1EEFB4E100C513B6 /* LCDevice.h in Headers */,
+				8363D6A41F1A3FA4009AFEEF /* AVSomethingWrong.h in Headers */,
 				83D7423C1EF671B40016BB63 /* AVApplication.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4232,6 +4247,7 @@
 				835BC2711EF02B5A006B56C6 /* LCFoundation.h in Headers */,
 				83A46FF41EF1997A009E9380 /* AVSDK+Internal.h in Headers */,
 				8352BEB81EEFB4E100C513B6 /* LCDevice.h in Headers */,
+				8363D6A21F1A3FA4009AFEEF /* AVSomethingWrong.h in Headers */,
 				83D7423A1EF671B40016BB63 /* AVApplication.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6095,6 +6111,7 @@
 				83177CD01EF8E959004FB12A /* LCUtility.m in Sources */,
 				83D742491EF674850016BB63 /* AVApplication+Internal.m in Sources */,
 				835BC26D1EEFCC24006B56C6 /* AVSDK.m in Sources */,
+				8363D6A71F1A3FA4009AFEEF /* AVSomethingWrong.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6113,6 +6130,7 @@
 				83177CD21EF8E959004FB12A /* LCUtility.m in Sources */,
 				83D7424B1EF674850016BB63 /* AVApplication+Internal.m in Sources */,
 				835BC26F1EEFCC24006B56C6 /* AVSDK.m in Sources */,
+				8363D6A91F1A3FA4009AFEEF /* AVSomethingWrong.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6131,6 +6149,7 @@
 				83177CD11EF8E959004FB12A /* LCUtility.m in Sources */,
 				83D7424A1EF674850016BB63 /* AVApplication+Internal.m in Sources */,
 				835BC26E1EEFCC24006B56C6 /* AVSDK.m in Sources */,
+				8363D6A81F1A3FA4009AFEEF /* AVSomethingWrong.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6427,6 +6446,7 @@
 				83177CCF1EF8E959004FB12A /* LCUtility.m in Sources */,
 				83D742481EF674850016BB63 /* AVApplication+Internal.m in Sources */,
 				835BC26C1EEFCC24006B56C6 /* AVSDK.m in Sources */,
+				8363D6A61F1A3FA4009AFEEF /* AVSomethingWrong.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
