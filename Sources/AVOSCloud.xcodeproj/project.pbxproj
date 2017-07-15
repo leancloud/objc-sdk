@@ -625,6 +625,10 @@
 		8363D6B11F1A4DA2009AFEEF /* AVSomethingWrong+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 8363D6AB1F1A4DA2009AFEEF /* AVSomethingWrong+Internal.m */; };
 		8363D6B21F1A4DA2009AFEEF /* AVSomethingWrong+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 8363D6AB1F1A4DA2009AFEEF /* AVSomethingWrong+Internal.m */; };
 		8363D6B31F1A4DA2009AFEEF /* AVSomethingWrong+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 8363D6AB1F1A4DA2009AFEEF /* AVSomethingWrong+Internal.m */; };
+		8363D6B51F1A73A6009AFEEF /* LCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 8363D6B41F1A73A6009AFEEF /* LCMacros.h */; };
+		8363D6B61F1A73A6009AFEEF /* LCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 8363D6B41F1A73A6009AFEEF /* LCMacros.h */; };
+		8363D6B71F1A73A6009AFEEF /* LCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 8363D6B41F1A73A6009AFEEF /* LCMacros.h */; };
+		8363D6B81F1A73A6009AFEEF /* LCMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 8363D6B41F1A73A6009AFEEF /* LCMacros.h */; };
 		8376B2291EF041E7006ED4C2 /* EXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 8376B2261EF041DE006ED4C2 /* EXTScope.h */; };
 		8376B22A1EF041E7006ED4C2 /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 8376B2271EF041DE006ED4C2 /* EXTScope.m */; };
 		8376B22B1EF041E7006ED4C2 /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 8376B2281EF041DE006ED4C2 /* metamacros.h */; };
@@ -1746,6 +1750,7 @@
 		8363D6A11F1A3FA4009AFEEF /* AVSomethingWrong.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVSomethingWrong.m; sourceTree = "<group>"; };
 		8363D6AA1F1A4DA2009AFEEF /* AVSomethingWrong+Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVSomethingWrong+Internal.h"; sourceTree = "<group>"; };
 		8363D6AB1F1A4DA2009AFEEF /* AVSomethingWrong+Internal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AVSomethingWrong+Internal.m"; sourceTree = "<group>"; };
+		8363D6B41F1A73A6009AFEEF /* LCMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCMacros.h; sourceTree = "<group>"; };
 		8376B2261EF041DE006ED4C2 /* EXTScope.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXTScope.h; sourceTree = "<group>"; };
 		8376B2271EF041DE006ED4C2 /* EXTScope.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EXTScope.m; sourceTree = "<group>"; };
 		8376B2281EF041DE006ED4C2 /* metamacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = metamacros.h; sourceTree = "<group>"; };
@@ -2937,6 +2942,7 @@
 			isa = PBXGroup;
 			children = (
 				8376B2241EF0418C006ED4C2 /* ThirdParty */,
+				8363D6B41F1A73A6009AFEEF /* LCMacros.h */,
 				835BC2861EF0D945006B56C6 /* AVTargetConditionals.h */,
 				835BC2661EEFCC23006B56C6 /* AVSDK.h */,
 				835BC2671EEFCC23006B56C6 /* AVSDK.m */,
@@ -3952,6 +3958,7 @@
 				83F87C7A1F1613E500649C73 /* AVNamedTable.h in Headers */,
 				83D7424F1EF6971A0016BB63 /* LCPath.h in Headers */,
 				835BC28D1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
+				8363D6B61F1A73A6009AFEEF /* LCMacros.h in Headers */,
 				83A46FFF1EF1A6FE009E9380 /* SDMacros.h in Headers */,
 				835BC2691EEFCC23006B56C6 /* AVSDK.h in Headers */,
 				8352BDDD1EEF6F1800C513B6 /* AVOSCloudFoundation.h in Headers */,
@@ -3978,6 +3985,7 @@
 				83F87C7C1F1613E500649C73 /* AVNamedTable.h in Headers */,
 				83D742511EF6971A0016BB63 /* LCPath.h in Headers */,
 				835BC28F1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
+				8363D6B81F1A73A6009AFEEF /* LCMacros.h in Headers */,
 				83A470011EF1A6FF009E9380 /* SDMacros.h in Headers */,
 				835BC26B1EEFCC24006B56C6 /* AVSDK.h in Headers */,
 				8352BE401EEF70E300C513B6 /* AVOSCloudFoundation.h in Headers */,
@@ -4004,6 +4012,7 @@
 				83F87C7B1F1613E500649C73 /* AVNamedTable.h in Headers */,
 				83D742501EF6971A0016BB63 /* LCPath.h in Headers */,
 				835BC28E1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
+				8363D6B71F1A73A6009AFEEF /* LCMacros.h in Headers */,
 				83A470001EF1A6FE009E9380 /* SDMacros.h in Headers */,
 				835BC26A1EEFCC23006B56C6 /* AVSDK.h in Headers */,
 				8352BEA31EEF713400C513B6 /* AVOSCloudFoundation.h in Headers */,
@@ -4254,6 +4263,7 @@
 				83F87C791F1613E500649C73 /* AVNamedTable.h in Headers */,
 				83D7424E1EF6971A0016BB63 /* LCPath.h in Headers */,
 				835BC28C1EF0DDC8006B56C6 /* LCTargetUmbrella.h in Headers */,
+				8363D6B51F1A73A6009AFEEF /* LCMacros.h in Headers */,
 				83A46FFE1EF1A6FD009E9380 /* SDMacros.h in Headers */,
 				835BC2681EEFCC23006B56C6 /* AVSDK.h in Headers */,
 				83F599CC1EED0F610013AF6B /* AVOSCloudFoundation.h in Headers */,
