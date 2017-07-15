@@ -68,6 +68,17 @@
     XCTAssertEqual(_LC_NUM_ARGS(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), 10);
 }
 
+- (void)testError {
+    int line = __LINE__;
+    AVSomethingWrong *error = LC_ERROR(AVSomethingWrongCodeNotFound, @"Something not found.");
+
+    LCCodeLocation *codeLocation = error.codeLocation;
+
+    XCTAssertEqualObjects(codeLocation.file, [@(__FILE__) lastPathComponent]);
+    XCTAssertEqual(codeLocation.selector, _cmd);
+    XCTAssertEqual(codeLocation.line, line + 1);
+}
+
 - (void)testNamedTable {
     NSInteger number = 42;
     NSInteger AnotherNumber = 1024;
