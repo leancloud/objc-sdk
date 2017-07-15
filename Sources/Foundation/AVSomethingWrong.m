@@ -8,6 +8,8 @@
 
 #import "AVSomethingWrong.h"
 
+NSErrorDomain const AVSomethingWrongDomain = @"AVSomethingWrongDomain";
+
 @implementation AVSomethingWrong
 
 @end

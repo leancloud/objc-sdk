@@ -18,3 +18,4 @@
 #import "LCDevice.h"
 #import "LCBundle.h"
 #import "LCUtility.h"
+#import "AVSomethingWrong+Internal.h"
