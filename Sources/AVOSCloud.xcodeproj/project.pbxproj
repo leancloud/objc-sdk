@@ -1577,6 +1577,13 @@
 			remoteGlobalIDString = 8352BE4B1EEF713400C513B6;
 			remoteInfo = "Foundation-tvOS";
 		};
+		83E6FC6E1F19C3AE00399635 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 83E6FC581F19C19100399635;
+			remoteInfo = FoundationTestsHost;
+		};
 		83F87CA91F16211B00649C73 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
@@ -5063,6 +5070,7 @@
 			);
 			dependencies = (
 				83E6FC1A1F19B7F600399635 /* PBXTargetDependency */,
+				83E6FC6F1F19C3AE00399635 /* PBXTargetDependency */,
 			);
 			name = "FoundationTests-tvOS";
 			productName = FoundationTests;
@@ -5302,6 +5310,7 @@
 					};
 					83E6FC121F19B7F600399635 = {
 						CreatedOnToolsVersion = 9.0;
+						TestTargetID = 83E6FC581F19C19100399635;
 					};
 					83E6FC581F19C19100399635 = {
 						CreatedOnToolsVersion = 9.0;
@@ -6839,6 +6848,11 @@
 			isa = PBXTargetDependency;
 			target = 8352BE4B1EEF713400C513B6 /* Foundation-tvOS */;
 			targetProxy = 83E6FC191F19B7F600399635 /* PBXContainerItemProxy */;
+		};
+		83E6FC6F1F19C3AE00399635 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 83E6FC581F19C19100399635 /* FoundationTestsHost */;
+			targetProxy = 83E6FC6E1F19C3AE00399635 /* PBXContainerItemProxy */;
 		};
 		83F87CAA1F16211B00649C73 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -9833,6 +9847,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FoundationTestsHost.app/FoundationTestsHost";
 				TVOS_DEPLOYMENT_TARGET = 11.0;
 			};
 			name = Debug;
@@ -9864,6 +9879,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FoundationTestsHost.app/FoundationTestsHost";
 				TVOS_DEPLOYMENT_TARGET = 11.0;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -11054,6 +11070,7 @@
 				83E6FC6A1F19C19100399635 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		83F599CF1EED0F610013AF6B /* Build configuration list for PBXNativeTarget "Foundation-iOS" */ = {
 			isa = XCConfigurationList;
