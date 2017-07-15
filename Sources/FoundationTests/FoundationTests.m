@@ -111,18 +111,9 @@
     TEST_NAMED_TABLE_PROPERTY_EQUALITY(encodedYaNamedTable);
 }
 
-#if LC_TARGET_OS_IOS || LC_TARGET_OS_MAC
-
-- (void)testUDID {
-    NSString *UDID1 = [LCDevice current].UDID;
-    NSString *UDID2 = [LCDevice current].UDID;
-
-    XCTAssertNotNil(UDID1);
-    XCTAssertNotNil(UDID2);
-
-    XCTAssertEqualObjects(UDID1, UDID2);
+- (void)testDeviceUDID {
+    NSString *UDID = [LCDevice current].UDID;
+    XCTAssertNotNil(UDID);
 }
-
-#endif
 
 @end
