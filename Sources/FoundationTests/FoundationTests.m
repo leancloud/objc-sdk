@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "LCFoundation.h"
+#import "UICKeyChainStore.h"
 
 @interface FoundationTests : XCTestCase
 
@@ -112,6 +113,15 @@
 }
 
 - (void)testDeviceUDID {
+    NSString *key   = @"foo";
+    NSString *value = @"bar";
+
+    UICKeyChainStore *keyChainStore1 = [UICKeyChainStore keyChainStore];
+    UICKeyChainStore *keyChainStore2 = [UICKeyChainStore keyChainStore];
+
+    keyChainStore1[key] = value;
+    XCTAssertEqualObjects(keyChainStore2[key], value);
+
     NSString *UDID = [LCDevice current].UDID;
     XCTAssertNotNil(UDID);
 }
