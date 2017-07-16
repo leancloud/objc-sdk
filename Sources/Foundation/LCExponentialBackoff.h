@@ -20,10 +20,6 @@ FOUNDATION_EXPORT const double LCExponentialBackoffDefaultJitter;
 
 @interface LCExponentialBackoff : NSObject
 
-@property (nonatomic, assign, readonly) NSTimeInterval initialTime;
-@property (nonatomic, assign, readonly) NSTimeInterval maximumTime;
-@property (nonatomic, assign, readonly) double jitter;
-
 @property (nonatomic, weak) id<LCExponentialBackoffDelegate> delegate;
 
 - (instancetype)initWithInitialTime:(NSTimeInterval)initialTime
