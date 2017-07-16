@@ -392,6 +392,7 @@ found:
     NSString *URLString = [self RTMRouterURLString];
     NSDictionary *parameters = [self RTMRouterParameters];
 
+    NSURLSessionDataTask *task = \
     [self.RESTClient sessionDataTaskWithMethod:@"GET"
                                       endpoint:URLString
                                     parameters:parameters
@@ -409,6 +410,7 @@ found:
                                                block(nil, error);
                                            }
                                        }];
+    [task resume];
 }
 
 - (void)getRTMServerTableWithBlock:(void (^)(NSDictionary *RTMServerTable, NSError *error))block {
