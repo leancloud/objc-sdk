@@ -31,6 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface AVConnectionOptions : AVNamedTable
 
+/// User-defined WebSocket protocols.
+@property (nonatomic, strong) NSArray<NSString *> *protocols;
+
 @end
 
 @interface AVConnection : NSObject
@@ -65,9 +68,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeDelegate:(id<AVConnectionDelegate>)delegate;
 
 /**
- Keep connection alive.
+ Open connection.
+
+ @note: After this method called, connection will automatically keep itself alive.
  */
-- (void)keepAlive;
+- (void)open;
 
 /**
  Send a frame to current connection.

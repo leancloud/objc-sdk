@@ -11,7 +11,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, AVSomethingWrongCode) {
-    AVSomethingWrongCodeNotFound = 9527
+    AVSomethingWrongCodeNotFound = 9527,
+    AVSomethingWrongCodeUnderlying
 };
 
 FOUNDATION_EXPORT NSErrorDomain const AVSomethingWrongDomain;
