@@ -11,6 +11,7 @@
 #import "SRWebSocket.h"
 #import "AVRESTClient+Internal.h"
 #import "LCFoundation.h"
+#import "AFNetworkReachabilityManager.h"
 
 static const NSTimeInterval AVConnectionExponentialBackoffInitialTime = 0.618;
 static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
@@ -25,6 +26,7 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 @property (nonatomic, strong) AVRESTClient *RESTClient;
 @property (nonatomic, strong) NSHashTable *delegates;
 @property (nonatomic, strong) LCExponentialBackoff *exponentialBackoff;
+@property (nonatomic, strong) AFNetworkReachabilityManager *reachabilityManager;
 
 @end
 
@@ -62,6 +64,13 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
                                                                  growFactor:2
                                                                      jitter:LCExponentialBackoffDefaultJitter];
     _exponentialBackoff.delegate = self;
+
+    _reachabilityManager = [AFNetworkReachabilityManager manager];
+
+    @weakify(self, weakSelf);
+    [_reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        [weakSelf reachabilityStatusDidChange:status];
+    }];
 }
 
 - (void)addDelegate:(id<AVConnectionDelegate>)delegate {
@@ -112,6 +121,20 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 
 - (void)exponentialBackoffDidReach:(LCExponentialBackoff *)exponentialBackoff {
     [self tryOpen];
+}
+
+- (void)reachabilityStatusDidChange:(AFNetworkReachabilityStatus)status {
+    switch (status) {
+    case AFNetworkReachabilityStatusUnknown:
+    case AFNetworkReachabilityStatusNotReachable:
+        [self close];
+        break;
+    case AFNetworkReachabilityStatusReachableViaWiFi:
+    case AFNetworkReachabilityStatusReachableViaWWAN:
+        [self resetExponentialBackoff];
+        [self tryOpen];
+        break;
+    }
 }
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket {
