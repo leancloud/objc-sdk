@@ -1,22 +1,22 @@
 //
-//  AVMethodDispatcher.m
+//  LCMethodDispatcher.m
 //  AVOS
 //
 //  Created by Tang Tianyong on 08/06/2017.
 //  Copyright © 2017 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVMethodDispatcher.h"
+#import "LCMethodDispatcher.h"
 
 static id nilPlaceholder;
 
-@interface AVMethodDispatcher ()
+@interface LCMethodDispatcher ()
 
 @property (nonatomic, assign, readonly) NSInteger arity;
 
 @end
 
-@implementation AVMethodDispatcher
+@implementation LCMethodDispatcher
 
 + (void)initialize {
     static dispatch_once_t onceToken;

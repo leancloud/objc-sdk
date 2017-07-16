@@ -561,14 +561,14 @@
 		8344E8CD1F1BDD2800E24D03 /* AVOSCloudCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 837D1B661EF53CDC00C3F93A /* AVOSCloudCache.framework */; };
 		8344E8CE1F1BDD2E00E24D03 /* AVOSCloudRESTClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83BC01D21EF3BD6200B7E680 /* AVOSCloudRESTClient.framework */; };
 		8344E8CF1F1BDD3300E24D03 /* AVOSCloudConnection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83C7D3F31EEC4E4700AD7EDE /* AVOSCloudConnection.framework */; };
-		8344E8D31F1BE01100E24D03 /* AVMethodDispatcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 8344E8D21F1BDFFC00E24D03 /* AVMethodDispatcher.h */; };
-		8344E8D41F1BE01100E24D03 /* AVMethodDispatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 8344E8D11F1BDFFC00E24D03 /* AVMethodDispatcher.m */; };
-		8344E8D51F1BE01200E24D03 /* AVMethodDispatcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 8344E8D21F1BDFFC00E24D03 /* AVMethodDispatcher.h */; };
-		8344E8D61F1BE01200E24D03 /* AVMethodDispatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 8344E8D11F1BDFFC00E24D03 /* AVMethodDispatcher.m */; };
-		8344E8D71F1BE01300E24D03 /* AVMethodDispatcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 8344E8D21F1BDFFC00E24D03 /* AVMethodDispatcher.h */; };
-		8344E8D81F1BE01300E24D03 /* AVMethodDispatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 8344E8D11F1BDFFC00E24D03 /* AVMethodDispatcher.m */; };
-		8344E8D91F1BE01400E24D03 /* AVMethodDispatcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 8344E8D21F1BDFFC00E24D03 /* AVMethodDispatcher.h */; };
-		8344E8DA1F1BE01400E24D03 /* AVMethodDispatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 8344E8D11F1BDFFC00E24D03 /* AVMethodDispatcher.m */; };
+		8344E8D31F1BE01100E24D03 /* LCMethodDispatcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 8344E8D21F1BDFFC00E24D03 /* LCMethodDispatcher.h */; };
+		8344E8D41F1BE01100E24D03 /* LCMethodDispatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 8344E8D11F1BDFFC00E24D03 /* LCMethodDispatcher.m */; };
+		8344E8D51F1BE01200E24D03 /* LCMethodDispatcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 8344E8D21F1BDFFC00E24D03 /* LCMethodDispatcher.h */; };
+		8344E8D61F1BE01200E24D03 /* LCMethodDispatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 8344E8D11F1BDFFC00E24D03 /* LCMethodDispatcher.m */; };
+		8344E8D71F1BE01300E24D03 /* LCMethodDispatcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 8344E8D21F1BDFFC00E24D03 /* LCMethodDispatcher.h */; };
+		8344E8D81F1BE01300E24D03 /* LCMethodDispatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 8344E8D11F1BDFFC00E24D03 /* LCMethodDispatcher.m */; };
+		8344E8D91F1BE01400E24D03 /* LCMethodDispatcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 8344E8D21F1BDFFC00E24D03 /* LCMethodDispatcher.h */; };
+		8344E8DA1F1BE01400E24D03 /* LCMethodDispatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 8344E8D11F1BDFFC00E24D03 /* LCMethodDispatcher.m */; };
 		834775DC1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 834775DB1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h */; };
 		834A54831ECAF3A0006C8F4B /* AVSubscriber.h in Headers */ = {isa = PBXBuildFile; fileRef = 834A54811ECAF3A0006C8F4B /* AVSubscriber.h */; };
 		834A54841ECAF3A0006C8F4B /* AVSubscriber.h in Headers */ = {isa = PBXBuildFile; fileRef = 834A54811ECAF3A0006C8F4B /* AVSubscriber.h */; };
@@ -1790,8 +1790,8 @@
 		8344E8BE1F1BDC4700E24D03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8344E8BF1F1BDC4700E24D03 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8344E8D01F1BDDC900E24D03 /* TestingGround.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestingGround.pch; sourceTree = "<group>"; };
-		8344E8D11F1BDFFC00E24D03 /* AVMethodDispatcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVMethodDispatcher.m; sourceTree = "<group>"; };
-		8344E8D21F1BDFFC00E24D03 /* AVMethodDispatcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVMethodDispatcher.h; sourceTree = "<group>"; };
+		8344E8D11F1BDFFC00E24D03 /* LCMethodDispatcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCMethodDispatcher.m; sourceTree = "<group>"; };
+		8344E8D21F1BDFFC00E24D03 /* LCMethodDispatcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCMethodDispatcher.h; sourceTree = "<group>"; };
 		834775DB1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMKeyedConversation_internal.h; sourceTree = "<group>"; };
 		834A54811ECAF3A0006C8F4B /* AVSubscriber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVSubscriber.h; sourceTree = "<group>"; };
 		834A54821ECAF3A0006C8F4B /* AVSubscriber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVSubscriber.m; sourceTree = "<group>"; };
@@ -3061,8 +3061,8 @@
 				8363D6CE1F1B814D009AFEEF /* LCExponentialBackoff.m */,
 				8363D6D81F1B9699009AFEEF /* LCExponentialTimer.h */,
 				8363D6D71F1B9699009AFEEF /* LCExponentialTimer.m */,
-				8344E8D21F1BDFFC00E24D03 /* AVMethodDispatcher.h */,
-				8344E8D11F1BDFFC00E24D03 /* AVMethodDispatcher.m */,
+				8344E8D21F1BDFFC00E24D03 /* LCMethodDispatcher.h */,
+				8344E8D11F1BDFFC00E24D03 /* LCMethodDispatcher.m */,
 				83A46FA51EF11DB0009E9380 /* LCUUID.h */,
 				83A46FA61EF11DB0009E9380 /* LCUUID.m */,
 				8352BEB61EEFB4E100C513B6 /* LCDevice.h */,
@@ -4050,7 +4050,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8363D6DB1F1B96BF009AFEEF /* LCExponentialTimer.h in Headers */,
-				8344E8D51F1BE01200E24D03 /* AVMethodDispatcher.h in Headers */,
+				8344E8D51F1BE01200E24D03 /* LCMethodDispatcher.h in Headers */,
 				83A46FEA1EF12F81009E9380 /* LCBundle.h in Headers */,
 				83D742451EF674850016BB63 /* AVApplication+Internal.h in Headers */,
 				8376B22E1EF041E7006ED4C2 /* metamacros.h in Headers */,
@@ -4081,7 +4081,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8363D6DF1F1B96C1009AFEEF /* LCExponentialTimer.h in Headers */,
-				8344E8D91F1BE01400E24D03 /* AVMethodDispatcher.h in Headers */,
+				8344E8D91F1BE01400E24D03 /* LCMethodDispatcher.h in Headers */,
 				83A46FEC1EF12F81009E9380 /* LCBundle.h in Headers */,
 				83D742471EF674850016BB63 /* AVApplication+Internal.h in Headers */,
 				8376B2341EF041E8006ED4C2 /* metamacros.h in Headers */,
@@ -4112,7 +4112,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8363D6DD1F1B96C0009AFEEF /* LCExponentialTimer.h in Headers */,
-				8344E8D71F1BE01300E24D03 /* AVMethodDispatcher.h in Headers */,
+				8344E8D71F1BE01300E24D03 /* LCMethodDispatcher.h in Headers */,
 				83A46FEB1EF12F81009E9380 /* LCBundle.h in Headers */,
 				83D742461EF674850016BB63 /* AVApplication+Internal.h in Headers */,
 				8376B2311EF041E8006ED4C2 /* metamacros.h in Headers */,
@@ -4365,7 +4365,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8363D6D91F1B96BE009AFEEF /* LCExponentialTimer.h in Headers */,
-				8344E8D31F1BE01100E24D03 /* AVMethodDispatcher.h in Headers */,
+				8344E8D31F1BE01100E24D03 /* LCMethodDispatcher.h in Headers */,
 				83A46FE91EF12F81009E9380 /* LCBundle.h in Headers */,
 				83D742441EF674850016BB63 /* AVApplication+Internal.h in Headers */,
 				8376B22B1EF041E7006ED4C2 /* metamacros.h in Headers */,
@@ -6283,7 +6283,7 @@
 				8376B22D1EF041E7006ED4C2 /* EXTScope.m in Sources */,
 				8363D6B11F1A4DA2009AFEEF /* AVSomethingWrong+Internal.m in Sources */,
 				83F87C7E1F1613E500649C73 /* AVNamedTable.m in Sources */,
-				8344E8D61F1BE01200E24D03 /* AVMethodDispatcher.m in Sources */,
+				8344E8D61F1BE01200E24D03 /* LCMethodDispatcher.m in Sources */,
 				83A46FAC1EF11DB0009E9380 /* LCUUID.m in Sources */,
 				8363D6DC1F1B96BF009AFEEF /* LCExponentialTimer.m in Sources */,
 				8352BEBD1EEFB4E100C513B6 /* LCDevice.m in Sources */,
@@ -6307,7 +6307,7 @@
 				8376B2331EF041E8006ED4C2 /* EXTScope.m in Sources */,
 				8363D6B31F1A4DA2009AFEEF /* AVSomethingWrong+Internal.m in Sources */,
 				83F87C801F1613E500649C73 /* AVNamedTable.m in Sources */,
-				8344E8DA1F1BE01400E24D03 /* AVMethodDispatcher.m in Sources */,
+				8344E8DA1F1BE01400E24D03 /* LCMethodDispatcher.m in Sources */,
 				83A46FAE1EF11DB0009E9380 /* LCUUID.m in Sources */,
 				8363D6E01F1B96C1009AFEEF /* LCExponentialTimer.m in Sources */,
 				8352BEBF1EEFB4E100C513B6 /* LCDevice.m in Sources */,
@@ -6331,7 +6331,7 @@
 				8376B2301EF041E8006ED4C2 /* EXTScope.m in Sources */,
 				8363D6B21F1A4DA2009AFEEF /* AVSomethingWrong+Internal.m in Sources */,
 				83F87C7F1F1613E500649C73 /* AVNamedTable.m in Sources */,
-				8344E8D81F1BE01300E24D03 /* AVMethodDispatcher.m in Sources */,
+				8344E8D81F1BE01300E24D03 /* LCMethodDispatcher.m in Sources */,
 				83A46FAD1EF11DB0009E9380 /* LCUUID.m in Sources */,
 				8363D6DE1F1B96C0009AFEEF /* LCExponentialTimer.m in Sources */,
 				8352BEBE1EEFB4E100C513B6 /* LCDevice.m in Sources */,
@@ -6631,7 +6631,7 @@
 				8376B22A1EF041E7006ED4C2 /* EXTScope.m in Sources */,
 				8363D6B01F1A4DA2009AFEEF /* AVSomethingWrong+Internal.m in Sources */,
 				83F87C7D1F1613E500649C73 /* AVNamedTable.m in Sources */,
-				8344E8D41F1BE01100E24D03 /* AVMethodDispatcher.m in Sources */,
+				8344E8D41F1BE01100E24D03 /* LCMethodDispatcher.m in Sources */,
 				83A46FAB1EF11DB0009E9380 /* LCUUID.m in Sources */,
 				8363D6DA1F1B96BE009AFEEF /* LCExponentialTimer.m in Sources */,
 				8352BEBC1EEFB4E100C513B6 /* LCDevice.m in Sources */,

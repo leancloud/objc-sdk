@@ -7,7 +7,7 @@
 //
 
 #import "AVConnection.h"
-#import "AVMethodDispatcher.h"
+#import "LCMethodDispatcher.h"
 #import "SRWebSocket.h"
 #import "AVRESTClient+Internal.h"
 #import "LCFoundation.h"
@@ -109,7 +109,7 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
     va_start(args, argument1);
 
     for (id delegate in delegates) {
-        AVMethodDispatcher *dispatcher = [[AVMethodDispatcher alloc] initWithTarget:delegate selector:selector];
+        LCMethodDispatcher *dispatcher = [[LCMethodDispatcher alloc] initWithTarget:delegate selector:selector];
         [dispatcher callWithArgument:argument1 vaList:args];
     }
 

@@ -1,5 +1,5 @@
 //
-//  AVMethodDispatcher.h
+//  LCMethodDispatcher.h
 //  AVOS
 //
 //  Created by Tang Tianyong on 08/06/2017.
@@ -11,7 +11,7 @@
 /**
  Dispatch method call to an object.
  */
-@interface AVMethodDispatcher : NSObject
+@interface LCMethodDispatcher : NSObject
 
 /// The target that receives method call.
 @property (nonatomic, strong, readonly) id target;
