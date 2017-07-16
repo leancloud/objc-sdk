@@ -23,15 +23,17 @@ const double LCExponentialBackoffDefaultJitter = 0.11304999836;
 
 - (instancetype)initWithInitialTime:(NSTimeInterval)initialTime
                         maximumTime:(NSTimeInterval)maximumTime
+                         growFactor:(double)growFactor
                              jitter:(double)jitter
 {
     self = [super init];
 
     if (self) {
         _dispatchQueue = dispatch_queue_create("cn.leancloud.exponential-backoff", DISPATCH_QUEUE_SERIAL);
-        _exponentialTimer = [LCExponentialTimer exponentialTimerWithInitialTime:initialTime
-                                                                        maxTime:maximumTime
-                                                                         jitter:jitter];
+        _exponentialTimer = [[LCExponentialTimer alloc] initWithInitialTime:initialTime
+                                                                    maxTime:maximumTime
+                                                                 growFactor:growFactor
+                                                                     jitter:jitter];
     }
 
     return self;

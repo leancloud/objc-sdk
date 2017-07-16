@@ -24,6 +24,7 @@ FOUNDATION_EXPORT const double LCExponentialBackoffDefaultJitter;
 
 - (instancetype)initWithInitialTime:(NSTimeInterval)initialTime
                         maximumTime:(NSTimeInterval)maximumTime
+                         growFactor:(double)growFactor
                              jitter:(double)jitter;
 
 - (void)resume;

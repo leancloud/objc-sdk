@@ -20,6 +20,8 @@
  */
 #import <Foundation/Foundation.h>
 
+FOUNDATION_EXPORT const double LCExponentialTimerDefaultGrow;
+
 #pragma mark - Default Jitter Values
 
 /// The default jitter value which should give very good results most of the time.
@@ -57,6 +59,19 @@ FOUNDATION_EXPORT const double LCExponentialTimerDefaultJitter;
 + (instancetype)exponentialTimerWithInitialTime:(NSTimeInterval)initialTime
                                         maxTime:(NSTimeInterval)maxTime
                                          jitter:(double)jitter;
+
+/**
+ * Create timer with initial time and max limit and user defined jitter
+ *
+ * @param initialTime The initial time to start counting the delay from.
+ * @param maxTime Upper limit which shouldnt be exceeded when calculating a new delay value.
+ * @param growFactor The growing factor of the delay.
+ * @param jitter Jitter value for calculating the delay.
+ */
+- (instancetype)initWithInitialTime:(NSTimeInterval)initialTime
+                            maxTime:(NSTimeInterval)maxTime
+                         growFactor:(double)growFactor
+                             jitter:(double)jitter;
 
 #pragma mark Accessing and Updating the Delay Value
 

@@ -59,6 +59,7 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 
     _exponentialBackoff = [[LCExponentialBackoff alloc] initWithInitialTime:AVConnectionExponentialBackoffInitialTime
                                                                 maximumTime:AVConnectionExponentialBackoffMaximumTime
+                                                                 growFactor:2
                                                                      jitter:LCExponentialBackoffDefaultJitter];
     _exponentialBackoff.delegate = self;
 }

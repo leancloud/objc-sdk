@@ -26,7 +26,7 @@
 
 #pragma mark - Default Values
 
-static const double LCExponentialTimerDefaultGrow = M_E;
+const double LCExponentialTimerDefaultGrow = M_E;
 const double LCExponentialTimerDefaultJitter = 0.11304999836;
 
 
