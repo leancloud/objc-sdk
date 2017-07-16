@@ -249,7 +249,7 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 - (BOOL)shouldOpen {
     BOOL result = YES;
 
-    if (strcmp(getenv("LCIM_BACKGROUND_CONNECT_ENABLED"), "1"))
+    if (strcmp(getenv("LCIM_BACKGROUND_CONNECT_ENABLED") ?: "", "1"))
         return YES;
 
 #if TARGET_OS_IOS
