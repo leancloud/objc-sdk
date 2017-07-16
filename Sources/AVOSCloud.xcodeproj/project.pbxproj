@@ -565,6 +565,10 @@
 		8344E8BA1F1BDC4600E24D03 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8344E8B91F1BDC4600E24D03 /* Assets.xcassets */; };
 		8344E8BD1F1BDC4700E24D03 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8344E8BB1F1BDC4700E24D03 /* LaunchScreen.storyboard */; };
 		8344E8C01F1BDC4700E24D03 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8344E8BF1F1BDC4700E24D03 /* main.m */; };
+		8344E8CC1F1BDD2200E24D03 /* AVOSCloudFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83F599C81EED0F610013AF6B /* AVOSCloudFoundation.framework */; };
+		8344E8CD1F1BDD2800E24D03 /* AVOSCloudCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 837D1B661EF53CDC00C3F93A /* AVOSCloudCache.framework */; };
+		8344E8CE1F1BDD2E00E24D03 /* AVOSCloudRESTClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83BC01D21EF3BD6200B7E680 /* AVOSCloudRESTClient.framework */; };
+		8344E8CF1F1BDD3300E24D03 /* AVOSCloudConnection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83C7D3F31EEC4E4700AD7EDE /* AVOSCloudConnection.framework */; };
 		834775DC1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 834775DB1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h */; };
 		834A54831ECAF3A0006C8F4B /* AVSubscriber.h in Headers */ = {isa = PBXBuildFile; fileRef = 834A54811ECAF3A0006C8F4B /* AVSubscriber.h */; };
 		834A54841ECAF3A0006C8F4B /* AVSubscriber.h in Headers */ = {isa = PBXBuildFile; fileRef = 834A54811ECAF3A0006C8F4B /* AVSubscriber.h */; };
@@ -1472,6 +1476,34 @@
 			remoteGlobalIDString = 837D1B9D1EF53D1400C3F93A;
 			remoteInfo = "Cache-tvOS";
 		};
+		8344E8C41F1BDCED00E24D03 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 83F599C71EED0F610013AF6B;
+			remoteInfo = "Foundation-iOS";
+		};
+		8344E8C61F1BDCFC00E24D03 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 837D1B651EF53CDC00C3F93A;
+			remoteInfo = "Cache-iOS";
+		};
+		8344E8C81F1BDD0700E24D03 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 83BC01D11EF3BD6200B7E680;
+			remoteInfo = "RESTClient-iOS";
+		};
+		8344E8CA1F1BDD1000E24D03 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 83C7D3F21EEC4E4700AD7EDE;
+			remoteInfo = "Connection-iOS";
+		};
 		837D1B0F1EF4FCBF00C3F93A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
@@ -1759,6 +1791,7 @@
 		8344E8BC1F1BDC4700E24D03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8344E8BE1F1BDC4700E24D03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8344E8BF1F1BDC4700E24D03 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		8344E8D01F1BDDC900E24D03 /* TestingGround.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestingGround.pch; sourceTree = "<group>"; };
 		834775DB1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMKeyedConversation_internal.h; sourceTree = "<group>"; };
 		834A54811ECAF3A0006C8F4B /* AVSubscriber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVSubscriber.h; sourceTree = "<group>"; };
 		834A54821ECAF3A0006C8F4B /* AVSubscriber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVSubscriber.m; sourceTree = "<group>"; };
@@ -2272,6 +2305,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8344E8CF1F1BDD3300E24D03 /* AVOSCloudConnection.framework in Frameworks */,
+				8344E8CE1F1BDD2E00E24D03 /* AVOSCloudRESTClient.framework in Frameworks */,
+				8344E8CD1F1BDD2800E24D03 /* AVOSCloudCache.framework in Frameworks */,
+				8344E8CC1F1BDD2200E24D03 /* AVOSCloudFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2634,6 +2671,7 @@
 		8344E8AF1F1BDC4600E24D03 /* TestingGround */ = {
 			isa = PBXGroup;
 			children = (
+				8344E8D01F1BDDC900E24D03 /* TestingGround.pch */,
 				8344E8B01F1BDC4600E24D03 /* AppDelegate.h */,
 				8344E8B11F1BDC4600E24D03 /* AppDelegate.m */,
 				8344E8B31F1BDC4600E24D03 /* ViewController.h */,
@@ -4708,6 +4746,10 @@
 			buildRules = (
 			);
 			dependencies = (
+				8344E8CB1F1BDD1000E24D03 /* PBXTargetDependency */,
+				8344E8C91F1BDD0700E24D03 /* PBXTargetDependency */,
+				8344E8C71F1BDCFC00E24D03 /* PBXTargetDependency */,
+				8344E8C51F1BDCED00E24D03 /* PBXTargetDependency */,
 			);
 			name = "TestingGround-iOS";
 			productName = TestingGround;
@@ -6916,6 +6958,26 @@
 			target = 837D1B9D1EF53D1400C3F93A /* Cache-tvOS */;
 			targetProxy = 83177CFA1EF903EC004FB12A /* PBXContainerItemProxy */;
 		};
+		8344E8C51F1BDCED00E24D03 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 83F599C71EED0F610013AF6B /* Foundation-iOS */;
+			targetProxy = 8344E8C41F1BDCED00E24D03 /* PBXContainerItemProxy */;
+		};
+		8344E8C71F1BDCFC00E24D03 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 837D1B651EF53CDC00C3F93A /* Cache-iOS */;
+			targetProxy = 8344E8C61F1BDCFC00E24D03 /* PBXContainerItemProxy */;
+		};
+		8344E8C91F1BDD0700E24D03 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 83BC01D11EF3BD6200B7E680 /* RESTClient-iOS */;
+			targetProxy = 8344E8C81F1BDD0700E24D03 /* PBXContainerItemProxy */;
+		};
+		8344E8CB1F1BDD1000E24D03 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 83C7D3F21EEC4E4700AD7EDE /* Connection-iOS */;
+			targetProxy = 8344E8CA1F1BDD1000E24D03 /* PBXContainerItemProxy */;
+		};
 		837D1B101EF4FCBF00C3F93A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 837D1B041EF4FCBF00C3F93A /* RESTClient-macOS */;
@@ -7746,6 +7808,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/TestingGround/TestingGround.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -7782,6 +7845,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/TestingGround/TestingGround.pch";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = TestingGround/Info.plist;

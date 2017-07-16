@@ -1,0 +1,17 @@
+//
+//  TestingGround.pch
+//  TestingGround-iOS
+//
+//  Created by Tang Tianyong on 17/07/2017.
+//  Copyright © 2017 LeanCloud Inc. All rights reserved.
+//
+
+#ifndef TestingGround_pch
+#define TestingGround_pch
+
+#import <AVOSCloudCache/AVOSCloudCache.h>
+#import <AVOSCloudFoundation/AVOSCloudFoundation.h>
+#import <AVOSCloudRESTClient/AVOSCloudRESTClient.h>
+#import <AVOSCloudConnection/AVOSCloudConnection.h>
+
+#endif /* TestingGround_pch */
