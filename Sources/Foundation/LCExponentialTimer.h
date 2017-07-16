@@ -23,14 +23,14 @@
 #pragma mark - Default Jitter Values
 
 /// The default jitter value which should give very good results most of the time.
-FOUNDATION_EXPORT const double AVExponentialTimerDefaultJitter;
+FOUNDATION_EXPORT const double LCExponentialTimerDefaultJitter;
 
-#pragma mark - AVExponentialTimer Interface
+#pragma mark - LCExponentialTimer Interface
 
 /**
  * Exponential timer with jitter for proper backoff handling in data transmissions.
  */
-@interface AVExponentialTimer : NSObject
+@interface LCExponentialTimer : NSObject
 
 #pragma mark Creating an Exponential Timer Object
 

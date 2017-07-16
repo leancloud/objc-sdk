@@ -38,7 +38,7 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 @property (nonatomic, assign) BOOL inKeepAlive;
 @property (nonatomic, assign) dispatch_once_t loginOnceToken;
 @property (nonatomic,   weak) AVConnection *connection;
-@property (nonatomic, strong) AVExponentialTimer *backoffTimer;
+@property (nonatomic, strong) LCExponentialTimer *backoffTimer;
 
 @end
 
@@ -70,7 +70,7 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 
     _connection = [AVConnection sharedInstance];
     _identifier = [NSString stringWithFormat:@"%@-%@", AVIdentifierPrefix, deviceUUID];
-    _backoffTimer = [AVExponentialTimer exponentialTimerWithInitialTime:AVBackoffInitialTime
+    _backoffTimer = [LCExponentialTimer exponentialTimerWithInitialTime:AVBackoffInitialTime
                                                                 maxTime:AVBackoffMaximumTime];
 
     [_connection addDelegate:self];

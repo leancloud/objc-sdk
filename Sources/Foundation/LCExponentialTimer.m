@@ -18,7 +18,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-#import "AVExponentialTimer.h"
+#import "LCExponentialTimer.h"
 
 #import <math.h>
 #import <stdlib.h>
@@ -26,13 +26,13 @@
 
 #pragma mark - Default Values
 
-static const double AVExponentialTimerDefaultGrow = M_E;
-const double AVExponentialTimerDefaultJitter = 0.11304999836;
+static const double LCExponentialTimerDefaultGrow = M_E;
+const double LCExponentialTimerDefaultJitter = 0.11304999836;
 
 
-#pragma mark - AVExponentialTimer Private Interface
+#pragma mark - LCExponentialTimer Private Interface
 
-@interface AVExponentialTimer ()
+@interface LCExponentialTimer ()
 
 @property (nonatomic, assign, readwrite) NSTimeInterval timeInterval;
 @property (nonatomic, assign, readonly) NSTimeInterval maxTime;
@@ -44,16 +44,16 @@ const double AVExponentialTimerDefaultJitter = 0.11304999836;
 @end
 
 
-#pragma mark - AVExponentialTimer Implementation
+#pragma mark - LCExponentialTimer Implementation
 
-@implementation AVExponentialTimer
+@implementation LCExponentialTimer
 
 #pragma mark Creating an Exponential Timer Object
 
 + (instancetype)exponentialTimerWithInitialTime:(NSTimeInterval)initialTime
                                         maxTime:(NSTimeInterval)maxTime
 {
-    return [self exponentialTimerWithInitialTime:initialTime maxTime:maxTime jitter:AVExponentialTimerDefaultJitter];
+    return [self exponentialTimerWithInitialTime:initialTime maxTime:maxTime jitter:LCExponentialTimerDefaultJitter];
 }
 
 + (instancetype)exponentialTimerWithInitialTime:(NSTimeInterval)initialTime
@@ -62,7 +62,7 @@ const double AVExponentialTimerDefaultJitter = 0.11304999836;
 {
     return [[self alloc] initWithInitialTime:initialTime
                                      maxTime:maxTime
-                                  growFactor:AVExponentialTimerDefaultGrow
+                                  growFactor:LCExponentialTimerDefaultGrow
                                       jitter:jitter];
 }
 

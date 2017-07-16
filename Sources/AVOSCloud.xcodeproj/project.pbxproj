@@ -645,6 +645,14 @@
 		8363D6D41F1B814D009AFEEF /* LCExponentialBackoff.m in Sources */ = {isa = PBXBuildFile; fileRef = 8363D6CE1F1B814D009AFEEF /* LCExponentialBackoff.m */; };
 		8363D6D51F1B814D009AFEEF /* LCExponentialBackoff.m in Sources */ = {isa = PBXBuildFile; fileRef = 8363D6CE1F1B814D009AFEEF /* LCExponentialBackoff.m */; };
 		8363D6D61F1B814D009AFEEF /* LCExponentialBackoff.m in Sources */ = {isa = PBXBuildFile; fileRef = 8363D6CE1F1B814D009AFEEF /* LCExponentialBackoff.m */; };
+		8363D6D91F1B96BE009AFEEF /* LCExponentialTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8363D6D81F1B9699009AFEEF /* LCExponentialTimer.h */; };
+		8363D6DA1F1B96BE009AFEEF /* LCExponentialTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8363D6D71F1B9699009AFEEF /* LCExponentialTimer.m */; };
+		8363D6DB1F1B96BF009AFEEF /* LCExponentialTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8363D6D81F1B9699009AFEEF /* LCExponentialTimer.h */; };
+		8363D6DC1F1B96BF009AFEEF /* LCExponentialTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8363D6D71F1B9699009AFEEF /* LCExponentialTimer.m */; };
+		8363D6DD1F1B96C0009AFEEF /* LCExponentialTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8363D6D81F1B9699009AFEEF /* LCExponentialTimer.h */; };
+		8363D6DE1F1B96C0009AFEEF /* LCExponentialTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8363D6D71F1B9699009AFEEF /* LCExponentialTimer.m */; };
+		8363D6DF1F1B96C1009AFEEF /* LCExponentialTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8363D6D81F1B9699009AFEEF /* LCExponentialTimer.h */; };
+		8363D6E01F1B96C1009AFEEF /* LCExponentialTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8363D6D71F1B9699009AFEEF /* LCExponentialTimer.m */; };
 		8376B2291EF041E7006ED4C2 /* EXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 8376B2261EF041DE006ED4C2 /* EXTScope.h */; };
 		8376B22A1EF041E7006ED4C2 /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 8376B2271EF041DE006ED4C2 /* EXTScope.m */; };
 		8376B22B1EF041E7006ED4C2 /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 8376B2281EF041DE006ED4C2 /* metamacros.h */; };
@@ -984,14 +992,6 @@
 		83E6FC181F19B7F600399635 /* AVOSCloudFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8352BEAC1EEF713400C513B6 /* AVOSCloudFoundation.framework */; };
 		83E6FC1E1F19B81A00399635 /* FoundationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F87CA51F16211B00649C73 /* FoundationTests.m */; };
 		83E6FC681F19C19100399635 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E6FC671F19C19100399635 /* main.m */; };
-		83F240581EEA89650041D2E2 /* AVExponentialTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F240561EEA89640041D2E2 /* AVExponentialTimer.h */; };
-		83F240591EEA89650041D2E2 /* AVExponentialTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F240561EEA89640041D2E2 /* AVExponentialTimer.h */; };
-		83F2405A1EEA89650041D2E2 /* AVExponentialTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F240561EEA89640041D2E2 /* AVExponentialTimer.h */; };
-		83F2405B1EEA89650041D2E2 /* AVExponentialTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F240561EEA89640041D2E2 /* AVExponentialTimer.h */; };
-		83F2405C1EEA89650041D2E2 /* AVExponentialTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F240571EEA89640041D2E2 /* AVExponentialTimer.m */; };
-		83F2405D1EEA89650041D2E2 /* AVExponentialTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F240571EEA89640041D2E2 /* AVExponentialTimer.m */; };
-		83F2405E1EEA89650041D2E2 /* AVExponentialTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F240571EEA89640041D2E2 /* AVExponentialTimer.m */; };
-		83F2405F1EEA89650041D2E2 /* AVExponentialTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F240571EEA89640041D2E2 /* AVExponentialTimer.m */; };
 		83F599CC1EED0F610013AF6B /* AVOSCloudFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F599CA1EED0F610013AF6B /* AVOSCloudFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83F745F11B91732D00437259 /* LCIMMessageCacheStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F745EE1B91732D00437259 /* LCIMMessageCacheStore.h */; };
 		83F745F21B91732D00437259 /* LCIMMessageCacheStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F745EF1B91732D00437259 /* LCIMMessageCacheStore.m */; };
@@ -1771,6 +1771,8 @@
 		8363D6C41F1A883A009AFEEF /* LCCodeLocation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCCodeLocation.h; sourceTree = "<group>"; };
 		8363D6CD1F1B814D009AFEEF /* LCExponentialBackoff.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCExponentialBackoff.h; sourceTree = "<group>"; };
 		8363D6CE1F1B814D009AFEEF /* LCExponentialBackoff.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCExponentialBackoff.m; sourceTree = "<group>"; };
+		8363D6D71F1B9699009AFEEF /* LCExponentialTimer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCExponentialTimer.m; sourceTree = "<group>"; };
+		8363D6D81F1B9699009AFEEF /* LCExponentialTimer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCExponentialTimer.h; sourceTree = "<group>"; };
 		8376B2261EF041DE006ED4C2 /* EXTScope.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXTScope.h; sourceTree = "<group>"; };
 		8376B2271EF041DE006ED4C2 /* EXTScope.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EXTScope.m; sourceTree = "<group>"; };
 		8376B2281EF041DE006ED4C2 /* metamacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = metamacros.h; sourceTree = "<group>"; };
@@ -1912,8 +1914,6 @@
 		83E6FC591F19C19100399635 /* FoundationTestsHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoundationTestsHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83E6FC661F19C19100399635 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83E6FC671F19C19100399635 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		83F240561EEA89640041D2E2 /* AVExponentialTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVExponentialTimer.h; sourceTree = "<group>"; };
-		83F240571EEA89640041D2E2 /* AVExponentialTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVExponentialTimer.m; sourceTree = "<group>"; };
 		83F599C81EED0F610013AF6B /* AVOSCloudFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		83F599CA1EED0F610013AF6B /* AVOSCloudFoundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloudFoundation.h; sourceTree = "<group>"; };
 		83F599CB1EED0F610013AF6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -2982,6 +2982,8 @@
 				8363D6C31F1A883A009AFEEF /* LCCodeLocation.m */,
 				8363D6CD1F1B814D009AFEEF /* LCExponentialBackoff.h */,
 				8363D6CE1F1B814D009AFEEF /* LCExponentialBackoff.m */,
+				8363D6D81F1B9699009AFEEF /* LCExponentialTimer.h */,
+				8363D6D71F1B9699009AFEEF /* LCExponentialTimer.m */,
 				83A46FA51EF11DB0009E9380 /* LCUUID.h */,
 				83A46FA61EF11DB0009E9380 /* LCUUID.m */,
 				8352BEB61EEFB4E100C513B6 /* LCDevice.h */,
@@ -3443,8 +3445,6 @@
 				8302AED41C192A0600E13F8A /* LCURLConnection.m */,
 				833391381EE91AC100D46D5C /* AVMethodDispatcher.h */,
 				833391391EE91AC100D46D5C /* AVMethodDispatcher.m */,
-				83F240561EEA89640041D2E2 /* AVExponentialTimer.h */,
-				83F240571EEA89640041D2E2 /* AVExponentialTimer.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -3832,7 +3832,6 @@
 				8333913B1EE91AC100D46D5C /* AVMethodDispatcher.h in Headers */,
 				83E13C121D4B4FC60009CB6F /* AVConfiguration.h in Headers */,
 				70CA80341BDE4318000A3B21 /* AVUser_Internal.h in Headers */,
-				83F240591EEA89650041D2E2 /* AVExponentialTimer.h in Headers */,
 				70CA80351BDE4318000A3B21 /* AVErrorUtils.h in Headers */,
 				70CA80361BDE4318000A3B21 /* AVHelpers.h in Headers */,
 				83020AC81EF23A5F00B649BC /* AVHTTPRequestOperation.h in Headers */,
@@ -3952,7 +3951,6 @@
 				8320F9401C1918C60024B45E /* AVGeoPoint_Internal.h in Headers */,
 				8320F9471C1918C60024B45E /* AVDuration.h in Headers */,
 				8320F9481C1918C60024B45E /* UserAgent.h in Headers */,
-				83F2405B1EEA89650041D2E2 /* AVExponentialTimer.h in Headers */,
 				8320F94C1C1918C60024B45E /* AVRole_Internal.h in Headers */,
 				8320F94D1C1918C60024B45E /* LCDatabaseMigrator.h in Headers */,
 				8320F94F1C1918C60024B45E /* AVCloud_Internal.h in Headers */,
@@ -3974,6 +3972,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8363D6DB1F1B96BF009AFEEF /* LCExponentialTimer.h in Headers */,
 				83A46FEA1EF12F81009E9380 /* LCBundle.h in Headers */,
 				83D742451EF674850016BB63 /* AVApplication+Internal.h in Headers */,
 				8376B22E1EF041E7006ED4C2 /* metamacros.h in Headers */,
@@ -4003,6 +4002,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8363D6DF1F1B96C1009AFEEF /* LCExponentialTimer.h in Headers */,
 				83A46FEC1EF12F81009E9380 /* LCBundle.h in Headers */,
 				83D742471EF674850016BB63 /* AVApplication+Internal.h in Headers */,
 				8376B2341EF041E8006ED4C2 /* metamacros.h in Headers */,
@@ -4032,6 +4032,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8363D6DD1F1B96C0009AFEEF /* LCExponentialTimer.h in Headers */,
 				83A46FEB1EF12F81009E9380 /* LCBundle.h in Headers */,
 				83D742461EF674850016BB63 /* AVApplication+Internal.h in Headers */,
 				8376B2311EF041E8006ED4C2 /* metamacros.h in Headers */,
@@ -4241,7 +4242,6 @@
 				83E13C131D4B4FC60009CB6F /* AVConfiguration.h in Headers */,
 				83D8CF1B1C17DAF50094279D /* AVPartialInputStream.h in Headers */,
 				83020AD71EF23A6100B649BC /* AVHTTPRequestOperation.h in Headers */,
-				83F2405A1EEA89650041D2E2 /* AVExponentialTimer.h in Headers */,
 				830EB9C31C3E4BFA00BA917F /* LCObserver.h in Headers */,
 				83D8CF211C17DAF50094279D /* AVFriendQuery.h in Headers */,
 				83D8CF221C17DAF50094279D /* AVObject_Internal.h in Headers */,
@@ -4285,6 +4285,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8363D6D91F1B96BE009AFEEF /* LCExponentialTimer.h in Headers */,
 				83A46FE91EF12F81009E9380 /* LCBundle.h in Headers */,
 				83D742441EF674850016BB63 /* AVApplication+Internal.h in Headers */,
 				8376B22B1EF041E7006ED4C2 /* metamacros.h in Headers */,
@@ -4398,7 +4399,6 @@
 				8C841AC01A5A7A0000C5C6C4 /* AVExceptionHandler.h in Headers */,
 				83E13C111D4B4FC60009CB6F /* AVConfiguration.h in Headers */,
 				8C841AE31A5A7A0000C5C6C4 /* AVPartialInputStream.h in Headers */,
-				83F240581EEA89650041D2E2 /* AVExponentialTimer.h in Headers */,
 				83020AB91EF23A5D00B649BC /* AVHTTPRequestOperation.h in Headers */,
 				830EB9C01C3E4BFA00BA917F /* LCObserver.h in Headers */,
 				8C841B2A1A5A7A0000C5C6C4 /* AVFriendQuery.h in Headers */,
@@ -6033,7 +6033,6 @@
 				70CA7F881BDE3721000A3B21 /* AVObjectUtils.m in Sources */,
 				70CA7F891BDE3721000A3B21 /* AVRelation.m in Sources */,
 				83020AD21EF23A5F00B649BC /* AVURLConnectionOperation.m in Sources */,
-				83F2405D1EEA89650041D2E2 /* AVExponentialTimer.m in Sources */,
 				70CA7F8A1BDE3721000A3B21 /* AVRequestManager.m in Sources */,
 				70CA7F8B1BDE3721000A3B21 /* AVInstallation.m in Sources */,
 				70CA7F8C1BDE3721000A3B21 /* AVPush.m in Sources */,
@@ -6139,7 +6138,6 @@
 				8320F8C51C1918C60024B45E /* AVRelation.m in Sources */,
 				8320F8C71C1918C60024B45E /* AVFileHTTPRequestOperation.m in Sources */,
 				83331D5B1EB9D55100CADC9C /* NSDictionary+LeanCloud.m in Sources */,
-				83F2405F1EEA89650041D2E2 /* AVExponentialTimer.m in Sources */,
 				8320F8C81C1918C60024B45E /* AVLogger.m in Sources */,
 				8320F8CA1C1918C60024B45E /* AVScheduler.m in Sources */,
 				830EB9C91C3E4BFA00BA917F /* LCObserver.m in Sources */,
@@ -6164,6 +6162,7 @@
 				8363D6B11F1A4DA2009AFEEF /* AVSomethingWrong+Internal.m in Sources */,
 				83F87C7E1F1613E500649C73 /* AVNamedTable.m in Sources */,
 				83A46FAC1EF11DB0009E9380 /* LCUUID.m in Sources */,
+				8363D6DC1F1B96BF009AFEEF /* LCExponentialTimer.m in Sources */,
 				8352BEBD1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 				83A46FF91EF1997A009E9380 /* AVSDK+Internal.m in Sources */,
 				83D742531EF6971A0016BB63 /* LCPath.m in Sources */,
@@ -6186,6 +6185,7 @@
 				8363D6B31F1A4DA2009AFEEF /* AVSomethingWrong+Internal.m in Sources */,
 				83F87C801F1613E500649C73 /* AVNamedTable.m in Sources */,
 				83A46FAE1EF11DB0009E9380 /* LCUUID.m in Sources */,
+				8363D6E01F1B96C1009AFEEF /* LCExponentialTimer.m in Sources */,
 				8352BEBF1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 				83A46FFB1EF1997A009E9380 /* AVSDK+Internal.m in Sources */,
 				83D742551EF6971A0016BB63 /* LCPath.m in Sources */,
@@ -6208,6 +6208,7 @@
 				8363D6B21F1A4DA2009AFEEF /* AVSomethingWrong+Internal.m in Sources */,
 				83F87C7F1F1613E500649C73 /* AVNamedTable.m in Sources */,
 				83A46FAD1EF11DB0009E9380 /* LCUUID.m in Sources */,
+				8363D6DE1F1B96C0009AFEEF /* LCExponentialTimer.m in Sources */,
 				8352BEBE1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 				83A46FFA1EF1997A009E9380 /* AVSDK+Internal.m in Sources */,
 				83D742541EF6971A0016BB63 /* LCPath.m in Sources */,
@@ -6463,7 +6464,6 @@
 				83D8CEB41C17DAF50094279D /* AVGeoPoint.m in Sources */,
 				83D8CEB51C17DAF50094279D /* AVCacheManager.m in Sources */,
 				83D8CEB61C17DAF50094279D /* AVACL.m in Sources */,
-				83F2405E1EEA89650041D2E2 /* AVExponentialTimer.m in Sources */,
 				83020AE11EF23A6100B649BC /* AVURLConnectionOperation.m in Sources */,
 				83D8CEB71C17DAF50094279D /* AVFriendQuery.m in Sources */,
 				83D8CEB81C17DAF50094279D /* AVPartialInputStream.m in Sources */,
@@ -6508,6 +6508,7 @@
 				8363D6B01F1A4DA2009AFEEF /* AVSomethingWrong+Internal.m in Sources */,
 				83F87C7D1F1613E500649C73 /* AVNamedTable.m in Sources */,
 				83A46FAB1EF11DB0009E9380 /* LCUUID.m in Sources */,
+				8363D6DA1F1B96BE009AFEEF /* LCExponentialTimer.m in Sources */,
 				8352BEBC1EEFB4E100C513B6 /* LCDevice.m in Sources */,
 				83A46FF81EF1997A009E9380 /* AVSDK+Internal.m in Sources */,
 				83D742521EF6971A0016BB63 /* LCPath.m in Sources */,
@@ -6606,7 +6607,6 @@
 				8C841AE81A5A7A0000C5C6C4 /* AVGeoPoint.m in Sources */,
 				8C841AC91A5A7A0000C5C6C4 /* AVCacheManager.m in Sources */,
 				8C841AAE1A5A7A0000C5C6C4 /* AVACL.m in Sources */,
-				83F2405C1EEA89650041D2E2 /* AVExponentialTimer.m in Sources */,
 				83020AC31EF23A5D00B649BC /* AVURLConnectionOperation.m in Sources */,
 				8C841B2B1A5A7A0000C5C6C4 /* AVFriendQuery.m in Sources */,
 				8C841AE41A5A7A0000C5C6C4 /* AVPartialInputStream.m in Sources */,
