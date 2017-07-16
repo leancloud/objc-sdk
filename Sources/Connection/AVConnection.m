@@ -71,6 +71,12 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
     [_reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
         [weakSelf reachabilityStatusDidChange:status];
     }];
+
+#if LC_TARGET_OS_IOS
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:)   name:UIApplicationDidEnterBackgroundNotification    object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:)      name:UIApplicationDidBecomeActiveNotification       object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:)        name:UIApplicationWillTerminateNotification         object:nil];
+#endif
 }
 
 - (void)addDelegate:(id<AVConnectionDelegate>)delegate {
@@ -135,6 +141,19 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
         [self tryOpen];
         break;
     }
+}
+
+- (void)applicationDidEnterBackground:(id)sender {
+    [self close];
+}
+
+- (void)applicationDidBecomeActive:(id)sender {
+    [self resetExponentialBackoff];
+    [self tryOpen];
+}
+
+- (void)applicationWillTerminate:(id)sender {
+    [self close];
 }
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket {
@@ -292,6 +311,7 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 }
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self close];
 }
 
