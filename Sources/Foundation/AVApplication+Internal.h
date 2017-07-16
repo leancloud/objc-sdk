@@ -16,6 +16,6 @@
 
 @interface AVApplication (Internal)
 
-@property (nonatomic, readonly, copy) NSString *relativePath;
+- (NSString *)relativePath;
 
 @end

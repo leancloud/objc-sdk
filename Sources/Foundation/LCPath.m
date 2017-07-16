@@ -138,7 +138,7 @@ NSString *LCSDKRoot(void) {
 }
 
 - (NSString *)sandbox {
-    NSString *relativePath = self.application.relativePath;
+    NSString *relativePath = [self.application relativePath];
 
     if (!relativePath)
         return nil;
