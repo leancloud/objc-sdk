@@ -13,8 +13,9 @@
 #import "LCFoundation.h"
 #import "AFNetworkReachabilityManager.h"
 
-static const NSTimeInterval AVConnectionExponentialBackoffInitialTime = 0.5;
-static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
+static const NSTimeInterval AVConnectionOpeningBackoffInitialTime   = 0.5;
+static const NSTimeInterval AVConnectionOpeningBackoffMaximumTime   = 60;
+static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
 
 @interface AVConnection ()
 
@@ -25,7 +26,7 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 @property (nonatomic, strong) NSOperationQueue *openOperationQueue;
 @property (nonatomic, strong) AVRESTClient *RESTClient;
 @property (nonatomic, strong) NSHashTable *delegates;
-@property (nonatomic, strong) LCExponentialBackoff *exponentialBackoff;
+@property (nonatomic, strong) LCExponentialBackoff *openingBackoff;
 @property (nonatomic, strong) AFNetworkReachabilityManager *reachabilityManager;
 @property (nonatomic, assign) AVConnectionState state;
 
@@ -60,11 +61,11 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
     _openOperationQueue = [[NSOperationQueue alloc] init];
     _delegates = [NSHashTable weakObjectsHashTable];
 
-    _exponentialBackoff = [[LCExponentialBackoff alloc] initWithInitialTime:AVConnectionExponentialBackoffInitialTime
-                                                                maximumTime:AVConnectionExponentialBackoffMaximumTime
-                                                                 growFactor:2
-                                                                     jitter:LCExponentialBackoffDefaultJitter];
-    _exponentialBackoff.delegate = self;
+    _openingBackoff = [[LCExponentialBackoff alloc] initWithInitialTime:AVConnectionOpeningBackoffInitialTime
+                                                            maximumTime:AVConnectionOpeningBackoffMaximumTime
+                                                             growFactor:AVConnectionOpeningBackoffGrowingFactor
+                                                                 jitter:LCExponentialBackoffDefaultJitter];
+    _openingBackoff.delegate = self;
 
     _reachabilityManager = [AFNetworkReachabilityManager manager];
 
@@ -72,6 +73,7 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
     [_reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
         [weakSelf reachabilityStatusDidChange:status];
     }];
+
     [_reachabilityManager startMonitoring];
 
 #if LC_TARGET_OS_IOS
@@ -129,13 +131,13 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
     va_end(args);
 }
 
-- (void)resetExponentialBackoff {
-    [self.exponentialBackoff reset];
+- (void)resetOpeningBackoff {
+    [self.openingBackoff reset];
 }
 
-- (void)resumeExponentialBackoff {
+- (void)resumeOpeningBackoff {
     if ([self shouldOpen])
-        [self.exponentialBackoff resume];
+        [self.openingBackoff resume];
 }
 
 - (void)exponentialBackoffDidReach:(LCExponentialBackoff *)exponentialBackoff {
@@ -156,7 +158,7 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
         break;
     case AFNetworkReachabilityStatusReachableViaWiFi:
     case AFNetworkReachabilityStatusReachableViaWWAN:
-        [self resetExponentialBackoff];
+        [self resetOpeningBackoff];
         [self tryOpen];
         break;
     }
@@ -167,7 +169,7 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 }
 
 - (void)applicationDidBecomeActive:(id)sender {
-    [self resetExponentialBackoff];
+    [self resetOpeningBackoff];
     [self tryOpen];
 }
 
@@ -176,26 +178,26 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 }
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket {
-    [self resetExponentialBackoff];
+    [self resetOpeningBackoff];
     [self changeState:AVConnectionStateOpen];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message {
-    [self resetExponentialBackoff];
+    [self resetOpeningBackoff];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceivePong:(NSData *)pongPayload {
-    [self resetExponentialBackoff];
+    [self resetOpeningBackoff];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
     [self changeState:AVConnectionStateClosed];
-    [self resumeExponentialBackoff];
+    [self resumeOpeningBackoff];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
     [self changeState:AVConnectionStateClosed];
-    [self resumeExponentialBackoff];
+    [self resumeOpeningBackoff];
 }
 
 - (BOOL)isConnectingOrOpen {
@@ -296,7 +298,7 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
         return;
     }
 
-    [self invalidateWebSocketWithStateChange:NO];
+    [self closeWebSocketWithStateChange:NO];
     [self changeState:AVConnectionStateConnecting];
 
     [self createWebSocketWithBlock:^(SRWebSocket *webSocket, NSError *error) {
@@ -306,7 +308,7 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
         } else {
             LC_ERROR(AVSomethingWrongCodeUnderlying, @"Cannot initialize WebSocket.", error);
             [self.openLock unlock];
-            [self resumeExponentialBackoff];
+            [self resumeOpeningBackoff];
         }
     }];
 }
@@ -321,23 +323,22 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
     /* TODO */
 }
 
-- (void)invalidateWebSocket {
-    [self invalidateWebSocketWithStateChange:YES];
+- (void)closeWebSocketWithStateChange:(BOOL)stateChange {
+    if (_webSocket) {
+        _webSocket.delegate = nil;
+        [_webSocket close];
+    }
+
+    if (stateChange)
+        [self changeState:AVConnectionStateClosed];
 }
 
-- (void)invalidateWebSocketWithStateChange:(BOOL)shouldChange {
-    if (!_webSocket)
-        return;
-
-    if (shouldChange)
-        [self changeState:AVConnectionStateClosed];
-
-    _webSocket.delegate = nil;
-    [_webSocket close];
+- (void)closeWebSocket {
+    [self closeWebSocketWithStateChange:YES];
 }
 
 - (void)close {
-    [self invalidateWebSocket];
+    [self closeWebSocket];
 }
 
 - (void)dealloc {
