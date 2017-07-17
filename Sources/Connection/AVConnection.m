@@ -143,6 +143,11 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
         [self tryOpen];
 }
 
+- (void)sendPing {
+    if (self.webSocket.readyState == SR_OPEN)
+        [self.webSocket sendPing:[NSData data]];
+}
+
 - (void)reachabilityStatusDidChange:(AFNetworkReachabilityStatus)status {
     switch (status) {
     case AFNetworkReachabilityStatusUnknown:
