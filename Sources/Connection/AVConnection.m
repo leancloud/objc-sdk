@@ -110,7 +110,7 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 
     for (id delegate in delegates) {
         LCMethodDispatcher *dispatcher = [[LCMethodDispatcher alloc] initWithTarget:delegate selector:selector];
-        [dispatcher callWithArgument:argument1 vaList:args];
+        [dispatcher callWithArgument:(void *)argument1 vaList:args];
     }
 
     va_end(args);
@@ -158,6 +158,9 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket {
     [self resetExponentialBackoff];
+
+    [self callDelegateMethod:@selector(connection:stateDidChangeTo:)
+               withArguments:self, AVConnectionStateOpen];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message {
@@ -193,6 +196,9 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 
 - (void)webSocketDidCreate:(SRWebSocket *)webSocket {
     _webSocket = webSocket;
+
+    [self callDelegateMethod:@selector(connection:stateDidChangeTo:)
+               withArguments:self, AVConnectionStateConnecting];
 
     webSocket.delegate = self;
     [webSocket open];
@@ -301,6 +307,9 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 - (void)invalidateWebSocket {
     if (!_webSocket)
         return;
+
+    [self callDelegateMethod:@selector(connection:stateDidChangeTo:)
+               withArguments:self, AVConnectionStateClosed];
 
     _webSocket.delegate = nil;
     [_webSocket close];

@@ -12,6 +12,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class AVConnection;
+
+typedef NS_ENUM(NSInteger, AVConnectionState) {
+    AVConnectionStateConnecting = 1,
+    AVConnectionStateOpen,
+    AVConnectionStateClosed
+};
+
 /**
  A protocol defines a frame that can be sent by connection.
  */
@@ -23,6 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
  A protocol for handling connection events.
  */
 @protocol AVConnectionDelegate <NSObject>
+
+- (void)connection:(AVConnection *)connection stateDidChangeTo:(AVConnectionState)state;
 
 @end
 
