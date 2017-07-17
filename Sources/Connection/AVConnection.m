@@ -27,6 +27,7 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 @property (nonatomic, strong) NSHashTable *delegates;
 @property (nonatomic, strong) LCExponentialBackoff *exponentialBackoff;
 @property (nonatomic, strong) AFNetworkReachabilityManager *reachabilityManager;
+@property (nonatomic, assign) AVConnectionState state;
 
 @end
 
@@ -71,12 +72,24 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
     [_reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
         [weakSelf reachabilityStatusDidChange:status];
     }];
+    [_reachabilityManager startMonitoring];
 
 #if LC_TARGET_OS_IOS
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:)   name:UIApplicationDidEnterBackgroundNotification    object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:)      name:UIApplicationDidBecomeActiveNotification       object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:)        name:UIApplicationWillTerminateNotification         object:nil];
 #endif
+}
+
+- (void)changeState:(AVConnectionState)state {
+    @synchronized (self) {
+        if (state == _state)
+            return;
+
+        _state = state;
+        [self callDelegateMethod:@selector(connection:stateDidChangeTo:)
+                   withArguments:(__bridge void *)self, state];
+    }
 }
 
 - (void)addDelegate:(id<AVConnectionDelegate>)delegate {
@@ -92,7 +105,7 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 }
 
 - (void)callDelegateMethod:(SEL)selector
-             withArguments:(id)argument1, ...
+             withArguments:(void *)argument1, ...
 {
     NSArray *delegates = nil;
 
@@ -110,7 +123,7 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 
     for (id delegate in delegates) {
         LCMethodDispatcher *dispatcher = [[LCMethodDispatcher alloc] initWithTarget:delegate selector:selector];
-        [dispatcher callWithArgument:(void *)argument1 vaList:args];
+        [dispatcher callWithArgument:argument1 vaList:args];
     }
 
     va_end(args);
@@ -126,7 +139,8 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 }
 
 - (void)exponentialBackoffDidReach:(LCExponentialBackoff *)exponentialBackoff {
-    [self tryOpen];
+    if (self.reachabilityManager.isReachable)
+        [self tryOpen];
 }
 
 - (void)reachabilityStatusDidChange:(AFNetworkReachabilityStatus)status {
@@ -158,9 +172,7 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket {
     [self resetExponentialBackoff];
-
-    [self callDelegateMethod:@selector(connection:stateDidChangeTo:)
-               withArguments:self, AVConnectionStateOpen];
+    [self changeState:AVConnectionStateOpen];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message {
@@ -173,10 +185,12 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
     [self resumeExponentialBackoff];
+    [self changeState:AVConnectionStateClosed];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
     [self resumeExponentialBackoff];
+    [self changeState:AVConnectionStateClosed];
 }
 
 - (BOOL)isConnectingOrOpen {
@@ -196,9 +210,6 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 
 - (void)webSocketDidCreate:(SRWebSocket *)webSocket {
     _webSocket = webSocket;
-
-    [self callDelegateMethod:@selector(connection:stateDidChangeTo:)
-               withArguments:self, AVConnectionStateConnecting];
 
     webSocket.delegate = self;
     [webSocket open];
@@ -280,7 +291,8 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
         return;
     }
 
-    [self invalidateWebSocket];
+    [self invalidateWebSocketWithStateChange:NO];
+    [self changeState:AVConnectionStateConnecting];
 
     [self createWebSocketWithBlock:^(SRWebSocket *webSocket, NSError *error) {
         if (webSocket) {
@@ -305,11 +317,15 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 }
 
 - (void)invalidateWebSocket {
+    [self invalidateWebSocketWithStateChange:YES];
+}
+
+- (void)invalidateWebSocketWithStateChange:(BOOL)shouldChange {
     if (!_webSocket)
         return;
 
-    [self callDelegateMethod:@selector(connection:stateDidChangeTo:)
-               withArguments:self, AVConnectionStateClosed];
+    if (shouldChange)
+        [self changeState:AVConnectionStateClosed];
 
     _webSocket.delegate = nil;
     [_webSocket close];
