@@ -13,7 +13,7 @@
 #import "LCFoundation.h"
 #import "AFNetworkReachabilityManager.h"
 
-static const NSTimeInterval AVConnectionExponentialBackoffInitialTime = 0.618;
+static const NSTimeInterval AVConnectionExponentialBackoffInitialTime = 0.5;
 static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 
 @interface AVConnection ()
