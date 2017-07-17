@@ -329,6 +329,8 @@ static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
         [_webSocket close];
     }
 
+    [self.openingBackoff reset];
+
     if (stateChange)
         [self changeState:AVConnectionStateClosed];
 }
