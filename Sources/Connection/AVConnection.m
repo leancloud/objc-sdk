@@ -184,13 +184,13 @@ static const NSTimeInterval AVConnectionExponentialBackoffMaximumTime = 60;
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
-    [self resumeExponentialBackoff];
     [self changeState:AVConnectionStateClosed];
+    [self resumeExponentialBackoff];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
-    [self resumeExponentialBackoff];
     [self changeState:AVConnectionStateClosed];
+    [self resumeExponentialBackoff];
 }
 
 - (BOOL)isConnectingOrOpen {
