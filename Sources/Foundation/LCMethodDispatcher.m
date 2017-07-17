@@ -8,27 +8,63 @@
 
 #import "LCMethodDispatcher.h"
 
-static id nilPlaceholder;
+static const NSInteger LCArgumentOffset = 2;
+
+@interface LCMethodArgument : NSObject
+
+@property (nonatomic, assign, readonly) void *data;
+
+@property (nonatomic, strong) id        objectValue;
+@property (nonatomic, assign) int64_t   int64Value;
+@property (nonatomic, assign) uint64_t  uint64Value;
+@property (nonatomic, assign) double    doubleValue;
+@property (nonatomic, assign) BOOL      booleanValue;
+@property (nonatomic, assign) void *    pointerValue;
+
+@end
+
+@implementation LCMethodArgument
+
+- (void)setObjectValue:(id)objectValue {
+    _objectValue = objectValue;
+    _data = &_objectValue;
+}
+
+- (void)setInt64Value:(int64_t)int64Value {
+    _int64Value = int64Value;
+    _data = &_int64Value;
+}
+
+- (void)setUint64Value:(uint64_t)uint64Value {
+    _uint64Value = uint64Value;
+    _data = &_uint64Value;
+}
+
+- (void)setDoubleValue:(double)doubleValue {
+    _doubleValue = doubleValue;
+    _data = &_doubleValue;
+}
+
+- (void)setBooleanValue:(BOOL)booleanValue {
+    _booleanValue = booleanValue;
+    _data = &_booleanValue;
+}
+
+- (void)setPointerValue:(void *)pointerValue {
+    _pointerValue = pointerValue;
+    _data = &_pointerValue;
+}
+
+@end
 
 @interface LCMethodDispatcher ()
 
 @property (nonatomic, assign, readonly) NSInteger arity;
+@property (nonatomic, strong, readonly) NSMethodSignature *signature;
 
 @end
 
 @implementation LCMethodDispatcher
-
-+ (void)initialize {
-    static dispatch_once_t onceToken;
-
-    dispatch_once(&onceToken, ^{
-        [self doInitialize];
-    });
-}
-
-+ (void)doInitialize {
-    nilPlaceholder = [[NSObject alloc] init];
-}
 
 - (instancetype)initWithTarget:(id)target selector:(SEL)selector {
     self = [super init];
@@ -36,6 +72,7 @@ static id nilPlaceholder;
     if (self) {
         _target   = target;
         _selector = selector;
+        _signature = [target methodSignatureForSelector:selector];
     }
 
     return self;
@@ -46,8 +83,44 @@ static id nilPlaceholder;
     return [components count] - 1;
 }
 
-- (NSArray *)arrayFromVaList:(va_list)vaList
-                       start:(id)start
+- (LCMethodArgument *)getArgumentFromVaList:(va_list)vaList
+                                    atIndex:(NSInteger)index
+{
+    LCMethodArgument *argument = [[LCMethodArgument alloc] init];
+    const char *type = [self.signature getArgumentTypeAtIndex:index + LCArgumentOffset];
+
+    switch (type[0]) {
+    case 'c':
+    case 'i':
+    case 's':
+    case 'l':
+    case 'q':
+    case 'B':
+        argument.int64Value = va_arg(vaList, int64_t);
+        break;
+    case 'C':
+    case 'I':
+    case 'S':
+    case 'L':
+    case 'Q':
+    case '*':
+        argument.uint64Value = va_arg(vaList, uint64_t);
+        break;
+    case 'f':
+    case 'd':
+        argument.doubleValue = va_arg(vaList, double);
+        break;
+    case '@':
+    case '#':
+        argument.objectValue = va_arg(vaList, id);
+        break;
+    }
+
+    return argument;
+}
+
+- (NSArray<LCMethodArgument *> *)getArgumentsFromVaList:(va_list)vaList
+                                                  start:(void *)start
 {
     NSInteger arity = self.arity;
     NSMutableArray *arguments = [NSMutableArray arrayWithCapacity:arity];
@@ -55,15 +128,16 @@ static id nilPlaceholder;
     if (!arity)
         return arguments;
 
-    id firstArgument = start ?: nilPlaceholder;
+    LCMethodArgument *firstArgument = [[LCMethodArgument alloc] init];
+    firstArgument.pointerValue = start;
 
     [arguments addObject:firstArgument];
 
     va_list args;
     va_copy(args, vaList);
 
-    for (NSInteger i = 0, size = arity - 1; i < size; i++) {
-        id argument = va_arg(args, id) ?: nilPlaceholder;
+    for (NSInteger i = 1; i < arity; i++) {
+        LCMethodArgument *argument = [self getArgumentFromVaList:args atIndex:i];
         [arguments addObject:argument];
     }
 
@@ -74,7 +148,7 @@ static id nilPlaceholder;
 
 - (void)callInDispatchQueue:(dispatch_queue_t)dispatchQueue
              asynchronously:(BOOL)asynchronously
-               withArgument:(id)argument
+               withArgument:(void *)argument
                      vaList:(va_list)vaList
 {
     if (!dispatchQueue)
@@ -93,7 +167,7 @@ static id nilPlaceholder;
 
 - (void)callInDispatchQueue:(dispatch_queue_t)dispatchQueue
              asynchronously:(BOOL)asynchronously
-              withArguments:(id)argument1, ...
+              withArguments:(void *)argument1, ...
 {
     va_list args;
     va_start(args, argument1);
@@ -106,21 +180,17 @@ static id nilPlaceholder;
     va_end(args);
 }
 
-- (void)callWithArgument:(id)argument
+- (void)callWithArgument:(void *)argument
                   vaList:(va_list)vaList
 {
     id  target   = self.target;
     SEL selector = self.selector;
+    NSMethodSignature *signature = self.signature;
 
     if (!target)
         return;
     if (!selector)
         return;
-    if (![target respondsToSelector:selector])
-        return;
-
-    NSMethodSignature *signature = [target methodSignatureForSelector:selector];
-
     if (!signature)
         return;
 
@@ -129,27 +199,17 @@ static id nilPlaceholder;
     invocation.target   = target;
     invocation.selector = selector;
 
-    /* The first two arguments is already occupied by target itself and selector. */
-    const NSInteger argumentStartIndex = 2;
+    NSInteger index = LCArgumentOffset;
+    NSArray<LCMethodArgument *> *arguments = [self getArgumentsFromVaList:vaList start:argument];
 
-    NSArray *arguments = [self arrayFromVaList:vaList start:argument];
-
-    for (NSInteger i = 0, argc = arguments.count; i < argc; ++i) {
-        id argument = arguments[i];
-
-        if (argument == nilPlaceholder)
-            continue;
-
-        NSInteger index = argumentStartIndex + i;
-
-        [invocation setArgument:(void *)&argument
-                        atIndex:index];
+    for (LCMethodArgument *argument in arguments) {
+        [invocation setArgument:argument.data atIndex:index++];
     }
 
     [invocation invoke];
 }
 
-- (void)callWithArguments:(id)argument1, ... {
+- (void)callWithArguments:(void *)argument1, ... {
     va_list args;
     va_start(args, argument1);
 

@@ -41,7 +41,7 @@
  */
 - (void)callInDispatchQueue:(dispatch_queue_t)dispatchQueue
              asynchronously:(BOOL)asynchronously
-               withArgument:(id)argument
+               withArgument:(void *)argument
                      vaList:(va_list)vaList;
 
 /**
@@ -55,7 +55,7 @@
  */
 - (void)callInDispatchQueue:(dispatch_queue_t)dispatchQueue
              asynchronously:(BOOL)asynchronously
-              withArguments:(id)argument1, ...;
+              withArguments:(void *)argument1, ...;
 
 /**
  Call method with arguments.
@@ -63,7 +63,7 @@
  @param argument The first argument.
  @param vaList   A va_list.
  */
-- (void)callWithArgument:(id)argument
+- (void)callWithArgument:(void *)argument
                   vaList:(va_list)vaList;
 
 /**
@@ -71,6 +71,6 @@
 
  @param argument1 The start of argument list.
  */
-- (void)callWithArguments:(id)argument1, ...;
+- (void)callWithArguments:(void *)argument1, ...;
 
 @end
