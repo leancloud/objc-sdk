@@ -18,6 +18,8 @@ static const NSTimeInterval AVConnectionOpenBackoffInitialTime   = 0.5;
 static const NSTimeInterval AVConnectionOpenBackoffMaximumTime   = 60;
 static const double         AVConnectionOpenBackoffGrowingFactor = 2;
 
+static const NSTimeInterval AVConnectionPingBackoffInterval      = 180;
+
 @interface AVConnection ()
 
 <SRWebSocketDelegate, LCExponentialBackoffDelegate>
@@ -28,6 +30,7 @@ static const double         AVConnectionOpenBackoffGrowingFactor = 2;
 @property (nonatomic, strong) AVRESTClient *RESTClient;
 @property (nonatomic, strong) NSHashTable *delegates;
 @property (nonatomic, strong) LCExponentialBackoff *openBackoff;
+@property (nonatomic, strong) LCExponentialBackoff *pingBackoff;
 @property (nonatomic, strong) AFNetworkReachabilityManager *reachabilityManager;
 @property (nonatomic, assign) AVConnectionState state;
 
@@ -67,6 +70,12 @@ static const double         AVConnectionOpenBackoffGrowingFactor = 2;
                                                           growFactor:AVConnectionOpenBackoffGrowingFactor
                                                               jitter:LCExponentialBackoffDefaultJitter];
     _openBackoff.delegate = self;
+
+    _pingBackoff = [[LCExponentialBackoff alloc] initWithInitialTime:AVConnectionPingBackoffInterval
+                                                         maximumTime:AVConnectionPingBackoffInterval
+                                                          growFactor:1
+                                                              jitter:0];
+    _pingBackoff.delegate = self;
 
     _reachabilityManager = [AFNetworkReachabilityManager manager];
 
@@ -141,9 +150,33 @@ static const double         AVConnectionOpenBackoffGrowingFactor = 2;
         [self.openBackoff resume];
 }
 
-- (void)exponentialBackoffDidReach:(LCExponentialBackoff *)exponentialBackoff {
+- (void)resetPingBackoff {
+    [self.pingBackoff reset];
+}
+
+- (void)resumePingBackoff {
+    [self.pingBackoff resume];
+}
+
+- (void)restartPingBackoff {
+    [self resetPingBackoff];
+    [self resumePingBackoff];
+}
+
+- (void)exponentialBackoffDidReach:(LCExponentialBackoff *)backoff {
+    if (backoff == self.openBackoff)
+        [self openBackoffDidReach:backoff];
+    else if (backoff == self.pingBackoff)
+        [self pingBackoffDidReach:backoff];
+}
+
+- (void)openBackoffDidReach:(LCExponentialBackoff *)backoff {
     if ([self canOpen])
         [self open];
+}
+
+- (void)pingBackoffDidReach:(LCExponentialBackoff *)backoff {
+    [self sendPing];
 }
 
 - (void)sendPing {
@@ -181,6 +214,8 @@ static const double         AVConnectionOpenBackoffGrowingFactor = 2;
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket {
     [self resetOpenBackoff];
     [self changeState:AVConnectionStateOpen];
+
+    [self restartPingBackoff];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message {
@@ -341,6 +376,8 @@ static const double         AVConnectionOpenBackoffGrowingFactor = 2;
         _webSocket.delegate = nil;
         [_webSocket close];
     }
+
+    [self resetPingBackoff];
 
     if (stateChange)
         [self changeState:AVConnectionStateClosed];
