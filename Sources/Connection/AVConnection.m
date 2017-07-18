@@ -27,6 +27,7 @@ static const NSTimeInterval AVConnectionPingBackoffInterval      = 180;
 @property (nonatomic, strong) SRWebSocket *webSocket;
 @property (nonatomic, assign) pthread_mutex_t openLock;
 @property (nonatomic, strong) NSOperationQueue *openQueue;
+@property (nonatomic, strong) NSOperationQueue *workQueue;
 @property (nonatomic, strong) AVRESTClient *RESTClient;
 @property (nonatomic, strong) NSHashTable *delegates;
 @property (nonatomic, strong) LCExponentialBackoff *openBackoff;
@@ -65,6 +66,8 @@ static const NSTimeInterval AVConnectionPingBackoffInterval      = 180;
 - (void)doInitialize {
     pthread_mutex_init(&_openLock, NULL);
     _openQueue = [[NSOperationQueue alloc] init];
+    _workQueue = [[NSOperationQueue alloc] init];
+    _workQueue.maxConcurrentOperationCount = 1;
     _delegates = [NSHashTable weakObjectsHashTable];
 
     _openBackoff = [[LCExponentialBackoff alloc] initWithInitialTime:AVConnectionOpenBackoffInitialTime
@@ -93,6 +96,13 @@ static const NSTimeInterval AVConnectionPingBackoffInterval      = 180;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:)      name:UIApplicationDidBecomeActiveNotification       object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:)        name:UIApplicationWillTerminateNotification         object:nil];
 #endif
+}
+
+- (void)addOperation:(void(^)(AVConnection *connection))operation {
+    @weakify(self, connection);
+    [self.workQueue addOperationWithBlock:^{
+        operation(connection);
+    }];
 }
 
 - (void)changeState:(AVConnectionState)state {
@@ -166,15 +176,20 @@ static const NSTimeInterval AVConnectionPingBackoffInterval      = 180;
 }
 
 - (void)exponentialBackoffDidReach:(LCExponentialBackoff *)backoff {
-    if (backoff == self.openBackoff)
-        [self openBackoffDidReach:backoff];
-    else if (backoff == self.pingBackoff)
-        [self pingBackoffDidReach:backoff];
+    [self addOperation:^(AVConnection *connection) {
+        if (backoff == connection.openBackoff)
+            [connection openBackoffDidReach:backoff];
+        else if (backoff == connection.pingBackoff)
+            [connection pingBackoffDidReach:backoff];
+    }];
 }
 
 - (void)openBackoffDidReach:(LCExponentialBackoff *)backoff {
     if ([self canOpen])
         [self open];
+
+    if (self.webSocket.readyState == SR_OPEN)
+        [self resetOpenBackoff];
 }
 
 - (void)pingBackoffDidReach:(LCExponentialBackoff *)backoff {
@@ -191,61 +206,79 @@ static const NSTimeInterval AVConnectionPingBackoffInterval      = 180;
 }
 
 - (void)reachabilityStatusDidChange:(AFNetworkReachabilityStatus)status {
-    switch (status) {
-    case AFNetworkReachabilityStatusUnknown:
-    case AFNetworkReachabilityStatusNotReachable:
-        [self close];
-        break;
-    case AFNetworkReachabilityStatusReachableViaWiFi:
-    case AFNetworkReachabilityStatusReachableViaWWAN:
-        [self resetOpenBackoff];
-        [self open];
-        break;
-    }
+    [self addOperation:^(AVConnection *connection) {
+        switch (status) {
+        case AFNetworkReachabilityStatusUnknown:
+        case AFNetworkReachabilityStatusNotReachable:
+            [connection close];
+            break;
+        case AFNetworkReachabilityStatusReachableViaWiFi:
+        case AFNetworkReachabilityStatusReachableViaWWAN:
+            [connection resetOpenBackoff];
+            [connection open];
+            break;
+        }
+    }];
 }
 
 - (void)applicationDidEnterBackground:(id)sender {
-    [self close];
+    [self addOperation:^(AVConnection *connection) {
+        [connection close];
+    }];
 }
 
 - (void)applicationDidBecomeActive:(id)sender {
-    [self resetOpenBackoff];
-    [self open];
+    [self addOperation:^(AVConnection *connection) {
+        [connection resetOpenBackoff];
+        [connection open];
+    }];
 }
 
 - (void)applicationWillTerminate:(id)sender {
-    [self close];
+    [self addOperation:^(AVConnection *connection) {
+        [connection close];
+    }];
 }
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket {
-    [self resetOpenBackoff];
-    [self changeState:AVConnectionStateOpen];
+    [self addOperation:^(AVConnection *connection) {
+        [connection resetOpenBackoff];
+        [connection changeState:AVConnectionStateOpen];
 
-    [self restartPingBackoff];
+        [connection restartPingBackoff];
+    }];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message {
-    [self resetOpenBackoff];
+    [self addOperation:^(AVConnection *connection) {
+        [connection resetOpenBackoff];
+    }];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceivePong:(NSData *)pongPayload {
-    [self resetOpenBackoff];
+    [self addOperation:^(AVConnection *connection) {
+        [connection resetOpenBackoff];
 
-    typeof(_maximumPongId) pongId = 0;
-    [pongPayload getBytes:&pongId length:sizeof(pongId)];
+        typeof(connection.maximumPongId) pongId = 0;
+        [pongPayload getBytes:&pongId length:sizeof(pongId)];
 
-    if (pongId > _maximumPongId)
-        _maximumPongId = pongId;
+        if (pongId > connection.maximumPongId)
+            connection.maximumPongId = pongId;
+    }];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
-    [self close];
-    [self resumeOpenBackoff];
+    [self addOperation:^(AVConnection *connection) {
+        [connection close];
+        [connection resumeOpenBackoff];
+    }];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
-    [self close];
-    [self resumeOpenBackoff];
+    [self addOperation:^(AVConnection *connection) {
+        [connection close];
+        [connection resumeOpenBackoff];
+    }];
 }
 
 - (void)webSocketDidCreate:(SRWebSocket *)webSocket {
@@ -296,13 +329,16 @@ static const NSTimeInterval AVConnectionPingBackoffInterval      = 180;
 }
 
 - (void)createWebSocketWithBlock:(void(^)(SRWebSocket *webSocket, NSError *error))block {
+    @weakify(self, connection);
     [self.RESTClient getRTMServerTableWithBlock:^(NSDictionary *serverTable, NSError *error) {
-        if (serverTable) {
-            SRWebSocket *webSocket = [self webSocketWithServerTable:serverTable];
-            block(webSocket, nil);
-        } else {
-            block(nil, error);
-        }
+        [connection addOperation:^(AVConnection *connection) {
+            if (serverTable) {
+                SRWebSocket *webSocket = [connection webSocketWithServerTable:serverTable];
+                block(webSocket, nil);
+            } else {
+                block(nil, error);
+            }
+        }];
     }];
 }
 
@@ -350,32 +386,38 @@ static const NSTimeInterval AVConnectionPingBackoffInterval      = 180;
 }
 
 - (void)tryOpen {
-    if (pthread_mutex_trylock(&_openLock))
+    pthread_mutex_t *lock = &_openLock;
+
+    if (pthread_mutex_trylock(lock))
         return;
 
     if (![self canOpen]) {
-        pthread_mutex_unlock(&_openLock);
+        pthread_mutex_unlock(lock);
         return;
     }
 
-    [self closeWebSocketWithStateChange:NO];
-    [self changeState:AVConnectionStateConnecting];
+    [self addOperation:^(AVConnection *connection) {
+        [connection closeWebSocketWithStateChange:NO];
+        [connection changeState:AVConnectionStateConnecting];
+    }];
 
+    @weakify(self, connection);
     [self createWebSocketWithBlock:^(SRWebSocket *webSocket, NSError *error) {
         if (webSocket) {
-            [self webSocketDidCreate:webSocket];
-            pthread_mutex_unlock(&_openLock);
+            [connection webSocketDidCreate:webSocket];
+            pthread_mutex_unlock(lock);
         } else {
             LC_ERROR(AVSomethingWrongCodeUnderlying, @"Cannot initialize WebSocket.", error);
-            pthread_mutex_unlock(&_openLock);
-            [self resumeOpenBackoff];
+            pthread_mutex_unlock(lock);
+            [connection resumeOpenBackoff];
         }
     }];
 }
 
 - (void)open {
+    @weakify(self, connection);
     [self.openQueue addOperationWithBlock:^{
-        [self tryOpen];
+        [connection tryOpen];
     }];
 }
 
@@ -384,15 +426,19 @@ static const NSTimeInterval AVConnectionPingBackoffInterval      = 180;
 }
 
 - (void)closeWebSocketWithStateChange:(BOOL)stateChange {
-    if (_webSocket) {
-        _webSocket.delegate = nil;
-        [_webSocket close];
-    }
+    [self addOperation:^(AVConnection *connection) {
+        [connection resetPingBackoff];
 
-    [self resetPingBackoff];
+        if (stateChange)
+            [connection changeState:AVConnectionStateClosed];
 
-    if (stateChange)
-        [self changeState:AVConnectionStateClosed];
+        SRWebSocket *webSocket = connection.webSocket;
+
+        if (webSocket) {
+            webSocket.delegate = nil;
+            [webSocket close];
+        }
+    }];
 }
 
 - (void)closeWebSocket {
