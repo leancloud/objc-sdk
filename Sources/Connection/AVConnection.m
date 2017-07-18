@@ -26,7 +26,7 @@ static const NSTimeInterval AVConnectionPingBackoffInterval      = 180;
 
 @property (nonatomic, strong) SRWebSocket *webSocket;
 @property (nonatomic, assign) pthread_mutex_t openLock;
-@property (nonatomic, strong) NSOperationQueue *openOperationQueue;
+@property (nonatomic, strong) NSOperationQueue *openQueue;
 @property (nonatomic, strong) AVRESTClient *RESTClient;
 @property (nonatomic, strong) NSHashTable *delegates;
 @property (nonatomic, strong) LCExponentialBackoff *openBackoff;
@@ -64,7 +64,7 @@ static const NSTimeInterval AVConnectionPingBackoffInterval      = 180;
 
 - (void)doInitialize {
     pthread_mutex_init(&_openLock, NULL);
-    _openOperationQueue = [[NSOperationQueue alloc] init];
+    _openQueue = [[NSOperationQueue alloc] init];
     _delegates = [NSHashTable weakObjectsHashTable];
 
     _openBackoff = [[LCExponentialBackoff alloc] initWithInitialTime:AVConnectionOpenBackoffInitialTime
@@ -374,7 +374,7 @@ static const NSTimeInterval AVConnectionPingBackoffInterval      = 180;
 }
 
 - (void)open {
-    [self.openOperationQueue addOperationWithBlock:^{
+    [self.openQueue addOperationWithBlock:^{
         [self tryOpen];
     }];
 }
