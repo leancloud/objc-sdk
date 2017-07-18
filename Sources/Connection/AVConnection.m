@@ -289,6 +289,8 @@ static const NSTimeInterval AVConnectionPingBackoffInterval      = 180;
 
     webSocket.delegate = self;
     [webSocket open];
+
+    [self resumeOpenBackoff];
 }
 
 /**
