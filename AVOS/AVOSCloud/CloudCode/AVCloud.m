@@ -55,14 +55,7 @@
     [[AVPaasClient sharedInstance]
      performRequest:request
      success:^(NSHTTPURLResponse *response, id responseObject) {
-         NSError *serverError = [AVErrorUtils errorFromJSON:responseObject];
-
-         if (serverError) {
-             error = serverError;
-         } else {
-             result = [self processedFunctionResultFromObject:responseObject[@"result"]];
-         }
-
+         result = [self processedFunctionResultFromObject:responseObject[@"result"]];
          finished = YES;
      }
      failure:^(NSHTTPURLResponse *response, id responseObject, NSError *inError) {
