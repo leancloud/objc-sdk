@@ -12,6 +12,7 @@
 #import "AVRESTClient+Internal.h"
 #import "LCFoundation.h"
 #import "AFNetworkReachabilityManager.h"
+#import <pthread.h>
 
 static const NSTimeInterval AVConnectionOpeningBackoffInitialTime   = 0.5;
 static const NSTimeInterval AVConnectionOpeningBackoffMaximumTime   = 60;
@@ -22,7 +23,7 @@ static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
 <SRWebSocketDelegate, LCExponentialBackoffDelegate>
 
 @property (nonatomic, strong) SRWebSocket *webSocket;
-@property (nonatomic, strong) NSRecursiveLock *openLock;
+@property (nonatomic, assign) pthread_mutex_t openLock;
 @property (nonatomic, strong) NSOperationQueue *openOperationQueue;
 @property (nonatomic, strong) AVRESTClient *RESTClient;
 @property (nonatomic, strong) NSHashTable *delegates;
@@ -57,7 +58,7 @@ static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
 }
 
 - (void)doInitialize {
-    _openLock = [[NSRecursiveLock alloc] init];
+    pthread_mutex_init(&_openLock, NULL);
     _openOperationQueue = [[NSOperationQueue alloc] init];
     _delegates = [NSHashTable weakObjectsHashTable];
 
@@ -136,13 +137,13 @@ static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
 }
 
 - (void)resumeOpeningBackoff {
-    if ([self shouldOpen])
+    if ([self canOpen])
         [self.openingBackoff resume];
 }
 
 - (void)exponentialBackoffDidReach:(LCExponentialBackoff *)exponentialBackoff {
-    if (self.reachabilityManager.isReachable)
-        [self tryOpen];
+    if ([self canOpen])
+        [self open];
 }
 
 - (void)sendPing {
@@ -159,7 +160,7 @@ static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
     case AFNetworkReachabilityStatusReachableViaWiFi:
     case AFNetworkReachabilityStatusReachableViaWWAN:
         [self resetOpeningBackoff];
-        [self tryOpen];
+        [self open];
         break;
     }
 }
@@ -170,7 +171,7 @@ static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
 
 - (void)applicationDidBecomeActive:(id)sender {
     [self resetOpeningBackoff];
-    [self tryOpen];
+    [self open];
 }
 
 - (void)applicationWillTerminate:(id)sender {
@@ -191,31 +192,19 @@ static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
-    [self changeState:AVConnectionStateClosed];
+    [self close];
     [self resumeOpeningBackoff];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
-    [self changeState:AVConnectionStateClosed];
+    [self close];
     [self resumeOpeningBackoff];
 }
 
-- (BOOL)isConnectingOrOpen {
-    SRWebSocket *webSocket = self.webSocket;
-
-    if (!webSocket)
-        return NO;
-
-    if (webSocket.readyState == SR_CONNECTING ||
-        webSocket.readyState == SR_OPEN)
-    {
-        return YES;
-    }
-
-    return NO;
-}
-
 - (void)webSocketDidCreate:(SRWebSocket *)webSocket {
+    if (![self canOpen])
+        return;
+
     _webSocket = webSocket;
 
     webSocket.delegate = self;
@@ -270,7 +259,11 @@ static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
     }];
 }
 
-- (BOOL)shouldOpen {
+- (BOOL)isNetworkReachable {
+    return self.reachabilityManager.isReachable;
+}
+
+- (BOOL)isApplicationStateNormal {
     BOOL result = YES;
 
     if (strcmp(getenv("LCIM_BACKGROUND_CONNECT_ENABLED") ?: "", "1"))
@@ -286,15 +279,35 @@ static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
     return result;
 }
 
+- (BOOL)isConnectionBroken {
+    SRWebSocket *webSocket = self.webSocket;
+
+    if (!webSocket)
+        return YES;
+
+    if (webSocket.readyState == SR_CONNECTING ||
+        webSocket.readyState == SR_OPEN)
+    {
+        return NO;
+    }
+
+    return YES;
+}
+
+- (BOOL)canOpen {
+    return (
+        [self isNetworkReachable] &&
+        [self isApplicationStateNormal] &&
+        [self isConnectionBroken]
+    );
+}
+
 - (void)tryOpen {
-    if (![self shouldOpen])
+    if (pthread_mutex_trylock(&_openLock))
         return;
 
-    if (![self.openLock tryLock])
-        return;
-
-    if ([self isConnectingOrOpen]) {
-        [self.openLock unlock];
+    if (![self canOpen]) {
+        pthread_mutex_unlock(&_openLock);
         return;
     }
 
@@ -304,10 +317,10 @@ static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
     [self createWebSocketWithBlock:^(SRWebSocket *webSocket, NSError *error) {
         if (webSocket) {
             [self webSocketDidCreate:webSocket];
-            [self.openLock unlock];
+            pthread_mutex_unlock(&_openLock);
         } else {
             LC_ERROR(AVSomethingWrongCodeUnderlying, @"Cannot initialize WebSocket.", error);
-            [self.openLock unlock];
+            pthread_mutex_unlock(&_openLock);
             [self resumeOpeningBackoff];
         }
     }];
@@ -329,8 +342,6 @@ static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
         [_webSocket close];
     }
 
-    [self.openingBackoff reset];
-
     if (stateChange)
         [self changeState:AVConnectionStateClosed];
 }
@@ -345,6 +356,7 @@ static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    pthread_mutex_destroy(&_openLock);
     [self close];
 }
 
