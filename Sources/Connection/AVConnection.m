@@ -14,9 +14,9 @@
 #import "AFNetworkReachabilityManager.h"
 #import <pthread.h>
 
-static const NSTimeInterval AVConnectionOpeningBackoffInitialTime   = 0.5;
-static const NSTimeInterval AVConnectionOpeningBackoffMaximumTime   = 60;
-static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
+static const NSTimeInterval AVConnectionOpenBackoffInitialTime   = 0.5;
+static const NSTimeInterval AVConnectionOpenBackoffMaximumTime   = 60;
+static const double         AVConnectionOpenBackoffGrowingFactor = 2;
 
 @interface AVConnection ()
 
@@ -27,7 +27,7 @@ static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
 @property (nonatomic, strong) NSOperationQueue *openOperationQueue;
 @property (nonatomic, strong) AVRESTClient *RESTClient;
 @property (nonatomic, strong) NSHashTable *delegates;
-@property (nonatomic, strong) LCExponentialBackoff *openingBackoff;
+@property (nonatomic, strong) LCExponentialBackoff *openBackoff;
 @property (nonatomic, strong) AFNetworkReachabilityManager *reachabilityManager;
 @property (nonatomic, assign) AVConnectionState state;
 
@@ -62,11 +62,11 @@ static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
     _openOperationQueue = [[NSOperationQueue alloc] init];
     _delegates = [NSHashTable weakObjectsHashTable];
 
-    _openingBackoff = [[LCExponentialBackoff alloc] initWithInitialTime:AVConnectionOpeningBackoffInitialTime
-                                                            maximumTime:AVConnectionOpeningBackoffMaximumTime
-                                                             growFactor:AVConnectionOpeningBackoffGrowingFactor
-                                                                 jitter:LCExponentialBackoffDefaultJitter];
-    _openingBackoff.delegate = self;
+    _openBackoff = [[LCExponentialBackoff alloc] initWithInitialTime:AVConnectionOpenBackoffInitialTime
+                                                         maximumTime:AVConnectionOpenBackoffMaximumTime
+                                                          growFactor:AVConnectionOpenBackoffGrowingFactor
+                                                              jitter:LCExponentialBackoffDefaultJitter];
+    _openBackoff.delegate = self;
 
     _reachabilityManager = [AFNetworkReachabilityManager manager];
 
@@ -132,13 +132,13 @@ static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
     va_end(args);
 }
 
-- (void)resetOpeningBackoff {
-    [self.openingBackoff reset];
+- (void)resetOpenBackoff {
+    [self.openBackoff reset];
 }
 
-- (void)resumeOpeningBackoff {
+- (void)resumeOpenBackoff {
     if ([self canOpen])
-        [self.openingBackoff resume];
+        [self.openBackoff resume];
 }
 
 - (void)exponentialBackoffDidReach:(LCExponentialBackoff *)exponentialBackoff {
@@ -159,7 +159,7 @@ static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
         break;
     case AFNetworkReachabilityStatusReachableViaWiFi:
     case AFNetworkReachabilityStatusReachableViaWWAN:
-        [self resetOpeningBackoff];
+        [self resetOpenBackoff];
         [self open];
         break;
     }
@@ -170,7 +170,7 @@ static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
 }
 
 - (void)applicationDidBecomeActive:(id)sender {
-    [self resetOpeningBackoff];
+    [self resetOpenBackoff];
     [self open];
 }
 
@@ -179,26 +179,26 @@ static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
 }
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket {
-    [self resetOpeningBackoff];
+    [self resetOpenBackoff];
     [self changeState:AVConnectionStateOpen];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message {
-    [self resetOpeningBackoff];
+    [self resetOpenBackoff];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceivePong:(NSData *)pongPayload {
-    [self resetOpeningBackoff];
+    [self resetOpenBackoff];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
     [self close];
-    [self resumeOpeningBackoff];
+    [self resumeOpenBackoff];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
     [self close];
-    [self resumeOpeningBackoff];
+    [self resumeOpenBackoff];
 }
 
 - (void)webSocketDidCreate:(SRWebSocket *)webSocket {
@@ -321,7 +321,7 @@ static const double         AVConnectionOpeningBackoffGrowingFactor = 2;
         } else {
             LC_ERROR(AVSomethingWrongCodeUnderlying, @"Cannot initialize WebSocket.", error);
             pthread_mutex_unlock(&_openLock);
-            [self resumeOpeningBackoff];
+            [self resumeOpenBackoff];
         }
     }];
 }
