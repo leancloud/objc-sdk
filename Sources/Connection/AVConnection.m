@@ -31,6 +31,8 @@ static const NSTimeInterval AVConnectionPingBackoffInterval      = 180;
 @property (nonatomic, strong) NSHashTable *delegates;
 @property (nonatomic, strong) LCExponentialBackoff *openBackoff;
 @property (nonatomic, strong) LCExponentialBackoff *pingBackoff;
+@property (nonatomic, assign) NSUInteger lastPingId;
+@property (nonatomic, assign) NSUInteger maximumPongId;
 @property (nonatomic, strong) AFNetworkReachabilityManager *reachabilityManager;
 @property (nonatomic, assign) AVConnectionState state;
 
@@ -180,8 +182,12 @@ static const NSTimeInterval AVConnectionPingBackoffInterval      = 180;
 }
 
 - (void)sendPing {
-    if (self.webSocket.readyState == SR_OPEN)
-        [self.webSocket sendPing:[NSData data]];
+    if (self.webSocket.readyState != SR_OPEN)
+        return;
+
+    _lastPingId += 1;
+    NSData *data = [NSData dataWithBytes:&_lastPingId length:sizeof(_lastPingId)];
+    [self.webSocket sendPing:data];
 }
 
 - (void)reachabilityStatusDidChange:(AFNetworkReachabilityStatus)status {
@@ -224,6 +230,12 @@ static const NSTimeInterval AVConnectionPingBackoffInterval      = 180;
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceivePong:(NSData *)pongPayload {
     [self resetOpenBackoff];
+
+    typeof(_maximumPongId) pongId = 0;
+    [pongPayload getBytes:&pongId length:sizeof(pongId)];
+
+    if (pongId > _maximumPongId)
+        _maximumPongId = pongId;
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
