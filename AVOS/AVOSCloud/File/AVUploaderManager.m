@@ -205,8 +205,6 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
             }
             
             [AVFile cacheFile:file];
-        } else {
-            [file deleteInBackground];
         }
         [AVUtils callBooleanResultBlock:resultBlock error:error];
     };
