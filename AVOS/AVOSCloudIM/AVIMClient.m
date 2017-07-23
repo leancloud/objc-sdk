@@ -568,7 +568,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 - (void)openWithCallback:(AVIMBooleanResultBlock)callback {
-    [self openWithClientId:self.clientId security:YES tag:self.tag force:NO callback:callback];
+    [self openWithOption:nil callback:callback];
 }
 
 - (void)openWithOption:(AVIMClientOpenOption *)option callback:(AVIMBooleanResultBlock)callback {
@@ -578,14 +578,6 @@ static BOOL AVIMClientHasInstantiated = NO;
         force = option.force;
 
     [self openWithClientId:self.clientId security:YES tag:self.tag force:force callback:callback];
-}
-
-- (void)openWithClientId:(NSString *)clientId callback:(AVIMBooleanResultBlock)callback {
-    [self openWithClientId:clientId security:YES tag:nil force:NO callback:callback];
-}
-
-- (void)openWithClientId:(NSString *)clientId tag:(NSString *)tag callback:(AVIMBooleanResultBlock)callback {
-    [self openWithClientId:clientId security:YES tag:tag force:NO callback:callback];
 }
 
 - (void)openWithClientId:(NSString *)clientId security:(BOOL)security tag:(NSString *)tag force:(BOOL)force callback:(AVIMBooleanResultBlock)callback {

@@ -340,13 +340,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AVIMClient (AVDeprecated)
 
-- (void)openWithClientId:(NSString *)clientId
-                callback:(AVIMBooleanResultBlock)callback AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.1.7.2. Use -[AVIMClient openWithCallback:] or -[AVIMClient openWithOption:callback:] instead.");
-
-- (void)openWithClientId:(NSString *)clientId
-                     tag:(nullable NSString *)tag
-                callback:(AVIMBooleanResultBlock)callback AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.1.7.2. Use -[AVIMClient openWithCallback:] or -[AVIMClient openWithOption:callback:] instead.");
-
 @end
 
 NS_ASSUME_NONNULL_END
