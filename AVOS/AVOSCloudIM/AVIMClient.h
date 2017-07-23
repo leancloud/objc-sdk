@@ -17,6 +17,7 @@
 @class AVIMTypedMessage;
 @class AVIMConversationQuery;
 @class AVIMClientOpenOption;
+@class AVUser;
 
 @protocol AVIMClientDelegate;
 
@@ -66,6 +67,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, readonly, nullable) NSString *clientId;
 
 /**
+ The user that you login as a client.
+ */
+@property (nonatomic, strong, readonly, nullable) AVUser *user;
+
+/**
  * Tag of current client.
  * @brief If tag is not nil and "default", offline mechanism is enabled.
  * @discussion If one client id login on two different devices, previous opened client will be gone offline by later opened client.
@@ -94,6 +100,21 @@ NS_ASSUME_NONNULL_BEGIN
  @param tag      Tag of client.
  */
 - (instancetype)initWithClientId:(NSString *)clientId tag:(nullable NSString *)tag;
+
+/*!
+ Initializes client with an user and a tag.
+
+ This method allows you to use an user as a client to login to IM.
+ Using user as an IM client has some extra benifits. For example, It will activate
+ login signature to improve security. Besides that, you can also take advantage of
+ the friendship relations of users.
+
+ @note You should enable login signature option in application console before you call this method.
+
+ @param user An user who has logged in.
+ @param tag  Tag of client.
+ */
+- (instancetype)initWithUser:(AVUser *)user tag:(nullable NSString *)tag;
 
 /*!
  默认 AVIMClient 实例

@@ -41,6 +41,11 @@ static dispatch_queue_t defaultClientAccessQueue = NULL;
 
 static const NSUInteger kDistinctMessageIdArraySize = 10;
 
+typedef NS_ENUM(NSInteger, LCIMClientLoginMethod) {
+    LCIMClientLoginMethodID = 0,
+    LCIMClientLoginMethodUser
+};
+
 typedef NS_ENUM(NSUInteger, LCIMClientSessionOptions) {
     LCIMClientSessionEnableMessagePatch = 1 << 0
 };
@@ -49,6 +54,12 @@ NS_INLINE
 BOOL isValidTag(NSString *tag) {
     return tag && ![tag isEqualToString:LCIMTagDefault];
 }
+
+@interface AVIMClient ()
+
+@property (nonatomic, assign) LCIMClientLoginMethod loginMethod;
+
+@end
 
 @implementation AVIMClient {
     NSMutableArray *_distinctMessageIdArray;
@@ -142,6 +153,20 @@ static BOOL AVIMClientHasInstantiated = NO;
     if (self) {
         _clientId = [clientId copy];
         _tag = [tag copy];
+
+        [self doInitialization];
+    }
+
+    return self;
+}
+
+- (instancetype)initWithUser:(AVUser *)user tag:(NSString *)tag {
+    self = [super init];
+
+    if (self) {
+        _user = user;
+        _tag = [tag copy];
+        _loginMethod = LCIMClientLoginMethodUser;
 
         [self doInitialization];
     }
