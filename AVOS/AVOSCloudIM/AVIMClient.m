@@ -34,10 +34,8 @@
 #import <libkern/OSAtomic.h>
 
 static const int kMaxClientIdLength = 64;
-static AVIMClient *defaultClient = nil;
 
 static dispatch_queue_t imClientQueue = NULL;
-static dispatch_queue_t defaultClientAccessQueue = NULL;
 
 static const NSUInteger kDistinctMessageIdArraySize = 10;
 
@@ -72,7 +70,6 @@ static BOOL AVIMClientHasInstantiated = NO;
     
     dispatch_once(&onceToken, ^{
         imClientQueue = dispatch_queue_create("cn.leancloud.im", DISPATCH_QUEUE_SERIAL);
-        defaultClientAccessQueue = dispatch_queue_create("cn.leancloud.imclient", DISPATCH_QUEUE_SERIAL);
     });
 }
 
@@ -81,25 +78,8 @@ static BOOL AVIMClientHasInstantiated = NO;
     return [super alloc];
 }
 
-+ (instancetype)defaultClient {
-    __block AVIMClient *client = nil;
-    dispatch_sync(defaultClientAccessQueue, ^{
-        if (!defaultClient) {
-            defaultClient = [[self alloc] init];
-        }
-        client = defaultClient;
-    });
-    return client;
-}
-
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds {
     [AVIMWebSocketWrapper setTimeoutIntervalInSeconds:seconds];
-}
-
-+ (void)resetDefaultClient {
-    dispatch_sync(defaultClientAccessQueue, ^{
-        defaultClient = nil;
-    });
 }
 
 + (dispatch_queue_t)imClientQueue {
