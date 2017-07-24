@@ -561,10 +561,10 @@ static BOOL AVIMClientHasInstantiated = NO;
     if (option)
         force = option.force;
 
-    [self openWithClientId:self.clientId security:YES tag:self.tag force:force callback:callback];
+    [self openWithClientId:self.clientId tag:self.tag force:force callback:callback];
 }
 
-- (void)openWithClientId:(NSString *)clientId security:(BOOL)security tag:(NSString *)tag force:(BOOL)force callback:(AVIMBooleanResultBlock)callback {
+- (void)openWithClientId:(NSString *)clientId tag:(NSString *)tag force:(BOOL)force callback:(AVIMBooleanResultBlock)callback {
     // Validate client id
     if (!clientId) {
         [NSException raise:NSInternalInconsistencyException format:@"Client id can not be nil."];
@@ -588,7 +588,7 @@ static BOOL AVIMClientHasInstantiated = NO;
         if (self.status != AVIMClientStatusOpened) {
             self.clientId = clientId;
             self.tag = tag;
-            self.socketWrapper = [self socketWrapperForSecurity:security];
+            self.socketWrapper = [self socketWrapperForSecurity:YES];
             self.openTimes = 0;
             self.openCommand = [self openCommandWithAppId:appId
                                                  clientId:clientId
@@ -610,7 +610,7 @@ static BOOL AVIMClientHasInstantiated = NO;
                     [self changeStatus:AVIMClientStatusClosed];
 
                     if ([self shouldRetryForCommand:inCommand]) {
-                        [self openWithClientId:clientId security:security tag:tag force:force callback:callback];
+                        [self openWithClientId:clientId tag:tag force:force callback:callback];
                     } else {
                         [AVIMBlockHelper callBooleanResultBlock:callback error:error];
                     }
