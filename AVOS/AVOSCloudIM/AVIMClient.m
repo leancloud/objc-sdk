@@ -186,6 +186,11 @@ static BOOL AVIMClientHasInstantiated = NO;
          @strongify(self);
          [self registerPushChannelInBackground];
      }];
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        LCIMConversationCache *cache = [self conversationCache];
+        [cache cleanAllExpiredConversations];
+    });
 }
 
 - (LCIMConversationCache *)conversationCache {
@@ -194,16 +199,19 @@ static BOOL AVIMClientHasInstantiated = NO;
     return clientId ? [[LCIMConversationCache alloc] initWithClientId:clientId] : nil;
 }
 
-- (void)setClientId:(NSString *)clientId {
-    _clientId = [clientId copy];
-    
-    [_conversations removeAllObjects];
-    [_stagedMessages removeAllObjects];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        LCIMConversationCache *cache = [self conversationCache];
-        [cache cleanAllExpiredConversations];
-    });
+- (NSString *)clientId {
+    NSString *clientId = nil;
+
+    switch (self.loginMethod) {
+    case LCIMClientLoginMethodID:
+        clientId = _clientId;
+        break;
+    case LCIMClientLoginMethodUser:
+        clientId = self.user.objectId;
+        break;
+    }
+
+    return clientId;
 }
 
 - (void)dealloc {
@@ -617,8 +625,6 @@ static BOOL AVIMClientHasInstantiated = NO;
         @strongify(self);
 
         if (self.status != AVIMClientStatusOpened) {
-            self.clientId = clientId;
-            self.tag = tag;
             self.socketWrapper = [self socketWrapperForSecurity:YES];
             self.openTimes = 0;
             self.openCommand = [self openCommandWithAppId:appId
