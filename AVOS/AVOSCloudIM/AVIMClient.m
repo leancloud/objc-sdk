@@ -29,6 +29,7 @@
 #import "LCObserver.h"
 #import "SDMacros.h"
 #import "AVIMUserOptions.h"
+#import "AVPaasClient.h"
 
 #import <objc/runtime.h>
 #import <libkern/OSAtomic.h>
@@ -56,6 +57,7 @@ BOOL isValidTag(NSString *tag) {
 @interface AVIMClient ()
 
 @property (nonatomic, assign) LCIMClientLoginMethod loginMethod;
+@property (nonatomic, copy) AVIMSignature *(^loginSignatureGetter)(AVIMClient *client);
 
 @end
 
@@ -151,6 +153,10 @@ static BOOL AVIMClientHasInstantiated = NO;
         _user = user;
         _tag = [tag copy];
         _loginMethod = LCIMClientLoginMethodUser;
+
+        self.loginSignatureGetter = ^AVIMSignature *(AVIMClient *client) {
+            return [AVIMClient getSignatureForSessionToken:client.user.sessionToken];
+        };
 
         [self doInitialization];
     }
@@ -341,7 +347,32 @@ static BOOL AVIMClientHasInstantiated = NO;
     }
 }
 
++ (AVIMSignature *)getSignatureForSessionToken:(NSString *)sessionToken {
+    AVIMSignature *signature = [[AVIMSignature alloc] init];
+    AVPaasClient *RESTClient = [AVPaasClient sharedInstance];
+
+    NSDictionary *parameters = @{ @"session_token" : sessionToken };
+    NSURLRequest *request = [RESTClient requestWithPath:@"rtm/sign" method:@"POST" headers:nil parameters:parameters];
+
+    [RESTClient
+     performRequest:request
+     success:^(NSHTTPURLResponse *response, id result) {
+         signature.nonce = result[@"nonce"];
+         signature.signature = result[@"signature"];
+         signature.timestamp = [result[@"timestamp"] unsignedIntegerValue];
+     }
+     failure:^(NSHTTPURLResponse *response, id result, NSError *error) {
+         signature.error = error;
+     }
+     wait:YES];
+
+    return signature;
+}
+
 - (AVIMSignature *)signatureWithClientId:(NSString *)clientId conversationId:(NSString *)conversationId action:(NSString *)action actionOnClientIds:(NSArray *)clientIds {
+    if ([action isEqualToString:@"open"] && self.loginSignatureGetter)
+        return self.loginSignatureGetter(self);
+
     AVIMSignature *signature = nil;
     if ([_signatureDataSource respondsToSelector:@selector(signatureWithClientId:conversationId:action:actionOnClientIds:)]) {
         signature = [_signatureDataSource signatureWithClientId:clientId conversationId:conversationId action:action actionOnClientIds:clientIds];
