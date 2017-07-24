@@ -102,6 +102,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithClientId:(NSString *)clientId tag:(nullable NSString *)tag;
 
 /*!
+ Initializes client with an user.
+
+ @seealso It's a convenience initializer of <code>-[AVIMClient initWithUser:tag:]</code>
+ */
+- (instancetype)initWithUser:(AVUser *)user;
+
+/*!
  Initializes client with an user and a tag.
 
  This method allows you to use an user as a client to login to IM.

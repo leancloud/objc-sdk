@@ -160,6 +160,10 @@ static BOOL AVIMClientHasInstantiated = NO;
     return self;
 }
 
+- (instancetype)initWithUser:(AVUser *)user {
+    return [self initWithUser:user tag:nil];
+}
+
 - (instancetype)initWithUser:(AVUser *)user tag:(NSString *)tag {
     self = [super init];
 
