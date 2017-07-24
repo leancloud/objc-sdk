@@ -129,4 +129,9 @@ FOUNDATION_EXPORT NSString *const LCHeaderFieldNameProduction;
                success:(void (^)(NSHTTPURLResponse *response, id responseObject))successBlock
                failure:(void (^)(NSHTTPURLResponse *response, id responseObject, NSError *error))failureBlock;
 
+- (void)performRequest:(NSURLRequest *)request
+               success:(void (^)(NSHTTPURLResponse *response, id responseObject))successBlock
+               failure:(void (^)(NSHTTPURLResponse *response, id responseObject, NSError *error))failureBlock
+                  wait:(BOOL)wait;
+
 @end
