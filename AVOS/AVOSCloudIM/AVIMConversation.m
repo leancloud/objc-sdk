@@ -874,13 +874,6 @@ static dispatch_queue_t messageCacheOperationQueue;
         BOOL transient = option.transient;
         BOOL receipt = option.receipt;
 
-        if ([message isKindOfClass:[AVIMTypedMessage class]]) {
-            AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)message;
-            if (!typedMessage.messageObject._lctext && !typedMessage.messageObject._lcloc && !typedMessage.messageObject._lcfile && !typedMessage.messageObject._lcattrs) {
-                [NSException raise:NSInternalInconsistencyException format:@"AVIMTypedMessage should have one of text, file, location or attributes not be nil."];
-            }
-        }
-
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
         genericCommand.needResponse = YES;
         genericCommand.cmd = AVIMCommandType_Direct;
