@@ -361,6 +361,12 @@ static dispatch_queue_t messageCacheOperationQueue;
         genericCommand.cmd = AVIMCommandType_Conv;
         genericCommand.op = AVIMOpType_MaxRead;
         genericCommand.peerId = self.imClient.clientId;
+        genericCommand.needResponse = YES;
+
+        AVIMConvCommand *convCommand = [[AVIMConvCommand alloc] init];
+        convCommand.cid = self.conversationId;
+
+        genericCommand.convMessage = convCommand;
 
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             if (error)
