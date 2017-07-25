@@ -56,6 +56,7 @@ NSString *LCIMConversationPropertyValueKey = @"propertyValue";
 NSNotificationName LCIMConversationPropertyUpdateNotification = @"LCIMConversationPropertyUpdateNotification";
 
 NSNotificationName LCIMConversationMessagePatchNotification = @"LCIMConversationMessagePatchNotification";
+NSNotificationName LCIMConversationDidReceiveMessageNotification = @"LCIMConversationDidReceiveMessageNotification";
 
 @interface AVIMConversation()
 
@@ -109,6 +110,11 @@ static dispatch_queue_t messageCacheOperationQueue;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didReceivePatchItem:)
                                                  name:LCIMConversationMessagePatchNotification
+                                               object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveMessageNotification:)
+                                                 name:LCIMConversationDidReceiveMessageNotification
                                                object:nil];
 }
 
@@ -180,6 +186,25 @@ static dispatch_queue_t messageCacheOperationQueue;
 
     [self callDelegateMethod:@selector(conversation:messageHasBeenUpdated:)
                withArguments:@[self, message]];
+}
+
+- (void)didReceiveMessageNotification:(NSNotification *)notification {
+    if (!self.conversationId)
+        return;
+    if (notification.object != self.imClient)
+        return;
+
+    NSDictionary *userInfo = notification.userInfo;
+    AVIMMessage *message = userInfo[@"message"];
+
+    if (![message.conversationId isEqualToString:self.conversationId])
+        return;
+
+    [self didReceiveMessage:message];
+}
+
+- (void)didReceiveMessage:(AVIMMessage *)message {
+    /* TODO */
 }
 
 - (void)callDelegateMethod:(SEL)method withArguments:(NSArray *)arguments {
