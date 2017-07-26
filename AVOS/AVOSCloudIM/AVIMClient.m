@@ -1370,7 +1370,16 @@ static BOOL AVIMClientHasInstantiated = NO;
                 message);
         }
         [ws passMessage:message toConversation:conversation];
+        [ws postNotificationForMessage:message];
     }];
+}
+
+- (void)postNotificationForMessage:(AVIMMessage *)message {
+    NSDictionary *userInfo = @{ @"message": message };
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:LCIMConversationDidReceiveMessageNotification
+                                                        object:self
+                                                      userInfo:userInfo];
 }
 
 - (void)passMessage:(AVIMMessage *)message toConversation:(AVIMConversation *)conversation {

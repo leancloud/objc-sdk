@@ -42,6 +42,7 @@ do {                                                                            
 } while(0)
 
 FOUNDATION_EXPORT NSNotificationName LCIMConversationMessagePatchNotification;
+FOUNDATION_EXPORT NSNotificationName LCIMConversationDidReceiveMessageNotification;
 
 @interface AVIMConversation ()
 

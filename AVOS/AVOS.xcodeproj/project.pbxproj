@@ -578,6 +578,19 @@
 		83A2BD331CF33CDA0047B230 /* AVPaasClient_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 83A2BD2E1CF33CDA0047B230 /* AVPaasClient_internal.h */; };
 		83AB6DF81C3CFEA70064BE17 /* AVOSCloudIM.m in Sources */ = {isa = PBXBuildFile; fileRef = 83AB6DF71C3CFEA70064BE17 /* AVOSCloudIM.m */; };
 		83AB6DFA1C3CFEA70064BE17 /* AVOSCloudIM.m in Sources */ = {isa = PBXBuildFile; fileRef = 83AB6DF71C3CFEA70064BE17 /* AVOSCloudIM.m */; };
+		83B0E5841F28375900EE1A75 /* JRSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B0E5821F28375900EE1A75 /* JRSwizzle.h */; };
+		83B0E5851F28375900EE1A75 /* JRSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B0E5821F28375900EE1A75 /* JRSwizzle.h */; };
+		83B0E5861F28375900EE1A75 /* JRSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B0E5821F28375900EE1A75 /* JRSwizzle.h */; };
+		83B0E5871F28375900EE1A75 /* JRSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B0E5821F28375900EE1A75 /* JRSwizzle.h */; };
+		83B0E5881F28375900EE1A75 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B0E5831F28375900EE1A75 /* JRSwizzle.m */; };
+		83B0E5891F28375900EE1A75 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B0E5831F28375900EE1A75 /* JRSwizzle.m */; };
+		83B0E58A1F28375900EE1A75 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B0E5831F28375900EE1A75 /* JRSwizzle.m */; };
+		83B0E58B1F28375900EE1A75 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B0E5831F28375900EE1A75 /* JRSwizzle.m */; };
+		83B0E5951F2839FB00EE1A75 /* AVOSCloudIMGroupChat.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B0E5931F2839FB00EE1A75 /* AVOSCloudIMGroupChat.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		83B0E59B1F283AEF00EE1A75 /* AVIMReadReceiptMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B0E5991F283AEE00EE1A75 /* AVIMReadReceiptMessage.m */; };
+		83B0E59C1F283AEF00EE1A75 /* AVIMReadReceiptMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B0E59A1F283AEE00EE1A75 /* AVIMReadReceiptMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		83B0E59F1F283BE200EE1A75 /* AVIMConversation+GroupChat.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B0E59D1F283BE100EE1A75 /* AVIMConversation+GroupChat.m */; };
+		83B0E5A01F283BE200EE1A75 /* AVIMConversation+GroupChat.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B0E59E1F283BE100EE1A75 /* AVIMConversation+GroupChat.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83B5FF451B7C768B000C3923 /* BreakpadDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF081B7C768B000C3923 /* BreakpadDefines.h */; };
 		83B5FF461B7C768B000C3923 /* BreakpadController.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF0B1B7C768B000C3923 /* BreakpadController.h */; };
 		83B5FF471B7C768B000C3923 /* BreakpadController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF0C1B7C768B000C3923 /* BreakpadController.mm */; };
@@ -1420,6 +1433,15 @@
 		838DD7C11B42630400C95897 /* LCSSLChallenger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCSSLChallenger.m; sourceTree = "<group>"; };
 		83A2BD2E1CF33CDA0047B230 /* AVPaasClient_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVPaasClient_internal.h; sourceTree = "<group>"; };
 		83AB6DF71C3CFEA70064BE17 /* AVOSCloudIM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVOSCloudIM.m; sourceTree = "<group>"; };
+		83B0E5821F28375900EE1A75 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
+		83B0E5831F28375900EE1A75 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
+		83B0E5911F2839FB00EE1A75 /* AVOSCloudIMGroupChat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudIMGroupChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		83B0E5931F2839FB00EE1A75 /* AVOSCloudIMGroupChat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloudIMGroupChat.h; sourceTree = "<group>"; };
+		83B0E5941F2839FB00EE1A75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		83B0E5991F283AEE00EE1A75 /* AVIMReadReceiptMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMReadReceiptMessage.m; sourceTree = "<group>"; };
+		83B0E59A1F283AEE00EE1A75 /* AVIMReadReceiptMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMReadReceiptMessage.h; sourceTree = "<group>"; };
+		83B0E59D1F283BE100EE1A75 /* AVIMConversation+GroupChat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AVIMConversation+GroupChat.m"; sourceTree = "<group>"; };
+		83B0E59E1F283BE100EE1A75 /* AVIMConversation+GroupChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVIMConversation+GroupChat.h"; sourceTree = "<group>"; };
 		83B5FF081B7C768B000C3923 /* BreakpadDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpadDefines.h; sourceTree = "<group>"; };
 		83B5FF0B1B7C768B000C3923 /* BreakpadController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpadController.h; sourceTree = "<group>"; };
 		83B5FF0C1B7C768B000C3923 /* BreakpadController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BreakpadController.mm; sourceTree = "<group>"; };
@@ -1881,6 +1903,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		83B0E58D1F2839FB00EE1A75 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		83D8CECD1C17DAF50094279D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -2036,6 +2065,28 @@
 				838DD7951B3D309F00C95897 /* LCNetworkStatistics.m */,
 			);
 			path = Statistics;
+			sourceTree = "<group>";
+		};
+		83B0E5811F28375900EE1A75 /* JRSwizzle */ = {
+			isa = PBXGroup;
+			children = (
+				83B0E5821F28375900EE1A75 /* JRSwizzle.h */,
+				83B0E5831F28375900EE1A75 /* JRSwizzle.m */,
+			);
+			path = JRSwizzle;
+			sourceTree = "<group>";
+		};
+		83B0E5921F2839FB00EE1A75 /* AVOSCloudIMGroupChat */ = {
+			isa = PBXGroup;
+			children = (
+				83B0E5931F2839FB00EE1A75 /* AVOSCloudIMGroupChat.h */,
+				83B0E59A1F283AEE00EE1A75 /* AVIMReadReceiptMessage.h */,
+				83B0E5991F283AEE00EE1A75 /* AVIMReadReceiptMessage.m */,
+				83B0E59E1F283BE100EE1A75 /* AVIMConversation+GroupChat.h */,
+				83B0E59D1F283BE100EE1A75 /* AVIMConversation+GroupChat.m */,
+				83B0E5941F2839FB00EE1A75 /* Info.plist */,
+			);
+			path = AVOSCloudIMGroupChat;
 			sourceTree = "<group>";
 		};
 		83B5FF071B7C7678000C3923 /* Breakpad */ = {
@@ -2331,6 +2382,7 @@
 				7085D5321BEA2A0A00449DC1 /* Resources */,
 				838CE31C1EC97E6E00B24F5B /* AVOSCloudLiveQuery */,
 				838CE3271EC97E6F00B24F5B /* AVOSCloudLiveQueryTests */,
+				83B0E5921F2839FB00EE1A75 /* AVOSCloudIMGroupChat */,
 				8C8419871A5A791300C5C6C4 /* Products */,
 				8CEA86581A777A7900864211 /* TestBase */,
 			);
@@ -2356,6 +2408,7 @@
 				838CE3231EC97E6E00B24F5B /* AVOSCloudLiveQuery-iOSTests.xctest */,
 				838CE3401EC980DE00B24F5B /* AVOSCloudLiveQuery.framework */,
 				838CE34D1EC980E000B24F5B /* AVOSCloudLiveQuery-macOSTests.xctest */,
+				83B0E5911F2839FB00EE1A75 /* AVOSCloudIMGroupChat.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2677,6 +2730,7 @@
 				836705A91BA1358D0050E968 /* SDMacros */,
 				83BE73011D8105AF008ED3CF /* libextobjc */,
 				830EB9BD1C3E4BFA00BA917F /* COSObserver */,
+				83B0E5811F28375900EE1A75 /* JRSwizzle */,
 			);
 			path = ThirdParty;
 			sourceTree = "<group>";
@@ -3147,6 +3201,7 @@
 				70CA80121BDE4314000A3B21 /* AVHTTPClient.h in Headers */,
 				8311CD871C3D25B9007DEFF8 /* AVAvailability.h in Headers */,
 				70CA80131BDE4314000A3B21 /* AVHTTPRequestOperation.h in Headers */,
+				83B0E5851F28375900EE1A75 /* JRSwizzle.h in Headers */,
 				70CA80141BDE4314000A3B21 /* AVImageRequestOperation.h in Headers */,
 				83331D4F1EB9A34000CADC9C /* AVDynamicObject_Internal.h in Headers */,
 				83FCB9A11CEDC57C007D8712 /* LCHTTPSessionManager.h in Headers */,
@@ -3246,6 +3301,7 @@
 				83E13C1D1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */,
 				8320F8F71C1918C60024B45E /* AVQuery.h in Headers */,
 				9A404DD61CE5A9BB00DEB3DC /* LCRouter.h in Headers */,
+				83B0E5871F28375900EE1A75 /* JRSwizzle.h in Headers */,
 				83FCB9DA1CEDC57C007D8712 /* LCURLSessionManager.h in Headers */,
 				8320F8F81C1918C60024B45E /* AVSearchQuery.h in Headers */,
 				83FCB9D01CEDC57C007D8712 /* LCURLResponseSerialization.h in Headers */,
@@ -3341,6 +3397,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		83B0E58E1F2839FB00EE1A75 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83B0E59C1F283AEF00EE1A75 /* AVIMReadReceiptMessage.h in Headers */,
+				83B0E5951F2839FB00EE1A75 /* AVOSCloudIMGroupChat.h in Headers */,
+				83B0E5A01F283BE200EE1A75 /* AVIMConversation+GroupChat.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		83D8CED11C17DAF50094279D /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -3394,6 +3460,7 @@
 				83D8CF021C17DAF50094279D /* AVImageRequestOperation.h in Headers */,
 				83D8CF031C17DAF50094279D /* AVJSONRequestOperation.h in Headers */,
 				9A404DD51CE5A9BA00DEB3DC /* LCRouter.h in Headers */,
+				83B0E5861F28375900EE1A75 /* JRSwizzle.h in Headers */,
 				83D8CF041C17DAF50094279D /* AVNetworkActivityIndicatorManager.h in Headers */,
 				83D8CF051C17DAF50094279D /* AVNetworking.h in Headers */,
 				83D8CF061C17DAF50094279D /* AVURLConnectionOperation.h in Headers */,
@@ -3544,6 +3611,7 @@
 				8C841B441A5A7A0000C5C6C4 /* AVJSONRequestOperation.h in Headers */,
 				8C841B461A5A7A0000C5C6C4 /* AVNetworkActivityIndicatorManager.h in Headers */,
 				8C841B481A5A7A0000C5C6C4 /* AVNetworking.h in Headers */,
+				83B0E5841F28375900EE1A75 /* JRSwizzle.h in Headers */,
 				8C841B4B1A5A7A0000C5C6C4 /* AVURLConnectionOperation.h in Headers */,
 				8C841B4D1A5A7A0000C5C6C4 /* AVXMLRequestOperation.h in Headers */,
 				8C841B5E1A5A7A0000C5C6C4 /* AVHelpers.h in Headers */,
@@ -3879,6 +3947,24 @@
 			productReference = 838CE34D1EC980E000B24F5B /* AVOSCloudLiveQuery-macOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		83B0E5901F2839FB00EE1A75 /* AVOSCloudIMGroupChat */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 83B0E5961F2839FB00EE1A75 /* Build configuration list for PBXNativeTarget "AVOSCloudIMGroupChat" */;
+			buildPhases = (
+				83B0E58C1F2839FB00EE1A75 /* Sources */,
+				83B0E58D1F2839FB00EE1A75 /* Frameworks */,
+				83B0E58E1F2839FB00EE1A75 /* Headers */,
+				83B0E58F1F2839FB00EE1A75 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AVOSCloudIMGroupChat;
+			productName = AVOSCloudIMGroupChat;
+			productReference = 83B0E5911F2839FB00EE1A75 /* AVOSCloudIMGroupChat.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		83D8CE731C17DAF50094279D /* AVOSCloud-tvOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 83D8CF521C17DAF50094279D /* Build configuration list for PBXNativeTarget "AVOSCloud-tvOS" */;
@@ -4018,6 +4104,9 @@
 						CreatedOnToolsVersion = 8.3.2;
 						ProvisioningStyle = Automatic;
 					};
+					83B0E5901F2839FB00EE1A75 = {
+						CreatedOnToolsVersion = 9.0;
+					};
 					8C255D251AE9F815008A6FFC = {
 						CreatedOnToolsVersion = 6.3.1;
 					};
@@ -4057,6 +4146,7 @@
 				8C8419CC1A5A796000C5C6C4 /* AVOSCloudIM-iOSTests */,
 				704F3B6D1BE0D0180033245C /* AVOSCloudIM-macOS */,
 				704F3B761BE0D0180033245C /* AVOSCloudIM-macOSTests */,
+				83B0E5901F2839FB00EE1A75 /* AVOSCloudIMGroupChat */,
 				8C255D251AE9F815008A6FFC /* AVOSCloudCrashReporting-iOS */,
 				838CE31A1EC97E6E00B24F5B /* AVOSCloudLiveQuery-iOS */,
 				838CE3221EC97E6E00B24F5B /* AVOSCloudLiveQuery-iOSTests */,
@@ -4142,6 +4232,13 @@
 			files = (
 				838CE3491EC980E000B24F5B /* AVOSCloudLiveQuery-iOSTests.Info.plist in Resources */,
 				838CE3511EC982A500B24F5B /* AVOSCloudLiveQuery-macOSTests.Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83B0E58F1F2839FB00EE1A75 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4338,6 +4435,7 @@
 				70CA7F7C1BDE3721000A3B21 /* AVCacheManager.m in Sources */,
 				70CA7F7D1BDE3721000A3B21 /* AVPersistenceUtils.m in Sources */,
 				70CA7F7E1BDE3721000A3B21 /* AVScheduler.m in Sources */,
+				83B0E5891F28375900EE1A75 /* JRSwizzle.m in Sources */,
 				70CA7F7F1BDE3721000A3B21 /* AVCloud.m in Sources */,
 				70CA7F801BDE3721000A3B21 /* AVFile.m in Sources */,
 				70CA7F811BDE3721000A3B21 /* AVFileQuery.m in Sources */,
@@ -4418,6 +4516,7 @@
 				8320F87E1C1918C60024B45E /* AVJSONRequestOperation.m in Sources */,
 				8320F87F1C1918C60024B45E /* LCDatabaseQueue.m in Sources */,
 				8320F8801C1918C60024B45E /* AVRequestManager.m in Sources */,
+				83B0E58B1F28375900EE1A75 /* JRSwizzle.m in Sources */,
 				8320F8811C1918C60024B45E /* AVFileQuery.m in Sources */,
 				8320F8821C1918C60024B45E /* LCDatabaseAdditions.m in Sources */,
 				8320F8831C1918C60024B45E /* AVUtils.m in Sources */,
@@ -4521,6 +4620,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		83B0E58C1F2839FB00EE1A75 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83B0E59B1F283AEF00EE1A75 /* AVIMReadReceiptMessage.m in Sources */,
+				83B0E59F1F283BE200EE1A75 /* AVIMConversation+GroupChat.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		83D8CE741C17DAF50094279D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4567,6 +4675,7 @@
 				83D8CEA71C17DAF50094279D /* AVExceptionHandler.m in Sources */,
 				83D8CEA81C17DAF50094279D /* AVRole.m in Sources */,
 				835092031EB1BDD0000DA884 /* AVSMS.m in Sources */,
+				83B0E58A1F28375900EE1A75 /* JRSwizzle.m in Sources */,
 				83D8CEA91C17DAF50094279D /* AVPaasClient.m in Sources */,
 				8302AEDD1C192A0700E13F8A /* LCURLConnection.m in Sources */,
 				83D8CEAA1C17DAF50094279D /* AVHTTPRequestOperation.m in Sources */,
@@ -4679,6 +4788,7 @@
 				8C841AC11A5A7A0000C5C6C4 /* AVExceptionHandler.m in Sources */,
 				8C841AB11A5A7A0000C5C6C4 /* AVRole.m in Sources */,
 				835092011EB1BDD0000DA884 /* AVSMS.m in Sources */,
+				83B0E5881F28375900EE1A75 /* JRSwizzle.m in Sources */,
 				8C841B331A5A7A0000C5C6C4 /* AVPaasClient.m in Sources */,
 				8302AEDA1C192A0700E13F8A /* LCURLConnection.m in Sources */,
 				8C841B411A5A7A0000C5C6C4 /* AVHTTPRequestOperation.m in Sources */,
@@ -5876,6 +5986,140 @@
 			};
 			name = Release;
 		};
+		83B0E5971F2839FB00EE1A75 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = AVOSCloudIMGroupChat/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.AVOSCloudIMGroupChat;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		83B0E5981F2839FB00EE1A75 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = AVOSCloudIMGroupChat/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.AVOSCloudIMGroupChat;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		83D8CF531C17DAF50094279D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -6696,6 +6940,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		83B0E5961F2839FB00EE1A75 /* Build configuration list for PBXNativeTarget "AVOSCloudIMGroupChat" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83B0E5971F2839FB00EE1A75 /* Debug */,
+				83B0E5981F2839FB00EE1A75 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		83D8CF521C17DAF50094279D /* Build configuration list for PBXNativeTarget "AVOSCloud-tvOS" */ = {
 			isa = XCConfigurationList;

@@ -184,6 +184,23 @@ module Podspec
       write 'AVOSCloudIM.podspec', podspec
     end
 
+    # Generate IM Group Chat podspec.
+    def generateAVOSCloudIMGroupChat()
+      header_files        = header_files('AVOSCloudIMGroupChat')
+      source_files        = source_files('AVOSCloudIMGroupChat')
+      public_header_files = public_header_files('AVOSCloudIMGroupChat')
+
+      template = File.read('Podspec/AVOSCloudIMGroupChat.podspec.mustache')
+
+      podspec = Mustache.render template, {
+        'version' => version,
+        'source_files' => file_list_string(header_files + source_files, 4),
+        'public_header_files' => file_list_string(public_header_files, 4),
+      }
+
+      write 'AVOSCloudIMGroupChat.podspec', podspec
+    end
+
     # Generate crash reporting podspec.
     def generateAVOSCloudCrashReporting()
       header_files = header_files('AVOSCloudCrashReporting-iOS')
@@ -238,6 +255,7 @@ module Podspec
     def generate()
       generateAVOSCloud
       generateAVOSCloudIM
+      generateAVOSCloudIMGroupChat
       generateAVOSCloudCrashReporting
       generateAVOSCloudLiveQuery
     end

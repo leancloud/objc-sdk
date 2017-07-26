@@ -56,6 +56,7 @@ NSString *LCIMConversationPropertyValueKey = @"propertyValue";
 NSNotificationName LCIMConversationPropertyUpdateNotification = @"LCIMConversationPropertyUpdateNotification";
 
 NSNotificationName LCIMConversationMessagePatchNotification = @"LCIMConversationMessagePatchNotification";
+NSNotificationName LCIMConversationDidReceiveMessageNotification = @"LCIMConversationDidReceiveMessageNotification";
 
 @interface AVIMConversation()
 
@@ -109,6 +110,11 @@ static dispatch_queue_t messageCacheOperationQueue;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didReceivePatchItem:)
                                                  name:LCIMConversationMessagePatchNotification
+                                               object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveMessageNotification:)
+                                                 name:LCIMConversationDidReceiveMessageNotification
                                                object:nil];
 }
 
@@ -180,6 +186,25 @@ static dispatch_queue_t messageCacheOperationQueue;
 
     [self callDelegateMethod:@selector(conversation:messageHasBeenUpdated:)
                withArguments:@[self, message]];
+}
+
+- (void)didReceiveMessageNotification:(NSNotification *)notification {
+    if (!self.conversationId)
+        return;
+    if (notification.object != self.imClient)
+        return;
+
+    NSDictionary *userInfo = notification.userInfo;
+    AVIMMessage *message = userInfo[@"message"];
+
+    if (![message.conversationId isEqualToString:self.conversationId])
+        return;
+
+    [self didReceiveMessage:message];
+}
+
+- (void)didReceiveMessage:(AVIMMessage *)message {
+    /* TODO */
 }
 
 - (void)callDelegateMethod:(SEL)method withArguments:(NSArray *)arguments {
@@ -336,6 +361,12 @@ static dispatch_queue_t messageCacheOperationQueue;
         genericCommand.cmd = AVIMCommandType_Conv;
         genericCommand.op = AVIMOpType_MaxRead;
         genericCommand.peerId = self.imClient.clientId;
+        genericCommand.needResponse = YES;
+
+        AVIMConvCommand *convCommand = [[AVIMConvCommand alloc] init];
+        convCommand.cid = self.conversationId;
+
+        genericCommand.convMessage = convCommand;
 
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             if (error)
@@ -842,13 +873,6 @@ static dispatch_queue_t messageCacheOperationQueue;
         BOOL will = option.will;
         BOOL transient = option.transient;
         BOOL receipt = option.receipt;
-
-        if ([message isKindOfClass:[AVIMTypedMessage class]]) {
-            AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)message;
-            if (!typedMessage.messageObject._lctext && !typedMessage.messageObject._lcloc && !typedMessage.messageObject._lcfile && !typedMessage.messageObject._lcattrs) {
-                [NSException raise:NSInternalInconsistencyException format:@"AVIMTypedMessage should have one of text, file, location or attributes not be nil."];
-            }
-        }
 
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
         genericCommand.needResponse = YES;
