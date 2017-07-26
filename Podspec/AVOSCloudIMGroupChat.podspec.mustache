@@ -31,5 +31,12 @@ Pod::Spec.new do |s|
     {{{public_header_files}}}
   {{/public_header_files}}
 
+  s.preserve_paths =
+   'AVOS/AVOSCloudIM/Protobuf/google'
+
+  s.pod_target_xcconfig = {
+    'HEADER_SEARCH_PATHS' => '"$(PODS_ROOT)/AVOSCloudIM/AVOS/AVOSCloudIM/Protobuf"'
+  }
+
   s.dependency 'AVOSCloudIM', "#{s.version}"
 end
