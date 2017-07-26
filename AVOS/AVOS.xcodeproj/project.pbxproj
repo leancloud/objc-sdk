@@ -589,6 +589,8 @@
 		83B0E5951F2839FB00EE1A75 /* AVOSCloudIMGroupChat.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B0E5931F2839FB00EE1A75 /* AVOSCloudIMGroupChat.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83B0E59B1F283AEF00EE1A75 /* AVIMReadReceiptMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B0E5991F283AEE00EE1A75 /* AVIMReadReceiptMessage.m */; };
 		83B0E59C1F283AEF00EE1A75 /* AVIMReadReceiptMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B0E59A1F283AEE00EE1A75 /* AVIMReadReceiptMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		83B0E59F1F283BE200EE1A75 /* AVIMConversation+GroupChat.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B0E59D1F283BE100EE1A75 /* AVIMConversation+GroupChat.m */; };
+		83B0E5A01F283BE200EE1A75 /* AVIMConversation+GroupChat.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B0E59E1F283BE100EE1A75 /* AVIMConversation+GroupChat.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83B5FF451B7C768B000C3923 /* BreakpadDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF081B7C768B000C3923 /* BreakpadDefines.h */; };
 		83B5FF461B7C768B000C3923 /* BreakpadController.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF0B1B7C768B000C3923 /* BreakpadController.h */; };
 		83B5FF471B7C768B000C3923 /* BreakpadController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF0C1B7C768B000C3923 /* BreakpadController.mm */; };
@@ -1438,6 +1440,8 @@
 		83B0E5941F2839FB00EE1A75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83B0E5991F283AEE00EE1A75 /* AVIMReadReceiptMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMReadReceiptMessage.m; sourceTree = "<group>"; };
 		83B0E59A1F283AEE00EE1A75 /* AVIMReadReceiptMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMReadReceiptMessage.h; sourceTree = "<group>"; };
+		83B0E59D1F283BE100EE1A75 /* AVIMConversation+GroupChat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AVIMConversation+GroupChat.m"; sourceTree = "<group>"; };
+		83B0E59E1F283BE100EE1A75 /* AVIMConversation+GroupChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVIMConversation+GroupChat.h"; sourceTree = "<group>"; };
 		83B5FF081B7C768B000C3923 /* BreakpadDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpadDefines.h; sourceTree = "<group>"; };
 		83B5FF0B1B7C768B000C3923 /* BreakpadController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpadController.h; sourceTree = "<group>"; };
 		83B5FF0C1B7C768B000C3923 /* BreakpadController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BreakpadController.mm; sourceTree = "<group>"; };
@@ -2078,6 +2082,8 @@
 				83B0E5931F2839FB00EE1A75 /* AVOSCloudIMGroupChat.h */,
 				83B0E59A1F283AEE00EE1A75 /* AVIMReadReceiptMessage.h */,
 				83B0E5991F283AEE00EE1A75 /* AVIMReadReceiptMessage.m */,
+				83B0E59E1F283BE100EE1A75 /* AVIMConversation+GroupChat.h */,
+				83B0E59D1F283BE100EE1A75 /* AVIMConversation+GroupChat.m */,
 				83B0E5941F2839FB00EE1A75 /* Info.plist */,
 			);
 			path = AVOSCloudIMGroupChat;
@@ -3397,6 +3403,7 @@
 			files = (
 				83B0E59C1F283AEF00EE1A75 /* AVIMReadReceiptMessage.h in Headers */,
 				83B0E5951F2839FB00EE1A75 /* AVOSCloudIMGroupChat.h in Headers */,
+				83B0E5A01F283BE200EE1A75 /* AVIMConversation+GroupChat.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4618,6 +4625,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83B0E59B1F283AEF00EE1A75 /* AVIMReadReceiptMessage.m in Sources */,
+				83B0E59F1F283BE200EE1A75 /* AVIMConversation+GroupChat.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6019,6 +6027,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -6033,9 +6042,10 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = AVOSCloudIMGroupChat/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.AVOSCloudIMGroupChat;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -6095,9 +6105,10 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = AVOSCloudIMGroupChat/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.AVOSCloudIMGroupChat;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";

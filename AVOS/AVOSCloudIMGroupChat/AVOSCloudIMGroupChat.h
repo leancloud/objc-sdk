@@ -7,3 +7,4 @@
 //
 
 #import "AVIMReadReceiptMessage.h"
+#import "AVIMConversation+GroupChat.h"
