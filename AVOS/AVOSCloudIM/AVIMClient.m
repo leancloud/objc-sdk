@@ -29,17 +29,21 @@
 #import "LCObserver.h"
 #import "SDMacros.h"
 #import "AVIMUserOptions.h"
+#import "AVPaasClient.h"
 
 #import <objc/runtime.h>
 #import <libkern/OSAtomic.h>
 
 static const int kMaxClientIdLength = 64;
-static AVIMClient *defaultClient = nil;
 
 static dispatch_queue_t imClientQueue = NULL;
-static dispatch_queue_t defaultClientAccessQueue = NULL;
 
 static const NSUInteger kDistinctMessageIdArraySize = 10;
+
+typedef NS_ENUM(NSInteger, LCIMClientLoginMethod) {
+    LCIMClientLoginMethodID = 0,
+    LCIMClientLoginMethodUser
+};
 
 typedef NS_ENUM(NSUInteger, LCIMClientSessionOptions) {
     LCIMClientSessionEnableMessagePatch = 1 << 0
@@ -49,6 +53,13 @@ NS_INLINE
 BOOL isValidTag(NSString *tag) {
     return tag && ![tag isEqualToString:LCIMTagDefault];
 }
+
+@interface AVIMClient ()
+
+@property (nonatomic, assign) LCIMClientLoginMethod loginMethod;
+@property (nonatomic, copy) AVIMSignature *(^loginSignatureGetter)(AVIMClient *client);
+
+@end
 
 @implementation AVIMClient {
     NSMutableArray *_distinctMessageIdArray;
@@ -61,7 +72,6 @@ static BOOL AVIMClientHasInstantiated = NO;
     
     dispatch_once(&onceToken, ^{
         imClientQueue = dispatch_queue_create("cn.leancloud.im", DISPATCH_QUEUE_SERIAL);
-        defaultClientAccessQueue = dispatch_queue_create("cn.leancloud.imclient", DISPATCH_QUEUE_SERIAL);
     });
 }
 
@@ -70,25 +80,8 @@ static BOOL AVIMClientHasInstantiated = NO;
     return [super alloc];
 }
 
-+ (instancetype)defaultClient {
-    __block AVIMClient *client = nil;
-    dispatch_sync(defaultClientAccessQueue, ^{
-        if (!defaultClient) {
-            defaultClient = [[self alloc] init];
-        }
-        client = defaultClient;
-    });
-    return client;
-}
-
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds {
     [AVIMWebSocketWrapper setTimeoutIntervalInSeconds:seconds];
-}
-
-+ (void)resetDefaultClient {
-    dispatch_sync(defaultClientAccessQueue, ^{
-        defaultClient = nil;
-    });
 }
 
 + (dispatch_queue_t)imClientQueue {
@@ -149,6 +142,28 @@ static BOOL AVIMClientHasInstantiated = NO;
     return self;
 }
 
+- (instancetype)initWithUser:(AVUser *)user {
+    return [self initWithUser:user tag:nil];
+}
+
+- (instancetype)initWithUser:(AVUser *)user tag:(NSString *)tag {
+    self = [super init];
+
+    if (self) {
+        _user = user;
+        _tag = [tag copy];
+        _loginMethod = LCIMClientLoginMethodUser;
+
+        self.loginSignatureGetter = ^AVIMSignature *(AVIMClient *client) {
+            return [AVIMClient getSignatureForSessionToken:client.user.sessionToken];
+        };
+
+        [self doInitialization];
+    }
+
+    return self;
+}
+
 - (void)doInitialization {
     _status = AVIMClientStatusNone;
     _conversations = [[NSMutableDictionary alloc] init];
@@ -171,6 +186,11 @@ static BOOL AVIMClientHasInstantiated = NO;
          @strongify(self);
          [self registerPushChannelInBackground];
      }];
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        LCIMConversationCache *cache = [self conversationCache];
+        [cache cleanAllExpiredConversations];
+    });
 }
 
 - (LCIMConversationCache *)conversationCache {
@@ -179,16 +199,19 @@ static BOOL AVIMClientHasInstantiated = NO;
     return clientId ? [[LCIMConversationCache alloc] initWithClientId:clientId] : nil;
 }
 
-- (void)setClientId:(NSString *)clientId {
-    _clientId = [clientId copy];
-    
-    [_conversations removeAllObjects];
-    [_stagedMessages removeAllObjects];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        LCIMConversationCache *cache = [self conversationCache];
-        [cache cleanAllExpiredConversations];
-    });
+- (NSString *)clientId {
+    NSString *clientId = nil;
+
+    switch (self.loginMethod) {
+    case LCIMClientLoginMethodID:
+        clientId = _clientId;
+        break;
+    case LCIMClientLoginMethodUser:
+        clientId = self.user.objectId;
+        break;
+    }
+
+    return clientId;
 }
 
 - (void)dealloc {
@@ -332,7 +355,32 @@ static BOOL AVIMClientHasInstantiated = NO;
     }
 }
 
++ (AVIMSignature *)getSignatureForSessionToken:(NSString *)sessionToken {
+    AVIMSignature *signature = [[AVIMSignature alloc] init];
+    AVPaasClient *RESTClient = [AVPaasClient sharedInstance];
+
+    NSDictionary *parameters = @{ @"session_token" : sessionToken };
+    NSURLRequest *request = [RESTClient requestWithPath:@"rtm/sign" method:@"POST" headers:nil parameters:parameters];
+
+    [RESTClient
+     performRequest:request
+     success:^(NSHTTPURLResponse *response, id result) {
+         signature.nonce = result[@"nonce"];
+         signature.signature = result[@"signature"];
+         signature.timestamp = [result[@"timestamp"] unsignedIntegerValue];
+     }
+     failure:^(NSHTTPURLResponse *response, id result, NSError *error) {
+         signature.error = error;
+     }
+     wait:YES];
+
+    return signature;
+}
+
 - (AVIMSignature *)signatureWithClientId:(NSString *)clientId conversationId:(NSString *)conversationId action:(NSString *)action actionOnClientIds:(NSArray *)clientIds {
+    if ([action isEqualToString:@"open"] && self.loginSignatureGetter)
+        return self.loginSignatureGetter(self);
+
     AVIMSignature *signature = nil;
     if ([_signatureDataSource respondsToSelector:@selector(signatureWithClientId:conversationId:action:actionOnClientIds:)]) {
         signature = [_signatureDataSource signatureWithClientId:clientId conversationId:conversationId action:action actionOnClientIds:clientIds];
@@ -543,7 +591,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 - (void)openWithCallback:(AVIMBooleanResultBlock)callback {
-    [self openWithClientId:self.clientId security:YES tag:self.tag force:NO callback:callback];
+    [self openWithOption:nil callback:callback];
 }
 
 - (void)openWithOption:(AVIMClientOpenOption *)option callback:(AVIMBooleanResultBlock)callback {
@@ -552,18 +600,10 @@ static BOOL AVIMClientHasInstantiated = NO;
     if (option)
         force = option.force;
 
-    [self openWithClientId:self.clientId security:YES tag:self.tag force:force callback:callback];
+    [self openWithClientId:self.clientId tag:self.tag force:force callback:callback];
 }
 
-- (void)openWithClientId:(NSString *)clientId callback:(AVIMBooleanResultBlock)callback {
-    [self openWithClientId:clientId security:YES tag:nil force:NO callback:callback];
-}
-
-- (void)openWithClientId:(NSString *)clientId tag:(NSString *)tag callback:(AVIMBooleanResultBlock)callback {
-    [self openWithClientId:clientId security:YES tag:tag force:NO callback:callback];
-}
-
-- (void)openWithClientId:(NSString *)clientId security:(BOOL)security tag:(NSString *)tag force:(BOOL)force callback:(AVIMBooleanResultBlock)callback {
+- (void)openWithClientId:(NSString *)clientId tag:(NSString *)tag force:(BOOL)force callback:(AVIMBooleanResultBlock)callback {
     // Validate client id
     if (!clientId) {
         [NSException raise:NSInternalInconsistencyException format:@"Client id can not be nil."];
@@ -585,9 +625,7 @@ static BOOL AVIMClientHasInstantiated = NO;
         @strongify(self);
 
         if (self.status != AVIMClientStatusOpened) {
-            self.clientId = clientId;
-            self.tag = tag;
-            self.socketWrapper = [self socketWrapperForSecurity:security];
+            self.socketWrapper = [self socketWrapperForSecurity:YES];
             self.openTimes = 0;
             self.openCommand = [self openCommandWithAppId:appId
                                                  clientId:clientId
@@ -609,7 +647,7 @@ static BOOL AVIMClientHasInstantiated = NO;
                     [self changeStatus:AVIMClientStatusClosed];
 
                     if ([self shouldRetryForCommand:inCommand]) {
-                        [self openWithClientId:clientId security:security tag:tag force:force callback:callback];
+                        [self openWithClientId:clientId tag:tag force:force callback:callback];
                     } else {
                         [AVIMBlockHelper callBooleanResultBlock:callback error:error];
                     }
