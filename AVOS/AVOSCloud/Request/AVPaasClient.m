@@ -87,8 +87,13 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             [command appendCommandLineArgument:[NSString stringWithFormat:@"--cookie \"%@=%@\"", [cookie name], [cookie value]]];
         }
     }
+
+    NSMutableDictionary<NSString *, NSString *> *headers = [[self allHTTPHeaderFields] mutableCopy];
+
+    /* Remove signature for security. */
+    [headers removeObjectForKey:@"X-LC-Sign"];
     
-    for (id field in [self allHTTPHeaderFields]) {
+    for (NSString * field in headers) {
         [command appendCommandLineArgument:[NSString stringWithFormat:@"-H %@", [NSString stringWithFormat:@"'%@: %@'", field, [[self valueForHTTPHeaderField:field] stringByReplacingOccurrencesOfString:@"\'" withString:@"\\\'"]]]];
     }
 
