@@ -33,5 +33,12 @@ Pod::Spec.new do |s|
     'AVOS/AVOSCloudIMGroupChat/AVOSCloudIMGroupChat.h',
     'AVOS/AVOSCloudIMGroupChat/AVIMConversation+GroupChat.h'
 
+  s.preserve_paths =
+   'AVOS/AVOSCloudIM/Protobuf/google'
+
+  s.pod_target_xcconfig = {
+    'HEADER_SEARCH_PATHS' => '"$(PODS_ROOT)/AVOSCloudIM/AVOS/AVOSCloudIM/Protobuf"'
+  }
+
   s.dependency 'AVOSCloudIM', "#{s.version}"
 end
