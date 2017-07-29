@@ -12,6 +12,17 @@
 
 @implementation AVOSCloudIM
 
++ (AVIMOptions *)defaultOptions {
+    static AVIMOptions *options;
+    static dispatch_once_t onceToken;
+
+    dispatch_once(&onceToken, ^{
+        options = [[AVIMOptions alloc] init];
+    });
+
+    return options;
+}
+
 + (void)registerForRemoteNotification {
     [AVOSCloud registerForRemoteNotification];
 }

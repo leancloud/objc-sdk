@@ -17,6 +17,7 @@
 #import "AVOSCloud_Internal.h"
 #import "LCRouter.h"
 #import "SDMacros.h"
+#import "AVOSCloudIM.h"
 #import <arpa/inet.h>
 
 #define PING_INTERVAL 60*3
@@ -362,6 +363,13 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         if (!(self.webSocket && (self.webSocket.readyState == AVIM_OPEN || self.webSocket.readyState == AVIM_CONNECTING))) {
             if (!self.openCallback) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT object:self userInfo:nil];
+            }
+
+            NSString *RTMServer = [AVOSCloudIM defaultOptions].RTMServer;
+
+            if (RTMServer) {
+                [self internalOpenWebSocketConnection:RTMServer];
+                return;
             }
 
             LCRouter *router = [LCRouter sharedInstance];
