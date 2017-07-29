@@ -544,6 +544,10 @@
 		836705AB1BA1358D0050E968 /* SDMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705AA1BA1358D0050E968 /* SDMacros.h */; };
 		836705DF1BA1C1710050E968 /* AVKeychain.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705DC1BA1C1710050E968 /* AVKeychain.h */; };
 		836705E01BA1C1710050E968 /* AVKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 836705DD1BA1C1710050E968 /* AVKeychain.m */; };
+		837261DC1F2C605C009DBDF7 /* AVIMOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 837261DA1F2C605C009DBDF7 /* AVIMOptions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		837261DD1F2C605C009DBDF7 /* AVIMOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 837261DA1F2C605C009DBDF7 /* AVIMOptions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		837261DE1F2C605C009DBDF7 /* AVIMOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 837261DB1F2C605C009DBDF7 /* AVIMOptions.m */; };
+		837261DF1F2C605C009DBDF7 /* AVIMOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 837261DB1F2C605C009DBDF7 /* AVIMOptions.m */; };
 		837CC71E1B568431001333AD /* NSDictionary+LCHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 837CC71C1B568431001333AD /* NSDictionary+LCHash.h */; };
 		837CC71F1B568431001333AD /* NSDictionary+LCHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 837CC71D1B568431001333AD /* NSDictionary+LCHash.m */; };
 		838AF12A1AFE58F600B8965E /* LCIMMessageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 838AF1221AFE58F600B8965E /* LCIMMessageCache.h */; };
@@ -1407,6 +1411,8 @@
 		836705AA1BA1358D0050E968 /* SDMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMacros.h; sourceTree = "<group>"; };
 		836705DC1BA1C1710050E968 /* AVKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVKeychain.h; sourceTree = "<group>"; };
 		836705DD1BA1C1710050E968 /* AVKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVKeychain.m; sourceTree = "<group>"; };
+		837261DA1F2C605C009DBDF7 /* AVIMOptions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVIMOptions.h; sourceTree = "<group>"; };
+		837261DB1F2C605C009DBDF7 /* AVIMOptions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVIMOptions.m; sourceTree = "<group>"; };
 		837CC71C1B568431001333AD /* NSDictionary+LCHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+LCHash.h"; sourceTree = "<group>"; };
 		837CC71D1B568431001333AD /* NSDictionary+LCHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+LCHash.m"; sourceTree = "<group>"; };
 		838AF1221AFE58F600B8965E /* LCIMMessageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageCache.h; sourceTree = "<group>"; };
@@ -2471,6 +2477,8 @@
 			children = (
 				8C8419C71A5A796000C5C6C4 /* AVOSCloudIM.h */,
 				83AB6DF71C3CFEA70064BE17 /* AVOSCloudIM.m */,
+				837261DA1F2C605C009DBDF7 /* AVIMOptions.h */,
+				837261DB1F2C605C009DBDF7 /* AVIMOptions.m */,
 				8C841BCB1A5A84C600C5C6C4 /* AVIMClient_Internal.h */,
 				8C841BCC1A5A84C600C5C6C4 /* AVIMClient.h */,
 				8C841BCD1A5A84C600C5C6C4 /* AVIMClient.m */,
@@ -3108,6 +3116,7 @@
 				9A2F1B5D1CF6F6FA00BE52F2 /* LCIMUnknownField_PackagePrivate.h in Headers */,
 				9A2F1B0C1CF6F6FA00BE52F2 /* LCIMCodedInputStream.h in Headers */,
 				9A2F1B2D1CF6F6FA00BE52F2 /* LCIMDictionary_PackagePrivate.h in Headers */,
+				837261DD1F2C605C009DBDF7 /* AVIMOptions.h in Headers */,
 				9AE76C551C3F7CC600325902 /* AVIMCommandCommon.h in Headers */,
 				9A2F1B1B1CF6F6FA00BE52F2 /* LCIMCodedOutputStream_PackagePrivate.h in Headers */,
 				704F3BE81BE0D0810033245C /* AVIMTypedMessageObject.h in Headers */,
@@ -3740,6 +3749,7 @@
 				9A2F1B4F1CF6F6FA00BE52F2 /* LCIMRootObject_PackagePrivate.h in Headers */,
 				8C895DDC1A78A5D900992A8F /* AVMPDefines.h in Headers */,
 				8C841C3E1A5A84C600C5C6C4 /* AVIMBlockHelper.h in Headers */,
+				837261DC1F2C605C009DBDF7 /* AVIMOptions.h in Headers */,
 				8C895DDB1A78A5D900992A8F /* avmp.h in Headers */,
 				8CA1571F1A5E8556003C2532 /* AVIMTypedMessageObject.h in Headers */,
 				9AD392421BFC395200D28074 /* AVIMConversationOutCommand.h in Headers */,
@@ -4324,6 +4334,7 @@
 				704F3B901BE0D05C0033245C /* AVIMUserOptions.m in Sources */,
 				9AE76C571C3F7CC600325902 /* AVIMDynamicObject.m in Sources */,
 				830EB9EA1C3F996A00BA917F /* AVIMClientOpenOption.m in Sources */,
+				837261DF1F2C605C009DBDF7 /* AVIMOptions.m in Sources */,
 				831E295D1D882CBB006E502B /* AVIMMessageOption.m in Sources */,
 				9AD27C461E1418DB002F9C7C /* LCIMApi.pbobjc.m in Sources */,
 				70BA7A701BE22B1900C3EB70 /* LCIMClientSessionTokenCacheStore.m in Sources */,
@@ -4889,6 +4900,7 @@
 				8C895DE71A78A5D900992A8F /* AVMPOrderedDictionary.m in Sources */,
 				8C841C431A5A84C600C5C6C4 /* AVIMReachability.m in Sources */,
 				8C841C3F1A5A84C600C5C6C4 /* AVIMBlockHelper.m in Sources */,
+				837261DE1F2C605C009DBDF7 /* AVIMOptions.m in Sources */,
 				831E295C1D882CBB006E502B /* AVIMMessageOption.m in Sources */,
 				9AD27C451E1418DB002F9C7C /* LCIMApi.pbobjc.m in Sources */,
 				830EB9E81C3F996A00BA917F /* AVIMClientOpenOption.m in Sources */,
@@ -6948,6 +6960,7 @@
 				83B0E5981F2839FB00EE1A75 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		83D8CF521C17DAF50094279D /* Build configuration list for PBXNativeTarget "AVOSCloud-tvOS" */ = {
 			isa = XCConfigurationList;
