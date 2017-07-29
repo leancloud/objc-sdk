@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AVOSCloudIM'
-  s.version  = '7.0.0'
+  s.version  = '7.1.0'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud IM Objective-C SDK'
   s.authors  = 'LeanCloud'
@@ -85,6 +85,7 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/Protobuf/LCIMRootObject_PackagePrivate.h',
       'AVOS/AVOSCloudIM/AVMPMessagePack/AVMPDefines.h',
       'AVOS/AVOSCloudIM/Utilities/AVIMBlockHelper.h',
+      'AVOS/AVOSCloudIM/AVIMOptions.h',
       'AVOS/AVOSCloudIM/AVMPMessagePack/avmp.h',
       'AVOS/AVOSCloudIM/InternalObjects/AVIMTypedMessageObject.h',
       'AVOS/AVOSCloudIM/Commands/AVIMConversationOutCommand.h',
@@ -145,6 +146,7 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/AVMPMessagePack/AVMPOrderedDictionary.m',
       'AVOS/AVOSCloudIM/WebSocket/AVIMReachability.m',
       'AVOS/AVOSCloudIM/Utilities/AVIMBlockHelper.m',
+      'AVOS/AVOSCloudIM/AVIMOptions.m',
       'AVOS/AVOSCloudIM/AVIMMessageOption.m',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMApi.pbobjc.m',
       'AVOS/AVOSCloudIM/AVIMClientOpenOption.m',
@@ -213,6 +215,7 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/AVIMMessage.h',
       'AVOS/AVOSCloudIM/AVIMSignature.h',
       'AVOS/AVOSCloudIM/AVIMAvailability.h',
+      'AVOS/AVOSCloudIM/AVIMOptions.h',
       'AVOS/AVOSCloudIM/AVOSCloudIM.h',
       'AVOS/AVOSCloudIM/AVIMUserOptions.h'
 
