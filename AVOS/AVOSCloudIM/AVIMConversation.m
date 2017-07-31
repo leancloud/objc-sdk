@@ -151,14 +151,19 @@ static dispatch_queue_t messageCacheOperationQueue;
         return;
 
     [self setValue:propertyValue forKey:propertyName];
+    [self postUpdateNotificationForKey:propertyName];
+}
 
-    AVIMClient *client = self.imClient;
-    SEL delegateMethod = @selector(conversation:didUpdateForKey:);
+- (void)postUpdateNotificationForKey:(NSString *)key {
+    id  delegate = self.imClient.delegate;
+    SEL selector = @selector(conversation:didUpdateForKey:);
 
-    if ([client.delegate respondsToSelector:delegateMethod])
-        [AVIMRuntimeHelper callMethodInMainThreadWithTarget:client.delegate
-                                                   selector:delegateMethod
-                                                  arguments:@[self, propertyName]];
+    if (![delegate respondsToSelector:selector])
+        return;
+
+    [AVIMRuntimeHelper callMethodInMainThreadWithTarget:delegate
+                                               selector:selector
+                                              arguments:@[self, key]];
 }
 
 - (void)didReceivePatchItem:(NSNotification *)notification {
@@ -204,7 +209,22 @@ static dispatch_queue_t messageCacheOperationQueue;
 }
 
 - (void)didReceiveMessage:(AVIMMessage *)message {
-    /* TODO */
+    if (!message.transient) {
+        self.lastMessage = message;
+        [self postUpdateNotificationForKey:NSStringFromSelector(@selector(lastMessage))];
+
+        /* Update last message timestamp if needed. */
+        NSDate *sentAt = [NSDate dateWithTimeIntervalSince1970:(message.sendTimestamp / 1000.0)];
+
+        if (!self.lastMessageAt || [self.lastMessageAt compare:sentAt] == NSOrderedAscending) {
+            self.lastMessageAt = sentAt;
+            [self postUpdateNotificationForKey:NSStringFromSelector(@selector(lastMessageAt))];
+        }
+
+        /* Increase unread messages count. */
+        self.unreadMessagesCount += 1;
+        [self postUpdateNotificationForKey:NSStringFromSelector(@selector(unreadMessagesCount))];
+    }
 }
 
 - (void)callDelegateMethod:(SEL)method withArguments:(NSArray *)arguments {

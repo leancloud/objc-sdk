@@ -1357,18 +1357,6 @@ static BOOL AVIMClientHasInstantiated = NO;
     __weak typeof(self) ws = self;
     
     [self fetchConversationIfNeeded:conversation withBlock:^(AVIMConversation *conversation) {
-        /* Update lastMessageAt if needed. */
-        NSDate *messageSentAt = [NSDate dateWithTimeIntervalSince1970:(message.sendTimestamp / 1000.0)];
-        if (!message.transient) {
-            if (!conversation.lastMessageAt || [conversation.lastMessageAt compare:messageSentAt] == NSOrderedAscending) {
-                conversation.lastMessageAt = messageSentAt;
-            }
-            LCIM_NOTIFY_PROPERTY_UPDATE(
-                ws.clientId,
-                conversationId,
-                NSStringFromSelector(@selector(lastMessage)),
-                message);
-        }
         [ws passMessage:message toConversation:conversation];
         [ws postNotificationForMessage:message];
     }];
