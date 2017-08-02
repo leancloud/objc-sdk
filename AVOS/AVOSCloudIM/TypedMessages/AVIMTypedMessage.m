@@ -99,18 +99,6 @@ NSMutableDictionary const *_typeDict = nil;
 }
 
 + (instancetype)messageWithText:(NSString *)text
-                      mediaType:(AVIMMessageMediaType)mediaType
-               attachedFilePath:(NSString *)attachedFilePath
-                     attributes:(NSDictionary *)attributes {
-    AVIMTypedMessage *message = [[self alloc] init];
-    message.text = text;
-    message.mediaType = mediaType;
-    message.attributes = attributes;
-    message.attachedFilePath = attachedFilePath;
-    return message;
-}
-
-+ (instancetype)messageWithText:(NSString *)text
                attachedFilePath:(NSString *)attachedFilePath
                      attributes:(NSDictionary *)attributes {
     AVIMTypedMessage *message = [[self alloc] init];
