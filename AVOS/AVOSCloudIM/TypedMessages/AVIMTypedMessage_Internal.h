@@ -21,7 +21,6 @@ extern NSMutableDictionary const *_typeDict;
 @property(nonatomic, strong)AVGeoPoint *location;
 //@property(nonatomic, strong)NSData *data;
 @property(nonatomic, strong)AVIMTypedMessageObject *messageObject;
-@property(nonatomic, strong)NSString *attachedFilePath;
 
 + (Class)classForMediaType:(AVIMMessageMediaType)mediaType;
 //+ (instancetype)messageWithText:(NSString *)text

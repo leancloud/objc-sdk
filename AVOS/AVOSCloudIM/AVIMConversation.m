@@ -793,22 +793,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     if ([message isKindOfClass:[AVIMTypedMessage class]]) {
         AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)message;
         
-        AVFile *file = nil;
-        
-        if (typedMessage.file) {
-            file = typedMessage.file;
-        } else if (typedMessage.attachedFilePath) {
-            NSString *attachedFilePath = typedMessage.attachedFilePath;
-            
-            if (![[NSFileManager defaultManager] fileExistsAtPath:attachedFilePath]) {
-                [AVIMBlockHelper callBooleanResultBlock:callback error:[AVErrorUtils fileNotFoundError]];
-                return;
-            }
-            
-            NSString *name = [attachedFilePath lastPathComponent];
-            
-            file = [AVFile fileWithName:name contentsAtPath:attachedFilePath];
-        }
+        AVFile *file = typedMessage.file;
         
         if (file) {
             if ([file isDirty]) {
