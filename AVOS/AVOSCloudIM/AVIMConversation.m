@@ -792,31 +792,22 @@ static dispatch_queue_t messageCacheOperationQueue;
     
     if ([message isKindOfClass:[AVIMTypedMessage class]]) {
         AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)message;
-        
         AVFile *file = typedMessage.file;
         
         if (file) {
-            if ([file isDirty]) {
-                /* File need to be uploaded */
-                [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    if (succeeded) {
-                        /* If uploading is success, bind file to message */
-                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                            [self fillTypedMessage:typedMessage withFile:file];
-                            [self fillTypedMessageForLocationIfNeeded:typedMessage];
-                            [self sendRealMessage:message option:option callback:callback];
-                        });
-                    } else {
-                        message.status = AVIMMessageStatusFailed;
-                        [AVIMBlockHelper callBooleanResultBlock:callback error:error];
-                    }
-                } progressBlock:progressBlock];
-            } else {
-                /* File has already been uploaded, bind file to message */
-                [self fillTypedMessage:typedMessage withFile:file];
-                [self fillTypedMessageForLocationIfNeeded:typedMessage];
-                [self sendRealMessage:message option:option callback:callback];
-            }
+            [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (succeeded) {
+                    /* If uploading is success, bind file to message */
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        [self fillTypedMessage:typedMessage withFile:file];
+                        [self fillTypedMessageForLocationIfNeeded:typedMessage];
+                        [self sendRealMessage:message option:option callback:callback];
+                    });
+                } else {
+                    message.status = AVIMMessageStatusFailed;
+                    [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+                }
+            } progressBlock:progressBlock];
         } else {
             [self fillTypedMessageForLocationIfNeeded:typedMessage];
             [self sendRealMessage:message option:option callback:callback];
