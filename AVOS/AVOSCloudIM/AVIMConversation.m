@@ -963,7 +963,7 @@ static dispatch_queue_t messageCacheOperationQueue;
                     self.lastMessage = message;
                 }
                 if (!directCommand.transient && self.imClient.messageQueryCacheEnabled) {
-                    [[self messageCacheStore] insertMessage:message withBreakpoint:NO];
+                    [[self messageCacheStore] insertOrUpdateMessage:message withBreakpoint:NO];
                 }
                 if (!transient) {
                     if (directOutCommand.r) {
@@ -1143,7 +1143,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     if (breakpoint) {
         [[self messageCache] addContinuousMessages:messages forConversationId:self.conversationId];
     } else {
-        [[self messageCacheStore] insertMessages:messages];
+        [[self messageCacheStore] insertOrUpdateMessages:messages];
     }
 
     [self messagesDidCache];
@@ -1181,7 +1181,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     message.clientId = _imClient.clientId;
     message.conversationId = _conversationId;
 
-    [[self messageCacheStore] insertMessage:message];
+    [[self messageCacheStore] insertOrUpdateMessage:message];
 }
 
 - (void)removeMessageFromCache:(AVIMMessage *)message {
