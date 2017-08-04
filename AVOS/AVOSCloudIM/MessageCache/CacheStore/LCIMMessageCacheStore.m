@@ -109,17 +109,8 @@
     ];
 }
 
-- (void)insertMessages:(NSArray *)messages {
-    LCIM_OPEN_DATABASE(db, ({
-        for (AVIMMessage *message in messages) {
-            NSArray *args = [self insertionRecordForMessage:message];
-            [db executeUpdate:LCIM_SQL_INSERT_MESSAGE withArgumentsInArray:args];
-        }
-    }));
-}
-
 - (void)insertMessage:(AVIMMessage *)message {
-    [self insertMessages:@[message]];
+    [self insertMessage:message withBreakpoint:NO];
 }
 
 - (void)insertMessage:(AVIMMessage *)message withBreakpoint:(BOOL)breakpoint {
@@ -127,6 +118,11 @@
         NSArray *args = [self insertionRecordForMessage:message withBreakpoint:breakpoint];
         [db executeUpdate:LCIM_SQL_INSERT_MESSAGE withArgumentsInArray:args];
     }));
+}
+
+- (void)insertMessages:(NSArray<AVIMMessage *> *)messages {
+    for (AVIMMessage *message in messages)
+        [self insertMessage:message];
 }
 
 - (void)updateBreakpoint:(BOOL)breakpoint forMessages:(NSArray *)messages {
