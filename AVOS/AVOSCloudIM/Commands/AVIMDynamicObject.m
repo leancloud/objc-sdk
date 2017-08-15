@@ -698,20 +698,20 @@ static void setter_fAtomic(id self, SEL _cmd, float value) {
 
 - (instancetype)initWithJSON:(NSString *)json {
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:NULL];
-    if (!dict) {
-        return nil;
-    } else {
+
+    if (dict && [dict isKindOfClass:[NSDictionary class]])
         return [self initWithDictionary:dict];
-    }
+
+    return nil;
 }
 
 - (instancetype)initWithMessagePack:(NSData *)data {
     NSDictionary *dict = [AVMPMessagePackReader readData:data options:0 error:nil];
-    if (!dict) {
-        return nil;
-    } else {
+
+    if (dict && [dict isKindOfClass:[NSDictionary class]])
         return [self initWithDictionary:dict];
-    }
+
+    return nil;
 }
 
 - (BOOL)hasKey:(NSString *)key {
