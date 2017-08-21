@@ -30,6 +30,36 @@ enum : AVIMMessageSendOption {
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface AVIMMessageIntervalBound : NSObject
+
+@property (nonatomic,   copy, nullable) NSString *messageId;
+@property (nonatomic, assign) int64_t timestamp;
+@property (nonatomic, assign) BOOL closed;
+
+- (instancetype)initWithMessageId:(nullable NSString *)messageId
+                        timestamp:(int64_t)timestamp
+                           closed:(BOOL)closed;
+
+@end
+
+@interface AVIMMessageInterval : NSObject
+
+@property (nonatomic, strong) AVIMMessageIntervalBound *startIntervalBound;
+@property (nonatomic, strong, nullable) AVIMMessageIntervalBound *endIntervalBound;
+
+- (instancetype)initWithStartIntervalBound:(AVIMMessageIntervalBound *)startIntervalBound
+                          endIntervalBound:(nullable AVIMMessageIntervalBound *)endIntervalBound;
+
+@end
+
+/**
+ Enumerations that define message query direction.
+ */
+typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
+    AVIMMessageQueryDirectionFromNewToOld = 0,
+    AVIMMessageQueryDirectionFromOldToNew
+};
+
 /**
  A protocol defines callbacks of events related to conversation.
  */
@@ -348,6 +378,19 @@ NS_ASSUME_NONNULL_BEGIN
                     timestamp:(int64_t)timestamp
                         limit:(NSUInteger)limit
                      callback:(AVIMArrayResultBlock)callback;
+
+/**
+ Query messages from a message to an another message with specified direction applied.
+
+ @param interval  A message interval.
+ @param direction Direction of message query.
+ @param limit     Limit of messages you want to query.
+ @param callback  Callback of query request.
+ */
+- (void)queryMessagesInInterval:(AVIMMessageInterval *)interval
+                      direction:(AVIMMessageQueryDirection)direction
+                          limit:(NSUInteger)limit
+                       callback:(AVIMArrayResultBlock)callback;
 
 @end
 
