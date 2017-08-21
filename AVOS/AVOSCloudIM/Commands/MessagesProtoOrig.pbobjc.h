@@ -172,6 +172,21 @@ LCIMEnumDescriptor *AVIMStatusType_EnumDescriptor(void);
  **/
 BOOL AVIMStatusType_IsValidValue(int32_t value);
 
+#pragma mark - Enum AVIMLogsCommand_QueryDirection
+
+typedef GPB_ENUM(AVIMLogsCommand_QueryDirection) {
+  AVIMLogsCommand_QueryDirection_Old = 1,
+  AVIMLogsCommand_QueryDirection_New = 2,
+};
+
+LCIMEnumDescriptor *AVIMLogsCommand_QueryDirection_EnumDescriptor(void);
+
+/**
+ * Checks to see if the given value is defined by the enum or was not known at
+ * the time this source was generated.
+ **/
+BOOL AVIMLogsCommand_QueryDirection_IsValidValue(int32_t value);
+
 #pragma mark - AVIMMessagesProtoOrigRoot
 
 /**
@@ -447,6 +462,7 @@ typedef GPB_ENUM(AVIMDirectCommand_FieldNumber) {
   AVIMDirectCommand_FieldNumber_PushData = 16,
   AVIMDirectCommand_FieldNumber_Will = 17,
   AVIMDirectCommand_FieldNumber_PatchTimestamp = 18,
+  AVIMDirectCommand_FieldNumber_BinaryMsg = 19,
 };
 
 @interface AVIMDirectCommand : LCIMMessage
@@ -508,6 +524,10 @@ typedef GPB_ENUM(AVIMDirectCommand_FieldNumber) {
 @property(nonatomic, readwrite) int64_t patchTimestamp;
 
 @property(nonatomic, readwrite) BOOL hasPatchTimestamp;
+@property(nonatomic, readwrite, copy, null_resettable) NSData *binaryMsg;
+/** Test to see if @c binaryMsg has been set. */
+@property(nonatomic, readwrite) BOOL hasBinaryMsg;
+
 @end
 
 #pragma mark - AVIMAckCommand
@@ -778,7 +798,9 @@ typedef GPB_ENUM(AVIMLogsCommand_FieldNumber) {
   AVIMLogsCommand_FieldNumber_Mid = 7,
   AVIMLogsCommand_FieldNumber_Checksum = 8,
   AVIMLogsCommand_FieldNumber_Stored = 9,
-  AVIMLogsCommand_FieldNumber_Reversed = 10,
+  AVIMLogsCommand_FieldNumber_Direction = 10,
+  AVIMLogsCommand_FieldNumber_TIncluded = 11,
+  AVIMLogsCommand_FieldNumber_TtIncluded = 12,
   AVIMLogsCommand_FieldNumber_LogsArray = 105,
 };
 
@@ -815,9 +837,15 @@ typedef GPB_ENUM(AVIMLogsCommand_FieldNumber) {
 @property(nonatomic, readwrite) BOOL stored;
 
 @property(nonatomic, readwrite) BOOL hasStored;
-@property(nonatomic, readwrite) BOOL reversed;
+@property(nonatomic, readwrite) AVIMLogsCommand_QueryDirection direction;
 
-@property(nonatomic, readwrite) BOOL hasReversed;
+@property(nonatomic, readwrite) BOOL hasDirection;
+@property(nonatomic, readwrite) BOOL tIncluded;
+
+@property(nonatomic, readwrite) BOOL hasTIncluded;
+@property(nonatomic, readwrite) BOOL ttIncluded;
+
+@property(nonatomic, readwrite) BOOL hasTtIncluded;
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<AVIMLogItem*> *logsArray;
 /** The number of items in @c logsArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger logsArray_Count;

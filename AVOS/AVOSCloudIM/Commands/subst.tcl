@@ -25,6 +25,9 @@ array set rules {
     GPBFieldHasEnumDescriptor
     LCIMFieldHasEnumDescriptor
 
+    GPBFieldHasDefaultValue
+    LCIMFieldHasDefaultValue
+
     GPBFieldTextFormatNameCustom
     LCIMFieldTextFormatNameCustom
 
