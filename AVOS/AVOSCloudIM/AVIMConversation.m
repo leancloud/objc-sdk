@@ -57,6 +57,42 @@ NSNotificationName LCIMConversationPropertyUpdateNotification = @"LCIMConversati
 
 NSNotificationName LCIMConversationMessagePatchNotification = @"LCIMConversationMessagePatchNotification";
 
+@implementation AVIMMessageIntervalBound
+
+- (instancetype)initWithMessageId:(NSString *)messageId
+                        timestamp:(int64_t)timestamp
+                           closed:(BOOL)closed
+{
+    self = [super init];
+
+    if (self) {
+        _messageId = [messageId copy];
+        _timestamp = timestamp;
+        _closed = closed;
+    }
+
+    return self;
+}
+
+@end
+
+@implementation AVIMMessageInterval
+
+- (instancetype)initWithStartIntervalBound:(AVIMMessageIntervalBound *)startIntervalBound
+                          endIntervalBound:(AVIMMessageIntervalBound *)endIntervalBound
+{
+    self = [super init];
+
+    if (self) {
+        _startIntervalBound = startIntervalBound;
+        _endIntervalBound = endIntervalBound;
+    }
+
+    return self;
+}
+
+@end
+
 @interface AVIMConversation()
 
 @property (nonatomic, strong) NSMutableDictionary *propertiesForUpdate;
@@ -1443,6 +1479,46 @@ static dispatch_queue_t messageCacheOperationQueue;
              }];
         }
     });
+}
+
+- (void)queryMessagesInInterval:(AVIMMessageInterval *)interval
+                      direction:(AVIMMessageQueryDirection)direction
+                          limit:(NSUInteger)limit
+                       callback:(AVIMArrayResultBlock)callback
+{
+    AVIMLogsCommand *logsCommand = [[AVIMLogsCommand alloc] init];
+
+    logsCommand.cid  = _conversationId;
+    logsCommand.l    = LCIM_VALID_LIMIT(limit);
+
+    logsCommand.direction = (direction == AVIMMessageQueryDirectionFromOldToNew)
+        ? AVIMLogsCommand_QueryDirection_New
+        : AVIMLogsCommand_QueryDirection_Old;
+
+    AVIMMessageIntervalBound *startIntervalBound = interval.startIntervalBound;
+    AVIMMessageIntervalBound *endIntervalBound = interval.endIntervalBound;
+
+    logsCommand.mid  = startIntervalBound.messageId;
+    logsCommand.tmid = endIntervalBound.messageId;
+
+    logsCommand.tIncluded = startIntervalBound.closed;
+    logsCommand.ttIncluded = endIntervalBound.closed;
+
+    int64_t t = startIntervalBound.timestamp;
+    int64_t tt = endIntervalBound.timestamp;
+
+    if (t > 0)
+        logsCommand.t = t;
+    if (tt > 0)
+        logsCommand.tt = tt;
+
+    AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
+    genericCommand.needResponse = YES;
+    genericCommand.cmd = AVIMCommandType_Logs;
+    genericCommand.peerId = _imClient.clientId;
+    genericCommand.logsMessage = logsCommand;
+
+    [self queryMessagesFromServerWithCommand:genericCommand callback:callback];
 }
 
 - (void)postprocessMessages:(NSArray *)messages {
