@@ -1543,7 +1543,9 @@ NSArray *LCPublicKeysFromCerts(NSArray *certs) {
                 }
                 assert(_readBuffer);
                 
-                if (!_secure && self.readyState == AVIM_CONNECTING && aStream == _inputStream) {
+                // didConnect fires after certificate verification if we're using pinned certificates.
+                BOOL usingPinnedCerts = [[_urlRequest AVIM_SSLPinnedCertificates] count] > 0;
+                if ((!_secure || !usingPinnedCerts) && self.readyState == AVIM_CONNECTING && aStream == _inputStream) {
                     [self didConnect];
                 }
                 [self _pumpWriting];

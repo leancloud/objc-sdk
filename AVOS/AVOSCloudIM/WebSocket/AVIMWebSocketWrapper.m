@@ -497,11 +497,6 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
         _webSocket = [[AVIMWebSocket alloc] initWithURLRequest:request];
     }
 
-    if (self.security) {
-        request.AVIM_SSLPinnedCertificates = [self pinnedCertificates];
-        _webSocket.SSLPinningMode = AVIMSSLPinningModePublicKey;
-    }
-
     _webSocket.delegate = self;
     [_webSocket open];
 }
