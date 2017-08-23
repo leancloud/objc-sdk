@@ -93,9 +93,18 @@
 #pragma mark - Lazy loading
 
 - (LCIMConversationCacheStore *)cacheStore {
-    return _cacheStore ?: (
-        _cacheStore = [[LCIMConversationCacheStore alloc] initWithClientId:self.clientId]
-    );
+    if (_cacheStore)
+        return _cacheStore;
+
+    @synchronized (self) {
+        if (_cacheStore)
+            return _cacheStore;
+
+        _cacheStore = [[LCIMConversationCacheStore alloc] initWithClientId:self.clientId];
+        _cacheStore.client = self.client;
+
+        return _cacheStore;
+    }
 }
 
 - (LCIMConversationQueryCacheStore *)queryCacheStore {

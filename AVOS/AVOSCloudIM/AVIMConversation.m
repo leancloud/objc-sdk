@@ -1143,9 +1143,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 }
 
 - (LCIMConversationCache *)conversationCache {
-    NSString *clientId = self.clientId;
-
-    return clientId ? [[LCIMConversationCache alloc] initWithClientId:clientId] : nil;
+    return self.imClient.conversationCache;
 }
 
 - (void)cacheContinuousMessages:(NSArray *)messages {

@@ -8,11 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+@class AVIMClient;
 @class AVIMConversation;
 @class AVIMConversationOutCommand;
 
 @interface LCIMConversationCache : NSObject
 
+@property (nonatomic, weak) AVIMClient *client;
 @property (nonatomic, copy, readonly) NSString *clientId;
 
 - (instancetype)initWithClientId:(NSString *)clientId;

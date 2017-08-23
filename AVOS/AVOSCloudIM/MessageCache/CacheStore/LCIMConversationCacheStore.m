@@ -9,6 +9,7 @@
 #import "LCIMConversationCacheStore.h"
 #import "LCIMConversationCacheStoreSQL.h"
 #import "LCIMMessageCacheStoreSQL.h"
+#import "AVIMClient_Internal.h"
 #import "AVIMConversation.h"
 #import "AVIMConversation_Internal.h"
 #import "LCDatabaseMigrator.h"
@@ -141,9 +142,10 @@
 }
 
 - (AVIMConversation *)conversationWithResult:(LCResultSet *)result {
-    AVIMConversation *conversation = [[AVIMConversation alloc] init];
+    NSString *conversationId = [result stringForColumn:LCIM_FIELD_CONVERSATION_ID];
 
-    conversation.conversationId = [result stringForColumn:LCIM_FIELD_CONVERSATION_ID];
+    AVIMConversation *conversation = [self.client conversationWithId:conversationId];
+
     conversation.name           = [result stringForColumn:LCIM_FIELD_NAME];
     conversation.creator        = [result stringForColumn:LCIM_FIELD_CREATOR];
     conversation.transient      = [result boolForColumn:LCIM_FIELD_TRANSIENT];
