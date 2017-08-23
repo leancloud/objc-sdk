@@ -392,7 +392,8 @@ NSString *const kAVIMKeyConversationId = @"objectId";
     NSMutableArray *conversations = [NSMutableArray arrayWithCapacity:[results count]];
 
     for (NSDictionary *dict in results) {
-        AVIMConversation *conversation = [[AVIMConversation alloc] init];
+        NSString *conversationId = [dict objectForKey:@"objectId"];
+        AVIMConversation *conversation = [self.client conversationWithId:conversationId];
 
         /* Note:
          * We store all properties into conversation for custom attributes access.
@@ -401,7 +402,6 @@ NSString *const kAVIMKeyConversationId = @"objectId";
         conversation.properties = [dict mutableCopy];
 
         conversation.imClient = self.client;
-        NSString *conversationId = [dict objectForKey:@"objectId"];
         conversation.conversationId = conversationId;
         conversation.name = [dict objectForKey:KEY_NAME];
         conversation.attributes = [dict objectForKey:KEY_ATTR];
@@ -443,7 +443,7 @@ NSString *const kAVIMKeyConversationId = @"objectId";
 }
 
 - (LCIMConversationCache *)conversationCache {
-    return [[LCIMConversationCache alloc] initWithClientId:self.client.clientId];
+    return self.client.conversationCache;
 }
 
 /*!

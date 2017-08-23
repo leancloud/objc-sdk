@@ -8,9 +8,12 @@
 
 #import "LCIMCacheStore.h"
 
+@class AVIMClient;
 @class AVIMConversation;
 
 @interface LCIMConversationCacheStore : LCIMCacheStore
+
+@property (nonatomic, weak) AVIMClient *client;
 
 /*!
  * Cache conversations with max age.

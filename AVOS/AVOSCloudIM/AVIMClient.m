@@ -194,9 +194,18 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 - (LCIMConversationCache *)conversationCache {
-    NSString *clientId = self.clientId;
+    if (_conversationCache)
+        return _conversationCache;
 
-    return clientId ? [[LCIMConversationCache alloc] initWithClientId:clientId] : nil;
+    @synchronized (self) {
+        if (_conversationCache)
+            return _conversationCache;
+
+        _conversationCache = [[LCIMConversationCache alloc] initWithClientId:self.clientId];
+        _conversationCache.client = self;
+
+        return _conversationCache;
+    }
 }
 
 - (NSString *)clientId {
@@ -280,17 +289,20 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 - (AVIMConversation *)conversationWithId:(NSString *)conversationId {
-    if (!conversationId) {
-        
+    if (!conversationId)
         return nil;
+
+    @synchronized (self) {
+        AVIMConversation *conversation = [self conversationForId:conversationId];
+
+        if (!conversation) {
+            conversation = [[AVIMConversation alloc] initWithConversationId:conversationId];
+            conversation.imClient = self;
+            [self addConversation:conversation];
+        }
+
+        return conversation;
     }
-    AVIMConversation *conversation = [self conversationForId:conversationId];
-    if (!conversation) {
-        conversation = [[AVIMConversation alloc] initWithConversationId:conversationId];
-        conversation.imClient = self;
-        [self addConversation:conversation];
-    }
-    return conversation;
 }
 
 - (void)sendCommand:(AVIMGenericCommand *)command {

@@ -8,6 +8,7 @@
 
 #import "AVIMClient.h"
 #import "AVIMWebSocketWrapper.h"
+#import "LCIMConversationCache.h"
 
 @interface AVIMClient ()
 
@@ -31,6 +32,8 @@
 
 @property (nonatomic, assign) int64_t                lastPatchTimestamp;
 @property (nonatomic, assign) int64_t                lastUnreadTimestamp;
+
+@property (nonatomic, strong) LCIMConversationCache *conversationCache;
 
 - (void)setStatus:(AVIMClientStatus)status;
 - (AVIMConversation *)conversationWithId:(NSString *)conversationId;
