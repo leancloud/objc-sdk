@@ -1,1 +1,1 @@
-#define SDK_VERSION @"v7.1.0"
+#define SDK_VERSION @"v7.2.0"
