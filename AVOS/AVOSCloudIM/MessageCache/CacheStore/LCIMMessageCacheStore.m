@@ -81,7 +81,7 @@
 
 - (NSArray *)insertionRecordForMessage:(AVIMMessage *)message withBreakpoint:(BOOL)breakpoint {
     return @[
-        message.messageId,
+        message.messageId ?: [NSNull null],
         self.conversationId,
         message.clientId,
         [self timestampForMessage:message],
