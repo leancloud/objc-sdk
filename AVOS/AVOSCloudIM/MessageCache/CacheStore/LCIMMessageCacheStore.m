@@ -79,21 +79,6 @@
     ];
 }
 
-- (NSArray *)insertionRecordForMessage:(AVIMMessage *)message {
-    return @[
-        message.messageId,
-        self.conversationId,
-        message.clientId,
-        [self timestampForMessage:message],
-        [self receiptTimestampForMessage:message],
-        [self readTimestampForMessage:message],
-        [self patchTimestampForMessage:message],
-        [message.payload dataUsingEncoding:NSUTF8StringEncoding],
-        @(message.status),
-        @(NO)
-    ];
-}
-
 - (NSArray *)insertionRecordForMessage:(AVIMMessage *)message withBreakpoint:(BOOL)breakpoint {
     return @[
         message.messageId,
