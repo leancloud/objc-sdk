@@ -30,6 +30,9 @@
 #define LCIM_SQL_INSERT_MESSAGE \
 @"insert or replace into message (message_id, conversation_id, from_peer_id, timestamp, receipt_timestamp, read_timestamp, patch_timestamp, payload, status, breakpoint) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
+#define LCIM_SQL_REPLACE_MESSAGE \
+@"replace into message (seq, message_id, conversation_id, from_peer_id, timestamp, receipt_timestamp, read_timestamp, patch_timestamp, payload, status, breakpoint) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+
 #define LCIM_SQL_DELETE_MESSAGE \
 @"delete from message where conversation_id = ? and message_id = ?"
 
@@ -103,5 +106,8 @@ from message order by timestamp asc, message_id asc;                            
                                                                                                                  \
 drop table if exists message;                                                                                    \
 alter table message_seq rename to message;"
+
+#define LCIM_SQL_LAST_MESSAGE_SEQ \
+@"select seq from sqlite_sequence where name=\"message\""
 
 #endif

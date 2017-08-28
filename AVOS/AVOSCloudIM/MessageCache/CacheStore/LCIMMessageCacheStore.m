@@ -79,6 +79,15 @@
     ];
 }
 
+- (NSArray *)replacingRecordForMessage:(AVIMMessage *)message withBreakpoint:(BOOL)breakpoint {
+    NSAssert(message.seq > 0, @"Message must has a sequence number.");
+
+    NSMutableArray *record = [[self insertionRecordForMessage:message withBreakpoint:breakpoint] mutableCopy];
+    [record insertObject:@(message.seq) atIndex:0];
+
+    return record;
+}
+
 - (NSArray *)insertionRecordForMessage:(AVIMMessage *)message withBreakpoint:(BOOL)breakpoint {
     return @[
         message.messageId ?: [NSNull null],
@@ -100,8 +109,21 @@
 
 - (void)insertOrUpdateMessage:(AVIMMessage *)message withBreakpoint:(BOOL)breakpoint {
     LCIM_OPEN_DATABASE(db, ({
-        NSArray *args = [self insertionRecordForMessage:message withBreakpoint:breakpoint];
-        [db executeUpdate:LCIM_SQL_INSERT_MESSAGE withArgumentsInArray:args];
+        if (message.seq) {
+            NSArray *args = [self replacingRecordForMessage:message withBreakpoint:breakpoint];
+            [db executeUpdate:LCIM_SQL_REPLACE_MESSAGE withArgumentsInArray:args];
+        } else {
+            NSArray *args = [self insertionRecordForMessage:message withBreakpoint:breakpoint];
+            [db executeUpdate:LCIM_SQL_INSERT_MESSAGE withArgumentsInArray:args];
+
+            /* Assign sequence number to message. */
+            LCResultSet *resultSet = [db executeQuery:LCIM_SQL_LAST_MESSAGE_SEQ];
+
+            if ([resultSet next])
+                message.seq = [resultSet longLongIntForColumn:@"seq"];
+
+            [resultSet close];
+        }
     }));
 }
 
