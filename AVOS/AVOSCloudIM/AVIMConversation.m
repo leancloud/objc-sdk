@@ -1360,9 +1360,11 @@ static dispatch_queue_t messageCacheOperationQueue;
                                      callback:^(NSArray *messages, NSError *error)
          {
              if (!error) {
-                 [AVIMBlockHelper callArrayResultBlock:callback array:messages error:nil];
                  dispatch_async(messageCacheOperationQueue, ^{
                      [self cacheContinuousMessages:messages withBreakpoint:YES];
+
+                     NSArray *messages = [self queryMessagesFromCacheWithLimit:limit];
+                     [AVIMBlockHelper callArrayResultBlock:callback array:messages error:nil];
                  });
              } else if ([error.domain isEqualToString:NSURLErrorDomain]) {
                  /* If network has an error, fallback to query from cache */
@@ -1470,11 +1472,14 @@ static dispatch_queue_t messageCacheOperationQueue;
                      if (hasContinuous) {
                          [fetchedMessages addObjectsFromArray:continuousMessages];
                      }
-                     
-                     [AVIMBlockHelper callArrayResultBlock:callback array:fetchedMessages error:nil];
 
                      dispatch_async(messageCacheOperationQueue, ^{
                          [self cacheContinuousMessages:fetchedMessages plusMessage:fromMessage];
+
+                         NSArray *messages = [[self messageCacheStore] messagesBeforeTimestamp:timestamp
+                                                                                     messageId:messageId
+                                                                                         limit:limit];
+                         [AVIMBlockHelper callArrayResultBlock:callback array:messages error:nil];
                      });
                  }];
             } else {
