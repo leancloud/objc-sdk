@@ -71,7 +71,7 @@
 
     [migrator executeMigrations:@[
         [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
-            [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN muted INTEGER"];
+            [db executeUpdate:LCIM_SQL_MESSAGE_MIGRATION_V1];
         }],
 
         [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
@@ -79,42 +79,15 @@
         }],
 
         [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
-            [db executeUpdate:@"ALTER TABLE message ADD COLUMN read_timestamp REAL"];
+            [db executeUpdate:LCIM_SQL_MESSAGE_MIGRATION_V2];
         }],
 
         [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
-            [db executeUpdate:@"ALTER TABLE message ADD COLUMN patch_timestamp REAL"];
+            [db executeUpdate:LCIM_SQL_MESSAGE_MIGRATION_V3];
         }],
 
-        /* Add an auto-increment primary key 'seq'. It has two main purposes:
-           1. A secondary sorting for unsent message and sent message whose timestamps are the same.
-           2. An index for unsent message which the ID will change after sent.
-         */
         [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
-            NSString *statements = @("\
-CREATE TABLE IF NOT EXISTS message_seq(                                                                          \
-    seq INTEGER PRIMARY KEY AUTOINCREMENT, message_id TEXT,                                                      \
-    conversation_id TEXT, from_peer_id TEXT, timestamp REAL,                                                     \
-    receipt_timestamp REAL, read_timestamp REAL, patch_timestamp REAL,                                           \
-    payload BLOB, status INTEGER, breakpoint BOOL);                                                              \
-                                                                                                                 \
-CREATE UNIQUE INDEX IF NOT EXISTS message_unique_index ON message_seq(conversation_id, message_id, timestamp);   \
-                                                                                                                 \
-CREATE INDEX IF NOT EXISTS message_index_conversation_id ON message_seq(conversation_id);                        \
-CREATE INDEX IF NOT EXISTS message_index_message_id ON message_seq(message_id);                                  \
-CREATE INDEX IF NOT EXISTS message_index_timestamp ON message_seq(timestamp);                                    \
-                                                                                                                 \
-INSERT INTO message_seq(                                                                                         \
-    message_id, conversation_id, from_peer_id, payload, timestamp,                                               \
-    receipt_timestamp, read_timestamp, patch_timestamp, status, breakpoint)                                      \
-SELECT                                                                                                           \
-    message_id, conversation_id, from_peer_id, payload, timestamp,                                               \
-    receipt_timestamp, read_timestamp, patch_timestamp, status, breakpoint                                       \
-FROM message ORDER BY timestamp;                                                                                 \
-                                                                                                                 \
-DROP TABLE IF EXISTS message;                                                                                    \
-ALTER TABLE message_seq RENAME TO message;");
-            [db executeStatements:statements];
+            [db executeStatements:LCIM_SQL_MESSAGE_MIGRATION_V4];
         }]
     ]];
 }
