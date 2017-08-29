@@ -146,11 +146,10 @@
     LCIMMessageCacheStore *cacheStore = [self cacheStoreWithConversationId:conversationId];
 
     for (AVIMMessage *message in messages) {
-        NSString *messageId = message.messageId;
         AVIMMessage *nextMessage = [self nextMessageForMessage:message conversationId:conversationId];
 
         [cacheStore updateBreakpoint:YES forMessage:nextMessage];
-        [cacheStore deleteMessageForId:messageId];
+        [cacheStore deleteMessage:message];
     }
 }
 

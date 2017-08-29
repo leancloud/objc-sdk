@@ -28,7 +28,7 @@
 
 - (void)updateEntries:(NSDictionary<NSString *, id> *)entries forMessageId:(NSString *)messageId;
 
-- (void)deleteMessageForId:(NSString *)messageId;
+- (void)deleteMessage:(AVIMMessage *)message;
 
 - (BOOL)containMessage:(AVIMMessage *)message;
 

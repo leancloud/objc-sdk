@@ -34,7 +34,7 @@
 @"replace into message (seq, message_id, conversation_id, from_peer_id, timestamp, receipt_timestamp, read_timestamp, patch_timestamp, payload, status, breakpoint) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
 #define LCIM_SQL_DELETE_MESSAGE \
-@"delete from message where conversation_id = ? and message_id = ?"
+@"delete from message where conversation_id = ? and (seq = ? or (message_id is not null and message_id = ?))"
 
 #define LCIM_SQL_UPDATE_MESSAGE_BREAKPOINT \
 @"update message set breakpoint = ? where conversation_id = ? and message_id = ?"

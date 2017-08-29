@@ -188,11 +188,13 @@
     }));
 }
 
-- (void)deleteMessageForId:(NSString *)messageId {
-    if (!messageId)
-        return;
+- (void)deleteMessage:(AVIMMessage *)message {
     LCIM_OPEN_DATABASE(db, ({
-        NSArray *args = @[self.conversationId, messageId];
+        NSArray *args = @[
+            self.conversationId,
+            @(message.seq),
+            message.messageId ?: [NSNull null]
+        ];
         [db executeUpdate:LCIM_SQL_DELETE_MESSAGE withArgumentsInArray:args];
     }));
 }

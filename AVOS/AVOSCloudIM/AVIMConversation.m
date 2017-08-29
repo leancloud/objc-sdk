@@ -1185,7 +1185,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 }
 
 - (void)removeMessageFromCache:(AVIMMessage *)message {
-    [[self messageCacheStore] deleteMessageForId:message.messageId];
+    [[self messageCacheStore] deleteMessage:message];
 }
 
 #pragma mark - Message Query
