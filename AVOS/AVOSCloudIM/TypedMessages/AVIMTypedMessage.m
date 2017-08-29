@@ -150,10 +150,6 @@ NSMutableDictionary const *_typeDict = nil;
     AVIMTypedMessage *message = [super copyWithZone:zone];
     if (message) {
         message.messageObject = self.messageObject;
-//        message.mediaType = self.mediaType;
-//        message.text = self.text;
-////        message.attachmentUrl = self.attachmentUrl;
-//        message.attributes = self.attributes;
         message.file = self.file;
         message.location = self.location;
     }
