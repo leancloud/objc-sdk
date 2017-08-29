@@ -96,6 +96,8 @@ create index if not exists message_index_conversation_id on message_seq(conversa
 create index if not exists message_index_message_id on message_seq(message_id);                                  \
 create index if not exists message_index_timestamp on message_seq(timestamp);                                    \
                                                                                                                  \
+drop index if exists unique_index;                                                                               \
+                                                                                                                 \
 insert into message_seq(                                                                                         \
     message_id, conversation_id, from_peer_id, payload, timestamp,                                               \
     receipt_timestamp, read_timestamp, patch_timestamp, status, breakpoint)                                      \
