@@ -284,6 +284,7 @@
         message = [[AVIMMessage alloc] init];
     }
 
+    message.seq                = [record longLongIntForColumn:@"seq"];
     message.messageId          = [record stringForColumn:LCIM_FIELD_MESSAGE_ID];
     message.conversationId     = [record stringForColumn:LCIM_FIELD_CONVERSATION_ID];
     message.clientId           = [record stringForColumn:LCIM_FIELD_FROM_PEER_ID];
