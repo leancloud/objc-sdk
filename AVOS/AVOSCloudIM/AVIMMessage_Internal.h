@@ -66,4 +66,7 @@
 @property (nonatomic, assign) int64_t deliveredTimestamp;
 @property (nonatomic, assign) int64_t readTimestamp;
 
+/* Sequence number in cache store. */
+@property (nonatomic, assign) long long seq;
+
 @end
