@@ -167,6 +167,8 @@
 }
 
 - (void)deleteMessageForId:(NSString *)messageId {
+    if (!messageId)
+        return;
     LCIM_OPEN_DATABASE(db, ({
         NSArray *args = @[self.conversationId, messageId];
         [db executeUpdate:LCIM_SQL_DELETE_MESSAGE withArgumentsInArray:args];

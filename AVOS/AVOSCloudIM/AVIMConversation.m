@@ -1177,6 +1177,17 @@ static dispatch_queue_t messageCacheOperationQueue;
     [[self messageCacheStore] cleanCache];
 }
 
+- (void)addMessageToCache:(AVIMMessage *)message {
+    message.clientId = _imClient.clientId;
+    message.conversationId = _conversationId;
+
+    [[self messageCacheStore] insertMessage:message];
+}
+
+- (void)removeMessageFromCache:(AVIMMessage *)message {
+    [[self messageCacheStore] deleteMessageForId:message.messageId];
+}
+
 #pragma mark - Message Query
 
 - (void)sendACKIfNeeded:(NSArray *)messages {
