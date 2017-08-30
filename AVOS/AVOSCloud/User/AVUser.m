@@ -232,19 +232,26 @@ static BOOL enableAutomatic = NO;
 
 -(NSMutableDictionary *)userDictionary
 {
+    NSString *username = self.username;
+    NSString *password = self.password;
+    NSString *email = self.email;
+    NSString *mobilePhoneNumber = self.mobilePhoneNumber;
+
     NSMutableDictionary * parameters = [[NSMutableDictionary alloc] init];
-    if (self.username) {
-        [parameters setObject:self.username forKey:usernameTag];
+
+    if (username) {
+        [parameters setObject:username forKey:usernameTag];
     }
-    if (self.password) {
-        [parameters setObject:self.password forKey:passwordTag];
+    if (password) {
+        [parameters setObject:password forKey:passwordTag];
     }
-    if (self.email) {
-        [parameters setObject:self.email forKey:emailTag];
+    if (email) {
+        [parameters setObject:email forKey:emailTag];
     }
-    if (self.mobilePhoneNumber) {
-        [parameters setObject:self.mobilePhoneNumber forKey:mobilePhoneNumberTag];
+    if (mobilePhoneNumber) {
+        [parameters setObject:mobilePhoneNumber forKey:mobilePhoneNumberTag];
     }
+
     return parameters;
 }
 
