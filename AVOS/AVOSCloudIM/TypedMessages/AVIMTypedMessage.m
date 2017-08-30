@@ -99,25 +99,12 @@ NSMutableDictionary const *_typeDict = nil;
 }
 
 + (instancetype)messageWithText:(NSString *)text
-                      mediaType:(AVIMMessageMediaType)mediaType
                attachedFilePath:(NSString *)attachedFilePath
                      attributes:(NSDictionary *)attributes {
-    AVIMTypedMessage *message = [[self alloc] init];
-    message.text = text;
-    message.mediaType = mediaType;
-    message.attributes = attributes;
-    message.attachedFilePath = attachedFilePath;
-    return message;
-}
+    NSString *name = [attachedFilePath lastPathComponent];
+    AVFile   *file = [AVFile fileWithName:name contentsAtPath:attachedFilePath];
 
-+ (instancetype)messageWithText:(NSString *)text
-               attachedFilePath:(NSString *)attachedFilePath
-                     attributes:(NSDictionary *)attributes {
-    AVIMTypedMessage *message = [[self alloc] init];
-    message.text = text;
-    message.attributes = attributes;
-    message.attachedFilePath = attachedFilePath;
-    return message;
+    return [self messageWithText:text file:file attributes:attributes];
 }
 
 + (instancetype)messageWithText:(NSString *)text
@@ -163,11 +150,6 @@ NSMutableDictionary const *_typeDict = nil;
     AVIMTypedMessage *message = [super copyWithZone:zone];
     if (message) {
         message.messageObject = self.messageObject;
-//        message.mediaType = self.mediaType;
-//        message.text = self.text;
-////        message.attachmentUrl = self.attachmentUrl;
-//        message.attributes = self.attributes;
-        message.attachedFilePath = self.attachedFilePath;
         message.file = self.file;
         message.location = self.location;
     }
@@ -178,7 +160,6 @@ NSMutableDictionary const *_typeDict = nil;
     [super encodeWithCoder:coder];
     NSData *data = [self.messageObject messagePack];
     [coder encodeObject:data forKey:@"typedMessage"];
-    [coder encodeObject:self.attachedFilePath forKey:@"attachedFilePath"];
 }
 
 - (instancetype)init {
@@ -194,10 +175,8 @@ NSMutableDictionary const *_typeDict = nil;
 - (id)initWithCoder:(NSCoder *)coder {
     if ((self = [super initWithCoder:coder])) {
         NSData *data = [coder decodeObjectForKey:@"typedMessage"];
-        NSString *attachedFilePath = [coder decodeObjectForKey:@"attachedFilePath"];
         AVIMTypedMessageObject *object = [[AVIMTypedMessageObject alloc] initWithMessagePack:data];
         self.messageObject = object;
-        self.attachedFilePath = attachedFilePath;
         self.file = [[self class] fileFromDictionary:object._lcfile];
         self.location = [[self class] locationFromDictionary:object._lcloc];
     }

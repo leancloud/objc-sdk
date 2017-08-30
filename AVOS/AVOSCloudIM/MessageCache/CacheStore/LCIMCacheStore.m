@@ -71,7 +71,7 @@
 
     [migrator executeMigrations:@[
         [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
-            [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN muted INTEGER"];
+            [db executeUpdate:LCIM_SQL_MESSAGE_MIGRATION_V1];
         }],
 
         [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
@@ -79,11 +79,15 @@
         }],
 
         [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
-            [db executeUpdate:@"ALTER TABLE message ADD COLUMN read_timestamp REAL"];
+            [db executeUpdate:LCIM_SQL_MESSAGE_MIGRATION_V2];
         }],
 
         [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
-            [db executeUpdate:@"ALTER TABLE message ADD COLUMN patch_timestamp REAL"];
+            [db executeUpdate:LCIM_SQL_MESSAGE_MIGRATION_V3];
+        }],
+
+        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
+            [db executeStatements:LCIM_SQL_MESSAGE_MIGRATION_V4];
         }]
     ]];
 }

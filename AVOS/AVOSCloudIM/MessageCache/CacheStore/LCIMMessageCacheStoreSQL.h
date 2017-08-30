@@ -24,120 +24,92 @@
 
 #define LCIM_INDEX_MESSAGE              @"unique_index"
 
-#define LCIM_SQL_CREATE_MESSAGE_TABLE                        \
-    @"CREATE TABLE IF NOT EXISTS " LCIM_TABLE_MESSAGE @" ("  \
-        LCIM_FIELD_MESSAGE_ID           @" TEXT, "           \
-        LCIM_FIELD_CONVERSATION_ID      @" TEXT, "           \
-        LCIM_FIELD_FROM_PEER_ID         @" TEXT, "           \
-        LCIM_FIELD_TIMESTAMP            @" REAL, "           \
-        LCIM_FIELD_RECEIPT_TIMESTAMP    @" REAL, "           \
-        LCIM_FIELD_PAYLOAD              @" BLOB, "           \
-        LCIM_FIELD_STATUS               @" INTEGER, "        \
-        LCIM_FIELD_BREAKPOINT           @" BOOL, "           \
-        @"PRIMARY KEY(" LCIM_FIELD_MESSAGE_ID @")"           \
-    @")"
+#define LCIM_SQL_SELECT_NEXT_MESSAGE \
+@"select * from message where conversation_id = ? and (timestamp > ? or (timestamp = ? and message_id > ?)) order by timestamp, message_id limit 1"
 
-#define LCIM_SQL_CREATE_MESSAGE_UNIQUE_INDEX                   \
-@"CREATE UNIQUE INDEX IF NOT EXISTS " LCIM_INDEX_MESSAGE @" "  \
-    @"ON " LCIM_TABLE_MESSAGE @"("                             \
-        LCIM_FIELD_CONVERSATION_ID  @", "                      \
-        LCIM_FIELD_MESSAGE_ID       @", "                      \
-        LCIM_FIELD_TIMESTAMP                                   \
-    @")"
+#define LCIM_SQL_INSERT_MESSAGE \
+@"insert or replace into message (message_id, conversation_id, from_peer_id, timestamp, receipt_timestamp, read_timestamp, patch_timestamp, payload, status, breakpoint) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
-#define LCIM_SQL_INSERT_MESSAGE                           \
-    @"INSERT OR REPLACE INTO " LCIM_TABLE_MESSAGE  @" ("  \
-        LCIM_FIELD_MESSAGE_ID           @", "             \
-        LCIM_FIELD_CONVERSATION_ID      @", "             \
-        LCIM_FIELD_FROM_PEER_ID         @", "             \
-        LCIM_FIELD_TIMESTAMP            @", "             \
-        LCIM_FIELD_RECEIPT_TIMESTAMP    @", "             \
-        LCIM_FIELD_READ_TIMESTAMP       @", "             \
-        LCIM_FIELD_PATCH_TIMESTAMP      @", "             \
-        LCIM_FIELD_PAYLOAD              @", "             \
-        LCIM_FIELD_STATUS               @", "             \
-        LCIM_FIELD_BREAKPOINT                             \
-    @") VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+#define LCIM_SQL_REPLACE_MESSAGE \
+@"replace into message (seq, message_id, conversation_id, from_peer_id, timestamp, receipt_timestamp, read_timestamp, patch_timestamp, payload, status, breakpoint) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
-#define LCIM_SQL_UPDATE_MESSAGE                     \
-    @"UPDATE " LCIM_TABLE_MESSAGE        @" "       \
-    @"SET "                                         \
-        LCIM_FIELD_FROM_PEER_ID          @" = ?, "  \
-        LCIM_FIELD_TIMESTAMP             @" = ?, "  \
-        LCIM_FIELD_RECEIPT_TIMESTAMP     @" = ?, "  \
-        LCIM_FIELD_READ_TIMESTAMP        @" = ?, "  \
-        LCIM_FIELD_PATCH_TIMESTAMP       @" = ?, "  \
-        LCIM_FIELD_PAYLOAD               @" = ?, "  \
-        LCIM_FIELD_STATUS                @" = ? "   \
-    @"WHERE " LCIM_FIELD_CONVERSATION_ID @" = ? "   \
-    @"AND " LCIM_FIELD_MESSAGE_ID @" = ?"
+#define LCIM_SQL_DELETE_MESSAGE \
+@"delete from message where conversation_id = ? and (seq = ? or (message_id is not null and message_id = ?))"
 
-#define LCIM_SQL_UPDATE_MESSAGE_ENTRIES_FMT         \
-    @"UPDATE " LCIM_TABLE_MESSAGE        @" "       \
-    @"SET %@ "                                      \
-    @"WHERE " LCIM_FIELD_CONVERSATION_ID @" = ? "   \
-    @"AND " LCIM_FIELD_MESSAGE_ID @" = ?"
+#define LCIM_SQL_UPDATE_MESSAGE_BREAKPOINT \
+@"update message set breakpoint = ? where conversation_id = ? and message_id = ?"
 
-#define LCIM_SQL_MESSAGE_WHERE_CLAUSE              \
-    @"WHERE " LCIM_FIELD_CONVERSATION_ID @" = ? "  \
-    @"AND " LCIM_FIELD_MESSAGE_ID @" = ?"
+#define LCIM_SQL_UPDATE_MESSAGE \
+@"update message set from_peer_id = ?, timestamp = ?, receipt_timestamp = ?, read_timestamp = ?, patch_timestamp = ?, payload = ?, status = ? where conversation_id = ? and message_id = ?"
 
-#define LCIM_SQL_SELECT_MESSAGE_BY_ID              \
-    @"SELECT * FROM " LCIM_TABLE_MESSAGE @" "      \
-    LCIM_SQL_MESSAGE_WHERE_CLAUSE
+#define LCIM_SQL_SELECT_MESSAGE_LESS_THAN_TIMESTAMP \
+@"select * from message where conversation_id = ? and timestamp < ? order by timestamp desc limit ?"
 
-#define LCIM_SQL_SELECT_TIMESTAMP  \
-    @"SELECT " LCIM_FIELD_TIMESTAMP @" FROM " LCIM_TABLE_MESSAGE @" "  \
-    LCIM_SQL_MESSAGE_WHERE_CLAUSE
+#define LCIM_SQL_CREATE_MESSAGE_TABLE \
+@"create table if not exists message (message_id text, conversation_id text, from_peer_id text, timestamp real, receipt_timestamp real, payload blob, status integer, breakpoint bool, primary key(message_id))"
 
-#define LCIM_SQL_SELECT_MESSAGE_LESS_THAN_TIMESTAMP  \
-    @"SELECT * FROM " LCIM_TABLE_MESSAGE @" "        \
-    @"WHERE " LCIM_FIELD_CONVERSATION_ID @" = ? "    \
-    @"AND " LCIM_FIELD_TIMESTAMP @" < ? "            \
-    @"ORDER BY " LCIM_FIELD_TIMESTAMP @" DESC "      \
-    @"LIMIT ?"
+#define LCIM_SQL_SELECT_MESSAGE_BY_ID \
+@"select * from message where conversation_id = ? and message_id = ?"
 
-#define LCIM_SQL_SELECT_MESSAGE_LESS_THAN_TIMESTAMP_AND_ID  \
-    @"SELECT * FROM " LCIM_TABLE_MESSAGE @" "               \
-    @"WHERE " LCIM_FIELD_CONVERSATION_ID @" = ? "           \
-    @"AND (" LCIM_FIELD_TIMESTAMP @" < ? OR (" LCIM_FIELD_TIMESTAMP @" = ? AND " LCIM_FIELD_MESSAGE_ID @" < ?)) "  \
-    @"ORDER BY " LCIM_FIELD_TIMESTAMP @" DESC, " LCIM_FIELD_MESSAGE_ID @" DESC "  \
-    @"LIMIT ?"
+#define LCIM_SQL_DELETE_ALL_MESSAGES_OF_CONVERSATION \
+@"delete from message where conversation_id = ?"
 
-#define LCIM_SQL_SELECT_NEXT_MESSAGE               \
-    @"SELECT * FROM " LCIM_TABLE_MESSAGE @" "      \
-    @"WHERE " LCIM_FIELD_CONVERSATION_ID @" = ? "  \
-    @"AND (" LCIM_FIELD_TIMESTAMP @" > ? OR (" LCIM_FIELD_TIMESTAMP @" = ? AND " LCIM_FIELD_MESSAGE_ID @" > ?)) "  \
-    @"ORDER BY " LCIM_FIELD_TIMESTAMP @", " LCIM_FIELD_MESSAGE_ID @" "  \
-    @"LIMIT 1"
+#define LCIM_SQL_CREATE_MESSAGE_UNIQUE_INDEX \
+@"create unique index if not exists unique_index on message(conversation_id, message_id, timestamp)"
 
-#define LCIM_SQL_UPDATE_MESSAGE_BREAKPOINT        \
-    @"UPDATE " LCIM_TABLE_MESSAGE @" "            \
-    @"SET " LCIM_FIELD_BREAKPOINT @" = ? "        \
-    LCIM_SQL_MESSAGE_WHERE_CLAUSE
+#define LCIM_SQL_LATEST_MESSAGE \
+@"select * from message where conversation_id = ? order by timestamp desc limit ?"
 
-#define LCIM_SQL_DELETE_MESSAGE             \
-    @"DELETE FROM " LCIM_TABLE_MESSAGE @" " \
-    LCIM_SQL_MESSAGE_WHERE_CLAUSE
+#define LCIM_SQL_CLEAN_MESSAGE \
+@"delete from message where conversation_id = ?"
 
-#define LCIM_SQL_DELETE_ALL_MESSAGES_OF_CONVERSATION  \
-    @"DELETE FROM " LCIM_TABLE_MESSAGE @" "           \
-    @"WHERE " LCIM_FIELD_CONVERSATION_ID @" = ?"      \
+#define LCIM_SQL_SELECT_MESSAGE_LESS_THAN_TIMESTAMP_AND_ID \
+@"select * from message where conversation_id = ? and (timestamp < ? or (timestamp = ? and message_id < ?)) order by timestamp desc, message_id desc limit ?"
 
-#define LCIM_SQL_LATEST_MESSAGE  \
-    @"SELECT * FROM " LCIM_TABLE_MESSAGE @" "      \
-    @"WHERE " LCIM_FIELD_CONVERSATION_ID @" = ? "  \
-    @"ORDER BY " LCIM_FIELD_TIMESTAMP @" DESC "    \
-    @"LIMIT ?"
+#define LCIM_SQL_LATEST_NO_BREAKPOINT_MESSAGE \
+@"select *, max(timestamp) from message where conversation_id = ? and breakpoint = 0"
 
-#define LCIM_SQL_LATEST_NO_BREAKPOINT_MESSAGE      \
-    @"SELECT *, MAX(" LCIM_FIELD_TIMESTAMP @") "   \
-    @"FROM " LCIM_TABLE_MESSAGE @" "               \
-    @"WHERE " LCIM_FIELD_CONVERSATION_ID @" = ? "  \
-    @"AND " LCIM_FIELD_BREAKPOINT @" = 0"
+#define LCIM_SQL_UPDATE_MESSAGE_ENTRIES_FMT \
+@"update message set %@ where conversation_id = ? and message_id = ?"
 
-#define LCIM_SQL_CLEAN_MESSAGE                    \
-    @"DELETE FROM " LCIM_TABLE_MESSAGE   @" "     \
-    @"WHERE " LCIM_FIELD_CONVERSATION_ID @" = ?"
+#define LCIM_SQL_MESSAGE_MIGRATION_V1 \
+@"alter table conversation add column muted integer"
+
+#define LCIM_SQL_MESSAGE_MIGRATION_V2 \
+@"alter table message add column read_timestamp real"
+
+#define LCIM_SQL_MESSAGE_MIGRATION_V3 \
+@"alter table message add column patch_timestamp real"
+
+/* Add an auto-increment primary key 'seq' as index for unsent message which the message id will change after sent. */
+
+#define LCIM_SQL_MESSAGE_MIGRATION_V4 \
+@"create table if not exists message_seq(                                                                        \
+    seq integer primary key autoincrement, message_id text,                                                      \
+    conversation_id text, from_peer_id text, timestamp real,                                                     \
+    receipt_timestamp real, read_timestamp real, patch_timestamp real,                                           \
+    payload blob, status integer, breakpoint bool);                                                              \
+                                                                                                                 \
+create unique index if not exists message_unique_index on message_seq(conversation_id, message_id, timestamp);   \
+                                                                                                                 \
+create index if not exists message_index_conversation_id on message_seq(conversation_id);                        \
+create index if not exists message_index_message_id on message_seq(message_id);                                  \
+create index if not exists message_index_timestamp on message_seq(timestamp);                                    \
+                                                                                                                 \
+drop index if exists unique_index;                                                                               \
+                                                                                                                 \
+insert into message_seq(                                                                                         \
+    message_id, conversation_id, from_peer_id, payload, timestamp,                                               \
+    receipt_timestamp, read_timestamp, patch_timestamp, status, breakpoint)                                      \
+select                                                                                                           \
+    message_id, conversation_id, from_peer_id, payload, timestamp,                                               \
+    receipt_timestamp, read_timestamp, patch_timestamp, status, breakpoint                                       \
+from message order by timestamp asc, message_id asc;                                                             \
+                                                                                                                 \
+drop table if exists message;                                                                                    \
+alter table message_seq rename to message;"
+
+#define LCIM_SQL_LAST_MESSAGE_SEQ \
+@"select seq from sqlite_sequence where name=\"message\""
 
 #endif

@@ -792,46 +792,22 @@ static dispatch_queue_t messageCacheOperationQueue;
     
     if ([message isKindOfClass:[AVIMTypedMessage class]]) {
         AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)message;
-        
-        AVFile *file = nil;
-        
-        if (typedMessage.file) {
-            file = typedMessage.file;
-        } else if (typedMessage.attachedFilePath) {
-            NSString *attachedFilePath = typedMessage.attachedFilePath;
-            
-            if (![[NSFileManager defaultManager] fileExistsAtPath:attachedFilePath]) {
-                [AVIMBlockHelper callBooleanResultBlock:callback error:[AVErrorUtils fileNotFoundError]];
-                return;
-            }
-            
-            NSString *name = [attachedFilePath lastPathComponent];
-            
-            file = [AVFile fileWithName:name contentsAtPath:attachedFilePath];
-        }
+        AVFile *file = typedMessage.file;
         
         if (file) {
-            if ([file isDirty]) {
-                /* File need to be uploaded */
-                [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    if (succeeded) {
-                        /* If uploading is success, bind file to message */
-                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                            [self fillTypedMessage:typedMessage withFile:file];
-                            [self fillTypedMessageForLocationIfNeeded:typedMessage];
-                            [self sendRealMessage:message option:option callback:callback];
-                        });
-                    } else {
-                        message.status = AVIMMessageStatusFailed;
-                        [AVIMBlockHelper callBooleanResultBlock:callback error:error];
-                    }
-                } progressBlock:progressBlock];
-            } else {
-                /* File has already been uploaded, bind file to message */
-                [self fillTypedMessage:typedMessage withFile:file];
-                [self fillTypedMessageForLocationIfNeeded:typedMessage];
-                [self sendRealMessage:message option:option callback:callback];
-            }
+            [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (succeeded) {
+                    /* If uploading is success, bind file to message */
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        [self fillTypedMessage:typedMessage withFile:file];
+                        [self fillTypedMessageForLocationIfNeeded:typedMessage];
+                        [self sendRealMessage:message option:option callback:callback];
+                    });
+                } else {
+                    message.status = AVIMMessageStatusFailed;
+                    [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+                }
+            } progressBlock:progressBlock];
         } else {
             [self fillTypedMessageForLocationIfNeeded:typedMessage];
             [self sendRealMessage:message option:option callback:callback];
@@ -987,7 +963,7 @@ static dispatch_queue_t messageCacheOperationQueue;
                     self.lastMessage = message;
                 }
                 if (!directCommand.transient && self.imClient.messageQueryCacheEnabled) {
-                    [[self messageCacheStore] insertMessage:message withBreakpoint:NO];
+                    [[self messageCacheStore] insertOrUpdateMessage:message withBreakpoint:NO];
                 }
                 if (!transient) {
                     if (directOutCommand.r) {
@@ -1167,7 +1143,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     if (breakpoint) {
         [[self messageCache] addContinuousMessages:messages forConversationId:self.conversationId];
     } else {
-        [[self messageCacheStore] insertMessages:messages];
+        [[self messageCacheStore] insertOrUpdateMessages:messages];
     }
 
     [self messagesDidCache];
@@ -1199,6 +1175,17 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (void)removeCachedMessages {
     [[self messageCacheStore] cleanCache];
+}
+
+- (void)addMessageToCache:(AVIMMessage *)message {
+    message.clientId = _imClient.clientId;
+    message.conversationId = _conversationId;
+
+    [[self messageCacheStore] insertOrUpdateMessage:message];
+}
+
+- (void)removeMessageFromCache:(AVIMMessage *)message {
+    [[self messageCacheStore] deleteMessage:message];
 }
 
 #pragma mark - Message Query
@@ -1373,9 +1360,11 @@ static dispatch_queue_t messageCacheOperationQueue;
                                      callback:^(NSArray *messages, NSError *error)
          {
              if (!error) {
-                 [AVIMBlockHelper callArrayResultBlock:callback array:messages error:nil];
                  dispatch_async(messageCacheOperationQueue, ^{
                      [self cacheContinuousMessages:messages withBreakpoint:YES];
+
+                     NSArray *messages = [self queryMessagesFromCacheWithLimit:limit];
+                     [AVIMBlockHelper callArrayResultBlock:callback array:messages error:nil];
                  });
              } else if ([error.domain isEqualToString:NSURLErrorDomain]) {
                  /* If network has an error, fallback to query from cache */
@@ -1483,11 +1472,14 @@ static dispatch_queue_t messageCacheOperationQueue;
                      if (hasContinuous) {
                          [fetchedMessages addObjectsFromArray:continuousMessages];
                      }
-                     
-                     [AVIMBlockHelper callArrayResultBlock:callback array:fetchedMessages error:nil];
 
                      dispatch_async(messageCacheOperationQueue, ^{
                          [self cacheContinuousMessages:fetchedMessages plusMessage:fromMessage];
+
+                         NSArray *messages = [[self messageCacheStore] messagesBeforeTimestamp:timestamp
+                                                                                     messageId:messageId
+                                                                                         limit:limit];
+                         [AVIMBlockHelper callArrayResultBlock:callback array:messages error:nil];
                      });
                  }];
             } else {

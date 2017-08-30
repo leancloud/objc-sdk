@@ -120,7 +120,7 @@
     BOOL newestMessageExisted = [cacheStore containMessage:newestMessage];
 
     /* Insert messages and remove their breakpoints */
-    [cacheStore insertMessages:newerMessages];
+    [cacheStore insertOrUpdateMessages:newerMessages];
 
     if (!newestMessageExisted) {
         AVIMMessage *nextMessage = [self nextMessageForMessage:newestMessage conversationId:conversationId];
@@ -137,7 +137,7 @@
     if ([cacheStore containMessage:message]) {
         [cacheStore updateMessageWithoutBreakpoint:message];
     } else {
-        [cacheStore insertMessage:message];
+        [cacheStore insertOrUpdateMessage:message];
         [cacheStore updateBreakpoint:YES forMessage:message];
     }
 }
@@ -146,11 +146,10 @@
     LCIMMessageCacheStore *cacheStore = [self cacheStoreWithConversationId:conversationId];
 
     for (AVIMMessage *message in messages) {
-        NSString *messageId = message.messageId;
         AVIMMessage *nextMessage = [self nextMessageForMessage:message conversationId:conversationId];
 
         [cacheStore updateBreakpoint:YES forMessage:nextMessage];
-        [cacheStore deleteMessageForId:messageId];
+        [cacheStore deleteMessage:message];
     }
 }
 

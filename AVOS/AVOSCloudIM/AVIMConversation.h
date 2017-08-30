@@ -345,6 +345,20 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
 - (void)recallMessage:(AVIMMessage *)oldMessage callback:(void(^)(BOOL succeeded, NSError * _Nullable error, AVIMRecalledMessage * _Nullable recalledMessage))callback;
 
 /*!
+ Add a message to cache.
+
+ @param message The message to be cached.
+ */
+- (void)addMessageToCache:(AVIMMessage *)message;
+
+/*!
+ Remove a message from cache.
+
+ @param message The message which you want to remove from cache.
+ */
+- (void)removeMessageFromCache:(AVIMMessage *)message;
+
+/*!
  从服务端拉取该会话的最近 limit 条消息。
  @param limit 返回结果的数量，默认 20 条，最多 1000 条。
  @param callback 查询结果回调。

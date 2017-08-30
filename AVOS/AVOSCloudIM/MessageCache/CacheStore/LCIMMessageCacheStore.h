@@ -16,9 +16,10 @@
 
 - (instancetype)initWithClientId:(NSString *)clientId conversationId:(NSString *)conversationId;
 
-- (void)insertMessages:(NSArray *)messages;
-- (void)insertMessage:(AVIMMessage *)message;
-- (void)insertMessage:(AVIMMessage *)message withBreakpoint:(BOOL)breakpoint;
+- (void)insertOrUpdateMessage:(AVIMMessage *)message;
+- (void)insertOrUpdateMessage:(AVIMMessage *)message withBreakpoint:(BOOL)breakpoint;
+
+- (void)insertOrUpdateMessages:(NSArray<AVIMMessage *> *)messages;
 
 - (void)updateBreakpoint:(BOOL)breakpoint forMessages:(NSArray *)messages;
 - (void)updateBreakpoint:(BOOL)breakpoint forMessage:(AVIMMessage *)message;
@@ -27,7 +28,7 @@
 
 - (void)updateEntries:(NSDictionary<NSString *, id> *)entries forMessageId:(NSString *)messageId;
 
-- (void)deleteMessageForId:(NSString *)messageId;
+- (void)deleteMessage:(AVIMMessage *)message;
 
 - (BOOL)containMessage:(AVIMMessage *)message;
 
