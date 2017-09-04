@@ -133,8 +133,8 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  Set what server will issues for offline messages when client did login.
 
- @param enabled Set `YES` if you want server issues concrete offline messages.
-                Set `NO` if you want server just issues the count of offline messages in each conversation.
+ @param enabled Set `YES` if you want server just issues the count of offline messages in each conversation.
+                Set `NO` if you want server issues concrete offline messages.
                 Defaults to `NO`.
  */
 + (void)setUnreadNotificationEnabled:(BOOL)enabled;
