@@ -300,18 +300,20 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
         goto found;
     }
 
-    cachedHost = [self cachedServerTableForKey:LCAppRouterCacheKey][module];
-
-    if (cachedHost) {
-        host = cachedHost;
-        goto found;
-    }
-
     switch (self.serverLocation) {
     case LCServerLocationUCloud:
-        host = [self lncldServerForModule:module] ?: [self fallbackAPIURLString]; break;
+        cachedHost = [self cachedServerTableForKey:LCAppRouterCacheKey][module];
+
+        if (cachedHost) {
+            host = cachedHost;
+            goto found;
+        }
+
+        host = [self lncldServerForModule:module] ?: [self fallbackAPIURLString];
+        break;
     default:
-        host = [self fallbackAPIURLString]; break;
+        host = [self fallbackAPIURLString];
+        break;
     }
 
 found:
