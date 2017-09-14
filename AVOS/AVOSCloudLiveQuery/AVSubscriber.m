@@ -33,7 +33,6 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 @interface AVSubscriber ()
 
 @property (nonatomic, assign) BOOL alive;
-@property (nonatomic, assign) BOOL inKeepAlive;
 @property (nonatomic, assign) dispatch_once_t loginOnceToken;
 @property (nonatomic,   weak) AVIMWebSocketWrapper *webSocket;
 @property (nonatomic, strong) AVExponentialTimer   *backoffTimer;
@@ -139,12 +138,11 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 
 - (void)webSocketDidReceiveError:(NSNotification *)notification {
     self.alive = NO;
-    [self keepAlive];
+    [self keepAliveIntermittently];
 }
 
 - (void)webSocketDidClose:(NSNotification *)notification {
     self.alive = NO;
-    [self keepAlive];
 }
 
 - (AVIMGenericCommand *)makeLoginCommand {
@@ -188,13 +186,12 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 
 - (void)keepAliveIntermittently {
     if (self.alive) {
-        self.inKeepAlive = NO;
         return;
     }
 
     [self loginWithCallback:^(BOOL succeeded, NSError *error) {
-        if (self.alive) {
-            self.inKeepAlive = NO;
+        if (succeeded) {
+            self.alive = YES;
             return;
         }
 
@@ -211,11 +208,6 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 
 - (void)keepAlive {
     @synchronized (self) {
-        if (self.inKeepAlive) {
-            return;
-        }
-
-        self.inKeepAlive = YES;
         [self.backoffTimer reset];
         [self keepAliveIntermittently];
     }
