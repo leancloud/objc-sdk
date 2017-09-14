@@ -215,6 +215,13 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
     [request setValue:USER_AGENT    forHTTPHeaderField:@"User-Agent"];
     [request setValue:file.mimeType forHTTPHeaderField:@"Content-Type"];
 
+    // Set a default cache control.
+    [request setValue:@"public, max-age=31536000" forHTTPHeaderField:@"Cache-Control"];
+
+    for (NSString *key in file.uploadingHeaders) {
+        [request setValue:file.uploadingHeaders[key] forHTTPHeaderField:key];
+    }
+
     request.HTTPMethod = @"PUT";
     request.HTTPBody = file.data;
 

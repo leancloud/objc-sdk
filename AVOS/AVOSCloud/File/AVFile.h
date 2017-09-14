@@ -101,6 +101,15 @@ The name of the file.
 @property (nonatomic, strong, nullable) AVACL *ACL;
 
 /*!
+ Request headers for file uploading.
+
+ Some file hosting services allow you set custom headers in uploading request.
+ Currently, it only supports files in US node, aka. the files hosted on AmazonS3.
+ See http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPUT.html for all request headers.
+ */
+@property (nonatomic, strong, nullable) NSDictionary<NSString *, NSString *> *uploadingHeaders;
+
+/*!
  Saves the file.
  @return whether the save succeeded.
  */
