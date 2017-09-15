@@ -450,17 +450,6 @@ static NSString *const kAVOnlineConfig = @"AVOS_ONLINE_CONFIG";
     [self postRecording];
 }
 
--(AVReportPolicy)reportPolicy {
-    BOOL debug = [AVAnalyticsUtils inDebug];
-    if (_reportPolicy == AV_REALTIME && !debug) {
-        return AV_BATCH;
-    }
-    if (_reportPolicy == AV_SENDWIFIONLY && !debug) {
-        return AV_BATCH;
-    }
-    return _reportPolicy;
-}
-
 /**
  *  Post to server what have been recording.
  */
