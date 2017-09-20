@@ -186,8 +186,12 @@ static dispatch_queue_t messageCacheOperationQueue;
         || (!conversationId || ![conversationId isEqualToString:self.conversationId]))
         return;
 
-    if ([self shouldUpdateKey:propertyName toValue:propertyValue]) {
-        [self updateKey:propertyName toValue:propertyValue];
+    [self tryUpdateKey:propertyName toValue:propertyValue];
+}
+
+- (void)tryUpdateKey:(NSString *)key toValue:(id)value {
+    if ([self shouldUpdateKey:key toValue:value]) {
+        [self updateKey:key toValue:value];
     }
 }
 
@@ -1188,22 +1192,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (void)messagesDidCache {
     AVIMMessage *lastMessage = [[self queryMessagesFromCacheWithLimit:1] firstObject];
-
-    if (lastMessage) {
-        LCIM_NOTIFY_PROPERTY_UPDATE(
-            self.clientId,
-            self.conversationId,
-            NSStringFromSelector(@selector(lastMessage)),
-            lastMessage);
-
-        NSDate *lastMessageAt = [NSDate dateWithTimeIntervalSince1970:(lastMessage.sendTimestamp / 1000.0)];
-
-        LCIM_NOTIFY_PROPERTY_UPDATE(
-            self.clientId,
-            self.conversationId,
-            NSStringFromSelector(@selector(lastMessageAt)),
-            lastMessageAt);
-    }
+    [self tryUpdateKey:@"lastMessage" toValue:lastMessage];
 }
 
 - (void)removeCachedConversation {
