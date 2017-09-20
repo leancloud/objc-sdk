@@ -1030,6 +1030,13 @@ static dispatch_queue_t messageCacheOperationQueue;
     patchItem.timestamp = oldMessage.sendTimestamp;
     patchItem.data_p = newMessage.payload;
 
+    if (newMessage.mentionAll) {
+        patchItem.mentionAll = newMessage.mentionAll;
+    }
+    if (newMessage.mentionList.count) {
+        patchItem.mentionPidsArray = [newMessage.mentionList mutableCopy];
+    }
+
     NSMutableArray *patchesArray = @[patchItem];
     AVIMPatchCommand *patchMessage = [[AVIMPatchCommand alloc] init];
 

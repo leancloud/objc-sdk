@@ -1291,7 +1291,9 @@ static BOOL AVIMClientHasInstantiated = NO;
 
     NSDictionary<NSString *, id> *entries = @{
         LCIM_FIELD_PAYLOAD: patchItem.data_p,
-        LCIM_FIELD_PATCH_TIMESTAMP: @((double)patchItem.patchTimestamp)
+        LCIM_FIELD_PATCH_TIMESTAMP: @((double)patchItem.patchTimestamp),
+        @"mention_all": @(patchItem.mentionAll),
+        @"mention_list": patchItem.mentionPidsArray ? [NSKeyedArchiver archivedDataWithRootObject:patchItem.mentionPidsArray] : [NSNull null],
     };
 
     [messageCacheStore updateEntries:entries
