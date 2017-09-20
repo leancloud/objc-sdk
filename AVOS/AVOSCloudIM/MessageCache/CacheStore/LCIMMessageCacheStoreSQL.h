@@ -28,19 +28,19 @@
 @"select * from message where conversation_id = ? and (timestamp > ? or (timestamp = ? and message_id > ?)) order by timestamp, message_id limit 1"
 
 #define LCIM_SQL_INSERT_MESSAGE \
-@"insert or replace into message (message_id, conversation_id, from_peer_id, timestamp, receipt_timestamp, read_timestamp, patch_timestamp, payload, status, breakpoint) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+@"insert or replace into message (message_id, conversation_id, from_peer_id, mention_all, mention_list, timestamp, receipt_timestamp, read_timestamp, patch_timestamp, payload, status, breakpoint) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
 #define LCIM_SQL_REPLACE_MESSAGE \
-@"replace into message (seq, message_id, conversation_id, from_peer_id, timestamp, receipt_timestamp, read_timestamp, patch_timestamp, payload, status, breakpoint) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+@"replace into message (seq, message_id, conversation_id, from_peer_id, mention_all, mention_list, timestamp, receipt_timestamp, read_timestamp, patch_timestamp, payload, status, breakpoint) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+
+#define LCIM_SQL_UPDATE_MESSAGE \
+@"update message set from_peer_id = ?, mention_all = ?, mention_list = ?, timestamp = ?, receipt_timestamp = ?, read_timestamp = ?, patch_timestamp = ?, payload = ?, status = ? where conversation_id = ? and message_id = ?"
 
 #define LCIM_SQL_DELETE_MESSAGE \
 @"delete from message where conversation_id = ? and (seq = ? or (message_id is not null and message_id = ?))"
 
 #define LCIM_SQL_UPDATE_MESSAGE_BREAKPOINT \
 @"update message set breakpoint = ? where conversation_id = ? and message_id = ?"
-
-#define LCIM_SQL_UPDATE_MESSAGE \
-@"update message set from_peer_id = ?, timestamp = ?, receipt_timestamp = ?, read_timestamp = ?, patch_timestamp = ?, payload = ?, status = ? where conversation_id = ? and message_id = ?"
 
 #define LCIM_SQL_SELECT_MESSAGE_LESS_THAN_TIMESTAMP \
 @"select * from message where conversation_id = ? and timestamp < ? order by timestamp desc limit ?"
@@ -81,13 +81,17 @@
 #define LCIM_SQL_MESSAGE_MIGRATION_V3 \
 @"alter table message add column patch_timestamp real"
 
-/* Add an auto-increment primary key 'seq' as index for unsent message which the message id will change after sent. */
+/*
+ 1. Add an auto-increment primary key 'seq' as index for unsent message which the message id will change after sent.
+ 2. Add two mention related fields: 'mention_all' and 'mention_list'.
+ */
 
 #define LCIM_SQL_MESSAGE_MIGRATION_V4 \
 @"create table if not exists message_seq(                                                                        \
     seq integer primary key autoincrement, message_id text,                                                      \
     conversation_id text, from_peer_id text, timestamp real,                                                     \
     receipt_timestamp real, read_timestamp real, patch_timestamp real,                                           \
+    mention_all integer, mention_list blob,                                                                      \
     payload blob, status integer, breakpoint bool);                                                              \
                                                                                                                  \
 create unique index if not exists message_unique_index on message_seq(conversation_id, message_id, timestamp);   \
