@@ -1049,43 +1049,28 @@ static BOOL AVIMClientHasInstantiated = NO;
     if (!conversation) return;
     
     [self fetchConversationIfNeeded:conversation withBlock:^(AVIMConversation *conversation) {
-        AVIMMessage *lastMessage = [self messageWithUnreadTuple:unreadTuple];
-        [self updateConversation:conversation unreadMessagesCount:unreadTuple.unread lastMessage:lastMessage];
+        NSDictionary *dictionary = @{
+            @"unreadMessagesCount": @(unreadTuple.unread),
+            @"lastMessage": [self messageWithUnreadTuple:unreadTuple],
+            @"mentioned": @(unreadTuple.mentioned)
+        };
+
+        [self updateConversation:conversationId withDictionary:dictionary];
+
+        /* For compatibility, we reserve this callback. It should be removed in future. */
+        if ([self.delegate respondsToSelector:@selector(conversation:didReceiveUnread:)])
+            [self.delegate conversation:conversation didReceiveUnread:unreadTuple.unread];
     }];
 }
 
-- (void)updateConversation:(AVIMConversation *)conversation unreadMessagesCount:(NSUInteger)unreadMessagesCount lastMessage:(AVIMMessage *)lastMessage {
-    LCIM_NOTIFY_PROPERTY_UPDATE(
-        self.clientId,
-        conversation.conversationId,
-        NSStringFromSelector(@selector(unreadMessagesCount)),
-        @(unreadMessagesCount));
-
-    AVIMMessage *originLastMessage = conversation.lastMessage;
-
-    if (lastMessage && (!originLastMessage || lastMessage.sendTimestamp > originLastMessage.sendTimestamp)) {
-        LCIM_NOTIFY_PROPERTY_UPDATE(
-            self.clientId,
-            conversation.conversationId,
-            NSStringFromSelector(@selector(lastMessage)),
-            lastMessage);
-
-        NSDate *lastMessageAt = [NSDate dateWithTimeIntervalSince1970:(lastMessage.sendTimestamp / 1000.0)];
-
-        LCIM_NOTIFY_PROPERTY_UPDATE(
-            self.clientId,
-            conversation.conversationId,
-            NSStringFromSelector(@selector(lastMessageAt)),
-            lastMessageAt);
-    }
-
-    /* For compatibility, we reserve this callback. It should be removed in future. */
-    if ([self.delegate respondsToSelector:@selector(conversation:didReceiveUnread:)])
-        [self.delegate conversation:conversation didReceiveUnread:unreadMessagesCount];
+- (void)updateConversation:(NSString *)conversationId withDictionary:(NSDictionary *)dictionary {
+    [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
+        LCIM_NOTIFY_PROPERTY_UPDATE(self.clientId, conversationId, key, value);
+    }];
 }
 
 - (void)resetUnreadMessagesCountForConversation:(AVIMConversation *)conversation {
-    [self updateConversation:conversation unreadMessagesCount:0 lastMessage:nil];
+    [self updateConversation:conversation withDictionary:@{@"unreadMessagesCount": @(0)}];
 }
 
 - (void)removeCachedConversationForId:(NSString *)conversationId {

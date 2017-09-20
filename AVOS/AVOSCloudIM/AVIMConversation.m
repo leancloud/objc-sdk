@@ -186,8 +186,32 @@ static dispatch_queue_t messageCacheOperationQueue;
         || (!conversationId || ![conversationId isEqualToString:self.conversationId]))
         return;
 
-    [self setValue:propertyValue forKey:propertyName];
-    [self postUpdateNotificationForKey:propertyName];
+    if ([self shouldUpdateKey:propertyName toValue:propertyValue]) {
+        [self updateKey:propertyName toValue:propertyValue];
+    }
+}
+
+- (BOOL)shouldUpdateKey:(NSString *)key toValue:(id)value {
+    if ([key isEqualToString:@"lastMessage"]) {
+        AVIMMessage *lastMessage = value;
+        AVIMMessage *originLastMessage = self.lastMessage;
+
+        BOOL shouldUpdate = (lastMessage && (!originLastMessage || lastMessage.sendTimestamp > originLastMessage.sendTimestamp));
+
+        if (shouldUpdate) {
+            NSDate *lastMessageAt = [NSDate dateWithTimeIntervalSince1970:(lastMessage.sendTimestamp / 1000.0)];
+            [self updateKey:@"lastMessageAt" toValue:lastMessageAt];
+        }
+
+        return shouldUpdate;
+    }
+
+    return YES;
+}
+
+- (void)updateKey:(NSString *)key toValue:(id)value {
+    [self setValue:value forKey:key];
+    [self postUpdateNotificationForKey:key];
 }
 
 - (void)postUpdateNotificationForKey:(NSString *)key {
