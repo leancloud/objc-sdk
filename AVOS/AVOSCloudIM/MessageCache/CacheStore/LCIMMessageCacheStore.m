@@ -307,6 +307,7 @@
     message.content            = payload;
     message.status             = [record intForColumn:LCIM_FIELD_STATUS];
     message.breakpoint         = [record boolForColumn:LCIM_FIELD_BREAKPOINT];
+    message.localClientId      = self.clientId;
 
     return message;
 }
