@@ -947,6 +947,8 @@ static BOOL AVIMClientHasInstantiated = NO;
     message.hasMore = directCommand.hasMore;
     message.localClientId = self.clientId;
     message.transient = directCommand.transient;
+    message.mentionAll = directCommand.mentionAll;
+    message.mentionList = [directCommand.mentionPidsArray copy];
 
     if (directCommand.hasPatchTimestamp)
         message.updatedAt = [NSDate dateWithTimeIntervalSince1970:(directCommand.patchTimestamp / 1000.0)];

@@ -946,6 +946,12 @@ static dispatch_queue_t messageCacheOperationQueue;
                 }
             }
         }
+        if (message.mentionAll) {
+            directCommand.mentionAll = YES;
+        }
+        if (message.mentionList.count) {
+            directCommand.mentionPidsArray = [message.mentionList mutableCopy];
+        }
 
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             AVIMDirectCommand *directOutCommand = outCommand.directMessage;
