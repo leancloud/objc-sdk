@@ -322,6 +322,8 @@ typedef struct AVIMJsonObjectMessage__storage_ {
 @dynamic hasFrom, from;
 @dynamic hasData_p, data_p;
 @dynamic hasPatchTimestamp, patchTimestamp;
+@dynamic hasMentioned, mentioned;
+@dynamic hasBinaryMsg, binaryMsg;
 
 typedef struct AVIMUnreadTuple__storage_ {
   uint32_t _has_storage_[1];
@@ -330,6 +332,7 @@ typedef struct AVIMUnreadTuple__storage_ {
   NSString *mid;
   NSString *from;
   NSString *data_p;
+  NSData *binaryMsg;
   int64_t timestamp;
   int64_t patchTimestamp;
 } AVIMUnreadTuple__storage_;
@@ -403,6 +406,24 @@ typedef struct AVIMUnreadTuple__storage_ {
         .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,
       },
+      {
+        .name = "mentioned",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMUnreadTuple_FieldNumber_Mentioned,
+        .hasIndex = 7,
+        .offset = 8,  // Stored in _has_storage_ to save space.
+        .flags = LCIMFieldOptional,
+        .dataType = GPBDataTypeBool,
+      },
+      {
+        .name = "binaryMsg",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMUnreadTuple_FieldNumber_BinaryMsg,
+        .hasIndex = 9,
+        .offset = (uint32_t)offsetof(AVIMUnreadTuple__storage_, binaryMsg),
+        .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeBytes,
+      },
     };
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[AVIMUnreadTuple class]
@@ -414,7 +435,7 @@ typedef struct AVIMUnreadTuple__storage_ {
                                          flags:LCIMDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\001\007\016\000";
+        "\002\007\016\000\t\t\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
@@ -436,12 +457,16 @@ typedef struct AVIMUnreadTuple__storage_ {
 @dynamic hasAckAt, ackAt;
 @dynamic hasReadAt, readAt;
 @dynamic hasPatchTimestamp, patchTimestamp;
+@dynamic hasMentionAll, mentionAll;
+@dynamic mentionPidsArray, mentionPidsArray_Count;
+@dynamic hasBin, bin;
 
 typedef struct AVIMLogItem__storage_ {
   uint32_t _has_storage_[1];
   NSString *from;
   NSString *data_p;
   NSString *msgId;
+  NSMutableArray *mentionPidsArray;
   int64_t timestamp;
   int64_t ackAt;
   int64_t readAt;
@@ -517,6 +542,33 @@ typedef struct AVIMLogItem__storage_ {
         .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,
       },
+      {
+        .name = "mentionAll",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMLogItem_FieldNumber_MentionAll,
+        .hasIndex = 7,
+        .offset = 8,  // Stored in _has_storage_ to save space.
+        .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeBool,
+      },
+      {
+        .name = "mentionPidsArray",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMLogItem_FieldNumber_MentionPidsArray,
+        .hasIndex = GPBNoHasBit,
+        .offset = (uint32_t)offsetof(AVIMLogItem__storage_, mentionPidsArray),
+        .flags = (LCIMFieldFlags)(LCIMFieldRepeated | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "bin",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMLogItem_FieldNumber_Bin,
+        .hasIndex = 9,
+        .offset = 10,  // Stored in _has_storage_ to save space.
+        .flags = LCIMFieldOptional,
+        .dataType = GPBDataTypeBool,
+      },
     };
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[AVIMLogItem class]
@@ -528,7 +580,7 @@ typedef struct AVIMLogItem__storage_ {
                                          flags:LCIMDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\004\004\005\000\005\005\000\006\006\000\007\016\000";
+        "\006\004\005\000\005\005\000\006\006\000\007\016\000\010\n\000\t\000mentionPids\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
@@ -950,6 +1002,8 @@ typedef struct AVIMErrorCommand__storage_ {
 @dynamic hasWill, will;
 @dynamic hasPatchTimestamp, patchTimestamp;
 @dynamic hasBinaryMsg, binaryMsg;
+@dynamic mentionPidsArray, mentionPidsArray_Count;
+@dynamic hasMentionAll, mentionAll;
 
 typedef struct AVIMDirectCommand__storage_ {
   uint32_t _has_storage_[1];
@@ -963,6 +1017,7 @@ typedef struct AVIMDirectCommand__storage_ {
   NSString *roomId;
   NSString *pushData;
   NSData *binaryMsg;
+  NSMutableArray *mentionPidsArray;
   int64_t timestamp;
   int64_t patchTimestamp;
 } AVIMDirectCommand__storage_;
@@ -1126,6 +1181,24 @@ typedef struct AVIMDirectCommand__storage_ {
         .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
         .dataType = GPBDataTypeBytes,
       },
+      {
+        .name = "mentionPidsArray",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMDirectCommand_FieldNumber_MentionPidsArray,
+        .hasIndex = GPBNoHasBit,
+        .offset = (uint32_t)offsetof(AVIMDirectCommand__storage_, mentionPidsArray),
+        .flags = (LCIMFieldFlags)(LCIMFieldRepeated | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "mentionAll",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMDirectCommand_FieldNumber_MentionAll,
+        .hasIndex = 21,
+        .offset = 22,  // Stored in _has_storage_ to save space.
+        .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeBool,
+      },
     };
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[AVIMDirectCommand class]
@@ -1137,7 +1210,8 @@ typedef struct AVIMDirectCommand__storage_ {
                                          flags:LCIMDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\007\003\n\000\006\007\000\007\000toPeerIds\000\017\006\000\020\010\000\022\016\000\023\t\000";
+        "\t\003\n\000\006\007\000\007\000toPeerIds\000\017\006\000\020\010\000\022\016\000\023\t\000\024\000mention"
+        "Pids\000\025\n\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
@@ -2466,6 +2540,9 @@ typedef struct AVIMReportCommand__storage_ {
 @dynamic hasData_p, data_p;
 @dynamic hasPatchTimestamp, patchTimestamp;
 @dynamic hasFrom, from;
+@dynamic hasBinaryMsg, binaryMsg;
+@dynamic hasMentionAll, mentionAll;
+@dynamic mentionPidsArray, mentionPidsArray_Count;
 
 typedef struct AVIMPatchItem__storage_ {
   uint32_t _has_storage_[1];
@@ -2473,6 +2550,8 @@ typedef struct AVIMPatchItem__storage_ {
   NSString *mid;
   NSString *data_p;
   NSString *from;
+  NSData *binaryMsg;
+  NSMutableArray *mentionPidsArray;
   int64_t timestamp;
   int64_t patchTimestamp;
 } AVIMPatchItem__storage_;
@@ -2546,6 +2625,33 @@ typedef struct AVIMPatchItem__storage_ {
         .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeString,
       },
+      {
+        .name = "binaryMsg",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMPatchItem_FieldNumber_BinaryMsg,
+        .hasIndex = 8,
+        .offset = (uint32_t)offsetof(AVIMPatchItem__storage_, binaryMsg),
+        .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeBytes,
+      },
+      {
+        .name = "mentionAll",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMPatchItem_FieldNumber_MentionAll,
+        .hasIndex = 9,
+        .offset = 10,  // Stored in _has_storage_ to save space.
+        .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeBool,
+      },
+      {
+        .name = "mentionPidsArray",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMPatchItem_FieldNumber_MentionPidsArray,
+        .hasIndex = GPBNoHasBit,
+        .offset = (uint32_t)offsetof(AVIMPatchItem__storage_, mentionPidsArray),
+        .flags = (LCIMFieldFlags)(LCIMFieldRepeated | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
     };
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[AVIMPatchItem class]
@@ -2557,7 +2663,7 @@ typedef struct AVIMPatchItem__storage_ {
                                          flags:LCIMDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\001\006\016\000";
+        "\004\006\016\000\010\t\000\t\n\000\n\000mentionPids\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
