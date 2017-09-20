@@ -1049,11 +1049,13 @@ static BOOL AVIMClientHasInstantiated = NO;
     if (!conversation) return;
     
     [self fetchConversationIfNeeded:conversation withBlock:^(AVIMConversation *conversation) {
-        NSDictionary *dictionary = @{
-            @"unreadMessagesCount": @(unreadTuple.unread),
-            @"lastMessage": [self messageWithUnreadTuple:unreadTuple],
-            @"mentioned": @(unreadTuple.mentioned)
-        };
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+
+        dictionary[@"unreadMessagesCount"] = @(unreadTuple.unread);
+        dictionary[@"lastMessage"] = [self messageWithUnreadTuple:unreadTuple];
+
+        if (unreadTuple.hasMentioned)
+            dictionary[@"mentioned"] = @(unreadTuple.mentioned);
 
         [self updateConversation:conversationId withDictionary:dictionary];
 
