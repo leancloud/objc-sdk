@@ -106,6 +106,16 @@
     }
 }
 
+- (BOOL)mentioned {
+    if (self.ioType == AVIMMessageIOTypeOut)
+        return NO;
+
+    if (self.mentionAll || [self.mentionList containsObject:self.localClientId])
+        return YES;
+
+    return NO;
+}
+
 /*!
  * 
  "msg":"{"_lctype":-1,"_lctext":"1620318941"}",
