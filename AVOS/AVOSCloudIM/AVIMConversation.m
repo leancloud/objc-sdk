@@ -1280,6 +1280,8 @@ static dispatch_queue_t messageCacheOperationQueue;
                     message.sendTimestamp = [logsItem timestamp];
                     message.clientId = [logsItem from];
                     message.messageId = [logsItem msgId];
+                    message.mentionAll = logsItem.mentionAll;
+                    message.mentionList = [logsItem.mentionPidsArray copy];
 
                     if (logsItem.hasPatchTimestamp)
                         message.updatedAt = [NSDate dateWithTimeIntervalSince1970:(logsItem.patchTimestamp / 1000.0)];
