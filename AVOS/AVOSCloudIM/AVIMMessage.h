@@ -67,7 +67,7 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  * An ID list of clients who mentioned by this message.
  */
-@property (nonatomic, strong, nullable) NSArray *mentionList;
+@property (nonatomic, strong, nullable) NSArray<NSString *> *mentionList;
 
 /*!
  * Whether current client is mentioned by this message.
