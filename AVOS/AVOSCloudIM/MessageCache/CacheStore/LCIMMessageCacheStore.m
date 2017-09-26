@@ -68,6 +68,8 @@
 - (NSArray *)updationRecordForMessage:(AVIMMessage *)message {
     return @[
         message.clientId,
+        @(message.mentionAll),
+        message.mentionList ? [NSKeyedArchiver archivedDataWithRootObject:message.mentionList] : [NSNull null],
         [self timestampForMessage:message],
         [self receiptTimestampForMessage:message],
         [self readTimestampForMessage:message],
@@ -93,6 +95,8 @@
         message.messageId ?: [NSNull null],
         self.conversationId,
         message.clientId,
+        @(message.mentionAll),
+        message.mentionList ? [NSKeyedArchiver archivedDataWithRootObject:message.mentionList] : [NSNull null],
         [self timestampForMessage:message],
         [self receiptTimestampForMessage:message],
         [self readTimestampForMessage:message],
@@ -290,6 +294,12 @@
     message.messageId          = [record stringForColumn:LCIM_FIELD_MESSAGE_ID];
     message.conversationId     = [record stringForColumn:LCIM_FIELD_CONVERSATION_ID];
     message.clientId           = [record stringForColumn:LCIM_FIELD_FROM_PEER_ID];
+    message.mentionAll         = [record boolForColumn:@"mention_all"];
+    message.mentionList        = ({
+        NSData *data = [record dataForColumn:@"mention_list"];
+        NSArray *mentionList = data ? [NSKeyedUnarchiver unarchiveObjectWithData:data] : nil;
+        mentionList;
+    });
     message.sendTimestamp      = [record longLongIntForColumn:LCIM_FIELD_TIMESTAMP];
     message.deliveredTimestamp = [record longLongIntForColumn:LCIM_FIELD_RECEIPT_TIMESTAMP];
     message.readTimestamp      = [record longLongIntForColumn:LCIM_FIELD_READ_TIMESTAMP];
@@ -297,6 +307,7 @@
     message.content            = payload;
     message.status             = [record intForColumn:LCIM_FIELD_STATUS];
     message.breakpoint         = [record boolForColumn:LCIM_FIELD_BREAKPOINT];
+    message.localClientId      = self.clientId;
 
     return message;
 }

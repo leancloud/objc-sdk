@@ -186,8 +186,36 @@ static dispatch_queue_t messageCacheOperationQueue;
         || (!conversationId || ![conversationId isEqualToString:self.conversationId]))
         return;
 
-    [self setValue:propertyValue forKey:propertyName];
-    [self postUpdateNotificationForKey:propertyName];
+    [self tryUpdateKey:propertyName toValue:propertyValue];
+}
+
+- (void)tryUpdateKey:(NSString *)key toValue:(id)value {
+    if ([self shouldUpdateKey:key toValue:value]) {
+        [self updateKey:key toValue:value];
+    }
+}
+
+- (BOOL)shouldUpdateKey:(NSString *)key toValue:(id)value {
+    if ([key isEqualToString:@"lastMessage"]) {
+        AVIMMessage *lastMessage = value;
+        AVIMMessage *originLastMessage = self.lastMessage;
+
+        BOOL shouldUpdate = (lastMessage && (!originLastMessage || lastMessage.sendTimestamp > originLastMessage.sendTimestamp));
+
+        if (shouldUpdate) {
+            NSDate *lastMessageAt = [NSDate dateWithTimeIntervalSince1970:(lastMessage.sendTimestamp / 1000.0)];
+            [self updateKey:@"lastMessageAt" toValue:lastMessageAt];
+        }
+
+        return shouldUpdate;
+    }
+
+    return YES;
+}
+
+- (void)updateKey:(NSString *)key toValue:(id)value {
+    [self setValue:value forKey:key];
+    [self postUpdateNotificationForKey:key];
 }
 
 - (void)postUpdateNotificationForKey:(NSString *)key {
@@ -946,6 +974,12 @@ static dispatch_queue_t messageCacheOperationQueue;
                 }
             }
         }
+        if (message.mentionAll) {
+            directCommand.mentionAll = YES;
+        }
+        if (message.mentionList.count) {
+            directCommand.mentionPidsArray = [message.mentionList mutableCopy];
+        }
 
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             AVIMDirectCommand *directOutCommand = outCommand.directMessage;
@@ -999,6 +1033,13 @@ static dispatch_queue_t messageCacheOperationQueue;
     patchItem.mid = oldMessage.messageId;
     patchItem.timestamp = oldMessage.sendTimestamp;
     patchItem.data_p = newMessage.payload;
+
+    if (newMessage.mentionAll) {
+        patchItem.mentionAll = newMessage.mentionAll;
+    }
+    if (newMessage.mentionList.count) {
+        patchItem.mentionPidsArray = [newMessage.mentionList mutableCopy];
+    }
 
     NSMutableArray *patchesArray = @[patchItem];
     AVIMPatchCommand *patchMessage = [[AVIMPatchCommand alloc] init];
@@ -1151,22 +1192,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (void)messagesDidCache {
     AVIMMessage *lastMessage = [[self queryMessagesFromCacheWithLimit:1] firstObject];
-
-    if (lastMessage) {
-        LCIM_NOTIFY_PROPERTY_UPDATE(
-            self.clientId,
-            self.conversationId,
-            NSStringFromSelector(@selector(lastMessage)),
-            lastMessage);
-
-        NSDate *lastMessageAt = [NSDate dateWithTimeIntervalSince1970:(lastMessage.sendTimestamp / 1000.0)];
-
-        LCIM_NOTIFY_PROPERTY_UPDATE(
-            self.clientId,
-            self.conversationId,
-            NSStringFromSelector(@selector(lastMessageAt)),
-            lastMessageAt);
-    }
+    [self tryUpdateKey:@"lastMessage" toValue:lastMessage];
 }
 
 - (void)removeCachedConversation {
@@ -1243,6 +1269,8 @@ static dispatch_queue_t messageCacheOperationQueue;
                     message.sendTimestamp = [logsItem timestamp];
                     message.clientId = [logsItem from];
                     message.messageId = [logsItem msgId];
+                    message.mentionAll = logsItem.mentionAll;
+                    message.mentionList = [logsItem.mentionPidsArray copy];
 
                     if (logsItem.hasPatchTimestamp)
                         message.updatedAt = [NSDate dateWithTimeIntervalSince1970:(logsItem.patchTimestamp / 1000.0)];
