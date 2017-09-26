@@ -131,7 +131,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
 /**
  *  A flag indicates whether an unread message mentioned you.
  */
-@property (nonatomic, assign) BOOL mentioned;
+@property (nonatomic, assign) BOOL unreadMessagesMentioned;
 
 /**
  *  The name of this conversation. Can be changed by update:callback: .

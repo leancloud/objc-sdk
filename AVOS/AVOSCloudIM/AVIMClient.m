@@ -1055,7 +1055,7 @@ static BOOL AVIMClientHasInstantiated = NO;
         dictionary[@"lastMessage"] = [self messageWithUnreadTuple:unreadTuple];
 
         if (unreadTuple.hasMentioned)
-            dictionary[@"mentioned"] = @(unreadTuple.mentioned);
+            dictionary[@"unreadMessagesMentioned"] = @(unreadTuple.mentioned);
 
         [self updateConversation:conversationId withDictionary:dictionary];
 
