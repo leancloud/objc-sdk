@@ -1072,7 +1072,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 - (void)resetUnreadMessagesCountForConversation:(AVIMConversation *)conversation {
-    [self updateConversation:conversation withDictionary:@{@"unreadMessagesCount": @(0)}];
+    [self updateConversation:conversation.conversationId withDictionary:@{@"unreadMessagesCount": @(0)}];
 }
 
 - (void)removeCachedConversationForId:(NSString *)conversationId {
