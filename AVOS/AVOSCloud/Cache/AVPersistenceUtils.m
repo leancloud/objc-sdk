@@ -58,11 +58,6 @@
     return [[self cacheSandboxPath] stringByAppendingPathComponent:@"KeyValue"];
 }
 
-// ~/Library/Caches/LeanCloud/{applicationId}/CommandCache
-+ (NSString *)commandCacheDatabasePath {
-    return [[self cacheSandboxPath] stringByAppendingPathComponent:@"CommandCache"];
-}
-
 // ~/Library/Caches/LeanCloud/{applicationId}/ClientSessionToken
 + (NSString *)clientSessionTokenCacheDatabasePath {
     return [[self cacheSandboxPath] stringByAppendingPathComponent:@"ClientSessionToken"];

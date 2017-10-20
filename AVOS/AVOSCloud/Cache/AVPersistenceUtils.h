@@ -23,7 +23,6 @@
 + (NSString *)messageCacheDatabasePathWithName:(NSString *)name;
 
 + (NSString *)keyValueDatabasePath;
-+ (NSString *)commandCacheDatabasePath;
 + (NSString *)clientSessionTokenCacheDatabasePath;
 
 + (NSString *)userDefaultsPath;
