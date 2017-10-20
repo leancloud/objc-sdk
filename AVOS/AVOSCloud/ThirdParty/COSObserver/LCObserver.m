@@ -233,7 +233,8 @@ void cos_hook_object_if_needed(NSObject *object) {
         [_target removeObserver:self forKeyPath:_keyPath context:cos_context];
     }
 
-    [cos_observation_pool(_target) removeObject:self], _target = nil;
+    [cos_observation_pool(_target) removeObject:self];
+    _target = nil;
     [cos_observation_pool(_object) removeObject:self];
 }
 

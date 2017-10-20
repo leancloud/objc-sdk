@@ -7887,7 +7887,11 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 + (instancetype)dictionaryWithDictionary:(LCIMInt64UInt64Dictionary *)dictionary {
   // Cast is needed so the compiler knows what class we are invoking initWithDictionary:
   // on to get the type correct.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Weverything"
+  // this warning may be a bug of Xcode or clang.
   return [[(LCIMInt64UInt64Dictionary*)[self alloc] initWithDictionary:dictionary] autorelease];
+#pragma clang diagnostic pop
 }
 
 + (instancetype)dictionaryWithCapacity:(NSUInteger)numItems {
@@ -7937,7 +7941,11 @@ void LCIMDictionaryReadEntry(id mapDictionary,
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Weverything"
+  // this warning may be a bug of Xcode or clang.
   return [[LCIMInt64UInt64Dictionary allocWithZone:zone] initWithDictionary:self];
+#pragma clang diagnostic pop
 }
 
 - (BOOL)isEqual:(id)other {
