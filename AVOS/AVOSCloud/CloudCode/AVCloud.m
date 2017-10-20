@@ -133,14 +133,8 @@
     [[AVPaasClient sharedInstance]
      performRequest:request
      success:^(NSHTTPURLResponse *response, id responseObject) {
-         NSError *error = [AVErrorUtils errorFromJSON:responseObject];
-
-         if (error) {
-             [AVUtils callIdResultBlock:block object:nil error:error];
-         } else {
-             id result = [self processedFunctionResultFromObject:responseObject[@"result"]];
-             [AVUtils callIdResultBlock:block object:result error:nil];
-         }
+         id result = [self processedFunctionResultFromObject:responseObject[@"result"]];
+         [AVUtils callIdResultBlock:block object:result error:nil];
      }
      failure:^(NSHTTPURLResponse *response, id responseObject, NSError *inError) {
          NSError *error = [AVErrorUtils errorFromJSON:responseObject] ?: inError;
