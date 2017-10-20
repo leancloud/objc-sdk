@@ -619,7 +619,7 @@ static BOOL enableAutomatic = NO;
     }];
 }
 
-+ (instancetype)becomeWithSessionToken:(NSString *)sessionToken error:(NSError **)error {
++ (instancetype)becomeWithSessionToken:(NSString *)sessionToken error:(NSError * __autoreleasing *)error {
     __block Boolean hasCallback = NO;
     __block AVUser *user;
     [self internalBecomeWithSessionTokenInBackground:sessionToken block:^(AVUser *theUser, NSError *theError) {

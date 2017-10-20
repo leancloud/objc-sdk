@@ -529,7 +529,7 @@ if (block) { \
     return queue;
 }
 
-+ (void)asynchronize:(void (^)())task {
++ (void)asynchronizeTask:(void (^)(void))task {
     NSAssert(task != nil, @"Task cannot be nil.");
 
     dispatch_async([self asynchronousTaskQueue], ^{

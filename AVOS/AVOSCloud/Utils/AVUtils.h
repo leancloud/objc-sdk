@@ -107,7 +107,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 
  @param task The task to be dispatched.
  */
-+ (void)asynchronizeTask:(void(^)())task;
++ (void)asynchronizeTask:(void(^)(void))task;
 
 #pragma mark - String Util
 + (NSString *)MIMEType:(NSString *)filePathOrName;

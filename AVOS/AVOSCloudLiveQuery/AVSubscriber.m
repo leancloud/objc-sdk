@@ -101,9 +101,11 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
         return;
 
     switch (command.cmd) {
-    case AVIMCommandType_Data:
-        [self handleDataCommand:command];
-        break;
+        case AVIMCommandType_Data:
+            [self handleDataCommand:command];
+            break;
+        default:
+            break;
     }
 }
 
@@ -128,7 +130,7 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
     if (error || !dictionary)
         return;
 
-    NSDictionary *event = [AVObjectUtils objectFromDictionary:dictionary recursive:YES];
+    NSDictionary *event = (NSDictionary *)[AVObjectUtils objectFromDictionary:dictionary recursive:YES];
     NSDictionary *userInfo = @{ AVLiveQueryEventKey: event };
 
     [[NSNotificationCenter defaultCenter] postNotificationName:AVLiveQueryEventNotification

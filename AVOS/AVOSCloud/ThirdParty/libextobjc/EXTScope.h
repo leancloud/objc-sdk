@@ -33,7 +33,7 @@
     __strong ext_cleanupBlock_t metamacro_concat(ext_exitBlock_, __LINE__) __attribute__((cleanup(lc_executeCleanupBlock), unused)) = ^
 
 /*** implementation details follow ***/
-typedef void (^ext_cleanupBlock_t)();
+typedef void (^ext_cleanupBlock_t)(void);
 
 #if defined(__cplusplus)
 extern "C" {

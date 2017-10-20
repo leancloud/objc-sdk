@@ -7,8 +7,7 @@
 //
 
 
-#import "AVSubclassing.h"
-#import <AVOSCloud/AVOSCloud.h>
+#import "AVOSCloud.h"
 #import "AVSubclassing.h"
 
 

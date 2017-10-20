@@ -169,7 +169,11 @@ static void setter_selector(id self, SEL _cmd, SEL value) {
 
 NS_INLINE
 BOOL hasProperty(id object, NSString *name) {
-    return class_getProperty(object_getClass(object), name.UTF8String);
+    if (class_getProperty(object_getClass(object), name.UTF8String)) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 NS_INLINE

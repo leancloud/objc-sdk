@@ -522,7 +522,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 - (void)performRequest:(NSURLRequest *)request saveResult:(BOOL)saveResult block:(AVIdResultBlock)block retryTimes:(NSInteger)retryTimes {
     NSURL *URL = request.URL;
-    NSString *path = URL.path;
     NSString *URLString = URL.absoluteString;
     NSMutableURLRequest *mutableRequest = [request mutableCopy];
 

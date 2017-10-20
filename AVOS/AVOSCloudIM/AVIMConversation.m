@@ -1041,10 +1041,10 @@ static dispatch_queue_t messageCacheOperationQueue;
         patchItem.mentionPidsArray = [newMessage.mentionList mutableCopy];
     }
 
-    NSMutableArray *patchesArray = @[patchItem];
+    NSArray<AVIMPatchItem*> *patchesArray = @[patchItem];
     AVIMPatchCommand *patchMessage = [[AVIMPatchCommand alloc] init];
 
-    patchMessage.patchesArray = patchesArray;
+    patchMessage.patchesArray = [patchesArray mutableCopy];
     command.patchMessage = patchMessage;
 
     return command;
@@ -1218,7 +1218,11 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (void)sendACKIfNeeded:(NSArray *)messages {
     NSDictionary *userOptions = [AVIMClient userOptions];
+    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     BOOL useUnread = [userOptions[AVIMUserOptionUseUnread] boolValue];
+#pragma clang diagnostic pop
     
     if (useUnread) {
         AVIMClient *client = self.imClient;
@@ -1305,7 +1309,10 @@ static dispatch_queue_t messageCacheOperationQueue;
     logsCommand.cid    = _conversationId;
     logsCommand.mid    = messageId;
     logsCommand.t      = LCIM_VALID_TIMESTAMP(timestamp);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     logsCommand.l      = LCIM_VALID_LIMIT(limit);
+#pragma clang diagnostic pop
     
     [genericCommand avim_addRequiredKeyWithCommand:logsCommand];
     [self queryMessagesFromServerWithCommand:genericCommand callback:callback];
@@ -1328,7 +1335,10 @@ static dispatch_queue_t messageCacheOperationQueue;
     logsCommand.tmid   = toMessageId;
     logsCommand.tt     = MAX(toTimestamp, 0);
     logsCommand.t      = MAX(timestamp, 0);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     logsCommand.l      = LCIM_VALID_LIMIT(limit);
+#pragma clang diagnostic pop
     [genericCommand avim_addRequiredKeyWithCommand:logsCommand];
     [self queryMessagesFromServerWithCommand:genericCommand callback:callback];
 }
@@ -1336,7 +1346,10 @@ static dispatch_queue_t messageCacheOperationQueue;
 - (void)queryMessagesFromServerWithLimit:(NSUInteger)limit
                                 callback:(AVIMArrayResultBlock)callback
 {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     limit = LCIM_VALID_LIMIT(limit);
+#pragma clang diagnostic pop
     
     [self queryMessagesFromServerBeforeId:nil
                                 timestamp:LCIM_DISTANT_FUTURE_TIMESTAMP
@@ -1355,7 +1368,10 @@ static dispatch_queue_t messageCacheOperationQueue;
 }
 
 - (NSArray *)queryMessagesFromCacheWithLimit:(NSUInteger)limit {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     limit = LCIM_VALID_LIMIT(limit);
+#pragma clang diagnostic pop
     NSArray *cachedMessages = [[self messageCacheStore] latestMessagesWithLimit:limit];
     [self postprocessMessages:cachedMessages];
     
@@ -1365,7 +1381,10 @@ static dispatch_queue_t messageCacheOperationQueue;
 - (void)queryMessagesWithLimit:(NSUInteger)limit
                       callback:(AVIMArrayResultBlock)callback
 {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     limit = LCIM_VALID_LIMIT(limit);
+#pragma clang diagnostic pop
     
     BOOL socketOpened = self.imClient.status == AVIMClientStatusOpened;
     // 如果屏蔽了本地缓存则全部走网络
@@ -1415,7 +1434,10 @@ static dispatch_queue_t messageCacheOperationQueue;
                         limit:(NSUInteger)limit
                      callback:(AVIMArrayResultBlock)callback
 {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     limit     = LCIM_VALID_LIMIT(limit);
+#pragma clang diagnostic pop
     timestamp = LCIM_VALID_TIMESTAMP(timestamp);
 
     /*
@@ -1551,7 +1573,10 @@ static dispatch_queue_t messageCacheOperationQueue;
     AVIMLogsCommand *logsCommand = [[AVIMLogsCommand alloc] init];
 
     logsCommand.cid  = _conversationId;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     logsCommand.l    = LCIM_VALID_LIMIT(limit);
+#pragma clang diagnostic pop
 
     logsCommand.direction = (direction == AVIMMessageQueryDirectionFromOldToNew)
         ? AVIMLogsCommand_QueryDirection_New

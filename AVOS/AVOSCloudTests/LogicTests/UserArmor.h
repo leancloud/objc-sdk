@@ -6,7 +6,7 @@
 //  Copyright (c) 2013年 AVOS. All rights reserved.
 //
 
-#import <AVOSCloud/AVOSCloud.h>
+#import "AVOSCloud.h"
 #import "AVSubclassing.h"
 #import "UserInfo.h"
 #import "Armor.h"

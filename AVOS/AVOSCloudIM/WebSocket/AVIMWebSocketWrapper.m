@@ -478,16 +478,19 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
     NSMutableSet *protocols = [NSMutableSet set];
     NSDictionary *userOptions = [AVIMClient userOptions];
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     if ([userOptions[AVIMUserOptionUseUnread] boolValue]) {
         [protocols addObject:AVIMProtocolPROTOBUF3];
     } else {
         [protocols addObject:AVIMProtocolPROTOBUF1];
     }
-
+    
     if (userOptions[AVIMUserOptionCustomProtocols]) {
         [protocols removeAllObjects];
         [protocols addObjectsFromArray:userOptions[AVIMUserOptionCustomProtocols]];
     }
+#pragma clang diagnostic pop
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:server]];
 

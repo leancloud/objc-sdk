@@ -16,7 +16,7 @@ const NSInteger LCIMErrorCodeSessionTokenExpired = 4112;
 @implementation AVIMCommandFormatter
 
 + (NSString *)commandType:(AVIMCommandType)commandType {
-    NSString *commandTypeString;
+    NSString *commandTypeString = nil;
     switch (commandType) {
         case AVIMCommandType_Session:
             commandTypeString = @"Session";
@@ -72,6 +72,9 @@ const NSInteger LCIMErrorCodeSessionTokenExpired = 4112;
             
         case AVIMCommandType_Report:
             commandTypeString = @"Report";
+            break;
+            
+        default:
             break;
     }
     return commandTypeString;
