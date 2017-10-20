@@ -248,6 +248,9 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 - (AVIMConversation *)conversationForId:(NSString *)conversationId {
+    if (!conversationId)
+        return nil;
+
     AVIMConversation *conversation = [_conversations objectForKey:conversationId];
 
     /* Disable conversation cache for consistent */

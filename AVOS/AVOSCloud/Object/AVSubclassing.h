@@ -25,16 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)parseClassName;
 
 /*!
- Constructs an object of the most specific class known to implement parseClassName.
- This method takes care to help AVObject subclasses be subclassed themselves.
- For example, [AVUser object] returns a AVUser by default but will return an
- object of a registered subclass instead if one is known.
- A default implementation is provided by AVObject which should always be sufficient.
- @return the object that is instantiated.
- */
-+ (instancetype)object;
-
-/*!
  Creates a reference to an existing AVObject for use in creating associations between AVObjects.  Calling isDataAvailable on this
  object will return NO until fetchIfNeeded or refresh has been called.  No network request will be made.
  A default implementation is provided by AVObject which should always be sufficient.
