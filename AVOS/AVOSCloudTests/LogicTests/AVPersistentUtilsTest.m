@@ -42,9 +42,4 @@
     [self assertPath:path equalToRelativePath:@"~/Library/Caches/LeanCloud/MessageCache/chat"];
 }
 
-- (void)testCommandCacheDatabasePath {
-    NSString *path = [AVPersistenceUtils commandCacheDatabasePath];
-    [self assertPath:path equalToRelativePath:@"~/Documents/LeanCloud/CommandCache"];
-}
-
 @end

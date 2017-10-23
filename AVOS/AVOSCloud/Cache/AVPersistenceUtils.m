@@ -38,42 +38,6 @@
 
 #pragma mark - ~/Documents
 
-// ~/Documents
-+ (NSString *)appDocumentPath {
-    static NSString *path = nil;
-    
-    if (!path) {
-        path = [[self homeDirectoryPath] stringByAppendingPathComponent:@"Documents"];
-    }
-    
-    return path;
-}
-
-// ~/Documents/LeanCloud
-+ (NSString *)leanDocumentPath {
-    NSString *path = [self appDocumentPath];
-    
-    path = [path stringByAppendingPathComponent:LCRootDirName];
-    
-    [self createDirectoryIfNeeded:path];
-    
-    return path;
-}
-
-// ~/Documents/LeanCloud/keyvalue
-+ (NSString *)keyValueDatabasePath {
-    return [[self leanDocumentPath] stringByAppendingPathComponent:@"keyvalue"];
-}
-
-// ~/Documents/LeanCloud/CommandCache
-+ (NSString *)commandCacheDatabasePath {
-    return [[self leanDocumentPath] stringByAppendingPathComponent:@"CommandCache"];
-}
-
-+ (NSString *)clientSessionTokenCacheDatabasePath {
-    return [[self leanDocumentPath] stringByAppendingPathComponent:@"ClientSessionToken"];
-}
-
 // ~/Library/Caches/LeanCloud/{applicationId}
 + (NSString *)cacheSandboxPath {
     NSString *applicationId = [AVOSCloud getApplicationId];
@@ -87,6 +51,16 @@
     [self createDirectoryIfNeeded:sandboxPath];
 
     return sandboxPath;
+}
+
+// ~/Library/Caches/LeanCloud/{applicationId}/KeyValue
++ (NSString *)keyValueDatabasePath {
+    return [[self cacheSandboxPath] stringByAppendingPathComponent:@"KeyValue"];
+}
+
+// ~/Library/Caches/LeanCloud/{applicationId}/ClientSessionToken
++ (NSString *)clientSessionTokenCacheDatabasePath {
+    return [[self cacheSandboxPath] stringByAppendingPathComponent:@"ClientSessionToken"];
 }
 
 // ~/Library/Caches/LeanCloud/{applicationId}/UserDefaults
