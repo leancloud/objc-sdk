@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AVOSCloudCrashReporting'
-  s.version  = '7.3.1'
+  s.version  = '7.3.2'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud Crash Reporting Objective-C SDK'
   s.authors  = 'LeanCloud'
