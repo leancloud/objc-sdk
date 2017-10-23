@@ -26,7 +26,7 @@
  * @param messageId Start messageId, if message not found, use the timestamp instead.
  * @param conversationId Conversation which messages belong to.
  * @param limit Max number of messages to query.
- * @param complete Wether the messages queried is complete.
+ * @param continuous Wether the messages queried is complete.
  */
 - (NSArray *)messagesBeforeTimestamp:(int64_t)timestamp
                            messageId:(NSString *)messageId
@@ -75,7 +75,6 @@
  * Update message without it bearkpoint.
  * @param message Message which for updating.
  * @param conversationId Conversation id of message.
- * @return void.
  */
 - (void)updateMessage:(AVIMMessage *)message forConversationId:(NSString *)conversationId;
 

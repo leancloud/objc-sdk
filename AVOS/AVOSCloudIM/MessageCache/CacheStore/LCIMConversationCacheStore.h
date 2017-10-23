@@ -55,7 +55,7 @@
 /*!
  * Get conversation from cache by id.
  * @param conversationId Conversation id.
- * @param A conversation or nil if conversation not found or expired.
+ * @return A conversation or nil if conversation not found or expired.
  */
 - (AVIMConversation *)conversationForId:(NSString *)conversationId;
 
