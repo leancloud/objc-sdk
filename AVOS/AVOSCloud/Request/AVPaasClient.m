@@ -330,10 +330,23 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
                              policy:(AVCachePolicy)policy
                               block:(AVIdResultBlock)block
 {
-    BOOL needCache = (policy != kAVCachePolicyIgnoreCache);
-    NSMutableURLRequest *request = [self requestWithPath:path method:@"GET" headers:nil parameters:parameters];
+    NSURLRequest *request = [self requestWithPath:path method:@"GET" headers:nil parameters:parameters];
 
-    [self performRequest:request saveResult:needCache block:block];
+    /* If GET request too heavy,
+       wrap it into a POST request and ignore cache policy. */
+    if (parameters && request.URL.absoluteString.length > 4096) {
+        NSDictionary *request = [AVPaasClient batchMethod:@"GET" path:path body:nil parameters:parameters];
+        [self postBatchObject:@[request] block:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+            if (!error) {
+                [AVUtils callIdResultBlock:block object:objects.firstObject error:nil];
+            } else {
+                [AVUtils callIdResultBlock:block object:nil error:error];
+            }
+        }];
+    } else {
+        BOOL needCache = (policy != kAVCachePolicyIgnoreCache);
+        [self performRequest:request saveResult:needCache block:block];
+    }
 }
 
 - (void)getObject:(NSString *)path withParameters:(NSDictionary *)parameters policy:(AVCachePolicy)policy maxCacheAge:(NSTimeInterval)maxCacheAge block:(AVIdResultBlock)block {
