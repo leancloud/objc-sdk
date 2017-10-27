@@ -1257,6 +1257,40 @@
 		9AE76C551C3F7CC600325902 /* AVIMCommandCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD143771BD8C6CE0022652C /* AVIMCommandCommon.h */; };
 		9AE76C561C3F7CC600325902 /* AVIMDynamicObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD651D31BD9470900C55F85 /* AVIMDynamicObject.h */; };
 		9AE76C571C3F7CC600325902 /* AVIMDynamicObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD651D41BD9470900C55F85 /* AVIMDynamicObject.m */; };
+		D342B7081FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
+		D342B7091FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
+		D342B70A1FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
+		D342B70B1FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
+		D342B70C1FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
+		D342B70D1FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
+		D342B70E1FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
+		D342B70F1FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
+		D342B7101FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
+		D342B7111FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
+		D342B7121FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
+		D342B7131FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
+		D342B7141FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
+		D342B7151FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
+		D342B7161FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
+		D342B7171FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
+		D342B7181FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
+		D342B7191FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
+		D342B71A1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
+		D342B71B1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
+		D342B71C1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
+		D342B71D1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
+		D342B71E1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
+		D342B71F1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
+		D342B7201FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
+		D342B7211FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
+		D374210D1F9DDC9F004E30D1 /* AVUser+Social.h in Headers */ = {isa = PBXBuildFile; fileRef = D374210B1F9DDC9F004E30D1 /* AVUser+Social.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D374210E1F9DDC9F004E30D1 /* AVUser+Social.m in Sources */ = {isa = PBXBuildFile; fileRef = D374210C1F9DDC9F004E30D1 /* AVUser+Social.m */; };
+		D374210F1F9DDCC2004E30D1 /* AVUser+Social.h in Headers */ = {isa = PBXBuildFile; fileRef = D374210B1F9DDC9F004E30D1 /* AVUser+Social.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D37421101F9DDCC3004E30D1 /* AVUser+Social.h in Headers */ = {isa = PBXBuildFile; fileRef = D374210B1F9DDC9F004E30D1 /* AVUser+Social.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D37421111F9DDCC5004E30D1 /* AVUser+Social.h in Headers */ = {isa = PBXBuildFile; fileRef = D374210B1F9DDC9F004E30D1 /* AVUser+Social.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D37421121F9DDCC8004E30D1 /* AVUser+Social.m in Sources */ = {isa = PBXBuildFile; fileRef = D374210C1F9DDC9F004E30D1 /* AVUser+Social.m */; };
+		D37421131F9DDCC9004E30D1 /* AVUser+Social.m in Sources */ = {isa = PBXBuildFile; fileRef = D374210C1F9DDC9F004E30D1 /* AVUser+Social.m */; };
+		D37421141F9DDCCA004E30D1 /* AVUser+Social.m in Sources */ = {isa = PBXBuildFile; fileRef = D374210C1F9DDC9F004E30D1 /* AVUser+Social.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1837,6 +1871,10 @@
 		9AD392491BFD7BE600D28074 /* MessagesProtoOrig.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessagesProtoOrig.pbobjc.m; sourceTree = "<group>"; };
 		9AD651D31BD9470900C55F85 /* AVIMDynamicObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMDynamicObject.h; sourceTree = "<group>"; };
 		9AD651D41BD9470900C55F85 /* AVIMDynamicObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMDynamicObject.m; sourceTree = "<group>"; };
+		D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LCExtension+Cocoa.h"; sourceTree = "<group>"; };
+		D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "LCExtension+Cocoa.m"; sourceTree = "<group>"; };
+		D374210B1F9DDC9F004E30D1 /* AVUser+Social.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVUser+Social.h"; sourceTree = "<group>"; };
+		D374210C1F9DDC9F004E30D1 /* AVUser+Social.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AVUser+Social.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2773,6 +2811,8 @@
 				8C841A9E1A5A7A0000C5C6C4 /* AVUser.h */,
 				8C841A9F1A5A7A0000C5C6C4 /* AVUser.m */,
 				8C841AA01A5A7A0000C5C6C4 /* AVUser_Internal.h */,
+				D374210B1F9DDC9F004E30D1 /* AVUser+Social.h */,
+				D374210C1F9DDC9F004E30D1 /* AVUser+Social.m */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -2809,6 +2849,8 @@
 				835092101EB1ECB7000DA884 /* AVDynamicObject.h */,
 				83331D4D1EB9A34000CADC9C /* AVDynamicObject_Internal.h */,
 				835092111EB1ECB7000DA884 /* AVDynamicObject.m */,
+				D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */,
+				D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -3116,6 +3158,7 @@
 				9A2F1B5D1CF6F6FA00BE52F2 /* LCIMUnknownField_PackagePrivate.h in Headers */,
 				9A2F1B0C1CF6F6FA00BE52F2 /* LCIMCodedInputStream.h in Headers */,
 				9A2F1B2D1CF6F6FA00BE52F2 /* LCIMDictionary_PackagePrivate.h in Headers */,
+				D342B70D1FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */,
 				837261DD1F2C605C009DBDF7 /* AVIMOptions.h in Headers */,
 				9AE76C551C3F7CC600325902 /* AVIMCommandCommon.h in Headers */,
 				9A2F1B1B1CF6F6FA00BE52F2 /* LCIMCodedOutputStream_PackagePrivate.h in Headers */,
@@ -3246,6 +3289,7 @@
 				70CA80431BDE431A000A3B21 /* NSDictionary+LCHash.h in Headers */,
 				70CA7FDC1BDE42F5000A3B21 /* AVACL_Internal.h in Headers */,
 				830EBA011C44F3D600BA917F /* AVSaveOption_internal.h in Headers */,
+				D342B7091FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */,
 				70CA7FDE1BDE42F5000A3B21 /* AVRole_Internal.h in Headers */,
 				70CA7FE01BDE42F5000A3B21 /* AVAnalytics_Internal.h in Headers */,
 				70BA7A6A1BE2041D00C3EB70 /* AVKeychain.h in Headers */,
@@ -3270,6 +3314,7 @@
 				83FCB9C41CEDC57C007D8712 /* LCURLRequestSerialization.h in Headers */,
 				8302AED71C192A0700E13F8A /* LCURLConnection.h in Headers */,
 				70CA7FF71BDE42F6000A3B21 /* AVGeoPoint_Internal.h in Headers */,
+				D374210F1F9DDCC2004E30D1 /* AVUser+Social.h in Headers */,
 				70CA7FF81BDE42F6000A3B21 /* AVLocationManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3279,6 +3324,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83331D481EB9A25F00CADC9C /* AVCaptcha.h in Headers */,
+				D342B70B1FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */,
 				835092151EB1ECB7000DA884 /* AVDynamicObject.h in Headers */,
 				835092001EB1BDD0000DA884 /* AVSMS.h in Headers */,
 				8320F8D91C1918C60024B45E /* AVACL.h in Headers */,
@@ -3335,6 +3381,7 @@
 				8320F9071C1918C60024B45E /* AVHTTPClient.h in Headers */,
 				8320F9081C1918C60024B45E /* AVHTTPRequestOperation.h in Headers */,
 				8320F9091C1918C60024B45E /* AVImageRequestOperation.h in Headers */,
+				D37421111F9DDCC5004E30D1 /* AVUser+Social.h in Headers */,
 				8320F90A1C1918C60024B45E /* AVJSONRequestOperation.h in Headers */,
 				8320F90B1C1918C60024B45E /* AVNetworkActivityIndicatorManager.h in Headers */,
 				8320F90C1C1918C60024B45E /* AVNetworking.h in Headers */,
@@ -3389,6 +3436,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				838CE3541EC9838500B24F5B /* AVLiveQuery.h in Headers */,
+				D342B7101FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */,
 				8366BD071ECE0FF2008A5264 /* AVExponentialTimer.h in Headers */,
 				838CE32B1EC97E6F00B24F5B /* AVOSCloudLiveQuery.h in Headers */,
 				834A54831ECAF3A0006C8F4B /* AVSubscriber.h in Headers */,
@@ -3400,6 +3448,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				838CE3551EC9838500B24F5B /* AVLiveQuery.h in Headers */,
+				D342B7111FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */,
 				8366BD081ECE0FF2008A5264 /* AVExponentialTimer.h in Headers */,
 				838CE33A1EC980DE00B24F5B /* AVOSCloudLiveQuery.h in Headers */,
 				834A54841ECAF3A0006C8F4B /* AVSubscriber.h in Headers */,
@@ -3411,6 +3460,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83B0E59C1F283AEF00EE1A75 /* AVIMReadReceiptMessage.h in Headers */,
+				D342B70E1FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */,
 				83B0E5951F2839FB00EE1A75 /* AVOSCloudIMGroupChat.h in Headers */,
 				83B0E5A01F283BE200EE1A75 /* AVIMConversation+GroupChat.h in Headers */,
 			);
@@ -3505,6 +3555,7 @@
 				83E13C1C1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */,
 				83D8CF2B1C17DAF50094279D /* AVOSCloud_Internal.h in Headers */,
 				83D8CF2E1C17DAF50094279D /* AVCacheManager.h in Headers */,
+				D342B70A1FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */,
 				83D8CF301C17DAF50094279D /* AVUser_Internal.h in Headers */,
 				83D8CF311C17DAF50094279D /* AVInstallation_Internal.h in Headers */,
 				83D8CF321C17DAF50094279D /* AVPersistenceUtils.h in Headers */,
@@ -3529,6 +3580,7 @@
 				83D8CF491C17DAF50094279D /* AVAnalytics_Internal.h in Headers */,
 				83D8CF4A1C17DAF50094279D /* AVCloudQueryResult_Internal.h in Headers */,
 				83D8CF4B1C17DAF50094279D /* AVAnalyticsActivity.h in Headers */,
+				D37421101F9DDCC3004E30D1 /* AVUser+Social.h in Headers */,
 				83D8CF4D1C17DAF50094279D /* AVPush_Internal.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3538,6 +3590,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83B5FF511B7C768B000C3923 /* dynamic_images.h in Headers */,
+				D342B70F1FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */,
 				83B5FF6D1B7C768B000C3923 /* macho_walker.h in Headers */,
 				83B5FF581B7C768B000C3923 /* protected_memory_allocator.h in Headers */,
 				83B5FF711B7C768B000C3923 /* md5.h in Headers */,
@@ -3656,6 +3709,7 @@
 				83A2BD2F1CF33CDA0047B230 /* AVPaasClient_internal.h in Headers */,
 				8C841AC81A5A7A0000C5C6C4 /* AVCacheManager.h in Headers */,
 				8C841B5B1A5A7A0000C5C6C4 /* AVUser_Internal.h in Headers */,
+				D342B7081FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */,
 				8C841B231A5A7A0000C5C6C4 /* AVInstallation_Internal.h in Headers */,
 				8C841ACA1A5A7A0000C5C6C4 /* AVPersistenceUtils.h in Headers */,
 				8C841B641A5A7A0000C5C6C4 /* AVUtils.h in Headers */,
@@ -3680,6 +3734,7 @@
 				83FCB9AE1CEDC57C007D8712 /* LCNetworkReachabilityManager.h in Headers */,
 				8C841B291A5A7A0000C5C6C4 /* AVCloudQueryResult_Internal.h in Headers */,
 				8C841AB61A5A7A0000C5C6C4 /* AVAnalyticsActivity.h in Headers */,
+				D374210D1F9DDC9F004E30D1 /* AVUser+Social.h in Headers */,
 				8C841B261A5A7A0000C5C6C4 /* AVPush_Internal.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3749,6 +3804,7 @@
 				9A2F1B4F1CF6F6FA00BE52F2 /* LCIMRootObject_PackagePrivate.h in Headers */,
 				8C895DDC1A78A5D900992A8F /* AVMPDefines.h in Headers */,
 				8C841C3E1A5A84C600C5C6C4 /* AVIMBlockHelper.h in Headers */,
+				D342B70C1FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */,
 				837261DC1F2C605C009DBDF7 /* AVIMOptions.h in Headers */,
 				8C895DDB1A78A5D900992A8F /* avmp.h in Headers */,
 				8CA1571F1A5E8556003C2532 /* AVIMTypedMessageObject.h in Headers */,
@@ -4369,6 +4425,7 @@
 				9AD27C5E1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.m in Sources */,
 				9AD27C4E1E1418DB002F9C7C /* LCIMEmpty.pbobjc.m in Sources */,
 				704F3BB01BE0D05C0033245C /* AVIMImageMessage.m in Sources */,
+				D342B71A1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				9A2F1B7B1CF6F6FA00BE52F2 /* LCIMWireFormat.m in Sources */,
 				704F3BB11BE0D05C0033245C /* AVIMLocationMessage.m in Sources */,
 				704F3BB21BE0D05C0033245C /* AVIMTextMessage.m in Sources */,
@@ -4393,6 +4450,7 @@
 				7085D5241BEA237A00449DC1 /* AVTestUtil.m in Sources */,
 				704F3C0F1BE0D6BB0033245C /* XCTestCase+AsyncTesting.m in Sources */,
 				704F3C071BE0D5F50033245C /* AVIMTestBase.m in Sources */,
+				D342B71B1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				704F3C081BE0D5F50033245C /* AVIMCustomMessage.m in Sources */,
 				704F3C091BE0D5F50033245C /* AVIMClientTest.m in Sources */,
 				704F3C0A1BE0D5F50033245C /* AVIMConversationTest.m in Sources */,
@@ -4466,6 +4524,7 @@
 				70CA7F8B1BDE3721000A3B21 /* AVInstallation.m in Sources */,
 				70CA7F8C1BDE3721000A3B21 /* AVPush.m in Sources */,
 				70BA7A691BE2041200C3EB70 /* AVKeychain.m in Sources */,
+				D342B7141FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				8302AEDC1C192A0700E13F8A /* LCURLConnection.m in Sources */,
 				70CA7F8D1BDE3721000A3B21 /* AVCloudQueryResult.m in Sources */,
 				83FCB9D31CEDC57C007D8712 /* LCURLResponseSerialization.m in Sources */,
@@ -4480,6 +4539,7 @@
 				70CA7F941BDE3721000A3B21 /* LCNetworkStatistics.m in Sources */,
 				70CA7F951BDE3721000A3B21 /* AVStatus.m in Sources */,
 				835092021EB1BDD0000DA884 /* AVSMS.m in Sources */,
+				D37421121F9DDCC8004E30D1 /* AVUser+Social.m in Sources */,
 				83FCB9BF1CEDC57C007D8712 /* LCSecurityPolicy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4501,6 +4561,7 @@
 				70F3153D1BDE507700D691B3 /* AVCloudTest.m in Sources */,
 				70F3153E1BDE507800D691B3 /* AVOSCloudTest.m in Sources */,
 				70F3153F1BDE507800D691B3 /* AVFileTest.m in Sources */,
+				D342B7151FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				70F315401BDE507800D691B3 /* AVRoleTest.m in Sources */,
 				70F315411BDE507800D691B3 /* AVACLTest.m in Sources */,
 				70F315421BDE507800D691B3 /* AVHelpersTest.m in Sources */,
@@ -4523,6 +4584,7 @@
 			files = (
 				83E5D9521C1AA7C000E61E37 /* AVAnalyticsUtils.m in Sources */,
 				8320F87C1C1918C60024B45E /* AVRequestOperation.m in Sources */,
+				D342B7171FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				8320F87D1C1918C60024B45E /* AVFile.m in Sources */,
 				8320F87E1C1918C60024B45E /* AVJSONRequestOperation.m in Sources */,
 				8320F87F1C1918C60024B45E /* LCDatabaseQueue.m in Sources */,
@@ -4591,6 +4653,7 @@
 				8320F8CE1C1918C60024B45E /* AVImageRequestOperation.m in Sources */,
 				8320F8CF1C1918C60024B45E /* AVNetworkActivityIndicatorManager.m in Sources */,
 				8320F8D01C1918C60024B45E /* LCKeyValueStore.m in Sources */,
+				D37421141F9DDCCA004E30D1 /* AVUser+Social.m in Sources */,
 				8320F8D11C1918C60024B45E /* AVURLConnectionOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4601,6 +4664,7 @@
 			files = (
 				834A54851ECAF3A0006C8F4B /* AVSubscriber.m in Sources */,
 				838CE3561EC9838500B24F5B /* AVLiveQuery.m in Sources */,
+				D342B71E1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				8366BD091ECE0FF2008A5264 /* AVExponentialTimer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4609,6 +4673,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D342B71F1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				838CE3291EC97E6F00B24F5B /* AVOSCloudLiveQueryTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4619,6 +4684,7 @@
 			files = (
 				834A54861ECAF3A0006C8F4B /* AVSubscriber.m in Sources */,
 				838CE3571EC9838500B24F5B /* AVLiveQuery.m in Sources */,
+				D342B7201FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				8366BD0A1ECE0FF2008A5264 /* AVExponentialTimer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4627,6 +4693,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D342B7211FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				838CE3451EC980E000B24F5B /* AVOSCloudLiveQueryTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4636,6 +4703,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83B0E59B1F283AEF00EE1A75 /* AVIMReadReceiptMessage.m in Sources */,
+				D342B71C1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				83B0E59F1F283BE200EE1A75 /* AVIMConversation+GroupChat.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4706,6 +4774,7 @@
 				83D8CEB91C17DAF50094279D /* AVPush.m in Sources */,
 				835092181EB1ECB7000DA884 /* AVDynamicObject.m in Sources */,
 				83D8CEBA1C17DAF50094279D /* LCDatabaseCoordinator.m in Sources */,
+				D342B7161FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				83D8CEBE1C17DAF50094279D /* AVRelation.m in Sources */,
 				83D8CEBF1C17DAF50094279D /* AVReachability.m in Sources */,
 				83FCB9B61CEDC57C007D8712 /* LCNetworkReachabilityManager.m in Sources */,
@@ -4720,6 +4789,7 @@
 				83FCB9C01CEDC57C007D8712 /* LCSecurityPolicy.m in Sources */,
 				83D8CEC91C17DAF50094279D /* LCKeyValueStore.m in Sources */,
 				83D8CECA1C17DAF50094279D /* AVURLConnectionOperation.m in Sources */,
+				D37421131F9DDCC9004E30D1 /* AVUser+Social.m in Sources */,
 				830EB9FC1C44D68400BA917F /* AVSaveOption.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4745,6 +4815,7 @@
 				83B5FF701B7C768B000C3923 /* md5.cc in Sources */,
 				83B5FF521B7C768B000C3923 /* exception_handler.cc in Sources */,
 				83B5FF4B1B7C768B000C3923 /* Breakpad.mm in Sources */,
+				D342B71D1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				83B5FF661B7C768B000C3923 /* file_id.cc in Sources */,
 				83B5FF6E1B7C768B000C3923 /* string_utilities.cc in Sources */,
 				83B5FF481B7C768B000C3923 /* ios_exception_minidump_generator.mm in Sources */,
@@ -4819,6 +4890,7 @@
 				8C841B251A5A7A0000C5C6C4 /* AVPush.m in Sources */,
 				835092161EB1ECB7000DA884 /* AVDynamicObject.m in Sources */,
 				830E7CF91B1CA2A2005F4B22 /* LCDatabaseCoordinator.m in Sources */,
+				D342B7121FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				8C841B1E1A5A7A0000C5C6C4 /* AVRelation.m in Sources */,
 				8C841B631A5A7A0000C5C6C4 /* AVReachability.m in Sources */,
 				83FCB9B31CEDC57C007D8712 /* LCNetworkReachabilityManager.m in Sources */,
@@ -4833,6 +4905,7 @@
 				83FCB9BD1CEDC57C007D8712 /* LCSecurityPolicy.m in Sources */,
 				838DD7A11B3D3FB600C95897 /* LCKeyValueStore.m in Sources */,
 				8C841B4C1A5A7A0000C5C6C4 /* AVURLConnectionOperation.m in Sources */,
+				D374210E1F9DDC9F004E30D1 /* AVUser+Social.m in Sources */,
 				830EB9F91C44D68400BA917F /* AVSaveOption.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4857,6 +4930,7 @@
 				706F85A11B82E4E00079CC55 /* AVOSCloudTest.m in Sources */,
 				704F8DAE1BF49292007CB560 /* AVUtilsTest.m in Sources */,
 				705EEF611BD8C4E600A29083 /* AVCustomUser.m in Sources */,
+				D342B7131FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				8CEEABCC1ABC179300B9E757 /* AVCloudTest.m in Sources */,
 				70276B5E1B809333002E91EC /* AVACLTest.m in Sources */,
 				8CEEABCD1ABC179300B9E757 /* AVFileTest.m in Sources */,
@@ -4935,6 +5009,7 @@
 				9AD27C5D1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.m in Sources */,
 				9AD27C4D1E1418DB002F9C7C /* LCIMEmpty.pbobjc.m in Sources */,
 				9A2F1B791CF6F6FA00BE52F2 /* LCIMWireFormat.m in Sources */,
+				D342B7181FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				8C9A92791A70AF1800CA4912 /* AVIMTextMessage.m in Sources */,
 				83F745F71B91735B00437259 /* LCIMCacheStore.m in Sources */,
 				8C841C471A5A84C600C5C6C4 /* AVIMWebSocketWrapper.m in Sources */,
@@ -4959,6 +5034,7 @@
 				7047179A1B4A60CC00F6ADDC /* AVIMClientTest.m in Sources */,
 				8CEA86691A77817B00864211 /* AVTestUtil.m in Sources */,
 				8CEA86621A777A7900864211 /* XCTestCase+AsyncTesting.m in Sources */,
+				D342B7191FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				7047179C1B4A60E100F6ADDC /* AVIMMessageTest.m in Sources */,
 				704717A51B4A620900F6ADDC /* AVIMTestBase.m in Sources */,
 				8CEA865F1A777A7900864211 /* AVTestBase.m in Sources */,
