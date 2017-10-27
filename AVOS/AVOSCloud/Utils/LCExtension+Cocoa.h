@@ -16,33 +16,33 @@
 /**
  Type checking for a cocoa instance in runtime.
 
- @param aClass a cocoa class.
+ @param instance a cocoa object's instance.
  @return if the result is valid, then return True, else return False.
  */
-- (BOOL)lc_isValidForTypeCheckingWith:(Class)aClass;
++ (BOOL)lc_isValidForCheckingTypeWith:(id)instance;
 
 /**
  Type checking for a cocoa instance in runtime.
 
- @param aClass a cocoa class.
+ @param instance a cocoa object's instance.
  @return if the result is invalid, then return True, else return False.
  */
-- (BOOL)lc_isInvalidForTypeCheckingWith:(Class)aClass;
++ (BOOL)lc_isInvalidForCheckingTypeWith:(id)instance;
 
 /**
  Strict type checking for a cocoa instance in runtime.
 
- @param aClass a cocoa class.
+ @param instance a cocoa object's instance.
  @return if the result is valid, then return True, else return False.
  */
-- (BOOL)lc_isValidForStrictTypeCheckingWith:(Class)aClass;
++ (BOOL)lc_isValidForCheckingStrictTypeWith:(id)instance;
 
 /**
  Strict type checking for a cocoa instance in runtime.
 
- @param aClass a cocoa class.
+ @param instance a cocoa object's instance.
  @return if the result is invalid, then return True, else return False.
  */
-- (BOOL)lc_isInvalidForStrictTypeCheckingWith:(Class)aClass;
++ (BOOL)lc_isInvalidForCheckingStrictTypeWith:(id)instance;
 
 @end

@@ -950,11 +950,11 @@ static BOOL enableAutomatic = NO;
 + (void)configAndChangeCurrentUserWithUser:(AVUser *)user
                                     object:(id)object
 {
-    NSDictionary *dic = (NSDictionary *)object;
-    
-    if ([dic lc_isInvalidForTypeCheckingWith:NSDictionary.class]) {
+    if ([NSDictionary lc_isInvalidForCheckingTypeWith:object]) {
         return;
     }
+    
+    NSDictionary *dic = (NSDictionary *)object;
     
     [AVObjectUtils copyDictionary:dic toObject:user];
     

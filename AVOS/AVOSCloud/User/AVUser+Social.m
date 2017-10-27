@@ -276,7 +276,7 @@ NSString *const UserAuthDataKey = @"authData";
     
     NSDictionary *authDataValue = authData[UserAuthDataKey];
     
-    if ([authDataValue lc_isInvalidForTypeCheckingWith:NSDictionary.class]) {
+    if ([NSDictionary lc_isInvalidForCheckingTypeWith:authDataValue]) {
         
         *error = fuckingErr(UserAuthDataKey);
         
@@ -287,7 +287,7 @@ NSString *const UserAuthDataKey = @"authData";
     
     NSDictionary *platformValue = authDataValue[platform];
     
-    if ([platformValue lc_isInvalidForTypeCheckingWith:NSDictionary.class]) {
+    if ([NSDictionary lc_isInvalidForCheckingTypeWith:platformValue]) {
         
         *error = fuckingErr(platform);
         
@@ -318,7 +318,7 @@ NSString *const UserAuthDataKey = @"authData";
     
     NSString *just_id = platformValue[just_id_key];
     
-    if ([just_id lc_isInvalidForTypeCheckingWith:NSString.class]) {
+    if ([NSString lc_isInvalidForCheckingTypeWith:just_id]) {
         
         *error = fuckingErr(just_id_key);
         
@@ -329,7 +329,7 @@ NSString *const UserAuthDataKey = @"authData";
     
     NSString *access_token = platformValue[@"access_token"];
     
-    if ([access_token lc_isInvalidForTypeCheckingWith:NSString.class]) {
+    if ([NSString lc_isInvalidForCheckingTypeWith:access_token]) {
         
         *error = fuckingErr(@"access_token");
         

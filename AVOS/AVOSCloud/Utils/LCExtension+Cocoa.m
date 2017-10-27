@@ -10,24 +10,24 @@
 
 @implementation NSObject (LCExtension)
 
-- (BOOL)lc_isValidForTypeCheckingWith:(Class)aClass
++ (BOOL)lc_isValidForCheckingTypeWith:(id)instance
 {
-    return (self && [self isKindOfClass:aClass]);
+    return (instance && [instance isKindOfClass:self]);
 }
 
-- (BOOL)lc_isInvalidForTypeCheckingWith:(Class)aClass
++ (BOOL)lc_isInvalidForCheckingTypeWith:(id)instance
 {
-    return ![self lc_isValidForTypeCheckingWith:aClass];
+    return ![self lc_isValidForCheckingTypeWith:instance];
 }
 
-- (BOOL)lc_isValidForStrictTypeCheckingWith:(Class)aClass
++ (BOOL)lc_isValidForCheckingStrictTypeWith:(id)instance
 {
-    return (self && [self isMemberOfClass:aClass]);
+    return (instance && [instance isMemberOfClass:self]);
 }
 
-- (BOOL)lc_isInvalidForStrictTypeCheckingWith:(Class)aClass
++ (BOOL)lc_isInvalidForCheckingStrictTypeWith:(id)instance
 {
-    return ![self lc_isValidForStrictTypeCheckingWith:aClass];
+    return ![self lc_isValidForCheckingStrictTypeWith:instance];
 }
 
 @end
