@@ -23,7 +23,10 @@
 - (void)tearDown {
     [super tearDown];
     // 不影响其它测试
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
     [AVACL setDefaultACL:nil withAccessForCurrentUser:NO];
+#pragma clang diagnostic pop
 }
 
 - (void)testACL {

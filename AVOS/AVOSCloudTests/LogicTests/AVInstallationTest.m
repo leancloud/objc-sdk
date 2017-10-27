@@ -42,7 +42,7 @@
     XCTAssertNil(error);
     NSString *objectId = [AVInstallation currentInstallation].objectId;
     
-    AVInstallation *installation = [AVInstallation objectWithoutDataWithObjectId:objectId];
+    AVInstallation *installation = [AVInstallation objectWithObjectId:objectId];
     [installation fetch:&error];
     XCTAssertNil(error);
     

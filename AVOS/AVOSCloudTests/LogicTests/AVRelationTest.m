@@ -28,16 +28,16 @@
     [self addDeleteObject:object1];
     
     AVObject *object2 = [AVObject objectWithClassName:className];
-    AVRelation *relation = [object2 relationforKey:@"child"];
+    AVRelation *relation = [object2 relationForKey:@"child"];
     [relation addObject:object1];
 //    [object2 setObject:object1 forKey:@"child"];
     XCTAssertTrue([object2 save:&error], @"error %@", error);
     [self addDeleteObject:object2];
     
-    AVObject *obj=[AVObject objectWithoutDataWithClassName:className objectId:object2.objectId];
+    AVObject *obj=[AVObject objectWithClassName:className objectId:object2.objectId];
     [obj fetchIfNeeded];
     
-    AVRelation *postRel=[obj relationforKey:@"child"];
+    AVRelation *postRel=[obj relationForKey:@"child"];
     AVQuery *q=[postRel query];
     
     NSUInteger count= [q countObjects];
@@ -231,7 +231,7 @@
     
     AVObject *parent = [AVObject objectWithClassName:[NSString stringWithFormat:@"%@_Parent", className]];
     [parent setObject:[NSDate date] forKey:@"birthday"];
-    AVRelation * relation = [parent relationforKey:@"child"];
+    AVRelation * relation = [parent relationForKey:@"child"];
     AVObject *child = [AVObject objectWithClassName:[NSString stringWithFormat:@"%@_Child", className]];
     [child setObject:@(1) forKey:@"like"];
     [child setObject:[NSDate date] forKey:@"birthday"];
@@ -258,10 +258,11 @@
     AVUser *user = [AVUser user];
     user.username = [NSString stringWithFormat:@"%@", username];
     user.password = @"123456";
-    [user signUp];
+    NSError *err = nil;
+    [user signUp:&err];
     [self addDeleteObject:user];
     
-    AVRelation * relation = [user relationforKey:@"myLikes"];
+    AVRelation * relation = [user relationForKey:@"myLikes"];
     AVObject * post = [AVObject objectWithClassName:[NSString stringWithFormat:@"%@_Post", className]];
     [post setObject:@"article content" forKey:@"content"];
     [post save];
@@ -293,7 +294,7 @@
     for(int i = 0; i < max; ++i) {
         AVObject * parent = [AVObject objectWithClassName:[NSString stringWithFormat:@"%@_Parent", className]];
         [parent setObject:@(i) forKey:@"myValue"];
-        AVRelation * relation = [parent relationforKey:@"child"];
+        AVRelation * relation = [parent relationForKey:@"child"];
         [relation addObject:child];
         XCTAssertTrue([parent save], @"save failed");
         [self addDeleteObject:parent];
@@ -319,7 +320,7 @@
     Armor *shield = [Armor object];
     shield.displayName = @"Wooden Shield";
     
-    AVRelation * relation = [shield relationforKey:@"relation"];
+    AVRelation * relation = [shield relationForKey:@"relation"];
     UserInfo * info = [UserInfo object];
     info.company = @"test";
     XCTAssertTrue([info save:&error], @"save failed %@", error);
@@ -347,7 +348,7 @@
     
     AVObject *child = [AVObject objectWithClassName:[NSString stringWithFormat:@"%@_Child", className]];
     AVObject * parent = [AVObject objectWithClassName:[NSString stringWithFormat:@"%@_Parent", className]];
-    AVRelation * relation = [parent relationforKey:@"child"];
+    AVRelation * relation = [parent relationForKey:@"child"];
     XCTAssertThrows([relation addObject:child], @"should raise exception when adding object without objectId to relation");
 }
 
@@ -367,7 +368,7 @@
     
     AVObject *c = [AVObject objectWithClassName:[NSString stringWithFormat:@"%@_C", className]];
     [c setObject:@"e" forKey:@"e"];
-    AVRelation *relation = [c relationforKey:@"f"];
+    AVRelation *relation = [c relationForKey:@"f"];
     [relation addObject:b];
     [c save:&error];
     XCTAssertNil(error, @"%@", error);
@@ -464,7 +465,7 @@
     XCTAssertTrue([child save:&error], @"error %@", error);
     
     AVObject *parent = [AVObject objectWithClassName:@"AVRelationTest_A"];
-    AVRelation *relation = [parent relationforKey:@"child"];
+    AVRelation *relation = [parent relationForKey:@"child"];
     [relation addObject:child];
     XCTAssertTrue([parent save:&error], @"error %@", error);
     
@@ -480,7 +481,7 @@
     query.cachePolicy = kAVCachePolicyCacheOnly;
     NSArray *cacheObjects = [query findObjects];
     XCTAssertEqual(cacheObjects.count, 1);
-    AVObject *cacheChild = cacheObjects[0];
+//    AVObject *cacheChild = cacheObjects[0];
     XCTAssertEqualObjects(relationChild.objectId, child.objectId);
     
     [self addDeleteObject:child];

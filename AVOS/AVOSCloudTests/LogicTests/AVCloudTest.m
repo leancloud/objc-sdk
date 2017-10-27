@@ -51,7 +51,7 @@
     AVObject *object = [AVObject objectWithClassName:NSStringFromClass([self class])];
     [object save];
     [self addDeleteObject:object];
-    AVObject *obj=[AVObject objectWithoutDataWithClassName:NSStringFromClass([self class]) objectId:object.objectId];
+    AVObject *obj=[AVObject objectWithClassName:NSStringFromClass([self class]) objectId:object.objectId];
     NSDictionary *params=@{@"obj":obj};
     
     // return: {"objectId":"55d37fb600b09b5389a7c4ef","createdAt":"2015-08-18T18:55:50.357Z",

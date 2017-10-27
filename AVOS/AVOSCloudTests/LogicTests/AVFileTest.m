@@ -26,7 +26,7 @@
     XCTAssertNil(error);
     
     [AVFile getFileWithObjectId:file.objectId withBlock:^(AVFile *file2, NSError *error) {
-        NSString *name = file2.name;
+//        NSString *name = file2.name;
         XCTAssertNil(error);
         NOTIFY
     }];
@@ -142,7 +142,7 @@
 
 -(void)testObjectWithLargeFileAttribute {
     NSString *filePath=[[NSBundle bundleForClass:[self class]] pathForResource:@"TestRelation" ofType:@"json"];
-    NSString *fileMD5= [AVUtils MD5ForFile:filePath];
+//    NSString *fileMD5= [AVUtils MD5ForFile:filePath];
     
     AVFile *file1 = [AVFile fileWithName:@"TestRelation.json" contentsAtPath:filePath];
     AVFile *file2 = [AVFile fileWithName:@"TestRelation.json" contentsAtPath:filePath];
@@ -181,7 +181,7 @@
     }];
     NSLog(@"reached");
     WAIT_FOREVER;
-    AVObject *object2 = [AVObject objectWithoutDataWithClassName:NSStringFromClass([self class]) objectId:object.objectId];
+    AVObject *object2 = [AVObject objectWithClassName:NSStringFromClass([self class]) objectId:object.objectId];
     [object2 fetch];
     NSArray *a = [object2 objectForKey:fieldName];
     NSLog(@"%@", a);
