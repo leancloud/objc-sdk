@@ -33,8 +33,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)objectWithoutDataWithObjectId:(NSString *)objectId;
 
-
-
 /*!
  Create a query which returns objects of this type.
  A default implementation is provided by AVObject which should always be sufficient.

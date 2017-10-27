@@ -109,23 +109,8 @@ static BOOL enableAutomatic = NO;
     }];
 }
 
-- (BOOL)isAuthDataExistInMemory {
-    if (self.sessionToken.length > 0 ||
-        self.sinaWeiboToken.length > 0 ||
-        [self objectForKey:authDataTag]) // for sns user
-    {
-        return YES;
-    }
-    return NO;
-}
-
 - (BOOL)isAuthenticated {
     return [self isAuthDataExistInMemory];
-}
-
-- (NSArray *)linkedServiceNames {
-    NSDictionary *dict = [self objectForKey:authDataTag];
-    return[dict allKeys];
 }
 
 - (NSArray<AVRole *> *)getRoles:(NSError * _Nullable __autoreleasing *)error {
@@ -151,23 +136,9 @@ static BOOL enableAutomatic = NO;
     return u;
 }
 
-+ (AVUser *)userOrSubclassUser {
-    return (AVUser *)[AVObjectUtils avObjectForClass:[AVUser userTag]];
-}
-
 + (void)enableAutomaticUser
 {
     enableAutomatic = YES;
-}
-
-+(BOOL)isAutomaticUserEnabled
-{
-    return enableAutomatic;
-}
-
-+(void)disableAutomaticUser
-{
-    enableAutomatic = NO;
 }
 
 -(NSError *)preSave
@@ -477,9 +448,9 @@ static BOOL enableAutomatic = NO;
             user = [self userOrSubclassUser];
             user.username = username;
             user.password = password;
-            [AVObjectUtils copyDictionary:object toObject:user];
-            [user.requestManager clear];
-            [[self class] changeCurrentUser:user save:YES];
+            
+            [self configAndChangeCurrentUserWithUser:user
+                                              object:object];
         }
         
         if (wait) {
@@ -561,9 +532,9 @@ static BOOL enableAutomatic = NO;
         if (error == nil)
         {
             user = [self userOrSubclassUser];
-            [AVObjectUtils copyDictionary:object toObject:user];
-            [user.requestManager clear];
-            [[self class] changeCurrentUser:user save:YES];
+            
+            [self configAndChangeCurrentUserWithUser:user
+                                              object:object];
         }
         
         if (wait) {
@@ -713,12 +684,10 @@ static BOOL enableAutomatic = NO;
         if (error == nil)
         {
             user = [self userOrSubclassUser];
-            //            user.username = username;
-            //            user.password = password;
             user.mobilePhoneVerified = YES;
-            [AVObjectUtils copyDictionary:object toObject:user];
-            [user.requestManager clear];
-            [[self class] changeCurrentUser:user save:YES];
+
+            [self configAndChangeCurrentUserWithUser:user
+                                              object:object];
         }
         
         if (wait) {
@@ -794,11 +763,9 @@ static BOOL enableAutomatic = NO;
         if (error == nil)
         {
             user = [self userOrSubclassUser];
-            //            user.username = username;
-            //            user.password = password;
-            [AVObjectUtils copyDictionary:object toObject:user];
-            [user.requestManager clear];
-            [[self class] changeCurrentUser:user save:YES];
+            
+            [self configAndChangeCurrentUserWithUser:user
+                                              object:object];
         }
         
         if (wait) {
@@ -926,26 +893,6 @@ static BOOL enableAutomatic = NO;
     return query;
 }
 
-+(NSString *)userTag
-{
-    return @"_User";
-}
-
-+(NSString *)endPoint
-{
-    return @"users";
-}
-
--(NSString *)internalClassName
-{
-    return @"_User";
-}
-
--(void)setNewFlag:(BOOL)isNew
-{
-    self.isNew = isNew;
-}
-
 #pragma mark - Override from AVObject
 
 /**
@@ -974,8 +921,74 @@ static BOOL enableAutomatic = NO;
     return snapshot;
 }
 
-@end
+#pragma mark - internal method
 
++(NSString *)userTag
+{
+    return @"_User";
+}
+
++(NSString *)endPoint
+{
+    return @"users";
+}
+
++(BOOL)isAutomaticUserEnabled
+{
+    return enableAutomatic;
+}
+
++(void)disableAutomaticUser
+{
+    enableAutomatic = NO;
+}
+
++ (AVUser *)userOrSubclassUser {
+    return (AVUser *)[AVObjectUtils avObjectForClass:[AVUser userTag]];
+}
+
++ (void)configAndChangeCurrentUserWithUser:(AVUser *)user
+                                    object:(id)object
+{
+    NSDictionary *dic = (NSDictionary *)object;
+    
+    if ([dic lc_isInvalidForTypeCheckingWith:NSDictionary.class]) {
+        return;
+    }
+    
+    [AVObjectUtils copyDictionary:dic toObject:user];
+    
+    [user.requestManager clear];
+    
+    [self changeCurrentUser:user save:YES];
+}
+
+-(NSString *)internalClassName
+{
+    return @"_User";
+}
+
+-(void)setNewFlag:(BOOL)isNew
+{
+    self.isNew = isNew;
+}
+
+- (BOOL)isAuthDataExistInMemory {
+    if (self.sessionToken.length > 0 ||
+        self.sinaWeiboToken.length > 0 ||
+        [self objectForKey:authDataTag]) // for sns user
+    {
+        return YES;
+    }
+    return NO;
+}
+
+- (NSArray *)linkedServiceNames {
+    NSDictionary *dict = [self objectForKey:authDataTag];
+    return[dict allKeys];
+}
+
+@end
 
 @implementation AVUser (Friendship)
 
