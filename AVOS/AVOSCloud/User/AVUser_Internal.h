@@ -36,4 +36,19 @@
 + (void)configAndChangeCurrentUserWithUser:(AVUser *)user
                                     object:(id)object;
 
++ (void)loginOrSignUpWithAuthData:(NSDictionary *)authData
+                             user:(AVUser *)user
+                         platform:(NSString *)platform
+                 openSafeCallback:(BOOL)openSafeCallback
+                            block:(AVUserResultBlock)block;
+
+- (void)associateWithAuthData:(NSDictionary *)authData
+                     platform:(NSString *)platform
+             openSafeCallback:(BOOL)openSafeCallback
+                        block:(AVUserResultBlock)block;
+
+- (void)disassociateWithPlatform:(NSString *)platform
+                openSafeCallback:(BOOL)openSafeCallback
+                           block:(AVUserResultBlock)block;
+
 @end

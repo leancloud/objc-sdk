@@ -42,7 +42,6 @@
 
 // User
 #import "AVUser.h"
-#import "AVUser+Social.h"
 #import "AVAnonymousUtils.h"
 
 // CloudCode

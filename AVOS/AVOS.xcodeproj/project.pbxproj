@@ -1283,14 +1283,6 @@
 		D342B71F1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
 		D342B7201FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
 		D342B7211FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
-		D374210D1F9DDC9F004E30D1 /* AVUser+Social.h in Headers */ = {isa = PBXBuildFile; fileRef = D374210B1F9DDC9F004E30D1 /* AVUser+Social.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D374210E1F9DDC9F004E30D1 /* AVUser+Social.m in Sources */ = {isa = PBXBuildFile; fileRef = D374210C1F9DDC9F004E30D1 /* AVUser+Social.m */; };
-		D374210F1F9DDCC2004E30D1 /* AVUser+Social.h in Headers */ = {isa = PBXBuildFile; fileRef = D374210B1F9DDC9F004E30D1 /* AVUser+Social.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D37421101F9DDCC3004E30D1 /* AVUser+Social.h in Headers */ = {isa = PBXBuildFile; fileRef = D374210B1F9DDC9F004E30D1 /* AVUser+Social.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D37421111F9DDCC5004E30D1 /* AVUser+Social.h in Headers */ = {isa = PBXBuildFile; fileRef = D374210B1F9DDC9F004E30D1 /* AVUser+Social.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D37421121F9DDCC8004E30D1 /* AVUser+Social.m in Sources */ = {isa = PBXBuildFile; fileRef = D374210C1F9DDC9F004E30D1 /* AVUser+Social.m */; };
-		D37421131F9DDCC9004E30D1 /* AVUser+Social.m in Sources */ = {isa = PBXBuildFile; fileRef = D374210C1F9DDC9F004E30D1 /* AVUser+Social.m */; };
-		D37421141F9DDCCA004E30D1 /* AVUser+Social.m in Sources */ = {isa = PBXBuildFile; fileRef = D374210C1F9DDC9F004E30D1 /* AVUser+Social.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1873,8 +1865,6 @@
 		9AD651D41BD9470900C55F85 /* AVIMDynamicObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMDynamicObject.m; sourceTree = "<group>"; };
 		D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LCExtension+Cocoa.h"; sourceTree = "<group>"; };
 		D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "LCExtension+Cocoa.m"; sourceTree = "<group>"; };
-		D374210B1F9DDC9F004E30D1 /* AVUser+Social.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVUser+Social.h"; sourceTree = "<group>"; };
-		D374210C1F9DDC9F004E30D1 /* AVUser+Social.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AVUser+Social.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2811,8 +2801,6 @@
 				8C841A9E1A5A7A0000C5C6C4 /* AVUser.h */,
 				8C841A9F1A5A7A0000C5C6C4 /* AVUser.m */,
 				8C841AA01A5A7A0000C5C6C4 /* AVUser_Internal.h */,
-				D374210B1F9DDC9F004E30D1 /* AVUser+Social.h */,
-				D374210C1F9DDC9F004E30D1 /* AVUser+Social.m */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -3314,7 +3302,6 @@
 				83FCB9C41CEDC57C007D8712 /* LCURLRequestSerialization.h in Headers */,
 				8302AED71C192A0700E13F8A /* LCURLConnection.h in Headers */,
 				70CA7FF71BDE42F6000A3B21 /* AVGeoPoint_Internal.h in Headers */,
-				D374210F1F9DDCC2004E30D1 /* AVUser+Social.h in Headers */,
 				70CA7FF81BDE42F6000A3B21 /* AVLocationManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3381,7 +3368,6 @@
 				8320F9071C1918C60024B45E /* AVHTTPClient.h in Headers */,
 				8320F9081C1918C60024B45E /* AVHTTPRequestOperation.h in Headers */,
 				8320F9091C1918C60024B45E /* AVImageRequestOperation.h in Headers */,
-				D37421111F9DDCC5004E30D1 /* AVUser+Social.h in Headers */,
 				8320F90A1C1918C60024B45E /* AVJSONRequestOperation.h in Headers */,
 				8320F90B1C1918C60024B45E /* AVNetworkActivityIndicatorManager.h in Headers */,
 				8320F90C1C1918C60024B45E /* AVNetworking.h in Headers */,
@@ -3580,7 +3566,6 @@
 				83D8CF491C17DAF50094279D /* AVAnalytics_Internal.h in Headers */,
 				83D8CF4A1C17DAF50094279D /* AVCloudQueryResult_Internal.h in Headers */,
 				83D8CF4B1C17DAF50094279D /* AVAnalyticsActivity.h in Headers */,
-				D37421101F9DDCC3004E30D1 /* AVUser+Social.h in Headers */,
 				83D8CF4D1C17DAF50094279D /* AVPush_Internal.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3734,7 +3719,6 @@
 				83FCB9AE1CEDC57C007D8712 /* LCNetworkReachabilityManager.h in Headers */,
 				8C841B291A5A7A0000C5C6C4 /* AVCloudQueryResult_Internal.h in Headers */,
 				8C841AB61A5A7A0000C5C6C4 /* AVAnalyticsActivity.h in Headers */,
-				D374210D1F9DDC9F004E30D1 /* AVUser+Social.h in Headers */,
 				8C841B261A5A7A0000C5C6C4 /* AVPush_Internal.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4539,7 +4523,6 @@
 				70CA7F941BDE3721000A3B21 /* LCNetworkStatistics.m in Sources */,
 				70CA7F951BDE3721000A3B21 /* AVStatus.m in Sources */,
 				835092021EB1BDD0000DA884 /* AVSMS.m in Sources */,
-				D37421121F9DDCC8004E30D1 /* AVUser+Social.m in Sources */,
 				83FCB9BF1CEDC57C007D8712 /* LCSecurityPolicy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4653,7 +4636,6 @@
 				8320F8CE1C1918C60024B45E /* AVImageRequestOperation.m in Sources */,
 				8320F8CF1C1918C60024B45E /* AVNetworkActivityIndicatorManager.m in Sources */,
 				8320F8D01C1918C60024B45E /* LCKeyValueStore.m in Sources */,
-				D37421141F9DDCCA004E30D1 /* AVUser+Social.m in Sources */,
 				8320F8D11C1918C60024B45E /* AVURLConnectionOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4789,7 +4771,6 @@
 				83FCB9C01CEDC57C007D8712 /* LCSecurityPolicy.m in Sources */,
 				83D8CEC91C17DAF50094279D /* LCKeyValueStore.m in Sources */,
 				83D8CECA1C17DAF50094279D /* AVURLConnectionOperation.m in Sources */,
-				D37421131F9DDCC9004E30D1 /* AVUser+Social.m in Sources */,
 				830EB9FC1C44D68400BA917F /* AVSaveOption.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4905,7 +4886,6 @@
 				83FCB9BD1CEDC57C007D8712 /* LCSecurityPolicy.m in Sources */,
 				838DD7A11B3D3FB600C95897 /* LCKeyValueStore.m in Sources */,
 				8C841B4C1A5A7A0000C5C6C4 /* AVURLConnectionOperation.m in Sources */,
-				D374210E1F9DDC9F004E30D1 /* AVUser+Social.m in Sources */,
 				830EB9F91C44D68400BA917F /* AVSaveOption.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
