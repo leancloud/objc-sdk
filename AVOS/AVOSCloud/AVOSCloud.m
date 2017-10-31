@@ -98,6 +98,7 @@ AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
 
     [self initializePaasClient];
     [self updateRouterInBackground];
+    [self setAllLogsEnabled: NO];
     [[LCNetworkStatistics sharedInstance] start];
 
     for (Class<AVOSCloudModule> cls in AVOSCloudModules) {
