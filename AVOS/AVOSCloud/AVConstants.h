@@ -157,6 +157,8 @@ extern NSInteger const kAVErrorUserWithMobilePhoneNotFound;
 extern NSInteger const kAVErrorUserMobilePhoneNumberTaken;
 /*! @abstract 215: Mobile phone number isn't verified. */
 extern NSInteger const kAVErrorUserMobilePhoneNotVerified;
+/*! @abstract 216: SNS Auth Data's format is invalid. */
+extern NSInteger const kAVErrorUserSNSAuthDataInvalid;
 /*! @abstract 250: Linked id missing from request */
 extern NSInteger const kAVErrorLinkedIdMissing;
 /*! @abstract 251: Invalid linked session */

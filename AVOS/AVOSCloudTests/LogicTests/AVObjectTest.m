@@ -62,7 +62,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
 }
 
 - (AVObject *)fetchObjectById:(NSString *)objectId {
-    AVObject *object = [AVObject objectWithoutDataWithClassName:self.className objectId:objectId];
+    AVObject *object = [AVObject objectWithClassName:self.className objectId:objectId];
     NSError *error;
     [object fetch:&error];
     XCTAssertNil(error);
@@ -154,7 +154,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     NSMutableArray *array2 = [NSMutableArray arrayWithCapacity:10];
     
     for (AVObject *obj in data) {
-        AVObject *objToFetch = [AVObject objectWithoutDataWithClassName:NSStringFromClass([self class]) objectId:obj.objectId];
+        AVObject *objToFetch = [AVObject objectWithClassName:NSStringFromClass([self class]) objectId:obj.objectId];
         [array1 addObject:objToFetch];
         [array2 addObject:objToFetch];
     };
@@ -178,7 +178,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
 }
 
 - (void)testFetchError {
-    AVObject * object = [AVObject objectWithoutDataWithClassName:self.className objectId:@"abc"];
+    AVObject * object = [AVObject objectWithClassName:self.className objectId:@"abc"];
     NSError *error;
     BOOL result = [object fetch:&error];
     XCTAssertFalse(result);
@@ -187,7 +187,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
 }
 
 - (void)testFetchAllError {
-    AVObject * object = [AVObject objectWithoutDataWithClassName:self.className objectId:@"abc"];
+    AVObject * object = [AVObject objectWithClassName:self.className objectId:@"abc"];
     NSError *error;
     BOOL result = [AVObject fetchAll:@[object] error:&error];
     XCTAssertFalse(result);
@@ -355,7 +355,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     [object save];
     [self addDeleteObject:object];
     
-    AVObject *student = [AVObject objectWithoutDataWithClassName:NSStringFromClass([self class]) objectId:object.objectId];
+    AVObject *student = [AVObject objectWithClassName:NSStringFromClass([self class]) objectId:object.objectId];
     [student fetch];
     
     // don't change anything of user, then save student
@@ -380,7 +380,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     [self addDeleteObject:object1];
     
     NSString *objectId = object1.objectId;
-    AVObject *object2 = [AVObject objectWithoutDataWithClassName:self.className objectId:objectId];
+    AVObject *object2 = [AVObject objectWithClassName:self.className objectId:objectId];
     [object2 fetch];
     XCTAssertEqualObjects(object1.createdAt, object2.createdAt, @"time is not equal");
 }
@@ -552,7 +552,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     XCTAssertEqualObjects(@(100), [object objectForKey:@"any"][@"score"]);
     XCTAssertEqualObjects(@"shit", [object objectForKey:@"any"][@"name"]);
     
-    AVObject *fetchObject = [AVObject objectWithoutDataWithClassName:self.className objectId:object.objectId];
+    AVObject *fetchObject = [AVObject objectWithClassName:self.className objectId:object.objectId];
     XCTAssertTrue([fetchObject fetch]);
     XCTAssertEqualObjects(@(100), [fetchObject objectForKey:@"any"][@"score"]);
     XCTAssertEqualObjects(@"shit", [fetchObject objectForKey:@"any"][@"name"]);
@@ -584,7 +584,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     
     XCTAssertTrue([object delete]);
     
-    AVObject *deletedObject = [AVObject objectWithoutDataWithClassName:self.className objectId:object.objectId];
+    AVObject *deletedObject = [AVObject objectWithClassName:self.className objectId:object.objectId];
     NSError *error;
     XCTAssertFalse([deletedObject fetch:&error]);
     XCTAssertEqual(error.code, kAVErrorObjectNotFound);
@@ -612,7 +612,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     XCTAssertTrue([AVObject deleteAll:[objects subarrayWithRange:NSMakeRange(4, 2)]]);
     
     for (AVObject *object in objects) {
-        AVObject *deletedObject = [AVObject objectWithoutDataWithClassName:self.className objectId:object.objectId];
+        AVObject *deletedObject = [AVObject objectWithClassName:self.className objectId:object.objectId];
         NSError *error;
         XCTAssertFalse([deletedObject fetch:&error]);
         XCTAssertEqual(error.code, kAVErrorObjectNotFound);
@@ -707,7 +707,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
 - (void)testObjectWithoutDataWithClassName_objectId {
     NSString *className = @"TestObject";
     NSString *objectId = @"anTestObjectId";
-    AVObject *object = [AVObject objectWithoutDataWithClassName:className objectId:objectId];
+    AVObject *object = [AVObject objectWithClassName:className objectId:objectId];
     XCTAssertEqualObjects(object.objectId, objectId);
 }
 
@@ -769,7 +769,10 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     
     XCTAssertNoThrow([object removeObjectForKey:@"string"]);
     XCTAssertNil([object objectForKey:@"string"]);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
     XCTAssertThrows([object removeObjectForKey:nil]);
+#pragma clang diagnostic pop
 }
 
 - (void)testObjectForKeyedSubscript {
@@ -800,7 +803,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     AVObject *objectA = [AVObject objectWithClassName:className];
     AVObject *objectB = [AVObject objectWithClassName:className];
     
-    AVRelation *relation = [objectA relationforKey:@"relation"];
+    AVRelation *relation = [objectA relationForKey:@"relation"];
     XCTAssertThrows([relation addObject:objectB]);
     NSError *error = nil;
     [objectB save:&error];
@@ -819,7 +822,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     NSError *error = nil;
     [object save:&error];
     XCTAssertNil(error);
-    object = [AVObject objectWithoutDataWithClassName:className objectId:object.objectId];
+    object = [AVObject objectWithClassName:className objectId:object.objectId];
     [object addObject:@"test string 2" forKey:@"array"];
     [object save:&error];
     XCTAssertNil(error);
@@ -837,7 +840,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     NSError *error = nil;
     [object save:&error];
     XCTAssertNil(error);
-    object = [AVObject objectWithoutDataWithClassName:className objectId:object.objectId];
+    object = [AVObject objectWithClassName:className objectId:object.objectId];
     [object addObjectsFromArray:@[@"test string 3", @"test string 4"] forKey:@"array"];
     [object save:&error];
     XCTAssertNil(error);
@@ -855,11 +858,11 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     NSError *error = nil;
     [object save:&error];
     XCTAssertNil(error);
-    object = [AVObject objectWithoutDataWithClassName:className objectId:object.objectId];
+    object = [AVObject objectWithClassName:className objectId:object.objectId];
     [object addUniqueObject:@"test string 1" forKey:@"array"];
     [object save:&error];
     XCTAssertNil(error);
-    object = [AVObject objectWithoutDataWithClassName:className objectId:object.objectId];
+    object = [AVObject objectWithClassName:className objectId:object.objectId];
     [object addUniqueObject:@"test string 2" forKey:@"array"];
     [object save:&error];
     XCTAssertNil(error);
@@ -877,7 +880,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     NSError *error = nil;
     [object save:&error];
     XCTAssertNil(error);
-    object = [AVObject objectWithoutDataWithClassName:className objectId:object.objectId];
+    object = [AVObject objectWithClassName:className objectId:object.objectId];
     [object addUniqueObjectsFromArray:@[@"test string 2", @"test string 3"] forKey:@"array"];
     [object save:&error];
     XCTAssertNil(error);
@@ -895,7 +898,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     NSError *error = nil;
     [object save:&error];
     XCTAssertNil(error);
-    object = [AVObject objectWithoutDataWithClassName:className objectId:object.objectId];
+    object = [AVObject objectWithClassName:className objectId:object.objectId];
     [object removeObject:@"test string 2" forKey:@"array"];
     [object save:&error];
     XCTAssertNil(error);
@@ -932,7 +935,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     NSError *error = nil;
     [object save:&error];
     XCTAssertNil(error);
-    object = [AVObject objectWithoutDataWithClassName:className objectId:object.objectId];
+    object = [AVObject objectWithClassName:className objectId:object.objectId];
     [object removeObjectsInArray:@[@"test string 2", @"test string 3", @"test string 4"] forKey:@"array"];
     [object save:&error];
     XCTAssertNil(error);
@@ -949,7 +952,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     NSError *error = nil;
     [object save:&error];
     XCTAssertNil(error);
-    object = [AVObject objectWithoutDataWithClassName:className objectId:object.objectId];
+    object = [AVObject objectWithClassName:className objectId:object.objectId];
     [object incrementKey:@"number"];
     [object save:&error];
     XCTAssertNil(error);
@@ -965,7 +968,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     NSError *error = nil;
     [object save:&error];
     XCTAssertNil(error);
-    object = [AVObject objectWithoutDataWithClassName:className objectId:object.objectId];
+    object = [AVObject objectWithClassName:className objectId:object.objectId];
     [object incrementKey:@"number" byAmount:@3];
     object.fetchWhenSave = YES;
     [object save:&error];
@@ -1015,7 +1018,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     [obj save:&error];
     XCTAssertNil(error);
     
-    AVObject *fetchObj = [AVObject objectWithoutDataWithClassName:self.className objectId:obj.objectId];
+    AVObject *fetchObj = [AVObject objectWithClassName:self.className objectId:obj.objectId];
     [fetchObj fetch];
     NSArray *array = obj[@"array"];
     XCTAssertEqual(array.count, 2);
@@ -1031,7 +1034,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     NSError *error;
     [obj save:&error];
     
-    AVObject *fetchObj = [AVObject objectWithoutDataWithClassName:@"TestObject" objectId:obj.objectId];
+    AVObject *fetchObj = [AVObject objectWithClassName:@"TestObject" objectId:obj.objectId];
     [fetchObj fetch];
     XCTAssertNil(fetchObj[@"string"]);
     XCTAssertNil(fetchObj[@"number"]);

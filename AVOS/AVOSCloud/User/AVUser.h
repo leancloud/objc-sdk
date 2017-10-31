@@ -11,6 +11,10 @@
 @class AVQuery;
 @class AVUserShortMessageRequestOptions;
 
+extern NSString * _Nonnull const LeanCloudSocialPlatformWeiBo;
+extern NSString * _Nonnull const LeanCloudSocialPlatformQQ;
+extern NSString * _Nonnull const LeanCloudSocialPlatformWeiXin;
+
 NS_ASSUME_NONNULL_BEGIN
 
 /*!
@@ -382,6 +386,22 @@ A LeanCloud Framework User Object that is a local representation of a user persi
  Creates a query for AVUser objects.
  */
 + (AVQuery *)query;
+
++ (void)loginOrSignUpWithAuthData:(NSDictionary *)authData
+                         platform:(NSString *)platform
+                            block:(AVUserResultBlock)block;
+
++ (void)loginOrSignUpWithAuthData:(NSDictionary *)authData
+                             user:(AVUser *)user
+                         platform:(NSString *)platform
+                            block:(AVUserResultBlock)block;
+
+- (void)associateWithAuthData:(NSDictionary *)authData
+                     platform:(NSString *)platform
+                        block:(AVUserResultBlock)block;
+
+- (void)disassociateWithPlatform:(NSString *)platform
+                           block:(AVUserResultBlock)block;
 
 @end
 

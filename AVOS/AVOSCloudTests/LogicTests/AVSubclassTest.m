@@ -50,11 +50,12 @@
 @implementation AVSubclassTest
 +(void)setUp{
     [super setUp];
+    NSError *err = nil;
     [Armor registerSubclass];
     AVUser *user = [AVUser user];
     user.username = @"travis";
     user.password = @"123456";
-    [user signUp];
+    [user signUp:&err];
     [self addDeleteObject:user];
 }
 

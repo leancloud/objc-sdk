@@ -284,8 +284,7 @@
     else
     {
         [NSException raise: NSInvalidArgumentException
-                    format: @"Unknown event (%"PRIuPTR") passed to _sendEvent:",
-         event];
+                    format: @"Unknown event (%"PRIuPTR") passed to _sendEvent:", event];
     }
 }
 

@@ -292,9 +292,7 @@ static void image_add_callback (const struct mach_header *mh, intptr_t vmaddr_sl
  *
  * Write a binary image frame
  *
- * @param file Output file
  * @param name binary image path (or name).
- * @param image_base Mach-O image base.
  */
 static void process_binary_image (const char *name, const void *header,
                                   struct uuid_command *out_uuid, uintptr_t *out_baseaddr) {

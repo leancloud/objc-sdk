@@ -108,7 +108,7 @@ static void *kExpectedStatus_Key = "kExpectedStatus_Key";
 
 - (void) setNotifiedStatus:(XCTAsyncTestCaseStatus)value
 {
-    NSNumber *valueNumber = [NSNumber numberWithInt:value];
+    NSNumber *valueNumber = [NSNumber numberWithUnsignedLong:value];
     [self setAssociatedObject:valueNumber key:kNotifiedStatus_Key];
 }
 
@@ -120,7 +120,7 @@ static void *kExpectedStatus_Key = "kExpectedStatus_Key";
 
 - (void) setExpectedStatus:(XCTAsyncTestCaseStatus)value
 {
-    NSNumber *valueNumber = [NSNumber numberWithInt:value];
+    NSNumber *valueNumber = [NSNumber numberWithUnsignedLong:value];
     [self setAssociatedObject:valueNumber key:kExpectedStatus_Key];
 }
 

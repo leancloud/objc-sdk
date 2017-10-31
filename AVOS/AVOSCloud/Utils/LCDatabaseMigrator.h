@@ -38,7 +38,6 @@
  * Migrate database with migrations.
  * @param migrations An array of object confirms LCDatabaseMigration protocol.
  * NOTE: migration can not be removed, only can be added.
- * @return void.
  */
 - (void)executeMigrations:(NSArray *)migrations;
 

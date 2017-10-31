@@ -23,13 +23,32 @@
 
 + (AVUser *)userOrSubclassUser;
 
-+(NSString *)userTag;
-+(BOOL)isAutomaticUserEnabled;
-+(void)disableAutomaticUser;
++ (NSString *)userTag;
++ (BOOL)isAutomaticUserEnabled;
++ (void)disableAutomaticUser;
 
-+(NSString *)endPoint;
--(NSString *)internalClassName;
--(void)setNewFlag:(BOOL)isNew;
++ (NSString *)endPoint;
+- (NSString *)internalClassName;
+- (void)setNewFlag:(BOOL)isNew;
 
 - (NSArray *)linkedServiceNames;
+
++ (void)configAndChangeCurrentUserWithUser:(AVUser *)user
+                                    object:(id)object;
+
++ (void)loginOrSignUpWithAuthData:(NSDictionary *)authData
+                             user:(AVUser *)user
+                         platform:(NSString *)platform
+                 openSafeCallback:(BOOL)openSafeCallback
+                            block:(AVUserResultBlock)block;
+
+- (void)associateWithAuthData:(NSDictionary *)authData
+                     platform:(NSString *)platform
+             openSafeCallback:(BOOL)openSafeCallback
+                        block:(AVUserResultBlock)block;
+
+- (void)disassociateWithPlatform:(NSString *)platform
+                openSafeCallback:(BOOL)openSafeCallback
+                           block:(AVUserResultBlock)block;
+
 @end

@@ -105,6 +105,8 @@ NSInteger const kAVErrorUserWithMobilePhoneNotFound = 213;
 NSInteger const kAVErrorUserMobilePhoneNumberTaken = 214;
 /*! @abstract 215: Mobile phone number isn't verified. */
 NSInteger const kAVErrorUserMobilePhoneNotVerified = 215;
+/*! @abstract 216: SNS Auth Data's format is invalid. */
+NSInteger const kAVErrorUserSNSAuthDataInvalid = 216;
 
 /*! @abstract 250: Linked id missing from request */
 NSInteger const kAVErrorLinkedIdMissing = 250;

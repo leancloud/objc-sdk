@@ -408,10 +408,10 @@
     XCTAssertTrue([obj2 save:&err], @"save fail:%@",[err description]);
     [self addDeleteObject:obj2];
     
-    AVObject *object=[AVObject objectWithoutDataWithClassName:className objectId:obj2.objectId];
+    AVObject *object=[AVObject objectWithClassName:className objectId:obj2.objectId];
     [object fetchIfNeeded];
     
-    AVRelation *postRel=[object relationforKey:@"child"];
+    AVRelation *postRel=[object relationForKey:@"child"];
     
     AVQuery *q=[postRel query];
     
@@ -571,7 +571,7 @@
     AVUser *user = [[AVUser alloc] init];
     user.username = className;
     user.password = @"123456";
-    [user signUp];
+    [user signUp:&error];
     [self addDeleteObject:user];
     int max = 15;
     for(int i = 0; i < max; ++i) {
@@ -583,6 +583,7 @@
 //            [acl setReadAccess:YES forUser:[AVUser currentUser]];
 //            [object setACL:acl];
 //        }
+        error = nil;
         XCTAssertTrue([object save:&error], @"error %@", error);
         [self addDeleteObject:object];
     }
