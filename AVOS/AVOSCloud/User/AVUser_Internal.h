@@ -39,16 +39,16 @@
 + (void)loginOrSignUpWithAuthData:(NSDictionary *)authData
                              user:(AVUser *)user
                          platform:(NSString *)platform
-                 openSafeCallback:(BOOL)openSafeCallback
+                            queue:(dispatch_queue_t)queue
                             block:(AVUserResultBlock)block;
 
 - (void)associateWithAuthData:(NSDictionary *)authData
                      platform:(NSString *)platform
-             openSafeCallback:(BOOL)openSafeCallback
+                        queue:(dispatch_queue_t)queue
                         block:(AVUserResultBlock)block;
 
 - (void)disassociateWithPlatform:(NSString *)platform
-                openSafeCallback:(BOOL)openSafeCallback
+                           queue:(dispatch_queue_t)queue
                            block:(AVUserResultBlock)block;
 
 @end

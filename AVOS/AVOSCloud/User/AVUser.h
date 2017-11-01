@@ -11,11 +11,11 @@
 @class AVQuery;
 @class AVUserShortMessageRequestOptions;
 
-extern NSString * _Nonnull const LeanCloudSocialPlatformWeiBo;
-extern NSString * _Nonnull const LeanCloudSocialPlatformQQ;
-extern NSString * _Nonnull const LeanCloudSocialPlatformWeiXin;
-
 NS_ASSUME_NONNULL_BEGIN
+
+extern NSString * const LeanCloudSocialPlatformWeiBo;
+extern NSString * const LeanCloudSocialPlatformQQ;
+extern NSString * const LeanCloudSocialPlatformWeiXin;
 
 /*!
 A LeanCloud Framework User Object that is a local representation of a user persisted to the LeanCloud. This class
@@ -387,19 +387,63 @@ A LeanCloud Framework User Object that is a local representation of a user persi
  */
 + (AVQuery *)query;
 
+/**
+ Use a SNS's auth data to login or signup.
+ if the auth data already bind to a valid AVUser, then the instance of the AVUser will return in result block.
+ if the auth data not bind to a exist AVUser, then a new instance of AVUser will be created and return in result block.
+
+ @param authData a Dictionary with specific format.
+ e.g.
+ {
+     "authData" : {
+         'Platform' : {
+             'uid' : someChars,
+             'access_token' : someChars,
+             ... ... (other attribute)
+         }
+     }
+ }
+ @param platform if the auth data belongs to Weibo, QQ or Weixin(Wechat),
+                 please use `LeanCloudSocialPlatformXXX` to assign platform.
+                 if not above platform, use a custom string.
+ @param block result callback.
+ */
 + (void)loginOrSignUpWithAuthData:(NSDictionary *)authData
                          platform:(NSString *)platform
                             block:(AVUserResultBlock)block;
 
-+ (void)loginOrSignUpWithAuthData:(NSDictionary *)authData
-                             user:(AVUser *)user
-                         platform:(NSString *)platform
-                            block:(AVUserResultBlock)block;
+/**
+ Associate a SNS's auth data to a instance of AVUser.
+ after associated, user can login by auth data.
 
+ @param authData a Dictionary with specific format.
+ e.g.
+ {
+     "authData" : {
+         'Platform' : {
+             'uid' : someChars,
+             'access_token' : someChars,
+             ... ... (other attribute)
+         }
+     }
+ }
+ @param platform if the auth data belongs to Weibo, QQ or Weixin(Wechat),
+                 please use `LeanCloudSocialPlatformXXX` to assign platform.
+                 if not above platform, use a custom string.
+ @param block result callback.
+ */
 - (void)associateWithAuthData:(NSDictionary *)authData
                      platform:(NSString *)platform
                         block:(AVUserResultBlock)block;
 
+/**
+ Disassociate the specified platform's auth data from a instance of AVUser.
+
+ @param platform if the auth data belongs to Weibo, QQ or Weixin(Wechat),
+                 please use `LeanCloudSocialPlatformXXX` to assign platform.
+                 if not above platform, use a custom string.
+ @param block result callback.
+ */
 - (void)disassociateWithPlatform:(NSString *)platform
                            block:(AVUserResultBlock)block;
 
