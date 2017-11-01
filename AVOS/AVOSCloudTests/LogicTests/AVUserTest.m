@@ -553,7 +553,7 @@ static dispatch_time_t dTimeout(NSTimeInterval interval) {
         [AVUser loginOrSignUpWithAuthData:weiboAuthData
                                      user:nil
                                  platform:LeanCloudSocialPlatformWeiBo
-                         openSafeCallback:false
+                                    queue:dispatch_queue_create("", nil)
                                     block:block];
     } )) {
         XCTFail(@"timeout");
@@ -575,7 +575,7 @@ static dispatch_time_t dTimeout(NSTimeInterval interval) {
         };
 
         [aUser disassociateWithPlatform:LeanCloudSocialPlatformWeiBo
-                       openSafeCallback:false
+                                  queue:dispatch_queue_create("", nil)
                                   block:block];
     } )) {
         XCTFail(@"timeout");
@@ -596,7 +596,7 @@ static dispatch_time_t dTimeout(NSTimeInterval interval) {
 
         [aUser associateWithAuthData:weiboAuthData
                             platform:LeanCloudSocialPlatformWeiBo
-                    openSafeCallback:false
+                               queue:dispatch_queue_create("", nil)
                                block:block];
     } )) {
         XCTFail(@"timeout");
