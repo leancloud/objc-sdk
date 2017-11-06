@@ -260,6 +260,10 @@ NSMutableDictionary const *_typeDict = nil;
     [self.messageObject setObject:object forKey:key];
 }
 
+- (id)objectForKey:(NSString *)key {
+    return [self.messageObject objectForKey:key];
+}
+
 - (NSString *)payload {
     NSDictionary *dict = [self.messageObject dictionary];
 

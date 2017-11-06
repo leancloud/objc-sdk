@@ -41,6 +41,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setObject:(nullable id)object forKey:(NSString *)key;
 
 /**
+ Get a user-defiend property for a key.
+
+ @param key The key of property that you want to get.
+ @return The value for key.
+ */
+- (nullable id)objectForKey:(NSString *)key;
+
+/**
  *  子类调用此方法进行注册，一般可在子类的 [+(void)load] 方法里面调用
  */
 + (void)registerSubclass;
