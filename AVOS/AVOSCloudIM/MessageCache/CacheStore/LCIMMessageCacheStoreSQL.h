@@ -54,9 +54,6 @@
 #define LCIM_SQL_DELETE_ALL_MESSAGES_OF_CONVERSATION \
 @"delete from message where conversation_id = ?"
 
-#define LCIM_SQL_CREATE_MESSAGE_UNIQUE_INDEX \
-@"create unique index if not exists unique_index on message(conversation_id, message_id, timestamp)"
-
 #define LCIM_SQL_LATEST_MESSAGE \
 @"select * from message where conversation_id = ? order by timestamp desc limit ?"
 
@@ -100,9 +97,7 @@ create index if not exists message_index_conversation_id on message_seq(conversa
 create index if not exists message_index_message_id on message_seq(message_id);                                  \
 create index if not exists message_index_timestamp on message_seq(timestamp);                                    \
                                                                                                                  \
-drop index if exists unique_index;                                                                               \
-                                                                                                                 \
-insert into message_seq(                                                                                         \
+insert or replace into message_seq(                                                                              \
     message_id, conversation_id, from_peer_id, payload, timestamp,                                               \
     receipt_timestamp, read_timestamp, patch_timestamp, status, breakpoint)                                      \
 select                                                                                                           \
@@ -112,6 +107,13 @@ from message order by timestamp asc, message_id asc;                            
                                                                                                                  \
 drop table if exists message;                                                                                    \
 alter table message_seq rename to message;"
+
+#define LCIM_SQL_MESSAGE_UNIQUE_INDEX_INFO \
+@"pragma index_info(message_unique_index)"
+
+#define LCIM_SQL_REBUILD_MESSAGE_UNIQUE_INDEX \
+@"delete from message;"               \
+@"create unique index if not exists message_unique_index on message(conversation_id, message_id, timestamp);"
 
 #define LCIM_SQL_LAST_MESSAGE_SEQ \
 @"select seq from sqlite_sequence where name=\"message\""
