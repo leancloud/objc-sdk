@@ -1,3 +1,0 @@
-[submodule "Breakpad"]
-	path = Breakpad
-	url = https://github.com/leancloud/Breakpad.git

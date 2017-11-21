@@ -595,53 +595,6 @@
 		83B0E59C1F283AEF00EE1A75 /* AVIMReadReceiptMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B0E59A1F283AEE00EE1A75 /* AVIMReadReceiptMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83B0E59F1F283BE200EE1A75 /* AVIMConversation+GroupChat.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B0E59D1F283BE100EE1A75 /* AVIMConversation+GroupChat.m */; };
 		83B0E5A01F283BE200EE1A75 /* AVIMConversation+GroupChat.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B0E59E1F283BE100EE1A75 /* AVIMConversation+GroupChat.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		83B5FF451B7C768B000C3923 /* BreakpadDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF081B7C768B000C3923 /* BreakpadDefines.h */; };
-		83B5FF461B7C768B000C3923 /* BreakpadController.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF0B1B7C768B000C3923 /* BreakpadController.h */; };
-		83B5FF471B7C768B000C3923 /* BreakpadController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF0C1B7C768B000C3923 /* BreakpadController.mm */; };
-		83B5FF481B7C768B000C3923 /* ios_exception_minidump_generator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF0D1B7C768B000C3923 /* ios_exception_minidump_generator.mm */; };
-		83B5FF491B7C768B000C3923 /* ios_exception_minidump_generator.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF0E1B7C768B000C3923 /* ios_exception_minidump_generator.h */; };
-		83B5FF4A1B7C768B000C3923 /* Breakpad.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF101B7C768B000C3923 /* Breakpad.h */; };
-		83B5FF4B1B7C768B000C3923 /* Breakpad.mm in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF111B7C768B000C3923 /* Breakpad.mm */; };
-		83B5FF4C1B7C768B000C3923 /* ConfigFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF131B7C768B000C3923 /* ConfigFile.h */; };
-		83B5FF4D1B7C768B000C3923 /* ConfigFile.mm in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF141B7C768B000C3923 /* ConfigFile.mm */; };
-		83B5FF4E1B7C768B000C3923 /* breakpad_nlist_64.cc in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF161B7C768B000C3923 /* breakpad_nlist_64.cc */; };
-		83B5FF4F1B7C768B000C3923 /* breakpad_nlist_64.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF171B7C768B000C3923 /* breakpad_nlist_64.h */; };
-		83B5FF501B7C768B000C3923 /* dynamic_images.cc in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF181B7C768B000C3923 /* dynamic_images.cc */; };
-		83B5FF511B7C768B000C3923 /* dynamic_images.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF191B7C768B000C3923 /* dynamic_images.h */; };
-		83B5FF521B7C768B000C3923 /* exception_handler.cc in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF1A1B7C768B000C3923 /* exception_handler.cc */; };
-		83B5FF531B7C768B000C3923 /* exception_handler.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF1B1B7C768B000C3923 /* exception_handler.h */; };
-		83B5FF541B7C768B000C3923 /* mach_vm_compat.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF1C1B7C768B000C3923 /* mach_vm_compat.h */; };
-		83B5FF551B7C768B000C3923 /* minidump_generator.cc in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF1D1B7C768B000C3923 /* minidump_generator.cc */; };
-		83B5FF561B7C768B000C3923 /* minidump_generator.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF1E1B7C768B000C3923 /* minidump_generator.h */; };
-		83B5FF571B7C768B000C3923 /* protected_memory_allocator.cc in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF1F1B7C768B000C3923 /* protected_memory_allocator.cc */; };
-		83B5FF581B7C768B000C3923 /* protected_memory_allocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF201B7C768B000C3923 /* protected_memory_allocator.h */; };
-		83B5FF591B7C768B000C3923 /* ucontext_compat.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF211B7C768B000C3923 /* ucontext_compat.h */; };
-		83B5FF5A1B7C768B000C3923 /* uploader.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF231B7C768B000C3923 /* uploader.h */; };
-		83B5FF5B1B7C768B000C3923 /* uploader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF241B7C768B000C3923 /* uploader.mm */; };
-		83B5FF5C1B7C768B000C3923 /* minidump_file_writer-inl.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF271B7C768B000C3923 /* minidump_file_writer-inl.h */; };
-		83B5FF5D1B7C768B000C3923 /* minidump_file_writer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF281B7C768B000C3923 /* minidump_file_writer.cc */; };
-		83B5FF5E1B7C768B000C3923 /* minidump_file_writer.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF291B7C768B000C3923 /* minidump_file_writer.h */; };
-		83B5FF601B7C768B000C3923 /* simple_string_dictionary.cc in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF2C1B7C768B000C3923 /* simple_string_dictionary.cc */; };
-		83B5FF611B7C768B000C3923 /* simple_string_dictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF2D1B7C768B000C3923 /* simple_string_dictionary.h */; };
-		83B5FF621B7C768B000C3923 /* convert_UTF.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF2E1B7C768B000C3923 /* convert_UTF.c */; };
-		83B5FF631B7C768B000C3923 /* convert_UTF.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF2F1B7C768B000C3923 /* convert_UTF.h */; };
-		83B5FF641B7C768B000C3923 /* HTTPMultipartUpload.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF301B7C768B000C3923 /* HTTPMultipartUpload.h */; };
-		83B5FF651B7C768B000C3923 /* HTTPMultipartUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF311B7C768B000C3923 /* HTTPMultipartUpload.m */; };
-		83B5FF661B7C768B000C3923 /* file_id.cc in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF321B7C768B000C3923 /* file_id.cc */; };
-		83B5FF671B7C768B000C3923 /* file_id.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF331B7C768B000C3923 /* file_id.h */; };
-		83B5FF681B7C768B000C3923 /* macho_id.cc in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF341B7C768B000C3923 /* macho_id.cc */; };
-		83B5FF691B7C768B000C3923 /* macho_id.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF351B7C768B000C3923 /* macho_id.h */; };
-		83B5FF6A1B7C768B000C3923 /* macho_utilities.cc in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF361B7C768B000C3923 /* macho_utilities.cc */; };
-		83B5FF6B1B7C768B000C3923 /* macho_utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF371B7C768B000C3923 /* macho_utilities.h */; };
-		83B5FF6C1B7C768B000C3923 /* macho_walker.cc in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF381B7C768B000C3923 /* macho_walker.cc */; };
-		83B5FF6D1B7C768B000C3923 /* macho_walker.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF391B7C768B000C3923 /* macho_walker.h */; };
-		83B5FF6E1B7C768B000C3923 /* string_utilities.cc in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF3A1B7C768B000C3923 /* string_utilities.cc */; };
-		83B5FF6F1B7C768B000C3923 /* string_utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF3B1B7C768B000C3923 /* string_utilities.h */; };
-		83B5FF701B7C768B000C3923 /* md5.cc in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF3D1B7C768B000C3923 /* md5.cc */; };
-		83B5FF711B7C768B000C3923 /* md5.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF3E1B7C768B000C3923 /* md5.h */; };
-		83B5FF721B7C768B000C3923 /* string_conversion.cc in Sources */ = {isa = PBXBuildFile; fileRef = 83B5FF3F1B7C768B000C3923 /* string_conversion.cc */; };
-		83B5FF731B7C768B000C3923 /* string_conversion.h in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF401B7C768B000C3923 /* string_conversion.h */; };
-		83B5FF741B7C768B000C3923 /* Breakpad_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 83B5FF431B7C768B000C3923 /* Breakpad_Prefix.pch */; };
 		83BE43971D242905000C7AC3 /* SDMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BE43931D242905000C7AC3 /* SDMacros.h */; };
 		83BE43991D242905000C7AC3 /* SDMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BE43931D242905000C7AC3 /* SDMacros.h */; };
 		83BE439A1D242905000C7AC3 /* AVIMWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 83BE43951D242905000C7AC3 /* AVIMWebSocket.h */; };
@@ -900,8 +853,6 @@
 		83FCB9DD1CEDC57C007D8712 /* LCURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FCB99E1CEDC57C007D8712 /* LCURLSessionManager.m */; };
 		83FCB9DE1CEDC57C007D8712 /* LCURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FCB99E1CEDC57C007D8712 /* LCURLSessionManager.m */; };
 		83FCB9DF1CEDC57C007D8712 /* LCURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FCB99E1CEDC57C007D8712 /* LCURLSessionManager.m */; };
-		8C255D2B1AE9F817008A6FFC /* AVOSCloudCrashReporting.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C255D2A1AE9F817008A6FFC /* AVOSCloudCrashReporting.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8C255D421AE9FD91008A6FFC /* AVOSCloudCrashReporting.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C255D411AE9FD91008A6FFC /* AVOSCloudCrashReporting.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		8C2FED541A67C2DA0056F945 /* AVIMGeneralObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C2FED521A67C2DA0056F945 /* AVIMGeneralObject.h */; };
 		8C2FED551A67C2DA0056F945 /* AVIMGeneralObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2FED531A67C2DA0056F945 /* AVIMGeneralObject.m */; };
 		8C630C811A6EB259008F1B00 /* AVIMErrorUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C630C7F1A6EB259008F1B00 /* AVIMErrorUtil.h */; };
@@ -1264,7 +1215,6 @@
 		D342B70C1FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
 		D342B70D1FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
 		D342B70E1FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
-		D342B70F1FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
 		D342B7101FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
 		D342B7111FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
 		D342B7121FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
@@ -1278,7 +1228,6 @@
 		D342B71A1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
 		D342B71B1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
 		D342B71C1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
-		D342B71D1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
 		D342B71E1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
 		D342B71F1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
 		D342B7201FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
@@ -1474,54 +1423,6 @@
 		83B0E59A1F283AEE00EE1A75 /* AVIMReadReceiptMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMReadReceiptMessage.h; sourceTree = "<group>"; };
 		83B0E59D1F283BE100EE1A75 /* AVIMConversation+GroupChat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AVIMConversation+GroupChat.m"; sourceTree = "<group>"; };
 		83B0E59E1F283BE100EE1A75 /* AVIMConversation+GroupChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVIMConversation+GroupChat.h"; sourceTree = "<group>"; };
-		83B5FF081B7C768B000C3923 /* BreakpadDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpadDefines.h; sourceTree = "<group>"; };
-		83B5FF0B1B7C768B000C3923 /* BreakpadController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpadController.h; sourceTree = "<group>"; };
-		83B5FF0C1B7C768B000C3923 /* BreakpadController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BreakpadController.mm; sourceTree = "<group>"; };
-		83B5FF0D1B7C768B000C3923 /* ios_exception_minidump_generator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ios_exception_minidump_generator.mm; sourceTree = "<group>"; };
-		83B5FF0E1B7C768B000C3923 /* ios_exception_minidump_generator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ios_exception_minidump_generator.h; sourceTree = "<group>"; };
-		83B5FF101B7C768B000C3923 /* Breakpad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Breakpad.h; sourceTree = "<group>"; };
-		83B5FF111B7C768B000C3923 /* Breakpad.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Breakpad.mm; sourceTree = "<group>"; };
-		83B5FF131B7C768B000C3923 /* ConfigFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigFile.h; sourceTree = "<group>"; };
-		83B5FF141B7C768B000C3923 /* ConfigFile.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ConfigFile.mm; sourceTree = "<group>"; };
-		83B5FF161B7C768B000C3923 /* breakpad_nlist_64.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = breakpad_nlist_64.cc; sourceTree = "<group>"; };
-		83B5FF171B7C768B000C3923 /* breakpad_nlist_64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = breakpad_nlist_64.h; sourceTree = "<group>"; };
-		83B5FF181B7C768B000C3923 /* dynamic_images.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dynamic_images.cc; sourceTree = "<group>"; };
-		83B5FF191B7C768B000C3923 /* dynamic_images.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dynamic_images.h; sourceTree = "<group>"; };
-		83B5FF1A1B7C768B000C3923 /* exception_handler.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = exception_handler.cc; sourceTree = "<group>"; };
-		83B5FF1B1B7C768B000C3923 /* exception_handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = exception_handler.h; sourceTree = "<group>"; };
-		83B5FF1C1B7C768B000C3923 /* mach_vm_compat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mach_vm_compat.h; sourceTree = "<group>"; };
-		83B5FF1D1B7C768B000C3923 /* minidump_generator.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = minidump_generator.cc; sourceTree = "<group>"; };
-		83B5FF1E1B7C768B000C3923 /* minidump_generator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = minidump_generator.h; sourceTree = "<group>"; };
-		83B5FF1F1B7C768B000C3923 /* protected_memory_allocator.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = protected_memory_allocator.cc; sourceTree = "<group>"; };
-		83B5FF201B7C768B000C3923 /* protected_memory_allocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = protected_memory_allocator.h; sourceTree = "<group>"; };
-		83B5FF211B7C768B000C3923 /* ucontext_compat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ucontext_compat.h; sourceTree = "<group>"; };
-		83B5FF231B7C768B000C3923 /* uploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uploader.h; sourceTree = "<group>"; };
-		83B5FF241B7C768B000C3923 /* uploader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = uploader.mm; sourceTree = "<group>"; };
-		83B5FF271B7C768B000C3923 /* minidump_file_writer-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "minidump_file_writer-inl.h"; sourceTree = "<group>"; };
-		83B5FF281B7C768B000C3923 /* minidump_file_writer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = minidump_file_writer.cc; sourceTree = "<group>"; };
-		83B5FF291B7C768B000C3923 /* minidump_file_writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = minidump_file_writer.h; sourceTree = "<group>"; };
-		83B5FF2A1B7C768B000C3923 /* minidump_file_writer_unittest.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = minidump_file_writer_unittest.cc; sourceTree = "<group>"; };
-		83B5FF2C1B7C768B000C3923 /* simple_string_dictionary.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = simple_string_dictionary.cc; sourceTree = "<group>"; };
-		83B5FF2D1B7C768B000C3923 /* simple_string_dictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simple_string_dictionary.h; sourceTree = "<group>"; };
-		83B5FF2E1B7C768B000C3923 /* convert_UTF.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = convert_UTF.c; sourceTree = "<group>"; };
-		83B5FF2F1B7C768B000C3923 /* convert_UTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = convert_UTF.h; sourceTree = "<group>"; };
-		83B5FF301B7C768B000C3923 /* HTTPMultipartUpload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPMultipartUpload.h; sourceTree = "<group>"; };
-		83B5FF311B7C768B000C3923 /* HTTPMultipartUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPMultipartUpload.m; sourceTree = "<group>"; };
-		83B5FF321B7C768B000C3923 /* file_id.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = file_id.cc; sourceTree = "<group>"; };
-		83B5FF331B7C768B000C3923 /* file_id.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = file_id.h; sourceTree = "<group>"; };
-		83B5FF341B7C768B000C3923 /* macho_id.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = macho_id.cc; sourceTree = "<group>"; };
-		83B5FF351B7C768B000C3923 /* macho_id.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macho_id.h; sourceTree = "<group>"; };
-		83B5FF361B7C768B000C3923 /* macho_utilities.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = macho_utilities.cc; sourceTree = "<group>"; };
-		83B5FF371B7C768B000C3923 /* macho_utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macho_utilities.h; sourceTree = "<group>"; };
-		83B5FF381B7C768B000C3923 /* macho_walker.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = macho_walker.cc; sourceTree = "<group>"; };
-		83B5FF391B7C768B000C3923 /* macho_walker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macho_walker.h; sourceTree = "<group>"; };
-		83B5FF3A1B7C768B000C3923 /* string_utilities.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = string_utilities.cc; sourceTree = "<group>"; };
-		83B5FF3B1B7C768B000C3923 /* string_utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = string_utilities.h; sourceTree = "<group>"; };
-		83B5FF3D1B7C768B000C3923 /* md5.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = md5.cc; sourceTree = "<group>"; };
-		83B5FF3E1B7C768B000C3923 /* md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = md5.h; sourceTree = "<group>"; };
-		83B5FF3F1B7C768B000C3923 /* string_conversion.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = string_conversion.cc; sourceTree = "<group>"; };
-		83B5FF401B7C768B000C3923 /* string_conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = string_conversion.h; sourceTree = "<group>"; };
-		83B5FF431B7C768B000C3923 /* Breakpad_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Breakpad_Prefix.pch; sourceTree = "<group>"; };
 		83BE43931D242905000C7AC3 /* SDMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDMacros.h; sourceTree = "<group>"; };
 		83BE43951D242905000C7AC3 /* AVIMWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMWebSocket.h; sourceTree = "<group>"; };
 		83BE43961D242905000C7AC3 /* AVIMWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMWebSocket.m; sourceTree = "<group>"; };
@@ -1574,10 +1475,6 @@
 		83FCB99D1CEDC57C007D8712 /* LCURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCURLSessionManager.h; sourceTree = "<group>"; };
 		83FCB99E1CEDC57C007D8712 /* LCURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCURLSessionManager.m; sourceTree = "<group>"; };
 		8C1F675E1A8B379F00310E65 /* AVIMConversationQuery_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVIMConversationQuery_Internal.h; sourceTree = "<group>"; };
-		8C255D261AE9F815008A6FFC /* AVOSCloudCrashReporting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudCrashReporting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8C255D291AE9F817008A6FFC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8C255D2A1AE9F817008A6FFC /* AVOSCloudCrashReporting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloudCrashReporting.h; sourceTree = "<group>"; };
-		8C255D411AE9FD91008A6FFC /* AVOSCloudCrashReporting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVOSCloudCrashReporting.m; sourceTree = "<group>"; };
 		8C2FED521A67C2DA0056F945 /* AVIMGeneralObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMGeneralObject.h; sourceTree = "<group>"; };
 		8C2FED531A67C2DA0056F945 /* AVIMGeneralObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMGeneralObject.m; sourceTree = "<group>"; };
 		8C630C7F1A6EB259008F1B00 /* AVIMErrorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMErrorUtil.h; sourceTree = "<group>"; };
@@ -1951,13 +1848,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8C255D221AE9F815008A6FFC /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8C8419821A5A791300C5C6C4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -2123,169 +2013,6 @@
 			path = AVOSCloudIMGroupChat;
 			sourceTree = "<group>";
 		};
-		83B5FF071B7C7678000C3923 /* Breakpad */ = {
-			isa = PBXGroup;
-			children = (
-				83B5FF421B7C768B000C3923 /* Classes */,
-				83B5FF441B7C768B000C3923 /* Other Sources */,
-			);
-			name = Breakpad;
-			sourceTree = "<group>";
-		};
-		83B5FF091B7C768B000C3923 /* Framework */ = {
-			isa = PBXGroup;
-			children = (
-				83B5FF081B7C768B000C3923 /* BreakpadDefines.h */,
-			);
-			path = Framework;
-			sourceTree = "<group>";
-		};
-		83B5FF0A1B7C768B000C3923 /* apple */ = {
-			isa = PBXGroup;
-			children = (
-				83B5FF091B7C768B000C3923 /* Framework */,
-			);
-			path = apple;
-			sourceTree = "<group>";
-		};
-		83B5FF0F1B7C768B000C3923 /* handler */ = {
-			isa = PBXGroup;
-			children = (
-				83B5FF0D1B7C768B000C3923 /* ios_exception_minidump_generator.mm */,
-				83B5FF0E1B7C768B000C3923 /* ios_exception_minidump_generator.h */,
-			);
-			path = handler;
-			sourceTree = "<group>";
-		};
-		83B5FF121B7C768B000C3923 /* ios */ = {
-			isa = PBXGroup;
-			children = (
-				83B5FF0B1B7C768B000C3923 /* BreakpadController.h */,
-				83B5FF0C1B7C768B000C3923 /* BreakpadController.mm */,
-				83B5FF0F1B7C768B000C3923 /* handler */,
-				83B5FF101B7C768B000C3923 /* Breakpad.h */,
-				83B5FF111B7C768B000C3923 /* Breakpad.mm */,
-			);
-			path = ios;
-			sourceTree = "<group>";
-		};
-		83B5FF151B7C768B000C3923 /* crash_generation */ = {
-			isa = PBXGroup;
-			children = (
-				83B5FF131B7C768B000C3923 /* ConfigFile.h */,
-				83B5FF141B7C768B000C3923 /* ConfigFile.mm */,
-			);
-			path = crash_generation;
-			sourceTree = "<group>";
-		};
-		83B5FF221B7C768B000C3923 /* handler */ = {
-			isa = PBXGroup;
-			children = (
-				83B5FF161B7C768B000C3923 /* breakpad_nlist_64.cc */,
-				83B5FF171B7C768B000C3923 /* breakpad_nlist_64.h */,
-				83B5FF181B7C768B000C3923 /* dynamic_images.cc */,
-				83B5FF191B7C768B000C3923 /* dynamic_images.h */,
-				83B5FF1A1B7C768B000C3923 /* exception_handler.cc */,
-				83B5FF1B1B7C768B000C3923 /* exception_handler.h */,
-				83B5FF1C1B7C768B000C3923 /* mach_vm_compat.h */,
-				83B5FF1D1B7C768B000C3923 /* minidump_generator.cc */,
-				83B5FF1E1B7C768B000C3923 /* minidump_generator.h */,
-				83B5FF1F1B7C768B000C3923 /* protected_memory_allocator.cc */,
-				83B5FF201B7C768B000C3923 /* protected_memory_allocator.h */,
-				83B5FF211B7C768B000C3923 /* ucontext_compat.h */,
-			);
-			path = handler;
-			sourceTree = "<group>";
-		};
-		83B5FF251B7C768B000C3923 /* sender */ = {
-			isa = PBXGroup;
-			children = (
-				83B5FF231B7C768B000C3923 /* uploader.h */,
-				83B5FF241B7C768B000C3923 /* uploader.mm */,
-			);
-			path = sender;
-			sourceTree = "<group>";
-		};
-		83B5FF261B7C768B000C3923 /* mac */ = {
-			isa = PBXGroup;
-			children = (
-				83B5FF151B7C768B000C3923 /* crash_generation */,
-				83B5FF221B7C768B000C3923 /* handler */,
-				83B5FF251B7C768B000C3923 /* sender */,
-			);
-			path = mac;
-			sourceTree = "<group>";
-		};
-		83B5FF2B1B7C768B000C3923 /* client */ = {
-			isa = PBXGroup;
-			children = (
-				83B5FF0A1B7C768B000C3923 /* apple */,
-				83B5FF121B7C768B000C3923 /* ios */,
-				83B5FF261B7C768B000C3923 /* mac */,
-				83B5FF271B7C768B000C3923 /* minidump_file_writer-inl.h */,
-				83B5FF281B7C768B000C3923 /* minidump_file_writer.cc */,
-				83B5FF291B7C768B000C3923 /* minidump_file_writer.h */,
-				83B5FF2A1B7C768B000C3923 /* minidump_file_writer_unittest.cc */,
-			);
-			name = client;
-			path = ..;
-			sourceTree = "<group>";
-		};
-		83B5FF3C1B7C768B000C3923 /* mac */ = {
-			isa = PBXGroup;
-			children = (
-				83B5FF301B7C768B000C3923 /* HTTPMultipartUpload.h */,
-				83B5FF311B7C768B000C3923 /* HTTPMultipartUpload.m */,
-				83B5FF321B7C768B000C3923 /* file_id.cc */,
-				83B5FF331B7C768B000C3923 /* file_id.h */,
-				83B5FF341B7C768B000C3923 /* macho_id.cc */,
-				83B5FF351B7C768B000C3923 /* macho_id.h */,
-				83B5FF361B7C768B000C3923 /* macho_utilities.cc */,
-				83B5FF371B7C768B000C3923 /* macho_utilities.h */,
-				83B5FF381B7C768B000C3923 /* macho_walker.cc */,
-				83B5FF391B7C768B000C3923 /* macho_walker.h */,
-				83B5FF3A1B7C768B000C3923 /* string_utilities.cc */,
-				83B5FF3B1B7C768B000C3923 /* string_utilities.h */,
-			);
-			path = mac;
-			sourceTree = "<group>";
-		};
-		83B5FF411B7C768B000C3923 /* common */ = {
-			isa = PBXGroup;
-			children = (
-				83B5FF2C1B7C768B000C3923 /* simple_string_dictionary.cc */,
-				83B5FF2D1B7C768B000C3923 /* simple_string_dictionary.h */,
-				83B5FF2E1B7C768B000C3923 /* convert_UTF.c */,
-				83B5FF2F1B7C768B000C3923 /* convert_UTF.h */,
-				83B5FF3C1B7C768B000C3923 /* mac */,
-				83B5FF3D1B7C768B000C3923 /* md5.cc */,
-				83B5FF3E1B7C768B000C3923 /* md5.h */,
-				83B5FF3F1B7C768B000C3923 /* string_conversion.cc */,
-				83B5FF401B7C768B000C3923 /* string_conversion.h */,
-			);
-			name = common;
-			path = ../../common;
-			sourceTree = "<group>";
-		};
-		83B5FF421B7C768B000C3923 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				83B5FF2B1B7C768B000C3923 /* client */,
-				83B5FF411B7C768B000C3923 /* common */,
-			);
-			name = Classes;
-			path = ../../Breakpad/src/client/ios;
-			sourceTree = "<group>";
-		};
-		83B5FF441B7C768B000C3923 /* Other Sources */ = {
-			isa = PBXGroup;
-			children = (
-				83B5FF431B7C768B000C3923 /* Breakpad_Prefix.pch */,
-			);
-			name = "Other Sources";
-			path = ../../Breakpad/src/client/ios;
-			sourceTree = "<group>";
-		};
 		83BE43911D242905000C7AC3 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
@@ -2386,30 +2113,10 @@
 			path = LCNetworking;
 			sourceTree = "<group>";
 		};
-		8C255D271AE9F817008A6FFC /* AVOSCloudCrashReporting */ = {
-			isa = PBXGroup;
-			children = (
-				83B5FF071B7C7678000C3923 /* Breakpad */,
-				8C255D2A1AE9F817008A6FFC /* AVOSCloudCrashReporting.h */,
-				8C255D411AE9FD91008A6FFC /* AVOSCloudCrashReporting.m */,
-				8C255D281AE9F817008A6FFC /* Supporting Files */,
-			);
-			path = AVOSCloudCrashReporting;
-			sourceTree = "<group>";
-		};
-		8C255D281AE9F817008A6FFC /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				8C255D291AE9F817008A6FFC /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		8C84197A1A5A78E100C5C6C4 = {
 			isa = PBXGroup;
 			children = (
 				8C8419881A5A791300C5C6C4 /* AVOSCloud */,
-				8C255D271AE9F817008A6FFC /* AVOSCloudCrashReporting */,
 				8C8419C41A5A796000C5C6C4 /* AVOSCloudIM */,
 				8C8419D11A5A796000C5C6C4 /* AVOSCloudIMTests */,
 				8C8419951A5A791300C5C6C4 /* AVOSCloudTests */,
@@ -2431,7 +2138,6 @@
 				8C8419911A5A791300C5C6C4 /* AVOSCloud-iOSTests.xctest */,
 				8C8419C31A5A796000C5C6C4 /* AVOSCloudIM.framework */,
 				8C8419CD1A5A796000C5C6C4 /* AVOSCloudIM-iOSTests.xctest */,
-				8C255D261AE9F815008A6FFC /* AVOSCloudCrashReporting.framework */,
 				70CA7F681BDE2DC3000A3B21 /* AVOSCloud.framework */,
 				70F315321BDE503B00D691B3 /* AVOSCloud-macOSTests.xctest */,
 				704F3B6E1BE0D0180033245C /* AVOSCloudIM.framework */,
@@ -3570,41 +3276,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8C255D231AE9F815008A6FFC /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				83B5FF511B7C768B000C3923 /* dynamic_images.h in Headers */,
-				D342B70F1FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */,
-				83B5FF6D1B7C768B000C3923 /* macho_walker.h in Headers */,
-				83B5FF581B7C768B000C3923 /* protected_memory_allocator.h in Headers */,
-				83B5FF711B7C768B000C3923 /* md5.h in Headers */,
-				83B5FF461B7C768B000C3923 /* BreakpadController.h in Headers */,
-				83B5FF5A1B7C768B000C3923 /* uploader.h in Headers */,
-				8C255D2B1AE9F817008A6FFC /* AVOSCloudCrashReporting.h in Headers */,
-				83B5FF741B7C768B000C3923 /* Breakpad_Prefix.pch in Headers */,
-				83B5FF6F1B7C768B000C3923 /* string_utilities.h in Headers */,
-				83B5FF6B1B7C768B000C3923 /* macho_utilities.h in Headers */,
-				83B5FF4A1B7C768B000C3923 /* Breakpad.h in Headers */,
-				83B5FF491B7C768B000C3923 /* ios_exception_minidump_generator.h in Headers */,
-				83B5FF5E1B7C768B000C3923 /* minidump_file_writer.h in Headers */,
-				83B5FF671B7C768B000C3923 /* file_id.h in Headers */,
-				83B5FF691B7C768B000C3923 /* macho_id.h in Headers */,
-				83B5FF631B7C768B000C3923 /* convert_UTF.h in Headers */,
-				83B5FF4F1B7C768B000C3923 /* breakpad_nlist_64.h in Headers */,
-				83B5FF531B7C768B000C3923 /* exception_handler.h in Headers */,
-				83B5FF731B7C768B000C3923 /* string_conversion.h in Headers */,
-				83B5FF611B7C768B000C3923 /* simple_string_dictionary.h in Headers */,
-				83B5FF4C1B7C768B000C3923 /* ConfigFile.h in Headers */,
-				83B5FF641B7C768B000C3923 /* HTTPMultipartUpload.h in Headers */,
-				83B5FF541B7C768B000C3923 /* mach_vm_compat.h in Headers */,
-				83B5FF451B7C768B000C3923 /* BreakpadDefines.h in Headers */,
-				83B5FF591B7C768B000C3923 /* ucontext_compat.h in Headers */,
-				83B5FF5C1B7C768B000C3923 /* minidump_file_writer-inl.h in Headers */,
-				83B5FF561B7C768B000C3923 /* minidump_generator.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8C8419831A5A791300C5C6C4 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -4033,24 +3704,6 @@
 			productReference = 83D8CF551C17DAF50094279D /* AVOSCloud.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		8C255D251AE9F815008A6FFC /* AVOSCloudCrashReporting-iOS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 8C255D3D1AE9F818008A6FFC /* Build configuration list for PBXNativeTarget "AVOSCloudCrashReporting-iOS" */;
-			buildPhases = (
-				8C255D211AE9F815008A6FFC /* Sources */,
-				8C255D221AE9F815008A6FFC /* Frameworks */,
-				8C255D231AE9F815008A6FFC /* Headers */,
-				8C255D241AE9F815008A6FFC /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "AVOSCloudCrashReporting-iOS";
-			productName = AVOSCloudCrashReporting;
-			productReference = 8C255D261AE9F815008A6FFC /* AVOSCloudCrashReporting.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 		8C8419851A5A791300C5C6C4 /* AVOSCloud-iOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8C84199A1A5A791300C5C6C4 /* Build configuration list for PBXNativeTarget "AVOSCloud-iOS" */;
@@ -4157,9 +3810,6 @@
 					83B0E5901F2839FB00EE1A75 = {
 						CreatedOnToolsVersion = 9.0;
 					};
-					8C255D251AE9F815008A6FFC = {
-						CreatedOnToolsVersion = 6.3.1;
-					};
 					8C8419851A5A791300C5C6C4 = {
 						CreatedOnToolsVersion = 6.1.1;
 					};
@@ -4197,7 +3847,6 @@
 				704F3B6D1BE0D0180033245C /* AVOSCloudIM-macOS */,
 				704F3B761BE0D0180033245C /* AVOSCloudIM-macOSTests */,
 				83B0E5901F2839FB00EE1A75 /* AVOSCloudIMGroupChat */,
-				8C255D251AE9F815008A6FFC /* AVOSCloudCrashReporting-iOS */,
 				838CE31A1EC97E6E00B24F5B /* AVOSCloudLiveQuery-iOS */,
 				838CE3221EC97E6E00B24F5B /* AVOSCloudLiveQuery-iOSTests */,
 				838CE3361EC980DE00B24F5B /* AVOSCloudLiveQuery-macOS */,
@@ -4297,13 +3946,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				83D8CF571C17DB4A0094279D /* AVOSCloud-tvOS.Info.plist in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8C255D241AE9F815008A6FFC /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4772,36 +4414,6 @@
 				83D8CEC91C17DAF50094279D /* LCKeyValueStore.m in Sources */,
 				83D8CECA1C17DAF50094279D /* AVURLConnectionOperation.m in Sources */,
 				830EB9FC1C44D68400BA917F /* AVSaveOption.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8C255D211AE9F815008A6FFC /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				83B5FF5B1B7C768B000C3923 /* uploader.mm in Sources */,
-				83B5FF5D1B7C768B000C3923 /* minidump_file_writer.cc in Sources */,
-				83B5FF501B7C768B000C3923 /* dynamic_images.cc in Sources */,
-				83B5FF6C1B7C768B000C3923 /* macho_walker.cc in Sources */,
-				83B5FF601B7C768B000C3923 /* simple_string_dictionary.cc in Sources */,
-				83B5FF6A1B7C768B000C3923 /* macho_utilities.cc in Sources */,
-				83B5FF621B7C768B000C3923 /* convert_UTF.c in Sources */,
-				83B5FF4E1B7C768B000C3923 /* breakpad_nlist_64.cc in Sources */,
-				83B5FF721B7C768B000C3923 /* string_conversion.cc in Sources */,
-				83B5FF651B7C768B000C3923 /* HTTPMultipartUpload.m in Sources */,
-				83B5FF551B7C768B000C3923 /* minidump_generator.cc in Sources */,
-				83B5FF681B7C768B000C3923 /* macho_id.cc in Sources */,
-				83B5FF4D1B7C768B000C3923 /* ConfigFile.mm in Sources */,
-				8C255D421AE9FD91008A6FFC /* AVOSCloudCrashReporting.m in Sources */,
-				83B5FF701B7C768B000C3923 /* md5.cc in Sources */,
-				83B5FF521B7C768B000C3923 /* exception_handler.cc in Sources */,
-				83B5FF4B1B7C768B000C3923 /* Breakpad.mm in Sources */,
-				D342B71D1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
-				83B5FF661B7C768B000C3923 /* file_id.cc in Sources */,
-				83B5FF6E1B7C768B000C3923 /* string_utilities.cc in Sources */,
-				83B5FF481B7C768B000C3923 /* ios_exception_minidump_generator.mm in Sources */,
-				83B5FF471B7C768B000C3923 /* BreakpadController.mm in Sources */,
-				83B5FF571B7C768B000C3923 /* protected_memory_allocator.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6330,150 +5942,6 @@
 			};
 			name = Release;
 		};
-		8C255D391AE9F818008A6FFC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				BITCODE_GENERATION_MODE = marker;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = NO;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 3;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREFIX_HEADER = "";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					../Breakpad/src,
-					../Breakpad/src/client/apple/Framework,
-					../Breakpad/src/common/mac,
-				);
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = AVOSCloudCrashReporting;
-				PROVISIONING_PROFILE = "";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		8C255D3A1AE9F818008A6FFC /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				BITCODE_GENERATION_MODE = bitcode;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = NO;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 3;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREFIX_HEADER = "";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					../Breakpad/src,
-					../Breakpad/src/client/apple/Framework,
-					../Breakpad/src/common/mac,
-				);
-				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = AVOSCloudCrashReporting;
-				PROVISIONING_PROFILE = "";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
 		8C84197F1A5A78E100C5C6C4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -7097,15 +6565,6 @@
 			buildConfigurations = (
 				83D8CF531C17DAF50094279D /* Debug */,
 				83D8CF541C17DAF50094279D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		8C255D3D1AE9F818008A6FFC /* Build configuration list for PBXNativeTarget "AVOSCloudCrashReporting-iOS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				8C255D391AE9F818008A6FFC /* Debug */,
-				8C255D3A1AE9F818008A6FFC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
