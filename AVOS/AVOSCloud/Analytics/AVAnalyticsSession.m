@@ -217,7 +217,7 @@
 -(NSArray *)eventsDictionary
 {
     NSMutableArray * array = [[NSMutableArray alloc] initWithCapacity:self.events.count];
-    NSDictionary * dict = @{kAVSessionIdTag: self.sessionId};
+    NSDictionary * dict = @{kAVSessionIdTag: [AVAnalyticsUtils safeString:self.sessionId]};
     for(AVAnalyticsEvent * event in [self.events copy]) {
         [array addObject:[event jsonDictionary:dict]];
     }
