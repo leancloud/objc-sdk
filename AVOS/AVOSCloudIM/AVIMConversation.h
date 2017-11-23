@@ -387,13 +387,15 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
                       callback:(AVIMArrayResultBlock)callback;
 
 /*!
- 查询历史消息，获取某条消息或指定时间戳之前的 limit 条消息。
+ 查询历史消息，获取某条消息之前的 limit 条消息。
+ @warning `timestamp` must equal to the timestamp of the message that messageId equal to `messageId`, if the `timestamp` and `messageId` not match, continuity of querying message can't guarantee.
+ 
  @param messageId 此消息以前的消息。
  @param timestamp 此时间以前的消息。
  @param limit 返回结果的数量，默认 20 条，最多 1000 条。
  @param callback 查询结果回调。
  */
-- (void)queryMessagesBeforeId:(nullable NSString *)messageId
+- (void)queryMessagesBeforeId:(NSString *)messageId
                     timestamp:(int64_t)timestamp
                         limit:(NSUInteger)limit
                      callback:(AVIMArrayResultBlock)callback;

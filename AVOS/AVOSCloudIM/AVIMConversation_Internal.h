@@ -44,6 +44,9 @@ do {                                                                            
 FOUNDATION_EXPORT NSNotificationName LCIMConversationMessagePatchNotification;
 FOUNDATION_EXPORT NSNotificationName LCIMConversationDidReceiveMessageNotification;
 
+/// it's a key. the value from dic, True: 开启未读通知; False: 关闭离线消息推送。
+static NSString *const kAVIMUserOptionUseUnread = @"AVIMUserOptionUseUnread";
+
 @interface AVIMConversation ()
 
 @property (nonatomic, copy)   NSString     *name;

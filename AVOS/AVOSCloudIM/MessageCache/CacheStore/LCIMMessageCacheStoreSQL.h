@@ -51,6 +51,9 @@
 #define LCIM_SQL_SELECT_MESSAGE_BY_ID \
 @"select * from message where conversation_id = ? and message_id = ?"
 
+#define LCIM_SQL_SELECT_MESSAGE_BY_ID_AND_TIMESTAMP \
+@"select * from message where conversation_id = ? and message_id = ? and timestamp = ?"
+
 #define LCIM_SQL_DELETE_ALL_MESSAGES_OF_CONVERSATION \
 @"delete from message where conversation_id = ?"
 

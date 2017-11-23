@@ -1470,7 +1470,7 @@ static BOOL AVIMClientHasInstantiated = NO;
     }
 }
 
-+ (NSMutableDictionary *)userOptions {
++ (NSMutableDictionary *)_userOptions {
     static dispatch_once_t onceToken;
     static NSMutableDictionary *userOptions;
 
@@ -1481,6 +1481,17 @@ static BOOL AVIMClientHasInstantiated = NO;
     return userOptions;
 }
 
++ (void)_setUserOptions:(NSDictionary *)userOptions {
+    if (AVIMClientHasInstantiated) {
+        [NSException raise:NSInternalInconsistencyException format:@"AVIMClient user options should be set before instantiation"];
+    }
+    
+    if (!userOptions)
+        return;
+    
+    [self._userOptions addEntriesFromDictionary:userOptions];
+}
+
 + (void)setUserOptions:(NSDictionary *)userOptions {
     if (AVIMClientHasInstantiated) {
         [NSException raise:NSInternalInconsistencyException format:@"AVIMClient user options should be set before instantiation"];
@@ -1489,15 +1500,13 @@ static BOOL AVIMClientHasInstantiated = NO;
     if (!userOptions)
         return;
 
-    [[self userOptions] addEntriesFromDictionary:userOptions];
+    [self._userOptions addEntriesFromDictionary:userOptions];
 }
 
-+ (void)setUnreadNotificationEnabled:(BOOL)enabled {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    NSDictionary *options = @{ AVIMUserOptionUseUnread : @(enabled) };
-    [self setUserOptions:options];
-#pragma clang diagnostic pop
++ (void)setUnreadNotificationEnabled:(BOOL)enabled
+{
+    NSDictionary *options = @{ kAVIMUserOptionUseUnread : @(enabled) };
+    [self _setUserOptions:options];
 }
 
 @end

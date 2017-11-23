@@ -18,6 +18,7 @@
 #import "LCRouter.h"
 #import "SDMacros.h"
 #import "AVOSCloudIM.h"
+#import "AVIMConversation_Internal.h"
 #import <arpa/inet.h>
 
 #define PING_INTERVAL 60*3
@@ -476,16 +477,16 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
     AVLoggerInfo(AVLoggerDomainIM, @"Open websocket with url: %@", server);
     
     NSMutableSet *protocols = [NSMutableSet set];
-    NSDictionary *userOptions = [AVIMClient userOptions];
+    NSDictionary *userOptions = [AVIMClient _userOptions];
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    if ([userOptions[AVIMUserOptionUseUnread] boolValue]) {
+    if ([userOptions[kAVIMUserOptionUseUnread] boolValue]) {
         [protocols addObject:AVIMProtocolPROTOBUF3];
     } else {
         [protocols addObject:AVIMProtocolPROTOBUF1];
     }
     
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     if (userOptions[AVIMUserOptionCustomProtocols]) {
         [protocols removeAllObjects];
         [protocols addObjectsFromArray:userOptions[AVIMUserOptionCustomProtocols]];
