@@ -102,9 +102,9 @@
     return [mutableArray copy];
 }
 
-- (void)addContinuousMessages:(NSArray *)messages forConversationId:(NSString *)conversationId {
-    if (![messages count])
-        return;
+- (void)addContinuousMessages:(NSArray *)messages forConversationId:(NSString *)conversationId
+{
+    if (messages.count == 0) { return; }
 
     NSMutableArray *allMessages = [[self messagesOrderedByTimestampDescending:messages] mutableCopy];
 
@@ -112,7 +112,7 @@
     AVIMMessage *newestMessage = [allMessages firstObject];
     NSArray     *newerMessages = [allMessages subarrayWithRange:NSMakeRange(0, [allMessages count] - 1)];
 
-    /* Update oldest message without breakpoint */
+    /* insert breakpoint message or update oldest message without breakpoint */
     [self insertMessageAndUpdateBreakpoint:oldestMessage forConversationId:conversationId];
 
     LCIMMessageCacheStore *cacheStore = [self cacheStoreWithConversationId:conversationId];

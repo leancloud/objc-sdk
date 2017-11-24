@@ -34,6 +34,8 @@
 
 - (AVIMMessage *)messageForId:(NSString *)messageId;
 
+- (AVIMMessage *)getMessageById:(NSString *)messageId timestamp:(int64_t)timestamp;
+
 - (AVIMMessage *)nextMessageForId:(NSString *)messageId timestamp:(int64_t)timestamp;
 
 - (NSArray *)messagesBeforeTimestamp:(int64_t)timestamp

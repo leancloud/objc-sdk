@@ -253,6 +253,26 @@
     return message;
 }
 
+- (AVIMMessage *)getMessageById:(NSString *)messageId timestamp:(int64_t)timestamp
+{
+    if (!messageId || !self.conversationId) { return nil; }
+    
+    __block AVIMMessage *message = nil;
+    
+    LCIM_OPEN_DATABASE(db, ({
+        NSArray *args = @[self.conversationId, messageId, @(timestamp)];
+        LCResultSet *result = [db executeQuery:LCIM_SQL_SELECT_MESSAGE_BY_ID_AND_TIMESTAMP withArgumentsInArray:args];
+        
+        if ([result next]) {
+            message = [self messageForRecord:result];
+        }
+        
+        [result close];
+    }));
+    
+    return message;
+}
+
 - (AVIMMessage *)nextMessageForId:(NSString *)messageId timestamp:(int64_t)timestamp {
     __block AVIMMessage *message = nil;
 
