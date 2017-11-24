@@ -40,31 +40,6 @@ NSNotificationName LCIMConversationDidReceiveMessageNotification = @"LCIMConvers
 
 @implementation AVIMMessageIntervalBound
 
-static NSUInteger LCIM_VALID_LIMIT(NSUInteger limit)
-{
-    if (limit <= 0) { limit = 20; }
-    
-    BOOL useUnread = [AVIMClient._userOptions[kAVIMUserOptionUseUnread] boolValue];
-    
-    NSUInteger max = useUnread ? 100 : 1000;
-    
-    if (limit > max) { limit = max; }
-    
-    return limit;
-}
-
-static NSTimeInterval LCIM_DISTANT_FUTURE_TIMESTAMP()
-{
-    return ([[NSDate distantFuture] timeIntervalSince1970] * 1000);
-}
-
-static int64_t LCIM_VALID_TIMESTAMP(int64_t timestamp)
-{
-    if (timestamp <= 0) { timestamp = (int64_t)LCIM_DISTANT_FUTURE_TIMESTAMP; }
-    
-    return timestamp;
-}
-
 - (instancetype)initWithMessageId:(NSString *)messageId
                         timestamp:(int64_t)timestamp
                            closed:(BOOL)closed
@@ -109,12 +84,41 @@ static int64_t LCIM_VALID_TIMESTAMP(int64_t timestamp)
 
 static dispatch_queue_t messageCacheOperationQueue;
 
-+ (void)initialize {
++ (void)initialize
+{
     static dispatch_once_t onceToken;
 
     dispatch_once(&onceToken, ^{
         messageCacheOperationQueue = dispatch_queue_create("leancloud.message-cache-operation-queue", DISPATCH_QUEUE_CONCURRENT);
     });
+}
+
++ (NSUInteger)validLimit:(NSUInteger)limit
+{
+    if (limit <= 0) { limit = 20; }
+    
+    BOOL useUnread = [AVIMClient._userOptions[kAVIMUserOptionUseUnread] boolValue];
+    
+    NSUInteger max = useUnread ? 100 : 1000;
+    
+    if (limit > max) { limit = max; }
+    
+    return limit;
+}
+
++ (NSTimeInterval)distantFutureTimestamp
+{
+    return ([[NSDate distantFuture] timeIntervalSince1970] * 1000);
+}
+
++ (int64_t)validTimestamp:(int64_t)timestamp
+{
+    if (timestamp <= 0) {
+        
+        timestamp = (int64_t)[self distantFutureTimestamp];
+    }
+    
+    return timestamp;
 }
 
 - (instancetype)init {
@@ -1311,8 +1315,8 @@ static dispatch_queue_t messageCacheOperationQueue;
     AVIMLogsCommand *logsCommand = [[AVIMLogsCommand alloc] init];
     logsCommand.cid    = _conversationId;
     logsCommand.mid    = messageId;
-    logsCommand.t      = LCIM_VALID_TIMESTAMP(timestamp);
-    logsCommand.l      = (int32_t)LCIM_VALID_LIMIT(limit);
+    logsCommand.t      = [self.class validTimestamp:timestamp];
+    logsCommand.l      = (int32_t)[self.class validLimit:limit];
     
     [genericCommand avim_addRequiredKeyWithCommand:logsCommand];
     [self queryMessagesFromServerWithCommand:genericCommand callback:callback];
@@ -1335,7 +1339,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     logsCommand.tmid   = toMessageId;
     logsCommand.tt     = MAX(toTimestamp, 0);
     logsCommand.t      = MAX(timestamp, 0);
-    logsCommand.l      = (int32_t)LCIM_VALID_LIMIT(limit);
+    logsCommand.l      = (int32_t)[self.class validLimit:limit];
     [genericCommand avim_addRequiredKeyWithCommand:logsCommand];
     [self queryMessagesFromServerWithCommand:genericCommand callback:callback];
 }
@@ -1343,10 +1347,12 @@ static dispatch_queue_t messageCacheOperationQueue;
 - (void)queryMessagesFromServerWithLimit:(NSUInteger)limit
                                 callback:(AVIMArrayResultBlock)callback
 {
-    limit = LCIM_VALID_LIMIT(limit);
+    limit = [self.class validLimit:limit];
+    
+    int64_t timestamp = (int64_t)[self.class distantFutureTimestamp];
     
     [self queryMessagesFromServerBeforeId:nil
-                                timestamp:(int64_t)LCIM_DISTANT_FUTURE_TIMESTAMP
+                                timestamp:timestamp
                                     limit:limit
                                  callback:^(NSArray *messages, NSError *error)
      {
@@ -1382,7 +1388,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (NSArray *)queryMessagesFromCacheWithLimit:(NSUInteger)limit
 {
-    limit = LCIM_VALID_LIMIT(limit);
+    limit = [self.class validLimit:limit];
     NSArray *cachedMessages = [[self messageCacheStore] latestMessagesWithLimit:limit];
     [self postprocessMessages:cachedMessages];
     
@@ -1392,7 +1398,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 - (void)queryMessagesWithLimit:(NSUInteger)limit
                       callback:(AVIMArrayResultBlock)callback
 {
-    limit = LCIM_VALID_LIMIT(limit);
+    limit = [self.class validLimit:limit];
     
     BOOL socketOpened = (self.imClient.status == AVIMClientStatusOpened);
     
@@ -1430,9 +1436,11 @@ static dispatch_queue_t messageCacheOperationQueue;
         return;
     }
     
+    int64_t timestamp = (int64_t)[self.class distantFutureTimestamp];
+    
     /* query recent message from server. */
     [self queryMessagesFromServerBeforeId:nil
-                                timestamp:(int64_t)LCIM_DISTANT_FUTURE_TIMESTAMP
+                                timestamp:timestamp
                               toMessageId:nil
                               toTimestamp:0
                                     limit:limit
@@ -1496,8 +1504,8 @@ static dispatch_queue_t messageCacheOperationQueue;
         return;
     }
     
-    limit     = LCIM_VALID_LIMIT(limit);
-    timestamp = LCIM_VALID_TIMESTAMP(timestamp);
+    limit     = [self.class validLimit:limit];
+    timestamp = [self.class validTimestamp:timestamp];
 
     /*
      * Firstly, if message query cache is not enabled, just forward query request.
@@ -1679,7 +1687,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     AVIMLogsCommand *logsCommand = [[AVIMLogsCommand alloc] init];
 
     logsCommand.cid  = _conversationId;
-    logsCommand.l    = (int32_t)LCIM_VALID_LIMIT(limit);
+    logsCommand.l    = (int32_t)[self.class validLimit:limit];
 
     logsCommand.direction = (direction == AVIMMessageQueryDirectionFromOldToNew)
         ? AVIMLogsCommand_QueryDirection_New
