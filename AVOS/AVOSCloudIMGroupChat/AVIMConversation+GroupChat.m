@@ -10,10 +10,18 @@
 #import "AVIMConversation_Internal.h"
 #import "AVIMClient_Internal.h"
 #import "AVIMReadReceiptMessage.h"
-#import "JRSwizzle.h"
 #import "AVUtils.h"
 
 #import <objc/runtime.h>
+
+#define _SetNSErrorFor(FUNC, ERROR_VAR, FORMAT,...)    \
+if (ERROR_VAR) {    \
+NSString *errStr = [NSString stringWithFormat:@"%s: " FORMAT,FUNC,##__VA_ARGS__]; \
+*ERROR_VAR = [NSError errorWithDomain:@"NSCocoaErrorDomain" \
+code:-1    \
+userInfo:[NSDictionary dictionaryWithObject:errStr forKey:NSLocalizedDescriptionKey]]; \
+}
+#define _SetNSError(ERROR_VAR, FORMAT,...) _SetNSErrorFor(__func__, ERROR_VAR, FORMAT, ##__VA_ARGS__)
 
 @interface AVIMConversation ()
 
@@ -33,19 +41,52 @@
 }
 
 NS_INLINE
-void swizzleMethodsForGroupChat(Class clazz) {
+void swizzleMethodsForGroupChat(Class aClass) {
+    
+    BOOL (^swizzleMethod_block)(SEL, SEL, NSError **) = ^BOOL(SEL origSel_, SEL altSel_, NSError **error_) {
+        
+        Method origMethod = class_getInstanceMethod(aClass, origSel_);
+        if (!origMethod) {
+#if TARGET_OS_IPHONE
+            _SetNSError(error_, @"original method %@ not found for class %@", NSStringFromSelector(origSel_), [aClass class]);
+#else
+            _SetNSError(error_, @"original method %@ not found for class %@", NSStringFromSelector(origSel_), [aClass className]);
+#endif
+            return NO;
+        }
+        
+        Method altMethod = class_getInstanceMethod(aClass, altSel_);
+        if (!altMethod) {
+#if TARGET_OS_IPHONE
+            _SetNSError(error_, @"alternate method %@ not found for class %@", NSStringFromSelector(altSel_), [aClass class]);
+#else
+            _SetNSError(error_, @"alternate method %@ not found for class %@", NSStringFromSelector(altSel_), [aClass className]);
+#endif
+            return NO;
+        }
+        
+        class_addMethod(aClass,
+                        origSel_,
+                        class_getMethodImplementation(aClass, origSel_),
+                        method_getTypeEncoding(origMethod));
+        class_addMethod(aClass,
+                        altSel_,
+                        class_getMethodImplementation(aClass, altSel_),
+                        method_getTypeEncoding(altMethod));
+        
+        method_exchangeImplementations(class_getInstanceMethod(aClass, origSel_), class_getInstanceMethod(aClass, altSel_));
+        
+        return YES;
+    };
+    
     NSError *error = nil;
     BOOL succeeded = (
-        [clazz lc_swizzleMethod:@selector(readInBackground)
-                     withMethod:@selector(readInBackgroundSwizzledForGroupChat)
-                          error:&error] &&
-        [clazz lc_swizzleMethod:@selector(didReceiveMessage:)
-                     withMethod:@selector(didReceiveMessageSwizzledForGroupChat:)
-                          error:&error] &&
-        [clazz lc_swizzleMethod:@selector(fetchReceiptTimestampsInBackground)
-                     withMethod:@selector(fetchReceiptTimestampsInBackgroundSwizzledForGroupChat)
-                          error:&error]
-    );
+                      swizzleMethod_block(@selector(readInBackground), @selector(readInBackgroundSwizzledForGroupChat), &error)
+                      &&
+                      swizzleMethod_block(@selector(didReceiveMessage:), @selector(didReceiveMessageSwizzledForGroupChat:), &error)
+                      &&
+                      swizzleMethod_block(@selector(fetchReceiptTimestampsInBackground), @selector(fetchReceiptTimestampsInBackgroundSwizzledForGroupChat), &error)
+                      );
 
     if (!succeeded || error)
         AVLoggerError(AVOSCloudIMErrorDomain,
