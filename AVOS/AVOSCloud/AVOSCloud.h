@@ -59,13 +59,13 @@
 #import "AVCaptcha.h"
 #import "AVSMS.h"
 
+// Router
+#import "LCRouter.h"
+
 #if AV_IOS_ONLY && !TARGET_OS_WATCH
 // Analytics
 #import "AVAnalytics.h"
 #endif
-
-// Router
-#import "LCRouter.h"
 
 /**
  *  Storage Type
