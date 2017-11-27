@@ -54,7 +54,8 @@ Pod::Spec.new do |s|
     'AVOS/AVOSCloud/User/AVAnonymousUtils.h',
     'AVOS/AVOSCloud/User/AVUser.h',
     'AVOS/AVOSCloud/Utils/AVLogger.h',
-    'AVOS/AVOSCloud/AVAvailability.h'
+    'AVOS/AVOSCloud/AVAvailability.h',
+    'AVOS/AVOSCloud/Router/LCRouter.h'
 
   s.osx.exclude_files =
         []
