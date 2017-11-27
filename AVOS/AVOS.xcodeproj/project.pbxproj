@@ -799,7 +799,7 @@
 		83F745FA1B9177DE00437259 /* LCIMConversationCacheStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F745F81B9177DE00437259 /* LCIMConversationCacheStore.h */; };
 		83F745FB1B9177DE00437259 /* LCIMConversationCacheStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F745F91B9177DE00437259 /* LCIMConversationCacheStore.m */; };
 		83F745FD1B9177F100437259 /* LCIMConversationCacheStoreSQL.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F745FC1B9177F100437259 /* LCIMConversationCacheStoreSQL.h */; };
-		83F9A2C71CE014430002E21B /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F9A2C51CE014430002E21B /* LCRouter.h */; };
+		83F9A2C71CE014430002E21B /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F9A2C51CE014430002E21B /* LCRouter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83F9A2C81CE014430002E21B /* LCRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F9A2C61CE014430002E21B /* LCRouter.m */; };
 		83FCB99F1CEDC57C007D8712 /* LCHTTPSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 83FCB9921CEDC57C007D8712 /* LCHTTPSessionManager.h */; };
 		83FCB9A11CEDC57C007D8712 /* LCHTTPSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 83FCB9921CEDC57C007D8712 /* LCHTTPSessionManager.h */; };
@@ -1133,9 +1133,9 @@
 		9A2F1B781CF6F6FA00BE52F2 /* LCIMWireFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AC01CF6F6FA00BE52F2 /* LCIMWireFormat.h */; };
 		9A2F1B791CF6F6FA00BE52F2 /* LCIMWireFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AC11CF6F6FA00BE52F2 /* LCIMWireFormat.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9A2F1B7B1CF6F6FA00BE52F2 /* LCIMWireFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AC11CF6F6FA00BE52F2 /* LCIMWireFormat.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A404DD41CE5A9B700DEB3DC /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F9A2C51CE014430002E21B /* LCRouter.h */; };
-		9A404DD51CE5A9BA00DEB3DC /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F9A2C51CE014430002E21B /* LCRouter.h */; };
-		9A404DD61CE5A9BB00DEB3DC /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F9A2C51CE014430002E21B /* LCRouter.h */; };
+		9A404DD41CE5A9B700DEB3DC /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F9A2C51CE014430002E21B /* LCRouter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A404DD51CE5A9BA00DEB3DC /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F9A2C51CE014430002E21B /* LCRouter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A404DD61CE5A9BB00DEB3DC /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F9A2C51CE014430002E21B /* LCRouter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A404DD81CE5A9C200DEB3DC /* LCRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F9A2C61CE014430002E21B /* LCRouter.m */; };
 		9A404DDC1CE5A9C300DEB3DC /* LCRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F9A2C61CE014430002E21B /* LCRouter.m */; };
 		9A404DE01CE5A9C400DEB3DC /* LCRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F9A2C61CE014430002E21B /* LCRouter.m */; };

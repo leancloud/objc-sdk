@@ -64,6 +64,9 @@
 #import "AVAnalytics.h"
 #endif
 
+// Router
+#import "LCRouter.h"
+
 /**
  *  Storage Type
  */
