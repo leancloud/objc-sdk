@@ -34,28 +34,6 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 + (instancetype)queryWithClassName:(NSString *)className;
 
 /*!
- Creates a AVQuery with the constraints given by predicate.
- 
- The following types of predicates are supported:
- * Simple comparisons such as =, !=, <, >, <=, >=, and BETWEEN with a key and a constant.
- * Containment predicates, such as "x IN {1, 2, 3}".
- * Key-existence predicates, such as "x IN SELF".
- * BEGINSWITH expressions.
- * Compound predicates with AND, OR, and NOT.
- * SubQueries with "key IN %@", subquery.
- 
- The following types of predicates are NOT supported:
- * Aggregate operations, such as ANY, SOME, ALL, or NONE.
- * Regular expressions, such as LIKE, MATCHES, CONTAINS, or ENDSWITH.
- * Predicates comparing one key to another.
- * Complex predicates with many ORed clauses.
- 
- @param className the class name
- @param predicate the predicates
- */
-+ (instancetype)queryWithClassName:(NSString *)className predicate:(NSPredicate *)predicate;
-
-/*!
  *  使用 CQL 查询
  *  @param cql CQL 字符串
  *  @return 查询结果
