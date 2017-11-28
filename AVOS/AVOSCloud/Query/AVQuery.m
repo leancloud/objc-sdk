@@ -66,12 +66,6 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
     return query;
 }
 
-+ (instancetype)queryWithClassName:(NSString *)className predicate:(NSPredicate *)predicate
-{
-    AVQuery * query = [[[self class] alloc] initWithClassName:className];
-    return query;
-}
-
 + (AVCloudQueryResult *)doCloudQueryWithCQL:(NSString *)cql {
     return [self doCloudQueryWithCQL:cql error:NULL];
 }
