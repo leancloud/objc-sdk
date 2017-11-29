@@ -385,6 +385,11 @@ found:
     }];
 }
 
+- (NSDictionary *)cachedAppRouterServerTable
+{
+    return [self cachedServerTableForKey:LCAppRouterCacheKey];
+}
+
 - (NSDictionary *)cachedRTMServerTable {
     NSDictionary *RTMServerTable = [self cachedServerTableForKey:LCRTMRouterCacheKey];
 

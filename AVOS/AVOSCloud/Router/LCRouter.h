@@ -23,6 +23,11 @@ FOUNDATION_EXPORT NSString *const LCRouterDidUpdateNotification;
 + (instancetype)sharedInstance;
 
 /**
+ Get cached App-Router server table
+ */
+- (NSDictionary * _Nullable)cachedAppRouterServerTable;
+
+/**
  Get cached RTM server table.
  */
 - (NSDictionary * _Nullable)cachedRTMServerTable;
