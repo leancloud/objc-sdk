@@ -339,7 +339,9 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  @param newMessage A new message.
  @param callback   Callback of message update.
  */
-- (void)updateMessage:(AVIMMessage *)oldMessage toNewMessage:(AVIMMessage *)newMessage callback:(AVIMBooleanResultBlock)callback;
+- (void)updateMessage:(AVIMMessage *)oldMessage
+         toNewMessage:(AVIMMessage *)newMessage
+             callback:(AVIMBooleanResultBlock)callback;
 
 /*!
  Recall a message.
@@ -347,7 +349,8 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  @param oldMessage The message you've sent which will be replaced by newMessage.
  @param callback   Callback of message update.
  */
-- (void)recallMessage:(AVIMMessage *)oldMessage callback:(void(^)(BOOL succeeded, NSError * _Nullable error, AVIMRecalledMessage * _Nullable recalledMessage))callback;
+- (void)recallMessage:(AVIMMessage *)oldMessage
+             callback:(void(^)(BOOL succeeded, NSError * _Nullable error, AVIMRecalledMessage * _Nullable recalledMessage))callback;
 
 /*!
  Add a message to cache.

@@ -1120,17 +1120,95 @@ static dispatch_queue_t messageCacheOperationQueue;
 - (void)recallMessage:(AVIMMessage *)oldMessage
              callback:(nonnull void (^)(BOOL, NSError * _Nullable, AVIMRecalledMessage * _Nullable))callback
 {
-    AVIMRecalledMessage *recalledMessage = [[AVIMRecalledMessage alloc] init];
-
-    [self updateMessage:oldMessage
-           toNewMessage:recalledMessage
-               callback:^(BOOL succeeded, NSError * _Nullable error) {
-                   if (!callback)
-                       return;
-                   dispatch_async(dispatch_get_main_queue(), ^{
-                       callback(succeeded, error, (succeeded ? recalledMessage : nil));
-                   });
-               }];
+    /* arg check */
+    ///
+    NSString *errReason = nil;
+    
+    if ([NSString lc_isInvalidForCheckingTypeWith:self.conversationId]) {
+        
+        errReason = @"`conversationId` is invalid.";
+        
+    } else if (oldMessage == nil ||
+               [NSString lc_isInvalidForCheckingTypeWith:oldMessage.messageId]) {
+        
+        errReason = @"`oldMessage` is invalid.";
+        
+    } else if (callback == nil) {
+        
+        errReason = @"`callback` is invalid.";
+    }
+    
+    if (errReason) {
+        
+        NSString *reason = errReason;
+        
+        NSDictionary *info = @{ @"reason" : reason };
+        
+        NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                              code:0
+                                          userInfo:info];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            callback(false, aError, nil);
+        });
+        
+        return;
+    }
+    ///
+    
+    AVIMGenericCommand *(^cmdOfRecall)(void) = ^AVIMGenericCommand *(void) {
+        
+        AVIMGenericCommand *command = [[AVIMGenericCommand alloc] init];
+        
+        command.needResponse = YES;
+        command.cmd = AVIMCommandType_Patch;
+        command.op = AVIMOpType_Modify;
+        command.peerId = self.clientId;
+        
+        AVIMPatchItem *patchItem = [[AVIMPatchItem alloc] init];
+        
+        patchItem.cid = self.conversationId;
+        patchItem.mid = oldMessage.messageId;
+        patchItem.timestamp = oldMessage.sendTimestamp;
+        patchItem.recall = true;
+        
+        NSArray<AVIMPatchItem*> *patchesArray = @[patchItem];
+        AVIMPatchCommand *patchMessage = [[AVIMPatchCommand alloc] init];
+        
+        patchMessage.patchesArray = [patchesArray mutableCopy];
+        command.patchMessage = patchMessage;
+        
+        return command;
+    };
+    
+    AVIMGenericCommand *patch_modify_cmd = cmdOfRecall();
+    
+    patch_modify_cmd.callback = ^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
+        
+        if (error) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                callback(false, error, nil);
+            });
+            
+            return;
+        }
+        
+        AVIMRecalledMessage *recalledMessage = [[AVIMRecalledMessage alloc] init];
+        
+        [self didUpdateMessage:oldMessage
+                  toNewMessage:recalledMessage
+                  patchCommand:inCommand.patchMessage];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            callback(true, nil, recalledMessage);
+        });
+    };
+    
+    [self sendCommand:patch_modify_cmd];
 }
 
 - (void)updateConversationAfterSendMessage:(AVIMMessage *)message {
