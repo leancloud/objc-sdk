@@ -202,10 +202,41 @@ typedef NS_ENUM(NSInteger, LCServerLocation) {
     [self postUpdateNotification];
 }
 
-- (void)updateInBackground {
+- (void)updateInBackground
+{
     /* App router 2 is unavailable in US node. */
-    if (LCEffectiveServiceRegion == AVServiceRegionUS)
+    if (LCEffectiveServiceRegion == AVServiceRegionUS) {
         return;
+    }
+    
+    BOOL (^isCustomAllService)(void) = ^BOOL(void) {
+        
+        NSArray *serviceKeyArray = @[LCServiceModuleAPI,
+                                     LCServiceModuleRTM,
+                                     LCServiceModulePush,
+                                     LCServiceModuleEngine,
+                                     LCServiceModuleStatistics];
+        
+        for (NSString *serviceKey in serviceKeyArray) {
+            
+            if (_presetURLStringTable[serviceKey] == nil) {
+                
+                return false;
+            }
+        }
+        
+        return true;
+    };
+    
+    /* if custom all service url, then there is no need to update router. */
+    ///
+    BOOL shouldReturn = isCustomAllService();
+    
+    if (shouldReturn) {
+        
+        return;
+    }
+    ///
 
     NSString *applicationId = [AVOSCloud getApplicationId];
 
