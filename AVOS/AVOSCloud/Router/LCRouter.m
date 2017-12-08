@@ -10,6 +10,7 @@
 #import "AVOSCloud.h"
 #import "AVPaasClient.h"
 #import "LCKeyValueStore.h"
+#import "LCNetworkStatistics.h"
 
 #define APIVersion @"1.1"
 
@@ -443,6 +444,7 @@ found:
         return;
 
     _presetURLStringTable[serviceModule] = URLString;
+    LCNetworkStatistics.sharedInstance.ignoreAlwaysCollectIfCustomedService = true;
 }
 
 @end
