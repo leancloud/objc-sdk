@@ -26,4 +26,7 @@
 @property (nonatomic, assign) BOOL          transient;
 @property (nonatomic, assign) BOOL          muted;
 
+@property (nonatomic, strong) NSMutableDictionary *properties;
+@property (nonatomic, strong) NSDictionary *rawDataDic;
+
 @end

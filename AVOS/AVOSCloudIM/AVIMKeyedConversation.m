@@ -16,7 +16,8 @@
 
 @implementation AVIMKeyedConversation
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
     self = [super init];
 
     if (self) {
@@ -34,12 +35,33 @@
         self.attributes     = [aDecoder decodeObjectForKey:LC_SEL_STR(attributes)];
         self.transient      = [aDecoder decodeBoolForKey:LC_SEL_STR(transient)];
         self.muted          = [aDecoder decodeBoolForKey:LC_SEL_STR(muted)];
+        
+        /* check if exist `properties` */
+        ///
+        NSString *properties_key = LC_SEL_STR(properties);
+        
+        if ([aDecoder containsValueForKey:properties_key]) {
+            
+            self.properties = [aDecoder decodeObjectForKey:properties_key];
+        }
+        ///
+        
+        /* check if exist `rawDataDic` */
+        ///
+        NSString *rawDataDic_key = LC_SEL_STR(rawDataDic);
+        
+        if ([aDecoder containsValueForKey:rawDataDic_key]) {
+            
+            self.rawDataDic = [aDecoder decodeObjectForKey:rawDataDic_key];
+        }
+        ///
     }
 
     return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)aCoder {
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
     [aCoder encodeObject:self.conversationId forKey:LC_SEL_STR(conversationId)];
     [aCoder encodeObject:self.clientId       forKey:LC_SEL_STR(clientId)];
     [aCoder encodeObject:self.creator        forKey:LC_SEL_STR(creator)];
@@ -54,6 +76,16 @@
     [aCoder encodeObject:self.attributes     forKey:LC_SEL_STR(attributes)];
     [aCoder encodeBool:self.transient        forKey:LC_SEL_STR(transient)];
     [aCoder encodeBool:self.muted            forKey:LC_SEL_STR(muted)];
+    
+    if (self.properties) {
+        
+        [aCoder encodeObject:self.properties forKey:LC_SEL_STR(properties)];
+    }
+    
+    if (self.rawDataDic) {
+        
+        [aCoder encodeObject:self.rawDataDic forKey:LC_SEL_STR(rawDataDic)];
+    }
 }
 
 @end

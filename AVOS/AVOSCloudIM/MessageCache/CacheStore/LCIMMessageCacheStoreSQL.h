@@ -72,9 +72,6 @@
 #define LCIM_SQL_UPDATE_MESSAGE_ENTRIES_FMT \
 @"update message set %@ where conversation_id = ? and message_id = ?"
 
-#define LCIM_SQL_MESSAGE_MIGRATION_V1 \
-@"alter table conversation add column muted integer"
-
 #define LCIM_SQL_MESSAGE_MIGRATION_V2 \
 @"alter table message add column read_timestamp real"
 

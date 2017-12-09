@@ -69,13 +69,6 @@
     LCDatabaseMigrator *migrator = [[LCDatabaseMigrator alloc] initWithDatabasePath:databasePath];
 
     [migrator executeMigrations:@[
-        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
-            [db executeUpdate:LCIM_SQL_MESSAGE_MIGRATION_V1];
-        }],
-
-        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
-            [db executeUpdate:@"ALTER TABLE conversation ADD COLUMN last_message BLOB"];
-        }],
 
         [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
             [db executeUpdate:LCIM_SQL_MESSAGE_MIGRATION_V2];
