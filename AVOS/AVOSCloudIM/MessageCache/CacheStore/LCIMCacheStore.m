@@ -69,6 +69,14 @@
     LCDatabaseMigrator *migrator = [[LCDatabaseMigrator alloc] initWithDatabasePath:databasePath];
 
     [migrator executeMigrations:@[
+                                  
+        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
+            // do-nothing operation 1, reserve for compatibility.
+        }],
+        
+        [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
+            // do-nothing operation 2, reserve for compatibility.
+        }],
 
         [LCDatabaseMigration migrationWithBlock:^(LCDatabase *db) {
             [db executeUpdate:LCIM_SQL_MESSAGE_MIGRATION_V2];
