@@ -92,9 +92,13 @@ static NSTimeInterval const kAVNetworkActivityIndicatorInvisibilityDelay = 0.17;
     return _activityCount > 0;
 }
 
-- (void)updateNetworkActivityIndicatorVisibility {
+- (void)updateNetworkActivityIndicatorVisibility
+{
 #if AV_TARGET_OS_IOS
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:[self isNetworkActivityIndicatorVisible]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:[self isNetworkActivityIndicatorVisible]];
+    });
 #endif
 }
 
