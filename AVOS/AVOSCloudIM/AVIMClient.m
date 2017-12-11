@@ -1488,21 +1488,23 @@ static BOOL AVIMClientHasInstantiated = NO;
     [self._userOptions addEntriesFromDictionary:userOptions];
 }
 
-+ (void)setUserOptions:(NSDictionary *)userOptions {
-    if (AVIMClientHasInstantiated) {
-        [NSException raise:NSInternalInconsistencyException format:@"AVIMClient user options should be set before instantiation"];
-    }
-
-    if (!userOptions)
-        return;
-
-    [self._userOptions addEntriesFromDictionary:userOptions];
-}
-
 + (void)setUnreadNotificationEnabled:(BOOL)enabled
 {
     NSDictionary *options = @{ kAVIMUserOptionUseUnread : @(enabled) };
     [self _setUserOptions:options];
+}
+
+// MARK: - Deprecated
+
++ (void)setUserOptions:(NSDictionary *)userOptions {
+    if (AVIMClientHasInstantiated) {
+        [NSException raise:NSInternalInconsistencyException format:@"AVIMClient user options should be set before instantiation"];
+    }
+    
+    if (!userOptions)
+        return;
+    
+    [self._userOptions addEntriesFromDictionary:userOptions];
 }
 
 @end
