@@ -34,11 +34,15 @@ class AVUserTestCase: LCTestBase {
         
         do {
             
-            let _ = try AVUser.logIn(withUsername:username, password: password, error: ())
+            let _ = try AVUser.logIn(
+                withUsername: username,
+                password: password,
+                error: ()
+            )
             
         } catch {
             
-            print(error)
+            XCTAssertNil(error)
         }
     }
     
