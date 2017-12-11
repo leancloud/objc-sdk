@@ -1204,6 +1204,12 @@
 		9AE76C571C3F7CC600325902 /* AVIMDynamicObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD651D41BD9470900C55F85 /* AVIMDynamicObject.m */; };
 		D30DF3F71FDE2CD200F932BC /* AVUserTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF3F61FDE2CD200F932BC /* AVUserTestCase.swift */; };
 		D30DF3F81FDE2CD200F932BC /* AVUserTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF3F61FDE2CD200F932BC /* AVUserTestCase.swift */; };
+		D30DF4161FDE38EF00F932BC /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
+		D30DF4171FDE38EF00F932BC /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
+		D30DF4181FDE38EF00F932BC /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
+		D30DF4191FDE38EF00F932BC /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
+		D30DF41A1FDE38EF00F932BC /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
+		D30DF41B1FDE38EF00F932BC /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
 		D342B7081FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
 		D342B7091FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
 		D342B70A1FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
@@ -1753,9 +1759,14 @@
 		9AD392491BFD7BE600D28074 /* MessagesProtoOrig.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessagesProtoOrig.pbobjc.m; sourceTree = "<group>"; };
 		9AD651D31BD9470900C55F85 /* AVIMDynamicObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMDynamicObject.h; sourceTree = "<group>"; };
 		9AD651D41BD9470900C55F85 /* AVIMDynamicObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMDynamicObject.m; sourceTree = "<group>"; };
-		D30DF3F41FDE2CD200F932BC /* AVOSCloud-iOSTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVOSCloud-iOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
-		D30DF3F51FDE2CD200F932BC /* AVOSCloud-macOSTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVOSCloud-macOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		D30DF3F61FDE2CD200F932BC /* AVUserTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVUserTestCase.swift; sourceTree = "<group>"; };
+		D30DF4111FDE38EE00F932BC /* AVOSCloudIM-iOSTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVOSCloudIM-iOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		D30DF4121FDE38EE00F932BC /* AVOSCloudIM-macOSTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVOSCloudIM-macOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		D30DF4131FDE38EE00F932BC /* AVOSCloudLiveQuery-iOSTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVOSCloudLiveQuery-iOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		D30DF4141FDE38EE00F932BC /* AVOSCloudLiveQuery-macOSTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVOSCloudLiveQuery-macOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		D30DF4151FDE38EF00F932BC /* LCTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCTestBase.swift; sourceTree = "<group>"; };
+		D30DF41C1FDE391C00F932BC /* AVOSCloud-macOSTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVOSCloud-macOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		D30DF41D1FDE391D00F932BC /* AVOSCloud-iOSTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVOSCloud-iOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LCExtension+Cocoa.h"; sourceTree = "<group>"; };
 		D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "LCExtension+Cocoa.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2644,6 +2655,7 @@
 		8CEA86581A777A7900864211 /* TestBase */ = {
 			isa = PBXGroup;
 			children = (
+				D30DF4051FDE373900F932BC /* Swift */,
 				8CEA86591A777A7900864211 /* AVTestBase.h */,
 				8CEA865A1A777A7900864211 /* AVTestBase.m */,
 				8CEA865B1A777A7900864211 /* XCTestCase+AsyncTesting.h */,
@@ -2782,10 +2794,30 @@
 			isa = PBXGroup;
 			children = (
 				D30DF3F61FDE2CD200F932BC /* AVUserTestCase.swift */,
-				D30DF3F41FDE2CD200F932BC /* AVOSCloud-iOSTests-Bridging-Header.h */,
-				D30DF3F51FDE2CD200F932BC /* AVOSCloud-macOSTests-Bridging-Header.h */,
 			);
 			path = Swift;
+			sourceTree = "<group>";
+		};
+		D30DF4051FDE373900F932BC /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				D30DF4151FDE38EF00F932BC /* LCTestBase.swift */,
+				D30DF41E1FDE396100F932BC /* Bridging-Header */,
+			);
+			path = Swift;
+			sourceTree = "<group>";
+		};
+		D30DF41E1FDE396100F932BC /* Bridging-Header */ = {
+			isa = PBXGroup;
+			children = (
+				D30DF41D1FDE391D00F932BC /* AVOSCloud-iOSTests-Bridging-Header.h */,
+				D30DF41C1FDE391C00F932BC /* AVOSCloud-macOSTests-Bridging-Header.h */,
+				D30DF4111FDE38EE00F932BC /* AVOSCloudIM-iOSTests-Bridging-Header.h */,
+				D30DF4121FDE38EE00F932BC /* AVOSCloudIM-macOSTests-Bridging-Header.h */,
+				D30DF4131FDE38EE00F932BC /* AVOSCloudLiveQuery-iOSTests-Bridging-Header.h */,
+				D30DF4141FDE38EE00F932BC /* AVOSCloudLiveQuery-macOSTests-Bridging-Header.h */,
+			);
+			path = "Bridging-Header";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3784,7 +3816,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = AV;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = "LeanCloud Inc.";
 				TargetAttributes = {
 					704F3B6D1BE0D0180033245C = {
@@ -3792,6 +3824,7 @@
 					};
 					704F3B761BE0D0180033245C = {
 						CreatedOnToolsVersion = 7.0;
+						LastSwiftMigration = 0920;
 					};
 					70CA7F671BDE2DC3000A3B21 = {
 						CreatedOnToolsVersion = 7.0;
@@ -3806,7 +3839,11 @@
 					};
 					838CE3221EC97E6E00B24F5B = {
 						CreatedOnToolsVersion = 8.3.2;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
+					};
+					838CE3411EC980E000B24F5B = {
+						LastSwiftMigration = 0920;
 					};
 					83B0E5901F2839FB00EE1A75 = {
 						CreatedOnToolsVersion = 9.0;
@@ -3823,6 +3860,7 @@
 					};
 					8C8419CC1A5A796000C5C6C4 = {
 						CreatedOnToolsVersion = 6.1.1;
+						LastSwiftMigration = 0920;
 					};
 				};
 			};
@@ -4080,6 +4118,7 @@
 				D342B71B1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				704F3C081BE0D5F50033245C /* AVIMCustomMessage.m in Sources */,
 				704F3C091BE0D5F50033245C /* AVIMClientTest.m in Sources */,
+				D30DF4191FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 				704F3C0A1BE0D5F50033245C /* AVIMConversationTest.m in Sources */,
 				704F3C0B1BE0D5F50033245C /* AVIMMessageTest.m in Sources */,
 			);
@@ -4181,6 +4220,7 @@
 				70F315501BDE510D00D691B3 /* Thread.m in Sources */,
 				70F315511BDE510D00D691B3 /* UserArmor.m in Sources */,
 				70F315521BDE510D00D691B3 /* UserBar.m in Sources */,
+				D30DF4171FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 				70F315531BDE510D00D691B3 /* UserInfo.m in Sources */,
 				70F315541BDE510D00D691B3 /* XCTestCase+AsyncTesting.m in Sources */,
 				70F3154D1BDE50D100D691B3 /* AVTestBase.m in Sources */,
@@ -4301,6 +4341,7 @@
 			files = (
 				D342B71F1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				838CE3291EC97E6F00B24F5B /* AVOSCloudLiveQueryTests.m in Sources */,
+				D30DF41A1FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4321,6 +4362,7 @@
 			files = (
 				D342B7211FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				838CE3451EC980E000B24F5B /* AVOSCloudLiveQueryTests.m in Sources */,
+				D30DF41B1FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4529,6 +4571,7 @@
 				8CEEABCC1ABC179300B9E757 /* AVCloudTest.m in Sources */,
 				70276B5E1B809333002E91EC /* AVACLTest.m in Sources */,
 				8CEEABCD1ABC179300B9E757 /* AVFileTest.m in Sources */,
+				D30DF4161FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 				8CEEABD41ABC179300B9E757 /* AVSearchQueryTest.m in Sources */,
 				8CEEABD01ABC179300B9E757 /* AVObjectTest.m in Sources */,
 				8CEEABDB1ABC179300B9E757 /* UserBar.m in Sources */,
@@ -4631,6 +4674,7 @@
 				D342B7191FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				7047179C1B4A60E100F6ADDC /* AVIMMessageTest.m in Sources */,
 				704717A51B4A620900F6ADDC /* AVIMTestBase.m in Sources */,
+				D30DF4181FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 				8CEA865F1A777A7900864211 /* AVTestBase.m in Sources */,
 				70DA624D1B4BDC8300D95D4D /* AVIMCustomMessage.m in Sources */,
 			);
@@ -4857,6 +4901,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudIM-macOSTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -4899,6 +4946,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudIM-macOSTests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -5075,7 +5124,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "AVOSCloudTests/Swift/AVOSCloud-macOSTests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloud-macOSTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -5119,7 +5168,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "AVOSCloudTests/Swift/AVOSCloud-macOSTests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloud-macOSTests-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
@@ -5418,6 +5467,9 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.AVOSCloudLiveQueryTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudLiveQuery-iOSTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -5462,6 +5514,8 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.AVOSCloudLiveQueryTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudLiveQuery-iOSTests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -5634,6 +5688,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.AVOSCloudLiveQueryTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudLiveQuery-macOSTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -5679,6 +5736,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.AVOSCloudLiveQueryTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudLiveQuery-macOSTests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -6035,6 +6094,7 @@
 				);
 				PROVISIONING_PROFILE = "2a6f2f85-65c9-4344-b118-8977505bcf3b";
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
@@ -6213,7 +6273,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "cn.leancloud.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "AVOSCloudTests/Swift/AVOSCloud-iOSTests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloud-iOSTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -6258,7 +6318,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "cn.leancloud.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "AVOSCloudTests/Swift/AVOSCloud-iOSTests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloud-iOSTests-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
@@ -6430,6 +6490,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudIM-iOSTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -6475,6 +6538,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudIM-iOSTests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

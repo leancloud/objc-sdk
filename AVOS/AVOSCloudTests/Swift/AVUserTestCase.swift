@@ -8,7 +8,7 @@
 
 import XCTest
 
-class AVUserTestCase: AVTestBase {
+class AVUserTestCase: LCTestBase {
     
     override func setUp() {
         super.setUp()
