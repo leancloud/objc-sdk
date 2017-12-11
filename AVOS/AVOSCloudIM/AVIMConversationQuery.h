@@ -15,11 +15,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString *const kAVIMKeyName;
-extern NSString *const kAVIMKeyMember;
-extern NSString *const kAVIMKeyCreator;
-extern NSString *const kAVIMKeyConversationId;
-
 typedef NS_OPTIONS(uint64_t, AVIMConversationQueryOption) {
     AVIMConversationQueryOptionNone = 0,
     AVIMConversationQueryOptionCompact = 1 << 0, /**< 不返回成员列表 */

@@ -123,14 +123,16 @@
  "msg_mid":"2USGXPmbTEWjt9WnNRZpWQ",
  "msg_timestamp":1480325615220,
  */
-+ (instancetype)parseMessageWithConversationId:(NSString *)conversationId result:(NSDictionary *)result {
-    id messageContent = result[KEY_LAST_MESSAGE];
++ (instancetype)parseMessageWithConversationId:(NSString *)conversationId
+                                        result:(NSDictionary *)result
+{
+    id messageContent = result[kConvAttrKey_lastMessage];
     if((!messageContent) || (messageContent == [NSNull null])) { return nil; }
     
-    NSString *from = result[KEY_LAST_MESSAGE_FROM];
+    NSString *from = result[kConvAttrKey_lastMessageFrom];
     NSString *content = (NSString *)messageContent;
-    NSTimeInterval timestamp = [result[KEY_LAST_MESSAGE_TIMESTAMP] doubleValue];
-    NSString *messageId = result[KEY_LAST_MESSAGE_MID];
+    NSTimeInterval timestamp = [result[kConvAttrKey_lastMessageTimestamp] doubleValue];
+    NSString *messageId = result[kConvAttrKey_lastMessageId];
     
     AVIMMessage *message = nil;
     AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:content];

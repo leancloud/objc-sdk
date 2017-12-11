@@ -745,8 +745,8 @@ static BOOL AVIMClientHasInstantiated = NO;
         if (name || attr) {
             attributes = [[NSMutableDictionary alloc] init];
             
-            if (name) [attributes setObject:name forKey:KEY_NAME];
-            if (attr) [attributes setObject:attr forKey:KEY_ATTR];
+            if (name) [attributes setObject:name forKey:kConvAttrKey_name];
+            if (attr) [attributes setObject:attr forKey:kConvAttrKey_attributes];
         }
         
         BOOL transient = options & AVIMConversationOptionTransient;
@@ -1086,10 +1086,6 @@ static BOOL AVIMClientHasInstantiated = NO;
 
 - (void)resetUnreadMessagesCountForConversation:(AVIMConversation *)conversation {
     [self updateConversation:conversation.conversationId withDictionary:@{@"unreadMessagesCount": @(0)}];
-}
-
-- (void)removeCachedConversationForId:(NSString *)conversationId {
-    [[self conversationCache] removeConversationForId:conversationId];
 }
 
 - (void)removeCachedMessagesForId:(NSString *)conversationId {

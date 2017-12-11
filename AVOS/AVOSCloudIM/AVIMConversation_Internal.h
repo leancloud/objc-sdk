@@ -8,17 +8,45 @@
 
 #import "AVIMConversation.h"
 
-#define KEY_NAME @"name"
-#define KEY_ATTR @"attr"
-#define KEY_TIMESTAMP @"timestamp"
-#define KEY_DATA @"data"
-#define KEY_FROM @"from"
-#define KEY_MSGID @"msgId"
-#define KEY_LAST_MESSAGE_AT @"lm"
-#define KEY_LAST_MESSAGE @"msg"
-#define KEY_LAST_MESSAGE_FROM @"msg_from"
-#define KEY_LAST_MESSAGE_MID @"msg_mid"
-#define KEY_LAST_MESSAGE_TIMESTAMP @"msg_timestamp"
+/* key of the conversation's attribute */
+///
+
+/* Value Type: NSString */
+static NSString * const kConvAttrKey_conversationId       = @"objectId";
+static NSString * const kConvAttrKey_uniqueId             = @"uniqueId";
+
+/* Value Type: NSString */
+static NSString * const kConvAttrKey_name                 = @"name";
+static NSString * const kConvAttrKey_avatarURL            = @"avatarURL";
+static NSString * const kConvAttrKey_creator              = @"c";
+static NSString * const kConvAttrKey_createdAt            = @"createdAt";
+static NSString * const kConvAttrKey_updatedAt            = @"updatedAt";
+static NSString * const kConvAttrKey_lastMessageAt        = @"lm";
+static NSString * const kConvAttrKey_lastMessage          = @"msg";
+static NSString * const kConvAttrKey_lastMessageId        = @"msg_mid";
+static NSString * const kConvAttrKey_lastMessageFrom      = @"msg_from";
+
+/* Value Type: NSNumber double */
+static NSString * const kConvAttrKey_lastMessageTimestamp = @"msg_timestamp";
+
+/* Value Type: NSDictionary */
+static NSString * const kConvAttrKey_attributes           = @"attr";
+
+/* Value Type: NSArray */
+static NSString * const kConvAttrKey_members              = @"m";
+static NSString * const kConvAttrKey_membersMuted         = @"mu";
+
+/* Value Type: NSNumber BOOL */
+static NSString * const kConvAttrKey_muted                = @"muted";
+static NSString * const kConvAttrKey_unique               = @"unique";
+static NSString * const kConvAttrKey_transient            = @"tr";
+static NSString * const kConvAttrKey_system               = @"sys";
+static NSString * const kConvAttrKey_temporary            = @"temp";
+
+/* Value Type: NSNumber int32 */
+static NSString * const kConvAttrKey_temporaryTTL         = @"ttl";
+
+///
 
 FOUNDATION_EXPORT NSString *LCIMClientIdKey;
 FOUNDATION_EXPORT NSString *LCIMConversationIdKey;
@@ -62,6 +90,12 @@ static NSString *const kAVIMUserOptionUseUnread = @"AVIMUserOptionUseUnread";
 @property (nonatomic, assign) BOOL          transient;
 
 @property (nonatomic, strong) NSMutableDictionary *properties;
+
+/*
+ because `properties` can be changed by user,
+ so need a immutable dic to store conversation's attribute data
+ */
+@property (nonatomic, strong) NSDictionary *rawDataDic;
 
 @property (nonatomic, strong) NSHashTable<id<AVIMConversationDelegate>> *delegates;
 

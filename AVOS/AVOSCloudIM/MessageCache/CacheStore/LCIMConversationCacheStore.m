@@ -18,21 +18,65 @@
 
 @implementation LCIMConversationCacheStore
 
-- (NSArray *)insertionRecordForConversation:(AVIMConversation *)conversation expireAt:(NSTimeInterval)expireAt {
-    return @[
-        conversation.conversationId,
-        conversation.name ?: [NSNull null],
-        conversation.creator ?: [NSNull null],
-        [NSNumber numberWithInteger:conversation.transient],
-        conversation.members ? [conversation.members componentsJoinedByString:@","] : [NSNull null],
-        conversation.attributes ? [NSKeyedArchiver archivedDataWithRootObject:conversation.attributes] : [NSNull null],
-        [NSNumber numberWithDouble:[conversation.createAt timeIntervalSince1970]],
-        [NSNumber numberWithDouble:[conversation.updateAt timeIntervalSince1970]],
-        [NSNumber numberWithDouble:[conversation.lastMessageAt timeIntervalSince1970]],
-        conversation.lastMessage ? [NSKeyedArchiver archivedDataWithRootObject:conversation.lastMessage] : [NSNull null],
-        [NSNumber numberWithInteger:conversation.muted],
-        [NSNumber numberWithDouble:expireAt]
-    ];
+- (NSArray *)insertionRecordForConversation:(AVIMConversation *)conversation expireAt:(NSTimeInterval)expireAt
+{
+    id conversationId = conversation.conversationId;
+    
+    id name = (conversation.name
+               ?: [NSNull null]);
+    
+    id creator = (conversation.creator
+                  ?: [NSNull null]);
+    
+    id transient = [NSNumber numberWithBool:conversation.transient];
+    
+    id members = (conversation.members
+                  ? [conversation.members componentsJoinedByString:@","]
+                  : [NSNull null]);
+    
+    id attributes = (conversation.attributes
+                     ? [NSKeyedArchiver archivedDataWithRootObject:conversation.attributes]
+                     : [NSNull null]);
+    
+    id createAt = (conversation.createAt
+                   ? [NSNumber numberWithDouble:[conversation.createAt timeIntervalSince1970]]
+                   : [NSNull null]);
+    
+    id updateAt = (conversation.updateAt
+                   ? [NSNumber numberWithDouble:[conversation.updateAt timeIntervalSince1970]]
+                   : [NSNull null]);
+    
+    id lastMessageAt = (conversation.lastMessageAt
+                        ? [NSNumber numberWithDouble:[conversation.lastMessageAt timeIntervalSince1970]]
+                        : [NSNull null]);
+    
+    id lastMessage = (conversation.lastMessage
+                      ? [NSKeyedArchiver archivedDataWithRootObject:conversation.lastMessage]
+                      : [NSNull null]);
+    
+    id muted = [NSNumber numberWithBool:conversation.muted];
+    
+    id rawDataDic = (conversation.rawDataDic
+                     ? [NSKeyedArchiver archivedDataWithRootObject:conversation.rawDataDic]
+                     : [NSNull null]);
+    
+    NSArray *array = @[
+                       conversationId,
+                       name,
+                       creator,
+                       transient,
+                       members,
+                       attributes,
+                       createAt,
+                       updateAt,
+                       lastMessageAt,
+                       lastMessage,
+                       muted,
+                       rawDataDic,
+                       [NSNumber numberWithDouble:expireAt]
+                       ];
+    
+    return array;
 }
 
 - (void)insertConversations:(NSArray *)conversations {
@@ -141,7 +185,8 @@
     return timeInterval ? [NSDate dateWithTimeIntervalSince1970:timeInterval] : nil;
 }
 
-- (AVIMConversation *)conversationWithResult:(LCResultSet *)result {
+- (AVIMConversation *)conversationWithResult:(LCResultSet *)result
+{
     NSString *conversationId = [result stringForColumn:LCIM_FIELD_CONVERSATION_ID];
 
     AVIMConversation *conversation = [self.client conversationWithId:conversationId];
@@ -162,6 +207,12 @@
         data ? [NSKeyedUnarchiver unarchiveObjectWithData:data] : nil;
     });
     conversation.muted          = [result boolForColumn:LCIM_FIELD_MUTED];
+    
+    conversation.rawDataDic = ({
+        NSData *data = [result dataForColumn:LCIM_FIELD_RAW_DATA];
+        data ? [NSKeyedUnarchiver unarchiveObjectWithData:data] : nil;
+    });
+    
     return conversation;
 }
 

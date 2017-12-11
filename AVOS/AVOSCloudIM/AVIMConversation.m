@@ -13,7 +13,6 @@
 #import "AVIMClient_Internal.h"
 #import "AVIMBlockHelper.h"
 #import "AVIMTypedMessage_Internal.h"
-#import "AVIMConversationUpdateBuilder_Internal.h"
 #import "AVIMGeneralObject.h"
 #import "AVIMConversationQuery.h"
 #import "LCIMMessageCache.h"
@@ -121,29 +120,36 @@ static dispatch_queue_t messageCacheOperationQueue;
     return timestamp;
 }
 
-- (instancetype)init {
+- (instancetype)init
+{
     self = [super init];
 
     if (self) {
+        
         [self doInitialize];
     }
 
     return self;
 }
 
-- (instancetype)initWithConversationId:(NSString *)conversationId {
-    self = [self init];
+- (instancetype)initWithConversationId:(NSString *)conversationId
+{
+    self = [super init];
 
     if (self) {
         _conversationId = [conversationId copy];
+        
+        [self doInitialize];
     }
 
     return self;
 }
 
-- (void)doInitialize {
+- (void)doInitialize
+{
     _properties = [NSMutableDictionary dictionary];
     _propertiesForUpdate = [NSMutableDictionary dictionary];
+    _rawDataDic = [NSDictionary dictionary];
 
     _delegates = [NSHashTable weakObjectsHashTable];
 
@@ -359,13 +365,24 @@ static dispatch_queue_t messageCacheOperationQueue;
     [self setObject:object forKey:key];
 }
 
-- (nullable id)objectForKey:(NSString *)key {
-    id object = (
-        [self.propertiesForUpdate objectForKey:key] ?:
-        [self.properties objectForKey:key]
-    );
+- (nullable id)objectForKey:(NSString *)key
+{
+    id object = self.propertiesForUpdate[key];
+    if (object) {
+        return object;
+    }
+    
+    object = self.properties[key];
+    if (object) {
+        return object;
+    }
+    
+    object = self.rawDataDic[key];
+    if (object) {
+        return object;
+    }
 
-    return object;
+    return nil;
 }
 
 - (id)objectForKeyedSubscript:(NSString *)key {
@@ -374,11 +391,6 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (void)cleanAttributesForUpdate {
     [self.propertiesForUpdate removeAllObjects];
-}
-
-- (AVIMConversationUpdateBuilder *)newUpdateBuilder {
-    AVIMConversationUpdateBuilder *builder = [[AVIMConversationUpdateBuilder alloc] init];
-    return builder;
 }
 
 - (void)addMembers:(NSArray *)members {
@@ -418,19 +430,19 @@ static dispatch_queue_t messageCacheOperationQueue;
 }
 
 - (NSString *)name {
-    return self.properties[KEY_NAME];
+    return self.properties[kConvAttrKey_name];
 }
 
 - (void)setName:(NSString *)name {
-    self.properties[KEY_NAME] = name;
+    self.properties[kConvAttrKey_name] = name;
 }
 
 - (NSDictionary *)attributes {
-    return self.properties[KEY_ATTR];
+    return self.properties[kConvAttrKey_attributes];
 }
 
 - (void)setAttributes:(NSDictionary *)attributes {
-    self.properties[KEY_ATTR] = attributes;
+    self.properties[kConvAttrKey_attributes] = attributes;
 }
 
 - (void)fetchWithCallback:(AVIMBooleanResultBlock)callback {
@@ -609,8 +621,8 @@ static dispatch_queue_t messageCacheOperationQueue;
 }
 
 - (void)updateLocalAttributes:(NSDictionary *)attributes {
-    NSString *name = attributes[KEY_NAME];
-    NSDictionary *attr = attributes[KEY_ATTR];
+    NSString *name = attributes[kConvAttrKey_name];
+    NSDictionary *attr = attributes[kConvAttrKey_attributes];
 
     if (name)
         self.name = name;
@@ -647,12 +659,30 @@ static dispatch_queue_t messageCacheOperationQueue;
     dispatch_async([AVIMClient imClientQueue], ^{
         AVIMGenericCommand *genericCommand = [self generateGenericCommandWithAttributes:attributes];
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
+            
             if (!error) {
+            
+                /* Remove 'large size' & 'frequent change' Key-Value */
+                ///
+                NSMutableDictionary *rawDataDic = [self.properties mutableCopy];
+                [rawDataDic removeObjectForKey:kConvAttrKey_name];
+                [rawDataDic removeObjectForKey:kConvAttrKey_avatarURL];
+                [rawDataDic removeObjectForKey:kConvAttrKey_members];
+                [rawDataDic removeObjectForKey:kConvAttrKey_membersMuted];
+                [rawDataDic removeObjectForKey:kConvAttrKey_attributes];
+                [rawDataDic removeObjectForKey:kConvAttrKey_lastMessage];
+                self.rawDataDic = rawDataDic;
+                ///
+                
                 [self cleanAttributesForUpdate];
+                
                 [self removeCachedConversation];
             }
-            if (callback)
+            
+            if (callback) {
+                
                 callback(error == nil, error);
+            }
         }];
         [_imClient sendCommand:genericCommand];
     });
@@ -1806,7 +1836,8 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 #pragma mark - Keyed Conversation
 
-- (AVIMKeyedConversation *)keyedConversation {
+- (AVIMKeyedConversation *)keyedConversation
+{
     AVIMKeyedConversation *keyedConversation = [[AVIMKeyedConversation alloc] init];
     
     keyedConversation.conversationId = self.conversationId;
@@ -1822,10 +1853,21 @@ static dispatch_queue_t messageCacheOperationQueue;
     keyedConversation.transient      = self.transient;
     keyedConversation.muted          = self.muted;
     
+    if (self.properties) {
+        
+        keyedConversation.properties = [self.properties mutableCopy];
+    }
+    
+    if (self.rawDataDic) {
+        
+        keyedConversation.rawDataDic = [self.rawDataDic copy];
+    }
+    
     return keyedConversation;
 }
 
-- (void)setKeyedConversation:(AVIMKeyedConversation *)keyedConversation {
+- (void)setKeyedConversation:(AVIMKeyedConversation *)keyedConversation
+{
     self.conversationId    = keyedConversation.conversationId;
     self.creator           = keyedConversation.creator;
     self.createAt          = keyedConversation.createAt;
@@ -1837,6 +1879,16 @@ static dispatch_queue_t messageCacheOperationQueue;
     self.attributes        = keyedConversation.attributes;
     self.transient         = keyedConversation.transient;
     self.muted             = keyedConversation.muted;
+    
+    if (keyedConversation.properties) {
+        
+        self.properties = [keyedConversation.properties mutableCopy];
+    }
+    
+    if (keyedConversation.rawDataDic) {
+        
+        self.rawDataDic = [keyedConversation.rawDataDic copy];
+    }
 }
 
 @end

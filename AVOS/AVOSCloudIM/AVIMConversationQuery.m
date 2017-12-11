@@ -20,11 +20,6 @@
 #import "LCIMConversationCache.h"
 #import "AVIMMessage_Internal.h"
 
-NSString *const kAVIMKeyName = @"name";
-NSString *const kAVIMKeyMember = @"m";
-NSString *const kAVIMKeyCreator = @"c";
-NSString *const kAVIMKeyConversationId = @"objectId";
-
 @implementation AVIMConversationQuery
 
 +(NSDictionary *)dictionaryFromGeoPoint:(AVGeoPoint *)point {
@@ -321,7 +316,7 @@ NSString *const kAVIMKeyConversationId = @"objectId";
 
 - (void)getConversationById:(NSString *)conversationId
                    callback:(AVIMConversationResultBlock)callback {
-    [self whereKey:@"objectId" equalTo:conversationId];
+    [self whereKey:kConvAttrKey_conversationId equalTo:conversationId];
     [self findConversationsWithCallback:^(NSArray *objects, NSError *error) {
         if (!error && objects.count > 0) {
             AVIMConversation *conversation = [objects objectAtIndex:0];
@@ -392,8 +387,26 @@ NSString *const kAVIMKeyConversationId = @"objectId";
     NSMutableArray *conversations = [NSMutableArray arrayWithCapacity:[results count]];
 
     for (NSDictionary *dict in results) {
-        NSString *conversationId = [dict objectForKey:@"objectId"];
+        NSString *conversationId = [dict objectForKey:kConvAttrKey_conversationId];
         AVIMConversation *conversation = [self.client conversationWithId:conversationId];
+        
+        /*
+         `properties` can be changed by user,
+         so use an other dic to store some unchangeable attribute,
+         but SDK can't know whitch attribute is unchangeable,
+         so just store all data directly.
+         */
+        ///
+        NSMutableDictionary *rawDataDic = [dict mutableCopy];
+        /* Remove 'large size' & 'frequent change' Key-Value */
+        [rawDataDic removeObjectForKey:kConvAttrKey_name];
+        [rawDataDic removeObjectForKey:kConvAttrKey_avatarURL];
+        [rawDataDic removeObjectForKey:kConvAttrKey_members];
+        [rawDataDic removeObjectForKey:kConvAttrKey_membersMuted];
+        [rawDataDic removeObjectForKey:kConvAttrKey_attributes];
+        [rawDataDic removeObjectForKey:kConvAttrKey_lastMessage];
+        conversation.rawDataDic = rawDataDic;
+        ///
 
         /* Note:
          * We store all properties into conversation for custom attributes access.
@@ -403,18 +416,18 @@ NSString *const kAVIMKeyConversationId = @"objectId";
 
         conversation.imClient = self.client;
         conversation.conversationId = conversationId;
-        conversation.name = [dict objectForKey:KEY_NAME];
-        conversation.attributes = [dict objectForKey:KEY_ATTR];
-        conversation.creator = [dict objectForKey:@"c"];
+        conversation.name = [dict objectForKey:kConvAttrKey_name];
+        conversation.attributes = [dict objectForKey:kConvAttrKey_attributes];
+        conversation.creator = [dict objectForKey:kConvAttrKey_creator];
         conversation.lastMessage = [AVIMMessage parseMessageWithConversationId:conversationId result:dict];
-        conversation.members = [dict objectForKey:@"m"];
-        conversation.muted = [[dict objectForKey:@"muted"] boolValue];
-        conversation.transient = [[dict objectForKey:@"tr"] boolValue];
+        conversation.members = [dict objectForKey:kConvAttrKey_members];
+        conversation.muted = [[dict objectForKey:kConvAttrKey_muted] boolValue];
+        conversation.transient = [[dict objectForKey:kConvAttrKey_transient] boolValue];
 
-        NSDictionary    *lastMessageDate        = dict[@"lm"];
-        NSNumber        *lastMessageTimestamp   = dict[@"msg_timestamp"];
-        NSString        *createdAt              = dict[@"createdAt"];
-        NSString        *updatedAt              = dict[@"updatedAt"];
+        NSDictionary    *lastMessageDate        = dict[kConvAttrKey_lastMessageAt];
+        NSNumber        *lastMessageTimestamp   = dict[kConvAttrKey_lastMessageTimestamp];
+        NSString        *createdAt              = dict[kConvAttrKey_createdAt];
+        NSString        *updatedAt              = dict[kConvAttrKey_updatedAt];
 
         /* For system conversation, there's no `lm` field.
            Instead, we read `msg_timestamp`field. */

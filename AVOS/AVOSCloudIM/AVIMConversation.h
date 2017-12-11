@@ -9,7 +9,6 @@
 #import "AVIMCommon.h"
 #import "AVIMMessage.h"
 #import "AVIMTypedMessage.h"
-#import "AVIMConversationUpdateBuilder.h"
 #import "AVIMKeyedConversation.h"
 #import "AVIMAvailability.h"
 #import "AVIMMessageOption.h"
@@ -441,12 +440,6 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
             options:(AVIMMessageSendOption)options
       progressBlock:(nullable AVIMProgressBlock)progressBlock
            callback:(AVIMBooleanResultBlock)callback AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.4.0. Use -[AVIMConversation sendMessage:option:progressBlock:callback:] instead.");
-
-/*!
- 生成一个新的 AVIMConversationUpdateBuilder 实例。用于更新对话。
- @return 新的 AVIMConversationUpdateBuilder 实例.
- */
-- (AVIMConversationUpdateBuilder *)newUpdateBuilder AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.7.0. Use -[AVIMConversation setObject:forKey:] instead.");
 
 /*!
  发送更新。
