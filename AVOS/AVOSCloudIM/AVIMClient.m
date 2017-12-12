@@ -171,6 +171,9 @@ static BOOL AVIMClientHasInstantiated = NO;
     _messageQueryCacheEnabled = YES;
 
     _distinctMessageIdArray = [NSMutableArray arrayWithCapacity:kDistinctMessageIdArraySize + 1];
+    
+    _conversationDictionary = [NSMutableDictionary dictionary];
+    _queueOfConvMemory = dispatch_queue_create("AVIMClient._queueOfConvMemory", NULL);
 
     /* Observe push notification device token and websocket open event. */
 
@@ -1492,6 +1495,71 @@ static BOOL AVIMClientHasInstantiated = NO;
 {
     NSDictionary *options = @{ kAVIMUserOptionUseUnread : @(enabled) };
     [self _setUserOptions:options];
+}
+
+// MARK: - Conversation Construction
+
+- (AVIMConversation *)constructConversationWithConvId:(NSString *)convId
+                                             convType:(LCIMConvType)convType
+                                               client:(AVIMClient *)client
+{
+    return nil;
+}
+
+// MARK: - Conversation Memory Cache
+
+- (void)retainConversationsInMemory:(NSArray<AVIMConversation *> *)convArray
+{
+    if (convArray == nil ||
+        convArray.count == 0) {
+        
+        return;
+    }
+    
+    dispatch_async(_queueOfConvMemory, ^{
+        
+        for (AVIMConversation *conv in convArray) {
+            
+            NSString *key = conv.conversationId;
+            
+            [_conversationDictionary setObject:conv
+                                        forKey:key];
+        }
+    });
+}
+
+- (NSArray<AVIMConversation *> *)getConversationsFromMemoryWith:(NSArray<NSString *> *)convIdArray
+{
+    if (convIdArray == nil ||
+        convIdArray.count == 0) {
+        
+        return nil;
+    }
+    
+    NSMutableArray<AVIMConversation *> *result = [NSMutableArray arrayWithCapacity:convIdArray.count];
+    
+    dispatch_sync(_queueOfConvMemory, ^{
+        
+        for (NSString *convId in convIdArray) {
+            
+            AVIMConversation *conv = [_conversationDictionary objectForKey:convId];
+            
+            if (conv) {
+                
+                [result addObject:conv];
+            }
+        }
+    });
+    
+    return result;
+}
+
+- (void)removeAllConversationsInMemory
+{
+    dispatch_async(_queueOfConvMemory, ^{
+        
+        [_conversationDictionary removeAllObjects];
+    });
 }
 
 // MARK: - Deprecated

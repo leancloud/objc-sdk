@@ -10,6 +10,15 @@
 #import "AVIMWebSocketWrapper.h"
 #import "LCIMConversationCache.h"
 
+/* Use this enum to match command's value(`convType`) */
+typedef NS_ENUM(NSUInteger, LCIMConvType) {
+    LCIMConvTypeUnknown = 0,
+    LCIMConvTypeNormal,
+    LCIMConvTypeTransient,
+    LCIMConvTypeSystem,
+    LCIMConvTypeTemporary
+};
+
 @interface AVIMClient ()
 
 + (NSMutableDictionary *)_userOptions;
@@ -35,6 +44,16 @@
 
 @property (nonatomic, strong) LCIMConversationCache *conversationCache;
 
+/**
+ Conversations's Memory Cache Container.
+ */
+@property (nonatomic, strong) NSMutableDictionary *conversationDictionary;
+
+/**
+ Use a queue to manage in-out operation of conversation in memory.
+ */
+@property (nonatomic, strong) dispatch_queue_t queueOfConvMemory;
+
 - (void)setStatus:(AVIMClientStatus)status;
 - (AVIMConversation *)conversationWithId:(NSString *)conversationId;
 - (void)sendCommand:(AVIMGenericCommand *)command;
@@ -56,5 +75,17 @@
 - (void)updateReceipt:(NSDate *)date
        ofConversation:(AVIMConversation *)conversation
                forKey:(NSString *)key;
+
+// MARK: - Expose for Unit Test
+
+- (AVIMConversation *)constructConversationWithConvId:(NSString *)convId
+                                             convType:(LCIMConvType)convType
+                                               client:(AVIMClient *)client;
+
+- (void)retainConversationsInMemory:(NSArray<AVIMConversation *> *)convArray;
+
+- (NSArray<AVIMConversation *> *)getConversationsFromMemoryWith:(NSArray<NSString *> *)convIdArray;
+
+- (void)removeAllConversationsInMemory;
 
 @end
