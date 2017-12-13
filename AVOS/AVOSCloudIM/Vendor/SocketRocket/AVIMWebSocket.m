@@ -465,8 +465,9 @@ static __strong NSData *CRLFCRLF;
     }
 
     [self _performDelegateBlock:^{
-        if ([self.delegate respondsToSelector:@selector(webSocketDidOpen:)]) {
-            [self.delegate webSocketDidOpen:self];
+        id <AVIMWebSocketDelegate> delegate = self.delegate;
+        if (delegate && [delegate respondsToSelector:@selector(webSocketDidOpen:)]) {
+            [delegate webSocketDidOpen:self];
         };
     }];
 }
@@ -709,8 +710,9 @@ static __strong NSData *CRLFCRLF;
         if (self.readyState != AVIM_CLOSED) {
             _failed = YES;
             [self _performDelegateBlock:^{
-                if ([self.delegate respondsToSelector:@selector(webSocket:didFailWithError:)]) {
-                    [self.delegate webSocket:self didFailWithError:error];
+                id <AVIMWebSocketDelegate> delegate = self.delegate;
+                if (delegate && [delegate respondsToSelector:@selector(webSocket:didFailWithError:)]) {
+                    [delegate webSocket:self didFailWithError:error];
                 }
             }];
 
@@ -777,8 +779,9 @@ static __strong NSData *CRLFCRLF;
 {
     AVIMFastLog(@"Received pong");
     [self _performDelegateBlock:^{
-        if ([self.delegate respondsToSelector:@selector(webSocket:didReceivePong:)]) {
-            [self.delegate webSocket:self didReceivePong:pongData];
+        id <AVIMWebSocketDelegate> delegate = self.delegate;
+        if (delegate && [delegate respondsToSelector:@selector(webSocket:didReceivePong:)]) {
+            [delegate webSocket:self didReceivePong:pongData];
         }
     }];
 }
@@ -787,7 +790,10 @@ static __strong NSData *CRLFCRLF;
 {
     AVIMFastLog(@"Received message");
     [self _performDelegateBlock:^{
-        [self.delegate webSocket:self didReceiveMessage:message];
+        id <AVIMWebSocketDelegate> delegate = self.delegate;
+        if (delegate) {
+            [delegate webSocket:self didReceiveMessage:message];
+        }
     }];
 }
 
@@ -1139,8 +1145,9 @@ static const uint8_t AVIMPayloadLenMask   = 0x7F;
         
         if (!_failed) {
             [self _performDelegateBlock:^{
-                if ([self.delegate respondsToSelector:@selector(webSocket:didCloseWithCode:reason:wasClean:)]) {
-                    [self.delegate webSocket:self didCloseWithCode:_closeCode reason:_closeReason wasClean:YES];
+                id <AVIMWebSocketDelegate> delegate = self.delegate;
+                if (delegate && [delegate respondsToSelector:@selector(webSocket:didCloseWithCode:reason:wasClean:)]) {
+                    [delegate webSocket:self didCloseWithCode:_closeCode reason:_closeReason wasClean:YES];
                 }
             }];
         }
@@ -1588,8 +1595,9 @@ NSArray *LCPublicKeysFromCerts(NSArray *certs) {
                         _sentClose = YES;
                         // If we get closed in this state it's probably not clean because we should be sending this when we send messages
                         [self _performDelegateBlock:^{
-                            if ([self.delegate respondsToSelector:@selector(webSocket:didCloseWithCode:reason:wasClean:)]) {
-                                [self.delegate webSocket:self didCloseWithCode:AVIMStatusCodeGoingAway reason:@"Stream end encountered" wasClean:NO];
+                            id <AVIMWebSocketDelegate> delegate = self.delegate;
+                            if (delegate && [delegate respondsToSelector:@selector(webSocket:didCloseWithCode:reason:wasClean:)]) {
+                                [delegate webSocket:self didCloseWithCode:AVIMStatusCodeGoingAway reason:@"Stream end encountered" wasClean:NO];
                             }
                         }];
                     }

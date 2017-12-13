@@ -56,7 +56,7 @@ extern NSString *const AVIMHTTPResponseErrorKey;
 
 @interface AVIMWebSocket : NSObject <NSStreamDelegate>
 
-@property (nonatomic, weak) id <AVIMWebSocketDelegate> delegate;
+@property (atomic, weak) id <AVIMWebSocketDelegate> delegate;
 
 @property (nonatomic, readonly) AVIMReadyState readyState;
 @property (nonatomic, readonly, retain) NSURL *url;
