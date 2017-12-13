@@ -235,7 +235,7 @@ typedef void (^data_callback)(AVIMWebSocket *webSocket,  NSData *data);
     NSURLRequest *_urlRequest;
 
     BOOL _sentClose;
-    BOOL _didFail;
+
     int _closeCode;
     
     BOOL _isPumping;
@@ -460,9 +460,7 @@ static __strong NSData *CRLFCRLF;
     
     self.readyState = AVIM_OPEN;
     
-    if (!_didFail) {
-        [self _readFrameNew];
-    }
+    [self _readFrameNew];
 
     [self _performDelegateBlock:^{
         id <AVIMWebSocketDelegate> delegate = self.delegate;
