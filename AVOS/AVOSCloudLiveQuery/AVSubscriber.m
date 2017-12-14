@@ -86,6 +86,7 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [_webSocket decreaseObserverCount];
 }
 
 - (void)webSocketDidOpen:(NSNotification *)notification {

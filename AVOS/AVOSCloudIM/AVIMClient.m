@@ -406,26 +406,45 @@ static BOOL AVIMClientHasInstantiated = NO;
     return signature;
 }
 
-- (AVIMWebSocketWrapper *)socketWrapperForSecurity:(BOOL)security {
-    AVIMWebSocketWrapper *socketWrapper = nil;
-    
-    if (security) {
-        socketWrapper = [AVIMWebSocketWrapper sharedSecurityInstance];
-    } else {
-        socketWrapper = [AVIMWebSocketWrapper sharedInstance];
-    }
-    
-    if (socketWrapper) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(websocketOpened:) name:AVIM_NOTIFICATION_WEBSOCKET_OPENED object:socketWrapper];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(websocketClosed:) name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED object:socketWrapper];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(websocketReconnect:) name:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT object:socketWrapper];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveCommand:) name:AVIM_NOTIFICATION_WEBSOCKET_COMMAND object:socketWrapper];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveError:) name:AVIM_NOTIFICATION_WEBSOCKET_ERROR object:socketWrapper];
+- (void)setupSocketWrapperForSecurity
+{
+    if (self.socketWrapper) {
         
-        [socketWrapper increaseObserverCount];
+        return;
     }
     
-    return socketWrapper;
+    AVIMWebSocketWrapper *socketWrapper = [AVIMWebSocketWrapper sharedSecurityInstance];
+    
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    
+    [center addObserver:self
+               selector:@selector(websocketOpened:)
+                   name:AVIM_NOTIFICATION_WEBSOCKET_OPENED
+                 object:socketWrapper];
+    
+    [center addObserver:self
+               selector:@selector(websocketClosed:)
+                   name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
+                 object:socketWrapper];
+    
+    [center addObserver:self
+               selector:@selector(websocketReconnect:)
+                   name:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
+                 object:socketWrapper];
+    
+    [center addObserver:self
+               selector:@selector(receiveCommand:)
+                   name:AVIM_NOTIFICATION_WEBSOCKET_COMMAND
+                 object:socketWrapper];
+    
+    [center addObserver:self
+               selector:@selector(receiveError:)
+                   name:AVIM_NOTIFICATION_WEBSOCKET_ERROR
+                 object:socketWrapper];
+    
+    [socketWrapper increaseObserverCount];
+    
+    self.socketWrapper = socketWrapper;
 }
 
 - (void)updateLastPatchTimestamp:(int64_t)patchTimestamp {
@@ -643,7 +662,7 @@ static BOOL AVIMClientHasInstantiated = NO;
         @strongify(self);
 
         if (self.status != AVIMClientStatusOpened) {
-            self.socketWrapper = [self socketWrapperForSecurity:YES];
+            [self setupSocketWrapperForSecurity];
             self.openTimes = 0;
             self.openCommand = [self openCommandWithAppId:appId
                                                  clientId:clientId
