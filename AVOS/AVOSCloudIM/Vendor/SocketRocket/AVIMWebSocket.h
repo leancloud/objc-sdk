@@ -17,11 +17,12 @@
 #import <Foundation/Foundation.h>
 #import <Security/SecCertificate.h>
 
-typedef NS_ENUM(NSInteger, AVIMReadyState) {
-    AVIM_CONNECTING   = 1,
-    AVIM_OPEN         = 2,
-    AVIM_CLOSING      = 3,
-    AVIM_CLOSED       = 4,
+typedef NS_ENUM(NSUInteger, AVIMWebSocketState) {
+    AVIMWebSocketStateNone       = 0,
+    AVIMWebSocketStateConnecting = 1,
+    AVIMWebSocketStateConnected  = 2,
+    AVIMWebSocketStateClosing    = 3,
+    AVIMWebSocketStateClosed     = 4,
 };
 
 typedef enum AVIMStatusCode : NSInteger {
@@ -58,7 +59,7 @@ extern NSString *const AVIMHTTPResponseErrorKey;
 
 @property (nonatomic, weak) id <AVIMWebSocketDelegate> delegate;
 
-@property (nonatomic, readonly) AVIMReadyState readyState;
+@property (nonatomic, readonly) AVIMWebSocketState readyState;
 @property (nonatomic, readonly, retain) NSURL *url;
 
 

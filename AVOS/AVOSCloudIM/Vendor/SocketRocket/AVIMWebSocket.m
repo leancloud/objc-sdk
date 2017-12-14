@@ -178,7 +178,7 @@ typedef void (^data_callback)(AVIMWebSocket *webSocket,  NSData *data);
 
 @interface AVIMWebSocket ()  <NSStreamDelegate>
 
-@property (nonatomic) AVIMReadyState readyState;
+@property (nonatomic) AVIMWebSocketState readyState;
 
 @property (nonatomic) NSOperationQueue *delegateOperationQueue;
 @property (nonatomic) dispatch_queue_t delegateDispatchQueue;
@@ -315,7 +315,7 @@ static __strong NSData *CRLFCRLF;
         _secure = YES;
     }
     
-    _readyState = AVIM_CONNECTING;
+    _readyState = AVIMWebSocketStateNone;
     _consumerStopped = YES;
     _webSocketVersion = 13;
     
@@ -374,11 +374,15 @@ static __strong NSData *CRLFCRLF;
 
 #ifndef NDEBUG
 
-- (void)setReadyState:(AVIMReadyState)aReadyState;
+- (void)setReadyState:(AVIMWebSocketState)aReadyState;
 {
+    NSAssert(aReadyState > _readyState,
+             @"Error in change state");
+    
     [self willChangeValueForKey:@"readyState"];
-    assert(aReadyState > _readyState);
+    
     _readyState = aReadyState;
+    
     [self didChangeValueForKey:@"readyState"];
 }
 
@@ -387,7 +391,9 @@ static __strong NSData *CRLFCRLF;
 - (void)open;
 {
     assert(_url);
-    NSAssert(_readyState == AVIM_CONNECTING, @"Cannot call -(void)open on AVIMWebSocket more than once");
+    NSAssert(_readyState == AVIMWebSocketStateNone, @"Cannot call -(void)open on AVIMWebSocket more than once");
+    
+    [self setReadyState:AVIMWebSocketStateConnecting];
 
     _selfRetain = self;
     
@@ -458,7 +464,7 @@ static __strong NSData *CRLFCRLF;
         _protocol = negotiatedProtocol;
     }
     
-    self.readyState = AVIM_OPEN;
+    [self setReadyState:AVIMWebSocketStateConnected];
     
     [self _readFrameNew];
 
@@ -649,13 +655,13 @@ static __strong NSData *CRLFCRLF;
 {
     assert(code);
     dispatch_async(_workQueue, ^{
-        if (self.readyState == AVIM_CLOSING || self.readyState == AVIM_CLOSED) {
+        if (self.readyState == AVIMWebSocketStateClosing || self.readyState == AVIMWebSocketStateClosed) {
             return;
         }
         
-        BOOL wasConnecting = self.readyState == AVIM_CONNECTING;
+        BOOL wasConnecting = self.readyState == AVIMWebSocketStateConnecting;
         
-        self.readyState = AVIM_CLOSING;
+        [self setReadyState:AVIMWebSocketStateClosing];
         
         AVIMFastLog(@"Closing with code %d reason %@", code, reason);
         
@@ -705,7 +711,7 @@ static __strong NSData *CRLFCRLF;
 - (void)_failWithError:(NSError *)error;
 {
     dispatch_async(_workQueue, ^{
-        if (self.readyState != AVIM_CLOSED) {
+        if (self.readyState != AVIMWebSocketStateClosed) {
             _failed = YES;
             [self _performDelegateBlock:^{
                 id <AVIMWebSocketDelegate> delegate = self.delegate;
@@ -714,7 +720,7 @@ static __strong NSData *CRLFCRLF;
                 }
             }];
 
-            self.readyState = AVIM_CLOSED;
+            [self setReadyState:AVIMWebSocketStateClosed];
             _selfRetain = nil;
 
             AVIMFastLog(@"Failing with error %@", error.localizedDescription);
@@ -737,7 +743,9 @@ static __strong NSData *CRLFCRLF;
 
 - (void)send:(id)data;
 {
-    NSAssert(self.readyState != AVIM_CONNECTING, @"Invalid State: Cannot call send: until connection is open");
+    NSAssert((self.readyState != AVIMWebSocketStateConnecting) &&
+             (self.readyState != AVIMWebSocketStateNone),
+             @"Invalid State: Cannot call send: until connection is open");
     // TODO: maybe not copy this for performance
     data = [data copy];
     dispatch_async(_workQueue, ^{
@@ -755,7 +763,7 @@ static __strong NSData *CRLFCRLF;
 
 - (void)sendPing:(NSData *)data;
 {
-    NSAssert(self.readyState == AVIM_OPEN, @"Invalid State: Cannot call send: until connection is open");
+    NSAssert(self.readyState == AVIMWebSocketStateConnected, @"Invalid State: Cannot call send: until connection is open");
     // TODO: maybe not copy this for performance
     data = [data copy] ?: [NSData data]; // It's okay for a ping to be empty
     dispatch_async(_workQueue, ^{
@@ -861,7 +869,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
     
     [self assertOnWorkQueue];
     
-    if (self.readyState == AVIM_OPEN) {
+    if (self.readyState == AVIMWebSocketStateConnected) {
         [self closeWithCode:1000 reason:nil];
     }
     dispatch_async(_workQueue, ^{
@@ -927,7 +935,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
 {
     assert(frame_header.opcode != 0);
     
-    if (self.readyState != AVIM_OPEN) {
+    if (self.readyState != AVIMWebSocketStateConnected) {
         return;
     }
     
@@ -1215,7 +1223,7 @@ static const char CRLFCRLFBytes[] = {'\r', '\n', '\r', '\n'};
     
     BOOL didWork = NO;
     
-    if (self.readyState >= AVIM_CLOSING) {
+    if (self.readyState >= AVIMWebSocketStateClosing) {
         return didWork;
     }
     
@@ -1552,14 +1560,14 @@ NSArray *LCPublicKeysFromCerts(NSArray *certs) {
         switch (eventCode) {
             case NSStreamEventOpenCompleted: {
                 AVIMFastLog(@"NSStreamEventOpenCompleted %@", aStream);
-                if (self.readyState >= AVIM_CLOSING) {
+                if (self.readyState >= AVIMWebSocketStateClosing) {
                     return;
                 }
                 assert(_readBuffer);
                 
                 // didConnect fires after certificate verification if we're using pinned certificates.
                 BOOL usingPinnedCerts = [[_urlRequest AVIM_SSLPinnedCertificates] count] > 0;
-                if ((!_secure || !usingPinnedCerts) && self.readyState == AVIM_CONNECTING && aStream == _inputStream) {
+                if ((!_secure || !usingPinnedCerts) && self.readyState == AVIMWebSocketStateConnecting && aStream == _inputStream) {
                     [self didConnect];
                 }
                 [self _pumpWriting];
@@ -1584,8 +1592,8 @@ NSArray *LCPublicKeysFromCerts(NSArray *certs) {
                     [self _failWithError:aStream.streamError];
                 } else {
                     dispatch_async(_workQueue, ^{
-                        if (self.readyState != AVIM_CLOSED) {
-                            self.readyState = AVIM_CLOSED;
+                        if (self.readyState != AVIMWebSocketStateClosed) {
+                            self.readyState = AVIMWebSocketStateClosed;
                             _selfRetain = nil;
                         }
 
