@@ -1527,6 +1527,8 @@ NSArray *LCPublicKeysFromCerts(NSArray *certs) {
     return result;
 }
 
+// MARK: - NSStreamDelegate
+
 - (void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode;
 {
     if (_secure && _SSLPinningMode && !_pinnedCertFound && (eventCode == NSStreamEventHasBytesAvailable || eventCode == NSStreamEventHasSpaceAvailable)) {
