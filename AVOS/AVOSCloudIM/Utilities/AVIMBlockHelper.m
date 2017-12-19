@@ -46,17 +46,4 @@ if (block) { \
     safeBlock(conversation);
 }
 
-+ (AVIMBooleanResultBlock)calledOnceBlockWithBooleanResultBlock:(AVIMBooleanResultBlock)block {
-    __block int32_t called = 0;
-
-    return ^(BOOL succeeded, NSError *error){
-        OSAtomicAdd32(1, &called);
-        if (called == 1) {
-            if (block) {
-                block(succeeded, error);
-            }
-        }
-    };
-}
-
 @end

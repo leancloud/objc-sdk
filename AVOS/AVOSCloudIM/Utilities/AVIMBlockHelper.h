@@ -25,6 +25,4 @@
                        conversation:(AVIMConversation *)conversation
                               error:(NSError *)error;
 
-+ (AVIMBooleanResultBlock)calledOnceBlockWithBooleanResultBlock:(AVIMBooleanResultBlock)block;
-
 @end
