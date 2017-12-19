@@ -174,6 +174,42 @@ static BOOL AVIMClientHasInstantiated = NO;
     
     _conversationDictionary = [NSMutableDictionary dictionary];
     _queueOfConvMemory = dispatch_queue_create("AVIMClient._queueOfConvMemory", NULL);
+    
+    /*
+     Init socketWrapper
+     */
+    ///
+    AVIMWebSocketWrapper *socketWrapper = [[AVIMWebSocketWrapper alloc] init];
+    
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    
+    [center addObserver:self
+               selector:@selector(websocketOpened:)
+                   name:AVIM_NOTIFICATION_WEBSOCKET_OPENED
+                 object:socketWrapper];
+    
+    [center addObserver:self
+               selector:@selector(websocketClosed:)
+                   name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
+                 object:socketWrapper];
+    
+    [center addObserver:self
+               selector:@selector(websocketReconnect:)
+                   name:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
+                 object:socketWrapper];
+    
+    [center addObserver:self
+               selector:@selector(receiveCommand:)
+                   name:AVIM_NOTIFICATION_WEBSOCKET_COMMAND
+                 object:socketWrapper];
+    
+    [center addObserver:self
+               selector:@selector(receiveError:)
+                   name:AVIM_NOTIFICATION_WEBSOCKET_ERROR
+                 object:socketWrapper];
+    
+    _socketWrapper = socketWrapper;
+    ///
 
     /* Observe push notification device token and websocket open event. */
 
@@ -229,7 +265,6 @@ static BOOL AVIMClientHasInstantiated = NO;
 - (void)dealloc {
     AVLoggerInfo(AVLoggerDomainIM, @"AVIMClient dealloc.");
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [_socketWrapper decreaseObserverCount];
 }
 
 - (void)addConversation:(AVIMConversation *)conversation {
@@ -404,47 +439,6 @@ static BOOL AVIMClientHasInstantiated = NO;
         signature = [_signatureDataSource signatureWithClientId:clientId conversationId:conversationId action:action actionOnClientIds:clientIds];
     }
     return signature;
-}
-
-- (void)setupSocketWrapperForSecurity
-{
-    if (self.socketWrapper) {
-        
-        return;
-    }
-    
-    AVIMWebSocketWrapper *socketWrapper = [AVIMWebSocketWrapper sharedSecurityInstance];
-    
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    
-    [center addObserver:self
-               selector:@selector(websocketOpened:)
-                   name:AVIM_NOTIFICATION_WEBSOCKET_OPENED
-                 object:socketWrapper];
-    
-    [center addObserver:self
-               selector:@selector(websocketClosed:)
-                   name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
-                 object:socketWrapper];
-    
-    [center addObserver:self
-               selector:@selector(websocketReconnect:)
-                   name:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
-                 object:socketWrapper];
-    
-    [center addObserver:self
-               selector:@selector(receiveCommand:)
-                   name:AVIM_NOTIFICATION_WEBSOCKET_COMMAND
-                 object:socketWrapper];
-    
-    [center addObserver:self
-               selector:@selector(receiveError:)
-                   name:AVIM_NOTIFICATION_WEBSOCKET_ERROR
-                 object:socketWrapper];
-    
-    [socketWrapper increaseObserverCount];
-    
-    self.socketWrapper = socketWrapper;
 }
 
 - (void)updateLastPatchTimestamp:(int64_t)patchTimestamp {
@@ -640,7 +634,11 @@ static BOOL AVIMClientHasInstantiated = NO;
     [self openWithClientId:self.clientId tag:self.tag force:force callback:callback];
 }
 
-- (void)openWithClientId:(NSString *)clientId tag:(NSString *)tag force:(BOOL)force callback:(AVIMBooleanResultBlock)callback {
+- (void)openWithClientId:(NSString *)clientId
+                     tag:(NSString *)tag
+                   force:(BOOL)force
+                callback:(AVIMBooleanResultBlock)callback
+{
     // Validate client id
     if (!clientId) {
         [NSException raise:NSInternalInconsistencyException format:@"Client id can not be nil."];
@@ -655,71 +653,70 @@ static BOOL AVIMClientHasInstantiated = NO;
         [NSException raise:NSInternalInconsistencyException format:@"Application id can not be nil."];
     }
 
-    callback = [AVIMBlockHelper calledOnceBlockWithBooleanResultBlock:callback];
-
-    @weakify(self);
     dispatch_async(imClientQueue, ^{
-        @strongify(self);
 
         if (self.status != AVIMClientStatusOpened) {
-            [self setupSocketWrapperForSecurity];
+            
             self.openTimes = 0;
-            self.openCommand = [self openCommandWithAppId:appId
-                                                 clientId:clientId
-                                                      tag:tag
-                                                    force:force
-                                                 callback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error)
+            
+            AVIMCommandResultBlock openCommandCallback = ^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error)
             {
                 if (!error) {
                     self.onceOpened = YES;
-
+                    
                     [self changeStatus:AVIMClientStatusOpened];
-
+                    
                     [self registerPushChannel];
-
+                    
                     [AVIMBlockHelper callBooleanResultBlock:callback error:nil];
-
+                    
                     [self cacheClientSessionTokenForCommand:(AVIMGenericCommand *)inCommand tag:tag];
                 } else {
                     [self changeStatus:AVIMClientStatusClosed];
-
+                    
                     if ([self shouldRetryForCommand:inCommand]) {
                         [self openWithClientId:clientId tag:tag force:force callback:callback];
                     } else {
                         [AVIMBlockHelper callBooleanResultBlock:callback error:error];
                     }
                 }
-
+                
                 outCommand.callback = nil;
-            }];
+            };
+            
+            self.openCommand = [self openCommandWithAppId:appId
+                                                 clientId:clientId
+                                                      tag:tag
+                                                    force:force
+                                                 callback:openCommandCallback];
 
             [self changeStatus:AVIMClientStatusOpening];
 
-            if ([self.socketWrapper isConnectionOpen]) {
+            [self.socketWrapper openWithCallback:^(BOOL succeeded, NSError *error) {
+                
+                if (error) {
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        
+                        callback(false, error);
+                    });
+                    
+                    return;
+                }
+                
                 [self sendOpenCommand];
-            } else {
-                [self.socketWrapper openWebSocketConnectionWithCallback:^(BOOL succeeded, NSError *error) {
-                    [self changeStatus:AVIMClientStatusNone];
-                    [AVIMBlockHelper callBooleanResultBlock:callback error:error];
-                    self.openCommand.callback = nil;
-                }];
-            }
+            }];
+            
         } else {
-            [AVIMBlockHelper callBooleanResultBlock:callback error:nil];
+            
+            [AVIMBlockHelper callBooleanResultBlock:callback
+                                              error:nil];
         }
     });
 }
 
-- (void)removeWebSocketNotification {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVIM_NOTIFICATION_WEBSOCKET_OPENED object:_socketWrapper];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVIM_NOTIFICATION_WEBSOCKET_COMMAND object:_socketWrapper];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT object:_socketWrapper];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED object:_socketWrapper];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVIM_NOTIFICATION_WEBSOCKET_ERROR object:_socketWrapper];
-}
-
-- (void)processClientStatusAfterWebSocketOffline {
-    [self removeWebSocketNotification];
+- (void)processClientStatusAfterWebSocketOffline
+{
     [[AVInstallation currentInstallation] removeObject:_clientId forKey:@"channels"];
     if ([[AVInstallation currentInstallation] deviceToken]) {
         [[AVInstallation currentInstallation] saveInBackground];
@@ -743,6 +740,7 @@ static BOOL AVIMClientHasInstantiated = NO;
         [genericCommand avim_addRequiredKeyWithCommand:sessionCommand];
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             if (!error) {
+                [self.socketWrapper close];
                 [self processClientStatusAfterWebSocketOffline];
             }
             [AVIMBlockHelper callBooleanResultBlock:callback error:error];

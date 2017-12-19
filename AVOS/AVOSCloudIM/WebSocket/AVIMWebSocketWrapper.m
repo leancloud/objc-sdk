@@ -179,6 +179,11 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         _countOfSendPingWithoutReceivePong = 0;
         
         /*
+         Check Timeout
+         */
+        _checkTimeoutTimerSource = nil;
+        
+        /*
          Reconnect
          */
         _needReconnect = false;
@@ -190,6 +195,8 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
          */
         _isGettingRTMServer = false;
         _preferToUseSecondaryRTMServer = false;
+        
+        _webSocket = nil;
         
         NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
         
@@ -241,27 +248,30 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 {
     dispatch_async(_serialQueue, ^{
         
-        [self _closeWithBlockAfterClose:^{
+        if (_invokedOpenOnce) {
             
-            NSString *reason = @"Application is in Background.";
-            
-            NSDictionary *info = @{ @"reason" : reason };
-            
-            NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                                  code:0
-                                              userInfo:info];
-            
-            if (_openCallbackArray.count > 0) {
+            [self _closeWithBlockAfterClose:^{
                 
-                [self invokeAllOpenCallbackWithSuccess:false
-                                                 error:aError];
+                NSString *reason = @"Application is in Background.";
                 
-            } else {
+                NSDictionary *info = @{ @"reason" : reason };
                 
-                [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
-                                     error:aError];
-            }
-        }];
+                NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                                      code:0
+                                                  userInfo:info];
+                
+                if (_openCallbackArray.count > 0) {
+                    
+                    [self invokeAllOpenCallbackWithSuccess:false
+                                                     error:aError];
+                    
+                } else {
+                    
+                    [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
+                                         error:aError];
+                }
+            }];
+        }
     });
 }
 
@@ -269,11 +279,14 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 {
     dispatch_async(_serialQueue, ^{
         
-        [self _openWithCallback:nil blockBeforeOpen:^{
+        if (_invokedOpenOnce) {
             
-            [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
-                                 error:nil];
-        }];
+            [self _openWithCallback:nil blockBeforeOpen:^{
+                
+                [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
+                                     error:nil];
+            }];
+        }
     });
 }
 
@@ -311,11 +324,14 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         
         _oldNetworkReachabilityStatus = newStatus;
         
-        [self _openWithCallback:nil blockBeforeOpen:^{
+        if (_invokedOpenOnce) {
             
-            [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
-                                 error:nil];
-        }];
+            [self _openWithCallback:nil blockBeforeOpen:^{
+                
+                [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
+                                     error:nil];
+            }];
+        }
         
     } else if (isNewStatusNotReachable && isOldStatusNormal) {
         
@@ -324,27 +340,30 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
          */
         _oldNetworkReachabilityStatus = newStatus;
         
-        [self _closeWithBlockAfterClose:^{
+        if (_invokedOpenOnce) {
             
-            NSString *reason = @"Network is Not Reachable.";
-            
-            NSDictionary *info = @{ @"reason" : reason };
-            
-            NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                                  code:0
-                                              userInfo:info];
-            
-            if (_openCallbackArray.count > 0) {
+            [self _closeWithBlockAfterClose:^{
                 
-                [self invokeAllOpenCallbackWithSuccess:false
-                                                 error:aError];
+                NSString *reason = @"Network is Not Reachable.";
                 
-            } else {
+                NSDictionary *info = @{ @"reason" : reason };
                 
-                [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
-                                     error:aError];
-            }
-        }];
+                NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                                      code:0
+                                                  userInfo:info];
+                
+                if (_openCallbackArray.count > 0) {
+                    
+                    [self invokeAllOpenCallbackWithSuccess:false
+                                                     error:aError];
+                    
+                } else {
+                    
+                    [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
+                                         error:aError];
+                }
+            }];
+        }
         
     } else if (isNewStatusNormal && isOldStatusNormal) {
         
@@ -545,6 +564,11 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 - (void)close
 {
     dispatch_async(_serialQueue, ^{
+
+        /*
+         Reset this to avoid reopen due to `Application Notification` or `Reachability`
+         */
+        _invokedOpenOnce = false;
 
         [self _closeWithBlockAfterClose:nil];
     });
