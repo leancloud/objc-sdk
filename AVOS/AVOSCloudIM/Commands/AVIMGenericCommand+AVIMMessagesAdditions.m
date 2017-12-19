@@ -15,8 +15,6 @@
 
 NSString *const kAVIMConversationOperationQuery = @"query";
 
-static uint16_t _searial_id = 0;
-
 @implementation AVIMGenericCommand (AVIMMessagesAdditions)
 
 - (AVIMCommandResultBlock)callback {
@@ -130,19 +128,6 @@ static uint16_t _searial_id = 0;
         self.directMessage.transient = transient;
         self.directMessage.message = message;
     }
-}
-
-- (void)avim_addOrRefreshSerialId {
-    self.i = [[self class] nextSerialId];
-}
-
-+ (uint16_t)nextSerialId {
-    if (_searial_id == 0) {
-        ++_searial_id;
-    }
-    uint16_t result = _searial_id;
-    _searial_id = (_searial_id + 1) % (UINT16_MAX + 1);
-    return result;
 }
 
 - (BOOL)avim_validateCommand:(NSError **)error {

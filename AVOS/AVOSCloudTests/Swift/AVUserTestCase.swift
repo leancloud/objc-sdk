@@ -8,7 +8,7 @@
 
 import XCTest
 
-class AVUserTestCase: AVTestBase {
+class AVUserTestCase: LCTestBase {
     
     override func setUp() {
         super.setUp()
@@ -34,11 +34,15 @@ class AVUserTestCase: AVTestBase {
         
         do {
             
-            let _ = try AVUser.logIn(withUsername:username, password: password, error: ())
+            let _ = try AVUser.logIn(
+                withUsername: username,
+                password: password,
+                error: ()
+            )
             
         } catch {
             
-            print(error)
+            XCTAssertNil(error)
         }
     }
     

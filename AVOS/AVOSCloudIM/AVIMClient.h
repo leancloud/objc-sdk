@@ -21,6 +21,8 @@
 
 @protocol AVIMClientDelegate;
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSUInteger, AVIMClientStatus) {
     /// Initial client status.
     AVIMClientStatusNone,
@@ -46,8 +48,6 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
     /// Unique conversation. If the server detects the conversation with that members exists, will return it instead of creating a new one.
     AVIMConversationOptionUnique    = 1 << 1,
 };
-
-NS_ASSUME_NONNULL_BEGIN
 
 @interface AVIMClient : NSObject
 
@@ -122,13 +122,6 @@ NS_ASSUME_NONNULL_BEGIN
  @param tag  Tag of client.
  */
 - (instancetype)initWithUser:(AVUser *)user tag:(nullable NSString *)tag;
-
-/*!
- * 设置用户选项。
- * 该接口用于控制 AVIMClient 的一些细节行为。
- * @param userOptions 用户选项。
- */
-+ (void)setUserOptions:(NSDictionary *)userOptions AVIM_DEPRECATED("Deprecated in v5.1.0. Do not use it any more.");
 
 /*!
  Set what server will issues for offline messages when client did login.
@@ -308,13 +301,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)conversation:(AVIMConversation *)conversation kickedByClientId:(NSString *)clientId;
 
 /*!
-  收到未读通知。在该终端上线的时候，服务器会将对话的未读数发送过来。未读数可通过 -[AVIMConversation markAsReadInBackground] 清零，服务端不会自动清零。
- @param conversation 所属会话。
- @param unread 未读消息数量。
- */
-- (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 4.3.0. Instead, use `-[AVIMClientDelegate conversation:propertyDidUpdate:]` instead.");
-
-/*!
  Notification for conversation property update.
  You can use this method to handle the properties that will be updated dynamicly during conversation's lifetime,
  for example, unread message count, last message and receipt timestamp, etc.
@@ -331,9 +317,25 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)client:(AVIMClient *)client didOfflineWithError:(NSError *)error;
 
+/*!
+ 收到未读通知。在该终端上线的时候，服务器会将对话的未读数发送过来。未读数可通过 -[AVIMConversation markAsReadInBackground] 清零，服务端不会自动清零。
+ @param conversation 所属会话。
+ @param unread 未读消息数量。
+ */
+- (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread
+AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 4.3.0. Instead, use `-[AVIMClientDelegate conversation:propertyDidUpdate:]` instead.");
+
 @end
 
 @interface AVIMClient (AVDeprecated)
+
+/*!
+ * 设置用户选项。
+ * 该接口用于控制 AVIMClient 的一些细节行为。
+ * @param userOptions 用户选项。
+ */
++ (void)setUserOptions:(NSDictionary *)userOptions
+AVIM_DEPRECATED("Deprecated in v5.1.0. Do not use it any more.");
 
 @end
 

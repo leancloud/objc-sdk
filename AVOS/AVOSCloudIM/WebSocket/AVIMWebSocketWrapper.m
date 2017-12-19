@@ -21,8 +21,8 @@
 #import "AVIMConversation_Internal.h"
 #import <arpa/inet.h>
 
-#define PING_INTERVAL 60*3
-#define TIMEOUT_CHECK_INTERVAL 1
+#define PING_INTERVAL (60 * 3)
+#define TIMEOUT_CHECK_INTERVAL (1.0)
 
 #define LCIM_OUT_COMMAND_LOG_FORMAT \
     @"\n\n" \
@@ -38,812 +38,1324 @@
     @"------ END --------------------------------\n" \
     @"\n"
 
-static NSTimeInterval AVIMWebSocketDefaultTimeoutInterval = 30.0;
+#define AssertRunInSerialQueue NSAssert(dispatch_get_specific(_serialQueue_specific_key) == _serialQueue_specific_value, @"This internal method should run in `_serialQueue`.")
 
-typedef enum : NSUInteger {
-    //mutually exclusive
-    AVIMURLQueryOptionDefault = 0,
-    AVIMURLQueryOptionKeepLastValue,
-    AVIMURLQueryOptionKeepFirstValue,
-    AVIMURLQueryOptionUseArrays,
-    AVIMURLQueryOptionAlwaysUseArrays,
-    
-    //can be |ed with other values
-    AVIMURLQueryOptionUseArraySyntax = 8,
-    AVIMURLQueryOptionSortKeys = 16
-} AVIMURLQueryOptions;
+static NSTimeInterval AVIMWebSocketDefaultTimeoutInterval = 30.0;
 
 NSString *const AVIMProtocolPROTOBUF1 = @"lc.protobuf2.1";
 NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf2.2";
 NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 
+// MARK: - AVIMCommandCarrier
+
 @interface AVIMCommandCarrier : NSObject
+
 @property(nonatomic, strong) AVIMGenericCommand *command;
-@property(nonatomic)NSTimeInterval timestamp;
+@property(nonatomic, assign) NSTimeInterval timeoutDeadlineTimestamp;
 
 @end
+
 @implementation AVIMCommandCarrier
-- (void)timeoutInSeconds:(NSTimeInterval)seconds {
-    NSTimeInterval timestamp = [[NSDate date] timeIntervalSince1970];
-    timestamp += seconds;
-    self.timestamp = timestamp;
+
+- (void)timeoutInSeconds:(NSTimeInterval)seconds
+{
+    NSTimeInterval currentTimestamp = [NSDate.date timeIntervalSince1970];
+    
+    _timeoutDeadlineTimestamp = currentTimestamp + seconds;
 }
+
 @end
 
-@interface AVIMWebSocketWrapper () <NSURLConnectionDelegate, AVIMWebSocketDelegate> {
-    BOOL _isClosed;
-    NSTimer *_pingTimer;
-    NSTimer *_timeoutCheckTimer;
-    NSTimer *_pingTimeoutCheckTimer;
+// MARK: - AVIMWebSocketWrapper
 
-    int _observerCount;
-    int32_t _ttl;
+@interface AVIMWebSocketWrapper () <AVIMWebSocketDelegate>
+{
+    NSTimeInterval _timeout;
+    
+    BOOL _invokedOpenOnce;
+    
+    uint16_t _searialId;
+    
+    BOOL _isApplicationEnterBackground;
+    
+    /*
+     RTM Server
+     */
+    BOOL _isGettingRTMServer;
+    BOOL _preferToUseSecondaryRTMServer;
+    
+    /*
+     Ping & Pong
+     */
+    dispatch_source_t _pingTimerSource;
     NSTimeInterval _lastPingTimestamp;
-    NSTimeInterval _lastPongTimestamp;
+    int _countOfSendPingWithoutReceivePong;
+    
+    /*
+     Reconnect
+     */
+    BOOL _needReconnect;
     NSTimeInterval _reconnectInterval;
-
-    BOOL _waitingForPong;
-    NSMutableDictionary *_commandDictionary;
-    NSMutableArray *_serialIdArray;
+    dispatch_block_t _reconnectBlock;
+    
+    /*
+     Check Timeout
+     */
+    dispatch_source_t _checkTimeoutTimerSource;
+    
+    /**
+     Internal Serial Queue
+     */
+    dispatch_queue_t _serialQueue;
+    void *_serialQueue_specific_key;
+    void *_serialQueue_specific_value;
+    
+    /*
+     Container
+     */
+    NSMutableArray<AVIMBooleanResultBlock> *_openCallbackArray;
+    NSMutableDictionary<NSNumber *, AVIMCommandCarrier *> *_commandDictionary;
+    NSMutableArray<NSNumber *> *_serialIdArray;
+    
+    AVIMWebSocket *_webSocket;
+    
+    LCNetworkReachabilityManager *_reachabilityMonitor;
+    AFNetworkReachabilityStatus _oldNetworkReachabilityStatus;
 }
 
-@property (nonatomic, assign) BOOL security;
-@property (nonatomic, assign) BOOL useSecondary;
-@property (nonatomic, assign) BOOL needRetry;
-@property (nonatomic, strong) LCNetworkReachabilityManager *reachabilityMonitor;
-@property (nonatomic, strong) NSTimer *reconnectTimer;
-@property (nonatomic, strong) AVIMWebSocket *webSocket;
-@property (nonatomic, copy)   AVIMBooleanResultBlock openCallback;
-@property (nonatomic, strong) NSMutableDictionary *IPTable;
+@property (nonatomic, strong, readonly) dispatch_queue_t serialQueue;
 
 @end
 
 @implementation AVIMWebSocketWrapper
-+ (instancetype)sharedInstance {
-    static dispatch_once_t onceToken;
-    static AVIMWebSocketWrapper *sharedInstance = nil;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] init];
-    });
-    return sharedInstance;
-}
 
-+ (instancetype)sharedSecurityInstance {
-    static dispatch_once_t onceToken;
-    static AVIMWebSocketWrapper *sharedInstance = nil;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] init];
-        sharedInstance.security = YES;
-    });
-    
-    return sharedInstance;
-}
-
-+ (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds {
++ (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds
+{
     if (seconds > 0) {
+        
         AVIMWebSocketDefaultTimeoutInterval = seconds;
     }
 }
 
-- (id)init {
+- (instancetype)init
+{
+    if (!AVOSCloud.getApplicationId) {
+        
+        [NSException raise:@"AVOSCloudIM Exception"
+                    format:@"Application ID not found."];
+    }
+    
     self = [super init];
+    
     if (self) {
-        _commandDictionary = [[NSMutableDictionary alloc] init];
-        _serialIdArray = [[NSMutableArray alloc] init];
-        _ttl = -1;
-        _observerCount = 0;
+        
         _timeout = AVIMWebSocketDefaultTimeoutInterval;
         
-        _lastPongTimestamp = [[NSDate date] timeIntervalSince1970];
+        _invokedOpenOnce = false;
         
+        _searialId = 0;
+        
+        _isApplicationEnterBackground = (UIApplication.sharedApplication.applicationState == UIApplicationStateBackground);
+        
+        /*
+         Serial Queue
+         */
+        _serialQueue = dispatch_queue_create("AVIMWebSocketWrapper._serialQueue", NULL);
+        _serialQueue_specific_key = (__bridge void *)_serialQueue;
+        _serialQueue_specific_value = (__bridge void *)_serialQueue;
+        dispatch_queue_set_specific(_serialQueue,
+                                    _serialQueue_specific_key,
+                                    _serialQueue_specific_value,
+                                    NULL);
+        
+        /*
+         Container
+         */
+        _openCallbackArray = [NSMutableArray array];
+        _serialIdArray = [NSMutableArray array];
+        _commandDictionary = [NSMutableDictionary dictionary];
+        
+        /*
+         Ping & Pong
+         */
+        _pingTimerSource = nil;
+        _lastPingTimestamp = -1;
+        _countOfSendPingWithoutReceivePong = 0;
+        
+        /*
+         Check Timeout
+         */
+        _checkTimeoutTimerSource = nil;
+        
+        /*
+         Reconnect
+         */
+        _needReconnect = false;
         _reconnectInterval = 1;
-        _needRetry = YES;
+        _reconnectBlock = nil;
         
-#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
-        // Register for notification when the app shuts down
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:nil];
+        /*
+         RTM Server
+         */
+        _isGettingRTMServer = false;
+        _preferToUseSecondaryRTMServer = false;
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
+        _webSocket = nil;
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+        [center addObserver:self
+                   selector:@selector(applicationDidEnterBackground)
+                       name:UIApplicationDidEnterBackgroundNotification
+                     object:nil];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
+        [center addObserver:self
+                   selector:@selector(applicationWillEnterForeground)
+                       name:UIApplicationWillEnterForegroundNotification
+                     object:nil];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+        _reachabilityMonitor = [LCNetworkReachabilityManager manager];
         
-#else
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
+        _oldNetworkReachabilityStatus = AFNetworkReachabilityStatusUnknown;
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:) name:NSApplicationDidResignActiveNotification object:nil];
+        __weak typeof(self) weakSelf = self;
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:NSApplicationDidBecomeActiveNotification object:nil];
-#endif
-        [self startNotifyReachability];
+        [_reachabilityMonitor setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus newStatus) {
+            
+            __strong AVIMWebSocketWrapper *strongSelf = weakSelf;
+            
+            if (strongSelf == nil) {
+                
+                return;
+            }
+            
+            dispatch_async(strongSelf.serialQueue, ^{
+                
+                [strongSelf handleReachabilityWithNewStatus:newStatus];
+            });
+        }];
+        
+        [_reachabilityMonitor startMonitoring];
     }
+    
     return self;
 }
 
-- (void)startNotifyReachability {
-    @weakify(self, ws);
-
-    _reachabilityMonitor = [LCNetworkReachabilityManager manager];
-    [_reachabilityMonitor setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-        switch (status) {
-        case AFNetworkReachabilityStatusUnknown:
-        case AFNetworkReachabilityStatusNotReachable:
-            [ws networkDidBecomeUnreachable];
-            break;
-        case AFNetworkReachabilityStatusReachableViaWWAN:
-        case AFNetworkReachabilityStatusReachableViaWiFi:
-            [ws networkDidBecomeReachable];
-            break;
-        }
-    }];
-
-    [_reachabilityMonitor startMonitoring];
+- (void)dealloc
+{
+    [NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
-- (BOOL)isReachable {
-    return _reachabilityMonitor.networkReachabilityStatus != AFNetworkReachabilityStatusNotReachable;
-}
+// MARK: - Application Notification
 
-- (void)dealloc {
-    [_reachabilityMonitor stopMonitoring];
-    if (!_isClosed) {
-        [self closeWebSocketConnectionRetry:NO];
-    }
-}
-
-- (void)increaseObserverCount {
-    ++_observerCount;
-}
-
-- (void)decreaseObserverCount {
-    --_observerCount;
-    if (_observerCount <= 0) {
-        _observerCount = 0;
-        [self closeWebSocketConnectionRetry:NO];
-    }
-}
-
-#pragma mark - process application notification
-
-- (void)applicationDidFinishLaunching:(id)sender {
-    /* Nothing to do. */
-}
-
-- (void)applicationDidEnterBackground:(id)sender {
-    [self closeWebSocketConnectionRetry:NO];
-}
-
-- (void)applicationWillEnterForeground:(id)sender {
-    /* Nothing to do. */
-}
-
-- (void)applicationWillResignActive:(id)sender {
-    /* Nothing to do. */
-}
-
-- (void)applicationDidBecomeActive:(id)sender {
-    [self reopenWebSocketConnection];
-}
-
-- (void)applicationWillTerminate:(id)sender {
-    [self closeWebSocketConnectionRetry:NO];
-}
-
-#pragma mark - ping timer fierd
-- (void)timerFired:(id)sender {
-    if (_lastPongTimestamp > 0 && [[NSDate date] timeIntervalSince1970] - _lastPongTimestamp >= 5 * 60) {
-        [self closeWebSocketConnection];
-        return;
-    }
-    
-    if (_webSocket.readyState == AVIM_OPEN) {
-        [self sendPing];
-    }
-}
-
-+ (NSString *)URLEncodedString:(NSString *)string {
-    CFStringRef encoded = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                  (__bridge CFStringRef)string,
-                                                                  NULL,
-                                                                  CFSTR("!*'\"();:@&=+$,/?%#[]% "),
-                                                                  kCFStringEncodingUTF8);
-    return CFBridgingRelease(encoded);
-}
-
-+ (NSString *)URLQueryWithParameters:(NSDictionary *)parameters {
-    return [self URLQueryWithParameters:parameters options:AVIMURLQueryOptionDefault];
-}
-
-+ (NSString *)URLQueryWithParameters:(NSDictionary *)parameters options:(AVIMURLQueryOptions)options {
-    options = options ?: AVIMURLQueryOptionUseArrays;
-    
-    BOOL sortKeys = !!(options & AVIMURLQueryOptionSortKeys);
-    if (sortKeys) {
-        options -= AVIMURLQueryOptionSortKeys;
-    }
-    
-    BOOL useArraySyntax = !!(options & AVIMURLQueryOptionUseArraySyntax);
-    if (useArraySyntax) {
-        options -= AVIMURLQueryOptionUseArraySyntax;
-        NSAssert(options == AVIMURLQueryOptionUseArrays || options == AVIMURLQueryOptionAlwaysUseArrays,
-                 @"AVIMURLQueryOptionUseArraySyntax has no effect unless combined with AVIMURLQueryOptionUseArrays or AVIMURLQueryOptionAlwaysUseArrays option");
-    }
-    
-    NSMutableString *result = [NSMutableString string];
-    NSArray *keys = [parameters allKeys];
-    if (sortKeys) keys = [keys sortedArrayUsingSelector:@selector(compare:)];
-    for (NSString *key in keys) {
-        id value = parameters[key];
-        NSString *encodedKey = [self URLEncodedString:[key description]];
-        if ([value isKindOfClass:[NSArray class]]) {
-            if (options == AVIMURLQueryOptionKeepFirstValue && [(NSArray *)value count]) {
-                if ([result length]) {
-                    [result appendString:@"&"];
-                }
-                [result appendFormat:@"%@=%@", encodedKey, [self URLEncodedString:[[value firstObject] description]]];
-            } else if (options == AVIMURLQueryOptionKeepLastValue && [(NSArray *)value count]) {
-                if ([result length]) {
-                    [result appendString:@"&"];
-                }
-                [result appendFormat:@"%@=%@", encodedKey, [self URLEncodedString:[[value lastObject] description]]];
-            } else {
-                for (NSString *element in value) {
-                    if ([result length]) {
-                        [result appendString:@"&"];
-                    }
-                    if (useArraySyntax) {
-                        [result appendFormat:@"%@[]=%@", encodedKey, [self URLEncodedString:[element description]]];
-                    } else {
-                        [result appendFormat:@"%@=%@", encodedKey, [self URLEncodedString:[element description]]];
-                    }
-                }
-            }
-        } else {
-            if ([result length]) {
-                [result appendString:@"&"];
-            }
-            if (useArraySyntax && options == AVIMURLQueryOptionAlwaysUseArrays) {
-                [result appendFormat:@"%@[]=%@", encodedKey, [self URLEncodedString:[value description]]];
-            } else {
-                [result appendFormat:@"%@=%@", encodedKey, [self URLEncodedString:[value description]]];
-            }
-        }
-    }
-    return result;
-}
-
-#pragma mark - API to use websocket
-
-- (void)networkDidBecomeReachable {
-    [self reopenWebSocketConnection];
-}
-
-- (void)networkDidBecomeUnreachable {
-    [self closeWebSocketConnectionRetry:NO];
-}
-
-- (void)openWebSocketConnection {
-    [self openWebSocketConnectionWithCallback:nil];
-}
-
-/**
- Reopen websocket connection if application state is normal.
- */
-- (void)reopenWebSocketConnection {
-    BOOL shouldOpen = YES;
-
-#if TARGET_OS_IOS
-    UIApplicationState state = [UIApplication sharedApplication].applicationState;
-
-    if (!getenv("LCIM_BACKGROUND_CONNECT_ENABLED") && state == UIApplicationStateBackground)
-        shouldOpen = NO;
-#endif
-
-    if (shouldOpen) {
-        _reconnectInterval = 1;
-        [self openWebSocketConnection];
-    }
-}
-
-- (void)openWebSocketConnectionWithCallback:(AVIMBooleanResultBlock)callback {
-    @weakify(self);
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        @strongify(self);
-
-        AVLoggerInfo(AVLoggerDomainIM, @"Open websocket connection.");
-        self.openCallback = callback;
+- (void)applicationDidEnterBackground
+{
+    dispatch_async(_serialQueue, ^{
         
-        self.needRetry = YES;
-        [self.reconnectTimer invalidate];
+        _isApplicationEnterBackground = true;
         
-        if (!(self.webSocket && (self.webSocket.readyState == AVIM_OPEN || self.webSocket.readyState == AVIM_CONNECTING))) {
-            if (!self.openCallback) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT object:self userInfo:nil];
-            }
-
-            NSString *RTMServer = [AVOSCloudIM defaultOptions].RTMServer;
-
-            if (RTMServer) {
-                [self internalOpenWebSocketConnection:RTMServer];
-                return;
-            }
-
-            LCRouter *router = [LCRouter sharedInstance];
-            NSDictionary *RTMServerTable = [router cachedRTMServerTable];
-
-            if (RTMServerTable) {
-                [self openConnectionForRTMServerTable:RTMServerTable];
-                return;
-            }
-
-            NSString *appId = [AVOSCloud getApplicationId];
-
-            if (!appId) {
-                @throw [NSException exceptionWithName:@"AVOSCloudIM Exception" reason:@"Application ID not found." userInfo:nil];
-            }
-
-            [[LCRouter sharedInstance] fetchRTMServerTableInBackground:^(NSDictionary *object, NSError *error) {
-                NSInteger code = error.code;
-
-                if (object && !error) { /* Everything is OK. */
-                    self.useSecondary = NO;
-                    [self openConnectionForRTMServerTable:object];
-                } else if (code == 404) { /* 404, stop reconnection. */
-                    NSError *httpError = [AVIMErrorUtil errorWithCode:code reason:[NSHTTPURLResponse localizedStringForStatusCode:code]];
-                    if (self.openCallback) {
-                        [AVIMBlockHelper callBooleanResultBlock:self.openCallback error:httpError];
-                        self.openCallback = nil;
-                    } else {
-                        [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED object:self userInfo:@{@"error": error}];
-                    }
-                } else if ((!object && !error) || code >= 400 || error) { /* Something error, try to reconnect. */
-                    if (!error) {
-                        if (code >= 404) {
-                            error = [AVIMErrorUtil errorWithCode:code reason:[NSHTTPURLResponse localizedStringForStatusCode:code]];
-                        } else {
-                            error = [AVIMErrorUtil errorWithCode:kAVIMErrorInvalidData reason:@"No data received"];
-                        }
-                    }
-                    if (self.openCallback) {
-                        [AVIMBlockHelper callBooleanResultBlock:self.openCallback error:error];
-                        self.openCallback = nil;
-                    } else {
-                        [self reconnect];
-                    }
+        if (_invokedOpenOnce) {
+            
+            [self _closeWithBlockAfterClose:^{
+                
+                NSString *reason = @"Application is in Background.";
+                
+                NSDictionary *info = @{ @"reason" : reason };
+                
+                NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                                      code:0
+                                                  userInfo:info];
+                
+                if (_openCallbackArray.count > 0) {
+                    
+                    [self invokeAllOpenCallbackWithSuccess:false
+                                                     error:aError];
+                    
+                } else {
+                    
+                    [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
+                                         error:aError];
                 }
             }];
         }
     });
 }
 
-/**
- Open connection for RTM server table.
+- (void)applicationWillEnterForeground
+{
+    dispatch_async(_serialQueue, ^{
+        
+        _isApplicationEnterBackground = false;
+        
+        if (_invokedOpenOnce) {
+            
+            [self _openWithCallback:nil blockBeforeOpen:^{
+                
+                [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
+                                     error:nil];
+            }];
+        }
+    });
+}
 
- It will choose a RTM server from RTM server table firstly,
- then, create connection to that server.
+// MARK: - Reachability
 
- If RTM server not found, it will retry from scratch.
- */
-- (void)openConnectionForRTMServerTable:(NSDictionary *)RTMServerTable {
-    NSString *server = [self chooseServerFromRTMServerTable:RTMServerTable];
-
-    if (server) {
-        [self internalOpenWebSocketConnection:server];
-    } else {
-        AVLoggerError(AVLoggerDomainIM, @"RTM server not found, try reconnection...");
-        [self reconnect];
+- (void)handleReachabilityWithNewStatus:(AFNetworkReachabilityStatus)newStatus
+{
+    AssertRunInSerialQueue;
+    
+    /*
+     Should ignore Unknown Status
+     */
+    
+    AFNetworkReachabilityStatus oldStatus = _oldNetworkReachabilityStatus;
+    
+    BOOL isOldStatusNormal = (
+                              (oldStatus == AFNetworkReachabilityStatusReachableViaWWAN) ||
+                              (oldStatus == AFNetworkReachabilityStatusReachableViaWiFi)
+                              );
+    
+    BOOL isOldStatusNotReachable = (oldStatus == AFNetworkReachabilityStatusNotReachable);
+    
+    BOOL isNewStatusNormal = (
+                              (newStatus == AFNetworkReachabilityStatusReachableViaWWAN) ||
+                              (newStatus == AFNetworkReachabilityStatusReachableViaWiFi)
+                              );
+    
+    BOOL isNewStatusNotReachable = (newStatus == AFNetworkReachabilityStatusNotReachable);
+    
+    if (isNewStatusNormal && isOldStatusNotReachable) {
+        
+        /*
+         Status change from `NotReachable` to `Reachable`
+         */
+        
+        _oldNetworkReachabilityStatus = newStatus;
+        
+        if (_invokedOpenOnce) {
+            
+            [self _openWithCallback:nil blockBeforeOpen:^{
+                
+                [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
+                                     error:nil];
+            }];
+        }
+        
+    } else if (isNewStatusNotReachable && isOldStatusNormal) {
+        
+        /*
+         Status change from `Reachable` to `NotReachable`
+         */
+        _oldNetworkReachabilityStatus = newStatus;
+        
+        if (_invokedOpenOnce) {
+            
+            [self _closeWithBlockAfterClose:^{
+                
+                NSString *reason = @"Network is Not Reachable.";
+                
+                NSDictionary *info = @{ @"reason" : reason };
+                
+                NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                                      code:0
+                                                  userInfo:info];
+                
+                if (_openCallbackArray.count > 0) {
+                    
+                    [self invokeAllOpenCallbackWithSuccess:false
+                                                     error:aError];
+                    
+                } else {
+                    
+                    [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
+                                         error:aError];
+                }
+            }];
+        }
+        
+    } else if (isNewStatusNormal && isOldStatusNormal) {
+        
+        /*
+         Status change from `Reachable` to `Reachable`
+         */
+        
+        _oldNetworkReachabilityStatus = newStatus;
+    }
+    
+    if (_oldNetworkReachabilityStatus == AFNetworkReachabilityStatusUnknown &&
+        newStatus != AFNetworkReachabilityStatusUnknown) {
+        
+        /*
+         Init with a valid status.
+         */
+        
+        _oldNetworkReachabilityStatus = newStatus;
     }
 }
 
-/**
- Choose a RTM server from RTM server table.
- RTM server table may contain both primary server and secondary server.
+// MARK: - Open WebSocket
 
- If `_useSecondary` is true, it will choose secondary server preferentially.
- Otherwise, it will choose primary server preferentially.
- */
-- (NSString *)chooseServerFromRTMServerTable:(NSDictionary *)RTMServerTable {
-    NSString *server = nil;
-
-    NSString *primary   = RTMServerTable[@"server"];
-    NSString *secondary = RTMServerTable[@"secondary"];
-
-    if (_useSecondary)
-        server = secondary ?: primary;
-    else
-        server = primary ?: secondary;
-
-    return server;
+- (void)openWithCallback:(AVIMBooleanResultBlock)callback
+{
+    dispatch_async(_serialQueue, ^{
+        
+        NSString *errReason = nil;
+        
+        if (_isApplicationEnterBackground) {
+            
+            errReason = @"Can't open WebSocket when Application in Background.";
+            
+        } else if (_oldNetworkReachabilityStatus == AFNetworkReachabilityStatusNotReachable) {
+            
+            errReason = @"Can't open WebSocket when Network is Not Reachable.";
+        }
+        
+        if (errReason) {
+            
+            NSDictionary *info = @{ @"reason" : errReason };
+            
+            NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                                  code:0
+                                              userInfo:info];
+            
+            callback(false, aError);
+            
+            return;
+        }
+        
+        _invokedOpenOnce = true;
+        
+        [self _openWithCallback:callback blockBeforeOpen:nil];
+    });
 }
 
-SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
-
-- (NSArray *)pinnedCertificates {
-    id cert = (__bridge_transfer id)LCGetCertificateFromBase64String(LCRootCertificate);
-    return cert ? @[cert] : @[];
+- (void)_openWithCallback:(AVIMBooleanResultBlock)callback
+          blockBeforeOpen:(void(^)(void))block
+{
+    AssertRunInSerialQueue;
+    
+    [self cancelReconnectBlock];
+    
+    if (!_invokedOpenOnce ||
+        _isApplicationEnterBackground ||
+        _oldNetworkReachabilityStatus == AFNetworkReachabilityStatusNotReachable) {
+        
+        return;
+    }
+    
+    AVLoggerInfo(AVLoggerDomainIM, @"Start Open Websocket Connection.");
+    
+    AVIMWebSocket *webSocket = _webSocket;
+    
+    if (webSocket) {
+        
+        AVIMWebSocketState readyState = webSocket.readyState;
+        
+        if (readyState == AVIMWebSocketStateConnected) {
+            
+            if (callback) {
+                
+                callback(true, nil);
+            }
+            
+            return;
+        }
+        
+        if (readyState == AVIMWebSocketStateConnecting) {
+            
+            if (callback && [_openCallbackArray containsObject:callback] == false) {
+                
+                [_openCallbackArray addObject:callback];
+            }
+            
+            return;
+        }
+    }
+    
+    if (callback && [_openCallbackArray containsObject:callback] == false) {
+        
+        [_openCallbackArray addObject:callback];
+    }
+    
+    if (block) { block(); }
+    
+    [self getRTMServerWithCallback:^(NSString *RTMServer, NSError *error){
+        
+        AssertRunInSerialQueue;
+        
+        _isGettingRTMServer = false;
+        
+        if (error) {
+            
+            if (_openCallbackArray.count > 0) {
+                
+                [self invokeAllOpenCallbackWithSuccess:false
+                                                 error:error];
+                
+            } else {
+                
+                [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_ERROR
+                                     error:error];
+            }
+            
+            return;
+        }
+        
+        [self newWebSocketAndConnectWithServer:RTMServer];
+    }];
 }
 
-- (void)internalOpenWebSocketConnection:(NSString *)server {
-    _webSocket.delegate = nil;
-    [_webSocket close];
-#if USE_DEBUG_SERVER
-    server = DEBUG_SERVER;
-#endif
-    AVLoggerInfo(AVLoggerDomainIM, @"Open websocket with url: %@", server);
+- (void)newWebSocketAndConnectWithServer:(NSString *)server
+{
+    AssertRunInSerialQueue;
+    
+    AVLoggerInfo(AVLoggerDomainIM, @"Opening WebSocket with URL: %@", server);
+    
+    if (_webSocket) {
+        
+        /*
+         close old websocket
+         */
+        
+        _webSocket.delegate = nil;
+        
+        [_webSocket close];
+        
+        _webSocket = nil;
+    }
     
     NSMutableSet *protocols = [NSMutableSet set];
     NSDictionary *userOptions = [AVIMClient _userOptions];
-
+    
     if ([userOptions[kAVIMUserOptionUseUnread] boolValue]) {
+        
         [protocols addObject:AVIMProtocolPROTOBUF3];
+        
     } else {
+        
         [protocols addObject:AVIMProtocolPROTOBUF1];
     }
     
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     if (userOptions[AVIMUserOptionCustomProtocols]) {
+        
         [protocols removeAllObjects];
+        
         [protocols addObjectsFromArray:userOptions[AVIMUserOptionCustomProtocols]];
     }
 #pragma clang diagnostic pop
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:server]];
-
-    if ([protocols count]) {
-        _webSocket = [[AVIMWebSocket alloc] initWithURLRequest:request protocols:[protocols allObjects]];
+    
+    AVIMWebSocket *webSocket = nil;
+    
+    if (protocols.count > 0) {
+        
+        webSocket = [[AVIMWebSocket alloc] initWithURLRequest:request protocols:[protocols allObjects]];
+        
     } else {
-        _webSocket = [[AVIMWebSocket alloc] initWithURLRequest:request];
+        
+        webSocket = [[AVIMWebSocket alloc] initWithURLRequest:request];
     }
-
-    _webSocket.delegate = self;
-    [_webSocket open];
-}
-
-- (void)closeWebSocketConnection {
-    AVLoggerInfo(AVLoggerDomainIM, @"Close websocket connection.");
-    [_pingTimer invalidate];
-    [_webSocket close];
-    [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED object:self userInfo:nil];
-    _isClosed = YES;
-}
-
-- (void)closeWebSocketConnectionRetry:(BOOL)retry {
-    AVLoggerInfo(AVLoggerDomainIM, @"Close websocket connection.");
-    [_pingTimer invalidate];
-    _needRetry = retry;
-    [_webSocket close];
-    [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED object:self userInfo:nil];
-    _isClosed = YES;
-}
-
-- (void)checkTimeout:(NSTimer *)timer {
-    NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
-    if (_waitingForPong && now - _lastPingTimestamp > _timeout) {
-        _lastPingTimestamp = 0;
-        _lastPongTimestamp = 0;
-        [self closeWebSocketConnection];
-        if (_pingTimeoutCheckTimer) {
-            [_pingTimeoutCheckTimer invalidate];
-            _pingTimeoutCheckTimer = nil;
-        }
-    }
-    NSMutableArray *array = nil;
-    for (NSNumber *num in _serialIdArray) {
-        AVIMCommandCarrier *carrier = [_commandDictionary objectForKey:num];
-        NSTimeInterval timestamp = carrier.timestamp;
-        //        NSLog(@"now:%lf expire:%lf", now, timestamp);
-        if (now > timestamp) {
-            if (!array) {
-                array = [[NSMutableArray alloc] init];
-            }
-            [array addObject:num];
-            AVIMGenericCommand *command = [self dequeueCommandWithId:num];
-            AVIMCommandResultBlock callback = command.callback;
-            if (callback) {
-                NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorTimeout reason:@"The request timed out."];
-                callback(command, nil, error);
-            }
-            if (now - _lastPingTimestamp > _timeout) {
-                [self sendPing];
-            }
-        } else {
-            break;
-        }
-    }
-    if (array) {
-        [_serialIdArray removeObjectsInArray:array];
-    }
-}
-
-- (void)enqueueCommand:(AVIMGenericCommand *)command {
-    AVIMCommandCarrier *carrier = [[AVIMCommandCarrier alloc] init];
-    carrier.command = command;
-    [carrier timeoutInSeconds:_timeout];
-    NSNumber *num = @(command.i);
-    [_commandDictionary setObject:carrier forKey:num];
-    if (!_timeoutCheckTimer) {
-        _timeoutCheckTimer = [NSTimer scheduledTimerWithTimeInterval:TIMEOUT_CHECK_INTERVAL target:self selector:@selector(checkTimeout:) userInfo:nil repeats:YES];
-    }
-}
-
-- (AVIMGenericCommand *)dequeueCommandWithId:(NSNumber *)num {
-    if (!num)
-        return nil;
-    AVIMCommandCarrier *carrier = [_commandDictionary objectForKey:num];
-    AVIMGenericCommand *command = carrier.command;
-    [_commandDictionary removeObjectForKey:num];
-    if (_commandDictionary.count == 0) {
-        [_timeoutCheckTimer invalidate];
-        _timeoutCheckTimer = nil;
-    }
-    return command;
-}
-
-- (BOOL)checkSizeForData:(id)data {
-    if ([data isKindOfClass:[NSString class]] && [(NSString *)data length] > 5000) {
-        return NO;
-    } else if ([data isKindOfClass:[NSData class]] && [(NSData *)data length] > 5000) {
-        return NO;
-    }
-    return YES;
-}
-
-- (void)sendCommand:(AVIMGenericCommand *)genericCommand {
-    BOOL needResponse = genericCommand.needResponse;
-    if (_webSocket.readyState == AVIM_OPEN) {
-        if (needResponse) {
-            [genericCommand avim_addOrRefreshSerialId];
-            [self enqueueCommand:genericCommand];
-            NSNumber *num = @(genericCommand.i);
-            [_serialIdArray addObject:num];
-        }
-        NSError *error = nil;
-        id data = [genericCommand data];
-        if (![self checkSizeForData:data]) {
-            AVIMCommandResultBlock callback = genericCommand.callback;
-            if (callback) {
-                error = [AVIMErrorUtil errorWithCode:kAVIMErrorMessageTooLong reason:@"Message data to send is too long."];
-                callback(genericCommand, nil, error);
-            }
-            return;
-        }
-        [_webSocket send:data];
-        if (!needResponse) {
-            AVIMCommandResultBlock callback = genericCommand.callback;
-            if (callback) {
-                callback(genericCommand, nil, nil);
-            }
-        }
-    } else {
-        AVIMCommandResultBlock callback = genericCommand.callback;
-        NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorConnectionLost reason:@"websocket not opened"];
-        if (callback) {
-            callback(genericCommand, nil, error);
-        } else {
-            [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_ERROR object:self userInfo:@{@"error": error}];
-        }
-    }
-    AVLoggerInfo(AVLoggerDomainIM, LCIM_OUT_COMMAND_LOG_FORMAT, [genericCommand avim_description] );
-}
-
-- (void)sendPing {
-    if ([self isConnectionOpen]) {
-        AVLoggerInfo(AVLoggerDomainIM, @"Websocket send ping.");
-        _lastPingTimestamp = [[NSDate date] timeIntervalSince1970];
-        _waitingForPong = YES;
-        if (!_pingTimeoutCheckTimer) {
-            _pingTimeoutCheckTimer = [NSTimer scheduledTimerWithTimeInterval:TIMEOUT_CHECK_INTERVAL target:self selector:@selector(checkTimeout:) userInfo:nil repeats:YES];
-        }
-        [_webSocket sendPing:[@"" dataUsingEncoding:NSUTF8StringEncoding]];
-    }
-}
-
-- (BOOL)isConnectionOpen {
-    return _webSocket.readyState == AVIM_OPEN;
-}
-
-#pragma mark - SRWebSocketDelegate
-- (void)webSocketDidOpen:(AVIMWebSocket *)webSocket {
-    AVLoggerInfo(AVLoggerDomainIM, @"Websocket connection opened.");
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_OPENED object:self userInfo:nil];
+    [webSocket setDelegateDispatchQueue:_serialQueue];
+    webSocket.delegate = self;
     
-    [_reconnectTimer invalidate];
+    [webSocket open];
     
-    [_pingTimer invalidate];
-    _pingTimer = [NSTimer scheduledTimerWithTimeInterval:PING_INTERVAL target:self selector:@selector(timerFired:) userInfo:nil repeats:YES];
+    _webSocket = webSocket;
 }
 
-- (void)webSocket:(AVIMWebSocket *)webSocket didReceiveMessage:(id)message {
+// MARK: - Close WebSocket
+
+- (void)close
+{
+    dispatch_async(_serialQueue, ^{
+
+        /*
+         Reset this to avoid reopen due to `Application Notification` or `Reachability`
+         */
+        _invokedOpenOnce = false;
+
+        [self _closeWithBlockAfterClose:nil];
+    });
+}
+
+- (void)_closeWithBlockAfterClose:(void(^)(void))block
+{
+    AssertRunInSerialQueue;
+    
+    AVLoggerInfo(AVLoggerDomainIM, @"Closing WebSocket Connection.");
+    
+    /*
+     stop reconnect
+     */
+    [self cancelReconnectBlock];
+    _needReconnect = false;
     _reconnectInterval = 1;
-    NSError *error = nil;
-    /* message for server which is in accordance with protobuf protocol must be data type, there is no need to convert string to data. */
-    AVIMGenericCommand *command = [AVIMGenericCommand parseFromData:message error:&error];
-    AVLoggerInfo(AVLoggerDomainIM, LCIM_IN_COMMAND_LOG_FORMAT, [command avim_description]);
+    
+    /*
+     stop ping timer
+     */
+    [self stopPingTimer];
+    
+    /*
+     stop check timeout timer
+     */
+    [self stopCheckTimeoutTimer];
+    
+    /*
+     close websocket
+     */
+    if (_webSocket) {
+        
+        _webSocket.delegate = nil;
+        
+        [_webSocket close];
+        
+        _webSocket = nil;
+        
+        if (block) { block(); }
+    }
+}
 
-    if (!command) {
-        AVLoggerError(AVLoggerDomainIM, @"Not handled data.");
+// MARK: - Send Command
+
+- (void)sendCommand:(AVIMGenericCommand *)genericCommand
+{
+    dispatch_async(_serialQueue, ^{
+        
+        [self _sendCommand:genericCommand];
+    });
+}
+
+- (void)_sendCommand:(AVIMGenericCommand *)genericCommand
+{
+    AssertRunInSerialQueue;
+    
+    if (!genericCommand) {
+        
         return;
     }
-    if (command.i > 0) {
-        NSNumber *num = @(command.i);
-        AVIMGenericCommand *outCommand = [self dequeueCommandWithId:num];
+    
+    AVLoggerInfo(AVLoggerDomainIM, LCIM_OUT_COMMAND_LOG_FORMAT, [genericCommand avim_description]);
+    
+    AVIMCommandResultBlock callback = [genericCommand callback];
+    
+    BOOL needResponse = [genericCommand needResponse];
+    
+    AVIMWebSocket *webSocket = _webSocket;
+    
+    if (!webSocket ||
+        webSocket.readyState != AVIMWebSocketStateConnected) {
+        
+        NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorConnectionLost
+                                               reason:@"Websocket Not Connected."];
+        
+        if (callback) {
+            
+            callback(genericCommand, nil, error);
+            
+        } else {
+            
+            AVLoggerError(AVLoggerDomainIM, @"Command without Need Response is Dropped with Error: %@", error);
+        }
+        
+        return;
+    }
+    
+    if (needResponse) {
+        
+        /*
+         Set `i` before generate data
+         */
+        
+        genericCommand.i = [self nextSerialId];
+    }
+    
+    NSData *data = [genericCommand data];
+    
+    if ([data respondsToSelector:@selector(length)] &&
+        data.length > 5000) {
+        
+        NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorMessageTooLong
+                                               reason:@"The Size of Message Data is Too Large."];
+        
+        if (callback) {
+            
+            callback(genericCommand, nil, error);
+            
+        } else {
+            
+            AVLoggerError(AVLoggerDomainIM, @"Out Command is not valid with Error: %@", error);
+        }
+        
+        return;
+    }
+    
+    if (needResponse) {
+        
+        [self enqueueCommand:genericCommand];
+        
+    } else {
+        
+        if (callback) {
+            
+            callback(genericCommand, nil, nil);
+        }
+    }
+    
+    [webSocket send:data];
+}
+
+- (void)enqueueCommand:(AVIMGenericCommand *)command
+{
+    AssertRunInSerialQueue;
+    
+    if (!command) {
+        
+        return;
+    }
+    
+    AVIMCommandCarrier *carrier = [[AVIMCommandCarrier alloc] init];
+    
+    carrier.command = command;
+    
+    [carrier timeoutInSeconds:_timeout];
+    
+    NSNumber *num = @(command.i);
+    
+    [_commandDictionary setObject:carrier forKey:num];
+    
+    [_serialIdArray addObject:num];
+}
+
+- (AVIMGenericCommand *)dequeueCommandWithId:(NSNumber *)num
+{
+    AssertRunInSerialQueue;
+    
+    if (!num) {
+        
+        return nil;
+    }
+    
+    AVIMCommandCarrier *carrier = [_commandDictionary objectForKey:num];
+    
+    if (carrier) {
+        
+        [_commandDictionary removeObjectForKey:num];
+        
+        [_serialIdArray removeObject:num];
+        
+        return carrier.command;
+        
+    } else {
+        
+        return nil;
+    }
+}
+
+- (void)clearQueuedCommandWithError:(NSError *)error
+{
+    AssertRunInSerialQueue;
+    
+    NSArray<AVIMCommandCarrier *> *allCarrierArray = [_commandDictionary allValues];
+    
+    for (AVIMCommandCarrier *carrier in allCarrierArray) {
+        
+        AVIMGenericCommand *outCommand = carrier.command;
+        
         if (outCommand) {
-            [_serialIdArray removeObject:num];
-            if ([command avim_hasError]) {
-                error = [command avim_errorObject];
-            }
-            AVIMCommandResultBlock callback = outCommand.callback;
+            
+            AVIMCommandResultBlock callback = [outCommand callback];
+            
             if (callback) {
-                callback(outCommand, command, error);
+                
+                callback(outCommand, nil, error);
+            }
+        }
+    }
+    
+    [_commandDictionary removeAllObjects];
+    
+    [_serialIdArray removeAllObjects];
+}
+
+// MARK: - AVIMWebSocketDelegate
+
+- (void)webSocketDidOpen:(AVIMWebSocket *)webSocket
+{
+    AssertRunInSerialQueue;
+    
+    AVLoggerInfo(AVLoggerDomainIM, @"Websocket Connection Opened.");
+    
+    /*
+     open reconnect
+     */
+    _needReconnect = true;
+    
+    /*
+     start ping timer
+     */
+    [self startPingTimer];
+    
+    /*
+     start check timeout timer
+     */
+    [self startCheckTimeoutTimer];
+    
+    if (_openCallbackArray.count > 0) {
+        
+        [self invokeAllOpenCallbackWithSuccess:true
+                                         error:nil];
+        
+    } else {
+        
+        [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_OPENED
+                             error:nil];
+    }
+}
+
+- (void)webSocket:(AVIMWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
+{
+    AssertRunInSerialQueue;
+    
+    AVLoggerDebug(AVLoggerDomainIM, @"Websocket Closed with Code: %ld, Reason: %@, WasClean: %@.", (long)code, reason, @(wasClean));
+    
+    NSError *error = [AVIMErrorUtil errorWithCode:code
+                                           reason:reason];
+    
+    [self handleWebSocketClosedWithError:error];
+    
+    if (_openCallbackArray.count > 0) {
+        
+        [self invokeAllOpenCallbackWithSuccess:false
+                                         error:error];
+        
+    } else {
+        
+        [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
+                             error:error];
+        
+        if (_needReconnect) {
+            
+            [self setupReconnectBlock];
+        }
+    }
+}
+
+- (void)webSocket:(AVIMWebSocket *)webSocket didFailWithError:(NSError *)error
+{
+    AssertRunInSerialQueue;
+    
+    AVLoggerError(AVLoggerDomainIM, @"Websocket Open Failed with Error: %@", error);
+    
+    _preferToUseSecondaryRTMServer = !_preferToUseSecondaryRTMServer;
+    
+    [self handleWebSocketClosedWithError:error];
+    
+    if (_openCallbackArray.count > 0) {
+        
+        [self invokeAllOpenCallbackWithSuccess:false
+                                         error:error];
+        
+    } else {
+        
+        [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_ERROR
+                             error:error];
+        
+        if (_needReconnect) {
+            
+            [self setupReconnectBlock];
+        }
+    }
+}
+
+- (void)webSocket:(AVIMWebSocket *)webSocket didReceiveMessage:(id)message
+{
+    AssertRunInSerialQueue;
+    
+    NSError *error = nil;
+    
+    /*
+     message for server which is in accordance with protobuf protocol must be data type, there is no need to convert string to data.
+     */
+    AVIMGenericCommand *inCommand = [AVIMGenericCommand parseFromData:message
+                                                                error:&error];
+    
+    if (!inCommand) {
+        
+        AVLoggerError(AVLoggerDomainIM, @"Not Handled Data with Error: %@", (error ?: @"nil"));
+        
+        return;
+    }
+    
+    AVLoggerInfo(AVLoggerDomainIM, LCIM_IN_COMMAND_LOG_FORMAT, [inCommand avim_description]);
+    
+    void(^notifyCommand_block)(void) = ^(void) {
+        
+        [NSNotificationCenter.defaultCenter postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_COMMAND
+                                                          object:self
+                                                        userInfo:@{ @"command" : inCommand }];
+    };
+    
+    if (inCommand.i > 0) {
+        
+        NSNumber *num = @(inCommand.i);
+        
+        AVIMGenericCommand *outCommand = [self dequeueCommandWithId:num];
+        
+        if (outCommand) {
+            
+            if ([inCommand avim_hasError]) {
+                
+                error = [inCommand avim_errorObject];
+            }
+            
+            AVIMCommandResultBlock callback = outCommand.callback;
+            
+            if (callback) {
+                
+                callback(outCommand, inCommand, error);
+                
                 /* 另外，对于情景：单点登录, 由于未上传 deviceToken 就 open，如果用户没有 force 登录，会报错,
                  详见 https://leanticket.cn/t/leancloud/925
                  
                  sessionMessage {
-                    code: 4111
-                    reason: "SESSION_CONFLICT"
+                 code: 4111
+                 reason: "SESSION_CONFLICT"
                  }
                  这种情况不仅要告知用户登录失败，同时也要也要在 `-[AVIMClient processSessionCommand:]` 中统一进行异常处理，
                  触发代理方法 `-client:didOfflineWithError:` 告知用户需要将 force 设为 YES。
                  */
-                if (command.hasSessionMessage && error) {
-                    [self notifyCommand:command];
+                if (inCommand.hasSessionMessage && error) {
+                    
+                    notifyCommand_block();
                 }
             } else {
-                [self notifyCommand:command];
+                
+                notifyCommand_block();
             }
         } else {
-            AVLoggerError(AVLoggerDomainIM, @"No out message matched the in message %@", message);
+            
+            AVLoggerError(AVLoggerDomainIM, @"No Out Command Matched Serial ID: %@", num);
         }
     } else {
-        [self notifyCommand:command];
+        
+        notifyCommand_block();
     }
 }
 
-- (void)notifyCommand:(AVIMGenericCommand *)command {
-    [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_COMMAND object:self userInfo:@{@"command": command}];
-}
-
-- (void)webSocket:(AVIMWebSocket *)webSocket didReceivePong:(id)data {
-    AVLoggerInfo(AVLoggerDomainIM, @"Websocket receive pong.");
-    _lastPongTimestamp = [[NSDate date] timeIntervalSince1970];
-    _waitingForPong = NO;
-    if (_pingTimeoutCheckTimer) {
-        [_pingTimeoutCheckTimer invalidate];
-        _pingTimeoutCheckTimer = nil;
-    }
-}
-
-- (void)webSocket:(AVIMWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
-    AVLoggerDebug(AVLoggerDomainIM, @"Websocket closed with code:%ld, reason:%@.", (long)code, reason);
+- (void)webSocket:(AVIMWebSocket *)webSocket didReceivePong:(id)data
+{
+    AssertRunInSerialQueue;
     
-    NSError *error = [AVIMErrorUtil errorWithCode:code reason:reason];
-    for (NSNumber *num in _serialIdArray) {
-        AVIMGenericCommand *outCommand = [self dequeueCommandWithId:num];
-        if (outCommand) {
-            AVIMCommandResultBlock callback = outCommand.callback;
-            if (callback) {
-                callback(outCommand, nil, error);
-            }
-        } else {
-            AVLoggerError(AVLoggerDomainIM, @"No out message matched serial id %@", num);
-        }
-    }
-    [_serialIdArray removeAllObjects];
-    if (_webSocket.readyState != AVIM_CLOSED) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED object:self userInfo:@{@"error": error}];
-    }
-    if ([self isReachable]) {
-        [self retryIfNeeded];
-    }
-}
-
-- (void)forwardError:(NSError *)error forWebSocket:(AVIMWebSocket *)webSocket {
-    AVLoggerError(AVLoggerDomainIM, @"Websocket open failed with error:%@.", error);
-
-    _useSecondary = YES;
-
-    for (NSNumber *num in _serialIdArray) {
-        AVIMGenericCommand *outCommand = [self dequeueCommandWithId:num];
-        if (outCommand) {
-            AVIMCommandResultBlock callback = outCommand.callback;
-            if (callback) {
-                callback(outCommand, nil, error);
-            }
-        } else {
-            AVLoggerError(AVLoggerDomainIM, @"No out message matched serial id %@", num);
-        }
-    }
-
-    [_serialIdArray removeAllObjects];
+    AVLoggerInfo(AVLoggerDomainIM, @"Websocket Received Pong.");
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_ERROR object:self userInfo:@{@"error": error}];
+    _countOfSendPingWithoutReceivePong = 0;
+}
+
+// MARK: - RTM Server
+
+- (void)getRTMServerWithCallback:(void(^)(NSString *, NSError *))callback
+{
+    AssertRunInSerialQueue;
     
-    if (self.openCallback) {
-        [AVIMBlockHelper callBooleanResultBlock:self.openCallback error:error];
-        self.openCallback = nil;
-    } else {
-        if ([self isReachable]) {
-            [self retryIfNeeded];
-        }
-    }
-}
-
-- (BOOL)isValidIPAddress:(NSString *)address {
-    if (!address)
-        return NO;
-
-    const char *str = [address UTF8String];
-
-    struct in_addr dst;
-    int success = inet_pton(AF_INET, str, &dst);
-
-    if (success != 1) {
-        struct in6_addr dst6;
-        success = inet_pton(AF_INET6, str, &dst6);
-    }
-
-    return success == 1;
-}
-
-- (BOOL)shouldTryIP:(NSString *)IP forHost:(NSString *)host {
-    if (!IP)
-        return NO;
-
-    NSMutableSet *IPs = self.IPTable[host];
-
-    if (IPs) {
-        if ([IPs containsObject:IP]) {
-            return NO;
-        } else {
-            [IPs addObject:IP];
-        }
-    } else {
-        self.IPTable[host] = [NSMutableSet setWithObject:IP];
-    }
-
-    return YES;
-}
-
-- (NSString *)selectIP:(NSArray *)IPs forHost:(NSString *)host {
-    for (NSString *IP in IPs) {
-        if ([self shouldTryIP:IP forHost:host]) {
-            return IP;
-        }
-    }
-
-    return nil;
-}
-
-- (void)webSocket:(AVIMWebSocket *)webSocket didFailWithError:(NSError *)error {
-    [self forwardError:error forWebSocket:webSocket];
-}
-
-- (NSMutableDictionary *)IPTable {
-    return _IPTable ?: (_IPTable = [NSMutableDictionary dictionary]);
-}
-
-#pragma mark - reconnect
-
-- (void)reconnect {
-    AVLoggerDebug(AVLoggerDomainIM, @"Websocket connection reconnect in %ld seconds.", (long)_reconnectInterval);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        _reconnectTimer = [NSTimer scheduledTimerWithTimeInterval:_reconnectInterval target:self selector:@selector(openWebSocketConnection) userInfo:nil repeats:NO];
-    });
-    _reconnectInterval *= 2;
-}
-
-- (void)retryIfNeeded {
-    if (!_needRetry) {
+    if (_isGettingRTMServer) {
+        
         return;
     }
-    [self reconnect];
+    
+    _isGettingRTMServer = true;
+    
+    NSString *RTMServer = AVOSCloudIM.defaultOptions.RTMServer;
+    
+    if (RTMServer) {
+        
+        callback(RTMServer, nil);
+        
+        return;
+    }
+    
+    LCRouter *router = LCRouter.sharedInstance;
+    
+    NSDictionary *RTMServerTable = router.cachedRTMServerTable;
+    
+    if (RTMServerTable) {
+        
+        NSString *primary   = RTMServerTable[@"server"];
+        
+        NSString *secondary = RTMServerTable[@"secondary"];
+        
+        if (_preferToUseSecondaryRTMServer) {
+            
+            RTMServer = secondary ?: primary;
+            
+        } else {
+            
+            RTMServer = primary ?: secondary;
+        }
+        
+        if (RTMServer) {
+            
+            callback(RTMServer, nil);
+            
+            return;
+        }
+    }
+    
+    [router fetchRTMServerTableInBackground:^(NSDictionary *RTMServerTable, NSError *error){
+        
+        dispatch_async(_serialQueue, ^{
+            
+            if (RTMServerTable) {
+                
+                _preferToUseSecondaryRTMServer = false;
+                
+                NSString *primary   = RTMServerTable[@"server"];
+                
+                NSString *secondary = RTMServerTable[@"secondary"];
+                
+                NSString *RTMServer = primary ?: secondary;
+                
+                if (RTMServer) {
+                    
+                    callback(RTMServer, nil);
+                    
+                    return;
+                }
+            }
+            
+            NSError *callbackError = nil;
+            
+            if (error) {
+                
+                callbackError = error;
+                
+            } else {
+                
+                NSString *reason = @"Unknown Error when fetching RTM Server Table.";
+                
+                NSDictionary *info = @{ @"reason" : reason };
+                
+                NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                                      code:0
+                                                  userInfo:info];
+                
+                callbackError = aError;
+            }
+            
+            callback(nil, callbackError);
+        });
+    }];
+}
+
+// MARK: - Reconnect
+
+- (void)setupReconnectBlock
+{
+    AssertRunInSerialQueue;
+    
+    [self cancelReconnectBlock];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    _reconnectBlock = dispatch_block_create(0, ^{
+        
+        AssertRunInSerialQueue;
+    
+        [weakSelf cancelReconnectBlock];
+        
+        [weakSelf _openWithCallback:nil blockBeforeOpen:nil];
+    });
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(_reconnectInterval * NSEC_PER_SEC)),
+                   _serialQueue,
+                   _reconnectBlock);
+    
+    _reconnectInterval = (_reconnectInterval * 2);
+    
+    [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
+                         error:nil];
+}
+
+- (void)cancelReconnectBlock
+{
+    AssertRunInSerialQueue;
+    
+    if (_reconnectBlock) {
+        
+        dispatch_block_cancel(_reconnectBlock);
+        
+        _reconnectBlock = nil;
+    }
+}
+
+// MARK: - Ping Timer
+
+- (void)stopPingTimer
+{
+    AssertRunInSerialQueue;
+    
+    if (_pingTimerSource) {
+        
+        dispatch_source_cancel(_pingTimerSource);
+        
+        _pingTimerSource = nil;
+    }
+    
+    _lastPingTimestamp = -1;
+    _countOfSendPingWithoutReceivePong = 0;
+}
+
+- (void)startPingTimer
+{
+    AssertRunInSerialQueue;
+    
+    [self stopPingTimer];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    dispatch_block_t eventHandler = ^{
+        
+        [weakSelf sendPing];
+    };
+    
+    _pingTimerSource = [self newTimerSourceWithInterval:PING_INTERVAL
+                                                 atOnce:true
+                                           eventHandler:eventHandler];
+}
+
+- (void)sendPing
+{
+    AssertRunInSerialQueue;
+    
+    AVIMWebSocket *webSocket = _webSocket;
+    
+    if (!webSocket ||
+        webSocket.readyState != AVIMWebSocketStateConnected) {
+        
+        return;
+    }
+    
+    AVLoggerInfo(AVLoggerDomainIM, @"Websocket Send Ping.");
+    
+    _lastPingTimestamp = NSDate.date.timeIntervalSince1970;
+    
+    _countOfSendPingWithoutReceivePong += 1;
+    
+    NSData *pingData = [@"" dataUsingEncoding:NSUTF8StringEncoding];
+    
+    [webSocket sendPing:pingData];
+}
+
+// MARK: - Check Timeout Timer
+
+- (void)stopCheckTimeoutTimer
+{
+    AssertRunInSerialQueue;
+    
+    if (_checkTimeoutTimerSource) {
+        
+        dispatch_source_cancel(_checkTimeoutTimerSource);
+        
+        _checkTimeoutTimerSource = nil;
+    }
+}
+
+- (void)startCheckTimeoutTimer
+{
+    AssertRunInSerialQueue;
+    
+    [self stopCheckTimeoutTimer];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    dispatch_block_t eventHandler = ^{
+        
+        [weakSelf checkTimeout];
+    };
+    
+    _checkTimeoutTimerSource = [self newTimerSourceWithInterval:TIMEOUT_CHECK_INTERVAL
+                                                         atOnce:false
+                                                   eventHandler:eventHandler];
+}
+
+- (void)checkTimeout
+{
+    AssertRunInSerialQueue;
+    
+    NSTimeInterval currentTimestamp = NSDate.date.timeIntervalSince1970;
+    
+    if (_lastPingTimestamp > 0 &&
+        _countOfSendPingWithoutReceivePong > 0 &&
+        (currentTimestamp - _lastPingTimestamp) > _timeout) {
+        
+        if (_countOfSendPingWithoutReceivePong >= 3) {
+            
+            [self _closeWithBlockAfterClose:^{
+                
+                NSString *reason = @"WebSocket Ping Timeout.";
+                
+                NSDictionary *info = @{ @"reason" : reason };
+                
+                NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                                      code:0
+                                                  userInfo:info];
+                
+                [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
+                                     error:aError];
+            }];
+            
+            [self _openWithCallback:nil blockBeforeOpen:^{
+                
+                [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
+                                     error:nil];
+            }];
+            
+        } else {
+            
+            [self sendPing];
+        }
+    }
+    
+    NSMutableArray *timeoutIdArray = [NSMutableArray array];
+    
+    for (NSNumber *num in _serialIdArray) {
+        
+        AVIMCommandCarrier *carrier = [_commandDictionary objectForKey:num];
+        
+        if (!carrier) {
+            
+            continue;
+        }
+        
+        if (currentTimestamp <= carrier.timeoutDeadlineTimestamp) {
+            
+            break;
+        }
+
+        [timeoutIdArray addObject:num];
+        
+        AVIMGenericCommand *command = carrier.command;
+        
+        AVIMCommandResultBlock callback = command.callback;
+        
+        if (callback) {
+            
+            NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorTimeout
+                                                   reason:@"Request Timeout."];
+            
+            callback(command, nil, error);
+        }
+    }
+    
+    [_commandDictionary removeObjectsForKeys:timeoutIdArray];
+    
+    [_serialIdArray removeObjectsInArray:timeoutIdArray];
+}
+
+// MARK: - Misc
+
+- (void)invokeAllOpenCallbackWithSuccess:(BOOL)success
+                                   error:(NSError *)error
+{
+    AssertRunInSerialQueue;
+    
+    for (AVIMBooleanResultBlock block in _openCallbackArray) {
+        
+        block(success, error);
+    }
+    
+    [_openCallbackArray removeAllObjects];
+}
+
+- (void)handleWebSocketClosedWithError:(NSError *)error
+{
+    AssertRunInSerialQueue;
+    
+    if (_webSocket) {
+        
+        /*
+         Discard webSocket
+         */
+        
+        _webSocket.delegate = nil;
+        
+        _webSocket = nil;
+    }
+    
+    /*
+     Stop Ping
+     */
+    [self stopPingTimer];
+    
+    /*
+     Stop Check Timeout
+     */
+    [self stopCheckTimeoutTimer];
+    
+    /*
+     Clear Queued Command
+     */
+    [self clearQueuedCommandWithError:error];
+}
+
+- (dispatch_source_t)newTimerSourceWithInterval:(NSTimeInterval)interval
+                                         atOnce:(BOOL)atOnce
+                                   eventHandler:(dispatch_block_t)eventHandler
+{
+    AssertRunInSerialQueue;
+    
+    dispatch_source_t source = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, _serialQueue);
+    
+    uint64_t _interval = interval * NSEC_PER_SEC;
+    
+    int64_t startDelay = atOnce ? 0 : (int64_t)_interval;
+    
+    dispatch_time_t startTime = dispatch_time(DISPATCH_TIME_NOW, startDelay);
+    
+    dispatch_source_set_timer(source, startTime, _interval, 0);
+    
+    dispatch_source_set_event_handler(source, eventHandler);
+    
+    dispatch_resume(source);
+    
+    return source;
+}
+
+- (void)postNotificationName:(NSNotificationName)name
+                       error:(NSError *)error
+{
+    AssertRunInSerialQueue;
+    
+    NSDictionary *userInfo = nil;
+    
+    if (error) {
+        
+        userInfo = @{ @"error" : error };
+    }
+    
+    [NSNotificationCenter.defaultCenter postNotificationName:name
+                                                      object:self
+                                                    userInfo:userInfo];
+}
+
+- (uint16_t)nextSerialId
+{
+    AssertRunInSerialQueue;
+    
+    if (_searialId == 0) {
+        
+        _searialId += 1;
+    }
+    
+    uint16_t result = _searialId;
+    
+    _searialId = (_searialId + 1) % (UINT16_MAX + 1);
+    
+    return result;
 }
 
 @end

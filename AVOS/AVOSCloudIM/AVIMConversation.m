@@ -644,15 +644,6 @@ static dispatch_queue_t messageCacheOperationQueue;
     [self updateAttributes:self.propertiesForUpdate callback:callback];
 }
 
-- (void)update:(NSDictionary *)attributes callback:(AVIMBooleanResultBlock)callback {
-    [self updateAttributes:attributes callback:^(BOOL succeeded, NSError * _Nullable error) {
-        if (!error)
-            [self updateLocalAttributes:attributes];
-
-        [AVIMBlockHelper callBooleanResultBlock:callback error:error];
-    }];
-}
-
 - (void)updateAttributes:(NSDictionary *)attributes callback:(AVIMBooleanResultBlock)callback {
     attributes = [attributes copy];
 
@@ -736,24 +727,6 @@ static dispatch_queue_t messageCacheOperationQueue;
     });
 }
 
-- (void)markAsReadInBackground {
-    __weak typeof(self) ws = self;
-    
-    dispatch_async([AVIMClient imClientQueue], ^{
-        [ws.imClient sendCommand:({
-            AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
-            genericCommand.needResponse = YES;
-            genericCommand.cmd = AVIMCommandType_Read;
-            genericCommand.peerId = ws.imClient.clientId;
-            
-            AVIMReadCommand *readCommand = [[AVIMReadCommand alloc] init];
-            readCommand.cid = ws.conversationId;
-            [genericCommand avim_addRequiredKeyWithCommand:readCommand];
-            genericCommand;
-        })];
-    });
-}
-
 - (void)readInBackground {
     dispatch_async([AVIMClient imClientQueue], ^{
         int64_t lastTimestamp = 0;
@@ -814,32 +787,6 @@ static dispatch_queue_t messageCacheOperationQueue;
            callback:(AVIMBooleanResultBlock)callback
 {
     [self sendMessage:message option:nil progressBlock:progressBlock callback:callback];
-}
-
-- (void)sendMessage:(AVIMMessage *)message
-            options:(AVIMMessageSendOption)options
-           callback:(AVIMBooleanResultBlock)callback
-{
-    [self sendMessage:message
-              options:options
-        progressBlock:nil
-             callback:callback];
-}
-
-- (void)sendMessage:(AVIMMessage *)message
-            options:(AVIMMessageSendOption)options
-      progressBlock:(AVProgressBlock)progressBlock
-           callback:(AVIMBooleanResultBlock)callback
-{
-    AVIMMessageOption *option = [[AVIMMessageOption alloc] init];
-
-    if (options & AVIMMessageSendOptionTransient)
-        option.transient = YES;
-
-    if (options & AVIMMessageSendOptionRequestReceipt)
-        option.receipt = YES;
-
-    [self sendMessage:message option:option progressBlock:progressBlock callback:callback];
 }
 
 - (void)sendMessage:(AVIMMessage *)message
@@ -1889,6 +1836,63 @@ static dispatch_queue_t messageCacheOperationQueue;
         
         self.rawDataDic = [keyedConversation.rawDataDic copy];
     }
+}
+
+// MARK: - Deprecated
+
+- (void)sendMessage:(AVIMMessage *)message
+            options:(AVIMMessageSendOption)options
+           callback:(AVIMBooleanResultBlock)callback
+{
+    [self sendMessage:message
+              options:options
+        progressBlock:nil
+             callback:callback];
+}
+
+
+- (void)sendMessage:(AVIMMessage *)message
+            options:(AVIMMessageSendOption)options
+      progressBlock:(AVProgressBlock)progressBlock
+           callback:(AVIMBooleanResultBlock)callback
+{
+    AVIMMessageOption *option = [[AVIMMessageOption alloc] init];
+    
+    if (options & AVIMMessageSendOptionTransient)
+        option.transient = YES;
+    
+    if (options & AVIMMessageSendOptionRequestReceipt)
+        option.receipt = YES;
+    
+    [self sendMessage:message option:option progressBlock:progressBlock callback:callback];
+}
+
+
+- (void)update:(NSDictionary *)attributes callback:(AVIMBooleanResultBlock)callback {
+    [self updateAttributes:attributes callback:^(BOOL succeeded, NSError * _Nullable error) {
+        if (!error)
+            [self updateLocalAttributes:attributes];
+        
+        [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+    }];
+}
+
+- (void)markAsReadInBackground {
+    __weak typeof(self) ws = self;
+    
+    dispatch_async([AVIMClient imClientQueue], ^{
+        [ws.imClient sendCommand:({
+            AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
+            genericCommand.needResponse = YES;
+            genericCommand.cmd = AVIMCommandType_Read;
+            genericCommand.peerId = ws.imClient.clientId;
+            
+            AVIMReadCommand *readCommand = [[AVIMReadCommand alloc] init];
+            readCommand.cid = ws.conversationId;
+            [genericCommand avim_addRequiredKeyWithCommand:readCommand];
+            genericCommand;
+        })];
+    });
 }
 
 @end

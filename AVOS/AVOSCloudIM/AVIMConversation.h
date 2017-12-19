@@ -16,7 +16,10 @@
 
 @class AVIMClient;
 
-typedef uint64_t AVIMMessageSendOption AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.4.0. Use AVIMMessageOption instead.");
+NS_ASSUME_NONNULL_BEGIN
+
+typedef uint64_t AVIMMessageSendOption
+AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.4.0. Use AVIMMessageOption instead.");
 
 enum : AVIMMessageSendOption {
     /// Default message.
@@ -26,8 +29,6 @@ enum : AVIMMessageSendOption {
     /// When receiver receives the message, in sender part, -[AVIMClientDelegate conversation:messageDelivered:] will be called.
     AVIMMessageSendOptionRequestReceipt = 1 << 1,
 } AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.4.0. Use AVIMMessageOption instead.");
-
-NS_ASSUME_NONNULL_BEGIN
 
 @interface AVIMMessageIntervalBound : NSObject
 
@@ -258,12 +259,6 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
 - (void)unmuteWithCallback:(AVIMBooleanResultBlock)callback;
 
 /*!
- 标记该会话已读。
- 将服务端该会话的未读消息数置零。
- */
-- (void)markAsReadInBackground AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 4.3.0. Use -[AVIMConversation readInBackground] instead.");
-
-/*!
  将对话标记为已读。
  该方法将本地对话中其他成员发出的最新消息标记为已读，该消息的发送者会收到已读通知。
  */
@@ -448,6 +443,12 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  */
 - (void)update:(NSDictionary *)updateDict
       callback:(AVIMBooleanResultBlock)callback AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.7.0. Use -[AVIMConversation updateWithCallback:] instead.");
+
+/*!
+ 标记该会话已读。
+ 将服务端该会话的未读消息数置零。
+ */
+- (void)markAsReadInBackground AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 4.3.0. Use -[AVIMConversation readInBackground] instead.");
 
 @end
 

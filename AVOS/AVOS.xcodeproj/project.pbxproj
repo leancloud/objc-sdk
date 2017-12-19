@@ -56,7 +56,6 @@
 		704F3BB61BE0D05C0033245C /* AVIMBlockHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841C011A5A84C600C5C6C4 /* AVIMBlockHelper.m */; };
 		704F3BB71BE0D05C0033245C /* AVIMRuntimeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841C031A5A84C600C5C6C4 /* AVIMRuntimeHelper.m */; };
 		704F3BB81BE0D05C0033245C /* AVIMErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C630C801A6EB259008F1B00 /* AVIMErrorUtil.m */; };
-		704F3BB91BE0D05C0033245C /* AVIMReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841C061A5A84C600C5C6C4 /* AVIMReachability.m */; };
 		704F3BBB1BE0D05C0033245C /* AVIMWebSocketWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841C0A1A5A84C600C5C6C4 /* AVIMWebSocketWrapper.m */; };
 		704F3BBC1BE0D07E0033245C /* AVIMClient_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841BCB1A5A84C600C5C6C4 /* AVIMClient_Internal.h */; };
 		704F3BBD1BE0D07E0033245C /* AVIMClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841BCC1A5A84C600C5C6C4 /* AVIMClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -100,7 +99,6 @@
 		704F3BFB1BE0D0830033245C /* AVIMBlockHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841C001A5A84C600C5C6C4 /* AVIMBlockHelper.h */; };
 		704F3BFC1BE0D0830033245C /* AVIMRuntimeHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841C021A5A84C600C5C6C4 /* AVIMRuntimeHelper.h */; };
 		704F3BFD1BE0D0830033245C /* AVIMErrorUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C630C7F1A6EB259008F1B00 /* AVIMErrorUtil.h */; };
-		704F3BFE1BE0D0830033245C /* AVIMReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841C051A5A84C600C5C6C4 /* AVIMReachability.h */; };
 		704F3C001BE0D0830033245C /* AVIMWebSocketWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841C091A5A84C600C5C6C4 /* AVIMWebSocketWrapper.h */; };
 		704F3C051BE0D5400033245C /* AVOSCloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7F681BDE2DC3000A3B21 /* AVOSCloud.framework */; };
 		704F3C061BE0D5650033245C /* avmp.c in Sources */ = {isa = PBXBuildFile; fileRef = 8C895DC61A78A5D900992A8F /* avmp.c */; };
@@ -986,8 +984,6 @@
 		8C841C3F1A5A84C600C5C6C4 /* AVIMBlockHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841C011A5A84C600C5C6C4 /* AVIMBlockHelper.m */; };
 		8C841C401A5A84C600C5C6C4 /* AVIMRuntimeHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841C021A5A84C600C5C6C4 /* AVIMRuntimeHelper.h */; };
 		8C841C411A5A84C600C5C6C4 /* AVIMRuntimeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841C031A5A84C600C5C6C4 /* AVIMRuntimeHelper.m */; };
-		8C841C421A5A84C600C5C6C4 /* AVIMReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841C051A5A84C600C5C6C4 /* AVIMReachability.h */; };
-		8C841C431A5A84C600C5C6C4 /* AVIMReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841C061A5A84C600C5C6C4 /* AVIMReachability.m */; };
 		8C841C461A5A84C600C5C6C4 /* AVIMWebSocketWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841C091A5A84C600C5C6C4 /* AVIMWebSocketWrapper.h */; };
 		8C841C471A5A84C600C5C6C4 /* AVIMWebSocketWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841C0A1A5A84C600C5C6C4 /* AVIMWebSocketWrapper.m */; };
 		8C895DDA1A78A5D900992A8F /* avmp.c in Sources */ = {isa = PBXBuildFile; fileRef = 8C895DC61A78A5D900992A8F /* avmp.c */; };
@@ -1204,6 +1200,12 @@
 		9AE76C571C3F7CC600325902 /* AVIMDynamicObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD651D41BD9470900C55F85 /* AVIMDynamicObject.m */; };
 		D30DF3F71FDE2CD200F932BC /* AVUserTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF3F61FDE2CD200F932BC /* AVUserTestCase.swift */; };
 		D30DF3F81FDE2CD200F932BC /* AVUserTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF3F61FDE2CD200F932BC /* AVUserTestCase.swift */; };
+		D30DF4161FDE38EF00F932BC /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
+		D30DF4171FDE38EF00F932BC /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
+		D30DF4181FDE38EF00F932BC /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
+		D30DF4191FDE38EF00F932BC /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
+		D30DF41A1FDE38EF00F932BC /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
+		D30DF41B1FDE38EF00F932BC /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
 		D342B7081FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
 		D342B7091FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
 		D342B70A1FA1B5D600FEC543 /* LCExtension+Cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */; };
@@ -1228,6 +1230,10 @@
 		D342B71F1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
 		D342B7201FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
 		D342B7211FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
+		D3CDF4EB1FE8F3810033153E /* LCIMTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */; };
+		D3CDF4EC1FE8F3810033153E /* LCIMTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */; };
+		D3CDF4F01FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */; };
+		D3CDF4F11FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1614,8 +1620,6 @@
 		8C841C011A5A84C600C5C6C4 /* AVIMBlockHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMBlockHelper.m; sourceTree = "<group>"; };
 		8C841C021A5A84C600C5C6C4 /* AVIMRuntimeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMRuntimeHelper.h; sourceTree = "<group>"; };
 		8C841C031A5A84C600C5C6C4 /* AVIMRuntimeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMRuntimeHelper.m; sourceTree = "<group>"; };
-		8C841C051A5A84C600C5C6C4 /* AVIMReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMReachability.h; sourceTree = "<group>"; };
-		8C841C061A5A84C600C5C6C4 /* AVIMReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMReachability.m; sourceTree = "<group>"; };
 		8C841C091A5A84C600C5C6C4 /* AVIMWebSocketWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMWebSocketWrapper.h; sourceTree = "<group>"; };
 		8C841C0A1A5A84C600C5C6C4 /* AVIMWebSocketWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AVIMWebSocketWrapper.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		8C895DC61A78A5D900992A8F /* avmp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = avmp.c; sourceTree = "<group>"; };
@@ -1753,11 +1757,18 @@
 		9AD392491BFD7BE600D28074 /* MessagesProtoOrig.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessagesProtoOrig.pbobjc.m; sourceTree = "<group>"; };
 		9AD651D31BD9470900C55F85 /* AVIMDynamicObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMDynamicObject.h; sourceTree = "<group>"; };
 		9AD651D41BD9470900C55F85 /* AVIMDynamicObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMDynamicObject.m; sourceTree = "<group>"; };
-		D30DF3F41FDE2CD200F932BC /* AVOSCloud-iOSTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVOSCloud-iOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
-		D30DF3F51FDE2CD200F932BC /* AVOSCloud-macOSTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVOSCloud-macOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		D30DF3F61FDE2CD200F932BC /* AVUserTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVUserTestCase.swift; sourceTree = "<group>"; };
+		D30DF4111FDE38EE00F932BC /* AVOSCloudIM-iOSTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVOSCloudIM-iOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		D30DF4121FDE38EE00F932BC /* AVOSCloudIM-macOSTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVOSCloudIM-macOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		D30DF4131FDE38EE00F932BC /* AVOSCloudLiveQuery-iOSTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVOSCloudLiveQuery-iOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		D30DF4141FDE38EE00F932BC /* AVOSCloudLiveQuery-macOSTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVOSCloudLiveQuery-macOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		D30DF4151FDE38EF00F932BC /* LCTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCTestBase.swift; sourceTree = "<group>"; };
+		D30DF41C1FDE391C00F932BC /* AVOSCloud-macOSTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVOSCloud-macOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		D30DF41D1FDE391D00F932BC /* AVOSCloud-iOSTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVOSCloud-iOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LCExtension+Cocoa.h"; sourceTree = "<group>"; };
 		D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "LCExtension+Cocoa.m"; sourceTree = "<group>"; };
+		D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestBase.swift; sourceTree = "<group>"; };
+		D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2263,15 +2274,9 @@
 		8C8419D11A5A796000C5C6C4 /* AVOSCloudIMTests */ = {
 			isa = PBXGroup;
 			children = (
-				70DA62491B4BD7D100D95D4D /* testAudio.mp3 */,
-				70DA62471B4BD21B00D95D4D /* testImage.png */,
-				704717A31B4A620900F6ADDC /* AVIMTestBase.h */,
-				704717A41B4A620900F6ADDC /* AVIMTestBase.m */,
-				70DA624B1B4BDC8300D95D4D /* AVIMCustomMessage.h */,
-				70DA624C1B4BDC8300D95D4D /* AVIMCustomMessage.m */,
-				704717991B4A60CC00F6ADDC /* AVIMClientTest.m */,
-				704717971B4A606D00F6ADDC /* AVIMConversationTest.m */,
-				7047179B1B4A60E100F6ADDC /* AVIMMessageTest.m */,
+				D3CDF4EE1FE8F3F70033153E /* Resources */,
+				D3CDF4ED1FE8F3E20033153E /* Objc */,
+				D3CDF4E91FE8F2FA0033153E /* Swift */,
 				8C8419D21A5A796000C5C6C4 /* Supporting Files */,
 			);
 			path = AVOSCloudIMTests;
@@ -2579,8 +2584,6 @@
 		8C841C041A5A84C600C5C6C4 /* WebSocket */ = {
 			isa = PBXGroup;
 			children = (
-				8C841C051A5A84C600C5C6C4 /* AVIMReachability.h */,
-				8C841C061A5A84C600C5C6C4 /* AVIMReachability.m */,
 				8C841C091A5A84C600C5C6C4 /* AVIMWebSocketWrapper.h */,
 				8C841C0A1A5A84C600C5C6C4 /* AVIMWebSocketWrapper.m */,
 			);
@@ -2644,6 +2647,7 @@
 		8CEA86581A777A7900864211 /* TestBase */ = {
 			isa = PBXGroup;
 			children = (
+				D30DF4051FDE373900F932BC /* Swift */,
 				8CEA86591A777A7900864211 /* AVTestBase.h */,
 				8CEA865A1A777A7900864211 /* AVTestBase.m */,
 				8CEA865B1A777A7900864211 /* XCTestCase+AsyncTesting.h */,
@@ -2782,10 +2786,62 @@
 			isa = PBXGroup;
 			children = (
 				D30DF3F61FDE2CD200F932BC /* AVUserTestCase.swift */,
-				D30DF3F41FDE2CD200F932BC /* AVOSCloud-iOSTests-Bridging-Header.h */,
-				D30DF3F51FDE2CD200F932BC /* AVOSCloud-macOSTests-Bridging-Header.h */,
 			);
 			path = Swift;
+			sourceTree = "<group>";
+		};
+		D30DF4051FDE373900F932BC /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				D30DF4151FDE38EF00F932BC /* LCTestBase.swift */,
+				D30DF41E1FDE396100F932BC /* Bridging-Header */,
+			);
+			path = Swift;
+			sourceTree = "<group>";
+		};
+		D30DF41E1FDE396100F932BC /* Bridging-Header */ = {
+			isa = PBXGroup;
+			children = (
+				D30DF41D1FDE391D00F932BC /* AVOSCloud-iOSTests-Bridging-Header.h */,
+				D30DF41C1FDE391C00F932BC /* AVOSCloud-macOSTests-Bridging-Header.h */,
+				D30DF4111FDE38EE00F932BC /* AVOSCloudIM-iOSTests-Bridging-Header.h */,
+				D30DF4121FDE38EE00F932BC /* AVOSCloudIM-macOSTests-Bridging-Header.h */,
+				D30DF4131FDE38EE00F932BC /* AVOSCloudLiveQuery-iOSTests-Bridging-Header.h */,
+				D30DF4141FDE38EE00F932BC /* AVOSCloudLiveQuery-macOSTests-Bridging-Header.h */,
+			);
+			path = "Bridging-Header";
+			sourceTree = "<group>";
+		};
+		D3CDF4E91FE8F2FA0033153E /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */,
+				D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */,
+			);
+			name = Swift;
+			sourceTree = "<group>";
+		};
+		D3CDF4ED1FE8F3E20033153E /* Objc */ = {
+			isa = PBXGroup;
+			children = (
+				704717A31B4A620900F6ADDC /* AVIMTestBase.h */,
+				704717A41B4A620900F6ADDC /* AVIMTestBase.m */,
+				70DA624B1B4BDC8300D95D4D /* AVIMCustomMessage.h */,
+				70DA624C1B4BDC8300D95D4D /* AVIMCustomMessage.m */,
+				704717991B4A60CC00F6ADDC /* AVIMClientTest.m */,
+				704717971B4A606D00F6ADDC /* AVIMConversationTest.m */,
+				7047179B1B4A60E100F6ADDC /* AVIMMessageTest.m */,
+			);
+			name = Objc;
+			sourceTree = "<group>";
+		};
+		D3CDF4EE1FE8F3F70033153E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				70DA62491B4BD7D100D95D4D /* testAudio.mp3 */,
+				70DA62471B4BD21B00D95D4D /* testImage.png */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2888,7 +2944,6 @@
 				704F3BFB1BE0D0830033245C /* AVIMBlockHelper.h in Headers */,
 				704F3BFC1BE0D0830033245C /* AVIMRuntimeHelper.h in Headers */,
 				704F3BFD1BE0D0830033245C /* AVIMErrorUtil.h in Headers */,
-				704F3BFE1BE0D0830033245C /* AVIMReachability.h in Headers */,
 				9A2F1B6F1CF6F6FA00BE52F2 /* LCIMUtilities_PackagePrivate.h in Headers */,
 				9A2F1B451CF6F6FA00BE52F2 /* LCIMProtocolBuffers.h in Headers */,
 				704F3C001BE0D0830033245C /* AVIMWebSocketWrapper.h in Headers */,
@@ -3449,7 +3504,6 @@
 				9AD651D51BD9470900C55F85 /* AVIMDynamicObject.h in Headers */,
 				838AF12A1AFE58F600B8965E /* LCIMMessageCache.h in Headers */,
 				9AD143781BD8C6CE0022652C /* AVIMCommandCommon.h in Headers */,
-				8C841C421A5A84C600C5C6C4 /* AVIMReachability.h in Headers */,
 				8C841C0B1A5A84C600C5C6C4 /* AVIMClient_Internal.h in Headers */,
 				83F745FD1B9177F100437259 /* LCIMConversationCacheStoreSQL.h in Headers */,
 				83F745F61B91735B00437259 /* LCIMCacheStore.h in Headers */,
@@ -3784,7 +3838,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = AV;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = "LeanCloud Inc.";
 				TargetAttributes = {
 					704F3B6D1BE0D0180033245C = {
@@ -3792,6 +3846,7 @@
 					};
 					704F3B761BE0D0180033245C = {
 						CreatedOnToolsVersion = 7.0;
+						LastSwiftMigration = 0920;
 					};
 					70CA7F671BDE2DC3000A3B21 = {
 						CreatedOnToolsVersion = 7.0;
@@ -3806,7 +3861,11 @@
 					};
 					838CE3221EC97E6E00B24F5B = {
 						CreatedOnToolsVersion = 8.3.2;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
+					};
+					838CE3411EC980E000B24F5B = {
+						LastSwiftMigration = 0920;
 					};
 					83B0E5901F2839FB00EE1A75 = {
 						CreatedOnToolsVersion = 9.0;
@@ -3823,6 +3882,7 @@
 					};
 					8C8419CC1A5A796000C5C6C4 = {
 						CreatedOnToolsVersion = 6.1.1;
+						LastSwiftMigration = 0920;
 					};
 				};
 			};
@@ -4063,7 +4123,6 @@
 				704F3BB61BE0D05C0033245C /* AVIMBlockHelper.m in Sources */,
 				704F3BB71BE0D05C0033245C /* AVIMRuntimeHelper.m in Sources */,
 				704F3BB81BE0D05C0033245C /* AVIMErrorUtil.m in Sources */,
-				704F3BB91BE0D05C0033245C /* AVIMReachability.m in Sources */,
 				704F3BBB1BE0D05C0033245C /* AVIMWebSocketWrapper.m in Sources */,
 				9AE76C541C3F7CC600325902 /* AVIMCommandFormatter.m in Sources */,
 			);
@@ -4073,13 +4132,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3CDF4EC1FE8F3810033153E /* LCIMTestBase.swift in Sources */,
 				704F3C0E1BE0D6B50033245C /* AVTestBase.m in Sources */,
 				7085D5241BEA237A00449DC1 /* AVTestUtil.m in Sources */,
 				704F3C0F1BE0D6BB0033245C /* XCTestCase+AsyncTesting.m in Sources */,
 				704F3C071BE0D5F50033245C /* AVIMTestBase.m in Sources */,
 				D342B71B1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				704F3C081BE0D5F50033245C /* AVIMCustomMessage.m in Sources */,
+				D3CDF4F11FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */,
 				704F3C091BE0D5F50033245C /* AVIMClientTest.m in Sources */,
+				D30DF4191FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 				704F3C0A1BE0D5F50033245C /* AVIMConversationTest.m in Sources */,
 				704F3C0B1BE0D5F50033245C /* AVIMMessageTest.m in Sources */,
 			);
@@ -4181,6 +4243,7 @@
 				70F315501BDE510D00D691B3 /* Thread.m in Sources */,
 				70F315511BDE510D00D691B3 /* UserArmor.m in Sources */,
 				70F315521BDE510D00D691B3 /* UserBar.m in Sources */,
+				D30DF4171FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 				70F315531BDE510D00D691B3 /* UserInfo.m in Sources */,
 				70F315541BDE510D00D691B3 /* XCTestCase+AsyncTesting.m in Sources */,
 				70F3154D1BDE50D100D691B3 /* AVTestBase.m in Sources */,
@@ -4301,6 +4364,7 @@
 			files = (
 				D342B71F1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				838CE3291EC97E6F00B24F5B /* AVOSCloudLiveQueryTests.m in Sources */,
+				D30DF41A1FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4321,6 +4385,7 @@
 			files = (
 				D342B7211FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				838CE3451EC980E000B24F5B /* AVOSCloudLiveQueryTests.m in Sources */,
+				D30DF41B1FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4529,6 +4594,7 @@
 				8CEEABCC1ABC179300B9E757 /* AVCloudTest.m in Sources */,
 				70276B5E1B809333002E91EC /* AVACLTest.m in Sources */,
 				8CEEABCD1ABC179300B9E757 /* AVFileTest.m in Sources */,
+				D30DF4161FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 				8CEEABD41ABC179300B9E757 /* AVSearchQueryTest.m in Sources */,
 				8CEEABD01ABC179300B9E757 /* AVObjectTest.m in Sources */,
 				8CEEABDB1ABC179300B9E757 /* UserBar.m in Sources */,
@@ -4567,7 +4633,6 @@
 				9AD27C491E1418DB002F9C7C /* LCIMDuration.pbobjc.m in Sources */,
 				9A2F1B4C1CF6F6FA00BE52F2 /* LCIMRootObject.m in Sources */,
 				8C895DE71A78A5D900992A8F /* AVMPOrderedDictionary.m in Sources */,
-				8C841C431A5A84C600C5C6C4 /* AVIMReachability.m in Sources */,
 				8C841C3F1A5A84C600C5C6C4 /* AVIMBlockHelper.m in Sources */,
 				837261DE1F2C605C009DBDF7 /* AVIMOptions.m in Sources */,
 				831E295C1D882CBB006E502B /* AVIMMessageOption.m in Sources */,
@@ -4624,13 +4689,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3CDF4EB1FE8F3810033153E /* LCIMTestBase.swift in Sources */,
 				704717981B4A606D00F6ADDC /* AVIMConversationTest.m in Sources */,
 				7047179A1B4A60CC00F6ADDC /* AVIMClientTest.m in Sources */,
 				8CEA86691A77817B00864211 /* AVTestUtil.m in Sources */,
 				8CEA86621A777A7900864211 /* XCTestCase+AsyncTesting.m in Sources */,
 				D342B7191FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				7047179C1B4A60E100F6ADDC /* AVIMMessageTest.m in Sources */,
+				D3CDF4F01FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */,
 				704717A51B4A620900F6ADDC /* AVIMTestBase.m in Sources */,
+				D30DF4181FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 				8CEA865F1A777A7900864211 /* AVTestBase.m in Sources */,
 				70DA624D1B4BDC8300D95D4D /* AVIMCustomMessage.m in Sources */,
 			);
@@ -4857,6 +4925,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudIM-macOSTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -4899,6 +4970,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudIM-macOSTests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -5075,7 +5148,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "AVOSCloudTests/Swift/AVOSCloud-macOSTests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloud-macOSTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -5119,7 +5192,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "AVOSCloudTests/Swift/AVOSCloud-macOSTests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloud-macOSTests-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
@@ -5418,6 +5491,9 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.AVOSCloudLiveQueryTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudLiveQuery-iOSTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -5462,6 +5538,8 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.AVOSCloudLiveQueryTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudLiveQuery-iOSTests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -5634,6 +5712,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.AVOSCloudLiveQueryTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudLiveQuery-macOSTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -5679,6 +5760,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.AVOSCloudLiveQueryTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudLiveQuery-macOSTests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -6035,6 +6118,7 @@
 				);
 				PROVISIONING_PROFILE = "2a6f2f85-65c9-4344-b118-8977505bcf3b";
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
@@ -6213,7 +6297,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "cn.leancloud.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "AVOSCloudTests/Swift/AVOSCloud-iOSTests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloud-iOSTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -6258,7 +6342,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "cn.leancloud.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "AVOSCloudTests/Swift/AVOSCloud-iOSTests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloud-iOSTests-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
@@ -6401,10 +6485,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
@@ -6430,6 +6511,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudIM-iOSTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -6455,10 +6539,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -6475,6 +6556,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudIM-iOSTests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

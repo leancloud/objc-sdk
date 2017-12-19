@@ -1,17 +1,18 @@
+////
+////  AVIMCustomMessage.h
+////  AVOS
+////
+////  Created by lzw on 15/7/7.
+////  Copyright (c) 2015年 LeanCloud Inc. All rights reserved.
+////
 //
-//  AVIMCustomMessage.h
-//  AVOS
+//#import "AVIMTestBase.h"
 //
-//  Created by lzw on 15/7/7.
-//  Copyright (c) 2015年 LeanCloud Inc. All rights reserved.
+//static NSInteger const kAVIMMessageMediaTypeCustom = 1;
 //
+//@interface AVIMCustomMessage : AVIMTypedMessage<AVIMTypedMessageSubclassing>
+//
+//+ (instancetype)messageWithAttributes:(NSDictionary *)attributes;
+//
+//@end
 
-#import "AVIMTestBase.h"
-
-static NSInteger const kAVIMMessageMediaTypeCustom = 1;
-
-@interface AVIMCustomMessage : AVIMTypedMessage<AVIMTypedMessageSubclassing>
-
-+ (instancetype)messageWithAttributes:(NSDictionary *)attributes;
-
-@end
