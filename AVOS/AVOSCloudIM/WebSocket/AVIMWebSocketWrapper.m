@@ -657,6 +657,15 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         return;
     }
     
+    if (needResponse) {
+        
+        /*
+         Set `i` before generate data
+         */
+        
+        genericCommand.i = [self nextSerialId];
+    }
+    
     NSData *data = [genericCommand data];
     
     if ([data respondsToSelector:@selector(length)] &&
@@ -678,8 +687,6 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
     }
     
     if (needResponse) {
-        
-        genericCommand.i = [self nextSerialId];
         
         [self enqueueCommand:genericCommand];
         
