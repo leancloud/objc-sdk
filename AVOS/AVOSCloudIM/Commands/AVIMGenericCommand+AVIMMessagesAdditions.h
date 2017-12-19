@@ -50,12 +50,6 @@ typedef void (^AVIMCommandResultBlock)(AVIMGenericCommand *outCommand, AVIMGener
 - (void)avim_addRequiredKeyForDirectMessageWithMessage:(AVIMMessage *)message transient:(BOOL)transient;
 
 /*!
- 为消息创建SerialId
- *
- */
-- (void)avim_addOrRefreshSerialId;
-
-/*!
  序列化时，判断消息是否需要符合要求：包含必要的字段
  @param error - 错误
  @return 消息是否需要符合要求：包含必要的字段
