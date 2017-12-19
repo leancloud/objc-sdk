@@ -34,7 +34,7 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 
 @property (nonatomic, assign) BOOL alive;
 @property (nonatomic, assign) dispatch_once_t loginOnceToken;
-@property (nonatomic,   weak) AVIMWebSocketWrapper *webSocket;
+@property (nonatomic, strong) AVIMWebSocketWrapper *webSocket;
 @property (nonatomic, strong) AVExponentialTimer   *backoffTimer;
 
 @end
@@ -65,7 +65,7 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 - (void)doInitialize {
     NSString *deviceUUID = [AVUtils deviceUUID];
 
-    _webSocket = [AVIMWebSocketWrapper sharedSecurityInstance];
+    _webSocket = [[AVIMWebSocketWrapper alloc] init];
     _identifier = [NSString stringWithFormat:@"%@-%@", AVIdentifierPrefix, deviceUUID];
     _backoffTimer = [AVExponentialTimer exponentialTimerWithInitialTime:AVBackoffInitialTime
                                                                 maxTime:AVBackoffMaximumTime];
@@ -80,13 +80,10 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
     [notificationCenter addObserver:self selector:@selector(webSocketDidReceiveCommand:)  name:AVIM_NOTIFICATION_WEBSOCKET_COMMAND  object:_webSocket];
     [notificationCenter addObserver:self selector:@selector(webSocketDidReceiveError:)    name:AVIM_NOTIFICATION_WEBSOCKET_ERROR    object:_webSocket];
     [notificationCenter addObserver:self selector:@selector(webSocketDidClose:)           name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED   object:_webSocket];
-
-    [_webSocket increaseObserverCount];
 }
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [_webSocket decreaseObserverCount];
 }
 
 - (void)webSocketDidOpen:(NSNotification *)notification {
@@ -173,12 +170,7 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
         [AVUtils callBooleanResultBlock:callback error:error];
     };
 
-    if ([self.webSocket isConnectionOpen]) {
-        [self.webSocket sendCommand:command];
-        return;
-    }
-
-    [self.webSocket openWebSocketConnectionWithCallback:^(BOOL succeeded, NSError *error) {
+    [self.webSocket openWithCallback:^(BOOL succeeded, NSError *error) {
         if (error) {
             [AVUtils callBooleanResultBlock:callback error:error];
         } else {
