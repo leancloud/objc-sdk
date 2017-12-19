@@ -76,6 +76,8 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
     
     uint16_t _searialId;
     
+    BOOL _isApplicationEnterBackground;
+    
     /*
      RTM Server
      */
@@ -152,6 +154,8 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         _invokedOpenOnce = false;
         
         _searialId = 0;
+        
+        _isApplicationEnterBackground = (UIApplication.sharedApplication.applicationState == UIApplicationStateBackground);
         
         /*
          Serial Queue
@@ -248,6 +252,8 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 {
     dispatch_async(_serialQueue, ^{
         
+        _isApplicationEnterBackground = true;
+        
         if (_invokedOpenOnce) {
             
             [self _closeWithBlockAfterClose:^{
@@ -278,6 +284,8 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 - (void)applicationWillEnterForeground
 {
     dispatch_async(_serialQueue, ^{
+        
+        _isApplicationEnterBackground = false;
         
         if (_invokedOpenOnce) {
             
@@ -393,7 +401,7 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         
         NSString *errReason = nil;
         
-        if (UIApplication.sharedApplication.applicationState == UIApplicationStateBackground) {
+        if (_isApplicationEnterBackground) {
             
             errReason = @"Can't open WebSocket when Application in Background.";
             
@@ -429,7 +437,7 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
     [self cancelReconnectBlock];
     
     if (!_invokedOpenOnce ||
-        UIApplication.sharedApplication.applicationState == UIApplicationStateBackground ||
+        _isApplicationEnterBackground ||
         _oldNetworkReachabilityStatus == AFNetworkReachabilityStatusNotReachable) {
         
         return;
