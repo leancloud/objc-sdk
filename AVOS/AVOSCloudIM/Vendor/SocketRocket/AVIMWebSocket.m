@@ -767,7 +767,9 @@ static __strong NSData *CRLFCRLF;
 
 - (void)sendPing:(NSData *)data;
 {
-    NSAssert(self.readyState == AVIMWebSocketStateConnected, @"Invalid State: Cannot call send: until connection is open");
+    NSAssert((self.readyState != AVIMWebSocketStateConnecting) &&
+             (self.readyState != AVIMWebSocketStateNone),
+             @"Invalid State: Cannot call send: until connection is open");
     // TODO: maybe not copy this for performance
     data = [data copy] ?: [NSData data]; // It's okay for a ping to be empty
     dispatch_async(_workQueue, ^{
