@@ -19,15 +19,10 @@
 
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds;
 
-+ (instancetype)sharedSecurityInstance;
+- (void)openWithCallback:(AVIMBooleanResultBlock)callback;
 
-- (void)increaseObserverCount;
-- (void)decreaseObserverCount;
-
-- (void)openWebSocketConnectionWithCallback:(AVIMBooleanResultBlock)callback;
+- (void)close;
 
 - (void)sendCommand:(AVIMGenericCommand *)genericCommand;
-
-- (BOOL)isConnectionOpen;
 
 @end
