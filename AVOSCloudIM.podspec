@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AVOSCloudIM'
-  s.version  = '8.0.4'
+  s.version  = '8.0.5'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud IM Objective-C SDK'
   s.authors  = 'LeanCloud'
@@ -48,7 +48,6 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/TypedMessages/AVIMImageMessage.h',
       'AVOS/AVOSCloudIM/AVIMMessage_Internal.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMUnknownFieldSet.h',
-      'AVOS/AVOSCloudIM/AVIMConversationUpdateBuilder.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMMessage_PackagePrivate.h',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMEmpty.pbobjc.h',
       'AVOS/AVOSCloudIM/Commands/AVIMGenericCommand+AVIMMessagesAdditions.h',
@@ -119,7 +118,6 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/AVIMKeyedConversation_internal.h',
       'AVOS/AVOSCloudIM/AVMPMessagePack/AVMPMessagePackWriter.h',
       'AVOS/AVOSCloudIM/AVMPMessagePack/AVMPOrderedDictionary.h',
-      'AVOS/AVOSCloudIM/AVIMConversationUpdateBuilder_Internal.h',
       'AVOS/AVOSCloudIM/AVMPMessagePack/AVMPMessagePackReader.h',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMTimestamp.pbobjc.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMUnknownFieldSet.m',
@@ -156,7 +154,6 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/Commands/AVIMGenericCommand+AVIMMessagesAdditions.m',
       'AVOS/AVOSCloudIM/Protobuf/LCIMArray.m',
       'AVOS/AVOSCloudIM/InternalObjects/AVIMMessageObject.m',
-      'AVOS/AVOSCloudIM/AVIMConversationUpdateBuilder.m',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMTypedMessage.m',
       'AVOS/AVOSCloudIM/Protobuf/LCIMDictionary.m',
       'AVOS/AVOSCloudIM/Commands/AVIMCommandFormatter.m',
@@ -206,7 +203,6 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/AVIMClientOpenOption.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMTypedMessage.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMImageMessage.h',
-      'AVOS/AVOSCloudIM/AVIMConversationUpdateBuilder.h',
       'AVOS/AVOSCloudIM/AVIMClient.h',
       'AVOS/AVOSCloudIM/AVIMCommon.h',
       'AVOS/AVOSCloudIM/AVIMConversation.h',
