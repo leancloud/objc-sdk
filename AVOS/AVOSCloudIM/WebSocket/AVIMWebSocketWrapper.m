@@ -155,7 +155,9 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         
         _searialId = 0;
         
+#if TARGET_OS_IOS
         _isApplicationEnterBackground = (UIApplication.sharedApplication.applicationState == UIApplicationStateBackground);
+#endif
         
         /*
          Serial Queue
@@ -201,7 +203,8 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         _preferToUseSecondaryRTMServer = false;
         
         _webSocket = nil;
-        
+
+#if TARGET_OS_IOS
         NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
         
         [center addObserver:self
@@ -213,6 +216,7 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
                    selector:@selector(applicationWillEnterForeground)
                        name:UIApplicationWillEnterForegroundNotification
                      object:nil];
+#endif
         
         _reachabilityMonitor = [LCNetworkReachabilityManager manager];
         
@@ -247,6 +251,8 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 }
 
 // MARK: - Application Notification
+
+#if TARGET_OS_IOS
 
 - (void)applicationDidEnterBackground
 {
@@ -297,6 +303,8 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         }
     });
 }
+
+#endif
 
 // MARK: - Reachability
 
