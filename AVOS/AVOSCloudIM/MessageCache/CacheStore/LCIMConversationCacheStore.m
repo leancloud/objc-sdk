@@ -18,6 +18,15 @@
 
 @implementation LCIMConversationCacheStore
 
++ (NSString *)LCIM_SQL_Delete_Expired_Conversations
+{
+    NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@ <= ?;",
+                     LCIM_TABLE_CONVERSATION_V2,
+                     LCIM_FIELD_EXPIRE_AT];
+    
+    return sql;
+}
+
 - (NSArray *)insertionRecordForConversation:(AVIMConversation *)conversation expireAt:(NSTimeInterval)expireAt
 {
     id conversationId = conversation.conversationId;
@@ -238,46 +247,20 @@
     return isOK ? conversations : @[];
 }
 
-- (NSArray *)allAliveConversations {
-    NSMutableArray *conversations = [NSMutableArray array];
-
-    LCIM_OPEN_DATABASE(db, ({
-        NSArray *args = @[[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
-        LCResultSet *result = [db executeQuery:LCIM_SQL_SELECT_ALIVE_CONVERSATIONS withArgumentsInArray:args];
-
-        while ([result next]) {
-            [conversations addObject:[self conversationWithResult:result]];
-        }
-
-        [result close];
-    }));
-
-    return conversations;
-}
-
-- (NSArray *)allExpiredConversations {
-    NSMutableArray *conversations = [NSMutableArray array];
-
-    LCIM_OPEN_DATABASE(db, ({
-        NSArray *args = @[[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
-        LCResultSet *result = [db executeQuery:LCIM_SQL_SELECT_EXPIRED_CONVERSATIONS withArgumentsInArray:args];
-
-        while ([result next]) {
-            [conversations addObject:[self conversationWithResult:result]];
-        }
-
-        [result close];
-    }));
-
-    return conversations;
-}
-
-- (void)cleanAllExpiredConversations {
-    NSArray *conversations = [self allExpiredConversations];
-
-    for (AVIMConversation *conversation in conversations) {
-        [self deleteConversation:conversation];
-    }
+- (void)cleanAllExpiredConversations
+{
+    [self.databaseQueue inDatabase:^(LCDatabase *db) {
+        
+        db.logsErrors = LCIM_SHOULD_LOG_ERRORS;
+        
+        NSString *sql = [self.class LCIM_SQL_Delete_Expired_Conversations];
+        
+        NSTimeInterval currentTimestamp = NSDate.date.timeIntervalSince1970;
+        
+        NSArray *args = @[@(currentTimestamp)];
+        
+        [db executeUpdate:sql withArgumentsInArray:args];
+    }];
 }
 
 @end

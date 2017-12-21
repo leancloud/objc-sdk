@@ -83,7 +83,7 @@
 }
 
 - (void)cleanAllExpiredConversations {
-    [self.cacheStore allExpiredConversations];
+    [self.cacheStore cleanAllExpiredConversations];
 }
 
 - (void)updateConversationForLastMessageAt:(NSDate *)lastMessageAt conversationId:(NSString *)conversationId {

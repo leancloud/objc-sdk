@@ -9,7 +9,7 @@
 #ifndef AVOS_LCIMConversationCacheStoreSQL_h
 #define AVOS_LCIMConversationCacheStoreSQL_h
 
-#define LCIM_TABLE_CONVERSATION_V2         @"conversation_v2"
+#define LCIM_TABLE_CONVERSATION_V2      @"conversation_v2"
 
 #define LCIM_FIELD_CONVERSATION_ID      @"conversation_id"
 #define LCIM_FIELD_NAME                 @"name"

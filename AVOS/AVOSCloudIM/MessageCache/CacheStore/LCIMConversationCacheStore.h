@@ -68,18 +68,6 @@
 - (NSArray *)conversationsForIds:(NSArray *)conversationIds;
 
 /*!
- * Get all conversations which are expired.
- * @return A conversation list.
- */
-- (NSArray *)allExpiredConversations;
-
-/*!
- * Get all conversations which are not expired.
- * @return A conversation list.
- */
-- (NSArray *)allAliveConversations;
-
-/*!
  * Clean all expired conversations.
  */
 - (void)cleanAllExpiredConversations;
