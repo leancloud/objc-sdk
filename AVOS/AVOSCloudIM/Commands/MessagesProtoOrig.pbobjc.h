@@ -28,7 +28,9 @@
 CF_EXTERN_C_BEGIN
 
 @class AVIMAckCommand;
+@class AVIMBlacklistCommand;
 @class AVIMConvCommand;
+@class AVIMConvMemberInfo;
 @class AVIMDataCommand;
 @class AVIMDirectCommand;
 @class AVIMErrorCommand;
@@ -39,6 +41,7 @@ CF_EXTERN_C_BEGIN
 @class AVIMPatchCommand;
 @class AVIMPatchItem;
 @class AVIMPresenceCommand;
+@class AVIMPubsubCommand;
 @class AVIMRcpCommand;
 @class AVIMReadCommand;
 @class AVIMReadTuple;
@@ -72,6 +75,8 @@ typedef GPB_ENUM(AVIMCommandType) {
   AVIMCommandType_Logout = 16,
   AVIMCommandType_Loggedout = 17,
   AVIMCommandType_Patch = 18,
+  AVIMCommandType_Pubsub = 19,
+  AVIMCommandType_Blacklist = 20,
 };
 
 LCIMEnumDescriptor *AVIMCommandType_EnumDescriptor(void);
@@ -97,6 +102,8 @@ typedef GPB_ENUM(AVIMOpType) {
   AVIMOpType_Conflict = 9,
   AVIMOpType_Added = 10,
   AVIMOpType_Removed = 11,
+  AVIMOpType_Refresh = 12,
+  AVIMOpType_Refreshed = 13,
 
   /** conv */
   AVIMOpType_Start = 30,
@@ -125,6 +132,9 @@ typedef GPB_ENUM(AVIMOpType) {
   AVIMOpType_Members = 50,
   AVIMOpType_MaxRead = 51,
   AVIMOpType_IsMember = 52,
+  AVIMOpType_MemberInfoUpdate = 53,
+  AVIMOpType_MemberInfoUpdated = 54,
+  AVIMOpType_MemberInfoChanged = 55,
 
   /** room */
   AVIMOpType_Join = 80,
@@ -144,9 +154,34 @@ typedef GPB_ENUM(AVIMOpType) {
   AVIMOpType_Upload = 100,
   AVIMOpType_Uploaded = 101,
 
+  /** pubsub */
+  AVIMOpType_Subscribe = 120,
+  AVIMOpType_Subscribed = 121,
+  AVIMOpType_Unsubscribe = 122,
+  AVIMOpType_Unsubscribed = 123,
+  AVIMOpType_IsSubscribed = 124,
+
   /** patch */
   AVIMOpType_Modify = 150,
   AVIMOpType_Modified = 151,
+
+  /** blacklist, query, query_result defined with 7, 8 */
+  AVIMOpType_Block = 170,
+  AVIMOpType_Unblock = 171,
+  AVIMOpType_Blocked = 172,
+  AVIMOpType_Unblocked = 173,
+  AVIMOpType_MembersBlocked = 174,
+  AVIMOpType_MembersUnblocked = 175,
+  AVIMOpType_AddShutup = 180,
+  AVIMOpType_RemoveShutup = 181,
+  AVIMOpType_QueryShutup = 182,
+  AVIMOpType_ShutupAdded = 183,
+  AVIMOpType_ShutupRemoved = 184,
+  AVIMOpType_ShutupResult = 185,
+  AVIMOpType_Shutuped = 186,
+  AVIMOpType_Unshutuped = 187,
+  AVIMOpType_MembersShutuped = 188,
+  AVIMOpType_MembersUnshutuped = 189,
 };
 
 LCIMEnumDescriptor *AVIMOpType_EnumDescriptor(void);
@@ -228,6 +263,7 @@ typedef GPB_ENUM(AVIMUnreadTuple_FieldNumber) {
   AVIMUnreadTuple_FieldNumber_PatchTimestamp = 7,
   AVIMUnreadTuple_FieldNumber_Mentioned = 8,
   AVIMUnreadTuple_FieldNumber_BinaryMsg = 9,
+  AVIMUnreadTuple_FieldNumber_ConvType = 10,
 };
 
 @interface AVIMUnreadTuple : LCIMMessage
@@ -264,6 +300,9 @@ typedef GPB_ENUM(AVIMUnreadTuple_FieldNumber) {
 /** Test to see if @c binaryMsg has been set. */
 @property(nonatomic, readwrite) BOOL hasBinaryMsg;
 
+@property(nonatomic, readwrite) int32_t convType;
+
+@property(nonatomic, readwrite) BOOL hasConvType;
 @end
 
 #pragma mark - AVIMLogItem
@@ -279,6 +318,7 @@ typedef GPB_ENUM(AVIMLogItem_FieldNumber) {
   AVIMLogItem_FieldNumber_MentionAll = 8,
   AVIMLogItem_FieldNumber_MentionPidsArray = 9,
   AVIMLogItem_FieldNumber_Bin = 10,
+  AVIMLogItem_FieldNumber_ConvType = 11,
 };
 
 @interface AVIMLogItem : LCIMMessage
@@ -317,6 +357,33 @@ typedef GPB_ENUM(AVIMLogItem_FieldNumber) {
 @property(nonatomic, readwrite) BOOL bin;
 
 @property(nonatomic, readwrite) BOOL hasBin;
+@property(nonatomic, readwrite) int32_t convType;
+
+@property(nonatomic, readwrite) BOOL hasConvType;
+@end
+
+#pragma mark - AVIMConvMemberInfo
+
+typedef GPB_ENUM(AVIMConvMemberInfo_FieldNumber) {
+  AVIMConvMemberInfo_FieldNumber_Pid = 1,
+  AVIMConvMemberInfo_FieldNumber_Role = 2,
+  AVIMConvMemberInfo_FieldNumber_InfoId = 3,
+};
+
+@interface AVIMConvMemberInfo : LCIMMessage
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *pid;
+/** Test to see if @c pid has been set. */
+@property(nonatomic, readwrite) BOOL hasPid;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *role;
+/** Test to see if @c role has been set. */
+@property(nonatomic, readwrite) BOOL hasRole;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *infoId;
+/** Test to see if @c infoId has been set. */
+@property(nonatomic, readwrite) BOOL hasInfoId;
+
 @end
 
 #pragma mark - AVIMDataCommand
@@ -445,6 +512,7 @@ typedef GPB_ENUM(AVIMErrorCommand_FieldNumber) {
   AVIMErrorCommand_FieldNumber_Reason = 2,
   AVIMErrorCommand_FieldNumber_AppCode = 3,
   AVIMErrorCommand_FieldNumber_Detail = 4,
+  AVIMErrorCommand_FieldNumber_PidsArray = 5,
 };
 
 @interface AVIMErrorCommand : LCIMMessage
@@ -462,6 +530,10 @@ typedef GPB_ENUM(AVIMErrorCommand_FieldNumber) {
 @property(nonatomic, readwrite, copy, null_resettable) NSString *detail;
 /** Test to see if @c detail has been set. */
 @property(nonatomic, readwrite) BOOL hasDetail;
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *pidsArray;
+/** The number of items in @c pidsArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger pidsArray_Count;
 
 @end
 
@@ -487,6 +559,7 @@ typedef GPB_ENUM(AVIMDirectCommand_FieldNumber) {
   AVIMDirectCommand_FieldNumber_BinaryMsg = 19,
   AVIMDirectCommand_FieldNumber_MentionPidsArray = 20,
   AVIMDirectCommand_FieldNumber_MentionAll = 21,
+  AVIMDirectCommand_FieldNumber_ConvType = 22,
 };
 
 @interface AVIMDirectCommand : LCIMMessage
@@ -559,6 +632,9 @@ typedef GPB_ENUM(AVIMDirectCommand_FieldNumber) {
 @property(nonatomic, readwrite) BOOL mentionAll;
 
 @property(nonatomic, readwrite) BOOL hasMentionAll;
+@property(nonatomic, readwrite) int32_t convType;
+
+@property(nonatomic, readwrite) BOOL hasConvType;
 @end
 
 #pragma mark - AVIMAckCommand
@@ -666,6 +742,13 @@ typedef GPB_ENUM(AVIMConvCommand_FieldNumber) {
   AVIMConvCommand_FieldNumber_QueryAllMembers = 23,
   AVIMConvCommand_FieldNumber_MaxReadTuplesArray = 24,
   AVIMConvCommand_FieldNumber_CidsArray = 25,
+  AVIMConvCommand_FieldNumber_Info = 26,
+  AVIMConvCommand_FieldNumber_TempConv = 27,
+  AVIMConvCommand_FieldNumber_TempConvTtl = 28,
+  AVIMConvCommand_FieldNumber_TempConvIdsArray = 29,
+  AVIMConvCommand_FieldNumber_AllowedPidsArray = 30,
+  AVIMConvCommand_FieldNumber_FailedPidsArray = 31,
+  AVIMConvCommand_FieldNumber_Offset = 40,
   AVIMConvCommand_FieldNumber_Results = 100,
   AVIMConvCommand_FieldNumber_Where = 101,
   AVIMConvCommand_FieldNumber_Attr = 103,
@@ -761,6 +844,33 @@ typedef GPB_ENUM(AVIMConvCommand_FieldNumber) {
 /** The number of items in @c cidsArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger cidsArray_Count;
 
+@property(nonatomic, readwrite, strong, null_resettable) AVIMConvMemberInfo *info;
+/** Test to see if @c info has been set. */
+@property(nonatomic, readwrite) BOOL hasInfo;
+
+@property(nonatomic, readwrite) BOOL tempConv;
+
+@property(nonatomic, readwrite) BOOL hasTempConv;
+@property(nonatomic, readwrite) int32_t tempConvTtl;
+
+@property(nonatomic, readwrite) BOOL hasTempConvTtl;
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *tempConvIdsArray;
+/** The number of items in @c tempConvIdsArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger tempConvIdsArray_Count;
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *allowedPidsArray;
+/** The number of items in @c allowedPidsArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger allowedPidsArray_Count;
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<AVIMErrorCommand*> *failedPidsArray;
+/** The number of items in @c failedPidsArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger failedPidsArray_Count;
+
+/** used in blacklist/shutup query */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *offset;
+/** Test to see if @c offset has been set. */
+@property(nonatomic, readwrite) BOOL hasOffset;
+
 @property(nonatomic, readwrite, strong, null_resettable) AVIMJsonObjectMessage *results;
 /** Test to see if @c results has been set. */
 @property(nonatomic, readwrite) BOOL hasResults;
@@ -832,6 +942,7 @@ typedef GPB_ENUM(AVIMLogsCommand_FieldNumber) {
   AVIMLogsCommand_FieldNumber_Direction = 10,
   AVIMLogsCommand_FieldNumber_TIncluded = 11,
   AVIMLogsCommand_FieldNumber_TtIncluded = 12,
+  AVIMLogsCommand_FieldNumber_Lctype = 13,
   AVIMLogsCommand_FieldNumber_LogsArray = 105,
 };
 
@@ -877,6 +988,9 @@ typedef GPB_ENUM(AVIMLogsCommand_FieldNumber) {
 @property(nonatomic, readwrite) BOOL ttIncluded;
 
 @property(nonatomic, readwrite) BOOL hasTtIncluded;
+@property(nonatomic, readwrite) int32_t lctype;
+
+@property(nonatomic, readwrite) BOOL hasLctype;
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<AVIMLogItem*> *logsArray;
 /** The number of items in @c logsArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger logsArray_Count;
@@ -890,6 +1004,7 @@ typedef GPB_ENUM(AVIMRcpCommand_FieldNumber) {
   AVIMRcpCommand_FieldNumber_Cid = 2,
   AVIMRcpCommand_FieldNumber_T = 3,
   AVIMRcpCommand_FieldNumber_Read = 4,
+  AVIMRcpCommand_FieldNumber_From = 5,
 };
 
 @interface AVIMRcpCommand : LCIMMessage
@@ -908,6 +1023,10 @@ typedef GPB_ENUM(AVIMRcpCommand_FieldNumber) {
 @property(nonatomic, readwrite) BOOL read;
 
 @property(nonatomic, readwrite) BOOL hasRead;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *from;
+/** Test to see if @c from has been set. */
+@property(nonatomic, readwrite) BOOL hasFrom;
+
 @end
 
 #pragma mark - AVIMReadTuple
@@ -1098,6 +1217,108 @@ typedef GPB_ENUM(AVIMPatchCommand_FieldNumber) {
 @property(nonatomic, readwrite) BOOL hasLastPatchTime;
 @end
 
+#pragma mark - AVIMPubsubCommand
+
+typedef GPB_ENUM(AVIMPubsubCommand_FieldNumber) {
+  AVIMPubsubCommand_FieldNumber_Cid = 1,
+  AVIMPubsubCommand_FieldNumber_CidsArray = 2,
+  AVIMPubsubCommand_FieldNumber_Topic = 3,
+  AVIMPubsubCommand_FieldNumber_Subtopic = 4,
+  AVIMPubsubCommand_FieldNumber_TopicsArray = 5,
+  AVIMPubsubCommand_FieldNumber_SubtopicsArray = 6,
+  AVIMPubsubCommand_FieldNumber_Results = 7,
+};
+
+@interface AVIMPubsubCommand : LCIMMessage
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *cid;
+/** Test to see if @c cid has been set. */
+@property(nonatomic, readwrite) BOOL hasCid;
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *cidsArray;
+/** The number of items in @c cidsArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger cidsArray_Count;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *topic;
+/** Test to see if @c topic has been set. */
+@property(nonatomic, readwrite) BOOL hasTopic;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *subtopic;
+/** Test to see if @c subtopic has been set. */
+@property(nonatomic, readwrite) BOOL hasSubtopic;
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *topicsArray;
+/** The number of items in @c topicsArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger topicsArray_Count;
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *subtopicsArray;
+/** The number of items in @c subtopicsArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger subtopicsArray_Count;
+
+@property(nonatomic, readwrite, strong, null_resettable) AVIMJsonObjectMessage *results;
+/** Test to see if @c results has been set. */
+@property(nonatomic, readwrite) BOOL hasResults;
+
+@end
+
+#pragma mark - AVIMBlacklistCommand
+
+typedef GPB_ENUM(AVIMBlacklistCommand_FieldNumber) {
+  AVIMBlacklistCommand_FieldNumber_SrcCid = 1,
+  AVIMBlacklistCommand_FieldNumber_ToPidsArray = 2,
+  AVIMBlacklistCommand_FieldNumber_SrcPid = 3,
+  AVIMBlacklistCommand_FieldNumber_ToCidsArray = 4,
+  AVIMBlacklistCommand_FieldNumber_Limit = 5,
+  AVIMBlacklistCommand_FieldNumber_Offset = 6,
+  AVIMBlacklistCommand_FieldNumber_BlockedPidsArray = 8,
+  AVIMBlacklistCommand_FieldNumber_BlockedCidsArray = 9,
+  AVIMBlacklistCommand_FieldNumber_AllowedPidsArray = 10,
+  AVIMBlacklistCommand_FieldNumber_FailedPidsArray = 11,
+};
+
+@interface AVIMBlacklistCommand : LCIMMessage
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *srcCid;
+/** Test to see if @c srcCid has been set. */
+@property(nonatomic, readwrite) BOOL hasSrcCid;
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *toPidsArray;
+/** The number of items in @c toPidsArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger toPidsArray_Count;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *srcPid;
+/** Test to see if @c srcPid has been set. */
+@property(nonatomic, readwrite) BOOL hasSrcPid;
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *toCidsArray;
+/** The number of items in @c toCidsArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger toCidsArray_Count;
+
+@property(nonatomic, readwrite) int32_t limit;
+
+@property(nonatomic, readwrite) BOOL hasLimit;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *offset;
+/** Test to see if @c offset has been set. */
+@property(nonatomic, readwrite) BOOL hasOffset;
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *blockedPidsArray;
+/** The number of items in @c blockedPidsArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger blockedPidsArray_Count;
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *blockedCidsArray;
+/** The number of items in @c blockedCidsArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger blockedCidsArray_Count;
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *allowedPidsArray;
+/** The number of items in @c allowedPidsArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger allowedPidsArray_Count;
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<AVIMErrorCommand*> *failedPidsArray;
+/** The number of items in @c failedPidsArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger failedPidsArray_Count;
+
+@end
+
 #pragma mark - AVIMGenericCommand
 
 typedef GPB_ENUM(AVIMGenericCommand_FieldNumber) {
@@ -1109,6 +1330,7 @@ typedef GPB_ENUM(AVIMGenericCommand_FieldNumber) {
   AVIMGenericCommand_FieldNumber_InstallationId = 6,
   AVIMGenericCommand_FieldNumber_Priority = 7,
   AVIMGenericCommand_FieldNumber_Service = 8,
+  AVIMGenericCommand_FieldNumber_ServerTs = 9,
   AVIMGenericCommand_FieldNumber_DataMessage = 101,
   AVIMGenericCommand_FieldNumber_SessionMessage = 102,
   AVIMGenericCommand_FieldNumber_ErrorMessage = 103,
@@ -1123,6 +1345,8 @@ typedef GPB_ENUM(AVIMGenericCommand_FieldNumber) {
   AVIMGenericCommand_FieldNumber_PresenceMessage = 112,
   AVIMGenericCommand_FieldNumber_ReportMessage = 113,
   AVIMGenericCommand_FieldNumber_PatchMessage = 114,
+  AVIMGenericCommand_FieldNumber_PubsubMessage = 115,
+  AVIMGenericCommand_FieldNumber_BlacklistMessage = 116,
 };
 
 @interface AVIMGenericCommand : LCIMMessage
@@ -1154,6 +1378,9 @@ typedef GPB_ENUM(AVIMGenericCommand_FieldNumber) {
 @property(nonatomic, readwrite) int32_t service;
 
 @property(nonatomic, readwrite) BOOL hasService;
+@property(nonatomic, readwrite) int64_t serverTs;
+
+@property(nonatomic, readwrite) BOOL hasServerTs;
 @property(nonatomic, readwrite, strong, null_resettable) AVIMDataCommand *dataMessage;
 /** Test to see if @c dataMessage has been set. */
 @property(nonatomic, readwrite) BOOL hasDataMessage;
@@ -1209,6 +1436,14 @@ typedef GPB_ENUM(AVIMGenericCommand_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) AVIMPatchCommand *patchMessage;
 /** Test to see if @c patchMessage has been set. */
 @property(nonatomic, readwrite) BOOL hasPatchMessage;
+
+@property(nonatomic, readwrite, strong, null_resettable) AVIMPubsubCommand *pubsubMessage;
+/** Test to see if @c pubsubMessage has been set. */
+@property(nonatomic, readwrite) BOOL hasPubsubMessage;
+
+@property(nonatomic, readwrite, strong, null_resettable) AVIMBlacklistCommand *blacklistMessage;
+/** Test to see if @c blacklistMessage has been set. */
+@property(nonatomic, readwrite) BOOL hasBlacklistMessage;
 
 @end
 
