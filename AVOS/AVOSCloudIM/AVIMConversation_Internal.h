@@ -75,6 +75,22 @@ FOUNDATION_EXPORT NSNotificationName LCIMConversationDidReceiveMessageNotificati
 /// it's a key. the value from dic, True: 开启未读通知; False: 关闭离线消息推送。
 static NSString *const kAVIMUserOptionUseUnread = @"AVIMUserOptionUseUnread";
 
+/*
+ SDK 可以通过对话 ID 的特殊标识来判断这是一个临时对话的 ID，
+ 临时对话的 ID 中会有个特殊前缀 `_tmp:` ，
+ SDK 通过检查 cid 前缀判断出是不是临时对话。
+ */
+static NSString * const kTempConvIdPrefix = @"_tmp:";
+
+/* Use this enum to match command's value(`convType`) */
+typedef NS_ENUM(NSUInteger, LCIMConvType) {
+    LCIMConvTypeUnknown = 0,
+    LCIMConvTypeNormal,
+    LCIMConvTypeTransient,
+    LCIMConvTypeSystem,
+    LCIMConvTypeTemporary
+};
+
 @interface AVIMConversation ()
 
 @property (nonatomic, copy)   NSString     *name;
@@ -99,7 +115,10 @@ static NSString *const kAVIMUserOptionUseUnread = @"AVIMUserOptionUseUnread";
 
 @property (nonatomic, strong) NSHashTable<id<AVIMConversationDelegate>> *delegates;
 
-- (instancetype)initWithConversationId:(NSString *)conversationId;
++ (instancetype)newWithConversationId:(NSString *)conversationId
+                             convType:(LCIMConvType)convType
+                               client:(AVIMClient *)client;
+
 - (void)setConversationId:(NSString *)conversationId;
 - (void)setMembers:(NSArray *)members;
 - (void)setCreator:(NSString *)creator;
@@ -110,5 +129,17 @@ static NSString *const kAVIMUserOptionUseUnread = @"AVIMUserOptionUseUnread";
 - (void)removeMember:(NSString *)clientId;
 
 - (void)setKeyedConversation:(AVIMKeyedConversation *)keyedConversation;
+
+@end
+
+@interface AVIMChatRoom ()
+
+@end
+
+@interface AVIMServiceConversation ()
+
+@end
+
+@interface AVIMTemporaryConversation ()
 
 @end

@@ -372,6 +372,28 @@
     });
 }
 
+- (void)findTemporaryConversationsWith:(NSArray<NSString *> *)tempConvIds
+                              callback:(AVIMArrayResultBlock)callback
+{
+    AVIMGenericCommand *command = [self queryCommand];
+    
+    command.convMessage.tempConvIdsArray = tempConvIds.mutableCopy;
+    
+    [command setNeedResponse:true];
+    [command setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
+        
+        [self processInCommand:inCommand
+                    outCommand:outCommand
+                      callback:callback
+                         error:error];
+    }];
+    
+    dispatch_async([AVIMClient imClientQueue], ^{
+        
+        [self processOutCommand:command callback:callback];
+    });
+}
+
 - (id)JSONValue:(NSString *)string {
     NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
     NSError *error = nil;
@@ -381,14 +403,46 @@
 
 
 
-- (NSArray *)conversationsWithResults:(AVIMJsonObjectMessage *)messages {
+- (NSArray *)conversationsWithResults:(AVIMJsonObjectMessage *)messages
+{
     NSArray *results = [self JSONValue:messages.data_p];
 
     NSMutableArray *conversations = [NSMutableArray arrayWithCapacity:[results count]];
 
     for (NSDictionary *dict in results) {
+        
         NSString *conversationId = [dict objectForKey:kConvAttrKey_conversationId];
-        AVIMConversation *conversation = [self.client conversationWithId:conversationId];
+        
+        BOOL transient = [dict[kConvAttrKey_transient] boolValue];
+        BOOL system = [dict[kConvAttrKey_system] boolValue];
+        BOOL temporary = [dict[kConvAttrKey_temporary] boolValue];
+        
+        LCIMConvType convType = LCIMConvTypeUnknown;
+        
+        if (!transient && !system && !temporary) {
+            
+            convType = LCIMConvTypeNormal;
+            
+        } else if (transient && !system && !temporary) {
+            
+            convType = LCIMConvTypeTransient;
+            
+        } else if (!transient && system && !temporary) {
+            
+            convType = LCIMConvTypeSystem;
+            
+        } else if (!transient && !system && temporary) {
+            
+            convType = LCIMConvTypeTemporary;
+        }
+        
+        AVIMConversation *conversation = [self.client getConversationWithId:conversationId
+                                                              orNewWithType:convType];
+        
+        if (!conversation) {
+            
+            continue;
+        }
         
         /*
          `properties` can be changed by user,
@@ -414,7 +468,6 @@
          */
         conversation.properties = [dict mutableCopy];
 
-        conversation.imClient = self.client;
         conversation.conversationId = conversationId;
         conversation.name = [dict objectForKey:kConvAttrKey_name];
         conversation.attributes = [dict objectForKey:kConvAttrKey_attributes];
@@ -444,15 +497,7 @@
         [conversations addObject:conversation];
     }
 
-    [self.client cacheConversations:conversations];
-
     return conversations;
-}
-
-- (void)bindConversations:(NSArray *)conversations {
-    for (AVIMConversation *conversation in conversations) {
-        conversation.imClient = self.client;
-    }
 }
 
 - (LCIMConversationCache *)conversationCache {
@@ -471,12 +516,6 @@
         NSArray *conversations = [cache conversationsForCommand:[outCommand avim_conversationForCache]];
         callback(conversations);
     });
-}
-
-- (void)callCallback:(AVIMArrayResultBlock)callback withConversations:(NSArray *)conversations {
-    [self bindConversations:conversations];
-    [self.client cacheConversationsIfNeeded:conversations];
-    [AVIMBlockHelper callArrayResultBlock:callback array:conversations error:nil];
 }
 
 - (void)processInCommand:(AVIMGenericCommand *)inCommand
@@ -499,7 +538,7 @@
         if (self.cachePolicy == kAVCachePolicyNetworkElseCache) {
             [self fetchCachedResultsForOutCommand:outCommand callback:^(NSArray *conversations) {
                 if (conversations) {
-                    [self callCallback:callback withConversations:conversations];
+                    [AVIMBlockHelper callArrayResultBlock:callback array:conversations error:nil];
                 } else {
                     [AVIMBlockHelper callArrayResultBlock:callback array:nil error:error];
                 }
@@ -518,7 +557,7 @@
         break;
     case kAVCachePolicyCacheOnly: {
         [self fetchCachedResultsForOutCommand:outCommand callback:^(NSArray *conversations) {
-            [self callCallback:callback withConversations:conversations];
+            [AVIMBlockHelper callArrayResultBlock:callback array:conversations error:nil];
         }];
     }
         break;
@@ -529,7 +568,7 @@
     case kAVCachePolicyCacheElseNetwork: {
         [self fetchCachedResultsForOutCommand:outCommand callback:^(NSArray *conversations) {
             if ([conversations count]) {
-                [self callCallback:callback withConversations:conversations];
+                [AVIMBlockHelper callArrayResultBlock:callback array:conversations error:nil];
             } else {
                 [self.client sendCommand:outCommand];
             }
@@ -542,7 +581,7 @@
         break;
     case kAVCachePolicyCacheThenNetwork: {
         [self fetchCachedResultsForOutCommand:outCommand callback:^(NSArray *conversations) {
-            [self callCallback:callback withConversations:conversations];
+            [AVIMBlockHelper callArrayResultBlock:callback array:conversations error:nil];
             [self.client sendCommand:outCommand];
         }];
     }

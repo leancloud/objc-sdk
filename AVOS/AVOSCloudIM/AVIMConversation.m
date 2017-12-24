@@ -32,8 +32,8 @@ NSString *LCIMClientIdKey = @"clientId";
 NSString *LCIMConversationIdKey = @"conversationId";
 NSString *LCIMConversationPropertyNameKey = @"propertyName";
 NSString *LCIMConversationPropertyValueKey = @"propertyValue";
-NSNotificationName LCIMConversationPropertyUpdateNotification = @"LCIMConversationPropertyUpdateNotification";
 
+NSNotificationName LCIMConversationPropertyUpdateNotification = @"LCIMConversationPropertyUpdateNotification";
 NSNotificationName LCIMConversationMessagePatchNotification = @"LCIMConversationMessagePatchNotification";
 NSNotificationName LCIMConversationDidReceiveMessageNotification = @"LCIMConversationDidReceiveMessageNotification";
 
@@ -120,28 +120,85 @@ static dispatch_queue_t messageCacheOperationQueue;
     return timestamp;
 }
 
++ (instancetype)new
+{
+    [NSException raise:NSInternalInconsistencyException
+                format:@"New Instance is not Allowed."];
+    
+    return nil;
+}
+
 - (instancetype)init
 {
-    self = [super init];
+    [NSException raise:NSInternalInconsistencyException
+                format:@"Init Instance is not Allowed."];
+    
+    return nil;
+}
 
-    if (self) {
++ (instancetype)newWithConversationId:(NSString *)conversationId
+                             convType:(LCIMConvType)convType
+                               client:(AVIMClient *)client
+{
+    if (!conversationId) {
         
-        [self doInitialize];
+        return nil;
     }
-
-    return self;
+    
+    AVIMConversation *conv = nil;
+    
+    switch (convType)
+    {
+        case LCIMConvTypeNormal:
+            
+            conv = [[AVIMConversation alloc] initWithConversationId:conversationId client:client];
+            
+            break;
+            
+        case LCIMConvTypeTransient:
+            
+            conv = [[AVIMChatRoom alloc] initWithConversationId:conversationId client:client];
+            
+            break;
+            
+        case LCIMConvTypeSystem:
+            
+            conv = [[AVIMServiceConversation alloc] initWithConversationId:conversationId client:client];
+            
+            break;
+            
+        case LCIMConvTypeTemporary:
+            
+            conv = [[AVIMTemporaryConversation alloc] initWithConversationId:conversationId client:client];
+            
+            break;
+            
+        default:
+            
+            AVLoggerError(AVLoggerDomainIM, @"Unknown Conversation Type is Found, ID: (%@)", conversationId);
+            
+            conv = nil;
+            
+            break;
+    }
+    
+    return conv;
 }
 
 - (instancetype)initWithConversationId:(NSString *)conversationId
+                                client:(AVIMClient *)client
 {
     self = [super init];
-
+    
     if (self) {
-        _conversationId = [conversationId copy];
+        
+        _conversationId = conversationId.copy;
+        
+        _imClient = client;
         
         [self doInitialize];
     }
-
+    
     return self;
 }
 
@@ -152,21 +209,28 @@ static dispatch_queue_t messageCacheOperationQueue;
     _rawDataDic = [NSDictionary dictionary];
 
     _delegates = [NSHashTable weakObjectsHashTable];
+    
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(propertyDidUpdate:)
-                                                 name:LCIMConversationPropertyUpdateNotification
-                                               object:nil];
+    [center addObserver:self
+               selector:@selector(propertyDidUpdate:)
+                   name:LCIMConversationPropertyUpdateNotification
+                 object:nil];
+    
+    [center addObserver:self
+               selector:@selector(didReceivePatchItem:)
+                   name:LCIMConversationMessagePatchNotification
+                 object:nil];
+    
+    [center addObserver:self
+               selector:@selector(didReceiveMessageNotification:)
+                   name:LCIMConversationDidReceiveMessageNotification
+                 object:nil];
+}
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didReceivePatchItem:)
-                                                 name:LCIMConversationMessagePatchNotification
-                                               object:nil];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didReceiveMessageNotification:)
-                                                 name:LCIMConversationDidReceiveMessageNotification
-                                               object:nil];
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)addDelegate:(id<AVIMConversationDelegate>)delegate {
@@ -179,10 +243,6 @@ static dispatch_queue_t messageCacheOperationQueue;
     @synchronized(_delegates) {
         [_delegates removeObject:delegate];
     }
-}
-
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)propertyDidUpdate:(NSNotification *)notification {
@@ -1894,5 +1954,17 @@ static dispatch_queue_t messageCacheOperationQueue;
         })];
     });
 }
+
+@end
+
+@implementation AVIMChatRoom
+
+@end
+
+@implementation AVIMServiceConversation
+
+@end
+
+@implementation AVIMTemporaryConversation
 
 @end

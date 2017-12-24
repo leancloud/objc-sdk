@@ -166,6 +166,10 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  */
 @property (nonatomic, weak, readonly, nullable)   AVIMClient   *imClient;
 
++ (instancetype)new NS_UNAVAILABLE;
+
+- (instancetype)init NS_UNAVAILABLE;
+
 /**
  Add a delegate which listens conversation events.
 
@@ -409,6 +413,18 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
                       direction:(AVIMMessageQueryDirection)direction
                           limit:(NSUInteger)limit
                        callback:(AVIMArrayResultBlock)callback;
+
+@end
+
+@interface AVIMChatRoom : AVIMConversation
+
+@end
+
+@interface AVIMServiceConversation : AVIMConversation
+
+@end
+
+@interface AVIMTemporaryConversation : AVIMConversation
 
 @end
 

@@ -99,7 +99,7 @@
         BOOL noMembers = (!conversation.members || conversation.members.count == 0);
         if (noMembers) {
             AVIMConversation *conversationInCache = [self conversationForId:conversation.conversationId];
-            if (noMembers) {
+            if (noMembers && conversationInCache) {
                 conversation.members = conversationInCache.members;
             }
         }
@@ -197,8 +197,42 @@
 - (AVIMConversation *)conversationWithResult:(LCResultSet *)result
 {
     NSString *conversationId = [result stringForColumn:LCIM_FIELD_CONVERSATION_ID];
+    
+    NSDictionary *rawDataDic = ({
+        NSData *data = [result dataForColumn:LCIM_FIELD_RAW_DATA];
+        data ? [NSKeyedUnarchiver unarchiveObjectWithData:data] : nil;
+    });
+    
+    BOOL transient = [rawDataDic[kConvAttrKey_transient] boolValue];
+    BOOL system = [rawDataDic[kConvAttrKey_system] boolValue];
+    BOOL temporary = [rawDataDic[kConvAttrKey_temporary] boolValue];
+    
+    LCIMConvType convType = LCIMConvTypeUnknown;
+    
+    if (!transient && !system && !temporary) {
+        
+        convType = LCIMConvTypeNormal;
+        
+    } else if (transient && !system && !temporary) {
+        
+        convType = LCIMConvTypeTransient;
+        
+    } else if (!transient && system && !temporary) {
+        
+        convType = LCIMConvTypeSystem;
+        
+    } else if (!transient && !system && temporary) {
+        
+        convType = LCIMConvTypeTemporary;
+    }
 
-    AVIMConversation *conversation = [self.client conversationWithId:conversationId];
+    AVIMConversation *conversation = [self.client getConversationWithId:conversationId
+                                                          orNewWithType:convType];
+    
+    if (!conversation) {
+        
+        return nil;
+    }
 
     conversation.name           = [result stringForColumn:LCIM_FIELD_NAME];
     conversation.creator        = [result stringForColumn:LCIM_FIELD_CREATOR];
@@ -217,10 +251,7 @@
     });
     conversation.muted          = [result boolForColumn:LCIM_FIELD_MUTED];
     
-    conversation.rawDataDic = ({
-        NSData *data = [result dataForColumn:LCIM_FIELD_RAW_DATA];
-        data ? [NSKeyedUnarchiver unarchiveObjectWithData:data] : nil;
-    });
+    conversation.rawDataDic = rawDataDic;
     
     return conversation;
 }

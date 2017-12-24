@@ -43,10 +43,12 @@ typedef NS_ENUM(NSUInteger, AVIMClientStatus) {
 typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
     /// Default conversation. At most allow 500 people to join the conversation.
     AVIMConversationOptionNone      = 0,
-    /// Transient conversation. No headcount limits. But the functionality is limited. No offline messages, no offline notifications, etc.
-    AVIMConversationOptionTransient = 1 << 0,
     /// Unique conversation. If the server detects the conversation with that members exists, will return it instead of creating a new one.
-    AVIMConversationOptionUnique    = 1 << 1,
+    AVIMConversationOptionUnique    = 1 << 0,
+    /// Transient conversation. No headcount limits. But the functionality is limited. No offline messages, no offline notifications, etc.
+    AVIMConversationOptionTransient = 1 << 1,
+    /// Temporary conversation
+    AVIMConversationOptionTemporary = 1 << 2
 };
 
 @interface AVIMClient : NSObject
@@ -165,9 +167,31 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  @param clientIds - 聊天参与者（发起人除外）的 clientId 列表。
  @param callback － 对话建立之后的回调
  */
-- (void)createConversationWithName:(NSString *)name
+- (void)createConversationWithName:(NSString * _Nullable)name
                          clientIds:(NSArray *)clientIds
                           callback:(AVIMConversationResultBlock)callback;
+
+/**
+ Create a new chat room conversation.
+ 
+ @param name Name of the chat room.
+ @param attributes Custom attributes of the chat room.
+ @param callback Result of callback.
+ */
+- (void)createChatRoomWithName:(NSString * _Nullable)name
+                    attributes:(NSDictionary * _Nullable)attributes
+                      callback:(AVIMChatRoomResultBlock)callback;
+
+/**
+ Create a new temporary conversation.
+ 
+ @param clientIds Member's client ID of conversation.
+ @param ttl Use it to setup time to live of temporary conversation. it will not greater than a default max value(depend on server). if set Zero or Negtive, it will use max ttl.
+ @param callback Result of callback.
+ */
+- (void)createTemporaryConversationWithClientIds:(NSArray *)clientIds
+                                      timeToLive:(int32_t)ttl
+                                        callback:(AVIMTemporaryConversationResultBlock)callback;
 
 /*!
  创建一个新的用户对话。
@@ -178,19 +202,54 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  @param options － 可选参数，可以使用或 “|” 操作表示多个选项
  @param callback － 对话建立之后的回调
  */
-- (void)createConversationWithName:(NSString *)name
+- (void)createConversationWithName:(NSString * _Nullable)name
                          clientIds:(NSArray *)clientIds
-                        attributes:(nullable NSDictionary *)attributes
+                        attributes:(NSDictionary * _Nullable)attributes
                            options:(AVIMConversationOption)options
                           callback:(AVIMConversationResultBlock)callback;
 
-/*!
- 通过 conversationId 查找已激活会话。
- 已激活会话是指通过查询、创建、或通过 KeyedConversation 所得到的会话。
- @param conversationId Conversation 的 id。
- @return 与 conversationId 匹配的会话，若找不到，返回 nil。
+/**
+ Create a New Conversation.
+
+ @param name Name of the Conversation.
+ @param clientIds Array of Other Client's ID
+ @param attributes Custom Attributes
+ @param options Option of the Conversation's Type
+ @param temporaryTTL Temporary Conversation's Time to Live
+ @param callback Result callback
  */
-- (nullable AVIMConversation *)conversationForId:(NSString *)conversationId;
+- (void)createConversationWithName:(NSString * _Nullable)name
+                         clientIds:(NSArray *)clientIds
+                        attributes:(NSDictionary * _Nullable)attributes
+                           options:(AVIMConversationOption)options
+                      temporaryTTL:(int32_t)temporaryTTL
+                          callback:(AVIMConversationResultBlock)callback;
+
+/**
+ Get a Exist Conversation Retained by this Client.
+ 
+ Thread-safe & Sync.
+
+ @param conversationId conversationId
+ @return if the Conversation Exist, return the Instance; if not, return nil.
+ */
+- (AVIMConversation * _Nullable)conversationForId:(NSString *)conversationId;
+
+/**
+ Remove Conversations Retained by this Client.
+ 
+ Thread-safe & Async.
+
+ @param conversationIDArray Array of conversation's ID
+ */
+- (void)removeConversationsInMemoryWith:(NSArray<NSString *> *)conversationIDArray;
+
+/**
+ Remove all Conversations Retained by this Client.
+ 
+ Thread-safe & Async.
+ */
+- (void)removeAllConversationsInMemory;
 
 /*!
  创建一个绑定到当前 client 的会话。

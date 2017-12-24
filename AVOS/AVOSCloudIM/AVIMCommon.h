@@ -10,6 +10,8 @@
 #import <AVFoundation/AVFoundation.h>
 
 @class AVIMConversation;
+@class AVIMChatRoom;
+@class AVIMTemporaryConversation;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -36,11 +38,19 @@ FOUNDATION_EXPORT NSString *const kAVIMReasonKey;
 /* AVOSCloud IM detail key */
 FOUNDATION_EXPORT NSString *const kAVIMDetailKey;
 
-typedef void (^AVIMBooleanResultBlock)(BOOL succeeded, NSError * _Nullable error);
-typedef void (^AVIMIntegerResultBlock)(NSInteger number, NSError * _Nullable error);
-typedef void (^AVIMArrayResultBlock)(NSArray * _Nullable objects, NSError * _Nullable error);
-typedef void (^AVIMConversationResultBlock)(AVIMConversation * _Nullable conversation, NSError * _Nullable error);
-typedef void (^AVIMProgressBlock)(NSInteger percentDone);
+typedef void(^AVIMBooleanResultBlock)(BOOL, NSError * _Nullable);
+
+typedef void(^AVIMIntegerResultBlock)(NSInteger, NSError * _Nullable);
+
+typedef void(^AVIMArrayResultBlock)(NSArray * _Nullable, NSError * _Nullable);
+
+typedef void(^AVIMConversationResultBlock)(AVIMConversation * _Nullable, NSError * _Nullable);
+
+typedef void(^AVIMChatRoomResultBlock)(AVIMChatRoom * _Nullable, NSError * _Nullable);
+
+typedef void(^AVIMTemporaryConversationResultBlock)(AVIMTemporaryConversation * _Nullable, NSError * _Nullable);
+
+typedef void(^AVIMProgressBlock)(NSInteger);
 
 NS_ASSUME_NONNULL_END
 
