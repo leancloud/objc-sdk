@@ -105,6 +105,10 @@ typedef NS_ENUM(NSUInteger, LCIMConvType) {
 @property (nonatomic, assign) BOOL          muted;
 @property (nonatomic, assign) BOOL          transient;
 
+@property (nonatomic, assign) BOOL system;
+@property (nonatomic, assign) BOOL temporary;
+@property (nonatomic, assign) int32_t temporaryTTL;
+
 @property (nonatomic, strong) NSMutableDictionary *properties;
 
 /*

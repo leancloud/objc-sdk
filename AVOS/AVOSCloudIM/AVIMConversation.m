@@ -153,11 +153,19 @@ static dispatch_queue_t messageCacheOperationQueue;
             
             conv = [[AVIMConversation alloc] initWithConversationId:conversationId client:client];
             
+            conv.transient = false;
+            conv.system = false;
+            conv.temporary = false;
+            
             break;
             
         case LCIMConvTypeTransient:
             
             conv = [[AVIMChatRoom alloc] initWithConversationId:conversationId client:client];
+            
+            conv.transient = true;
+            conv.system = false;
+            conv.temporary = false;
             
             break;
             
@@ -165,11 +173,19 @@ static dispatch_queue_t messageCacheOperationQueue;
             
             conv = [[AVIMServiceConversation alloc] initWithConversationId:conversationId client:client];
             
+            conv.transient = false;
+            conv.system = true;
+            conv.temporary = false;
+            
             break;
             
         case LCIMConvTypeTemporary:
             
             conv = [[AVIMTemporaryConversation alloc] initWithConversationId:conversationId client:client];
+            
+            conv.transient = false;
+            conv.system = false;
+            conv.temporary = true;
             
             break;
             
@@ -1857,8 +1873,12 @@ static dispatch_queue_t messageCacheOperationQueue;
     keyedConversation.name           = self.name;
     keyedConversation.members        = self.members;
     keyedConversation.attributes     = self.attributes;
-    keyedConversation.transient      = self.transient;
-    keyedConversation.muted          = self.muted;
+    
+    keyedConversation.muted        = self.muted;
+    keyedConversation.transient    = self.transient;
+    keyedConversation.system       = self.system;
+    keyedConversation.temporary    = self.temporary;
+    keyedConversation.temporaryTTL = self.temporaryTTL;
     
     if (self.properties) {
         
@@ -1884,8 +1904,12 @@ static dispatch_queue_t messageCacheOperationQueue;
     self.name              = keyedConversation.name;
     self.members           = keyedConversation.members;
     self.attributes        = keyedConversation.attributes;
-    self.transient         = keyedConversation.transient;
-    self.muted             = keyedConversation.muted;
+    
+    self.muted        = keyedConversation.muted;
+    self.transient    = keyedConversation.transient;
+    self.system       = keyedConversation.system;
+    self.temporary    = keyedConversation.temporary;
+    self.temporaryTTL = keyedConversation.temporaryTTL;
     
     if (keyedConversation.properties) {
         

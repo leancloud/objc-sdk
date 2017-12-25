@@ -23,8 +23,12 @@
 @property (nonatomic, copy)   NSString     *name;
 @property (nonatomic, strong) NSArray      *members;
 @property (nonatomic, strong) NSDictionary *attributes;
-@property (nonatomic, assign) BOOL          transient;
-@property (nonatomic, assign) BOOL          muted;
+
+@property (nonatomic, assign) BOOL    transient;
+@property (nonatomic, assign) BOOL    system;
+@property (nonatomic, assign) BOOL    temporary;
+@property (nonatomic, assign) int32_t temporaryTTL;
+@property (nonatomic, assign) BOOL    muted;
 
 @property (nonatomic, strong) NSMutableDictionary *properties;
 @property (nonatomic, strong) NSDictionary *rawDataDic;

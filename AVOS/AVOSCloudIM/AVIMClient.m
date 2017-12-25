@@ -953,7 +953,7 @@ static BOOL AVIMClientHasInstantiated = NO;
                 conversation.attributes = attr;
                 conversation.creator = self.clientId;
                 conversation.createAt = [AVObjectUtils dateFromString:[conversationInCommand cdate]];
-                conversation.transient = conversationOutCommand.transient;
+                
                 [conversation addMembers:[conversationOutCommand.mArray copy]];
 
                 [AVIMBlockHelper callConversationResultBlock:callback
@@ -1226,15 +1226,8 @@ static BOOL AVIMClientHasInstantiated = NO;
 - (void)processUnreadTuple:(AVIMUnreadTuple *)unreadTuple
 {
     NSString *conversationId = unreadTuple.cid;
-    LCIMConvType convType = unreadTuple.convType;
     
-    AVIMConversation *conversation = [self getConversationWithId:conversationId
-                                                   orNewWithType:convType];
-
-    if (!conversation) {
-        
-        return;
-    }
+    LCIMConvType convType = unreadTuple.convType;
     
     void(^messageNotification_block)(AVIMConversation *) = ^(AVIMConversation *conversation) {
         
@@ -1260,7 +1253,10 @@ static BOOL AVIMClientHasInstantiated = NO;
         }
     };
     
-    if (conversation.createAt) {
+    AVIMConversation *conversation = [self getConversationWithId:conversationId
+                                                   orNewWithType:convType];
+    
+    if (conversation && conversation.createAt) {
         
         messageNotification_block(conversation);
         
@@ -1360,53 +1356,70 @@ static BOOL AVIMClientHasInstantiated = NO;
 
 - (void)processConvCommand:(AVIMGenericCommand *)command
 {
-    NSString *conversationId = command.convMessage.cid;
+    AVIMConvCommand *convCommand = command.convMessage;
+    
+    if (!convCommand) {
+        
+        return;
+    }
+    
+    NSString *conversationId = convCommand.cid;
     
     if (!conversationId) {
         
         return;
     }
     
-    NSArray<AVIMConversation *> *result = [self getConversationsFromMemoryWith:@[conversationId]];
+    LCIMConvType convType = LCIMConvTypeUnknown;
     
-    AVIMConversation *conversation = result.firstObject;
+    if (convCommand.tempConv) {
+        
+        convType = LCIMConvTypeTemporary;
+        
+    } else {
+        
+        convType = LCIMConvTypeNormal;
+    }
     
-    if (conversation) {
+    AVIMConversation *conversation = [self getConversationWithId:conversationId
+                                                   orNewWithType:convType];
+    
+    if (conversation && conversation.createAt) {
         
         [self passConvCommand:command toConversation:conversation];
         
-        return;
-    }
-    
-    AVIMConversationQuery *query = [self conversationQuery];
-    
-    query.cachePolicy = kAVCachePolicyNetworkOnly;
-    
-    __weak typeof(self) weakSelf = self;
-    
-    [query getConversationById:conversationId
-                      callback:
-     ^(AVIMConversation *conversation, NSError *error){
-         
-         AVIMClient *client = weakSelf;
-         
-         if (!client) {
+    } else {
+        
+        AVIMConversationQuery *query = [self conversationQuery];
+        
+        query.cachePolicy = kAVCachePolicyNetworkOnly;
+        
+        __weak typeof(self) weakSelf = self;
+        
+        [query getConversationById:conversationId
+                          callback:
+         ^(AVIMConversation *conversation, NSError *error){
              
-             return;
-         }
-         
-         dispatch_async([client.class imClientQueue], ^{
+             AVIMClient *client = weakSelf;
              
-             if (error) {
-                 
-                 AVLoggerError(AVLoggerDomainIM, @"Fetch Conversation Failed, with Error: %@", error);
+             if (!client) {
                  
                  return;
              }
              
-             [client passConvCommand:command toConversation:conversation];
-         });
-     }];
+             dispatch_async([client.class imClientQueue], ^{
+                 
+                 if (error) {
+                     
+                     AVLoggerError(AVLoggerDomainIM, @"Fetch Conversation Failed, with Error: %@", error);
+                     
+                     return;
+                 }
+                 
+                 [client passConvCommand:command toConversation:conversation];
+             });
+         }];
+    }
 }
 
 - (LCIMMessageCacheStore *)messageCacheStoreForConversationId:(NSString *)conversationId {
@@ -1510,42 +1523,42 @@ static BOOL AVIMClientHasInstantiated = NO;
     
     AVIMConversation *conversation = result.firstObject;
     
-    if (conversation) {
+    if (conversation && conversation.createAt) {
         
         updateReceipt_block(conversation);
         
-        return;
-    }
-
-    AVIMConversationQuery *query = [self conversationQuery];
-    
-    query.cachePolicy = kAVCachePolicyNetworkOnly;
-    
-    __weak typeof(self) weakSelf = self;
-    
-    [query getConversationById:conversationId
-                      callback:
-     ^(AVIMConversation *conversation, NSError *error){
-         
-         AVIMClient *client = weakSelf;
-         
-         if (!client) {
+    } else {
+        
+        AVIMConversationQuery *query = [self conversationQuery];
+        
+        query.cachePolicy = kAVCachePolicyNetworkOnly;
+        
+        __weak typeof(self) weakSelf = self;
+        
+        [query getConversationById:conversationId
+                          callback:
+         ^(AVIMConversation *conversation, NSError *error){
              
-             return;
-         }
-         
-         dispatch_async([client.class imClientQueue], ^{
+             AVIMClient *client = weakSelf;
              
-             if (error) {
-                 
-                 AVLoggerError(AVLoggerDomainIM, @"Fetch Conversation Failed, with Error: %@", error);
+             if (!client) {
                  
                  return;
              }
              
-             updateReceipt_block(conversation);
-         });
-     }];
+             dispatch_async([client.class imClientQueue], ^{
+                 
+                 if (error) {
+                     
+                     AVLoggerError(AVLoggerDomainIM, @"Fetch Conversation Failed, with Error: %@", error);
+                     
+                     return;
+                 }
+                 
+                 updateReceipt_block(conversation);
+             });
+         }];
+    }
 }
 
 - (void)updateReceipt:(NSDate *)date
@@ -1682,7 +1695,7 @@ static BOOL AVIMClientHasInstantiated = NO;
     AVIMConversation *conversation = [self getConversationWithId:conversationId
                                                    orNewWithType:convtype];
     
-    if (conversation.createAt) {
+    if (conversation && conversation.createAt) {
         
         [self passMessage:message toConversation:conversation];
         [self postNotificationForMessage:message];

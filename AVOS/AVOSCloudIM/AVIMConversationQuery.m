@@ -375,6 +375,25 @@
 - (void)findTemporaryConversationsWith:(NSArray<NSString *> *)tempConvIds
                               callback:(AVIMArrayResultBlock)callback
 {
+    if (!tempConvIds || tempConvIds.count == 0) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            callback(@[], nil);
+        });
+        
+        return;
+    }
+    
+    for (NSString *tempConvId in tempConvIds) {
+        
+        if ([tempConvId isKindOfClass:[NSString class]] == false) {
+            
+            [NSException raise:NSInvalidArgumentException
+                        format:@"Found Invalid item in `tempConvIds`."];
+        }
+    }
+    
     AVIMGenericCommand *command = [self queryCommand];
     
     command.convMessage.tempConvIdsArray = tempConvIds.mutableCopy;
@@ -475,7 +494,8 @@
         conversation.lastMessage = [AVIMMessage parseMessageWithConversationId:conversationId result:dict];
         conversation.members = [dict objectForKey:kConvAttrKey_members];
         conversation.muted = [[dict objectForKey:kConvAttrKey_muted] boolValue];
-        conversation.transient = [[dict objectForKey:kConvAttrKey_transient] boolValue];
+        
+        conversation.temporaryTTL = [[dict objectForKey:kConvAttrKey_temporaryTTL] intValue];
 
         NSDictionary    *lastMessageDate        = dict[kConvAttrKey_lastMessageAt];
         NSNumber        *lastMessageTimestamp   = dict[kConvAttrKey_lastMessageTimestamp];
@@ -484,15 +504,24 @@
 
         /* For system conversation, there's no `lm` field.
            Instead, we read `msg_timestamp`field. */
-        if (lastMessageDate)
+        if (lastMessageDate) {
+            
             conversation.lastMessageAt = [AVObjectUtils dateFromDictionary:lastMessageDate];
-        else if (lastMessageTimestamp)
+            
+        } else if (lastMessageTimestamp) {
+            
             conversation.lastMessageAt = [NSDate dateWithTimeIntervalSince1970:([lastMessageTimestamp doubleValue] / 1000.0)];
+        }
 
-        if (createdAt)
+        if (createdAt) {
+            
             conversation.createAt = [AVObjectUtils dateFromString:createdAt];
-        if (updatedAt)
+        }
+        
+        if (updatedAt) {
+            
             conversation.updateAt = [AVObjectUtils dateFromString:updatedAt];
+        }
 
         [conversations addObject:conversation];
     }

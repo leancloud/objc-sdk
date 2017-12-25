@@ -236,7 +236,6 @@
 
     conversation.name           = [result stringForColumn:LCIM_FIELD_NAME];
     conversation.creator        = [result stringForColumn:LCIM_FIELD_CREATOR];
-    conversation.transient      = [result boolForColumn:LCIM_FIELD_TRANSIENT];
     conversation.members        = [[result stringForColumn:LCIM_FIELD_MEMBERS] componentsSeparatedByString:@","];
     conversation.attributes     = ({
         NSData *data = [result dataForColumn:LCIM_FIELD_ATTRIBUTES];
@@ -250,6 +249,8 @@
         data ? [NSKeyedUnarchiver unarchiveObjectWithData:data] : nil;
     });
     conversation.muted          = [result boolForColumn:LCIM_FIELD_MUTED];
+
+    conversation.temporaryTTL = [rawDataDic[kConvAttrKey_temporaryTTL] intValue];
     
     conversation.rawDataDic = rawDataDic;
     

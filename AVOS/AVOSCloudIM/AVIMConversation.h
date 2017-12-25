@@ -156,6 +156,21 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
 @property (nonatomic, assign, readonly) BOOL transient;
 
 /**
+ Indicate whether it is a system conversation.
+ */
+@property (nonatomic, assign, readonly) BOOL system;
+
+/**
+ Indicate whether it is a temporary conversation.
+ */
+@property (nonatomic, assign, readonly) BOOL temporary;
+
+/**
+ Temporary Conversation's Time to Live.
+ */
+@property (nonatomic, assign, readonly) int32_t temporaryTTL;
+
+/**
  *  Muting status. If muted, when you have offline messages, will not receive Apple APNS notification.
  *  Can be changed by muteWithCallback: or unmuteWithCallback:.
  */

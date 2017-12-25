@@ -33,8 +33,42 @@
         self.name           = [aDecoder decodeObjectForKey:LC_SEL_STR(name)];
         self.members        = [aDecoder decodeObjectForKey:LC_SEL_STR(members)];
         self.attributes     = [aDecoder decodeObjectForKey:LC_SEL_STR(attributes)];
+        
         self.transient      = [aDecoder decodeBoolForKey:LC_SEL_STR(transient)];
         self.muted          = [aDecoder decodeBoolForKey:LC_SEL_STR(muted)];
+        
+        NSString *system_key = LC_SEL_STR(system);
+        
+        if ([aDecoder containsValueForKey:system_key]) {
+            
+            self.system = [aDecoder decodeBoolForKey:system_key];
+            
+        } else {
+            
+            self.system = false;
+        }
+        
+        NSString *temporary_key = LC_SEL_STR(temporary);
+        
+        if ([aDecoder containsValueForKey:temporary_key]) {
+            
+            self.temporary = [aDecoder decodeBoolForKey:temporary_key];
+            
+        } else {
+            
+            self.temporary = false;
+        }
+        
+        NSString *temporaryTTL_key = LC_SEL_STR(temporaryTTL);
+        
+        if ([aDecoder containsValueForKey:temporaryTTL_key]) {
+            
+            self.temporaryTTL = [aDecoder decodeInt32ForKey:temporaryTTL_key];
+            
+        } else {
+            
+            self.temporaryTTL = 0;
+        }
         
         /* check if exist `properties` */
         ///
@@ -74,8 +108,6 @@
     [aCoder encodeObject:self.name           forKey:LC_SEL_STR(name)];
     [aCoder encodeObject:self.members        forKey:LC_SEL_STR(members)];
     [aCoder encodeObject:self.attributes     forKey:LC_SEL_STR(attributes)];
-    [aCoder encodeBool:self.transient        forKey:LC_SEL_STR(transient)];
-    [aCoder encodeBool:self.muted            forKey:LC_SEL_STR(muted)];
     
     if (self.properties) {
         
@@ -86,6 +118,12 @@
         
         [aCoder encodeObject:self.rawDataDic forKey:LC_SEL_STR(rawDataDic)];
     }
+    
+    [aCoder encodeBool:self.transient forKey:LC_SEL_STR(transient)];
+    [aCoder encodeBool:self.system forKey:LC_SEL_STR(system)];
+    [aCoder encodeBool:self.temporary forKey:LC_SEL_STR(temporary)];
+    [aCoder encodeInt32:self.temporaryTTL forKey:LC_SEL_STR(temporaryTTL)];
+    [aCoder encodeBool:self.muted forKey:LC_SEL_STR(muted)];
 }
 
 @end
