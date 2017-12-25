@@ -4,3 +4,4 @@
 
 #import "AVOSCloud.h"
 #import "AVOSCloudIM.h"
+#import "AVIMConversation_Internal.h"
