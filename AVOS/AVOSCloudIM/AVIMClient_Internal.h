@@ -63,6 +63,7 @@
  Conversation Memory Cache
  */
 - (AVIMConversation *)getConversationWithId:(NSString *)convId
-                              orNewWithType:(LCIMConvType)convType;
+                              orNewWithType:(LCIMConvType)convType
+__attribute__((warn_unused_result));
 
 @end

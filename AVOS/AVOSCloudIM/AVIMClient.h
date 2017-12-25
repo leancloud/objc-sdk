@@ -233,7 +233,8 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  @param conversationId conversationId
  @return if the Conversation Exist, return the Instance; if not, return nil.
  */
-- (AVIMConversation * _Nullable)conversationForId:(NSString *)conversationId;
+- (AVIMConversation * _Nullable)conversationForId:(NSString *)conversationId
+__attribute__((warn_unused_result));
 
 /**
  Remove Conversations Retained by this Client.

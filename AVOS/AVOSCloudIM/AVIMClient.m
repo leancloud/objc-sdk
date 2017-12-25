@@ -1884,8 +1884,8 @@ static BOOL AVIMClientHasInstantiated = NO;
     
     dispatch_sync(_queueOfConvMemory, ^{
         
-        [self _getConversationWithId:convId
-                       orNewWithType:convType];
+        conv = [self _getConversationWithId:convId
+                              orNewWithType:convType];
     });
     
     return conv;
@@ -1893,6 +1893,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 
 - (AVIMConversation *)_getConversationWithId:(NSString *)convId
                                orNewWithType:(LCIMConvType)convType
+__attribute__((warn_unused_result))
 {
     NSAssert(dispatch_get_specific(_queueOfConvMemory_specific_key) == _queueOfConvMemory_specific_value,
              @"This internal method should run in `_queueOfConvMemory`.");
@@ -1947,6 +1948,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 - (NSArray<AVIMConversation *> *)getConversationsFromMemoryWith:(NSArray<NSString *> *)convIdArray
+__attribute__((warn_unused_result))
 {
     __block NSArray<AVIMConversation *> *result = nil;
     
@@ -1959,6 +1961,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 }
 
 - (NSArray<AVIMConversation *> *)_getConversationsFromMemoryWith:(NSArray<NSString *> *)convIdArray
+__attribute__((warn_unused_result))
 {
     NSAssert(dispatch_get_specific(_queueOfConvMemory_specific_key) == _queueOfConvMemory_specific_value,
              @"This internal method should run in `_queueOfConvMemory`.");
