@@ -16,15 +16,15 @@ class LCIMTestCaseClient: LCIMTestBase {
         
         super.setUp()
         
-        var _globalClient: AVIMClient? = AVIMClient(clientId: "LCIMTestCaseClient.globalClient")
+        var client: AVIMClient? = AVIMClient(clientId: "LCIMTestCaseClient.globalClient")
         
         if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
             
-            _globalClient!.open(callback: { (success, error) in
+            client!.open(callback: { (success, error) in
                 
                 XCTAssertTrue(success)
                 XCTAssertNil(error)
-                XCTAssertEqual(_globalClient!.status, .opened)
+                XCTAssertEqual(client!.status, .opened)
                 
                 semaphore.breakWaiting = true
             })
@@ -33,10 +33,10 @@ class LCIMTestCaseClient: LCIMTestBase {
             
             XCTFail("timeout")
             
-            _globalClient = nil
+            client = nil
         }
         
-        self.globalClient = _globalClient
+        self.globalClient = client
     }
     
     override func tearDown() {
@@ -60,9 +60,9 @@ class LCIMTestCaseClient: LCIMTestBase {
         }
     }
     
-    func testClientOpenClose() {
+    func testClientOpenCloseMultiple() {
         
-        let openCloseClient: AVIMClient = AVIMClient(clientId: "LCIMTestCaseClient.testClientOpenClose")
+        let openCloseClient: AVIMClient = AVIMClient(clientId: "LCIMTestCaseClient.testClientOpenCloseMultiple")
         
         for _ in 0..<5 {
             
@@ -100,7 +100,7 @@ class LCIMTestCaseClient: LCIMTestBase {
         }
     }
     
-    func testClientCreateConversation() {
+    func testCreateConversation() {
         
         guard let client: AVIMClient = self.globalClient else {
             
@@ -112,7 +112,7 @@ class LCIMTestCaseClient: LCIMTestBase {
         if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
             
             client.createConversation(
-                withName: "LCIMTestCaseClient.testClientCreateConversation.1",
+                withName: "LCIMTestCaseClient.testCreateConversation",
                 clientIds: []
             ) { (conv, error) in
                 
@@ -139,11 +139,21 @@ class LCIMTestCaseClient: LCIMTestBase {
             
             XCTFail("timeout")
         }
+    }
+    
+    func testCreateChatRoom() {
+        
+        guard let client: AVIMClient = self.globalClient else {
+            
+            XCTFail()
+            
+            return
+        }
         
         if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
             
             client.createChatRoom(
-                withName: "LCIMTestCaseClient.testClientCreateConversation.2",
+                withName: "LCIMTestCaseClient.testCreateChatRoom",
                 attributes: ["test" : "test"]
             ) { (chatRoom, error) in
                 
@@ -169,6 +179,16 @@ class LCIMTestCaseClient: LCIMTestBase {
         }) {
             
             XCTFail("timeout")
+        }
+    }
+    
+    func testCreateTemporaryConversation() {
+        
+        guard let client: AVIMClient = self.globalClient else {
+            
+            XCTFail()
+            
+            return
         }
         
         if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
@@ -206,7 +226,7 @@ class LCIMTestCaseClient: LCIMTestBase {
         }
     }
     
-    func testFindTemporaryConversation() {
+    func testCreateUniqueConversation() {
         
         guard let client: AVIMClient = self.globalClient else {
             
@@ -215,87 +235,53 @@ class LCIMTestCaseClient: LCIMTestBase {
             return
         }
         
-        var tempConvId: String? = nil
+        var uniqueId: String? = nil
         
-        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+        for i in 0..<2 {
             
-            client.createTemporaryConversation(
-                withClientIds: [],
-                timeToLive: 0
-            ) { (tempConv, error) in
+            if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
                 
-                semaphore.breakWaiting = true
-                
-                guard let tempConv: AVIMTemporaryConversation = tempConv else {
+                client.createConversation(
+                    withName: "LCIMTestCaseClient.testCreateUniqueConversation",
+                    clientIds: ["testCreateUniqueConversation.otherId.1"],
+                    attributes: nil,
+                    options: [.unique]
+                ) { (conv, error) in
                     
-                    XCTFail("\(error!)")
+                    semaphore.breakWaiting = true
                     
-                    return
+                    guard let conv: AVIMConversation = conv else  {
+                        
+                        XCTFail("\(error!)")
+                        
+                        return
+                    }
+                    
+                    XCTAssertNil(error)
+                    
+                    XCTAssertNotNil(conv.conversationId)
+                    
+                    if i == 0 {
+                        
+                        uniqueId = conv.conversationId
+                    }
+                    
+                    if i == 1 {
+                        
+                        XCTAssertTrue(uniqueId == conv.conversationId)
+                    }
+                    
+                    XCTAssertNotNil(conv.createAt)
+                    
+                    XCTAssertFalse(conv.transient)
+                    XCTAssertFalse(conv.system)
+                    XCTAssertFalse(conv.temporary)
                 }
                 
-                XCTAssertNil(error)
+            }) {
                 
-                let convId: String? = tempConv.conversationId
-                
-                XCTAssertNotNil(convId)
-                XCTAssertTrue(convId!.hasPrefix(kTempConvIdPrefix))
-                XCTAssertNotNil(tempConv.createAt)
-                
-                XCTAssertFalse(tempConv.transient)
-                XCTAssertFalse(tempConv.system)
-                XCTAssertTrue(tempConv.temporary)
-                
-                tempConvId = convId
+                XCTFail("timeout")
             }
-            
-        }) {
-            
-            XCTFail("timeout")
-        }
-        
-        guard let _temoConvId: String = tempConvId else {
-            
-            XCTFail()
-            
-            return
-        }
-        
-        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
-            
-            let query: AVIMConversationQuery = client.conversationQuery()
-            
-            query.cachePolicy = .networkOnly
-            
-            query.findTemporaryConversations(with: [_temoConvId]) { (array, error) in
-                
-                semaphore.breakWaiting = true
-                
-                guard let tempConv: AVIMTemporaryConversation = array?.first as? AVIMTemporaryConversation else {
-                    
-                    XCTFail("\(error!)")
-                    
-                    return
-                }
-                
-                XCTAssertNil(error)
-                
-                let convId: String? = tempConv.conversationId
-                
-                XCTAssertNotNil(convId)
-                XCTAssertTrue(convId == _temoConvId)
-                XCTAssertTrue(convId!.hasPrefix(kTempConvIdPrefix))
-                XCTAssertNotNil(tempConv.createAt)
-                
-                XCTAssertFalse(tempConv.transient)
-                XCTAssertFalse(tempConv.system)
-                XCTAssertTrue(tempConv.temporary)
-                XCTAssertTrue(tempConv.temporaryTTL > 0)
-            }
-            
-            
-        }) {
-            
-            XCTFail("timeout")
         }
     }
     
