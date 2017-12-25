@@ -493,6 +493,11 @@
         conversation.creator = [dict objectForKey:kConvAttrKey_creator];
         conversation.lastMessage = [AVIMMessage parseMessageWithConversationId:conversationId result:dict];
         conversation.members = [dict objectForKey:kConvAttrKey_members];
+        
+        conversation.uniqueId = [dict objectForKey:kConvAttrKey_uniqueId];
+        
+        conversation.unique = [[dict objectForKey:kConvAttrKey_unique] boolValue];
+        
         conversation.muted = [[dict objectForKey:kConvAttrKey_muted] boolValue];
         
         conversation.temporaryTTL = [[dict objectForKey:kConvAttrKey_temporaryTTL] intValue];

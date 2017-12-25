@@ -248,9 +248,14 @@
         NSData *data = [result dataForColumn:LCIM_FIELD_LAST_MESSAGE];
         data ? [NSKeyedUnarchiver unarchiveObjectWithData:data] : nil;
     });
+    
     conversation.muted          = [result boolForColumn:LCIM_FIELD_MUTED];
 
     conversation.temporaryTTL = [rawDataDic[kConvAttrKey_temporaryTTL] intValue];
+    
+    conversation.uniqueId = rawDataDic[kConvAttrKey_uniqueId];
+    
+    conversation.unique = [rawDataDic[kConvAttrKey_unique] boolValue];
     
     conversation.rawDataDic = rawDataDic;
     

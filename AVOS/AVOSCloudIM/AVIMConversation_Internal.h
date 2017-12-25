@@ -102,11 +102,14 @@ typedef NS_ENUM(NSUInteger, LCIMConvType) {
 @property (nonatomic, strong) NSDate       *lastDeliveredAt;
 @property (nonatomic, assign) NSUInteger    unreadMessagesCount;
 @property (nonatomic, strong) NSDictionary *attributes;
-@property (nonatomic, assign) BOOL          muted;
-@property (nonatomic, assign) BOOL          transient;
 
-@property (nonatomic, assign) BOOL system;
-@property (nonatomic, assign) BOOL temporary;
+@property (nonatomic, strong) NSString *uniqueId;
+
+@property (nonatomic, assign) BOOL    unique;
+@property (nonatomic, assign) BOOL    muted;
+@property (nonatomic, assign) BOOL    transient;
+@property (nonatomic, assign) BOOL    system;
+@property (nonatomic, assign) BOOL    temporary;
 @property (nonatomic, assign) int32_t temporaryTTL;
 
 @property (nonatomic, strong) NSMutableDictionary *properties;

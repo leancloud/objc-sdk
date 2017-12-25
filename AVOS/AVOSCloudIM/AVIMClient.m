@@ -962,6 +962,16 @@ static BOOL AVIMClientHasInstantiated = NO;
                     
                     conversation.temporaryTTL = inConvCommand.tempConvTtl;
                 }
+                
+                if (outConvCommand.unique) {
+                    
+                    conversation.unique = true;
+                    
+                    if (inConvCommand.hasUniqueId) {
+                        
+                        conversation.uniqueId = inConvCommand.uniqueId;
+                    }
+                }
 
                 [AVIMBlockHelper callConversationResultBlock:callback
                                                 conversation:conversation

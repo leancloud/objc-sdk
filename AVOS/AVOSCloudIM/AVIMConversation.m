@@ -1879,6 +1879,12 @@ static dispatch_queue_t messageCacheOperationQueue;
     keyedConversation.system       = self.system;
     keyedConversation.temporary    = self.temporary;
     keyedConversation.temporaryTTL = self.temporaryTTL;
+    keyedConversation.unique       = self.unique;
+    
+    if (self.uniqueId) {
+        
+        keyedConversation.uniqueId = self.uniqueId;
+    }
     
     if (self.properties) {
         
@@ -1910,6 +1916,12 @@ static dispatch_queue_t messageCacheOperationQueue;
     self.system       = keyedConversation.system;
     self.temporary    = keyedConversation.temporary;
     self.temporaryTTL = keyedConversation.temporaryTTL;
+    self.unique       = keyedConversation.unique;
+    
+    if (keyedConversation.uniqueId) {
+        
+        self.uniqueId = keyedConversation.uniqueId;
+    }
     
     if (keyedConversation.properties) {
         

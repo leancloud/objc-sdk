@@ -31,6 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly, nullable) NSArray      *members;        // 对话参与者列表
 @property (nonatomic, strong, readonly, nullable) NSDictionary *attributes;     // 自定义属性
 
+@property (nonatomic, strong, readonly, nullable) NSString *uniqueId;
+
+@property (nonatomic, assign, readonly) BOOL    unique;
 @property (nonatomic, assign, readonly) BOOL    transient;
 @property (nonatomic, assign, readonly) BOOL    system;
 @property (nonatomic, assign, readonly) BOOL    temporary;

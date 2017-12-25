@@ -150,6 +150,16 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
 @property (nonatomic, strong, readonly, nullable) NSDictionary *attributes;
 
 /**
+ Unique ID of Unique Conversation.
+ */
+@property (nonatomic, strong, readonly, nullable) NSString *uniqueId;
+
+/**
+ Indicate whether it is a unique conversation.
+ */
+@property (nonatomic, assign, readonly) BOOL unique;
+
+/**
  *  Indicate whether it is a transient conversation. 
  *  @see AVIMConversationOptionTransient
  */

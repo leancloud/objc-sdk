@@ -70,6 +70,24 @@
             self.temporaryTTL = 0;
         }
         
+        NSString *unique_key = LC_SEL_STR(unique);
+        
+        if ([aDecoder containsValueForKey:unique_key]) {
+            
+            self.unique = [aDecoder decodeBoolForKey:unique_key];
+            
+        } else {
+            
+            self.unique = false;
+        }
+        
+        NSString *uniqueId_key = LC_SEL_STR(uniqueId);
+        
+        if ([aDecoder containsValueForKey:uniqueId_key]) {
+            
+            self.uniqueId = [aDecoder decodeObjectForKey:uniqueId_key];
+        }
+        
         /* check if exist `properties` */
         ///
         NSString *properties_key = LC_SEL_STR(properties);
@@ -119,11 +137,17 @@
         [aCoder encodeObject:self.rawDataDic forKey:LC_SEL_STR(rawDataDic)];
     }
     
+    if (self.uniqueId) {
+        
+        [aCoder encodeObject:self.uniqueId forKey:LC_SEL_STR(uniqueId)];
+    }
+    
     [aCoder encodeBool:self.transient forKey:LC_SEL_STR(transient)];
     [aCoder encodeBool:self.system forKey:LC_SEL_STR(system)];
     [aCoder encodeBool:self.temporary forKey:LC_SEL_STR(temporary)];
     [aCoder encodeInt32:self.temporaryTTL forKey:LC_SEL_STR(temporaryTTL)];
     [aCoder encodeBool:self.muted forKey:LC_SEL_STR(muted)];
+    [aCoder encodeBool:self.unique forKey:LC_SEL_STR(unique)];
 }
 
 @end

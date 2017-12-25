@@ -24,6 +24,9 @@
 @property (nonatomic, strong) NSArray      *members;
 @property (nonatomic, strong) NSDictionary *attributes;
 
+@property (nonatomic, strong) NSString *uniqueId;
+
+@property (nonatomic, assign) BOOL    unique;
 @property (nonatomic, assign) BOOL    transient;
 @property (nonatomic, assign) BOOL    system;
 @property (nonatomic, assign) BOOL    temporary;
