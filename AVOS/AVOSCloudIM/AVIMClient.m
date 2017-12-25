@@ -908,10 +908,10 @@ static BOOL AVIMClientHasInstantiated = NO;
         
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             if (!error) {
-                AVIMConvCommand *conversationInCommand = inCommand.convMessage;
-                AVIMConvCommand *conversationOutCommand = outCommand.convMessage;
+                AVIMConvCommand *inConvCommand = inCommand.convMessage;
+                AVIMConvCommand *outConvCommand = outCommand.convMessage;
                 
-                NSString *convId = conversationInCommand.cid;
+                NSString *convId = inConvCommand.cid;
                 
                 LCIMConvType convType = LCIMConvTypeUnknown;
                 
@@ -951,10 +951,17 @@ static BOOL AVIMClientHasInstantiated = NO;
                 
                 conversation.name = name;
                 conversation.attributes = attr;
-                conversation.creator = self.clientId;
-                conversation.createAt = [AVObjectUtils dateFromString:[conversationInCommand cdate]];
                 
-                [conversation addMembers:[conversationOutCommand.mArray copy]];
+                conversation.creator = self.clientId;
+                
+                conversation.createAt = [AVObjectUtils dateFromString:[inConvCommand cdate]];
+                
+                [conversation addMembers:[outConvCommand.mArray copy]];
+                
+                if (temporary) {
+                    
+                    conversation.temporaryTTL = inConvCommand.tempConvTtl;
+                }
 
                 [AVIMBlockHelper callConversationResultBlock:callback
                                                 conversation:conversation
@@ -1325,12 +1332,24 @@ static BOOL AVIMClientHasInstantiated = NO;
             
             // AVIMOpType_Joined = 32,
         case AVIMOpType_Joined:
+            
+            if (convCommand.tempConv && convCommand.tempConvTtl > 0) {
+                
+                conversation.temporaryTTL = convCommand.tempConvTtl;
+            }
+            
             [conversation addMember:self.clientId];
             [self receiveInvitedFromConversation:conversation byClientId:initBy];
             break;
             
             // AVIMOpType_MembersJoined = 33,
         case AVIMOpType_MembersJoined:
+            
+            if (convCommand.tempConv && convCommand.tempConvTtl > 0) {
+                
+                conversation.temporaryTTL = convCommand.tempConvTtl;
+            }
+            
             [conversation addMembers:members];
             [self receiveMembersAddedFromConversation:conversation clientIds:members byClientId:initBy];
             break;
