@@ -1997,6 +1997,7 @@ __attribute__((warn_unused_result))
 }
 
 - (void)removeConversationsInMemoryWith:(NSArray<NSString *> *)conversationIDArray
+                               callback:(nonnull void (^)(void))callback
 {
     if (!conversationIDArray ||
         conversationIDArray.count == 0) {
@@ -2007,14 +2008,24 @@ __attribute__((warn_unused_result))
     dispatch_async(_queueOfConvMemory, ^{
         
         [_conversationDictionary removeObjectsForKeys:conversationIDArray];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            callback();
+        });
     });
 }
 
-- (void)removeAllConversationsInMemory
+- (void)removeAllConversationsInMemoryWith:(void (^)(void))callback
 {
     dispatch_async(_queueOfConvMemory, ^{
         
         [_conversationDictionary removeAllObjects];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            callback();
+        });
     });
 }
 

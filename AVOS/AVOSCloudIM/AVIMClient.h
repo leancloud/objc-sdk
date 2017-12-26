@@ -186,7 +186,7 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  Create a new temporary conversation.
  
  @param clientIds Member's client ID of conversation.
- @param ttl Use it to setup time to live of temporary conversation. it will not greater than a default max value(depend on server). if set Zero or Negtive, it will use max ttl.
+ @param ttl Use it to setup time to live of temporary conversation. it will not greater than a default max value(depend on server). if set Zero or Negtive, it will use max ttl, Unit of Measure: Second.
  @param callback Result of callback.
  */
 - (void)createTemporaryConversationWithClientIds:(NSArray *)clientIds
@@ -215,7 +215,7 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  @param clientIds Array of Other Client's ID
  @param attributes Custom Attributes
  @param options Option of the Conversation's Type
- @param temporaryTTL Temporary Conversation's Time to Live
+ @param temporaryTTL Temporary Conversation's Time to Live, Unit of Measure: Second.
  @param callback Result callback
  */
 - (void)createConversationWithName:(NSString * _Nullable)name
@@ -242,15 +242,19 @@ __attribute__((warn_unused_result));
  Thread-safe & Async.
 
  @param conversationIDArray Array of conversation's ID
+ @param callback Result of Callback, always means success.
  */
-- (void)removeConversationsInMemoryWith:(NSArray<NSString *> *)conversationIDArray;
+- (void)removeConversationsInMemoryWith:(NSArray<NSString *> *)conversationIDArray
+                               callback:(void(^)(void))callback;
 
 /**
  Remove all Conversations Retained by this Client.
  
  Thread-safe & Async.
+ 
+ @param callback Result of Callback, always means success.
  */
-- (void)removeAllConversationsInMemory;
+- (void)removeAllConversationsInMemoryWith:(void(^)(void))callback;
 
 /*!
  创建一个绑定到当前 client 的会话。
