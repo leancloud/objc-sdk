@@ -21,10 +21,6 @@
 		703812EE1BDE8257009F2385 /* TestInstallationSave.json in Resources */ = {isa = PBXBuildFile; fileRef = 70C288B01BB55E0300A4773C /* TestInstallationSave.json */; };
 		703EDB1A1BB4FBD400F06757 /* TestDictionaryForObject.json in Resources */ = {isa = PBXBuildFile; fileRef = 703EDB191BB4FBD400F06757 /* TestDictionaryForObject.json */; };
 		704245751BEF153F00E4C12C /* AVAnalyticsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 704245741BEF153F00E4C12C /* AVAnalyticsTest.m */; };
-		704717981B4A606D00F6ADDC /* AVIMConversationTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 704717971B4A606D00F6ADDC /* AVIMConversationTest.m */; };
-		7047179A1B4A60CC00F6ADDC /* AVIMClientTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 704717991B4A60CC00F6ADDC /* AVIMClientTest.m */; };
-		7047179C1B4A60E100F6ADDC /* AVIMMessageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7047179B1B4A60E100F6ADDC /* AVIMMessageTest.m */; };
-		704717A51B4A620900F6ADDC /* AVIMTestBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 704717A41B4A620900F6ADDC /* AVIMTestBase.m */; };
 		704F3B781BE0D0180033245C /* AVOSCloudIM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 704F3B6E1BE0D0180033245C /* AVOSCloudIM.framework */; };
 		704F3B851BE0D05C0033245C /* AVIMClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841BCD1A5A84C600C5C6C4 /* AVIMClient.m */; };
 		704F3B861BE0D05C0033245C /* AVIMCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841BCF1A5A84C600C5C6C4 /* AVIMCommon.m */; };
@@ -102,11 +98,6 @@
 		704F3C001BE0D0830033245C /* AVIMWebSocketWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841C091A5A84C600C5C6C4 /* AVIMWebSocketWrapper.h */; };
 		704F3C051BE0D5400033245C /* AVOSCloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7F681BDE2DC3000A3B21 /* AVOSCloud.framework */; };
 		704F3C061BE0D5650033245C /* avmp.c in Sources */ = {isa = PBXBuildFile; fileRef = 8C895DC61A78A5D900992A8F /* avmp.c */; };
-		704F3C071BE0D5F50033245C /* AVIMTestBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 704717A41B4A620900F6ADDC /* AVIMTestBase.m */; };
-		704F3C081BE0D5F50033245C /* AVIMCustomMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 70DA624C1B4BDC8300D95D4D /* AVIMCustomMessage.m */; };
-		704F3C091BE0D5F50033245C /* AVIMClientTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 704717991B4A60CC00F6ADDC /* AVIMClientTest.m */; };
-		704F3C0A1BE0D5F50033245C /* AVIMConversationTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 704717971B4A606D00F6ADDC /* AVIMConversationTest.m */; };
-		704F3C0B1BE0D5F50033245C /* AVIMMessageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7047179B1B4A60E100F6ADDC /* AVIMMessageTest.m */; };
 		704F3C0C1BE0D6030033245C /* testAudio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 70DA62491B4BD7D100D95D4D /* testAudio.mp3 */; };
 		704F3C0D1BE0D6030033245C /* testImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 70DA62471B4BD21B00D95D4D /* testImage.png */; };
 		704F3C0E1BE0D6B50033245C /* AVTestBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA865A1A777A7900864211 /* AVTestBase.m */; };
@@ -274,7 +265,6 @@
 		70CA80431BDE431A000A3B21 /* NSDictionary+LCHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 837CC71C1B568431001333AD /* NSDictionary+LCHash.h */; };
 		70DA62481B4BD21B00D95D4D /* testImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 70DA62471B4BD21B00D95D4D /* testImage.png */; };
 		70DA624A1B4BD7D100D95D4D /* testAudio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 70DA62491B4BD7D100D95D4D /* testAudio.mp3 */; };
-		70DA624D1B4BDC8300D95D4D /* AVIMCustomMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 70DA624C1B4BDC8300D95D4D /* AVIMCustomMessage.m */; };
 		70F3153D1BDE507700D691B3 /* AVCloudTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEEABB01ABC179300B9E757 /* AVCloudTest.m */; };
 		70F3153E1BDE507800D691B3 /* AVOSCloudTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 706F85A01B82E4E00079CC55 /* AVOSCloudTest.m */; };
 		70F3153F1BDE507800D691B3 /* AVFileTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEEABB11ABC179300B9E757 /* AVFileTest.m */; };
@@ -1230,6 +1220,8 @@
 		D342B71F1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
 		D342B7201FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
 		D342B7211FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
+		D37CD4111FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */; };
+		D37CD4121FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */; };
 		D3CDF4EB1FE8F3810033153E /* LCIMTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */; };
 		D3CDF4EC1FE8F3810033153E /* LCIMTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */; };
 		D3CDF4F01FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */; };
@@ -1311,11 +1303,6 @@
 		70344DD31B71C4F600C3DAD9 /* TestRelation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestRelation.json; sourceTree = "<group>"; };
 		703EDB191BB4FBD400F06757 /* TestDictionaryForObject.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestDictionaryForObject.json; sourceTree = "<group>"; };
 		704245741BEF153F00E4C12C /* AVAnalyticsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVAnalyticsTest.m; sourceTree = "<group>"; };
-		704717971B4A606D00F6ADDC /* AVIMConversationTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMConversationTest.m; sourceTree = "<group>"; };
-		704717991B4A60CC00F6ADDC /* AVIMClientTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMClientTest.m; sourceTree = "<group>"; };
-		7047179B1B4A60E100F6ADDC /* AVIMMessageTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMMessageTest.m; sourceTree = "<group>"; };
-		704717A31B4A620900F6ADDC /* AVIMTestBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMTestBase.h; sourceTree = "<group>"; };
-		704717A41B4A620900F6ADDC /* AVIMTestBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMTestBase.m; sourceTree = "<group>"; };
 		704F3B6E1BE0D0180033245C /* AVOSCloudIM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudIM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		704F3B771BE0D0180033245C /* AVOSCloudIM-macOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AVOSCloudIM-macOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		704F8DAD1BF49292007CB560 /* AVUtilsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVUtilsTest.m; sourceTree = "<group>"; };
@@ -1340,8 +1327,6 @@
 		70CA7F681BDE2DC3000A3B21 /* AVOSCloud.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloud.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		70DA62471B4BD21B00D95D4D /* testImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testImage.png; sourceTree = "<group>"; };
 		70DA62491B4BD7D100D95D4D /* testAudio.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = testAudio.mp3; sourceTree = "<group>"; };
-		70DA624B1B4BDC8300D95D4D /* AVIMCustomMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMCustomMessage.h; sourceTree = "<group>"; };
-		70DA624C1B4BDC8300D95D4D /* AVIMCustomMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMCustomMessage.m; sourceTree = "<group>"; };
 		70F315321BDE503B00D691B3 /* AVOSCloud-macOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AVOSCloud-macOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8302AED31C192A0600E13F8A /* LCURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCURLConnection.h; sourceTree = "<group>"; };
 		8302AED41C192A0600E13F8A /* LCURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCURLConnection.m; sourceTree = "<group>"; };
@@ -1767,6 +1752,7 @@
 		D30DF41D1FDE391D00F932BC /* AVOSCloud-iOSTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVOSCloud-iOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LCExtension+Cocoa.h"; sourceTree = "<group>"; };
 		D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "LCExtension+Cocoa.m"; sourceTree = "<group>"; };
+		D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseQuery.swift; sourceTree = "<group>"; };
 		D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestBase.swift; sourceTree = "<group>"; };
 		D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2817,6 +2803,7 @@
 			children = (
 				D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */,
 				D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */,
+				D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */,
 			);
 			name = Swift;
 			sourceTree = "<group>";
@@ -2824,13 +2811,6 @@
 		D3CDF4ED1FE8F3E20033153E /* Objc */ = {
 			isa = PBXGroup;
 			children = (
-				704717A31B4A620900F6ADDC /* AVIMTestBase.h */,
-				704717A41B4A620900F6ADDC /* AVIMTestBase.m */,
-				70DA624B1B4BDC8300D95D4D /* AVIMCustomMessage.h */,
-				70DA624C1B4BDC8300D95D4D /* AVIMCustomMessage.m */,
-				704717991B4A60CC00F6ADDC /* AVIMClientTest.m */,
-				704717971B4A606D00F6ADDC /* AVIMConversationTest.m */,
-				7047179B1B4A60E100F6ADDC /* AVIMMessageTest.m */,
 			);
 			name = Objc;
 			sourceTree = "<group>";
@@ -4133,17 +4113,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3CDF4EC1FE8F3810033153E /* LCIMTestBase.swift in Sources */,
+				D37CD4121FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */,
 				704F3C0E1BE0D6B50033245C /* AVTestBase.m in Sources */,
 				7085D5241BEA237A00449DC1 /* AVTestUtil.m in Sources */,
 				704F3C0F1BE0D6BB0033245C /* XCTestCase+AsyncTesting.m in Sources */,
-				704F3C071BE0D5F50033245C /* AVIMTestBase.m in Sources */,
 				D342B71B1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
-				704F3C081BE0D5F50033245C /* AVIMCustomMessage.m in Sources */,
 				D3CDF4F11FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */,
-				704F3C091BE0D5F50033245C /* AVIMClientTest.m in Sources */,
 				D30DF4191FDE38EF00F932BC /* LCTestBase.swift in Sources */,
-				704F3C0A1BE0D5F50033245C /* AVIMConversationTest.m in Sources */,
-				704F3C0B1BE0D5F50033245C /* AVIMMessageTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4690,17 +4666,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3CDF4EB1FE8F3810033153E /* LCIMTestBase.swift in Sources */,
-				704717981B4A606D00F6ADDC /* AVIMConversationTest.m in Sources */,
-				7047179A1B4A60CC00F6ADDC /* AVIMClientTest.m in Sources */,
+				D37CD4111FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */,
 				8CEA86691A77817B00864211 /* AVTestUtil.m in Sources */,
 				8CEA86621A777A7900864211 /* XCTestCase+AsyncTesting.m in Sources */,
 				D342B7191FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
-				7047179C1B4A60E100F6ADDC /* AVIMMessageTest.m in Sources */,
 				D3CDF4F01FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */,
-				704717A51B4A620900F6ADDC /* AVIMTestBase.m in Sources */,
 				D30DF4181FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 				8CEA865F1A777A7900864211 /* AVTestBase.m in Sources */,
-				70DA624D1B4BDC8300D95D4D /* AVIMCustomMessage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6389,6 +6361,7 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/AVOSCloudIM/Protobuf";
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
@@ -6398,6 +6371,8 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_CFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = AVOSCloudIM;
@@ -6406,6 +6381,7 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+				WARNING_CFLAGS = "";
 			};
 			name = Debug;
 		};
@@ -6444,6 +6420,7 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/AVOSCloudIM/Protobuf";
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
@@ -6453,6 +6430,8 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = AVOSCloudIM;
@@ -6462,6 +6441,7 @@
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+				WARNING_CFLAGS = "";
 			};
 			name = Release;
 		};

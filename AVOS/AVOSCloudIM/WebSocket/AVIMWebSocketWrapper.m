@@ -107,8 +107,10 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
      Internal Serial Queue
      */
     dispatch_queue_t _serialQueue;
+#ifdef DEBUG
     void *_serialQueue_specific_key;
     void *_serialQueue_specific_value;
+#endif
     
     /*
      Container
@@ -163,12 +165,14 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
          Serial Queue
          */
         _serialQueue = dispatch_queue_create("AVIMWebSocketWrapper._serialQueue", NULL);
+#ifdef DEBUG
         _serialQueue_specific_key = (__bridge void *)_serialQueue;
         _serialQueue_specific_value = (__bridge void *)_serialQueue;
         dispatch_queue_set_specific(_serialQueue,
                                     _serialQueue_specific_key,
                                     _serialQueue_specific_value,
                                     NULL);
+#endif
         
         /*
          Container

@@ -271,6 +271,14 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationQueryOption) {
  */
 - (void)findConversationsWithCallback:(AVIMArrayResultBlock)callback;
 
+/**
+ Query array of `AVIMTemporaryConversation` info. if not set `limit`, or `limit` invalid, return 10 or less in default.
+ @param tempConvIds Array of queried conversation's id.
+ @param callback Result of callback.
+ */
+- (void)findTemporaryConversationsWith:(NSArray<NSString *> *)tempConvIds
+                              callback:(AVIMArrayResultBlock)callback;
+
 @end
 
 NS_ASSUME_NONNULL_END

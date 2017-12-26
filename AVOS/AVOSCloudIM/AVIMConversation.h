@@ -150,10 +150,35 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
 @property (nonatomic, strong, readonly, nullable) NSDictionary *attributes;
 
 /**
+ Unique ID of Unique Conversation.
+ */
+@property (nonatomic, strong, readonly, nullable) NSString *uniqueId;
+
+/**
+ Indicate whether it is a unique conversation.
+ */
+@property (nonatomic, assign, readonly) BOOL unique;
+
+/**
  *  Indicate whether it is a transient conversation. 
  *  @see AVIMConversationOptionTransient
  */
 @property (nonatomic, assign, readonly) BOOL transient;
+
+/**
+ Indicate whether it is a system conversation.
+ */
+@property (nonatomic, assign, readonly) BOOL system;
+
+/**
+ Indicate whether it is a temporary conversation.
+ */
+@property (nonatomic, assign, readonly) BOOL temporary;
+
+/**
+ Temporary Conversation's Time to Live.
+ */
+@property (nonatomic, assign, readonly) int32_t temporaryTTL;
 
 /**
  *  Muting status. If muted, when you have offline messages, will not receive Apple APNS notification.
@@ -165,6 +190,10 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  *  The AVIMClient object which this conversation belongs to.
  */
 @property (nonatomic, weak, readonly, nullable)   AVIMClient   *imClient;
+
++ (instancetype)new NS_UNAVAILABLE;
+
+- (instancetype)init NS_UNAVAILABLE;
 
 /**
  Add a delegate which listens conversation events.
@@ -409,6 +438,18 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
                       direction:(AVIMMessageQueryDirection)direction
                           limit:(NSUInteger)limit
                        callback:(AVIMArrayResultBlock)callback;
+
+@end
+
+@interface AVIMChatRoom : AVIMConversation
+
+@end
+
+@interface AVIMServiceConversation : AVIMConversation
+
+@end
+
+@interface AVIMTemporaryConversation : AVIMConversation
 
 @end
 

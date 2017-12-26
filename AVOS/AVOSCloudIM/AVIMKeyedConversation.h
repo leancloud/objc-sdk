@@ -30,8 +30,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy,   readonly, nullable) NSString     *name;           // 对话名字
 @property (nonatomic, strong, readonly, nullable) NSArray      *members;        // 对话参与者列表
 @property (nonatomic, strong, readonly, nullable) NSDictionary *attributes;     // 自定义属性
-@property (nonatomic, assign, readonly)           BOOL          transient;      // 是否为临时会话（开放群组）
-@property (nonatomic, assign, readonly)           BOOL          muted;          // 静音状态
+
+@property (nonatomic, strong, readonly, nullable) NSString *uniqueId;
+
+@property (nonatomic, assign, readonly) BOOL    unique;
+@property (nonatomic, assign, readonly) BOOL    transient;
+@property (nonatomic, assign, readonly) BOOL    system;
+@property (nonatomic, assign, readonly) BOOL    temporary;
+@property (nonatomic, assign, readonly) int32_t temporaryTTL;
+@property (nonatomic, assign, readonly) BOOL    muted;
 
 @end
 
