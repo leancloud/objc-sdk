@@ -10,59 +10,9 @@ import XCTest
 
 class LCIMTestCaseQuery: LCIMTestBase {
     
-    var globalClient: AVIMClient?
-    
-    override func setUp() {
-        
-        super.setUp()
-        
-        var client: AVIMClient? = AVIMClient(clientId: "LCIMTestCaseQuery.globalClient")
-        
-        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
-            
-            client!.open(callback: { (success, error) in
-                
-                XCTAssertTrue(success)
-                XCTAssertNil(error)
-                XCTAssertEqual(client!.status, .opened)
-                
-                semaphore.breakWaiting = true
-            })
-            
-        }) {
-            
-            XCTFail("timeout")
-            
-            client = nil
-        }
-        
-        self.globalClient = client
-    }
-    
-    override func tearDown() {
-        
-        super.tearDown()
-        
-        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
-            
-            self.globalClient?.close(callback: { (success, error) in
-                
-                XCTAssertTrue(success)
-                XCTAssertNil(error)
-                XCTAssertEqual(self.globalClient?.status, .closed)
-                
-                semaphore.breakWaiting = true
-            })
-            
-        }) {
-            
-            XCTFail("timeout")
-        }
-    }
-    
     func testFindTemporaryConversation() {
         
-        guard let client: AVIMClient = self.globalClient else {
+        guard let client: AVIMClient = LCIMTestBase.baseGlobalClient else {
             
             XCTFail()
             

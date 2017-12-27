@@ -1220,6 +1220,12 @@
 		D342B71F1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
 		D342B7201FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
 		D342B7211FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */; };
+		D36A1E0A1FF246C2006EFB5F /* LCIMTestCaseConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */; };
+		D36A1E0B1FF246C2006EFB5F /* LCIMTestCaseConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */; };
+		D37A04671FF36E6200AD44A9 /* testVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D37A04661FF36E6200AD44A9 /* testVideo.mp4 */; };
+		D37A04681FF36E6200AD44A9 /* testVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D37A04661FF36E6200AD44A9 /* testVideo.mp4 */; };
+		D37A046A1FF3705500AD44A9 /* testFile.md in Resources */ = {isa = PBXBuildFile; fileRef = D37A04691FF3705500AD44A9 /* testFile.md */; };
+		D37A046B1FF3705500AD44A9 /* testFile.md in Resources */ = {isa = PBXBuildFile; fileRef = D37A04691FF3705500AD44A9 /* testFile.md */; };
 		D37CD4111FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */; };
 		D37CD4121FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */; };
 		D3CDF4EB1FE8F3810033153E /* LCIMTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */; };
@@ -1752,6 +1758,9 @@
 		D30DF41D1FDE391D00F932BC /* AVOSCloud-iOSTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVOSCloud-iOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		D342B7061FA1B5D600FEC543 /* LCExtension+Cocoa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LCExtension+Cocoa.h"; sourceTree = "<group>"; };
 		D342B7071FA1B5D600FEC543 /* LCExtension+Cocoa.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "LCExtension+Cocoa.m"; sourceTree = "<group>"; };
+		D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseConversation.swift; sourceTree = "<group>"; };
+		D37A04661FF36E6200AD44A9 /* testVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = testVideo.mp4; sourceTree = "<group>"; };
+		D37A04691FF3705500AD44A9 /* testFile.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = testFile.md; sourceTree = "<group>"; };
 		D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseQuery.swift; sourceTree = "<group>"; };
 		D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestBase.swift; sourceTree = "<group>"; };
 		D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseClient.swift; sourceTree = "<group>"; };
@@ -2633,13 +2642,8 @@
 		8CEA86581A777A7900864211 /* TestBase */ = {
 			isa = PBXGroup;
 			children = (
+				D36A1E0C1FF24D67006EFB5F /* Objc */,
 				D30DF4051FDE373900F932BC /* Swift */,
-				8CEA86591A777A7900864211 /* AVTestBase.h */,
-				8CEA865A1A777A7900864211 /* AVTestBase.m */,
-				8CEA865B1A777A7900864211 /* XCTestCase+AsyncTesting.h */,
-				8CEA865C1A777A7900864211 /* XCTestCase+AsyncTesting.m */,
-				8CEA86651A77817B00864211 /* AVTestUtil.h */,
-				8CEA86661A77817B00864211 /* AVTestUtil.m */,
 			);
 			path = TestBase;
 			sourceTree = "<group>";
@@ -2779,8 +2783,8 @@
 		D30DF4051FDE373900F932BC /* Swift */ = {
 			isa = PBXGroup;
 			children = (
-				D30DF4151FDE38EF00F932BC /* LCTestBase.swift */,
 				D30DF41E1FDE396100F932BC /* Bridging-Header */,
+				D30DF4151FDE38EF00F932BC /* LCTestBase.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -2798,12 +2802,26 @@
 			path = "Bridging-Header";
 			sourceTree = "<group>";
 		};
+		D36A1E0C1FF24D67006EFB5F /* Objc */ = {
+			isa = PBXGroup;
+			children = (
+				8CEA86591A777A7900864211 /* AVTestBase.h */,
+				8CEA865A1A777A7900864211 /* AVTestBase.m */,
+				8CEA865B1A777A7900864211 /* XCTestCase+AsyncTesting.h */,
+				8CEA865C1A777A7900864211 /* XCTestCase+AsyncTesting.m */,
+				8CEA86651A77817B00864211 /* AVTestUtil.h */,
+				8CEA86661A77817B00864211 /* AVTestUtil.m */,
+			);
+			path = Objc;
+			sourceTree = "<group>";
+		};
 		D3CDF4E91FE8F2FA0033153E /* Swift */ = {
 			isa = PBXGroup;
 			children = (
 				D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */,
 				D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */,
 				D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */,
+				D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */,
 			);
 			name = Swift;
 			sourceTree = "<group>";
@@ -2818,6 +2836,8 @@
 		D3CDF4EE1FE8F3F70033153E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D37A04691FF3705500AD44A9 /* testFile.md */,
+				D37A04661FF36E6200AD44A9 /* testVideo.mp4 */,
 				70DA62491B4BD7D100D95D4D /* testAudio.mp3 */,
 				70DA62471B4BD21B00D95D4D /* testImage.png */,
 			);
@@ -3912,6 +3932,8 @@
 				9A62AE5B1DF8145900EE0973 /* TestTypedMessage.json in Resources */,
 				704F3C0C1BE0D6030033245C /* testAudio.mp3 in Resources */,
 				704F3C0D1BE0D6030033245C /* testImage.png in Resources */,
+				D37A046B1FF3705500AD44A9 /* testFile.md in Resources */,
+				D37A04681FF36E6200AD44A9 /* testVideo.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4025,6 +4047,8 @@
 				9A62AE591DF8145400EE0973 /* TestTypedMessage.json in Resources */,
 				70DA624A1B4BD7D100D95D4D /* testAudio.mp3 in Resources */,
 				70DA62481B4BD21B00D95D4D /* testImage.png in Resources */,
+				D37A046A1FF3705500AD44A9 /* testFile.md in Resources */,
+				D37A04671FF36E6200AD44A9 /* testVideo.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4115,6 +4139,7 @@
 				D3CDF4EC1FE8F3810033153E /* LCIMTestBase.swift in Sources */,
 				D37CD4121FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */,
 				704F3C0E1BE0D6B50033245C /* AVTestBase.m in Sources */,
+				D36A1E0B1FF246C2006EFB5F /* LCIMTestCaseConversation.swift in Sources */,
 				7085D5241BEA237A00449DC1 /* AVTestUtil.m in Sources */,
 				704F3C0F1BE0D6BB0033245C /* XCTestCase+AsyncTesting.m in Sources */,
 				D342B71B1FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
@@ -4668,6 +4693,7 @@
 				D3CDF4EB1FE8F3810033153E /* LCIMTestBase.swift in Sources */,
 				D37CD4111FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */,
 				8CEA86691A77817B00864211 /* AVTestUtil.m in Sources */,
+				D36A1E0A1FF246C2006EFB5F /* LCIMTestCaseConversation.swift in Sources */,
 				8CEA86621A777A7900864211 /* XCTestCase+AsyncTesting.m in Sources */,
 				D342B7191FA1B5D600FEC543 /* LCExtension+Cocoa.m in Sources */,
 				D3CDF4F01FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */,

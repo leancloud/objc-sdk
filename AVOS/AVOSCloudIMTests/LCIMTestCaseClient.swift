@@ -10,56 +10,6 @@ import XCTest
 
 class LCIMTestCaseClient: LCIMTestBase {
     
-    var globalClient: AVIMClient?
-    
-    override func setUp() {
-        
-        super.setUp()
-        
-        var client: AVIMClient? = AVIMClient(clientId: "LCIMTestCaseClient.globalClient")
-        
-        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
-            
-            client!.open(callback: { (success, error) in
-                
-                XCTAssertTrue(success)
-                XCTAssertNil(error)
-                XCTAssertEqual(client!.status, .opened)
-                
-                semaphore.breakWaiting = true
-            })
-            
-        }) {
-            
-            XCTFail("timeout")
-            
-            client = nil
-        }
-        
-        self.globalClient = client
-    }
-    
-    override func tearDown() {
-        
-        super.tearDown()
-        
-        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
-            
-            self.globalClient?.close(callback: { (success, error) in
-                
-                XCTAssertTrue(success)
-                XCTAssertNil(error)
-                XCTAssertEqual(self.globalClient?.status, .closed)
-                
-                semaphore.breakWaiting = true
-            })
-            
-        }) {
-            
-            XCTFail("timeout")
-        }
-    }
-    
     func testClientOpenCloseMultiple() {
         
         let openCloseClient: AVIMClient = AVIMClient(clientId: "LCIMTestCaseClient.testClientOpenCloseMultiple")
@@ -102,7 +52,7 @@ class LCIMTestCaseClient: LCIMTestBase {
     
     func testCreateConversation() {
         
-        guard let client: AVIMClient = self.globalClient else {
+        guard let client: AVIMClient = LCIMTestBase.baseGlobalClient else {
             
             XCTFail()
             
@@ -143,7 +93,7 @@ class LCIMTestCaseClient: LCIMTestBase {
     
     func testCreateChatRoom() {
         
-        guard let client: AVIMClient = self.globalClient else {
+        guard let client: AVIMClient = LCIMTestBase.baseGlobalClient else {
             
             XCTFail()
             
@@ -184,7 +134,7 @@ class LCIMTestCaseClient: LCIMTestBase {
     
     func testCreateTemporaryConversation() {
         
-        guard let client: AVIMClient = self.globalClient else {
+        guard let client: AVIMClient = LCIMTestBase.baseGlobalClient else {
             
             XCTFail()
             
@@ -228,7 +178,7 @@ class LCIMTestCaseClient: LCIMTestBase {
     
     func testCreateUniqueConversation() {
         
-        guard let client: AVIMClient = self.globalClient else {
+        guard let client: AVIMClient = LCIMTestBase.baseGlobalClient else {
             
             XCTFail()
             
