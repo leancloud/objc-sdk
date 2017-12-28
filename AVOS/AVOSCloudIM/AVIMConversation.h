@@ -439,6 +439,21 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
                           limit:(NSUInteger)limit
                        callback:(AVIMArrayResultBlock)callback;
 
+/**
+ Query Specific Media Type Message from Server.
+
+ @param type Specific Media Type you want to query, see `AVIMMessageMediaType`.
+ @param limit Limit of messages you want to query.
+ @param messageId If set it and MessageId is Valid, the Query Result is Decending base on Timestamp and will Not Include the Message that its messageId is this parameter.
+ @param timestamp Set Zero or Negative, it will query from latest Message and result include the latest Message; Set a valid timestamp, the Query Result is Decending base on Timestamp and will Not Include the Message that its timestamp is this parameter.
+ @param callback Result callback.
+ */
+- (void)queryMediaMessagesFromServerWithType:(AVIMMessageMediaType)type
+                                       limit:(NSUInteger)limit
+                               fromMessageId:(NSString * _Nullable)messageId
+                               fromTimestamp:(int64_t)timestamp
+                                    callback:(AVIMArrayResultBlock)callback;
+
 @end
 
 @interface AVIMChatRoom : AVIMConversation

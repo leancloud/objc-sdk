@@ -19,9 +19,9 @@ let kLCTestBase_AppKey_CN: String = "6vdnmdkdi4fva9i06lt50s4mcsfhppjpzm3zf5zjc9t
 
 class LCTestBase: XCTestCase {
     
-    override func setUp() {
+    override class func setUp() {
+        
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
         
         let appId: String
         let appKey: String
@@ -41,8 +41,8 @@ class LCTestBase: XCTestCase {
         AVOSCloud.setAllLogsEnabled(false)
     }
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    override class func tearDown() {
+        
         super.tearDown()
     }
     
@@ -55,10 +55,7 @@ class LCTestBase: XCTestCase {
     {
         XCTAssertTrue(timeout > 0)
         
-        var timer: TimeInterval = 0
-        let frequency: TimeInterval = 1.0
-        
-        var isTimeout: Bool
+        let currentTimestamp: TimeInterval = Date().timeIntervalSince1970
         
         let semaphore: RunLoopSemaphore = RunLoopSemaphore()
         
@@ -66,21 +63,51 @@ class LCTestBase: XCTestCase {
         
         while semaphore.breakWaiting == false {
             
-            let date: Date = Date.init(timeIntervalSinceNow: frequency)
+            let date: Date = Date.init(timeIntervalSinceNow: 1.0)
             
             XCTAssertTrue(RunLoop.current.run(mode: .defaultRunLoopMode, before: date))
             
-            timer += frequency
-            
-            if timer > timeout {
+            if date.timeIntervalSince1970 - currentTimestamp > timeout {
                 
-                isTimeout = true
+                let isTimeout: Bool = true
                 
                 return isTimeout
             }
         }
         
-        isTimeout = false
+        let isTimeout: Bool = false
+        
+        return isTimeout
+    }
+    
+    static func runloopTestAsync(
+        timeout: TimeInterval = 30,
+        closure: (RunLoopSemaphore) -> (Void)
+        ) -> Bool
+    {
+        XCTAssertTrue(timeout > 0)
+        
+        let currentTimestamp: TimeInterval = Date().timeIntervalSince1970
+        
+        let semaphore: RunLoopSemaphore = RunLoopSemaphore()
+        
+        closure(semaphore)
+        
+        while semaphore.breakWaiting == false {
+            
+            let date: Date = Date.init(timeIntervalSinceNow: 1.0)
+            
+            XCTAssertTrue(RunLoop.current.run(mode: .defaultRunLoopMode, before: date))
+            
+            if date.timeIntervalSince1970 - currentTimestamp > timeout {
+                
+                let isTimeout: Bool = true
+                
+                return isTimeout
+            }
+        }
+        
+        let isTimeout: Bool = false
         
         return isTimeout
     }

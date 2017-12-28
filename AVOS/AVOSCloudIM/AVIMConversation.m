@@ -1175,14 +1175,17 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     /* arg check */
     ///
+    NSString *conversationId = self.conversationId;
+    
+    NSString *oldMessageId = oldMessage ? oldMessage.messageId : nil;
+    
     NSString *errReason = nil;
     
-    if ([NSString lc_isInvalidForCheckingTypeWith:self.conversationId]) {
+    if (!conversationId) {
         
         errReason = @"`conversationId` is invalid.";
         
-    } else if (oldMessage == nil ||
-               [NSString lc_isInvalidForCheckingTypeWith:oldMessage.messageId]) {
+    } else if (!oldMessage || !oldMessageId) {
         
         errReason = @"`oldMessage` is invalid.";
         
@@ -1221,8 +1224,8 @@ static dispatch_queue_t messageCacheOperationQueue;
         
         AVIMPatchItem *patchItem = [[AVIMPatchItem alloc] init];
         
-        patchItem.cid = self.conversationId;
-        patchItem.mid = oldMessage.messageId;
+        patchItem.cid = conversationId;
+        patchItem.mid = oldMessageId;
         patchItem.timestamp = oldMessage.sendTimestamp;
         patchItem.recall = true;
         
@@ -1358,25 +1361,35 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (void)sendACKIfNeeded:(NSArray *)messages
 {
+    AVIMClient *client = self.imClient;
+    
+    if (!client) { return; }
+    
     NSDictionary *userOptions = [AVIMClient _userOptions];
     
     BOOL useUnread = [userOptions[kAVIMUserOptionUseUnread] boolValue];
     
     if (useUnread) {
-        AVIMClient *client = self.imClient;
-        AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
-        genericCommand.cmd = AVIMCommandType_Ack;
-        genericCommand.needResponse = YES;
-        genericCommand.peerId = client.clientId;
         
-        AVIMAckCommand *ackOutCommand = [[AVIMAckCommand alloc] init];
-        ackOutCommand.cid = self.conversationId;
+        AVIMAckCommand *ackCommand = [[AVIMAckCommand alloc] init];
+        
+        ackCommand.cid = self.conversationId;
+        
         int64_t fromts = [[messages firstObject] sendTimestamp];
         int64_t tots   = [[messages lastObject] sendTimestamp];
-        ackOutCommand.fromts = MIN(fromts, tots);
-        ackOutCommand.tots   = MAX(fromts, tots);
-        [genericCommand avim_addRequiredKeyWithCommand:ackOutCommand];
-        [client sendCommand:genericCommand];
+        
+        ackCommand.fromts = MIN(fromts, tots);
+        ackCommand.tots   = MAX(fromts, tots);
+        
+        AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
+        
+        genericCommand.cmd = AVIMCommandType_Ack;
+        genericCommand.ackMessage = ackCommand;
+        
+        dispatch_async([AVIMClient imClientQueue], ^{
+            
+            [client sendCommand:genericCommand];
+        });
     }
 }
 
@@ -1855,6 +1868,158 @@ static dispatch_queue_t messageCacheOperationQueue;
         message.status = AVIMMessageStatusSent;
         message.localClientId = self.imClient.clientId;
     }
+}
+
+- (void)queryMediaMessagesFromServerWithType:(AVIMMessageMediaType)type
+                                       limit:(NSUInteger)limit
+                               fromMessageId:(NSString * _Nullable)messageId
+                               fromTimestamp:(int64_t)timestamp
+                                    callback:(AVIMArrayResultBlock)callback
+{
+    AVIMClient *client = self.imClient;
+    
+    NSString *convId = self.conversationId;
+    
+    NSString *errReason = nil;
+    
+    if (!convId) {
+        
+        errReason = @"This Conversation's ID is invalid.";
+    }
+    
+    if (!client) {
+        
+        errReason = @"This Conversation's Client is invalid.";
+    }
+    
+    if (errReason) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSDictionary *info = @{ @"reason" : errReason };
+            
+            NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                                  code:0
+                                              userInfo:info];
+            
+            callback(nil, aError);
+        });
+        
+        return;
+    }
+    
+    AVIMLogsCommand *logsCommand = [[AVIMLogsCommand alloc] init];
+    
+    logsCommand.cid = convId;
+    
+    logsCommand.lctype = type;
+    
+    logsCommand.l = (int32_t)[self.class validLimit:limit];
+    
+    if (messageId) {
+        
+        logsCommand.mid = messageId;
+    }
+    
+    logsCommand.t = [self.class validTimestamp:timestamp];
+    
+    AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
+    
+    genericCommand.cmd = AVIMCommandType_Logs;
+    genericCommand.logsMessage = logsCommand;
+    
+    [genericCommand setNeedResponse:true];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error){
+        
+        dispatch_async([AVIMClient imClientQueue], ^{
+            
+            AVIMConversation *strongSelf = weakSelf;
+            
+            if (!strongSelf) { return; }
+            
+            if (error) {
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    callback(nil, error);
+                });
+                
+                return;
+            }
+           
+            AVIMLogsCommand *logsInCommand = inCommand.logsMessage;
+            AVIMLogsCommand *logsOutCommand = outCommand.logsMessage;
+            
+            NSMutableArray *messageArray = [[NSMutableArray alloc] init];
+            
+            NSEnumerator *reverseLogsArray = logsInCommand.logsArray.reverseObjectEnumerator;
+            
+            for (AVIMLogItem *logsItem in reverseLogsArray) {
+                
+                AVIMMessage *message = nil;
+                
+                id data = [logsItem data_p];
+                
+                if (![data isKindOfClass:[NSString class]]) {
+                    
+                    AVLoggerError(AVOSCloudIMErrorDomain, @"Received an invalid message.");
+                    
+                    continue;
+                }
+                
+                AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:data];
+                
+                if ([messageObject isValidTypedMessageObject]) {
+                    
+                    AVIMTypedMessage *m = [AVIMTypedMessage messageWithMessageObject:messageObject];
+                    
+                    message = m;
+                    
+                } else {
+                    
+                    AVIMMessage *m = [[AVIMMessage alloc] init];
+                    
+                    m.content = data;
+                    
+                    message = m;
+                }
+                
+                message.clientId = logsItem.from;
+                message.conversationId = logsOutCommand.cid;
+                
+                message.messageId = logsItem.msgId;
+                message.sendTimestamp = logsItem.timestamp;
+                
+                message.mentionAll = logsItem.mentionAll;
+                message.mentionList = logsItem.mentionPidsArray;
+                
+                if (logsItem.hasPatchTimestamp) {
+                    
+                    message.updatedAt = [NSDate dateWithTimeIntervalSince1970:(logsItem.patchTimestamp / 1000.0)];
+                }
+                
+                message.status = AVIMMessageStatusSent;
+                message.localClientId = client.clientId;
+                
+                [messageArray addObject:message];
+            }
+            
+            [strongSelf sendACKIfNeeded:messageArray];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                callback(messageArray, nil);
+            });
+        });
+    }];
+    
+    dispatch_async([AVIMClient imClientQueue], ^{
+        
+        [client sendCommand:genericCommand];
+    });
 }
 
 #pragma mark - Keyed Conversation
