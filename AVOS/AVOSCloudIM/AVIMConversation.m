@@ -1175,14 +1175,17 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     /* arg check */
     ///
+    NSString *conversationId = self.conversationId;
+    
+    NSString *oldMessageId = oldMessage ? oldMessage.messageId : nil;
+    
     NSString *errReason = nil;
     
-    if ([NSString lc_isInvalidForCheckingTypeWith:self.conversationId]) {
+    if (!conversationId) {
         
         errReason = @"`conversationId` is invalid.";
         
-    } else if (oldMessage == nil ||
-               [NSString lc_isInvalidForCheckingTypeWith:oldMessage.messageId]) {
+    } else if (!oldMessage || !oldMessageId) {
         
         errReason = @"`oldMessage` is invalid.";
         
@@ -1221,8 +1224,8 @@ static dispatch_queue_t messageCacheOperationQueue;
         
         AVIMPatchItem *patchItem = [[AVIMPatchItem alloc] init];
         
-        patchItem.cid = self.conversationId;
-        patchItem.mid = oldMessage.messageId;
+        patchItem.cid = conversationId;
+        patchItem.mid = oldMessageId;
         patchItem.timestamp = oldMessage.sendTimestamp;
         patchItem.recall = true;
         
@@ -1998,10 +2001,10 @@ static dispatch_queue_t messageCacheOperationQueue;
                     message.updatedAt = [NSDate dateWithTimeIntervalSince1970:(logsItem.patchTimestamp / 1000.0)];
                 }
                 
-                [messageArray addObject:message];
-                
                 message.status = AVIMMessageStatusSent;
                 message.localClientId = client.clientId;
+                
+                [messageArray addObject:message];
             }
             
             [strongSelf sendACKIfNeeded:messageArray];

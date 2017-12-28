@@ -1201,7 +1201,7 @@ static BOOL is_sync_callback(dispatch_queue_t queue)
     
     NSDictionary *authDataValue = authData[authDataTag];
     
-    if ([NSDictionary lc_isInvalidForCheckingTypeWith:authDataValue]) {
+    if (!authDataValue || [authDataValue isKindOfClass:[NSDictionary class]] == false) {
         
         *error = newErrBlock(authDataTag);
         
@@ -1212,7 +1212,7 @@ static BOOL is_sync_callback(dispatch_queue_t queue)
     
     NSDictionary *platformValue = authDataValue[platform];
     
-    if ([NSDictionary lc_isInvalidForCheckingTypeWith:platformValue]) {
+    if (!platformValue || [platformValue isKindOfClass:[NSDictionary class]] == false) {
         
         *error = newErrBlock(platform);
         
@@ -1243,7 +1243,7 @@ static BOOL is_sync_callback(dispatch_queue_t queue)
     
     NSString *just_id = platformValue[just_id_key];
     
-    if ([NSString lc_isInvalidForCheckingTypeWith:just_id]) {
+    if (!just_id || [just_id isKindOfClass:[NSString class]] == false) {
         
         *error = newErrBlock(just_id_key);
         
@@ -1254,7 +1254,7 @@ static BOOL is_sync_callback(dispatch_queue_t queue)
     
     NSString *access_token = platformValue[@"access_token"];
     
-    if ([NSString lc_isInvalidForCheckingTypeWith:access_token]) {
+    if (!access_token || [access_token isKindOfClass:[NSString class]] == false) {
         
         *error = newErrBlock(@"access_token");
         
@@ -1319,7 +1319,7 @@ static BOOL is_sync_callback(dispatch_queue_t queue)
 + (void)configAndChangeCurrentUserWithUser:(AVUser *)user
                                     object:(id)object
 {
-    if ([NSDictionary lc_isInvalidForCheckingTypeWith:object]) {
+    if (!object || [object isKindOfClass:[NSDictionary class]] == false) {
         return;
     }
     
