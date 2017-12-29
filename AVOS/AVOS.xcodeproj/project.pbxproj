@@ -1738,6 +1738,10 @@
 		D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseQuery.swift; sourceTree = "<group>"; };
 		D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestBase.swift; sourceTree = "<group>"; };
 		D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseClient.swift; sourceTree = "<group>"; };
+		D3DA60C81FF5E42D00AC5F4F /* AVOSCloudLiveQuery.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = AVOSCloudLiveQuery.podspec; path = ../AVOSCloudLiveQuery.podspec; sourceTree = "<group>"; };
+		D3DA60C91FF5E42D00AC5F4F /* AVOSCloud.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = AVOSCloud.podspec; path = ../AVOSCloud.podspec; sourceTree = "<group>"; };
+		D3DA60CA1FF5E42D00AC5F4F /* AVOSCloudIMGroupChat.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = AVOSCloudIMGroupChat.podspec; path = ../AVOSCloudIMGroupChat.podspec; sourceTree = "<group>"; };
+		D3DA60CB1FF5E42D00AC5F4F /* AVOSCloudIM.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = AVOSCloudIM.podspec; path = ../AVOSCloudIM.podspec; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2092,6 +2096,10 @@
 		8C84197A1A5A78E100C5C6C4 = {
 			isa = PBXGroup;
 			children = (
+				D3DA60C91FF5E42D00AC5F4F /* AVOSCloud.podspec */,
+				D3DA60CB1FF5E42D00AC5F4F /* AVOSCloudIM.podspec */,
+				D3DA60CA1FF5E42D00AC5F4F /* AVOSCloudIMGroupChat.podspec */,
+				D3DA60C81FF5E42D00AC5F4F /* AVOSCloudLiveQuery.podspec */,
 				8C8419881A5A791300C5C6C4 /* AVOSCloud */,
 				8C8419C41A5A796000C5C6C4 /* AVOSCloudIM */,
 				8C8419D11A5A796000C5C6C4 /* AVOSCloudIMTests */,
