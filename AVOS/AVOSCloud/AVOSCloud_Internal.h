@@ -9,14 +9,8 @@
 
 #import <AVOSCloud/AVOSCloud.h>
 
-@protocol AVOSCloudModule <NSObject>
-
-+ (void)AVOSCloudDidInitializeWithApplicationId:(NSString *)applicationId clientKey:(NSString *)clientKey;
-
-@end
-
 @interface AVOSCloud ()
 
-+ (void)enableAVOSCloudModule:(Class<AVOSCloudModule>)cls;
++ (BOOL)isSSLPinningEnabled;
 
 @end

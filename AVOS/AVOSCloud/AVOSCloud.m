@@ -28,28 +28,34 @@
 #import "LCRouter.h"
 #import "SDMacros.h"
 
-static AVVerbosePolicy _verbosePolicy       = kAVVerboseShow;
+static AVVerbosePolicy _verbosePolicy = kAVVerboseShow;
 
 static BOOL LCInitialized = NO;
-static NSMutableArray *AVOSCloudModules = nil;
 
 AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
 
+static BOOL LCSSLPinningEnabled = true;
+
 @implementation AVOSCloud
+
++ (void)setSSLPinningEnabled:(BOOL)enabled
+{
+    if (LCInitialized) {
+        
+        [NSException raise:NSInternalInconsistencyException
+                    format:@"SSL Pinning Enabled should be set before +[AVOSCloud setApplicationId:clientKey:]."];
+    }
+    
+    LCSSLPinningEnabled = enabled;
+}
+
++ (BOOL)isSSLPinningEnabled
+{
+    return LCSSLPinningEnabled;
+}
 
 + (void)setAllLogsEnabled:(BOOL)enabled {
     [AVLogger setAllLogsEnabled:enabled];
-}
-
-+ (void)enableAVOSCloudModule:(Class<AVOSCloudModule>)cls {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        AVOSCloudModules = [[NSMutableArray alloc] init];
-    });
-    if (LCInitialized) {
-        [NSException raise:NSInternalInconsistencyException format:@"Should enable module %@ before +[AVOSCloud setApplicationId:clientKey:].", NSStringFromClass(cls)];
-    }
-    [AVOSCloudModules addObject:cls];
 }
 
 + (void)setVerbosePolicy:(AVVerbosePolicy)verbosePolicy {
@@ -97,10 +103,6 @@ AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
     [self initializePaasClient];
     [self updateRouterInBackground];
     [[LCNetworkStatistics sharedInstance] start];
-
-    for (Class<AVOSCloudModule> cls in AVOSCloudModules) {
-        [cls AVOSCloudDidInitializeWithApplicationId:applicationId clientKey:clientKey];
-    }
 
 #if !TARGET_OS_WATCH
     [AVAnalytics startInternally];

@@ -113,6 +113,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface AVOSCloud : NSObject
 
+/**
+ Enable SSL Pinning for all HTTPS Requests.
+ Default is True.
+
+ @param enabled Set whatever you want.
+ */
++ (void)setSSLPinningEnabled:(BOOL)enabled;
+
 /*!
  * Enable logs of all levels and domains. When define DEBUG macro, it's enabled, otherwise, it's not enabled. This is recommended. But you can set it NO, and call AVLogger's methods to control which domains' log should be output.
  */
