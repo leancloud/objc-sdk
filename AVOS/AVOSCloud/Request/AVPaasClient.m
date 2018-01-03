@@ -187,16 +187,17 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             LCURLSessionManager *manager = [[LCURLSessionManager alloc] initWithSessionConfiguration:configuration];
             manager.completionQueue = _completionQueue;
 
-#if LC_SSL_PINNING_ENABLED
-            [manager setSessionDidReceiveAuthenticationChallengeBlock:
-            ^NSURLSessionAuthChallengeDisposition(NSURLSession * _Nonnull session,
-                                                  NSURLAuthenticationChallenge * _Nonnull challenge,
-                                                  NSURLCredential *__autoreleasing  _Nullable * _Nullable credential)
-            {
-                [[LCSSLChallenger sharedInstance] acceptChallenge:challenge];
-                return NSURLSessionAuthChallengeUseCredential;
-            }];
-#endif
+            if ([AVOSCloud isSSLPinningEnabled]) {
+                
+                [manager setSessionDidReceiveAuthenticationChallengeBlock:
+                 ^NSURLSessionAuthChallengeDisposition(NSURLSession * _Nonnull session,
+                                                       NSURLAuthenticationChallenge * _Nonnull challenge,
+                                                       NSURLCredential *__autoreleasing  _Nullable * _Nullable credential)
+                 {
+                     [[LCSSLChallenger sharedInstance] acceptChallenge:challenge];
+                     return NSURLSessionAuthChallengeUseCredential;
+                 }];
+            }
 
             /* Remove all null value of result. */
             LCJSONResponseSerializer *responseSerializer = (LCJSONResponseSerializer *)manager.responseSerializer;
