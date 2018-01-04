@@ -462,35 +462,36 @@ static BOOL AVIMClientHasInstantiated = NO;
     return genericCommand;
 }
 
-- (void)sendOpenCommand {
+- (void)sendOpenCommand
+{
     AVIMGenericCommand *command = self.openCommand;
-
+    
     if (!command) {
-        AVLoggerError(AVLoggerDomainIM, @"Command not found, can not open client.");
+        
         return;
     }
-
+    
     int64_t lastPatchTimestamp  = self.lastPatchTimestamp;
     int64_t lastUnreadTimestamp = self.lastUnreadTimestamp;
-
+    
     if (lastPatchTimestamp)
         command.sessionMessage.lastPatchTime = lastPatchTimestamp;
     if (lastUnreadTimestamp)
         command.sessionMessage.lastUnreadNotifTime = lastUnreadTimestamp;
-
+    
     NSString *actionString = [AVIMCommandFormatter signatureActionForKey:command.op];
     AVIMSignature *signature = [self signatureWithClientId:command.peerId conversationId:nil action:actionString actionOnClientIds:nil];
-
+    
     if ([AVIMClient checkErrorForSignature:signature command:command]) {
         AVLoggerError(AVLoggerDomainIM, @"Signature error, can not open client.");
         return;
     }
     /* NOTE: this will trigger an action that `command.sessionMessage.st = nil;` */
     [command avim_addRequiredKeyForSessionMessageWithSignature:signature];
-
+    
     /* By default, we make non-initiative connection. */
     BOOL force = NO;
-
+    
     if (self.openTimes == 0) {
         /* If force, we make an initiative login. */
         if ([objc_getAssociatedObject(command, @selector(force)) boolValue]) {
@@ -500,7 +501,7 @@ static BOOL AVIMClientHasInstantiated = NO;
              * This connection may be rejected by server because of gone offline by the same client on other device.
              */
             BOOL hasTag = isValidTag(objc_getAssociatedObject(command, @selector(tag)));
-
+            
             if (hasTag) {
                 force = NO;
             } else {
@@ -508,16 +509,16 @@ static BOOL AVIMClientHasInstantiated = NO;
             }
         }
     }
-
+    
     command.sessionMessage.r = !force;
-
+    
     NSString *deviceToken = [AVInstallation currentInstallation].deviceToken;
-
+    
     if (deviceToken)
         command.sessionMessage.deviceToken = deviceToken;
-
+    
     OSAtomicIncrement32(&_openTimes);
-
+    
     [self sendCommand:command];
 }
 
@@ -668,7 +669,10 @@ static BOOL AVIMClientHasInstantiated = NO;
                     return;
                 }
                 
-                [self sendOpenCommand];
+                dispatch_async(imClientQueue, ^{
+                    
+                    [self sendOpenCommand];
+                });
             }];
             
         } else {
@@ -1073,58 +1077,73 @@ static BOOL AVIMClientHasInstantiated = NO;
     });
 }
 
-- (void)websocketOpened:(NSNotification *)notification {
+- (void)websocketOpened:(NSNotification *)notification
+{
     dispatch_async(imClientQueue, ^{
+        
         [self sendOpenCommand];
+        
+        [self changeStatus:AVIMClientStatusOpened];
     });
-    [self changeStatus:AVIMClientStatusOpened];
 }
 
-- (void)websocketClosed:(NSNotification *)notification {
-    [self changeStatus:AVIMClientStatusPaused];
+- (void)websocketClosed:(NSNotification *)notification
+{
+    dispatch_async(imClientQueue, ^{
+        
+        [self changeStatus:AVIMClientStatusPaused];
+    });
 }
 
-- (void)websocketReconnect:(NSNotification *)notification {
-    [self changeStatus:AVIMClientStatusResuming];
+- (void)websocketReconnect:(NSNotification *)notification
+{
+    dispatch_async(imClientQueue, ^{
+        
+        [self changeStatus:AVIMClientStatusResuming];
+    });
 }
 
 #pragma mark - process received messages
 
-- (void)receiveCommand:(NSNotification *)notification {
-    NSDictionary *dict = notification.userInfo;
-
-    AVIMGenericCommand *command = [dict objectForKey:@"command"];
-    // 因为是 notification ，可能收到其它 client 的广播
-    // 根据文档，每条消息都带有 peerId
-    /* Filter out other client's command */
-    if ([command.peerId isEqualToString:self.clientId] == NO) {
-        return;
-    }
-    
-    AVIMCommandType commandType = command.cmd;
-    switch (commandType) {
-        case AVIMCommandType_Session:
-            [self processSessionCommand:command];
-            break;
-        case AVIMCommandType_Direct:
-            [self processDirectCommand:command];
-            break;
-        case AVIMCommandType_Unread:
-            [self processUnreadCommand:command];
-            break;
-        case AVIMCommandType_Conv:
-            [self processConvCommand:command];
-            break;
-        case AVIMCommandType_Rcp:
-            [self processReceiptCommand:command];
-            break;
-        case AVIMCommandType_Patch:
-            [self processPatchCommand:command];
-            break;
-            
-        default:
-            break;
-    }
+- (void)receiveCommand:(NSNotification *)notification
+{
+    dispatch_async(imClientQueue, ^{
+        
+        NSDictionary *dict = notification.userInfo;
+        
+        AVIMGenericCommand *command = [dict objectForKey:@"command"];
+        // 因为是 notification ，可能收到其它 client 的广播
+        // 根据文档，每条消息都带有 peerId
+        /* Filter out other client's command */
+        if ([command.peerId isEqualToString:self.clientId] == NO) {
+            return;
+        }
+        
+        AVIMCommandType commandType = command.cmd;
+        switch (commandType) {
+            case AVIMCommandType_Session:
+                [self processSessionCommand:command];
+                break;
+            case AVIMCommandType_Direct:
+                [self processDirectCommand:command];
+                break;
+            case AVIMCommandType_Unread:
+                [self processUnreadCommand:command];
+                break;
+            case AVIMCommandType_Conv:
+                [self processConvCommand:command];
+                break;
+            case AVIMCommandType_Rcp:
+                [self processReceiptCommand:command];
+                break;
+            case AVIMCommandType_Patch:
+                [self processPatchCommand:command];
+                break;
+                
+            default:
+                break;
+        }
+    });
 }
 
 - (BOOL)insertDistinctMessageId:(NSString *)messageId {
@@ -1611,6 +1630,12 @@ static BOOL AVIMClientHasInstantiated = NO;
         [self changeStatus:AVIMClientStatusClosed];
         /* If the closed command has a code, it's an offline command. */
         if (sessionCommand.code > 0) {
+            
+            if (sessionCommand.code == 4111) {
+                
+                self.openCommand = nil;
+            }
+            
             if ([self.delegate respondsToSelector:@selector(client:didOfflineWithError:)]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self processClientStatusAfterWebSocketOffline];
@@ -1847,14 +1872,28 @@ static BOOL AVIMClientHasInstantiated = NO;
     [AVIMRuntimeHelper callMethodInMainThreadWithTarget:_delegate selector:@selector(imClientResumed:) arguments:arguments];
 }
 
-- (void)receiveError:(NSNotification *)notification {
-    if ([_delegate respondsToSelector:@selector(imClientPaused:error:)]) {
-        NSError *error = [notification.userInfo objectForKey:@"error"];
+- (void)receiveError:(NSNotification *)notification
+{
+    dispatch_async(imClientQueue, ^{
         
-        [self receivePausedWithError:error];
-    } else if ([_delegate respondsToSelector:@selector(imClientPaused:)]) {
-        [self receivePaused];
-    }
+        id<AVIMClientDelegate> delegate = self.delegate;
+        
+        if (!delegate) {
+            
+            return;
+        }
+        
+        if ([delegate respondsToSelector:@selector(imClientPaused:error:)]) {
+            
+            NSError *error = [notification.userInfo objectForKey:@"error"];
+            
+            [self receivePausedWithError:error];
+            
+        } else if ([delegate respondsToSelector:@selector(imClientPaused:)]) {
+            
+            [self receivePaused];
+        }
+    });
 }
 
 + (NSMutableDictionary *)_userOptions {
