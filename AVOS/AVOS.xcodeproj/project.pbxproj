@@ -1198,6 +1198,8 @@
 		D30DF41B1FDE38EF00F932BC /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
 		D36A1E0A1FF246C2006EFB5F /* LCIMTestCaseConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */; };
 		D36A1E0B1FF246C2006EFB5F /* LCIMTestCaseConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */; };
+		D36AC7691FFF50AB00BDCA24 /* AVInstallationTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36AC7681FFF50AB00BDCA24 /* AVInstallationTestCase.swift */; };
+		D36AC76A1FFF50AB00BDCA24 /* AVInstallationTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36AC7681FFF50AB00BDCA24 /* AVInstallationTestCase.swift */; };
 		D37A04671FF36E6200AD44A9 /* testVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D37A04661FF36E6200AD44A9 /* testVideo.mp4 */; };
 		D37A04681FF36E6200AD44A9 /* testVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D37A04661FF36E6200AD44A9 /* testVideo.mp4 */; };
 		D37A046A1FF3705500AD44A9 /* testFile.md in Resources */ = {isa = PBXBuildFile; fileRef = D37A04691FF3705500AD44A9 /* testFile.md */; };
@@ -1733,6 +1735,7 @@
 		D30DF41C1FDE391C00F932BC /* AVOSCloud-macOSTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVOSCloud-macOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		D30DF41D1FDE391D00F932BC /* AVOSCloud-iOSTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVOSCloud-iOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseConversation.swift; sourceTree = "<group>"; };
+		D36AC7681FFF50AB00BDCA24 /* AVInstallationTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVInstallationTestCase.swift; sourceTree = "<group>"; };
 		D37A04661FF36E6200AD44A9 /* testVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = testVideo.mp4; sourceTree = "<group>"; };
 		D37A04691FF3705500AD44A9 /* testFile.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = testFile.md; sourceTree = "<group>"; };
 		D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseQuery.swift; sourceTree = "<group>"; };
@@ -2756,6 +2759,7 @@
 			isa = PBXGroup;
 			children = (
 				D30DF3F61FDE2CD200F932BC /* AVUserTestCase.swift */,
+				D36AC7681FFF50AB00BDCA24 /* AVInstallationTestCase.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -4214,6 +4218,7 @@
 				70F315521BDE510D00D691B3 /* UserBar.m in Sources */,
 				D30DF4171FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 				70F315531BDE510D00D691B3 /* UserInfo.m in Sources */,
+				D36AC76A1FFF50AB00BDCA24 /* AVInstallationTestCase.swift in Sources */,
 				70F315541BDE510D00D691B3 /* XCTestCase+AsyncTesting.m in Sources */,
 				70F3154D1BDE50D100D691B3 /* AVTestBase.m in Sources */,
 				70F3154E1BDE50D100D691B3 /* AVTestUtil.m in Sources */,
@@ -4561,6 +4566,7 @@
 				8CEEABCF1ABC179300B9E757 /* AVInstallationTest.m in Sources */,
 				8CEEABD61ABC179300B9E757 /* AVSubclassTest.m in Sources */,
 				838B32EE1CE1953800CAEBF8 /* LCRouterTest.m in Sources */,
+				D36AC7691FFF50AB00BDCA24 /* AVInstallationTestCase.swift in Sources */,
 				8CEEABCE1ABC179300B9E757 /* AVHelpersTest.m in Sources */,
 				8CEEABD91ABC179300B9E757 /* Thread.m in Sources */,
 				8CEA86671A77817B00864211 /* AVTestUtil.m in Sources */,
