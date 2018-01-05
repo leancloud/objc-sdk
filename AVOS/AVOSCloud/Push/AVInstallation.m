@@ -94,7 +94,22 @@
     
     deviceToken = [deviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
     
-    if (!self.deviceToken || [self.deviceToken isEqualToString:deviceToken] == false) {
+    NSString *oldDeviceToken = self.deviceToken;
+    
+    NSString *oldTeamId = self.apnsTeamId;
+    
+    BOOL shouldUpdateDeviceToken = (
+                                    !oldDeviceToken ||
+                                    false == [oldDeviceToken isEqualToString:deviceToken]
+                                    );
+    
+    BOOL shouldUpdateTeamId = (
+                               (!oldTeamId && teamId) ||
+                               (oldTeamId && !teamId) ||
+                               (oldTeamId && teamId && false == [oldTeamId isEqualToString:teamId])
+                               );
+    
+    if (shouldUpdateDeviceToken || shouldUpdateTeamId) {
         
         self.deviceToken = deviceToken;
         
