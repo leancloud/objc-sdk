@@ -55,43 +55,84 @@ func script_processor(launchPath: String, arguments: [String], needOutput: Bool)
         
         return .fail(
             """
+            
+            ❌❌❌
+            
             Timeout with Command: [\(arguments.joined(separator: " "))].
             
             In general, there are two cases.
             
             1. Task Process Deadlock
             
-            2. The running time of the Task Process is more than Timeout(\(timeout) seconds)
+            2. The running time of the Task Process is more than Timeout('\(timeout)' seconds)
             
             If it's the secondary case, you can change the Timeout.
+            
             """
         )
+    }
+    
+    var outputString: String? = nil
+    
+    if let outputData: Data = outputPipe?.fileHandleForReading.readDataToEndOfFile(),
+        let outputStr: String = String.init(data: outputData, encoding: .utf8),
+        !outputStr.isEmpty {
+        
+        outputString = outputStr
+    }
+    
+    if task.terminationStatus == 0 {
+        
+        if outputString == nil {
+            
+            outputString =
+            """
+            
+            ✅✅✅
+            
+            Command [\(launchPath) \(arguments.joined(separator: " "))] Success.
+            
+            """
+        }
+        
+        return .success(outputString)
         
     } else {
         
-        if task.terminationStatus == 0 {
+        let errorData: Data = errorPipe.fileHandleForReading.readDataToEndOfFile()
+        
+        let errorString: String = String.init(data: errorData, encoding: .utf8)!
+        
+        if let outputStr: String = outputString {
             
-            let outputData: Data? = outputPipe?.fileHandleForReading.readDataToEndOfFile()
-            
-            let outputString: String? = outputData != nil
-                ? String.init(data: outputData!, encoding: .utf8)
-                : Optional<String>.init("Command [\(launchPath) \(arguments.joined(separator: " "))] Success.")
-            
-            return .success(outputString)
+            return .fail(
+                """
+                
+                ❌❌❌
+                
+                \(outputStr)
+                
+                \(errorString)
+                
+                """
+            )
             
         } else {
             
-            let errorData: Data = errorPipe.fileHandleForReading.readDataToEndOfFile()
-            
-            let errorString: String = String.init(data: errorData, encoding: .utf8)
-                ?? "Unknown Error with Command: [\(arguments.joined(separator: " "))]."
-            
-            return .fail(errorString)
+            return .fail(
+                """
+                
+                ❌❌❌
+                
+                \(errorString)
+                
+                """
+            )
         }
     }
 }
 
-func bash(command: String, arguments: [String], needOutput: Bool) -> Result {
+func bash(command: String, arguments: [String]) -> Result {
     
     let commandPathResult: Result = script_processor(
         launchPath: "/bin/bash",
@@ -105,13 +146,21 @@ func bash(command: String, arguments: [String], needOutput: Bool) -> Result {
         
         guard let path: String = (string as? String)?.trimmingCharacters(in: .whitespacesAndNewlines) else {
             
-            return .fail("Not found a path for '\(command)'.")
+            return .fail(
+                """
+                
+                ❌❌❌
+                
+                Not found a path for '\(command)'.
+                
+                """
+            )
         }
         
         return script_processor(
             launchPath: path,
             arguments: arguments,
-            needOutput: needOutput
+            needOutput: true
         )
         
     case .fail(_):
@@ -129,20 +178,19 @@ func xcodebuild_list(projectPath: String) -> Result {
     
     let result: Result = bash(
         command: "xcodebuild",
-        arguments: arguments,
-        needOutput: true
+        arguments: arguments
     )
     
     switch result {
         
-    case .success(let output):
+    case .success(let string):
         
-        guard let _output: String = output as? String else {
+        guard let output: String = string as? String else {
             
-            return .fail("Not get a valid output with Command: [\(arguments.joined(separator: " "))].")
+            fatalError()
         }
         
-        let lines: [String] = _output.components(separatedBy: CharacterSet.newlines)
+        let lines: [String] = output.components(separatedBy: CharacterSet.newlines)
             
             .map { (item: String) -> (String) in
                 
@@ -218,27 +266,26 @@ func xcodebuild_building_schemes(projectPath: String, schemes: [String], buildCo
                 "-project", projectPath,
                 "-scheme", scheme,
                 "-configuration", buildConfiguration,
-                "build"
+                "build",
+                "-quiet"
             ]
             
             let result: Result = bash(
                 command: "xcodebuild",
-                arguments: arguments,
-                needOutput: false
+                arguments: arguments
             )
             
             switch result {
                 
-            case .success(let output):
+            case .success(let string):
                 
-                if let _output: String = output as? String {
+                guard let output: String = string as? String else {
                     
-                    print(_output)
-                    
-                } else {
-                    
-                    print("Command [\(arguments.joined(separator: " "))] Success.")
+                    fatalError()
                 }
+                
+                print(output)
+                
             case .fail(_):
                 
                 return result
@@ -246,43 +293,45 @@ func xcodebuild_building_schemes(projectPath: String, schemes: [String], buildCo
         }
     }
     
-    return .success("The Build of All Schemes are Success.")
+    return .success(
+        """
+        
+        ✅✅✅
+        
+        The Build of All Schemes are Success.
+        
+        """
+    )
 }
 
 func check_if_installed_xcodebuild() -> Result {
     
     let result: Result = bash(
         command: "xcodebuild",
-        arguments: ["-version"],
-        needOutput: true
+        arguments: ["-version"]
     )
     
     return result
 }
 
-let projectPath: String = "AVOS/AVOS.xcodeproj"
-
 func main() {
     
-    let isInstalledXcodebuild: Result = check_if_installed_xcodebuild()
+    let projectPath: String = "AVOS/AVOS.xcodeproj"
     
-    guard case .success(_) = isInstalledXcodebuild else {
+    switch check_if_installed_xcodebuild() {
         
-        if case let .fail(error) = isInstalledXcodebuild {
-            
-            print(error)
-            
-        } else {
-            
-            print("Not found 'xcodebuild'.")
-        }
+    case .success(_):
+        
+        break
+        
+    case .fail(let error):
+        
+        print(error)
         
         return
     }
     
-    let listResult: Result = xcodebuild_list(projectPath: projectPath)
-    
-    switch listResult {
+    switch xcodebuild_list(projectPath: projectPath) {
         
     case .success(let stringArray):
         
@@ -295,64 +344,29 @@ func main() {
         
         let buildConfigurations: [String] = get_project_all_buildConfigurations(lines: lines)
         
-        let buildResult: Result = xcodebuild_building_schemes(
+        switch xcodebuild_building_schemes(
             projectPath: projectPath,
             schemes: schemes,
             buildConfigurations: buildConfigurations
-        )
-        
-        switch buildResult {
+        ) {
             
         case .success(let string):
             
-            var output: String
-            
-            if let str: String = string as? String {
+            guard let output: String = string as? String else {
                 
-                output = str
-                
-            } else {
-                
-                output = String(describing: string)
+                fatalError()
             }
             
-            
-            print(
-                """
-                
-                ✅✅✅
-                
-                \(output)
-                
-                """
-            )
+            print(output)
             
         case .fail(let error):
             
-            print(
-                """
-                
-                ❌❌❌
-                
-                \(error)
-                
-                """
-            )
+            print(error)
         }
-        
     case .fail(let error):
         
-        print(
-            """
-            
-            ❌❌❌
-            
-            \(error)
-            
-            """
-        )
+        print(error)
     }
 }
 
 main()
-
