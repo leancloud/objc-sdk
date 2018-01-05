@@ -93,10 +93,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) NSArray *channels;
 
 /// The apns topic for universal push notification.
-@property (nonatomic, copy, readonly, nullable) NSString *apnsTopic;
+@property (nonatomic, copy, nullable) NSString *apnsTopic;
 
 /// The apns teamId for universal push notification.
-@property (nonatomic, copy, readonly, nullable) NSString *apnsTeamId;
+@property (nonatomic, copy, nullable) NSString *apnsTeamId;
 
 @end
 

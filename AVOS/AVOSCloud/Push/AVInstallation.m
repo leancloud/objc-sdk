@@ -16,15 +16,6 @@
 
 @implementation AVInstallation
 
-@synthesize deviceType  = _deviceType;
-@synthesize installationId = _installationId;
-@synthesize deviceToken  = _deviceToken;
-@synthesize deviceProfile = _deviceProfile;
-@synthesize badge = _badge;
-@synthesize timeZone  = _timeZone;
-@synthesize channels  = _channels;
-
-
 + (AVQuery *)query
 {
     AVQuery *query = [[AVQuery alloc] initWithClassName:@"_Installation"];
@@ -256,6 +247,30 @@
     }
     _deviceProfile = deviceProfile;
     [self addSetRequest:deviceProfileTag object:self.deviceProfile];
+}
+
+- (void)setApnsTopic:(NSString *)apnsTopic
+{
+    if (_apnsTopic && [_apnsTopic isEqualToString:apnsTopic]) {
+        
+        return;
+    }
+    
+    _apnsTopic = apnsTopic;
+    
+    [self addSetRequest:@"apnsTopic" object:apnsTopic];
+}
+
+- (void)setApnsTeamId:(NSString *)apnsTeamId
+{
+    if (_apnsTeamId && [_apnsTeamId isEqualToString:apnsTeamId]) {
+        
+        return;
+    }
+    
+    _apnsTeamId = apnsTeamId;
+    
+    [self addSetRequest:@"apnsTeamId" object:apnsTeamId];
 }
 
 - (void)postProcessBatchRequests:(NSMutableArray *)requests {
