@@ -411,12 +411,39 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
 #endif
 }
 
-+ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken constructingInstallationWithBlock:(void (^)(AVInstallation *))block {
++ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    [self handleRemoteNotificationsWithDeviceToken:deviceToken
+                                            teamId:nil
+                 constructingInstallationWithBlock:nil];
+}
+
++ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+                                          teamId:(NSString *)teamId
+{
+    [self handleRemoteNotificationsWithDeviceToken:deviceToken
+                                            teamId:teamId
+                 constructingInstallationWithBlock:nil];
+}
+
++ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+               constructingInstallationWithBlock:(void (^)(AVInstallation *))block
+{
+    [self handleRemoteNotificationsWithDeviceToken:deviceToken
+                                            teamId:nil
+                 constructingInstallationWithBlock:block];
+}
+
++ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+                                          teamId:(NSString *)teamId
+               constructingInstallationWithBlock:(void (^)(AVInstallation *))block
+{
     AVInstallation *installation = [AVInstallation currentInstallation];
 
     @weakify(installation, weakInstallation);
 
-    [installation setDeviceTokenFromData:deviceToken];
+    [installation setDeviceTokenFromData:deviceToken
+                                  teamId:teamId];
 
     if (block) {
         block(installation);
@@ -429,10 +456,6 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
             AVLoggerInfo(AVLoggerDomainIM, @"Installation saved OK, object id: %@.", weakInstallation.objectId);
         }
     }];
-}
-
-+ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    [self handleRemoteNotificationsWithDeviceToken:deviceToken constructingInstallationWithBlock:nil];
 }
 
 @end

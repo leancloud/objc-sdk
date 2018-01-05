@@ -13,9 +13,11 @@
 @property (nonatomic, copy) NSString *timeZone;
 @property (nonatomic, copy) NSString *deviceType;
 
+@property (nonatomic, copy) NSString *apnsTopic;
+@property (nonatomic, copy) NSString *apnsTeamId;
+
 +(AVQuery *)installationQuery;
 +(AVInstallation *)installation;
-
 
 +(NSString *)deviceType;
 

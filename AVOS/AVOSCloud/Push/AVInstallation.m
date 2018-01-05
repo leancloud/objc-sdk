@@ -79,18 +79,29 @@
     return self;
 }
 
-- (void)setDeviceTokenFromData:(NSData *)deviceTokenData {
-    [self setDeviceTokenFromData:deviceTokenData submit:NO];
+- (void)setDeviceTokenFromData:(NSData *)deviceTokenData
+{
+    [self setDeviceTokenFromData:deviceTokenData
+                          teamId:nil];
 }
 
-- (void)setDeviceTokenFromData:(NSData *)deviceTokenData submit:(BOOL)submit
+- (void)setDeviceTokenFromData:(NSData *)deviceTokenData
+                        teamId:(NSString *)teamId
 {
-    NSString *deviceToken = [[deviceTokenData description] stringByTrimmingCharactersInSet: [NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    NSCharacterSet *charactersSet = [NSCharacterSet characterSetWithCharactersInString:@"<>"];
+    
+    NSString *deviceToken = [deviceTokenData.description stringByTrimmingCharactersInSet:charactersSet];
+    
     deviceToken = [deviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
-    if (submit || ![self.deviceToken isEqualToString:deviceToken]) {
+    
+    if (!self.deviceToken || [self.deviceToken isEqualToString:deviceToken] == false) {
+        
         self.deviceToken = deviceToken;
-
+        
+        self.apnsTeamId = teamId;
+        
         [self.requestManager synchronize:^{
+            
             [self updateInstallationDictionary:[self.requestManager setDict]];
         }];
     }
@@ -181,6 +192,9 @@
     }
     if (self.apnsTopic) {
         [data setObject:self.apnsTopic forKey:topicTag];
+    }
+    if (self.apnsTeamId) {
+        [data setObject:self.apnsTeamId forKey:@"apnsTeamId"];
     }
 
     NSDictionary *updationData = [AVObjectUtils dictionaryFromObject:self.localData];

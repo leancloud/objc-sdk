@@ -288,19 +288,44 @@ NS_ASSUME_NONNULL_BEGIN
     AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.5.0. It will be removed in future.");
 
 /**
- * Handle device token registered from APNs.
- * @param deviceToken Device token issued by APNs.
- * This method should be called in -[UIApplication application:didRegisterForRemoteNotificationsWithDeviceToken:].
+ Handle device token registered from APNs.
+ This method should be called in -[UIApplication application:didRegisterForRemoteNotificationsWithDeviceToken:].
+
+ @param deviceToken Device token issued by APNs.
  */
 + (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
 
 /**
- * Handle device token registered from APNs.
- * @param deviceToken Device token issued by APNs.
- * @param block       Constructing block of [AVInstallation currentInstallation].
- * This method should be called in -[UIApplication application:didRegisterForRemoteNotificationsWithDeviceToken:].
+ Handle device token registered from APNs, with a team ID.
+ This method should be called in -[UIApplication application:didRegisterForRemoteNotificationsWithDeviceToken:].
+
+ @param deviceToken Device token issued by APNs.
+ @param teamId Team ID.
  */
-+ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken constructingInstallationWithBlock:(nullable void (^)(AVInstallation *currentInstallation))block;
++ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+                                          teamId:(NSString * _Nullable)teamId;
+
+/**
+ Handle device token registered from APNs.
+ This method should be called in -[UIApplication application:didRegisterForRemoteNotificationsWithDeviceToken:].
+
+ @param deviceToken Device token issued by APNs.
+ @param block Constructing block of [AVInstallation currentInstallation].
+ */
++ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+               constructingInstallationWithBlock:(void(^ _Nullable)(AVInstallation *currentInstallation))block;
+
+/**
+ Handle device token registered from APNs, with a team ID.
+ This method should be called in -[UIApplication application:didRegisterForRemoteNotificationsWithDeviceToken:].
+
+ @param deviceToken Device token issued by APNs.
+ @param teamId Team ID.
+ @param block Constructing block of [AVInstallation currentInstallation].
+ */
++ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+                                          teamId:(NSString * _Nullable)teamId
+               constructingInstallationWithBlock:(void(^ _Nullable)(AVInstallation *))block;
 
 @end
 
