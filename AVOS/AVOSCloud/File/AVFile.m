@@ -369,7 +369,7 @@ static LCHTTPSessionManager *imageSessionManager = nil;
     [self downloadFileImpl:^(BOOL succeeded, NSError *error) {
         NSString *path = self.localPath;
         NSInputStream * inputStream = [[NSInputStream alloc] initWithFileAtPath:path];
-        if (resultBlock) resultBlock(inputStream, nil);
+        if (resultBlock) resultBlock(inputStream, error);
     } progressBlock:^(NSInteger percentDone) {
         if (progressBlock) progressBlock(percentDone);
     }];
