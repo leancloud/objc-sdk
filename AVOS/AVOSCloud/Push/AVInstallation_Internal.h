@@ -16,7 +16,6 @@
 +(AVQuery *)installationQuery;
 +(AVInstallation *)installation;
 
-
 +(NSString *)deviceType;
 
 +(NSString *)className;

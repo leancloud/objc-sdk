@@ -30,8 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
  applications running on OS X, because they cannot receive push notifications.
  */
 
-@interface AVInstallation : AVObject {
-}
+@interface AVInstallation : AVObject
 
 /** @name Targeting Installations */
 
@@ -57,9 +56,18 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  Sets the device token string property from an NSData-encoded token.
  
- @param deviceTokenData  NSData-encoded device token.
+ @param deviceTokenData NSData-encoded device token.
  */
 - (void)setDeviceTokenFromData:(NSData *)deviceTokenData;
+
+/**
+ Sets the device token string property from an NSData-encoded token, with a team ID.
+ 
+ @param deviceTokenData NSData-encoded device token
+ @param teamId Team ID
+ */
+- (void)setDeviceTokenFromData:(NSData *)deviceTokenData
+                        teamId:(NSString * _Nullable)teamId;
 
 /** @name Properties */
 
@@ -86,6 +94,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// The apns topic for universal push notification.
 @property (nonatomic, copy, nullable) NSString *apnsTopic;
+
+/// The apns teamId for universal push notification.
+@property (nonatomic, copy, nullable) NSString *apnsTeamId;
 
 @end
 

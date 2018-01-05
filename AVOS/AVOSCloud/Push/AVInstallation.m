@@ -16,15 +16,6 @@
 
 @implementation AVInstallation
 
-@synthesize deviceType  = _deviceType;
-@synthesize installationId = _installationId;
-@synthesize deviceToken  = _deviceToken;
-@synthesize deviceProfile = _deviceProfile;
-@synthesize badge = _badge;
-@synthesize timeZone  = _timeZone;
-@synthesize channels  = _channels;
-
-
 + (AVQuery *)query
 {
     AVQuery *query = [[AVQuery alloc] initWithClassName:@"_Installation"];
@@ -79,18 +70,44 @@
     return self;
 }
 
-- (void)setDeviceTokenFromData:(NSData *)deviceTokenData {
-    [self setDeviceTokenFromData:deviceTokenData submit:NO];
+- (void)setDeviceTokenFromData:(NSData *)deviceTokenData
+{
+    [self setDeviceTokenFromData:deviceTokenData
+                          teamId:nil];
 }
 
-- (void)setDeviceTokenFromData:(NSData *)deviceTokenData submit:(BOOL)submit
+- (void)setDeviceTokenFromData:(NSData *)deviceTokenData
+                        teamId:(NSString *)teamId
 {
-    NSString *deviceToken = [[deviceTokenData description] stringByTrimmingCharactersInSet: [NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    NSCharacterSet *charactersSet = [NSCharacterSet characterSetWithCharactersInString:@"<>"];
+    
+    NSString *deviceToken = [deviceTokenData.description stringByTrimmingCharactersInSet:charactersSet];
+    
     deviceToken = [deviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
-    if (submit || ![self.deviceToken isEqualToString:deviceToken]) {
+    
+    NSString *oldDeviceToken = self.deviceToken;
+    
+    NSString *oldTeamId = self.apnsTeamId;
+    
+    BOOL shouldUpdateDeviceToken = (
+                                    !oldDeviceToken ||
+                                    false == [oldDeviceToken isEqualToString:deviceToken]
+                                    );
+    
+    BOOL shouldUpdateTeamId = (
+                               (!oldTeamId && teamId) ||
+                               (oldTeamId && !teamId) ||
+                               (oldTeamId && teamId && false == [oldTeamId isEqualToString:teamId])
+                               );
+    
+    if (shouldUpdateDeviceToken || shouldUpdateTeamId) {
+        
         self.deviceToken = deviceToken;
-
+        
+        self.apnsTeamId = teamId;
+        
         [self.requestManager synchronize:^{
+            
             [self updateInstallationDictionary:[self.requestManager setDict]];
         }];
     }
@@ -182,6 +199,9 @@
     if (self.apnsTopic) {
         [data setObject:self.apnsTopic forKey:topicTag];
     }
+    if (self.apnsTeamId) {
+        [data setObject:self.apnsTeamId forKey:@"apnsTeamId"];
+    }
 
     NSDictionary *updationData = [AVObjectUtils dictionaryFromObject:self.localData];
 
@@ -227,6 +247,30 @@
     }
     _deviceProfile = deviceProfile;
     [self addSetRequest:deviceProfileTag object:self.deviceProfile];
+}
+
+- (void)setApnsTopic:(NSString *)apnsTopic
+{
+    if (_apnsTopic && [_apnsTopic isEqualToString:apnsTopic]) {
+        
+        return;
+    }
+    
+    _apnsTopic = apnsTopic;
+    
+    [self addSetRequest:@"apnsTopic" object:apnsTopic];
+}
+
+- (void)setApnsTeamId:(NSString *)apnsTeamId
+{
+    if (_apnsTeamId && [_apnsTeamId isEqualToString:apnsTeamId]) {
+        
+        return;
+    }
+    
+    _apnsTeamId = apnsTeamId;
+    
+    [self addSetRequest:@"apnsTeamId" object:apnsTeamId];
 }
 
 - (void)postProcessBatchRequests:(NSMutableArray *)requests {
