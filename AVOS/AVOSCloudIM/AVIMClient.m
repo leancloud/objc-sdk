@@ -707,11 +707,21 @@ static BOOL AVIMClientHasInstantiated = NO;
         AVIMSessionCommand *sessionCommand = [[AVIMSessionCommand alloc] init];
         [genericCommand avim_addRequiredKeyWithCommand:sessionCommand];
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
-            if (!error) {
-                [self.socketWrapper close];
-                [self processClientStatusAfterWebSocketOffline];
-            }
-            [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+            
+            dispatch_async(imClientQueue, ^{
+                
+                if (!error) {
+                    
+                    self.openCommand = nil;
+                    
+                    [self.socketWrapper close];
+                    
+                    [self processClientStatusAfterWebSocketOffline];
+                }
+                
+                [AVIMBlockHelper callBooleanResultBlock:callback
+                                                  error:error];
+            });
         }];
         [self sendCommand:genericCommand withBeforeSendingBlock:^{
             [self changeStatus:AVIMClientStatusClosing];
