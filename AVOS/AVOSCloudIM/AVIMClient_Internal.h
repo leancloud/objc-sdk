@@ -11,6 +11,20 @@
 #import "LCIMConversationCache.h"
 #import "AVIMConversation_Internal.h"
 
+/*
+ Use dispatch's specific to Assert ('current queue' == 'imClient')
+ */
+///
+#ifdef DEBUG
+
+static void *imClientQueue_specific_key;
+static void *imClientQueue_specific_value;
+
+#define AssertRunInIMClientQueue NSAssert(dispatch_get_specific(imClientQueue_specific_key) == imClientQueue_specific_value, @"This internal method should run in `imClientQueue`.")
+
+#endif
+///
+
 @interface AVIMClient ()
 
 + (NSMutableDictionary *)_userOptions;

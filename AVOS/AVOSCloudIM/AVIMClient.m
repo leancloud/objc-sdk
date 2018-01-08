@@ -80,6 +80,19 @@ static BOOL AVIMClientHasInstantiated = NO;
     
     dispatch_once(&onceToken, ^{
         imClientQueue = dispatch_queue_create("cn.leancloud.im", DISPATCH_QUEUE_SERIAL);
+/*
+ Add specific to 'imClientQueue'
+ */
+///
+#ifdef DEBUG
+        imClientQueue_specific_key = (__bridge void *)imClientQueue;
+        imClientQueue_specific_value = (__bridge void *)imClientQueue;
+        dispatch_queue_set_specific(imClientQueue,
+                                    imClientQueue_specific_key,
+                                    imClientQueue_specific_value,
+                                    NULL);
+#endif
+///
     });
 }
 
