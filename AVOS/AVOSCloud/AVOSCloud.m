@@ -34,7 +34,7 @@ static BOOL LCInitialized = NO;
 
 AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
 
-static BOOL LCSSLPinningEnabled = true;
+static BOOL LCSSLPinningEnabled = false;
 
 @implementation AVOSCloud
 
