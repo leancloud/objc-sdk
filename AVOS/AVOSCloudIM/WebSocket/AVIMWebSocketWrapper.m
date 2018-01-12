@@ -655,8 +655,6 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         return;
     }
     
-    AVLoggerInfo(AVLoggerDomainIM, LCIM_OUT_COMMAND_LOG_FORMAT, [genericCommand avim_description]);
-    
     AVIMCommandResultBlock callback = [genericCommand callback];
     
     BOOL needResponse = [genericCommand needResponse];
@@ -721,6 +719,8 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
             callback(genericCommand, nil, nil);
         }
     }
+    
+    AVLoggerInfo(AVLoggerDomainIM, LCIM_OUT_COMMAND_LOG_FORMAT, [genericCommand avim_description]);
     
     [webSocket send:data];
 }
