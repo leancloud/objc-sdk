@@ -1262,10 +1262,15 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         
         if (callback) {
             
-            NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorTimeout
-                                                   reason:@"Request Timeout."];
+            NSString *reason = @"Command Timeout.";
             
-            callback(command, nil, error);
+            NSDictionary *info = @{ @"reason" : reason };
+            
+            NSError *aError = [NSError errorWithDomain:kLeanCloudIMErrorDomain
+                                                  code:LeanCloudIMErrorCode_CommandTimeout
+                                              userInfo:info];
+            
+            callback(command, nil, aError);
         }
     }
     
