@@ -8,6 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const kLeanCloudIMErrorDomain;
+
+typedef NS_ENUM(NSInteger, LeanCloudIMErrorCode) {
+    
+    /*
+     IM Command Timeout
+     */
+    LeanCloudIMErrorCode_CommandTimeout = -20000,
+};
+
 @interface AVIMErrorUtil : NSObject
 + (NSError *)errorWithCode:(NSInteger)code reason:(NSString *)reason;
 @end
