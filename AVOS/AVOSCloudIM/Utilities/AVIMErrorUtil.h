@@ -13,6 +13,10 @@ extern NSString * const kLeanCloudIMErrorDomain;
 typedef NS_ENUM(NSInteger, LeanCloudIMErrorCode) {
     
     /*
+     IM Module Error Code Number's Style is '-2XXXX'
+     */
+    
+    /*
      IM Command Timeout
      */
     LeanCloudIMErrorCode_CommandTimeout = -20000,
