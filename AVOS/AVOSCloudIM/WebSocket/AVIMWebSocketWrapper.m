@@ -287,8 +287,16 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
                     
                 } else {
                     
-                    [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
-                                         error:aError];
+                    NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+                    
+                    NSDictionary *userInfo = @{
+                                               @"error" : aError,
+                                               @"willReconnect" : @(true)
+                                               };
+                    
+                    [center postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
+                                          object:self
+                                        userInfo:userInfo];
                 }
             }];
         }
@@ -305,8 +313,10 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
             
             [self _openWithCallback:nil blockBeforeOpen:^{
                 
-                [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
-                                     error:nil];
+                NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+                
+                [center postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
+                                      object:self];
             }];
         }
     });
@@ -352,8 +362,10 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
             
             [self _openWithCallback:nil blockBeforeOpen:^{
                 
-                [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
-                                     error:nil];
+                NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+                
+                [center postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
+                                      object:self];
             }];
         }
         
@@ -382,9 +394,17 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
                                                      error:aError];
                     
                 } else {
+
+                    NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
                     
-                    [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
-                                         error:aError];
+                    NSDictionary *userInfo = @{
+                                               @"error" : aError,
+                                               @"willReconnect" : @(true)
+                                               };
+                    
+                    [center postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
+                                          object:self
+                                        userInfo:userInfo];
                 }
             }];
         }
@@ -509,9 +529,17 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
                                                  error:error];
                 
             } else {
+
+                NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
                 
-                [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
-                                     error:error];
+                NSDictionary *userInfo = @{
+                                           @"error" : error,
+                                           @"willReconnect" : @(false)
+                                           };
+                
+                [center postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
+                                      object:self
+                                    userInfo:userInfo];
             }
             
             return;
@@ -828,8 +856,10 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         
     } else {
         
-        [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_OPENED
-                             error:nil];
+        NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+        
+        [center postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_OPENED
+                              object:self];
     }
 }
 
@@ -851,10 +881,20 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         
     } else {
         
-        [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
-                             error:error];
+        BOOL needReconnect = _needReconnect;
         
-        if (_needReconnect) {
+        NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+        
+        NSDictionary *userInfo = @{
+                                   @"error" : error,
+                                   @"willReconnect" : @(needReconnect)
+                                   };
+        
+        [center postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
+                              object:self
+                            userInfo:userInfo];
+        
+        if (needReconnect) {
             
             [self setupReconnectBlock];
         }
@@ -864,6 +904,12 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 - (void)webSocket:(AVIMWebSocket *)webSocket didFailWithError:(NSError *)error
 {
     AssertRunInSerialQueue;
+    
+    if (!error) {
+        
+        error = [AVIMErrorUtil errorWithCode:0
+                                      reason:@"WebSocket failed with an Unknown Error."];
+    }
     
     AVLoggerError(AVLoggerDomainIM, @"Websocket Open Failed with Error: %@", error);
     
@@ -878,10 +924,20 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         
     } else {
         
-        [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
-                             error:error];
+        BOOL needReconnect = _needReconnect;
         
-        if (_needReconnect) {
+        NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+        
+        NSDictionary *userInfo = @{
+                                   @"error" : error,
+                                   @"willReconnect" : @(needReconnect)
+                                   };
+        
+        [center postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
+                              object:self
+                            userInfo:userInfo];
+        
+        if (needReconnect) {
             
             [self setupReconnectBlock];
         }
@@ -1094,8 +1150,10 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
     
     _reconnectInterval = (_reconnectInterval * 2);
     
-    [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
-                         error:nil];
+    NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+    
+    [center postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
+                          object:self];
 }
 
 - (void)cancelReconnectBlock
@@ -1212,6 +1270,8 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         
         if (_countOfSendPingWithoutReceivePong >= 3) {
             
+            NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+            
             [self _closeWithBlockAfterClose:^{
                 
                 NSString *reason = @"WebSocket Ping Timeout.";
@@ -1222,14 +1282,20 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
                                                       code:0
                                                   userInfo:info];
                 
-                [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
-                                     error:aError];
+                NSDictionary *userInfo = @{
+                                           @"error" : aError,
+                                           @"willReconnect" : @(true)
+                                           };
+                
+                [center postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
+                                      object:self
+                                    userInfo:userInfo];
             }];
             
             [self _openWithCallback:nil blockBeforeOpen:^{
                 
-                [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
-                                     error:nil];
+                [center postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
+                                      object:self];
             }];
             
         } else {
@@ -1348,23 +1414,6 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
     dispatch_resume(source);
     
     return source;
-}
-
-- (void)postNotificationName:(NSNotificationName)name
-                       error:(NSError *)error
-{
-    AssertRunInSerialQueue;
-    
-    NSDictionary *userInfo = nil;
-    
-    if (error) {
-        
-        userInfo = @{ @"error" : error };
-    }
-    
-    [NSNotificationCenter.defaultCenter postNotificationName:name
-                                                      object:self
-                                                    userInfo:userInfo];
 }
 
 - (uint16_t)nextSerialId
