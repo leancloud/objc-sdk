@@ -510,7 +510,7 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
                 
             } else {
                 
-                [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_ERROR
+                [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
                                      error:error];
             }
             
@@ -878,7 +878,7 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         
     } else {
         
-        [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_ERROR
+        [self postNotificationName:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
                              error:error];
         
         if (_needReconnect) {
@@ -1305,6 +1305,8 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
          */
         
         _webSocket.delegate = nil;
+        
+        [_webSocket close];
         
         _webSocket = nil;
     }
