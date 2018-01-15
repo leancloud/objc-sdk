@@ -2650,6 +2650,18 @@ __attribute__((warn_unused_result))
     });
 }
 
+// MARK: - Thread Unsafe
+
+- (AVIMClientStatus)threadUnsafe_status
+{
+    return _status;
+}
+
+- (id<AVIMClientDelegate>)threadUnsafe_delegate
+{
+    return _delegate;
+}
+
 // MARK: - Deprecated
 
 + (void)setUserOptions:(NSDictionary *)userOptions {

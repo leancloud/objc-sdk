@@ -51,4 +51,17 @@
                               orNewWithType:(LCIMConvType)convType
 __attribute__((warn_unused_result));
 
+/*
+ Thread-unsafe
+ */
+///
+
+- (AVIMClientStatus)threadUnsafe_status
+__attribute__((warn_unused_result));
+
+- (id<AVIMClientDelegate>)threadUnsafe_delegate
+__attribute__((warn_unused_result));
+
+///
+
 @end
