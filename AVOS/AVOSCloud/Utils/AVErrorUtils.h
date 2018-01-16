@@ -31,8 +31,4 @@ typedef NS_ENUM(NSInteger, AVLocalErrorCode) {
 
 + (NSError *)dataNotAvailableError;
 
-+ (NSError *)errorFromJSON:(id)JSON;
-
-+ (NSError *)errorFromAVError:(NSError *)error;
-
 @end

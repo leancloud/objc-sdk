@@ -158,16 +158,13 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
     
     [operation setCompletionBlockWithSuccess:^(AVHTTPRequestOperation *operation, id responseObject) {
         if (![operation isCancelled]) {
-            NSError *error = [AVErrorUtils errorFromJSON:responseObject];
-            if (!error) {
-                file.url = [responseObject objectForKey:@"url"];
-                file.name = [responseObject objectForKey:@"name"];
-                
-                [AVFile cacheFile:file];
-                // NSLog(@"remote file link:%@", file.url);
-            }
             
-            [AVUtils callBooleanResultBlock:resultBlock error:error];
+            file.url = [responseObject objectForKey:@"url"];
+            file.name = [responseObject objectForKey:@"name"];
+            
+            [AVFile cacheFile:file];
+            
+            [AVUtils callBooleanResultBlock:resultBlock error:nil];
         };
     } failure:^(AVHTTPRequestOperation *operation, NSError *error) {
         [AVUtils callBooleanResultBlock:resultBlock error:error];
@@ -358,7 +355,7 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
     }];
     [operation setCompletionBlockWithSuccess:^(AVHTTPRequestOperation *operation, id responseObject) {
         if (![operation isCancelled]) {
-            [AVUtils callBooleanResultBlock:resultBlock error:[AVErrorUtils errorFromJSON:responseObject]];
+            [AVUtils callBooleanResultBlock:resultBlock error:nil];
         };
     } failure:^(AVHTTPRequestOperation *operation, NSError *error) {
         [AVUtils callBooleanResultBlock:resultBlock error:error];
@@ -396,7 +393,7 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
     }];
     [operation setCompletionBlockWithSuccess:^(AVHTTPRequestOperation *operation, id responseObject) {
         if (![operation isCancelled]) {
-            [AVUtils callBooleanResultBlock:resultBlock error:[AVErrorUtils errorFromJSON:responseObject]];
+            [AVUtils callBooleanResultBlock:resultBlock error:nil];
         };
     } failure:^(AVHTTPRequestOperation *operation, NSError *error) {
         NSString *recoverySuggestion = error.userInfo[@"NSLocalizedRecoverySuggestion"];
@@ -648,7 +645,7 @@ static uint64_t const QCloudSliceSize = 512 * 1024;
     operation.localPath = file.localPath;
     [operation setCompletionBlockWithSuccess:^(AVHTTPRequestOperation *operation, id responseObject) {
         if (![operation isCancelled]) {
-            [AVUtils callBooleanResultBlock:resultBlock error:[AVErrorUtils errorFromJSON:responseObject]];
+            [AVUtils callBooleanResultBlock:resultBlock error:nil];
         };
     } failure:^(AVHTTPRequestOperation *operation, NSError *error) {
         NSString *recoverySuggestion = error.userInfo[@"NSLocalizedRecoverySuggestion"];

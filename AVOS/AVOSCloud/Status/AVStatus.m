@@ -253,10 +253,9 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     NSString *owner=[AVStatus stringOfStatusOwner:[AVUser currentUser].objectId];
     [[AVPaasClient sharedInstance] getObject:[NSString stringWithFormat:@"statuses/%@",objectId] withParameters:@{@"owner":owner,@"include":@"source"} block:^(id object, NSError *error) {
         
-        if (error) {
-            error=[AVErrorUtils errorFromAVError:error];
-        } else {
-            object=[self statusFromCloudData:object];
+        if (!error) {
+            
+            object = [self statusFromCloudData:object];
         }
         
         [AVUtils callIdResultBlock:callback object:object error:error];
@@ -273,9 +272,6 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     NSString *owner=[AVStatus stringOfStatusOwner:[AVUser currentUser].objectId];
     [[AVPaasClient sharedInstance] deleteObject:[NSString stringWithFormat:@"statuses/%@",objectId] withParameters:@{@"owner":owner} block:^(id object, NSError *error) {
         
-        if (error) {
-            error=[AVErrorUtils errorFromAVError:error];
-        }
         [AVUtils callBooleanResultBlock:callback error:error];
     }];
 }
@@ -334,9 +330,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     
     [[AVPaasClient sharedInstance] getObject:@"subscribe/statuses/count" withParameters:@{@"owner":owner,@"inboxType":type} block:^(id object, NSError *error) {
         NSUInteger count=[object[@"unread"] integerValue];
-        if (error) {
-            error=[AVErrorUtils errorFromAVError:error];
-        }
+        
         [AVUtils callIntegerResultBlock:callback number:count error:error];
     }];
 }
@@ -458,7 +452,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
          [AVUtils callBooleanResultBlock:block error:[AVErrorUtils errorWithCode:kAVErrorInvalidJSON errorText:@"unexpected result return"]];
      }
      failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error) {
-         [AVUtils callBooleanResultBlock:block error:[AVErrorUtils errorFromJSON:responseObject] ?: error];
+         [AVUtils callBooleanResultBlock:block error:error];
      }];
 }
 
