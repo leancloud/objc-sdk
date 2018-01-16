@@ -82,9 +82,9 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 @implementation AVIMClient {
     
-    id<AVIMClientDelegate> _delegate;
+    __weak id<AVIMClientDelegate> _delegate;
     
-    id<AVIMSignatureDataSource> _signatureDataSource;
+    __weak id<AVIMSignatureDataSource> _signatureDataSource;
     
     AVIMWebSocketWrapper *_socketWrapper;
     
