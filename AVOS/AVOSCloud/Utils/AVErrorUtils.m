@@ -121,50 +121,51 @@ NSInteger const kAVErrorFileDataNotAvailable = 401;
 
 @implementation AVErrorUtils
 
-+(NSError *)errorWithCode:(NSInteger)code
++ (NSError *)errorWithCode:(NSInteger)code
 {
-    return [NSError errorWithDomain:kAVErrorDomain code:code userInfo:nil];
+    return [NSError errorWithDomain:kAVErrorDomain
+                               code:code
+                           userInfo:nil];
 }
 
-+ (NSError *)errorWithText:(NSString *)text {
-    return [self errorWithCode:0 errorText:text];
++ (NSError *)errorWithText:(NSString *)text
+{
+    return [self errorWithCode:0
+                     errorText:text];
 }
 
-+(NSError *)errorWithCode:(NSInteger)code errorText:(NSString *)text {
-    if (!code) {
-        code = 0;
-    }
-    
-    NSString *localizedString = NSLocalizedString(text, nil);
-    
++ (NSError *)errorWithCode:(NSInteger)code
+                 errorText:(NSString *)text
+{
     NSDictionary *errorInfo = @{
                                 @"code" : @(code),
-                                @"error" : text, //???: should we remove this key
-                                NSLocalizedDescriptionKey : localizedString //TODO: add localized error descriptions
+                                @"error" : text
                                 };
     
-    NSError *err= [NSError errorWithDomain:kAVErrorDomain
-                               code:code
-                           userInfo:errorInfo];
+    NSError *err = [NSError errorWithDomain:kAVErrorDomain
+                                       code:code
+                                   userInfo:errorInfo];
     
     return err;
 }
 
-+(NSError *)internalServerError
++ (NSError *)internalServerError
 {
-    return [NSError errorWithDomain:kAVErrorDomain code:kAVErrorInternalServer userInfo:nil];
+    return [NSError errorWithDomain:kAVErrorDomain
+                               code:kAVErrorInternalServer
+                           userInfo:nil];
 }
 
-+(NSError *)fileNotFoundError
++ (NSError *)fileNotFoundError
 {
-    NSError *error = [AVErrorUtils errorWithCode:kAVErrorFileNotFound errorText:@"File not found."];
-    return error;
+    return [AVErrorUtils errorWithCode:kAVErrorFileNotFound
+                             errorText:@"File not found."];
 }
 
-+(NSError *)dataNotAvailableError
++ (NSError *)dataNotAvailableError
 {
-    NSError * error = [AVErrorUtils errorWithCode:kAVErrorFileDataNotAvailable errorText:@"File data not available."];
-    return error;
+    return [AVErrorUtils errorWithCode:kAVErrorFileDataNotAvailable
+                             errorText:@"File data not available."];
 }
 
 /**
@@ -175,89 +176,95 @@ NSInteger const kAVErrorFileDataNotAvailable = 401;
  
  递归找到一个 error 为止
  */
-+ (NSError *)errorFromJSON:(id)JSON {
++ (NSError *)errorFromJSON:(id)JSON
+{
     if (!JSON) {
+        
         return nil;
     }
-
-    NSError *returnError = nil;
-
+    
+    NSError *(^decodingError_block)(NSDictionary *) = ^NSError *(NSDictionary *dic) {
+        
+        NSNumber *code = [dic objectForKey:@"code"];
+        
+        NSString *errorString = [dic objectForKey:@"error"];
+        
+        if (code &&
+            [code isKindOfClass:[NSNumber class]] &&
+            errorString &&
+            [errorString isKindOfClass:[NSString class]]) {
+            
+            return [AVErrorUtils errorWithCode:code.integerValue
+                                     errorText:errorString];;
+        }
+        
+        return nil;
+    };
+    
+    NSError *error = nil;
+    
     if ([JSON isKindOfClass:[NSDictionary class]]) {
-        if ([AVErrorUtils _isDictionaryError:JSON]) {
-            returnError = [AVErrorUtils _errorFromDictionary:JSON];
-        } else {
-            for (NSString *key in [JSON allKeys]) {
-                id child = [JSON objectForKey:key];
+        
+        NSDictionary *dic = (NSDictionary *)JSON;
+        
+        error = decodingError_block(dic);
+        
+        if (error) {
+            
+            return error;
+        }
+        
+        for (id item in dic.allValues) {
+            
+            error = [[self class] errorFromJSON:item];
+            
+            if (error) {
                 
-                if ([child isKindOfClass:[NSDictionary class]] && [AVErrorUtils _isDictionaryError:child]) {
-                    returnError = [AVErrorUtils _errorFromDictionary:child];
-                    break;
-                }
+                return error;
             }
         }
     } else if ([JSON isKindOfClass:[NSArray class]]) {
-        for (id JSON1 in [JSON copy]) {
-            returnError = [[self class] errorFromJSON:JSON1];
-            if (returnError) {
-                break;
+        
+        NSArray *array = (NSArray *)JSON;
+        
+        for (id item in array) {
+            
+            error = [[self class] errorFromJSON:item];
+            
+            if (error) {
+                
+                return error;
             }
         }
     }
     
-    if (returnError) AVLoggerE(@"error: %@", returnError);
-
-    return returnError;
-}
-
-+ (NSString *)errorTextFromError:(NSError *)error {
-    NSString *JSONString = [error.userInfo objectForKey:NSLocalizedRecoverySuggestionErrorKey];
-    NSDictionary *JSON = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:NULL];
-    
-    return [JSON objectForKey:@"error"];
+    return nil;
 }
 
 + (NSError *)errorFromAVError:(NSError *)error
 {
     NSString *JSONString = [error.userInfo objectForKey:NSLocalizedRecoverySuggestionErrorKey];
-    if (JSONString == nil) {
+    
+    if (!JSONString ||
+        [JSONString isKindOfClass:[NSString class]] == false) {
+        
         return error;
     }
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:NULL];
-    if ([dict objectForKey:@"code"] == nil) {
+    
+    NSData *data = [JSONString dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSError *err = nil;
+    
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data
+                                                        options:NSJSONReadingAllowFragments
+                                                          error:&err];
+    
+    if (err) {
+        
         return error;
     }
-    return [AVErrorUtils errorFromJSON:dict];
-}
-
-#pragma mark - Internal Methods
-+ (NSError *)_errorFromDictionary:(NSDictionary *)dic {
-    if (![AVErrorUtils _isDictionaryError:dic]) return nil;
     
-    NSString *errorString = [dic objectForKey:@"error"];
-    NSNumber *code = [dic objectForKey:@"code"];
-    if (code == NULL) {
-        code = @(kAVErrorUnknownErrorCode);
-    }
-    if (errorString == NULL) {
-        errorString = [NSString stringWithFormat:@"%@, `code` and `error` are reserved keys.", kAVErrorUnknownText];
-    }
-    return [AVErrorUtils errorWithCode:code.integerValue errorText:errorString];
-}
-
-+ (BOOL)_isDictionaryError:(NSDictionary *)dic {
-    
-    id errorString = [dic objectForKey:@"error"];
-    id code = [dic objectForKey:@"code"];
-    
-    if (code && [code isKindOfClass:[NSNumber class]]) {
-        return YES;
-    }
-    
-    if (errorString && [errorString isKindOfClass:[NSString class]]) {
-        return YES;
-    }
-    
-    return NO;
+    return [AVErrorUtils errorFromJSON:dic];
 }
 
 @end
