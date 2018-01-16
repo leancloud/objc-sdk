@@ -587,9 +587,13 @@ static dispatch_queue_t messageCacheOperationQueue;
         command.cid = self.conversationId;
         command.mArray = [NSMutableArray arrayWithArray:clientIds];
         NSString  *actionString = [AVIMCommandFormatter signatureActionForKey:genericCommand.op];
-        NSString *clientIdString = [NSString stringWithFormat:@"%@",genericCommand.peerId];
+        
         NSArray *clientIds = [command.mArray copy];
-        AVIMSignature *signature = [_imClient signatureWithClientId:clientIdString conversationId:command.cid action:actionString actionOnClientIds:clientIds];
+        
+        AVIMSignature *signature = [_imClient getSignatureByDataSourceWithAction:actionString
+                                                                  conversationId:command.cid
+                                                                       clientIds:clientIds];
+        
         [genericCommand avim_addRequiredKeyWithCommand:command];
         [genericCommand avim_addRequiredKeyForConvMessageWithSignature:signature];
         if ([AVIMClient checkErrorForSignature:signature command:genericCommand]) {
@@ -630,10 +634,13 @@ static dispatch_queue_t messageCacheOperationQueue;
         command.cid = self.conversationId;
         command.mArray = [NSMutableArray arrayWithArray:clientIds];
         NSString *actionString = [AVIMCommandFormatter signatureActionForKey:genericCommand.op];
-        NSString *clientIdString = [NSString stringWithFormat:@"%@",genericCommand.peerId];
+        
         NSArray *clientIds = [command.mArray copy];
         
-        AVIMSignature *signature = [_imClient signatureWithClientId:clientIdString conversationId:command.cid action:actionString actionOnClientIds:clientIds];
+        AVIMSignature *signature = [_imClient getSignatureByDataSourceWithAction:actionString
+                                                                  conversationId:command.cid
+                                                                       clientIds:clientIds];
+        
         [genericCommand avim_addRequiredKeyWithCommand:command];
         [genericCommand avim_addRequiredKeyForConvMessageWithSignature:signature];
         if ([AVIMClient checkErrorForSignature:signature command:genericCommand]) {

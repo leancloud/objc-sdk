@@ -191,8 +191,18 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  */
 @property (nonatomic, weak, readonly, nullable)   AVIMClient   *imClient;
 
+/**
+ Unavailable.
+ 
+ @return Exception.
+ */
 + (instancetype)new NS_UNAVAILABLE;
 
+/**
+ Unavailable.
+ 
+ @return Exception.
+ */
 - (instancetype)init NS_UNAVAILABLE;
 
 /**

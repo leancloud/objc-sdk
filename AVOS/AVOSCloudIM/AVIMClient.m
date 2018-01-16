@@ -712,7 +712,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         });
     };
     
-    void(^imClientPausedWithError_block)(NSError *) = ^(NSError *error) {
+    void(^imClientClosedWithError_block)(NSError *) = ^(NSError *error) {
         
         AssertRunInIMClientQueue;
         
@@ -727,7 +727,15 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [delegate imClientPaused:self error:error];
+            [delegate imClientClosed:self error:error];
+            
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+            if ([delegate respondsToSelector:@selector(imClientPaused:error:)]) {
+                
+                [delegate imClientPaused:self error:error];
+            }
+#pragma clang diagnostic pop
         });
     };
     
@@ -743,7 +751,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
             
             if (signature && signature.error) {
                 
-                imClientPausedWithError_block(signature.error);
+                imClientClosedWithError_block(signature.error);
                 
                 return ;
             }
@@ -760,7 +768,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                     
                     if (error) {
                         
-                        imClientPausedWithError_block(error);
+                        imClientClosedWithError_block(error);
                         
                         return ;
                     }
@@ -806,7 +814,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                     return ;
                 }
                 
-                imClientPausedWithError_block(error);
+                imClientClosedWithError_block(error);
                 
                 return ;
             }
@@ -880,7 +888,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     });
 }
 
-- (void)processCommandSessionClosed:(AVIMGenericCommand *)genericCommand
+- (void)processCommand_SessionClosed:(AVIMGenericCommand *)genericCommand
 {
     AssertRunInIMClientQueue;
     
@@ -1020,7 +1028,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
             });
         };
         
-        void(^imClientPausedWithError_block)(NSError *) = ^(NSError *error) {
+        void(^imClientClosedWithError_block)(NSError *) = ^(NSError *error) {
             
             _status = AVIMClientStatusClosed;
             
@@ -1033,7 +1041,15 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                [delegate imClientPaused:self error:error];
+                [delegate imClientClosed:self error:error];
+                
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+                if ([delegate respondsToSelector:@selector(imClientPaused:error:)]) {
+                    
+                    [delegate imClientPaused:self error:error];
+                }
+#pragma clang diagnostic pop
             });
         };
         
@@ -1051,7 +1067,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
             
         } else {
             
-            imClientPausedWithError_block(error);
+            imClientClosedWithError_block(error);
         }
     });
 }
@@ -1153,9 +1169,9 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 // MARK: - Signature
 
-- (AVIMSignature *)getSignatureByDataSourceProtocolWithAction:(NSString *)action
-                                               conversationId:(NSString *)conversationId
-                                                    clientIds:(NSArray<NSString *> *)clientIds
+- (AVIMSignature *)getSignatureByDataSourceWithAction:(NSString *)action
+                                       conversationId:(NSString *)conversationId
+                                            clientIds:(NSArray<NSString *> *)clientIds
 {
     AssertRunInIMClientQueue;
     
@@ -1290,24 +1306,12 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         
     } else {
         
-        signature = [self getSignatureByDataSourceProtocolWithAction:@"open"
-                                                      conversationId:nil
-                                                           clientIds:nil];
+        signature = [self getSignatureByDataSourceWithAction:@"open"
+                                              conversationId:nil
+                                                   clientIds:nil];
         
         callback(signature);
     }
-}
-
-- (AVIMSignature *)signatureWithClientId:(NSString *)clientId
-                          conversationId:(NSString *)conversationId
-                                  action:(NSString *)action
-                       actionOnClientIds:(NSArray *)clientIds
-{
-    AVIMSignature *signature = nil;
-    if ([_signatureDataSource respondsToSelector:@selector(signatureWithClientId:conversationId:action:actionOnClientIds:)]) {
-        signature = [_signatureDataSource signatureWithClientId:clientId conversationId:conversationId action:action actionOnClientIds:clientIds];
-    }
-    return signature;
 }
 
 // MARK: - Send Command
@@ -1581,10 +1585,9 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         
         NSString *acition = [AVIMCommandFormatter signatureActionForKey:genericCommand.op];
         
-        AVIMSignature *signature = [self signatureWithClientId:genericCommand.peerId
-                                                conversationId:nil
-                                                        action:acition
-                                             actionOnClientIds:[convCommand.mArray copy]];
+        AVIMSignature *signature = [self getSignatureByDataSourceWithAction:acition
+                                                             conversationId:nil
+                                                                  clientIds:memberArray.copy];
         
         [genericCommand avim_addRequiredKeyForConvMessageWithSignature:signature];
         
@@ -2261,7 +2264,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     
     if (op == AVIMOpType_Closed) {
         
-        [self processCommandSessionClosed:genericCommand];
+        [self processCommand_SessionClosed:genericCommand];
     }
 }
 

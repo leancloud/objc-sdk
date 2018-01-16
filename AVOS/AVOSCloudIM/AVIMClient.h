@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, AVIMClientStatus) {
     
-    /// Initial client status.
+    /// Initial client status or an unknown status.
     AVIMClientStatusNone,
     
     /// Indicate the client is connecting the server now.
@@ -48,6 +48,10 @@ typedef NS_ENUM(NSUInteger, AVIMClientStatus) {
 };
 
 typedef NS_OPTIONS(uint64_t, LCIMClientOpenOption) {
+    
+    /*
+     Use this option when open client means the open action is a reopen or reconnect action.
+     */
     LCIMClientOpenOptionReopen = 1 << 0,
 };
 
@@ -101,8 +105,18 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  */
 @property (nonatomic, assign) BOOL messageQueryCacheEnabled;
 
+/**
+ Unavailable.
+ 
+ @return Exception.
+ */
 + (instancetype)new NS_UNAVAILABLE;
 
+/**
+ Unavailable.
+ 
+ @return Exception.
+ */
 - (instancetype)init NS_UNAVAILABLE;
 
 /*!
@@ -161,6 +175,12 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  */
 - (void)openWithCallback:(AVIMBooleanResultBlock)callback;
 
+/**
+ Open Client with a Option.
+
+ @param openOption Option `LCIMClientOpenOption`.
+ @param callback Result Callback.
+ */
 - (void)openWithOpenOption:(LCIMClientOpenOption)openOption
                   callback:(AVIMBooleanResultBlock)callback;
 
@@ -297,18 +317,18 @@ __attribute__((warn_unused_result));
 @protocol AVIMClientDelegate <NSObject>
 
 /**
- *  当前聊天状态被暂停，常见于网络断开时触发。
+ *  当前聊天状态被暂停，常见于网络断开或应用进入后台之后时触发，网络恢复或应用进入前台后，会自动重连。
  *  @param imClient 相应的 imClient
  */
 - (void)imClientPaused:(AVIMClient *)imClient;
 
 /**
- *  当前聊天状态被暂停，常见于网络断开时触发。
- *  注意：该回调会覆盖 imClientPaused: 方法。
- *  @param imClient 相应的 imClient
- *  @param error    具体错误信息
+ 当前聊天被关闭且不会自动重连时触发。
+
+ @param imClient 相应的 imClient
+ @param error    相应的错误信息
  */
-- (void)imClientPaused:(AVIMClient *)imClient error:(NSError *)error;
+- (void)imClientClosed:(AVIMClient *)imClient error:(NSError *)error;
 
 /**
  *  当前聊天状态开始恢复，常见于网络断开后开始重新连接。
@@ -392,6 +412,15 @@ __attribute__((warn_unused_result));
  */
 - (void)client:(AVIMClient *)client didOfflineWithError:(NSError *)error;
 
+/**
+ *  当前聊天状态被暂停，常见于网络断开时触发。
+ *  注意：该回调会覆盖 imClientPaused: 方法。
+ *  @param imClient 相应的 imClient
+ *  @param error    具体错误信息
+ */
+- (void)imClientPaused:(AVIMClient *)imClient error:(NSError *)error
+__deprecated_msg("Deprecated after v8.2.0 , use -[imClientClosed:error:] instead.");
+
 /*!
  收到未读通知。在该终端上线的时候，服务器会将对话的未读数发送过来。未读数可通过 -[AVIMConversation markAsReadInBackground] 清零，服务端不会自动清零。
  @param conversation 所属会话。
@@ -418,8 +447,9 @@ AVIM_DEPRECATED("Deprecated in v5.1.0. Do not use it any more.");
  * @param callback Callback for openning client.
  * @brief Open client with option of which the properties will override client's default option.
  */
-- (void)openWithOption:(nullable AVIMClientOpenOption *)option callback:(AVIMBooleanResultBlock)callback
-__deprecated_msg("Deprecated in v8.3.0 , use -[openWithOpenOption:callback:] instead.");
+- (void)openWithOption:(nullable AVIMClientOpenOption *)option
+              callback:(AVIMBooleanResultBlock)callback
+__deprecated_msg("Deprecated after v8.2.0 , use -[openWithOpenOption:callback:] instead.");
 
 @end
 

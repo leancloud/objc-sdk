@@ -29,11 +29,6 @@
 
 - (void)sendCommand:(AVIMGenericCommand *)command;
 
-- (AVIMSignature *)signatureWithClientId:(NSString *)clientId
-                          conversationId:(NSString *)conversationId
-                                  action:(NSString *)action
-                       actionOnClientIds:(NSArray *)clientIds;
-
 - (void)stageMessage:(AVIMMessage *)message;
 - (void)unstageMessageForId:(NSString *)messageId;
 - (AVIMMessage *)stagedMessageForId:(NSString *)messageId;
@@ -43,6 +38,14 @@
 - (void)updateReceipt:(NSDate *)date
        ofConversation:(AVIMConversation *)conversation
                forKey:(NSString *)key;
+
+/*
+ Signature
+ */
+- (AVIMSignature *)getSignatureByDataSourceWithAction:(NSString *)action
+                                       conversationId:(NSString *)conversationId
+                                            clientIds:(NSArray<NSString *> *)clientIds
+__attribute__((warn_unused_result));
 
 /*
  Conversation Memory Cache
