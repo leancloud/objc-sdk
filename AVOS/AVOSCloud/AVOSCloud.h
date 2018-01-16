@@ -114,9 +114,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface AVOSCloud : NSObject
 
 /**
- Enable SSL Pinning for all HTTPS Requests.
- Default is True.
-
+ A switch of SSL Pinning for all LeanCloud's HTTPS Requests.
+ Default is False.
+ 
  @param enabled Set whatever you want if you master SSL & SSL Pinning.
  */
 + (void)setSSLPinningEnabled:(BOOL)enabled;

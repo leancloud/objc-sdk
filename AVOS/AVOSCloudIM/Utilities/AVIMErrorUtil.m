@@ -9,6 +9,8 @@
 #import "AVIMErrorUtil.h"
 #import "AVIMCommon.h"
 
+NSString * const kLeanCloudIMErrorDomain = @"LeanCloudIMErrorDomain";
+
 NSString *AVOSCloudIMErrorDomain = @"AVOSCloudIMErrorDomain";
 
 @implementation AVIMErrorUtil

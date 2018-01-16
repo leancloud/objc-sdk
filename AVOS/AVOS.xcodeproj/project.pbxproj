@@ -1206,6 +1206,8 @@
 		D37A046B1FF3705500AD44A9 /* testFile.md in Resources */ = {isa = PBXBuildFile; fileRef = D37A04691FF3705500AD44A9 /* testFile.md */; };
 		D37CD4111FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */; };
 		D37CD4121FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */; };
+		D3917130200DE4290061CCF4 /* AVErrorUtilsTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D391712F200DE4290061CCF4 /* AVErrorUtilsTestCase.swift */; };
+		D3917131200DE4290061CCF4 /* AVErrorUtilsTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D391712F200DE4290061CCF4 /* AVErrorUtilsTestCase.swift */; };
 		D3CDF4EB1FE8F3810033153E /* LCIMTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */; };
 		D3CDF4EC1FE8F3810033153E /* LCIMTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */; };
 		D3CDF4F01FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */; };
@@ -1739,6 +1741,7 @@
 		D37A04661FF36E6200AD44A9 /* testVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = testVideo.mp4; sourceTree = "<group>"; };
 		D37A04691FF3705500AD44A9 /* testFile.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = testFile.md; sourceTree = "<group>"; };
 		D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseQuery.swift; sourceTree = "<group>"; };
+		D391712F200DE4290061CCF4 /* AVErrorUtilsTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVErrorUtilsTestCase.swift; sourceTree = "<group>"; };
 		D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestBase.swift; sourceTree = "<group>"; };
 		D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseClient.swift; sourceTree = "<group>"; };
 		D3DA60C81FF5E42D00AC5F4F /* AVOSCloudLiveQuery.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = AVOSCloudLiveQuery.podspec; path = ../AVOSCloudLiveQuery.podspec; sourceTree = "<group>"; };
@@ -2760,6 +2763,7 @@
 			children = (
 				D30DF3F61FDE2CD200F932BC /* AVUserTestCase.swift */,
 				D36AC7681FFF50AB00BDCA24 /* AVInstallationTestCase.swift */,
+				D391712F200DE4290061CCF4 /* AVErrorUtilsTestCase.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -4212,6 +4216,7 @@
 				70AF993D1BE1D0FA0091F46F /* AVCustomUser.m in Sources */,
 				D30DF3F81FDE2CD200F932BC /* AVUserTestCase.swift in Sources */,
 				70F3154F1BDE510D00D691B3 /* Armor.m in Sources */,
+				D3917131200DE4290061CCF4 /* AVErrorUtilsTestCase.swift in Sources */,
 				705A389B1BDF606600864B72 /* AVPersistentUtilsTest.m in Sources */,
 				70F315501BDE510D00D691B3 /* Thread.m in Sources */,
 				70F315511BDE510D00D691B3 /* UserArmor.m in Sources */,
@@ -4538,6 +4543,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3917130200DE4290061CCF4 /* AVErrorUtilsTestCase.swift in Sources */,
 				8CEEABD31ABC179300B9E757 /* AVRelationTest.m in Sources */,
 				D30DF3F71FDE2CD200F932BC /* AVUserTestCase.swift in Sources */,
 				705A389A1BDF605C00864B72 /* AVPersistentUtilsTest.m in Sources */,

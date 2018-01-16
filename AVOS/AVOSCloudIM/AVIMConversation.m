@@ -310,7 +310,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 }
 
 - (void)postUpdateNotificationForKey:(NSString *)key {
-    id  delegate = self.imClient.delegate;
+    id  delegate = self.imClient.threadUnsafe_delegate;
     SEL selector = @selector(conversation:didUpdateForKey:);
 
     if (![delegate respondsToSelector:selector])
@@ -587,9 +587,13 @@ static dispatch_queue_t messageCacheOperationQueue;
         command.cid = self.conversationId;
         command.mArray = [NSMutableArray arrayWithArray:clientIds];
         NSString  *actionString = [AVIMCommandFormatter signatureActionForKey:genericCommand.op];
-        NSString *clientIdString = [NSString stringWithFormat:@"%@",genericCommand.peerId];
+        
         NSArray *clientIds = [command.mArray copy];
-        AVIMSignature *signature = [_imClient signatureWithClientId:clientIdString conversationId:command.cid action:actionString actionOnClientIds:clientIds];
+        
+        AVIMSignature *signature = [_imClient getSignatureByDataSourceWithAction:actionString
+                                                                  conversationId:command.cid
+                                                                       clientIds:clientIds];
+        
         [genericCommand avim_addRequiredKeyWithCommand:command];
         [genericCommand avim_addRequiredKeyForConvMessageWithSignature:signature];
         if ([AVIMClient checkErrorForSignature:signature command:genericCommand]) {
@@ -630,10 +634,13 @@ static dispatch_queue_t messageCacheOperationQueue;
         command.cid = self.conversationId;
         command.mArray = [NSMutableArray arrayWithArray:clientIds];
         NSString *actionString = [AVIMCommandFormatter signatureActionForKey:genericCommand.op];
-        NSString *clientIdString = [NSString stringWithFormat:@"%@",genericCommand.peerId];
+        
         NSArray *clientIds = [command.mArray copy];
         
-        AVIMSignature *signature = [_imClient signatureWithClientId:clientIdString conversationId:command.cid action:actionString actionOnClientIds:clientIds];
+        AVIMSignature *signature = [_imClient getSignatureByDataSourceWithAction:actionString
+                                                                  conversationId:command.cid
+                                                                       clientIds:clientIds];
+        
         [genericCommand avim_addRequiredKeyWithCommand:command];
         [genericCommand avim_addRequiredKeyForConvMessageWithSignature:signature];
         if ([AVIMClient checkErrorForSignature:signature command:genericCommand]) {
@@ -872,7 +879,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     message.clientId = _imClient.clientId;
     message.conversationId = _conversationId;
-    if (self.imClient.status != AVIMClientStatusOpened) {
+    if (self.imClient.threadUnsafe_status != AVIMClientStatusOpened) {
         message.status = AVIMMessageStatusFailed;
         NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorClientNotOpen reason:@"You can only send message when the status of the client is opened."];
         [AVIMBlockHelper callBooleanResultBlock:callback error:error];
@@ -1544,7 +1551,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     limit = [self.class validLimit:limit];
     
-    BOOL socketOpened = (self.imClient.status == AVIMClientStatusOpened);
+    BOOL socketOpened = (self.imClient.threadUnsafe_status == AVIMClientStatusOpened);
     
     /* if disable query from cache, then only query from server. */
     if (!self.imClient.messageQueryCacheEnabled) {
@@ -1726,7 +1733,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         /*
          * If message is continuous or socket connect is not opened, return fetched messages directly.
          */
-        BOOL socketOpened = (self.imClient.status == AVIMClientStatusOpened);
+        BOOL socketOpened = (self.imClient.threadUnsafe_status == AVIMClientStatusOpened);
         
         if ((continuous && cachedMessages.count == limit) ||
             !socketOpened) {

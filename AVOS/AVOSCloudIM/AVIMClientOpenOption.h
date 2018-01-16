@@ -10,6 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+__deprecated_msg("Deprecated after v8.2.0")
 @interface AVIMClientOpenOption : NSObject
 
 @property (nonatomic, assign) BOOL force;
