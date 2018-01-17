@@ -364,4 +364,77 @@ class LCIMTestCaseConversation: LCIMTestBase {
         }
     }
     
+    func testServiceConversation_subscribe_unsubscrib() {
+        
+        guard let client: AVIMClient = type(of: self).baseGlobalClient else {
+            
+            XCTFail()
+            
+            return
+        }
+        
+        var serviceConversation: AVIMServiceConversation? = nil
+        
+        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+            
+            client.conversationQuery().getConversationById("5a5ee32afe88c2003b0f2d6b") { (conv: AVIMConversation?, error: Error?) in
+                
+                semaphore.breakWaiting = true
+                
+                XCTAssertNotNil(conv)
+                XCTAssertNil(error)
+                
+                guard let serviceConv: AVIMServiceConversation = conv as? AVIMServiceConversation else {
+                    
+                    XCTFail()
+                    
+                    return
+                }
+                
+                serviceConversation = serviceConv
+            }
+            
+        }) {
+            
+            XCTFail("timeout")
+        }
+        
+        guard let serviceConv: AVIMServiceConversation = serviceConversation else {
+            
+            XCTFail()
+            
+            return
+        }
+        
+        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+            
+            serviceConv.subscribe(callback: { (success: Bool, error: Error?) in
+                
+                semaphore.breakWaiting = true
+                
+                XCTAssertTrue(success)
+                XCTAssertNil(error)
+            })
+            
+        }) {
+            
+            XCTFail("timeout")
+        }
+        
+        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+
+            serviceConv.unsubscribe(callback: { (success: Bool, error: Error?) in
+
+                semaphore.breakWaiting = true
+
+                XCTAssertTrue(success)
+                XCTAssertNil(error)
+            })
+
+        }) {
+
+            XCTFail("timeout")
+        }
+    }
+    
 }
