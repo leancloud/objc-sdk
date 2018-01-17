@@ -25,83 +25,171 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, AVIMClientStatus) {
     
-    /// Initial client status or an unknown status.
+    /*
+     
+     Initial Status or Unknown Status
+     
+     Common Scenario:
+     
+     1. After New a Instance of Client
+     
+     2. Closing Client but received an Error
+     
+     */
     AVIMClientStatusNone,
     
-    /// Indicate the client is connecting the server now.
+    /*
+     Client is Opening
+     */
     AVIMClientStatusOpening,
     
-    /// Indicate the client connected the server.
+    /*
+     Client Opened
+     */
     AVIMClientStatusOpened,
     
-    /// Indicate the connection paused. Usually for the network reason.
+    /*
+     
+     Client Paused
+     
+     Common Scenario:
+     
+     1. Network Unreachable
+     
+     2. iOS App in Background
+     
+     3. ... ...
+     
+     */
     AVIMClientStatusPaused,
     
-    /// Indicate the connection is recovering.
+    /*
+     
+     Client is Resuming
+     
+     Common Scenario:
+     
+     1. Network from Unreachable to Reachable
+     
+     2. iOS App from Background to Foreground
+     
+     3. ... ...
+     
+     */
     AVIMClientStatusResuming,
     
-    /// Indicate the connection is closing.
+    /*
+     Client is Closing
+     */
     AVIMClientStatusClosing,
     
-    /// Indicate the connection is closed.
+    /*
+     Client Closed
+     */
     AVIMClientStatusClosed
+    
 };
 
 typedef NS_OPTIONS(uint64_t, LCIMClientOpenOption) {
     
     /*
-     Use this option when open client means the open action is a reopen or reconnect action.
+     
+     Use this option when opening client means the open action is a reopen or reconnect action.
+     
+     Common Scenario:
+     
+     1. Reopen Client with the same Session Token
+     
+     2. Auto-Login Pattern
+     
+     3. ... ...
+     
      */
-    LCIMClientOpenOptionReopen = 1 << 0,
+    LCIMClientOpenOptionReopen = 1 << 0
+    
 };
 
 typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
-    /// Default conversation. At most allow 500 people to join the conversation.
+    
+    /*
+     Default conversation. At most allow 500 people to join the conversation.
+     */
     AVIMConversationOptionNone      = 0,
-    /// Unique conversation. If the server detects the conversation with that members exists, will return it instead of creating a new one.
+    
+    /*
+     Unique conversation. If the server detects the conversation with that members exists, will return it instead of creating a new one.
+     */
     AVIMConversationOptionUnique    = 1 << 0,
-    /// Transient conversation. No headcount limits. But the functionality is limited. No offline messages, no offline notifications, etc.
+    
+    /*
+     Transient conversation. No headcount limits. But the functionality is limited. No offline messages, no offline notifications, etc.
+     */
     AVIMConversationOptionTransient = 1 << 1,
-    /// Temporary conversation
+    
+    /*
+     Temporary conversation
+     */
     AVIMConversationOptionTemporary = 1 << 2
+    
 };
 
 @interface AVIMClient : NSObject
 
+/*!
+ Set what server will issues for offline messages when client did login.
+ 
+ @param enabled Set `YES` if you want server just issues the count of offline messages in each conversation.
+ Set `NO` if you want server issues concrete offline messages.
+ Defaults to `NO`.
+ */
++ (void)setUnreadNotificationEnabled:(BOOL)enabled;
+
+/*!
+ * 设置实时通信的超时时间，默认 30 秒。
+ * @param seconds 超时时间，单位是秒。
+ */
++ (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds;
+
 /**
- *  The delegate which implements AVIMClientDelegate protocol. It handles these events: connecting status changes, message coming and members of the conversation changes.
+ Thread-safe for getter & setter.
  */
 @property (nonatomic, weak, nullable) id<AVIMClientDelegate> delegate;
 
-/**
- *  The delegate which implements AVIMSignatureDataSource protocol. It is used to fetching signature from your server, and return an AVIMSignature object.
+/*
+ Thread-safe for getter & setter.
  */
 @property (nonatomic, weak, nullable) id<AVIMSignatureDataSource> signatureDataSource;
 
 /**
- *  The ID of the current client. Usually the user's ID.
+ The ID of this Client.
+ 
+ see more: -[initWithClientId:] or -[initWithClientId:tag:]
  */
-@property (nonatomic, strong, readonly, nonnull) NSString *clientId;
+@property (nonatomic, copy, readonly, nonnull) NSString *clientId;
 
 /**
- The user that you login as a client.
+ The `AVUser` of this Client.
+ 
+ see more: -[initWithUser:] or -[initWithUser:tag:]
  */
 @property (nonatomic, strong, readonly, nullable) AVUser *user;
 
 /**
- * Tag of current client.
- * @brief If tag is not nil and "default", offline mechanism is enabled.
- * @discussion If one client id login on two different devices, previous opened client will be gone offline by later opened client.
+ The Tag of this Client.
+ 
+ see more: -[initWithClientId:tag:] or -[initWithUser:tag:]
  */
-@property (nonatomic, strong, readonly, nullable) NSString *tag;
+@property (nonatomic, copy, readonly, nullable) NSString *tag;
 
 /**
- *  The connecting status of the current client.
+ The Status of this Client.
+ 
+ see more: `AVIMClientStatus`
  */
 @property (nonatomic, assign, readonly) AVIMClientStatus status;
 
 /**
- * 控制是否打开历史消息查询的本地缓存功能,默认开启
+ 控制是否打开历史消息查询本地缓存的功能, 默认开启
  */
 @property (nonatomic, assign) BOOL messageQueryCacheEnabled;
 
@@ -119,74 +207,63 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  */
 - (instancetype)init NS_UNAVAILABLE;
 
-/*!
- Initializes a newly allocated client.
- @param clientId Identifier of client, nonnull requierd.
+/**
+ Initialization method.
+
+ @param clientId Identifie of this Client.
+ @return Instance.
  */
 - (instancetype)initWithClientId:(NSString *)clientId;
 
-/*!
- Initializes a newly allocated client.
- @param clientId Identifier of client, nonnull requierd.
- @param tag      Tag of client.
+/**
+ Initialization method.
+
+ @param clientId Identifie of this Client.
+ @param tag You can use 'Tag' to implement the feature that the same 'clientId' only used in single device. 'Tag' Can't set with "default", it's a reserved tag.
+ @return Instance.
  */
 - (instancetype)initWithClientId:(NSString *)clientId tag:(nullable NSString *)tag;
 
-/*!
- Initializes client with an user.
+/**
+ Initialization method.
 
- @seealso It's a convenience initializer of <code>-[AVIMClient initWithUser:tag:]</code>
+ @param user The AVUser of this Client.
+ @return Instance.
  */
 - (instancetype)initWithUser:(AVUser *)user;
 
-/*!
- Initializes client with an user and a tag.
+/**
+ Initialization method.
 
- This method allows you to use an user as a client to login to IM.
- Using user as an IM client has some extra benifits. For example, It will activate
- login signature to improve security. Besides that, you can also take advantage of
- the friendship relations of users.
-
- @note You should enable login signature option in application console before you call this method.
-
- @param user An user who has logged in.
- @param tag  Tag of client.
+ @param user The AVUser of this Client.
+  @param tag You can use 'Tag' to implement the feature that the same 'clientId' only used in single device. 'Tag' Can't set with "default", it's a reserved tag.
+ @return Instance.
  */
 - (instancetype)initWithUser:(AVUser *)user tag:(nullable NSString *)tag;
 
-/*!
- Set what server will issues for offline messages when client did login.
-
- @param enabled Set `YES` if you want server just issues the count of offline messages in each conversation.
-                Set `NO` if you want server issues concrete offline messages.
-                Defaults to `NO`.
- */
-+ (void)setUnreadNotificationEnabled:(BOOL)enabled;
-
-/*!
- * 设置实时通信的超时时间，默认 15 秒。
- * @param seconds 超时时间，单位是秒。
- */
-+ (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds;
-
-/*!
- 开启某个账户的聊天
- @param callback － 聊天开启之后的回调
+/**
+ Start a Session with Server.
+ It is similar to Login.
+ 
+ @param callback Result Callback.
  */
 - (void)openWithCallback:(AVIMBooleanResultBlock)callback;
 
 /**
- Open Client with a Option.
-
- @param openOption Option `LCIMClientOpenOption`.
+ Start a Session with Server.
+ It is similar to Login.
+ 
+ @param openOption See more: `LCIMClientOpenOption`.
  @param callback Result Callback.
  */
 - (void)openWithOpenOption:(LCIMClientOpenOption)openOption
                   callback:(AVIMBooleanResultBlock)callback;
 
-/*!
- 结束某个账户的聊天
- @param callback － 聊天关闭之后的回调
+/**
+ End a Session with Server.
+ It is similar to Logout.
+ 
+ @param callback Result Callback.
  */
 - (void)closeWithCallback:(AVIMBooleanResultBlock)callback;
 
@@ -317,30 +394,55 @@ __attribute__((warn_unused_result));
 @protocol AVIMClientDelegate <NSObject>
 
 /**
- *  当前聊天状态被暂停，常见于网络断开或应用进入后台之后时触发，网络恢复或应用进入前台后，会自动重连。
- *  @param imClient 相应的 imClient
+ 
+ Client Paused.
+ 
+ Common Scenario:
+ 
+ 1. Network Unreachable
+ 
+ 2. iOS App in Background
+ 
+ 3. ... ...
+ 
+ Client will Auto Resuming if environment become Normal.
+
+ @param imClient imClient
  */
 - (void)imClientPaused:(AVIMClient *)imClient;
 
 /**
- 当前聊天被关闭且不会自动重连时触发。
+ 
+ Client is Resuming.
+ 
+ Common Scenario:
+ 
+ 1. Network from Unreachable to Reachable
+ 
+ 2. iOS App from Background to Foreground
+ 
+ 3. ... ...
+ 
+ Client is Resuming the Session.
 
- @param imClient 相应的 imClient
- @param error    相应的错误信息
- */
-- (void)imClientClosed:(AVIMClient *)imClient error:(NSError *)error;
-
-/**
- *  当前聊天状态开始恢复，常见于网络断开后开始重新连接。
- *  @param imClient 相应的 imClient
+ @param imClient imClient
  */
 - (void)imClientResuming:(AVIMClient *)imClient;
 
 /**
- *  当前聊天状态已经恢复，常见于网络断开后重新连接上。
- *  @param imClient 相应的 imClient
+ Client is Resumed from Paused Status and now its Status is Opened.
+
+ @param imClient imClient
  */
 - (void)imClientResumed:(AVIMClient *)imClient;
+
+/**
+ Client Closed with an Error and will not resume.
+ 
+ @param imClient imClient
+ @param error Something Wrong
+ */
+- (void)imClientClosed:(AVIMClient *)imClient error:(NSError *)error;
 
 @optional
 
