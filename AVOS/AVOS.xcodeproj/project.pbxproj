@@ -1457,7 +1457,6 @@
 		8C8419911A5A791300C5C6C4 /* AVOSCloud-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AVOSCloud-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C8419971A5A791300C5C6C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C8419C31A5A796000C5C6C4 /* AVOSCloudIM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudIM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8C8419C61A5A796000C5C6C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C8419C71A5A796000C5C6C4 /* AVOSCloudIM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloudIM.h; sourceTree = "<group>"; };
 		8C8419CD1A5A796000C5C6C4 /* AVOSCloudIM-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AVOSCloudIM-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C8419DD1A5A79FF00C5C6C4 /* AVACL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVACL.h; sourceTree = "<group>"; };
@@ -2236,21 +2235,12 @@
 				8C841BD71A5A84C600C5C6C4 /* Commands */,
 				8CA1571C1A5E8556003C2532 /* InternalObjects */,
 				838AF11D1AFE58F600B8965E /* MessageCache */,
-				8C8419C51A5A796000C5C6C4 /* Supporting Files */,
 				8C9A92651A70AF1800CA4912 /* TypedMessages */,
 				8C841BFF1A5A84C600C5C6C4 /* Utilities */,
 				83BE43911D242905000C7AC3 /* Vendor */,
 				8C841C041A5A84C600C5C6C4 /* WebSocket */,
 			);
 			path = AVOSCloudIM;
-			sourceTree = "<group>";
-		};
-		8C8419C51A5A796000C5C6C4 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				8C8419C61A5A796000C5C6C4 /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		8C8419D11A5A796000C5C6C4 /* AVOSCloudIMTests */ = {
