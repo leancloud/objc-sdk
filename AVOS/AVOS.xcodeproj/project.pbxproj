@@ -1460,7 +1460,6 @@
 		8C8419C61A5A796000C5C6C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C8419C71A5A796000C5C6C4 /* AVOSCloudIM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloudIM.h; sourceTree = "<group>"; };
 		8C8419CD1A5A796000C5C6C4 /* AVOSCloudIM-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AVOSCloudIM-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8C8419D31A5A796000C5C6C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C8419DD1A5A79FF00C5C6C4 /* AVACL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVACL.h; sourceTree = "<group>"; };
 		8C8419DE1A5A79FF00C5C6C4 /* AVACL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVACL.m; sourceTree = "<group>"; };
 		8C8419DF1A5A79FF00C5C6C4 /* AVACL_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVACL_Internal.h; sourceTree = "<group>"; };
@@ -2257,20 +2256,10 @@
 		8C8419D11A5A796000C5C6C4 /* AVOSCloudIMTests */ = {
 			isa = PBXGroup;
 			children = (
-				D3CDF4EE1FE8F3F70033153E /* Resources */,
-				D3CDF4ED1FE8F3E20033153E /* Objc */,
-				D3CDF4E91FE8F2FA0033153E /* Swift */,
-				8C8419D21A5A796000C5C6C4 /* Supporting Files */,
+				D3414E0B200F25F200A416C5 /* Resources */,
+				D3414E0A200F255D00A416C5 /* Swift */,
 			);
 			path = AVOSCloudIMTests;
-			sourceTree = "<group>";
-		};
-		8C8419D21A5A796000C5C6C4 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				8C8419D31A5A796000C5C6C4 /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		8C8419DC1A5A79FF00C5C6C4 /* ACL */ = {
@@ -2782,12 +2771,34 @@
 			children = (
 				D30DF41D1FDE391D00F932BC /* AVOSCloud-iOSTests-Bridging-Header.h */,
 				D30DF41C1FDE391C00F932BC /* AVOSCloud-macOSTests-Bridging-Header.h */,
-				D30DF4111FDE38EE00F932BC /* AVOSCloudIM-iOSTests-Bridging-Header.h */,
-				D30DF4121FDE38EE00F932BC /* AVOSCloudIM-macOSTests-Bridging-Header.h */,
 				D30DF4131FDE38EE00F932BC /* AVOSCloudLiveQuery-iOSTests-Bridging-Header.h */,
 				D30DF4141FDE38EE00F932BC /* AVOSCloudLiveQuery-macOSTests-Bridging-Header.h */,
 			);
 			path = "Bridging-Header";
+			sourceTree = "<group>";
+		};
+		D3414E0A200F255D00A416C5 /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				D30DF4111FDE38EE00F932BC /* AVOSCloudIM-iOSTests-Bridging-Header.h */,
+				D30DF4121FDE38EE00F932BC /* AVOSCloudIM-macOSTests-Bridging-Header.h */,
+				D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */,
+				D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */,
+				D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */,
+				D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */,
+			);
+			path = Swift;
+			sourceTree = "<group>";
+		};
+		D3414E0B200F25F200A416C5 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D37A04691FF3705500AD44A9 /* testFile.md */,
+				D37A04661FF36E6200AD44A9 /* testVideo.mp4 */,
+				70DA62491B4BD7D100D95D4D /* testAudio.mp3 */,
+				70DA62471B4BD21B00D95D4D /* testImage.png */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		D36A1E0C1FF24D67006EFB5F /* Objc */ = {
@@ -2801,35 +2812,6 @@
 				8CEA86661A77817B00864211 /* AVTestUtil.m */,
 			);
 			path = Objc;
-			sourceTree = "<group>";
-		};
-		D3CDF4E91FE8F2FA0033153E /* Swift */ = {
-			isa = PBXGroup;
-			children = (
-				D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */,
-				D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */,
-				D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */,
-				D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */,
-			);
-			name = Swift;
-			sourceTree = "<group>";
-		};
-		D3CDF4ED1FE8F3E20033153E /* Objc */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Objc;
-			sourceTree = "<group>";
-		};
-		D3CDF4EE1FE8F3F70033153E /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				D37A04691FF3705500AD44A9 /* testFile.md */,
-				D37A04661FF36E6200AD44A9 /* testVideo.mp4 */,
-				70DA62491B4BD7D100D95D4D /* testAudio.mp3 */,
-				70DA62471B4BD21B00D95D4D /* testImage.png */,
-			);
-			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -4891,7 +4873,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudIM-macOSTests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "AVOSCloudIMTests/Swift/AVOSCloudIM-iOSTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -4936,7 +4918,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudIM-macOSTests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "AVOSCloudIMTests/Swift/AVOSCloudIM-iOSTests-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
@@ -6485,7 +6467,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudIM-iOSTests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "AVOSCloudIMTests/Swift/AVOSCloudIM-iOSTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -6530,7 +6512,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = "TestBase/Swift/Bridging-Header/AVOSCloudIM-iOSTests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "AVOSCloudIMTests/Swift/AVOSCloudIM-iOSTests-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				VALIDATE_PRODUCT = YES;
 			};
