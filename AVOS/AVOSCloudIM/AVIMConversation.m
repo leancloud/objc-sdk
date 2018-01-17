@@ -2171,6 +2171,16 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 @implementation AVIMServiceConversation
 
+- (void)subscribeWithCallback:(void (^)(BOOL, NSError * _Nullable))callback
+{
+    [self joinWithCallback:callback];
+}
+
+- (void)unsubscribeWithCallback:(void (^)(BOOL, NSError * _Nullable))callback
+{
+    [self quitWithCallback:callback];
+}
+
 @end
 
 @implementation AVIMTemporaryConversation

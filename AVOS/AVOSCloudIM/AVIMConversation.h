@@ -472,6 +472,10 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
 
 @interface AVIMServiceConversation : AVIMConversation
 
+- (void)subscribeWithCallback:(void(^)(BOOL, NSError * _Nullable))callback;
+
+- (void)unsubscribeWithCallback:(void(^)(BOOL, NSError * _Nullable))callback;
+
 @end
 
 @interface AVIMTemporaryConversation : AVIMConversation
