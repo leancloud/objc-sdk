@@ -442,7 +442,7 @@ __attribute__((warn_unused_result));
  @param imClient imClient
  @param error Something Wrong
  */
-- (void)imClientClosed:(AVIMClient *)imClient error:(NSError *)error;
+- (void)imClientClosed:(AVIMClient *)imClient error:(NSError * _Nullable)error;
 
 @optional
 
