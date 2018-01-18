@@ -30,15 +30,19 @@ class LCIMTestBase: LCTestBase {
         
         if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
             
+            semaphore.increment()
+            
             client.open(callback: { (success, error) in
+                
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
                 
                 XCTAssertTrue(success)
                 XCTAssertNil(error)
                 XCTAssertEqual(client.status, .opened)
                 
                 self.baseGlobalClient = success ? client : nil;
-                
-                semaphore.breakWaiting = true
             })
             
         }) {
@@ -51,13 +55,17 @@ class LCIMTestBase: LCTestBase {
         
         if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
             
+            semaphore.increment()
+            
             self.baseGlobalClient?.close(callback: { (success, error) in
+                
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
                 
                 XCTAssertTrue(success)
                 XCTAssertNil(error)
                 XCTAssertEqual(self.baseGlobalClient?.status, .closed)
-                
-                semaphore.breakWaiting = true
             })
             
         }) {

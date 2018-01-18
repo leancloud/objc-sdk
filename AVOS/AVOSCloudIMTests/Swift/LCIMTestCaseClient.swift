@@ -10,7 +10,7 @@ import XCTest
 
 class LCIMTestCaseClient: LCIMTestBase {
     
-    func testClientOpenCloseMultiple() {
+    func test_Client_Open_Close_Multiple() {
         
         let openCloseClient: AVIMClient = AVIMClient(clientId: "LCIMTestCaseClient.testClientOpenCloseMultiple")
         
@@ -18,13 +18,19 @@ class LCIMTestCaseClient: LCIMTestBase {
             
             if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
                 
+                semaphore.increment()
+                
                 openCloseClient.open(callback: { (success, error) in
+                    
+                    semaphore.decrement()
+                    
+                    XCTAssertTrue(Thread.isMainThread)
+                    
+                    XCTAssertTrue(Thread.isMainThread)
                     
                     XCTAssertTrue(success)
                     XCTAssertNil(error)
                     XCTAssertEqual(openCloseClient.status, .opened)
-                    
-                    semaphore.breakWaiting = true
                 })
                 
             }) {
@@ -34,13 +40,19 @@ class LCIMTestCaseClient: LCIMTestBase {
             
             if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
                 
+                semaphore.increment()
+                
                 openCloseClient.close(callback: { (success, error) in
+                    
+                    semaphore.decrement()
+                    
+                    XCTAssertTrue(Thread.isMainThread)
+                    
+                    XCTAssertTrue(Thread.isMainThread)
                     
                     XCTAssertTrue(success)
                     XCTAssertNil(error)
                     XCTAssertEqual(openCloseClient.status, .closed)
-                    
-                    semaphore.breakWaiting = true
                 })
                 
             }) {
@@ -50,7 +62,7 @@ class LCIMTestCaseClient: LCIMTestBase {
         }
     }
     
-    func testCreateConversation() {
+    func test_Create_Conversation() {
         
         guard let client: AVIMClient = LCIMTestBase.baseGlobalClient else {
             
@@ -61,12 +73,18 @@ class LCIMTestCaseClient: LCIMTestBase {
         
         if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
             
+            semaphore.increment()
+            
             client.createConversation(
                 withName: "LCIMTestCaseClient.testCreateConversation",
                 clientIds: []
             ) { (conv, error) in
                 
-                semaphore.breakWaiting = true
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertTrue(Thread.isMainThread)
                 
                 guard let conv: AVIMConversation = conv else  {
                     
@@ -91,7 +109,7 @@ class LCIMTestCaseClient: LCIMTestBase {
         }
     }
     
-    func testCreateChatRoom() {
+    func test_Create_ChatRoom() {
         
         guard let client: AVIMClient = LCIMTestBase.baseGlobalClient else {
             
@@ -102,12 +120,18 @@ class LCIMTestCaseClient: LCIMTestBase {
         
         if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
             
+            semaphore.increment()
+            
             client.createChatRoom(
                 withName: "LCIMTestCaseClient.testCreateChatRoom",
                 attributes: ["test" : "test"]
             ) { (chatRoom, error) in
                 
-                semaphore.breakWaiting = true
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertTrue(Thread.isMainThread)
                 
                 guard let chatRoom: AVIMChatRoom = chatRoom else {
                     
@@ -132,7 +156,7 @@ class LCIMTestCaseClient: LCIMTestBase {
         }
     }
     
-    func testCreateTemporaryConversation() {
+    func test_Create_TemporaryConversation() {
         
         guard let client: AVIMClient = LCIMTestBase.baseGlobalClient else {
             
@@ -143,12 +167,18 @@ class LCIMTestCaseClient: LCIMTestBase {
         
         if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
             
+            semaphore.increment()
+            
             client.createTemporaryConversation(
                 withClientIds: [],
                 timeToLive: 0
             ) { (tempConv, error) in
                 
-                semaphore.breakWaiting = true
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertTrue(Thread.isMainThread)
                 
                 guard let tempConv: AVIMTemporaryConversation = tempConv else {
                     
@@ -176,7 +206,7 @@ class LCIMTestCaseClient: LCIMTestBase {
         }
     }
     
-    func testCreateUniqueConversation() {
+    func test_Create_Unique_Conversation() {
         
         guard let client: AVIMClient = LCIMTestBase.baseGlobalClient else {
             
@@ -191,6 +221,8 @@ class LCIMTestCaseClient: LCIMTestBase {
             
             if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
                 
+                semaphore.increment()
+                
                 client.createConversation(
                     withName: "LCIMTestCaseClient.testCreateUniqueConversation",
                     clientIds: ["testCreateUniqueConversation.otherId.1"],
@@ -198,7 +230,11 @@ class LCIMTestCaseClient: LCIMTestBase {
                     options: [.unique]
                 ) { (conv, error) in
                     
-                    semaphore.breakWaiting = true
+                    semaphore.decrement()
+                    
+                    XCTAssertTrue(Thread.isMainThread)
+                    
+                    XCTAssertTrue(Thread.isMainThread)
                     
                     guard let conv: AVIMConversation = conv else  {
                         

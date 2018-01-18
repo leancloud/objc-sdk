@@ -38,7 +38,7 @@ class LCTestBase: XCTestCase {
         }
         
         AVOSCloud.setApplicationId(appId, clientKey: appKey)
-        AVOSCloud.setAllLogsEnabled(false)
+        AVOSCloud.setAllLogsEnabled(true)
     }
     
     override class func tearDown() {
@@ -61,7 +61,7 @@ class LCTestBase: XCTestCase {
         
         closure(semaphore)
         
-        while semaphore.breakWaiting == false {
+        while semaphore.waiting() {
             
             let date: Date = Date.init(timeIntervalSinceNow: 1.0)
             
@@ -93,7 +93,7 @@ class LCTestBase: XCTestCase {
         
         closure(semaphore)
         
-        while semaphore.breakWaiting == false {
+        while semaphore.waiting() {
             
             let date: Date = Date.init(timeIntervalSinceNow: 1.0)
             
@@ -116,6 +116,21 @@ class LCTestBase: XCTestCase {
 
 class RunLoopSemaphore {
     
-    var breakWaiting: Bool = false
+    var semaphoreValue = 0
+    
+    func increment() {
+        
+        self.semaphoreValue += 1
+    }
+    
+    func decrement() {
+        
+        self.semaphoreValue -= 1
+    }
+    
+    func waiting() -> Bool {
+        
+        return (self.semaphoreValue > 0)
+    }
     
 }

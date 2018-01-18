@@ -30,6 +30,8 @@ class LCIMTestCaseConversation: LCIMTestBase {
         
         if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
             
+            semaphore.increment()
+            
             client.createConversation(
                 withName: "LCIMTestCaseConversation.globalConversation",
                 clientIds: [],
@@ -38,7 +40,9 @@ class LCIMTestCaseConversation: LCIMTestBase {
                 temporaryTTL: 0
             ){ (conv, err) in
                 
-                semaphore.breakWaiting = true
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
                 
                 XCTAssertNotNil(conv)
                 XCTAssertNotNil(conv?.conversationId)
@@ -89,9 +93,13 @@ class LCIMTestCaseConversation: LCIMTestBase {
             
             if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
                 
+                semaphore.increment()
+                
                 conv.send(textMessage, callback: { (isSuccess, error) in
                     
-                    semaphore.breakWaiting = true
+                    semaphore.decrement()
+                    
+                    XCTAssertTrue(Thread.isMainThread)
                     
                     XCTAssertTrue(isSuccess)
                     XCTAssertNil(error)
@@ -130,9 +138,13 @@ class LCIMTestCaseConversation: LCIMTestBase {
             
             if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
                 
+                semaphore.increment()
+                
                 conv.send(imageMessage, callback: { (isSuccess, error) in
                     
-                    semaphore.breakWaiting = true
+                    semaphore.decrement()
+                    
+                    XCTAssertTrue(Thread.isMainThread)
                     
                     XCTAssertTrue(isSuccess)
                     XCTAssertNil(error)
@@ -171,9 +183,13 @@ class LCIMTestCaseConversation: LCIMTestBase {
             
             if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
                 
+                semaphore.increment()
+                
                 conv.send(audioMessage, callback: { (isSuccess, error) in
                     
-                    semaphore.breakWaiting = true
+                    semaphore.decrement()
+                    
+                    XCTAssertTrue(Thread.isMainThread)
                     
                     XCTAssertTrue(isSuccess)
                     XCTAssertNil(error)
@@ -212,9 +228,13 @@ class LCIMTestCaseConversation: LCIMTestBase {
             
             if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
                 
+                semaphore.increment()
+                
                 conv.send(videoMessage, callback: { (isSuccess, error) in
                     
-                    semaphore.breakWaiting = true
+                    semaphore.decrement()
+                    
+                    XCTAssertTrue(Thread.isMainThread)
                     
                     XCTAssertTrue(isSuccess)
                     XCTAssertNil(error)
@@ -250,9 +270,13 @@ class LCIMTestCaseConversation: LCIMTestBase {
             
             if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
                 
+                semaphore.increment()
+                
                 conv.send(locationMessage, callback: { (isSuccess, error) in
                     
-                    semaphore.breakWaiting = true
+                    semaphore.decrement()
+                    
+                    XCTAssertTrue(Thread.isMainThread)
                     
                     XCTAssertTrue(isSuccess)
                     XCTAssertNil(error)
@@ -291,9 +315,13 @@ class LCIMTestCaseConversation: LCIMTestBase {
             
             if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
                 
+                semaphore.increment()
+                
                 conv.send(fileMessage, callback: { (isSuccess, error) in
                     
-                    semaphore.breakWaiting = true
+                    semaphore.decrement()
+                    
+                    XCTAssertTrue(Thread.isMainThread)
                     
                     XCTAssertTrue(isSuccess)
                     XCTAssertNil(error)
@@ -329,6 +357,8 @@ class LCIMTestCaseConversation: LCIMTestBase {
             
             if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
                 
+                semaphore.increment()
+                
                 conv.queryMediaMessagesFromServer(
                     with: type,
                     limit: 10,
@@ -336,7 +366,9 @@ class LCIMTestCaseConversation: LCIMTestBase {
                     fromTimestamp: 0
                 ) { (array, error) in
                     
-                    semaphore.breakWaiting = true
+                    semaphore.decrement()
+                    
+                    XCTAssertTrue(Thread.isMainThread)
                     
                     XCTAssertNotNil(array)
                     XCTAssertNil(error)
@@ -377,9 +409,13 @@ class LCIMTestCaseConversation: LCIMTestBase {
         
         if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
             
+            semaphore.increment()
+            
             client.conversationQuery().getConversationById("5a5ee32afe88c2003b0f2d6b") { (conv: AVIMConversation?, error: Error?) in
                 
-                semaphore.breakWaiting = true
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
                 
                 XCTAssertNotNil(conv)
                 XCTAssertNil(error)
@@ -408,9 +444,13 @@ class LCIMTestCaseConversation: LCIMTestBase {
         
         if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
             
+            semaphore.increment()
+            
             serviceConv.subscribe(callback: { (success: Bool, error: Error?) in
                 
-                semaphore.breakWaiting = true
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
                 
                 XCTAssertTrue(success)
                 XCTAssertNil(error)
@@ -422,10 +462,14 @@ class LCIMTestCaseConversation: LCIMTestBase {
         }
         
         if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+            
+            semaphore.increment()
 
             serviceConv.unsubscribe(callback: { (success: Bool, error: Error?) in
 
-                semaphore.breakWaiting = true
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
 
                 XCTAssertTrue(success)
                 XCTAssertNil(error)

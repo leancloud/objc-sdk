@@ -23,12 +23,16 @@ class LCIMTestCaseQuery: LCIMTestBase {
         
         if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
             
+            semaphore.increment()
+            
             client.createTemporaryConversation(
                 withClientIds: [],
                 timeToLive: 0
             ) { (tempConv, error) in
                 
-                semaphore.breakWaiting = true
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
                 
                 guard let tempConv: AVIMTemporaryConversation = tempConv else {
                     
@@ -70,9 +74,13 @@ class LCIMTestCaseQuery: LCIMTestBase {
             
             query.cachePolicy = .networkOnly
             
+            semaphore.increment()
+            
             query.findTemporaryConversations(with: [_temoConvId]) { (array, error) in
                 
-                semaphore.breakWaiting = true
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
                 
                 guard let tempConv: AVIMTemporaryConversation = array?.first as? AVIMTemporaryConversation else {
                     
