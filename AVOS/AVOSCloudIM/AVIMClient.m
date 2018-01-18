@@ -49,6 +49,12 @@ static void *imClientQueue_specific_value;
 #define AssertNotRunInIMClientQueue NSAssert(dispatch_get_specific(imClientQueue_specific_key) != imClientQueue_specific_value, @"This Method should Not Run in `imClientQueue` Thread.")
 ///
 
+#else
+
+#define AssertRunInIMClientQueue
+
+#define AssertNotRunInIMClientQueue
+
 #endif
 
 static const NSUInteger kMaxClientIdLength = 64;
@@ -396,9 +402,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)setDelegate:(id<AVIMClientDelegate>)delegate
 {
-    AssertNotRunInIMClientQueue;
-    
-    dispatch_sync(imClientQueue, ^{
+    dispatch_async(imClientQueue, ^{
         
         _delegate = delegate;
     });
@@ -420,9 +424,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)setSignatureDataSource:(id<AVIMSignatureDataSource>)signatureDataSource
 {
-    AssertNotRunInIMClientQueue;
-    
-    dispatch_sync(imClientQueue, ^{
+    dispatch_async(imClientQueue, ^{
         
         _signatureDataSource = signatureDataSource;
     });
@@ -1175,7 +1177,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 {
     AssertRunInIMClientQueue;
     
-    NSString *clientId = self.clientId;
+    NSString *clientId = _clientId;
     
     __block AVIMSignature *signature = nil;
     
@@ -1212,7 +1214,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 {
     AssertRunInIMClientQueue;
     
-    AVUser *user = self.user;
+    AVUser *user = _user;
     
     AVIMSignature *signature = nil;
     
@@ -1359,7 +1361,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         if (_conversationCache)
             return _conversationCache;
 
-        _conversationCache = [[LCIMConversationCache alloc] initWithClientId:self.clientId];
+        _conversationCache = [[LCIMConversationCache alloc] initWithClientId:_clientId];
         _conversationCache.client = self;
 
         return _conversationCache;
@@ -1535,7 +1537,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         
         NSMutableSet *members = [NSMutableSet setWithArray:clientIds ?: @[]];
         
-        [members addObject:self.clientId];
+        [members addObject:_clientId];
         
         [members allObjects];
     })];
@@ -1641,7 +1643,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                 conversation.name = name;
                 conversation.attributes = attr;
                 
-                conversation.creator = self.clientId;
+                conversation.creator = _clientId;
                 
                 conversation.createAt = [AVObjectUtils dateFromString:[inConvCommand cdate]];
                 
@@ -1808,7 +1810,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     message.status = AVIMMessageStatusDelivered;
     message.offline = directCommand.offline;
     message.hasMore = directCommand.hasMore;
-    message.localClientId = self.clientId;
+    message.localClientId = _clientId;
     message.transient = directCommand.transient;
     message.mentionAll = directCommand.mentionAll;
     message.mentionList = [directCommand.mentionPidsArray copy];
@@ -1863,7 +1865,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     message.clientId = fromPeerId;
     message.messageId = messageId;
     message.status = AVIMMessageStatusDelivered;
-    message.localClientId = self.clientId;
+    message.localClientId = _clientId;
 
     if (unreadTuple.hasPatchTimestamp)
         message.updatedAt = [NSDate dateWithTimeIntervalSince1970:unreadTuple.patchTimestamp / 1000.0];
@@ -1961,7 +1963,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)updateConversation:(NSString *)conversationId withDictionary:(NSDictionary *)dictionary {
     [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
-        LCIM_NOTIFY_PROPERTY_UPDATE(self.clientId, conversationId, key, value);
+        LCIM_NOTIFY_PROPERTY_UPDATE(_clientId, conversationId, key, value);
     }];
 }
 
@@ -1970,7 +1972,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 }
 
 - (void)removeCachedMessagesForId:(NSString *)conversationId {
-    NSString *clientId = self.clientId;
+    NSString *clientId = _clientId;
 
     if (clientId && conversationId) {
         LCIMMessageCacheStore *messageCacheStore = [[LCIMMessageCacheStore alloc] initWithClientId:clientId conversationId:conversationId];
@@ -1996,7 +1998,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                 conversation.temporaryTTL = convCommand.tempConvTtl;
             }
             
-            [conversation addMember:self.clientId];
+            [conversation addMember:_clientId];
             [self receiveInvitedFromConversation:conversation byClientId:initBy];
             break;
             
@@ -2014,7 +2016,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
             
             // AVIMOpType_Left = 39,
         case AVIMOpType_Left:
-            [conversation removeMember:self.clientId];
+            [conversation removeMember:_clientId];
             [self receiveKickedFromConversation:conversation byClientId:initBy];
             // Remove conversation and it's message from cache.
             [conversationCache removeConversationAndItsMessagesForId:conversationId];
@@ -2105,7 +2107,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     if (!conversationId)
         return nil;
 
-    LCIMMessageCacheStore *cacheStore = [[LCIMMessageCacheStore alloc] initWithClientId:self.clientId conversationId:conversationId];
+    LCIMMessageCacheStore *cacheStore = [[LCIMMessageCacheStore alloc] initWithClientId:_clientId conversationId:conversationId];
     return cacheStore;
 }
 
@@ -2252,7 +2254,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     NSDate *oldDate = [conversation valueForKey:key];
 
     if (!oldDate || [oldDate compare:date] == NSOrderedAscending) {
-        LCIM_NOTIFY_PROPERTY_UPDATE(self.clientId, conversation.conversationId, key, date);
+        LCIM_NOTIFY_PROPERTY_UPDATE(_clientId, conversation.conversationId, key, date);
     }
 }
 
@@ -2327,7 +2329,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
     AVIMGenericCommand *command = [[AVIMGenericCommand alloc] init];
 
-    command.peerId = self.clientId;
+    command.peerId = _clientId;
 
     command.cmd = AVIMCommandType_Patch;
     command.op  = AVIMOpType_Modified;
@@ -2359,7 +2361,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     
     /* Only cache non-transient message */
     if (!message.transient && self.messageQueryCacheEnabled) {
-        LCIMMessageCacheStore *cacheStore = [[LCIMMessageCacheStore alloc] initWithClientId:self.clientId conversationId:conversationId];
+        LCIMMessageCacheStore *cacheStore = [[LCIMMessageCacheStore alloc] initWithClientId:_clientId conversationId:conversationId];
         
         /* If cache contains message, update message only */
         if ([cacheStore containMessage:message]) {

@@ -460,11 +460,23 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             // 网络请求成功
             NSMutableArray *results = [NSMutableArray array];
             for (NSDictionary *object in objects) {
-                if (object[@"success"]) {
-                    [results addObject:object[@"success"]];
-                } else if (object[@"error"]) {
-                    NSError *error = [AVErrorUtils errorFromJSON:object[@"error"]];
+                
+                id success = object[@"success"];
+                
+                if (success) {
+                    
+                    [results addObject:success];
+                    
+                    continue;
+                }
+                
+                id error = object[@"error"];
+                
+                if (error) {
+                    
                     [results addObject:error];
+                    
+                    continue;
                 }
             }
             block(results, nil);
@@ -554,8 +566,8 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         @strongify(self);
 
         if (block) {
-            NSError *error = [AVErrorUtils errorFromJSON:responseObject];
-            block(responseObject, error);
+            
+            block(responseObject, nil);
         }
 
         if (self.isLastModifyEnabled && [request.HTTPMethod isEqualToString:@"GET"]) {
@@ -597,8 +609,9 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
                 }
             }];
         } else {
-            if (block)
-                block(responseObject, [AVErrorUtils errorFromJSON:responseObject] ?: error);
+            if (block) {
+                block(responseObject, error);
+            }
         }
     }];
 }
