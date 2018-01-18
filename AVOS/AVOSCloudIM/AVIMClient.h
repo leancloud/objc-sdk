@@ -447,6 +447,13 @@ __attribute__((warn_unused_result));
 @optional
 
 /*!
+ 客户端下线通知。
+ @param client 已下线的 client。
+ @param error 错误信息。
+ */
+- (void)client:(AVIMClient *)client didOfflineWithError:(NSError * _Nullable)error;
+
+/*!
  接收到新的普通消息。
  @param conversation － 所属对话
  @param message - 具体的消息
@@ -506,13 +513,6 @@ __attribute__((warn_unused_result));
  @param key          The property name of updated conversation.
  */
 - (void)conversation:(AVIMConversation *)conversation didUpdateForKey:(NSString *)key;
-
-/*!
- 客户端下线通知。
- @param client 已下线的 client。
- @param error 错误信息。
- */
-- (void)client:(AVIMClient *)client didOfflineWithError:(NSError *)error;
 
 /**
  *  当前聊天状态被暂停，常见于网络断开时触发。
