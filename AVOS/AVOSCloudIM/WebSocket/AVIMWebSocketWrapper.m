@@ -42,6 +42,10 @@
 
 #define AssertRunInSerialQueue NSAssert(dispatch_get_specific(_serialQueue_specific_key) == _serialQueue_specific_value, @"This internal method should run in `_serialQueue`.")
 
+#else
+
+#define AssertRunInSerialQueue
+
 #endif
 
 static NSTimeInterval AVIMWebSocketDefaultTimeoutInterval = 30.0;

@@ -49,6 +49,12 @@ static void *imClientQueue_specific_value;
 #define AssertNotRunInIMClientQueue NSAssert(dispatch_get_specific(imClientQueue_specific_key) != imClientQueue_specific_value, @"This Method should Not Run in `imClientQueue` Thread.")
 ///
 
+#else
+
+#define AssertRunInIMClientQueue
+
+#define AssertNotRunInIMClientQueue
+
 #endif
 
 static const NSUInteger kMaxClientIdLength = 64;
