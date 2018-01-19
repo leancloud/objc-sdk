@@ -14,23 +14,90 @@ import AVOSCloudLiveQuery
 class ViewController: UIViewController {
     
     var client: AVIMClient!
+    
+    @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var reopenButton: UIButton!
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+    
+    @IBAction func login() {
+        
+        self.activityIndicatorView.startAnimating()
+        self.loginButton.isEnabled = false
+        self.reopenButton.isEnabled = false
+        
+        self.client.open { (success: Bool, error: Error?) in
+            
+            self.activityIndicatorView.stopAnimating()
+            self.loginButton.isEnabled = true
+            self.reopenButton.isEnabled = true
+            
+            if success {
+                
+                let alert: UIAlertController = UIAlertController(title: "Success", message: "Login", preferredStyle: .alert)
+                
+                let action: UIAlertAction = UIAlertAction(title: "ok", style: .default, handler: nil)
+                
+                alert.addAction(action)
+                
+                self.present(alert, animated: true, completion: nil)
+                
+            } else {
+                
+                let alert: UIAlertController = UIAlertController(title: "Error", message: "\(String(describing: error))", preferredStyle: .alert)
+                
+                let action: UIAlertAction = UIAlertAction(title: "ok", style: .default, handler: nil)
+                
+                alert.addAction(action)
+                
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    @IBAction func reopen() {
+        
+        self.activityIndicatorView.startAnimating()
+        self.loginButton.isEnabled = false
+        self.reopenButton.isEnabled = false
+        
+        self.client.open(with: [.reopen]) { (success: Bool, error: Error?) in
+            
+            self.activityIndicatorView.stopAnimating()
+            self.loginButton.isEnabled = true
+            self.reopenButton.isEnabled = true
+            
+            if success {
+                
+                let alert: UIAlertController = UIAlertController(title: "Success", message: "Login", preferredStyle: .alert)
+                
+                let action: UIAlertAction = UIAlertAction(title: "ok", style: .default, handler: nil)
+                
+                alert.addAction(action)
+                
+                self.present(alert, animated: true, completion: nil)
+                
+            } else {
+                
+                let alert: UIAlertController = UIAlertController(title: "Error", message: "\(String(describing: error))", preferredStyle: .alert)
+                
+                let action: UIAlertAction = UIAlertAction(title: "ok", style: .default, handler: nil)
+                
+                alert.addAction(action)
+                
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.client = AVIMClient(clientId: "RuntimeTestDemo")
+        AVInstallation.current().deviceToken = UUID().uuidString
+        
+        self.client = AVIMClient(clientId: "RuntimeTestDemo", tag: "test")
         self.client.delegate = self
         
         assert(self.client.status == .none)
-        
-        self.client.open { (success: Bool, error: Error?) in
-            
-            if let error = error {
-                
-                fatalError("\(error)")
-                
-            }
-        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -68,6 +135,21 @@ extension ViewController: AVIMClientDelegate {
         assert(Thread.isMainThread)
         
         assert(imClient.status == .closed)
+    }
+    
+    func client(_ client: AVIMClient, didOfflineWithError error: Error?) {
+        
+        assert(Thread.isMainThread)
+        
+        assert(client.status == .closed)
+        
+        let alert: UIAlertController = UIAlertController(title: "Offline", message: "\(String(describing: error))", preferredStyle: .alert)
+        
+        let action: UIAlertAction = UIAlertAction(title: "ok", style: .default, handler: nil)
+        
+        alert.addAction(action)
+        
+        self.present(alert, animated: true, completion: nil)
     }
     
 }
