@@ -438,7 +438,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
                                           teamId:(NSString *)teamId
                constructingInstallationWithBlock:(void (^)(AVInstallation *))block
 {
-    AVInstallation *installation = [AVInstallation currentInstallation];
+    AVInstallation *installation = [AVInstallation defaultInstallation];
 
     @weakify(installation, weakInstallation);
 

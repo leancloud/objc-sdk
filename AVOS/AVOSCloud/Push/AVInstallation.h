@@ -43,31 +43,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** @name Accessing the Current Installation */
 
-/*!
- Gets the currently-running installation from disk and returns an instance of
- it. If this installation is not stored on disk, returns a AVInstallation
- with deviceType and installationId fields set to those of the
- current installation.
- @return a AVInstallation that represents the currently-running
- installation.
- */
-+ (AVInstallation *)currentInstallation;
-
-/*!
- Sets the device token string property from an NSData-encoded token.
- 
- @param deviceTokenData NSData-encoded device token.
- */
-- (void)setDeviceTokenFromData:(NSData *)deviceTokenData;
-
 /**
- Sets the device token string property from an NSData-encoded token, with a team ID.
- 
- @param deviceTokenData NSData-encoded device token
- @param teamId Team ID
+ Default Singleton Installation.
+
+ @return Default Singleton Instance.
  */
-- (void)setDeviceTokenFromData:(NSData *)deviceTokenData
-                        teamId:(NSString * _Nullable)teamId;
++ (AVInstallation *)defaultInstallation;
+
+// Deprecated
++ (AVInstallation *)currentInstallation
+__deprecated_msg("Deprecated after v8.2.0, use +[defaultInstallation] instead.");
 
 /** @name Properties */
 
@@ -97,6 +82,22 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// The apns teamId for universal push notification.
 @property (nonatomic, copy, nullable) NSString *apnsTeamId;
+
+/*!
+ Sets the device token string property from an NSData-encoded token.
+ 
+ @param deviceTokenData NSData-encoded device token.
+ */
+- (void)setDeviceTokenFromData:(NSData *)deviceTokenData;
+
+/**
+ Sets the device token string property from an NSData-encoded token, with a team ID.
+ 
+ @param deviceTokenData NSData-encoded device token
+ @param teamId Team ID
+ */
+- (void)setDeviceTokenFromData:(NSData *)deviceTokenData
+                        teamId:(NSString * _Nullable)teamId;
 
 @end
 

@@ -42,7 +42,6 @@ FOUNDATION_EXPORT NSString *const LCHeaderFieldNameProduction;
 @property (nonatomic, readwrite, strong) AVACL * defaultACL;
 @property (nonatomic, readwrite) BOOL currentUserAccessForDefaultACL;
 
-@property (nonatomic, readwrite, strong) AVInstallation * currentInstallation;
 @property (nonatomic, readwrite, assign) NSTimeInterval timeoutInterval;
 
 @property (nonatomic, readwrite, strong) NSMutableDictionary * subclassTable;

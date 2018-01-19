@@ -452,7 +452,7 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
     __block  NSSet * resultSet = nil;
 
     AVQuery * query = [AVInstallation installationQuery];
-    [query whereKey:deviceTokenTag equalTo:[AVInstallation currentInstallation].deviceToken];
+    [query whereKey:deviceTokenTag equalTo:[AVInstallation defaultInstallation].deviceToken];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (objects.count > 0)
         {
@@ -482,14 +482,14 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
 
 + (BOOL)subscribeToChannel:(NSString *)channel error:(NSError **)error
 {
-    AVInstallation * installation = [AVInstallation currentInstallation];
+    AVInstallation * installation = [AVInstallation defaultInstallation];
     [installation addUniqueObject:channel forKey:channelsTag];
     return [installation save:error];
 }
 
 + (void)subscribeToChannelInBackground:(NSString *)channel
 {
-    AVInstallation * installation = [AVInstallation currentInstallation];
+    AVInstallation * installation = [AVInstallation defaultInstallation];
     [installation addUniqueObject:channel forKey:channelsTag];
     [installation saveInBackground];
 }
@@ -497,7 +497,7 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
 + (void)subscribeToChannelInBackground:(NSString *)channel
                                  block:(AVBooleanResultBlock)block
 {
-    AVInstallation * installation = [AVInstallation currentInstallation];
+    AVInstallation * installation = [AVInstallation defaultInstallation];
     [installation addUniqueObject:channel forKey:channelsTag];
     [installation saveInBackgroundWithBlock:block];
 }
@@ -506,21 +506,21 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
                                 target:(id)target
                               selector:(SEL)selector
 {
-    AVInstallation * installation = [AVInstallation currentInstallation];
+    AVInstallation * installation = [AVInstallation defaultInstallation];
     [installation addUniqueObject:channel forKey:channelsTag];
     [installation saveInBackgroundWithTarget:target selector:selector];
 }
 
 + (BOOL)unsubscribeFromChannel:(NSString *)channel error:(NSError **)error
 {
-    AVInstallation * installation = [AVInstallation currentInstallation];
+    AVInstallation * installation = [AVInstallation defaultInstallation];
     [installation removeObject:channel forKey:channelsTag];
     return [installation save:error];
 }
 
 + (void)unsubscribeFromChannelInBackground:(NSString *)channel
 {
-    AVInstallation * installation = [AVInstallation currentInstallation];
+    AVInstallation * installation = [AVInstallation defaultInstallation];
     [installation removeObject:channel forKey:channelsTag];
     [installation saveInBackground];
 }
@@ -529,7 +529,7 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
 + (void)unsubscribeFromChannelInBackground:(NSString *)channel
                                      block:(AVBooleanResultBlock)block
 {
-    AVInstallation * installation = [AVInstallation currentInstallation];
+    AVInstallation * installation = [AVInstallation defaultInstallation];
     [installation removeObject:channel forKey:channelsTag];
     [installation saveInBackgroundWithBlock:block];
 }
@@ -538,7 +538,7 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
                                     target:(id)target
                                   selector:(SEL)selector
 {
-    AVInstallation * installation = [AVInstallation currentInstallation];
+    AVInstallation * installation = [AVInstallation defaultInstallation];
     [installation removeObject:channel forKey:channelsTag];
     [installation saveInBackgroundWithTarget:target selector:selector];
 }

@@ -13,12 +13,12 @@
 @property (nonatomic, copy) NSString *timeZone;
 @property (nonatomic, copy) NSString *deviceType;
 
-+(AVQuery *)installationQuery;
-+(AVInstallation *)installation;
++ (AVQuery *)installationQuery;
++ (AVInstallation *)installation;
 
-+(NSString *)deviceType;
++ (NSString *)deviceType;
 
-+(NSString *)className;
-+(NSString *)endPoint;
++ (NSString *)className;
++ (NSString *)endPoint;
 
 @end

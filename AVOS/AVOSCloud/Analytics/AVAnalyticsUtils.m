@@ -323,7 +323,7 @@ static NSString *const WWANType = @"WWAN";
         [dic addEntriesFromDictionary:currentUserDic];
     }
     
-    AVInstallation *currentInstallation = [AVInstallation currentInstallation];
+    AVInstallation *currentInstallation = [AVInstallation defaultInstallation];
     
     if (currentInstallation && currentInstallation.objectId) {
         

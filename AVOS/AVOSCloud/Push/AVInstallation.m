@@ -39,14 +39,17 @@
     return installation;
 }
 
-+ (AVInstallation *)currentInstallation
++ (AVInstallation *)defaultInstallation
 {
-    if ([AVPaasClient sharedInstance].currentInstallation)
-    {
-        return [AVPaasClient sharedInstance].currentInstallation;
-    }
-    AVInstallation * installation = [AVInstallation installation];
-    [AVPaasClient sharedInstance].currentInstallation = installation;
+    static AVInstallation *installation = nil;
+    
+    static dispatch_once_t onceToken;
+    
+    dispatch_once(&onceToken, ^{
+        
+        installation = [[AVInstallation alloc] init];
+    });
+    
     return installation;
 }
 
@@ -141,7 +144,7 @@
 - (BOOL)isDirty {
     if ([super isDirty]) {
         return YES;
-    } else if ([AVInstallation currentInstallation] == self) {
+    } else if ([AVInstallation defaultInstallation] == self) {
         /* If cache expired, we deem that it is dirty. */
         if (!self.updatedAt || [self.updatedAt timeIntervalSinceNow] < - 60 * 60 * 24) {
             return YES;
@@ -286,6 +289,13 @@
             request[@"body"][@"deviceToken"] = self.deviceToken;
         }
     }
+}
+
+// MARK: - Deprecated
+
++ (AVInstallation *)currentInstallation
+{
+    return [AVInstallation defaultInstallation];
 }
 
 @end

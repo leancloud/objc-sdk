@@ -311,8 +311,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     
     _socketWrapper = socketWrapper;
     
-    // FIXME: [AVInstallation currentInstallation] is Not Thread-safe
-    _currentInstallation = [AVInstallation currentInstallation];
+    _currentInstallation = [AVInstallation defaultInstallation];
     
     _lastPatchTimestamp = 0;
     _lastUnreadTimestamp = 0;
