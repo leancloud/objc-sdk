@@ -11,6 +11,8 @@
 #import "AVOSCloud.h"
 #import "AVHelpers.h"
 
+#define keyPath(base, path) ({ __typeof__(base.path) _ __attribute__((unused)); @#path; })
+
 /**
  * Check the equality of two security key.
  */
