@@ -184,6 +184,8 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
 /**
  The Status of this Client.
  
+ @note Out of Thread-safe, this property Not Support KVO. Recommend using `AVIMClientDelegate`.
+ 
  see more: `AVIMClientStatus`
  */
 @property (nonatomic, assign, readonly) AVIMClientStatus status;
@@ -213,7 +215,8 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  @param clientId Identifie of this Client.
  @return Instance.
  */
-- (instancetype)initWithClientId:(NSString *)clientId;
+- (instancetype)initWithClientId:(NSString *)clientId
+__attribute__((warn_unused_result));
 
 /**
  Initialization method.
@@ -222,7 +225,8 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  @param tag You can use 'Tag' to implement the feature that the same 'clientId' only used in single device. 'Tag' Can't set with "default", it's a reserved tag.
  @return Instance.
  */
-- (instancetype)initWithClientId:(NSString *)clientId tag:(nullable NSString *)tag;
+- (instancetype)initWithClientId:(NSString *)clientId tag:(NSString * _Nullable)tag
+__attribute__((warn_unused_result));
 
 /**
  Initialization method.
@@ -230,7 +234,8 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  @param user The AVUser of this Client.
  @return Instance.
  */
-- (instancetype)initWithUser:(AVUser *)user;
+- (instancetype)initWithUser:(AVUser *)user
+__attribute__((warn_unused_result));
 
 /**
  Initialization method.
@@ -239,7 +244,8 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
   @param tag You can use 'Tag' to implement the feature that the same 'clientId' only used in single device. 'Tag' Can't set with "default", it's a reserved tag.
  @return Instance.
  */
-- (instancetype)initWithUser:(AVUser *)user tag:(nullable NSString *)tag;
+- (instancetype)initWithUser:(AVUser *)user tag:(NSString * _Nullable)tag
+__attribute__((warn_unused_result));
 
 /**
  Start a Session with Server.
@@ -368,13 +374,15 @@ __attribute__((warn_unused_result));
  @param keyedConversation AVIMKeyedConversation 对象。
  @return 已绑定到当前 client 的会话。
  */
-- (AVIMConversation *)conversationWithKeyedConversation:(AVIMKeyedConversation *)keyedConversation;
+- (AVIMConversation *)conversationWithKeyedConversation:(AVIMKeyedConversation *)keyedConversation
+__attribute__((warn_unused_result));
 
 /*!
  构造一个对话查询对象
  @return 对话查询对象.
  */
-- (AVIMConversationQuery *)conversationQuery;
+- (AVIMConversationQuery *)conversationQuery
+__attribute__((warn_unused_result));
 
 /*!
  Query online clients within the given array of clients.
