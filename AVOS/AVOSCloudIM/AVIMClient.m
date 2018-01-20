@@ -26,7 +26,6 @@
 #import "LCIMConversationCache.h"
 #import "LCIMClientSessionTokenCacheStore.h"
 #import "AVIMCommandCommon.h"
-#import "LCObserver.h"
 #import "SDMacros.h"
 #import "AVIMUserOptions.h"
 #import "AVPaasClient.h"
@@ -189,7 +188,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
             return;
         }
         if ([item length] == 0 || [item length] > kMaxClientIdLength) {
-            [NSException raise:NSInternalInconsistencyException format:@"ClientId length should be in range [1, 64] but found '%@' length %lu.", item, [item length]];
+            [NSException raise:NSInternalInconsistencyException format:@"ClientId length should be in range [1, 64] but found '%@' length %lu.", item, (unsigned long)[item length]];
             return;
         }
     }
@@ -272,7 +271,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         if (!clientId || clientId.length > kMaxClientIdLength) {
             
             [NSException raise:NSInvalidArgumentException
-                        format:@"`clientId` is invalid or exceed Max Length('%lu').", kMaxClientIdLength];
+                        format:@"`clientId` is invalid or exceed Max Length('%lu').", (unsigned long)kMaxClientIdLength];
         }
         
         _clientId = [clientId copy];
