@@ -94,7 +94,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     
     AVIMWebSocketWrapper *_socketWrapper;
     
-    AVInstallation *_currentInstallation;
+    AVInstallation *_installation;
     
     NSString *_appId;
     
@@ -252,81 +252,110 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 - (void)doInitializationWithClientId:(NSString *)clientId
                                  tag:(NSString *)tag
 {
-    NSString *appId = [AVOSCloud getApplicationId];
-    
-    if (!appId) {
+    void(^setupAppId_block)(void) = ^(void) {
         
-        [NSException raise:NSInternalInconsistencyException
-                    format:@"Application id can not be nil."];
-    }
-    
-    _appId = [appId copy];
-    
-    if (!clientId || clientId.length > kMaxClientIdLength) {
+        NSString *appId = [AVOSCloud getApplicationId];
         
-        [NSException raise:NSInvalidArgumentException
-                    format:@"`clientId` is invalid or exceed Max Length('%lu').", kMaxClientIdLength];
-    }
-    
-    _clientId = [clientId copy];
-    
-    if (tag) {
-        
-        if ([tag isEqualToString:LCIMTagDefault]) {
+        if (!appId) {
             
-            [NSException raise:NSInvalidArgumentException
-                        format:@"The tag('%@') is a Reserved Tag", LCIMTagDefault];
+            [NSException raise:NSInternalInconsistencyException
+                        format:@"Application id can not be nil."];
         }
         
-        _tag = [tag copy];
+        _appId = [appId copy];
+    };
+    
+    setupAppId_block();
+
+    void(^setupClientId_block)(void) = ^(void) {
         
-    } else {
+        if (!clientId || clientId.length > kMaxClientIdLength) {
+            
+            [NSException raise:NSInvalidArgumentException
+                        format:@"`clientId` is invalid or exceed Max Length('%lu').", kMaxClientIdLength];
+        }
         
-        _tag = nil;
-    }
+        _clientId = [clientId copy];
+    };
     
-    AVIMWebSocketWrapper *socketWrapper = [[AVIMWebSocketWrapper alloc] init];
+    setupClientId_block();
+
+    void(^setupTag_block)(void) = ^(void) {
+        
+        if (tag) {
+            
+            if ([tag isEqualToString:LCIMTagDefault]) {
+                
+                [NSException raise:NSInvalidArgumentException
+                            format:@"The tag('%@') is a Reserved Tag", LCIMTagDefault];
+            }
+            
+            _tag = [tag copy];
+            
+        } else {
+            
+            _tag = nil;
+        }
+    };
     
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    setupTag_block();
     
-    [center addObserver:self
-               selector:@selector(websocketOpened:)
-                   name:AVIM_NOTIFICATION_WEBSOCKET_OPENED
-                 object:socketWrapper];
+    void(^setupWebSocketWrapper_block)(void) = ^(void) {
+        
+        AVIMWebSocketWrapper *socketWrapper = [[AVIMWebSocketWrapper alloc] init];
+        
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+        
+        [center addObserver:self
+                   selector:@selector(websocketOpened:)
+                       name:AVIM_NOTIFICATION_WEBSOCKET_OPENED
+                     object:socketWrapper];
+        
+        [center addObserver:self
+                   selector:@selector(websocketClosed:)
+                       name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
+                     object:socketWrapper];
+        
+        [center addObserver:self
+                   selector:@selector(websocketReconnect:)
+                       name:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
+                     object:socketWrapper];
+        
+        [center addObserver:self
+                   selector:@selector(receiveCommand:)
+                       name:AVIM_NOTIFICATION_WEBSOCKET_COMMAND
+                     object:socketWrapper];
+        
+        _socketWrapper = socketWrapper;
+    };
     
-    [center addObserver:self
-               selector:@selector(websocketClosed:)
-                   name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
-                 object:socketWrapper];
+    setupWebSocketWrapper_block();
     
-    [center addObserver:self
-               selector:@selector(websocketReconnect:)
-                   name:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
-                 object:socketWrapper];
+    void(^setupInstallation_block)(void) = ^(void) {
+        
+        AVInstallation *installation = [AVInstallation defaultInstallation];
+        
+        [installation addObserver:self
+                       forKeyPath:keyPath(installation, deviceToken)
+                          options:(NSKeyValueObservingOptionNew)
+                          context:nil];
+        
+        _installation = installation;
+    };
     
-    [center addObserver:self
-               selector:@selector(receiveCommand:)
-                   name:AVIM_NOTIFICATION_WEBSOCKET_COMMAND
-                 object:socketWrapper];
+    setupInstallation_block();
     
-    _socketWrapper = socketWrapper;
+    void(^setup_StateMachine_Var_block)(void) = ^(void) {
+        
+        _status = AVIMClientStatusNone;
+        
+        _sessionToken = nil;
+    };
     
-    _currentInstallation = [AVInstallation defaultInstallation];
+    setup_StateMachine_Var_block();
     
     _lastPatchTimestamp = 0;
     _lastUnreadTimestamp = 0;
-    
-    /*
-     State-Machine global variable's initialization
-     */
-    
-    ///
-    
-    _status = AVIMClientStatusNone;
-    
-    _sessionToken = nil;
-    
-    ///
     
     _stagedMessages = [[NSMutableDictionary alloc] init];
     _messageQueryCacheEnabled = YES;
@@ -344,29 +373,6 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                                 _queueOfConvMemory_specific_value,
                                 NULL);
 #endif
-
-    // FIXME: Memory Leak
-    /*
-     Observe push notification device token and websocket open event.
-     */
-    ///
-    __weak typeof(self) weakSelf = self;
-    
-    [LCObserverMake(self) addTarget:_currentInstallation
-                         forKeyPath:NSStringFromSelector(@selector(deviceToken))
-                            options:0
-                              block:
-     ^(id object, id target, NSDictionary *change) {
-         
-         dispatch_async(imClientQueue, ^{
-             
-             if (_status == AVIMClientStatusOpened) {
-                 
-                 [weakSelf installationRegisterClientChannel];
-             }
-         });
-     }];
-    ///
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         LCIMConversationCache *cache = [self conversationCache];
@@ -648,7 +654,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         
         /* Device Token */
         
-        NSString *deviceToken = _currentInstallation.deviceToken ?: [AVUtils deviceUUID];
+        NSString *deviceToken = _installation.deviceToken ?: [AVUtils deviceUUID];
         
         sessionCommand.deviceToken = deviceToken;
         
@@ -919,32 +925,11 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 // MARK: - APNs
 
-- (void)installationRemoveClientChannel
-{
-    AssertRunInIMClientQueue;
-    
-    AVInstallation *installation = _currentInstallation;
-    
-    if (installation.deviceToken) {
-        
-        [installation removeObject:_clientId
-                            forKey:@"channels"];
-        
-        [installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-            
-            if (error) {
-                
-                AVLoggerError(AVLoggerDomainIM, @"%@", error);
-            }
-        }];
-    }
-}
-
 - (void)installationRegisterClientChannel
 {
     AssertRunInIMClientQueue;
     
-    AVInstallation *installation = _currentInstallation;
+    AVInstallation *installation = _installation;
     
     NSString *clientId = _clientId;
     
@@ -979,6 +964,27 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     genericCommand.reportMessage = reportCommand;
     
     [self _sendCommand:genericCommand];
+}
+
+- (void)installationRemoveClientChannel
+{
+    AssertRunInIMClientQueue;
+    
+    AVInstallation *installation = _installation;
+    
+    if (installation.deviceToken) {
+        
+        [installation removeObject:_clientId
+                            forKey:@"channels"];
+        
+        [installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            
+            if (error) {
+                
+                AVLoggerError(AVLoggerDomainIM, @"%@", error);
+            }
+        }];
+    }
 }
 
 // MARK: - WebSocket Notification
@@ -2652,6 +2658,32 @@ __attribute__((warn_unused_result))
             callback();
         });
     });
+}
+
+// MARK: - KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary<NSKeyValueChangeKey,id> *)change
+                       context:(void *)context
+{
+    if (keyPath == keyPath(_installation, deviceToken)) {
+        
+        NSString *value = change[NSKeyValueChangeNewKey];
+        
+        if (value && [value isKindOfClass:[NSString class]]) {
+            
+            dispatch_async(imClientQueue, ^{
+                
+                if (_status != AVIMClientStatusOpened) {
+                    
+                    return ;
+                }
+                
+                [self installationRegisterClientChannel];
+            });
+        }
+    }
 }
 
 // MARK: - Thread Unsafe
