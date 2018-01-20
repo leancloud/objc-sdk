@@ -15,96 +15,140 @@ class ViewController: UIViewController {
     
     var client: AVIMClient!
     
-    @IBOutlet weak var loginButton: UIButton!
-    @IBOutlet weak var reopenButton: UIButton!
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
-    
-    @IBAction func login() {
-        
-        self.activityIndicatorView.startAnimating()
-        self.loginButton.isEnabled = false
-        self.reopenButton.isEnabled = false
-        
-        self.client.open { (success: Bool, error: Error?) in
-            
-            self.activityIndicatorView.stopAnimating()
-            self.loginButton.isEnabled = true
-            self.reopenButton.isEnabled = true
-            
-            if success {
-                
-                let alert: UIAlertController = UIAlertController(title: "Success", message: "Login", preferredStyle: .alert)
-                
-                let action: UIAlertAction = UIAlertAction(title: "ok", style: .default, handler: nil)
-                
-                alert.addAction(action)
-                
-                self.present(alert, animated: true, completion: nil)
-                
-            } else {
-                
-                let alert: UIAlertController = UIAlertController(title: "Error", message: "\(String(describing: error))", preferredStyle: .alert)
-                
-                let action: UIAlertAction = UIAlertAction(title: "ok", style: .default, handler: nil)
-                
-                alert.addAction(action)
-                
-                self.present(alert, animated: true, completion: nil)
-            }
-        }
-    }
-    
-    @IBAction func reopen() {
-        
-        self.activityIndicatorView.startAnimating()
-        self.loginButton.isEnabled = false
-        self.reopenButton.isEnabled = false
-        
-        self.client.open(with: [.reopen]) { (success: Bool, error: Error?) in
-            
-            self.activityIndicatorView.stopAnimating()
-            self.loginButton.isEnabled = true
-            self.reopenButton.isEnabled = true
-            
-            if success {
-                
-                let alert: UIAlertController = UIAlertController(title: "Success", message: "Login", preferredStyle: .alert)
-                
-                let action: UIAlertAction = UIAlertAction(title: "ok", style: .default, handler: nil)
-                
-                alert.addAction(action)
-                
-                self.present(alert, animated: true, completion: nil)
-                
-            } else {
-                
-                let alert: UIAlertController = UIAlertController(title: "Error", message: "\(String(describing: error))", preferredStyle: .alert)
-                
-                let action: UIAlertAction = UIAlertAction(title: "ok", style: .default, handler: nil)
-                
-                alert.addAction(action)
-                
-                self.present(alert, animated: true, completion: nil)
-            }
-        }
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        AVInstallation.current().deviceToken = UUID().uuidString
+        AVInstallation.default().deviceToken = UUID().uuidString
         
         self.client = AVIMClient(clientId: "RuntimeTestDemo", tag: "test")
         self.client.delegate = self
         
         assert(self.client.status == .none)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    func enableUserInteraction() {
+        self.activityIndicatorView.stopAnimating()
+        self.view.isUserInteractionEnabled = true
+    }
+    
+    func disableUserInteraction() {
+        self.activityIndicatorView.startAnimating()
+        self.view.isUserInteractionEnabled = false
     }
 
+}
+
+extension ViewController {
+    
+    func login() {
+        
+        self.disableUserInteraction()
+        
+        self.client.open { (success: Bool, error: Error?) in
+            
+            self.enableUserInteraction()
+            
+            if success {
+                
+                let alert: UIAlertController = UIAlertController(title: "Success", message: "Login", preferredStyle: .alert)
+                
+                let action: UIAlertAction = UIAlertAction(title: "ok", style: .default, handler: nil)
+                
+                alert.addAction(action)
+                
+                self.present(alert, animated: true, completion: nil)
+                
+            } else {
+                
+                let alert: UIAlertController = UIAlertController(title: "Error", message: "\(String(describing: error))", preferredStyle: .alert)
+                
+                let action: UIAlertAction = UIAlertAction(title: "ok", style: .default, handler: nil)
+                
+                alert.addAction(action)
+                
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    func reopen() {
+        
+        self.disableUserInteraction()
+        
+        self.client.open(with: [.reopen]) { (success: Bool, error: Error?) in
+            
+            self.enableUserInteraction()
+            
+            if success {
+                
+                let alert: UIAlertController = UIAlertController(title: "Success", message: "Login", preferredStyle: .alert)
+                
+                let action: UIAlertAction = UIAlertAction(title: "ok", style: .default, handler: nil)
+                
+                alert.addAction(action)
+                
+                self.present(alert, animated: true, completion: nil)
+                
+            } else {
+                
+                let alert: UIAlertController = UIAlertController(title: "Error", message: "\(String(describing: error))", preferredStyle: .alert)
+                
+                let action: UIAlertAction = UIAlertAction(title: "ok", style: .default, handler: nil)
+                
+                alert.addAction(action)
+                
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    func changeDeviceToken() {
+        AVInstallation.default().deviceToken = UUID().uuidString
+    }
+    
+}
+
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 3
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell")!
+        switch indexPath.row {
+        case 0:
+            cell.textLabel?.text = "Login"
+        case 1:
+            cell.textLabel?.text = "Reopen"
+        case 2:
+            cell.textLabel?.text = "Change Device Token"
+        default:
+            fatalError()
+        }
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        defer {
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
+        
+        switch indexPath.row {
+        case 0:
+            self.login()
+        case 1:
+            self.reopen()
+        case 2:
+            self.changeDeviceToken()
+        default:
+            fatalError()
+        }
+    }
 }
 
 extension ViewController: AVIMClientDelegate {
