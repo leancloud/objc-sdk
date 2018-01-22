@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
  checks.
  
  A valid AVInstallation can only be instantiated via
- [AVInstallation currentInstallation] because the required identifier fields
+ [AVInstallation defaultInstallation] because the required identifier fields
  are readonly. The timeZone and badge fields are also readonly properties which
  are automatically updated to match the device's time zone and application badge
  when the AVInstallation is saved, thus these fields might not reflect the

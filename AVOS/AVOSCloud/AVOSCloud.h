@@ -310,7 +310,7 @@ NS_ASSUME_NONNULL_BEGIN
  This method should be called in -[UIApplication application:didRegisterForRemoteNotificationsWithDeviceToken:].
 
  @param deviceToken Device token issued by APNs.
- @param block Constructing block of [AVInstallation currentInstallation].
+ @param block Constructing block of [AVInstallation defaultInstallation].
  */
 + (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
                constructingInstallationWithBlock:(void(^ _Nullable)(AVInstallation *currentInstallation))block;
@@ -321,7 +321,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param deviceToken Device token issued by APNs.
  @param teamId Team ID.
- @param block Constructing block of [AVInstallation currentInstallation].
+ @param block Constructing block of [AVInstallation defaultInstallation].
  */
 + (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
                                           teamId:(NSString * _Nullable)teamId
