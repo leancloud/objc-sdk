@@ -25,8 +25,8 @@
     [super setUp];
     NSError *error;
     // save current installation for test
-    [[AVInstallation currentInstallation] setDeviceToken:kTestDeviceToken];
-    [[AVInstallation currentInstallation] save:&error];
+    [[AVInstallation defaultInstallation] setDeviceToken:kTestDeviceToken];
+    [[AVInstallation defaultInstallation] save:&error];
     XCTAssertNil(error);
 }
 

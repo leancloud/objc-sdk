@@ -20,8 +20,8 @@
     [super setUp];
     NSError *error;
     // save current installation for test
-    [[AVInstallation currentInstallation] setDeviceToken:kTestDeviceToken];
-    [[AVInstallation currentInstallation] save:&error];
+    [[AVInstallation defaultInstallation] setDeviceToken:kTestDeviceToken];
+    [[AVInstallation defaultInstallation] save:&error];
     XCTAssertNil(error);
 }
 
@@ -36,11 +36,11 @@
 
 - (void)testInstallationUpdate {
     NSString *name = NSStringFromSelector(_cmd);
-    [[AVInstallation currentInstallation] setObject:name forKey:@"name"];
+    [[AVInstallation defaultInstallation] setObject:name forKey:@"name"];
     NSError *error;
-    [[AVInstallation currentInstallation] save:&error];
+    [[AVInstallation defaultInstallation] save:&error];
     XCTAssertNil(error);
-    NSString *objectId = [AVInstallation currentInstallation].objectId;
+    NSString *objectId = [AVInstallation defaultInstallation].objectId;
     
     AVInstallation *installation = [AVInstallation objectWithObjectId:objectId];
     [installation fetch:&error];
@@ -66,14 +66,14 @@
 /** 需要 delete 权限 */
 - (void)testDeleteInstallation {
     NSError *error;
-    [[AVInstallation currentInstallation] delete:&error];
+    [[AVInstallation defaultInstallation] delete:&error];
     XCTAssertNil(error);
 }
 
 // https://ticket.leancloud.cn/tickets/8487
 - (void)testInstallationMutated {
     NSDictionary *dict = [self jsonWithFileName:@"TestInstallationSave"];
-    AVInstallation *installation = [AVInstallation currentInstallation];
+    AVInstallation *installation = [AVInstallation defaultInstallation];
     [installation objectFromDictionary:dict];
     [installation setObject:@(YES) forKey:@"enableNoDisturb"];
     [installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {

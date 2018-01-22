@@ -8,14 +8,40 @@
 
 import XCTest
 
-let kLCTestBase_IsSelectRegion_US: Bool = false
-
-// US
-let kLCTestBase_AppId_US: String = "kknqydxqd9wdq4cboy1dvvug5ha0ce3i2mrerrdrmr6pla1p"
-let kLCTestBase_AppKey_US: String = "fate582pwsfh97s9o99nw91a152i7ndm9tsy866e6wpezth4"
-// CN
-let kLCTestBase_AppId_CN: String = "nq0awk3lh1dpmbkziz54377mryii8ny4xvp6njoygle5nlyg"
-let kLCTestBase_AppKey_CN: String = "6vdnmdkdi4fva9i06lt50s4mcsfhppjpzm3zf5zjc9ty4pdz"
+enum TestRegion {
+    
+    case CN_North
+    case CN_East
+    case US
+    
+    var appInfo: (id: String, key: String) {
+        
+        switch self {
+            
+        case .CN_North:
+            
+            return (
+                id: "nq0awk3lh1dpmbkziz54377mryii8ny4xvp6njoygle5nlyg",
+                key: "6vdnmdkdi4fva9i06lt50s4mcsfhppjpzm3zf5zjc9ty4pdz"
+            )
+            
+        case .CN_East:
+            
+            return (
+                id: "uwWkfssEBRtrxVpQWEnFtqfr-9Nh9j0Va",
+                key: "9OaLpoW21lIQtRYzJya4WHUR"
+            )
+            
+        case .US:
+            
+            return (
+                id: "kknqydxqd9wdq4cboy1dvvug5ha0ce3i2mrerrdrmr6pla1p",
+                key: "fate582pwsfh97s9o99nw91a152i7ndm9tsy866e6wpezth4"
+            )
+        }
+        
+    }
+}
 
 class LCTestBase: XCTestCase {
     
@@ -23,21 +49,12 @@ class LCTestBase: XCTestCase {
         
         super.setUp()
         
-        let appId: String
-        let appKey: String
+        let region: TestRegion = .CN_East
         
-        if kLCTestBase_IsSelectRegion_US {
-            
-            appId = kLCTestBase_AppId_US
-            appKey = kLCTestBase_AppKey_US
-            
-        } else {
-            
-            appId = kLCTestBase_AppId_CN
-            appKey = kLCTestBase_AppKey_CN
-        }
+        let appInfo: (id: String, key: String) = region.appInfo
         
-        AVOSCloud.setApplicationId(appId, clientKey: appKey)
+        AVOSCloud.setApplicationId(appInfo.id, clientKey: appInfo.key)
+        
         AVOSCloud.setAllLogsEnabled(true)
     }
     

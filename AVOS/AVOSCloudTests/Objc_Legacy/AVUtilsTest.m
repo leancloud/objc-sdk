@@ -35,7 +35,7 @@
     // 观察日志是否输出
     [AVOSCloud setAllLogsEnabled:NO];
     AVLoggerD(@"debug");
-    [[AVInstallation currentInstallation] save];
+    [[AVInstallation defaultInstallation] save];
     [AVOSCloud setAllLogsEnabled:YES];
 }
 
