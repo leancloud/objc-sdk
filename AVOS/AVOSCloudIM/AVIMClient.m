@@ -98,7 +98,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     NSString *_appId;
     
     /*
-     State-Machine global variable
+     State-Machine-Property global variable
      */
     
     ///
@@ -108,6 +108,8 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     NSString *_sessionToken;
     
     ///
+    
+    dispatch_queue_t _internalSerialQueue;
     
     NSMutableArray *_distinctMessageIdArray;
     
@@ -161,10 +163,6 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds {
     [AVIMWebSocketWrapper setTimeoutIntervalInSeconds:seconds];
-}
-
-+ (dispatch_queue_t)imClientQueue {
-    return imClientQueue;
 }
 
 + (BOOL)checkErrorForSignature:(AVIMSignature *)signature command:(AVIMGenericCommand *)command {
@@ -344,14 +342,16 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     
     setupInstallation_block();
     
-    void(^setup_StateMachine_Var_block)(void) = ^(void) {
+    void(^setup_StateMachineProperty_Var_block)(void) = ^(void) {
         
         _status = AVIMClientStatusNone;
         
         _sessionToken = nil;
     };
     
-    setup_StateMachine_Var_block();
+    setup_StateMachineProperty_Var_block();
+    
+    _internalSerialQueue = imClientQueue;
     
     _lastPatchTimestamp = 0;
     _lastUnreadTimestamp = 0;
@@ -388,6 +388,13 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     [_socketWrapper close];
 }
 
+// MARK: - Internal Serial Queue
+
+- (dispatch_queue_t)internalSerialQueue
+{
+    return _internalSerialQueue;
+}
+
 // MARK: - Getter and Setter of Delegate & DataSource
 
 - (id<AVIMClientDelegate>)delegate
@@ -396,7 +403,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     
     __block id<AVIMClientDelegate> delegate = nil;
     
-    dispatch_sync(imClientQueue, ^{
+    dispatch_sync(_internalSerialQueue, ^{
         
         delegate = _delegate;
     });
@@ -406,7 +413,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)setDelegate:(id<AVIMClientDelegate>)delegate
 {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         _delegate = delegate;
     });
@@ -418,7 +425,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     
     __block id<AVIMSignatureDataSource> signatureDataSource = nil;
     
-    dispatch_sync(imClientQueue, ^{
+    dispatch_sync(_internalSerialQueue, ^{
         
         signatureDataSource = _signatureDataSource;
     });
@@ -428,7 +435,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)setSignatureDataSource:(id<AVIMSignatureDataSource>)signatureDataSource
 {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         _signatureDataSource = signatureDataSource;
     });
@@ -442,7 +449,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     
     __block AVIMClientStatus status = AVIMClientStatusNone;
     
-    dispatch_sync(imClientQueue, ^{
+    dispatch_sync(_internalSerialQueue, ^{
         
         status = _status;
     });
@@ -493,7 +500,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         
         [socketWrapper openWithCallback:^(BOOL succeeded, NSError *error1) {
             
-            dispatch_async(imClientQueue, ^{
+            dispatch_async(_internalSerialQueue, ^{
                 
                 if (error1) {
                     
@@ -515,7 +522,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                 
                 [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error2) {
                     
-                    dispatch_async(imClientQueue, ^{
+                    dispatch_async(_internalSerialQueue, ^{
                         
                         if (error2) {
                             
@@ -770,7 +777,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
             
             [cmd setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
                 
-                dispatch_async(imClientQueue, ^{
+                dispatch_async(_internalSerialQueue, ^{
                     
                     if (error) {
                         
@@ -806,7 +813,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     
     [cmd setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
         
-        dispatch_async(imClientQueue, ^{
+        dispatch_async(_internalSerialQueue, ^{
             
             if (error) {
                 
@@ -836,7 +843,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)closeWithCallback:(AVIMBooleanResultBlock)callback
 {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         if (_status == AVIMClientStatusClosed) {
             
@@ -861,7 +868,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         [genericCommand setNeedResponse:true];
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             
-            dispatch_async(imClientQueue, ^{
+            dispatch_async(_internalSerialQueue, ^{
                 
                 if (error) {
                     
@@ -990,7 +997,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)websocketOpened:(NSNotification *)notification
 {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         NSString *sessionToken = _sessionToken;
         
@@ -1010,7 +1017,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)websocketClosed:(NSNotification *)notification
 {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         if (!_sessionToken) {
             
@@ -1080,7 +1087,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)websocketReconnect:(NSNotification *)notification
 {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         if (!_sessionToken) {
             
@@ -1110,7 +1117,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)receiveCommand:(NSNotification *)notification
 {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         NSDictionary *userInfo = notification.userInfo;
         
@@ -1208,7 +1215,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)getSignatureForOpenWith:(void(^)(AVIMSignature *))callback
 {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         [self _getSignatureForOpenWith:callback];
     });
@@ -1268,7 +1275,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                 
                 signature.error = aError;
                 
-                dispatch_async(imClientQueue, ^{
+                dispatch_async(_internalSerialQueue, ^{
                     
                     callback(signature);
                 });
@@ -1280,7 +1287,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
             signature.signature = result[@"signature"];
             signature.timestamp = [result[@"timestamp"] unsignedIntegerValue];
             
-            dispatch_async(imClientQueue, ^{
+            dispatch_async(_internalSerialQueue, ^{
                 
                 callback(signature);
             });
@@ -1304,7 +1311,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                 signature.error = aError;
             }
             
-            dispatch_async(imClientQueue, ^{
+            dispatch_async(_internalSerialQueue, ^{
                 
                 callback(signature);
             });
@@ -1324,7 +1331,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)sendCommand:(AVIMGenericCommand *)command
 {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         [self _sendCommand:command];
     });
@@ -1546,7 +1553,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         [members allObjects];
     })];
     
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
         
@@ -1735,7 +1742,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 }
 
 - (void)queryOnlineClientsInClients:(NSArray<NSString *> *)clients callback:(AVIMArrayResultBlock)callback {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
 
         genericCommand.needResponse = YES;
@@ -1950,7 +1957,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                  return;
              }
              
-             dispatch_async([client.class imClientQueue], ^{
+             dispatch_async(_internalSerialQueue, ^{
                  
                  if (error) {
                      
@@ -2092,7 +2099,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                  return;
              }
              
-             dispatch_async([client.class imClientQueue], ^{
+             dispatch_async(_internalSerialQueue, ^{
                  
                  if (error) {
                      
@@ -2233,7 +2240,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                  return;
              }
              
-             dispatch_async([client.class imClientQueue], ^{
+             dispatch_async(_internalSerialQueue, ^{
                  
                  if (error) {
                      
@@ -2404,7 +2411,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                  return;
              }
              
-             dispatch_async([client.class imClientQueue], ^{
+             dispatch_async(_internalSerialQueue, ^{
                  
                  if (error) {
                      
@@ -2672,7 +2679,7 @@ __attribute__((warn_unused_result))
         
         if (value && [value isKindOfClass:[NSString class]]) {
             
-            dispatch_async(imClientQueue, ^{
+            dispatch_async(_internalSerialQueue, ^{
                 
                 if (_status != AVIMClientStatusOpened) {
                     

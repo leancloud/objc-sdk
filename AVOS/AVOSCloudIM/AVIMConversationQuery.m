@@ -358,8 +358,29 @@
     return genericCommand;
 }
 
-- (void)findConversationsWithCallback:(AVIMArrayResultBlock)callback {
-    dispatch_async([AVIMClient imClientQueue], ^{
+- (void)findConversationsWithCallback:(AVIMArrayResultBlock)callback
+{
+    AVIMClient *client = self.client;
+    
+    if (!client) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSString *reason = @"`client` is invalid.";
+            
+            NSDictionary *info = @{ @"reason" : reason };
+            
+            NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                                  code:0
+                                              userInfo:info];
+            
+            callback(false, aError);
+        });
+        
+        return;
+    }
+    
+    dispatch_async(client.internalSerialQueue, ^{
         AVIMGenericCommand *command = [self queryCommand];
         [command setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
 
@@ -375,6 +396,26 @@
 - (void)findTemporaryConversationsWith:(NSArray<NSString *> *)tempConvIds
                               callback:(AVIMArrayResultBlock)callback
 {
+    AVIMClient *client = self.client;
+    
+    if (!client) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSString *reason = @"`client` is invalid.";
+            
+            NSDictionary *info = @{ @"reason" : reason };
+            
+            NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                                  code:0
+                                              userInfo:info];
+            
+            callback(nil, aError);
+        });
+        
+        return;
+    }
+    
     if (!tempConvIds || tempConvIds.count == 0) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -407,7 +448,7 @@
                          error:error];
     }];
     
-    dispatch_async([AVIMClient imClientQueue], ^{
+    dispatch_async(client.internalSerialQueue, ^{
         
         [self processOutCommand:command callback:callback];
     });
