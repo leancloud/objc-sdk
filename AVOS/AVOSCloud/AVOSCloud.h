@@ -115,7 +115,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Enable SSL Pinning for all HTTPS Requests.
- Default is True.
+ Default is False.
 
  @param enabled Set whatever you want if you master SSL & SSL Pinning.
  */
