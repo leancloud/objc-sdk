@@ -167,22 +167,6 @@ static BOOL LCSSLPinningEnabled = false;
 
 + (void)setStorageType:(AVStorageType)storageType
 {
-    [AVUploaderManager sharedInstance].storageType = storageType;
-}
-
-+ (AVStorageType)storageTypeForServiceRegion:(AVServiceRegion)serviceRegion {
-    AVStorageType storageType = AVStorageTypeDefault;
-
-    switch (serviceRegion) {
-    case AVServiceRegionCN:
-        storageType = AVStorageTypeQiniu;
-        break;
-    case AVServiceRegionUS:
-        storageType = AVStorageTypeS3;
-        break;
-    }
-
-    return storageType;
 }
 
 + (NSString *)pushGroupForServiceRegion:(AVServiceRegion)serviceRegion {
@@ -210,11 +194,6 @@ static BOOL LCSSLPinningEnabled = false;
     }
 
     LCEffectiveServiceRegion = serviceRegion;
-
-    /* Setup file uploading service. */
-    [self setStorageType:[self storageTypeForServiceRegion:serviceRegion]];
-
-    [AVUploaderManager sharedInstance].serviceRegion = serviceRegion;
 }
 
 + (NSString *)stringFromServiceModule:(AVServiceModule)serviceModule {

@@ -70,7 +70,6 @@
 /**
  *  Storage Type
  */
-__deprecated_msg("Deprecated after v8.2.1")
 typedef NS_ENUM(NSInteger, AVStorageType) {
     AVStorageTypeQiniu = 0,
     AVStorageTypeParse,
@@ -78,7 +77,7 @@ typedef NS_ENUM(NSInteger, AVStorageType) {
     AVStorageTypeQCloud,
     /* Default service region */
     AVStorageTypeDefault = AVStorageTypeQiniu
-} ;
+} __deprecated_msg("Deprecated after v8.2.1");
 
 typedef enum AVLogLevel : NSUInteger {
     AVLogLevelNone      = 0,
@@ -179,7 +178,8 @@ NS_ASSUME_NONNULL_BEGIN
  *  Set third party file storage service. If uses China server, you can use QCloud or Qiniu, the default is Qiniu, if uses US server, the default is AWS S3.
  *  @param type Qiniu, QCloud or AWS S3.
  */
-+ (void)setStorageType:(AVStorageType)type;
++ (void)setStorageType:(AVStorageType)type
+__deprecated_msg("Deprecated after v8.2.1, it is no longer valid, you can delete this config.");
 
 /**
  * Use specified region.
