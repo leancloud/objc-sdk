@@ -752,18 +752,6 @@
 		83DF02B81AF86032000E289C /* LCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DF02AD1AF86032000E289C /* LCDB.h */; };
 		83DF02B91AF86032000E289C /* LCResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DF02AE1AF86032000E289C /* LCResultSet.h */; };
 		83DF02BA1AF86032000E289C /* LCResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DF02AF1AF86032000E289C /* LCResultSet.m */; };
-		83E13C111D4B4FC60009CB6F /* AVConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 83E13C0F1D4B4FC60009CB6F /* AVConfiguration.h */; };
-		83E13C121D4B4FC60009CB6F /* AVConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 83E13C0F1D4B4FC60009CB6F /* AVConfiguration.h */; };
-		83E13C131D4B4FC60009CB6F /* AVConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 83E13C0F1D4B4FC60009CB6F /* AVConfiguration.h */; };
-		83E13C141D4B4FC60009CB6F /* AVConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 83E13C0F1D4B4FC60009CB6F /* AVConfiguration.h */; };
-		83E13C151D4B4FC60009CB6F /* AVConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E13C101D4B4FC60009CB6F /* AVConfiguration.m */; };
-		83E13C161D4B4FC60009CB6F /* AVConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E13C101D4B4FC60009CB6F /* AVConfiguration.m */; };
-		83E13C171D4B4FC60009CB6F /* AVConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E13C101D4B4FC60009CB6F /* AVConfiguration.m */; };
-		83E13C181D4B4FC60009CB6F /* AVConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 83E13C101D4B4FC60009CB6F /* AVConfiguration.m */; };
-		83E13C1A1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */ = {isa = PBXBuildFile; fileRef = 83E13C191D4B509E0009CB6F /* AVConfiguration_extension.h */; };
-		83E13C1B1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */ = {isa = PBXBuildFile; fileRef = 83E13C191D4B509E0009CB6F /* AVConfiguration_extension.h */; };
-		83E13C1C1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */ = {isa = PBXBuildFile; fileRef = 83E13C191D4B509E0009CB6F /* AVConfiguration_extension.h */; };
-		83E13C1D1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */ = {isa = PBXBuildFile; fileRef = 83E13C191D4B509E0009CB6F /* AVConfiguration_extension.h */; };
 		83E5D9521C1AA7C000E61E37 /* AVAnalyticsUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419EE1A5A79FF00C5C6C4 /* AVAnalyticsUtils.m */; };
 		83E5D9531C1AA7D200E61E37 /* AVAnalyticsUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419ED1A5A79FF00C5C6C4 /* AVAnalyticsUtils.h */; };
 		83F745F11B91732D00437259 /* LCIMMessageCacheStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F745EE1B91732D00437259 /* LCIMMessageCacheStore.h */; };
@@ -1415,9 +1403,6 @@
 		83DF02AD1AF86032000E289C /* LCDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCDB.h; sourceTree = "<group>"; };
 		83DF02AE1AF86032000E289C /* LCResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCResultSet.h; sourceTree = "<group>"; };
 		83DF02AF1AF86032000E289C /* LCResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCResultSet.m; sourceTree = "<group>"; };
-		83E13C0F1D4B4FC60009CB6F /* AVConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVConfiguration.h; sourceTree = "<group>"; };
-		83E13C101D4B4FC60009CB6F /* AVConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVConfiguration.m; sourceTree = "<group>"; };
-		83E13C191D4B509E0009CB6F /* AVConfiguration_extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVConfiguration_extension.h; sourceTree = "<group>"; };
 		83F745EE1B91732D00437259 /* LCIMMessageCacheStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageCacheStore.h; sourceTree = "<group>"; };
 		83F745EF1B91732D00437259 /* LCIMMessageCacheStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMMessageCacheStore.m; sourceTree = "<group>"; };
 		83F745F01B91732D00437259 /* LCIMMessageCacheStoreSQL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageCacheStoreSQL.h; sourceTree = "<group>"; };
@@ -2152,9 +2137,6 @@
 				8C8419F61A5A79FF00C5C6C4 /* AVOSCloud_Internal.h */,
 				8C84198B1A5A791300C5C6C4 /* AVOSCloud.h */,
 				8C8419F81A5A79FF00C5C6C4 /* AVOSCloud.m */,
-				83E13C0F1D4B4FC60009CB6F /* AVConfiguration.h */,
-				83E13C191D4B509E0009CB6F /* AVConfiguration_extension.h */,
-				83E13C101D4B4FC60009CB6F /* AVConfiguration.m */,
 				8C8419F91A5A79FF00C5C6C4 /* Cache */,
 				8C841A001A5A79FF00C5C6C4 /* CloudCode */,
 				8C841A121A5A79FF00C5C6C4 /* File */,
@@ -2951,7 +2933,6 @@
 				83BE730E1D810651008ED3CF /* metamacros.h in Headers */,
 				70CA7FFB1BDE4313000A3B21 /* AVObject_Internal.h in Headers */,
 				70CA7FFC1BDE4313000A3B21 /* AVObjectUtils.h in Headers */,
-				83E13C1B1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */,
 				70CA7FFE1BDE4313000A3B21 /* AVRequestManager.h in Headers */,
 				70CA7FFF1BDE4313000A3B21 /* AVRelation_Internal.h in Headers */,
 				70CA80021BDE4313000A3B21 /* AVInstallation_Internal.h in Headers */,
@@ -2986,7 +2967,6 @@
 				83BE73051D8105AF008ED3CF /* EXTScope.h in Headers */,
 				83FCB9D81CEDC57C007D8712 /* LCURLSessionManager.h in Headers */,
 				70CA80301BDE4318000A3B21 /* SDMacros.h in Headers */,
-				83E13C121D4B4FC60009CB6F /* AVConfiguration.h in Headers */,
 				70CA80341BDE4318000A3B21 /* AVUser_Internal.h in Headers */,
 				70CA80351BDE4318000A3B21 /* AVErrorUtils.h in Headers */,
 				70CA80361BDE4318000A3B21 /* AVHelpers.h in Headers */,
@@ -3060,10 +3040,8 @@
 				8320F8F41C1918C60024B45E /* AVFileQuery.h in Headers */,
 				8302AED91C192A0700E13F8A /* LCURLConnection.h in Headers */,
 				83E5D9531C1AA7D200E61E37 /* AVAnalyticsUtils.h in Headers */,
-				83E13C141D4B4FC60009CB6F /* AVConfiguration.h in Headers */,
 				8320F8F51C1918C60024B45E /* AVPush.h in Headers */,
 				8320F8F61C1918C60024B45E /* AVCloudQueryResult.h in Headers */,
-				83E13C1D1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */,
 				8320F8F71C1918C60024B45E /* AVQuery.h in Headers */,
 				9A404DD61CE5A9BB00DEB3DC /* LCRouter.h in Headers */,
 				83B0E5871F28375900EE1A75 /* JRSwizzle.h in Headers */,
@@ -3240,7 +3218,6 @@
 				83D8CF151C17DAF50094279D /* AVRequestOperation.h in Headers */,
 				83D8CF171C17DAF50094279D /* AVAnalyticsImpl.h in Headers */,
 				83D8CF181C17DAF50094279D /* AVExceptionHandler.h in Headers */,
-				83E13C131D4B4FC60009CB6F /* AVConfiguration.h in Headers */,
 				83FCB9A21CEDC57C007D8712 /* LCHTTPSessionManager.h in Headers */,
 				83FCB9C51CEDC57C007D8712 /* LCURLRequestSerialization.h in Headers */,
 				83D8CF1A1C17DAF50094279D /* LCDatabasePool.h in Headers */,
@@ -3256,7 +3233,6 @@
 				83D8CF281C17DAF50094279D /* AVRequestManager.h in Headers */,
 				83D8CF291C17DAF50094279D /* LCDatabaseQueue.h in Headers */,
 				83D8CF2A1C17DAF50094279D /* AVUploaderManager.h in Headers */,
-				83E13C1C1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */,
 				83D8CF2B1C17DAF50094279D /* AVOSCloud_Internal.h in Headers */,
 				83D8CF2E1C17DAF50094279D /* AVCacheManager.h in Headers */,
 				83D8CF301C17DAF50094279D /* AVUser_Internal.h in Headers */,
@@ -3355,7 +3331,6 @@
 				8C841B301A5A7A0000C5C6C4 /* AVRequestOperation.h in Headers */,
 				8C841AB81A5A7A0000C5C6C4 /* AVAnalyticsImpl.h in Headers */,
 				8C841AC01A5A7A0000C5C6C4 /* AVExceptionHandler.h in Headers */,
-				83E13C111D4B4FC60009CB6F /* AVConfiguration.h in Headers */,
 				83DF02B41AF86032000E289C /* LCDatabasePool.h in Headers */,
 				8C841AE31A5A7A0000C5C6C4 /* AVPartialInputStream.h in Headers */,
 				836705AB1BA1358D0050E968 /* SDMacros.h in Headers */,
@@ -3371,7 +3346,6 @@
 				83DF02B61AF86032000E289C /* LCDatabaseQueue.h in Headers */,
 				8C841AE51A5A7A0000C5C6C4 /* AVUploaderManager.h in Headers */,
 				8C841AC51A5A7A0000C5C6C4 /* AVOSCloud_Internal.h in Headers */,
-				83E13C1A1D4B509E0009CB6F /* AVConfiguration_extension.h in Headers */,
 				83A2BD2F1CF33CDA0047B230 /* AVPaasClient_internal.h in Headers */,
 				8C841AC81A5A7A0000C5C6C4 /* AVCacheManager.h in Headers */,
 				8C841B5B1A5A7A0000C5C6C4 /* AVUser_Internal.h in Headers */,
@@ -4163,7 +4137,6 @@
 				70CA7FB31BDE374C000A3B21 /* LCSSLChallenger.m in Sources */,
 				70CA7FB41BDE374C000A3B21 /* NSDictionary+LCHash.m in Sources */,
 				70CA7F721BDE3721000A3B21 /* AVACL.m in Sources */,
-				83E13C161D4B4FC60009CB6F /* AVConfiguration.m in Sources */,
 				70CA7F731BDE3721000A3B21 /* AVRole.m in Sources */,
 				70CA7F741BDE3721000A3B21 /* AVAnalytics.m in Sources */,
 				70CA7F751BDE3721000A3B21 /* AVAnalyticsActivity.m in Sources */,
@@ -4284,7 +4257,6 @@
 				8320F89B1C1918C60024B45E /* AVInstallation.m in Sources */,
 				8320F89C1C1918C60024B45E /* LCDatabasePool.m in Sources */,
 				830EB9FD1C44D68400BA917F /* AVSaveOption.m in Sources */,
-				83E13C181D4B4FC60009CB6F /* AVConfiguration.m in Sources */,
 				8320F89E1C1918C60024B45E /* AVOSCloud.m in Sources */,
 				8320F8A01C1918C60024B45E /* AVObjectUtils.m in Sources */,
 				8320F8A11C1918C60024B45E /* LCSSLChallenger.m in Sources */,
@@ -4415,7 +4387,6 @@
 				83D8CEA31C17DAF50094279D /* AVSearchSortBuilder.m in Sources */,
 				83D8CEA51C17DAF50094279D /* LCNetworkStatistics.m in Sources */,
 				83D8CEA61C17DAF50094279D /* AVDuration.m in Sources */,
-				83E13C171D4B4FC60009CB6F /* AVConfiguration.m in Sources */,
 				83D8CEA71C17DAF50094279D /* AVExceptionHandler.m in Sources */,
 				83D8CEA81C17DAF50094279D /* AVRole.m in Sources */,
 				835092031EB1BDD0000DA884 /* AVSMS.m in Sources */,
@@ -4498,7 +4469,6 @@
 				8C841B391A5A7A0000C5C6C4 /* AVSearchSortBuilder.m in Sources */,
 				838DD7971B3D309F00C95897 /* LCNetworkStatistics.m in Sources */,
 				8C841ABF1A5A7A0000C5C6C4 /* AVDuration.m in Sources */,
-				83E13C151D4B4FC60009CB6F /* AVConfiguration.m in Sources */,
 				8C841AC11A5A7A0000C5C6C4 /* AVExceptionHandler.m in Sources */,
 				8C841AB11A5A7A0000C5C6C4 /* AVRole.m in Sources */,
 				835092011EB1BDD0000DA884 /* AVSMS.m in Sources */,

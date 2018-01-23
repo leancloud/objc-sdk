@@ -8,8 +8,6 @@
 
 #import "AVOSCloud.h"
 #import "AVOSCloud_Internal.h"
-#import "AVConfiguration.h"
-#import "AVConfiguration_extension.h"
 #import "AVPaasClient.h"
 #import "AVUploaderManager.h"
 #import "AVScheduler.h"
@@ -36,7 +34,26 @@ AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
 
 static BOOL LCSSLPinningEnabled = false;
 
-@implementation AVOSCloud
+@implementation AVOSCloud {
+    
+    NSString *_applicationId;
+    
+    NSString *_applicationKey;
+}
+
++ (instancetype)sharedInstance
+{
+    static AVOSCloud *sharedInstance = nil;
+    
+    static dispatch_once_t onceToken;
+    
+    dispatch_once(&onceToken, ^{
+        
+        sharedInstance = [[AVOSCloud alloc] init];
+    });
+    
+    return sharedInstance;
+}
 
 + (void)setSSLPinningEnabled:(BOOL)enabled
 {
@@ -91,10 +108,8 @@ static BOOL LCSSLPinningEnabled = false;
 
 + (void)setApplicationId:(NSString *)applicationId clientKey:(NSString *)clientKey
 {
-    AVConfiguration *configuration = [AVConfiguration sharedInstance];
-
-    configuration.applicationId  = applicationId;
-    configuration.applicationKey = clientKey;
+    [AVOSCloud sharedInstance]->_applicationId = applicationId;
+    [AVOSCloud sharedInstance]->_applicationKey = clientKey;
 
     if (_verbosePolicy == kAVVerboseShow) {
         [self logApplicationInfo];
@@ -127,12 +142,12 @@ static BOOL LCSSLPinningEnabled = false;
 
 + (NSString *)getApplicationId
 {
-    return [AVConfiguration sharedInstance].applicationId;
+    return [AVOSCloud sharedInstance]->_applicationId;
 }
 
 + (NSString *)getClientKey
 {
-    return [AVConfiguration sharedInstance].applicationKey;
+    return [AVOSCloud sharedInstance]->_applicationKey;
 }
 
 + (void)setLastModifyEnabled:(BOOL)enabled{
