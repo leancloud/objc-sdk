@@ -70,6 +70,7 @@
 /**
  *  Storage Type
  */
+__deprecated_msg("Deprecated after v8.2.1")
 typedef NS_ENUM(NSInteger, AVStorageType) {
     AVStorageTypeQiniu = 0,
     AVStorageTypeParse,

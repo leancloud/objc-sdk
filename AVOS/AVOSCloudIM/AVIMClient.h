@@ -529,7 +529,7 @@ __attribute__((warn_unused_result));
  *  @param error    具体错误信息
  */
 - (void)imClientPaused:(AVIMClient *)imClient error:(NSError *)error
-__deprecated_msg("Deprecated after v8.2.0 , use -[imClientClosed:error:] instead.");
+__deprecated_msg("Deprecated after v8.2.1 , use -[imClientClosed:error:] instead.");
 
 /*!
  收到未读通知。在该终端上线的时候，服务器会将对话的未读数发送过来。未读数可通过 -[AVIMConversation markAsReadInBackground] 清零，服务端不会自动清零。
@@ -559,7 +559,7 @@ AVIM_DEPRECATED("Deprecated in v5.1.0. Do not use it any more.");
  */
 - (void)openWithOption:(nullable AVIMClientOpenOption *)option
               callback:(AVIMBooleanResultBlock)callback
-__deprecated_msg("Deprecated after v8.2.0 , use -[openWithOpenOption:callback:] instead.");
+__deprecated_msg("Deprecated after v8.2.1 , use -[openWithOpenOption:callback:] instead.");
 
 @end
 
