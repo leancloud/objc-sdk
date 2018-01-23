@@ -463,8 +463,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
                 if (object[@"success"]) {
                     [results addObject:object[@"success"]];
                 } else if (object[@"error"]) {
-                    NSError *error = [AVErrorUtils errorFromJSON:object[@"error"]];
-                    [results addObject:error];
+                    [results addObject:object[@"error"]];
                 }
             }
             block(results, nil);
@@ -554,8 +553,8 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         @strongify(self);
 
         if (block) {
-            NSError *error = [AVErrorUtils errorFromJSON:responseObject];
-            block(responseObject, error);
+            
+            block(responseObject, nil);
         }
 
         if (self.isLastModifyEnabled && [request.HTTPMethod isEqualToString:@"GET"]) {
@@ -598,7 +597,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             }];
         } else {
             if (block)
-                block(responseObject, [AVErrorUtils errorFromJSON:responseObject] ?: error);
+                block(responseObject, error);
         }
     }];
 }
