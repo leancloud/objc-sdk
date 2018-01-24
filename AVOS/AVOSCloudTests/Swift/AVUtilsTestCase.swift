@@ -10,7 +10,7 @@ import XCTest
 
 class AVUtilsTestCase: LCTestBase {
 
-    func test_decodingFromDictionary() {
+    func test_cocoa_checkingType_decodingFromDictionary() {
         
         let dic: [String : Any] = [
             "a" : NSString(string: "a"),
@@ -18,28 +18,38 @@ class AVUtilsTestCase: LCTestBase {
             "c" : NSObject()
         ]
         
-        guard let _: NSString = NSString.decoding(withKey: "a", fromDic: dic) else {
+        guard NSDictionary.lc__checkingType(dic as NSDictionary) else {
             
             XCTFail()
             
             return
         }
         
-        guard let _: NSNumber = NSNumber.decoding(withKey: "b", fromDic: dic) else {
+        let b: NSString = NSString(string: "a")
+        XCTAssertFalse(NSNumber.lc__checkingType(b))
+        
+        guard let _: NSString = NSString.lc__decoding(withKey: "a", fromDic: dic) else {
             
             XCTFail()
             
             return
         }
         
-        guard let _: NSObject = NSObject.decoding(withKey: "c", fromDic: dic) else {
+        guard let _: NSNumber = NSNumber.lc__decoding(withKey: "b", fromDic: dic) else {
             
             XCTFail()
             
             return
         }
         
-        let a: NSNumber? = NSNumber.decoding(withKey: "a", fromDic: dic)
+        guard let _: NSObject = NSObject.lc__decoding(withKey: "c", fromDic: dic) else {
+            
+            XCTFail()
+            
+            return
+        }
+        
+        let a: NSNumber? = NSNumber.lc__decoding(withKey: "a", fromDic: dic)
         XCTAssertNil(a)
     }
 
