@@ -84,7 +84,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
 -(void)testObjectSaveWithNewFile {
     AVObject *object = [AVObject objectWithClassName:NSStringFromClass([self class])];
     
-    AVFile *avatar=[AVFile fileWithName:@"avatar.jpg" contentsAtPath:[[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil]];
+    AVFile *avatar=[AVFile fileWithName:@"avatar.jpg" contentsAtPath:[[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil] error:nil];
     
     [object setObject:avatar forKey:@"avatar"];
     
@@ -97,7 +97,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
 -(void)testObjectAsyncSaveWithNewFile {
     AVObject *object = [AVObject objectWithClassName:NSStringFromClass([self class])];
     
-    AVFile *avatar=[AVFile fileWithName:@"avatar.jpg" contentsAtPath:[[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil]];
+    AVFile *avatar=[AVFile fileWithName:@"avatar.jpg" contentsAtPath:[[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil] error:nil];
     
     [object setObject:avatar forKey:@"avatar"];
     
@@ -218,8 +218,8 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
 
     NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil];
 
-    object.avatar  = [AVFile fileWithName:@"avatar" contentsAtPath:filePath];
-    object.ebook = [AVFile fileWithName:@"avatar" contentsAtPath:filePath];
+    object.avatar  = [AVFile fileWithName:@"avatar" contentsAtPath:filePath error:nil];
+    object.ebook = [AVFile fileWithName:@"avatar" contentsAtPath:filePath error:nil];
 
     NSError *error = nil;
 
@@ -236,8 +236,8 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
 
     NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil];
 
-    object.avatar  = [AVFile fileWithName:@"avatar" contentsAtPath:filePath];
-    object.ebook = [AVFile fileWithName:@"avatar" contentsAtPath:filePath];
+    object.avatar  = [AVFile fileWithName:@"avatar" contentsAtPath:filePath error:nil];
+    object.ebook = [AVFile fileWithName:@"avatar" contentsAtPath:filePath error:nil];
 
     [AVObject
      saveAllInBackground:@[object]
@@ -257,7 +257,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     AVCustomObject *object = [[AVCustomObject alloc] init];
     
     NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil];
-    AVFile *file = [AVFile fileWithName:@"avatar" contentsAtPath:filePath];
+    AVFile *file = [AVFile fileWithName:@"avatar" contentsAtPath:filePath error:nil];
 
     NSError *error = nil;
     [file save:&error];
@@ -286,7 +286,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
 
     object1.avatar = ({
         NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil];
-        [AVFile fileWithName:@"Info-plist" contentsAtPath:filePath];
+        [AVFile fileWithName:@"Info-plist" contentsAtPath:filePath error:nil];
     });
 
     NSError *error = nil;
@@ -1208,7 +1208,7 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     NSString *avatarPath = @"/path/to/avatar.png";
 
     object.objectName = @"Anonymous";
-    object.avatar = [AVFile fileWithName:@"Avatar" contentsAtPath:avatarPath];
+    object.avatar = [AVFile fileWithName:@"Avatar" contentsAtPath:avatarPath error:nil];
     object[@"nonPredefinedNumericProperty"] = @42;
     object[@"nonPredefinedDateProperty"] = [NSDate date];
 

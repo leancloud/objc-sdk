@@ -151,7 +151,7 @@ static dispatch_time_t dTimeout(NSTimeInterval interval) {
     [[AVUser currentUser] save:&err];
     XCTAssertNil(err, @"%@", err);
     NSString *filePath=[[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino" ofType:@"jpg"];
-    AVFile *fileLarge = [AVFile fileWithName:@"alpacino.jpg" contentsAtPath:filePath];
+    AVFile *fileLarge = [AVFile fileWithName:@"alpacino.jpg" contentsAtPath:filePath error:nil];
     [fileLarge save:&err];
     XCTAssertNil(err, @"%@", err);
     [self addDeleteFile:fileLarge];

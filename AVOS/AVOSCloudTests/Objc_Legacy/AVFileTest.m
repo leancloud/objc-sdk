@@ -41,7 +41,7 @@
     
     XCTAssertEqualObjects(fileMD5, correctMD5, @"file md5 not work");
 
-    AVFile *file=[AVFile fileWithName:@"testimage.jpg" contentsAtPath:filePath];
+    AVFile *file=[AVFile fileWithName:@"testimage.jpg" contentsAtPath:filePath error:nil];
     [file save];
     [self addDeleteFile:file];
     
@@ -94,7 +94,7 @@
     NSString *filePath = [self generateFileOfMegabytes:32];
     NSString *fileMD5= [AVUtils MD5ForFile:filePath];
 
-    AVFile *file=[AVFile fileWithName:@"32M.bin" contentsAtPath:filePath];
+    AVFile *file=[AVFile fileWithName:@"32M.bin" contentsAtPath:filePath error:nil];
     [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         NOTIFY
     } progressBlock:^(NSInteger percentDone) {
@@ -125,7 +125,7 @@
     int count = 10;
     __block int uploaded = 0;
     for (int i = 0; i < count; ++i) {
-        AVFile *file = [AVFile fileWithName:@"avatar" contentsAtPath:filePath];
+        AVFile *file = [AVFile fileWithName:@"avatar" contentsAtPath:filePath error:nil];
         [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             XCTAssertTrue(succeeded, @"%@", error);
             ++uploaded;
@@ -144,8 +144,8 @@
     NSString *filePath=[[NSBundle bundleForClass:[self class]] pathForResource:@"TestRelation" ofType:@"json"];
 //    NSString *fileMD5= [AVUtils MD5ForFile:filePath];
     
-    AVFile *file1 = [AVFile fileWithName:@"TestRelation.json" contentsAtPath:filePath];
-    AVFile *file2 = [AVFile fileWithName:@"TestRelation.json" contentsAtPath:filePath];
+    AVFile *file1 = [AVFile fileWithName:@"TestRelation.json" contentsAtPath:filePath error:nil];
+    AVFile *file2 = [AVFile fileWithName:@"TestRelation.json" contentsAtPath:filePath error:nil];
     AVObject *object = [AVObject objectWithClassName:NSStringFromClass([self class])];
     [object setObject:file1 forKey:@"file1"];
     [object setObject:file2 forKey:@"file2"];
@@ -166,9 +166,9 @@
     NSString *filePath2=[[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino" ofType:@"jpg"];
     NSString *fieldName = NSStringFromSelector(_cmd);
     
-    AVFile *file1 = [AVFile fileWithName:@"TestRelation.json" contentsAtPath:filePath1];
+    AVFile *file1 = [AVFile fileWithName:@"TestRelation.json" contentsAtPath:filePath1 error:nil];
     [file1 save];
-    AVFile *file2 = [AVFile fileWithName:@"avatar.jpg" contentsAtPath:filePath2];
+    AVFile *file2 = [AVFile fileWithName:@"avatar.jpg" contentsAtPath:filePath2 error:nil];
     [file2 save];
     NSMutableArray *array = [[NSMutableArray alloc] init];
     [array addObject:file1];
