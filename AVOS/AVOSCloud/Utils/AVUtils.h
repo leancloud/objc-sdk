@@ -170,10 +170,13 @@ do {                                       \
 - (NSString *)AVAES256Decrypt;
 @end
 
-@interface NSObject (DecodingFromDictionary)
+@interface NSObject (__LC__checkingType__decodingFromDictionary__)
 
-+ (instancetype)decodingWithKey:(NSString *)key
-                        fromDic:(NSDictionary *)dic
++ (BOOL)lc__checkingType:(id)instance
+__attribute__((warn_unused_result));
+
++ (instancetype)lc__decodingWithKey:(NSString *)key
+                            fromDic:(NSDictionary *)dic
 __attribute__((warn_unused_result));
 
 @end
