@@ -1188,6 +1188,8 @@
 		D36A1E0B1FF246C2006EFB5F /* LCIMTestCaseConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */; };
 		D36AC7691FFF50AB00BDCA24 /* AVInstallationTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36AC7681FFF50AB00BDCA24 /* AVInstallationTestCase.swift */; };
 		D36AC76A1FFF50AB00BDCA24 /* AVInstallationTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36AC7681FFF50AB00BDCA24 /* AVInstallationTestCase.swift */; };
+		D370C2E320184C41003029AE /* AVUtilsTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D370C2E220184C41003029AE /* AVUtilsTestCase.swift */; };
+		D370C2E420184C41003029AE /* AVUtilsTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D370C2E220184C41003029AE /* AVUtilsTestCase.swift */; };
 		D37A04671FF36E6200AD44A9 /* testVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D37A04661FF36E6200AD44A9 /* testVideo.mp4 */; };
 		D37A04681FF36E6200AD44A9 /* testVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D37A04661FF36E6200AD44A9 /* testVideo.mp4 */; };
 		D37A046A1FF3705500AD44A9 /* testFile.md in Resources */ = {isa = PBXBuildFile; fileRef = D37A04691FF3705500AD44A9 /* testFile.md */; };
@@ -1726,6 +1728,7 @@
 		D3472E1E2015CBC200AAD65F /* AVFileTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVFileTestCase.swift; sourceTree = "<group>"; };
 		D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseConversation.swift; sourceTree = "<group>"; };
 		D36AC7681FFF50AB00BDCA24 /* AVInstallationTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVInstallationTestCase.swift; sourceTree = "<group>"; };
+		D370C2E220184C41003029AE /* AVUtilsTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVUtilsTestCase.swift; sourceTree = "<group>"; };
 		D37A04661FF36E6200AD44A9 /* testVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = testVideo.mp4; sourceTree = "<group>"; };
 		D37A04691FF3705500AD44A9 /* testFile.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = testFile.md; sourceTree = "<group>"; };
 		D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseQuery.swift; sourceTree = "<group>"; };
@@ -2748,6 +2751,7 @@
 				D30DF3F61FDE2CD200F932BC /* AVUserTestCase.swift */,
 				D36AC7681FFF50AB00BDCA24 /* AVInstallationTestCase.swift */,
 				D3472E1E2015CBC200AAD65F /* AVFileTestCase.swift */,
+				D370C2E220184C41003029AE /* AVUtilsTestCase.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -4207,6 +4211,7 @@
 				70F3154E1BDE50D100D691B3 /* AVTestUtil.m in Sources */,
 				70F3153D1BDE507700D691B3 /* AVCloudTest.m in Sources */,
 				70F3153E1BDE507800D691B3 /* AVOSCloudTest.m in Sources */,
+				D370C2E420184C41003029AE /* AVUtilsTestCase.swift in Sources */,
 				70F3153F1BDE507800D691B3 /* AVFileTest.m in Sources */,
 				70F315401BDE507800D691B3 /* AVRoleTest.m in Sources */,
 				70F315411BDE507800D691B3 /* AVACLTest.m in Sources */,
@@ -4514,6 +4519,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D370C2E320184C41003029AE /* AVUtilsTestCase.swift in Sources */,
 				8CEEABD31ABC179300B9E757 /* AVRelationTest.m in Sources */,
 				D30DF3F71FDE2CD200F932BC /* AVUserTestCase.swift in Sources */,
 				705A389A1BDF605C00864B72 /* AVPersistentUtilsTest.m in Sources */,
