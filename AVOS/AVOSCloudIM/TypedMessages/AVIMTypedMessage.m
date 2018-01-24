@@ -102,7 +102,7 @@ NSMutableDictionary const *_typeDict = nil;
                attachedFilePath:(NSString *)attachedFilePath
                      attributes:(NSDictionary *)attributes {
     NSString *name = [attachedFilePath lastPathComponent];
-    AVFile   *file = [AVFile fileWithName:name contentsAtPath:attachedFilePath];
+    AVFile   *file = [AVFile fileWithName:name contentsAtPath:attachedFilePath error:nil];
 
     return [self messageWithText:text file:file attributes:attributes];
 }
