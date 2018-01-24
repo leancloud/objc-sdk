@@ -1160,3 +1160,21 @@ static Byte ivBuff[]   = {0xA,1,0xB,5,4,0xF,7,9,0x17,3,1,6,8,0xC,0xD,91};
 
 @end
 
+@implementation NSObject (DecodingFromDictionary)
+
++ (instancetype)decodingWithKey:(NSString *)key
+                        fromDic:(NSDictionary *)dic
+{
+    id value = dic[key];
+    
+    if (value && [value isKindOfClass:self]) {
+        
+        return value;
+        
+    } else {
+        
+        return nil;
+    }
+}
+
+@end

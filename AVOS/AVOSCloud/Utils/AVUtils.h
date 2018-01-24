@@ -170,3 +170,10 @@ do {                                       \
 - (NSString *)AVAES256Decrypt;
 @end
 
+@interface NSObject (DecodingFromDictionary)
+
++ (instancetype)decodingWithKey:(NSString *)key
+                        fromDic:(NSDictionary *)dic
+__attribute__((warn_unused_result));
+
+@end
