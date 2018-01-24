@@ -213,7 +213,7 @@
 - (void)testDownloadFileSimultaneous {
     NSString *filePath = [self generateFileOfMegabytes:1];
 
-    AVFile *file = [AVFile fileWithName:@"1M.bin" contentsAtPath:filePath];
+    AVFile *file = [AVFile fileWithName:@"1M.bin" contentsAtPath:filePath error:nil];
     [file save];
     int64_t s = file.size;
     [file clearCachedFile];
@@ -253,12 +253,12 @@
     NSString *filePath = [self generateFileOfMegabytes:1];
 
     NSError *error;
-    AVFile *file = [AVFile fileWithName:@"1M.bin" contentsAtPath:filePath];
+    AVFile *file = [AVFile fileWithName:@"1M.bin" contentsAtPath:filePath error:nil];
     [file save:&error];
     XCTAssertNil(error);
     int64_t s = file.size;
 
-    AVFile *file2 = [AVFile fileWithName:@"1M.bin" contentsAtPath:filePath];
+    AVFile *file2 = [AVFile fileWithName:@"1M.bin" contentsAtPath:filePath error:nil];
     [file2 save];
     [file2 clearCachedFile];
 
