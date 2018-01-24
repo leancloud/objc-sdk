@@ -92,6 +92,7 @@ static LCHTTPSessionManager *imageSessionManager = nil;
 }
 
 #pragma mark - Public Methods
+
 + (instancetype)fileWithData:(NSData *)data
 {
     AVFile * file = [[self alloc] init];
@@ -122,17 +123,36 @@ static LCHTTPSessionManager *imageSessionManager = nil;
 }
 
 + (instancetype)fileWithName:(NSString *)name
-    contentsAtPath:(NSString *)path
+              contentsAtPath:(NSString *)path
+                       error:(NSError * __autoreleasing *)error
 {
+    NSError *_error = nil;
+    
+    NSData *data = [[NSData alloc] initWithContentsOfFile:path
+                                                  options:NSDataReadingMappedIfSafe
+                                                    error:&_error];
+    
+    if (_error) {
+        
+        if (error) { *error = _error; }
+        
+        return nil;
+    }
+    
     AVFile * file = [[self alloc] init];
     file.name = name;
     file.localPath = path;
-    NSError *error = nil;
-    file.data = [[NSData alloc] initWithContentsOfFile:path options:NSDataReadingMapped error:&error];
-//    file.data = [[NSData alloc] initWithContentsOfMappedFile:path];
-    //FIXME: 这些数据一直在内存 如果文件大的话很危险
-//    file.data = [NSData dataWithContentsOfFile:path];
+    file.data = data;
+    
     return file;
+}
+
++ (instancetype)fileWithName:(NSString *)name
+              contentsAtPath:(NSString *)path
+{
+    return [self fileWithName:name
+               contentsAtPath:path
+                        error:nil];
 }
 
 + (instancetype)fileWithAVObject:(AVObject *)object {
@@ -449,9 +469,14 @@ static LCHTTPSessionManager *imageSessionManager = nil;
     if ([AVPersistenceUtils fileExist:path])
     {
         NSError *error = nil;
-        self.data = [[NSData alloc] initWithContentsOfFile:path options:NSDataReadingMapped error:&error];
-//        self.data = [[NSData alloc] initWithContentsOfMappedFile:path];
-//        self.data = [NSData dataWithContentsOfFile:path];
+        
+        self.data = [[NSData alloc] initWithContentsOfFile:path
+                                                   options:NSDataReadingMappedIfSafe
+                                                     error:&error];
+        if (error) {
+            
+            AVLoggerError(AVLoggerDomainStorage, @"%@", error);
+        }
     }
 }
 

@@ -32,8 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
  @param data The contents of the new AVFile.
  @return A AVFile.
  */
-+ (instancetype)fileWithName:(nullable NSString *)name data:(NSData *)data;
-
++ (instancetype)fileWithName:(NSString * _Nullable)name
+                        data:(NSData *)data;
 
 /*!
  Creates a file with given url.
@@ -48,8 +48,14 @@ NS_ASSUME_NONNULL_BEGIN
  @param name The name of the new AVFile
  @param path The path to the file that will be uploaded to LeanCloud
  */
-+ (instancetype)fileWithName:(nullable NSString *)name
-              contentsAtPath:(NSString *)path;
++ (instancetype _Nullable)fileWithName:(NSString * _Nullable)name
+                        contentsAtPath:(NSString *)path
+                                 error:(NSError * __autoreleasing *)error;
+
+/// Deprecated
++ (instancetype _Nullable)fileWithName:(NSString * _Nullable)name
+                        contentsAtPath:(NSString *)path
+__deprecated_msg("Deprecated after v8.2.1, use +[fileWithName:contentsAtPath:error:] instead.");
 
 /*!
  Creates a file with an AVObject. 
