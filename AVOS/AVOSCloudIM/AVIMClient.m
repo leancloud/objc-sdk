@@ -159,6 +159,7 @@ static BOOL AVIMClientHasInstantiated = NO;
 
     if (self) {
         _user = user;
+        _clientId = [user.objectId copy];
         _tag = [tag copy];
         _loginMethod = LCIMClientLoginMethodUser;
 
@@ -263,21 +264,6 @@ static BOOL AVIMClientHasInstantiated = NO;
 
         return _conversationCache;
     }
-}
-
-- (NSString *)clientId {
-    NSString *clientId = nil;
-
-    switch (self.loginMethod) {
-    case LCIMClientLoginMethodID:
-        clientId = _clientId;
-        break;
-    case LCIMClientLoginMethodUser:
-        clientId = self.user.objectId;
-        break;
-    }
-
-    return clientId;
 }
 
 - (void)dealloc
