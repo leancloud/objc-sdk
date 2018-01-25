@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AVOSCloudIMGroupChat'
-  s.version  = '8.2.1'
+  s.version  = '8.2.2'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'Group Chat Extension of LeanCloud IM Objective-C SDK'
   s.authors  = 'LeanCloud'
