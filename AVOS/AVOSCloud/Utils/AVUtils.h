@@ -116,6 +116,7 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 + (NSString *)MIMETypeFromPath:(NSString *)fullPath;
 + (NSString *)contentTypeForImageData:(NSData *)data;
 
++ (NSString *)MD5ForData:(NSData *)data;
 + (NSString*)MD5ForFile:(NSString*)filePath;
 + (NSString*)SHAForFile:(NSString*)filePath;
 
