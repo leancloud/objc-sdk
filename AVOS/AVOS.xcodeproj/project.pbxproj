@@ -1182,6 +1182,8 @@
 		D30DF3F81FDE2CD200F932BC /* AVUserTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF3F61FDE2CD200F932BC /* AVUserTestCase.swift */; };
 		D30DF4161FDE38EF00F932BC /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
 		D30DF4171FDE38EF00F932BC /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
+		D341F2A32018B6DB00408778 /* _10_MB_.png in Resources */ = {isa = PBXBuildFile; fileRef = D341F2A22018B6DB00408778 /* _10_MB_.png */; };
+		D341F2A42018B6DB00408778 /* _10_MB_.png in Resources */ = {isa = PBXBuildFile; fileRef = D341F2A22018B6DB00408778 /* _10_MB_.png */; };
 		D3472E1F2015CBC200AAD65F /* AVFileTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3472E1E2015CBC200AAD65F /* AVFileTestCase.swift */; };
 		D3472E202015CBC200AAD65F /* AVFileTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3472E1E2015CBC200AAD65F /* AVFileTestCase.swift */; };
 		D36A1E0A1FF246C2006EFB5F /* LCIMTestCaseConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */; };
@@ -1725,6 +1727,7 @@
 		D30DF4151FDE38EF00F932BC /* LCTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCTestBase.swift; sourceTree = "<group>"; };
 		D30DF41C1FDE391C00F932BC /* AVOSCloud-macOSTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVOSCloud-macOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		D30DF41D1FDE391D00F932BC /* AVOSCloud-iOSTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVOSCloud-iOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		D341F2A22018B6DB00408778 /* _10_MB_.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = _10_MB_.png; sourceTree = "<group>"; };
 		D3472E1E2015CBC200AAD65F /* AVFileTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVFileTestCase.swift; sourceTree = "<group>"; };
 		D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseConversation.swift; sourceTree = "<group>"; };
 		D36AC7681FFF50AB00BDCA24 /* AVInstallationTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVInstallationTestCase.swift; sourceTree = "<group>"; };
@@ -2290,10 +2293,10 @@
 			isa = PBXGroup;
 			children = (
 				8C841A131A5A79FF00C5C6C4 /* AVFile.h */,
+				8C841A151A5A79FF00C5C6C4 /* AVFile_Internal.h */,
 				8C841A141A5A79FF00C5C6C4 /* AVFile.m */,
 				701881F41BC6777200432D43 /* AVFileQuery.h */,
 				701881F31BC6777200432D43 /* AVFileQuery.m */,
-				8C841A151A5A79FF00C5C6C4 /* AVFile_Internal.h */,
 				8C841A161A5A79FF00C5C6C4 /* AVFileHTTPRequestOperation.h */,
 				8C841A171A5A79FF00C5C6C4 /* AVFileHTTPRequestOperation.m */,
 				8C841A181A5A79FF00C5C6C4 /* AVPartialInputStream.h */,
@@ -2783,6 +2786,7 @@
 		D3472E212015D2AF00AAD65F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D341F2A22018B6DB00408778 /* _10_MB_.png */,
 				8CEEABAD1ABC179300B9E757 /* alpacino.jpg */,
 				70344DD31B71C4F600C3DAD9 /* TestRelation.json */,
 				9A62AE551DF813C100EE0973 /* TestTypedMessage.json */,
@@ -3904,6 +3908,7 @@
 			files = (
 				703812E91BDE8257009F2385 /* alpacino.jpg in Resources */,
 				703812EA1BDE8257009F2385 /* TestRelation.json in Resources */,
+				D341F2A42018B6DB00408778 /* _10_MB_.png in Resources */,
 				703812EB1BDE8257009F2385 /* TestDescriptionKey.json in Resources */,
 				703812EC1BDE8257009F2385 /* TestSaveAll.json in Resources */,
 				703812ED1BDE8257009F2385 /* TestDictionaryForObject.json in Resources */,
@@ -3980,6 +3985,7 @@
 			files = (
 				70C288B11BB55E0300A4773C /* TestInstallationSave.json in Resources */,
 				703EDB1A1BB4FBD400F06757 /* TestDictionaryForObject.json in Resources */,
+				D341F2A32018B6DB00408778 /* _10_MB_.png in Resources */,
 				70344DD41B71C4F600C3DAD9 /* TestRelation.json in Resources */,
 				8CEEABCA1ABC179300B9E757 /* alpacino.jpg in Resources */,
 				708F554D1B86121A0071CA48 /* TestDescriptionKey.json in Resources */,
