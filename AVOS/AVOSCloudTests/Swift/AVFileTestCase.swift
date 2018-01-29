@@ -35,9 +35,39 @@ class AVFileTestCase: LCTestBase {
 
     }
     
-    func test_upload_localFile() {
+    func test_upload_localFile_smallSize() {
         
         let filePath: String = Bundle(for: type(of: self)).path(forResource: "alpacino", ofType: "jpg")!
+        
+        let url: URL = URL.init(fileURLWithPath: filePath)
+        
+        let data: Data = try! Data.init(contentsOf: url)
+        
+        let localFile: AVFile = AVFile(data: data)
+        
+        if self.runloopTestAsync(timeout: .infinity, closure: { (semaphore) -> (Void) in
+            
+            semaphore.increment()
+            
+            localFile.saveInBackground({ (success: Bool, error: Error?) in
+                
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertTrue(success)
+                XCTAssertNil(error)
+            })
+            
+        }) {
+            
+            XCTFail("timeout")
+        }
+    }
+    
+    func test_upload_localFile_largeSize() {
+        
+        let filePath: String = Bundle(for: type(of: self)).path(forResource: "_10_MB_", ofType: "png")!
         
         let url: URL = URL.init(fileURLWithPath: filePath)
         

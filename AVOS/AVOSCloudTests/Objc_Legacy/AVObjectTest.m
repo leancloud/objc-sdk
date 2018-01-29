@@ -81,36 +81,36 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     WAIT
 }
 
--(void)testObjectSaveWithNewFile {
-    AVObject *object = [AVObject objectWithClassName:NSStringFromClass([self class])];
-    
-    AVFile *avatar=[AVFile fileWithName:@"avatar.jpg" contentsAtPath:[[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil] error:nil];
-    
-    [object setObject:avatar forKey:@"avatar"];
-    
-    NSError *error;
-    XCTAssertTrue([object save:&error], @"%@", error);
-    [self addDeleteFile:avatar];
-    [self addDeleteObject:object];
-}
+//-(void)testObjectSaveWithNewFile {
+//    AVObject *object = [AVObject objectWithClassName:NSStringFromClass([self class])];
+//
+//    AVFile *avatar=[AVFile fileWithName:@"avatar.jpg" contentsAtPath:[[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil] error:nil];
+//
+//    [object setObject:avatar forKey:@"avatar"];
+//
+//    NSError *error;
+//    XCTAssertTrue([object save:&error], @"%@", error);
+//    [self addDeleteFile:avatar];
+//    [self addDeleteObject:object];
+//}
 
--(void)testObjectAsyncSaveWithNewFile {
-    AVObject *object = [AVObject objectWithClassName:NSStringFromClass([self class])];
-    
-    AVFile *avatar=[AVFile fileWithName:@"avatar.jpg" contentsAtPath:[[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil] error:nil];
-    
-    [object setObject:avatar forKey:@"avatar"];
-    
-    [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        XCTAssertTrue(succeeded, @"%@", error);
-        [self addDeleteObject:object];
-        [self addDeleteFile:avatar];
-        NOTIFY
-    }];
-    
-    NSLog(@"1 %@",[[NSThread currentThread]description]);
-    WAIT
-}
+//-(void)testObjectAsyncSaveWithNewFile {
+//    AVObject *object = [AVObject objectWithClassName:NSStringFromClass([self class])];
+//
+//    AVFile *avatar=[AVFile fileWithName:@"avatar.jpg" contentsAtPath:[[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil] error:nil];
+//
+//    [object setObject:avatar forKey:@"avatar"];
+//
+//    [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+//        XCTAssertTrue(succeeded, @"%@", error);
+//        [self addDeleteObject:object];
+//        [self addDeleteFile:avatar];
+//        NOTIFY
+//    }];
+//
+//    NSLog(@"1 %@",[[NSThread currentThread]description]);
+//    WAIT
+//}
 
 - (void)testObjectWithDictionary {
     NSDictionary *dict = @{@"afterSave":@"1"};
@@ -213,123 +213,123 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     XCTAssert(object2.objectId != nil, @"Object 2 not saved.");
 }
 
-- (void)testSaveAllDescendantFiles {
-    AVCustomObject *object = [[AVCustomObject alloc] init];
+//- (void)testSaveAllDescendantFiles {
+//    AVCustomObject *object = [[AVCustomObject alloc] init];
+//
+//    NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil];
+//
+//    object.avatar  = [AVFile fileWithName:@"avatar" contentsAtPath:filePath error:nil];
+//    object.ebook = [AVFile fileWithName:@"avatar" contentsAtPath:filePath error:nil];
+//
+//    NSError *error = nil;
+//
+//    [AVObject saveAll:@[object] error:&error];
+//
+//    XCTAssert(!error, @"%@", error);
+//    XCTAssert(object.objectId != nil, @"Object not saved.");
+//    XCTAssert(object.avatar.url != nil, @"Avatar not uploaded.");
+//    XCTAssert(object.ebook.url != nil, @"Ebook not uploaded.");
+//}
 
-    NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil];
+//- (void)testSaveAllDescendantFilesInBackground {
+//    AVCustomObject *object = [[AVCustomObject alloc] init];
+//
+//    NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil];
+//
+//    object.avatar  = [AVFile fileWithName:@"avatar" contentsAtPath:filePath error:nil];
+//    object.ebook = [AVFile fileWithName:@"avatar" contentsAtPath:filePath error:nil];
+//
+//    [AVObject
+//     saveAllInBackground:@[object]
+//     block:^(BOOL succeeded, NSError *error) {
+//         XCTAssert(!error, @"%@", error);
+//         XCTAssert(object.objectId != nil, @"Object not saved.");
+//         XCTAssert(object.avatar.url != nil, @"Avatar not uploaded.");
+//         XCTAssert(object.ebook.url != nil, @"Ebook not uploaded.");
+//
+//         NOTIFY;
+//     }];
+//
+//    WAIT_FOREVER;
+//}
 
-    object.avatar  = [AVFile fileWithName:@"avatar" contentsAtPath:filePath error:nil];
-    object.ebook = [AVFile fileWithName:@"avatar" contentsAtPath:filePath error:nil];
+//- (void)testSaveAllAlreadySavedFile {
+//    AVCustomObject *object = [[AVCustomObject alloc] init];
+//
+//    NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil];
+//    AVFile *file = [AVFile fileWithName:@"avatar" contentsAtPath:filePath error:nil];
+//
+//    NSError *error = nil;
+//    [file save:&error];
+//
+//    XCTAssert(!error, @"%@", error);
+//    XCTAssert(file.url != nil, @"File not uploaded.");
+//
+//    NSString *prevObjectId = file.objectId;
+//
+//    object.avatar  = file;
+//
+//    [AVObject saveAll:@[object] error:&error];
+//
+//    NSString *currObjectId = file.objectId;
+//
+//    XCTAssert(!error, @"%@", error);
+//    XCTAssert(object.objectId != nil, @"Object not saved.");
+//    XCTAssert(object.avatar.url != nil, @"Avatar not uploaded.");
+//    XCTAssert([prevObjectId isEqualToString:currObjectId], @"File duplicated uploaded.");
+//}
 
-    NSError *error = nil;
-
-    [AVObject saveAll:@[object] error:&error];
-
-    XCTAssert(!error, @"%@", error);
-    XCTAssert(object.objectId != nil, @"Object not saved.");
-    XCTAssert(object.avatar.url != nil, @"Avatar not uploaded.");
-    XCTAssert(object.ebook.url != nil, @"Ebook not uploaded.");
-}
-
-- (void)testSaveAllDescendantFilesInBackground {
-    AVCustomObject *object = [[AVCustomObject alloc] init];
-
-    NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil];
-
-    object.avatar  = [AVFile fileWithName:@"avatar" contentsAtPath:filePath error:nil];
-    object.ebook = [AVFile fileWithName:@"avatar" contentsAtPath:filePath error:nil];
-
-    [AVObject
-     saveAllInBackground:@[object]
-     block:^(BOOL succeeded, NSError *error) {
-         XCTAssert(!error, @"%@", error);
-         XCTAssert(object.objectId != nil, @"Object not saved.");
-         XCTAssert(object.avatar.url != nil, @"Avatar not uploaded.");
-         XCTAssert(object.ebook.url != nil, @"Ebook not uploaded.");
-
-         NOTIFY;
-     }];
-
-    WAIT_FOREVER;
-}
-
-- (void)testSaveAllAlreadySavedFile {
-    AVCustomObject *object = [[AVCustomObject alloc] init];
-    
-    NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil];
-    AVFile *file = [AVFile fileWithName:@"avatar" contentsAtPath:filePath error:nil];
-
-    NSError *error = nil;
-    [file save:&error];
-
-    XCTAssert(!error, @"%@", error);
-    XCTAssert(file.url != nil, @"File not uploaded.");
-
-    NSString *prevObjectId = file.objectId;
-
-    object.avatar  = file;
-
-    [AVObject saveAll:@[object] error:&error];
-
-    NSString *currObjectId = file.objectId;
-
-    XCTAssert(!error, @"%@", error);
-    XCTAssert(object.objectId != nil, @"Object not saved.");
-    XCTAssert(object.avatar.url != nil, @"Avatar not uploaded.");
-    XCTAssert([prevObjectId isEqualToString:currObjectId], @"File duplicated uploaded.");
-}
-
-- (void)testSaveQueriedFile {
-    AVCustomObject *object1 = [[AVCustomObject alloc] init];
-
-    object1.objectName = @"The Object";
-
-    object1.avatar = ({
-        NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil];
-        [AVFile fileWithName:@"Info-plist" contentsAtPath:filePath error:nil];
-    });
-
-    NSError *error = nil;
-    [AVObject saveAll:@[object1] error:&error];
-
-    XCTAssert(!error, @"%@", error);
-
-    NSString *fileId1 = object1.avatar.objectId;
-
-    AVQuery *object1Query = [AVQuery queryWithClassName:@"AVCustomObject"];
-    [object1Query whereKey:@"objectId" equalTo:object1.objectId];
-
-    NSArray *objects = [object1Query findObjects:&error];
-
-    XCTAssert(!error, @"%@", error);
-    XCTAssert([objects count] == 1, @"Object not found.");
-
-    AVCustomObject *queriedObject1 = [objects objectAtIndex:0];
-
-    AVFile *queriedAvatar = queriedObject1.avatar;
-
-    AVCustomObject *object2 = [[AVCustomObject alloc] init];
-    object2.avatar = queriedAvatar;
-
-    [AVObject saveAll:@[object2] error:&error];
-
-    XCTAssert(!error, @"%@", error);
-
-    NSString *fileId2 = object2.avatar.objectId;
-
-    XCTAssert([fileId1 isEqualToString:fileId2], @"File upload duplicated.");
-
-    AVCustomObject *object3 = [[AVCustomObject alloc] init];
-    object3.avatar = queriedAvatar;
-
-    [object3 save:&error];
-
-    XCTAssert(!error, @"%@", error);
-
-    NSString *fileId3 = object3.avatar.objectId;
-
-    XCTAssert([fileId1 isEqualToString:fileId3], @"File upload duplicated.");
-}
+//- (void)testSaveQueriedFile {
+//    AVCustomObject *object1 = [[AVCustomObject alloc] init];
+//
+//    object1.objectName = @"The Object";
+//
+//    object1.avatar = ({
+//        NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"alpacino.jpg" ofType:nil];
+//        [AVFile fileWithName:@"Info-plist" contentsAtPath:filePath error:nil];
+//    });
+//
+//    NSError *error = nil;
+//    [AVObject saveAll:@[object1] error:&error];
+//
+//    XCTAssert(!error, @"%@", error);
+//
+//    NSString *fileId1 = object1.avatar.objectId;
+//
+//    AVQuery *object1Query = [AVQuery queryWithClassName:@"AVCustomObject"];
+//    [object1Query whereKey:@"objectId" equalTo:object1.objectId];
+//
+//    NSArray *objects = [object1Query findObjects:&error];
+//
+//    XCTAssert(!error, @"%@", error);
+//    XCTAssert([objects count] == 1, @"Object not found.");
+//
+//    AVCustomObject *queriedObject1 = [objects objectAtIndex:0];
+//
+//    AVFile *queriedAvatar = queriedObject1.avatar;
+//
+//    AVCustomObject *object2 = [[AVCustomObject alloc] init];
+//    object2.avatar = queriedAvatar;
+//
+//    [AVObject saveAll:@[object2] error:&error];
+//
+//    XCTAssert(!error, @"%@", error);
+//
+//    NSString *fileId2 = object2.avatar.objectId;
+//
+//    XCTAssert([fileId1 isEqualToString:fileId2], @"File upload duplicated.");
+//
+//    AVCustomObject *object3 = [[AVCustomObject alloc] init];
+//    object3.avatar = queriedAvatar;
+//
+//    [object3 save:&error];
+//
+//    XCTAssert(!error, @"%@", error);
+//
+//    NSString *fileId3 = object3.avatar.objectId;
+//
+//    XCTAssert([fileId1 isEqualToString:fileId3], @"File upload duplicated.");
+//}
 
 //- (void)testSetObjectWithInternalKeyName {
 //    AVObject *object = [AVObject objectWithClassName:NSStringFromClass([self class])];
@@ -1202,45 +1202,45 @@ const void *AVObjectTestDeleteAll = &AVObjectTestDeleteAll;
     WAIT
 }
 
-- (void)testEncodingAndDecoding {
-    AVCustomObject *object = [AVCustomObject object];
-
-    NSString *avatarPath = @"/path/to/avatar.png";
-
-    object.objectName = @"Anonymous";
-    object.avatar = [AVFile fileWithName:@"Avatar" contentsAtPath:avatarPath error:nil];
-    object[@"nonPredefinedNumericProperty"] = @42;
-    object[@"nonPredefinedDateProperty"] = [NSDate date];
-
-    AVRelation *relation = [object relationForKey:@"bestFriends"];
-
-    AVUser *friend = [AVUser objectWithObjectId:@"10101010101010"];
-    friend.username = @"David";
-    friend.email = @"david@leancloud.cn";
-    friend.sessionToken = @"000000000000000000";
-    [relation addObject:friend];
-
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object];
-    AVCustomObject *objectCopy = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-
-    XCTAssertEqualObjects(objectCopy.objectName, @"Anonymous");
-    XCTAssertEqualObjects(objectCopy.avatar.name, @"Avatar");
-    XCTAssertEqualObjects(objectCopy.avatar.localPath, avatarPath);
-    XCTAssertEqualObjects(objectCopy[@"nonPredefinedNumericProperty"], object[@"nonPredefinedNumericProperty"]);
-    XCTAssertEqualObjects(objectCopy[@"nonPredefinedDateProperty"], object[@"nonPredefinedDateProperty"]);
-
-    AVUser *friendCopy = objectCopy.relationData[@"bestFriends"][0];
-    XCTAssertEqualObjects(friendCopy.objectId, friend.objectId);
-    XCTAssertEqualObjects(friendCopy.sessionToken, friend.sessionToken);
-    XCTAssertEqualObjects(friendCopy.username, friend.username);
-    XCTAssertEqualObjects(friendCopy.email, friend.email);
-
-    AVGeoPoint *point = [AVGeoPoint geoPointWithLatitude:42.0 longitude:90.0];
-    AVGeoPoint *pointCopy = [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:point]];
-
-    XCTAssertEqual(point.latitude, pointCopy.latitude);
-    XCTAssertEqual(point.longitude, pointCopy.longitude);
-}
+//- (void)testEncodingAndDecoding {
+//    AVCustomObject *object = [AVCustomObject object];
+//
+//    NSString *avatarPath = @"/path/to/avatar.png";
+//
+//    object.objectName = @"Anonymous";
+//    object.avatar = [AVFile fileWithName:@"Avatar" contentsAtPath:avatarPath error:nil];
+//    object[@"nonPredefinedNumericProperty"] = @42;
+//    object[@"nonPredefinedDateProperty"] = [NSDate date];
+//
+//    AVRelation *relation = [object relationForKey:@"bestFriends"];
+//
+//    AVUser *friend = [AVUser objectWithObjectId:@"10101010101010"];
+//    friend.username = @"David";
+//    friend.email = @"david@leancloud.cn";
+//    friend.sessionToken = @"000000000000000000";
+//    [relation addObject:friend];
+//
+//    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object];
+//    AVCustomObject *objectCopy = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+//
+//    XCTAssertEqualObjects(objectCopy.objectName, @"Anonymous");
+//    XCTAssertEqualObjects(objectCopy.avatar.name, @"Avatar");
+//    XCTAssertEqualObjects(objectCopy.avatar.localPath, avatarPath);
+//    XCTAssertEqualObjects(objectCopy[@"nonPredefinedNumericProperty"], object[@"nonPredefinedNumericProperty"]);
+//    XCTAssertEqualObjects(objectCopy[@"nonPredefinedDateProperty"], object[@"nonPredefinedDateProperty"]);
+//
+//    AVUser *friendCopy = objectCopy.relationData[@"bestFriends"][0];
+//    XCTAssertEqualObjects(friendCopy.objectId, friend.objectId);
+//    XCTAssertEqualObjects(friendCopy.sessionToken, friend.sessionToken);
+//    XCTAssertEqualObjects(friendCopy.username, friend.username);
+//    XCTAssertEqualObjects(friendCopy.email, friend.email);
+//
+//    AVGeoPoint *point = [AVGeoPoint geoPointWithLatitude:42.0 longitude:90.0];
+//    AVGeoPoint *pointCopy = [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:point]];
+//
+//    XCTAssertEqual(point.latitude, pointCopy.latitude);
+//    XCTAssertEqual(point.longitude, pointCopy.longitude);
+//}
 
 - (void)testSavingUnarchivedObject {
     NSError *error = nil;

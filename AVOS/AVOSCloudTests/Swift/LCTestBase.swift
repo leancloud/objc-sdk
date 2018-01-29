@@ -53,7 +53,29 @@ class LCTestBase: XCTestCase {
         
         let appInfo: (id: String, key: String) = region.appInfo
         
+        if region == .CN_East || region == .CN_North {
+            
+            AVOSCloud.setServiceRegion(.CN)
+            
+        } else {
+            
+            AVOSCloud.setServiceRegion(.US)
+        }
+        
         AVOSCloud.setApplicationId(appInfo.id, clientKey: appInfo.key)
+        
+        if region == .CN_East {
+            
+            for item in [
+                AVServiceModule.API,
+                AVServiceModule.engine,
+                AVServiceModule.push,
+                AVServiceModule.statistics
+                ]
+            {
+                AVOSCloud.setServerURLString("tab.leancloud.cn", for: item)
+            }
+        }
         
         AVOSCloud.setAllLogsEnabled(true)
     }

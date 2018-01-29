@@ -57,5 +57,82 @@ class AVInstallationTestCase: LCTestBase {
         }
 
     }
+    
+    func test_save_multiple_installation() {
+        
+        let installation0 = AVInstallation()
+        installation0.apnsTopic = "0"
+        installation0.deviceToken = "0"
+        
+        var installation0_objectId: String? = nil
+        
+        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+            
+            semaphore.increment()
+            
+            installation0.saveInBackground({ (success: Bool, error: Error?) in
+                
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertTrue(success)
+                XCTAssertNil(error)
+                
+                XCTAssertNotNil(installation0.objectId)
+                
+                installation0_objectId = installation0.objectId
+            })
+            
+        }) {
+            
+            XCTFail("timeout")
+        }
+        
+        guard installation0_objectId != nil else {
+            
+            XCTFail()
+            
+            return
+        }
+        
+        let installation1 = AVInstallation()
+        installation1.apnsTopic = "1"
+        installation1.deviceToken = "1"
+        
+        var installation1_objectId: String? = nil
+        
+        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+            
+            semaphore.increment()
+            
+            installation0.saveInBackground({ (success: Bool, error: Error?) in
+                
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertTrue(success)
+                XCTAssertNil(error)
+                
+                XCTAssertNotNil(installation1.objectId)
+                
+                installation1_objectId = installation1.objectId
+            })
+            
+        }) {
+            
+            XCTFail("timeout")
+        }
+        
+        guard installation1_objectId != nil else {
+            
+            XCTFail()
+            
+            return
+        }
+        
+        XCTAssertNotEqual(installation0_objectId, installation1_objectId)
+    }
 
 }
