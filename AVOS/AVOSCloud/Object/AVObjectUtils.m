@@ -619,7 +619,7 @@
 }
 
 +(NSDictionary *)dictionaryFromACL:(AVACL *)acl {
-    return acl.permissionsById;
+    return [acl.permissionsById copy];
 }
 
 +(NSDictionary *)dictionaryFromRelation:(AVRelation *)relation {
