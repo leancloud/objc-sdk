@@ -138,7 +138,6 @@
 		70CA7F801BDE3721000A3B21 /* AVFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A141A5A79FF00C5C6C4 /* AVFile.m */; };
 		70CA7F811BDE3721000A3B21 /* AVFileQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 701881F31BC6777200432D43 /* AVFileQuery.m */; };
 		70CA7F821BDE3721000A3B21 /* AVFileHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A171A5A79FF00C5C6C4 /* AVFileHTTPRequestOperation.m */; };
-		70CA7F831BDE3721000A3B21 /* AVPartialInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A191A5A79FF00C5C6C4 /* AVPartialInputStream.m */; };
 		70CA7F841BDE3721000A3B21 /* AVUploaderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A1B1A5A79FF00C5C6C4 /* AVUploaderManager.m */; };
 		70CA7F851BDE3721000A3B21 /* AVGeoPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A1E1A5A79FF00C5C6C4 /* AVGeoPoint.m */; };
 		70CA7F861BDE3721000A3B21 /* AVLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A211A5A79FF00C5C6C4 /* AVLocationManager.m */; };
@@ -204,7 +203,6 @@
 		70CA7FF11BDE42F6000A3B21 /* AVFileQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 701881F41BC6777200432D43 /* AVFileQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		70CA7FF21BDE42F6000A3B21 /* AVFile_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A151A5A79FF00C5C6C4 /* AVFile_Internal.h */; };
 		70CA7FF31BDE42F6000A3B21 /* AVFileHTTPRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A161A5A79FF00C5C6C4 /* AVFileHTTPRequestOperation.h */; };
-		70CA7FF41BDE42F6000A3B21 /* AVPartialInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A181A5A79FF00C5C6C4 /* AVPartialInputStream.h */; };
 		70CA7FF51BDE42F6000A3B21 /* AVUploaderManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A1A1A5A79FF00C5C6C4 /* AVUploaderManager.h */; };
 		70CA7FF61BDE42F6000A3B21 /* AVGeoPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A1D1A5A79FF00C5C6C4 /* AVGeoPoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		70CA7FF71BDE42F6000A3B21 /* AVGeoPoint_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A1F1A5A79FF00C5C6C4 /* AVGeoPoint_Internal.h */; };
@@ -374,7 +372,6 @@
 		8320F8BC1C1918C60024B45E /* AVCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419FB1A5A79FF00C5C6C4 /* AVCacheManager.m */; };
 		8320F8BD1C1918C60024B45E /* AVACL.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419DE1A5A79FF00C5C6C4 /* AVACL.m */; };
 		8320F8BE1C1918C60024B45E /* AVFriendQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A661A5A79FF00C5C6C4 /* AVFriendQuery.m */; };
-		8320F8BF1C1918C60024B45E /* AVPartialInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A191A5A79FF00C5C6C4 /* AVPartialInputStream.m */; };
 		8320F8C01C1918C60024B45E /* AVPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A5F1A5A79FF00C5C6C4 /* AVPush.m */; };
 		8320F8C11C1918C60024B45E /* LCDatabaseCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 830E7CF71B1CA2A2005F4B22 /* LCDatabaseCoordinator.m */; };
 		8320F8C51C1918C60024B45E /* AVRelation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A571A5A79FF00C5C6C4 /* AVRelation.m */; };
@@ -436,7 +433,6 @@
 		8320F91A1C1918C60024B45E /* AVObjectUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A541A5A79FF00C5C6C4 /* AVObjectUtils.h */; };
 		8320F91C1C1918C60024B45E /* AVRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A6C1A5A79FF00C5C6C4 /* AVRequestOperation.h */; };
 		8320F9211C1918C60024B45E /* LCDatabasePool.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DF02A91AF86032000E289C /* LCDatabasePool.h */; };
-		8320F9221C1918C60024B45E /* AVPartialInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A181A5A79FF00C5C6C4 /* AVPartialInputStream.h */; };
 		8320F9271C1918C60024B45E /* SDMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705AA1BA1358D0050E968 /* SDMacros.h */; };
 		8320F9281C1918C60024B45E /* AVFriendQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A651A5A79FF00C5C6C4 /* AVFriendQuery.h */; };
 		8320F9291C1918C60024B45E /* AVObject_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A531A5A79FF00C5C6C4 /* AVObject_Internal.h */; };
@@ -636,7 +632,6 @@
 		83D8CEB51C17DAF50094279D /* AVCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419FB1A5A79FF00C5C6C4 /* AVCacheManager.m */; };
 		83D8CEB61C17DAF50094279D /* AVACL.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419DE1A5A79FF00C5C6C4 /* AVACL.m */; };
 		83D8CEB71C17DAF50094279D /* AVFriendQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A661A5A79FF00C5C6C4 /* AVFriendQuery.m */; };
-		83D8CEB81C17DAF50094279D /* AVPartialInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A191A5A79FF00C5C6C4 /* AVPartialInputStream.m */; };
 		83D8CEB91C17DAF50094279D /* AVPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A5F1A5A79FF00C5C6C4 /* AVPush.m */; };
 		83D8CEBA1C17DAF50094279D /* LCDatabaseCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 830E7CF71B1CA2A2005F4B22 /* LCDatabaseCoordinator.m */; };
 		83D8CEBE1C17DAF50094279D /* AVRelation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A571A5A79FF00C5C6C4 /* AVRelation.m */; };
@@ -704,7 +699,6 @@
 		83D8CF171C17DAF50094279D /* AVAnalyticsImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419E91A5A79FF00C5C6C4 /* AVAnalyticsImpl.h */; };
 		83D8CF181C17DAF50094279D /* AVExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419F11A5A79FF00C5C6C4 /* AVExceptionHandler.h */; };
 		83D8CF1A1C17DAF50094279D /* LCDatabasePool.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DF02A91AF86032000E289C /* LCDatabasePool.h */; };
-		83D8CF1B1C17DAF50094279D /* AVPartialInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A181A5A79FF00C5C6C4 /* AVPartialInputStream.h */; };
 		83D8CF201C17DAF50094279D /* SDMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705AA1BA1358D0050E968 /* SDMacros.h */; };
 		83D8CF211C17DAF50094279D /* AVFriendQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A651A5A79FF00C5C6C4 /* AVFriendQuery.h */; };
 		83D8CF221C17DAF50094279D /* AVObject_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A531A5A79FF00C5C6C4 /* AVObject_Internal.h */; };
@@ -862,8 +856,6 @@
 		8C841AE01A5A7A0000C5C6C4 /* AVFile_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A151A5A79FF00C5C6C4 /* AVFile_Internal.h */; };
 		8C841AE11A5A7A0000C5C6C4 /* AVFileHTTPRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A161A5A79FF00C5C6C4 /* AVFileHTTPRequestOperation.h */; };
 		8C841AE21A5A7A0000C5C6C4 /* AVFileHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A171A5A79FF00C5C6C4 /* AVFileHTTPRequestOperation.m */; };
-		8C841AE31A5A7A0000C5C6C4 /* AVPartialInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A181A5A79FF00C5C6C4 /* AVPartialInputStream.h */; };
-		8C841AE41A5A7A0000C5C6C4 /* AVPartialInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A191A5A79FF00C5C6C4 /* AVPartialInputStream.m */; };
 		8C841AE51A5A7A0000C5C6C4 /* AVUploaderManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A1A1A5A79FF00C5C6C4 /* AVUploaderManager.h */; };
 		8C841AE61A5A7A0000C5C6C4 /* AVUploaderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A1B1A5A79FF00C5C6C4 /* AVUploaderManager.m */; };
 		8C841AE71A5A7A0000C5C6C4 /* AVGeoPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A1D1A5A79FF00C5C6C4 /* AVGeoPoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1481,8 +1473,6 @@
 		8C841A151A5A79FF00C5C6C4 /* AVFile_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFile_Internal.h; sourceTree = "<group>"; };
 		8C841A161A5A79FF00C5C6C4 /* AVFileHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFileHTTPRequestOperation.h; sourceTree = "<group>"; };
 		8C841A171A5A79FF00C5C6C4 /* AVFileHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVFileHTTPRequestOperation.m; sourceTree = "<group>"; };
-		8C841A181A5A79FF00C5C6C4 /* AVPartialInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVPartialInputStream.h; sourceTree = "<group>"; };
-		8C841A191A5A79FF00C5C6C4 /* AVPartialInputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVPartialInputStream.m; sourceTree = "<group>"; };
 		8C841A1A1A5A79FF00C5C6C4 /* AVUploaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVUploaderManager.h; sourceTree = "<group>"; };
 		8C841A1B1A5A79FF00C5C6C4 /* AVUploaderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVUploaderManager.m; sourceTree = "<group>"; };
 		8C841A1D1A5A79FF00C5C6C4 /* AVGeoPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVGeoPoint.h; sourceTree = "<group>"; };
@@ -2299,8 +2289,6 @@
 				701881F31BC6777200432D43 /* AVFileQuery.m */,
 				8C841A161A5A79FF00C5C6C4 /* AVFileHTTPRequestOperation.h */,
 				8C841A171A5A79FF00C5C6C4 /* AVFileHTTPRequestOperation.m */,
-				8C841A181A5A79FF00C5C6C4 /* AVPartialInputStream.h */,
-				8C841A191A5A79FF00C5C6C4 /* AVPartialInputStream.m */,
 				8C841A1A1A5A79FF00C5C6C4 /* AVUploaderManager.h */,
 				8C841A1B1A5A79FF00C5C6C4 /* AVUploaderManager.m */,
 			);
@@ -3008,7 +2996,6 @@
 				70CA7FEF1BDE42F6000A3B21 /* AVCloud_Internal.h in Headers */,
 				70CA7FF21BDE42F6000A3B21 /* AVFile_Internal.h in Headers */,
 				70CA7FF31BDE42F6000A3B21 /* AVFileHTTPRequestOperation.h in Headers */,
-				70CA7FF41BDE42F6000A3B21 /* AVPartialInputStream.h in Headers */,
 				830EB9F61C44D68400BA917F /* AVSaveOption.h in Headers */,
 				70CA7FF51BDE42F6000A3B21 /* AVUploaderManager.h in Headers */,
 				83FCB9C41CEDC57C007D8712 /* LCURLRequestSerialization.h in Headers */,
@@ -3092,7 +3079,6 @@
 				8320F91C1C1918C60024B45E /* AVRequestOperation.h in Headers */,
 				8311CD891C3D25B9007DEFF8 /* AVAvailability.h in Headers */,
 				8320F9211C1918C60024B45E /* LCDatabasePool.h in Headers */,
-				8320F9221C1918C60024B45E /* AVPartialInputStream.h in Headers */,
 				830EB9F81C44D68400BA917F /* AVSaveOption.h in Headers */,
 				8320F9271C1918C60024B45E /* SDMacros.h in Headers */,
 				8320F9281C1918C60024B45E /* AVFriendQuery.h in Headers */,
@@ -3229,7 +3215,6 @@
 				83FCB9A21CEDC57C007D8712 /* LCHTTPSessionManager.h in Headers */,
 				83FCB9C51CEDC57C007D8712 /* LCURLRequestSerialization.h in Headers */,
 				83D8CF1A1C17DAF50094279D /* LCDatabasePool.h in Headers */,
-				83D8CF1B1C17DAF50094279D /* AVPartialInputStream.h in Headers */,
 				83BE730F1D810651008ED3CF /* metamacros.h in Headers */,
 				83D8CF201C17DAF50094279D /* SDMacros.h in Headers */,
 				83D8CF211C17DAF50094279D /* AVFriendQuery.h in Headers */,
@@ -3340,7 +3325,6 @@
 				8C841AB81A5A7A0000C5C6C4 /* AVAnalyticsImpl.h in Headers */,
 				8C841AC01A5A7A0000C5C6C4 /* AVExceptionHandler.h in Headers */,
 				83DF02B41AF86032000E289C /* LCDatabasePool.h in Headers */,
-				8C841AE31A5A7A0000C5C6C4 /* AVPartialInputStream.h in Headers */,
 				836705AB1BA1358D0050E968 /* SDMacros.h in Headers */,
 				83BE730D1D810651008ED3CF /* metamacros.h in Headers */,
 				83FCB9C21CEDC57C007D8712 /* LCURLRequestSerialization.h in Headers */,
@@ -4165,7 +4149,6 @@
 				70CA7F801BDE3721000A3B21 /* AVFile.m in Sources */,
 				70CA7F811BDE3721000A3B21 /* AVFileQuery.m in Sources */,
 				70CA7F821BDE3721000A3B21 /* AVFileHTTPRequestOperation.m in Sources */,
-				70CA7F831BDE3721000A3B21 /* AVPartialInputStream.m in Sources */,
 				70CA7F841BDE3721000A3B21 /* AVUploaderManager.m in Sources */,
 				70CA7F851BDE3721000A3B21 /* AVGeoPoint.m in Sources */,
 				70CA7F861BDE3721000A3B21 /* AVLocationManager.m in Sources */,
@@ -4292,7 +4275,6 @@
 				8320F8BC1C1918C60024B45E /* AVCacheManager.m in Sources */,
 				8320F8BD1C1918C60024B45E /* AVACL.m in Sources */,
 				8320F8BE1C1918C60024B45E /* AVFriendQuery.m in Sources */,
-				8320F8BF1C1918C60024B45E /* AVPartialInputStream.m in Sources */,
 				8320F8C01C1918C60024B45E /* AVPush.m in Sources */,
 				83FCB9A81CEDC57C007D8712 /* LCHTTPSessionManager.m in Sources */,
 				8320F8C11C1918C60024B45E /* LCDatabaseCoordinator.m in Sources */,
@@ -4417,7 +4399,6 @@
 				83D8CEB51C17DAF50094279D /* AVCacheManager.m in Sources */,
 				83D8CEB61C17DAF50094279D /* AVACL.m in Sources */,
 				83D8CEB71C17DAF50094279D /* AVFriendQuery.m in Sources */,
-				83D8CEB81C17DAF50094279D /* AVPartialInputStream.m in Sources */,
 				83D8CEB91C17DAF50094279D /* AVPush.m in Sources */,
 				835092181EB1ECB7000DA884 /* AVDynamicObject.m in Sources */,
 				83D8CEBA1C17DAF50094279D /* LCDatabaseCoordinator.m in Sources */,
@@ -4499,7 +4480,6 @@
 				8C841AC91A5A7A0000C5C6C4 /* AVCacheManager.m in Sources */,
 				8C841AAE1A5A7A0000C5C6C4 /* AVACL.m in Sources */,
 				8C841B2B1A5A7A0000C5C6C4 /* AVFriendQuery.m in Sources */,
-				8C841AE41A5A7A0000C5C6C4 /* AVPartialInputStream.m in Sources */,
 				8C841B251A5A7A0000C5C6C4 /* AVPush.m in Sources */,
 				835092161EB1ECB7000DA884 /* AVDynamicObject.m in Sources */,
 				830E7CF91B1CA2A2005F4B22 /* LCDatabaseCoordinator.m in Sources */,
