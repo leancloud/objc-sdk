@@ -393,7 +393,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 }
 
 - (NSString *)clientId {
-    return _imClient.clientId;
+    return self.imClient.clientId;
 }
 
 - (AVIMMessage *)lastMessage {
@@ -521,8 +521,29 @@ static dispatch_queue_t messageCacheOperationQueue;
     self.properties[kConvAttrKey_attributes] = attributes;
 }
 
-- (void)fetchWithCallback:(AVIMBooleanResultBlock)callback {
-    AVIMConversationQuery *query = [self.imClient conversationQuery];
+- (void)fetchWithCallback:(AVIMBooleanResultBlock)callback
+{
+    AVIMClient *client = self.imClient;
+    
+    if (!client) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *aError = ({
+                NSString *reason = @"`imClient` is invalid.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            callback(false, aError);
+        });
+        
+        return;
+    }
+    
+    AVIMConversationQuery *query = [client conversationQuery];
     query.cachePolicy = kAVCachePolicyNetworkOnly;
     [query getConversationById:self.conversationId callback:^(AVIMConversation *conversation, NSError *error) {
         dispatch_async([AVIMClient imClientQueue], ^{
@@ -570,17 +591,60 @@ static dispatch_queue_t messageCacheOperationQueue;
     });
 }
 
-- (void)joinWithCallback:(AVIMBooleanResultBlock)callback {
-    [self addMembersWithClientIds:@[_imClient.clientId] callback:callback];
+- (void)joinWithCallback:(AVIMBooleanResultBlock)callback
+{
+    AVIMClient *client = self.imClient;
+    
+    if (!client) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *aError = ({
+                NSString *reason = @"`imClient` is invalid.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            callback(false, aError);
+        });
+        
+        return;
+    }
+    
+    [self addMembersWithClientIds:@[client.clientId] callback:callback];
 }
 
-- (void)addMembersWithClientIds:(NSArray *)clientIds callback:(AVIMBooleanResultBlock)callback {
+- (void)addMembersWithClientIds:(NSArray *)clientIds
+                       callback:(AVIMBooleanResultBlock)callback
+{
+    AVIMClient *client = self.imClient;
+    
+    if (!client) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *aError = ({
+                NSString *reason = @"`imClient` is invalid.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            callback(false, aError);
+        });
+        
+        return;
+    }
+    
     [[AVIMClient class] _assertClientIdsIsValid:clientIds];
     dispatch_async([AVIMClient imClientQueue], ^{
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
         genericCommand.needResponse = YES;
         genericCommand.cmd = AVIMCommandType_Conv;
-        genericCommand.peerId = _imClient.clientId;
+        genericCommand.peerId = client.clientId;
         genericCommand.op = AVIMOpType_Add;
         
         AVIMConvCommand *command = [[AVIMConvCommand alloc] init];
@@ -589,7 +653,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         NSString  *actionString = [AVIMCommandFormatter signatureActionForKey:genericCommand.op];
         NSString *clientIdString = [NSString stringWithFormat:@"%@",genericCommand.peerId];
         NSArray *clientIds = [command.mArray copy];
-        AVIMSignature *signature = [_imClient signatureWithClientId:clientIdString conversationId:command.cid action:actionString actionOnClientIds:clientIds];
+        AVIMSignature *signature = [client signatureWithClientId:clientIdString conversationId:command.cid action:actionString actionOnClientIds:clientIds];
         [genericCommand avim_addRequiredKeyWithCommand:command];
         [genericCommand avim_addRequiredKeyForConvMessageWithSignature:signature];
         if ([AVIMClient checkErrorForSignature:signature command:genericCommand]) {
@@ -607,23 +671,66 @@ static dispatch_queue_t messageCacheOperationQueue;
         }];
         
 
-        [_imClient sendCommand:genericCommand];
+        [client sendCommand:genericCommand];
     });
 }
 
-- (void)quitWithCallback:(AVIMBooleanResultBlock)callback {
-    [self removeMembersWithClientIds:@[_imClient.clientId] callback:callback];
+- (void)quitWithCallback:(AVIMBooleanResultBlock)callback
+{
+    AVIMClient *client = self.imClient;
+    
+    if (!client) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *aError = ({
+                NSString *reason = @"`imClient` is invalid.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            callback(false, aError);
+        });
+        
+        return;
+    }
+    
+    [self removeMembersWithClientIds:@[client.clientId] callback:callback];
 }
 
-- (void)removeMembersWithClientIds:(NSArray *)clientIds callback:(AVIMBooleanResultBlock)callback {
-    NSString *myClientId = _imClient.clientId;
+- (void)removeMembersWithClientIds:(NSArray *)clientIds
+                          callback:(AVIMBooleanResultBlock)callback
+{
+    AVIMClient *client = self.imClient;
+    
+    if (!client) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *aError = ({
+                NSString *reason = @"`imClient` is invalid.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            callback(false, aError);
+        });
+        
+        return;
+    }
+    
+    NSString *myClientId = client.clientId;
     
     [[AVIMClient class] _assertClientIdsIsValid:clientIds];
     dispatch_async([AVIMClient imClientQueue], ^{
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
         genericCommand.needResponse = YES;
         genericCommand.cmd = AVIMCommandType_Conv;
-        genericCommand.peerId = _imClient.clientId;
+        genericCommand.peerId = client.clientId;
         genericCommand.op = AVIMOpType_Remove;
         
         AVIMConvCommand *command = [[AVIMConvCommand alloc] init];
@@ -633,7 +740,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         NSString *clientIdString = [NSString stringWithFormat:@"%@",genericCommand.peerId];
         NSArray *clientIds = [command.mArray copy];
         
-        AVIMSignature *signature = [_imClient signatureWithClientId:clientIdString conversationId:command.cid action:actionString actionOnClientIds:clientIds];
+        AVIMSignature *signature = [client signatureWithClientId:clientIdString conversationId:command.cid action:actionString actionOnClientIds:clientIds];
         [genericCommand avim_addRequiredKeyWithCommand:command];
         [genericCommand avim_addRequiredKeyForConvMessageWithSignature:signature];
         if ([AVIMClient checkErrorForSignature:signature command:genericCommand]) {
@@ -654,16 +761,37 @@ static dispatch_queue_t messageCacheOperationQueue;
             }
         }];
         
-        [_imClient sendCommand:genericCommand];
+        [client sendCommand:genericCommand];
     });
 }
 
-- (void)countMembersWithCallback:(AVIMIntegerResultBlock)callback {
+- (void)countMembersWithCallback:(AVIMIntegerResultBlock)callback
+{
+    AVIMClient *client = self.imClient;
+    
+    if (!client) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *aError = ({
+                NSString *reason = @"`imClient` is invalid.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            callback(0, aError);
+        });
+        
+        return;
+    }
+    
     dispatch_async([AVIMClient imClientQueue], ^{
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
         genericCommand.needResponse = YES;
         genericCommand.cmd = AVIMCommandType_Conv;
-        genericCommand.peerId = _imClient.clientId;
+        genericCommand.peerId = client.clientId;
         genericCommand.op = AVIMOpType_Count;
         
         AVIMConvCommand *command = [[AVIMConvCommand alloc] init];
@@ -678,7 +806,7 @@ static dispatch_queue_t messageCacheOperationQueue;
                 [AVIMBlockHelper callIntegerResultBlock:callback number:0 error:nil];
             }
         }];
-        [_imClient sendCommand:genericCommand];
+        [client sendCommand:genericCommand];
     });
 }
 
@@ -720,7 +848,29 @@ static dispatch_queue_t messageCacheOperationQueue;
     [self updateAttributes:self.propertiesForUpdate callback:callback];
 }
 
-- (void)updateAttributes:(NSDictionary *)attributes callback:(AVIMBooleanResultBlock)callback {
+- (void)updateAttributes:(NSDictionary *)attributes
+                callback:(AVIMBooleanResultBlock)callback
+{
+    AVIMClient *client = self.imClient;
+    
+    if (!client) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *aError = ({
+                NSString *reason = @"`imClient` is invalid.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            callback(false, aError);
+        });
+        
+        return;
+    }
+    
     attributes = [attributes copy];
 
     dispatch_async([AVIMClient imClientQueue], ^{
@@ -751,16 +901,37 @@ static dispatch_queue_t messageCacheOperationQueue;
                 callback(error == nil, error);
             }
         }];
-        [_imClient sendCommand:genericCommand];
+        [client sendCommand:genericCommand];
     });
 }
 
-- (void)muteWithCallback:(AVIMBooleanResultBlock)callback {
+- (void)muteWithCallback:(AVIMBooleanResultBlock)callback
+{
+    AVIMClient *client = self.imClient;
+    
+    if (!client) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *aError = ({
+                NSString *reason = @"`imClient` is invalid.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            callback(false, aError);
+        });
+        
+        return;
+    }
+    
     dispatch_async([AVIMClient imClientQueue], ^{
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
         genericCommand.needResponse = YES;
         genericCommand.cmd = AVIMCommandType_Conv;
-        genericCommand.peerId = _imClient.clientId;
+        genericCommand.peerId = client.clientId;
         genericCommand.op = AVIMOpType_Mute;
         
         AVIMConvCommand *convCommand = [[AVIMConvCommand alloc] init];
@@ -775,16 +946,37 @@ static dispatch_queue_t messageCacheOperationQueue;
                 [AVIMBlockHelper callBooleanResultBlock:callback error:error];
             }
         }];
-        [_imClient sendCommand:genericCommand];
+        [client sendCommand:genericCommand];
     });
 }
 
-- (void)unmuteWithCallback:(AVIMBooleanResultBlock)callback {
+- (void)unmuteWithCallback:(AVIMBooleanResultBlock)callback
+{
+    AVIMClient *client = self.imClient;
+    
+    if (!client) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *aError = ({
+                NSString *reason = @"`imClient` is invalid.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            callback(false, aError);
+        });
+        
+        return;
+    }
+    
     dispatch_async([AVIMClient imClientQueue], ^{
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
         genericCommand.needResponse = YES;
         genericCommand.cmd = AVIMCommandType_Conv;
-        genericCommand.peerId = _imClient.clientId;
+        genericCommand.peerId = client.clientId;
         genericCommand.op = AVIMOpType_Unmute;
         
         AVIMConvCommand *convCommand = [[AVIMConvCommand alloc] init];
@@ -799,11 +991,19 @@ static dispatch_queue_t messageCacheOperationQueue;
                 [AVIMBlockHelper callBooleanResultBlock:callback error:error];
             }
         }];
-        [_imClient sendCommand:genericCommand];
+        [client sendCommand:genericCommand];
     });
 }
 
-- (void)readInBackground {
+- (void)readInBackground
+{
+    AVIMClient *client = self.imClient;
+    
+    if (!client) {
+        
+        return;
+    }
+    
     dispatch_async([AVIMClient imClientQueue], ^{
         int64_t lastTimestamp = 0;
         NSString *lastMessageId = nil;
@@ -836,12 +1036,12 @@ static dispatch_queue_t messageCacheOperationQueue;
         readCommand.convsArray = [NSMutableArray arrayWithObject:readTuple];
 
         genericCommand.cmd = AVIMCommandType_Read;
-        genericCommand.peerId = self.imClient.clientId;
+        genericCommand.peerId = client.clientId;
 
         [genericCommand avim_addRequiredKeyWithCommand:readCommand];
 
-        [self.imClient resetUnreadMessagesCountForConversation:self];
-        [self.imClient sendCommand:genericCommand];
+        [client resetUnreadMessagesCountForConversation:self];
+        [client sendCommand:genericCommand];
     });
 }
 
@@ -870,14 +1070,17 @@ static dispatch_queue_t messageCacheOperationQueue;
       progressBlock:(AVProgressBlock)progressBlock
            callback:(AVIMBooleanResultBlock)callback
 {
-    message.clientId = _imClient.clientId;
-    message.conversationId = _conversationId;
-    if (self.imClient.status != AVIMClientStatusOpened) {
+    AVIMClient *client = self.imClient;
+    
+    if (!client || client.status != AVIMClientStatusOpened) {
         message.status = AVIMMessageStatusFailed;
         NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorClientNotOpen reason:@"You can only send message when the status of the client is opened."];
         [AVIMBlockHelper callBooleanResultBlock:callback error:error];
         return;
     }
+    
+    message.clientId = client.clientId;
+    message.conversationId = _conversationId;
     message.status = AVIMMessageStatusSending;
     
     if ([message isKindOfClass:[AVIMTypedMessage class]]) {
@@ -990,7 +1193,30 @@ static dispatch_queue_t messageCacheOperationQueue;
     }
 }
 
-- (void)sendRealMessage:(AVIMMessage *)message option:(AVIMMessageOption *)option callback:(AVIMBooleanResultBlock)callback {
+- (void)sendRealMessage:(AVIMMessage *)message
+                 option:(AVIMMessageOption *)option
+               callback:(AVIMBooleanResultBlock)callback
+{
+    AVIMClient *client = self.imClient;
+    
+    if (!client) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *aError = ({
+                NSString *reason = @"`imClient` is invalid.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            callback(false, aError);
+        });
+        
+        return;
+    }
+    
     dispatch_async([AVIMClient imClientQueue], ^{
         BOOL will = option.will;
         BOOL transient = option.transient;
@@ -1058,12 +1284,12 @@ static dispatch_queue_t messageCacheOperationQueue;
                 if (!transient) {
                     self.lastMessage = message;
                 }
-                if (!directCommand.transient && self.imClient.messageQueryCacheEnabled) {
+                if (!directCommand.transient && client.messageQueryCacheEnabled) {
                     [[self messageCacheStore] insertOrUpdateMessage:message withBreakpoint:NO];
                 }
                 if (!transient) {
                     if (directOutCommand.r) {
-                        [_imClient stageMessage:message];
+                        [client stageMessage:message];
                     }
                     [self updateConversationAfterSendMessage:message];
                 }
@@ -1071,12 +1297,8 @@ static dispatch_queue_t messageCacheOperationQueue;
             [AVIMBlockHelper callBooleanResultBlock:callback error:error];
         }];
         
-        [_imClient sendCommand:genericCommand];
+        [client sendCommand:genericCommand];
     });
-}
-
-- (void)sendCommand:(AVIMGenericCommand *)command {
-    [self.imClient sendCommand:command];
 }
 
 - (AVIMGenericCommand *)patchCommandWithOldMessage:(AVIMMessage *)oldMessage
@@ -1144,6 +1366,26 @@ static dispatch_queue_t messageCacheOperationQueue;
          toNewMessage:(AVIMMessage *)newMessage
              callback:(AVIMBooleanResultBlock)callback
 {
+    AVIMClient *client = self.imClient;
+    
+    if (!client) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *aError = ({
+                NSString *reason = @"`imClient` is invalid.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            callback(false, aError);
+        });
+        
+        return;
+    }
+    
     if (!newMessage) {
         NSError *error = [AVErrorUtils errorWithCode:kAVIMErrorMessageNotFound errorText:@"Cannot update a message to nil."];
         [AVUtils callBooleanResultBlock:callback error:error];
@@ -1167,12 +1409,32 @@ static dispatch_queue_t messageCacheOperationQueue;
         [AVUtils callBooleanResultBlock:callback error:nil];
     };
 
-    [self sendCommand:patchCommand];
+    [client sendCommand:patchCommand];
 }
 
 - (void)recallMessage:(AVIMMessage *)oldMessage
              callback:(nonnull void (^)(BOOL, NSError * _Nullable, AVIMRecalledMessage * _Nullable))callback
 {
+    AVIMClient *client = self.imClient;
+    
+    if (!client) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *aError = ({
+                NSString *reason = @"`imClient` is invalid.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            callback(false, aError, nil);
+        });
+        
+        return;
+    }
+    
     /* arg check */
     ///
     NSString *conversationId = self.conversationId;
@@ -1264,7 +1526,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         });
     };
     
-    [self sendCommand:patch_modify_cmd];
+    [client sendCommand:patch_modify_cmd];
 }
 
 - (void)updateConversationAfterSendMessage:(AVIMMessage *)message {
@@ -1347,7 +1609,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 }
 
 - (void)addMessageToCache:(AVIMMessage *)message {
-    message.clientId = _imClient.clientId;
+    message.clientId = self.imClient.clientId;
     message.conversationId = _conversationId;
 
     [[self messageCacheStore] insertOrUpdateMessage:message];
@@ -1396,6 +1658,26 @@ static dispatch_queue_t messageCacheOperationQueue;
 - (void)queryMessagesFromServerWithCommand:(AVIMGenericCommand *)genericCommand
                                   callback:(AVIMArrayResultBlock)callback
 {
+    AVIMClient *client = self.imClient;
+    
+    if (!client) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *aError = ({
+                NSString *reason = @"`imClient` is invalid.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            callback(false, aError);
+        });
+        
+        return;
+    }
+    
     AVIMLogsCommand *logsOutCommand = genericCommand.logsMessage;
     dispatch_async([AVIMClient imClientQueue], ^{
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
@@ -1442,7 +1724,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             }
         }];
         [genericCommand avim_addRequiredKeyWithCommand:logsOutCommand];
-        [_imClient sendCommand:genericCommand];
+        [client sendCommand:genericCommand];
     });
 }
 
@@ -1454,7 +1736,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
     genericCommand.needResponse = YES;
     genericCommand.cmd = AVIMCommandType_Logs;
-    genericCommand.peerId = _imClient.clientId;
+    genericCommand.peerId = self.imClient.clientId;
     
     AVIMLogsCommand *logsCommand = [[AVIMLogsCommand alloc] init];
     logsCommand.cid    = _conversationId;
@@ -1477,7 +1759,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     AVIMLogsCommand *logsCommand = [[AVIMLogsCommand alloc] init];
     genericCommand.needResponse = YES;
     genericCommand.cmd = AVIMCommandType_Logs;
-    genericCommand.peerId = _imClient.clientId;
+    genericCommand.peerId = self.imClient.clientId;
     logsCommand.cid    = _conversationId;
     logsCommand.mid    = messageId;
     logsCommand.tmid   = toMessageId;
@@ -1857,7 +2139,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
     genericCommand.needResponse = YES;
     genericCommand.cmd = AVIMCommandType_Logs;
-    genericCommand.peerId = _imClient.clientId;
+    genericCommand.peerId = self.imClient.clientId;
     genericCommand.logsMessage = logsCommand;
 
     [self queryMessagesFromServerWithCommand:genericCommand callback:callback];
