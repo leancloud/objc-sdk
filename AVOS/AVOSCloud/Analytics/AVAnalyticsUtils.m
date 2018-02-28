@@ -31,7 +31,6 @@
 #include <net/if_dl.h>
 
 #import "AVAnalyticsUtils.h"
-#import "AVNetworking.h"
 #import "UserAgent.h"
 #import "LCNetworkReachabilityManager.h"
 #import "AVUtils.h"

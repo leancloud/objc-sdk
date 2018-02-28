@@ -9,7 +9,6 @@
 #import "AVOSCloud.h"
 #import "AVOSCloud_Internal.h"
 #import "AVPaasClient.h"
-#import "AVUploaderManager.h"
 #import "AVScheduler.h"
 #import "AVPersistenceUtils.h"
 
