@@ -25,12 +25,9 @@ FOUNDATION_EXPORT NSString *const LCHeaderFieldNameSign;
 FOUNDATION_EXPORT NSString *const LCHeaderFieldNameSession;
 FOUNDATION_EXPORT NSString *const LCHeaderFieldNameProduction;
 
-@class AVHTTPClient;
-
 @interface AVPaasClient : NSObject
 
 +(AVPaasClient *)sharedInstance;
-@property (nonatomic, readonly, strong) AVHTTPClient * clientImpl;
 
 @property (nonatomic, readwrite, copy) NSString * applicationId;
 @property (nonatomic, readwrite, copy) NSString * clientKey;
