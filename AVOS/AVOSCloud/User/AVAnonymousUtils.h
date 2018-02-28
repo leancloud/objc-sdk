@@ -16,7 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
  Provides utility functions for working with Anonymously logged-in users.  Anonymous users have some unique characteristics:
  <ul>
    <li>Anonymous users don't need a user name or password.</li>
-   <li>Once logged out, an anonymous user cannot be recovered.</li>
    <li>When the current user is anonymous, the following methods can be used to switch to a different user or convert the
      anonymous user into a regular one:
      <ul>
