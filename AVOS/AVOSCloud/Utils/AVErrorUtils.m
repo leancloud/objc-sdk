@@ -156,16 +156,4 @@ NSInteger const kAVErrorFileDataNotAvailable = 401;
                            userInfo:nil];
 }
 
-+ (NSError *)fileNotFoundError
-{
-    return [AVErrorUtils errorWithCode:kAVErrorFileNotFound
-                             errorText:@"File not found."];
-}
-
-+ (NSError *)dataNotAvailableError
-{
-    return [AVErrorUtils errorWithCode:kAVErrorFileDataNotAvailable
-                             errorText:@"File data not available."];
-}
-
 @end

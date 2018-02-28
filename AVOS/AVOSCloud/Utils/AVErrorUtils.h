@@ -27,8 +27,4 @@ typedef NS_ENUM(NSInteger, AVLocalErrorCode) {
 
 + (NSError *)internalServerError;
 
-+ (NSError *)fileNotFoundError;
-
-+ (NSError *)dataNotAvailableError;
-
 @end

@@ -379,8 +379,6 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     });
 }
 
-// MARK: - Dealloc Instance
-
 - (void)dealloc
 {
     AVLoggerInfo(AVLoggerDomainIM, @"AVIMClient dealloc.");
