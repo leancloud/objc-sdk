@@ -96,12 +96,9 @@
 		704F3C061BE0D5650033245C /* avmp.c in Sources */ = {isa = PBXBuildFile; fileRef = 8C895DC61A78A5D900992A8F /* avmp.c */; };
 		704F3C0C1BE0D6030033245C /* testAudio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 70DA62491B4BD7D100D95D4D /* testAudio.mp3 */; };
 		704F3C0D1BE0D6030033245C /* testImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 70DA62471B4BD21B00D95D4D /* testImage.png */; };
-		704F3C0E1BE0D6B50033245C /* AVTestBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA865A1A777A7900864211 /* AVTestBase.m */; };
-		704F3C0F1BE0D6BB0033245C /* XCTestCase+AsyncTesting.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA865C1A777A7900864211 /* XCTestCase+AsyncTesting.m */; };
 		7068A7231BA3614D0004623A /* AVRequestManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7068A7211BA3614D0004623A /* AVRequestManager.h */; };
 		7068A7241BA3614D0004623A /* AVRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7068A7221BA3614D0004623A /* AVRequestManager.m */; };
 		707352781B4A8E08005466CE /* AVOSCloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8419861A5A791300C5C6C4 /* AVOSCloud.framework */; };
-		7085D5241BEA237A00449DC1 /* AVTestUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA86661A77817B00864211 /* AVTestUtil.m */; };
 		7085D52D1BEA245600449DC1 /* AVOSCloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7F681BDE2DC3000A3B21 /* AVOSCloud.framework */; };
 		708F554D1B86121A0071CA48 /* TestDescriptionKey.json in Resources */ = {isa = PBXBuildFile; fileRef = 708F554C1B86121A0071CA48 /* TestDescriptionKey.json */; };
 		70AACA931B4A74A5007C5FFD /* AVOSCloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8419861A5A791300C5C6C4 /* AVOSCloud.framework */; };
@@ -235,9 +232,6 @@
 		70CA80431BDE431A000A3B21 /* NSDictionary+LCHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 837CC71C1B568431001333AD /* NSDictionary+LCHash.h */; };
 		70DA62481B4BD21B00D95D4D /* testImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 70DA62471B4BD21B00D95D4D /* testImage.png */; };
 		70DA624A1B4BD7D100D95D4D /* testAudio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 70DA62491B4BD7D100D95D4D /* testAudio.mp3 */; };
-		70F3154D1BDE50D100D691B3 /* AVTestBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA865A1A777A7900864211 /* AVTestBase.m */; };
-		70F3154E1BDE50D100D691B3 /* AVTestUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA86661A77817B00864211 /* AVTestUtil.m */; };
-		70F315541BDE510D00D691B3 /* XCTestCase+AsyncTesting.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA865C1A777A7900864211 /* XCTestCase+AsyncTesting.m */; };
 		70FD6DF11BE07C8A00897138 /* AVOSCloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7F681BDE2DC3000A3B21 /* AVOSCloud.framework */; };
 		8302AED51C192A0700E13F8A /* LCURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 8302AED31C192A0600E13F8A /* LCURLConnection.h */; };
 		8302AED71C192A0700E13F8A /* LCURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 8302AED31C192A0600E13F8A /* LCURLConnection.h */; };
@@ -871,12 +865,6 @@
 		8CA157201A5E8556003C2532 /* AVIMTypedMessageObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA1571E1A5E8556003C2532 /* AVIMTypedMessageObject.m */; };
 		8CBDFDE21A808EA500D67FBE /* AVIMConversationQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CBDFDE01A808EA500D67FBE /* AVIMConversationQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CBDFDE31A808EA500D67FBE /* AVIMConversationQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBDFDE11A808EA500D67FBE /* AVIMConversationQuery.m */; };
-		8CEA865D1A777A7900864211 /* AVTestBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA865A1A777A7900864211 /* AVTestBase.m */; };
-		8CEA865F1A777A7900864211 /* AVTestBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA865A1A777A7900864211 /* AVTestBase.m */; };
-		8CEA86601A777A7900864211 /* XCTestCase+AsyncTesting.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA865C1A777A7900864211 /* XCTestCase+AsyncTesting.m */; };
-		8CEA86621A777A7900864211 /* XCTestCase+AsyncTesting.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA865C1A777A7900864211 /* XCTestCase+AsyncTesting.m */; };
-		8CEA86671A77817B00864211 /* AVTestUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA86661A77817B00864211 /* AVTestUtil.m */; };
-		8CEA86691A77817B00864211 /* AVTestUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA86661A77817B00864211 /* AVTestUtil.m */; };
 		8CEEABCA1ABC179300B9E757 /* alpacino.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8CEEABAD1ABC179300B9E757 /* alpacino.jpg */; };
 		9A2F1AFE1CF6F6FA00BE52F2 /* LCIMArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1A981CF6F6F900BE52F2 /* LCIMArray.h */; };
 		9A2F1B001CF6F6FA00BE52F2 /* LCIMArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1A981CF6F6F900BE52F2 /* LCIMArray.h */; };
@@ -1442,12 +1430,6 @@
 		8CA1571E1A5E8556003C2532 /* AVIMTypedMessageObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMTypedMessageObject.m; sourceTree = "<group>"; };
 		8CBDFDE01A808EA500D67FBE /* AVIMConversationQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMConversationQuery.h; sourceTree = "<group>"; };
 		8CBDFDE11A808EA500D67FBE /* AVIMConversationQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMConversationQuery.m; sourceTree = "<group>"; };
-		8CEA86591A777A7900864211 /* AVTestBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVTestBase.h; sourceTree = "<group>"; };
-		8CEA865A1A777A7900864211 /* AVTestBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVTestBase.m; sourceTree = "<group>"; };
-		8CEA865B1A777A7900864211 /* XCTestCase+AsyncTesting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCTestCase+AsyncTesting.h"; sourceTree = "<group>"; };
-		8CEA865C1A777A7900864211 /* XCTestCase+AsyncTesting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XCTestCase+AsyncTesting.m"; sourceTree = "<group>"; };
-		8CEA86651A77817B00864211 /* AVTestUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVTestUtil.h; sourceTree = "<group>"; };
-		8CEA86661A77817B00864211 /* AVTestUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVTestUtil.m; sourceTree = "<group>"; };
 		8CEEABAD1ABC179300B9E757 /* alpacino.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = alpacino.jpg; sourceTree = "<group>"; };
 		9A2F1A981CF6F6F900BE52F2 /* LCIMArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMArray.h; sourceTree = "<group>"; };
 		9A2F1A991CF6F6F900BE52F2 /* LCIMArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMArray.m; sourceTree = "<group>"; };
@@ -1912,7 +1894,6 @@
 				8C8419C41A5A796000C5C6C4 /* AVOSCloudIM */,
 				838CE31C1EC97E6E00B24F5B /* AVOSCloudLiveQuery */,
 				83B0E5921F2839FB00EE1A75 /* AVOSCloudIMGroupChat */,
-				8CEA86581A777A7900864211 /* TestBase_Legacy */,
 				8C8419951A5A791300C5C6C4 /* AVOSCloudTests */,
 				8C8419D11A5A796000C5C6C4 /* AVOSCloudIMTests */,
 				838CE3271EC97E6F00B24F5B /* AVOSCloudLiveQueryTests */,
@@ -2367,19 +2348,6 @@
 				8C895DEF1A78B0B700992A8F /* AVIMMessageObject.m */,
 			);
 			path = InternalObjects;
-			sourceTree = "<group>";
-		};
-		8CEA86581A777A7900864211 /* TestBase_Legacy */ = {
-			isa = PBXGroup;
-			children = (
-				8CEA86591A777A7900864211 /* AVTestBase.h */,
-				8CEA865A1A777A7900864211 /* AVTestBase.m */,
-				8CEA865B1A777A7900864211 /* XCTestCase+AsyncTesting.h */,
-				8CEA865C1A777A7900864211 /* XCTestCase+AsyncTesting.m */,
-				8CEA86651A77817B00864211 /* AVTestUtil.h */,
-				8CEA86661A77817B00864211 /* AVTestUtil.m */,
-			);
-			path = TestBase_Legacy;
 			sourceTree = "<group>";
 		};
 		9A2F1A811CF6F6F900BE52F2 /* Protobuf */ = {
@@ -3810,11 +3778,8 @@
 			files = (
 				D3CDF4EC1FE8F3810033153E /* LCIMTestBase.swift in Sources */,
 				D37CD4121FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */,
-				704F3C0E1BE0D6B50033245C /* AVTestBase.m in Sources */,
 				D36A1E0B1FF246C2006EFB5F /* LCIMTestCaseConversation.swift in Sources */,
-				7085D5241BEA237A00449DC1 /* AVTestUtil.m in Sources */,
 				D3078A6720105E9F00A4C5FD /* LCTestBase.swift in Sources */,
-				704F3C0F1BE0D6BB0033245C /* XCTestCase+AsyncTesting.m in Sources */,
 				D3CDF4F11FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3899,9 +3864,6 @@
 				D30DF3F81FDE2CD200F932BC /* AVUser_TestCase.swift in Sources */,
 				D30DF4171FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 				D36AC76A1FFF50AB00BDCA24 /* AVInstallation_TestCase.swift in Sources */,
-				70F315541BDE510D00D691B3 /* XCTestCase+AsyncTesting.m in Sources */,
-				70F3154D1BDE50D100D691B3 /* AVTestBase.m in Sources */,
-				70F3154E1BDE50D100D691B3 /* AVTestUtil.m in Sources */,
 				D3472E202015CBC200AAD65F /* AVFile_TestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4169,12 +4131,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D30DF3F71FDE2CD200F932BC /* AVUser_TestCase.swift in Sources */,
-				8CEA865D1A777A7900864211 /* AVTestBase.m in Sources */,
-				8CEA86601A777A7900864211 /* XCTestCase+AsyncTesting.m in Sources */,
 				D30DF4161FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 				D36AC7691FFF50AB00BDCA24 /* AVInstallation_TestCase.swift in Sources */,
 				D3472E1F2015CBC200AAD65F /* AVFile_TestCase.swift in Sources */,
-				8CEA86671A77817B00864211 /* AVTestUtil.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4260,12 +4219,9 @@
 			files = (
 				D3CDF4EB1FE8F3810033153E /* LCIMTestBase.swift in Sources */,
 				D37CD4111FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */,
-				8CEA86691A77817B00864211 /* AVTestUtil.m in Sources */,
 				D36A1E0A1FF246C2006EFB5F /* LCIMTestCaseConversation.swift in Sources */,
-				8CEA86621A777A7900864211 /* XCTestCase+AsyncTesting.m in Sources */,
 				D3078A6620105E9E00A4C5FD /* LCTestBase.swift in Sources */,
 				D3CDF4F01FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */,
-				8CEA865F1A777A7900864211 /* AVTestBase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

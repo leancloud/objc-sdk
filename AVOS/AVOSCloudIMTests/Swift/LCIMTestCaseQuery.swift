@@ -21,7 +21,7 @@ class LCIMTestCaseQuery: LCIMTestBase {
         
         var tempConvId: String? = nil
         
-        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment()
             
@@ -56,10 +56,10 @@ class LCIMTestCaseQuery: LCIMTestBase {
                 tempConvId = convId
             }
             
-        }) {
+        }, failure: {
             
             XCTFail("timeout")
-        }
+        })
         
         guard let _temoConvId: String = tempConvId else {
             
@@ -68,7 +68,7 @@ class LCIMTestCaseQuery: LCIMTestBase {
             return
         }
         
-        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             let query: AVIMConversationQuery = client.conversationQuery()
             
@@ -104,11 +104,10 @@ class LCIMTestCaseQuery: LCIMTestBase {
                 XCTAssertTrue(tempConv.temporaryTTL > 0)
             }
             
-            
-        }) {
+        }, failure: {
             
             XCTFail("timeout")
-        }
+        })
     }
     
 }

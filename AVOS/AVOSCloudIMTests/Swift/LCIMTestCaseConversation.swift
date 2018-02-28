@@ -28,7 +28,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
         
         var conversation: AVIMConversation? = nil
         
-        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment()
             
@@ -51,10 +51,10 @@ class LCIMTestCaseConversation: LCIMTestBase {
                 conversation = conv
             }
             
-        }) {
+        }, failure: {
             
             XCTFail("timeout")
-        }
+        })
         
         guard let _conversation: AVIMConversation = conversation else {
             
@@ -91,7 +91,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
                 attributes: nil
             )
             
-            if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment()
                 
@@ -106,10 +106,10 @@ class LCIMTestCaseConversation: LCIMTestBase {
                     XCTAssertNotNil(textMessage.messageId)
                 })
                 
-            }) {
+            }, failure: {
                 
                 XCTFail("timeout")
-            }
+            })
         }
     }
     
@@ -124,7 +124,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
         
         let imageUrl: URL = self.bundle.url(forResource: "testImage", withExtension: "png")!
         let imageData: Data = try! Data.init(contentsOf: imageUrl)
-        let imageFile: AVFile = AVFile(name: "image/png", data: imageData)
+        let imageFile: AVFile = AVFile.init(data: imageData, name: "image.png")
         
         for i in 0..<5 {
             
@@ -136,7 +136,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
                 attributes: nil
             )
             
-            if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment()
                 
@@ -151,10 +151,10 @@ class LCIMTestCaseConversation: LCIMTestBase {
                     XCTAssertNotNil(imageMessage.messageId)
                 })
                 
-            }) {
+            }, failure: {
                 
                 XCTFail("timeout")
-            }
+            })
         }
     }
     
@@ -169,7 +169,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
         
         let audioUrl: URL = self.bundle.url(forResource: "testAudio", withExtension: "mp3")!
         let audioData: Data = try! Data.init(contentsOf: audioUrl)
-        let audioFile: AVFile = AVFile(name: "audio/mpeg3", data: audioData)
+        let audioFile: AVFile = AVFile.init(data: audioData, name: "audio.mp3")
         
         for i in 0..<5 {
             
@@ -181,7 +181,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
                 attributes: nil
             )
             
-            if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment()
                 
@@ -196,10 +196,10 @@ class LCIMTestCaseConversation: LCIMTestBase {
                     XCTAssertNotNil(audioMessage.messageId)
                 })
                 
-            }) {
+            }, failure: {
                 
                 XCTFail("timeout")
-            }
+            })
         }
     }
     
@@ -214,7 +214,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
         
         let videoUrl: URL = bundle.url(forResource: "testVideo", withExtension: "mp4")!
         let videoData: Data = try! Data.init(contentsOf: videoUrl)
-        let videoFile: AVFile = AVFile(name: "video/mpeg", data: videoData)
+        let videoFile: AVFile = AVFile.init(data: videoData, name: "video.mp4")
         
         for i in 0..<5 {
             
@@ -226,7 +226,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
                 attributes: nil
             )
             
-            if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment()
                 
@@ -241,10 +241,10 @@ class LCIMTestCaseConversation: LCIMTestBase {
                     XCTAssertNotNil(videoMessage.messageId)
                 })
                 
-            }) {
+            }, failure: {
                 
                 XCTFail("timeout")
-            }
+            })
         }
     }
     
@@ -268,7 +268,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
                 attributes: nil
             )
             
-            if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment()
                 
@@ -283,10 +283,10 @@ class LCIMTestCaseConversation: LCIMTestBase {
                     XCTAssertNotNil(locationMessage.messageId)
                 })
                 
-            }) {
+            }, failure: {
                 
                 XCTFail("timeout")
-            }
+            })
         }
     }
     
@@ -301,7 +301,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
         
         let fileUrl: URL = bundle.url(forResource: "testFile", withExtension: "md")!
         let fileData: Data = try! Data.init(contentsOf: fileUrl)
-        let fileFile: AVFile = AVFile(name: "text/markdown", data: fileData)
+        let fileFile: AVFile = AVFile.init(data: fileData, name: "text.md")
         
         for i in 0..<5 {
             
@@ -313,7 +313,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
                 attributes: nil
             )
             
-            if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment()
                 
@@ -328,10 +328,10 @@ class LCIMTestCaseConversation: LCIMTestBase {
                     XCTAssertNotNil(fileMessage.messageId)
                 })
                 
-            }) {
+            }, failure: {
                 
                 XCTFail("timeout")
-            }
+            })
         }
     }
     
@@ -355,7 +355,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
         
         for type in typeArray {
             
-            if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment()
                 
@@ -389,10 +389,10 @@ class LCIMTestCaseConversation: LCIMTestBase {
                     }
                 }
                 
-            }) {
+            }, failure: {
                 
                 XCTFail("timeout")
-            }
+            })
         }
     }
     
@@ -407,7 +407,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
         
         var serviceConversation: AVIMServiceConversation? = nil
         
-        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment()
             
@@ -430,10 +430,10 @@ class LCIMTestCaseConversation: LCIMTestBase {
                 serviceConversation = serviceConv
             }
             
-        }) {
+        }, failure: {
             
             XCTFail("timeout")
-        }
+        })
         
         guard let serviceConv: AVIMServiceConversation = serviceConversation else {
             
@@ -442,7 +442,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
             return
         }
         
-        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment()
             
@@ -456,29 +456,29 @@ class LCIMTestCaseConversation: LCIMTestBase {
                 XCTAssertNil(error)
             })
             
-        }) {
+        }, failure: {
             
             XCTFail("timeout")
-        }
+        })
         
-        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment()
-
+            
             serviceConv.unsubscribe(callback: { (success: Bool, error: Error?) in
-
+                
                 semaphore.decrement()
                 
                 XCTAssertTrue(Thread.isMainThread)
-
+                
                 XCTAssertTrue(success)
                 XCTAssertNil(error)
             })
-
-        }) {
-
+            
+        }, failure: {
+            
             XCTFail("timeout")
-        }
+        })
     }
     
 }

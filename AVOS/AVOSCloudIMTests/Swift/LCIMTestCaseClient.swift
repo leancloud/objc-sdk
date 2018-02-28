@@ -16,7 +16,7 @@ class LCIMTestCaseClient: LCIMTestBase {
         
         for _ in 0..<5 {
             
-            if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment()
                 
@@ -33,12 +33,12 @@ class LCIMTestCaseClient: LCIMTestBase {
                     XCTAssertEqual(openCloseClient.status, .opened)
                 })
                 
-            }) {
+            }, failure: {
                 
                 XCTFail("timeout")
-            }
+            })
             
-            if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment()
                 
@@ -55,10 +55,10 @@ class LCIMTestCaseClient: LCIMTestBase {
                     XCTAssertEqual(openCloseClient.status, .closed)
                 })
                 
-            }) {
+            }, failure: {
                 
                 XCTFail("timeout")
-            }
+            })
         }
     }
     
@@ -71,7 +71,7 @@ class LCIMTestCaseClient: LCIMTestBase {
             return
         }
         
-        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment()
             
@@ -103,10 +103,10 @@ class LCIMTestCaseClient: LCIMTestBase {
                 XCTAssertFalse(conv.temporary)
             }
             
-        }) {
+        }, failure: {
             
             XCTFail("timeout")
-        }
+        })
     }
     
     func test_Create_ChatRoom() {
@@ -118,7 +118,7 @@ class LCIMTestCaseClient: LCIMTestBase {
             return
         }
         
-        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment()
             
@@ -150,10 +150,10 @@ class LCIMTestCaseClient: LCIMTestBase {
                 XCTAssertFalse(chatRoom.temporary)
             }
             
-        }) {
+        }, failure: {
             
             XCTFail("timeout")
-        }
+        })
     }
     
     func test_Create_TemporaryConversation() {
@@ -165,7 +165,7 @@ class LCIMTestCaseClient: LCIMTestBase {
             return
         }
         
-        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment()
             
@@ -200,10 +200,10 @@ class LCIMTestCaseClient: LCIMTestBase {
                 XCTAssertTrue(tempConv.temporary)
             }
             
-        }) {
+        }, failure: {
             
             XCTFail("timeout")
-        }
+        })
     }
     
     func test_Create_Unique_Conversation() {
@@ -219,7 +219,7 @@ class LCIMTestCaseClient: LCIMTestBase {
         
         for i in 0..<2 {
             
-            if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment()
                 
@@ -264,10 +264,10 @@ class LCIMTestCaseClient: LCIMTestBase {
                     XCTAssertFalse(conv.temporary)
                 }
                 
-            }) {
+            }, failure: {
                 
                 XCTFail("timeout")
-            }
+            })
         }
     }
     
