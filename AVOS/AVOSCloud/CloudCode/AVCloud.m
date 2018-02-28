@@ -146,12 +146,6 @@
     }];
 }
 
-#pragma mark - Util
-
-+ (NSDictionary *)cloudDictionaryFromObject:(id)object {
-    return [AVObjectUtils dictionaryFromObject:object topObject:YES];
-}
-
 #pragma mark - Data from LeanEngine
 /*
  response: Dictionary/Array or Simple Objects like String/Number(all from json)
