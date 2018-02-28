@@ -13,7 +13,6 @@
 #import "AVIMAvailability.h"
 #import "AVIMCommon.h"
 #import "AVIMClient.h"
-#import "AVIMClientOpenOption.h"
 #import "AVIMConversation.h"
 #import "AVIMKeyedConversation.h"
 #import "AVIMConversationQuery.h"

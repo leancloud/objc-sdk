@@ -16,7 +16,6 @@
 @class AVIMMessage;
 @class AVIMTypedMessage;
 @class AVIMConversationQuery;
-@class AVIMClientOpenOption;
 @class AVUser;
 
 @protocol AVIMClientDelegate;
@@ -90,7 +89,7 @@ typedef NS_ENUM(NSUInteger, AVIMClientStatus) {
     
 };
 
-typedef NS_OPTIONS(uint64_t, LCIMClientOpenOption) {
+typedef NS_OPTIONS(uint64_t, AVIMClientOpenOption) {
     
     /*
      
@@ -105,8 +104,7 @@ typedef NS_OPTIONS(uint64_t, LCIMClientOpenOption) {
      3. ... ...
      
      */
-    LCIMClientOpenOptionReopen = 1 << 0
-    
+    AVIMClientOpenOptionReopen = 1 << 0
 };
 
 typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
@@ -259,10 +257,10 @@ __attribute__((warn_unused_result));
  Start a Session with Server.
  It is similar to Login.
  
- @param openOption See more: `LCIMClientOpenOption`.
+ @param openOption See more: `AVIMClientOpenOption`.
  @param callback Result Callback.
  */
-- (void)openWithOpenOption:(LCIMClientOpenOption)openOption
+- (void)openWithOpenOption:(AVIMClientOpenOption)openOption
                   callback:(AVIMBooleanResultBlock)callback;
 
 /**
@@ -550,16 +548,6 @@ AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 4.3.0. Instead, use `-[AVIMClient
  */
 + (void)setUserOptions:(NSDictionary *)userOptions
 AVIM_DEPRECATED("Deprecated in v5.1.0. Do not use it any more.");
-
-/*!
- * Open client with option.
- * @param option   Option to open client.
- * @param callback Callback for openning client.
- * @brief Open client with option of which the properties will override client's default option.
- */
-- (void)openWithOption:(nullable AVIMClientOpenOption *)option
-              callback:(AVIMBooleanResultBlock)callback
-__deprecated_msg("Deprecated after v8.2.1 , use -[openWithOpenOption:callback:] instead.");
 
 @end
 

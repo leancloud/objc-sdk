@@ -8,7 +8,6 @@
 
 #import "AVIMClient.h"
 #import "AVIMClient_Internal.h"
-#import "AVIMClientOpenOption.h"
 #import "AVIMConversation_Internal.h"
 #import "AVIMBlockHelper.h"
 #import "UserAgent.h"
@@ -463,7 +462,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                     callback:callback];
 }
 
-- (void)openWithOpenOption:(LCIMClientOpenOption)openOption
+- (void)openWithOpenOption:(AVIMClientOpenOption)openOption
                   callback:(AVIMBooleanResultBlock)callback
 {
     [self getSignatureForOpenWith:^(AVIMSignature *signature) {
@@ -562,7 +561,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     }];
 }
 
-- (AVIMGenericCommand *)newSessionOpenCommandWithOpenOption:(LCIMClientOpenOption)openOption
+- (AVIMGenericCommand *)newSessionOpenCommandWithOpenOption:(AVIMClientOpenOption)openOption
                                                sessionToken:(NSString *)sessionToken
                                                   signature:(AVIMSignature *)signature
 {
@@ -613,7 +612,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         
         /* Not reconnect, Open by User */
         
-        if (openOption & LCIMClientOpenOptionReopen) {
+        if (openOption & AVIMClientOpenOptionReopen) {
             
             /*
              
@@ -767,7 +766,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                 return ;
             }
             
-            AVIMGenericCommand *cmd = [self newSessionOpenCommandWithOpenOption:LCIMClientOpenOptionReopen
+            AVIMGenericCommand *cmd = [self newSessionOpenCommandWithOpenOption:AVIMClientOpenOptionReopen
                                                                    sessionToken:nil
                                                                       signature:signature];
             
@@ -2713,22 +2712,6 @@ __attribute__((warn_unused_result))
         return;
     
     [self._userOptions addEntriesFromDictionary:userOptions];
-}
-
-- (void)openWithOption:(AVIMClientOpenOption *)option
-              callback:(AVIMBooleanResultBlock)callback
-{
-    BOOL force = option.force;
-    
-    if (force) {
-        
-        [self openWithCallback:callback];
-        
-    } else {
-        
-        [self openWithOpenOption:LCIMClientOpenOptionReopen
-                        callback:callback];
-    }
 }
 
 @end

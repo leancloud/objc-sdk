@@ -246,10 +246,6 @@
 		830E7CFC1B1CAD3B005F4B22 /* LCDatabaseMigrator.h in Headers */ = {isa = PBXBuildFile; fileRef = 830E7CFA1B1CAD3B005F4B22 /* LCDatabaseMigrator.h */; };
 		830E7CFD1B1CAD3B005F4B22 /* LCDatabaseMigrator.m in Sources */ = {isa = PBXBuildFile; fileRef = 830E7CFB1B1CAD3B005F4B22 /* LCDatabaseMigrator.m */; };
 		830E7CFF1B1CB07B005F4B22 /* LCDatabaseCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 830E7CFE1B1CB07B005F4B22 /* LCDatabaseCommon.h */; };
-		830EB9E51C3F996A00BA917F /* AVIMClientOpenOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 830EB9E31C3F996A00BA917F /* AVIMClientOpenOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		830EB9E71C3F996A00BA917F /* AVIMClientOpenOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 830EB9E31C3F996A00BA917F /* AVIMClientOpenOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		830EB9E81C3F996A00BA917F /* AVIMClientOpenOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 830EB9E41C3F996A00BA917F /* AVIMClientOpenOption.m */; };
-		830EB9EA1C3F996A00BA917F /* AVIMClientOpenOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 830EB9E41C3F996A00BA917F /* AVIMClientOpenOption.m */; };
 		830EB9F41C44D68400BA917F /* AVSaveOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 830EB9F21C44D68400BA917F /* AVSaveOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		830EB9F61C44D68400BA917F /* AVSaveOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 830EB9F21C44D68400BA917F /* AVSaveOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		830EB9F71C44D68400BA917F /* AVSaveOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 830EB9F21C44D68400BA917F /* AVSaveOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1158,8 +1154,6 @@
 		830E7CFA1B1CAD3B005F4B22 /* LCDatabaseMigrator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCDatabaseMigrator.h; sourceTree = "<group>"; };
 		830E7CFB1B1CAD3B005F4B22 /* LCDatabaseMigrator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCDatabaseMigrator.m; sourceTree = "<group>"; };
 		830E7CFE1B1CB07B005F4B22 /* LCDatabaseCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCDatabaseCommon.h; sourceTree = "<group>"; };
-		830EB9E31C3F996A00BA917F /* AVIMClientOpenOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMClientOpenOption.h; sourceTree = "<group>"; };
-		830EB9E41C3F996A00BA917F /* AVIMClientOpenOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMClientOpenOption.m; sourceTree = "<group>"; };
 		830EB9F21C44D68400BA917F /* AVSaveOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVSaveOption.h; sourceTree = "<group>"; };
 		830EB9F31C44D68400BA917F /* AVSaveOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVSaveOption.m; sourceTree = "<group>"; };
 		830EB9FE1C44F3D600BA917F /* AVSaveOption_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVSaveOption_internal.h; sourceTree = "<group>"; };
@@ -1981,8 +1975,6 @@
 				8C841BCB1A5A84C600C5C6C4 /* AVIMClient_Internal.h */,
 				8C841BCC1A5A84C600C5C6C4 /* AVIMClient.h */,
 				8C841BCD1A5A84C600C5C6C4 /* AVIMClient.m */,
-				830EB9E31C3F996A00BA917F /* AVIMClientOpenOption.h */,
-				830EB9E41C3F996A00BA917F /* AVIMClientOpenOption.m */,
 				83DBBDDB1BD0963000E69BDC /* LCIMClientSessionTokenCacheStore.h */,
 				83DBBDDC1BD0963000E69BDC /* LCIMClientSessionTokenCacheStore.m */,
 				8C841BCE1A5A84C600C5C6C4 /* AVIMCommon.h */,
@@ -2608,7 +2600,6 @@
 				9A2F1B691CF6F6FA00BE52F2 /* LCIMUtilities.h in Headers */,
 				9A2F1B001CF6F6FA00BE52F2 /* LCIMArray.h in Headers */,
 				9A2F1B721CF6F6FA00BE52F2 /* LCIMWellKnownTypes.h in Headers */,
-				830EB9E71C3F996A00BA917F /* AVIMClientOpenOption.h in Headers */,
 				704F3BFB1BE0D0830033245C /* AVIMBlockHelper.h in Headers */,
 				704F3BFC1BE0D0830033245C /* AVIMRuntimeHelper.h in Headers */,
 				704F3BFD1BE0D0830033245C /* AVIMErrorUtil.h in Headers */,
@@ -3076,7 +3067,6 @@
 				9A2F1B641CF6F6FA00BE52F2 /* LCIMUnknownFieldSet_PackagePrivate.h in Headers */,
 				8C9A927C1A70AF1800CA4912 /* AVIMVideoMessage.h in Headers */,
 				833E1F631B69F629002A691C /* AVIMFileMessage.h in Headers */,
-				830EB9E51C3F996A00BA917F /* AVIMClientOpenOption.h in Headers */,
 				9A2F1B491CF6F6FA00BE52F2 /* LCIMRootObject.h in Headers */,
 				8C9A927A1A70AF1800CA4912 /* AVIMTypedMessage.h in Headers */,
 				9A2F1B701CF6F6FA00BE52F2 /* LCIMWellKnownTypes.h in Headers */,
@@ -3721,7 +3711,6 @@
 				9A2F1B4E1CF6F6FA00BE52F2 /* LCIMRootObject.m in Sources */,
 				704F3B901BE0D05C0033245C /* AVIMUserOptions.m in Sources */,
 				9AE76C571C3F7CC600325902 /* AVIMDynamicObject.m in Sources */,
-				830EB9EA1C3F996A00BA917F /* AVIMClientOpenOption.m in Sources */,
 				837261DF1F2C605C009DBDF7 /* AVIMOptions.m in Sources */,
 				831E295D1D882CBB006E502B /* AVIMMessageOption.m in Sources */,
 				9AD27C461E1418DB002F9C7C /* LCIMApi.pbobjc.m in Sources */,
@@ -4166,7 +4155,6 @@
 				837261DE1F2C605C009DBDF7 /* AVIMOptions.m in Sources */,
 				831E295C1D882CBB006E502B /* AVIMMessageOption.m in Sources */,
 				9AD27C451E1418DB002F9C7C /* LCIMApi.pbobjc.m in Sources */,
-				830EB9E81C3F996A00BA917F /* AVIMClientOpenOption.m in Sources */,
 				8C9A927D1A70AF1800CA4912 /* AVIMVideoMessage.m in Sources */,
 				9AD27C551E1418DB002F9C7C /* LCIMSourceContext.pbobjc.m in Sources */,
 				9A2F1B3D1CF6F6FA00BE52F2 /* LCIMMessage.m in Sources */,
