@@ -85,13 +85,11 @@ static NSUInteger const AVHourCount = 3600 / AVTimerInterval;
 }
 
 - (void)willEnterForeground:(NSNotification *)notification {
-    if ([AVUtils networkIsWifiOrBetter])
-        [self handleArchivedRequests];
+    [self handleArchivedRequests];
 }
 
 - (void)didFinishLaunching:(NSNotification *)notification {
-    if ([AVUtils networkIsWifiOrBetter])
-        [self handleArchivedRequests];
+    [self handleArchivedRequests];
 }
 
 - (void)didReceiveMemoryWarning:(NSNotification *)notification {
@@ -110,7 +108,6 @@ static NSUInteger const AVHourCount = 3600 / AVTimerInterval;
 
 - (void)clearCache {
     [AVCacheManager clearCacheMoreThanDays:self.queryCacheExpiredDays];
-    [AVFile clearCacheMoreThanDays:self.fileCacheExpiredDays];
 }
 
 #pragma mark Timer
