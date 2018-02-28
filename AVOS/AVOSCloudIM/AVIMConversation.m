@@ -1058,7 +1058,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         AVFile *file = typedMessage.file;
         
         if (file) {
-            [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            [file uploadWithProgress:progressBlock completionHandler:^(BOOL succeeded, NSError * _Nullable error) {
                 if (succeeded) {
                     /* If uploading is success, bind file to message */
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -1070,7 +1070,7 @@ static dispatch_queue_t messageCacheOperationQueue;
                     message.status = AVIMMessageStatusFailed;
                     [AVIMBlockHelper callBooleanResultBlock:callback error:error];
                 }
-            } progressBlock:progressBlock];
+            }];
         } else {
             [self fillTypedMessageForLocationIfNeeded:typedMessage];
             [self sendRealMessage:message option:option callback:callback];
@@ -1089,10 +1089,55 @@ static dispatch_queue_t messageCacheOperationQueue;
     object.objId = file.objectId;
     
     switch (typedMessage.mediaType) {
-        case kAVIMMessageMediaTypeImage: {
-            UIImage *image = [[UIImage alloc] initWithData:[file getData]];
-            CGFloat width = image.size.width;
-            CGFloat height = image.size.height;
+        case kAVIMMessageMediaTypeImage:
+        {
+            id image = nil;
+#if TARGET_OS_IOS || TARGET_OS_TV || TARGET_OS_WATCH
+            image = ({
+                
+                UIImage *image = nil;
+                
+                NSString *cachedPath = file.persistentCachePath;
+                
+                if ([[NSFileManager defaultManager] fileExistsAtPath:cachedPath]) {
+                    
+                    NSData *data = [NSData dataWithContentsOfFile:cachedPath];
+                    
+                    image = [UIImage imageWithData:data];
+                }
+                
+                image;
+            });
+#else
+            image = ({
+                
+                NSImage *image = nil;
+                
+                NSString *cachedPath = file.persistentCachePath;
+                
+                if ([[NSFileManager defaultManager] fileExistsAtPath:cachedPath]) {
+                    
+                    NSData *data = [NSData dataWithContentsOfFile:cachedPath];
+                    
+                    image = [[NSImage alloc] initWithData:data];
+                }
+                
+                image;
+            });
+#endif
+            
+            if (!image) { break; }
+            
+            CGFloat width;
+            CGFloat height;
+            
+#if TARGET_OS_IOS || TARGET_OS_TV || TARGET_OS_WATCH
+            width = [(UIImage *)image size].width;
+            height = [(UIImage *)image size].height;
+#else
+            width = [(NSImage *)image size].width;
+            height = [(NSImage *)image size].height;
+#endif
             
             AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] init];
             metaData.height = height;
@@ -1100,7 +1145,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             metaData.size = file.size;
             metaData.format = [file.name pathExtension];
             
-            file.metaData = [[metaData dictionary] mutableCopy];
+            [file setMetaData:[metaData dictionary].copy];
             
             object.metaData = metaData;
             typedMessage.messageObject._lcfile = [object dictionary];
@@ -1109,7 +1154,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             
         case kAVIMMessageMediaTypeAudio:
         case kAVIMMessageMediaTypeVideo: {
-            NSString *path = file.localPath;
+            NSString *path = file.persistentCachePath;
             
             /* If audio file not found, no meta data */
             if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
