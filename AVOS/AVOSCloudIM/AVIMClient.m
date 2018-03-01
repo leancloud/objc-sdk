@@ -458,12 +458,12 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)openWithCallback:(AVIMBooleanResultBlock)callback
 {
-    [self openWithOpenOption:0
-                    callback:callback];
+    [self openWithOption:AVIMClientOpenOptionForceOpen
+                callback:callback];
 }
 
-- (void)openWithOpenOption:(AVIMClientOpenOption)openOption
-                  callback:(AVIMBooleanResultBlock)callback
+- (void)openWithOption:(AVIMClientOpenOption)openOption
+              callback:(AVIMBooleanResultBlock)callback
 {
     [self getSignatureForOpenWith:^(AVIMSignature *signature) {
         

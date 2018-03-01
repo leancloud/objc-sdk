@@ -93,15 +93,20 @@ typedef NS_OPTIONS(uint64_t, AVIMClientOpenOption) {
     
     /*
      
-     Use this option when opening client means the open action is a reopen or reconnect action.
+     Default Option.
      
-     Common Scenario:
+     if seted 'tag', then use 'ForceOpen' to open client, this will let other clients(has the same ID and Tag) to be kicked or can't reopen, and now only this client online.
      
-     1. Reopen Client with the same Session Token
+     if not seted 'tag', open client with this option is just a normal open action, it will not kick other client.
      
-     2. Auto-Login Pattern
+     */
+    AVIMClientOpenOptionForceOpen = 0,
+    
+    /*
      
-     3. ... ...
+     if seted 'tag', then use 'Reopen' option to open client, if client has not been kicked, it can be opened, else if client has been kicked, it can't be opened.
+     
+     if not seted 'tag', open client with this option is just a normal open action, it will not be kicked by other client.
      
      */
     AVIMClientOpenOptionReopen = 1 << 0
@@ -260,8 +265,8 @@ __attribute__((warn_unused_result));
  @param openOption See more: `AVIMClientOpenOption`.
  @param callback Result Callback.
  */
-- (void)openWithOpenOption:(AVIMClientOpenOption)openOption
-                  callback:(AVIMBooleanResultBlock)callback;
+- (void)openWithOption:(AVIMClientOpenOption)openOption
+              callback:(AVIMBooleanResultBlock)callback;
 
 /**
  End a Session with Server.
