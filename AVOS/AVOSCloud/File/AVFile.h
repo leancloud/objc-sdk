@@ -333,6 +333,22 @@ typedef NS_OPTIONS(NSUInteger, AVFileDownloadOption) {
  */
 + (void)setEnabledLock:(BOOL)isEnabledLock;
 
+// MARK: - Deprecated
+
+- (void)saveInBackgroundWithBlock:(void (^)(BOOL succeeded, NSError * _Nullable error))block
+__deprecated_msg("use -[uploadWithCompletionHandler:] instead.");
+
+- (void)saveInBackgroundWithBlock:(void (^)(BOOL succeeded, NSError * _Nullable error))block
+                    progressBlock:(void (^ _Nullable)(NSInteger number))progressBlock
+__deprecated_msg("use -[uploadWithProgress:completionHandler:] instead.");
+
+- (void)getDataInBackgroundWithBlock:(void (^)(NSData * _Nullable data, NSError * _Nullable error))block
+__deprecated_msg("use -[downloadWithCompletionHandler:] instead.");
+
+- (void)getDataInBackgroundWithBlock:(void (^)(NSData * _Nullable data, NSError * _Nullable error))block
+                       progressBlock:(void (^ _Nullable)(NSInteger number))progressBlock
+__deprecated_msg("use -[downloadWithProgress:completionHandler:] instead.");
+
 @end
 
 NS_ASSUME_NONNULL_END

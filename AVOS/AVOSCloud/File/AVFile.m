@@ -1654,6 +1654,72 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     AVFile_EnabledLock = isEnabledLock;
 }
 
+// MARK: - Deprecated
+
+- (void)saveInBackgroundWithBlock:(void (^)(BOOL, NSError * _Nullable))block
+{
+    [self uploadWithCompletionHandler:block];
+}
+
+- (void)saveInBackgroundWithBlock:(void (^)(BOOL, NSError * _Nullable))block
+                    progressBlock:(void (^)(NSInteger))progressBlock
+{
+    [self uploadWithProgress:progressBlock completionHandler:block];
+}
+
+- (void)getDataInBackgroundWithBlock:(void (^)(NSData * _Nullable, NSError * _Nullable))block
+{
+    [self downloadWithCompletionHandler:^(NSURL * _Nullable filePath, NSError * _Nullable error) {
+        
+        if (error) {
+            
+            block(nil, error);
+            
+            return;
+        }
+        
+        NSError *err = nil;
+        
+        NSData *data = [NSData dataWithContentsOfURL:filePath options:NSDataReadingMappedIfSafe error:&err];
+        
+        if (err) {
+            
+            block(nil, err);
+            
+            return;
+        }
+        
+        block(data, nil);
+    }];
+}
+
+- (void)getDataInBackgroundWithBlock:(void (^)(NSData * _Nullable, NSError * _Nullable))block
+                       progressBlock:(void (^)(NSInteger))progressBlock
+{
+    [self downloadWithProgress:progressBlock completionHandler:^(NSURL * _Nullable filePath, NSError * _Nullable error) {
+        
+        if (error) {
+            
+            block(nil, error);
+            
+            return;
+        }
+        
+        NSError *err = nil;
+        
+        NSData *data = [NSData dataWithContentsOfURL:filePath options:NSDataReadingMappedIfSafe error:&err];
+        
+        if (err) {
+            
+            block(nil, err);
+            
+            return;
+        }
+        
+        block(data, nil);
+    }];
+}
+
 @end
 
 @implementation LCFileTokens
