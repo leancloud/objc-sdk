@@ -89,8 +89,7 @@ typedef NS_ENUM(NSUInteger, AVIMClientStatus) {
     
 };
 
-typedef NS_OPTIONS(uint64_t, AVIMClientOpenOption) {
-    
+typedef NS_ENUM(NSUInteger, AVIMClientOpenOption) {
     /*
      
      Default Option.
@@ -109,7 +108,7 @@ typedef NS_OPTIONS(uint64_t, AVIMClientOpenOption) {
      if not seted 'tag', open client with this option is just a normal open action, it will not be kicked by other client.
      
      */
-    AVIMClientOpenOptionReopen = 1 << 0
+    AVIMClientOpenOptionReopen
 };
 
 typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {

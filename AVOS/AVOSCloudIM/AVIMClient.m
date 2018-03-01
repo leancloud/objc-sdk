@@ -612,7 +612,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         
         /* Not reconnect, Open by User */
         
-        if (openOption & AVIMClientOpenOptionReopen) {
+        if (openOption == AVIMClientOpenOptionReopen) {
             
             /*
              
