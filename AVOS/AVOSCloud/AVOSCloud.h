@@ -77,7 +77,7 @@ typedef NS_ENUM(NSInteger, AVStorageType) {
     AVStorageTypeQCloud,
     /* Default service region */
     AVStorageTypeDefault = AVStorageTypeQiniu
-} __deprecated_msg("Deprecated after v8.2.1");
+} __deprecated_msg("deprecated");
 
 typedef enum AVLogLevel : NSUInteger {
     AVLogLevelNone      = 0,
@@ -179,7 +179,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param type Qiniu, QCloud or AWS S3.
  */
 + (void)setStorageType:(AVStorageType)type
-__deprecated_msg("Deprecated after v8.2.1, it is no longer valid, you can delete this config.");
+__deprecated_msg("deprecated");
 
 /**
  * Use specified region.

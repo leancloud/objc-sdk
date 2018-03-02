@@ -52,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Deprecated
 + (AVInstallation *)currentInstallation
-__deprecated_msg("Deprecated after v8.2.1, use +[defaultInstallation] instead.");
+__deprecated_msg("use +[defaultInstallation] instead.");
 
 /** @name Properties */
 
