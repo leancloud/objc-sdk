@@ -227,7 +227,9 @@ func get_project_all_valid_schemes(lines: [String]) -> [String] {
         
         .filter { (item: String) -> Bool in
             
-            return !item.hasSuffix("Tests") }
+            let isFiltered = !(item.hasSuffix("Tests") || item.hasSuffix("Demo"))
+            
+            return isFiltered }
     
     return Array(arraySlice)
 }
@@ -344,24 +346,29 @@ func main() {
         
         let buildConfigurations: [String] = get_project_all_buildConfigurations(lines: lines)
         
-        switch xcodebuild_building_schemes(
-            projectPath: projectPath,
-            schemes: schemes,
-            buildConfigurations: buildConfigurations
-        ) {
+        for _ in 0..<5 {
             
-        case .success(let string):
-            
-            guard let output: String = string as? String else {
+            switch xcodebuild_building_schemes(
+                projectPath: projectPath,
+                schemes: schemes,
+                buildConfigurations: buildConfigurations
+            ) {
                 
-                fatalError()
+            case .success(let string):
+                
+                guard let output: String = string as? String else {
+                    
+                    fatalError()
+                }
+                
+                print(output)
+                
+                return
+                
+            case .fail(let error):
+                
+                print(error)
             }
-            
-            print(output)
-            
-        case .fail(let error):
-            
-            print(error)
         }
     case .fail(let error):
         

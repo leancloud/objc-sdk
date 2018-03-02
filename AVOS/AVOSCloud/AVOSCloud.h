@@ -77,7 +77,7 @@ typedef NS_ENUM(NSInteger, AVStorageType) {
     AVStorageTypeQCloud,
     /* Default service region */
     AVStorageTypeDefault = AVStorageTypeQiniu
-} ;
+} __deprecated_msg("deprecated");
 
 typedef enum AVLogLevel : NSUInteger {
     AVLogLevelNone      = 0,
@@ -178,7 +178,8 @@ NS_ASSUME_NONNULL_BEGIN
  *  Set third party file storage service. If uses China server, you can use QCloud or Qiniu, the default is Qiniu, if uses US server, the default is AWS S3.
  *  @param type Qiniu, QCloud or AWS S3.
  */
-+ (void)setStorageType:(AVStorageType)type;
++ (void)setStorageType:(AVStorageType)type
+__deprecated_msg("deprecated");
 
 /**
  * Use specified region.
@@ -310,7 +311,7 @@ NS_ASSUME_NONNULL_BEGIN
  This method should be called in -[UIApplication application:didRegisterForRemoteNotificationsWithDeviceToken:].
 
  @param deviceToken Device token issued by APNs.
- @param block Constructing block of [AVInstallation currentInstallation].
+ @param block Constructing block of [AVInstallation defaultInstallation].
  */
 + (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
                constructingInstallationWithBlock:(void(^ _Nullable)(AVInstallation *currentInstallation))block;
@@ -321,7 +322,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param deviceToken Device token issued by APNs.
  @param teamId Team ID.
- @param block Constructing block of [AVInstallation currentInstallation].
+ @param block Constructing block of [AVInstallation defaultInstallation].
  */
 + (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
                                           teamId:(NSString * _Nullable)teamId

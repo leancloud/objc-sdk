@@ -23,32 +23,32 @@
 }
 
 - (void)setSize:(uint64_t)size {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData];
+    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
     metaData.size = size;
 }
 
 - (uint64_t)size {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData];
+    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
     return metaData.size;
 }
 
 - (void)setFormat:(NSString *)format {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData];
+    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
     metaData.format = format;
 }
 
 - (NSString *)format {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData];
+    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
     return metaData.format;
 }
 
 - (void)setDuration:(float)duration {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData];
+    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
     metaData.duration = duration;
 }
 
 - (float)duration {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData];
+    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
     return metaData.duration;
 }
 

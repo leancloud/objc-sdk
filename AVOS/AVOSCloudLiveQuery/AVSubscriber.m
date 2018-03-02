@@ -10,7 +10,6 @@
 #import "AVExponentialTimer.h"
 
 /* AVOSCloud headers */
-#import "AVConfiguration.h"
 #import "AVUtils.h"
 #import "AVObjectUtils.h"
 
@@ -150,7 +149,7 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
     AVIMGenericCommand *command = [[AVIMGenericCommand alloc] init];
 
     command.cmd             = AVIMCommandType_Login;
-    command.appId           = [AVConfiguration sharedInstance].applicationId;
+    command.appId           = [AVOSCloud getApplicationId];
     command.installationId  = self.identifier;
     command.service         = AVServiceTypeLiveQuery;
     command.needResponse    = YES;

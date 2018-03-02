@@ -11,6 +11,8 @@
 #import "AVOSCloud.h"
 #import "AVHelpers.h"
 
+#define keyPath(base, path) ({ __unused typeof(base.path) _; @#path; })
+
 /**
  * Check the equality of two security key.
  */
@@ -36,30 +38,42 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 
 @interface AVUtils : NSObject
 
-+(void)warnMainThreadIfNecessary;
++ (void)warnMainThreadIfNecessary;
 
-+(BOOL)containsProperty:(Class)objectClass property:(NSString *)name;
-+ (BOOL)containsProperty:(NSString *)name inClass:(Class)objectClass containSuper:(BOOL)containSuper filterDynamic:(BOOL)filterDynamic;
-+ (BOOL)isDynamicProperty:(NSString *)name inClass:(Class)objectClass withType:(Class)targetClass containSuper:(BOOL)containSuper;
++ (BOOL)containsProperty:(Class)objectClass
+                property:(NSString *)name;
 
-+(void)copyPropertiesFrom:(NSObject *)src
-                 toObject:(NSObject *)target;
-+(void)copyPropertiesFromDictionary:(NSDictionary *)src
-                         toNSObject:(NSObject *)target;
++ (BOOL)containsProperty:(NSString *)name
+                 inClass:(Class)objectClass
+            containSuper:(BOOL)containSuper
+           filterDynamic:(BOOL)filterDynamic;
 
-+(NSString *)jsonStringFromDictionary:(NSDictionary *)dictionary;
-+(NSString *)jsonStringFromArray:(NSArray *)array;
++ (BOOL)isDynamicProperty:(NSString *)name
+                  inClass:(Class)objectClass
+                 withType:(Class)targetClass
+             containSuper:(BOOL)containSuper;
 
-+(void)performSelectorIfCould:(id)target
-                     selector:(SEL)selector
-                       object:(id)arg1
-                       object:(id)arg2;
++ (void)copyPropertiesFrom:(NSObject *)src
+                  toObject:(NSObject *)target;
+
++ (void)copyPropertiesFromDictionary:(NSDictionary *)src
+                          toNSObject:(NSObject *)target;
+
++ (NSString *)jsonStringFromDictionary:(NSDictionary *)dictionary;
+
++ (NSString *)jsonStringFromArray:(NSArray *)array;
+
++ (void)performSelectorIfCould:(id)target
+                      selector:(SEL)selector
+                        object:(id)arg1
+                        object:(id)arg2;
 
 + (NSString *)generateUUID;
 + (NSString *)generateCompactUUID;
 + (NSString *)deviceUUID;
 
 #pragma mark - Block
+
 + (void)callBooleanResultBlock:(AVBooleanResultBlock)block
                          error:(NSError *)error;
 
@@ -95,12 +109,13 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
                      AVFile:(AVFile *)file
                       error:(NSError *)error;
 
-+(void)callSetResultBlock:(AVSetResultBlock)block
-                      set:(NSSet *)set
-                    error:(NSError *)error;
-+(void)callCloudQueryResultBlock:(AVCloudQueryCallback)block
-                          result:(AVCloudQueryResult *)result
-                           error:error;
++ (void)callSetResultBlock:(AVSetResultBlock)block
+                       set:(NSSet *)set
+                     error:(NSError *)error;
+
++ (void)callCloudQueryResultBlock:(AVCloudQueryCallback)block
+                           result:(AVCloudQueryResult *)result
+                            error:error;
 
 /*!
  Dispatch task on background thread.
@@ -110,21 +125,10 @@ SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
 + (void)asynchronizeTask:(void(^)(void))task;
 
 #pragma mark - String Util
+
 + (NSString *)MIMEType:(NSString *)filePathOrName;
 + (NSString *)MIMETypeFromPath:(NSString *)fullPath;
 + (NSString *)contentTypeForImageData:(NSData *)data;
-
-+ (NSString*)MD5ForFile:(NSString*)filePath;
-+ (NSString*)SHAForFile:(NSString*)filePath;
-
-
-#pragma mark - Network Util
-
-#if !TARGET_OS_WATCH
-+ (BOOL)networkIsReachableOrBetter;
-+ (BOOL)networkIs3GOrBetter;
-+ (BOOL)networkIsWifiOrBetter;
-#endif
 
 #pragma mark - Something about log
 
@@ -168,3 +172,13 @@ do {                                       \
 - (NSString *)AVAES256Decrypt;
 @end
 
+@interface NSObject (__LC__checkingType__decodingFromDictionary__)
+
++ (BOOL)lc__checkingType:(id)instance
+__attribute__((warn_unused_result));
+
++ (instancetype)lc__decodingWithKey:(NSString *)key
+                            fromDic:(NSDictionary *)dic
+__attribute__((warn_unused_result));
+
+@end

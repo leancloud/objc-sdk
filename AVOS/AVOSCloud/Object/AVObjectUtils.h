@@ -37,7 +37,7 @@
 +(NSDictionary *)dictionaryFromGeoPoint:(AVGeoPoint *)point;
 +(NSDictionary *)dictionaryFromDate:(NSDate *)date;
 +(NSDictionary *)dictionaryFromData:(NSData *)data;
-+(NSDictionary *)dictionaryFromFile:(AVFile *)file;
+
 +(NSDictionary *)dictionaryFromACL:(AVACL *)acl;
 + (id)dictionaryFromObject:(id)obj;
 + (id)dictionaryFromObject:(id)obj topObject:(BOOL)topObject;

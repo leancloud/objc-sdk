@@ -160,7 +160,15 @@ void swizzleMethodsForGroupChat(Class aClass) {
     [self updateReadTimestamp:timestamp forClientId:clientId];
 }
 
-- (void)fetchReceiptTimestampsInBackgroundSwizzledForGroupChat {
+- (void)fetchReceiptTimestampsInBackgroundSwizzledForGroupChat
+{
+    AVIMClient *client = self.imClient;
+    
+    if (!client) {
+        
+        return;
+    }
+    
     if (self.members.count <= 2) {
         [self fetchReceiptTimestampsInBackgroundSwizzledForGroupChat];
         return;
@@ -170,7 +178,7 @@ void swizzleMethodsForGroupChat(Class aClass) {
 
     genericCommand.cmd = AVIMCommandType_Conv;
     genericCommand.op = AVIMOpType_MaxRead;
-    genericCommand.peerId = self.imClient.clientId;
+    
     genericCommand.needResponse = YES;
 
     AVIMConvCommand *convCommand = [[AVIMConvCommand alloc] init];
@@ -180,18 +188,20 @@ void swizzleMethodsForGroupChat(Class aClass) {
     genericCommand.convMessage = convCommand;
 
     [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
-        if (error)
-            return;
-
-        AVIMConvCommand *convCommand = inCommand.convMessage;
-        NSArray<AVIMMaxReadTuple*> *maxReadTuples = convCommand.maxReadTuplesArray;
-
-        [self handleMaxReadTuples:maxReadTuples];
+        
+        dispatch_async(client.internalSerialQueue, ^{
+            
+            if (error)
+                return;
+            
+            AVIMConvCommand *convCommand = inCommand.convMessage;
+            NSArray<AVIMMaxReadTuple*> *maxReadTuples = convCommand.maxReadTuplesArray;
+            
+            [self handleMaxReadTuples:maxReadTuples];
+        });
     }];
 
-    dispatch_async([AVIMClient imClientQueue], ^{
-        [self.imClient sendCommand:genericCommand];
-    });
+    [client sendCommand:genericCommand];
 }
 
 - (void)handleMaxReadTuples:(NSArray<AVIMMaxReadTuple*> *)maxReadTuples {

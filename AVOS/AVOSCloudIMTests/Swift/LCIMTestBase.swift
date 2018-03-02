@@ -28,46 +28,27 @@ class LCIMTestBase: LCTestBase {
         
         let client: AVIMClient = AVIMClient(clientId: "LCIMTestBase.baseGlobalClient")
         
-        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            
+            semaphore.increment()
             
             client.open(callback: { (success, error) in
+                
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
                 
                 XCTAssertTrue(success)
                 XCTAssertNil(error)
                 XCTAssertEqual(client.status, .opened)
                 
                 self.baseGlobalClient = success ? client : nil;
-                
-                semaphore.breakWaiting = true
             })
             
-        }) {
+        }, failure: {
             
             XCTFail("timeout")
-        }
-    }
-    
-    override class func tearDown() {
-        
-        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
-            
-            self.baseGlobalClient?.close(callback: { (success, error) in
-                
-                XCTAssertTrue(success)
-                XCTAssertNil(error)
-                XCTAssertEqual(self.baseGlobalClient?.status, .closed)
-                
-                semaphore.breakWaiting = true
-            })
-            
-        }) {
-            
-            XCTFail("timeout")
-        }
-        
-        self.baseGlobalClient = nil;
-        
-        super.tearDown()
+        })
     }
     
 }

@@ -16,7 +16,6 @@
 @class AVIMMessage;
 @class AVIMTypedMessage;
 @class AVIMConversationQuery;
-@class AVIMClientOpenOption;
 @class AVUser;
 
 @protocol AVIMClientDelegate;
@@ -90,23 +89,26 @@ typedef NS_ENUM(NSUInteger, AVIMClientStatus) {
     
 };
 
-typedef NS_OPTIONS(uint64_t, LCIMClientOpenOption) {
+typedef NS_ENUM(NSUInteger, AVIMClientOpenOption) {
+    /*
+     
+     Default Option.
+     
+     if seted 'tag', then use 'ForceOpen' to open client, this will let other clients(has the same ID and Tag) to be kicked or can't reopen, and now only this client online.
+     
+     if not seted 'tag', open client with this option is just a normal open action, it will not kick other client.
+     
+     */
+    AVIMClientOpenOptionForceOpen = 0,
     
     /*
      
-     Use this option when opening client means the open action is a reopen or reconnect action.
+     if seted 'tag', then use 'Reopen' option to open client, if client has not been kicked, it can be opened, else if client has been kicked, it can't be opened.
      
-     Common Scenario:
-     
-     1. Reopen Client with the same Session Token
-     
-     2. Auto-Login Pattern
-     
-     3. ... ...
+     if not seted 'tag', open client with this option is just a normal open action, it will not be kicked by other client.
      
      */
-    LCIMClientOpenOptionReopen = 1 << 0
-    
+    AVIMClientOpenOptionReopen
 };
 
 typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
@@ -184,6 +186,8 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
 /**
  The Status of this Client.
  
+ @note Out of Thread-safe, this property Not Support KVO. Recommend using `AVIMClientDelegate`.
+ 
  see more: `AVIMClientStatus`
  */
 @property (nonatomic, assign, readonly) AVIMClientStatus status;
@@ -213,7 +217,8 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  @param clientId Identifie of this Client.
  @return Instance.
  */
-- (instancetype)initWithClientId:(NSString *)clientId;
+- (instancetype)initWithClientId:(NSString *)clientId
+__attribute__((warn_unused_result));
 
 /**
  Initialization method.
@@ -222,7 +227,8 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  @param tag You can use 'Tag' to implement the feature that the same 'clientId' only used in single device. 'Tag' Can't set with "default", it's a reserved tag.
  @return Instance.
  */
-- (instancetype)initWithClientId:(NSString *)clientId tag:(nullable NSString *)tag;
+- (instancetype)initWithClientId:(NSString *)clientId tag:(NSString * _Nullable)tag
+__attribute__((warn_unused_result));
 
 /**
  Initialization method.
@@ -230,7 +236,8 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  @param user The AVUser of this Client.
  @return Instance.
  */
-- (instancetype)initWithUser:(AVUser *)user;
+- (instancetype)initWithUser:(AVUser *)user
+__attribute__((warn_unused_result));
 
 /**
  Initialization method.
@@ -239,7 +246,8 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
   @param tag You can use 'Tag' to implement the feature that the same 'clientId' only used in single device. 'Tag' Can't set with "default", it's a reserved tag.
  @return Instance.
  */
-- (instancetype)initWithUser:(AVUser *)user tag:(nullable NSString *)tag;
+- (instancetype)initWithUser:(AVUser *)user tag:(NSString * _Nullable)tag
+__attribute__((warn_unused_result));
 
 /**
  Start a Session with Server.
@@ -253,11 +261,11 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  Start a Session with Server.
  It is similar to Login.
  
- @param openOption See more: `LCIMClientOpenOption`.
+ @param openOption See more: `AVIMClientOpenOption`.
  @param callback Result Callback.
  */
-- (void)openWithOpenOption:(LCIMClientOpenOption)openOption
-                  callback:(AVIMBooleanResultBlock)callback;
+- (void)openWithOption:(AVIMClientOpenOption)openOption
+              callback:(AVIMBooleanResultBlock)callback;
 
 /**
  End a Session with Server.
@@ -368,13 +376,15 @@ __attribute__((warn_unused_result));
  @param keyedConversation AVIMKeyedConversation 对象。
  @return 已绑定到当前 client 的会话。
  */
-- (AVIMConversation *)conversationWithKeyedConversation:(AVIMKeyedConversation *)keyedConversation;
+- (AVIMConversation *)conversationWithKeyedConversation:(AVIMKeyedConversation *)keyedConversation
+__attribute__((warn_unused_result));
 
 /*!
  构造一个对话查询对象
  @return 对话查询对象.
  */
-- (AVIMConversationQuery *)conversationQuery;
+- (AVIMConversationQuery *)conversationQuery
+__attribute__((warn_unused_result));
 
 /*!
  Query online clients within the given array of clients.
@@ -442,9 +452,16 @@ __attribute__((warn_unused_result));
  @param imClient imClient
  @param error Something Wrong
  */
-- (void)imClientClosed:(AVIMClient *)imClient error:(NSError *)error;
+- (void)imClientClosed:(AVIMClient *)imClient error:(NSError * _Nullable)error;
 
 @optional
+
+/*!
+ 客户端下线通知。
+ @param client 已下线的 client。
+ @param error 错误信息。
+ */
+- (void)client:(AVIMClient *)client didOfflineWithError:(NSError * _Nullable)error;
 
 /*!
  接收到新的普通消息。
@@ -507,13 +524,6 @@ __attribute__((warn_unused_result));
  */
 - (void)conversation:(AVIMConversation *)conversation didUpdateForKey:(NSString *)key;
 
-/*!
- 客户端下线通知。
- @param client 已下线的 client。
- @param error 错误信息。
- */
-- (void)client:(AVIMClient *)client didOfflineWithError:(NSError *)error;
-
 /**
  *  当前聊天状态被暂停，常见于网络断开时触发。
  *  注意：该回调会覆盖 imClientPaused: 方法。
@@ -521,7 +531,7 @@ __attribute__((warn_unused_result));
  *  @param error    具体错误信息
  */
 - (void)imClientPaused:(AVIMClient *)imClient error:(NSError *)error
-__deprecated_msg("Deprecated after v8.2.0 , use -[imClientClosed:error:] instead.");
+__deprecated_msg("use -[imClientClosed:error:] instead.");
 
 /*!
  收到未读通知。在该终端上线的时候，服务器会将对话的未读数发送过来。未读数可通过 -[AVIMConversation markAsReadInBackground] 清零，服务端不会自动清零。
@@ -542,16 +552,6 @@ AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 4.3.0. Instead, use `-[AVIMClient
  */
 + (void)setUserOptions:(NSDictionary *)userOptions
 AVIM_DEPRECATED("Deprecated in v5.1.0. Do not use it any more.");
-
-/*!
- * Open client with option.
- * @param option   Option to open client.
- * @param callback Callback for openning client.
- * @brief Open client with option of which the properties will override client's default option.
- */
-- (void)openWithOption:(nullable AVIMClientOpenOption *)option
-              callback:(AVIMBooleanResultBlock)callback
-__deprecated_msg("Deprecated after v8.2.0 , use -[openWithOpenOption:callback:] instead.");
 
 @end
 

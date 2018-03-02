@@ -21,14 +21,18 @@ class LCIMTestCaseQuery: LCIMTestBase {
         
         var tempConvId: String? = nil
         
-        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            
+            semaphore.increment()
             
             client.createTemporaryConversation(
                 withClientIds: [],
                 timeToLive: 0
             ) { (tempConv, error) in
                 
-                semaphore.breakWaiting = true
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
                 
                 guard let tempConv: AVIMTemporaryConversation = tempConv else {
                     
@@ -52,10 +56,10 @@ class LCIMTestCaseQuery: LCIMTestBase {
                 tempConvId = convId
             }
             
-        }) {
+        }, failure: {
             
             XCTFail("timeout")
-        }
+        })
         
         guard let _temoConvId: String = tempConvId else {
             
@@ -64,15 +68,19 @@ class LCIMTestCaseQuery: LCIMTestBase {
             return
         }
         
-        if self.runloopTestAsync(closure: { (semaphore) -> (Void) in
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             let query: AVIMConversationQuery = client.conversationQuery()
             
             query.cachePolicy = .networkOnly
             
+            semaphore.increment()
+            
             query.findTemporaryConversations(with: [_temoConvId]) { (array, error) in
                 
-                semaphore.breakWaiting = true
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
                 
                 guard let tempConv: AVIMTemporaryConversation = array?.first as? AVIMTemporaryConversation else {
                     
@@ -96,11 +104,10 @@ class LCIMTestCaseQuery: LCIMTestBase {
                 XCTAssertTrue(tempConv.temporaryTTL > 0)
             }
             
-            
-        }) {
+        }, failure: {
             
             XCTFail("timeout")
-        }
+        })
     }
     
 }

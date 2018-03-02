@@ -13,6 +13,6 @@
 
 @property (nonatomic, strong) NSMutableDictionary *where;
 @property (nonatomic, strong) NSString *order;
-@property (nonatomic, strong) AVIMClient *client;
+@property (nonatomic, weak) AVIMClient *client;
 
 @end

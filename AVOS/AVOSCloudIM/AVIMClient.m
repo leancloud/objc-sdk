@@ -8,7 +8,6 @@
 
 #import "AVIMClient.h"
 #import "AVIMClient_Internal.h"
-#import "AVIMClientOpenOption.h"
 #import "AVIMConversation_Internal.h"
 #import "AVIMBlockHelper.h"
 #import "UserAgent.h"
@@ -26,7 +25,6 @@
 #import "LCIMConversationCache.h"
 #import "LCIMClientSessionTokenCacheStore.h"
 #import "AVIMCommandCommon.h"
-#import "LCObserver.h"
 #import "SDMacros.h"
 #import "AVIMUserOptions.h"
 #import "AVPaasClient.h"
@@ -94,12 +92,12 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     
     AVIMWebSocketWrapper *_socketWrapper;
     
-    AVInstallation *_currentInstallation;
+    AVInstallation *_installation;
     
     NSString *_appId;
     
     /*
-     State-Machine global variable
+     State-Machine-Property global variable
      */
     
     ///
@@ -109,6 +107,8 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     NSString *_sessionToken;
     
     ///
+    
+    dispatch_queue_t _internalSerialQueue;
     
     NSMutableArray *_distinctMessageIdArray;
     
@@ -164,10 +164,6 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     [AVIMWebSocketWrapper setTimeoutIntervalInSeconds:seconds];
 }
 
-+ (dispatch_queue_t)imClientQueue {
-    return imClientQueue;
-}
-
 + (BOOL)checkErrorForSignature:(AVIMSignature *)signature command:(AVIMGenericCommand *)command {
     if (signature.error) {
         AVIMCommandResultBlock callback = command.callback;
@@ -189,7 +185,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
             return;
         }
         if ([item length] == 0 || [item length] > kMaxClientIdLength) {
-            [NSException raise:NSInternalInconsistencyException format:@"ClientId length should be in range [1, 64] but found '%@' length %lu.", item, [item length]];
+            [NSException raise:NSInternalInconsistencyException format:@"ClientId length should be in range [1, 64] but found '%@' length %lu.", item, (unsigned long)[item length]];
             return;
         }
     }
@@ -252,82 +248,112 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 - (void)doInitializationWithClientId:(NSString *)clientId
                                  tag:(NSString *)tag
 {
-    NSString *appId = [AVOSCloud getApplicationId];
-    
-    if (!appId) {
+    void(^setupAppId_block)(void) = ^(void) {
         
-        [NSException raise:NSInternalInconsistencyException
-                    format:@"Application id can not be nil."];
-    }
-    
-    _appId = [appId copy];
-    
-    if (!clientId || clientId.length > kMaxClientIdLength) {
+        NSString *appId = [AVOSCloud getApplicationId];
         
-        [NSException raise:NSInvalidArgumentException
-                    format:@"`clientId` is invalid or exceed Max Length('%lu').", kMaxClientIdLength];
-    }
-    
-    _clientId = [clientId copy];
-    
-    if (tag) {
-        
-        if ([tag isEqualToString:LCIMTagDefault]) {
+        if (!appId) {
             
-            [NSException raise:NSInvalidArgumentException
-                        format:@"The tag('%@') is a Reserved Tag", LCIMTagDefault];
+            [NSException raise:NSInternalInconsistencyException
+                        format:@"Application id can not be nil."];
         }
         
-        _tag = [tag copy];
+        _appId = [appId copy];
+    };
+    
+    setupAppId_block();
+
+    void(^setupClientId_block)(void) = ^(void) {
         
-    } else {
+        if (!clientId || clientId.length > kMaxClientIdLength) {
+            
+            [NSException raise:NSInvalidArgumentException
+                        format:@"`clientId` is invalid or exceed Max Length('%lu').", (unsigned long)kMaxClientIdLength];
+        }
         
-        _tag = nil;
-    }
+        _clientId = [clientId copy];
+    };
     
-    AVIMWebSocketWrapper *socketWrapper = [[AVIMWebSocketWrapper alloc] init];
+    setupClientId_block();
+
+    void(^setupTag_block)(void) = ^(void) {
+        
+        if (tag) {
+            
+            if ([tag isEqualToString:LCIMTagDefault]) {
+                
+                [NSException raise:NSInvalidArgumentException
+                            format:@"The tag('%@') is a Reserved Tag", LCIMTagDefault];
+            }
+            
+            _tag = [tag copy];
+            
+        } else {
+            
+            _tag = nil;
+        }
+    };
     
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    setupTag_block();
     
-    [center addObserver:self
-               selector:@selector(websocketOpened:)
-                   name:AVIM_NOTIFICATION_WEBSOCKET_OPENED
-                 object:socketWrapper];
+    void(^setupWebSocketWrapper_block)(void) = ^(void) {
+        
+        AVIMWebSocketWrapper *socketWrapper = [[AVIMWebSocketWrapper alloc] init];
+        
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+        
+        [center addObserver:self
+                   selector:@selector(websocketOpened:)
+                       name:AVIM_NOTIFICATION_WEBSOCKET_OPENED
+                     object:socketWrapper];
+        
+        [center addObserver:self
+                   selector:@selector(websocketClosed:)
+                       name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
+                     object:socketWrapper];
+        
+        [center addObserver:self
+                   selector:@selector(websocketReconnect:)
+                       name:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
+                     object:socketWrapper];
+        
+        [center addObserver:self
+                   selector:@selector(receiveCommand:)
+                       name:AVIM_NOTIFICATION_WEBSOCKET_COMMAND
+                     object:socketWrapper];
+        
+        _socketWrapper = socketWrapper;
+    };
     
-    [center addObserver:self
-               selector:@selector(websocketClosed:)
-                   name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
-                 object:socketWrapper];
+    setupWebSocketWrapper_block();
     
-    [center addObserver:self
-               selector:@selector(websocketReconnect:)
-                   name:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
-                 object:socketWrapper];
+    void(^setupInstallation_block)(void) = ^(void) {
+        
+        AVInstallation *installation = [AVInstallation defaultInstallation];
+        
+        [installation addObserver:self
+                       forKeyPath:keyPath(installation, deviceToken)
+                          options:(NSKeyValueObservingOptionNew)
+                          context:nil];
+        
+        _installation = installation;
+    };
     
-    [center addObserver:self
-               selector:@selector(receiveCommand:)
-                   name:AVIM_NOTIFICATION_WEBSOCKET_COMMAND
-                 object:socketWrapper];
+    setupInstallation_block();
     
-    _socketWrapper = socketWrapper;
+    void(^setup_StateMachineProperty_Var_block)(void) = ^(void) {
+        
+        _status = AVIMClientStatusNone;
+        
+        _sessionToken = nil;
+    };
     
-    // FIXME: [AVInstallation currentInstallation] is Not Thread-safe
-    _currentInstallation = [AVInstallation currentInstallation];
+    setup_StateMachineProperty_Var_block();
+    
+    _internalSerialQueue = imClientQueue;
     
     _lastPatchTimestamp = 0;
     _lastUnreadTimestamp = 0;
-    
-    /*
-     State-Machine global variable's initialization
-     */
-    
-    ///
-    
-    _status = AVIMClientStatusNone;
-    
-    _sessionToken = nil;
-    
-    ///
     
     _stagedMessages = [[NSMutableDictionary alloc] init];
     _messageQueryCacheEnabled = YES;
@@ -346,42 +372,24 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                                 NULL);
 #endif
 
-    // FIXME: Memory Leak
-    /*
-     Observe push notification device token and websocket open event.
-     */
-    ///
-    __weak typeof(self) weakSelf = self;
-    
-    [LCObserverMake(self) addTarget:_currentInstallation
-                         forKeyPath:NSStringFromSelector(@selector(deviceToken))
-                            options:0
-                              block:
-     ^(id object, id target, NSDictionary *change) {
-         
-         dispatch_async(imClientQueue, ^{
-             
-             if (_status == AVIMClientStatusOpened) {
-                 
-                 [weakSelf installationRegisterClientChannel];
-             }
-         });
-     }];
-    ///
-
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         LCIMConversationCache *cache = [self conversationCache];
         [cache cleanAllExpiredConversations];
     });
 }
 
-// MARK: - Dealloc Instance
-
 - (void)dealloc
 {
     AVLoggerInfo(AVLoggerDomainIM, @"AVIMClient dealloc.");
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_socketWrapper close];
+}
+
+// MARK: - Internal Serial Queue
+
+- (dispatch_queue_t)internalSerialQueue
+{
+    return _internalSerialQueue;
 }
 
 // MARK: - Getter and Setter of Delegate & DataSource
@@ -392,7 +400,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     
     __block id<AVIMClientDelegate> delegate = nil;
     
-    dispatch_sync(imClientQueue, ^{
+    dispatch_sync(_internalSerialQueue, ^{
         
         delegate = _delegate;
     });
@@ -402,7 +410,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)setDelegate:(id<AVIMClientDelegate>)delegate
 {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         _delegate = delegate;
     });
@@ -414,7 +422,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     
     __block id<AVIMSignatureDataSource> signatureDataSource = nil;
     
-    dispatch_sync(imClientQueue, ^{
+    dispatch_sync(_internalSerialQueue, ^{
         
         signatureDataSource = _signatureDataSource;
     });
@@ -424,7 +432,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)setSignatureDataSource:(id<AVIMSignatureDataSource>)signatureDataSource
 {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         _signatureDataSource = signatureDataSource;
     });
@@ -438,7 +446,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     
     __block AVIMClientStatus status = AVIMClientStatusNone;
     
-    dispatch_sync(imClientQueue, ^{
+    dispatch_sync(_internalSerialQueue, ^{
         
         status = _status;
     });
@@ -450,12 +458,12 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)openWithCallback:(AVIMBooleanResultBlock)callback
 {
-    [self openWithOpenOption:0
-                    callback:callback];
+    [self openWithOption:AVIMClientOpenOptionForceOpen
+                callback:callback];
 }
 
-- (void)openWithOpenOption:(LCIMClientOpenOption)openOption
-                  callback:(AVIMBooleanResultBlock)callback
+- (void)openWithOption:(AVIMClientOpenOption)openOption
+              callback:(AVIMBooleanResultBlock)callback
 {
     [self getSignatureForOpenWith:^(AVIMSignature *signature) {
         
@@ -489,7 +497,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         
         [socketWrapper openWithCallback:^(BOOL succeeded, NSError *error1) {
             
-            dispatch_async(imClientQueue, ^{
+            dispatch_async(_internalSerialQueue, ^{
                 
                 if (error1) {
                     
@@ -511,7 +519,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                 
                 [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error2) {
                     
-                    dispatch_async(imClientQueue, ^{
+                    dispatch_async(_internalSerialQueue, ^{
                         
                         if (error2) {
                             
@@ -553,7 +561,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     }];
 }
 
-- (AVIMGenericCommand *)newSessionOpenCommandWithOpenOption:(LCIMClientOpenOption)openOption
+- (AVIMGenericCommand *)newSessionOpenCommandWithOpenOption:(AVIMClientOpenOption)openOption
                                                sessionToken:(NSString *)sessionToken
                                                   signature:(AVIMSignature *)signature
 {
@@ -604,7 +612,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         
         /* Not reconnect, Open by User */
         
-        if (openOption & LCIMClientOpenOptionReopen) {
+        if (openOption == AVIMClientOpenOptionReopen) {
             
             /*
              
@@ -649,7 +657,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         
         /* Device Token */
         
-        NSString *deviceToken = _currentInstallation.deviceToken ?: [AVUtils deviceUUID];
+        NSString *deviceToken = _installation.deviceToken ?: [AVUtils deviceUUID];
         
         sessionCommand.deviceToken = deviceToken;
         
@@ -758,7 +766,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                 return ;
             }
             
-            AVIMGenericCommand *cmd = [self newSessionOpenCommandWithOpenOption:LCIMClientOpenOptionReopen
+            AVIMGenericCommand *cmd = [self newSessionOpenCommandWithOpenOption:AVIMClientOpenOptionReopen
                                                                    sessionToken:nil
                                                                       signature:signature];
             
@@ -766,7 +774,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
             
             [cmd setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
                 
-                dispatch_async(imClientQueue, ^{
+                dispatch_async(_internalSerialQueue, ^{
                     
                     if (error) {
                         
@@ -802,7 +810,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     
     [cmd setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
         
-        dispatch_async(imClientQueue, ^{
+        dispatch_async(_internalSerialQueue, ^{
             
             if (error) {
                 
@@ -832,7 +840,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)closeWithCallback:(AVIMBooleanResultBlock)callback
 {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         if (_status == AVIMClientStatusClosed) {
             
@@ -857,7 +865,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         [genericCommand setNeedResponse:true];
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             
-            dispatch_async(imClientQueue, ^{
+            dispatch_async(_internalSerialQueue, ^{
                 
                 if (error) {
                     
@@ -920,32 +928,11 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 // MARK: - APNs
 
-- (void)installationRemoveClientChannel
-{
-    AssertRunInIMClientQueue;
-    
-    AVInstallation *installation = _currentInstallation;
-    
-    if (installation.deviceToken) {
-        
-        [installation removeObject:_clientId
-                            forKey:@"channels"];
-        
-        [installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-            
-            if (error) {
-                
-                AVLoggerError(AVLoggerDomainIM, @"%@", error);
-            }
-        }];
-    }
-}
-
 - (void)installationRegisterClientChannel
 {
     AssertRunInIMClientQueue;
     
-    AVInstallation *installation = _currentInstallation;
+    AVInstallation *installation = _installation;
     
     NSString *clientId = _clientId;
     
@@ -982,11 +969,32 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     [self _sendCommand:genericCommand];
 }
 
+- (void)installationRemoveClientChannel
+{
+    AssertRunInIMClientQueue;
+    
+    AVInstallation *installation = _installation;
+    
+    if (installation.deviceToken) {
+        
+        [installation removeObject:_clientId
+                            forKey:@"channels"];
+        
+        [installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            
+            if (error) {
+                
+                AVLoggerError(AVLoggerDomainIM, @"%@", error);
+            }
+        }];
+    }
+}
+
 // MARK: - WebSocket Notification
 
 - (void)websocketOpened:(NSNotification *)notification
 {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         NSString *sessionToken = _sessionToken;
         
@@ -1006,7 +1014,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)websocketClosed:(NSNotification *)notification
 {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         if (!_sessionToken) {
             
@@ -1076,7 +1084,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)websocketReconnect:(NSNotification *)notification
 {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         if (!_sessionToken) {
             
@@ -1106,7 +1114,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)receiveCommand:(NSNotification *)notification
 {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         NSDictionary *userInfo = notification.userInfo;
         
@@ -1204,7 +1212,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)getSignatureForOpenWith:(void(^)(AVIMSignature *))callback
 {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         [self _getSignatureForOpenWith:callback];
     });
@@ -1264,7 +1272,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                 
                 signature.error = aError;
                 
-                dispatch_async(imClientQueue, ^{
+                dispatch_async(_internalSerialQueue, ^{
                     
                     callback(signature);
                 });
@@ -1276,7 +1284,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
             signature.signature = result[@"signature"];
             signature.timestamp = [result[@"timestamp"] unsignedIntegerValue];
             
-            dispatch_async(imClientQueue, ^{
+            dispatch_async(_internalSerialQueue, ^{
                 
                 callback(signature);
             });
@@ -1300,7 +1308,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                 signature.error = aError;
             }
             
-            dispatch_async(imClientQueue, ^{
+            dispatch_async(_internalSerialQueue, ^{
                 
                 callback(signature);
             });
@@ -1320,7 +1328,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)sendCommand:(AVIMGenericCommand *)command
 {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         [self _sendCommand:command];
     });
@@ -1542,7 +1550,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         [members allObjects];
     })];
     
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
         
@@ -1731,7 +1739,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 }
 
 - (void)queryOnlineClientsInClients:(NSArray<NSString *> *)clients callback:(AVIMArrayResultBlock)callback {
-    dispatch_async(imClientQueue, ^{
+    dispatch_async(_internalSerialQueue, ^{
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
 
         genericCommand.needResponse = YES;
@@ -1946,7 +1954,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                  return;
              }
              
-             dispatch_async([client.class imClientQueue], ^{
+             dispatch_async(_internalSerialQueue, ^{
                  
                  if (error) {
                      
@@ -2088,7 +2096,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                  return;
              }
              
-             dispatch_async([client.class imClientQueue], ^{
+             dispatch_async(_internalSerialQueue, ^{
                  
                  if (error) {
                      
@@ -2229,7 +2237,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                  return;
              }
              
-             dispatch_async([client.class imClientQueue], ^{
+             dispatch_async(_internalSerialQueue, ^{
                  
                  if (error) {
                      
@@ -2400,7 +2408,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                  return;
              }
              
-             dispatch_async([client.class imClientQueue], ^{
+             dispatch_async(_internalSerialQueue, ^{
                  
                  if (error) {
                      
@@ -2655,6 +2663,32 @@ __attribute__((warn_unused_result))
     });
 }
 
+// MARK: - KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary<NSKeyValueChangeKey,id> *)change
+                       context:(void *)context
+{
+    if (keyPath == keyPath(_installation, deviceToken)) {
+        
+        NSString *value = change[NSKeyValueChangeNewKey];
+        
+        if (value && [value isKindOfClass:[NSString class]]) {
+            
+            dispatch_async(_internalSerialQueue, ^{
+                
+                if (_status != AVIMClientStatusOpened) {
+                    
+                    return ;
+                }
+                
+                [self installationRegisterClientChannel];
+            });
+        }
+    }
+}
+
 // MARK: - Thread Unsafe
 
 - (AVIMClientStatus)threadUnsafe_status
@@ -2678,22 +2712,6 @@ __attribute__((warn_unused_result))
         return;
     
     [self._userOptions addEntriesFromDictionary:userOptions];
-}
-
-- (void)openWithOption:(AVIMClientOpenOption *)option
-              callback:(AVIMBooleanResultBlock)callback
-{
-    BOOL force = option.force;
-    
-    if (force) {
-        
-        [self openWithCallback:callback];
-        
-    } else {
-        
-        [self openWithOpenOption:LCIMClientOpenOptionReopen
-                        callback:callback];
-    }
 }
 
 @end

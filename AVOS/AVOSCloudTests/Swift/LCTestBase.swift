@@ -8,14 +8,40 @@
 
 import XCTest
 
-let kLCTestBase_IsSelectRegion_US: Bool = false
-
-// US
-let kLCTestBase_AppId_US: String = "kknqydxqd9wdq4cboy1dvvug5ha0ce3i2mrerrdrmr6pla1p"
-let kLCTestBase_AppKey_US: String = "fate582pwsfh97s9o99nw91a152i7ndm9tsy866e6wpezth4"
-// CN
-let kLCTestBase_AppId_CN: String = "nq0awk3lh1dpmbkziz54377mryii8ny4xvp6njoygle5nlyg"
-let kLCTestBase_AppKey_CN: String = "6vdnmdkdi4fva9i06lt50s4mcsfhppjpzm3zf5zjc9ty4pdz"
+enum TestRegion {
+    
+    case CN_North
+    case CN_East
+    case US
+    
+    var appInfo: (id: String, key: String) {
+        
+        switch self {
+            
+        case .CN_North:
+            
+            return (
+                id: "nq0awk3lh1dpmbkziz54377mryii8ny4xvp6njoygle5nlyg",
+                key: "6vdnmdkdi4fva9i06lt50s4mcsfhppjpzm3zf5zjc9ty4pdz"
+            )
+            
+        case .CN_East:
+            
+            return (
+                id: "uwWkfssEBRtrxVpQWEnFtqfr-9Nh9j0Va",
+                key: "9OaLpoW21lIQtRYzJya4WHUR"
+            )
+            
+        case .US:
+            
+            return (
+                id: "kknqydxqd9wdq4cboy1dvvug5ha0ce3i2mrerrdrmr6pla1p",
+                key: "fate582pwsfh97s9o99nw91a152i7ndm9tsy866e6wpezth4"
+            )
+        }
+        
+    }
+}
 
 class LCTestBase: XCTestCase {
     
@@ -23,22 +49,35 @@ class LCTestBase: XCTestCase {
         
         super.setUp()
         
-        let appId: String
-        let appKey: String
+        let region: TestRegion = .CN_North
         
-        if kLCTestBase_IsSelectRegion_US {
+        let appInfo: (id: String, key: String) = region.appInfo
+        
+        if region == .CN_East || region == .CN_North {
             
-            appId = kLCTestBase_AppId_US
-            appKey = kLCTestBase_AppKey_US
+            AVOSCloud.setServiceRegion(.CN)
             
         } else {
             
-            appId = kLCTestBase_AppId_CN
-            appKey = kLCTestBase_AppKey_CN
+            AVOSCloud.setServiceRegion(.US)
         }
         
-        AVOSCloud.setApplicationId(appId, clientKey: appKey)
-        AVOSCloud.setAllLogsEnabled(false)
+        AVOSCloud.setApplicationId(appInfo.id, clientKey: appInfo.key)
+        
+        if region == .CN_East {
+            
+            for item in [
+                AVServiceModule.API,
+                AVServiceModule.engine,
+                AVServiceModule.push,
+                AVServiceModule.statistics
+                ]
+            {
+                AVOSCloud.setServerURLString("tab.leancloud.cn", for: item)
+            }
+        }
+        
+        AVOSCloud.setAllLogsEnabled(true)
     }
     
     override class func tearDown() {
@@ -48,74 +87,81 @@ class LCTestBase: XCTestCase {
     
     // MARK: - async testing utilities
     
-    func runloopTestAsync(
+    func runloopTestingAsync(
         timeout: TimeInterval = 30,
-        closure: (RunLoopSemaphore) -> (Void)
-        ) -> Bool
+        async: (RunLoopSemaphore) -> Void,
+        failure: () -> Void)
     {
         XCTAssertTrue(timeout > 0)
         
-        let currentTimestamp: TimeInterval = Date().timeIntervalSince1970
+        let startTimestamp: TimeInterval = Date().timeIntervalSince1970
         
         let semaphore: RunLoopSemaphore = RunLoopSemaphore()
         
-        closure(semaphore)
+        async(semaphore)
         
-        while semaphore.breakWaiting == false {
+        while semaphore.waiting() {
             
             let date: Date = Date.init(timeIntervalSinceNow: 1.0)
             
             XCTAssertTrue(RunLoop.current.run(mode: .defaultRunLoopMode, before: date))
             
-            if date.timeIntervalSince1970 - currentTimestamp > timeout {
+            if date.timeIntervalSince1970 - startTimestamp > timeout {
                 
-                let isTimeout: Bool = true
+                failure()
                 
-                return isTimeout
+                return
             }
         }
-        
-        let isTimeout: Bool = false
-        
-        return isTimeout
     }
     
-    static func runloopTestAsync(
+    static func runloopTestingAsync(
         timeout: TimeInterval = 30,
-        closure: (RunLoopSemaphore) -> (Void)
-        ) -> Bool
+        async: (RunLoopSemaphore) -> Void,
+        failure: () -> Void)
     {
         XCTAssertTrue(timeout > 0)
         
-        let currentTimestamp: TimeInterval = Date().timeIntervalSince1970
+        let startTimestamp: TimeInterval = Date().timeIntervalSince1970
         
         let semaphore: RunLoopSemaphore = RunLoopSemaphore()
         
-        closure(semaphore)
+        async(semaphore)
         
-        while semaphore.breakWaiting == false {
+        while semaphore.waiting() {
             
             let date: Date = Date.init(timeIntervalSinceNow: 1.0)
             
             XCTAssertTrue(RunLoop.current.run(mode: .defaultRunLoopMode, before: date))
             
-            if date.timeIntervalSince1970 - currentTimestamp > timeout {
+            if date.timeIntervalSince1970 - startTimestamp > timeout {
                 
-                let isTimeout: Bool = true
+                failure()
                 
-                return isTimeout
+                return
             }
         }
-        
-        let isTimeout: Bool = false
-        
-        return isTimeout
     }
     
 }
 
 class RunLoopSemaphore {
     
-    var breakWaiting: Bool = false
+    var semaphoreValue: Int = 0
+    
+    func increment() {
+        
+        self.semaphoreValue += 1
+    }
+    
+    func decrement() {
+        
+        self.semaphoreValue -= 1
+    }
+    
+    func waiting() -> Bool {
+        
+        return (self.semaphoreValue > 0) ? true : false
+    }
     
 }

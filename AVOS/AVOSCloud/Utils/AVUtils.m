@@ -574,163 +574,6 @@ if (block) { \
     return nil;
 }
 
-+ (NSString*)MD5ForFile:(NSString*)filePath{
-    
-    int chunkSizeForReadingData=1024*8;
-    
-    
-    
-    CFReadStreamRef readStream = NULL;
-    
-    CFURLRef fileURL =
-    CFURLCreateWithFileSystemPath(kCFAllocatorDefault,
-                                  (CFStringRef)filePath,
-                                  kCFURLPOSIXPathStyle,
-                                  (Boolean)false);
-    if (!fileURL) return nil;
-    
-    
-    // Create and open the read stream
-    readStream = CFReadStreamCreateWithFile(kCFAllocatorDefault,fileURL);
-    if (!readStream) return nil;
-    
-    bool didSucceed = (bool)CFReadStreamOpen(readStream);
-    if (!didSucceed) return nil;
-    
-    
-    // Initialize the hash object
-    CC_MD5_CTX hashObject;
-    CC_MD5_Init(&hashObject);
-    
-    
-    // Feed the data to the hash object
-    bool hasMoreData = true;
-    while (hasMoreData) {
-        uint8_t buffer[chunkSizeForReadingData];
-        CFIndex readBytesCount = CFReadStreamRead(readStream,(UInt8 *)buffer,(CFIndex)sizeof(buffer));
-        if (readBytesCount == -1) break;
-        if (readBytesCount == 0) {
-            hasMoreData = false;
-            continue;
-        }
-        CC_MD5_Update(&hashObject,(const void *)buffer,(CC_LONG)readBytesCount);
-    }
-    
-    didSucceed = !hasMoreData;
-    
-    NSString *result = nil;
-    if (didSucceed) {
-        unsigned char digest[CC_MD5_DIGEST_LENGTH];
-        CC_MD5_Final(digest, &hashObject);
-        
-        char hash[2 * sizeof(digest) + 1];
-        for (size_t i = 0; i < sizeof(digest); ++i) {
-            snprintf(hash + (2 * i), 3, "%02x", (int)(digest[i]));
-        }
-        result = [NSString stringWithCString:(const char *)hash encoding:NSUTF8StringEncoding];
-    }
-    
-    
-    if (readStream) {
-        CFReadStreamClose(readStream);
-        CFRelease(readStream);
-    }
-    if (fileURL) {
-        CFRelease(fileURL);
-    }
-    return result;
-}
-
-+ (NSString*)SHAForFile:(NSString *)filePath {
-    int chunkSizeForReadingData=1024*8;
-    return [self SHAForFile:filePath chunkSizeForReadingData:chunkSizeForReadingData];
-}
-
-+ (NSString*)SHAForFile:(NSString *)filePath chunkSizeForReadingData:(size_t)chunkSizeForReadingData {
-    
-    CFReadStreamRef readStream = NULL;
-    
-    CFURLRef fileURL =
-    CFURLCreateWithFileSystemPath(kCFAllocatorDefault,
-                                  (CFStringRef)filePath,
-                                  kCFURLPOSIXPathStyle,
-                                  (Boolean)false);
-    if (!fileURL) return nil;
-    
-    
-    // Create and open the read stream
-    readStream = CFReadStreamCreateWithFile(kCFAllocatorDefault,fileURL);
-    if (!readStream) return nil;
-    
-    bool didSucceed = (bool)CFReadStreamOpen(readStream);
-    if (!didSucceed) return nil;
-    
-    
-    // Initialize the hash object
-    CC_SHA1_CTX hashObject;
-    CC_SHA1_Init(&hashObject);
-    
-    
-    // Feed the data to the hash object
-    bool hasMoreData = true;
-    while (hasMoreData) {
-        uint8_t buffer[chunkSizeForReadingData];
-        CFIndex readBytesCount = CFReadStreamRead(readStream,(UInt8 *)buffer,(CFIndex)sizeof(buffer));
-        if (readBytesCount == -1) break;
-        if (readBytesCount == 0) {
-            hasMoreData = false;
-            continue;
-        }
-        CC_SHA1_Update(&hashObject,(const void *)buffer,(CC_LONG)readBytesCount);
-    }
-    
-    didSucceed = !hasMoreData;
-    
-    NSString *result = nil;
-    if (didSucceed) {
-        unsigned char digest[CC_SHA1_DIGEST_LENGTH];
-        CC_SHA1_Final(digest, &hashObject);
-        
-        char hash[2 * sizeof(digest) + 1];
-        for (size_t i = 0; i < sizeof(digest); ++i) {
-            snprintf(hash + (2 * i), 3, "%02x", (int)(digest[i]));
-        }
-        result = [NSString stringWithCString:(const char *)hash encoding:NSUTF8StringEncoding];
-    }
-    
-    
-    if (readStream) {
-        CFReadStreamClose(readStream);
-        CFRelease(readStream);
-    }
-    if (fileURL) {
-        CFRelease(fileURL);
-    }
-    return result;
-}
-
-#pragma mark - Network Util
-
-#if !TARGET_OS_WATCH
-
-+ (BOOL)networkIsReachableOrBetter {
-    return [[self class] networkEqualOrHigherThan:AVNetworkReachabilityStatusReachableViaWWAN];
-}
-
-+ (BOOL)networkIs3GOrBetter {
-    return [[self class] networkEqualOrHigherThan:AVNetworkReachabilityStatusReachableViaWWAN];
-}
-
-+ (BOOL)networkIsWifiOrBetter {
-    return [[self class] networkEqualOrHigherThan:AVNetworkReachabilityStatusReachableViaWiFi];
-}
-
-+ (BOOL)networkEqualOrHigherThan:(AVNetworkReachabilityStatus)status {
-    return [AVPaasClient sharedInstance].clientImpl.networkReachabilityStatus >= status;
-}
-
-#endif
-
 @end
 
 
@@ -1160,3 +1003,21 @@ static Byte ivBuff[]   = {0xA,1,0xB,5,4,0xF,7,9,0x17,3,1,6,8,0xC,0xD,91};
 
 @end
 
+@implementation NSObject (__LC__checkingType__decodingFromDictionary__)
+
++ (BOOL)lc__checkingType:(id)instance
+{
+    return (instance && [instance isKindOfClass:self]);
+}
+
++ (instancetype)lc__decodingWithKey:(NSString *)key
+                            fromDic:(NSDictionary *)dic
+{
+    if (!key || !dic) { return nil; }
+    
+    id value = dic[key];
+    
+    return (value && [value isKindOfClass:self]) ? value : nil;
+}
+
+@end

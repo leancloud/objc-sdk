@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AVOSCloudIM'
-  s.version  = '8.2.0'
+  s.version  = '9.0.0'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud IM Objective-C SDK'
   s.authors  = 'LeanCloud'
@@ -40,7 +40,6 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/Protobuf/LCIMUnknownFieldSet_PackagePrivate.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMVideoMessage.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMFileMessage.h',
-      'AVOS/AVOSCloudIM/AVIMClientOpenOption.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMRootObject.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMTypedMessage.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMWellKnownTypes.h',
@@ -145,7 +144,6 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/AVIMOptions.m',
       'AVOS/AVOSCloudIM/AVIMMessageOption.m',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMApi.pbobjc.m',
-      'AVOS/AVOSCloudIM/AVIMClientOpenOption.m',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMVideoMessage.m',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMSourceContext.pbobjc.m',
       'AVOS/AVOSCloudIM/Protobuf/LCIMMessage.m',
@@ -200,7 +198,6 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/TypedMessages/AVIMAudioMessage.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMVideoMessage.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMFileMessage.h',
-      'AVOS/AVOSCloudIM/AVIMClientOpenOption.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMTypedMessage.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMImageMessage.h',
       'AVOS/AVOSCloudIM/AVIMClient.h',

@@ -14,7 +14,7 @@
 @interface AVIMClient ()
 
 + (NSMutableDictionary *)_userOptions;
-+ (dispatch_queue_t)imClientQueue;
+
 + (BOOL)checkErrorForSignature:(AVIMSignature *)signature command:(AVIMGenericCommand *)command;
 + (void)_assertClientIdsIsValid:(NSArray *)clientIds;
 
@@ -38,6 +38,12 @@
 - (void)updateReceipt:(NSDate *)date
        ofConversation:(AVIMConversation *)conversation
                forKey:(NSString *)key;
+
+/*
+ Internal Serial Queue
+ */
+- (dispatch_queue_t)internalSerialQueue
+__attribute__((warn_unused_result));
 
 /*
  Signature

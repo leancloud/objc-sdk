@@ -330,7 +330,6 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     
     [[AVPaasClient sharedInstance] getObject:@"subscribe/statuses/count" withParameters:@{@"owner":owner,@"inboxType":type} block:^(id object, NSError *error) {
         NSUInteger count=[object[@"unread"] integerValue];
-        
         [AVUtils callIntegerResultBlock:callback number:count error:error];
     }];
 }

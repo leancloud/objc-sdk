@@ -3,783 +3,76 @@
 #import "AVConstants.h"
 #import "AVFile.h"
 #import "AVFile_Internal.h"
-#import "AVUploaderManager.h"
+#import "LCFileTaskManager.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"
-#import "AVNetworking.h"
 #import "LCNetworking.h"
 #import "AVErrorUtils.h"
 #import "AVPersistenceUtils.h"
 #import "AVObjectUtils.h"
 #import "AVACL_Internal.h"
+#import <CommonCrypto/CommonCrypto.h>
 
-#define AVFILE_REQUEST_TIMEOUT 60
+static BOOL AVFile_EnabledLock = true;
 
-static NSString * ownerTag = @"owner";
-static NSString * fileSizeTag = @"size";
-static NSString * fileMd5Tag =@"_checksum";
+static NSString * AVFile_CustomPersistentCacheDirectory = nil;
 
-static NSMutableDictionary *downloadingMap = nil;
-
-static LCHTTPSessionManager *imageSessionManager = nil;
-
-@interface _CallBack : NSObject
-@property(nonatomic, strong) AVBooleanResultBlock resultBlock;
-@property(nonatomic, strong) AVProgressBlock progressBlock;
-@end
-@implementation _CallBack
-
-@end
-
-@interface AVFile ()
-
-@property (nonatomic, copy) NSString *token;
-
-@end
-
-@implementation AVFile
-
-+ (void)initialize {
-    static dispatch_once_t onceToken;
-
-    dispatch_once(&onceToken, ^{
-        [self doInitialize];
-    });
-}
-
-+ (void)doInitialize {
-    imageSessionManager = ({
-        LCHTTPSessionManager *sessionManager = [[LCHTTPSessionManager alloc] init];
-        sessionManager.responseSerializer = [[LCImageResponseSerializer alloc] init];
-        sessionManager;
-    });
-}
-
-- (NSMutableDictionary *)metadata {
-    return _metaData;
-}
-
-- (void)setMetadata:(NSMutableDictionary *)metadata {
-    _metaData = metadata;
-}
-
--(instancetype)init
+static NSString * AVFile_PersistentCacheDirectory()
 {
-    self = [super init];
-    _metaData = [[NSMutableDictionary alloc] init];
-    _isDirty = YES;
-    _onceCallGetFileSize = NO;
-    return self;
+    return AVFile_CustomPersistentCacheDirectory ?: [AVPersistenceUtils RD_Library_Caches_LeanCloud_Files];
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super init];
-
-    if (self) {
-        NSDictionary *dictionary = [aDecoder decodeObjectForKey:@"dictionary"];
-
-        if (dictionary) {
-            [self updatePropertiesForDictionary:dictionary];
-        }
-    }
-
-    return self;
-}
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-    NSDictionary *dictionary = [self dictionary];
-    [aCoder encodeObject:dictionary forKey:@"dictionary"];
-}
-
-#pragma mark - Public Methods
-+ (instancetype)fileWithData:(NSData *)data
+static NSString * AVFile_CompactUUID()
 {
-    AVFile * file = [[self alloc] init];
-    file.data = data;
-    file.name = [AVUtils generateCompactUUID];
-    file.cachePath = file.localPath;
-    [data writeToFile:file.localPath atomically:YES];
-    return file;
+    return [AVUtils generateCompactUUID];
 }
 
-+ (instancetype)fileWithName:(NSString *)name data:(NSData *)data
+static NSString * AVFile_MD5ForURLString(NSString *URLString)
 {
-    AVFile * file = [[self alloc] init];
-    file.data = data;
-    file.name = name;
-    file.cachePath = file.localPath;
-    [data writeToFile:file.localPath atomically:YES];
-    return file;
-}
-
-+ (instancetype)fileWithURL:(NSString *)url
-{
-    AVFile * file = [[self alloc] init];
-    file.url = url;
-    file.name = [url lastPathComponent] ?: [url AVMD5String];
-    file.metaData = [NSMutableDictionary dictionaryWithObject:@"external" forKey:@"__source"];
-    return file;
-}
-
-+ (instancetype)fileWithName:(NSString *)name
-    contentsAtPath:(NSString *)path
-{
-    AVFile * file = [[self alloc] init];
-    file.name = name;
-    file.localPath = path;
-    NSError *error = nil;
-    file.data = [[NSData alloc] initWithContentsOfFile:path options:NSDataReadingMapped error:&error];
-//    file.data = [[NSData alloc] initWithContentsOfMappedFile:path];
-    //FIXME: 这些数据一直在内存 如果文件大的话很危险
-//    file.data = [NSData dataWithContentsOfFile:path];
-    return file;
-}
-
-+ (instancetype)fileWithAVObject:(AVObject *)object {
-    NSDictionary *dict = [object dictionaryForObject];
-    AVFile *file = [[self alloc] init];
-    [AVUtils copyPropertiesFromDictionary:dict toNSObject:file];
-    if (file.objectId.length > 0) {
-        file.isDirty = NO;
-    }
-    return file;
-}
-
-- (NSString *)localPath {
-    if (!_localPath) {
-        _localPath = [[AVPersistenceUtils avFileDirectory] stringByAppendingPathComponent:self.url.length > 0 ? [self.url AVMD5String] : [AVUtils generateCompactUUID]];
-    }
-    return _localPath;
-}
-
-- (void)dealloc {
-//    VLog(@"%s", __FUNCTION__);
-}
-
-- (BOOL)save
-{
-    return [self save:nil];
-}
-
-- (BOOL)save:(NSError **)theError
-{
-    BOOL __block theResult = NO;
-    BOOL __block hasCalledBack = NO;
-    NSError __block *blockError = nil;
+    NSData *data = [URLString dataUsingEncoding:NSUTF8StringEncoding];
     
-    [self saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        blockError = error;
-        theResult = (error == nil);
-        hasCalledBack = YES;
-    } progressBlock:^(NSInteger percentDone) {
-        AVLoggerI(@"progress %ld", (long)percentDone);
-    }];
+    if (!data || data.length == 0) { return nil; }
     
-    // wait until called back if necessary
-    [AVUtils warnMainThreadIfNecessary];
-    AV_WAIT_TIL_TRUE(hasCalledBack, 0.1);
+    const char *str = [data bytes];
     
-    if (theError != NULL) *theError = blockError;
-    return theResult;
-}
-
-- (BOOL)saveAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
-    return [self save:error];
-}
-
-- (void)saveInBackground
-{
-    [self saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+    unsigned char result[CC_MD5_DIGEST_LENGTH];
+    
+    CC_MD5(str, (CC_LONG)data.length, result);
+    
+    NSMutableString *hash = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH];
+    
+    for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
         
-    } progressBlock:^(NSInteger percentDone) {
-        
-    }];
-}
-
-- (void)saveInBackgroundWithBlock:(AVBooleanResultBlock)block
-{
-    [self saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        [AVUtils callBooleanResultBlock:block error:error];
-    } progressBlock:^(NSInteger percentDone) {
-        
-    }];
-}
-
-- (BOOL)hasLocalFile {
-    return [[NSFileManager defaultManager] fileExistsAtPath:_localPath] || self.data;
-}
-
-- (BOOL)hasExternalURL {
-    NSURL *url = [NSURL URLWithString:self.url];
-    return url && url.scheme && url.host;
-}
-
-- (void)saveInBackgroundWithBlock:(AVBooleanResultBlock)resultBlock
-                    progressBlock:(AVProgressBlock)progressBlock
-{
-    /*
-     * If has object id, do nothing.
-     * Else, if local file exists, upload file.
-     * Else, if has external URL, update the URL.
-     * Else, nothing to save, report not found error.
-     */
-    if (self.objectId) {
-        [AVUtils callProgressBlock:progressBlock percent:100];
-        [AVUtils callBooleanResultBlock:resultBlock error:nil];
-    } else if ([self hasLocalFile]) {
-        [self uploadFileWithResultBlock:resultBlock progressBlock:progressBlock];
-    } else if ([self hasExternalURL]) {
-        [self updateURLWithResultBlock:resultBlock progressBlock:progressBlock];
-    } else {
-        [AVUtils callBooleanResultBlock:resultBlock error:[AVErrorUtils fileNotFoundError]];
-    }
-}
-
-- (void)uploadFileWithResultBlock:(AVBooleanResultBlock)resultBlock progressBlock:(AVProgressBlock)progressBlock {
-    __weak typeof(self) ws=self;
-    [[AVUploaderManager sharedInstance] uploadWithAVFile:self progressBlock:progressBlock resultBlock:^(BOOL succeeded, NSError *error) {
-        if (succeeded)
-            ws.isDirty = NO;
-
-        [AVUtils callBooleanResultBlock:resultBlock error:error];
-        [ws feedbackUploadResult:succeeded];
-    }];
-}
-
-- (void)feedbackUploadResult:(BOOL)succeeded {
-    NSString *token = self.token;
-
-    if (token) {
-        NSDictionary *parameters = @{@"token":token, @"result":@(succeeded)};
-        [[AVPaasClient sharedInstance] postObject:@"fileCallback" withParameters:parameters block:nil];
-    }
-
-    /* If upload did fail, reset the objectId for later upload. */
-    if (!succeeded) {
-        self.objectId = nil;
-    }
-}
-
-- (void)updateURLWithResultBlock:(AVBooleanResultBlock)resultBlock progressBlock:(AVProgressBlock)progressBlock {
-    NSDictionary *parameters = [AVFile dictionaryFromFile:self];
-
-    __weak typeof(self) ws = self;
-    [[AVPaasClient sharedInstance] postObject:@"files" withParameters:parameters block:^(NSDictionary *result, NSError *error) {
-         if (!error) {
-             ws.isDirty = NO;
-             ws.objectId = result[@"objectId"];
-             [AVUtils callProgressBlock:progressBlock percent:100];
-         }
-         [AVUtils callBooleanResultBlock:resultBlock error:error];
-     }];
-}
-
-- (void)saveInBackgroundWithTarget:(id)target selector:(SEL)selector
-{
-    [self saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:@(succeeded) object:error];
-    } progressBlock:^(NSInteger percentDone) {
-    }];
-}
-
-- (NSData *)getData
-{
-    return [self getData:nil];
-}
-
-- (NSInputStream *)getDataStream
-{
-    return [self getDataStream:nil];
-}
-
-- (NSData *)getData:(NSError **)error
-{
-    if (self.data) {
-        return self.data;
+        [hash appendFormat:@"%02X", result[i]];
     }
     
-    if ([AVPersistenceUtils fileExist:self.localPath]) {
-        [self updateDataFromLocalFile];
-        return self.data;
-    }
+    return [hash lowercaseString];
+}
+
+static NSString * AVFile_ObjectPath(NSString *objectId)
+{
+    return (objectId && objectId.length > 0) ? [@"classes/_file" stringByAppendingPathComponent:objectId] : nil;
+}
+
+@implementation AVFile {
     
-    if (self.url) {
-        self.data = [NSData dataWithContentsOfURL:[NSURL URLWithString:self.url]];
-        if (self.data) [AVFile saveData:self.data withRemotePath:self.url];
-        return self.data;
-    }
+    NSLock *_lock;
     
-    if (error) {
-        *error = [AVErrorUtils fileNotFoundError];
-    }
-    return nil;
-}
-
-- (BOOL)isDataAvailable {
-    return self.data != nil || [AVPersistenceUtils fileExist:self.localPath];
-}
-
-- (NSInputStream *)getDataStream:(NSError **)error
-{
-    NSString *path = self.localPath;
-    if (![AVPersistenceUtils fileExist:path])
-    {
-        if (error) {
-            *error = [AVErrorUtils fileNotFoundError];
-        }
-        return nil;
-    }
-    NSInputStream * inputStream = [[NSInputStream alloc] initWithFileAtPath:path];
-    return inputStream;
-}
-
-- (void)getDataInBackgroundWithBlock:(AVDataResultBlock)block
-{
-    [self getDataInBackgroundWithBlock:block progressBlock:nil];
-}
-
-- (void)getDataInBackgroundWithBlock:(AVDataResultBlock)resultBlock
-                       progressBlock:(AVProgressBlock)progressBlock
-{
-    [self checkAndDownloadFile:^(BOOL succeeded, NSError *error) {
-        if (succeeded)
-        {
-            [self updateDataFromLocalFile];
-            if (resultBlock) resultBlock(self.data, nil);
-        }
-        else
-        {
-            if (resultBlock) resultBlock(nil, error);
-        }
-    } progressBlock:^(NSInteger percentDone) {
-        if (progressBlock) progressBlock(percentDone);
-    }];
-}
-
-- (void)getDataStreamInBackgroundWithBlock:(AVDataStreamResultBlock)block
-{
-    [self getDataStreamInBackgroundWithBlock:^(NSInputStream *stream, NSError *error) {
-        if (block) block(stream, error);
-    } progressBlock:nil];
-}
-
-- (void)getDataStreamInBackgroundWithBlock:(AVDataStreamResultBlock)resultBlock
-                             progressBlock:(AVProgressBlock)progressBlock
-{
-    [self downloadFileImpl:^(BOOL succeeded, NSError *error) {
-        NSString *path = self.localPath;
-        NSInputStream * inputStream = [[NSInputStream alloc] initWithFileAtPath:path];
-        if (resultBlock) resultBlock(inputStream, error);
-    } progressBlock:^(NSInteger percentDone) {
-        if (progressBlock) progressBlock(percentDone);
-    }];
-}
-
-- (void)getDataInBackgroundWithTarget:(id)target selector:(SEL)selector
-{
-    [self getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:data object:error];
-    }];
-}
-
-- (void)cancel
-{
-    [self.downloadOperation cancel];
-    [[AVUploaderManager sharedInstance] cancelWithLocalPath:self.localPath];
-}
-
-#pragma mark - Private Methods
-
-- (void)addACLToDict:(NSMutableDictionary *)dict {
-    if (self.ACL == nil) {
-        self.ACL = [AVPaasClient sharedInstance].updatedDefaultACL;
-    }
-    if (self.ACL) {
-        [dict setObject:[AVObjectUtils dictionaryFromACL:self.ACL] forKey:ACLTag];
-    }
-}
-
-- (NSString *)mimeType
-{
-    NSString * type = nil;
-    if (self.name.length > 0) {
-        type = [AVUtils MIMEType:self.name];
-    } else if (self.localPath.length > 0) {
-        type = [AVUtils MIMETypeFromPath:self.localPath];
-    } else if (self.data.length > 0) {
-        type = [AVUtils contentTypeForImageData:self.data];
-    } else if (self.url) {
-        type = [AVUtils MIMEType:self.url];
-    }
-    if (type != nil) {
-        return type;
-    }
-    return @"application/octet-stream";
-}
-
--(NSDictionary *)updateMetaData
-{
-    if ([self.metaData objectForKey:ownerTag] == nil) {
-        NSString * objectId = [AVPaasClient sharedInstance].currentUser.objectId;
-        if (objectId.length > 0) {
-            [self.metaData setObject:objectId forKey:ownerTag];
-        }
-    }
+    NSMutableDictionary *_rawJSONData;
     
-    if ([self.metaData objectForKey:fileSizeTag] == nil) {
-        if (self.data.length > 0) {
-            [self.metaData setObject:@(self.data.length) forKey:fileSizeTag];
-        }
-    }
-
-    if ([self.metaData objectForKey:fileMd5Tag] == nil) {
-        if (self.localPath.length > 0) {
-            NSString *md5= [AVUtils MD5ForFile:self.localPath];
-            if (md5) {
-                [self.metaData setObject:md5 forKey:fileMd5Tag];
-            }
-        }
-    }
-    return self.metaData;
-}
-
--(void)updateDataFromLocalFile
-{
-    NSString *path = self.localPath;
-    if ([AVPersistenceUtils fileExist:path])
-    {
-        NSError *error = nil;
-        self.data = [[NSData alloc] initWithContentsOfFile:path options:NSDataReadingMapped error:&error];
-//        self.data = [[NSData alloc] initWithContentsOfMappedFile:path];
-//        self.data = [NSData dataWithContentsOfFile:path];
-    }
-}
-
--(void)checkAndDownloadFile:(AVBooleanResultBlock)resultBlock
-              progressBlock:(AVProgressBlock)progressBlock
-{
-    if ([AVPersistenceUtils fileExist:self.localPath]) {
-        NSError *error = nil;
-        NSDictionary *dict = [[NSFileManager defaultManager] attributesOfItemAtPath:self.localPath error:&error];
-        if (!error) {
-            unsigned long long fileSize = [dict fileSize];
-            if (fileSize > 0) {
-                [self updateDataFromLocalFile];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [AVUtils callProgressBlock:progressBlock percent:100];
-                });
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [AVUtils callBooleanResultBlock:resultBlock error:nil];
-                });
-                return;
-            }
-        }
-    }
-    [self downloadFileImpl:^(BOOL succeeded, NSError *error) {
-        [AVUtils callBooleanResultBlock:resultBlock error:error];
-    } progressBlock:^(NSInteger percentDone) {
-        [AVUtils callProgressBlock:progressBlock percent:percentDone];
-    }];
-}
-
--(void)downloadFileImpl:(AVBooleanResultBlock)resultBlock
-          progressBlock:(AVProgressBlock)progressBlock
-{
-    if (!self.url) {
-        if (resultBlock) {
-            resultBlock(NO, [AVErrorUtils errorWithCode:kAVErrorProductDownloadFileSystemFailure errorText:@"file url is nil"]);
-        }
-        return;
-    }
-
-    @synchronized(downloadingMap) {
-        if (!downloadingMap) {
-            downloadingMap = [[NSMutableDictionary alloc] init];
-        }
-        _CallBack *callback = [[_CallBack alloc] init];
-        callback.resultBlock = resultBlock;
-        callback.progressBlock = progressBlock;
-        NSMutableArray *callbackArray = [downloadingMap objectForKey:self.url];
-        if (!callbackArray) {
-            callbackArray = [[NSMutableArray alloc] init];
-        }
-        [callbackArray addObject:callback];
-        [downloadingMap setObject:callbackArray forKey:self.url];
-        if (callbackArray.count > 1) {
-            // 已经有相同的下载任务在执行
-            return;
-        }
-    }
+    NSData *_data;
     
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.url]
-                                             cachePolicy:NSURLRequestReloadIgnoringCacheData
-                                         timeoutInterval:AVFILE_REQUEST_TIMEOUT];
-
-    _downloadOperation = [[AVHTTPRequestOperation alloc] initWithRequest:request];
+    NSString *_localPath;
     
-    NSString * path = self.localPath;
-    path = [path stringByAppendingString:@".downloading"];
-    [AVPersistenceUtils removeFile:path];
-    [AVPersistenceUtils createFile:path];
-    self.downloadOperation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
+    AVACL *_ACL;
     
-    AVFile __weak *weakSelf = self;
-    void (^downloadComplete)(NSError *error) = ^(NSError *error) {
-        @synchronized(downloadingMap) {
-            NSMutableArray *array = [downloadingMap objectForKey:weakSelf.url];
-            [downloadingMap removeObjectForKey:weakSelf.url];
-            for (_CallBack *c in [array copy]) {
-                AVBooleanResultBlock resultBlock = c.resultBlock;
-                BOOL result = error == nil ? YES : NO;
-                if (resultBlock) resultBlock(result, error);
-            }
-        }
-    };
-    [self.downloadOperation setCompletionBlockWithSuccess:^(AVHTTPRequestOperation *operation, id responseObject) {
-        BOOL shouldSave=YES;
-        
-        //检查md5
-        NSString *correctMd5 =weakSelf.metaData[fileMd5Tag];
-        if (correctMd5) {
-            shouldSave=[correctMd5 isEqualToString:[AVUtils MD5ForFile:path]];
-        }
-        if (shouldSave) {
-            NSError *error = nil;
-            [[NSFileManager defaultManager] moveItemAtPath:path toPath:weakSelf.localPath error:&error];
-            if (error) {
-                weakSelf.data = nil;
-                downloadComplete(error);
-            } else {
-                downloadComplete(nil);
-            }
-        } else {
-            //文件下载错误
-            downloadComplete([AVErrorUtils errorWithCode:kAVErrorProductDownloadFileSystemFailure errorText:@"file checksum incorrect"]);
-        }
-        
-    } failure:^(AVHTTPRequestOperation *operation, NSError *error) {
-        weakSelf.data = nil;
-        downloadComplete(error);
-    }];
+    NSDictionary<NSString *, NSString *> *_uploadingHeaders;
     
-    void (^downloadProgress)(NSInteger) = ^(NSInteger percentDone){
-        @synchronized(downloadingMap) {
-            NSMutableArray *array = [downloadingMap objectForKey:weakSelf.url];
-            for (_CallBack *c in [array copy]) {
-                AVProgressBlock progressBlock = c.progressBlock;
-                if (progressBlock) progressBlock(percentDone);
-            }
-        }
-    };
+    NSURLSessionUploadTask *_uploadTask;
     
-    self.onceCallGetFileSize = NO;
+    NSNumber *_uploadOption;
     
-    [self.downloadOperation setDownloadProgressBlock:^(AVURLConnectionOperation *operation, NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-        
-        @synchronized(downloadingMap) {
-            BOOL __block hasProgressBlock = NO;
-            NSMutableArray *array = [downloadingMap objectForKey:weakSelf.url];
-            for (_CallBack *c in [array copy]) {
-                if (c.progressBlock) {
-                    hasProgressBlock = YES;
-                    break;
-                }
-            }
-            if (hasProgressBlock == NO) {
-                return;
-            }
-        }
-        
-        if (totalBytesExpectedToRead == NSURLResponseUnknownLength) {
-            // https://github.com/leancloud/paas/issues/793
-            [weakSelf getFileSizeWithBlock:^(long long fileSize) {
-                if (fileSize > 0) {
-                    NSInteger percentDone = (NSInteger)((double)totalBytesRead * 100 / (double)fileSize);
-                    downloadProgress(percentDone);
-                }
-            }];
-        } else {
-            NSInteger percentDone = (NSInteger)((double)totalBytesRead * 100 / (double)totalBytesExpectedToRead);
-            downloadProgress(percentDone);
-        }
-    }];
-    [self.downloadOperation start];
-}
-
-typedef void (^AVFileSizeBlock)(long long fileSize);
-- (void)getFileSizeWithBlock:(AVFileSizeBlock)block {
-    if (self.size > 0 || self.onceCallGetFileSize) {
-        block(self.size);
-    } else {
-        self.onceCallGetFileSize = YES;
-        if (self.bucket.length == 0) {
-            block(0);
-        } else {
-            // 七牛文件
-            NSURL *URL = [NSURL URLWithString:self.url];
-            if (URL.query.length > 0) {
-                // 有其它 query 参数
-                // See https://github.com/leancloud/ios-sdk/pull/446#discussion_r42840988
-                block(0);
-            } else {
-                NSString *statUrl = [NSString stringWithFormat:@"%@?stat", self.url];
-                [[AVPaasClient sharedInstance] getObject:statUrl withParameters:nil block:^(id object, NSError *error) {
-                    if (error) {
-                        block(0);
-                    } else {
-                        if (object[@"fsize"] == nil) {
-                            AVLoggerInfo(AVLoggerDomainStorage, @"Qiniu ?stat route should return fsize data");
-                            block(0);
-                        } else {
-                            long long fsize = [object[@"fsize"] longLongValue];
-                            self.metaData[@"size"] = @(fsize);
-                            block(fsize);
-                        }
-                    }
-                }];
-            }
-        }
-    }
-}
-
-+ (void)saveData:(NSData *)data withRemotePath:(NSString *)remotePath {
-    NSParameterAssert(data);
-    NSParameterAssert(remotePath);
-
-    // maybe self.localPath == realLocalPath, maybe not
-    NSString *realLocalPath = [[AVPersistenceUtils avFileDirectory] stringByAppendingPathComponent:[remotePath AVMD5String]];
-    if (![AVPersistenceUtils fileExist:realLocalPath]) {
-        [data writeToFile:realLocalPath atomically:YES];
-    }
-}
-
-+ (void)saveDataWithPath:(NSString *)localPath withRemotePath:(NSString *)remotePath {
-    NSParameterAssert(localPath);
-    NSParameterAssert(remotePath);
-    
-    // maybe self.localPath == realLocalPath, maybe not
-    NSString *realLocalPath = [[AVPersistenceUtils avFileDirectory] stringByAppendingPathComponent:[remotePath AVMD5String]];
-    if (![AVPersistenceUtils fileExist:realLocalPath]) {
-        [[NSFileManager defaultManager] copyItemAtPath:localPath toPath:remotePath error:NULL];
-    }
-}
-
-+ (void)cacheFile:(AVFile *)file {
-    NSString *url = file.url;
-    NSString *realLocalPath = [[AVPersistenceUtils avFileDirectory] stringByAppendingPathComponent:[url AVMD5String]];
-    if (file.cachePath && ![file.cachePath isEqualToString:realLocalPath]) {
-        [[NSFileManager defaultManager] moveItemAtPath:file.cachePath toPath:realLocalPath error:NULL];
-        file.cachePath = realLocalPath;
-    }
-    if (![AVPersistenceUtils fileExist:realLocalPath]) {
-        NSData *data = file.data;
-        [data writeToFile:realLocalPath atomically:YES];
-    }
-
-}
-
-#pragma mark - Local Cache 
-- (void)clearCachedFile
-{
-    if (self.url) {
-        NSString *realLocalPath = [[AVPersistenceUtils avFileDirectory] stringByAppendingPathComponent:[self.url AVMD5String]];
-        [AVPersistenceUtils removeFile:realLocalPath];
-    }
-    
-    // remove local path file anyway, though maybe already removed
-    [AVPersistenceUtils removeFile:self.localPath];
-}
-
-+ (BOOL)clearAllCachedFiles {
-    BOOL ret = [[NSFileManager defaultManager] removeItemAtPath:[AVPersistenceUtils avFileDirectory] error:NULL];
-    [[NSFileManager defaultManager] createDirectoryAtPath:[AVPersistenceUtils avFileDirectory]
-                              withIntermediateDirectories:YES
-                                               attributes:nil
-                                                    error:NULL];
-    return ret;
-}
-
-+ (BOOL)clearCacheMoreThanDays:(NSInteger)numberOfDays {
-    return [AVPersistenceUtils deleteFilesInDirectory:[AVPersistenceUtils avFileDirectory] moreThanDays:numberOfDays];
-}
-
-#pragma mark - JSON <-> Object
-/*
- // from qiniu
- {
-    "__type": "File",
-    "bucket": "x5ocz6du3qyn5jiay7xw",
-    "createdAt": "2013-05-23T07:38:18.000Z",
-    "key": "8dyu9yShs6hi47co",
-    "mime_type": "application/octet-stream",
-    "name": "sample.apk",
-    "objectId": "519dc76ae4b034b9cc5170a8",
-    "updatedAt": "2013-05-23T07:38:18.000Z"
- }
- 
- // from s3
- {
-    "__type": "File",
-    "createdAt": "2013-05-27T07:10:52.000Z",
-    "objectId": "51a306fce4b06e53feb1d95f",
-    "updatedAt": "2013-05-27T07:10:52.000Z",
-    "name" : "b60b1e29-5314-4538-9759-2cb6d6c74185",
-    "url": "https://s3-ap-northeast-1.amazonaws.com/avos-cloud/b60b1e29-5314-4538-9759-2cb6d6c74185"
- }
- */
-+ (AVFile *)fileFromDictionary:(NSDictionary *)dict
-{
-    AVFile * file = [[AVFile alloc] init];
-
-    [file updatePropertiesForDictionary:dict];
-    file.isDirty = NO;
-
-    return file;
-}
-
-- (void)updatePropertiesForDictionary:(NSDictionary *)dictionary {
-    [AVUtils copyPropertiesFromDictionary:dictionary toNSObject:self];
-
-    if (!self.objectId) {
-        if (dictionary[@"id"]) {
-            self.objectId = dictionary[@"id"];
-        } else if (dictionary[@"objId"]) {
-            self.objectId = dictionary[@"objId"];
-        }
-    }
-
-    if ([dictionary objectForKey:@"metaData"]) {
-        self.metaData = [dictionary objectForKey:@"metaData"];
-    } else if ([dictionary objectForKey:@"metadata"]) {
-        self.metaData = [dictionary objectForKey:@"metadata"];
-    }
-
-    if ([dictionary objectForKey:ACLTag]) {
-        self.ACL = [AVObjectUtils aclFromDictionary:[dictionary objectForKey:ACLTag]];
-    }
-}
-
-- (NSDictionary *)dictionary {
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-
-    [dictionary setObject:[AVFile className] forKey:@"__type"];
-
-    if (_name)             [dictionary setObject:_name forKey:@"name"];
-    if (_objectId)         [dictionary setObject:_objectId forKey:@"id"];
-    if (_url)              [dictionary setObject:_url forKey:@"url"];
-    if (_localPath)        [dictionary setObject:_localPath forKey:@"localPath"];
-    if ([_metaData count]) [dictionary setObject:_metaData forKey:@"metaData"];
-
-    [dictionary setObject:[self mimeType] forKey:@"mime_type"];
-
-    [self addACLToDict:dictionary];
-
-    return dictionary;
-}
-
-+ (NSDictionary *)dictionaryFromFile:(AVFile *)file
-{
-    return [file dictionary];
+    NSURLSessionDownloadTask *_downloadTask;
 }
 
 + (NSString *)className
@@ -787,50 +80,1508 @@ typedef void (^AVFileSizeBlock)(long long fileSize);
     return @"File";
 }
 
-+(NSString *)objectPath:(NSString *)objectId
+// MARK: - Create File
+
++ (instancetype)fileWithData:(NSData *)data
 {
-    if (objectId.length > 0) {
-        return [NSString stringWithFormat:@"classes/_file/%@", objectId];
+    return [[AVFile alloc] initWithData:data name:nil];
+}
+
++ (instancetype)fileWithData:(NSData *)data name:(NSString *)name
+{
+    return [[AVFile alloc] initWithData:data name:name];
+}
+
++ (instancetype)fileWithLocalPath:(NSString *)localPath
+                            error:(NSError * __autoreleasing *)error
+{
+    return [[AVFile alloc] initWithLocalPath:localPath error:error];
+}
+
++ (instancetype)fileWithRemoteURL:(NSURL *)remoteURL
+{
+    return [[AVFile alloc] initWithRemoteURL:remoteURL];
+}
+
++ (instancetype)fileWithAVObject:(AVObject *)avObject
+{
+    return [[AVFile alloc] initWithRawJSONData:[avObject dictionaryForObject]];
+}
+
+// MARK: - Initialization
+
+- (instancetype)init
+{
+    self = [super init];
+    
+    if (self) {
+        
+        _lock = AVFile_EnabledLock ? [[NSLock alloc] init] : nil;
+        
+        _rawJSONData = ({
+            
+            NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+            dic[kLCFile___type] = [AVFile className];
+            dic;
+        });
     }
-    return [NSString stringWithFormat:@"classes/_file"];
+    
+    return self;
 }
 
-- (NSString *)objectEndpoint {
-    NSString *objectId = self.objectId;
-
-    if (!objectId)
-        return nil;
-
-    NSString *endpoint = [@"files" stringByAppendingPathComponent:objectId];
-
-    return endpoint;
-}
-
-+ (void)getFileWithObjectId:(NSString*)objectId
-                  withBlock:(AVFileResultBlock)block
+- (instancetype)initWithData:(NSData *)data
+                        name:(NSString *)name
 {
-    [[AVPaasClient sharedInstance]
-        getObject:[AVFile objectPath:objectId]
-        withParameters:nil
-                 block:^(id object, NSError* error) {
-                     if (error == nil) {
-                         AVFile* file = [[AVFile alloc] init];
-                         [AVUtils copyPropertiesFromDictionary:object toNSObject:file];
-                         if (file.objectId.length > 0) {
-                             file.isDirty = NO;
-                             [AVUtils callFileResultBlock:block AVFile:file error:error];
-                         }
-                         else {
-                             [AVUtils callFileResultBlock:block AVFile:nil error:[AVErrorUtils errorWithCode:kAVErrorObjectNotFound]];
-                         }
-                     }
-                     else {
-                         [AVUtils callFileResultBlock:block AVFile:nil error:error];
-                     }
-                 }];
+    self = [self init];
+    
+    if (self) {
+        
+        _data = data;
+        
+        _rawJSONData[kLCFile_name] = ({
+            
+            NSString *fileName = (name && name.length > 0) ? name : AVFile_CompactUUID();
+            
+            fileName;
+        });
+        
+        _rawJSONData[kLCFile_mime_type] = ({
+            
+            NSString *mimeType = nil;
+            
+            if (name && name.length > 0) {
+                
+                mimeType = [AVUtils MIMEType:name];
+            }
+            
+            if (!mimeType && data.length > 0) {
+                
+                mimeType = [AVUtils contentTypeForImageData:data];
+            }
+            
+            mimeType ?: @"application/octet-stream";
+        });
+        
+        _rawJSONData[kLCFile_metaData] = ({
+            
+            NSMutableDictionary *metaData = [NSMutableDictionary dictionary];
+            
+            metaData[kLCFile_size] = @(data.length);
+            
+            NSString *objectId = [AVPaasClient sharedInstance].currentUser.objectId;
+            
+            if (objectId && objectId.length > 0) {
+                
+                metaData[kLCFile_owner] = objectId;
+            }
+            
+            [metaData copy];
+        });
+        
+        _ACL = ({
+            
+            AVACL *acl = [AVPaasClient sharedInstance].updatedDefaultACL;
+            
+            if (acl) {
+                
+                _rawJSONData[ACLTag] = [AVObjectUtils dictionaryFromACL:acl];
+            }
+            
+            acl;
+        });
+    }
+    
+    return self;
 }
 
-#define QINIU_THUMBNAIL_FORMAT @"%@?imageView/%d/w/%d/h/%d/q/%d"
+- (instancetype)initWithLocalPath:(NSString *)localPath
+                            error:(NSError * __autoreleasing *)error
+{
+    NSDictionary *fileAttributes = ({
+        
+        [NSFileManager.defaultManager attributesOfItemAtPath:localPath
+                                                       error:error];
+    });
+    
+    if (!fileAttributes) {
+        
+        return nil;
+    }
+    
+    self = [self init];
+    
+    if (self) {
+        
+        _localPath = localPath;
+        
+        NSString *name = ({
+            
+            NSString *lastPathComponent = localPath.lastPathComponent;
+            
+            NSString *name = (lastPathComponent && lastPathComponent.length > 0) ? lastPathComponent : AVFile_CompactUUID();
+            
+            name;
+        });
+        
+        _rawJSONData[kLCFile_name] = name;
+        
+        _rawJSONData[kLCFile_mime_type] = ({
+            
+            NSString *mimeType = nil;
+            
+            if (name && name.length > 0) {
+                
+                mimeType = [AVUtils MIMEType:name];
+            }
+            
+            if (!mimeType && localPath.length > 0) {
+                
+                mimeType = [AVUtils MIMETypeFromPath:localPath];
+            }
+            
+            mimeType ?: @"application/octet-stream";
+        });
+        
+        _rawJSONData[kLCFile_metaData] = ({
+            
+            NSMutableDictionary *metaData = [NSMutableDictionary dictionary];
+            
+            metaData[kLCFile_size] = fileAttributes[NSFileSize];
+            
+            NSString *objectId = [AVPaasClient sharedInstance].currentUser.objectId;
+            
+            if (objectId && objectId.length > 0) {
+                
+                metaData[kLCFile_owner] = objectId;
+            }
+            
+            [metaData copy];
+        });
+        
+        _ACL = ({
+            
+            AVACL *acl = [AVPaasClient sharedInstance].updatedDefaultACL;
+            
+            if (acl) {
+                
+                _rawJSONData[ACLTag] = [AVObjectUtils dictionaryFromACL:acl];
+            }
+            
+            acl;
+        });
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithRemoteURL:(NSURL *)remoteURL
+{
+    self = [self init];
+    
+    if (self) {
+        
+        NSString *absoluteString = remoteURL.absoluteString;
+        
+        _rawJSONData[kLCFile_url] = absoluteString;
+        
+        _rawJSONData[kLCFile_name] = ({
+            
+            NSString *lastPathComponent = remoteURL.lastPathComponent;
+            
+            NSString *nameString = (lastPathComponent && lastPathComponent.length > 0) ? lastPathComponent : AVFile_CompactUUID();
+            
+            nameString;
+        });
+        
+        _rawJSONData[kLCFile_mime_type] = ({
+            
+            NSString *mimeType = nil;
+            
+            if (absoluteString && absoluteString.length > 0) {
+                
+                mimeType = [AVUtils MIMEType:absoluteString];
+            }
+            
+            mimeType ?: @"application/octet-stream";
+        });
+        
+        _rawJSONData[kLCFile_metaData] = ({
+            
+            NSDictionary *metaData = @{ kLCFile___source : @"external" };
+            
+            metaData;
+        });
+        
+        _ACL = ({
+            
+            AVACL *acl = [AVPaasClient sharedInstance].updatedDefaultACL;
+            
+            if (acl) {
+                
+                _rawJSONData[ACLTag] = [AVObjectUtils dictionaryFromACL:acl];
+            }
+            
+            acl;
+        });
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithRawJSONData:(NSMutableDictionary *)rawJSONData
+{
+    self = [self init];
+    
+    if (self) {
+        
+        _rawJSONData = rawJSONData;
+    }
+    
+    return self;
+}
+
+// MARK: - NSCoding
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [self init];
+    
+    if (self) {
+        
+        NSDictionary *dic = [aDecoder decodeObjectForKey:@"dictionary"];
+        
+        if (dic) {
+            
+            _rawJSONData = [dic mutableCopy];
+        }
+    }
+    
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:_rawJSONData forKey:@"dictionary"];
+}
+
+// MARK: - Lock
+
+- (void)internalSyncLock:(void (^)(void))block
+{
+    if (_lock) {
+        
+        [_lock lock];
+        
+        block();
+        
+        [_lock unlock];
+        
+    } else {
+        
+        block();
+    }
+}
+
+// MARK: - Property
+
+- (AVACL *)ACL
+{
+    __block AVACL *ACL = nil;
+    
+    [self internalSyncLock:^{
+        
+        ACL = _ACL;
+    }];
+    
+    return ACL;
+}
+
+- (void)setACL:(AVACL *)ACL
+{
+    NSDictionary *ACLDic = [AVObjectUtils dictionaryFromACL:ACL];
+    
+    [self internalSyncLock:^{
+        
+        _ACL = ACL;
+        
+        if (ACL) {
+            
+            _rawJSONData[ACLTag] = ACLDic;
+            
+        } else {
+            
+            [_rawJSONData removeObjectForKey:ACLTag];
+        }
+    }];
+}
+
+- (NSDictionary<NSString *,NSString *> *)uploadingHeaders
+{
+    __block NSDictionary<NSString *,NSString *> *dic = nil;
+    
+    [self internalSyncLock:^{
+        
+        dic = _uploadingHeaders;
+    }];
+
+    return dic;
+}
+
+- (void)setUploadingHeaders:(NSDictionary<NSString *,NSString *> *)uploadingHeaders
+{
+    [self internalSyncLock:^{
+        
+        _uploadingHeaders = [uploadingHeaders copy];
+    }];
+}
+
+- (NSString *)name
+{
+    __block NSString *name = nil;
+    
+    [self internalSyncLock:^{
+        
+        name = [NSString lc__decodingWithKey:kLCFile_name fromDic:_rawJSONData];
+    }];
+    
+    return name;
+}
+
+- (NSString *)objectId
+{
+    __block NSString *objectId = nil;
+    
+    [self internalSyncLock:^{
+        
+        objectId = [NSString lc__decodingWithKey:kLCFile_objectId fromDic:_rawJSONData];
+    }];
+    
+    return objectId;
+}
+
+- (NSString *)url
+{
+    __block NSString *url = nil;
+
+    [self internalSyncLock:^{
+        
+        url = [NSString lc__decodingWithKey:kLCFile_url fromDic:_rawJSONData];
+    }];
+
+    return url;
+}
+
+- (NSDictionary *)metaData
+{
+    __block NSDictionary *metaData = nil;
+
+    [self internalSyncLock:^{
+        
+        metaData = [NSDictionary lc__decodingWithKey:kLCFile_metaData fromDic:_rawJSONData];
+    }];
+    
+    return metaData;
+}
+
+- (void)setMetaData:(NSDictionary *)metaData
+{
+    [self internalSyncLock:^{
+        
+        _rawJSONData[kLCFile_metaData] = metaData;
+    }];
+}
+
+- (NSString *)ownerId
+{
+    NSDictionary *metaData = [self metaData];
+    
+    return metaData ? metaData[kLCFile_owner] : nil;
+}
+
+- (void)setOwnerId:(NSString *)ownerId
+{
+    [self internalSyncLock:^{
+        
+        NSMutableDictionary *metaData = [[NSDictionary lc__decodingWithKey:kLCFile_metaData fromDic:_rawJSONData] mutableCopy];
+        
+        if (metaData) {
+            
+            if (ownerId) {
+                
+                metaData[kLCFile_owner] = ownerId;
+                
+            } else {
+                
+                [metaData removeObjectForKey:kLCFile_owner];
+            }
+            
+            _rawJSONData[kLCFile_metaData] = [metaData copy];
+        }
+        else if (ownerId) {
+            
+            _rawJSONData[kLCFile_metaData] = @{ kLCFile_owner : ownerId };
+        }
+    }];
+}
+
+- (NSString *)checksum
+{
+    NSDictionary *metaData = [self metaData];
+    
+    return metaData ? metaData[kLCFile__checksum] : nil;
+}
+
+- (void)setChecksum:(NSString *)checksum
+{
+    [self internalSyncLock:^{
+        
+        NSMutableDictionary *metaData = [[NSDictionary lc__decodingWithKey:kLCFile_metaData fromDic:_rawJSONData] mutableCopy];
+        
+        if (metaData) {
+            
+            if (checksum) {
+                
+                metaData[kLCFile__checksum] = checksum;
+                
+            } else {
+                
+                [metaData removeObjectForKey:kLCFile__checksum];
+            }
+            
+            _rawJSONData[kLCFile_metaData] = [metaData copy];
+        }
+        else if (checksum) {
+            
+            _rawJSONData[kLCFile_metaData] = @{ kLCFile__checksum : checksum };
+        }
+    }];
+}
+
+- (NSUInteger)size
+{
+    NSDictionary *metaData = [self metaData];
+    
+    if (metaData) {
+        
+        id size = metaData[kLCFile_size];
+        
+        return size ? [size unsignedIntegerValue] : 0;
+    }
+    
+    return 0;
+}
+
+- (NSString *)pathExtension
+{
+    __block NSString *name = nil;
+    
+    __block NSString *url = nil;
+    
+    [self internalSyncLock:^{
+        
+        name = [NSString lc__decodingWithKey:kLCFile_name fromDic:_rawJSONData];
+        
+        url = [NSString lc__decodingWithKey:kLCFile_url fromDic:_rawJSONData];
+    }];
+    
+    
+    if (name && name.pathExtension.length > 0) {
+        
+        return name.pathExtension;
+    }
+    
+    if (url && url.pathExtension.length > 0) {
+        
+        return url.pathExtension;
+    }
+    
+    return nil;
+}
+
+- (NSString *)mimeType
+{
+    __block NSString *mimeType = nil;
+    
+    [self internalSyncLock:^{
+        
+        mimeType = [NSString lc__decodingWithKey:kLCFile_mime_type fromDic:_rawJSONData];
+    }];
+    
+    return mimeType;
+}
+
+- (id)objectForKey:(id)key
+{
+    __block id value = nil;
+    
+    [self internalSyncLock:^{
+        
+        value = [_rawJSONData objectForKey:key];
+    }];
+    
+    return value;
+}
+
+- (NSDictionary *)rawJSONDataCopy
+{
+    __block NSDictionary *dic = nil;
+    
+    [self internalSyncLock:^{
+        
+        dic = _rawJSONData.copy;
+    }];
+    
+    return dic;
+}
+
+- (NSMutableDictionary *)rawJSONDataMutableCopy
+{
+    __block NSMutableDictionary *dic = nil;
+    
+    [self internalSyncLock:^{
+        
+        dic = _rawJSONData.mutableCopy;
+    }];
+    
+    return dic;
+}
+
+// MARK: - Upload
+
+- (void)uploadWithCompletionHandler:(void (^)(BOOL, NSError * _Nullable))completionHandler
+{
+    [self uploadWithOption:AVFileUploadOptionCachingData
+                  progress:nil
+         completionHandler:completionHandler];
+}
+
+- (void)uploadWithProgress:(void (^)(NSInteger))uploadProgressBlock
+         completionHandler:(void (^)(BOOL, NSError * _Nullable))completionHandler
+{
+    [self uploadWithOption:AVFileUploadOptionCachingData
+                  progress:uploadProgressBlock
+         completionHandler:completionHandler];
+}
+
+- (void)uploadWithOption:(AVFileUploadOption)uploadOption
+                progress:(void (^)(NSInteger))uploadProgressBlock
+       completionHandler:(void (^)(BOOL, NSError * _Nullable))completionHandler
+{
+    if ([self objectId]) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            if (uploadProgressBlock) {
+                
+                uploadProgressBlock(100);
+            }
+            
+            completionHandler(true, nil);
+        });
+        
+        return;
+    }
+    
+    __block NSError *uploadingError = ({
+        
+        NSString *reason = @"File is in uploading, Can't do repeated upload operation.";
+        NSDictionary *userInfo = @{ @"reason" : reason };
+        [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                            code:0
+                        userInfo:userInfo];
+    });
+    
+    [self internalSyncLock:^{
+        
+        if (!_uploadOption) {
+            
+            uploadingError = nil;
+            
+            _uploadOption = @(uploadOption);
+        }
+    }];
+    
+    if (uploadingError) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            completionHandler(false, uploadingError);
+        });
+        
+        return;
+    }
+    
+    NSData *data = _data;
+    
+    NSString *localPath = _localPath;
+    
+    if (data || localPath) {
+        
+        void(^uploadProgress_block)(NSInteger) = ^(NSInteger number) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                uploadProgressBlock(number);
+            });
+        };
+        
+        id progress = (uploadProgressBlock ? uploadProgress_block : nil);
+        
+        [self uploadLocalDataWithData:data localPath:localPath progress:progress completionHandler:^(BOOL succeeded, NSError *error, NSString *key) {
+            
+            __block AVFileUploadOption option = 0;
+            
+            [self internalSyncLock:^{
+                
+                option = [_uploadOption unsignedIntegerValue];
+                
+                _uploadOption = nil;
+            }];
+            
+            BOOL isIgnoringCachingData = option & AVFileUploadOptionIgnoringCachingData;
+            
+            if (succeeded && !isIgnoringCachingData && key) {
+                
+                NSString *persistenceCachePath = [self persistentCachePathByKey:key
+                                                                      URLString:nil
+                                                                         source:nil];
+                
+                if (persistenceCachePath) {
+                    
+                    NSError *fileManagerError = nil;
+                    
+                    if ([[NSFileManager defaultManager] fileExistsAtPath:persistenceCachePath]) {
+                        
+                        [[NSFileManager defaultManager] removeItemAtPath:persistenceCachePath
+                                                                   error:&fileManagerError];
+                        
+                        if (fileManagerError) {
+                            
+                            AVLoggerError(AVLoggerDomainStorage, @"Error: %@", fileManagerError);
+                        }
+                    }
+                    
+                    if (data) {
+                        
+                        [data writeToFile:persistenceCachePath atomically:true];
+                        
+                    }
+                    else if (localPath) {
+                        
+                        fileManagerError = nil;
+                        
+                        [[NSFileManager defaultManager] copyItemAtPath:localPath
+                                                                toPath:persistenceCachePath
+                                                                 error:&fileManagerError];
+                        
+                        if (fileManagerError) {
+                            
+                            AVLoggerError(AVLoggerDomainStorage, @"Error: %@", fileManagerError);
+                        }
+                    }
+                }
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                completionHandler(succeeded, error);
+            });
+        }];
+        
+        return;
+    }
+    
+    NSString *url = [self url];
+    
+    if (url) {
+        
+        [self uploadRemoteURLWithCompletionHandler:^(BOOL succeeded, NSError *error) {
+            
+            [self internalSyncLock:^{
+                
+                _uploadOption = nil;
+            }];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                if (uploadProgressBlock) {
+                    
+                    uploadProgressBlock(100);
+                }
+                
+                completionHandler(true, nil);
+            });
+        }];
+        
+        return;
+    }
+    
+    [self internalSyncLock:^{
+        
+        _uploadOption = nil;
+    }];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        NSError *aError = ({
+            NSString *reason = @"No data or URL to Upload.";
+            NSDictionary *userInfo = @{ @"reason" : reason };
+            [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                code:0
+                            userInfo:userInfo];
+        });
+        
+        completionHandler(false, aError);
+    });
+}
+
+- (void)uploadLocalDataWithData:(NSData *)data
+                      localPath:(NSString *)localPath
+                       progress:(void (^)(NSInteger number))uploadProgressBlock
+              completionHandler:(void (^)(BOOL succeeded, NSError *error, NSString *key))completionHandler
+{
+    NSString *key = nil;
+    
+    NSMutableDictionary *parameters = ({
+        
+        __block NSMutableDictionary *dic = nil;
+        
+        [self internalSyncLock:^{
+            
+            dic = [_rawJSONData mutableCopy];
+        }];
+        
+        key = AVFile_CompactUUID();
+        
+        dic[kLCFile_key] = key;
+        
+        dic;
+    });
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [self getFileTokensWithParameters:parameters.copy callback:^(LCFileTokens *fileTokens, NSError *error) {
+        
+        void(^fileCallback_block)(BOOL succeeded) = ^(BOOL succeeded) {
+            
+            if (fileTokens && fileTokens.token) {
+                
+                NSDictionary *parameters = @{
+                                             @"token" : fileTokens.token,
+                                             @"result": @(succeeded)
+                                             };
+                
+                [[AVPaasClient sharedInstance] postObject:@"fileCallback"
+                                           withParameters:parameters
+                                                    block:nil];
+            }
+        };
+        
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        if (!strongSelf) {
+            
+            fileCallback_block(false);
+            
+            return;
+        }
+        
+        if (error) {
+            
+            completionHandler(false, error, nil);
+            
+            return;
+        }
+        
+        void(^uploadProgress_block)(NSProgress *) = ^(NSProgress *progress) {
+            
+            CGFloat completedUnitCount = (CGFloat)progress.completedUnitCount;
+            
+            CGFloat totalUnitCount = (CGFloat)progress.totalUnitCount;
+            
+            NSInteger number = (NSInteger)((completedUnitCount * 100.0) / totalUnitCount);
+            
+            uploadProgressBlock(number);
+        };
+        
+        void(^completionHandler_block)(BOOL success, NSError *error) = ^(BOOL success, NSError *error) {
+            
+            [strongSelf internalSyncLock:^{
+                
+                _uploadTask = nil;
+            }];
+            
+            if (error) {
+                
+                fileCallback_block(false);
+                
+                completionHandler(false, error, nil);
+                
+                return;
+            }
+            
+            fileCallback_block(true);
+            
+            [parameters addEntriesFromDictionary:fileTokens.rawDic];
+            
+            [strongSelf internalSyncLock:^{
+                
+                _rawJSONData = parameters;
+            }];
+            
+            completionHandler(true, nil, key);
+        };
+        
+        id progress = (uploadProgressBlock ? uploadProgress_block : nil);
+        
+        NSURLSessionUploadTask *task = nil;
+        
+        if (data) {
+            
+            task = [[LCFileTaskManager sharedInstance] uploadTaskWithData:data
+                                                               fileTokens:fileTokens
+                                                           fileParameters:parameters.copy
+                                                         uploadingHeaders:[strongSelf uploadingHeaders]
+                                                                 progress:progress
+                                                        completionHandler:completionHandler_block];
+        } else {
+            
+            task = [[LCFileTaskManager sharedInstance] uploadTaskWithLocalPath:localPath
+                                                                    fileTokens:fileTokens
+                                                                fileParameters:parameters.copy
+                                                              uploadingHeaders:[strongSelf uploadingHeaders]
+                                                                      progress:progress
+                                                             completionHandler:completionHandler_block];
+        }
+        
+        if (task) {
+            
+            [strongSelf internalSyncLock:^{
+                
+                _uploadTask = task;
+            }];
+            
+            [task resume];
+        }
+    }];
+}
+
+- (void)uploadRemoteURLWithCompletionHandler:(void (^)(BOOL succeeded, NSError *error))completionHandler
+{
+    NSMutableDictionary *parameters = ({
+        
+        __block NSMutableDictionary *dic = nil;
+        
+        [self internalSyncLock:^{
+            
+            dic = [_rawJSONData mutableCopy];
+        }];
+        
+        dic;
+    });
+    
+    [AVPaasClient.sharedInstance postObject:@"files" withParameters:parameters.copy block:^(id object, NSError *error) {
+        
+        if (error) {
+            
+            completionHandler(false, error);
+            
+            return;
+        }
+        
+        if (![NSDictionary lc__checkingType:object]) {
+            
+            NSError *aError = ({
+                NSString *reason = @"Get an invalid Response.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            completionHandler(false, aError);
+            
+            return;
+        }
+        
+        [parameters addEntriesFromDictionary:(NSDictionary *)object];
+        
+        [self internalSyncLock:^{
+            
+            _rawJSONData = parameters;
+        }];
+        
+        completionHandler(true, nil);
+    }];
+}
+
+- (void)getFileTokensWithParameters:(NSDictionary *)parameters
+                           callback:(void (^)(LCFileTokens *fileTokens, NSError *error))callback
+{
+    [[AVPaasClient sharedInstance] postObject:@"fileTokens" withParameters:parameters block:^(id _Nullable object, NSError * _Nullable error) {
+        
+        if (error) {
+            
+            callback(nil, error);
+            
+            return;
+        }
+        
+        LCFileTokens *fileTokens = ({
+            
+            LCFileTokens *fileTokens = nil;
+            
+            if ([NSDictionary lc__checkingType:object]) {
+                
+                fileTokens = [[LCFileTokens alloc] initWithDic:(NSDictionary *)object];
+                
+                if (!fileTokens.token ||
+                    !fileTokens.objectId ||
+                    !fileTokens.url ||
+                    !fileTokens.uploadUrl ||
+                    !fileTokens.provider) {
+                    
+                    fileTokens = nil;
+                }
+            }
+            
+            fileTokens;
+        });
+        
+        if (!fileTokens) {
+            
+            NSError *aError = ({
+                NSString *reason = @"Get an invalid response of `fileTokens`.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            callback(nil, aError);
+            
+            return;
+        }
+        
+        callback(fileTokens, nil);
+    }];
+}
+
+// MARK: - Download
+
+- (void)downloadWithCompletionHandler:(void (^)(NSURL * _Nullable, NSError * _Nullable))completionHandler
+{
+    [self downloadWithOption:AVFileDownloadOptionCachedData
+                    progress:nil
+           completionHandler:completionHandler];
+}
+
+- (void)downloadWithProgress:(void (^)(NSInteger))downloadProgressBlock
+           completionHandler:(void (^)(NSURL * _Nullable, NSError * _Nullable))completionHandler
+{
+    [self downloadWithOption:AVFileDownloadOptionCachedData
+                    progress:downloadProgressBlock
+           completionHandler:completionHandler];
+}
+
+- (void)downloadWithOption:(AVFileDownloadOption)downloadOption
+                  progress:(void (^)(NSInteger))downloadProgressBlock
+         completionHandler:(void (^)(NSURL * _Nullable, NSError * _Nullable))completionHandler
+{
+    NSURLSessionDownloadTask *downloadTask = ({
+        
+        __block NSURLSessionDownloadTask *task = nil;
+        
+        [self internalSyncLock:^{
+            
+            task = _downloadTask;
+        }];
+        
+        task;
+    });
+    
+    if (downloadTask) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *aError = ({
+                NSString *reason = @"File is in downloading, Can't do repeated download operation.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            completionHandler(nil, aError);
+        });
+        
+        return;
+    }
+    
+    __block NSDictionary *rawJSONData = nil;
+    
+    [self internalSyncLock:^{
+        
+        rawJSONData = _rawJSONData.copy;
+    }];
+    
+    if (![NSString lc__decodingWithKey:kLCFile_objectId fromDic:rawJSONData]) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *aError = ({
+                NSString *reason = @"`objectId` is invalid.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            completionHandler(nil, aError);
+        });
+        
+        return;
+    }
+    
+    NSString *URLString = [NSString lc__decodingWithKey:kLCFile_url fromDic:rawJSONData];
+    
+    if (!URLString || URLString.length == 0) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *aError = ({
+                NSString *reason = @"`url` is invalid.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            completionHandler(nil, aError);
+        });
+        
+        return;
+    }
+    
+    NSString *key = [NSString lc__decodingWithKey:kLCFile_key fromDic:rawJSONData];
+    
+    NSString *metaDataSource = ({
+        
+        NSDictionary *metaData = [NSDictionary lc__decodingWithKey:kLCFile_metaData fromDic:rawJSONData];
+        
+        NSString *source = [NSString lc__decodingWithKey:kLCFile___source fromDic:metaData];
+        
+        source;
+    });
+    
+    NSString *permanentLocationPath = [self persistentCachePathByKey:key
+                                                           URLString:URLString
+                                                              source:metaDataSource];
+    
+    if (!permanentLocationPath) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *aError = ({
+                NSString *reason = @"Not get a Permanent Location Path.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            completionHandler(nil, aError);
+        });
+        
+        return;
+    }
+    
+    BOOL isIgnoringCachedData = downloadOption & AVFileDownloadOptionIgnoringCachedData;
+    
+    if (!isIgnoringCachedData) {
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:permanentLocationPath]) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                if (downloadProgressBlock) {
+                    
+                    downloadProgressBlock(100);
+                }
+                
+                completionHandler([NSURL fileURLWithPath:permanentLocationPath], nil);
+            });
+            
+            return;
+        }
+    }
+    
+    void(^downloadProgress_block)(NSProgress *) = ^(NSProgress *progress) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            CGFloat completedUnitCount = (CGFloat)progress.completedUnitCount;
+            
+            CGFloat totalUnitCount = (CGFloat)progress.totalUnitCount;
+            
+            NSInteger number = (NSInteger)((completedUnitCount * 100.0) / totalUnitCount);
+            
+            downloadProgressBlock(number);
+        });
+    };
+    
+    NSURLSessionDownloadTask *task = ({
+        
+        id progress = (downloadProgressBlock ? downloadProgress_block : nil);
+        
+        [[LCFileTaskManager sharedInstance] downloadTaskWithURLString:URLString destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+            
+            if ([[NSFileManager defaultManager] fileExistsAtPath:permanentLocationPath]) {
+                
+                NSError *fileManagerError = nil;
+                
+                [[NSFileManager defaultManager] removeItemAtPath:permanentLocationPath
+                                                           error:&fileManagerError];
+                
+                if (fileManagerError) {
+                    
+                    AVLoggerError(AVLoggerDomainStorage, @"Error: %@", fileManagerError);
+                    
+                    return targetPath;
+                }
+            }
+            
+            return [NSURL fileURLWithPath:permanentLocationPath];
+            
+        } progress:progress completionHandler:^(NSURL *filePath, NSError *error) {
+            
+            [self internalSyncLock:^{
+                
+                _downloadTask = nil;
+            }];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                completionHandler(filePath, error);
+            });
+        }];
+    });
+    
+    if (task) {
+        
+        [self internalSyncLock:^{
+            
+            _downloadTask = task;
+        }];
+        
+        [task resume];
+    }
+}
+
+// MARK: - Cancel
+
+- (void)cancelUploading
+{
+    [self internalSyncLock:^{
+        
+        if (_uploadTask) {
+            
+            [_uploadTask cancel];
+            
+            _uploadTask = nil;
+        }
+        
+        _uploadOption = nil;
+    }];
+}
+
+- (void)cancelDownloading
+{
+    [self internalSyncLock:^{
+        
+        if (_downloadTask) {
+            
+            [_downloadTask cancel];
+            
+            _downloadTask = nil;
+        }
+    }];
+}
+
+// MARK: - Persistence Cache
+
++ (void)setCustomPersistentCacheDirectory:(NSString *)directory
+{
+    AVFile_CustomPersistentCacheDirectory = directory;
+}
+
+- (void)clearPersistentCache
+{
+    NSString *cachePath = [self persistentCachePath];
+    
+    if (!cachePath) { return; }
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:cachePath]) {
+        
+        NSError *error = nil;
+        
+        [[NSFileManager defaultManager] removeItemAtPath:cachePath
+                                                   error:&error];
+        
+        if (error) {
+            
+            AVLoggerError(AVLoggerDomainStorage, @"Error: %@", error);
+        }
+    }
+}
+
++ (void)clearAllPersistentCache
+{
+    NSString *directoryPath = AVFile_PersistentCacheDirectory();
+    
+    if (!directoryPath) { return; }
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:directoryPath]) {
+        
+        NSError *error = nil;
+        
+        [[NSFileManager defaultManager] removeItemAtPath:directoryPath
+                                                   error:&error];
+        
+        if (error) {
+            
+            AVLoggerError(AVLoggerDomainStorage, @"Error: %@", error);
+        }
+    }
+}
+
+- (NSString *)persistentCachePath
+{
+    __block NSDictionary *dic = nil;
+    
+    [self internalSyncLock:^{
+        
+        dic = _rawJSONData.copy;
+    }];
+    
+    if (![NSString lc__decodingWithKey:kLCFile_objectId fromDic:dic]) {
+        
+        return nil;
+    }
+    
+    NSString *key = [NSString lc__decodingWithKey:kLCFile_key fromDic:dic];
+    
+    NSString *url = [NSString lc__decodingWithKey:kLCFile_url fromDic:dic];
+    
+    NSString *metaDataSource = ({
+        
+        NSDictionary *metaData = [NSDictionary lc__decodingWithKey:kLCFile_metaData fromDic:dic];
+        
+        NSString *source = [NSString lc__decodingWithKey:kLCFile___source fromDic:metaData];
+        
+        source;
+    });
+    
+    NSString *persistentCachePath = [self persistentCachePathByKey:key
+                                                         URLString:url
+                                                            source:metaDataSource];
+    
+    return persistentCachePath;
+}
+
+- (NSString *)persistentCachePathByKey:(NSString *)key
+                             URLString:(NSString *)URLString
+                                source:(NSString *)source
+{
+    NSString *directory = nil;
+    
+    NSString *pathComponent = nil;
+    
+    if (key) {
+        
+        directory = AVFile_PersistentCacheDirectory();
+        
+        pathComponent = key;
+    }
+    else if (URLString && source && [source isEqualToString:@"external"]) {
+        
+        directory = [AVFile_PersistentCacheDirectory() stringByAppendingPathComponent:@"__External__"];
+        
+        pathComponent = AVFile_MD5ForURLString(URLString);
+    }
+    
+    if (!directory || !pathComponent) {
+        
+        return nil;
+    }
+    
+    NSError *createDirectoryError = ({
+        
+        NSError *error = nil;
+        [[NSFileManager defaultManager] createDirectoryAtPath:directory
+                                  withIntermediateDirectories:true
+                                                   attributes:nil
+                                                        error:&error];
+        error;
+    });
+    
+    if (createDirectoryError) {
+        
+        AVLoggerError(AVLoggerDomainStorage, @"Error: %@", createDirectoryError);
+        
+        return nil;
+    }
+    
+    return [directory stringByAppendingPathComponent:pathComponent];
+}
+
+// MARK: - Delete
+
+- (void)deleteWithCompletionHandler:(void (^)(BOOL, NSError * _Nullable))completionHandler
+{
+    NSString *objectPath = AVFile_ObjectPath([self objectId]);
+    
+    if (!objectPath) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *aError = ({
+                NSString *reason = @"`objectId` is invalid.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            completionHandler(false, aError);
+        });
+        
+        return;
+    }
+    
+    [[AVPaasClient sharedInstance] deleteObject:objectPath withParameters:nil block:^(id _Nullable object, NSError * _Nullable error) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            BOOL succeeded = error ? false : true;
+            
+            completionHandler(succeeded, error);
+        });
+    }];
+}
+
++ (void)deleteWithFiles:(NSArray<AVFile *> *)files
+      completionHandler:(void (^)(BOOL, NSError * _Nullable))completionHandler
+{
+    if (!files || files.count == 0) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            completionHandler(true, nil);
+        });
+        
+        return;
+    }
+    
+    NSMutableArray *requests = [NSMutableArray array];
+    
+    for (AVFile *file in files) {
+        
+        NSString *objectId = [file objectId];
+        
+        if (!objectId || objectId.length == 0) {
+            
+            continue;
+        }
+        
+        NSString *objectPath = [@"files" stringByAppendingPathComponent:objectId];
+        
+        NSMutableDictionary *request = [AVPaasClient batchMethod:@"DELETE"
+                                                            path:objectPath
+                                                            body:nil
+                                                      parameters:nil];
+        
+        [requests addObject:request];
+    }
+    
+    [[AVPaasClient sharedInstance] postBatchObject:requests block:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            BOOL succeeded = error ? false : true;
+            
+            completionHandler(succeeded, error);
+        });
+    }];
+}
+
+// MARK: - Get
+
++ (void)getFileWithObjectId:(NSString *)objectId
+          completionHandler:(void (^)(AVFile *file, NSError *error))completionHandler
+{
+    NSString *objectPath = AVFile_ObjectPath(objectId);
+    
+    if (!objectPath) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *aError = ({
+                NSString *reason = @"`objectId` is invalid.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            completionHandler(nil, aError);
+        });
+        
+        return;
+    }
+    
+    [[AVPaasClient sharedInstance] getObject:objectPath withParameters:nil block:^(id object, NSError* error) {
+        
+        if (error) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                completionHandler(nil, error);
+            });
+            
+            return;
+        }
+        
+        if (![NSDictionary lc__checkingType:object]) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                NSError *aError = ({
+                    NSString *reason = @"Get an invalid Object.";
+                    NSDictionary *userInfo = @{ @"reason" : reason };
+                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                        code:0
+                                    userInfo:userInfo];
+                });
+                
+                completionHandler(nil, aError);
+            });
+            
+            return;
+        }
+        
+        NSDictionary *dic = (NSDictionary *)object;
+        
+        AVFile *file = [[AVFile alloc] initWithRawJSONData:dic.mutableCopy];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            completionHandler(file, nil);
+        });
+    }];
+}
+
+// MARK: - Thumbnail
 
 - (NSString *)getThumbnailURLWithScaleToFit:(BOOL)scaleToFit
                                       width:(int)width
@@ -855,7 +1606,7 @@ typedef void (^AVFileSizeBlock)(long long fileSize);
 
     int mode = scaleToFit ? 2 : 1;
 
-    NSString *url = [NSString stringWithFormat:QINIU_THUMBNAIL_FORMAT, self.url, mode, width, height, quality];
+    NSString *url = [NSString stringWithFormat:@"%@?imageView/%d/w/%d/h/%d/q/%d", self.url, mode, width, height, quality];
 
     format = [format stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
@@ -873,104 +1624,209 @@ typedef void (^AVFileSizeBlock)(long long fileSize);
     return [self getThumbnailURLWithScaleToFit:scaleToFit width:width height:height quality:100 format:nil];
 }
 
--(void)getThumbnail:(BOOL)scaleToFit
+- (void)getThumbnail:(BOOL)scaleToFit
               width:(int)width
              height:(int)height
           withBlock:(AVImageResultBlock)block
 {
     NSString *url = [self getThumbnailURLWithScaleToFit:scaleToFit width:width height:height];
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-    NSURLSessionDataTask *task = [imageSessionManager
-                                  dataTaskWithRequest:request
-                                  completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-                                      [AVUtils callImageResultBlock:block image:responseObject error:error];
-                                  }];
-    [task resume];
+    
+    [[LCFileTaskManager sharedInstance] getThumbnailWithURLString:url completionHandler:^(id thumbnail, NSError *error) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            block(thumbnail, error);
+        });
+    }];
 }
 
--(void)setOwnerId:(NSString *)ownerId
+// MARK: - Query
+
++ (AVQuery *)query
 {
-    [self.metaData setObject:ownerId forKey:ownerTag];
+    return [AVFileQuery query];
 }
 
--(NSString *)ownerId
+// MARK: - Other
+
++ (void)setEnabledLock:(BOOL)isEnabledLock
 {
-    return [self.metaData objectForKey:ownerTag];
+    AVFile_EnabledLock = isEnabledLock;
 }
 
--(NSUInteger)size {
-    id object = [self.metaData objectForKey:fileSizeTag];
-    if (object != nil) {
-        return [object unsignedIntegerValue];
-    }
-    if (self.data.length > 0) {
-        return self.data.length;
-    }
-    return 0;
-}
+// MARK: - Deprecated
 
--(NSString *)pathExtension {
-    if (self.url.length > 0) {
-        return [self.url pathExtension];
-    } else if (self.name.length > 0) {
-        return [self.name pathExtension];
-    } else if (_localPath.length > 0) {
-        return [_localPath pathExtension];
-    }
-    return nil;
-}
-
-- (void)deleteInBackgroundWithBlock:(AVBooleanResultBlock)block
+- (void)saveInBackgroundWithBlock:(void (^)(BOOL, NSError * _Nullable))block
 {
-    [[AVPaasClient sharedInstance] deleteObject:[AVFile objectPath:self.objectId]
-                                 withParameters:nil
-                                          block:^(id object, NSError *error) {
-                                              [AVUtils callBooleanResultBlock:block error:error];
-                                          }];
+    [self uploadWithCompletionHandler:block];
 }
 
-+ (void)deleteFiles:(NSArray<AVFile *> *)files inBackgroundWithBlock:(AVBooleanResultBlock)block {
-    if (!files.count) {
-        [AVUtils callBooleanResultBlock:block error:nil];
-        return;
-    }
+- (void)saveInBackgroundWithBlock:(void (^)(BOOL, NSError * _Nullable))block
+                    progressBlock:(void (^)(NSInteger))progressBlock
+{
+    [self uploadWithProgress:progressBlock completionHandler:block];
+}
 
-    NSMutableArray *requests = [NSMutableArray array];
-
-    for (AVFile *file in files) {
-        NSError *error = nil;
-
-        if (![file isKindOfClass:[AVFile class]])
-            error = [AVErrorUtils errorWithText:@"Invalid file object."];
-
-        NSString *endpoint = file.objectEndpoint;
-
-        if (!endpoint)
-            error = [AVErrorUtils errorWithText:@"Cannot delete a file that has not been saved."];
-
+- (void)getDataInBackgroundWithBlock:(void (^)(NSData * _Nullable, NSError * _Nullable))block
+{
+    [self downloadWithCompletionHandler:^(NSURL * _Nullable filePath, NSError * _Nullable error) {
+        
         if (error) {
-            [AVUtils callBooleanResultBlock:block error:error];
+            
+            block(nil, error);
+            
             return;
         }
+        
+        NSError *err = nil;
+        
+        NSData *data = [NSData dataWithContentsOfURL:filePath options:NSDataReadingMappedIfSafe error:&err];
+        
+        if (err) {
+            
+            block(nil, err);
+            
+            return;
+        }
+        
+        block(data, nil);
+    }];
+}
 
-        NSMutableDictionary *request = [AVPaasClient batchMethod:@"DELETE" path:endpoint body:nil parameters:nil];
+- (void)getDataInBackgroundWithBlock:(void (^)(NSData * _Nullable, NSError * _Nullable))block
+                       progressBlock:(void (^)(NSInteger))progressBlock
+{
+    [self downloadWithProgress:progressBlock completionHandler:^(NSURL * _Nullable filePath, NSError * _Nullable error) {
+        
+        if (error) {
+            
+            block(nil, error);
+            
+            return;
+        }
+        
+        NSError *err = nil;
+        
+        NSData *data = [NSData dataWithContentsOfURL:filePath options:NSDataReadingMappedIfSafe error:&err];
+        
+        if (err) {
+            
+            block(nil, err);
+            
+            return;
+        }
+        
+        block(data, nil);
+    }];
+}
 
-        [requests addObject:request];
+@end
+
+@implementation LCFileTokens
+
+@synthesize provider = _provider;
+@synthesize objectId = _objectId;
+@synthesize token = _token;
+@synthesize bucket = _bucket;
+@synthesize url = _url;
+@synthesize uploadUrl = _uploadUrl;
+
+- (instancetype)initWithDic:(NSDictionary *)dic
+{
+    self = [super init];
+    
+    if (self) {
+        
+        _rawDic = dic;
     }
-
-    [[AVPaasClient sharedInstance] postBatchObject:requests block:^(NSArray * _Nullable objects, NSError * _Nullable error) {
-        [AVUtils callBooleanResultBlock:block error:error];
-    }];
+    
+    return self;
 }
 
-- (void)deleteInBackground {
-    [self deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-        /* Ignore result intentionally. */
-    }];
+- (NSString *)provider
+{
+    if (_provider) {
+        
+        return _provider;
+        
+    } else {
+        
+        _provider = [NSString lc__decodingWithKey:@"provider" fromDic:_rawDic];
+        
+        return _provider;
+    }
 }
 
-+ (AVQuery *)query {
-    return [AVFileQuery query];
+- (NSString *)objectId
+{
+    if (_objectId) {
+        
+        return _objectId;
+        
+    } else {
+        
+        _objectId = [NSString lc__decodingWithKey:@"objectId" fromDic:_rawDic];
+        
+        return _objectId;
+    }
+}
+
+- (NSString *)token
+{
+    if (_token) {
+        
+        return _token;
+        
+    } else {
+        
+        _token = [NSString lc__decodingWithKey:@"token" fromDic:_rawDic];
+        
+        return _token;
+    }
+}
+
+- (NSString *)bucket
+{
+    /* unused, maybe can delete. */
+    
+    if (_bucket) {
+        
+        return _bucket;
+        
+    } else {
+        
+        _bucket = [NSString lc__decodingWithKey:@"bucket" fromDic:_rawDic];
+        
+        return _bucket;
+    }
+}
+
+- (NSString *)url
+{
+    if (_url) {
+        
+        return _url;
+        
+    } else {
+        
+        _url = [NSString lc__decodingWithKey:@"url" fromDic:_rawDic];
+        
+        return _url;
+    }
+}
+
+- (NSString *)uploadUrl
+{
+    if (_uploadUrl) {
+        
+        return _uploadUrl;
+        
+    } else {
+        
+        _uploadUrl = [NSString lc__decodingWithKey:@"upload_url" fromDic:_rawDic];
+        
+        return _uploadUrl;
+    }
 }
 
 @end
