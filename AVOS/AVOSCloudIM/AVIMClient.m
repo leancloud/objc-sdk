@@ -298,7 +298,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     
     void(^setupWebSocketWrapper_block)(void) = ^(void) {
         
-        AVIMWebSocketWrapper *socketWrapper = [[AVIMWebSocketWrapper alloc] init];
+        AVIMWebSocketWrapper *socketWrapper = [AVIMWebSocketWrapper newWithDelegate:self];
         
         NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
         
@@ -390,6 +390,14 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 - (dispatch_queue_t)internalSerialQueue
 {
     return _internalSerialQueue;
+}
+
+- (void)addOperationToInternalSerialQueueWithBlock:(void (^)(void))block
+{
+    dispatch_async(_internalSerialQueue, ^{
+        
+        block();
+    });
 }
 
 // MARK: - Getter and Setter of Delegate & DataSource
@@ -1357,6 +1365,26 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     }
     
     [_socketWrapper sendCommand:command];
+}
+
+// MARK: - Command Receiving
+
+- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socket commandDidGetCallback:(LCIMProtobufCommandWrapper *)command
+{
+    [self addOperationToInternalSerialQueueWithBlock:^{
+        
+        if (command.callback) {
+            
+            command.callback(command);
+            
+            /* set to nil to avoid cycle retain */
+            command.callback = nil;
+            
+        } else if (command.error) {
+            
+            // TODO: add a protocol or global notification to throw error to user.
+        }
+    }];
 }
 
 // MARK: -

@@ -11,7 +11,7 @@
 #import "LCIMConversationCache.h"
 #import "AVIMConversation_Internal.h"
 
-@interface AVIMClient ()
+@interface AVIMClient () <AVIMWebSocketWrapperDelegate>
 
 + (NSMutableDictionary *)_userOptions;
 
@@ -44,6 +44,8 @@
  */
 - (dispatch_queue_t)internalSerialQueue
 __attribute__((warn_unused_result));
+
+- (void)addOperationToInternalSerialQueueWithBlock:(void (^)(void))block;
 
 /*
  Signature

@@ -9,20 +9,53 @@
 #import "AVIMCommon.h"
 #import "AVIMCommandCommon.h"
 
+@class AVIMWebSocketWrapper;
+@class LCIMProtobufCommandWrapper;
+
 #define AVIM_NOTIFICATION_WEBSOCKET_OPENED    @"AVIM_NOTIFICATION_WEBSOCKET_OPENED"
 #define AVIM_NOTIFICATION_WEBSOCKET_CLOSED    @"AVIM_NOTIFICATION_WEBSOCKET_CLOSED"
 #define AVIM_NOTIFICATION_WEBSOCKET_RECONNECT @"AVIM_NOTIFICATION_WEBSOCKET_RECONNECT"
 #define AVIM_NOTIFICATION_WEBSOCKET_ERROR     @"AVIM_NOTIFICATION_WEBSOCKET_ERROR"
 #define AVIM_NOTIFICATION_WEBSOCKET_COMMAND   @"AVIM_NOTIFICATION_WEBSOCKET_COMMAND"
 
+// MARK: - Delegate Protocol
+
+@protocol AVIMWebSocketWrapperDelegate <NSObject>
+
+- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socket commandDidGetCallback:(LCIMProtobufCommandWrapper *)command;
+
+@end
+
+// MARK: - Socket Wrapper
+
 @interface AVIMWebSocketWrapper : NSObject
 
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds;
+
++ (instancetype)newWithDelegate:(id <AVIMWebSocketWrapperDelegate>)delegate;
+
++ (instancetype)newByLiveQuery;
 
 - (void)openWithCallback:(AVIMBooleanResultBlock)callback;
 
 - (void)close;
 
 - (void)sendCommand:(AVIMGenericCommand *)genericCommand;
+
+- (void)sendCommandWrapper:(LCIMProtobufCommandWrapper *)commandWrapper;
+
+@end
+
+// MARK: - Data Wrapper
+
+@interface LCIMProtobufCommandWrapper : NSObject
+
+@property (nonatomic, copy) void (^callback)(LCIMProtobufCommandWrapper *commandWrapper);
+
+@property (nonatomic, strong) AVIMGenericCommand *outCommand;
+
+@property (nonatomic, strong) AVIMGenericCommand *inCommand;
+
+@property (nonatomic, strong) NSError *error;
 
 @end

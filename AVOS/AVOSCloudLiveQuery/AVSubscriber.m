@@ -64,7 +64,7 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 - (void)doInitialize {
     NSString *deviceUUID = [AVUtils deviceUUID];
 
-    _webSocket = [[AVIMWebSocketWrapper alloc] init];
+    _webSocket = [AVIMWebSocketWrapper newByLiveQuery];
     _identifier = [NSString stringWithFormat:@"%@-%@", AVIdentifierPrefix, deviceUUID];
     _backoffTimer = [AVExponentialTimer exponentialTimerWithInitialTime:AVBackoffInitialTime
                                                                 maxTime:AVBackoffMaximumTime];
