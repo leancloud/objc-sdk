@@ -78,7 +78,7 @@ extension ViewController {
         
         self.disableUserInteraction()
         
-        self.client.open(with: [.reopen]) { (success: Bool, error: Error?) in
+        self.client.open(with: .reopen) { (success: Bool, error: Error?) in
             
             self.enableUserInteraction()
             
