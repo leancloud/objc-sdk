@@ -453,7 +453,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     
     [self internalSyncLock:^{
         
-        objectId = [NSString lc__decodingWithKey:kLCFile_objectId fromDic:_rawJSONData];
+        objectId = [AVFile decodingIDFromDic:_rawJSONData];
     }];
     
     return objectId;
@@ -1125,7 +1125,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         rawJSONData = _rawJSONData.copy;
     }];
     
-    if (![NSString lc__decodingWithKey:kLCFile_objectId fromDic:rawJSONData]) {
+    if (![AVFile decodingIDFromDic:rawJSONData]) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -1364,7 +1364,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         dic = _rawJSONData.copy;
     }];
     
-    if (![NSString lc__decodingWithKey:kLCFile_objectId fromDic:dic]) {
+    if (![AVFile decodingIDFromDic:dic]) {
         
         return nil;
     }
@@ -1652,6 +1652,23 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 + (void)setEnabledLock:(BOOL)isEnabledLock
 {
     AVFile_EnabledLock = isEnabledLock;
+}
+
++ (NSString *)decodingIDFromDic:(NSDictionary *)dic
+{
+    /* @note For compatibility, should decoding multiple keys ... ... */
+    
+    NSString *value = [NSString lc__decodingWithKey:kLCFile_objectId fromDic:dic];
+    
+    if (value) { return value; }
+    
+    value = [NSString lc__decodingWithKey:kLCFile_objId fromDic:dic];
+    
+    if (value) { return value; }
+    
+    value = [NSString lc__decodingWithKey:kLCFile_id fromDic:dic];
+    
+    return value;
 }
 
 // MARK: - Deprecated
