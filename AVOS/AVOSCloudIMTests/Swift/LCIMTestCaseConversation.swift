@@ -73,6 +73,48 @@ class LCIMTestCaseConversation: LCIMTestBase {
         super.tearDown()
     }
     
+    func test_sendTransientMessage() {
+        
+        guard let conv: AVIMConversation = LCIMTestCaseConversation.globalConversation else {
+            
+            XCTFail()
+            
+            return
+        }
+        
+        for i in 0..<5 {
+            
+            let text: String = "\(i)"
+            
+            let textMessage: AVIMTextMessage = AVIMTextMessage(
+                text: text,
+                attributes: nil
+            )
+            
+            let option: AVIMMessageOption = AVIMMessageOption.init()
+            option.transient = true;
+            
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                
+                semaphore.increment()
+                
+                conv.send(textMessage, option: option, callback: { (succeeded: Bool, error: Error?) in
+                    
+                    semaphore.decrement()
+                    
+                    XCTAssertTrue(Thread.isMainThread)
+                    
+                    XCTAssertTrue(succeeded)
+                    XCTAssertNil(error)
+                })
+                
+            }, failure: {
+                
+                XCTFail("timeout")
+            })
+        }
+    }
+    
     func testSendTextMessage() {
         
         guard let conv: AVIMConversation = LCIMTestCaseConversation.globalConversation else {

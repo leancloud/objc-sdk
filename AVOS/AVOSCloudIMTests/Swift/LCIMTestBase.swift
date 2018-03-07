@@ -13,7 +13,7 @@ class LCIMTestBase: LCTestBase {
 
     /* For Internal Test */
     static let customTestRTMServer: String = "wss://rtm51.leancloud.cn";
-    static let isUseCustomTestRTMServer: Bool = true;
+    static let isUseCustomTestRTMServer: Bool = false;
     
     static var baseGlobalClient: AVIMClient?
     

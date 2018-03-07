@@ -136,7 +136,8 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         
         LCIMSessionConfigBitmap = (
                                    LCIMSessionConfigOptions_Patch |
-                                   LCIMSessionConfigOptions_TempConv
+                                   LCIMSessionConfigOptions_TempConv |
+                                   LCIMSessionConfigOptions_TransientACK
                                    );
         
 #ifdef DEBUG
@@ -298,7 +299,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     
     void(^setupWebSocketWrapper_block)(void) = ^(void) {
         
-        AVIMWebSocketWrapper *socketWrapper = [[AVIMWebSocketWrapper alloc] init];
+        AVIMWebSocketWrapper *socketWrapper = [AVIMWebSocketWrapper newWithDelegate:self];
         
         NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
         
@@ -390,6 +391,14 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 - (dispatch_queue_t)internalSerialQueue
 {
     return _internalSerialQueue;
+}
+
+- (void)addOperationToInternalSerialQueueWithBlock:(void (^)(AVIMClient *client))block
+{
+    dispatch_async(_internalSerialQueue, ^{
+        
+        block(self);
+    });
 }
 
 // MARK: - Getter and Setter of Delegate & DataSource
@@ -1334,6 +1343,34 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     });
 }
 
+- (void)sendCommandWrapper:(LCIMProtobufCommandWrapper *)commandWrapper
+{
+    [self addOperationToInternalSerialQueueWithBlock:^(AVIMClient *client) {
+        
+        if (_status != AVIMClientStatusOpened) {
+            
+            if ([commandWrapper hasCallback]) {
+                
+                NSError *aError = ({
+                    NSString *reason = @"Client Not Open when Send a Command.";
+                    NSDictionary *userInfo = @{ @"reason" : reason };
+                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                        code:0
+                                    userInfo:userInfo];
+                });
+                
+                commandWrapper.error = aError;
+                
+                [commandWrapper executeCallbackAndSetItToNil];
+            }
+            
+            return;
+        }
+        
+        [client->_socketWrapper sendCommandWrapper:commandWrapper];
+    }];
+}
+
 - (void)_sendCommand:(AVIMGenericCommand *)command
 {
     AssertRunInIMClientQueue;
@@ -1357,6 +1394,23 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     }
     
     [_socketWrapper sendCommand:command];
+}
+
+// MARK: - Command Receiving
+
+- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socket commandDidGetCallback:(LCIMProtobufCommandWrapper *)command
+{
+    [self addOperationToInternalSerialQueueWithBlock:^(AVIMClient *client) {
+        
+        if ([command hasCallback]) {
+            
+            [command executeCallbackAndSetItToNil];
+            
+        } else if (command.error) {
+            
+            // TODO: add a protocol or global notification to throw error to user.
+        }
+    }];
 }
 
 // MARK: -

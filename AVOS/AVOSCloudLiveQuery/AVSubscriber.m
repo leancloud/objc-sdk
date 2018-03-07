@@ -64,7 +64,7 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 - (void)doInitialize {
     NSString *deviceUUID = [AVUtils deviceUUID];
 
-    _webSocket = [[AVIMWebSocketWrapper alloc] init];
+    _webSocket = [AVIMWebSocketWrapper newByLiveQuery];
     _identifier = [NSString stringWithFormat:@"%@-%@", AVIdentifierPrefix, deviceUUID];
     _backoffTimer = [AVExponentialTimer exponentialTimerWithInitialTime:AVBackoffInitialTime
                                                                 maxTime:AVBackoffMaximumTime];
@@ -74,11 +74,23 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 
 - (void)observeWebSocket:(AVIMWebSocketWrapper *)webSocket {
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-
-    [notificationCenter addObserver:self selector:@selector(webSocketDidOpen:)            name:AVIM_NOTIFICATION_WEBSOCKET_OPENED   object:_webSocket];
-    [notificationCenter addObserver:self selector:@selector(webSocketDidReceiveCommand:)  name:AVIM_NOTIFICATION_WEBSOCKET_COMMAND  object:_webSocket];
-    [notificationCenter addObserver:self selector:@selector(webSocketDidReceiveError:)    name:AVIM_NOTIFICATION_WEBSOCKET_ERROR    object:_webSocket];
-    [notificationCenter addObserver:self selector:@selector(webSocketDidClose:)           name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED   object:_webSocket];
+    
+    [notificationCenter addObserver:self
+                           selector:@selector(webSocketDidOpen:)
+                               name:AVIM_NOTIFICATION_WEBSOCKET_OPENED
+                             object:_webSocket];
+    [notificationCenter addObserver:self
+                           selector:@selector(webSocketDidReceiveCommand:)
+                               name:AVIM_NOTIFICATION_WEBSOCKET_COMMAND
+                             object:_webSocket];
+    [notificationCenter addObserver:self
+                           selector:@selector(webSocketDidReconnect:)
+                               name:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
+                             object:_webSocket];
+    [notificationCenter addObserver:self
+                           selector:@selector(webSocketDidClose:)
+                               name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
+                             object:_webSocket];
 }
 
 - (void)dealloc {
@@ -136,7 +148,7 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
                                                       userInfo:userInfo];
 }
 
-- (void)webSocketDidReceiveError:(NSNotification *)notification {
+- (void)webSocketDidReconnect:(NSNotification *)notification {
     self.alive = NO;
     [self keepAliveIntermittently];
 }

@@ -15,6 +15,8 @@ class ViewController: UIViewController {
     
     var client: AVIMClient!
     
+    var liveQuery: AVLiveQuery!
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
 
@@ -27,6 +29,9 @@ class ViewController: UIViewController {
         self.client.delegate = self
         
         assert(self.client.status == .none)
+        
+        self.liveQuery = AVLiveQuery(query: AVQuery.init(className: "_File"))
+        self.liveQuery.delegate = self
     }
     
     func enableUserInteraction() {
@@ -38,12 +43,23 @@ class ViewController: UIViewController {
         self.activityIndicatorView.startAnimating()
         self.view.isUserInteractionEnabled = false
     }
+    
+    func showAlert(title: String, message: String) {
+        
+        let alert: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let action: UIAlertAction = UIAlertAction(title: "ok", style: .default, handler: nil)
+        
+        alert.addAction(action)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
 
 }
 
 extension ViewController {
     
-    func login() {
+    func imLogin() {
         
         self.disableUserInteraction()
         
@@ -53,54 +69,30 @@ extension ViewController {
             
             if success {
                 
-                let alert: UIAlertController = UIAlertController(title: "Success", message: "Login", preferredStyle: .alert)
-                
-                let action: UIAlertAction = UIAlertAction(title: "ok", style: .default, handler: nil)
-                
-                alert.addAction(action)
-                
-                self.present(alert, animated: true, completion: nil)
+                self.showAlert(title: "Success", message: "Login")
                 
             } else {
                 
-                let alert: UIAlertController = UIAlertController(title: "Error", message: "\(String(describing: error))", preferredStyle: .alert)
-                
-                let action: UIAlertAction = UIAlertAction(title: "ok", style: .default, handler: nil)
-                
-                alert.addAction(action)
-                
-                self.present(alert, animated: true, completion: nil)
+                self.showAlert(title: "Error", message: "\(String(describing: error))")
             }
         }
     }
     
-    func reopen() {
+    func imReopen() {
         
         self.disableUserInteraction()
         
-        self.client.open(with: [.reopen]) { (success: Bool, error: Error?) in
+        self.client.open(with: .reopen) { (success: Bool, error: Error?) in
             
             self.enableUserInteraction()
             
             if success {
                 
-                let alert: UIAlertController = UIAlertController(title: "Success", message: "Login", preferredStyle: .alert)
-                
-                let action: UIAlertAction = UIAlertAction(title: "ok", style: .default, handler: nil)
-                
-                alert.addAction(action)
-                
-                self.present(alert, animated: true, completion: nil)
+                self.showAlert(title: "Success", message: "Login")
                 
             } else {
                 
-                let alert: UIAlertController = UIAlertController(title: "Error", message: "\(String(describing: error))", preferredStyle: .alert)
-                
-                let action: UIAlertAction = UIAlertAction(title: "ok", style: .default, handler: nil)
-                
-                alert.addAction(action)
-                
-                self.present(alert, animated: true, completion: nil)
+                self.showAlert(title: "Error", message: "\(String(describing: error))")
             }
         }
     }
@@ -109,23 +101,39 @@ extension ViewController {
         AVInstallation.default().deviceToken = UUID().uuidString
     }
     
+    func liveQuerySubscribe() {
+        self.liveQuery.subscribe { (succeeded: Bool, error: Error?) in
+            
+            guard succeeded else {
+                
+                self.showAlert(title: "Error", message: "\(String(describing: error))")
+                
+                return
+            }
+            
+            self.showAlert(title: "Live Query", message: "Subscribe Succeeded")
+        }
+    }
+    
 }
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 4
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell")!
         switch indexPath.row {
         case 0:
-            cell.textLabel?.text = "Login"
+            cell.textLabel?.text = "IM Login"
         case 1:
-            cell.textLabel?.text = "Reopen"
+            cell.textLabel?.text = "IM Reopen"
         case 2:
             cell.textLabel?.text = "Change Device Token"
+        case 3:
+            cell.textLabel?.text = "Live Query"
         default:
             fatalError()
         }
@@ -140,11 +148,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         switch indexPath.row {
         case 0:
-            self.login()
+            self.imLogin()
         case 1:
-            self.reopen()
+            self.imReopen()
         case 2:
             self.changeDeviceToken()
+        case 3:
+            self.liveQuerySubscribe()
         default:
             fatalError()
         }
@@ -195,5 +205,9 @@ extension ViewController: AVIMClientDelegate {
         
         self.present(alert, animated: true, completion: nil)
     }
+    
+}
+
+extension ViewController: AVLiveQueryDelegate {
     
 }

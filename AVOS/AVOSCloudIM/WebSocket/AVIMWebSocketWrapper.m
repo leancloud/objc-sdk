@@ -54,6 +54,66 @@ NSString *const AVIMProtocolPROTOBUF1 = @"lc.protobuf2.1";
 NSString *const AVIMProtocolPROTOBUF2 = @"lc.protobuf2.2";
 NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 
+// MARK: - LCIMProtobufCommandWrapper
+
+@interface LCIMProtobufCommandWrapper () {
+    
+    NSError *_error;
+}
+
+@property (nonatomic, copy) void (^callback)(LCIMProtobufCommandWrapper *commandWrapper);
+
+@property (nonatomic, assign) uint16_t serialId;
+
+@property (nonatomic, assign) NSTimeInterval timeoutDeadlineTimestamp;
+
+@end
+
+@implementation LCIMProtobufCommandWrapper
+
+- (BOOL)hasCallback
+{
+    return _callback ? true : false;
+}
+
+- (void)executeCallbackAndSetItToNil
+{
+    if (_callback) {
+        
+        _callback(self);
+        
+        /*
+         set to nil to avoid cycle retain
+         */
+        _callback = nil;
+    }
+}
+
+- (void)setError:(NSError *)error
+{
+    _error = error;
+}
+
+- (NSError *)error
+{
+    if (_error) {
+        
+        return _error;
+        
+    } else if (_inCommand) {
+        
+        _error = [_inCommand avim_errorObject];
+        
+        return _error;
+        
+    } else {
+        
+        return nil;
+    }
+}
+
+@end
+
 // MARK: - AVIMCommandCarrier
 
 @interface AVIMCommandCarrier : NSObject
@@ -78,6 +138,8 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 
 @interface AVIMWebSocketWrapper () <AVIMWebSocketDelegate>
 {
+    __weak id <AVIMWebSocketWrapperDelegate> _delegate;
+    
     NSTimeInterval _timeout;
     
     BOOL _invokedOpenOnce;
@@ -125,6 +187,7 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
      */
     NSMutableArray<AVIMBooleanResultBlock> *_openCallbackArray;
     NSMutableDictionary<NSNumber *, AVIMCommandCarrier *> *_commandDictionary;
+    NSMutableDictionary<NSNumber *, LCIMProtobufCommandWrapper *> *_commandWrapperDic;
     NSMutableArray<NSNumber *> *_serialIdArray;
     
     AVIMWebSocket *_webSocket;
@@ -147,14 +210,18 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
     }
 }
 
++ (instancetype)newWithDelegate:(id<AVIMWebSocketWrapperDelegate>)delegate
+{
+    return [[self alloc] initWithDelegate:delegate];
+}
+
++ (instancetype)newByLiveQuery
+{
+    return [[self alloc] initByLiveQuery];
+}
+
 - (instancetype)init
 {
-    if (!AVOSCloud.getApplicationId) {
-        
-        [NSException raise:@"AVOSCloudIM Exception"
-                    format:@"Application ID not found."];
-    }
-    
     self = [super init];
     
     if (self) {
@@ -188,6 +255,7 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         _openCallbackArray = [NSMutableArray array];
         _serialIdArray = [NSMutableArray array];
         _commandDictionary = [NSMutableDictionary dictionary];
+        _commandWrapperDic = [NSMutableDictionary dictionary];
         
         /*
          Ping & Pong
@@ -215,46 +283,75 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         _preferToUseSecondaryRTMServer = false;
         
         _webSocket = nil;
-
-#if TARGET_OS_IOS
-        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-        
-        [center addObserver:self
-                   selector:@selector(applicationDidEnterBackground)
-                       name:UIApplicationDidEnterBackgroundNotification
-                     object:nil];
-        
-        [center addObserver:self
-                   selector:@selector(applicationWillEnterForeground)
-                       name:UIApplicationWillEnterForegroundNotification
-                     object:nil];
-#endif
-        
-        _reachabilityMonitor = [LCNetworkReachabilityManager manager];
-        
-        _oldNetworkReachabilityStatus = AFNetworkReachabilityStatusUnknown;
-        
-        __weak typeof(self) weakSelf = self;
-        
-        [_reachabilityMonitor setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus newStatus) {
-            
-            __strong AVIMWebSocketWrapper *strongSelf = weakSelf;
-            
-            if (strongSelf == nil) {
-                
-                return;
-            }
-            
-            dispatch_async(strongSelf.serialQueue, ^{
-                
-                [strongSelf handleReachabilityWithNewStatus:newStatus];
-            });
-        }];
-        
-        [_reachabilityMonitor startMonitoring];
     }
     
     return self;
+}
+
+- (instancetype)initByLiveQuery
+{
+    self = [self init];
+    
+    if (self) {
+        
+        [self setupObserverAndReachabilityMonitor];
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithDelegate:(id<AVIMWebSocketWrapperDelegate>)delegate
+{
+    self = [self init];
+    
+    if (self) {
+        
+        _delegate = delegate;
+        
+        [self setupObserverAndReachabilityMonitor];
+    }
+    
+    return self;
+}
+
+- (void)setupObserverAndReachabilityMonitor
+{
+#if TARGET_OS_IOS
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    
+    [center addObserver:self
+               selector:@selector(applicationDidEnterBackground)
+                   name:UIApplicationDidEnterBackgroundNotification
+                 object:nil];
+    
+    [center addObserver:self
+               selector:@selector(applicationWillEnterForeground)
+                   name:UIApplicationWillEnterForegroundNotification
+                 object:nil];
+#endif
+    
+    _reachabilityMonitor = [LCNetworkReachabilityManager manager];
+    
+    _oldNetworkReachabilityStatus = AFNetworkReachabilityStatusUnknown;
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [_reachabilityMonitor setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus newStatus) {
+        
+        __strong AVIMWebSocketWrapper *strongSelf = weakSelf;
+        
+        if (strongSelf == nil) {
+            
+            return;
+        }
+        
+        dispatch_async(strongSelf.serialQueue, ^{
+            
+            [strongSelf handleReachabilityWithNewStatus:newStatus];
+        });
+    }];
+    
+    [_reachabilityMonitor startMonitoring];
 }
 
 - (void)dealloc
@@ -674,160 +771,173 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 {
     dispatch_async(_serialQueue, ^{
         
-        [self _sendCommand:genericCommand];
-    });
-}
-
-- (void)_sendCommand:(AVIMGenericCommand *)genericCommand
-{
-    AssertRunInSerialQueue;
-    
-    if (!genericCommand) {
-        
-        return;
-    }
-    
-    AVIMCommandResultBlock callback = [genericCommand callback];
-    
-    BOOL needResponse = [genericCommand needResponse];
-    
-    AVIMWebSocket *webSocket = _webSocket;
-    
-    if (!webSocket ||
-        webSocket.readyState != AVIMWebSocketStateConnected) {
-        
-        NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorConnectionLost
-                                               reason:@"Websocket Not Connected."];
-        
-        if (callback) {
+        if (!genericCommand) {
             
-            callback(genericCommand, nil, error);
-            
-        } else {
-            
-            AVLoggerError(AVLoggerDomainIM, @"Command without Need Response is Dropped with Error: %@", error);
+            return;
         }
         
-        return;
-    }
-    
-    if (needResponse) {
+        AVIMCommandResultBlock callback = [genericCommand callback];
         
-        /*
-         Set `i` before generate data
-         */
+        BOOL needResponse = [genericCommand needResponse];
         
-        genericCommand.i = [self nextSerialId];
-    }
-    
-    NSData *data = [genericCommand data];
-    
-    if ([data respondsToSelector:@selector(length)] &&
-        data.length > 5000) {
+        AVIMWebSocket *webSocket = _webSocket;
         
-        NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorMessageTooLong
-                                               reason:@"The Size of Message Data is Too Large."];
-        
-        if (callback) {
+        if (!webSocket ||
+            webSocket.readyState != AVIMWebSocketStateConnected) {
             
-            callback(genericCommand, nil, error);
-            
-        } else {
-            
-            AVLoggerError(AVLoggerDomainIM, @"Out Command is not valid with Error: %@", error);
-        }
-        
-        return;
-    }
-    
-    if (needResponse) {
-        
-        [self enqueueCommand:genericCommand];
-        
-    } else {
-        
-        if (callback) {
-            
-            callback(genericCommand, nil, nil);
-        }
-    }
-    
-    AVLoggerInfo(AVLoggerDomainIM, LCIM_OUT_COMMAND_LOG_FORMAT, [genericCommand avim_description]);
-    
-    [webSocket send:data];
-}
-
-- (void)enqueueCommand:(AVIMGenericCommand *)command
-{
-    AssertRunInSerialQueue;
-    
-    if (!command) {
-        
-        return;
-    }
-    
-    AVIMCommandCarrier *carrier = [[AVIMCommandCarrier alloc] init];
-    
-    carrier.command = command;
-    
-    [carrier timeoutInSeconds:_timeout];
-    
-    NSNumber *num = @(command.i);
-    
-    [_commandDictionary setObject:carrier forKey:num];
-    
-    [_serialIdArray addObject:num];
-}
-
-- (AVIMGenericCommand *)dequeueCommandWithId:(NSNumber *)num
-{
-    AssertRunInSerialQueue;
-    
-    if (!num) {
-        
-        return nil;
-    }
-    
-    AVIMCommandCarrier *carrier = [_commandDictionary objectForKey:num];
-    
-    if (carrier) {
-        
-        [_commandDictionary removeObjectForKey:num];
-        
-        [_serialIdArray removeObject:num];
-        
-        return carrier.command;
-        
-    } else {
-        
-        return nil;
-    }
-}
-
-- (void)clearQueuedCommandWithError:(NSError *)error
-{
-    AssertRunInSerialQueue;
-    
-    NSArray<AVIMCommandCarrier *> *allCarrierArray = [_commandDictionary allValues];
-    
-    for (AVIMCommandCarrier *carrier in allCarrierArray) {
-        
-        AVIMGenericCommand *outCommand = carrier.command;
-        
-        if (outCommand) {
-            
-            AVIMCommandResultBlock callback = [outCommand callback];
+            NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorConnectionLost
+                                                   reason:@"Websocket Not Connected."];
             
             if (callback) {
                 
-                callback(outCommand, nil, error);
+                callback(genericCommand, nil, error);
+                
+            } else {
+                
+                AVLoggerError(AVLoggerDomainIM, @"Command without Need Response is Dropped with Error: %@", error);
+            }
+            
+            return;
+        }
+        
+        if (needResponse) {
+            
+            /*
+             Set `i` before generate data
+             */
+            
+            genericCommand.i = [self nextSerialId];
+        }
+        
+        NSData *data = [genericCommand data];
+        
+        if ([data respondsToSelector:@selector(length)] &&
+            data.length > 5000) {
+            
+            NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorMessageTooLong
+                                                   reason:@"The Size of Message Data is Too Large."];
+            
+            if (callback) {
+                
+                callback(genericCommand, nil, error);
+                
+            } else {
+                
+                AVLoggerError(AVLoggerDomainIM, @"Out Command is not valid with Error: %@", error);
+            }
+            
+            return;
+        }
+        
+        if (needResponse) {
+
+            AVIMCommandCarrier *carrier = [[AVIMCommandCarrier alloc] init];
+            
+            carrier.command = genericCommand;
+            
+            [carrier timeoutInSeconds:_timeout];
+            
+            NSNumber *num = @(genericCommand.i);
+            
+            [_commandDictionary setObject:carrier forKey:num];
+            
+            [_serialIdArray addObject:num];
+            
+        } else {
+            
+            if (callback) {
+                
+                callback(genericCommand, nil, nil);
             }
         }
-    }
-    
-    [_commandDictionary removeAllObjects];
-    
-    [_serialIdArray removeAllObjects];
+        
+        AVLoggerInfo(AVLoggerDomainIM, LCIM_OUT_COMMAND_LOG_FORMAT, [genericCommand avim_description]);
+        
+        [webSocket send:data];
+    });
+}
+
+- (void)sendCommandWrapper:(LCIMProtobufCommandWrapper *)commandWrapper
+{
+    dispatch_async(_serialQueue, ^{
+        
+        if (!commandWrapper || !commandWrapper.outCommand) {
+            
+            return;
+        }
+        
+        AVIMWebSocket *webSocket = _webSocket;
+        
+        if (!webSocket || webSocket.readyState != AVIMWebSocketStateConnected) {
+            
+            if (_delegate) {
+                
+                NSError *aError = ({
+                    
+                    NSString *reason = @"WebSocket not Connected.";
+                    NSDictionary *userInfo = @{ @"reason" : reason };
+                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                        code:0
+                                    userInfo:userInfo];
+                });
+                
+                commandWrapper.error = aError;
+                
+                [_delegate webSocketWrapper:self commandDidGetCallback:commandWrapper];
+            }
+            
+            return;
+        }
+        
+        if (commandWrapper.callback) {
+            
+            uint16_t serialId = [self nextSerialId];
+            
+            commandWrapper.serialId = serialId;
+            
+            commandWrapper.outCommand.i = serialId;
+        }
+        
+        NSData *data = [commandWrapper.outCommand data];
+        
+        if (data.length > 5000) {
+            
+            if (_delegate) {
+                
+                NSError *aError = ({
+                    NSString *reason = @"The Size of Message Data is Too Large.";
+                    NSDictionary *userInfo = @{ @"reason" : reason };
+                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                        code:0
+                                    userInfo:userInfo];
+                });
+                
+                commandWrapper.error = aError;
+                
+                [_delegate webSocketWrapper:self commandDidGetCallback:commandWrapper];
+            }
+            
+            return;
+        }
+        
+        if (commandWrapper.serialId) {
+            
+            commandWrapper.timeoutDeadlineTimestamp = ({
+                
+                NSTimeInterval timestamp = NSDate.date.timeIntervalSince1970 + _timeout;
+                
+                timestamp;
+            });
+            
+            _commandWrapperDic[@(commandWrapper.serialId)] = commandWrapper;
+            
+            [_serialIdArray addObject:@(commandWrapper.serialId)];
+        }
+        
+        AVLoggerInfo(AVLoggerDomainIM, LCIM_OUT_COMMAND_LOG_FORMAT, [commandWrapper.outCommand avim_description]);
+        
+        [webSocket send:data];
+    });
 }
 
 // MARK: - AVIMWebSocketDelegate
@@ -978,9 +1088,25 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
     
     if (inCommand.i > 0) {
         
-        NSNumber *num = @(inCommand.i);
+        NSNumber *serialId = @(inCommand.i);
         
-        AVIMGenericCommand *outCommand = [self dequeueCommandWithId:num];
+        AVIMGenericCommand *outCommand = ({
+            
+            AVIMGenericCommand *outCommand = nil;
+            
+            AVIMCommandCarrier *carrier = [_commandDictionary objectForKey:serialId];
+            
+            if (carrier) {
+                
+                [_commandDictionary removeObjectForKey:serialId];
+                
+                [_serialIdArray removeObject:serialId];
+                
+                outCommand = carrier.command;
+            }
+            
+            outCommand;
+        });
         
         if (outCommand) {
             
@@ -1017,7 +1143,26 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
             }
         } else {
             
-            AVLoggerError(AVLoggerDomainIM, @"No Out Command Matched Serial ID: %@", num);
+            LCIMProtobufCommandWrapper *commandWrapper = ({
+                
+                LCIMProtobufCommandWrapper *commandWrapper = _commandWrapperDic[serialId];
+                
+                if (commandWrapper) {
+                    
+                    [_commandWrapperDic removeObjectForKey:serialId];
+                    
+                    [_serialIdArray removeObject:serialId];
+                }
+                
+                commandWrapper;
+            });
+            
+            if (commandWrapper && _delegate) {
+                
+                commandWrapper.inCommand = inCommand;
+                
+                [_delegate webSocketWrapper:self commandDidGetCallback:commandWrapper];
+            }
         }
     } else {
         
@@ -1308,45 +1453,77 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         }
     }
     
-    NSMutableArray *timeoutIdArray = [NSMutableArray array];
+    NSMutableArray *timeoutIdArray1 = [NSMutableArray array];
+    
+    NSMutableArray *timeoutIdArray2 = [NSMutableArray array];
     
     for (NSNumber *num in _serialIdArray) {
         
         AVIMCommandCarrier *carrier = [_commandDictionary objectForKey:num];
         
-        if (!carrier) {
+        if (carrier) {
             
-            continue;
-        }
-        
-        if (currentTimestamp <= carrier.timeoutDeadlineTimestamp) {
+            if (currentTimestamp <= carrier.timeoutDeadlineTimestamp) {
+                
+                break;
+            }
             
-            break;
-        }
-
-        [timeoutIdArray addObject:num];
-        
-        AVIMGenericCommand *command = carrier.command;
-        
-        AVIMCommandResultBlock callback = command.callback;
-        
-        if (callback) {
+            [timeoutIdArray1 addObject:num];
             
-            NSString *reason = @"Command Timeout.";
+            AVIMGenericCommand *command = carrier.command;
             
-            NSDictionary *info = @{ @"reason" : reason };
+            AVIMCommandResultBlock callback = command.callback;
             
-            NSError *aError = [NSError errorWithDomain:kLeanCloudIMErrorDomain
-                                                  code:LeanCloudIMErrorCode_CommandTimeout
-                                              userInfo:info];
+            if (callback) {
+                
+                NSString *reason = @"Command Timeout.";
+                
+                NSDictionary *info = @{ @"reason" : reason };
+                
+                NSError *aError = [NSError errorWithDomain:kLeanCloudIMErrorDomain
+                                                      code:LeanCloudIMErrorCode_CommandTimeout
+                                                  userInfo:info];
+                
+                callback(command, nil, aError);
+            }
+        } else {
             
-            callback(command, nil, aError);
+            LCIMProtobufCommandWrapper *commandWrapper = _commandWrapperDic[num];
+            
+            if (!commandWrapper) {
+                
+                [timeoutIdArray2 addObject:num];
+                
+                continue;
+            }
+            
+            if (currentTimestamp <= commandWrapper.timeoutDeadlineTimestamp) {
+                
+                break;
+            }
+            
+            [timeoutIdArray2 addObject:num];
+            
+            if (_delegate) {
+                
+                NSError *aError = ({
+                    NSString *reason = @"Command Timeout.";
+                    NSDictionary *userInfo = @{ @"reason" : reason };
+                    [NSError errorWithDomain:kLeanCloudIMErrorDomain
+                                        code:LeanCloudIMErrorCode_CommandTimeout
+                                    userInfo:userInfo];
+                });
+                
+                commandWrapper.error = aError;
+                
+                [_delegate webSocketWrapper:self commandDidGetCallback:commandWrapper];
+            }
         }
     }
     
-    [_commandDictionary removeObjectsForKeys:timeoutIdArray];
-    
-    [_serialIdArray removeObjectsInArray:timeoutIdArray];
+    [_commandDictionary removeObjectsForKeys:timeoutIdArray1];
+    [_commandWrapperDic removeObjectsForKeys:timeoutIdArray2];
+    [_serialIdArray removeObjectsInArray:[timeoutIdArray1 arrayByAddingObjectsFromArray:timeoutIdArray2]];
 }
 
 // MARK: - Misc
@@ -1394,7 +1571,38 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
     /*
      Clear Queued Command
      */
-    [self clearQueuedCommandWithError:error];
+    NSArray<AVIMCommandCarrier *> *allCarrierArray = [_commandDictionary allValues];
+    
+    for (AVIMCommandCarrier *carrier in allCarrierArray) {
+        
+        AVIMGenericCommand *outCommand = carrier.command;
+        
+        if (outCommand) {
+            
+            AVIMCommandResultBlock callback = [outCommand callback];
+            
+            if (callback) {
+                
+                callback(outCommand, nil, error);
+            }
+        }
+    }
+    
+    if (_delegate) {
+        
+        NSArray<LCIMProtobufCommandWrapper *> *allCommandWrapper = [_commandWrapperDic allValues];
+        
+        for (LCIMProtobufCommandWrapper *item in allCommandWrapper) {
+            
+            item.error = error;
+            
+            [_delegate webSocketWrapper:self commandDidGetCallback:item];
+        }
+    }
+    
+    [_commandDictionary removeAllObjects];
+    [_commandWrapperDic removeAllObjects];
+    [_serialIdArray removeAllObjects];
 }
 
 - (dispatch_source_t)newTimerSourceWithInterval:(NSTimeInterval)interval
