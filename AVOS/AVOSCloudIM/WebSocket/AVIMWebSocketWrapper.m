@@ -914,6 +914,8 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
             [_serialIdArray addObject:@(commandWrapper.serialId)];
         }
         
+        AVLoggerInfo(AVLoggerDomainIM, LCIM_OUT_COMMAND_LOG_FORMAT, [commandWrapper.outCommand avim_description]);
+        
         [webSocket send:data];
     });
 }
