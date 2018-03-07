@@ -61,6 +61,8 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
     NSError *_error;
 }
 
+@property (nonatomic, copy) void (^callback)(LCIMProtobufCommandWrapper *commandWrapper);
+
 @property (nonatomic, assign) uint16_t serialId;
 
 @property (nonatomic, assign) NSTimeInterval timeoutDeadlineTimestamp;
@@ -68,6 +70,24 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 @end
 
 @implementation LCIMProtobufCommandWrapper
+
+- (BOOL)hasCallback
+{
+    return _callback ? true : false;
+}
+
+- (void)executeCallbackAndSetItToNil
+{
+    if (_callback) {
+        
+        _callback(self);
+        
+        /*
+         set to nil to avoid cycle retain
+         */
+        _callback = nil;
+    }
+}
 
 - (void)setError:(NSError *)error
 {

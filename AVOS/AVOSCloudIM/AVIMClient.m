@@ -1349,7 +1349,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         
         if (_status != AVIMClientStatusOpened) {
             
-            if (commandWrapper.callback) {
+            if ([commandWrapper hasCallback]) {
                 
                 NSError *aError = ({
                     NSString *reason = @"Client Not Open when Send a Command.";
@@ -1361,10 +1361,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                 
                 commandWrapper.error = aError;
                 
-                commandWrapper.callback(commandWrapper);
-                
-                /* set to nil to avoid cycle retain */
-                commandWrapper.callback = nil;
+                [commandWrapper executeCallbackAndSetItToNil];
             }
             
             return;
@@ -1405,12 +1402,9 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 {
     [self addOperationToInternalSerialQueueWithBlock:^(AVIMClient *client) {
         
-        if (command.callback) {
+        if ([command hasCallback]) {
             
-            command.callback(command);
-            
-            /* set to nil to avoid cycle retain */
-            command.callback = nil;
+            [command executeCallbackAndSetItToNil];
             
         } else if (command.error) {
             

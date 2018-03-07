@@ -49,12 +49,16 @@
 
 @interface LCIMProtobufCommandWrapper : NSObject
 
-@property (nonatomic, copy) void (^callback)(LCIMProtobufCommandWrapper *commandWrapper);
-
 @property (nonatomic, strong) AVIMGenericCommand *outCommand;
 
 @property (nonatomic, strong) AVIMGenericCommand *inCommand;
 
 @property (nonatomic, strong) NSError *error;
+
+- (void)setCallback:(void (^)(LCIMProtobufCommandWrapper *))callback;
+
+- (BOOL)hasCallback;
+
+- (void)executeCallbackAndSetItToNil;
 
 @end
