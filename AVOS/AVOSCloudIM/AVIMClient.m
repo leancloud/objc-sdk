@@ -136,7 +136,8 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         
         LCIMSessionConfigBitmap = (
                                    LCIMSessionConfigOptions_Patch |
-                                   LCIMSessionConfigOptions_TempConv
+                                   LCIMSessionConfigOptions_TempConv |
+                                   LCIMSessionConfigOptions_TransientACK
                                    );
         
 #ifdef DEBUG
@@ -392,11 +393,11 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     return _internalSerialQueue;
 }
 
-- (void)addOperationToInternalSerialQueueWithBlock:(void (^)(void))block
+- (void)addOperationToInternalSerialQueueWithBlock:(void (^)(AVIMClient *client))block
 {
     dispatch_async(_internalSerialQueue, ^{
         
-        block();
+        block(self);
     });
 }
 
@@ -1342,6 +1343,37 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     });
 }
 
+- (void)sendCommandWrapper:(LCIMProtobufCommandWrapper *)commandWrapper
+{
+    [self addOperationToInternalSerialQueueWithBlock:^(AVIMClient *client) {
+        
+        if (_status != AVIMClientStatusOpened) {
+            
+            if (commandWrapper.callback) {
+                
+                NSError *aError = ({
+                    NSString *reason = @"Client Not Open when Send a Command.";
+                    NSDictionary *userInfo = @{ @"reason" : reason };
+                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                        code:0
+                                    userInfo:userInfo];
+                });
+                
+                commandWrapper.error = aError;
+                
+                commandWrapper.callback(commandWrapper);
+                
+                /* set to nil to avoid cycle retain */
+                commandWrapper.callback = nil;
+            }
+            
+            return;
+        }
+        
+        [client->_socketWrapper sendCommandWrapper:commandWrapper];
+    }];
+}
+
 - (void)_sendCommand:(AVIMGenericCommand *)command
 {
     AssertRunInIMClientQueue;
@@ -1371,7 +1403,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (void)webSocketWrapper:(AVIMWebSocketWrapper *)socket commandDidGetCallback:(LCIMProtobufCommandWrapper *)command
 {
-    [self addOperationToInternalSerialQueueWithBlock:^{
+    [self addOperationToInternalSerialQueueWithBlock:^(AVIMClient *client) {
         
         if (command.callback) {
             

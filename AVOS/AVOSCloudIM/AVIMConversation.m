@@ -1283,45 +1283,43 @@ static dispatch_queue_t messageCacheOperationQueue;
         return;
     }
     
-    dispatch_async(client.internalSerialQueue, ^{
+    [client addOperationToInternalSerialQueueWithBlock:^(AVIMClient *client) {
         
-        BOOL will = option.will;
-        BOOL transient = option.transient;
-        BOOL receipt = option.receipt;
-
+        BOOL isWillMessage = option.will;
+        BOOL needReceipt = option.receipt;
+        BOOL isTransientMessage = option.transient;
+        AVIMMessagePriority messagePriority = option.priority;
+        NSDictionary *pushData = option.pushData;
+        
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
-        genericCommand.needResponse = YES;
+        
         genericCommand.cmd = AVIMCommandType_Direct;
-
-        if (option.priority > 0) {
+        
+        if (messagePriority > 0) {
             if (self.transient) {
-                genericCommand.priority = option.priority;
+                genericCommand.priority = messagePriority;
             } else {
                 AVLoggerInfo(AVLoggerDomainIM, @"Message priority has no effect in non-transient conversation.");
             }
         }
-
+        
         AVIMDirectCommand *directCommand = [[AVIMDirectCommand alloc] init];
         [genericCommand avim_addRequiredKeyWithCommand:directCommand];
-        [genericCommand avim_addRequiredKeyForDirectMessageWithMessage:message transient:NO];
-
-        if (will) {
+        [genericCommand avim_addRequiredKeyForDirectMessageWithMessage:message transient:isTransientMessage];
+        
+        if (isWillMessage) {
             directCommand.will = YES;
         }
-        if (transient) {
-            directCommand.transient = YES;
-            genericCommand.needResponse = NO;
-        }
-        if (receipt) {
+        if (needReceipt) {
             directCommand.r = YES;
         }
-        if (option.pushData) {
-            if (option.transient || self.transient) {
+        if (pushData) {
+            if (isTransientMessage || self.transient) {
                 AVLoggerInfo(AVLoggerDomainIM, @"Push data cannot applied to transient message or transient conversation.");
             } else {
                 NSError *error = nil;
-                NSData  *data  = [NSJSONSerialization dataWithJSONObject:option.pushData options:0 error:&error];
-
+                NSData  *data  = [NSJSONSerialization dataWithJSONObject:pushData options:0 error:&error];
+                
                 if (error) {
                     AVLoggerInfo(AVLoggerDomainIM, @"Push data cannot be serialize to JSON string. Error: %@.", error.localizedDescription);
                 } else {
@@ -1335,37 +1333,82 @@ static dispatch_queue_t messageCacheOperationQueue;
         if (message.mentionList.count) {
             directCommand.mentionPidsArray = [message.mentionList mutableCopy];
         }
-
-        [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
-            AVIMDirectCommand *directOutCommand = outCommand.directMessage;
-            AVIMMessage *message = outCommand.directMessage.message;
+        
+        if (isTransientMessage) {
             
-            if (error) {
-                message.status = AVIMMessageStatusFailed;
-            } else {
-                message.status = AVIMMessageStatusSent;
+            LCIMProtobufCommandWrapper *commandWrapper = [[LCIMProtobufCommandWrapper alloc] init];
+            
+            commandWrapper.outCommand = genericCommand;
+            
+            [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
                 
-                AVIMAckCommand *ackInCommand = inCommand.ackMessage;
-                message.sendTimestamp = ackInCommand.t;
-                message.messageId = ackInCommand.uid;
-                if (!transient) {
+                if (commandWrapper.error) {
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        
+                        callback(false, commandWrapper.error);
+                    });
+                    
+                    return;
+                }
+                
+                if (!(commandWrapper.inCommand.ackMessage)) {
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        
+                        NSError *aError = ({
+                            NSString *reason = @"Not get a ACK from In Command.";
+                            NSDictionary *userInfo = @{ @"reason" : reason };
+                            [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                                code:0
+                                            userInfo:userInfo];
+                        });
+                        
+                        callback(false, aError);
+                    });
+                    
+                    return;
+                }
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    callback(true, nil);
+                });
+            }];
+            
+            [client sendCommandWrapper:commandWrapper];
+            
+        } else {
+            
+            genericCommand.needResponse = YES;
+            [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
+                
+                AVIMDirectCommand *directOutCommand = outCommand.directMessage;
+                AVIMMessage *message = outCommand.directMessage.message;
+                
+                if (error) {
+                    message.status = AVIMMessageStatusFailed;
+                } else {
+                    message.status = AVIMMessageStatusSent;
+                    
+                    AVIMAckCommand *ackInCommand = inCommand.ackMessage;
+                    message.sendTimestamp = ackInCommand.t;
+                    message.messageId = ackInCommand.uid;
                     self.lastMessage = message;
-                }
-                if (!directCommand.transient && client.messageQueryCacheEnabled) {
-                    [[self messageCacheStore] insertOrUpdateMessage:message withBreakpoint:NO];
-                }
-                if (!transient) {
+                    if (client.messageQueryCacheEnabled) {
+                        [[self messageCacheStore] insertOrUpdateMessage:message withBreakpoint:NO];
+                    }
                     if (directOutCommand.r) {
                         [client stageMessage:message];
                     }
                     [self updateConversationAfterSendMessage:message];
                 }
-            }
-            [AVIMBlockHelper callBooleanResultBlock:callback error:error];
-        }];
-        
-        [client sendCommand:genericCommand];
-    });
+                [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+            }];
+            
+            [client sendCommand:genericCommand];
+        }
+    }];
 }
 
 - (AVIMGenericCommand *)patchCommandWithOldMessage:(AVIMMessage *)oldMessage

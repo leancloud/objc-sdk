@@ -29,6 +29,8 @@
 
 - (void)sendCommand:(AVIMGenericCommand *)command;
 
+- (void)sendCommandWrapper:(LCIMProtobufCommandWrapper *)commandWrapper;
+
 - (void)stageMessage:(AVIMMessage *)message;
 - (void)unstageMessageForId:(NSString *)messageId;
 - (AVIMMessage *)stagedMessageForId:(NSString *)messageId;
@@ -45,7 +47,7 @@
 - (dispatch_queue_t)internalSerialQueue
 __attribute__((warn_unused_result));
 
-- (void)addOperationToInternalSerialQueueWithBlock:(void (^)(void))block;
+- (void)addOperationToInternalSerialQueueWithBlock:(void (^)(AVIMClient *client))block;
 
 /*
  Signature
