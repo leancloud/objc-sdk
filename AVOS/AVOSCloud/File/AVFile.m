@@ -453,7 +453,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     
     [self internalSyncLock:^{
         
-        objectId = [AVFile decodingIDFromDic:_rawJSONData];
+        objectId = [AVFile decodingObjectIdFromDic:_rawJSONData];
     }];
     
     return objectId;
@@ -477,7 +477,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 
     [self internalSyncLock:^{
         
-        metaData = [NSDictionary lc__decodingWithKey:kLCFile_metaData fromDic:_rawJSONData];
+        metaData = [AVFile decodingMetaDataFromDic:_rawJSONData];
     }];
     
     return metaData;
@@ -502,7 +502,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 {
     [self internalSyncLock:^{
         
-        NSMutableDictionary *metaData = [[NSDictionary lc__decodingWithKey:kLCFile_metaData fromDic:_rawJSONData] mutableCopy];
+        NSMutableDictionary *metaData = [[AVFile decodingMetaDataFromDic:_rawJSONData] mutableCopy];
         
         if (metaData) {
             
@@ -535,7 +535,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 {
     [self internalSyncLock:^{
         
-        NSMutableDictionary *metaData = [[NSDictionary lc__decodingWithKey:kLCFile_metaData fromDic:_rawJSONData] mutableCopy];
+        NSMutableDictionary *metaData = [[AVFile decodingMetaDataFromDic:_rawJSONData] mutableCopy];
         
         if (metaData) {
             
@@ -1125,7 +1125,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         rawJSONData = _rawJSONData.copy;
     }];
     
-    if (![AVFile decodingIDFromDic:rawJSONData]) {
+    if (![AVFile decodingObjectIdFromDic:rawJSONData]) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -1167,7 +1167,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     
     NSString *metaDataSource = ({
         
-        NSDictionary *metaData = [NSDictionary lc__decodingWithKey:kLCFile_metaData fromDic:rawJSONData];
+        NSDictionary *metaData = [AVFile decodingMetaDataFromDic:rawJSONData];
         
         NSString *source = [NSString lc__decodingWithKey:kLCFile___source fromDic:metaData];
         
@@ -1364,7 +1364,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         dic = _rawJSONData.copy;
     }];
     
-    if (![AVFile decodingIDFromDic:dic]) {
+    if (![AVFile decodingObjectIdFromDic:dic]) {
         
         return nil;
     }
@@ -1375,7 +1375,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     
     NSString *metaDataSource = ({
         
-        NSDictionary *metaData = [NSDictionary lc__decodingWithKey:kLCFile_metaData fromDic:dic];
+        NSDictionary *metaData = [AVFile decodingMetaDataFromDic:dic];
         
         NSString *source = [NSString lc__decodingWithKey:kLCFile___source fromDic:metaData];
         
@@ -1654,7 +1654,9 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     AVFile_EnabledLock = isEnabledLock;
 }
 
-+ (NSString *)decodingIDFromDic:(NSDictionary *)dic
+// MARK: - Code for Compatibility
+
++ (NSString *)decodingObjectIdFromDic:(NSDictionary *)dic
 {
     /* @note For compatibility, should decoding multiple keys ... ... */
     
@@ -1667,6 +1669,19 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     if (value) { return value; }
     
     value = [NSString lc__decodingWithKey:kLCFile_id fromDic:dic];
+    
+    return value;
+}
+
++ (NSDictionary *)decodingMetaDataFromDic:(NSDictionary *)dic
+{
+    /* @note For compatibility, should decoding multiple keys ... ... */
+    
+    NSDictionary *value = [NSDictionary lc__decodingWithKey:kLCFile_metaData fromDic:dic];
+    
+    if (value) { return value; }
+    
+    value = [NSDictionary lc__decodingWithKey:kLCFile_metadata fromDic:dic];
     
     return value;
 }

@@ -15,7 +15,12 @@ static NSString * const kLCFile_name = @"name";
 static NSString * const kLCFile___type = @"__type";
 static NSString * const kLCFile_url = @"url";
 static NSString * const kLCFile_provider = @"provider";
+
+//### Meta Data of File Object ###//
+/// @note Totally, has two Keys to identify 'metaData' in history, @"metaData" is the latest Key.
 static NSString * const kLCFile_metaData = @"metaData";
+static NSString * const kLCFile_metadata = @"metadata";
+//### Meta Data of File Object ###//
 
 //## metaData : {} ##//
 static NSString * const kLCFile_owner = @"owner";
@@ -26,12 +31,12 @@ static NSString * const kLCFile___source = @"__source";
 
 static NSString * const kLCFile_bucket = @"bucket";
 
-//### ID of File Object ###//
-/// @note Has three Keys to identify 'ID', for compatibility.
+//### Object ID of File Object ###//
+/// @note Totally, has three Keys to identify 'objectId' in history, @"objectId" is the latest Key.
 static NSString * const kLCFile_objectId = @"objectId";
 static NSString * const kLCFile_objId = @"objId";
 static NSString * const kLCFile_id = @"id";
-//### ID of File Object ###//
+//### Object ID of File Object ###//
 
 static NSString * const kLCFile_createdAt = @"createdAt";
 static NSString * const kLCFile_updatedAt = @"updatedAt";
