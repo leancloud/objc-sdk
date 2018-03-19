@@ -27,28 +27,6 @@ static NSString * AVFile_CompactUUID()
     return [AVUtils generateCompactUUID];
 }
 
-static NSString * AVFile_MD5ForURLString(NSString *URLString)
-{
-    NSData *data = [URLString dataUsingEncoding:NSUTF8StringEncoding];
-    
-    if (!data || data.length == 0) { return nil; }
-    
-    const char *str = [data bytes];
-    
-    unsigned char result[CC_MD5_DIGEST_LENGTH];
-    
-    CC_MD5(str, (CC_LONG)data.length, result);
-    
-    NSMutableString *hash = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH];
-    
-    for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
-        
-        [hash appendFormat:@"%02X", result[i]];
-    }
-    
-    return [hash lowercaseString];
-}
-
 static NSString * AVFile_ObjectPath(NSString *objectId)
 {
     return (objectId && objectId.length > 0) ? [@"classes/_file" stringByAppendingPathComponent:objectId] : nil;
@@ -682,20 +660,21 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         return;
     }
     
-    __block NSError *uploadingError = ({
-        
-        NSString *reason = @"File is in uploading, Can't do repeated upload operation.";
-        NSDictionary *userInfo = @{ @"reason" : reason };
-        [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                            code:0
-                        userInfo:userInfo];
-    });
+    __block NSError *uploadingError = nil;
     
     [self internalSyncLock:^{
         
-        if (!_uploadOption) {
+        if (_uploadOption) {
             
-            uploadingError = nil;
+            uploadingError = ({
+                
+                NSString *reason = @"File is in uploading, Can't do repeated upload operation.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+        } else {
             
             _uploadOption = @(uploadOption);
         }
@@ -727,7 +706,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
         id progress = (uploadProgressBlock ? uploadProgress_block : nil);
         
-        [self uploadLocalDataWithData:data localPath:localPath progress:progress completionHandler:^(BOOL succeeded, NSError *error, NSString *key) {
+        [self uploadLocalDataWithData:data localPath:localPath progress:progress completionHandler:^(BOOL succeeded, NSError *error) {
             
             __block AVFileUploadOption option = 0;
             
@@ -740,11 +719,9 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
             
             BOOL isIgnoringCachingData = option & AVFileUploadOptionIgnoringCachingData;
             
-            if (succeeded && !isIgnoringCachingData && key) {
+            if (succeeded && !isIgnoringCachingData) {
                 
-                NSString *persistenceCachePath = [self persistentCachePathByKey:key
-                                                                      URLString:nil
-                                                                         source:nil];
+                NSString *persistenceCachePath = [self persistentCachePath];
                 
                 if (persistenceCachePath) {
                     
@@ -838,10 +815,8 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 - (void)uploadLocalDataWithData:(NSData *)data
                       localPath:(NSString *)localPath
                        progress:(void (^)(NSInteger number))uploadProgressBlock
-              completionHandler:(void (^)(BOOL succeeded, NSError *error, NSString *key))completionHandler
+              completionHandler:(void (^)(BOOL succeeded, NSError *error))completionHandler
 {
-    NSString *key = nil;
-    
     NSMutableDictionary *parameters = ({
         
         __block NSMutableDictionary *dic = nil;
@@ -851,9 +826,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
             dic = [_rawJSONData mutableCopy];
         }];
         
-        key = AVFile_CompactUUID();
-        
-        dic[kLCFile_key] = key;
+        dic[kLCFile_key] = AVFile_CompactUUID();
         
         dic;
     });
@@ -888,7 +861,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
         if (error) {
             
-            completionHandler(false, error, nil);
+            completionHandler(false, error);
             
             return;
         }
@@ -915,7 +888,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
                 
                 fileCallback_block(false);
                 
-                completionHandler(false, error, nil);
+                completionHandler(false, error);
                 
                 return;
             }
@@ -929,7 +902,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
                 _rawJSONData = parameters;
             }];
             
-            completionHandler(true, nil, key);
+            completionHandler(true, nil);
         };
         
         id progress = (uploadProgressBlock ? uploadProgress_block : nil);
@@ -1118,32 +1091,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         return;
     }
     
-    __block NSDictionary *rawJSONData = nil;
-    
-    [self internalSyncLock:^{
-        
-        rawJSONData = _rawJSONData.copy;
-    }];
-    
-    if (![AVFile decodingObjectIdFromDic:rawJSONData]) {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            NSError *aError = ({
-                NSString *reason = @"`objectId` is invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
-            });
-            
-            completionHandler(nil, aError);
-        });
-        
-        return;
-    }
-    
-    NSString *URLString = [NSString lc__decodingWithKey:kLCFile_url fromDic:rawJSONData];
+    NSString *URLString = [self url];
     
     if (!URLString || URLString.length == 0) {
         
@@ -1163,20 +1111,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         return;
     }
     
-    NSString *key = [NSString lc__decodingWithKey:kLCFile_key fromDic:rawJSONData];
-    
-    NSString *metaDataSource = ({
-        
-        NSDictionary *metaData = [AVFile decodingMetaDataFromDic:rawJSONData];
-        
-        NSString *source = [NSString lc__decodingWithKey:kLCFile___source fromDic:metaData];
-        
-        source;
-    });
-    
-    NSString *permanentLocationPath = [self persistentCachePathByKey:key
-                                                           URLString:URLString
-                                                              source:metaDataSource];
+    NSString *permanentLocationPath = [self persistentCachePath];
     
     if (!permanentLocationPath) {
         
@@ -1357,63 +1292,14 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 
 - (NSString *)persistentCachePath
 {
-    __block NSDictionary *dic = nil;
+    NSString *objectId = [self objectId];
     
-    [self internalSyncLock:^{
-        
-        dic = _rawJSONData.copy;
-    }];
-    
-    if (![AVFile decodingObjectIdFromDic:dic]) {
+    if (!objectId) {
         
         return nil;
     }
     
-    NSString *key = [NSString lc__decodingWithKey:kLCFile_key fromDic:dic];
-    
-    NSString *url = [NSString lc__decodingWithKey:kLCFile_url fromDic:dic];
-    
-    NSString *metaDataSource = ({
-        
-        NSDictionary *metaData = [AVFile decodingMetaDataFromDic:dic];
-        
-        NSString *source = [NSString lc__decodingWithKey:kLCFile___source fromDic:metaData];
-        
-        source;
-    });
-    
-    NSString *persistentCachePath = [self persistentCachePathByKey:key
-                                                         URLString:url
-                                                            source:metaDataSource];
-    
-    return persistentCachePath;
-}
-
-- (NSString *)persistentCachePathByKey:(NSString *)key
-                             URLString:(NSString *)URLString
-                                source:(NSString *)source
-{
-    NSString *directory = nil;
-    
-    NSString *pathComponent = nil;
-    
-    if (key) {
-        
-        directory = AVFile_PersistentCacheDirectory();
-        
-        pathComponent = key;
-    }
-    else if (URLString && source && [source isEqualToString:@"external"]) {
-        
-        directory = [AVFile_PersistentCacheDirectory() stringByAppendingPathComponent:@"__External__"];
-        
-        pathComponent = AVFile_MD5ForURLString(URLString);
-    }
-    
-    if (!directory || !pathComponent) {
-        
-        return nil;
-    }
+    NSString *directory = AVFile_PersistentCacheDirectory();
     
     NSError *createDirectoryError = ({
         
@@ -1432,7 +1318,9 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         return nil;
     }
     
-    return [directory stringByAppendingPathComponent:pathComponent];
+    NSString *persistentCachePath = [directory stringByAppendingPathComponent:objectId];
+    
+    return persistentCachePath;
 }
 
 // MARK: - Delete
