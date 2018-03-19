@@ -12,7 +12,7 @@ class LCIMTestCaseQuery: LCIMTestBase {
     
     func testFindTemporaryConversation() {
         
-        guard let client: AVIMClient = LCIMTestBase.baseGlobalClient else {
+        guard let client: AVIMClient = LCIMTestBase.defaultGlobalClient else {
             
             XCTFail()
             

@@ -17,7 +17,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
     override class func setUp() {
         super.setUp()
         
-        guard let client: AVIMClient = LCIMTestBase.baseGlobalClient else {
+        guard let client: AVIMClient = LCIMTestBase.defaultGlobalClient else {
             
             XCTFail()
             
@@ -440,7 +440,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
     
     func testServiceConversation_subscribe_unsubscrib() {
         
-        guard let client: AVIMClient = type(of: self).baseGlobalClient else {
+        guard let client: AVIMClient = type(of: self).defaultGlobalClient else {
             
             XCTFail()
             
