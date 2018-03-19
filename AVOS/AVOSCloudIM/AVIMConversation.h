@@ -60,21 +60,6 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
     AVIMMessageQueryDirectionFromOldToNew
 };
 
-/**
- A protocol defines callbacks of events related to conversation.
- */
-@protocol AVIMConversationDelegate <NSObject>
-
-/**
- Callback which called when a message has been updated.
-
- @param conversation The conversation which the message belongs to.
- @param message      The new message which has been updated.
- */
-- (void)conversation:(AVIMConversation *)conversation messageHasBeenUpdated:(AVIMMessage *)message;
-
-@end
-
 @interface AVIMConversation : NSObject
 
 /**
@@ -204,20 +189,6 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  @return Exception.
  */
 - (instancetype)init NS_UNAVAILABLE;
-
-/**
- Add a delegate which listens conversation events.
-
- @param delegate An object which listens conversation events.
- */
-- (void)addDelegate:(id<AVIMConversationDelegate>)delegate;
-
-/**
- Remove a delegate which is listening conversation events.
-
- @param delegate The delegate object you want to remove.
- */
-- (void)removeDelegate:(id<AVIMConversationDelegate>)delegate;
 
 /**
  * Add custom property for conversation.

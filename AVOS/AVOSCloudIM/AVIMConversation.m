@@ -223,8 +223,6 @@ static dispatch_queue_t messageCacheOperationQueue;
     _properties = [NSMutableDictionary dictionary];
     _propertiesForUpdate = [NSMutableDictionary dictionary];
     _rawDataDic = [NSDictionary dictionary];
-
-    _delegates = [NSHashTable weakObjectsHashTable];
     
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
 
@@ -247,18 +245,6 @@ static dispatch_queue_t messageCacheOperationQueue;
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)addDelegate:(id<AVIMConversationDelegate>)delegate {
-    @synchronized(_delegates) {
-        [_delegates addObject:delegate];
-    }
-}
-
-- (void)removeDelegate:(id<AVIMConversationDelegate>)delegate {
-    @synchronized(_delegates) {
-        [_delegates removeObject:delegate];
-    }
 }
 
 - (void)propertyDidUpdate:(NSNotification *)notification {
@@ -343,9 +329,6 @@ static dispatch_queue_t messageCacheOperationQueue;
 
     if ([message.messageId isEqualToString:self.lastMessage.messageId])
         self.lastMessage = message;
-
-    [self callDelegateMethod:@selector(conversation:messageHasBeenUpdated:)
-               withArguments:@[self, message]];
 }
 
 - (void)didReceiveMessageNotification:(NSNotification *)notification {
@@ -379,16 +362,6 @@ static dispatch_queue_t messageCacheOperationQueue;
         /* Increase unread messages count. */
         self.unreadMessagesCount += 1;
         [self postUpdateNotificationForKey:NSStringFromSelector(@selector(unreadMessagesCount))];
-    }
-}
-
-- (void)callDelegateMethod:(SEL)method withArguments:(NSArray *)arguments {
-    NSArray<id<AVIMConversationDelegate>> *delegates = [self.delegates allObjects];
-
-    for (id<AVIMConversationDelegate> delegate in delegates) {
-        [AVIMRuntimeHelper callMethodInMainThreadWithTarget:delegate
-                                                   selector:method
-                                                  arguments:arguments];
     }
 }
 
@@ -1523,7 +1496,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 }
 
 - (void)recallMessage:(AVIMMessage *)oldMessage
-             callback:(nonnull void (^)(BOOL, NSError * _Nullable, AVIMRecalledMessage * _Nullable))callback
+             callback:(void (^)(BOOL, NSError * _Nullable, AVIMRecalledMessage * _Nullable))callback
 {
     AVIMClient *client = self.imClient;
     
