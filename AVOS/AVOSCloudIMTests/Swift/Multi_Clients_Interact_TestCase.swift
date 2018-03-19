@@ -77,12 +77,12 @@ class Multi_Clients_Interact_TestCase: LCIMTestBase {
         super.tearDown()
     }
     
-    func test_recall_message() {
+    func createUniqueConversationByClient1() -> AVIMConversation? {
         
         guard let client1: AVIMClient_Wrapper = type(of: self).client1,
-            let client2: AVIMClient_Wrapper = type(of: self).client2 else {
-                XCTFail()
-                return
+            let client2: AVIMClient_Wrapper = type(of: self).client2 else
+        {
+            return nil
         }
         
         var conversation: AVIMConversation?
@@ -91,7 +91,12 @@ class Multi_Clients_Interact_TestCase: LCIMTestBase {
             
             semaphore.increment()
             
-            client1.client.createConversation(withName: "\(file)\(#line)", clientIds: [client1.client.clientId, client2.client.clientId], attributes: nil, options: [.unique], callback: { (conv: AVIMConversation?, error: Error?) in
+            client1.client.createConversation(
+                withName: "\(file)\(#line)",
+                clientIds: [client1.client.clientId, client2.client.clientId],
+                attributes: nil,
+                options: [.unique]
+            ) { (conv: AVIMConversation?, error: Error?) in
                 
                 semaphore.decrement()
                 
@@ -104,14 +109,25 @@ class Multi_Clients_Interact_TestCase: LCIMTestBase {
                     
                     conversation = conv
                 }
-            })
+            }
             
         }, failure: {
             
             XCTFail("timeout")
         })
         
-        guard let _conversation: AVIMConversation = conversation else {
+        return conversation
+    }
+    
+    func test_recall_message() {
+        
+        guard let client1: AVIMClient_Wrapper = type(of: self).client1,
+            let client2: AVIMClient_Wrapper = type(of: self).client2 else {
+                XCTFail()
+                return
+        }
+        
+        guard let uniqueConversation: AVIMConversation = self.createUniqueConversationByClient1() else {
             XCTFail()
             return
         }
@@ -124,7 +140,7 @@ class Multi_Clients_Interact_TestCase: LCIMTestBase {
             
             semaphore.increment()
             
-            _conversation.send(sendingMessage, callback: { (succeeded: Bool, error: Error?) in
+            uniqueConversation.send(sendingMessage, callback: { (succeeded: Bool, error: Error?) in
                 
                 semaphore.decrement()
                 
@@ -149,9 +165,9 @@ class Multi_Clients_Interact_TestCase: LCIMTestBase {
             return
         }
         
-        _conversation.add(client1)
+        uniqueConversation.add(client1)
         
-        _conversation.add(client2)
+        uniqueConversation.add(client2)
         
         self.runloopTestingAsync(timeout: 60, async: { (semaphore: RunLoopSemaphore) in
             
@@ -175,7 +191,7 @@ class Multi_Clients_Interact_TestCase: LCIMTestBase {
             
             semaphore.increment()
             
-            _conversation.recall(_message, callback: { (succeeded: Bool, error: Error?, recalledMessage: AVIMMessage?) in
+            uniqueConversation.recall(_message, callback: { (succeeded: Bool, error: Error?, recalledMessage: AVIMMessage?) in
                 
                 semaphore.decrement()
                 
@@ -193,6 +209,103 @@ class Multi_Clients_Interact_TestCase: LCIMTestBase {
         })
     }
     
+    func test_sendReceive_imageMessage() {
+        
+        guard let _: AVIMClient_Wrapper = type(of: self).client1,
+            let client2: AVIMClient_Wrapper = type(of: self).client2 else {
+                XCTFail()
+                return
+        }
+        
+        guard let uniqueConversation: AVIMConversation = self.createUniqueConversationByClient1() else {
+            XCTFail()
+            return
+        }
+        
+        var receiveTypedMessage: AVIMTypedMessage!
+        
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            
+            let imageMessage: AVIMImageMessage = {
+                
+                let filePath: String = Bundle(for: type(of: self)).path(forResource: "testImage", ofType: "png")!
+                
+                let url: URL = URL.init(fileURLWithPath: filePath)
+                
+                let data: Data = try! Data.init(contentsOf: url)
+                
+                let file: AVFile = AVFile(data: data, name: "testImage.png")
+                
+                let imageMessage: AVIMImageMessage = AVIMImageMessage(text: "test", file: file, attributes: nil)
+                
+                return imageMessage
+            }()
+            
+            semaphore.increment()
+            
+            client2.didReceiveTypedMessageClosure = { (conv: AVIMConversation, message: AVIMTypedMessage) in
+                
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertEqual(message.messageId, imageMessage.messageId)
+                
+                if message.messageId == imageMessage.messageId {
+                    
+                    receiveTypedMessage = message
+                }
+            }
+            
+            semaphore.increment()
+            
+            uniqueConversation.send(imageMessage, callback: { (succeeded: Bool, error: Error?) in
+                
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                
+                XCTAssertNotNil(imageMessage.messageId)
+            })
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
+        
+        guard receiveTypedMessage != nil, receiveTypedMessage.file != nil else {
+            XCTFail()
+            return
+        }
+        
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            
+            semaphore.increment()
+            
+            receiveTypedMessage.file?.download(completionHandler: { (url: URL?, error: Error?) in
+                
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
+
+                XCTAssertNotNil(url)
+                XCTAssertNil(error)
+                
+                if let url: URL = url {
+                    
+                    XCTAssertTrue(FileManager.default.fileExists(atPath: url.path))
+                }
+            })
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
+    }
+    
 }
 
 class AVIMClient_Wrapper: NSObject {
@@ -200,6 +313,8 @@ class AVIMClient_Wrapper: NSObject {
     let client: AVIMClient
     
     var messageHasBeenUpdatedClosure: ((AVIMConversation, AVIMMessage) -> Void)?
+    
+    var didReceiveTypedMessageClosure: ((AVIMConversation, AVIMTypedMessage) -> Void)?
     
     init(with clientId: String) {
         
@@ -221,6 +336,10 @@ extension AVIMClient_Wrapper: AVIMClientDelegate, AVIMConversationDelegate {
     
     func conversation(_ conversation: AVIMConversation, messageHasBeenUpdated message: AVIMMessage) {
         self.messageHasBeenUpdatedClosure?(conversation, message)
+    }
+    
+    func conversation(_ conversation: AVIMConversation, didReceive message: AVIMTypedMessage) {
+        self.didReceiveTypedMessageClosure?(conversation, message)
     }
     
 }

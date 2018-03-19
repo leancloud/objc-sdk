@@ -911,7 +911,7 @@ class AVFile_TestCase: LCTestBase {
             
             AVFile.clearAllPersistentCache()
             
-            XCTAssertFalse(FileManager.default.fileExists(atPath: URL.init(fileURLWithPath: cachedPath).deletingLastPathComponent().deletingLastPathComponent().path))
+            XCTAssertFalse(FileManager.default.fileExists(atPath: URL.init(fileURLWithPath: cachedPath).deletingLastPathComponent().path))
         }
         
         t3()
