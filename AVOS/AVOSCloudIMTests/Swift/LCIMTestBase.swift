@@ -15,7 +15,7 @@ class LCIMTestBase: LCTestBase {
     static let customTestRTMServer: String = "wss://rtm51.leancloud.cn";
     static let isUseCustomTestRTMServer: Bool = false;
     
-    static var baseGlobalClient: AVIMClient?
+    static var defaultGlobalClient: AVIMClient?
     
     override class func setUp() {
         
@@ -26,7 +26,7 @@ class LCIMTestBase: LCTestBase {
             AVOSCloudIM.defaultOptions().rtmServer = self.customTestRTMServer;
         }
         
-        let client: AVIMClient = AVIMClient(clientId: "LCIMTestBase.baseGlobalClient")
+        let client: AVIMClient = AVIMClient(clientId: "\(URL.init(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)\(#line)")
         
         self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
@@ -42,13 +42,46 @@ class LCIMTestBase: LCTestBase {
                 XCTAssertNil(error)
                 XCTAssertEqual(client.status, .opened)
                 
-                self.baseGlobalClient = success ? client : nil;
+                self.defaultGlobalClient = success ? client : nil;
             })
             
         }, failure: {
             
             XCTFail("timeout")
         })
+    }
+    
+    override class func tearDown() {
+        
+        if let client: AVIMClient = self.defaultGlobalClient, client.status == .opened {
+            
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                
+                semaphore.increment()
+                
+                client.close(callback: { (succeeded: Bool, error: Error?) in
+                    
+                    semaphore.decrement()
+                    
+                    XCTAssertTrue(Thread.isMainThread)
+                    
+                    XCTAssertTrue(succeeded)
+                    XCTAssertNil(error)
+                    
+                    XCTAssertTrue(client.status == .closed)
+                })
+                
+            }, failure: {
+                
+                XCTFail("timeout")
+            })
+            
+        } else {
+            
+            XCTFail()
+        }
+        
+        super.tearDown()
     }
     
 }

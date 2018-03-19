@@ -1051,6 +1051,8 @@
 		D37A046B1FF3705500AD44A9 /* testFile.md in Resources */ = {isa = PBXBuildFile; fileRef = D37A04691FF3705500AD44A9 /* testFile.md */; };
 		D37CD4111FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */; };
 		D37CD4121FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */; };
+		D3C271372052760200B3B5E7 /* Multi_Clients_Interact_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C271362052760200B3B5E7 /* Multi_Clients_Interact_TestCase.swift */; };
+		D3C271382052760200B3B5E7 /* Multi_Clients_Interact_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C271362052760200B3B5E7 /* Multi_Clients_Interact_TestCase.swift */; };
 		D3CDF4EB1FE8F3810033153E /* LCIMTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */; };
 		D3CDF4EC1FE8F3810033153E /* LCIMTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */; };
 		D3CDF4F01FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */; };
@@ -1527,6 +1529,7 @@
 		D37A04661FF36E6200AD44A9 /* testVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = testVideo.mp4; sourceTree = "<group>"; };
 		D37A04691FF3705500AD44A9 /* testFile.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = testFile.md; sourceTree = "<group>"; };
 		D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseQuery.swift; sourceTree = "<group>"; };
+		D3C271362052760200B3B5E7 /* Multi_Clients_Interact_TestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Multi_Clients_Interact_TestCase.swift; sourceTree = "<group>"; };
 		D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestBase.swift; sourceTree = "<group>"; };
 		D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2475,6 +2478,7 @@
 				D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */,
 				D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */,
 				D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */,
+				D3C271362052760200B3B5E7 /* Multi_Clients_Interact_TestCase.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -3767,6 +3771,7 @@
 			files = (
 				D3CDF4EC1FE8F3810033153E /* LCIMTestBase.swift in Sources */,
 				D37CD4121FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */,
+				D3C271382052760200B3B5E7 /* Multi_Clients_Interact_TestCase.swift in Sources */,
 				D36A1E0B1FF246C2006EFB5F /* LCIMTestCaseConversation.swift in Sources */,
 				D3078A6720105E9F00A4C5FD /* LCTestBase.swift in Sources */,
 				D3CDF4F11FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */,
@@ -4207,6 +4212,7 @@
 			files = (
 				D3CDF4EB1FE8F3810033153E /* LCIMTestBase.swift in Sources */,
 				D37CD4111FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */,
+				D3C271372052760200B3B5E7 /* Multi_Clients_Interact_TestCase.swift in Sources */,
 				D36A1E0A1FF246C2006EFB5F /* LCIMTestCaseConversation.swift in Sources */,
 				D3078A6620105E9E00A4C5FD /* LCTestBase.swift in Sources */,
 				D3CDF4F01FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */,

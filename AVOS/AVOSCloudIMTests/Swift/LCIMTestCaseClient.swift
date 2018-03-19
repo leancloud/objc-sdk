@@ -64,7 +64,7 @@ class LCIMTestCaseClient: LCIMTestBase {
     
     func test_Create_Conversation() {
         
-        guard let client: AVIMClient = LCIMTestBase.baseGlobalClient else {
+        guard let client: AVIMClient = LCIMTestBase.defaultGlobalClient else {
             
             XCTFail()
             
@@ -111,7 +111,7 @@ class LCIMTestCaseClient: LCIMTestBase {
     
     func test_Create_ChatRoom() {
         
-        guard let client: AVIMClient = LCIMTestBase.baseGlobalClient else {
+        guard let client: AVIMClient = LCIMTestBase.defaultGlobalClient else {
             
             XCTFail()
             
@@ -158,7 +158,7 @@ class LCIMTestCaseClient: LCIMTestBase {
     
     func test_Create_TemporaryConversation() {
         
-        guard let client: AVIMClient = LCIMTestBase.baseGlobalClient else {
+        guard let client: AVIMClient = LCIMTestBase.defaultGlobalClient else {
             
             XCTFail()
             
@@ -208,7 +208,7 @@ class LCIMTestCaseClient: LCIMTestBase {
     
     func test_Create_Unique_Conversation() {
         
-        guard let client: AVIMClient = LCIMTestBase.baseGlobalClient else {
+        guard let client: AVIMClient = LCIMTestBase.defaultGlobalClient else {
             
             XCTFail()
             
