@@ -2394,7 +2394,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         
         AVIMMessage *message = [[self messageCacheStoreForConversationId:conversationId] messageForId:messageId];
         
-        id <AVIMClientDelegate> delegate = self.delegate;
+        id <AVIMClientDelegate> delegate = _delegate;
         
         if (conv && message && delegate && [delegate respondsToSelector:@selector(conversation:messageHasBeenUpdated:)]) {
             
