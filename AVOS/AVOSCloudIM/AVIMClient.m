@@ -2344,7 +2344,10 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     }
 }
 
-- (void)processMessagePatchCommand:(AVIMPatchCommand *)command {
+- (void)processMessagePatchCommand:(AVIMPatchCommand *)command
+{
+    AssertRunInIMClientQueue;
+    
     NSArray<AVIMPatchItem *> *patchItems = command.patchesArray;
 
     for (AVIMPatchItem *patchItem in patchItems) {
@@ -2381,9 +2384,32 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     [[NSNotificationCenter defaultCenter] postNotificationName:LCIMConversationMessagePatchNotification
                                                         object:self
                                                       userInfo:userInfo];
+    
+    NSString *conversationId = patchItem.cid;
+    NSString *messageId = patchItem.mid;
+    
+    if (conversationId && messageId) {
+        
+        AVIMConversation *conv = [self conversationForId:conversationId];
+        
+        AVIMMessage *message = [[self messageCacheStoreForConversationId:conversationId] messageForId:messageId];
+        
+        id <AVIMClientDelegate> delegate = _delegate;
+        
+        if (conv && message && delegate && [delegate respondsToSelector:@selector(conversation:messageHasBeenUpdated:)]) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [delegate conversation:conv messageHasBeenUpdated:message];
+            });
+        }
+    }
 }
 
-- (void)sendACKForPatchCommand:(AVIMGenericCommand *)inCommand {
+- (void)sendACKForPatchCommand:(AVIMGenericCommand *)inCommand
+{
+    AssertRunInIMClientQueue;
+    
     int64_t lastPatchTimestamp = _lastPatchTimestamp;
 
     if (!lastPatchTimestamp)

@@ -484,6 +484,14 @@ __attribute__((warn_unused_result));
  */
 - (void)conversation:(AVIMConversation *)conversation messageDelivered:(AVIMMessage *)message;
 
+/**
+ Callback which called when a message has been updated.
+ 
+ @param conversation The conversation which the message belongs to.
+ @param message      The new message which has been updated.
+ */
+- (void)conversation:(AVIMConversation *)conversation messageHasBeenUpdated:(AVIMMessage *)message;
+
 /*!
  对话中有新成员加入时所有成员都会收到这一通知。
  @param conversation － 所属对话

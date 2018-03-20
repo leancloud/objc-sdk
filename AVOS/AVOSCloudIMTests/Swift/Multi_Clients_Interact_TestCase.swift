@@ -136,11 +136,11 @@ class Multi_Clients_Interact_TestCase: LCIMTestBase {
         
         self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
-            let sendingMessage: AVIMTextMessage = AVIMTextMessage.init(text: "test", attributes: nil)
+            let textMessage: AVIMTextMessage = AVIMTextMessage.init(text: "test", attributes: nil)
             
             semaphore.increment()
             
-            uniqueConversation.send(sendingMessage, callback: { (succeeded: Bool, error: Error?) in
+            uniqueConversation.send(textMessage, callback: { (succeeded: Bool, error: Error?) in
                 
                 semaphore.decrement()
                 
@@ -151,7 +151,7 @@ class Multi_Clients_Interact_TestCase: LCIMTestBase {
                 
                 if succeeded {
                     
-                    message = sendingMessage
+                    message = textMessage
                 }
             })
             
@@ -160,25 +160,12 @@ class Multi_Clients_Interact_TestCase: LCIMTestBase {
             XCTFail("timeout")
         })
         
-        guard let _message: AVIMMessage = message else {
+        guard let messageSent: AVIMMessage = message else {
             XCTFail()
             return
         }
         
-        uniqueConversation.add(client1)
-        
-        uniqueConversation.add(client2)
-        
-        self.runloopTestingAsync(timeout: 60, async: { (semaphore: RunLoopSemaphore) in
-            
-            semaphore.increment()
-            
-            client1.messageHasBeenUpdatedClosure = { (conv: AVIMConversation, message: AVIMMessage) in
-                
-                semaphore.decrement()
-                
-                XCTAssertEqual(message.messageId, _message.messageId)
-            }
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment()
             
@@ -186,12 +173,21 @@ class Multi_Clients_Interact_TestCase: LCIMTestBase {
                 
                 semaphore.decrement()
                 
-                XCTAssertEqual(message.messageId, _message.messageId)
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertEqual(message.messageId, messageSent.messageId)
+                
+                XCTAssertTrue(message.mediaType == .recalled)
+            }
+            
+            client1.messageHasBeenUpdatedClosure = { (conv: AVIMConversation, message: AVIMMessage) in
+                
+                XCTFail("Should not be called.")
             }
             
             semaphore.increment()
             
-            uniqueConversation.recall(_message, callback: { (succeeded: Bool, error: Error?, recalledMessage: AVIMMessage?) in
+            uniqueConversation.recall(messageSent, callback: { (succeeded: Bool, error: Error?, recalledMessage: AVIMMessage?) in
                 
                 semaphore.decrement()
                 
@@ -200,7 +196,7 @@ class Multi_Clients_Interact_TestCase: LCIMTestBase {
                 XCTAssertTrue(succeeded)
                 XCTAssertNil(error)
                 
-                XCTAssertEqual(_message.messageId, recalledMessage?.messageId)
+                XCTAssertEqual(recalledMessage?.messageId, messageSent.messageId)
             })
             
         }, failure: {
@@ -327,7 +323,7 @@ class AVIMClient_Wrapper: NSObject {
     
 }
 
-extension AVIMClient_Wrapper: AVIMClientDelegate, AVIMConversationDelegate {
+extension AVIMClient_Wrapper: AVIMClientDelegate {
     
     func imClientClosed(_ imClient: AVIMClient, error: Error?) {}
     func imClientResuming(_ imClient: AVIMClient) {}

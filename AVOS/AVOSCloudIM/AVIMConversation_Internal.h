@@ -120,8 +120,6 @@ typedef NS_ENUM(NSUInteger, LCIMConvType) {
  */
 @property (nonatomic, strong) NSDictionary *rawDataDic;
 
-@property (nonatomic, strong) NSHashTable<id<AVIMConversationDelegate>> *delegates;
-
 + (instancetype)newWithConversationId:(NSString *)conversationId
                              convType:(LCIMConvType)convType
                                client:(AVIMClient *)client;
