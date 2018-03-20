@@ -121,7 +121,7 @@ class Multi_Clients_Interact_TestCase: LCIMTestBase {
     
     func test_recall_message() {
         
-        guard let _: AVIMClient_Wrapper = type(of: self).client1,
+        guard let client1: AVIMClient_Wrapper = type(of: self).client1,
             let client2: AVIMClient_Wrapper = type(of: self).client2 else {
                 XCTFail()
                 return
@@ -173,9 +173,16 @@ class Multi_Clients_Interact_TestCase: LCIMTestBase {
                 
                 semaphore.decrement()
                 
+                XCTAssertTrue(Thread.isMainThread)
+                
                 XCTAssertEqual(message.messageId, messageSent.messageId)
                 
                 XCTAssertTrue(message.mediaType == .recalled)
+            }
+            
+            client1.messageHasBeenUpdatedClosure = { (conv: AVIMConversation, message: AVIMMessage) in
+                
+                XCTFail("Should not be called.")
             }
             
             semaphore.increment()
