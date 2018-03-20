@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@protocol AVIMConversationGroupChatDelegate <AVIMConversationDelegate>
+@protocol AVIMConversationGroupChatDelegate
 
 - (void)conversation:(AVIMConversation *)conversation lastReadTimestampsDidUpdateForClientIds:(NSArray *)clientIds;
 
