@@ -27,6 +27,7 @@
 #import "AVUtils.h"
 #import "AVIMRuntimeHelper.h"
 #import "AVIMRecalledMessage.h"
+#import "AVObjectUtils.h"
 
 NSString *LCIMClientIdKey = @"clientId";
 NSString *LCIMConversationIdKey = @"conversationId";
@@ -198,7 +199,135 @@ static dispatch_queue_t messageCacheOperationQueue;
             break;
     }
     
+    if (conv) {
+        
+        conv->_properties = [NSMutableDictionary dictionary];
+        conv->_propertiesForUpdate = [NSMutableDictionary dictionary];
+        conv->_rawDataDic = [NSDictionary dictionary];
+        
+        [conv setupObserver];
+    }
+    
     return conv;
+}
+
++ (instancetype)newWithRawJSONData:(NSDictionary *)rawJSONData
+                            client:(AVIMClient *)client
+{
+    NSString *conversationId = [rawJSONData objectForKey:kConvAttrKey_conversationId];
+    
+    if (!conversationId) {
+        
+        return nil;
+    }
+    
+    AVIMConversation *conversation = nil;
+    
+    BOOL isTransient = [rawJSONData[kConvAttrKey_transient] boolValue];
+    BOOL isSystem = [rawJSONData[kConvAttrKey_system] boolValue];
+    BOOL isTemporary = [rawJSONData[kConvAttrKey_temporary] boolValue];
+    
+    if (isTransient && !isSystem && !isTemporary) {
+        
+        conversation = [[AVIMChatRoom alloc] initWithConversationId:conversationId client:client];
+        
+    } else if (isSystem &&!isTransient  && !isTemporary) {
+        
+        conversation = [[AVIMServiceConversation alloc] initWithConversationId:conversationId client:client];
+        
+    } else if (isTemporary && !isTransient && !isSystem) {
+        
+        conversation = [[AVIMTemporaryConversation alloc] initWithConversationId:conversationId client:client];
+        
+    } else {
+        
+        conversation = [[AVIMConversation alloc] initWithConversationId:conversationId client:client];
+    }
+    
+    conversation.transient = isTransient;
+    conversation.system = isSystem;
+    conversation.temporary = isTemporary;
+    
+    /*
+     `properties` can be changed by user,
+     so use an other dic to store some unchangeable attribute,
+     but SDK can't know whitch attribute is unchangeable,
+     so just store all data directly.
+     */
+    ///
+    NSMutableDictionary *rawDataDic = [rawJSONData mutableCopy];
+    /* Remove 'large size' & 'frequent change' Key-Value */
+    [rawDataDic removeObjectForKey:kConvAttrKey_name];
+    [rawDataDic removeObjectForKey:kConvAttrKey_avatarURL];
+    [rawDataDic removeObjectForKey:kConvAttrKey_members];
+    [rawDataDic removeObjectForKey:kConvAttrKey_membersMuted];
+    [rawDataDic removeObjectForKey:kConvAttrKey_attributes];
+    [rawDataDic removeObjectForKey:kConvAttrKey_lastMessage];
+    conversation.rawDataDic = rawDataDic;
+    ///
+    
+    /* Note:
+     * We store all properties into conversation for custom attributes access.
+     * But the custom attributes will not be cached at present.
+     */
+    conversation.properties = [rawJSONData mutableCopy];
+    conversation.propertiesForUpdate = [NSMutableDictionary dictionary];
+    
+    conversation.name = rawJSONData[kConvAttrKey_name];
+    conversation.attributes = rawJSONData[kConvAttrKey_attributes];
+    conversation.creator = rawJSONData[kConvAttrKey_creator];
+    conversation.lastMessage = [AVIMMessage parseMessageWithConversationId:conversationId result:rawJSONData];
+    conversation.members = rawJSONData[kConvAttrKey_members];
+    
+    conversation.uniqueId = rawJSONData[kConvAttrKey_uniqueId];
+    conversation.unique = [rawJSONData[kConvAttrKey_unique] boolValue];
+    conversation.muted = [rawJSONData[kConvAttrKey_muted] boolValue];
+    conversation.temporaryTTL = [rawJSONData[kConvAttrKey_temporaryTTL] intValue];
+    
+    conversation.lastMessageAt = ({
+        
+        NSDate *date = nil;
+        
+        NSDictionary *lastMessageDate = rawJSONData[kConvAttrKey_lastMessageAt];
+        NSNumber *lastMessageTimestamp = rawJSONData[kConvAttrKey_lastMessageTimestamp];
+        /* For system conversation, there's no `lm` field.
+         Instead, we read `msg_timestamp`field. */
+        if (lastMessageDate) {
+            date = [AVObjectUtils dateFromDictionary:lastMessageDate];
+        } else if (lastMessageTimestamp) {
+            date = [NSDate dateWithTimeIntervalSince1970:([lastMessageTimestamp doubleValue] / 1000.0)];
+        }
+        
+        date;
+    });
+    
+    conversation.createAt = ({
+        
+        NSDate *date = nil;
+        
+        NSString *createdAt = rawJSONData[kConvAttrKey_createdAt];
+        if (createdAt) {
+            date = [AVObjectUtils dateFromString:createdAt];
+        }
+        
+        date;
+    });
+    
+    conversation.updateAt = ({
+        
+        NSDate *date = nil;
+        
+        NSString *updatedAt = rawJSONData[kConvAttrKey_updatedAt];
+        if (updatedAt) {
+            date = [AVObjectUtils dateFromString:updatedAt];
+        }
+        
+        date;
+    });
+    
+    [conversation setupObserver];
+    
+    return conversation;
 }
 
 - (instancetype)initWithConversationId:(NSString *)conversationId
@@ -208,22 +337,16 @@ static dispatch_queue_t messageCacheOperationQueue;
     
     if (self) {
         
-        _conversationId = conversationId.copy;
+        _conversationId = conversationId;
         
         _imClient = client;
-        
-        [self doInitialize];
     }
     
     return self;
 }
 
-- (void)doInitialize
+- (void)setupObserver
 {
-    _properties = [NSMutableDictionary dictionary];
-    _propertiesForUpdate = [NSMutableDictionary dictionary];
-    _rawDataDic = [NSDictionary dictionary];
-    
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
 
     [center addObserver:self
@@ -888,7 +1011,10 @@ static dispatch_queue_t messageCacheOperationQueue;
             
             if (callback) {
                 
-                callback(error == nil, error);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    callback(error == nil, error);
+                });
             }
         }];
         [client sendCommand:genericCommand];
@@ -1256,7 +1382,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         return;
     }
     
-    [client addOperationToInternalSerialQueueWithBlock:^(AVIMClient *client) {
+    [client addOperationToInternalSerialQueue:^(AVIMClient *client) {
         
         BOOL isWillMessage = option.will;
         BOOL needReceipt = option.receipt;

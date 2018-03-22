@@ -15,4 +15,6 @@
 @property (nonatomic, strong) NSString *order;
 @property (nonatomic, weak) AVIMClient *client;
 
+- (NSString *)whereString;
+
 @end

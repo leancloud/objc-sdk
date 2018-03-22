@@ -124,6 +124,9 @@ typedef NS_ENUM(NSUInteger, LCIMConvType) {
                              convType:(LCIMConvType)convType
                                client:(AVIMClient *)client;
 
++ (instancetype)newWithRawJSONData:(NSDictionary *)rawJSONData
+                            client:(AVIMClient *)client;
+
 - (void)setConversationId:(NSString *)conversationId;
 - (void)setMembers:(NSArray *)members;
 - (void)setCreator:(NSString *)creator;

@@ -47,7 +47,7 @@
 - (dispatch_queue_t)internalSerialQueue
 __attribute__((warn_unused_result));
 
-- (void)addOperationToInternalSerialQueueWithBlock:(void (^)(AVIMClient *client))block;
+- (void)addOperationToInternalSerialQueue:(void (^)(AVIMClient *client))block;
 
 /*
  Signature
