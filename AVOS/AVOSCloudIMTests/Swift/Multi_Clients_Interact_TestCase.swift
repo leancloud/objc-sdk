@@ -302,6 +302,57 @@ class Multi_Clients_Interact_TestCase: LCIMTestBase {
         })
     }
     
+    func test_update_conversation() {
+        
+        guard let client1: AVIMClient_Wrapper = type(of: self).client1,
+            let client2: AVIMClient_Wrapper = type(of: self).client2 else {
+                XCTFail()
+                return
+        }
+        
+        guard let uniqueConversation: AVIMConversation = self.createUniqueConversationByClient1() else {
+            XCTFail()
+            return
+        }
+        
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            
+            let key: String = "key_test"
+            let value: String = "value_test"
+            
+            uniqueConversation[key] = value
+            
+            semaphore.increment()
+            
+            client2.didUpdateDataClosure = { (conversation: AVIMConversation, date: Date, clientId: String, data: [AnyHashable : Any]) in
+                
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertEqual(conversation.conversationId, uniqueConversation.conversationId)
+                XCTAssertEqual(clientId, client1.client.clientId)
+                XCTAssertEqual(data[key] as? String, value)
+            }
+            
+            semaphore.increment()
+            
+            uniqueConversation.update(callback: { (succeeded: Bool, error: Error?) in
+                
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+            })
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
+    }
+    
 }
 
 class AVIMClient_Wrapper: NSObject {
@@ -311,6 +362,8 @@ class AVIMClient_Wrapper: NSObject {
     var messageHasBeenUpdatedClosure: ((AVIMConversation, AVIMMessage) -> Void)?
     
     var didReceiveTypedMessageClosure: ((AVIMConversation, AVIMTypedMessage) -> Void)?
+    
+    var didUpdateDataClosure: ((AVIMConversation, Date, String, [AnyHashable : Any]) -> Void)?
     
     init(with clientId: String) {
         
@@ -336,6 +389,10 @@ extension AVIMClient_Wrapper: AVIMClientDelegate {
     
     func conversation(_ conversation: AVIMConversation, didReceive message: AVIMTypedMessage) {
         self.didReceiveTypedMessageClosure?(conversation, message)
+    }
+    
+    func conversation(_ conversation: AVIMConversation, didUpdateAt date: Date, by clientId: String, data: [AnyHashable : Any]) {
+        self.didUpdateDataClosure?(conversation, date, clientId, data)
     }
     
 }
