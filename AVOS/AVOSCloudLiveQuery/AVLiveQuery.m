@@ -173,25 +173,57 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
     return parameters;
 }
 
-- (void)subscribeWithCallback:(void (^)(BOOL, NSError *))callback {
+- (void)subscribeWithCallback:(void (^)(BOOL, NSError *))callback
+{
     [self observeSubscriber];
-    [self.subscriber start];
-
-    NSDictionary *parameters = [self subscriptionParameters];
-
-    AVIdResultBlock block = ^(id object, NSError *error) {
-        if (error) {
-            [AVUtils callBooleanResultBlock:callback error:error];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [self.subscriber loginWithCallback:^(BOOL succeeded, NSError *error) {
+        
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        if (!strongSelf) {
+            
             return;
         }
-
-        self.queryId = object[AVQueryIdKey];
-        [AVUtils callBooleanResultBlock:callback error:nil];
-    };
-
-    [[AVPaasClient sharedInstance] postObject:AVSubscriptionEndpoint
-                               withParameters:parameters
-                                        block:block];
+        
+        if (error) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                callback(false, error);
+            });
+            
+            return;
+        }
+        
+        NSDictionary *parameters = [strongSelf subscriptionParameters];
+        
+        void (^block)(id object, NSError *error) = ^(id object, NSError *error) {
+            
+            if (error) {
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    callback(false, error);
+                });
+                
+                return;
+            }
+            
+            strongSelf.queryId = object[AVQueryIdKey];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                callback(true, nil);
+            });
+        };
+        
+        [[AVPaasClient sharedInstance] postObject:AVSubscriptionEndpoint
+                                   withParameters:parameters
+                                            block:block];
+    }];
 }
 
 - (NSDictionary *)unsubscriptionParameters {
