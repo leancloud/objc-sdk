@@ -29,10 +29,13 @@ static const NSTimeInterval AVBackoffMaximumTime = 60;
 NSString *const AVLiveQueryEventKey = @"AVLiveQueryEventKey";
 NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification";
 
-@interface AVSubscriber ()
+@interface AVSubscriber () {
+    
+    NSMutableArray<void (^)(BOOL, NSError *)> *_loginCallbackArray;
+    dispatch_queue_t _internalSerialQueue;
+}
 
 @property (nonatomic, assign) BOOL alive;
-@property (nonatomic, assign) dispatch_once_t loginOnceToken;
 @property (nonatomic, strong) AVIMWebSocketWrapper *webSocket;
 @property (nonatomic, strong) AVExponentialTimer   *backoffTimer;
 
@@ -40,7 +43,8 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 
 @implementation AVSubscriber
 
-+ (instancetype)sharedInstance {
++ (instancetype)sharedInstance
+{
     static AVSubscriber *instance;
     static dispatch_once_t onceToken;
 
@@ -51,72 +55,99 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
     return instance;
 }
 
-- (instancetype)init {
+- (instancetype)init
+{
     self = [super init];
 
     if (self) {
-        [self doInitialize];
+        
+        NSString *deviceUUID = [AVUtils deviceUUID];
+        _internalSerialQueue = dispatch_queue_create("AVSubscriber._internalSerialQueue", NULL);
+        _alive = false;
+        
+        _webSocket = [AVIMWebSocketWrapper newByLiveQuery];
+        _identifier = [NSString stringWithFormat:@"%@-%@", AVIdentifierPrefix, deviceUUID];
+        _backoffTimer = [AVExponentialTimer exponentialTimerWithInitialTime:AVBackoffInitialTime
+                                                                    maxTime:AVBackoffMaximumTime];
+        
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+        
+        [notificationCenter addObserver:self
+                               selector:@selector(webSocketDidReopen:)
+                                   name:AVIM_NOTIFICATION_WEBSOCKET_OPENED
+                                 object:_webSocket];
+        
+        [notificationCenter addObserver:self
+                               selector:@selector(webSocketDidReceiveCommand:)
+                                   name:AVIM_NOTIFICATION_WEBSOCKET_COMMAND
+                                 object:_webSocket];
+        
+        [notificationCenter addObserver:self
+                               selector:@selector(webSocketDidClose:)
+                                   name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
+                                 object:_webSocket];
     }
 
     return self;
 }
 
-- (void)doInitialize {
-    NSString *deviceUUID = [AVUtils deviceUUID];
-
-    _webSocket = [AVIMWebSocketWrapper newByLiveQuery];
-    _identifier = [NSString stringWithFormat:@"%@-%@", AVIdentifierPrefix, deviceUUID];
-    _backoffTimer = [AVExponentialTimer exponentialTimerWithInitialTime:AVBackoffInitialTime
-                                                                maxTime:AVBackoffMaximumTime];
-
-    [self observeWebSocket:_webSocket];
-}
-
-- (void)observeWebSocket:(AVIMWebSocketWrapper *)webSocket {
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    
-    [notificationCenter addObserver:self
-                           selector:@selector(webSocketDidOpen:)
-                               name:AVIM_NOTIFICATION_WEBSOCKET_OPENED
-                             object:_webSocket];
-    [notificationCenter addObserver:self
-                           selector:@selector(webSocketDidReceiveCommand:)
-                               name:AVIM_NOTIFICATION_WEBSOCKET_COMMAND
-                             object:_webSocket];
-    [notificationCenter addObserver:self
-                           selector:@selector(webSocketDidReconnect:)
-                               name:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
-                             object:_webSocket];
-    [notificationCenter addObserver:self
-                           selector:@selector(webSocketDidClose:)
-                               name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
-                             object:_webSocket];
-}
-
-- (void)dealloc {
+- (void)dealloc
+{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self.webSocket close];
 }
 
-- (void)webSocketDidOpen:(NSNotification *)notification {
-    [self keepAlive];
+// MARK: - Queue
+
+- (void)addOperationToInternalSerialQueue:(void (^)(AVSubscriber *subscriber))block
+{
+    dispatch_async(_internalSerialQueue, ^{
+        
+        block(self);
+    });
 }
 
-- (void)webSocketDidReceiveCommand:(NSNotification *)notification {
-    NSDictionary *dict = notification.userInfo;
-    AVIMGenericCommand *command = [dict objectForKey:@"command"];
-
-    /* Filter out non-live-query commands. */
-    if (command.service != AVServiceTypeLiveQuery)
-        return;
-
-    switch (command.cmd) {
-        case AVIMCommandType_Data:
-            [self handleDataCommand:command];
-            break;
-        default:
-            break;
+- (void)invokeCallback:(dispatch_block_t)block
+{
+    if (self.callbackQueue) {
+        
+        dispatch_async(self.callbackQueue, block);
+        
+    } else {
+        
+        block();
     }
+}
+
+// MARK: - Websocket Notification
+
+- (void)webSocketDidReopen:(NSNotification *)notification
+{
+    [self addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
+        
+        [subscriber resentLoginCommand];
+    }];
+}
+
+- (void)webSocketDidReceiveCommand:(NSNotification *)notification
+{
+    [self addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
+        
+        NSDictionary *dict = notification.userInfo;
+        AVIMGenericCommand *command = [dict objectForKey:@"command"];
+        
+        /* Filter out non-live-query commands. */
+        if (command.service != AVServiceTypeLiveQuery)
+            return;
+        
+        switch (command.cmd) {
+            case AVIMCommandType_Data:
+                [subscriber handleDataCommand:command];
+                break;
+            default:
+                break;
+        }
+    }];
 }
 
 - (void)handleDataCommand:(AVIMGenericCommand *)command {
@@ -148,16 +179,18 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
                                                       userInfo:userInfo];
 }
 
-- (void)webSocketDidReconnect:(NSNotification *)notification {
-    self.alive = NO;
-    [self keepAliveIntermittently];
+- (void)webSocketDidClose:(NSNotification *)notification
+{
+    [self addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
+        
+        subscriber.alive = false;
+    }];
 }
 
-- (void)webSocketDidClose:(NSNotification *)notification {
-    self.alive = NO;
-}
+// MARK: - Login
 
-- (AVIMGenericCommand *)makeLoginCommand {
+- (AVIMGenericCommand *)makeLoginCommand
+{
     AVIMGenericCommand *command = [[AVIMGenericCommand alloc] init];
 
     command.cmd             = AVIMCommandType_Login;
@@ -169,64 +202,126 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
     return command;
 }
 
-- (BOOL)isLoggedInCommand:(AVIMGenericCommand *)command {
-    BOOL isLoggedIn = (command && command.cmd == AVIMCommandType_Loggedin);
-    return isLoggedIn;
-}
-
-- (void)loginWithCallback:(AVBooleanResultBlock)callback {
-    AVIMGenericCommand *command = [self makeLoginCommand];
-
-    command.callback = ^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
-        self.alive = [self isLoggedInCommand:inCommand];
-        [AVUtils callBooleanResultBlock:callback error:error];
-    };
-
-    [self.webSocket openWithCallback:^(BOOL succeeded, NSError *error) {
-        if (error) {
-            [AVUtils callBooleanResultBlock:callback error:error];
-        } else {
-            [self.webSocket sendCommand:command];
-        }
-    }];
-}
-
-- (void)keepAliveIntermittently {
-    if (self.alive) {
+- (void)invokeAllLoginCallbackWithSucceeded:(BOOL)succeeded error:(NSError *)error
+{
+    NSArray<void (^)(BOOL, NSError *)> *callbacks = _loginCallbackArray;
+    
+    if (!callbacks) {
+        
         return;
     }
-
-    [self loginWithCallback:^(BOOL succeeded, NSError *error) {
-        if (succeeded) {
-            self.alive = YES;
-            return;
-        }
-
-        NSTimeInterval after = [self.backoffTimer timeIntervalAndCalculateNext];
-
-        dispatch_time_t when = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(after * NSEC_PER_SEC));
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-
-        dispatch_after(when, queue, ^{
-            [self keepAliveIntermittently];
-        });
-    }];
-}
-
-- (void)keepAlive {
-    @synchronized (self) {
-        [self.backoffTimer reset];
-        [self keepAliveIntermittently];
+    
+    _loginCallbackArray = nil;
+    
+    for (void (^item_callback)(BOOL, NSError *) in callbacks) {
+        
+        [self invokeCallback:^{
+            
+            item_callback(succeeded, error);
+        }];
     }
 }
 
-- (void)start {
-    dispatch_once(&_loginOnceToken, ^{
-        [self loginWithCallback:^(BOOL succeeded, NSError *error) {
-            if (!self.alive)
-                [self keepAlive];
+- (void)loginWithCallback:(void (^)(BOOL succeeded, NSError *error))callback
+{
+    [self addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
+        
+        if (subscriber.alive) {
+            
+            [subscriber invokeCallback:^{
+                
+                callback(true, nil);
+            }];
+            
+            return;
+        }
+        
+        if (subscriber->_loginCallbackArray) {
+            
+            [subscriber->_loginCallbackArray addObject:callback];
+            
+            return;
+        }
+            
+        subscriber->_loginCallbackArray = [NSMutableArray arrayWithObject:callback];
+        
+        AVIMGenericCommand *command = [subscriber makeLoginCommand];
+        
+        [command setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
+            
+            [subscriber addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
+                
+                subscriber.alive = (!error && inCommand && inCommand.cmd == AVIMCommandType_Loggedin);
+                
+                if (subscriber.alive) {
+                    
+                    [subscriber.backoffTimer reset];
+                    
+                    [subscriber invokeAllLoginCallbackWithSucceeded:true error:nil];
+                    
+                } else {
+                    
+                    [subscriber resentLoginCommand];
+                }
+            }];
         }];
-    });
+        
+        [subscriber.webSocket openWithCallback:^(BOOL succeeded, NSError *error) {
+            
+            [subscriber addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
+                
+                if (error) {
+                    
+                    [subscriber invokeAllLoginCallbackWithSucceeded:false error:error];
+                    
+                } else {
+                    
+                    [subscriber.webSocket sendCommand:command];
+                }
+            }];
+        }];
+    }];
+    
+}
+
+- (void)resentLoginCommand
+{
+    if (self.alive) {
+        
+        [self invokeAllLoginCallbackWithSucceeded:true error:nil];
+        
+        return;
+    }
+    
+    AVIMGenericCommand *command = [self makeLoginCommand];
+    
+    [command setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
+        
+        [self addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
+            
+            subscriber.alive = (!error && inCommand && inCommand.cmd == AVIMCommandType_Loggedin);
+            
+            if (subscriber.alive) {
+                
+                [subscriber.backoffTimer reset];
+                
+                [subscriber invokeAllLoginCallbackWithSucceeded:true error:nil];
+                
+            } else {
+                
+                NSTimeInterval after = [subscriber.backoffTimer timeIntervalAndCalculateNext];
+                
+                dispatch_time_t when = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(after * NSEC_PER_SEC));
+                
+                dispatch_after(when, subscriber->_internalSerialQueue, ^{
+                    
+                    [subscriber resentLoginCommand];
+                });
+            }
+        }];
+    }];
+    
+    [self.webSocket sendCommand:command];
 }
 
 @end
