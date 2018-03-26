@@ -740,6 +740,14 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
             AVLoggerInfo(AVLoggerDomainStorage, @"Object not changed, ignore save request.");
             break;
         }
+        
+        /* Firstly, save all related files. */
+        NSError *fileError = [self saveNewFiles];
+        
+        if (fileError) {
+            requestError = fileError;
+            break;
+        }
 
         /* Send object batch save request. */
         NSMutableArray *requests = [self buildSaveRequests];
@@ -920,6 +928,35 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 - (NSString *)initialRequestPath {
     return [self myObjectPath];
+}
+
+- (NSSet *)allAttachedDirtyFiles {
+    NSMutableSet *files = [NSMutableSet set];
+    
+    [self iterateDescendantObjectsWithBlock:^(id object) {
+        if ([object isKindOfClass:[AVFile class]] && ![(AVFile *)object objectId]) {
+            [files addObject:object];
+        }
+    }];
+    
+    return files;
+}
+
+- (NSError *)saveNewFiles{
+    NSError *error = nil;
+    NSSet   *files = [self allAttachedDirtyFiles];
+    
+    for (AVFile *file in files) {
+        if (![file objectId]) {
+            [AVObject saveFile:file];
+            
+            if (error) {
+                return error;
+            }
+        }
+    }
+    
+    return nil;
 }
 
 - (BOOL)shouldIncludeUpdateRequests {
@@ -1124,6 +1161,28 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     iterate_object_with_accessed(self, block, [NSMutableSet set]);
 }
 
+- (NSArray *)descendantFiles {
+    NSMutableSet *files = [NSMutableSet set];
+    
+    [self iterateDescendantObjectsWithBlock:^(id object) {
+        if ([object isKindOfClass:[AVFile class]] && ![(AVFile *)object objectId]) {
+            [files addObject:object];
+        }
+    }];
+    
+    return [files allObjects];
+}
+
++ (NSArray *)descendantFilesOfObjects:(NSArray *)objects {
+    NSMutableSet *files = [NSMutableSet set];
+    
+    for (AVObject *object in [objects copy]) {
+        [files addObjectsFromArray:[object descendantFiles]];
+    }
+    
+    return [files allObjects];
+}
+
 + (NSArray *)reduceObjectsFromArray:(NSMutableArray *)array count:(NSInteger)count {
     NSArray *subArray = nil;
 
@@ -1163,6 +1222,38 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         *error = blockError;
     }
     return blockError == nil;
+}
+
++ (BOOL)saveDescendantFileOfObjects:(NSArray *)objects error:(NSError **)error {
+    NSMutableArray *files = [[self descendantFilesOfObjects:objects] mutableCopy];
+    
+    __block BOOL saveOK = YES;
+    __block NSError *blockError;
+    
+    while ([files count] && saveOK) {
+        __block int32_t uploadCount = 0;
+        NSArray *subFiles = [self reduceObjectsFromArray:files count:AV_BATCH_CONCURRENT_SIZE];
+        
+        for (AVFile *file in subFiles) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                
+                NSError *anError = [AVObject saveFile:file];
+                if (anError) {
+                    blockError = anError;
+                    saveOK = NO;
+                }
+                
+                OSAtomicIncrement32(&uploadCount);
+            });
+        }
+        
+        AV_WAIT_TIL_TRUE(uploadCount == [subFiles count], 0.1);
+    }
+    if (blockError && error != NULL) {
+        *error = blockError;
+    }
+    
+    return saveOK;
 }
 
 + (BOOL)saveDescendantRequestsOfObjects:(NSArray *)objects error:(NSError **)error {
@@ -1208,6 +1299,14 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 + (BOOL)saveAll:(NSArray *)objects error:(NSError **)error
 {
+    // Upload descendant files of objects
+    NSError *fileUploadError = nil;
+    
+    if (![self saveDescendantFileOfObjects:objects error:&fileUploadError]) {
+        *error = fileUploadError;
+        return NO;
+    }
+    
     // Post descendant batch requests of objects
     NSError *requestPostError = nil;
 
@@ -1938,6 +2037,24 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     AVObject * otherObject = (AVObject *)other;
     return ([self.objectId isEqualToString:otherObject.objectId] &&
             [self.className isEqualToString:otherObject.className]);
+}
+
++ (NSError *)saveFile:(AVFile *)file
+{
+    __block NSError *aError = nil;
+    __block BOOL waiting = true;
+    
+    [file uploadWithCompletionHandler:^(BOOL succeeded, NSError * _Nullable error) {
+        aError = error;
+        waiting = false;
+    }];
+    
+    while (waiting) {
+        NSDate *date = [NSDate dateWithTimeIntervalSinceNow:1.0];
+        [NSRunLoop.currentRunLoop runMode:NSDefaultRunLoopMode beforeDate:date];
+    }
+    
+    return aError;
 }
 
 #pragma mark - Serialization, Deserialization
