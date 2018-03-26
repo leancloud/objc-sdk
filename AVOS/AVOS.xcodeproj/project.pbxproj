@@ -1041,6 +1041,8 @@
 		D341F2A42018B6DB00408778 /* _10_MB_.png in Resources */ = {isa = PBXBuildFile; fileRef = D341F2A22018B6DB00408778 /* _10_MB_.png */; };
 		D3472E1F2015CBC200AAD65F /* AVFile_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3472E1E2015CBC200AAD65F /* AVFile_TestCase.swift */; };
 		D3472E202015CBC200AAD65F /* AVFile_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3472E1E2015CBC200AAD65F /* AVFile_TestCase.swift */; };
+		D34FD72C2068CFE900B7C11B /* AVLiveQuery_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34FD72B2068CFE900B7C11B /* AVLiveQuery_Internal.h */; };
+		D34FD72D2068CFE900B7C11B /* AVLiveQuery_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34FD72B2068CFE900B7C11B /* AVLiveQuery_Internal.h */; };
 		D36A1E0A1FF246C2006EFB5F /* LCIMTestCaseConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */; };
 		D36A1E0B1FF246C2006EFB5F /* LCIMTestCaseConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */; };
 		D36AC7691FFF50AB00BDCA24 /* AVInstallation_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36AC7681FFF50AB00BDCA24 /* AVInstallation_TestCase.swift */; };
@@ -1524,6 +1526,7 @@
 		D30DF41D1FDE391D00F932BC /* AVOSCloud-iOSTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVOSCloud-iOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		D341F2A22018B6DB00408778 /* _10_MB_.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = _10_MB_.png; sourceTree = "<group>"; };
 		D3472E1E2015CBC200AAD65F /* AVFile_TestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVFile_TestCase.swift; sourceTree = "<group>"; };
+		D34FD72B2068CFE900B7C11B /* AVLiveQuery_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVLiveQuery_Internal.h; sourceTree = "<group>"; };
 		D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseConversation.swift; sourceTree = "<group>"; };
 		D36AC7681FFF50AB00BDCA24 /* AVInstallation_TestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVInstallation_TestCase.swift; sourceTree = "<group>"; };
 		D37A04661FF36E6200AD44A9 /* testVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = testVideo.mp4; sourceTree = "<group>"; };
@@ -1735,6 +1738,7 @@
 			children = (
 				838CE31D1EC97E6E00B24F5B /* AVOSCloudLiveQuery.h */,
 				838CE3521EC9838500B24F5B /* AVLiveQuery.h */,
+				D34FD72B2068CFE900B7C11B /* AVLiveQuery_Internal.h */,
 				838CE3531EC9838500B24F5B /* AVLiveQuery.m */,
 				834A54811ECAF3A0006C8F4B /* AVSubscriber.h */,
 				834A54821ECAF3A0006C8F4B /* AVSubscriber.m */,
@@ -2819,6 +2823,7 @@
 			files = (
 				838CE3541EC9838500B24F5B /* AVLiveQuery.h in Headers */,
 				8366BD071ECE0FF2008A5264 /* AVExponentialTimer.h in Headers */,
+				D34FD72C2068CFE900B7C11B /* AVLiveQuery_Internal.h in Headers */,
 				838CE32B1EC97E6F00B24F5B /* AVOSCloudLiveQuery.h in Headers */,
 				834A54831ECAF3A0006C8F4B /* AVSubscriber.h in Headers */,
 			);
@@ -2830,6 +2835,7 @@
 			files = (
 				838CE3551EC9838500B24F5B /* AVLiveQuery.h in Headers */,
 				8366BD081ECE0FF2008A5264 /* AVExponentialTimer.h in Headers */,
+				D34FD72D2068CFE900B7C11B /* AVLiveQuery_Internal.h in Headers */,
 				838CE33A1EC980DE00B24F5B /* AVOSCloudLiveQuery.h in Headers */,
 				834A54841ECAF3A0006C8F4B /* AVSubscriber.h in Headers */,
 			);
