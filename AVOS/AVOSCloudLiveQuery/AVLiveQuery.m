@@ -7,6 +7,7 @@
 //
 
 #import "AVLiveQuery.h"
+#import "AVLiveQuery_Internal.h"
 #import "AVSubscriber.h"
 
 #import "AVUser.h"
@@ -214,6 +215,8 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
             
             strongSelf.queryId = object[AVQueryIdKey];
             
+            [strongSelf.subscriber addLiveQueryObjectToWeakTable:strongSelf];
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 callback(true, nil);
@@ -245,6 +248,8 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
             [AVUtils callBooleanResultBlock:callback error:error];
             return;
         }
+        
+        [self.subscriber removeLiveQueryObjectFromWeakTable:self];
 
         [AVUtils callBooleanResultBlock:callback error:nil];
     };
@@ -252,6 +257,18 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
     [[AVPaasClient sharedInstance] postObject:AVUnsubscriptionEndpoint
                                withParameters:parameters
                                         block:block];
+}
+
+- (void)resubscribe
+{
+    if (self.query) {
+        
+        NSDictionary *parameters = [self subscriptionParameters];
+        
+        [[AVPaasClient sharedInstance] postObject:AVSubscriptionEndpoint withParameters:parameters block:^(id  _Nullable object, NSError * _Nullable error) {
+            // do nothing.
+        }];
+    }
 }
 
 @end

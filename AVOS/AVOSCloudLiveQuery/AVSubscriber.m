@@ -8,6 +8,8 @@
 
 #import "AVSubscriber.h"
 #import "AVExponentialTimer.h"
+#import "AVLiveQuery.h"
+#import "AVLiveQuery_Internal.h"
 
 /* AVOSCloud headers */
 #import "AVUtils.h"
@@ -31,6 +33,7 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 
 @interface AVSubscriber () {
     
+    NSHashTable<AVLiveQuery *> *_weakLiveQueryObjectTable;
     NSMutableArray<void (^)(BOOL, NSError *)> *_loginCallbackArray;
     dispatch_queue_t _internalSerialQueue;
 }
@@ -63,6 +66,8 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
         
         NSString *deviceUUID = [AVUtils deviceUUID];
         _internalSerialQueue = dispatch_queue_create("AVSubscriber._internalSerialQueue", NULL);
+        _weakLiveQueryObjectTable = [NSHashTable weakObjectsHashTable];
+        _loginCallbackArray = nil;
         _alive = false;
         
         _webSocket = [AVIMWebSocketWrapper newByLiveQuery];
@@ -109,9 +114,11 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 
 - (void)invokeCallback:(dispatch_block_t)block
 {
-    if (self.callbackQueue) {
+    dispatch_queue_t queue = self.callbackQueue;
+    
+    if (queue) {
         
-        dispatch_async(self.callbackQueue, block);
+        dispatch_async(queue, block);
         
     } else {
         
@@ -213,13 +220,13 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
     
     _loginCallbackArray = nil;
     
-    for (void (^item_callback)(BOOL, NSError *) in callbacks) {
+    [self invokeCallback:^{
         
-        [self invokeCallback:^{
+        for (void (^item_callback)(BOOL, NSError *) in callbacks) {
             
             item_callback(succeeded, error);
-        }];
-    }
+        }
+    }];
 }
 
 - (void)loginWithCallback:(void (^)(BOOL succeeded, NSError *error))callback
@@ -281,7 +288,6 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
             }];
         }];
     }];
-    
 }
 
 - (void)resentLoginCommand
@@ -307,6 +313,12 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
                 
                 [subscriber invokeAllLoginCallbackWithSucceeded:true error:nil];
                 
+                NSArray<AVLiveQuery *> *livingObjects = [subscriber->_weakLiveQueryObjectTable allObjects];
+                
+                for (AVLiveQuery *item in livingObjects) {
+                    
+                    [item resubscribe];
+                }
             } else {
                 
                 NSTimeInterval after = [subscriber.backoffTimer timeIntervalAndCalculateNext];
@@ -322,6 +334,24 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
     }];
     
     [self.webSocket sendCommand:command];
+}
+
+// MARK: - Weak Retainer
+
+- (void)addLiveQueryObjectToWeakTable:(AVLiveQuery *)liveQueryObject
+{
+    [self addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
+        
+        [subscriber->_weakLiveQueryObjectTable addObject:liveQueryObject];
+    }];
+}
+
+- (void)removeLiveQueryObjectFromWeakTable:(AVLiveQuery *)liveQueryObject
+{
+    [self addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
+        
+        [subscriber->_weakLiveQueryObjectTable removeObject:liveQueryObject];
+    }];
 }
 
 @end

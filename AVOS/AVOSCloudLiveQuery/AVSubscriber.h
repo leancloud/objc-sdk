@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class AVLiveQuery;
+
 FOUNDATION_EXPORT NSString *const    AVLiveQueryEventKey;
 FOUNDATION_EXPORT NSNotificationName AVLiveQueryEventNotification;
 
@@ -20,5 +22,9 @@ FOUNDATION_EXPORT NSNotificationName AVLiveQueryEventNotification;
 + (instancetype)sharedInstance;
 
 - (void)loginWithCallback:(void (^)(BOOL succeeded, NSError *error))callback;
+
+- (void)addLiveQueryObjectToWeakTable:(AVLiveQuery *)liveQueryObject;
+
+- (void)removeLiveQueryObjectFromWeakTable:(AVLiveQuery *)liveQueryObject;
 
 @end
