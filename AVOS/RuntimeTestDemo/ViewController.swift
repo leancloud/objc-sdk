@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     var client: AVIMClient!
     
     var liveQuery: AVLiveQuery!
+    var isShowFileCallbackAlert: Bool = false
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
@@ -30,18 +31,10 @@ class ViewController: UIViewController {
         
         assert(self.client.status == .none)
         
-        self.liveQuery = AVLiveQuery(query: AVQuery.init(className: "_File"))
+        let query: AVQuery = AVQuery.init(className: "_File")
+        query.whereKeyExists("objectId")
+        self.liveQuery = AVLiveQuery(query: query)
         self.liveQuery.delegate = self
-    }
-    
-    func enableUserInteraction() {
-        self.activityIndicatorView.stopAnimating()
-        self.view.isUserInteractionEnabled = true
-    }
-    
-    func disableUserInteraction() {
-        self.activityIndicatorView.startAnimating()
-        self.view.isUserInteractionEnabled = false
     }
     
     func showAlert(title: String, message: String) {
@@ -61,11 +54,7 @@ extension ViewController {
     
     func imLogin() {
         
-        self.disableUserInteraction()
-        
         self.client.open { (success: Bool, error: Error?) in
-            
-            self.enableUserInteraction()
             
             if success {
                 
@@ -80,11 +69,7 @@ extension ViewController {
     
     func imReopen() {
         
-        self.disableUserInteraction()
-        
         self.client.open(with: .reopen) { (success: Bool, error: Error?) in
-            
-            self.enableUserInteraction()
             
             if success {
                 
@@ -101,7 +86,8 @@ extension ViewController {
         AVInstallation.default().deviceToken = UUID().uuidString
     }
     
-    func liveQuerySubscribe() {
+    func liveQuerySubscribeFile() {
+        
         self.liveQuery.subscribe { (succeeded: Bool, error: Error?) in
             
             guard succeeded else {
@@ -111,7 +97,72 @@ extension ViewController {
                 return
             }
             
+            self.isShowFileCallbackAlert = false
             self.showAlert(title: "Live Query", message: "Subscribe Succeeded")
+        }
+    }
+    
+    func createFile() {
+        
+        let file: AVFile = AVFile.init(remoteURL: URL(string: "http://ac-jmbpc7y4.clouddn.com/d40e9cf44dc5dadf1577.m4a")!)
+        
+        file.upload { (succeeded: Bool, error: Error?) in
+            
+            guard succeeded else {
+                
+                self.showAlert(title: "Error", message: "\(String(describing: error))")
+                
+                return
+            }
+            
+            if self.isShowFileCallbackAlert {
+                
+                self.showAlert(title: "Succeeded", message: "Create File")
+            }
+        }
+    }
+    
+    func deleteFile(with objectId: String) {
+        
+        AVFile.getWithObjectId(objectId) { (file: AVFile?, error: Error?) in
+            
+            guard let file: AVFile = file else {
+                
+                self.showAlert(title: "Error", message: "\(String(describing: error))")
+                
+                return
+            }
+            
+            file.delete(completionHandler: { (succeeded: Bool, error: Error?) in
+                
+                guard succeeded else {
+                    
+                    self.showAlert(title: "Error", message: "\(String(describing: error))")
+                    
+                    return
+                }
+                
+                if self.isShowFileCallbackAlert {
+                    
+                    self.showAlert(title: "Succeeded", message: "Delete File")
+                }
+            })
+        }
+    }
+    
+    func liveQueryUnsubscribeFile() {
+        
+        self.liveQuery.unsubscribe { (succeeded: Bool, error: Error?) in
+            
+            guard succeeded else {
+                
+                self.showAlert(title: "Error", message: "\(String(describing: error))")
+                
+                return
+            }
+            
+            self.isShowFileCallbackAlert = true
+            self.showAlert(title: "Live Query", message: "Unsubscribe Succeeded")
         }
     }
     
@@ -120,7 +171,7 @@ extension ViewController {
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return 7
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -133,7 +184,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         case 2:
             cell.textLabel?.text = "Change Device Token"
         case 3:
-            cell.textLabel?.text = "Live Query"
+            cell.textLabel?.text = "Live Query Subscribe _File"
+        case 4:
+            cell.textLabel?.text = "Create a File"
+        case 5:
+            cell.textLabel?.text = "Delete a File"
+        case 6:
+            cell.textLabel?.text = "Live Query Unsubscribe _File"
         default:
             fatalError()
         }
@@ -141,10 +198,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        defer {
-            tableView.deselectRow(at: indexPath, animated: true)
-        }
         
         switch indexPath.row {
         case 0:
@@ -154,7 +207,25 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         case 2:
             self.changeDeviceToken()
         case 3:
-            self.liveQuerySubscribe()
+            self.liveQuerySubscribeFile()
+        case 4:
+            self.createFile()
+        case 5:
+            let alert: UIAlertController = UIAlertController(title: "Input", message: "objectId of deleting file", preferredStyle: .alert)
+            
+            alert.addTextField(configurationHandler: { _ in })
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] _ in
+                
+                if let text: String = alert?.textFields?.first?.text {
+                    
+                   self.deleteFile(with: text)
+                }
+            }))
+            
+            self.present(alert, animated: true, completion: nil)
+        case 6:
+            self.liveQueryUnsubscribeFile()
         default:
             fatalError()
         }
@@ -209,5 +280,19 @@ extension ViewController: AVIMClientDelegate {
 }
 
 extension ViewController: AVLiveQueryDelegate {
+    
+    func liveQuery(_ liveQuery: AVLiveQuery, objectDidCreate object: Any) {
+        
+        assert(self.isShowFileCallbackAlert == false)
+        
+        self.showAlert(title: "Object Did Create", message: "\(object)")
+    }
+    
+    func liveQuery(_ liveQuery: AVLiveQuery, objectDidDelete object: Any) {
+        
+        assert(self.isShowFileCallbackAlert == false)
+        
+        self.showAlert(title: "Object Did Delete", message: "\(object)")
+    }
     
 }

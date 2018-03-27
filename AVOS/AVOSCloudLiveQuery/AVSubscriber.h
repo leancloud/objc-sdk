@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class AVLiveQuery;
+
 FOUNDATION_EXPORT NSString *const    AVLiveQueryEventKey;
 FOUNDATION_EXPORT NSNotificationName AVLiveQueryEventNotification;
 
@@ -15,8 +17,14 @@ FOUNDATION_EXPORT NSNotificationName AVLiveQueryEventNotification;
 
 @property (nonatomic, copy, readonly) NSString *identifier;
 
+@property (nonatomic, strong, readwrite) dispatch_queue_t callbackQueue;
+
 + (instancetype)sharedInstance;
 
-- (void)start;
+- (void)loginWithCallback:(void (^)(BOOL succeeded, NSError *error))callback;
+
+- (void)addLiveQueryObjectToWeakTable:(AVLiveQuery *)liveQueryObject;
+
+- (void)removeLiveQueryObjectFromWeakTable:(AVLiveQuery *)liveQueryObject;
 
 @end

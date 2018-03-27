@@ -175,7 +175,16 @@
     else if ([AVObjectUtils isPointer:type] ||
              [AVObjectUtils isAVObject:dict] )
     {
+        /*
+         the backend stores AVFile as AVObject, but in sdk AVFile is not subclass of AVObject, have to process the situation here.
+         */
+        if ([AVObjectUtils isFilePointer:dict]) {
+            return [[AVFile alloc] initWithRawJSONData:[dict mutableCopy]];
+        }
         return [AVObjectUtils avobjectFromDictionary:dict];
+    }
+    else if ([AVObjectUtils isFile:type]) {
+        return [[AVFile alloc] initWithRawJSONData:[dict mutableCopy]];
     }
     else if ([AVObjectUtils isGeoPoint:type])
     {
@@ -231,6 +240,10 @@
     }
     else if ([AVObjectUtils isAVObject:dict]) {
         [target setObject:[AVObjectUtils objectFromDictionary:dict] forKey:key submit:NO];
+    }
+    else if ([AVObjectUtils isFile:type]) {
+        AVFile *file = [[AVFile alloc] initWithRawJSONData:[dict mutableCopy]];
+        [target setObject:file forKey:key submit:false];
     }
     else if ([AVObjectUtils isGeoPoint:type])
     {
@@ -598,6 +611,11 @@
     return @{@"__type": @"Bytes", @"base64":base64};
 }
 
++(NSDictionary *)dictionaryFromFile:(AVFile *)file
+{
+    return [file rawJSONDataCopy];
+}
+
 +(NSDictionary *)dictionaryFromACL:(AVACL *)acl {
     return [acl.permissionsById copy];
 }
@@ -637,6 +655,8 @@
         return [AVObjectUtils dictionaryFromDate:obj];
     } else if ([obj isKindOfClass:[NSData class]]) {
         return [AVObjectUtils dictionaryFromData:obj];
+    } else if ([obj isKindOfClass:[AVFile class]]) {
+        return [AVObjectUtils dictionaryFromFile:obj];
     } else if ([obj isKindOfClass:[AVACL class]]) {
         return [AVObjectUtils dictionaryFromACL:obj];
     } else if ([obj isKindOfClass:[AVRelation class]]) {
