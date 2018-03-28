@@ -42,6 +42,8 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     
     NSString *_localPath;
     
+    NSString *_pathExtension;
+    
     AVACL *_ACL;
     
     NSDictionary<NSString *, NSString *> *_uploadingHeaders;
@@ -115,6 +117,8 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     if (self) {
         
         _data = data;
+        
+        _pathExtension = name.pathExtension;
         
         _rawJSONData[kLCFile_name] = ({
             
@@ -192,6 +196,8 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
         _localPath = localPath;
         
+        _pathExtension = localPath.pathExtension;
+        
         NSString *name = ({
             
             NSString *lastPathComponent = localPath.lastPathComponent;
@@ -257,6 +263,8 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     self = [self init];
     
     if (self) {
+        
+        _pathExtension = remoteURL.pathExtension;
         
         NSString *absoluteString = remoteURL.absoluteString;
         
@@ -551,29 +559,28 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 
 - (NSString *)pathExtension
 {
-    __block NSString *name = nil;
-    
-    __block NSString *url = nil;
+    __block NSString *pathExtension = nil;
     
     [self internalSyncLock:^{
         
-        name = [NSString lc__decodingWithKey:kLCFile_name fromDic:_rawJSONData];
-        
-        url = [NSString lc__decodingWithKey:kLCFile_url fromDic:_rawJSONData];
+        if (_pathExtension) {
+            
+            pathExtension = _pathExtension;
+            
+        } else {
+            
+            pathExtension = [[NSString lc__decodingWithKey:kLCFile_name fromDic:_rawJSONData] pathExtension];
+            
+            if (!pathExtension) {
+                
+                pathExtension = [[NSString lc__decodingWithKey:kLCFile_url fromDic:_rawJSONData] pathExtension];
+            }
+            
+            _pathExtension = pathExtension;
+        }
     }];
     
-    
-    if (name && name.pathExtension.length > 0) {
-        
-        return name.pathExtension;
-    }
-    
-    if (url && url.pathExtension.length > 0) {
-        
-        return url.pathExtension;
-    }
-    
-    return nil;
+    return pathExtension;
 }
 
 - (NSString *)mimeType
@@ -826,7 +833,14 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
             dic = [_rawJSONData mutableCopy];
         }];
         
-        dic[kLCFile_key] = AVFile_CompactUUID();
+        NSString *key = AVFile_CompactUUID();
+        
+        if (_pathExtension) {
+            
+            key = [key stringByAppendingPathExtension:_pathExtension];
+        }
+        
+        dic[kLCFile_key] = key;
         
         dic;
     });
@@ -1319,6 +1333,13 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     }
     
     NSString *persistentCachePath = [directory stringByAppendingPathComponent:objectId];
+    
+    NSString *pathExtension = [self pathExtension];
+    
+    if (pathExtension) {
+        
+        persistentCachePath = [persistentCachePath stringByAppendingPathExtension:pathExtension];
+    }
     
     return persistentCachePath;
 }

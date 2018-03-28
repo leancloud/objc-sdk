@@ -168,7 +168,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
         let imageData: Data = try! Data.init(contentsOf: imageUrl)
         let imageFile: AVFile = AVFile.init(data: imageData, name: "image.png")
         
-        for i in 0..<5 {
+        for i in 0..<1 {
             
             let text: String = "\(i)"
             
@@ -213,7 +213,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
         let audioData: Data = try! Data.init(contentsOf: audioUrl)
         let audioFile: AVFile = AVFile.init(data: audioData, name: "audio.mp3")
         
-        for i in 0..<5 {
+        for i in 0..<1 {
             
             let text: String = "\(i)"
             
@@ -236,6 +236,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
                     XCTAssertTrue(isSuccess)
                     XCTAssertNil(error)
                     XCTAssertNotNil(audioMessage.messageId)
+                    XCTAssertTrue(audioMessage.duration > 0)
                 })
                 
             }, failure: {
@@ -258,7 +259,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
         let videoData: Data = try! Data.init(contentsOf: videoUrl)
         let videoFile: AVFile = AVFile.init(data: videoData, name: "video.mp4")
         
-        for i in 0..<5 {
+        for i in 0..<1 {
             
             let text: String = "\(i)"
             
@@ -281,6 +282,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
                     XCTAssertTrue(isSuccess)
                     XCTAssertNil(error)
                     XCTAssertNotNil(videoMessage.messageId)
+                    XCTAssertTrue(videoMessage.duration > 0)
                 })
                 
             }, failure: {
@@ -345,7 +347,7 @@ class LCIMTestCaseConversation: LCIMTestBase {
         let fileData: Data = try! Data.init(contentsOf: fileUrl)
         let fileFile: AVFile = AVFile.init(data: fileData, name: "text.md")
         
-        for i in 0..<5 {
+        for i in 0..<1 {
             
             let text: String = "\(i)"
             
