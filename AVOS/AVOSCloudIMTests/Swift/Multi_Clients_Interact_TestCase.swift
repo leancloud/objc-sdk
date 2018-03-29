@@ -317,10 +317,24 @@ class Multi_Clients_Interact_TestCase: LCIMTestBase {
         
         self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
-            let key: String = "key_test"
-            let value: String = "value_test"
+            let keyTest: String = "key_test"
+            let valueTest: String = "value_test"
             
-            uniqueConversation[key] = value
+            let attrSubKey: String = "test"
+            let attrSubKeyValue: String = "test"
+            
+            let nameValue: String = "name"
+            
+            var dic: [String : String] = [
+                keyTest : valueTest,
+                "attr.\(attrSubKey)" : attrSubKeyValue,
+                "name" : nameValue
+            ]
+            
+            for (key, value) in dic {
+                
+                uniqueConversation[key] = value
+            }
             
             semaphore.increment()
             
@@ -332,7 +346,15 @@ class Multi_Clients_Interact_TestCase: LCIMTestBase {
                 
                 XCTAssertEqual(conversation.conversationId, uniqueConversation.conversationId)
                 XCTAssertEqual(clientId, client1.client.clientId)
-                XCTAssertEqual(data[key] as? String, value)
+                
+                for (key, value) in data {
+                    
+                    XCTAssertEqual(dic[key as! String], value as? String)
+                }
+                
+                XCTAssertEqual(conversation.name, nameValue)
+                XCTAssertEqual(conversation.attributes?[attrSubKey] as! String, attrSubKeyValue)
+                XCTAssertEqual(conversation[keyTest] as! String, valueTest)
             }
             
             semaphore.increment()
