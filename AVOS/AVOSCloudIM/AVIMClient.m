@@ -84,7 +84,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     LCIMSessionConfigOptions_CallbackResultSlice = 1 << 5,
 };
 
-static id AVIMClient_JSONObjectFromString(NSString *string)
+static id AVIMClient_JSONObjectFromString(NSString *string, NSJSONReadingOptions options)
 {
     if (!string || string.length == 0) {
         
@@ -95,7 +95,7 @@ static id AVIMClient_JSONObjectFromString(NSString *string)
     
     NSError *error = nil;
     
-    id JSONObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    id JSONObject = [NSJSONSerialization JSONObjectWithData:data options:options error:&error];
     
     if (error) {
         
@@ -1538,7 +1538,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     
     NSString *conversationId = convCommand.cid;
     
-    id JSONObject = AVIMClient_JSONObjectFromString(convCommand.attr.data_p);
+    id JSONObject = AVIMClient_JSONObjectFromString(convCommand.attr.data_p, 0);
     
     if (!conversationId || ![NSDictionary lc__checkingType:JSONObject]) {
         
@@ -1547,7 +1547,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     
     void(^handlingWithConversation_block)(AVIMConversation *) = ^(AVIMConversation *conversation) {
         
-        // TODO: merge `JSONObject` to conversation's raw json data.
+        [conversation mergeConvUpdatedMessage:JSONObject];
         
         NSString *byId = convCommand.initBy;
         
@@ -1675,7 +1675,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                 results;
             });
             
-            NSArray *JSONObject = AVIMClient_JSONObjectFromString(results.data_p);
+            NSArray *JSONObject = AVIMClient_JSONObjectFromString(results.data_p, NSJSONReadingMutableContainers);
             
             if (![NSArray lc__checkingType:JSONObject] || JSONObject.count == 0) {
                 

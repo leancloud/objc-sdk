@@ -457,7 +457,7 @@
 - (id)JSONValue:(NSString *)string {
     NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
     NSError *error = nil;
-    id result = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    id result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
     return result;
 }
 

@@ -532,6 +532,14 @@ __attribute__((warn_unused_result));
  */
 - (void)conversation:(AVIMConversation *)conversation didUpdateForKey:(NSString *)key;
 
+/**
+ Notification for conversation's attribution updated.
+
+ @param conversation Updated conversation.
+ @param date Updated date.
+ @param clientId The client id which doing this updates.
+ @param data Updated data.
+ */
 - (void)conversation:(AVIMConversation *)conversation didUpdateAt:(NSDate *)date by:(NSString *)clientId data:(NSDictionary *)data;
 
 /**

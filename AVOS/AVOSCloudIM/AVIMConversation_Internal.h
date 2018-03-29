@@ -138,6 +138,8 @@ typedef NS_ENUM(NSUInteger, LCIMConvType) {
 
 - (void)setKeyedConversation:(AVIMKeyedConversation *)keyedConversation;
 
+- (void)mergeConvUpdatedMessage:(NSDictionary *)convUpdatedMessage;
+
 @end
 
 @interface AVIMChatRoom ()

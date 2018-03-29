@@ -38,6 +38,67 @@ NSNotificationName LCIMConversationPropertyUpdateNotification = @"LCIMConversati
 NSNotificationName LCIMConversationMessagePatchNotification = @"LCIMConversationMessagePatchNotification";
 NSNotificationName LCIMConversationDidReceiveMessageNotification = @"LCIMConversationDidReceiveMessageNotification";
 
+static void AVIMConversation_mergeNewDictionaryIntoOldDictionary(NSDictionary *newDictionary, NSMutableDictionary *oldDictionary)
+{
+    if (!newDictionary || !oldDictionary) {
+        
+        return;
+    }
+    
+    NSArray *allKeys = [newDictionary allKeys];
+    
+    for (id key in allKeys) {
+        
+        id newValue = newDictionary[key];
+        
+        if ([NSString lc__checkingType:key]) {
+            
+            NSArray *subKeys = [(NSString *)key componentsSeparatedByString:@"."];
+            
+            if (subKeys.count > 1) {
+                
+                id oldSubValue = oldDictionary[subKeys[0]];
+                
+                if (!oldSubValue) {
+                    
+                    oldSubValue = [NSMutableDictionary dictionary];
+                    
+                    oldDictionary[subKeys[0]] = oldSubValue;
+                }
+                
+                for (int i = 1; i < subKeys.count; i++) {
+                    
+                    id nextSubKey = subKeys[i];
+                    
+                    if (i == subKeys.count - 1) {
+                        
+                        oldSubValue[nextSubKey] = newValue;
+                        
+                    } else {
+                        
+                        id nextSubValue = oldSubValue[nextSubKey];
+                        
+                        if (!nextSubValue) {
+                            
+                            nextSubValue = [NSMutableDictionary dictionary];
+                            
+                            oldSubValue[nextSubKey] = nextSubValue;
+                        }
+                        
+                        oldSubValue = nextSubValue;
+                    }
+                }
+            } else {
+                
+                oldDictionary[key] = newValue;
+            }
+        } else {
+            
+            oldDictionary[key] = newValue;
+        }
+    }
+}
+
 @implementation AVIMMessageIntervalBound
 
 - (instancetype)initWithMessageId:(NSString *)messageId
@@ -2513,6 +2574,13 @@ static dispatch_queue_t messageCacheOperationQueue;
         
         [client sendCommand:genericCommand];
     });
+}
+
+// MARK: - Conv Updated
+
+- (void)mergeConvUpdatedMessage:(NSDictionary *)convUpdatedMessage
+{
+    AVIMConversation_mergeNewDictionaryIntoOldDictionary(convUpdatedMessage, self.properties);
 }
 
 #pragma mark - Keyed Conversation
