@@ -1226,12 +1226,6 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                 
                 break;
                 
-            case AVIMCommandType_Patch:
-                
-                [self processPatchCommand:command];
-                
-                break;
-                
             default:
                 
                 break;
@@ -1458,6 +1452,17 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
 
 // MARK: - AVIMWebSocketWrapperDelegate
 
+- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socket didOccurError:(LCIMProtobufCommandWrapper *)command
+{
+    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+        
+        if (command.hasCallback && command.error) {
+            
+            [command executeCallbackAndSetItToNil];
+        }
+    }];
+}
+
 - (void)webSocketWrapper:(AVIMWebSocketWrapper *)socket didReceiveCallback:(LCIMProtobufCommandWrapper *)command
 {
     [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
@@ -1501,24 +1506,26 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                     case AVIMOpType_Updated:
                     {
                         [client process_conv_updated:inCommand];
-                    }break;
+                    } break;
                         
                     default: break;
                 }
-            }break;
+            } break;
+                
+            case AVIMCommandType_Patch:
+            {
+                switch (inCommand.op)
+                {
+                    case AVIMOpType_Modify:
+                    {
+                        [client process_patch_modify:inCommand];
+                    } break;
+                        
+                    default: break;
+                }
+            } break;
                 
             default: break;
-        }
-    }];
-}
-
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socket didOccurError:(LCIMProtobufCommandWrapper *)command
-{
-    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-        
-        if (command.hasCallback && command.error) {
-            
-            [command executeCallbackAndSetItToNil];
         }
     }];
 }
@@ -1594,12 +1601,148 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     }
 }
 
+- (void)process_patch_modify:(AVIMGenericCommand *)inCommand
+{
+    AssertRunInIMClientQueue;
+    
+    NSArray<AVIMPatchItem *> *patchArray = inCommand.patchMessage.patchesArray;
+    
+    for (AVIMPatchItem *patchItem in patchArray) {
+        
+        if (patchItem.patchTimestamp > _lastPatchTimestamp) {
+            
+            _lastPatchTimestamp = patchItem.patchTimestamp;
+        }
+        
+        NSString *conversationId = patchItem.cid;
+        NSString *messageId = patchItem.mid;
+        NSString *payloadString = patchItem.data_p;
+        
+        if (conversationId && messageId && payloadString) {
+            
+            LCIMMessageCacheStore *messageCacheStore = [self messageCacheStoreForConversationId:conversationId];
+            
+            AVIMMessage *message = [messageCacheStore messageForId:messageId];
+            
+            if (message) {
+                
+                NSDictionary<NSString *, id> *entries = @{
+                                                          LCIM_FIELD_PAYLOAD: payloadString,
+                                                          LCIM_FIELD_PATCH_TIMESTAMP: @((double)patchItem.patchTimestamp),
+                                                          @"mention_all": @(patchItem.mentionAll),
+                                                          @"mention_list": patchItem.mentionPidsArray ? [NSKeyedArchiver archivedDataWithRootObject:patchItem.mentionPidsArray] : [NSNull null],
+                                                          };
+                
+                [messageCacheStore updateEntries:entries forMessageId:messageId];
+                
+                message.content = payloadString;
+                message.updatedAt = [NSDate dateWithTimeIntervalSince1970:(patchItem.patchTimestamp / 1000.0)];
+                message.mentionAll = patchItem.mentionAll;
+                message.mentionList = patchItem.mentionPidsArray;
+                
+                if ([message isKindOfClass:[AVIMTypedMessage class]]) {
+                    
+                    ((AVIMTypedMessage *)message).messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:patchItem.data_p];
+                }
+                
+            } else {
+                
+                AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:patchItem.data_p];
+                
+                if ([messageObject isValidTypedMessageObject]) {
+                    
+                    message = [AVIMTypedMessage messageWithMessageObject:messageObject];
+                    
+                } else {
+                    
+                    message = [[AVIMMessage alloc] init];
+                }
+                
+                message.content = patchItem.data_p;
+                message.sendTimestamp = patchItem.timestamp;
+                message.conversationId = conversationId;
+                message.clientId = patchItem.from;
+                message.messageId = messageId;
+                message.status = AVIMMessageStatusNone;
+                message.localClientId = _clientId;
+                message.mentionAll = patchItem.mentionAll;
+                message.mentionList = patchItem.mentionPidsArray;
+                message.updatedAt = [NSDate dateWithTimeIntervalSince1970:(patchItem.patchTimestamp / 1000.0)];
+                
+                [messageCacheStore insertOrUpdateMessage:message withBreakpoint:YES];
+            }
+            
+            NSDictionary *userInfo = @{ @"patchItem": patchItem };
+            [[NSNotificationCenter defaultCenter] postNotificationName:LCIMConversationMessagePatchNotification
+                                                                object:self
+                                                              userInfo:userInfo];
+            
+            [self queryConversationWithId:conversationId queryOption:AVIMConversationQueryOptionWithMessage callback:^(AVIMConversation *conversation, NSError *error) {
+                
+                id <AVIMClientDelegate> delegate = _delegate;
+                
+                if (conversation && message && delegate && [delegate respondsToSelector:@selector(conversation:messageHasBeenUpdated:)]) {
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        
+                        [delegate conversation:conversation messageHasBeenUpdated:message];
+                    });
+                }
+            }];
+        }
+    }
+    
+    LCIMProtobufCommandWrapper *ackCommandWrapper = ({
+        
+        AVIMGenericCommand *command = [[AVIMGenericCommand alloc] init];
+        command.cmd = AVIMCommandType_Patch;
+        command.op = AVIMOpType_Modified;
+        AVIMPatchCommand *patchMessage = [[AVIMPatchCommand alloc] init];
+        patchMessage.lastPatchTime = _lastPatchTimestamp;
+        command.patchMessage = patchMessage;
+        
+        LCIMProtobufCommandWrapper *commandWrapper = [[LCIMProtobufCommandWrapper alloc] init];
+        commandWrapper.outCommand = command;
+        commandWrapper;
+    });
+    
+    [self _sendCommandWrapper:ackCommandWrapper];
+}
+
 // MARK: - Query Conversation From Server
+
+- (void)queryConversationWithId:(NSString *)conversationId
+                    queryOption:(AVIMConversationQueryOption)queryOption
+                       callback:(void (^)(AVIMConversation *conversation, NSError *error))callback
+{
+    AssertRunInIMClientQueue;
+    NSParameterAssert(conversationId);
+    
+    AVIMConversation *conversation = [self conversationForId:conversationId];
+    
+    if (!conversation) {
+        
+        conversation = [[self conversationCache] conversationForId:conversationId];
+    }
+    
+    if (conversation) {
+        
+        callback(conversation, nil);
+        
+    } else {
+        
+        [self queryConversationFromServerWithId:conversationId queryOption:queryOption callback:^(AVIMConversation *conversation, NSError *error) {
+            
+            callback(conversation, error);
+        }];
+    }
+}
 
 - (void)queryConversationFromServerWithId:(NSString *)conversationId
                               queryOption:(AVIMConversationQueryOption)queryOption
                                  callback:(void (^)(AVIMConversation *conversation, NSError *error))callback
 {
+    AssertRunInIMClientQueue;
     NSParameterAssert(conversationId);
     
     NSMutableArray<void (^)(AVIMConversation *, NSError *)> *callbackArray_1 = _callbackMapOfQueryConversation[conversationId];
@@ -2655,104 +2798,6 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
         
         [self processCommand_SessionClosed:genericCommand];
     }
-}
-
-- (void)processPatchCommand:(AVIMGenericCommand *)command
-{
-    AssertRunInIMClientQueue;
-    
-    AVIMOpType op = command.op;
-
-    if (op == AVIMOpType_Modify) {
-        [self processMessagePatchCommand:command.patchMessage];
-        [self sendACKForPatchCommand:command];
-    }
-}
-
-- (void)processMessagePatchCommand:(AVIMPatchCommand *)command
-{
-    AssertRunInIMClientQueue;
-    
-    NSArray<AVIMPatchItem *> *patchItems = command.patchesArray;
-
-    for (AVIMPatchItem *patchItem in patchItems) {
-        [self updateLastPatchTimestamp:patchItem.patchTimestamp];
-        [self updateMessageCacheForPatchItem:patchItem];
-        [self postNotificationForPatchItem:patchItem];
-    }
-}
-
-- (void)updateMessageCacheForPatchItem:(AVIMPatchItem *)patchItem {
-    NSString *conversationId = patchItem.cid;
-    NSString *messageId      = patchItem.mid;
-
-    LCIMMessageCacheStore *messageCacheStore = [self messageCacheStoreForConversationId:conversationId];
-    AVIMMessage *message = [messageCacheStore messageForId:messageId];
-
-    if (!message)
-        return;
-
-    NSDictionary<NSString *, id> *entries = @{
-        LCIM_FIELD_PAYLOAD: patchItem.data_p,
-        LCIM_FIELD_PATCH_TIMESTAMP: @((double)patchItem.patchTimestamp),
-        @"mention_all": @(patchItem.mentionAll),
-        @"mention_list": patchItem.mentionPidsArray ? [NSKeyedArchiver archivedDataWithRootObject:patchItem.mentionPidsArray] : [NSNull null],
-    };
-
-    [messageCacheStore updateEntries:entries
-                        forMessageId:messageId];
-}
-
-- (void)postNotificationForPatchItem:(AVIMPatchItem *)patchItem {
-    NSDictionary *userInfo = @{ @"patchItem": patchItem };
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:LCIMConversationMessagePatchNotification
-                                                        object:self
-                                                      userInfo:userInfo];
-    
-    NSString *conversationId = patchItem.cid;
-    NSString *messageId = patchItem.mid;
-    
-    if (conversationId && messageId) {
-        
-        AVIMConversation *conv = [self conversationForId:conversationId];
-        
-        AVIMMessage *message = [[self messageCacheStoreForConversationId:conversationId] messageForId:messageId];
-        
-        id <AVIMClientDelegate> delegate = _delegate;
-        
-        if (conv && message && delegate && [delegate respondsToSelector:@selector(conversation:messageHasBeenUpdated:)]) {
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [delegate conversation:conv messageHasBeenUpdated:message];
-            });
-        }
-    }
-}
-
-- (void)sendACKForPatchCommand:(AVIMGenericCommand *)inCommand
-{
-    AssertRunInIMClientQueue;
-    
-    int64_t lastPatchTimestamp = _lastPatchTimestamp;
-
-    if (!lastPatchTimestamp)
-        return;
-
-    AVIMGenericCommand *command = [[AVIMGenericCommand alloc] init];
-
-    command.peerId = _clientId;
-
-    command.cmd = AVIMCommandType_Patch;
-    command.op  = AVIMOpType_Modified;
-
-    AVIMPatchCommand *patchMessage = [[AVIMPatchCommand alloc] init];
-    patchMessage.lastPatchTime = lastPatchTimestamp;
-
-    command.patchMessage = patchMessage;
-
-    [self _sendCommand:command];
 }
 
 - (void)array:(NSMutableArray *)array addObject:(id)object {
