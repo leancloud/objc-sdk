@@ -35,7 +35,6 @@ NSString *LCIMConversationPropertyNameKey = @"propertyName";
 NSString *LCIMConversationPropertyValueKey = @"propertyValue";
 
 NSNotificationName LCIMConversationPropertyUpdateNotification = @"LCIMConversationPropertyUpdateNotification";
-NSNotificationName LCIMConversationMessagePatchNotification = @"LCIMConversationMessagePatchNotification";
 NSNotificationName LCIMConversationDidReceiveMessageNotification = @"LCIMConversationDidReceiveMessageNotification";
 
 static void AVIMConversation_mergeNewDictionaryIntoOldDictionary(NSDictionary *newDictionary, NSMutableDictionary *oldDictionary)
@@ -416,11 +415,6 @@ static dispatch_queue_t messageCacheOperationQueue;
                  object:nil];
     
     [center addObserver:self
-               selector:@selector(didReceivePatchItem:)
-                   name:LCIMConversationMessagePatchNotification
-                 object:nil];
-    
-    [center addObserver:self
                selector:@selector(didReceiveMessageNotification:)
                    name:LCIMConversationDidReceiveMessageNotification
                  object:nil];
@@ -489,30 +483,6 @@ static dispatch_queue_t messageCacheOperationQueue;
     [AVIMRuntimeHelper callMethodInMainThreadWithTarget:delegate
                                                selector:selector
                                               arguments:@[self, key]];
-}
-
-- (void)didReceivePatchItem:(NSNotification *)notification {
-    if (!self.conversationId)
-        return;
-    if (notification.object != self.imClient)
-        return;
-
-    NSDictionary *userInfo = notification.userInfo;
-    AVIMPatchItem *patchItem = userInfo[@"patchItem"];
-
-    if (![patchItem.cid isEqualToString:self.conversationId])
-        return;
-
-    NSString *messageId = patchItem.mid;
-    LCIMMessageCacheStore *messageCacheStore = [self messageCacheStore];
-
-    AVIMMessage *message = [messageCacheStore messageForId:messageId];
-
-    if (!message)
-        return;
-
-    if ([message.messageId isEqualToString:self.lastMessage.messageId])
-        self.lastMessage = message;
 }
 
 - (void)didReceiveMessageNotification:(NSNotification *)notification {

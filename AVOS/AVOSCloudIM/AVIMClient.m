@@ -1672,12 +1672,12 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                 [messageCacheStore insertOrUpdateMessage:message withBreakpoint:YES];
             }
             
-            NSDictionary *userInfo = @{ @"patchItem": patchItem };
-            [[NSNotificationCenter defaultCenter] postNotificationName:LCIMConversationMessagePatchNotification
-                                                                object:self
-                                                              userInfo:userInfo];
-            
             [self queryConversationWithId:conversationId queryOption:AVIMConversationQueryOptionWithMessage callback:^(AVIMConversation *conversation, NSError *error) {
+                
+                if ([conversation.lastMessage.messageId isEqualToString:message.messageId]) {
+                    
+                    conversation.lastMessage = message;
+                }
                 
                 id <AVIMClientDelegate> delegate = _delegate;
                 
