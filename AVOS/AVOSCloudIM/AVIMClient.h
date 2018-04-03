@@ -540,7 +540,7 @@ __attribute__((warn_unused_result));
  @param clientId The client id which doing this updates.
  @param data Updated data.
  */
-- (void)conversation:(AVIMConversation *)conversation didUpdateAt:(NSDate *)date by:(NSString *)clientId data:(NSDictionary *)data;
+- (void)conversation:(AVIMConversation *)conversation didUpdateAt:(NSDate *)date byClientId:(NSString *)clientId updatedData:(NSDictionary *)data;
 
 /**
  *  当前聊天状态被暂停，常见于网络断开时触发。

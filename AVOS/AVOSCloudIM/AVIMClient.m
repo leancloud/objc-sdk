@@ -1556,19 +1556,19 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
         
         [conversation mergeConvUpdatedMessage:JSONObject];
         
-        NSString *byId = convCommand.initBy;
+        NSString *byClientId = convCommand.initBy;
         
         NSDate *atDate = AVIMClient_dateFromString(convCommand.udate);
         
         id <AVIMClientDelegate> delegate = _delegate;
         
-        SEL sel = @selector(conversation:didUpdateAt:by:data:);
+        SEL sel = @selector(conversation:didUpdateAt:byClientId:updatedData:);
         
         if (delegate && [delegate respondsToSelector:sel]) {
             
             [self invokeInSpecifiedQueue:^{
                 
-                [delegate conversation:conversation didUpdateAt:atDate by:byId data:JSONObject];
+                [delegate conversation:conversation didUpdateAt:atDate byClientId:byClientId updatedData:JSONObject];
             }];
         }
     };
