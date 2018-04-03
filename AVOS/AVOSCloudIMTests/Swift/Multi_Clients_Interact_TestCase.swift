@@ -367,6 +367,10 @@ class Multi_Clients_Interact_TestCase: LCIMTestBase {
                 
                 XCTAssertTrue(succeeded)
                 XCTAssertNil(error)
+                
+                XCTAssertEqual(uniqueConversation.name, nameValue)
+                XCTAssertEqual(uniqueConversation.attributes?[attrSubKey] as! String, attrSubKeyValue)
+                XCTAssertEqual(uniqueConversation[keyTest] as! String, valueTest)
             })
             
         }, failure: {
