@@ -504,29 +504,7 @@
             continue;
         }
         
-        /*
-         `properties` can be changed by user,
-         so use an other dic to store some unchangeable attribute,
-         but SDK can't know whitch attribute is unchangeable,
-         so just store all data directly.
-         */
-        ///
-        NSMutableDictionary *rawDataDic = [dict mutableCopy];
-        /* Remove 'large size' & 'frequent change' Key-Value */
-        [rawDataDic removeObjectForKey:kConvAttrKey_name];
-        [rawDataDic removeObjectForKey:kConvAttrKey_avatarURL];
-        [rawDataDic removeObjectForKey:kConvAttrKey_members];
-        [rawDataDic removeObjectForKey:kConvAttrKey_membersMuted];
-        [rawDataDic removeObjectForKey:kConvAttrKey_attributes];
-        [rawDataDic removeObjectForKey:kConvAttrKey_lastMessage];
-        conversation.rawDataDic = rawDataDic;
-        ///
-
-        /* Note:
-         * We store all properties into conversation for custom attributes access.
-         * But the custom attributes will not be cached at present.
-         */
-        conversation.properties = [dict mutableCopy];
+        [conversation setRawJSONData:[dict mutableCopy]];
 
         conversation.conversationId = conversationId;
         conversation.name = [dict objectForKey:kConvAttrKey_name];

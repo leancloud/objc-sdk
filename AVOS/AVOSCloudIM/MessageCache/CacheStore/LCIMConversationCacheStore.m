@@ -65,8 +65,10 @@
     
     id muted = [NSNumber numberWithBool:conversation.muted];
     
-    id rawDataDic = (conversation.rawDataDic
-                     ? [NSKeyedArchiver archivedDataWithRootObject:conversation.rawDataDic]
+    NSDictionary *rawJSONData = conversation.rawJSONDataCopy;
+    
+    id rawDataDic = (rawJSONData
+                     ? [NSKeyedArchiver archivedDataWithRootObject:rawJSONData]
                      : [NSNull null]);
     
     NSArray *array = @[
@@ -233,7 +235,9 @@
         
         return nil;
     }
-
+    
+    [conversation setRawJSONData:[rawDataDic mutableCopy]];
+    
     conversation.name           = [result stringForColumn:LCIM_FIELD_NAME];
     conversation.creator        = [result stringForColumn:LCIM_FIELD_CREATOR];
     conversation.members        = [[result stringForColumn:LCIM_FIELD_MEMBERS] componentsSeparatedByString:@","];
@@ -256,8 +260,6 @@
     conversation.uniqueId = rawDataDic[kConvAttrKey_uniqueId];
     
     conversation.unique = [rawDataDic[kConvAttrKey_unique] boolValue];
-    
-    conversation.rawDataDic = rawDataDic;
     
     return conversation;
 }

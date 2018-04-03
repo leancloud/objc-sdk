@@ -446,7 +446,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     });
 }
 
-- (void)invokeDelegateSelector:(void (^)(void))block
+- (void)invokeInSpecifiedQueue:(void (^)(void))block
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -1566,7 +1566,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
         
         if (delegate && [delegate respondsToSelector:sel]) {
             
-            [self invokeDelegateSelector:^{
+            [self invokeInSpecifiedQueue:^{
                 
                 [delegate conversation:conversation didUpdateAt:atDate by:byId data:JSONObject];
             }];
