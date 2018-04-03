@@ -37,6 +37,18 @@ NSString *LCIMConversationPropertyValueKey = @"propertyValue";
 NSNotificationName LCIMConversationPropertyUpdateNotification = @"LCIMConversationPropertyUpdateNotification";
 NSNotificationName LCIMConversationDidReceiveMessageNotification = @"LCIMConversationDidReceiveMessageNotification";
 
+static NSError * AVIMConversation_clientInvalidError()
+{
+    NSError *aError = ({
+        NSString *reason = @"`imClient` is invalid.";
+        NSDictionary *userInfo = @{ @"reason" : reason };
+        [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                            code:0
+                        userInfo:userInfo];
+    });
+    return aError;
+}
+
 static void AVIMConversation_mergeNewDictionaryIntoOldDictionary(NSDictionary *newDictionary, NSMutableDictionary *oldDictionary)
 {
     if (!newDictionary || !oldDictionary) {
@@ -134,13 +146,14 @@ static void AVIMConversation_mergeNewDictionaryIntoOldDictionary(NSDictionary *n
 
 @end
 
-@interface AVIMConversation()
-
-@property (nonatomic, strong) NSMutableDictionary *propertiesForUpdate;
-
-@end
-
-@implementation AVIMConversation
+@implementation AVIMConversation {
+    
+    NSLock *_lock;
+    
+    NSMutableDictionary *_rawJSONData;
+    NSMutableDictionary *_pendingData;
+    NSMutableDictionary *_snapshotData;
+}
 
 static dispatch_queue_t messageCacheOperationQueue;
 
@@ -260,11 +273,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     }
     
     if (conv) {
-        
-        conv->_properties = [NSMutableDictionary dictionary];
-        conv->_propertiesForUpdate = [NSMutableDictionary dictionary];
-        conv->_rawDataDic = [NSDictionary dictionary];
-        
+
         [conv setupObserver];
     }
     
@@ -308,30 +317,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     conversation.system = isSystem;
     conversation.temporary = isTemporary;
     
-    /*
-     `properties` can be changed by user,
-     so use an other dic to store some unchangeable attribute,
-     but SDK can't know whitch attribute is unchangeable,
-     so just store all data directly.
-     */
-    ///
-    NSMutableDictionary *rawDataDic = [rawJSONData mutableCopy];
-    /* Remove 'large size' & 'frequent change' Key-Value */
-    [rawDataDic removeObjectForKey:kConvAttrKey_name];
-    [rawDataDic removeObjectForKey:kConvAttrKey_avatarURL];
-    [rawDataDic removeObjectForKey:kConvAttrKey_members];
-    [rawDataDic removeObjectForKey:kConvAttrKey_membersMuted];
-    [rawDataDic removeObjectForKey:kConvAttrKey_attributes];
-    [rawDataDic removeObjectForKey:kConvAttrKey_lastMessage];
-    conversation.rawDataDic = rawDataDic;
-    ///
-    
-    /* Note:
-     * We store all properties into conversation for custom attributes access.
-     * But the custom attributes will not be cached at present.
-     */
-    conversation.properties = [rawJSONData mutableCopy];
-    conversation.propertiesForUpdate = [NSMutableDictionary dictionary];
+    [conversation setRawJSONData:[rawJSONData mutableCopy]];
     
     conversation.name = rawJSONData[kConvAttrKey_name];
     conversation.attributes = rawJSONData[kConvAttrKey_attributes];
@@ -400,6 +386,14 @@ static dispatch_queue_t messageCacheOperationQueue;
         _conversationId = conversationId;
         
         _imClient = client;
+        
+        _lock = [[NSLock alloc] init];
+        
+        _rawJSONData = [NSMutableDictionary dictionary];
+        
+        _pendingData = [NSMutableDictionary dictionary];
+        
+        _snapshotData = nil;
     }
     
     return self;
@@ -424,6 +418,29 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+
+// MARK: - Callback Invoking
+
+- (void)invokeInSpecifiedQueue:(void (^)(void))block
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        block();
+    });
+}
+
+// MARK: - Internal Lock
+
+- (void)internalSyncLock:(void (^)(void))block
+{
+    [_lock lock];
+    
+    block();
+    
+    [_lock unlock];
+}
+
+// MARK: -
 
 - (void)propertyDidUpdate:(NSNotification *)notification {
     if (!self.conversationId)
@@ -519,6 +536,28 @@ static dispatch_queue_t messageCacheOperationQueue;
     }
 }
 
+// MARK: - Property
+
+- (NSDictionary *)rawJSONDataCopy
+{
+    __block NSDictionary *dic = nil;
+    
+    [self internalSyncLock:^{
+        
+        dic = [self->_rawJSONData copy];
+    }];
+    
+    return dic;
+}
+
+- (void)setRawJSONData:(NSMutableDictionary *)rawJSONData
+{
+    [self internalSyncLock:^{
+        
+        self->_rawJSONData = rawJSONData;
+    }];
+}
+
 - (NSString *)clientId {
     return self.imClient.clientId;
 }
@@ -552,48 +591,34 @@ static dispatch_queue_t messageCacheOperationQueue;
     _members = members;
 }
 
-- (void)setProperties:(NSMutableDictionary *)properties {
-    if (properties)
-        _properties = properties;
-    else
-        _properties = [NSMutableDictionary dictionary];
+- (void)setObject:(id)object forKey:(NSString *)key
+{
+    [self internalSyncLock:^{
+        
+        self->_pendingData[key] = object;
+    }];
 }
 
-- (void)setObject:(nullable id)object forKey:(NSString *)key {
-    [self.propertiesForUpdate setObject:object forKey:key];
-    [self.properties setObject:object forKey:key];
-}
-
-- (void)setObject:(id)object forKeyedSubscript:(NSString *)key {
+- (void)setObject:(id)object forKeyedSubscript:(NSString *)key
+{
     [self setObject:object forKey:key];
 }
 
-- (nullable id)objectForKey:(NSString *)key
+- (id)objectForKey:(NSString *)key
 {
-    id object = self.propertiesForUpdate[key];
-    if (object) {
-        return object;
-    }
+    __block id object = nil;
     
-    object = self.properties[key];
-    if (object) {
-        return object;
-    }
+    [self internalSyncLock:^{
+        
+        object = self->_rawJSONData[key];
+    }];
     
-    object = self.rawDataDic[key];
-    if (object) {
-        return object;
-    }
-
-    return nil;
+    return object;
 }
 
-- (id)objectForKeyedSubscript:(NSString *)key {
+- (id)objectForKeyedSubscript:(NSString *)key
+{
     return [self objectForKey:key];
-}
-
-- (void)cleanAttributesForUpdate {
-    [self.propertiesForUpdate removeAllObjects];
 }
 
 - (void)addMembers:(NSArray *)members {
@@ -632,21 +657,47 @@ static dispatch_queue_t messageCacheOperationQueue;
     _creator = creator;
 }
 
-- (NSString *)name {
-    return self.properties[kConvAttrKey_name];
+- (NSString *)name
+{
+    __block NSString *name = nil;
+    
+    [self internalSyncLock:^{
+        
+        name = _rawJSONData[kConvAttrKey_name];
+    }];
+    
+    return name;
 }
 
-- (void)setName:(NSString *)name {
-    self.properties[kConvAttrKey_name] = name;
+- (void)setName:(NSString *)name
+{
+    [self internalSyncLock:^{
+        
+        _rawJSONData[kConvAttrKey_name] = name;
+    }];
 }
 
-- (NSDictionary *)attributes {
-    return self.properties[kConvAttrKey_attributes];
+- (NSDictionary *)attributes
+{
+    __block NSDictionary *attributes = nil;
+    
+    [self internalSyncLock:^{
+        
+        attributes = _rawJSONData[kConvAttrKey_attributes];
+    }];
+    
+    return attributes;
 }
 
-- (void)setAttributes:(NSDictionary *)attributes {
-    self.properties[kConvAttrKey_attributes] = attributes;
+- (void)setAttributes:(NSDictionary *)attributes
+{
+    [self internalSyncLock:^{
+        
+        _rawJSONData[kConvAttrKey_attributes] = attributes;
+    }];
 }
+
+// MARK: -
 
 - (void)fetchWithCallback:(AVIMBooleanResultBlock)callback
 {
@@ -954,55 +1005,34 @@ static dispatch_queue_t messageCacheOperationQueue;
     });
 }
 
-- (AVIMGenericCommand *)generateGenericCommandWithAttributes:(NSDictionary *)attributes {
-    AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
-    genericCommand.needResponse = YES;
-    genericCommand.cmd = AVIMCommandType_Conv;
-    genericCommand.peerId = self.imClient.clientId;
-    
-    AVIMConvCommand *convCommand = [[AVIMConvCommand alloc] init];
-    convCommand.cid = self.conversationId;
-    genericCommand.op = AVIMOpType_Update;
-    convCommand.attr = [AVIMCommandFormatter JSONObjectWithDictionary:attributes];
-    [genericCommand avim_addRequiredKeyWithCommand:convCommand];
-    return genericCommand;
-}
-
-- (void)updateLocalAttributes:(NSDictionary *)attributes {
-    NSString *name = attributes[kConvAttrKey_name];
-    NSDictionary *attr = attributes[kConvAttrKey_attributes];
-
-    if (name)
-        self.name = name;
-
-    if (attr) {
-        NSMutableDictionary *attributes = (
-            self.attributes ?
-            [NSMutableDictionary dictionaryWithDictionary:self.attributes] :
-            [NSMutableDictionary dictionary]
-        );
-
-        [attributes addEntriesFromDictionary:attr];
-
-        self.attributes = attributes;
-    }
-}
-
-- (void)updateWithCallback:(AVIMBooleanResultBlock)callback {
-    [self updateAttributes:self.propertiesForUpdate callback:callback];
-}
-
-- (void)updateAttributes:(NSDictionary *)attributes
-                callback:(AVIMBooleanResultBlock)callback
+- (void)updateWithCallback:(void (^)(BOOL succeeded, NSError *error))callback
 {
-    AVIMClient *client = self.imClient;
+    __block NSDictionary *pendingData = nil;
     
-    if (!client) {
+    [self internalSyncLock:^{
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-
+        if (self->_snapshotData) {
+            
+            pendingData = nil;
+            
+        } else {
+            
+            pendingData = [self->_pendingData copy];
+            
+            NSMutableDictionary *snapshotData = [_rawJSONData mutableCopy];
+            
+            AVIMConversation_mergeNewDictionaryIntoOldDictionary(pendingData, snapshotData);
+            
+            self->_snapshotData = snapshotData;
+        }
+    }];
+    
+    if (!pendingData) {
+        
+        [self invokeInSpecifiedQueue:^{
+            
             NSError *aError = ({
-                NSString *reason = @"`imClient` is invalid.";
+                NSString *reason = @"Can't do updating before last updating done.";
                 NSDictionary *userInfo = @{ @"reason" : reason };
                 [NSError errorWithDomain:@"LeanCloudErrorDomain"
                                     code:0
@@ -1010,46 +1040,99 @@ static dispatch_queue_t messageCacheOperationQueue;
             });
             
             callback(false, aError);
-        });
+        }];
         
         return;
     }
     
-    attributes = [attributes copy];
-
-    dispatch_async(client.internalSerialQueue, ^{
-        AVIMGenericCommand *genericCommand = [self generateGenericCommandWithAttributes:attributes];
-        [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
+    void(^clearPendingData_block)(void) = ^(void) {
+        
+        [self->_pendingData removeAllObjects];
+        
+        self->_snapshotData = nil;
+    };
+    
+    [self updateWithDictionary:pendingData callback:^(BOOL succeeded, NSError *error) {
+        
+        if (error) {
             
-            if (!error) {
+            [self internalSyncLock:^{
+                
+                clearPendingData_block();
+            }];
             
-                /* Remove 'large size' & 'frequent change' Key-Value */
-                ///
-                NSMutableDictionary *rawDataDic = [self.properties mutableCopy];
-                [rawDataDic removeObjectForKey:kConvAttrKey_name];
-                [rawDataDic removeObjectForKey:kConvAttrKey_avatarURL];
-                [rawDataDic removeObjectForKey:kConvAttrKey_members];
-                [rawDataDic removeObjectForKey:kConvAttrKey_membersMuted];
-                [rawDataDic removeObjectForKey:kConvAttrKey_attributes];
-                [rawDataDic removeObjectForKey:kConvAttrKey_lastMessage];
-                self.rawDataDic = rawDataDic;
-                ///
+            [self invokeInSpecifiedQueue:^{
                 
-                [self cleanAttributesForUpdate];
-                
-                [self removeCachedConversation];
-            }
+                callback(false, error);
+            }];
             
-            if (callback) {
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                    callback(error == nil, error);
-                });
-            }
+            return;
+        }
+        
+        [self removeCachedConversation];
+        
+        [self internalSyncLock:^{
+            
+            self->_rawJSONData = self->_snapshotData;
+            
+            clearPendingData_block();
         }];
-        [client sendCommand:genericCommand];
-    });
+        
+        [self invokeInSpecifiedQueue:^{
+            
+            callback(true, nil);
+        }];
+    }];
+}
+
+- (void)updateWithDictionary:(NSDictionary *)dictionary
+                    callback:(void (^)(BOOL succeeded, NSError *error))callback
+{
+    AVIMClient *client = self.imClient;
+    
+    NSString *conversationId = self.conversationId;
+    
+    if (!client) {
+        
+        callback(false, AVIMConversation_clientInvalidError());
+        
+        return;
+    }
+    
+    [client addOperationToInternalSerialQueue:^(AVIMClient *client) {
+        
+        LCIMProtobufCommandWrapper *commandWrapper = ({
+            
+            AVIMGenericCommand *command = [[AVIMGenericCommand alloc] init];
+            command.cmd = AVIMCommandType_Conv;
+            command.op = AVIMOpType_Update;
+            
+            AVIMConvCommand *convCommand = [[AVIMConvCommand alloc] init];
+            convCommand.cid = conversationId;
+            convCommand.attr = [AVIMCommandFormatter JSONObjectWithDictionary:dictionary];
+            
+            command.convMessage = convCommand;
+            
+            LCIMProtobufCommandWrapper *commandWrapper = [[LCIMProtobufCommandWrapper alloc] init];
+            commandWrapper.outCommand = command;
+            
+            commandWrapper;
+        });
+        
+        [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+            
+            if (commandWrapper.error) {
+                
+                callback(false, commandWrapper.error);
+                
+                return;
+            }
+            
+            callback(true, nil);
+        }];
+        
+        [client sendCommandWrapper:commandWrapper];
+    }];
 }
 
 - (void)muteWithCallback:(AVIMBooleanResultBlock)callback
@@ -2550,7 +2633,10 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (void)mergeConvUpdatedMessage:(NSDictionary *)convUpdatedMessage
 {
-    AVIMConversation_mergeNewDictionaryIntoOldDictionary(convUpdatedMessage, self.properties);
+    [self internalSyncLock:^{
+        
+        AVIMConversation_mergeNewDictionaryIntoOldDictionary(convUpdatedMessage, self->_rawJSONData);
+    }];
 }
 
 #pragma mark - Keyed Conversation
@@ -2582,15 +2668,10 @@ static dispatch_queue_t messageCacheOperationQueue;
         keyedConversation.uniqueId = self.uniqueId;
     }
     
-    if (self.properties) {
-        
-        keyedConversation.properties = [self.properties mutableCopy];
-    }
+    NSDictionary *rawJSONData = [self rawJSONDataCopy];
     
-    if (self.rawDataDic) {
-        
-        keyedConversation.rawDataDic = [self.rawDataDic copy];
-    }
+    keyedConversation.properties = [rawJSONData copy];
+    keyedConversation.rawDataDic = [rawJSONData copy];
     
     return keyedConversation;
 }
@@ -2621,12 +2702,11 @@ static dispatch_queue_t messageCacheOperationQueue;
     
     if (keyedConversation.properties) {
         
-        self.properties = [keyedConversation.properties mutableCopy];
-    }
-    
-    if (keyedConversation.rawDataDic) {
+        [self setRawJSONData:keyedConversation.properties.mutableCopy];
         
-        self.rawDataDic = [keyedConversation.rawDataDic copy];
+    } else if (keyedConversation.rawDataDic) {
+        
+        [self setRawJSONData:keyedConversation.rawDataDic.mutableCopy];
     }
 }
 
@@ -2660,12 +2740,31 @@ static dispatch_queue_t messageCacheOperationQueue;
 }
 
 
-- (void)update:(NSDictionary *)attributes callback:(AVIMBooleanResultBlock)callback {
-    [self updateAttributes:attributes callback:^(BOOL succeeded, NSError * _Nullable error) {
-        if (!error)
-            [self updateLocalAttributes:attributes];
+- (void)update:(NSDictionary *)attributes callback:(AVIMBooleanResultBlock)callback
+{
+    [self updateWithDictionary:attributes callback:^(BOOL succeeded, NSError *error) {
         
-        [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+        if (error) {
+            
+            [self invokeInSpecifiedQueue:^{
+                
+                callback(false, error);
+            }];
+            
+            return;
+        }
+        
+        [self removeCachedConversation];
+        
+        [self internalSyncLock:^{
+            
+            AVIMConversation_mergeNewDictionaryIntoOldDictionary(attributes, self->_rawJSONData);
+        }];
+        
+        [self invokeInSpecifiedQueue:^{
+            
+            callback(true, nil);
+        }];
     }];
 }
 

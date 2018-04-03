@@ -111,14 +111,6 @@ typedef NS_ENUM(NSUInteger, LCIMConvType) {
 @property (nonatomic, assign) BOOL    temporary;
 @property (nonatomic, assign) int32_t temporaryTTL;
 
-@property (nonatomic, strong) NSMutableDictionary *properties;
-
-/*
- because `properties` can be changed by user,
- so need a immutable dic to store conversation's attribute data
- */
-@property (nonatomic, strong) NSDictionary *rawDataDic;
-
 + (instancetype)newWithConversationId:(NSString *)conversationId
                              convType:(LCIMConvType)convType
                                client:(AVIMClient *)client;
@@ -138,6 +130,10 @@ typedef NS_ENUM(NSUInteger, LCIMConvType) {
 - (void)setKeyedConversation:(AVIMKeyedConversation *)keyedConversation;
 
 - (void)mergeConvUpdatedMessage:(NSDictionary *)convUpdatedMessage;
+
+- (NSDictionary *)rawJSONDataCopy;
+
+- (void)setRawJSONData:(NSMutableDictionary *)rawJSONData;
 
 @end
 
