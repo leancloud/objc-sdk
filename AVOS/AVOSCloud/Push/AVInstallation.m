@@ -82,30 +82,29 @@
 - (void)setDeviceTokenFromData:(NSData *)deviceTokenData
                         teamId:(NSString *)teamId
 {
+    if (!deviceTokenData || deviceTokenData.length == 0) {
+        
+        return;
+    }
+    
     NSCharacterSet *charactersSet = [NSCharacterSet characterSetWithCharactersInString:@"<>"];
     
-    NSString *deviceToken = [deviceTokenData.description stringByTrimmingCharactersInSet:charactersSet];
+    NSString *newDeviceToken = [deviceTokenData.description stringByTrimmingCharactersInSet:charactersSet];
     
-    deviceToken = [deviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
+    newDeviceToken = [newDeviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    if (newDeviceToken.length == 0) {
+        
+        return;
+    }
     
     NSString *oldDeviceToken = self.deviceToken;
     
     NSString *oldTeamId = self.apnsTeamId;
     
-    BOOL shouldUpdateDeviceToken = (
-                                    !oldDeviceToken ||
-                                    false == [oldDeviceToken isEqualToString:deviceToken]
-                                    );
-    
-    BOOL shouldUpdateTeamId = (
-                               (!oldTeamId && teamId) ||
-                               (oldTeamId && !teamId) ||
-                               (oldTeamId && teamId && false == [oldTeamId isEqualToString:teamId])
-                               );
-    
-    if (shouldUpdateDeviceToken || shouldUpdateTeamId) {
+    if (![oldDeviceToken isEqualToString:newDeviceToken] || ![teamId isEqualToString:oldTeamId]) {
         
-        self.deviceToken = deviceToken;
+        self.deviceToken = newDeviceToken;
         
         self.apnsTeamId = teamId;
         
