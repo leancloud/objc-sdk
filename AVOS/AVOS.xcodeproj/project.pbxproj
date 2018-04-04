@@ -1061,6 +1061,8 @@
 		D3CDF4EC1FE8F3810033153E /* LCIMTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */; };
 		D3CDF4F01FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */; };
 		D3CDF4F11FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */; };
+		D3FA1C522074C80A00311069 /* AVCloud_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA1C512074C80A00311069 /* AVCloud_TestCase.swift */; };
+		D3FA1C532074C80A00311069 /* AVCloud_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA1C512074C80A00311069 /* AVCloud_TestCase.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1538,6 +1540,7 @@
 		D3CC90CA2069E5BB0082EFD4 /* AVObject_TestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVObject_TestCase.swift; sourceTree = "<group>"; };
 		D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestBase.swift; sourceTree = "<group>"; };
 		D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseClient.swift; sourceTree = "<group>"; };
+		D3FA1C512074C80A00311069 /* AVCloud_TestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCloud_TestCase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2473,6 +2476,7 @@
 				D30DF3F61FDE2CD200F932BC /* AVUser_TestCase.swift */,
 				D36AC7681FFF50AB00BDCA24 /* AVInstallation_TestCase.swift */,
 				D3472E1E2015CBC200AAD65F /* AVFile_TestCase.swift */,
+				D3FA1C512074C80A00311069 /* AVCloud_TestCase.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -3865,6 +3869,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3FA1C532074C80A00311069 /* AVCloud_TestCase.swift in Sources */,
 				D30DF3F81FDE2CD200F932BC /* AVUser_TestCase.swift in Sources */,
 				D30DF4171FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 				D36AC76A1FFF50AB00BDCA24 /* AVInstallation_TestCase.swift in Sources */,
@@ -4135,6 +4140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3FA1C522074C80A00311069 /* AVCloud_TestCase.swift in Sources */,
 				D30DF3F71FDE2CD200F932BC /* AVUser_TestCase.swift in Sources */,
 				D30DF4161FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 				D36AC7691FFF50AB00BDCA24 /* AVInstallation_TestCase.swift in Sources */,
