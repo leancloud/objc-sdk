@@ -870,7 +870,9 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         
         if (!webSocket || webSocket.readyState != AVIMWebSocketStateConnected) {
             
-            if (_delegate) {
+            id <AVIMWebSocketWrapperDelegate> delegate = _delegate;
+            
+            if (delegate) {
                 
                 NSError *aError = ({
                     
@@ -883,7 +885,7 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
                 
                 commandWrapper.error = aError;
                 
-                [_delegate webSocketWrapper:self commandDidGetCallback:commandWrapper];
+                [delegate webSocketWrapper:self didOccurError:commandWrapper];
             }
             
             return;
@@ -902,7 +904,9 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         
         if (data.length > 5000) {
             
-            if (_delegate) {
+            id <AVIMWebSocketWrapperDelegate> delegate = _delegate;
+            
+            if (delegate) {
                 
                 NSError *aError = ({
                     NSString *reason = @"The Size of Message Data is Too Large.";
@@ -914,7 +918,7 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
                 
                 commandWrapper.error = aError;
                 
-                [_delegate webSocketWrapper:self commandDidGetCallback:commandWrapper];
+                [delegate webSocketWrapper:self didOccurError:commandWrapper];
             }
             
             return;
@@ -1157,16 +1161,34 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
                 commandWrapper;
             });
             
-            if (commandWrapper && _delegate) {
+            id <AVIMWebSocketWrapperDelegate> delegate = _delegate;
+            
+            if (commandWrapper && delegate) {
                 
                 commandWrapper.inCommand = inCommand;
                 
-                [_delegate webSocketWrapper:self commandDidGetCallback:commandWrapper];
+                [delegate webSocketWrapper:self didReceiveCallback:commandWrapper];
             }
         }
     } else {
         
         notifyCommand_block();
+        
+        id <AVIMWebSocketWrapperDelegate> delegate = _delegate;
+        
+        if (delegate) {
+            
+            LCIMProtobufCommandWrapper *commandWrapper = ({
+                
+                LCIMProtobufCommandWrapper *commandWrapper = [[LCIMProtobufCommandWrapper alloc] init];
+                
+                commandWrapper.inCommand = inCommand;
+                
+                commandWrapper;
+            });
+            
+            [delegate webSocketWrapper:self didReceiveCommand:commandWrapper];
+        }
     }
 }
 
@@ -1504,7 +1526,9 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
             
             [timeoutIdArray2 addObject:num];
             
-            if (_delegate) {
+            id <AVIMWebSocketWrapperDelegate> delegate = _delegate;
+            
+            if (delegate) {
                 
                 NSError *aError = ({
                     NSString *reason = @"Command Timeout.";
@@ -1516,7 +1540,7 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
                 
                 commandWrapper.error = aError;
                 
-                [_delegate webSocketWrapper:self commandDidGetCallback:commandWrapper];
+                [delegate webSocketWrapper:self didOccurError:commandWrapper];
             }
         }
     }
@@ -1588,7 +1612,9 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         }
     }
     
-    if (_delegate) {
+    id <AVIMWebSocketWrapperDelegate> delegate = _delegate;
+    
+    if (delegate) {
         
         NSArray<LCIMProtobufCommandWrapper *> *allCommandWrapper = [_commandWrapperDic allValues];
         
@@ -1596,7 +1622,7 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
             
             item.error = error;
             
-            [_delegate webSocketWrapper:self commandDidGetCallback:item];
+            [delegate webSocketWrapper:self didOccurError:item];
         }
     }
     

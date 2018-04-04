@@ -69,7 +69,6 @@ do {                                                                            
       userInfo:userInfo];                                                           \
 } while(0)
 
-FOUNDATION_EXPORT NSNotificationName LCIMConversationMessagePatchNotification;
 FOUNDATION_EXPORT NSNotificationName LCIMConversationDidReceiveMessageNotification;
 
 /// it's a key. the value from dic, True: 开启未读通知; False: 关闭离线消息推送。
@@ -112,17 +111,12 @@ typedef NS_ENUM(NSUInteger, LCIMConvType) {
 @property (nonatomic, assign) BOOL    temporary;
 @property (nonatomic, assign) int32_t temporaryTTL;
 
-@property (nonatomic, strong) NSMutableDictionary *properties;
-
-/*
- because `properties` can be changed by user,
- so need a immutable dic to store conversation's attribute data
- */
-@property (nonatomic, strong) NSDictionary *rawDataDic;
-
 + (instancetype)newWithConversationId:(NSString *)conversationId
                              convType:(LCIMConvType)convType
                                client:(AVIMClient *)client;
+
++ (instancetype)newWithRawJSONData:(NSDictionary *)rawJSONData
+                            client:(AVIMClient *)client;
 
 - (void)setConversationId:(NSString *)conversationId;
 - (void)setMembers:(NSArray *)members;
@@ -134,6 +128,12 @@ typedef NS_ENUM(NSUInteger, LCIMConvType) {
 - (void)removeMember:(NSString *)clientId;
 
 - (void)setKeyedConversation:(AVIMKeyedConversation *)keyedConversation;
+
+- (void)mergeConvUpdatedMessage:(NSDictionary *)convUpdatedMessage;
+
+- (NSDictionary *)rawJSONDataCopy;
+
+- (void)setRawJSONData:(NSMutableDictionary *)rawJSONData;
 
 @end
 

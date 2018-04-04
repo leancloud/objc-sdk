@@ -94,11 +94,11 @@ class LCTestBase: XCTestCase {
     {
         XCTAssertTrue(timeout > 0)
         
-        let startTimestamp: TimeInterval = Date().timeIntervalSince1970
-        
         let semaphore: RunLoopSemaphore = RunLoopSemaphore()
         
         async(semaphore)
+        
+        let startTimestamp: TimeInterval = Date().timeIntervalSince1970
         
         while semaphore.waiting() {
             
@@ -122,11 +122,11 @@ class LCTestBase: XCTestCase {
     {
         XCTAssertTrue(timeout > 0)
         
-        let startTimestamp: TimeInterval = Date().timeIntervalSince1970
-        
         let semaphore: RunLoopSemaphore = RunLoopSemaphore()
         
         async(semaphore)
+        
+        let startTimestamp: TimeInterval = Date().timeIntervalSince1970
         
         while semaphore.waiting() {
             

@@ -302,6 +302,83 @@ class Multi_Clients_Interact_TestCase: LCIMTestBase {
         })
     }
     
+    func test_update_conversation() {
+        
+        guard let client1: AVIMClient_Wrapper = type(of: self).client1,
+            let client2: AVIMClient_Wrapper = type(of: self).client2 else {
+                XCTFail()
+                return
+        }
+        
+        guard let uniqueConversation: AVIMConversation = self.createUniqueConversationByClient1() else {
+            XCTFail()
+            return
+        }
+        
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            
+            let keyTest: String = "key_test"
+            let valueTest: String = "value_test"
+            
+            let attrSubKey: String = "test"
+            let attrSubKeyValue: String = "test"
+            
+            let nameValue: String = "name"
+            
+            var dic: [String : String] = [
+                keyTest : valueTest,
+                "attr.\(attrSubKey)" : attrSubKeyValue,
+                "name" : nameValue
+            ]
+            
+            for (key, value) in dic {
+                
+                uniqueConversation[key] = value
+            }
+            
+            semaphore.increment()
+            
+            client2.didUpdateDataClosure = { (conversation: AVIMConversation, date: Date, clientId: String, data: [AnyHashable : Any]) in
+                
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertEqual(conversation.conversationId, uniqueConversation.conversationId)
+                XCTAssertEqual(clientId, client1.client.clientId)
+                
+                for (key, value) in data {
+                    
+                    XCTAssertEqual(dic[key as! String], value as? String)
+                }
+                
+                XCTAssertEqual(conversation.name, nameValue)
+                XCTAssertEqual(conversation.attributes?[attrSubKey] as! String, attrSubKeyValue)
+                XCTAssertEqual(conversation[keyTest] as! String, valueTest)
+            }
+            
+            semaphore.increment()
+            
+            uniqueConversation.update(callback: { (succeeded: Bool, error: Error?) in
+                
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                
+                XCTAssertEqual(uniqueConversation.name, nameValue)
+                XCTAssertEqual(uniqueConversation.attributes?[attrSubKey] as! String, attrSubKeyValue)
+                XCTAssertEqual(uniqueConversation[keyTest] as! String, valueTest)
+            })
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
+    }
+    
 }
 
 class AVIMClient_Wrapper: NSObject {
@@ -311,6 +388,8 @@ class AVIMClient_Wrapper: NSObject {
     var messageHasBeenUpdatedClosure: ((AVIMConversation, AVIMMessage) -> Void)?
     
     var didReceiveTypedMessageClosure: ((AVIMConversation, AVIMTypedMessage) -> Void)?
+    
+    var didUpdateDataClosure: ((AVIMConversation, Date, String, [AnyHashable : Any]) -> Void)?
     
     init(with clientId: String) {
         
@@ -336,6 +415,10 @@ extension AVIMClient_Wrapper: AVIMClientDelegate {
     
     func conversation(_ conversation: AVIMConversation, didReceive message: AVIMTypedMessage) {
         self.didReceiveTypedMessageClosure?(conversation, message)
+    }
+    
+    func conversation(_ conversation: AVIMConversation, didUpdateAt date: Date, by clientId: String, data: [AnyHashable : Any]) {
+        self.didUpdateDataClosure?(conversation, date, clientId, data)
     }
     
 }

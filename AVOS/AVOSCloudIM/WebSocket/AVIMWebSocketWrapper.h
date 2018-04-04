@@ -21,7 +21,11 @@
 
 @protocol AVIMWebSocketWrapperDelegate <NSObject>
 
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socket commandDidGetCallback:(LCIMProtobufCommandWrapper *)command;
+- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socket didReceiveCallback:(LCIMProtobufCommandWrapper *)command;
+
+- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socket didReceiveCommand:(LCIMProtobufCommandWrapper *)command;
+
+- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socket didOccurError:(LCIMProtobufCommandWrapper *)command;
 
 @end
 
@@ -55,7 +59,7 @@
 
 @property (nonatomic, strong) NSError *error;
 
-- (void)setCallback:(void (^)(LCIMProtobufCommandWrapper *))callback;
+- (void)setCallback:(void (^)(LCIMProtobufCommandWrapper *commandWrapper))callback;
 
 - (BOOL)hasCallback;
 

@@ -533,6 +533,16 @@ __attribute__((warn_unused_result));
 - (void)conversation:(AVIMConversation *)conversation didUpdateForKey:(NSString *)key;
 
 /**
+ Notification for conversation's attribution updated.
+
+ @param conversation Updated conversation.
+ @param date Updated date.
+ @param clientId The client id which doing this updates.
+ @param data Updated data.
+ */
+- (void)conversation:(AVIMConversation *)conversation didUpdateAt:(NSDate *)date byClientId:(NSString *)clientId updatedData:(NSDictionary *)data;
+
+/**
  *  当前聊天状态被暂停，常见于网络断开时触发。
  *  注意：该回调会覆盖 imClientPaused: 方法。
  *  @param imClient 相应的 imClient

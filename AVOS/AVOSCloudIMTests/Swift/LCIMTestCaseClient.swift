@@ -271,4 +271,43 @@ class LCIMTestCaseClient: LCIMTestBase {
         }
     }
     
+    func test_query_conv() {
+        
+        guard let client: AVIMClient = LCIMTestBase.defaultGlobalClient else {
+            XCTFail()
+            return
+        }
+        
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            
+            semaphore.increment()
+            
+            let q: AVIMConversationQuery = client.conversationQuery()
+            q.whereKey("m", containedIn: [client.clientId])
+            q.order(byDescending: "updatedAt")
+            q.cachePolicy = .networkOnly;
+            q.cacheMaxAge = 60 * 60 * 24 * 30
+            q.findConversations(callback: { (conversations: [Any]?, error: Error?) in
+                
+                semaphore.decrement()
+                
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertNil(error)
+                XCTAssertNotNil(conversations)
+                
+                for item in conversations! {
+                    
+                    let conv: AVIMConversation = item as! AVIMConversation
+                    
+                    XCTAssertNotNil(conv.conversationId)
+                }
+            })
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
+    }
+    
 }

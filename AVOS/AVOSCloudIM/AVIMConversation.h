@@ -242,7 +242,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  发送更新。
  @param callback － 结果回调
  */
-- (void)updateWithCallback:(AVIMBooleanResultBlock)callback;
+- (void)updateWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
  加入对话。
