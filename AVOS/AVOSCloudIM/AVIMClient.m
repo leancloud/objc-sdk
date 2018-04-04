@@ -426,8 +426,8 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
 
 - (void)dealloc
 {
-    AVLoggerInfo(AVLoggerDomainIM, @"AVIMClient dealloc.");
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [_installation removeObserver:self forKeyPath:keyPath(_installation, deviceToken)];
     [_socketWrapper close];
 }
 
