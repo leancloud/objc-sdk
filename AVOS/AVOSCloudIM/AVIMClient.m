@@ -151,6 +151,8 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     
     dispatch_queue_t _internalSerialQueue;
     
+    dispatch_queue_t _signatureQueue;
+    
     NSMutableArray *_distinctMessageIdArray;
     
     dispatch_queue_t _queueOfConvMemory;
@@ -385,16 +387,19 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     
     setupInstallation_block();
     
-    void(^setup_StateMachineProperty_Var_block)(void) = ^(void) {
-        
-        _status = AVIMClientStatusNone;
-        
-        _sessionToken = nil;
-    };
+    _status = AVIMClientStatusNone;
     
-    setup_StateMachineProperty_Var_block();
+    _sessionToken = nil;
     
     _internalSerialQueue = imClientQueue;
+    
+    _signatureQueue = ({
+        
+        NSString *className = NSStringFromClass([self class]);
+        NSString *ivarName = ivarName(self, _signatureQueue);
+        NSString *signatureQueueLabel = [NSString stringWithFormat:@"%@.%@", className, ivarName];
+        dispatch_queue_create(signatureQueueLabel.UTF8String, DISPATCH_QUEUE_CONCURRENT);
+    });
     
     _lastPatchTimestamp = 0;
     _lastUnreadTimestamp = 0;
@@ -898,6 +903,116 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     [socketWrapper sendCommand:cmd];
 }
 
+// MARK: - Session Token
+
+- (void)refreshSessionTokenWithCallback:(void (^)(NSString *sessionToken, NSError *error))callback
+{
+    NSString *action = @"open";
+    
+    [self getSignatureWithConversationId:nil action:action actionOnClientIds:nil callback:^(AVIMSignature *signature) {
+        
+        [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+            
+            NSError *sessionDidCloseError = ({
+                NSString *reason = @"Session did Close.";
+                NSDictionary *userInfo = @{ @"reason" : reason };
+                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                    code:0
+                                userInfo:userInfo];
+            });
+            
+            NSString *oldSessionToken = client->_sessionToken;
+            
+            if (!oldSessionToken) {
+                
+                callback(nil, sessionDidCloseError);
+                
+                return;
+            }
+            
+            if (signature && signature.error) {
+                
+                callback(nil, signature.error);
+                
+                return;
+            }
+            
+            AVIMGenericCommand *outCommand = ({
+                
+                AVIMGenericCommand *outCommand = [AVIMGenericCommand new];
+                AVIMSessionCommand *sessionCommand = [AVIMSessionCommand new];
+                
+                outCommand.cmd = AVIMCommandType_Session;
+                outCommand.op = AVIMOpType_Refresh;
+                outCommand.sessionMessage = sessionCommand;
+                
+                if (signature && signature.signature && signature.timestamp && signature.nonce) {
+                    
+                    sessionCommand.s = signature.signature;
+                    sessionCommand.t = signature.timestamp;
+                    sessionCommand.n = signature.nonce;
+                    
+                } else {
+                    
+                    sessionCommand.st = oldSessionToken;
+                }
+                
+                outCommand;
+            });
+            
+            LCIMProtobufCommandWrapper *commandWrapper = ({
+                
+                LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+                commandWrapper.outCommand = outCommand;
+                commandWrapper;
+            });
+            
+            [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+                
+                if (commandWrapper.error) {
+                    
+                    callback(nil, commandWrapper.error);
+                    
+                    return;
+                }
+                
+                if (!client->_sessionToken) {
+                    
+                    callback(nil, sessionDidCloseError);
+                    
+                    return;
+                }
+                
+                AVIMGenericCommand *inCommand = commandWrapper.inCommand;
+                NSString *newSessionToken = inCommand.sessionMessage.st;
+                
+                if (inCommand.cmd == AVIMCommandType_Session &&
+                    inCommand.op == AVIMOpType_Refreshed &&
+                    newSessionToken) {
+                    
+                    client->_sessionToken = newSessionToken;
+                    
+                    callback(newSessionToken, nil);
+                    
+                } else {
+                    
+                    NSError *aError = ({
+                        NSString *reason = @"Invalid session refreshed.";
+                        NSDictionary *userInfo = @{ @"reason" : reason };
+                        [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                            code:0
+                                        userInfo:userInfo];
+                    });
+                    
+                    callback(nil, aError);
+                }
+            }];
+            
+            [client sendCommandWrapper:commandWrapper];
+        }];
+    }];
+}
+
 // MARK: - Close Client
 
 - (void)closeWithCallback:(AVIMBooleanResultBlock)callback
@@ -1234,6 +1349,33 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
 }
 
 // MARK: - Signature
+
+- (void)getSignatureWithConversationId:(NSString *)conversationId
+                                action:(NSString *)action
+                     actionOnClientIds:(NSArray<NSString *> *)actionOnClientIds
+                              callback:(void (^)(AVIMSignature *signature))callback
+{
+    dispatch_async(self->_signatureQueue, ^{
+        
+        id <AVIMSignatureDataSource> dataSource = self->_signatureDataSource;
+        
+        SEL sel = @selector(signatureWithClientId:conversationId:action:actionOnClientIds:);
+        
+        if (dataSource && [dataSource respondsToSelector:sel]) {
+            
+            AVIMSignature *signature = [dataSource signatureWithClientId:self->_clientId
+                                                          conversationId:conversationId
+                                                                  action:action
+                                                       actionOnClientIds:actionOnClientIds];
+            
+            callback(signature);
+            
+        } else {
+            
+            callback(nil);
+        }
+    });
+}
 
 - (AVIMSignature *)getSignatureByDataSourceWithAction:(NSString *)action
                                        conversationId:(NSString *)conversationId
