@@ -433,7 +433,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
                                        limit:(NSUInteger)limit
                                fromMessageId:(NSString * _Nullable)messageId
                                fromTimestamp:(int64_t)timestamp
-                                    callback:(AVIMArrayResultBlock)callback;
+                                    callback:(void (^)(NSArray * _Nullable messages, NSError * _Nullable error))callback;
 
 @end
 

@@ -2480,9 +2480,9 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (void)queryMediaMessagesFromServerWithType:(AVIMMessageMediaType)type
                                        limit:(NSUInteger)limit
-                               fromMessageId:(NSString * _Nullable)messageId
+                               fromMessageId:(NSString *)messageId
                                fromTimestamp:(int64_t)timestamp
-                                    callback:(AVIMArrayResultBlock)callback
+                                    callback:(void (^)(NSArray *messages, NSError *error))callback
 {
     AVIMClient *client = self.imClient;
     
