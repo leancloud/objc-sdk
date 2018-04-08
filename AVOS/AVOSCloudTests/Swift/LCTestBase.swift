@@ -13,6 +13,7 @@ enum TestRegion {
     case CN_North
     case CN_East
     case US
+    case WebEngine
     
     var appInfo: (id: String, key: String) {
         
@@ -37,6 +38,13 @@ enum TestRegion {
             return (
                 id: "kknqydxqd9wdq4cboy1dvvug5ha0ce3i2mrerrdrmr6pla1p",
                 key: "fate582pwsfh97s9o99nw91a152i7ndm9tsy866e6wpezth4"
+            )
+            
+        case .WebEngine:
+            
+            return (
+                id: "tiy1PsmEtJJ1QtHvHzVQLVod-gzGzoHsz",
+                key: "m6HkmlWP3tclhnbbeWurifNl"
             )
         }
         

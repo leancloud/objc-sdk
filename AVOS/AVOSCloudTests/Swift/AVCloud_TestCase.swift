@@ -12,14 +12,7 @@ class AVCloud_TestCase: LCTestBase {
     
     func test_callFunction() {
         
-        /*
-         Test App for WebEngine, North China
-         */
-        
-        let appId: String = "tiy1PsmEtJJ1QtHvHzVQLVod-gzGzoHsz"
-        let _: String = "m6HkmlWP3tclhnbbeWurifNl" // appKey
-        
-        guard AVOSCloud.getApplicationId() == appId else {
+        guard AVOSCloud.getApplicationId() == TestRegion.WebEngine.appInfo.id else {
             XCTFail()
             return
         }
