@@ -12,6 +12,7 @@
 #import "AVHelpers.h"
 
 #define keyPath(base, path) ({ __unused typeof(base.path) _; @#path; })
+#define ivarName(base, path) ({ __unused typeof(base->path) _; @#path; })
 
 /**
  * Check the equality of two security key.
