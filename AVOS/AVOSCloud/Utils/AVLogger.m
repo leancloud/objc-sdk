@@ -92,17 +92,17 @@ static NSArray *loggerDomains = nil;
             NSString *levelString = nil;
             switch (level) {
                 case AVLoggerLevelInfo:
-                    levelString = @"INFO";
+                    levelString = @"💙INFO";
                     break;
                 case AVLoggerLevelDebug:
-                    levelString = @"DEBUG";
+                    levelString = @"💚DEBUG";
                     break;
                 case AVLoggerLevelError:
-                    levelString = @"ERROR";
+                    levelString = @"❤️ERROR";
                     break;
                     
                 default:
-                    levelString = @"UNKNOW";
+                    levelString = @"🧡UNKNOW";
                     break;
             }
             va_list args;
