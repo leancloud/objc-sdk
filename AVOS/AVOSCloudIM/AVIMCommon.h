@@ -13,6 +13,8 @@
 @class AVIMChatRoom;
 @class AVIMTemporaryConversation;
 
+#define LC_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
+
 NS_ASSUME_NONNULL_BEGIN
 
 extern NSString *AVOSCloudIMErrorDomain;
