@@ -35,7 +35,7 @@ typedef NS_ENUM(NSUInteger, AVIMClientStatus) {
      2. Closing Client but received an Error
      
      */
-    AVIMClientStatusNone,
+    AVIMClientStatusNone = 0,
     
     /*
      Client is Opening
@@ -116,12 +116,12 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
     /*
      Default conversation. At most allow 500 people to join the conversation.
      */
-    AVIMConversationOptionNone      = 0,
+    AVIMConversationOptionNone = 0,
     
     /*
      Unique conversation. If the server detects the conversation with that members exists, will return it instead of creating a new one.
      */
-    AVIMConversationOptionUnique    = 1 << 0,
+    AVIMConversationOptionUnique = 1 << 0,
     
     /*
      Transient conversation. No headcount limits. But the functionality is limited. No offline messages, no offline notifications, etc.
@@ -131,7 +131,7 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
     /*
      Temporary conversation
      */
-    AVIMConversationOptionTemporary = 1 << 2
+    AVIMConversationOptionTemporary = 1 << 2,
     
 };
 
@@ -217,8 +217,7 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  @param clientId Identifie of this Client.
  @return Instance.
  */
-- (instancetype)initWithClientId:(NSString *)clientId
-__attribute__((warn_unused_result));
+- (instancetype)initWithClientId:(NSString *)clientId LC_WARN_UNUSED_RESULT;
 
 /**
  Initialization method.
@@ -227,8 +226,7 @@ __attribute__((warn_unused_result));
  @param tag You can use 'Tag' to implement the feature that the same 'clientId' only used in single device. 'Tag' Can't set with "default", it's a reserved tag.
  @return Instance.
  */
-- (instancetype)initWithClientId:(NSString *)clientId tag:(NSString * _Nullable)tag
-__attribute__((warn_unused_result));
+- (instancetype)initWithClientId:(NSString *)clientId tag:(NSString * _Nullable)tag LC_WARN_UNUSED_RESULT;
 
 /**
  Initialization method.
@@ -236,8 +234,7 @@ __attribute__((warn_unused_result));
  @param user The AVUser of this Client.
  @return Instance.
  */
-- (instancetype)initWithUser:(AVUser *)user
-__attribute__((warn_unused_result));
+- (instancetype)initWithUser:(AVUser *)user LC_WARN_UNUSED_RESULT;
 
 /**
  Initialization method.
@@ -246,8 +243,7 @@ __attribute__((warn_unused_result));
   @param tag You can use 'Tag' to implement the feature that the same 'clientId' only used in single device. 'Tag' Can't set with "default", it's a reserved tag.
  @return Instance.
  */
-- (instancetype)initWithUser:(AVUser *)user tag:(NSString * _Nullable)tag
-__attribute__((warn_unused_result));
+- (instancetype)initWithUser:(AVUser *)user tag:(NSString * _Nullable)tag LC_WARN_UNUSED_RESULT;
 
 /**
  Start a Session with Server.
@@ -255,7 +251,7 @@ __attribute__((warn_unused_result));
  
  @param callback Result Callback.
  */
-- (void)openWithCallback:(AVIMBooleanResultBlock)callback;
+- (void)openWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /**
  Start a Session with Server.
@@ -265,7 +261,7 @@ __attribute__((warn_unused_result));
  @param callback Result Callback.
  */
 - (void)openWithOption:(AVIMClientOpenOption)openOption
-              callback:(AVIMBooleanResultBlock)callback;
+              callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /**
  End a Session with Server.
@@ -273,7 +269,7 @@ __attribute__((warn_unused_result));
  
  @param callback Result Callback.
  */
-- (void)closeWithCallback:(AVIMBooleanResultBlock)callback;
+- (void)closeWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
  创建一个新的用户对话。
@@ -283,8 +279,8 @@ __attribute__((warn_unused_result));
  @param callback － 对话建立之后的回调
  */
 - (void)createConversationWithName:(NSString * _Nullable)name
-                         clientIds:(NSArray *)clientIds
-                          callback:(AVIMConversationResultBlock)callback;
+                         clientIds:(NSArray<NSString *> *)clientIds
+                          callback:(void (^)(AVIMConversation * _Nullable conversation, NSError * _Nullable error))callback;
 
 /**
  Create a new chat room conversation.
@@ -295,7 +291,7 @@ __attribute__((warn_unused_result));
  */
 - (void)createChatRoomWithName:(NSString * _Nullable)name
                     attributes:(NSDictionary * _Nullable)attributes
-                      callback:(AVIMChatRoomResultBlock)callback;
+                      callback:(void (^)(AVIMChatRoom * _Nullable chatRoom, NSError * _Nullable error))callback;
 
 /**
  Create a new temporary conversation.
@@ -304,9 +300,9 @@ __attribute__((warn_unused_result));
  @param ttl Use it to setup time to live of temporary conversation. it will not greater than a default max value(depend on server). if set Zero or Negtive, it will use max ttl, Unit of Measure: Second.
  @param callback Result of callback.
  */
-- (void)createTemporaryConversationWithClientIds:(NSArray *)clientIds
+- (void)createTemporaryConversationWithClientIds:(NSArray<NSString *> *)clientIds
                                       timeToLive:(int32_t)ttl
-                                        callback:(AVIMTemporaryConversationResultBlock)callback;
+                                        callback:(void (^)(AVIMTemporaryConversation * _Nullable temporaryConversation, NSError * _Nullable error))callback;
 
 /*!
  创建一个新的用户对话。
@@ -318,10 +314,10 @@ __attribute__((warn_unused_result));
  @param callback － 对话建立之后的回调
  */
 - (void)createConversationWithName:(NSString * _Nullable)name
-                         clientIds:(NSArray *)clientIds
+                         clientIds:(NSArray<NSString *> *)clientIds
                         attributes:(NSDictionary * _Nullable)attributes
                            options:(AVIMConversationOption)options
-                          callback:(AVIMConversationResultBlock)callback;
+                          callback:(void (^)(AVIMConversation * _Nullable conversation, NSError * _Nullable error))callback;
 
 /**
  Create a New Conversation.
@@ -334,11 +330,11 @@ __attribute__((warn_unused_result));
  @param callback Result callback
  */
 - (void)createConversationWithName:(NSString * _Nullable)name
-                         clientIds:(NSArray *)clientIds
+                         clientIds:(NSArray<NSString *> *)clientIds
                         attributes:(NSDictionary * _Nullable)attributes
                            options:(AVIMConversationOption)options
                       temporaryTTL:(int32_t)temporaryTTL
-                          callback:(AVIMConversationResultBlock)callback;
+                          callback:(void (^)(AVIMConversation * _Nullable conversation, NSError * _Nullable error))callback;
 
 /**
  Get a Exist Conversation Retained by this Client.
