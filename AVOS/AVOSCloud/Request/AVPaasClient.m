@@ -27,6 +27,8 @@
 
 #define MAX_LAG_TIME 5.0
 
+static NSString * const kLC_REST_API_response_error = @"com.leancloud.response.error";
+
 NSString *const LCHeaderFieldNameId = @"X-LC-Id";
 NSString *const LCHeaderFieldNameKey = @"X-LC-Key";
 NSString *const LCHeaderFieldNameSign = @"X-LC-Sign";
@@ -628,20 +630,28 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         NSHTTPURLResponse *HTTPResponse = (NSHTTPURLResponse *)response;
 
         if (error) {
+            NSError *newError = ({
+                NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+                [userInfo addEntriesFromDictionary:error.userInfo];
+                userInfo[kLC_REST_API_response_error] = responseObject;
+                [NSError errorWithDomain:error.domain
+                                    code:error.code
+                                userInfo:userInfo.copy];
+            });
             if (failureBlock) {
-                failureBlock(HTTPResponse, responseObject, error);
+                failureBlock(HTTPResponse, responseObject, newError);
             }
 
             NSInteger statusCode = HTTPResponse.statusCode;
             NSTimeInterval costTime = -([operationEnqueueDate timeIntervalSinceNow] * 1000);
 
-            AVLoggerDebug(AVLoggerDomainNetwork, LC_REST_RESPONSE_LOG_FORMAT, path, costTime, error);
+            AVLoggerDebug(AVLoggerDomainNetwork, LC_REST_RESPONSE_LOG_FORMAT, path, costTime, newError);
 
             // Doing network statistics
             if ([self shouldStatisticsForPath:path statusCode:statusCode]) {
                 LCNetworkStatistics *statistician = [LCNetworkStatistics sharedInstance];
 
-                if (error.code == NSURLErrorTimedOut) {
+                if (newError.code == NSURLErrorTimedOut) {
                     [statistician addIncrementalAttribute:1 forKey:@"timeout"];
                 } else {
                     [statistician addIncrementalAttribute:1 forKey:[NSString stringWithFormat:@"%ld", (long)statusCode]];
