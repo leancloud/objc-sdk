@@ -19,17 +19,11 @@ class ViewController: UIViewController {
     var isShowFileCallbackAlert: Bool = false
     
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         AVInstallation.default().deviceToken = UUID().uuidString
-        
-        self.client = AVIMClient(clientId: "RuntimeTestDemo", tag: "test")
-        self.client.delegate = self
-        
-        assert(self.client.status == .none)
         
         let query: AVQuery = AVQuery.init(className: "_File")
         query.whereKeyExists("objectId")
@@ -52,37 +46,37 @@ class ViewController: UIViewController {
 
 extension ViewController {
     
-    func imLogin() {
-        
-        self.client.open { (success: Bool, error: Error?) in
-            
-            if success {
-                
-                self.showAlert(title: "Success", message: "Login")
-                
+    @objc func IM_open() {
+        if self.client == nil {
+            let clientId: String = "\(#function)\(#line)"
+            let tag: String = "\(#function)\(#line)"
+            self.client = AVIMClient(clientId: clientId, tag: tag)
+            self.client.delegate = self
+        }
+        self.client.open(with: .forceOpen) { (succeeded: Bool, error: Error?) in
+            if let err: Error = error {
+                self.showAlert(title: "error", message: "\(err)")
             } else {
-                
-                self.showAlert(title: "Error", message: "\(String(describing: error))")
+                self.showAlert(title: "ok", message: "\(#function)")
             }
         }
     }
     
-    func imReopen() {
-        
-        self.client.open(with: .reopen) { (success: Bool, error: Error?) in
-            
-            if success {
-                
-                self.showAlert(title: "Success", message: "Login")
-                
+    @objc func IM_close() {
+        if self.client == nil {
+            return
+        }
+        self.client.close { (succeeded: Bool, error: Error?) in
+            if let err: Error = error {
+                self.showAlert(title: "error", message: "\(err)")
             } else {
-                
-                self.showAlert(title: "Error", message: "\(String(describing: error))")
+                self.showAlert(title: "ok", message: "\(#function)")
+                self.client = nil
             }
         }
     }
     
-    func changeDeviceToken() {
+    @objc func IM_changeDeviceToken() {
         AVInstallation.default().deviceToken = UUID().uuidString
     }
     
@@ -178,11 +172,11 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell")!
         switch indexPath.row {
         case 0:
-            cell.textLabel?.text = "IM Login"
+            cell.textLabel?.text = "\(#selector(self.IM_open))"
         case 1:
-            cell.textLabel?.text = "IM Reopen"
+            cell.textLabel?.text = "\(#selector(self.IM_close))"
         case 2:
-            cell.textLabel?.text = "Change Device Token"
+            cell.textLabel?.text = "\(#selector(self.IM_changeDeviceToken))"
         case 3:
             cell.textLabel?.text = "Live Query Subscribe _File"
         case 4:
@@ -201,11 +195,11 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         switch indexPath.row {
         case 0:
-            self.imLogin()
+            self.IM_open()
         case 1:
-            self.imReopen()
+            self.IM_close()
         case 2:
-            self.changeDeviceToken()
+            self.IM_changeDeviceToken()
         case 3:
             self.liveQuerySubscribeFile()
         case 4:
@@ -238,43 +232,56 @@ extension ViewController: AVIMClientDelegate {
         
         assert(Thread.isMainThread)
         
-        assert(imClient.status == .paused)
+        let status: AVIMClientStatus = imClient.status
+        if status != .paused {
+            print("❤️ Error: \(#function)\(#line)")
+        } else {
+            print("💙 Info: \(#function)")
+        }
     }
     
     func imClientResuming(_ imClient: AVIMClient) {
         
         assert(Thread.isMainThread)
         
-        assert(imClient.status == .resuming)
+        let status: AVIMClientStatus = imClient.status
+        if status != .resuming {
+            print("❤️ Error: \(#function)\(#line)")
+        } else {
+            print("💙 Info: \(#function)")
+        }
     }
     
     func imClientResumed(_ imClient: AVIMClient) {
         
         assert(Thread.isMainThread)
         
-        assert(imClient.status == .opened)
+        let status: AVIMClientStatus = imClient.status
+        if status != .opened {
+            print("❤️ Error: \(#function)\(#line)")
+        } else {
+            print("💙 Info: \(#function)")
+        }
     }
     
     func imClientClosed(_ imClient: AVIMClient, error: Error?) {
         
         assert(Thread.isMainThread)
         
-        assert(imClient.status == .closed)
+        let status: AVIMClientStatus = imClient.status
+        if status != .closed {
+            print("❤️ Error: \(#function)\(#line)")
+        } else {
+            print("💙 Info: \(#function)")
+        }
     }
     
     func client(_ client: AVIMClient, didOfflineWithError error: Error?) {
         
         assert(Thread.isMainThread)
         
-        assert(client.status == .closed)
-        
-        let alert: UIAlertController = UIAlertController(title: "Offline", message: "\(String(describing: error))", preferredStyle: .alert)
-        
-        let action: UIAlertAction = UIAlertAction(title: "ok", style: .default, handler: nil)
-        
-        alert.addAction(action)
-        
-        self.present(alert, animated: true, completion: nil)
+        print("💛 Debug: \(client)")
+        print("💛 Debug: \(String(describing: error))")
     }
     
 }

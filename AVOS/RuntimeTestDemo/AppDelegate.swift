@@ -41,6 +41,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             appKey = kLCTestBase_AppKey_CN
         }
         
+        LCRouter.sharedInstance().cleanCache(forKey: "LCAppRouterCacheKey")
+        LCRouter.sharedInstance().cleanCache(forKey: "LCRTMRouterCacheKey")
+        
         AVOSCloud.setApplicationId(appId, clientKey: appKey)
         AVOSCloud.setAllLogsEnabled(true)
         

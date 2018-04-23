@@ -11,77 +11,66 @@ import XCTest
 
 class LCIMTestBase: LCTestBase {
 
-    /* For Internal Test */
-    static let customTestRTMServer: String = "wss://rtm51.leancloud.cn";
-    static let isUseCustomTestRTMServer: Bool = false;
+    let isUseCustomTestRTMServer: Bool = true;
+    let customTestRTMServer: String = "wss://rtm51.leancloud.cn"; /* internal test server */
     
-    static var defaultGlobalClient: AVIMClient?
+    var garbageClients: [AVIMClient] = []
     
-    override class func setUp() {
-        
+    override func setUp() {
         super.setUp()
         
         if self.isUseCustomTestRTMServer {
             
             AVOSCloudIM.defaultOptions().rtmServer = self.customTestRTMServer;
         }
-        
-        let client: AVIMClient = AVIMClient(clientId: "\(URL.init(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)\(#line)")
-        
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
-            
-            semaphore.increment()
-            
-            client.open(callback: { (success, error) in
-                
-                semaphore.decrement()
-                
-                XCTAssertTrue(Thread.isMainThread)
-                
-                XCTAssertTrue(success)
-                XCTAssertNil(error)
-                XCTAssertEqual(client.status, .opened)
-                
-                self.defaultGlobalClient = success ? client : nil;
-            })
-            
-        }, failure: {
-            
-            XCTFail("timeout")
-        })
     }
     
-    override class func tearDown() {
+    override func tearDown() {
         
-        if let client: AVIMClient = self.defaultGlobalClient, client.status == .opened {
+        for client in self.garbageClients {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            self.runloopTestingAsync(timeout: 10, async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment()
                 
-                client.close(callback: { (succeeded: Bool, error: Error?) in
+                client.close(callback: { (_, _) in
                     
                     semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(succeeded)
-                    XCTAssertNil(error)
-                    
-                    XCTAssertTrue(client.status == .closed)
                 })
-                
-            }, failure: {
-                
-                XCTFail("timeout")
             })
-            
-        } else {
-            
-            XCTFail()
         }
         
         super.tearDown()
+    }
+    
+    func newOpenedClient(clientId: String, tag: String? = nil, delegate: AVIMClientDelegate? = nil) -> AVIMClient? {
+        
+        var openedClient: AVIMClient?
+        
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            
+            let client: AVIMClient = AVIMClient(clientId: clientId, tag: tag)
+            client.delegate = delegate
+            
+            semaphore.increment()
+            
+            client.open(with: .forceOpen, callback: { (succeeded: Bool, error: Error?) in
+                
+                semaphore.decrement()
+                
+                if succeeded {
+                    
+                    openedClient = client
+                }
+            })
+        })
+        
+        return openedClient
+    }
+    
+    func recycleClient(_ client: AVIMClient) {
+        
+        self.garbageClients.append(client)
     }
     
 }

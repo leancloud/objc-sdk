@@ -14,6 +14,7 @@ enum TestRegion {
     case CN_East
     case US
     case WebEngine
+    case ConversationMemberInfo
     
     var appInfo: (id: String, key: String) {
         
@@ -46,6 +47,13 @@ enum TestRegion {
                 id: "tiy1PsmEtJJ1QtHvHzVQLVod-gzGzoHsz",
                 key: "m6HkmlWP3tclhnbbeWurifNl"
             )
+            
+        case .ConversationMemberInfo:
+            
+            return (
+                id: "anruhhk6visejjip57psvv5uuv8sggrzdfl9pg2bghgsiy35",
+                key: "xhiibo2eiyokjdu2y3kqcb7334rtw4x33zam98buxzkjuq5g"
+            )
         }
         
     }
@@ -57,18 +65,21 @@ class LCTestBase: XCTestCase {
         
         super.setUp()
         
-        let region: TestRegion = .CN_North
+        let region: TestRegion = .ConversationMemberInfo
         
         let appInfo: (id: String, key: String) = region.appInfo
         
-        if region == .CN_East || region == .CN_North {
+        if region == .US {
             
-            AVOSCloud.setServiceRegion(.CN)
+            AVOSCloud.setServiceRegion(.US)
             
         } else {
             
-            AVOSCloud.setServiceRegion(.US)
+            AVOSCloud.setServiceRegion(.CN)
         }
+        
+        LCRouter.sharedInstance().cleanCache(forKey: "LCAppRouterCacheKey")
+        LCRouter.sharedInstance().cleanCache(forKey: "LCRTMRouterCacheKey")
         
         AVOSCloud.setApplicationId(appInfo.id, clientKey: appInfo.key)
         
@@ -85,7 +96,7 @@ class LCTestBase: XCTestCase {
     func runloopTestingAsync(
         timeout: TimeInterval = 30,
         async: (RunLoopSemaphore) -> Void,
-        failure: () -> Void)
+        failure: (() -> Void)? = nil)
     {
         XCTAssertTrue(timeout > 0)
         
@@ -103,7 +114,7 @@ class LCTestBase: XCTestCase {
             
             if date.timeIntervalSince1970 - startTimestamp > timeout {
                 
-                failure()
+                failure?()
                 
                 return
             }
@@ -113,7 +124,7 @@ class LCTestBase: XCTestCase {
     static func runloopTestingAsync(
         timeout: TimeInterval = 30,
         async: (RunLoopSemaphore) -> Void,
-        failure: () -> Void)
+        failure: (() -> Void)? = nil)
     {
         XCTAssertTrue(timeout > 0)
         
@@ -131,7 +142,7 @@ class LCTestBase: XCTestCase {
             
             if date.timeIntervalSince1970 - startTimestamp > timeout {
                 
-                failure()
+                failure?()
                 
                 return
             }
@@ -144,17 +155,21 @@ class RunLoopSemaphore {
     
     var semaphoreValue: Int = 0
     
-    func increment() {
+    @discardableResult func increment() -> RunLoopSemaphore {
         
         self.semaphoreValue += 1
+        
+        return self
     }
     
-    func decrement() {
+    @discardableResult func decrement() -> RunLoopSemaphore {
         
         self.semaphoreValue -= 1
+        
+        return self
     }
     
-    func waiting() -> Bool {
+    fileprivate func waiting() -> Bool {
         
         return (self.semaphoreValue > 0) ? true : false
     }
