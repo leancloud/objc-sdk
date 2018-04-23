@@ -24,10 +24,11 @@
 #import "SDMacros.h"
 #import "AVOSCloud_Internal.h"
 #import "LCSSLChallenger.h"
+#import "AVConstants.h"
 
 #define MAX_LAG_TIME 5.0
 
-static NSString * const kLC_REST_API_response_error = @"com.leancloud.response.error";
+NSString * const kLeanCloudRESTAPIResponseError = @"com.leancloud.restapi.response.error";
 
 NSString *const LCHeaderFieldNameId = @"X-LC-Id";
 NSString *const LCHeaderFieldNameKey = @"X-LC-Key";
@@ -633,7 +634,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             NSError *newError = ({
                 NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
                 [userInfo addEntriesFromDictionary:error.userInfo];
-                userInfo[kLC_REST_API_response_error] = responseObject;
+                userInfo[kLeanCloudRESTAPIResponseError] = responseObject;
                 [NSError errorWithDomain:error.domain
                                     code:error.code
                                 userInfo:userInfo.copy];
