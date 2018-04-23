@@ -50,6 +50,7 @@ typedef NS_ENUM(int, AVCachePolicy) {
 
 // Errors
 
+extern NSString * _Nonnull const kLeanCloudRESTAPIResponseError;
 
 /*! @abstract 1: Internal server error. No information available. */
 extern NSInteger const kAVErrorInternalServer;

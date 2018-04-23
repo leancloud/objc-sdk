@@ -12,6 +12,7 @@
 #import "AVHelpers.h"
 
 #define keyPath(base, path) ({ __unused typeof(base.path) _; @#path; })
+#define ivarName(base, path) ({ __unused typeof(base->path) _; @#path; })
 
 /**
  * Check the equality of two security key.
@@ -172,13 +173,14 @@ do {                                       \
 - (NSString *)AVAES256Decrypt;
 @end
 
-@interface NSObject (__LC__checkingType__decodingFromDictionary__)
+@interface NSObject (__LeanCloud__)
 
-+ (BOOL)lc__checkingType:(id)instance
-__attribute__((warn_unused_result));
++ (BOOL)lc__checkingType:(id)instance __attribute__((warn_unused_result));
+
++ (instancetype)lc__decodingDictionary:(NSDictionary *)dictionary
+                                   key:(NSString *)key __attribute__((warn_unused_result));
 
 + (instancetype)lc__decodingWithKey:(NSString *)key
-                            fromDic:(NSDictionary *)dic
-__attribute__((warn_unused_result));
+                            fromDic:(NSDictionary *)dic __attribute__((warn_unused_result));
 
 @end

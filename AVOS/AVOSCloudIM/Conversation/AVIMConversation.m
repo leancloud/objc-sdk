@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMConversation.h"
 #import "AVIMCommon.h"
 #import "AVIMConversation_Internal.h"
 #import "AVIMClient.h"
@@ -28,6 +27,8 @@
 #import "AVIMRuntimeHelper.h"
 #import "AVIMRecalledMessage.h"
 #import "AVObjectUtils.h"
+#import "AVPaasClient.h"
+#import "AVIMConversationMemberInfo_Internal.h"
 
 NSString *LCIMClientIdKey = @"clientId";
 NSString *LCIMConversationIdKey = @"conversationId";
@@ -37,10 +38,9 @@ NSString *LCIMConversationPropertyValueKey = @"propertyValue";
 NSNotificationName LCIMConversationPropertyUpdateNotification = @"LCIMConversationPropertyUpdateNotification";
 NSNotificationName LCIMConversationDidReceiveMessageNotification = @"LCIMConversationDidReceiveMessageNotification";
 
-static NSError * AVIMConversation_clientInvalidError()
+static NSError * AVIMConversation_ParameterInvalidError(NSString *reason)
 {
     NSError *aError = ({
-        NSString *reason = @"`imClient` is invalid.";
         NSDictionary *userInfo = @{ @"reason" : reason };
         [NSError errorWithDomain:@"LeanCloudErrorDomain"
                             code:0
@@ -153,6 +153,8 @@ static void AVIMConversation_mergeNewDictionaryIntoOldDictionary(NSDictionary *n
     NSMutableDictionary *_rawJSONData;
     NSMutableDictionary *_pendingData;
     NSMutableDictionary *_snapshotData;
+    
+    NSMutableDictionary<NSString *, AVIMConversationMemberInfo *> *_memberInfoTable;
 }
 
 static dispatch_queue_t messageCacheOperationQueue;
@@ -383,17 +385,19 @@ static dispatch_queue_t messageCacheOperationQueue;
     
     if (self) {
         
-        _conversationId = conversationId;
+        self->_conversationId = conversationId;
         
-        _imClient = client;
+        self->_imClient = client;
         
-        _lock = [[NSLock alloc] init];
+        self->_lock = [[NSLock alloc] init];
         
-        _rawJSONData = [NSMutableDictionary dictionary];
+        self->_rawJSONData = [NSMutableDictionary dictionary];
         
-        _pendingData = [NSMutableDictionary dictionary];
+        self->_pendingData = [NSMutableDictionary dictionary];
         
-        _snapshotData = nil;
+        self->_snapshotData = nil;
+        
+        self->_memberInfoTable = nil;
     }
     
     return self;
@@ -434,10 +438,15 @@ static dispatch_queue_t messageCacheOperationQueue;
 - (void)internalSyncLock:(void (^)(void))block
 {
     [_lock lock];
-    
     block();
-    
     [_lock unlock];
+}
+
+// MARK: - PaaS Client
+
+- (AVPaasClient *)paasClient
+{
+    return AVPaasClient.sharedInstance;
 }
 
 // MARK: -
@@ -841,28 +850,34 @@ static dispatch_queue_t messageCacheOperationQueue;
         
         NSArray *clientIds = [command.mArray copy];
 
-        AVIMSignature *signature = [client getSignatureByDataSourceWithAction:actionString
-                                                               conversationId:command.cid
-                                                                    clientIds:clientIds];
-        
-        [genericCommand avim_addRequiredKeyWithCommand:command];
-        [genericCommand avim_addRequiredKeyForConvMessageWithSignature:signature];
-        if ([AVIMClient checkErrorForSignature:signature command:genericCommand]) {
-            return;
-        }
-        [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
-            if (!error) {
-                AVIMConvCommand *conversationOutCommand = outCommand.convMessage;
-                [self addMembers:[conversationOutCommand.mArray copy]];
-                [self removeCachedConversation];
-                [AVIMBlockHelper callBooleanResultBlock:callback error:nil];
-            } else {
-                [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+        [client getSignatureWithConversationId:command.cid action:actionString actionOnClientIds:clientIds callback:^(AVIMSignature *signature) {
+            
+            if (signature && signature.error) {
+                
+                [self invokeInSpecifiedQueue:^{
+                    
+                    callback(false, signature.error);
+                }];
+                
+                return;
             }
+            
+            [genericCommand avim_addRequiredKeyWithCommand:command];
+            [genericCommand avim_addRequiredKeyForConvMessageWithSignature:signature];
+            
+            [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
+                if (!error) {
+                    AVIMConvCommand *conversationOutCommand = outCommand.convMessage;
+                    [self addMembers:[conversationOutCommand.mArray copy]];
+                    [self removeCachedConversation];
+                    [AVIMBlockHelper callBooleanResultBlock:callback error:nil];
+                } else {
+                    [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+                }
+            }];
+            
+            [client sendCommand:genericCommand];
         }];
-        
-
-        [client sendCommand:genericCommand];
     });
 }
 
@@ -931,31 +946,38 @@ static dispatch_queue_t messageCacheOperationQueue;
         
         NSArray *clientIds = [command.mArray copy];
         
-        AVIMSignature *signature = [client getSignatureByDataSourceWithAction:actionString
-                                                               conversationId:command.cid
-                                                                    clientIds:clientIds];
-        
-        [genericCommand avim_addRequiredKeyWithCommand:command];
-        [genericCommand avim_addRequiredKeyForConvMessageWithSignature:signature];
-        if ([AVIMClient checkErrorForSignature:signature command:genericCommand]) {
-            return;
-        }
-        [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
-            if (!error) {
-                AVIMConvCommand *conversationOutCommand = outCommand.convMessage;
-                [self removeMembers:[conversationOutCommand.mArray copy]];
-                [self removeCachedConversation];
-                if ([clientIds containsObject:myClientId]) {
-                    [self removeCachedMessages];
-                }
-
-                [AVIMBlockHelper callBooleanResultBlock:callback error:nil];
-            } else {
-                [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+        [client getSignatureWithConversationId:command.cid action:actionString actionOnClientIds:clientIds callback:^(AVIMSignature *signature) {
+            
+            if (signature && signature.error) {
+                
+                [self invokeInSpecifiedQueue:^{
+                    
+                    callback(false, signature.error);
+                }];
+                
+                return;
             }
+            
+            [genericCommand avim_addRequiredKeyWithCommand:command];
+            [genericCommand avim_addRequiredKeyForConvMessageWithSignature:signature];
+            
+            [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
+                if (!error) {
+                    AVIMConvCommand *conversationOutCommand = outCommand.convMessage;
+                    [self removeMembers:[conversationOutCommand.mArray copy]];
+                    [self removeCachedConversation];
+                    if ([clientIds containsObject:myClientId]) {
+                        [self removeCachedMessages];
+                    }
+                    
+                    [AVIMBlockHelper callBooleanResultBlock:callback error:nil];
+                } else {
+                    [AVIMBlockHelper callBooleanResultBlock:callback error:error];
+                }
+            }];
+            
+            [client sendCommand:genericCommand];
         }];
-        
-        [client sendCommand:genericCommand];
     });
 }
 
@@ -1032,7 +1054,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         [self invokeInSpecifiedQueue:^{
             
             NSError *aError = ({
-                NSString *reason = @"Can't do updating before last updating done.";
+                NSString *reason = @"can't update before last update done.";
                 NSDictionary *userInfo = @{ @"reason" : reason };
                 [NSError errorWithDomain:@"LeanCloudErrorDomain"
                                     code:0
@@ -1094,7 +1116,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     
     if (!client) {
         
-        callback(false, AVIMConversation_clientInvalidError());
+        callback(false, AVIMConversation_ParameterInvalidError(@"imClient invalid."));
         
         return;
     }
@@ -1305,7 +1327,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     AVIMClient *client = self.imClient;
     
-    if (!client || client.status != AVIMClientStatusOpened) {
+    if (!client || client.threadUnsafe_status != AVIMClientStatusOpened) {
         
         message.status = AVIMMessageStatusFailed;
         NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorClientNotOpen reason:@"You can only send message when the status of the client is opened."];
@@ -2480,9 +2502,9 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (void)queryMediaMessagesFromServerWithType:(AVIMMessageMediaType)type
                                        limit:(NSUInteger)limit
-                               fromMessageId:(NSString * _Nullable)messageId
+                               fromMessageId:(NSString *)messageId
                                fromTimestamp:(int64_t)timestamp
-                                    callback:(AVIMArrayResultBlock)callback
+                                    callback:(void (^)(NSArray *messages, NSError *error))callback
 {
     AVIMClient *client = self.imClient;
     
@@ -2637,6 +2659,374 @@ static dispatch_queue_t messageCacheOperationQueue;
         
         AVIMConversation_mergeNewDictionaryIntoOldDictionary(convUpdatedMessage, self->_rawJSONData);
     }];
+}
+
+// MARK: - Conversation Member
+
+- (void)getAllMemberInfoWithCallback:(void (^)(NSArray<AVIMConversationMemberInfo *> *, NSError *))callback
+{
+    [self getAllMemberInfoWithIgnoringCache:false
+               forcingRefreshIMSessionToken:false
+                             recursionCount:0
+                                   callback:callback];
+}
+
+- (void)getAllMemberInfoWithIgnoringCache:(BOOL)ignoringCache
+                                 callback:(void (^)(NSArray<AVIMConversationMemberInfo *> *, NSError *))callback
+{
+    [self getAllMemberInfoWithIgnoringCache:ignoringCache
+               forcingRefreshIMSessionToken:false
+                             recursionCount:0
+                                   callback:callback];
+}
+
+- (void)getAllMemberInfoWithIgnoringCache:(BOOL)ignoringCache
+             forcingRefreshIMSessionToken:(BOOL)forcingRefreshIMSessionToken
+                           recursionCount:(NSUInteger)recursionCount
+                                 callback:(void (^)(NSArray<AVIMConversationMemberInfo *> *, NSError *))callback
+{
+    if (!ignoringCache) {
+        
+        __block NSArray<AVIMConversationMemberInfo *> *memberInfos = nil;
+        
+        [self internalSyncLock:^{
+            
+            if (self->_memberInfoTable) {
+                
+                memberInfos = self->_memberInfoTable.allValues;
+            }
+        }];
+        
+        if (memberInfos) {
+            
+            [self invokeInSpecifiedQueue:^{
+                
+                callback(memberInfos, nil);
+            }];
+            
+            return;
+        }
+    }
+    
+    AVIMClient *client = self.imClient;
+    NSString *clientId = client.clientId;
+    NSString *conversationId = self.conversationId;
+    
+    if (!client || !clientId || !conversationId) {
+        
+        [self invokeInSpecifiedQueue:^{
+            
+            NSError *error = nil;
+
+            if (!conversationId) {
+                
+                error = AVIMConversation_ParameterInvalidError(@"conversationId invalid.");
+                
+            } else {
+                
+                error = AVIMConversation_ParameterInvalidError(@"imClient invalid.");
+            }
+            
+            callback(nil, error);
+        }];
+        
+        return;
+    }
+    
+    NSError *JSONSerializationError = nil;
+    
+    NSData *whereData = [NSJSONSerialization dataWithJSONObject:@{ @"cid" : conversationId } options:0 error:&JSONSerializationError];
+    
+    if (JSONSerializationError) {
+        
+        [self invokeInSpecifiedQueue:^{
+            
+            callback(nil, JSONSerializationError);
+        }];
+        
+        return;
+    }
+    
+    [client getSessionTokenWithForcingRefresh:forcingRefreshIMSessionToken callback:^(NSString *sessionToken, NSError *error) {
+        
+        NSParameterAssert(sessionToken);
+        
+        if (error) {
+            
+            [self invokeInSpecifiedQueue:^{
+                
+                callback(nil, error);
+            }];
+            
+            return;
+        }
+        
+        AVPaasClient *paasClient = self.paasClient;
+        
+        NSURLRequest *request = ({
+            
+            NSString *whereString = [[NSString alloc] initWithData:whereData encoding:NSUTF8StringEncoding];
+            NSDictionary *parameters = nil;
+            if (whereString) {
+                parameters = @{ @"client_id" : clientId, @"where" : whereString };
+            }
+            [paasClient requestWithPath:@"classes/_ConversationMemberInfo"
+                                 method:@"GET"
+                                headers:@{ @"X-LC-IM-Session-Token" : sessionToken }
+                             parameters:parameters];
+        });
+        
+        [paasClient performRequest:request success:^(NSHTTPURLResponse *response, id responseObject) {
+            
+            if ([NSDictionary lc__checkingType:responseObject]) {
+                
+                NSArray *memberInfoJSONs = [NSArray lc__decodingDictionary:responseObject key:@"results"];
+                
+                if (!memberInfoJSONs) {
+                    
+                    [self invokeInSpecifiedQueue:^{
+                        
+                        callback(@[], nil);
+                    }];
+                    
+                } else {
+                    
+                    NSMutableArray<AVIMConversationMemberInfo *> *memberInfos = [NSMutableArray arrayWithCapacity:memberInfoJSONs.count];
+                    NSMutableDictionary<NSString *, AVIMConversationMemberInfo *> *memberInfoTable = [NSMutableDictionary dictionaryWithCapacity:memberInfoJSONs.count];
+                    
+                    for (id JSON in memberInfoJSONs) {
+                        
+                        if ([NSDictionary lc__checkingType:JSON]) {
+                            
+                            AVIMConversationMemberInfo *memberInfo = [[AVIMConversationMemberInfo alloc] initWithJSON:JSON conversation:self];
+                            
+                            [memberInfos addObject:memberInfo];
+                            
+                            NSString *memberId = memberInfo.memberId;
+                            if (memberId) {
+                                [memberInfoTable setObject:memberInfo forKey:memberId];
+                            }
+                        }
+                    }
+                    
+                    [self internalSyncLock:^{
+                        
+                        self->_memberInfoTable = memberInfoTable;
+                    }];
+                    
+                    [self invokeInSpecifiedQueue:^{
+                        
+                        callback(memberInfos, nil);
+                    }];
+                }
+                
+            } else {
+                
+                [self invokeInSpecifiedQueue:^{
+                    
+                    NSError *aError = ({
+                        NSString *reason = @"response invalid.";
+                        NSDictionary *userInfo = @{ @"reason" : reason };
+                        [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                            code:0
+                                        userInfo:userInfo];
+                    });
+                    
+                    callback(nil, aError);
+                }];
+            }
+            
+        } failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error) {
+            
+            if ([NSDictionary lc__checkingType:responseObject] &&
+                [responseObject[@"code"] integerValue] == kLC_Code_SessionTokenExpired &&
+                recursionCount < 3) {
+                
+                [self getAllMemberInfoWithIgnoringCache:ignoringCache
+                           forcingRefreshIMSessionToken:true
+                                         recursionCount:(recursionCount + 1)
+                                               callback:callback];
+                
+            } else {
+                
+                [self invokeInSpecifiedQueue:^{
+                    
+                    callback(nil, error);
+                }];
+            }
+        }];
+    }];
+}
+
+- (void)getMemberInfoWithMemberId:(NSString *)memberId
+                         callback:(void (^)(AVIMConversationMemberInfo *, NSError *))callback
+{
+    [self getMemberInfoWithIgnoringCache:false
+                                memberId:memberId
+                                callback:callback];
+}
+
+- (void)getMemberInfoWithIgnoringCache:(BOOL)ignoringCache
+                              memberId:(NSString *)memberId
+                              callback:(void (^)(AVIMConversationMemberInfo *, NSError *))callback
+{
+    if (!ignoringCache) {
+        
+        __block NSDictionary<NSString *, AVIMConversationMemberInfo *> *memberInfoTable = nil;
+        
+        [self internalSyncLock:^{
+            
+            if (self->_memberInfoTable) {
+                
+                memberInfoTable = self->_memberInfoTable.copy;
+            }
+        }];
+        
+        if (memberInfoTable) {
+            
+            [self invokeInSpecifiedQueue:^{
+                
+                callback(memberInfoTable[memberId], nil);
+            }];
+            
+            return;
+        }
+    }
+    
+    [self getAllMemberInfoWithIgnoringCache:ignoringCache forcingRefreshIMSessionToken:false recursionCount:0 callback:^(NSArray<AVIMConversationMemberInfo *> *memberInfos, NSError *error) {
+        
+        if (error) {
+            
+            callback(nil, error);
+            
+            return;
+        }
+        
+        __block AVIMConversationMemberInfo *memberInfo = nil;
+        
+        [self internalSyncLock:^{
+            
+            if (self->_memberInfoTable) {
+                
+                memberInfo = self->_memberInfoTable[memberId];
+            }
+        }];
+        
+        callback(memberInfo, nil);
+    }];
+}
+
+- (void)updateMemberRoleWithMemberId:(NSString *)memberId
+                                role:(AVIMConversationMemberRole)role
+                            callback:(void (^)(BOOL, NSError *))callback
+{
+    AVIMClient *client = self.imClient;
+    NSString *conversationId = self.conversationId;
+    NSString *role_string = AVIMConversationMemberInfo_StringFromRole(role);
+    
+    if (!client || !conversationId) {
+        
+        [self invokeInSpecifiedQueue:^{
+            
+            NSError *error = nil;
+            
+            if (!conversationId) {
+                
+                error = AVIMConversation_ParameterInvalidError(@"conversationId invalid.");
+                
+            } else {
+                
+                error = AVIMConversation_ParameterInvalidError(@"imClient invalid.");
+            }
+            
+            callback(nil, error);
+        }];
+        
+        return;
+    }
+    
+    LCIMProtobufCommandWrapper *commandWrapper = ({
+        
+        AVIMGenericCommand *outCommand = [AVIMGenericCommand new];
+        AVIMConvCommand *convCommand = [AVIMConvCommand new];
+        AVIMConvMemberInfo *convMemberInfo = [AVIMConvMemberInfo new];
+        
+        outCommand.cmd = AVIMCommandType_Conv;
+        outCommand.op = AVIMOpType_MemberInfoUpdate;
+        outCommand.convMessage = convCommand;
+        
+        convCommand.cid = conversationId;
+        convCommand.targetClientId = memberId;
+        convCommand.info = convMemberInfo;
+        
+        convMemberInfo.pid = memberId;
+        convMemberInfo.role = role_string;
+        
+        LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+        commandWrapper.outCommand = outCommand;
+        commandWrapper;
+    });
+    
+    [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+        
+        [self invokeInSpecifiedQueue:^{
+            
+            if (commandWrapper.error) {
+                
+                callback(false, commandWrapper.error);
+                
+                return;
+            }
+            
+            __block AVIMConversationMemberInfo *memberInfo = nil;
+            
+            [self internalSyncLock:^{
+                
+                if (self->_memberInfoTable) {
+                    
+                    memberInfo = self->_memberInfoTable[memberId];
+                }
+            }];
+            
+            if (memberInfo) {
+                
+                [memberInfo updateRawJSONDataWithKey:@"role" object:role_string];
+            }
+            
+            callback(true, nil);
+        }];
+    }];
+    
+    [client sendCommandWrapper:commandWrapper];
+}
+
+- (void)process_member_info_changed:(AVIMGenericCommand *)inCommand
+{
+    AVIMConvCommand *convCommand = inCommand.convMessage;
+    AVIMConvMemberInfo *memberInfoCommand = convCommand.info;
+    
+    NSString *memberId = memberInfoCommand.pid;
+    NSString *role = memberInfoCommand.role;
+    
+    if (!memberId || !role) {
+        
+        return;
+    }
+    
+    __block AVIMConversationMemberInfo *memberInfo = nil;
+    
+    [self internalSyncLock:^{
+        
+        if (self->_memberInfoTable) {
+            
+            memberInfo = self->_memberInfoTable[memberId];
+        }
+    }];
+    
+    if (memberInfo) {
+        
+        [memberInfo updateRawJSONDataWithKey:@"role" object:role];
+    }
 }
 
 #pragma mark - Keyed Conversation

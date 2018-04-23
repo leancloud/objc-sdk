@@ -73,6 +73,13 @@ FOUNDATION_EXPORT NSString *const LCRouterDidUpdateNotification;
  */
 - (void)updateInBackground;
 
+/**
+ Clean router cache.
+
+ @param key Key for cache.
+ */
+- (void)cleanRouterCacheForKey:(NSString *)key;
+
 @end
 
 NS_ASSUME_NONNULL_END

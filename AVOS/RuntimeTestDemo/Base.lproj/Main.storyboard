@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -45,23 +45,16 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="Lol-D8-lJn"/>
                                 </connections>
                             </tableView>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="8ZJ-SL-4JB">
-                                <rect key="frame" x="169" y="325.5" width="37" height="37"/>
-                                <color key="color" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </activityIndicatorView>
                         </subviews>
                         <constraints>
                             <constraint firstItem="m27-Yl-iiw" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="7hy-Ef-vEu"/>
                             <constraint firstItem="m27-Yl-iiw" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="VpK-ZS-M1w"/>
                             <constraint firstItem="m27-Yl-iiw" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="Xcm-Dg-o9M"/>
-                            <constraint firstItem="8ZJ-SL-4JB" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="cds-4L-W0R"/>
                             <constraint firstItem="m27-Yl-iiw" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="neH-Np-wWD"/>
-                            <constraint firstItem="8ZJ-SL-4JB" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="yOW-Rc-awA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="activityIndicatorView" destination="8ZJ-SL-4JB" id="bPj-xi-t9L"/>
                         <outlet property="tableView" destination="m27-Yl-iiw" id="x1V-EV-mY6"/>
                     </connections>
                 </viewController>

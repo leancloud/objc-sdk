@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMClient.h"
 #import "AVIMClient_Internal.h"
 #import "AVIMConversation_Internal.h"
 #import "AVIMBlockHelper.h"
@@ -33,29 +32,15 @@
 #import <objc/runtime.h>
 #import <libkern/OSAtomic.h>
 
-#ifdef DEBUG
-
-/*
- Use dispatch's specific to Assert ('current queue' == 'imClient')
- */
-///
+#if DEBUG
 static void *imClientQueue_specific_key;
 static void *imClientQueue_specific_value;
-
-#define AssertRunInIMClientQueue NSAssert(dispatch_get_specific(imClientQueue_specific_key) == imClientQueue_specific_value, @"This Internal Method should Run in `imClientQueue` Thread.")
-
-#define AssertNotRunInIMClientQueue NSAssert(dispatch_get_specific(imClientQueue_specific_key) != imClientQueue_specific_value, @"This Method should Not Run in `imClientQueue` Thread.")
-///
-
+#define AssertRunInIMClientQueue assert(dispatch_get_specific(imClientQueue_specific_key) == imClientQueue_specific_value)
+#define AssertNotRunInIMClientQueue assert(dispatch_get_specific(imClientQueue_specific_key) != imClientQueue_specific_value)
 #else
-
 #define AssertRunInIMClientQueue
-
 #define AssertNotRunInIMClientQueue
-
 #endif
-
-static const NSUInteger kMaxClientIdLength = 64;
 
 static const NSUInteger kDistinctMessageIdArraySize = 10;
 
@@ -63,7 +48,12 @@ static dispatch_queue_t imClientQueue = NULL;
 
 static BOOL AVIMClientHasInstantiated = NO;
 
-static int64_t LCIMSessionConfigBitmap;
+static int64_t AVIMClient_IMSessionConfigBitmap;
+
+static NSUInteger const kLC_ClientId_MaxLength = 64;
+static NSString * const kLC_SessionTag_Default = @"default";
+static NSInteger const kLC_Code_SessionConflict = 4111;
+NSInteger const kLC_Code_SessionTokenExpired = 4112;
 
 /*
  This Options is Just to let Server known What feature current SDK supported,
@@ -105,6 +95,27 @@ static id AVIMClient_JSONObjectFromString(NSString *string, NSJSONReadingOptions
     return JSONObject;
 }
 
+static NSString * AVIMClient_StringFromJSONObject(id JSONObject, NSJSONWritingOptions options)
+{
+    if (!JSONObject || ![NSJSONSerialization isValidJSONObject:JSONObject]) {
+        
+        return nil;
+    }
+    
+    NSError *error = nil;
+    
+    NSData *data = [NSJSONSerialization dataWithJSONObject:JSONObject options:options error:&error];
+    
+    if (error) {
+        
+        return nil;
+    }
+    
+    NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    
+    return (string.length > 0) ? string : nil;
+}
+
 static NSDate * AVIMClient_dateFromString(NSString *string)
 {
     if (!string || string.length == 0) {
@@ -133,23 +144,21 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     
     AVIMWebSocketWrapper *_socketWrapper;
     
-    AVInstallation *_installation;
-    
-    NSString *_appId;
-    
-    /*
-     State-Machine-Property global variable
-     */
-    
-    ///
-    
     AVIMClientStatus _status;
     
     NSString *_sessionToken;
+    NSTimeInterval _sessionTokenExpireTimestamp;
     
-    ///
+    AVInstallation *_installation;
+    NSString *_deviceToken;
+    dispatch_block_t _addClientIdToChannels_block;
+    dispatch_block_t _removeClientIdToChannels_block;
+    dispatch_block_t _uploadDeviceToken_block;
+    BOOL _isDeviceTokenUploaded;
     
     dispatch_queue_t _internalSerialQueue;
+    
+    dispatch_queue_t _signatureQueue;
     
     NSMutableArray *_distinctMessageIdArray;
     
@@ -177,11 +186,12 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
         
         imClientQueue = dispatch_queue_create("cn.leancloud.im", DISPATCH_QUEUE_SERIAL);
         
-        LCIMSessionConfigBitmap = (
-                                   LCIMSessionConfigOptions_Patch |
-                                   LCIMSessionConfigOptions_TempConv |
-                                   LCIMSessionConfigOptions_TransientACK
-                                   );
+        AVIMClient_IMSessionConfigBitmap = ({
+            
+            (LCIMSessionConfigOptions_Patch |
+             LCIMSessionConfigOptions_TempConv |
+             LCIMSessionConfigOptions_TransientACK);
+        });
         
 #ifdef DEBUG
         /*
@@ -208,51 +218,46 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     [AVIMWebSocketWrapper setTimeoutIntervalInSeconds:seconds];
 }
 
-+ (BOOL)checkErrorForSignature:(AVIMSignature *)signature command:(AVIMGenericCommand *)command {
-    if (signature.error) {
-        AVIMCommandResultBlock callback = command.callback;
-        if (callback) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                callback(command, nil, signature.error);
-            });
-        }
-        return YES;
-    } else {
-        return NO;
-    }
-}
-
 + (void)_assertClientIdsIsValid:(NSArray *)clientIds {
     for (id item in clientIds) {
         if (![item isKindOfClass:[NSString class]]) {
             [NSException raise:NSInternalInconsistencyException format:@"ClientId should be NSString but %@ found.", NSStringFromClass([item class])];
             return;
         }
-        if ([item length] == 0 || [item length] > kMaxClientIdLength) {
+        if ([item length] == 0 || [item length] > kLC_ClientId_MaxLength) {
             [NSException raise:NSInternalInconsistencyException format:@"ClientId length should be in range [1, 64] but found '%@' length %lu.", item, (unsigned long)[item length]];
             return;
         }
     }
 }
 
-// MARK: - Init Instance
+// MARK: - Init
+
++ (instancetype)new
+{
+    [NSException raise:NSInternalInconsistencyException
+                format:@"not allow."];
+    return nil;
+}
 
 - (instancetype)init
 {
     [NSException raise:NSInternalInconsistencyException
-                format:@"Not Allow to Initialize Instance by this Method."];
-    
+                format:@"not allow."];
     return nil;
 }
 
 - (instancetype)initWithClientId:(NSString *)clientId
 {
-    return [self initWithClientId:clientId
-                              tag:nil];
+    return [self initWithClientId:clientId tag:nil];
 }
 
-- (instancetype)initWithClientId:(NSString *)clientId
-                             tag:(NSString *)tag
+- (instancetype)initWithClientId:(NSString *)clientId tag:(NSString *)tag
+{
+    return [self initWithClientId:clientId tag:tag installation:AVInstallation.defaultInstallation];
+}
+
+- (instancetype)initWithClientId:(NSString *)clientId tag:(NSString *)tag installation:(AVInstallation *)installation
 {
     self = [super init];
     
@@ -260,8 +265,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
         
         _user = nil;
         
-        [self doInitializationWithClientId:clientId
-                                       tag:tag];
+        [self doInitializationWithClientId:clientId tag:tag installation:installation];
     }
     
     return self;
@@ -269,146 +273,78 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
 
 - (instancetype)initWithUser:(AVUser *)user
 {
-    return [self initWithUser:user
-                          tag:nil];
+    return [self initWithUser:user tag:nil];
 }
 
-- (instancetype)initWithUser:(AVUser *)user
-                         tag:(NSString *)tag
+- (instancetype)initWithUser:(AVUser *)user tag:(NSString *)tag
+{
+    return [self initWithUser:user tag:tag installation:AVInstallation.defaultInstallation];
+}
+
+- (instancetype)initWithUser:(AVUser *)user tag:(NSString *)tag installation:(AVInstallation *)installation
 {
     self = [super init];
-
+    
     if (self) {
         
         _user = user;
-
-        [self doInitializationWithClientId:user.objectId
-                                       tag:tag];
+        
+        [self doInitializationWithClientId:user.objectId tag:tag installation:installation];
     }
-
+    
     return self;
 }
 
 - (void)doInitializationWithClientId:(NSString *)clientId
                                  tag:(NSString *)tag
+                        installation:(AVInstallation *)installation
 {
-    void(^setupAppId_block)(void) = ^(void) {
-        
-        NSString *appId = [AVOSCloud getApplicationId];
-        
-        if (!appId) {
-            
-            [NSException raise:NSInternalInconsistencyException
-                        format:@"Application id can not be nil."];
-        }
-        
-        _appId = [appId copy];
-    };
-    
-    setupAppId_block();
-
-    void(^setupClientId_block)(void) = ^(void) {
-        
-        if (!clientId || clientId.length > kMaxClientIdLength) {
-            
+    self->_clientId = ({
+        if (!clientId || clientId.length > kLC_ClientId_MaxLength || clientId.length == 0) {
             [NSException raise:NSInvalidArgumentException
-                        format:@"`clientId` is invalid or exceed Max Length('%lu').", (unsigned long)kMaxClientIdLength];
+                        format:@"clientId invalid or length not in range [1 %lu].", (unsigned long)kLC_ClientId_MaxLength];
         }
-        
-        _clientId = [clientId copy];
-    };
+        clientId.copy;
+    });
     
-    setupClientId_block();
-
-    void(^setupTag_block)(void) = ^(void) {
-        
-        if (tag) {
-            
-            if ([tag isEqualToString:LCIMTagDefault]) {
-                
-                [NSException raise:NSInvalidArgumentException
-                            format:@"The tag('%@') is a Reserved Tag", LCIMTagDefault];
-            }
-            
-            _tag = [tag copy];
-            
-        } else {
-            
-            _tag = nil;
+    self->_tag = ({
+        if ([tag isEqualToString:kLC_SessionTag_Default]) {
+            [NSException raise:NSInvalidArgumentException
+                        format:@"%@ is reserved.", kLC_SessionTag_Default];
         }
-    };
+        (tag ? tag.copy : nil);
+    });
     
-    setupTag_block();
+    self->_status = AVIMClientStatusNone;
     
-    void(^setupWebSocketWrapper_block)(void) = ^(void) {
-        
-        AVIMWebSocketWrapper *socketWrapper = [AVIMWebSocketWrapper newWithDelegate:self];
-        
-        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-        
-        [center addObserver:self
-                   selector:@selector(websocketOpened:)
-                       name:AVIM_NOTIFICATION_WEBSOCKET_OPENED
-                     object:socketWrapper];
-        
-        [center addObserver:self
-                   selector:@selector(websocketClosed:)
-                       name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
-                     object:socketWrapper];
-        
-        [center addObserver:self
-                   selector:@selector(websocketReconnect:)
-                       name:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
-                     object:socketWrapper];
-        
-        [center addObserver:self
-                   selector:@selector(receiveCommand:)
-                       name:AVIM_NOTIFICATION_WEBSOCKET_COMMAND
-                     object:socketWrapper];
-        
-        _socketWrapper = socketWrapper;
-    };
-    
-    setupWebSocketWrapper_block();
-    
-    void(^setupInstallation_block)(void) = ^(void) {
-        
-        AVInstallation *installation = [AVInstallation defaultInstallation];
-        
-        [installation addObserver:self
-                       forKeyPath:keyPath(installation, deviceToken)
-                          options:(NSKeyValueObservingOptionNew)
-                          context:nil];
-        
-        _installation = installation;
-    };
-    
-    setupInstallation_block();
-    
-    void(^setup_StateMachineProperty_Var_block)(void) = ^(void) {
-        
-        _status = AVIMClientStatusNone;
-        
-        _sessionToken = nil;
-    };
-    
-    setup_StateMachineProperty_Var_block();
-    
-    _internalSerialQueue = imClientQueue;
+    self->_sessionToken = ({
+        self->_sessionTokenExpireTimestamp = 0;
+        nil;
+    });;
     
     _lastPatchTimestamp = 0;
     _lastUnreadTimestamp = 0;
     
     _stagedMessages = [[NSMutableDictionary alloc] init];
     _messageQueryCacheEnabled = YES;
-
+    
     _distinctMessageIdArray = [NSMutableArray arrayWithCapacity:kDistinctMessageIdArraySize + 1];
     
     _conversationDictionary = [NSMutableDictionary dictionary];
     
     _callbackMapOfQueryConversation = [NSMutableDictionary dictionary];
     
+    _internalSerialQueue = imClientQueue;
+    
+    _signatureQueue = ({
+        NSString *className = NSStringFromClass([self class]);
+        NSString *ivarName = ivarName(self, _signatureQueue);
+        NSString *label = [NSString stringWithFormat:@"%@.%@", className, ivarName];
+        dispatch_queue_create(label.UTF8String, DISPATCH_QUEUE_CONCURRENT);
+    });
+    
     _queueOfConvMemory = dispatch_queue_create("AVIMClient._queueOfConvMemory", NULL);
+    
 #ifdef DEBUG
     _queueOfConvMemory_specific_key = (__bridge void *)_queueOfConvMemory;
     _queueOfConvMemory_specific_value = (__bridge void *)_queueOfConvMemory;
@@ -417,7 +353,42 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                                 _queueOfConvMemory_specific_value,
                                 NULL);
 #endif
+    
+    self->_socketWrapper = ({
+        AVIMWebSocketWrapper *socketWrapper = [AVIMWebSocketWrapper newWithDelegate:self];
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+        [center addObserver:self
+                   selector:@selector(websocketOpened:)
+                       name:AVIM_NOTIFICATION_WEBSOCKET_OPENED
+                     object:socketWrapper];
+        [center addObserver:self
+                   selector:@selector(websocketClosed:)
+                       name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
+                     object:socketWrapper];
+        [center addObserver:self
+                   selector:@selector(websocketReconnect:)
+                       name:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
+                     object:socketWrapper];
+        [center addObserver:self
+                   selector:@selector(receiveCommand:)
+                       name:AVIM_NOTIFICATION_WEBSOCKET_COMMAND
+                     object:socketWrapper];
+        socketWrapper;
+    });
 
+    self->_installation = ({
+        self->_deviceToken = installation.deviceToken;
+        self->_isDeviceTokenUploaded = false;
+        self->_addClientIdToChannels_block = nil;
+        self->_removeClientIdToChannels_block = nil;
+        self->_uploadDeviceToken_block = nil;
+        [installation addObserver:self
+                       forKeyPath:keyPath(installation, deviceToken)
+                          options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew)
+                          context:nil];
+        installation;
+    });
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         LCIMConversationCache *cache = [self conversationCache];
         [cache cleanAllExpiredConversations];
@@ -427,24 +398,26 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [_installation removeObserver:self forKeyPath:keyPath(_installation, deviceToken)];
-    [_socketWrapper close];
+    [self->_installation removeObserver:self forKeyPath:keyPath(self->_installation, deviceToken)];
+    [self->_socketWrapper close];
 }
 
 // MARK: - Internal Serial Queue
 
 - (dispatch_queue_t)internalSerialQueue
 {
-    return _internalSerialQueue;
+    return self->_internalSerialQueue;
 }
 
 - (void)addOperationToInternalSerialQueue:(void (^)(AVIMClient *client))block
 {
-    dispatch_async(_internalSerialQueue, ^{
+    dispatch_async(self->_internalSerialQueue, ^{
         
         block(self);
     });
 }
+
+// MARK: - API Callback Queue
 
 - (void)invokeInSpecifiedQueue:(void (^)(void))block
 {
@@ -454,7 +427,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     });
 }
 
-// MARK: - Getter and Setter of Delegate & DataSource
+// MARK: - Delegate
 
 - (id<AVIMClientDelegate>)delegate
 {
@@ -500,7 +473,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     });
 }
 
-// MARK: - AVIMClient Status
+// MARK: - Status
 
 - (AVIMClientStatus)status
 {
@@ -516,662 +489,885 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     return status;
 }
 
-// MARK: - Open Client
+// MARK: - Open
 
-- (void)openWithCallback:(AVIMBooleanResultBlock)callback
+- (void)openWithCallback:(void (^)(BOOL succeeded, NSError *error))callback
 {
     [self openWithOption:AVIMClientOpenOptionForceOpen
                 callback:callback];
 }
 
 - (void)openWithOption:(AVIMClientOpenOption)openOption
-              callback:(AVIMBooleanResultBlock)callback
+              callback:(void (^)(BOOL succeeded, NSError *error))callback
 {
-    [self getSignatureForOpenWith:^(AVIMSignature *signature) {
+    [self getSessionOpenSignatureWithCallback:^(AVIMSignature *signature) {
         
         AssertRunInIMClientQueue;
         
         if (signature && signature.error) {
             
-            dispatch_async(dispatch_get_main_queue(), ^{
+            [self invokeInSpecifiedQueue:^{
                 
                 callback(false, signature.error);
-            });
-            
-            return ;
-        }
-        
-        if (_status == AVIMClientStatusOpened) {
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                callback(true, nil);
-            });
+            }];
             
             return;
         }
         
-        _status = AVIMClientStatusOpening;
-        
-        _sessionToken = nil;
-        
-        AVIMWebSocketWrapper *socketWrapper = _socketWrapper;
-        
-        [socketWrapper openWithCallback:^(BOOL succeeded, NSError *error1) {
+        if (self->_status == AVIMClientStatusOpened) {
             
-            dispatch_async(_internalSerialQueue, ^{
+            [self invokeInSpecifiedQueue:^{
                 
-                if (error1) {
+                callback(true, nil);
+            }];
+            
+            return;
+        }
+        
+        if (self->_status == AVIMClientStatusOpening) {
+            
+            [self invokeInSpecifiedQueue:^{
+                
+                NSError *aError = ({
+                    NSString *reason = @"can't open before last open done.";
+                    NSDictionary *userInfo = @{ @"reason" : reason };
+                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                        code:0
+                                    userInfo:userInfo];
+                });
+                
+                callback(false, aError);
+            }];
+            
+            return;
+        }
+        
+        self->_status = AVIMClientStatusOpening;
+        
+        [self->_socketWrapper openWithCallback:^(BOOL succeeded, NSError *error) {
+            
+            [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+                
+                if (error) {
                     
-                    _status = AVIMClientStatusClosed;
-                    
-                    dispatch_async(dispatch_get_main_queue(), ^{
+                    if (client->_status == AVIMClientStatusOpening) {
                         
-                        callback(false, error1);
-                    });
+                        client->_status = AVIMClientStatusClosed;
+                        
+                        [client clearSessionTokenAndTTL];
+                    }
+                    
+                    [client invokeInSpecifiedQueue:^{
+                        
+                        callback(false, error);
+                    }];
                     
                     return;
                 }
                 
-                AVIMGenericCommand *genericCommand = [self newSessionOpenCommandWithOpenOption:openOption
-                                                                                  sessionToken:nil
-                                                                                     signature:signature];
-                
-                [genericCommand setNeedResponse:true];
-                
-                [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error2) {
+                AVIMGenericCommand *outCommand = ({
                     
-                    dispatch_async(_internalSerialQueue, ^{
+                    AVIMGenericCommand *outCommand = [AVIMGenericCommand new];
+                    AVIMSessionCommand *sessionCommand = [AVIMSessionCommand new];
+                    
+                    outCommand.cmd = AVIMCommandType_Session;
+                    outCommand.op = AVIMOpType_Open;
+                    outCommand.appId = [AVOSCloud getApplicationId];
+                    outCommand.peerId = client->_clientId;
+                    outCommand.sessionMessage = sessionCommand;
+                    
+                    if (AVIMClient_IMSessionConfigBitmap) {
+                        sessionCommand.configBitmap = AVIMClient_IMSessionConfigBitmap;
+                    }
+                    if (client->_lastPatchTimestamp) {
+                        sessionCommand.lastPatchTime = client->_lastPatchTimestamp;
+                    }
+                    if (client->_lastUnreadTimestamp) {
+                        sessionCommand.lastUnreadNotifTime = client->_lastUnreadTimestamp;
+                    }
+                    if (openOption == AVIMClientOpenOptionReopen) {
+                        sessionCommand.r = true;
+                    }
+                    if (client->_tag) {
+                        sessionCommand.tag = client->_tag;
+                    }
+                    if (signature && signature.signature && signature.timestamp && signature.nonce) {
+                        sessionCommand.s = signature.signature;
+                        sessionCommand.t = signature.timestamp;
+                        sessionCommand.n = signature.nonce;
+                    }
+                    
+                    sessionCommand.deviceToken = client->_deviceToken ?: AVUtils.deviceUUID;
+                    sessionCommand.ua = @"ios" @"/" SDK_VERSION;
+                    
+                    outCommand;
+                });
+                
+                LCIMProtobufCommandWrapper *commandWrapper = ({
+                    
+                    LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+                    commandWrapper.outCommand = outCommand;
+                    commandWrapper;
+                });
+                
+                [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+                    
+                    if (commandWrapper.error) {
                         
-                        if (error2) {
+                        if (client->_status == AVIMClientStatusOpening) {
                             
-                            _status = AVIMClientStatusClosed;
+                            client->_status = AVIMClientStatusClosed;
                             
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                
-                                callback(false, error2);
+                            [client clearSessionTokenAndTTL];
+                        }
+                        
+                        [client invokeInSpecifiedQueue:^{
+                            
+                            callback(false, commandWrapper.error);
+                        }];
+                        
+                        return;
+                    }
+                    
+                    AVIMGenericCommand *inCommand = commandWrapper.inCommand;
+                    AVIMSessionCommand *inSessionCommand = inCommand.sessionMessage;
+                    
+                    if (!inSessionCommand || !inSessionCommand.st) {
+                        
+                        if (client->_status == AVIMClientStatusOpening) {
+                            
+                            client->_status = AVIMClientStatusClosed;
+                            
+                            [client clearSessionTokenAndTTL];
+                        }
+                        
+                        [client invokeInSpecifiedQueue:^{
+                            
+                            NSError *aError = ({
+                                NSString *reason = @"invalid session open.";
+                                NSDictionary *userInfo = @{ @"reason" : reason };
+                                [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                                    code:0
+                                                userInfo:userInfo];
                             });
                             
-                            return;
-                        }
+                            callback(false, aError);
+                        }];
                         
-                        _status = AVIMClientStatusOpened;
+                        return;
+                    }
+                    
+                    client->_status = AVIMClientStatusOpened;
+                    
+                    [client setSessionTokenAndTTL:inSessionCommand];
+                    
+                    [client addClientIdToChannels:1];
+                    
+                    client->_isDeviceTokenUploaded = false;
+                    
+                    [client uploadDeviceToken:1];
+                    
+                    [client invokeInSpecifiedQueue:^{
                         
-                        AVIMSessionCommand *sessionCommand = inCommand.sessionMessage;
-                        
-                        if (sessionCommand) {
-                            
-                            _sessionToken = sessionCommand.st;
-                            
-                        } else {
-                            
-                            AVLoggerError(AVLoggerDomainIM, @"Not Found Session Token.");
-                        }
-                        
-                        [self installationRegisterClientChannel];
-                        
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            
-                            callback(true, nil);
-                        });
-                    });
+                        callback(true, nil);
+                    }];
                 }];
                 
-                [socketWrapper sendCommand:genericCommand];
-            });
-        }];
-    }];
-}
-
-- (AVIMGenericCommand *)newSessionOpenCommandWithOpenOption:(AVIMClientOpenOption)openOption
-                                               sessionToken:(NSString *)sessionToken
-                                                  signature:(AVIMSignature *)signature
-{
-    AssertRunInIMClientQueue;
-    
-    AVIMSessionCommand *sessionCommand = [[AVIMSessionCommand alloc] init];
-    
-    /* Config Bitmap */
-    
-    sessionCommand.configBitmap = LCIMSessionConfigBitmap;
-    
-    /* Last Patch Time */
-    
-    int64_t lastPatchTimestamp  = _lastPatchTimestamp;
-    
-    if (lastPatchTimestamp > 0) {
-        
-        sessionCommand.lastPatchTime = lastPatchTimestamp;
-    }
-    
-    /* Last Unread Notif Time */
-    
-    int64_t lastUnreadTimestamp = _lastUnreadTimestamp;
-    
-    if (lastUnreadTimestamp > 0) {
-        
-        sessionCommand.lastUnreadNotifTime = lastUnreadTimestamp;
-    }
-    
-    /* Check `sessionToken` */
-    
-    if (sessionToken) {
-        
-        /*
-         If `sessionToken` is valid,
-         it must a reconnect action by SDK.
-         */
-        
-        /* Reconnect */
-        
-        sessionCommand.r = true;
-        
-        /* Session Token */
-        
-        sessionCommand.st = sessionToken;
-        
-    } else {
-        
-        /* Not reconnect, Open by User */
-        
-        if (openOption == AVIMClientOpenOptionReopen) {
-            
-            /*
-             
-             (Reopen == Reconnect), Almost, Nearly.
-             
-             Difference:
-             
-             1. `Reconnect` with a SessionToken.
-             
-             2. `Reopen` with or without a Signature.
-             
-             */
-            
-            sessionCommand.r = true;
-        }
-        
-        /* Tag */
-        
-        NSString *tag = _tag;
-        
-        if (tag) {
-            
-            sessionCommand.tag = tag;
-        }
-        
-        /* Signature */
-        
-        if (signature) {
-            
-            /*
-             Exist Signature, so must use Signature a get a new Session Token.
-             */
-            
-            NSAssert(nil == signature.error, @"Signature has a Error: %@", signature.error);
-            
-            sessionCommand.t = signature.timestamp;
-            
-            sessionCommand.n = signature.nonce;
-            
-            sessionCommand.s = signature.signature;
-        }
-        
-        /* Device Token */
-        
-        NSString *deviceToken = _installation.deviceToken ?: [AVUtils deviceUUID];
-        
-        sessionCommand.deviceToken = deviceToken;
-        
-        /* User Agent */
-        
-        sessionCommand.ua = @"ios" @"/" SDK_VERSION;
-    }
-    
-    AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
-    
-    /* Message */
-    
-    genericCommand.sessionMessage = sessionCommand;
-    
-    /* Type */
-    
-    genericCommand.cmd = AVIMCommandType_Session;
-    
-    /* Operation */
-    
-    genericCommand.op = AVIMOpType_Open;
-    
-    /* App ID */
-    
-    genericCommand.appId = _appId;
-    
-    /*
-     Peer ID
-     
-     @note Must ! With !! `PeerId` !!! Because !!! it's a Open !!! Command !!!
-     */
-    
-    genericCommand.peerId = _clientId;
-    
-    NSAssert(genericCommand.peerId, @"~(T_T)||~");
-    
-    return genericCommand;
-}
-
-- (void)reopenWithSessionToken:(NSString *)sessionToken
-{
-    AssertRunInIMClientQueue;
-    
-    AVIMWebSocketWrapper *socketWrapper = _socketWrapper;
-    
-    void(^imClientResumed_block)(void) = ^(void) {
-        
-        AssertRunInIMClientQueue;
-        
-        _status = AVIMClientStatusOpened;
-        
-        id<AVIMClientDelegate> delegate = _delegate;
-        
-        if (!delegate) {
-            
-            return;
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [delegate imClientResumed:self];
-        });
-    };
-    
-    void(^imClientClosedWithError_block)(NSError *) = ^(NSError *error) {
-        
-        AssertRunInIMClientQueue;
-        
-        _status = AVIMClientStatusClosed;
-        
-        id<AVIMClientDelegate> delegate = _delegate;
-        
-        if (!delegate) {
-            
-            return;
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [delegate imClientClosed:self error:error];
-            
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-            if ([delegate respondsToSelector:@selector(imClientPaused:error:)]) {
-                
-                [delegate imClientPaused:self error:error];
-            }
-#pragma clang diagnostic pop
-        });
-    };
-    
-    void(^handleSessionTokenExpired_block)(void) = ^(void) {
-        
-        AssertRunInIMClientQueue;
-        
-        _sessionToken = nil;
-        
-        [self _getSignatureForOpenWith:^(AVIMSignature *signature) {
-            
-            AssertRunInIMClientQueue;
-            
-            if (signature && signature.error) {
-                
-                imClientClosedWithError_block(signature.error);
-                
-                return ;
-            }
-            
-            AVIMGenericCommand *cmd = [self newSessionOpenCommandWithOpenOption:AVIMClientOpenOptionReopen
-                                                                   sessionToken:nil
-                                                                      signature:signature];
-            
-            [cmd setNeedResponse:true];
-            
-            [cmd setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
-                
-                dispatch_async(_internalSerialQueue, ^{
-                    
-                    if (error) {
-                        
-                        imClientClosedWithError_block(error);
-                        
-                        return ;
-                    }
-                    
-                    AVIMSessionCommand *sessionCommand = inCommand.sessionMessage;
-                    
-                    if (sessionCommand) {
-                        
-                        _sessionToken = sessionCommand.st;
-                        
-                    } else {
-                        
-                        AVLoggerError(AVLoggerDomainIM, @"Not Found Session Token.");
-                    }
-                    
-                    imClientResumed_block();
-                });
+                [client->_socketWrapper sendCommandWrapper:commandWrapper];
             }];
-            
-            [socketWrapper sendCommand:cmd];
         }];
-    };
-    
-    AVIMGenericCommand *cmd = [self newSessionOpenCommandWithOpenOption:0
-                                                           sessionToken:sessionToken
-                                                              signature:nil];
-    
-    [cmd setNeedResponse:true];
-    
-    [cmd setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
-        
-        dispatch_async(_internalSerialQueue, ^{
-            
-            if (error) {
-                
-                AVIMErrorCommand *errorCommand = inCommand.errorMessage;
-                
-                if (errorCommand &&
-                    (LCIMErrorCodeSessionTokenExpired == errorCommand.code)) {
-                    
-                    handleSessionTokenExpired_block();
-                    
-                    return ;
-                }
-                
-                imClientClosedWithError_block(error);
-                
-                return ;
-            }
-            
-            imClientResumed_block();
-        });
     }];
-    
-    [socketWrapper sendCommand:cmd];
 }
 
-// MARK: - Close Client
-
-- (void)closeWithCallback:(AVIMBooleanResultBlock)callback
-{
-    dispatch_async(_internalSerialQueue, ^{
-        
-        if (_status == AVIMClientStatusClosed) {
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                callback(true, nil);
-            });
-            
-            return;
-        }
-        
-        _status = AVIMClientStatusClosing;
-        
-        AVIMWebSocketWrapper *socketWrapper = _socketWrapper;
-        
-        AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
-        
-        genericCommand.cmd = AVIMCommandType_Session;
-        genericCommand.op = AVIMOpType_Close;
-        genericCommand.sessionMessage = [[AVIMSessionCommand alloc] init];
-        
-        [genericCommand setNeedResponse:true];
-        [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
-            
-            dispatch_async(_internalSerialQueue, ^{
-                
-                if (error) {
-                    
-                    _status = AVIMClientStatusNone;
-                    
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        
-                        callback(false, error);
-                    });
-                    
-                    return ;
-                }
-                
-                _status = AVIMClientStatusClosed;
-                
-                _sessionToken = nil;
-                
-                [self installationRemoveClientChannel];
-                
-                [socketWrapper close];
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                    callback(true, nil);
-                });
-            });
-        }];
-        
-        [socketWrapper sendCommand:genericCommand];
-    });
-}
-
-- (void)processCommand_SessionClosed:(AVIMGenericCommand *)genericCommand
+- (void)resumeWithCallback:(void (^)(BOOL succeeded, NSError *error))callback
 {
     AssertRunInIMClientQueue;
     
-    _status = AVIMClientStatusClosed;
+    NSString *imSessionToken = self->_sessionToken;
     
-    _sessionToken = nil;
-    
-    [self installationRemoveClientChannel];
-    
-    id<AVIMClientDelegate> delegate = _delegate;
-    
-    if (delegate) {
+    if (!imSessionToken) {
         
-        SEL aSel = @selector(client:didOfflineWithError:);
+        NSError *aError = ({
+            NSString *reason = @"session has not opened or did close.";
+            NSDictionary *userInfo = @{ @"reason" : reason };
+            [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                code:0
+                            userInfo:userInfo];
+        });
         
-        if ([delegate respondsToSelector:aSel]) {
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                NSError *error = [genericCommand avim_errorObject];
-                
-                [delegate client:self didOfflineWithError:error];
-            });
-        }
-    }
-}
-
-// MARK: - APNs
-
-- (void)installationRegisterClientChannel
-{
-    AssertRunInIMClientQueue;
-    
-    AVInstallation *installation = _installation;
-    
-    NSString *clientId = _clientId;
-    
-    NSString *deviceToken = installation.deviceToken;
-    
-    if (!deviceToken) {
+        callback(false, aError);
         
         return;
     }
     
-    [installation addUniqueObject:clientId
-                           forKey:@"channels"];
-    
-    [installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+    if (self->_status == AVIMClientStatusOpened) {
         
-        if (error) {
+        callback(true, nil);
+        
+        return;
+    }
+    
+    LCIMProtobufCommandWrapper * (^newReopenCommand_block)(AVIMSignature *signature, NSString *sessionToken) = ^(AVIMSignature *signature, NSString *sessionToken) {
+        
+        AVIMGenericCommand *outCommand = [AVIMGenericCommand new];
+        AVIMSessionCommand *sessionCommand = [AVIMSessionCommand new];
+        
+        outCommand.cmd = AVIMCommandType_Session;
+        outCommand.op = AVIMOpType_Open;
+        outCommand.appId = [AVOSCloud getApplicationId];
+        outCommand.peerId = self->_clientId;
+        outCommand.sessionMessage = sessionCommand;
+        
+        sessionCommand.r = true;
+        
+        if (sessionToken) {
             
-            AVLoggerError(AVLoggerDomainIM, @"%@", error);
+            sessionCommand.st = sessionToken;
+            
+        } else {
+            
+            if (signature && signature.signature && signature.timestamp && signature.nonce) {
+                
+                sessionCommand.s = signature.signature;
+                sessionCommand.t = signature.timestamp;
+                sessionCommand.n = signature.nonce;
+            }
+            
+            if (self->_tag) {
+                
+                sessionCommand.tag = self->_tag;
+            }
+            
+            if (AVIMClient_IMSessionConfigBitmap) {
+                
+                sessionCommand.configBitmap = AVIMClient_IMSessionConfigBitmap;
+            }
+            
+            sessionCommand.deviceToken = self->_deviceToken ?: AVUtils.deviceUUID;
+            sessionCommand.ua = @"ios" @"/" SDK_VERSION;
         }
+
+        if (self->_lastPatchTimestamp) {
+            
+            sessionCommand.lastPatchTime = self->_lastPatchTimestamp;
+        }
+        
+        if (self->_lastUnreadTimestamp) {
+            
+            sessionCommand.lastUnreadNotifTime = self->_lastUnreadTimestamp;
+        }
+        
+        LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+        commandWrapper.outCommand = outCommand;
+        
+        return commandWrapper;
+    };
+    
+    void(^handleSessionOpened_block)(AVIMSessionCommand *sessionCommand) = ^(AVIMSessionCommand *sessionCommand) {
+        
+        self->_status = AVIMClientStatusOpened;
+        
+        [self setSessionTokenAndTTL:sessionCommand];
+        
+        if (!self->_isDeviceTokenUploaded) {
+            
+            [self uploadDeviceToken:1];
+        }
+    };
+    
+    LCIMProtobufCommandWrapper *commandWrapper_1 = newReopenCommand_block(nil, imSessionToken);
+    
+    [commandWrapper_1 setCallback:^(LCIMProtobufCommandWrapper *commandWrapper_1) {
+        
+        if (commandWrapper_1.error) {
+            
+            if (commandWrapper_1.error.code == kLC_Code_SessionTokenExpired) {
+                
+                [self getSessionOpenSignatureWithCallback:^(AVIMSignature *signature) {
+                    
+                    AssertRunInIMClientQueue;
+                    
+                    if (signature && signature.error) {
+                        
+                        callback(false, signature.error);
+                        
+                        return;
+                    }
+                    
+                    LCIMProtobufCommandWrapper *commandWrapper_2 = newReopenCommand_block(signature, nil);
+                    
+                    [commandWrapper_2 setCallback:^(LCIMProtobufCommandWrapper *commandWrapper_2) {
+                        
+                        if (commandWrapper_2.error) {
+                            
+                            callback(false, commandWrapper_2.error);
+                            
+                            return;
+                        }
+                        
+                        handleSessionOpened_block(commandWrapper_2.inCommand.sessionMessage);
+                        
+                        callback(true, nil);
+                    }];
+                    
+                    [self->_socketWrapper sendCommandWrapper:commandWrapper_2];
+                }];
+                
+            } else {
+                
+                callback(false, commandWrapper_1.error);
+            }
+            
+            return;
+        }
+        
+        handleSessionOpened_block(commandWrapper_1.inCommand.sessionMessage);
+        
+        callback(true, nil);
     }];
     
-    AVIMReportCommand *reportCommand = [[AVIMReportCommand alloc] init];
-    
-    reportCommand.initiative = YES;
-    reportCommand.type = @"token";
-    reportCommand.data_p = deviceToken;
-    
-    AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
-    
-    genericCommand.cmd = AVIMCommandType_Report;
-    genericCommand.op = AVIMOpType_Upload;
-    genericCommand.reportMessage = reportCommand;
-    
-    [self _sendCommand:genericCommand];
+    [self->_socketWrapper sendCommandWrapper:commandWrapper_1];
 }
 
-- (void)installationRemoveClientChannel
+// MARK: - Close
+
+- (void)closeWithCallback:(void (^)(BOOL succeeded, NSError *error))callback
+{
+    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+        
+        if (client->_status == AVIMClientStatusClosed) {
+            
+            [client clearSessionTokenAndTTL];
+            
+            [client invokeInSpecifiedQueue:^{
+                
+                callback(true, nil);
+            }];
+            
+            return;
+        }
+        
+        if (client->_status == AVIMClientStatusClosing) {
+            
+            [client invokeInSpecifiedQueue:^{
+                
+                NSError *aError = ({
+                    NSString *reason = @"can't do close before last close done.";
+                    NSDictionary *userInfo = @{ @"reason" : reason };
+                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                        code:0
+                                    userInfo:userInfo];
+                });
+                
+                callback(false, aError);
+            }];
+            
+            return;
+        }
+        else if (client->_status != AVIMClientStatusOpened) {
+            
+            [client invokeInSpecifiedQueue:^{
+                
+                NSError *aError = ({
+                    NSString *reason = @"can't do close when not opened.";
+                    NSDictionary *userInfo = @{ @"reason" : reason };
+                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                        code:0
+                                    userInfo:userInfo];
+                });
+                
+                callback(false, aError);
+            }];
+            
+            return;
+        }
+        
+        client->_status = AVIMClientStatusClosing;
+        
+        AVIMGenericCommand *outCommand = ({
+            
+            AVIMGenericCommand *outCommand = [AVIMGenericCommand new];
+            AVIMSessionCommand *sessionCommand = [AVIMSessionCommand new];
+            
+            outCommand.cmd = AVIMCommandType_Session;
+            outCommand.op = AVIMOpType_Close;
+            outCommand.sessionMessage = sessionCommand;
+            
+            outCommand;
+        });
+        
+        LCIMProtobufCommandWrapper *commandWrapper = ({
+            
+            LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+            commandWrapper.outCommand = outCommand;
+            commandWrapper;
+        });
+        
+        [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+            
+            if (commandWrapper.error) {
+                
+                if (client->_status == AVIMClientStatusClosing) {
+                    
+                    client->_status = AVIMClientStatusOpened;
+                }
+                
+                [client invokeInSpecifiedQueue:^{
+                    
+                    callback(false, commandWrapper.error);
+                }];
+                
+                return;
+            }
+            
+            client->_status = AVIMClientStatusClosed;
+            
+            [client clearSessionTokenAndTTL];
+            
+            [client removeClientIdFromChannels:1];
+            
+            client->_isDeviceTokenUploaded = false;
+            
+            if (client->_uploadDeviceToken_block) {
+                
+                dispatch_block_cancel(client->_uploadDeviceToken_block);
+                
+                client->_uploadDeviceToken_block = nil;
+            }
+            
+            [client->_socketWrapper close];
+            
+            [client invokeInSpecifiedQueue:^{
+                
+                callback(true, nil);
+            }];
+        }];
+        
+        [client->_socketWrapper sendCommandWrapper:commandWrapper];
+    }];
+}
+
+// MARK: - Session Token
+
+- (void)setSessionTokenAndTTL:(AVIMSessionCommand *)sessionCommand
 {
     AssertRunInIMClientQueue;
     
-    AVInstallation *installation = _installation;
+    if (sessionCommand && sessionCommand.st) {
+        
+        self->_sessionToken = sessionCommand.st;
+        
+        if (sessionCommand.stTtl) {
+            
+            self->_sessionTokenExpireTimestamp = NSDate.date.timeIntervalSince1970 + (NSTimeInterval)sessionCommand.stTtl;
+        }
+    }
+}
+
+- (void)clearSessionTokenAndTTL
+{
+    AssertRunInIMClientQueue;
     
-    if (installation.deviceToken) {
+    self->_sessionToken = nil;
+    self->_sessionTokenExpireTimestamp = 0;
+}
+
+- (void)getSessionTokenWithForcingRefresh:(BOOL)forcingRefresh
+                                 callback:(void (^)(NSString *sessionToken, NSError *error))callback
+{
+    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
         
-        [installation removeObject:_clientId
-                            forKey:@"channels"];
+        NSString *oldSessionToken = client->_sessionToken;
         
-        [installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        NSError *sessionNotOpenError = ({
+            NSString *reason = @"session has not opened or did close.";
+            NSDictionary *userInfo = @{ @"reason" : reason };
+            [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                code:0
+                            userInfo:userInfo];
+        });
+        
+        if (!oldSessionToken || self->_status != AVIMClientStatusOpened) {
+            
+            callback(nil, sessionNotOpenError);
+            
+            return;
+        }
+        
+        if (forcingRefresh || (NSDate.date.timeIntervalSince1970 > client->_sessionTokenExpireTimestamp)) {
+            
+            AVIMGenericCommand *outCommand = ({
+                
+                AVIMGenericCommand *outCommand = [AVIMGenericCommand new];
+                AVIMSessionCommand *sessionCommand = [AVIMSessionCommand new];
+                
+                outCommand.cmd = AVIMCommandType_Session;
+                outCommand.op = AVIMOpType_Refresh;
+                outCommand.sessionMessage = sessionCommand;
+                
+                sessionCommand.st = oldSessionToken; /* let server to clear old session token */
+                
+                outCommand;
+            });
+            
+            LCIMProtobufCommandWrapper *commandWrapper = ({
+                
+                LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+                commandWrapper.outCommand = outCommand;
+                commandWrapper;
+            });
+            
+            [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+                
+                if (commandWrapper.error) {
+                    
+                    callback(nil, commandWrapper.error);
+                    
+                    return;
+                }
+                
+                if (!client->_sessionToken) {
+                    
+                    callback(nil, sessionNotOpenError);
+                    
+                    return;
+                }
+                
+                AVIMGenericCommand *inCommand = commandWrapper.inCommand;
+                AVIMSessionCommand *sessionCommand = inCommand.sessionMessage;
+                
+                if (inCommand.cmd == AVIMCommandType_Session &&
+                    inCommand.op == AVIMOpType_Refreshed &&
+                    sessionCommand && sessionCommand.st) {
+                    
+                    [client setSessionTokenAndTTL:sessionCommand];
+                    
+                    callback(sessionCommand.st, nil);
+                    
+                } else {
+                    
+                    NSError *aError = ({
+                        NSString *reason = @"invalid session refreshed.";
+                        NSDictionary *userInfo = @{ @"reason" : reason };
+                        [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                            code:0
+                                        userInfo:userInfo];
+                    });
+                    
+                    callback(nil, aError);
+                }
+            }];
+            
+            [client _sendCommandWrapper:commandWrapper];
+            
+        } else {
+            
+            callback(oldSessionToken, nil);
+        }
+    }];
+}
+
+// MARK: - APNs
+
+- (void)addClientIdToChannels:(NSUInteger)delayInterval
+{
+    AssertRunInIMClientQueue;
+    
+    if (self->_removeClientIdToChannels_block) {
+        
+        dispatch_block_cancel(self->_removeClientIdToChannels_block);
+        
+        self->_removeClientIdToChannels_block = nil;
+    }
+    
+    if (self->_addClientIdToChannels_block) {
+        
+        dispatch_block_cancel(self->_addClientIdToChannels_block);
+        
+        self->_addClientIdToChannels_block = nil;
+    }
+    
+    if (!self->_deviceToken || self->_deviceToken.length == 0) {
+        
+        return;
+    }
+    
+    dispatch_block_t block = dispatch_block_create(0, ^{
+        
+        self->_addClientIdToChannels_block = nil;
+        
+        [self->_installation addUniqueObject:self->_clientId forKey:@"channels"];
+        
+        [self->_installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             
             if (error) {
                 
-                AVLoggerError(AVLoggerDomainIM, @"%@", error);
+                AVLoggerError(AVLoggerDomainIM, @"Error: %@", error);
+                
+                if (delayInterval > 0) {
+                    
+                    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+                        
+                        [client addClientIdToChannels:delayInterval * 2];
+                    }];
+                }
             }
         }];
+    });
+    
+    self->_addClientIdToChannels_block = block;
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delayInterval * NSEC_PER_SEC), self->_internalSerialQueue, block);
+}
+
+- (void)removeClientIdFromChannels:(NSUInteger)delayInterval
+{
+    AssertRunInIMClientQueue;
+    
+    if (self->_addClientIdToChannels_block) {
+        
+        dispatch_block_cancel(self->_addClientIdToChannels_block);
+        
+        self->_addClientIdToChannels_block = nil;
     }
+    
+    if (self->_removeClientIdToChannels_block) {
+        
+        dispatch_block_cancel(self->_removeClientIdToChannels_block);
+        
+        self->_removeClientIdToChannels_block = nil;
+    }
+    
+    if (!self->_deviceToken || self->_deviceToken.length == 0) {
+        
+        return;
+    }
+    
+    dispatch_block_t block = dispatch_block_create(0, ^{
+        
+        self->_removeClientIdToChannels_block = nil;
+        
+        [self->_installation removeObject:self->_clientId forKey:@"channels"];
+        
+        [self->_installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            
+            if (error) {
+                
+                AVLoggerError(AVLoggerDomainIM, @"Error: %@", error);
+                
+                if (delayInterval > 0) {
+                    
+                    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+                        
+                        [client removeClientIdFromChannels:delayInterval * 2];
+                    }];
+                }
+            }
+        }];
+    });
+    
+    self->_removeClientIdToChannels_block = block;
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delayInterval * NSEC_PER_SEC), self->_internalSerialQueue, block);
+}
+
+- (void)uploadDeviceToken:(NSUInteger)delayInterval
+{
+    AssertRunInIMClientQueue;
+    
+    NSString *deviceToken = self->_deviceToken;
+    
+    if (!deviceToken || deviceToken.length == 0 || self->_status != AVIMClientStatusOpened) {
+        
+        return;
+    }
+    
+    if (self->_uploadDeviceToken_block) {
+        
+        dispatch_block_cancel(self->_uploadDeviceToken_block);
+        
+        self->_uploadDeviceToken_block = nil;
+    }
+    
+    dispatch_block_t block = dispatch_block_create(0, ^{
+        
+        self->_uploadDeviceToken_block = nil;
+        
+        AVIMGenericCommand *outCommand = [[AVIMGenericCommand alloc] init];
+        AVIMReportCommand *reportCommand = [[AVIMReportCommand alloc] init];
+        
+        outCommand.cmd = AVIMCommandType_Report;
+        outCommand.op = AVIMOpType_Upload;
+        outCommand.reportMessage = reportCommand;
+        
+        reportCommand.initiative = true;
+        reportCommand.type = @"token";
+        reportCommand.data_p = deviceToken;
+        
+        LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+        commandWrapper.outCommand = outCommand;
+        
+        [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+            
+            if (commandWrapper.error) {
+                
+                AVLoggerError(AVLoggerDomainIM, @"Error: %@", commandWrapper.error);
+                
+                if (delayInterval > 0) {
+                    
+                    [self uploadDeviceToken:delayInterval * 2];
+                }
+            } else {
+                
+                self->_isDeviceTokenUploaded = true;
+            }
+        }];
+        
+        [self _sendCommandWrapper:commandWrapper];
+    });
+    
+    self->_uploadDeviceToken_block = block;
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delayInterval * NSEC_PER_SEC), self->_internalSerialQueue, block);
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary<NSKeyValueChangeKey,id> *)change
+                       context:(void *)context
+{
+    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+        
+        if (object == client->_installation) {
+            
+            if (keyPath == keyPath(client->_installation, deviceToken)) {
+                
+                NSString *value = [NSString lc__decodingDictionary:change key:NSKeyValueChangeNewKey];
+                
+                if (value && value.length != 0 && ![value isEqualToString:client->_deviceToken]) {
+                    
+                    client->_deviceToken = value;
+                    
+                    if (client->_sessionToken) {
+                        
+                        client->_isDeviceTokenUploaded = false;
+                        
+                        [client addClientIdToChannels:1];
+                        
+                        [client uploadDeviceToken:1];
+                    }
+                }
+            }
+        }
+    }];
 }
 
 // MARK: - WebSocket Notification
 
 - (void)websocketOpened:(NSNotification *)notification
 {
-    dispatch_async(_internalSerialQueue, ^{
+    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
         
-        NSString *sessionToken = _sessionToken;
-        
-        if (!sessionToken) {
+        if (!client->_sessionToken) {
             
             return;
         }
         
-        if (_status != AVIMClientStatusResuming) {
+        [client resumeWithCallback:^(BOOL succeeded, NSError *error) {
             
-            return;
-        }
-        
-        [self reopenWithSessionToken:sessionToken];
-    });
+            if (error) {
+                
+                AVLoggerError(AVLoggerDomainIM, @"Error: %@", error);
+                
+            } else {
+                
+                id <AVIMClientDelegate> delegate = client->_delegate;
+                
+                if (delegate) {
+                    
+                    [client invokeInSpecifiedQueue:^{
+                        
+                        [delegate imClientResumed:client];
+                    }];
+                }
+            }
+        }];
+    }];
 }
 
 - (void)websocketClosed:(NSNotification *)notification
 {
-    dispatch_async(_internalSerialQueue, ^{
+    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
         
-        if (!_sessionToken) {
+        if (!client->_sessionToken) {
             
-            return ;
+            return;
         }
         
-        void(^imClientPaused_block)(void) = ^(void) {
-            
-            _status = AVIMClientStatusPaused;
-            
-            id<AVIMClientDelegate> delegate = _delegate;
-            
-            if (!delegate) {
-                
-                return;
-            }
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [delegate imClientPaused:self];
-            });
-        };
-        
-        void(^imClientClosedWithError_block)(NSError *) = ^(NSError *error) {
-            
-            _status = AVIMClientStatusClosed;
-            
-            id<AVIMClientDelegate> delegate = _delegate;
-            
-            if (!delegate) {
-                
-                return;
-            }
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [delegate imClientClosed:self error:error];
-                
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-                if ([delegate respondsToSelector:@selector(imClientPaused:error:)]) {
-                    
-                    [delegate imClientPaused:self error:error];
-                }
-#pragma clang diagnostic pop
-            });
-        };
-        
-        NSDictionary *info = notification.userInfo;
-        
-        NSAssert(info, @"This Notification's `userInfo` can't be nil.");
-        
-        BOOL willReconnect = [info[@"willReconnect"] boolValue];
-        
-        NSError *error = info[@"error"];
+        BOOL willReconnect = [notification.userInfo[@"willReconnect"] boolValue];
         
         if (willReconnect) {
             
-            imClientPaused_block();
+            client->_status = AVIMClientStatusPaused;
             
+            id<AVIMClientDelegate> delegate = client->_delegate;
+            
+            if (delegate) {
+                
+                [client invokeInSpecifiedQueue:^{
+                    
+                    [delegate imClientPaused:client];
+                }];
+            }
         } else {
             
-            imClientClosedWithError_block(error);
+            NSError *error = notification.userInfo[@"error"];
+            
+            client->_status = AVIMClientStatusClosed;
+            
+            [client clearSessionTokenAndTTL];
+            
+            id<AVIMClientDelegate> delegate = client->_delegate;
+            
+            if (delegate) {
+                
+                [client invokeInSpecifiedQueue:^{
+                    
+                    [delegate imClientClosed:client error:error];
+                    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+                    if ([delegate respondsToSelector:@selector(imClientPaused:error:)]) {
+                        [delegate imClientPaused:client error:error];
+                    }
+#pragma clang diagnostic pop
+                }];
+            }
         }
-    });
+    }];
 }
 
 - (void)websocketReconnect:(NSNotification *)notification
 {
-    dispatch_async(_internalSerialQueue, ^{
+    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
         
-        if (!_sessionToken) {
+        if (!client->_sessionToken) {
             
             return;
         }
         
-        if (_status != AVIMClientStatusPaused) {
+        client->_status = AVIMClientStatusResuming;
+        
+        id <AVIMClientDelegate> delegate = client->_delegate;
+        
+        if (delegate) {
             
-            return;
+            [client invokeInSpecifiedQueue:^{
+                
+                [delegate imClientResuming:client];
+            }];
         }
-        
-        _status = AVIMClientStatusResuming;
-        
-        id<AVIMClientDelegate> delegate = _delegate;
-        
-        if (!delegate) {
-            
-            return;
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [delegate imClientResuming:self];
-        });
-    });
+    }];
 }
 
 - (void)receiveCommand:(NSNotification *)notification
@@ -1195,12 +1391,6 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
         AVIMCommandType commandType = command.cmd;
         
         switch (commandType) {
-                
-            case AVIMCommandType_Session:
-                
-                [self processSessionCommand:command];
-                
-                break;
                 
             case AVIMCommandType_Direct:
                 
@@ -1235,149 +1425,137 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
 
 // MARK: - Signature
 
-- (AVIMSignature *)getSignatureByDataSourceWithAction:(NSString *)action
-                                       conversationId:(NSString *)conversationId
-                                            clientIds:(NSArray<NSString *> *)clientIds
+- (void)getSessionOpenSignatureWithCallback:(void (^)(AVIMSignature *signature))callback
 {
-    AssertRunInIMClientQueue;
-    
-    NSString *clientId = _clientId;
-    
-    __block AVIMSignature *signature = nil;
-    
-    id<AVIMSignatureDataSource> signatureDataSource = _signatureDataSource;
-    
-    if (signatureDataSource) {
+    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
         
-        SEL aSel = @selector(signatureWithClientId:conversationId:action:actionOnClientIds:);
+        AVUser *user = client->_user;
         
-        if ([signatureDataSource respondsToSelector:aSel]) {
+        if (user) {
             
-            dispatch_sync(dispatch_get_main_queue(), ^{
+            NSString *userSessionToken = user.sessionToken;
+            
+            if (!userSessionToken) {
                 
-                signature = [signatureDataSource signatureWithClientId:clientId
-                                                        conversationId:conversationId
-                                                                action:action
-                                                     actionOnClientIds:clientIds];
-            });
-        }
-    }
-    
-    return signature;
-}
-
-- (void)getSignatureForOpenWith:(void(^)(AVIMSignature *))callback
-{
-    dispatch_async(_internalSerialQueue, ^{
-        
-        [self _getSignatureForOpenWith:callback];
-    });
-}
-
-- (void)_getSignatureForOpenWith:(void(^)(AVIMSignature *))callback
-{
-    AssertRunInIMClientQueue;
-    
-    AVUser *user = _user;
-    
-    AVIMSignature *signature = nil;
-    
-    if (user) {
-        
-        signature = [[AVIMSignature alloc] init];
-        
-        NSString *userSessionToken = user.sessionToken;
-        
-        if (!userSessionToken) {
-            
-            NSString *reason = @"The Session Token of `user`('AVUser') is invalid.";
-            
-            NSDictionary *info = @{ @"reason" : reason };
-            
-            NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                                  code:0
-                                              userInfo:info];
-            
-            signature.error = aError;
-            
-            callback(signature);
-            
-            return;
-        }
-        
-        AVPaasClient *client = [AVPaasClient sharedInstance];
-        
-        NSDictionary *parameters = @{ @"session_token" : userSessionToken };
-        
-        NSURLRequest *request = [client requestWithPath:@"rtm/sign"
-                                                 method:@"POST"
-                                                headers:nil
-                                             parameters:parameters];
-        
-        [client performRequest:request success:^(NSHTTPURLResponse *response, id result) {
-            
-            if (!result) {
+                AVIMSignature *signature = [AVIMSignature new];
                 
-                NSString *reason = @"No Result for Open Signature.";
-                
-                NSDictionary *info = @{ @"reason" : reason };
-                
-                NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                                      code:0
-                                                  userInfo:info];
-                
-                signature.error = aError;
-                
-                dispatch_async(_internalSerialQueue, ^{
-                    
-                    callback(signature);
+                signature.error = ({
+                    NSString *reason = @"AVUser's Session Token is invalid.";
+                    NSDictionary *userInfo = @{ @"reason" : reason };
+                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                        code:0
+                                    userInfo:userInfo];
                 });
+                
+                callback(signature);
                 
                 return;
             }
             
-            signature.nonce = result[@"nonce"];
-            signature.signature = result[@"signature"];
-            signature.timestamp = [result[@"timestamp"] unsignedIntegerValue];
+            AVPaasClient *paasClient = [AVPaasClient sharedInstance];
             
-            dispatch_async(_internalSerialQueue, ^{
-                
-                callback(signature);
+            NSURLRequest *request = ({
+                NSDictionary *parameters = @{ @"session_token" : userSessionToken };
+                [paasClient requestWithPath:@"rtm/sign"
+                                     method:@"POST"
+                                    headers:nil
+                                 parameters:parameters];
             });
-            
-        } failure:^(NSHTTPURLResponse *response, id result, NSError *error) {
-            
-            if (error) {
+        
+            [paasClient performRequest:request success:^(NSHTTPURLResponse *response, id result) {
+                
+                if ([NSDictionary lc__checkingType:result]) {
+                    
+                    NSString *sign = [NSString lc__decodingDictionary:result key:@"signature"];
+                    int64_t timestamp = [[NSNumber lc__decodingDictionary:result key:@"timestamp"] longLongValue];
+                    NSString *nonce = [NSString lc__decodingDictionary:result key:@"nonce"];
+                    
+                    if (sign && timestamp && nonce) {
+                        
+                        AVIMSignature *signature = ({
+                            AVIMSignature *signature = [AVIMSignature new];
+                            signature.signature = sign;
+                            signature.timestamp = timestamp;
+                            signature.nonce = nonce;
+                            signature;
+                        });
+                        
+                        [client addOperationToInternalSerialQueue:^(AVIMClient *client) {
+                            
+                            callback(signature);
+                        }];
+                        
+                        return;
+                    }
+                }
+                
+                AVIMSignature *signature = [AVIMSignature new];
+                
+                signature.error = ({
+                    NSString *reason = [NSString stringWithFormat:@"response data: %@ is invalid.", (result ?: @"nil")];
+                    NSDictionary *userInfo = @{ @"reason" : reason };
+                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                        code:0
+                                    userInfo:userInfo];
+                });
+                
+                [client addOperationToInternalSerialQueue:^(AVIMClient *client) {
+                    
+                    callback(signature);
+                }];
+                
+            } failure:^(NSHTTPURLResponse *response, id result, NSError *error) {
+                
+                AVIMSignature *signature = [AVIMSignature new];
                 
                 signature.error = error;
                 
-            } else {
-                
-                NSString *reason = @"Unknown Error for Open Signature.";
-                
-                NSDictionary *info = @{ @"reason" : reason };
-                
-                NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                                      code:0
-                                                  userInfo:info];
-                
-                signature.error = aError;
-            }
+                [client addOperationToInternalSerialQueue:^(AVIMClient *client) {
+                    
+                    callback(signature);
+                }];
+            }];
             
-            dispatch_async(_internalSerialQueue, ^{
+        } else {
+            
+            NSString *action = @"open";
+            
+            [client getSignatureWithConversationId:nil action:action actionOnClientIds:nil callback:^(AVIMSignature *signature) {
+                
+                AssertRunInIMClientQueue;
                 
                 callback(signature);
-            });
+            }];
+        }
+    }];
+}
+
+- (void)getSignatureWithConversationId:(NSString *)conversationId
+                                action:(NSString *)action
+                     actionOnClientIds:(NSArray<NSString *> *)actionOnClientIds
+                              callback:(void (^)(AVIMSignature *signature))callback
+{
+    dispatch_async(self->_signatureQueue, ^{
+        
+        id <AVIMSignatureDataSource> dataSource = self->_signatureDataSource;
+        
+        SEL sel = @selector(signatureWithClientId:conversationId:action:actionOnClientIds:);
+        
+        AVIMSignature *signature = nil;
+        
+        if (dataSource && [dataSource respondsToSelector:sel]) {
+            
+            signature = [dataSource signatureWithClientId:self->_clientId
+                                           conversationId:conversationId
+                                                   action:action
+                                        actionOnClientIds:actionOnClientIds];
+        }
+        
+        [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+            
+            callback(signature);
         }];
-        
-    } else {
-        
-        signature = [self getSignatureByDataSourceWithAction:@"open"
-                                              conversationId:nil
-                                                   clientIds:nil];
-        
-        callback(signature);
-    }
+    });
 }
 
 // MARK: - Send Command
@@ -1427,19 +1605,18 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
 {
     AssertRunInIMClientQueue;
     
-    if (_status != AVIMClientStatusOpened) {
+    if (self->_status != AVIMClientStatusOpened) {
         
-        if ([commandWrapper hasCallback]) {
+        if (commandWrapper.hasCallback) {
             
-            NSError *aError = ({
-                NSString *reason = @"Client Not Opened.";
+            commandWrapper.error = ({
+                
+                NSString *reason = @"client not opened.";
                 NSDictionary *userInfo = @{ @"reason" : reason };
                 [NSError errorWithDomain:@"LeanCloudErrorDomain"
                                     code:0
                                 userInfo:userInfo];
             });
-            
-            commandWrapper.error = aError;
             
             [commandWrapper executeCallbackAndSetItToNil];
         }
@@ -1447,7 +1624,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
         return;
     }
     
-    [_socketWrapper sendCommandWrapper:commandWrapper];
+    [self->_socketWrapper sendCommandWrapper:commandWrapper];
 }
 
 // MARK: - AVIMWebSocketWrapperDelegate
@@ -1472,18 +1649,47 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
             [command executeCallbackAndSetItToNil];
         }
         
-        NSError *inCommandError = command.error;
-        
-        if (inCommandError && command.inCommand.hasSessionMessage) {
+        if (command.inCommand.cmd == AVIMCommandType_Session &&
+            command.inCommand.op == AVIMOpType_Closed &&
+            command.inCommand.sessionMessage &&
+            command.inCommand.sessionMessage.code == kLC_Code_SessionConflict) {
+            
+            client->_status = AVIMClientStatusClosed;
+            
+            [client clearSessionTokenAndTTL];
+            
+            [client removeClientIdFromChannels:1];
+            
+            client->_isDeviceTokenUploaded = false;
+            
+            if (client->_uploadDeviceToken_block) {
+                
+                dispatch_block_cancel(client->_uploadDeviceToken_block);
+                
+                client->_uploadDeviceToken_block = nil;
+            }
             
             id <AVIMClientDelegate> delegate = client->_delegate;
             
-            if (delegate && [delegate respondsToSelector:@selector(client:didOfflineWithError:)]) {
+            SEL sel = @selector(client:didOfflineWithError:);
+            
+            if (delegate && [delegate respondsToSelector:sel]) {
                 
-                dispatch_async(dispatch_get_main_queue(), ^{
+                [client invokeInSpecifiedQueue:^{
                     
-                    [delegate client:client didOfflineWithError:inCommandError];
-                });
+                    NSError *aError = ({
+                        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+                        AVIMSessionCommand *sessionCommand = command.inCommand.sessionMessage;
+                        userInfo[keyPath(sessionCommand, reason)] = sessionCommand.reason;
+                        userInfo[keyPath(sessionCommand, detail)] = sessionCommand.detail;
+                        userInfo[keyPath(sessionCommand, code)] = @(sessionCommand.code);
+                        [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                            code:command.inCommand.sessionMessage.code
+                                        userInfo:userInfo];
+                    });
+                    
+                    [delegate client:client didOfflineWithError:aError];
+                }];
             }
         }
     }];
@@ -1491,7 +1697,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
 
 - (void)webSocketWrapper:(AVIMWebSocketWrapper *)socket didReceiveCommand:(LCIMProtobufCommandWrapper *)command
 {
-    NSParameterAssert(command.inCommand);
+    if (!command.inCommand) { return; }
     
     [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
         
@@ -1499,6 +1705,19 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
         
         switch (inCommand.cmd)
         {
+            case AVIMCommandType_Session:
+            {
+                switch (inCommand.op)
+                {
+                    case AVIMOpType_Closed:
+                    {
+                        [client process_session_closed:inCommand];
+                    } break;
+                        
+                    default: break;
+                }
+            } break;
+                
             case AVIMCommandType_Conv:
             {
                 switch (inCommand.op)
@@ -1506,6 +1725,11 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                     case AVIMOpType_Updated:
                     {
                         [client process_conv_updated:inCommand];
+                    } break;
+                        
+                    case AVIMOpType_MemberInfoChanged:
+                    {
+                        [client process_conv_member_info_changed:inCommand];
                     } break;
                         
                     default: break;
@@ -1530,35 +1754,79 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     }];
 }
 
-// MARK: - Command Processor
+// MARK: - Process In Command
+
+- (void)process_session_closed:(AVIMGenericCommand *)inCommand
+{
+    AssertRunInIMClientQueue;
+    
+    self->_status = AVIMClientStatusClosed;
+    
+    [self clearSessionTokenAndTTL];
+    
+    AVIMSessionCommand *sessionCommand = inCommand.sessionMessage;
+    
+    if (!sessionCommand) {
+        
+        return;
+    }
+    
+    if (sessionCommand.code == kLC_Code_SessionConflict) {
+        
+        [self removeClientIdFromChannels:1];
+        
+        self->_isDeviceTokenUploaded = false;
+        
+        if (self->_uploadDeviceToken_block) {
+            
+            dispatch_block_cancel(self->_uploadDeviceToken_block);
+            
+            self->_uploadDeviceToken_block = nil;
+        }
+        
+        id <AVIMClientDelegate> delegate = self->_delegate;
+        
+        SEL sel = @selector(client:didOfflineWithError:);
+        
+        if (delegate && [delegate respondsToSelector:sel]) {
+            
+            [self invokeInSpecifiedQueue:^{
+                
+                NSError *aError = ({
+                    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+                    userInfo[keyPath(sessionCommand, reason)] = sessionCommand.reason;
+                    userInfo[keyPath(sessionCommand, detail)] = sessionCommand.detail;
+                    userInfo[keyPath(sessionCommand, code)] = @(sessionCommand.code);
+                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                        code:sessionCommand.code
+                                    userInfo:userInfo];
+                });
+                
+                [delegate client:self didOfflineWithError:aError];
+            }];
+        }
+    }
+}
 
 - (void)process_conv_updated:(AVIMGenericCommand *)inCommand
 {
     AssertRunInIMClientQueue;
     
-    AVIMConvCommand *convCommand = inCommand.convMessage;
-    
-    if (!convCommand) {
-        
-        return;
-    }
-    
-    NSString *conversationId = convCommand.cid;
-    
-    id JSONObject = AVIMClient_JSONObjectFromString(convCommand.attr.data_p, 0);
+    NSString *conversationId = inCommand.convMessage.cid;
+    NSString *initById = inCommand.convMessage.initBy;
+    NSDate *updateDate = AVIMClient_dateFromString(inCommand.convMessage.udate);
+    id JSONObject = AVIMClient_JSONObjectFromString(inCommand.convMessage.attr.data_p, 0);
     
     if (!conversationId || ![NSDictionary lc__checkingType:JSONObject]) {
         
         return;
     }
     
-    void(^handlingWithConversation_block)(AVIMConversation *) = ^(AVIMConversation *conversation) {
+    [self queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+        
+        if (error) { return; }
         
         [conversation mergeConvUpdatedMessage:JSONObject];
-        
-        NSString *byClientId = convCommand.initBy;
-        
-        NSDate *atDate = AVIMClient_dateFromString(convCommand.udate);
         
         id <AVIMClientDelegate> delegate = _delegate;
         
@@ -1568,37 +1836,10 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
             
             [self invokeInSpecifiedQueue:^{
                 
-                [delegate conversation:conversation didUpdateAt:atDate byClientId:byClientId updatedData:JSONObject];
+                [delegate conversation:conversation didUpdateAt:updateDate byClientId:initById updatedData:JSONObject];
             }];
         }
-    };
-    
-    AVIMConversation *cachedConversation = [self conversationForId:conversationId];
-    
-    if (!cachedConversation) {
-        
-        cachedConversation = [[self conversationCache] conversationForId:conversationId];
-    }
-    
-    if (!cachedConversation) {
-        
-        [self queryConversationFromServerWithId:conversationId queryOption:AVIMConversationQueryOptionWithMessage callback:^(AVIMConversation *conversation, NSError *error) {
-            
-            if (conversation) {
-                
-                handlingWithConversation_block(conversation);
-            }
-            
-            if (error) {
-                
-                AVLoggerError(AVLoggerDomainIM, @"Error: %@", error);
-            }
-        }];
-        
-    } else {
-        
-        handlingWithConversation_block(cachedConversation);
-    }
+    }];
 }
 
 - (void)process_patch_modify:(AVIMGenericCommand *)inCommand
@@ -1672,7 +1913,9 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                 [messageCacheStore insertOrUpdateMessage:message withBreakpoint:YES];
             }
             
-            [self queryConversationWithId:conversationId queryOption:AVIMConversationQueryOptionWithMessage callback:^(AVIMConversation *conversation, NSError *error) {
+            [self queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+                
+                if (error) { return; }
                 
                 if ([conversation.lastMessage.messageId isEqualToString:message.messageId]) {
                     
@@ -1709,7 +1952,47 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     [self _sendCommandWrapper:ackCommandWrapper];
 }
 
+- (void)process_conv_member_info_changed:(AVIMGenericCommand *)inCommand
+{
+    NSString *conversationId = inCommand.convMessage.cid;
+    NSString *initById = inCommand.convMessage.initBy;
+    NSString *memberId = inCommand.convMessage.info.pid;
+    NSString *role = inCommand.convMessage.info.role;
+    
+    if (!conversationId) {
+        
+        return;
+    }
+    
+    [self queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+        
+        if (error) { return; }
+        
+        [conversation process_member_info_changed:inCommand];
+        
+        id <AVIMClientDelegate> delegate = self->_delegate;
+        
+        SEL sel = @selector(conversation:didMemberInfoUpdateBy:memberId:role:);
+        
+        if (delegate && [delegate respondsToSelector:sel]) {
+            
+            [self invokeInSpecifiedQueue:^{
+                
+                [delegate conversation:conversation didMemberInfoUpdateBy:initById memberId:memberId role:role];
+            }];
+        }
+    }];
+}
+
 // MARK: - Query Conversation From Server
+
+- (void)queryConversationWithId:(NSString *)conversationId
+                       callback:(void (^)(AVIMConversation *conversation, NSError *error))callback
+{
+    [self queryConversationWithId:conversationId
+                      queryOption:AVIMConversationQueryOptionWithMessage
+                         callback:callback];
+}
 
 - (void)queryConversationWithId:(NSString *)conversationId
                     queryOption:(AVIMConversationQueryOption)queryOption
@@ -1719,11 +2002,6 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     NSParameterAssert(conversationId);
     
     AVIMConversation *conversation = [self conversationForId:conversationId];
-    
-    if (!conversation) {
-        
-        conversation = [[self conversationCache] conversationForId:conversationId];
-    }
     
     if (conversation) {
         
@@ -1937,278 +2215,246 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     }
 }
 
+// MARK: - Create Conversation
+
 - (void)createConversationWithName:(NSString *)name
-                         clientIds:(NSArray *)clientIds
-                          callback:(AVIMConversationResultBlock)callback
+                         clientIds:(NSArray<NSString *> *)clientIds
+                          callback:(void (^)(AVIMConversation *conversation, NSError *error))callback
 {
-    [self createConversationWithName:name
-                           clientIds:clientIds
-                          attributes:nil
-                             options:AVIMConversationOptionNone
-                        temporaryTTL:0
-                            callback:callback];
+    [self createConversationWithName:name clientIds:clientIds attributes:nil options:(AVIMConversationOptionNone) temporaryTTL:0 callback:callback];
 }
 
 - (void)createChatRoomWithName:(NSString *)name
                     attributes:(NSDictionary *)attributes
-                      callback:(AVIMChatRoomResultBlock)callback
+                      callback:(void (^)(AVIMChatRoom *chatRoom, NSError *error))callback
 {
-    [self createConversationWithName:name
-                           clientIds:@[]
-                          attributes:attributes
-                             options:AVIMConversationOptionTransient
-                        temporaryTTL:0
-                            callback:
-     ^(AVIMConversation *conv, NSError * error){
-         
-         if (conv) {
-             
-             AVIMChatRoom *chatRoom = (AVIMChatRoom *)conv;
-             
-             callback(chatRoom, nil);
-             
-         } else {
-             
-             callback(nil, error);
-         }
-     }];
+    [self createConversationWithName:name clientIds:@[] attributes:attributes options:(AVIMConversationOptionTransient) temporaryTTL:0 callback:^(AVIMConversation * _Nullable conversation, NSError * _Nullable error) {
+        
+        callback((AVIMChatRoom *)conversation, error);
+    }];
 }
 
-- (void)createTemporaryConversationWithClientIds:(NSArray *)clientIds
+- (void)createTemporaryConversationWithClientIds:(NSArray<NSString *> *)clientIds
                                       timeToLive:(int32_t)ttl
-                                        callback:(AVIMTemporaryConversationResultBlock)callback
+                                        callback:(void (^)(AVIMTemporaryConversation *temporaryConversation, NSError *error))callback
 {
-    [self createConversationWithName:nil
-                           clientIds:clientIds
-                          attributes:nil
-                             options:AVIMConversationOptionTemporary
-                        temporaryTTL:ttl
-                            callback:
-     ^(AVIMConversation *conv, NSError * error){
-         
-         if (conv) {
-             
-             AVIMTemporaryConversation *temporaryConversation = (AVIMTemporaryConversation *)conv;
-             
-             callback(temporaryConversation, nil);
-             
-         } else {
-             
-             callback(nil, error);
-         }
-     }];
+    [self createConversationWithName:nil clientIds:clientIds attributes:nil options:(AVIMConversationOptionTemporary) temporaryTTL:ttl callback:^(AVIMConversation * _Nullable conversation, NSError * _Nullable error) {
+        
+        callback((AVIMTemporaryConversation *)conversation, error);
+    }];
 }
 
 - (void)createConversationWithName:(NSString *)name
-                         clientIds:(NSArray *)clientIds
-                        attributes:(NSDictionary *)attr
+                         clientIds:(NSArray<NSString *> *)clientIds
+                        attributes:(NSDictionary *)attributes
                            options:(AVIMConversationOption)options
-                          callback:(AVIMConversationResultBlock)callback
+                          callback:(void (^)(AVIMConversation *conversation, NSError *error))callback
 {
-    [self createConversationWithName:name
-                           clientIds:clientIds
-                          attributes:attr
-                             options:options
-                        temporaryTTL:0
-                            callback:callback];
+    [self createConversationWithName:name clientIds:clientIds attributes:attributes options:options temporaryTTL:0 callback:callback];
 }
 
 - (void)createConversationWithName:(NSString *)name
-                         clientIds:(NSArray *)clientIds
-                        attributes:(NSDictionary *)attr
+                         clientIds:(NSArray<NSString *> *)clientIds
+                        attributes:(NSDictionary *)attributes
                            options:(AVIMConversationOption)options
                       temporaryTTL:(int32_t)temporaryTTL
                           callback:(AVIMConversationResultBlock)callback
 {
-    [[self class] _assertClientIdsIsValid:clientIds];
-    
-    BOOL unique    = options & AVIMConversationOptionUnique;
-    BOOL transient = options & AVIMConversationOptionTransient;
-    BOOL temporary = options & AVIMConversationOptionTemporary;
-    
-    if ((unique && transient) ||
-        (unique && temporary) ||
-        (transient && temporary)) {
+    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        for (NSString *item in clientIds) {
             
-            NSString *reason = @"`options` is invalid.";
-            
-            NSDictionary *info = @{ @"reason" : reason };
-            
-            NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                                  code:0
-                                              userInfo:info];
-            
-            callback(nil, aError);
-        });
-        
-        return;
-    }
-    
-    NSMutableDictionary *attributes = nil;
-    
-    if (name || attr) {
-        
-        attributes = [NSMutableDictionary dictionary];
-        
-        if (name) {
-            
-            [attributes setObject:name forKey:kConvAttrKey_name];
-        }
-        
-        if (attr) {
-            
-            [attributes setObject:attr forKey:kConvAttrKey_attributes];
-        }
-    }
-    
-    NSMutableArray *memberArray = [NSMutableArray arrayWithArray:({
-        
-        NSMutableSet *members = [NSMutableSet setWithArray:clientIds ?: @[]];
-        
-        [members addObject:_clientId];
-        
-        [members allObjects];
-    })];
-    
-    dispatch_async(_internalSerialQueue, ^{
-        
-        AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
-        
-        genericCommand.needResponse = YES;
-        
-        genericCommand.cmd = AVIMCommandType_Conv;
-        genericCommand.op = AVIMOpType_Start;
-
-        AVIMConvCommand *convCommand = [[AVIMConvCommand alloc] init];
-
-        if (attributes) {
-            
-            convCommand.attr = [AVIMCommandFormatter JSONObjectWithDictionary:attributes];
-        }
-
-        if (transient) {
-            
-            convCommand.transient = true;
-            
-        } else if (temporary) {
-            
-            convCommand.tempConv = true;
-            
-            if (temporaryTTL > 0) {
+            if (item.length > kLC_ClientId_MaxLength || item.length == 0) {
                 
-                convCommand.tempConvTtl = temporaryTTL;
-            }
-            
-            convCommand.mArray = memberArray;
-            
-        } else {
-            
-            if (unique) {
+                [client invokeInSpecifiedQueue:^{
+                    
+                    NSError *aError = ({
+                        NSString *reason = [NSString stringWithFormat:@"client id's length should in range [1 %lu].", (unsigned long)kLC_ClientId_MaxLength];
+                        NSDictionary *userInfo = @{ @"reason" : reason };
+                        [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                            code:0
+                                        userInfo:userInfo];
+                    });
+                    
+                    callback(nil, aError);
+                }];
                 
-                convCommand.unique = true;
+                return;
             }
-            
-            convCommand.mArray = memberArray;
         }
-
-        [genericCommand avim_addRequiredKeyWithCommand:convCommand];
         
-        NSString *acition = [AVIMCommandFormatter signatureActionForKey:genericCommand.op];
+        BOOL unique = options & AVIMConversationOptionUnique;
+        BOOL transient = options & AVIMConversationOptionTransient;
+        BOOL temporary = options & AVIMConversationOptionTemporary;
         
-        AVIMSignature *signature = [self getSignatureByDataSourceWithAction:acition
-                                                             conversationId:nil
-                                                                  clientIds:memberArray.copy];
-        
-        [genericCommand avim_addRequiredKeyForConvMessageWithSignature:signature];
-        
-        if ([AVIMClient checkErrorForSignature:signature command:genericCommand]) {
+        if ((unique && transient) || (unique && temporary) || (transient && temporary)) {
+            
+            [client invokeInSpecifiedQueue:^{
+                
+                NSError *aError = ({
+                    NSString *reason = @"options is invalid.";
+                    NSDictionary *userInfo = @{ @"reason" : reason };
+                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                        code:0
+                                    userInfo:userInfo];
+                });
+                
+                callback(nil, aError);
+            }];
+            
             return;
         }
         
-        [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
-            if (!error) {
-                AVIMConvCommand *inConvCommand = inCommand.convMessage;
-                AVIMConvCommand *outConvCommand = outCommand.convMessage;
+        NSMutableArray *members = ({
+            
+            NSMutableSet *set = [NSMutableSet setWithArray:(clientIds ?: @[])];
+            [set addObject:client->_clientId];
+            [[set allObjects] mutableCopy];
+        });
+        
+        [client getSignatureWithConversationId:nil action:@"start" actionOnClientIds:[members copy] callback:^(AVIMSignature *signature) {
+            
+            AssertRunInIMClientQueue;
+            
+            if (signature && signature.error) {
                 
-                NSString *convId = inConvCommand.cid;
+                [client invokeInSpecifiedQueue:^{
+                    
+                    callback(nil, signature.error);
+                }];
                 
-                LCIMConvType convType = LCIMConvTypeUnknown;
+                return;
+            }
+            
+            AVIMGenericCommand *outCommand = ({
+                
+                AVIMGenericCommand *outCommand = [AVIMGenericCommand new];
+                AVIMConvCommand *convCommand = [AVIMConvCommand new];
+                
+                outCommand.cmd = AVIMCommandType_Conv;
+                outCommand.op = AVIMOpType_Start;
+                outCommand.convMessage = convCommand;
+                
+                convCommand.attr = ({
+                    
+                    AVIMJsonObjectMessage *jsonObjectMessage = nil;
+                    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+                    if (name) { dic[kConvAttrKey_name] = name; }
+                    if (attributes) { dic[kConvAttrKey_attributes] = attributes; }
+                    if (dic.count > 0) {
+                        NSString *jsonString = AVIMClient_StringFromJSONObject(dic, 0);
+                        if (jsonString) {
+                            jsonObjectMessage = [AVIMJsonObjectMessage new];
+                            jsonObjectMessage.data_p = jsonString;
+                        }
+                    }
+                    jsonObjectMessage;
+                });
                 
                 if (transient) {
-                    
-                    convType = LCIMConvTypeTransient;
-                    
-                } else if (temporary) {
-                    
-                    convType = LCIMConvTypeTemporary;
-                    
-                } else {
-                    
-                    convType = LCIMConvTypeNormal;
+                    convCommand.transient = transient;
+                }
+                else if (temporary) {
+                    convCommand.tempConv = temporary;
+                    if (temporaryTTL > 0) {
+                        convCommand.tempConvTtl = temporaryTTL;
+                    }
+                    convCommand.mArray = members;
+                }
+                else {
+                    if (unique) {
+                        convCommand.unique = unique;
+                    }
+                    convCommand.mArray = members;
                 }
                 
-                AVIMConversation *conversation = [self getConversationWithId:convId
-                                                               orNewWithType:convType];
+                if (signature && signature.signature && signature.timestamp && signature.nonce) {
+                    convCommand.s = signature.signature;
+                    convCommand.t = signature.timestamp;
+                    convCommand.n = signature.nonce;
+                }
+                
+                outCommand;
+            });
+            
+            LCIMProtobufCommandWrapper *commandWrapper = ({
+                
+                LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+                commandWrapper.outCommand = outCommand;
+                commandWrapper;
+            });
+            
+            [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+                
+                if (commandWrapper.error) {
+                    
+                    [client invokeInSpecifiedQueue:^{
+                    
+                        callback(nil, commandWrapper.error);
+                    }];
+                    
+                    return;
+                }
+                
+                AVIMGenericCommand *inCommand = commandWrapper.inCommand;
+                AVIMConvCommand *inConvCommand = inCommand.convMessage;
+                
+                NSString *conversationId = inConvCommand.cid;
+                
+                LCIMConvType convType = ({
+                    
+                    LCIMConvType convType;
+                    if (transient) {
+                        convType = LCIMConvTypeTransient;
+                    } else if (temporary) {
+                        convType = LCIMConvTypeTemporary;
+                    } else {
+                        convType = LCIMConvTypeNormal;
+                    }
+                    convType;
+                });
+                
+                AVIMConversation *conversation = [client getConversationWithId:conversationId orNewWithType:convType];
                 
                 if (!conversation) {
                     
-                    dispatch_async(dispatch_get_main_queue(), ^{
+                    [client invokeInSpecifiedQueue:^{
                         
-                        NSString *reason = [NSString stringWithFormat:@"Create Conversation failed, conversation's ID: (%@)", convId ?: @"nil"];
-                        
-                        NSDictionary *info = @{ @"reason" : reason };
-                        
-                        NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                                              code:0
-                                                          userInfo:info];
+                        NSError *aError = ({
+                            NSString *reason = @"create conversation failed.";
+                            NSDictionary *userInfo = @{ @"reason" : reason };
+                            [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                                code:0
+                                            userInfo:userInfo];
+                        });
                         
                         callback(nil, aError);
-                    });
+                    }];
                     
                     return;
                 }
                 
                 conversation.name = name;
-                conversation.attributes = attr;
+                conversation.attributes = [attributes mutableCopy];
+                conversation.creator = client->_clientId;
+                conversation.createAt = AVIMClient_dateFromString(inConvCommand.cdate);
+                conversation.temporaryTTL = inConvCommand.tempConvTtl;
+                conversation.unique = unique;
+                conversation.uniqueId = inConvCommand.uniqueId;
+                [conversation addMembers:members];
                 
-                conversation.creator = _clientId;
-                
-                conversation.createAt = [AVObjectUtils dateFromString:[inConvCommand cdate]];
-                
-                [conversation addMembers:[outConvCommand.mArray copy]];
-                
-                if (temporary) {
+                [client invokeInSpecifiedQueue:^{
                     
-                    conversation.temporaryTTL = inConvCommand.tempConvTtl;
-                }
-                
-                if (outConvCommand.unique) {
-                    
-                    conversation.unique = true;
-                    
-                    if (inConvCommand.hasUniqueId) {
-                        
-                        conversation.uniqueId = inConvCommand.uniqueId;
-                    }
-                }
-
-                [AVIMBlockHelper callConversationResultBlock:callback
-                                                conversation:conversation
-                                                       error:nil];
-                
-            } else {
-                
-                [AVIMBlockHelper callConversationResultBlock:callback
-                                                conversation:nil
-                                                       error:error];
-            }
+                    callback(conversation, nil);
+                }];
+            }];
+            
+            [client sendCommandWrapper:commandWrapper];
         }];
-
-        [self _sendCommand:genericCommand];
-    });
+    }];
 }
+
+// MARK: -
 
 - (AVIMConversation *)conversationWithKeyedConversation:(AVIMKeyedConversation *)keyedConversation
 {
@@ -2788,18 +3034,6 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     }
 }
 
-- (void)processSessionCommand:(AVIMGenericCommand *)genericCommand
-{
-    AssertRunInIMClientQueue;
-    
-    AVIMOpType op = genericCommand.op;
-    
-    if (op == AVIMOpType_Closed) {
-        
-        [self processCommand_SessionClosed:genericCommand];
-    }
-}
-
 - (void)array:(NSMutableArray *)array addObject:(id)object {
     if (!object) {
         object = [NSNull null];
@@ -2933,12 +3167,6 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     [self array:arguments addObject:clientIds];
     [self array:arguments addObject:clientId];
     [AVIMRuntimeHelper callMethodInMainThreadWithTarget:_delegate selector:@selector(conversation:membersRemoved:byClientId:) arguments:arguments];
-}
-
-- (void)receiveResumed {
-    NSMutableArray *arguments = [[NSMutableArray alloc] init];
-    [self array:arguments addObject:self];
-    [AVIMRuntimeHelper callMethodInMainThreadWithTarget:_delegate selector:@selector(imClientResumed:) arguments:arguments];
 }
 
 + (NSMutableDictionary *)_userOptions {
@@ -3122,32 +3350,6 @@ __attribute__((warn_unused_result))
             callback();
         });
     });
-}
-
-// MARK: - KVO
-
-- (void)observeValueForKeyPath:(NSString *)keyPath
-                      ofObject:(id)object
-                        change:(NSDictionary<NSKeyValueChangeKey,id> *)change
-                       context:(void *)context
-{
-    if (keyPath == keyPath(_installation, deviceToken)) {
-        
-        NSString *value = change[NSKeyValueChangeNewKey];
-        
-        if (value && [value isKindOfClass:[NSString class]]) {
-            
-            dispatch_async(_internalSerialQueue, ^{
-                
-                if (_status != AVIMClientStatusOpened) {
-                    
-                    return ;
-                }
-                
-                [self installationRegisterClientChannel];
-            });
-        }
-    }
 }
 
 // MARK: - Thread Unsafe
