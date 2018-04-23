@@ -14,6 +14,7 @@
 #import "AVIMCommon.h"
 #import "AVIMClient.h"
 #import "AVIMConversation.h"
+#import "AVIMConversationMemberInfo.h"
 #import "AVIMKeyedConversation.h"
 #import "AVIMConversationQuery.h"
 #import "AVIMMessage.h"
