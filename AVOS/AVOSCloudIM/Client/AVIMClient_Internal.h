@@ -11,6 +11,10 @@
 #import "LCIMConversationCache.h"
 #import "AVIMConversation_Internal.h"
 
+@class AVInstallation;
+
+extern NSInteger const kLC_Code_SessionTokenExpired;
+
 @interface AVIMClient () <AVIMWebSocketWrapperDelegate>
 
 + (NSMutableDictionary *)_userOptions;
@@ -25,6 +29,14 @@
  Conversations's Memory Cache Container.
  */
 @property (nonatomic, strong) NSMutableDictionary *conversationDictionary;
+
+- (instancetype)initWithClientId:(NSString *)clientId
+                             tag:(NSString *)tag
+                    installation:(AVInstallation *)installation;
+
+- (instancetype)initWithUser:(AVUser *)user
+                         tag:(NSString *)tag
+                installation:(AVInstallation *)installation;
 
 - (void)sendCommand:(AVIMGenericCommand *)command;
 

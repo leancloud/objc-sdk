@@ -533,10 +533,20 @@ __attribute__((warn_unused_result));
 
  @param conversation Updated conversation.
  @param date Updated date.
- @param clientId The client id which doing this updates.
+ @param clientId Client ID of doing updates.
  @param data Updated data.
  */
-- (void)conversation:(AVIMConversation *)conversation didUpdateAt:(NSDate *)date byClientId:(NSString *)clientId updatedData:(NSDictionary *)data;
+- (void)conversation:(AVIMConversation *)conversation didUpdateAt:(NSDate * _Nullable)date byClientId:(NSString * _Nullable)clientId updatedData:(NSDictionary * _Nullable)data;
+
+/**
+ Notification for conversation's member info updated.
+ 
+ @param conversation Updated conversation.
+ @param byClientId Client ID of doing update.
+ @param memberId Client ID of being updated.
+ @param role Updated role.
+ */
+- (void)conversation:(AVIMConversation *)conversation didMemberInfoUpdateBy:(NSString * _Nullable)byClientId memberId:(NSString * _Nullable)memberId role:(NSString * _Nullable)role;
 
 /**
  *  当前聊天状态被暂停，常见于网络断开时触发。

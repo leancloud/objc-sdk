@@ -53,7 +53,7 @@ static int64_t AVIMClient_IMSessionConfigBitmap;
 static NSUInteger const kLC_ClientId_MaxLength = 64;
 static NSString * const kLC_SessionTag_Default = @"default";
 static NSInteger const kLC_Code_SessionConflict = 4111;
-static NSInteger const kLC_Code_SessionTokenExpired = 4112;
+NSInteger const kLC_Code_SessionTokenExpired = 4112;
 
 /*
  This Options is Just to let Server known What feature current SDK supported,
@@ -233,22 +233,31 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
 
 // MARK: - Init
 
++ (instancetype)new
+{
+    [NSException raise:NSInternalInconsistencyException
+                format:@"not allow."];
+    return nil;
+}
+
 - (instancetype)init
 {
     [NSException raise:NSInternalInconsistencyException
-                format:@"Not Allow to Initialize Instance by this Method."];
-    
+                format:@"not allow."];
     return nil;
 }
 
 - (instancetype)initWithClientId:(NSString *)clientId
 {
-    return [self initWithClientId:clientId
-                              tag:nil];
+    return [self initWithClientId:clientId tag:nil];
 }
 
-- (instancetype)initWithClientId:(NSString *)clientId
-                             tag:(NSString *)tag
+- (instancetype)initWithClientId:(NSString *)clientId tag:(NSString *)tag
+{
+    return [self initWithClientId:clientId tag:tag installation:AVInstallation.defaultInstallation];
+}
+
+- (instancetype)initWithClientId:(NSString *)clientId tag:(NSString *)tag installation:(AVInstallation *)installation
 {
     self = [super init];
     
@@ -256,8 +265,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
         
         _user = nil;
         
-        [self doInitializationWithClientId:clientId
-                                       tag:tag];
+        [self doInitializationWithClientId:clientId tag:tag installation:installation];
     }
     
     return self;
@@ -265,28 +273,31 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
 
 - (instancetype)initWithUser:(AVUser *)user
 {
-    return [self initWithUser:user
-                          tag:nil];
+    return [self initWithUser:user tag:nil];
 }
 
-- (instancetype)initWithUser:(AVUser *)user
-                         tag:(NSString *)tag
+- (instancetype)initWithUser:(AVUser *)user tag:(NSString *)tag
+{
+    return [self initWithUser:user tag:tag installation:AVInstallation.defaultInstallation];
+}
+
+- (instancetype)initWithUser:(AVUser *)user tag:(NSString *)tag installation:(AVInstallation *)installation
 {
     self = [super init];
-
+    
     if (self) {
         
         _user = user;
-
-        [self doInitializationWithClientId:user.objectId
-                                       tag:tag];
+        
+        [self doInitializationWithClientId:user.objectId tag:tag installation:installation];
     }
-
+    
     return self;
 }
 
 - (void)doInitializationWithClientId:(NSString *)clientId
                                  tag:(NSString *)tag
+                        installation:(AVInstallation *)installation
 {
     self->_clientId = ({
         if (!clientId || clientId.length > kLC_ClientId_MaxLength || clientId.length == 0) {
@@ -366,7 +377,6 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     });
 
     self->_installation = ({
-        AVInstallation *installation = AVInstallation.defaultInstallation;
         self->_deviceToken = installation.deviceToken;
         self->_isDeviceTokenUploaded = false;
         self->_addClientIdToChannels_block = nil;
@@ -969,7 +979,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
         
         NSString *oldSessionToken = client->_sessionToken;
         
-        NSError *sessionDidCloseError = ({
+        NSError *sessionNotOpenError = ({
             NSString *reason = @"session has not opened or did close.";
             NSDictionary *userInfo = @{ @"reason" : reason };
             [NSError errorWithDomain:@"LeanCloudErrorDomain"
@@ -977,9 +987,9 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                             userInfo:userInfo];
         });
         
-        if (!oldSessionToken) {
+        if (!oldSessionToken || self->_status != AVIMClientStatusOpened) {
             
-            callback(nil, sessionDidCloseError);
+            callback(nil, sessionNotOpenError);
             
             return;
         }
@@ -1018,7 +1028,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                 
                 if (!client->_sessionToken) {
                     
-                    callback(nil, sessionDidCloseError);
+                    callback(nil, sessionNotOpenError);
                     
                     return;
                 }
@@ -1717,6 +1727,11 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                         [client process_conv_updated:inCommand];
                     } break;
                         
+                    case AVIMOpType_MemberInfoChanged:
+                    {
+                        [client process_conv_member_info_changed:inCommand];
+                    } break;
+                        
                     default: break;
                 }
             } break;
@@ -1797,29 +1812,21 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
 {
     AssertRunInIMClientQueue;
     
-    AVIMConvCommand *convCommand = inCommand.convMessage;
-    
-    if (!convCommand) {
-        
-        return;
-    }
-    
-    NSString *conversationId = convCommand.cid;
-    
-    id JSONObject = AVIMClient_JSONObjectFromString(convCommand.attr.data_p, 0);
+    NSString *conversationId = inCommand.convMessage.cid;
+    NSString *initById = inCommand.convMessage.initBy;
+    NSDate *updateDate = AVIMClient_dateFromString(inCommand.convMessage.udate);
+    id JSONObject = AVIMClient_JSONObjectFromString(inCommand.convMessage.attr.data_p, 0);
     
     if (!conversationId || ![NSDictionary lc__checkingType:JSONObject]) {
         
         return;
     }
     
-    void(^handlingWithConversation_block)(AVIMConversation *) = ^(AVIMConversation *conversation) {
+    [self queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+        
+        if (error) { return; }
         
         [conversation mergeConvUpdatedMessage:JSONObject];
-        
-        NSString *byClientId = convCommand.initBy;
-        
-        NSDate *atDate = AVIMClient_dateFromString(convCommand.udate);
         
         id <AVIMClientDelegate> delegate = _delegate;
         
@@ -1829,37 +1836,10 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
             
             [self invokeInSpecifiedQueue:^{
                 
-                [delegate conversation:conversation didUpdateAt:atDate byClientId:byClientId updatedData:JSONObject];
+                [delegate conversation:conversation didUpdateAt:updateDate byClientId:initById updatedData:JSONObject];
             }];
         }
-    };
-    
-    AVIMConversation *cachedConversation = [self conversationForId:conversationId];
-    
-    if (!cachedConversation) {
-        
-        cachedConversation = [[self conversationCache] conversationForId:conversationId];
-    }
-    
-    if (!cachedConversation) {
-        
-        [self queryConversationFromServerWithId:conversationId queryOption:AVIMConversationQueryOptionWithMessage callback:^(AVIMConversation *conversation, NSError *error) {
-            
-            if (conversation) {
-                
-                handlingWithConversation_block(conversation);
-            }
-            
-            if (error) {
-                
-                AVLoggerError(AVLoggerDomainIM, @"Error: %@", error);
-            }
-        }];
-        
-    } else {
-        
-        handlingWithConversation_block(cachedConversation);
-    }
+    }];
 }
 
 - (void)process_patch_modify:(AVIMGenericCommand *)inCommand
@@ -1933,7 +1913,9 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                 [messageCacheStore insertOrUpdateMessage:message withBreakpoint:YES];
             }
             
-            [self queryConversationWithId:conversationId queryOption:AVIMConversationQueryOptionWithMessage callback:^(AVIMConversation *conversation, NSError *error) {
+            [self queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+                
+                if (error) { return; }
                 
                 if ([conversation.lastMessage.messageId isEqualToString:message.messageId]) {
                     
@@ -1970,7 +1952,47 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     [self _sendCommandWrapper:ackCommandWrapper];
 }
 
+- (void)process_conv_member_info_changed:(AVIMGenericCommand *)inCommand
+{
+    NSString *conversationId = inCommand.convMessage.cid;
+    NSString *initById = inCommand.convMessage.initBy;
+    NSString *memberId = inCommand.convMessage.info.pid;
+    NSString *role = inCommand.convMessage.info.role;
+    
+    if (!conversationId) {
+        
+        return;
+    }
+    
+    [self queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+        
+        if (error) { return; }
+        
+        [conversation process_member_info_changed:inCommand];
+        
+        id <AVIMClientDelegate> delegate = self->_delegate;
+        
+        SEL sel = @selector(conversation:didMemberInfoUpdateBy:memberId:role:);
+        
+        if (delegate && [delegate respondsToSelector:sel]) {
+            
+            [self invokeInSpecifiedQueue:^{
+                
+                [delegate conversation:conversation didMemberInfoUpdateBy:initById memberId:memberId role:role];
+            }];
+        }
+    }];
+}
+
 // MARK: - Query Conversation From Server
+
+- (void)queryConversationWithId:(NSString *)conversationId
+                       callback:(void (^)(AVIMConversation *conversation, NSError *error))callback
+{
+    [self queryConversationWithId:conversationId
+                      queryOption:AVIMConversationQueryOptionWithMessage
+                         callback:callback];
+}
 
 - (void)queryConversationWithId:(NSString *)conversationId
                     queryOption:(AVIMConversationQueryOption)queryOption
@@ -1980,11 +2002,6 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     NSParameterAssert(conversationId);
     
     AVIMConversation *conversation = [self conversationForId:conversationId];
-    
-    if (!conversation) {
-        
-        conversation = [[self conversationCache] conversationForId:conversationId];
-    }
     
     if (conversation) {
         
