@@ -7,6 +7,7 @@
 //
 
 #import "AVIMConversation.h"
+#import "MessagesProtoOrig.pbobjc.h"
 
 /* key of the conversation's attribute */
 ///
@@ -134,6 +135,10 @@ typedef NS_ENUM(NSUInteger, LCIMConvType) {
 - (NSDictionary *)rawJSONDataCopy;
 
 - (void)setRawJSONData:(NSMutableDictionary *)rawJSONData;
+
+// MARK: - Conversation Member
+
+- (void)process_member_info_changed:(AVIMGenericCommand *)inCommand;
 
 @end
 

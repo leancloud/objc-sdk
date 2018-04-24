@@ -1003,15 +1003,19 @@ static Byte ivBuff[]   = {0xA,1,0xB,5,4,0xF,7,9,0x17,3,1,6,8,0xC,0xD,91};
 
 @end
 
-@implementation NSObject (__LC__checkingType__decodingFromDictionary__)
+@implementation NSObject (__LeanCloud__)
 
 + (BOOL)lc__checkingType:(id)instance
 {
     return (instance && [instance isKindOfClass:self]);
 }
 
-+ (instancetype)lc__decodingWithKey:(NSString *)key
-                            fromDic:(NSDictionary *)dic
++ (instancetype)lc__decodingDictionary:(NSDictionary *)dictionary key:(NSString *)key
+{
+    return [self lc__decodingWithKey:key fromDic:dictionary];
+}
+
++ (instancetype)lc__decodingWithKey:(NSString *)key fromDic:(NSDictionary *)dic
 {
     if (!key || !dic) { return nil; }
     

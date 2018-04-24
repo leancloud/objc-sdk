@@ -13,6 +13,7 @@
 #import "AVIMAvailability.h"
 #import "AVIMMessageOption.h"
 #import "AVIMRecalledMessage.h"
+#import "AVIMConversationMemberInfo.h"
 
 @class AVIMClient;
 
@@ -433,7 +434,56 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
                                        limit:(NSUInteger)limit
                                fromMessageId:(NSString * _Nullable)messageId
                                fromTimestamp:(int64_t)timestamp
-                                    callback:(AVIMArrayResultBlock)callback;
+                                    callback:(void (^)(NSArray * _Nullable messages, NSError * _Nullable error))callback;
+
+// MARK: - Conversation Member
+
+/**
+ Get all member info. using cache as a default.
+
+ @param callback Result callback.
+ */
+- (void)getAllMemberInfoWithCallback:(void (^)(NSArray<AVIMConversationMemberInfo *> * _Nullable memberInfos, NSError * _Nullable error))callback;
+
+/**
+ Get all member info.
+
+ @param ignoringCache Cache option.
+ @param callback Result callback.
+ */
+- (void)getAllMemberInfoWithIgnoringCache:(BOOL)ignoringCache
+                                 callback:(void (^)(NSArray<AVIMConversationMemberInfo *> * _Nullable memberInfos, NSError * _Nullable error))callback;
+
+/**
+ Get a member info by member id. using cache as a default.
+
+ @param memberId Equal to client id.
+ @param callback Result callback.
+ */
+- (void)getMemberInfoWithMemberId:(NSString *)memberId
+                         callback:(void (^)(AVIMConversationMemberInfo * _Nullable memberInfo, NSError * _Nullable error))callback;
+
+/**
+ Get a member info by member id.
+
+ @param ignoringCache Cache option.
+ @param memberId Equal to client id.
+ @param callback Result callback.
+ */
+- (void)getMemberInfoWithIgnoringCache:(BOOL)ignoringCache
+                              memberId:(NSString *)memberId
+                              callback:(void (^)(AVIMConversationMemberInfo * _Nullable memberInfo, NSError * _Nullable error))callback;
+
+/**
+ Change a member's role.
+
+ @param memberId Equal to client id.
+ @param role Changing role.
+ @param callback Result callback.
+ */
+- (void)updateMemberRoleWithMemberId:(NSString *)memberId
+                                role:(AVIMConversationMemberRole)role
+                            callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 @end
 
