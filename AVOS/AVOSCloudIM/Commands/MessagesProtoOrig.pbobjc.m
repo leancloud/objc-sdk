@@ -1653,7 +1653,7 @@ typedef struct AVIMUnreadCommand__storage_ {
 @dynamic tempConvIdsArray, tempConvIdsArray_Count;
 @dynamic allowedPidsArray, allowedPidsArray_Count;
 @dynamic failedPidsArray, failedPidsArray_Count;
-@dynamic hasOffset, offset;
+@dynamic hasNext, next;
 @dynamic hasResults, results;
 @dynamic hasWhere, where;
 @dynamic hasAttr, attr;
@@ -1682,7 +1682,7 @@ typedef struct AVIMConvCommand__storage_ {
   NSMutableArray *tempConvIdsArray;
   NSMutableArray *allowedPidsArray;
   NSMutableArray *failedPidsArray;
-  NSString *offset;
+  NSString *next;
   AVIMJsonObjectMessage *results;
   AVIMJsonObjectMessage *where;
   AVIMJsonObjectMessage *attr;
@@ -1977,11 +1977,11 @@ typedef struct AVIMConvCommand__storage_ {
         .dataType = GPBDataTypeMessage,
       },
       {
-        .name = "offset",
+        .name = "next",
         .dataTypeSpecific.className = NULL,
-        .number = AVIMConvCommand_FieldNumber_Offset,
+        .number = AVIMConvCommand_FieldNumber_Next,
         .hasIndex = 31,
-        .offset = (uint32_t)offsetof(AVIMConvCommand__storage_, offset),
+        .offset = (uint32_t)offsetof(AVIMConvCommand__storage_, next),
         .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeString,
       },
@@ -3130,11 +3130,14 @@ typedef struct AVIMPubsubCommand__storage_ {
 @dynamic hasSrcPid, srcPid;
 @dynamic toCidsArray, toCidsArray_Count;
 @dynamic hasLimit, limit;
-@dynamic hasOffset, offset;
+@dynamic hasNext, next;
 @dynamic blockedPidsArray, blockedPidsArray_Count;
 @dynamic blockedCidsArray, blockedCidsArray_Count;
 @dynamic allowedPidsArray, allowedPidsArray_Count;
 @dynamic failedPidsArray, failedPidsArray_Count;
+@dynamic hasT, t;
+@dynamic hasN, n;
+@dynamic hasS, s;
 
 typedef struct AVIMBlacklistCommand__storage_ {
   uint32_t _has_storage_[1];
@@ -3143,11 +3146,14 @@ typedef struct AVIMBlacklistCommand__storage_ {
   NSMutableArray *toPidsArray;
   NSString *srcPid;
   NSMutableArray *toCidsArray;
-  NSString *offset;
+  NSString *next;
   NSMutableArray *blockedPidsArray;
   NSMutableArray *blockedCidsArray;
   NSMutableArray *allowedPidsArray;
   NSMutableArray *failedPidsArray;
+  NSString *n;
+  NSString *s;
+  int64_t t;
 } AVIMBlacklistCommand__storage_;
 
 // This method is threadsafe because it is initially called
@@ -3202,11 +3208,11 @@ typedef struct AVIMBlacklistCommand__storage_ {
         .dataType = GPBDataTypeInt32,
       },
       {
-        .name = "offset",
+        .name = "next",
         .dataTypeSpecific.className = NULL,
-        .number = AVIMBlacklistCommand_FieldNumber_Offset,
+        .number = AVIMBlacklistCommand_FieldNumber_Next,
         .hasIndex = 3,
-        .offset = (uint32_t)offsetof(AVIMBlacklistCommand__storage_, offset),
+        .offset = (uint32_t)offsetof(AVIMBlacklistCommand__storage_, next),
         .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeString,
       },
@@ -3245,6 +3251,33 @@ typedef struct AVIMBlacklistCommand__storage_ {
         .offset = (uint32_t)offsetof(AVIMBlacklistCommand__storage_, failedPidsArray),
         .flags = (LCIMFieldFlags)(LCIMFieldRepeated | LCIMFieldTextFormatNameCustom),
         .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "t",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMBlacklistCommand_FieldNumber_T,
+        .hasIndex = 4,
+        .offset = (uint32_t)offsetof(AVIMBlacklistCommand__storage_, t),
+        .flags = LCIMFieldOptional,
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "n",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMBlacklistCommand_FieldNumber_N,
+        .hasIndex = 5,
+        .offset = (uint32_t)offsetof(AVIMBlacklistCommand__storage_, n),
+        .flags = LCIMFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "s",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMBlacklistCommand_FieldNumber_S,
+        .hasIndex = 6,
+        .offset = (uint32_t)offsetof(AVIMBlacklistCommand__storage_, s),
+        .flags = LCIMFieldOptional,
+        .dataType = GPBDataTypeString,
       },
     };
     LCIMDescriptor *localDescriptor =

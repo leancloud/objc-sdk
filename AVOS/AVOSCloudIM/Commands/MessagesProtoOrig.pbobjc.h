@@ -748,7 +748,7 @@ typedef GPB_ENUM(AVIMConvCommand_FieldNumber) {
   AVIMConvCommand_FieldNumber_TempConvIdsArray = 29,
   AVIMConvCommand_FieldNumber_AllowedPidsArray = 30,
   AVIMConvCommand_FieldNumber_FailedPidsArray = 31,
-  AVIMConvCommand_FieldNumber_Offset = 40,
+  AVIMConvCommand_FieldNumber_Next = 40,
   AVIMConvCommand_FieldNumber_Results = 100,
   AVIMConvCommand_FieldNumber_Where = 101,
   AVIMConvCommand_FieldNumber_Attr = 103,
@@ -866,10 +866,10 @@ typedef GPB_ENUM(AVIMConvCommand_FieldNumber) {
 /** The number of items in @c failedPidsArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger failedPidsArray_Count;
 
-/** used in blacklist/shutup query */
-@property(nonatomic, readwrite, copy, null_resettable) NSString *offset;
-/** Test to see if @c offset has been set. */
-@property(nonatomic, readwrite) BOOL hasOffset;
+/** used in shutup query */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *next;
+/** Test to see if @c next has been set. */
+@property(nonatomic, readwrite) BOOL hasNext;
 
 @property(nonatomic, readwrite, strong, null_resettable) AVIMJsonObjectMessage *results;
 /** Test to see if @c results has been set. */
@@ -1269,11 +1269,14 @@ typedef GPB_ENUM(AVIMBlacklistCommand_FieldNumber) {
   AVIMBlacklistCommand_FieldNumber_SrcPid = 3,
   AVIMBlacklistCommand_FieldNumber_ToCidsArray = 4,
   AVIMBlacklistCommand_FieldNumber_Limit = 5,
-  AVIMBlacklistCommand_FieldNumber_Offset = 6,
+  AVIMBlacklistCommand_FieldNumber_Next = 6,
   AVIMBlacklistCommand_FieldNumber_BlockedPidsArray = 8,
   AVIMBlacklistCommand_FieldNumber_BlockedCidsArray = 9,
   AVIMBlacklistCommand_FieldNumber_AllowedPidsArray = 10,
   AVIMBlacklistCommand_FieldNumber_FailedPidsArray = 11,
+  AVIMBlacklistCommand_FieldNumber_T = 12,
+  AVIMBlacklistCommand_FieldNumber_N = 13,
+  AVIMBlacklistCommand_FieldNumber_S = 14,
 };
 
 @interface AVIMBlacklistCommand : LCIMMessage
@@ -1297,9 +1300,9 @@ typedef GPB_ENUM(AVIMBlacklistCommand_FieldNumber) {
 @property(nonatomic, readwrite) int32_t limit;
 
 @property(nonatomic, readwrite) BOOL hasLimit;
-@property(nonatomic, readwrite, copy, null_resettable) NSString *offset;
-/** Test to see if @c offset has been set. */
-@property(nonatomic, readwrite) BOOL hasOffset;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *next;
+/** Test to see if @c next has been set. */
+@property(nonatomic, readwrite) BOOL hasNext;
 
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *blockedPidsArray;
 /** The number of items in @c blockedPidsArray without causing the array to be created. */
@@ -1316,6 +1319,17 @@ typedef GPB_ENUM(AVIMBlacklistCommand_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<AVIMErrorCommand*> *failedPidsArray;
 /** The number of items in @c failedPidsArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger failedPidsArray_Count;
+
+@property(nonatomic, readwrite) int64_t t;
+
+@property(nonatomic, readwrite) BOOL hasT;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *n;
+/** Test to see if @c n has been set. */
+@property(nonatomic, readwrite) BOOL hasN;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *s;
+/** Test to see if @c s has been set. */
+@property(nonatomic, readwrite) BOOL hasS;
 
 @end
 
