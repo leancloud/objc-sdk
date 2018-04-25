@@ -55,22 +55,23 @@ static NSString * const kLC_SessionTag_Default = @"default";
 static NSInteger const kLC_Code_SessionConflict = 4111;
 NSInteger const kLC_Code_SessionTokenExpired = 4112;
 
-/*
- This Options is Just to let Server known What feature current SDK supported,
- It's Not a Switch!
+
+/**
+ Session open config bitmap.
+
+ - LCIMSessionConfigOptions_Patch: Support message patch.
+ - LCIMSessionConfigOptions_TempConv: Support temporary conversation.
+ - LCIMSessionConfigOptions_AutoBindInstallation: Support auto bind installation table.
+ - LCIMSessionConfigOptions_TransientACK: Support transient message's ack.
+ - LCIMSessionConfigOptions_ReliableNotification: Support reliable notification mechanism.
+ - LCIMSessionConfigOptions_CallbackResultSlice: Support callback result with part success and part failure.
  */
 typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
-    
     LCIMSessionConfigOptions_Patch = 1 << 0,
-    
     LCIMSessionConfigOptions_TempConv = 1 << 1,
-    
     LCIMSessionConfigOptions_AutoBindInstallation = 1 << 2,
-    
     LCIMSessionConfigOptions_TransientACK = 1 << 3,
-    
     LCIMSessionConfigOptions_ReliableNotification = 1 << 4,
-    
     LCIMSessionConfigOptions_CallbackResultSlice = 1 << 5,
 };
 
@@ -187,10 +188,12 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
         imClientQueue = dispatch_queue_create("cn.leancloud.im", DISPATCH_QUEUE_SERIAL);
         
         AVIMClient_IMSessionConfigBitmap = ({
-            
-            (LCIMSessionConfigOptions_Patch |
+            (
+             LCIMSessionConfigOptions_Patch |
              LCIMSessionConfigOptions_TempConv |
-             LCIMSessionConfigOptions_TransientACK);
+             LCIMSessionConfigOptions_TransientACK |
+             LCIMSessionConfigOptions_CallbackResultSlice
+             );
         });
         
 #ifdef DEBUG
@@ -394,6 +397,8 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
         [cache cleanAllExpiredConversations];
     });
 }
+
+// MARK: - Dealloc
 
 - (void)dealloc
 {
@@ -1732,6 +1737,26 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                         [client process_conv_member_info_changed:inCommand];
                     } break;
                         
+                    case AVIMOpType_Blocked:
+                    {
+                        [client process_conv_blocked:inCommand];
+                    } break;
+                        
+                    case AVIMOpType_MembersBlocked:
+                    {
+                        [client process_conv_members_blocked:inCommand];
+                    } break;
+                        
+                    case AVIMOpType_Unblocked:
+                    {
+                        [client process_conv_unblocked:inCommand];
+                    } break;
+                        
+                    case AVIMOpType_MembersUnblocked:
+                    {
+                        [client process_conv_members_unblocked:inCommand];
+                    } break;
+                        
                     default: break;
                 }
             } break;
@@ -1954,6 +1979,8 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
 
 - (void)process_conv_member_info_changed:(AVIMGenericCommand *)inCommand
 {
+    AssertRunInIMClientQueue;
+    
     NSString *conversationId = inCommand.convMessage.cid;
     NSString *initById = inCommand.convMessage.initBy;
     NSString *memberId = inCommand.convMessage.info.pid;
@@ -1984,7 +2011,133 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     }];
 }
 
-// MARK: - Query Conversation From Server
+- (void)process_conv_blocked:(AVIMGenericCommand *)inCommand
+{
+    AssertRunInIMClientQueue;
+    
+    AVIMConvCommand *convCommand = inCommand.convMessage;
+    NSString *conversationId = convCommand.cid;
+    NSString *initById = convCommand.initBy;
+    
+    if (!conversationId) {
+        
+        return;
+    }
+    
+    [self queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+        
+        if (error) { return; }
+        
+        id <AVIMClientDelegate> delegate = self->_delegate;
+        
+        SEL sel = @selector(conversation:didBlockBy:);
+        
+        if (delegate && [delegate respondsToSelector:sel]) {
+            
+            [self invokeInSpecifiedQueue:^{
+                
+                [delegate conversation:conversation didBlockBy:initById];
+            }];
+        }
+    }];
+}
+
+- (void)process_conv_members_blocked:(AVIMGenericCommand *)inCommand
+{
+    AssertRunInIMClientQueue;
+    
+    AVIMConvCommand *convCommand = inCommand.convMessage;
+    NSString *conversationId = convCommand.cid;
+    NSArray<NSString *> *memberIds = convCommand.mArray;
+    NSString *initById = convCommand.initBy;
+    
+    if (!conversationId) {
+        
+        return;
+    }
+    
+    [self queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+        
+        if (error) { return; }
+        
+        id <AVIMClientDelegate> delegate = self->_delegate;
+        
+        SEL sel = @selector(conversation:didMembersBlockBy:memberIds:);
+        
+        if (delegate && [delegate respondsToSelector:sel]) {
+            
+            [self invokeInSpecifiedQueue:^{
+                
+                [delegate conversation:conversation didMembersBlockBy:initById memberIds:memberIds];
+            }];
+        }
+    }];
+}
+
+- (void)process_conv_unblocked:(AVIMGenericCommand *)inCommand
+{
+    AssertRunInIMClientQueue;
+    
+    AVIMConvCommand *convCommand = inCommand.convMessage;
+    NSString *conversationId = convCommand.cid;
+    NSString *initById = convCommand.initBy;
+    
+    if (!conversationId) {
+        
+        return;
+    }
+    
+    [self queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+        
+        if (error) { return; }
+        
+        id <AVIMClientDelegate> delegate = self->_delegate;
+        
+        SEL sel = @selector(conversation:didUnblockBy:);
+        
+        if (delegate && [delegate respondsToSelector:sel]) {
+            
+            [self invokeInSpecifiedQueue:^{
+                
+                [delegate conversation:conversation didUnblockBy:initById];
+            }];
+        }
+    }];
+}
+
+- (void)process_conv_members_unblocked:(AVIMGenericCommand *)inCommand
+{
+    AssertRunInIMClientQueue;
+    
+    AVIMConvCommand *convCommand = inCommand.convMessage;
+    NSString *conversationId = convCommand.cid;
+    NSArray<NSString *> *memberIds = convCommand.mArray;
+    NSString *initById = convCommand.initBy;
+    
+    if (!conversationId) {
+        
+        return;
+    }
+    
+    [self queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+        
+        if (error) { return; }
+        
+        id <AVIMClientDelegate> delegate = self->_delegate;
+        
+        SEL sel = @selector(conversation:didMembersUnblockBy:memberIds:);
+        
+        if (delegate && [delegate respondsToSelector:sel]) {
+            
+            [self invokeInSpecifiedQueue:^{
+                
+                [delegate conversation:conversation didMembersUnblockBy:initById memberIds:memberIds];
+            }];
+        }
+    }];
+}
+
+// MARK: - Query Conversation
 
 - (void)queryConversationWithId:(NSString *)conversationId
                        callback:(void (^)(AVIMConversation *conversation, NSError *error))callback
@@ -2009,10 +2162,9 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
         
     } else {
         
-        [self queryConversationFromServerWithId:conversationId queryOption:queryOption callback:^(AVIMConversation *conversation, NSError *error) {
-            
-            callback(conversation, error);
-        }];
+        [self queryConversationFromServerWithId:conversationId
+                                    queryOption:queryOption
+                                       callback:callback];
     }
 }
 
@@ -2023,140 +2175,135 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     AssertRunInIMClientQueue;
     NSParameterAssert(conversationId);
     
-    NSMutableArray<void (^)(AVIMConversation *, NSError *)> *callbackArray_1 = _callbackMapOfQueryConversation[conversationId];
+    NSMutableArray<void (^)(AVIMConversation *, NSError *)> *callbacks_1 = self->_callbackMapOfQueryConversation[conversationId];
     
-    if (!callbackArray_1) {
+    if (callbacks_1) {
         
-        _callbackMapOfQueryConversation[conversationId] = [NSMutableArray arrayWithObject:callback];
+        [callbacks_1 addObject:callback];
         
-        AVIMGenericCommand *queryCommand = ({
-            
-            AVIMConversationQuery *query = [[AVIMConversationQuery alloc] init];
-            [query whereKey:kConvAttrKey_conversationId equalTo:conversationId];
-            
-            AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
-            AVIMConvCommand *convCommand = [[AVIMConvCommand alloc] init];
-            AVIMJsonObjectMessage *jsonObjectMessage = [[AVIMJsonObjectMessage alloc] init];
-            
-            genericCommand.cmd = AVIMCommandType_Conv;
-            genericCommand.op = AVIMOpType_Query;
-            genericCommand.convMessage = convCommand;
-            
-            convCommand.where = jsonObjectMessage;
-            
-            if (queryOption) {
-                
-                convCommand.flag = queryOption;
-            }
-            
-            jsonObjectMessage.data_p = [query whereString];
-            
-            genericCommand;
-        });
-        
-        LCIMProtobufCommandWrapper *commandWrapper = ({
-            
-            LCIMProtobufCommandWrapper *commandWrapper = [[LCIMProtobufCommandWrapper alloc] init];
-            commandWrapper.outCommand = queryCommand;
-            commandWrapper;
-        });
-        
-        [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
-            
-            NSMutableArray<void (^)(AVIMConversation *, NSError *)> *callbackArray_2 = _callbackMapOfQueryConversation[conversationId];
-            
-            if (callbackArray_2) {
-                
-                [_callbackMapOfQueryConversation removeObjectForKey:conversationId];
-            }
-            
-            void(^invokeAllCallback_block)(AVIMConversation *, NSError *) = ^(AVIMConversation *conversation, NSError *error) {
-                
-                if (callbackArray_2) {
-                    
-                    for (void (^item_block)(AVIMConversation *, NSError *) in callbackArray_2) {
-                        
-                        item_block(conversation, error);
-                    }
-                }
-            };
-            
-            if (commandWrapper.error) {
-                
-                invokeAllCallback_block(nil, commandWrapper.error);
-                
-                return;
-            }
-            
-            AVIMJsonObjectMessage *results = ({
-                
-                AVIMGenericCommand *inCommand = commandWrapper.inCommand;
-                AVIMConvCommand *convCommand = inCommand.convMessage;
-                AVIMJsonObjectMessage *results = convCommand.results;
-                results;
-            });
-            
-            NSArray *JSONObject = AVIMClient_JSONObjectFromString(results.data_p, NSJSONReadingMutableContainers);
-            
-            if (![NSArray lc__checkingType:JSONObject] || JSONObject.count == 0) {
-                
-                NSError *aError = ({
-                    NSString *reason = [NSString stringWithFormat:@"Not found Conversation with id: %@", conversationId];
-                    NSDictionary *userInfo = @{ @"reason" : reason };
-                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                        code:0
-                                    userInfo:userInfo];
-                });
-                
-                invokeAllCallback_block(nil, aError);
-                
-                return;
-            }
-            
-            AVIMConversation *conversation = ({
-                
-                AVIMConversation *conversation = nil;
-                
-                NSDictionary *dic = JSONObject.firstObject;
-                
-                if ([NSDictionary lc__checkingType:dic]) {
-                    
-                    conversation = [AVIMConversation newWithRawJSONData:dic client:self];
-                }
-                
-                conversation;
-            });
-            
-            if (conversation) {
-                
-                [self cacheConversationToMemory:conversation];
-                
-                [[self conversationCache] cacheConversations:@[conversation]
-                                                      maxAge:3600
-                                                  forCommand:[commandWrapper.outCommand avim_conversationForCache]];
-                
-                invokeAllCallback_block(conversation, nil);
-                
-            } else {
-                
-                NSError *aError = ({
-                    NSString *reason = [NSString stringWithFormat:@"Not found Conversation with id: %@", conversationId];
-                    NSDictionary *userInfo = @{ @"reason" : reason };
-                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                        code:0
-                                    userInfo:userInfo];
-                });
-                
-                invokeAllCallback_block(nil, aError);
-            }
-        }];
-        
-        [self _sendCommandWrapper:commandWrapper];
-        
-    } else {
-        
-        [callbackArray_1 addObject:callback];
+        return;
     }
+    
+    self->_callbackMapOfQueryConversation[conversationId] = [NSMutableArray arrayWithObject:callback];
+    
+    AVIMGenericCommand *queryCommand = ({
+        
+        AVIMConversationQuery *query = [[AVIMConversationQuery alloc] init];
+        [query whereKey:kConvAttrKey_conversationId equalTo:conversationId];
+        
+        AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
+        AVIMConvCommand *convCommand = [[AVIMConvCommand alloc] init];
+        AVIMJsonObjectMessage *jsonObjectMessage = [[AVIMJsonObjectMessage alloc] init];
+        
+        genericCommand.cmd = AVIMCommandType_Conv;
+        genericCommand.op = AVIMOpType_Query;
+        genericCommand.convMessage = convCommand;
+        
+        convCommand.where = jsonObjectMessage;
+        
+        if (queryOption) {
+            
+            convCommand.flag = queryOption;
+        }
+        
+        jsonObjectMessage.data_p = [query whereString];
+        
+        genericCommand;
+    });
+    
+    LCIMProtobufCommandWrapper *commandWrapper = ({
+        
+        LCIMProtobufCommandWrapper *commandWrapper = [[LCIMProtobufCommandWrapper alloc] init];
+        commandWrapper.outCommand = queryCommand;
+        commandWrapper;
+    });
+    
+    [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+        
+        NSMutableArray<void (^)(AVIMConversation *, NSError *)> *callbacka_2 = self->_callbackMapOfQueryConversation[conversationId];
+        
+        if (callbacka_2) {
+            
+            [self->_callbackMapOfQueryConversation removeObjectForKey:conversationId];
+        }
+        
+        void(^invokeAllCallback_block)(AVIMConversation *, NSError *) = ^(AVIMConversation *conversation, NSError *error) {
+            
+            for (void (^item_block)(AVIMConversation *, NSError *) in callbacka_2) {
+                
+                item_block(conversation, error);
+            }
+        };
+        
+        if (commandWrapper.error) {
+            
+            AVLoggerError(AVLoggerDomainIM, @"Error: %@", commandWrapper.error);
+            
+            invokeAllCallback_block(nil, commandWrapper.error);
+            
+            return;
+        }
+        
+        AVIMJsonObjectMessage *results = ({
+            
+            AVIMGenericCommand *inCommand = commandWrapper.inCommand;
+            AVIMConvCommand *convCommand = inCommand.convMessage;
+            AVIMJsonObjectMessage *results = convCommand.results;
+            results;
+        });
+        
+        NSArray *JSONObject = AVIMClient_JSONObjectFromString(results.data_p, NSJSONReadingMutableContainers);
+        
+        NSError *notFoundConversationError = ({
+            NSString *reason = [NSString stringWithFormat:@"Not found Conversation with id: %@", conversationId];
+            NSDictionary *userInfo = @{ @"reason" : reason };
+            [NSError errorWithDomain:@"LeanCloudErrorDomain"
+                                code:0
+                            userInfo:userInfo];
+        });
+        
+        if (![NSArray lc__checkingType:JSONObject] || JSONObject.count == 0) {
+            
+            AVLoggerError(AVLoggerDomainIM, @"Error: %@", notFoundConversationError);
+            
+            invokeAllCallback_block(nil, notFoundConversationError);
+            
+            return;
+        }
+        
+        AVIMConversation *conversation = ({
+            
+            AVIMConversation *conversation = nil;
+            
+            NSDictionary *dic = JSONObject.firstObject;
+            
+            if ([NSDictionary lc__checkingType:dic]) {
+                
+                conversation = [AVIMConversation newWithRawJSONData:dic client:self];
+            }
+            
+            conversation;
+        });
+        
+        if (!conversation) {
+            
+            AVLoggerError(AVLoggerDomainIM, @"Error: %@", notFoundConversationError);
+            
+            invokeAllCallback_block(nil, notFoundConversationError);
+            
+            return;
+        }
+        
+        [self cacheConversationToMemory:conversation];
+        
+        [[self conversationCache] cacheConversations:@[conversation]
+                                              maxAge:3600
+                                          forCommand:[commandWrapper.outCommand avim_conversationForCache]];
+        
+        invokeAllCallback_block(conversation, nil);
+    }];
+    
+    [self _sendCommandWrapper:commandWrapper];
 }
 
 // MARK: -

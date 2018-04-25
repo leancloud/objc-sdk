@@ -548,6 +548,14 @@ __attribute__((warn_unused_result));
  */
 - (void)conversation:(AVIMConversation *)conversation didMemberInfoUpdateBy:(NSString * _Nullable)byClientId memberId:(NSString * _Nullable)memberId role:(NSString * _Nullable)role;
 
+- (void)conversation:(AVIMConversation *)conversation didBlockBy:(NSString * _Nullable)byClientId;
+
+- (void)conversation:(AVIMConversation *)conversation didUnblockBy:(NSString * _Nullable)byClientId;
+
+- (void)conversation:(AVIMConversation *)conversation didMembersBlockBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
+
+- (void)conversation:(AVIMConversation *)conversation didMembersUnblockBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
+
 /**
  *  当前聊天状态被暂停，常见于网络断开时触发。
  *  注意：该回调会覆盖 imClientPaused: 方法。

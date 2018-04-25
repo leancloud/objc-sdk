@@ -53,6 +53,14 @@ enum : AVIMMessageSendOption {
 
 @end
 
+@interface AVIMFailedResult : NSObject
+
+@property (nonatomic, assign) NSInteger code;
+@property (nonatomic, strong, nullable) NSString *reason;
+@property (nonatomic, strong, nullable) NSArray<NSString *> *failedIds;
+
+@end
+
 /**
  Enumerations that define message query direction.
  */
@@ -436,7 +444,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
                                fromTimestamp:(int64_t)timestamp
                                     callback:(void (^)(NSArray * _Nullable messages, NSError * _Nullable error))callback;
 
-// MARK: - Conversation Member
+// MARK: - Member Info
 
 /**
  Get all member info. using cache as a default.
@@ -484,6 +492,18 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
 - (void)updateMemberRoleWithMemberId:(NSString *)memberId
                                 role:(AVIMConversationMemberRole)role
                             callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
+
+// MARK: - Member Block
+
+- (void)blockMembers:(NSArray<NSString *> *)memberIds
+            callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<AVIMFailedResult *> * _Nullable failedIds, NSError * _Nullable error))callback;
+
+- (void)unblockMembers:(NSArray<NSString *> *)memberIds
+              callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<AVIMFailedResult *> * _Nullable failedIds, NSError * _Nullable error))callback;
+
+- (void)queryBlockedMembersWithLimit:(NSUInteger)limit
+                        nextMemberId:(NSString * _Nullable)nextMemberId
+                            callback:(void (^)(NSArray<NSString *> * _Nullable blockedMemberIds, NSString * _Nullable nextMemberId, NSError * _Nullable error))callback;
 
 @end
 
