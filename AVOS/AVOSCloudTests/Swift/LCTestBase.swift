@@ -155,16 +155,20 @@ class RunLoopSemaphore {
     
     var semaphoreValue: Int = 0
     
-    @discardableResult func increment() -> RunLoopSemaphore {
+    @discardableResult func increment(_ number: Int = 1) -> RunLoopSemaphore {
         
-        self.semaphoreValue += 1
+        assert(number > 0)
+        
+        self.semaphoreValue += number
         
         return self
     }
     
-    @discardableResult func decrement() -> RunLoopSemaphore {
+    @discardableResult func decrement(_ number: Int = 1) -> RunLoopSemaphore {
         
-        self.semaphoreValue -= 1
+        assert(number > 0)
+        
+        self.semaphoreValue -= number
         
         return self
     }

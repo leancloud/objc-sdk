@@ -288,6 +288,10 @@ class AVIMClient_TestCase: LCIMTestBase {
 class AVIMClientDelegate_TestCase: NSObject, AVIMClientDelegate {
     
     var memberInfoChangeClosure: ((AVIMConversation, String?, String?, String?) -> Void)?
+    var blockByClosure: ((AVIMConversation, String?) -> Void)?
+    var unblockByClosure: ((AVIMConversation, String?) -> Void)?
+    var memberBlockByClosure: ((AVIMConversation, String?, [String]?) -> Void)?
+    var memberUnblockByClosure: ((AVIMConversation, String?, [String]?) -> Void)?
     
     func imClientPaused(_ imClient: AVIMClient) {}
     func imClientResuming(_ imClient: AVIMClient) {}
@@ -296,6 +300,22 @@ class AVIMClientDelegate_TestCase: NSObject, AVIMClientDelegate {
     
     func conversation(_ conversation: AVIMConversation, didMemberInfoUpdateBy byClientId: String?, memberId: String?, role: String?) {
         self.memberInfoChangeClosure?(conversation, byClientId, memberId, role)
+    }
+    
+    func conversation(_ conversation: AVIMConversation, didBlockBy byClientId: String?) {
+        self.blockByClosure?(conversation, byClientId)
+    }
+    
+    func conversation(_ conversation: AVIMConversation, didUnblockBy byClientId: String?) {
+        self.unblockByClosure?(conversation, byClientId)
+    }
+    
+    func conversation(_ conversation: AVIMConversation, didMembersBlockBy byClientId: String?, memberIds: [String]?) {
+        self.memberBlockByClosure?(conversation, byClientId, memberIds)
+    }
+    
+    func conversation(_ conversation: AVIMConversation, didMembersUnblockBy byClientId: String?, memberIds: [String]?) {
+        self.memberUnblockByClosure?(conversation, byClientId, memberIds)
     }
     
 }
