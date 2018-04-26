@@ -10,6 +10,8 @@ import XCTest
 
 class AVIMClient_TestCase: LCIMTestBase {
     
+    // MARK: - Client Open
+    
     func test_client_open_with_avuser() {
         
         var aUser: AVUser! = nil;
@@ -88,6 +90,104 @@ class AVIMClient_TestCase: LCIMTestBase {
             
             XCTFail("timeout")
         })
+    }
+    
+    // MARK: - Temporary Conversation
+    
+    func test_create_temp_conv() {
+        
+        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        guard let client_1: AVIMClient = self.newOpenedClient(clientId: "\(#function.substring(to: #function.index(of: "(")!))_\(#line)", delegate: delegate_1) else {
+            XCTFail()
+            return
+        }
+        
+        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        guard let client_2: AVIMClient = self.newOpenedClient(clientId: "\(#function.substring(to: #function.index(of: "(")!))_\(#line)", delegate: delegate_2) else {
+            XCTFail()
+            return
+        }
+        
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            
+            semaphore.increment(5)
+            
+            let clientIds: [String] = [client_1.clientId, client_2.clientId]
+            
+            delegate_1.invitedByClosure = { (conv: AVIMConversation, byClientId: String?) in
+                
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertEqual(byClientId, client_1.clientId)
+                
+                XCTAssertTrue((conv.conversationId ?? "").hasPrefix(kTemporaryConversationIdPrefix))
+                XCTAssertTrue(conv.isKind(of: AVIMTemporaryConversation.self))
+            }
+            
+            delegate_1.membersAddedClosure = { (conv: AVIMConversation, memberIds: [String]?, byClientId: String?) in
+                
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertNotNil(memberIds)
+                XCTAssertEqual(memberIds?.count, clientIds.count)
+                XCTAssertNotNil((memberIds ?? []).contains(client_1.clientId))
+                XCTAssertNotNil((memberIds ?? []).contains(client_2.clientId))
+                XCTAssertEqual(byClientId, client_1.clientId)
+                
+                XCTAssertTrue((conv.conversationId ?? "").hasPrefix(kTemporaryConversationIdPrefix))
+                XCTAssertTrue(conv.isKind(of: AVIMTemporaryConversation.self))
+            }
+            
+            delegate_2.invitedByClosure = { (conv: AVIMConversation, byClientId: String?) in
+                
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertEqual(byClientId, client_1.clientId)
+                
+                XCTAssertTrue((conv.conversationId ?? "").hasPrefix(kTemporaryConversationIdPrefix))
+                XCTAssertTrue(conv.isKind(of: AVIMTemporaryConversation.self))
+            }
+            
+            delegate_2.membersAddedClosure = { (conv: AVIMConversation, memberIds: [String]?, byClientId: String?) in
+                
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertNotNil(memberIds)
+                XCTAssertEqual(memberIds?.count, clientIds.count)
+                XCTAssertNotNil((memberIds ?? []).contains(client_1.clientId))
+                XCTAssertNotNil((memberIds ?? []).contains(client_2.clientId))
+                XCTAssertEqual(byClientId, client_1.clientId)
+                
+                XCTAssertTrue((conv.conversationId ?? "").hasPrefix(kTemporaryConversationIdPrefix))
+                XCTAssertTrue(conv.isKind(of: AVIMTemporaryConversation.self))
+            }
+            
+            client_1.createTemporaryConversation(withClientIds: clientIds, timeToLive: 0, callback: { (conversation: AVIMTemporaryConversation?, error: Error?) in
+                
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertNotNil(conversation)
+                XCTAssertNotNil(conversation?.conversationId)
+                if let conv: AVIMTemporaryConversation = conversation,
+                    let convId: String = conv.conversationId {
+                    XCTAssertTrue(convId.hasPrefix(kTemporaryConversationIdPrefix))
+                    XCTAssertTrue(conv.isKind(of: AVIMTemporaryConversation.self))
+                }
+                XCTAssertNil(error)
+            })
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
+        
+        self.recycleClient(client_1)
+        self.recycleClient(client_2)
     }
     
     func test_client_create_conversation() {
@@ -287,6 +387,10 @@ class AVIMClient_TestCase: LCIMTestBase {
 
 class AVIMClientDelegate_TestCase: NSObject, AVIMClientDelegate {
     
+    var invitedByClosure: ((AVIMConversation, String?) -> Void)?
+    var kickedByClosure: ((AVIMConversation, String?) -> Void)?
+    var membersAddedClosure: ((AVIMConversation, [String]?, String?) -> Void)?
+    var membersRemovedClosure: ((AVIMConversation, [String]?, String?) -> Void)?
     var memberInfoChangeClosure: ((AVIMConversation, String?, String?, String?) -> Void)?
     var blockByClosure: ((AVIMConversation, String?) -> Void)?
     var unblockByClosure: ((AVIMConversation, String?) -> Void)?
@@ -297,6 +401,22 @@ class AVIMClientDelegate_TestCase: NSObject, AVIMClientDelegate {
     func imClientResuming(_ imClient: AVIMClient) {}
     func imClientResumed(_ imClient: AVIMClient) {}
     func imClientClosed(_ imClient: AVIMClient, error: Error?) {}
+    
+    func conversation(_ conversation: AVIMConversation, invitedByClientId clientId: String?) {
+        self.invitedByClosure?(conversation, clientId)
+    }
+    
+    func conversation(_ conversation: AVIMConversation, kickedByClientId clientId: String?) {
+        self.kickedByClosure?(conversation, clientId)
+    }
+    
+    func conversation(_ conversation: AVIMConversation, membersAdded clientIds: [String]?, byClientId clientId: String?) {
+        self.membersAddedClosure?(conversation, clientIds, clientId)
+    }
+    
+    func conversation(_ conversation: AVIMConversation, membersRemoved clientIds: [String]?, byClientId clientId: String?) {
+        self.membersRemovedClosure?(conversation, clientIds, clientId)
+    }
     
     func conversation(_ conversation: AVIMConversation, didMemberInfoUpdateBy byClientId: String?, memberId: String?, role: String?) {
         self.memberInfoChangeClosure?(conversation, byClientId, memberId, role)
