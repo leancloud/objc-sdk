@@ -349,7 +349,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 
                 semaphore.increment(3)
                 
-                conversation_0.queryBlockedMembers(withLimit: 0, nextMemberId: nil, callback: { (blockedIds: [String]?, nextId: String?, error: Error?) in
+                conversation_0.queryBlockedMembers(withLimit: 0, next: nil, callback: { (blockedIds: [String]?, next_1: String?, error: Error?) in
                     
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
@@ -358,11 +358,11 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     XCTAssertEqual(blockedIds?.count, 2)
                     XCTAssertTrue((blockedIds ?? []).contains(blockingId_1))
                     XCTAssertTrue((blockedIds ?? []).contains(blockingId_2))
-                    XCTAssertNil(nextId)
+                    XCTAssertTrue((next_1 ?? "").isEmpty)
                     XCTAssertNil(error)
                 })
                 
-                conversation_0.queryBlockedMembers(withLimit: 1, nextMemberId: nil, callback: { (blockedIds: [String]?, nextId: String?, error: Error?) in
+                conversation_0.queryBlockedMembers(withLimit: 1, next: nil, callback: { (blockedIds: [String]?, next_2: String?, error: Error?) in
                     
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
@@ -373,15 +373,11 @@ class AVIMConversation_TestCase: LCIMTestBase {
                         (blockedIds?.first ?? "") == blockingId_1 ||
                             (blockedIds?.first ?? "") == blockingId_2
                     )
-                    XCTAssertNotNil(nextId)
-                    XCTAssertTrue(
-                        (nextId ?? "") == blockingId_1 ||
-                            (nextId ?? "") == blockingId_2
-                    )
-                    XCTAssertNotEqual(blockedIds?.first, nextId)
+                    XCTAssertNotNil(next_2)
+                    XCTAssertNotEqual(next_2, "")
                     XCTAssertNil(error)
                     
-                    conversation_0.queryBlockedMembers(withLimit: 1, nextMemberId: nextId, callback: { (blockedIds_0: [String]?, nextMemberId: String?, error: Error?) in
+                    conversation_0.queryBlockedMembers(withLimit: 0, next: next_2, callback: { (blockedIds_0: [String]?, next_3: String?, error: Error?) in
                         
                         semaphore.decrement()
                         XCTAssertTrue(Thread.isMainThread)
@@ -392,8 +388,8 @@ class AVIMConversation_TestCase: LCIMTestBase {
                             (blockedIds_0?.first ?? "") == blockingId_1 ||
                                 (blockedIds_0?.first ?? "") == blockingId_2
                         )
-                        XCTAssertNil(nextId)
                         XCTAssertNotEqual(blockedIds_0?.first, blockedIds?.first)
+                        XCTAssertTrue((next_3 ?? "").isEmpty)
                         XCTAssertNil(error)
                     })
                 })
@@ -440,7 +436,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     XCTAssertTrue((mIds ?? []).contains(blockingId_2))
                 }
                 
-                conversation_0.unblockMembers([blockingId_1, blockingId_1], callback: { (successfulIds: [String]?, failedIds: [AVIMFailedResult]?, error: Error?) in
+                conversation_0.unblockMembers([blockingId_1, blockingId_2], callback: { (successfulIds: [String]?, failedIds: [AVIMFailedResult]?, error: Error?) in
                     
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
