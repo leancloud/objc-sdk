@@ -15,6 +15,8 @@
 
 extern NSInteger const kLC_Code_SessionTokenExpired;
 
+extern NSString * const kTemporaryConversationIdPrefix;
+
 @interface AVIMClient () <AVIMWebSocketWrapperDelegate>
 
 + (NSMutableDictionary *)_userOptions;

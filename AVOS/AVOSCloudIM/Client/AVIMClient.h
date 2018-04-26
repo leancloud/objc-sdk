@@ -494,7 +494,7 @@ __attribute__((warn_unused_result));
  @param clientIds - 加入的新成员列表
  @param clientId - 邀请者的 id
  */
-- (void)conversation:(AVIMConversation *)conversation membersAdded:(NSArray *)clientIds byClientId:(NSString *)clientId;
+- (void)conversation:(AVIMConversation *)conversation membersAdded:(NSArray<NSString *> * _Nullable)clientIds byClientId:(NSString * _Nullable)clientId;
 
 /*!
  对话中有成员离开时所有剩余成员都会收到这一通知。
@@ -502,21 +502,21 @@ __attribute__((warn_unused_result));
  @param clientIds - 离开的成员列表
  @param clientId - 操作者的 id
  */
-- (void)conversation:(AVIMConversation *)conversation membersRemoved:(NSArray *)clientIds byClientId:(NSString *)clientId;
+- (void)conversation:(AVIMConversation *)conversation membersRemoved:(NSArray<NSString *> * _Nullable)clientIds byClientId:(NSString * _Nullable)clientId;
 
 /*!
  当前用户被邀请加入对话的通知。
  @param conversation － 所属对话
  @param clientId - 邀请者的 id
  */
-- (void)conversation:(AVIMConversation *)conversation invitedByClientId:(NSString *)clientId;
+- (void)conversation:(AVIMConversation *)conversation invitedByClientId:(NSString * _Nullable)clientId;
 
 /*!
  当前用户被踢出对话的通知。
  @param conversation － 所属对话
  @param clientId - 操作者的 id
  */
-- (void)conversation:(AVIMConversation *)conversation kickedByClientId:(NSString *)clientId;
+- (void)conversation:(AVIMConversation *)conversation kickedByClientId:(NSString * _Nullable)clientId;
 
 /*!
  Notification for conversation property update.
