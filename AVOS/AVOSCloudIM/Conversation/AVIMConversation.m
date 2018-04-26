@@ -3148,7 +3148,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 }
 
 - (void)queryBlockedMembersWithLimit:(NSUInteger)limit
-                        nextMemberId:(NSString *)nextMemberId
+                                next:(NSString * _Nullable)next
                             callback:(void (^)(NSArray<NSString *> *, NSString *, NSError *))callback
 {
     AVIMClient *client = self.imClient;
@@ -3198,7 +3198,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             }
             number;
         });
-        blacklistCommand.next = nextMemberId;
+        blacklistCommand.next = next;
         
         LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
         commandWrapper.outCommand = outCommand;

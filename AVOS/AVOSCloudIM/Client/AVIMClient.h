@@ -548,12 +548,38 @@ __attribute__((warn_unused_result));
  */
 - (void)conversation:(AVIMConversation *)conversation didMemberInfoUpdateBy:(NSString * _Nullable)byClientId memberId:(NSString * _Nullable)memberId role:(NSString * _Nullable)role;
 
+/**
+ Notification for this client was blocked by other client in the conversation.
+
+ @param conversation Conversation.
+ @param byClientId Who blocking this client.
+ */
 - (void)conversation:(AVIMConversation *)conversation didBlockBy:(NSString * _Nullable)byClientId;
 
+/**
+ Notification for this client was Unblocked by other client in the conversation.
+
+ @param conversation Conversation.
+ @param byClientId Who unblocking this client.
+ */
 - (void)conversation:(AVIMConversation *)conversation didUnblockBy:(NSString * _Nullable)byClientId;
 
+/**
+ Notification for some other clients was blocked by a client in the conversation.
+
+ @param conversation Conversation.
+ @param byClientId Who blocking these clients.
+ @param memberIds Being blocked clients's ID array.
+ */
 - (void)conversation:(AVIMConversation *)conversation didMembersBlockBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
 
+/**
+ Notification for some other clients was unblocked by a client in the conversation.
+
+ @param conversation Conversation.
+ @param byClientId Who unblocking these clients.
+ @param memberIds Being unblocked clients's ID array.
+ */
 - (void)conversation:(AVIMConversation *)conversation didMembersUnblockBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
 
 /**

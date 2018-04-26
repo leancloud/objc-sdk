@@ -495,15 +495,34 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
 
 // MARK: - Member Block
 
+/**
+ Blocking some members in the conversation.
+
+ @param memberIds Who will be blocked.
+ @param callback Result callback.
+ */
 - (void)blockMembers:(NSArray<NSString *> *)memberIds
             callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<AVIMFailedResult *> * _Nullable failedIds, NSError * _Nullable error))callback;
 
+/**
+ Unblocking some members in the conversation.
+
+ @param memberIds Who will be unblocked.
+ @param callback Result callback.
+ */
 - (void)unblockMembers:(NSArray<NSString *> *)memberIds
               callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<AVIMFailedResult *> * _Nullable failedIds, NSError * _Nullable error))callback;
 
+/**
+ Query blocked members in the conversation.
+
+ @param limit Count of the blocked members you want to query.
+ @param next Offset, if callback's next is nil or empty, that means there is no more blocked members.
+ @param callback Result callback.
+ */
 - (void)queryBlockedMembersWithLimit:(NSUInteger)limit
-                        nextMemberId:(NSString * _Nullable)nextMemberId
-                            callback:(void (^)(NSArray<NSString *> * _Nullable blockedMemberIds, NSString * _Nullable nextMemberId, NSError * _Nullable error))callback;
+                                next:(NSString * _Nullable)next
+                            callback:(void (^)(NSArray<NSString *> * _Nullable blockedMemberIds, NSString * _Nullable next, NSError * _Nullable error))callback;
 
 @end
 
