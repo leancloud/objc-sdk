@@ -53,11 +53,11 @@ enum : AVIMMessageSendOption {
 
 @end
 
-@interface AVIMFailedResult : NSObject
+@interface AVIMOperationFailure : NSObject
 
 @property (nonatomic, assign) NSInteger code;
 @property (nonatomic, strong, nullable) NSString *reason;
-@property (nonatomic, strong, nullable) NSArray<NSString *> *failedIds;
+@property (nonatomic, strong, nullable) NSArray<NSString *> *clientIds;
 
 @end
 
@@ -502,7 +502,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  @param callback Result callback.
  */
 - (void)blockMembers:(NSArray<NSString *> *)memberIds
-            callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<AVIMFailedResult *> * _Nullable failedIds, NSError * _Nullable error))callback;
+            callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<AVIMOperationFailure *> * _Nullable failedIds, NSError * _Nullable error))callback;
 
 /**
  Unblocking some members in the conversation.
@@ -511,7 +511,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  @param callback Result callback.
  */
 - (void)unblockMembers:(NSArray<NSString *> *)memberIds
-              callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<AVIMFailedResult *> * _Nullable failedIds, NSError * _Nullable error))callback;
+              callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<AVIMOperationFailure *> * _Nullable failedIds, NSError * _Nullable error))callback;
 
 /**
  Query blocked members in the conversation.

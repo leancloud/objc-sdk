@@ -321,7 +321,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     XCTAssertTrue((mIds ?? []).contains(blockingId_2))
                 }
                 
-                conversation_0.blockMembers([blockingId_1, blockingId_2], callback: { (successfulIds: [String]?, failedIds: [AVIMFailedResult]?, error: Error?) in
+                conversation_0.blockMembers([blockingId_1, blockingId_2], callback: { (successfulIds: [String]?, failedIds: [AVIMOperationFailure]?, error: Error?) in
                     
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
@@ -331,7 +331,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     XCTAssertNil(error)
                     
                     if let _successfulIds: [String] = successfulIds,
-                        let _failedIds: [AVIMFailedResult] = failedIds {
+                        let _failedIds: [AVIMOperationFailure] = failedIds {
                         
                         XCTAssertEqual(_successfulIds.count, 2)
                         XCTAssertTrue(_successfulIds.contains(blockingId_1))
@@ -436,7 +436,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     XCTAssertTrue((mIds ?? []).contains(blockingId_2))
                 }
                 
-                conversation_0.unblockMembers([blockingId_1, blockingId_2], callback: { (successfulIds: [String]?, failedIds: [AVIMFailedResult]?, error: Error?) in
+                conversation_0.unblockMembers([blockingId_1, blockingId_2], callback: { (successfulIds: [String]?, failedIds: [AVIMOperationFailure]?, error: Error?) in
                     
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
@@ -446,7 +446,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     XCTAssertNil(error)
                     
                     if let _successfulIds: [String] = successfulIds,
-                        let _failedIds: [AVIMFailedResult] = failedIds {
+                        let _failedIds: [AVIMOperationFailure] = failedIds {
                         
                         XCTAssertEqual(_successfulIds.count, 2)
                         XCTAssertTrue(_successfulIds.contains(blockingId_1))

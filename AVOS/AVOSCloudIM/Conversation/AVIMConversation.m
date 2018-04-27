@@ -146,7 +146,7 @@ static void AVIMConversation_mergeNewDictionaryIntoOldDictionary(NSDictionary *n
 
 @end
 
-@implementation AVIMFailedResult
+@implementation AVIMOperationFailure
 
 @end
 
@@ -3038,20 +3038,20 @@ static dispatch_queue_t messageCacheOperationQueue;
 // MARK: - Member Block
 
 - (void)blockMembers:(NSArray<NSString *> *)memberIds
-            callback:(void (^)(NSArray<NSString *> *, NSArray<AVIMFailedResult *> *, NSError *))callback
+            callback:(void (^)(NSArray<NSString *> *, NSArray<AVIMOperationFailure *> *, NSError *))callback
 {
     [self blockOrUnblockMembers:memberIds isBlockAction:true callback:callback];
 }
 
 - (void)unblockMembers:(NSArray<NSString *> *)memberIds
-              callback:(void (^)(NSArray<NSString *> *, NSArray<AVIMFailedResult *> *, NSError *))callback
+              callback:(void (^)(NSArray<NSString *> *, NSArray<AVIMOperationFailure *> *, NSError *))callback
 {
     [self blockOrUnblockMembers:memberIds isBlockAction:false callback:callback];
 }
 
 - (void)blockOrUnblockMembers:(NSArray<NSString *> *)memberIds
                 isBlockAction:(BOOL)isBlockAction
-                     callback:(void (^)(NSArray<NSString *> *, NSArray<AVIMFailedResult *> *, NSError *))callback
+                     callback:(void (^)(NSArray<NSString *> *, NSArray<AVIMOperationFailure *> *, NSError *))callback
 {
     AVIMClient *client = self.imClient;
     NSString *conversationId = self.conversationId;
@@ -3130,13 +3130,13 @@ static dispatch_queue_t messageCacheOperationQueue;
                     
                     NSArray<NSString *> *allowedPids = cmd.allowedPidsArray ?: @[];
                     
-                    NSMutableArray<AVIMFailedResult *> *failedPids = [NSMutableArray array];
+                    NSMutableArray<AVIMOperationFailure *> *failedPids = [NSMutableArray array];
                     
                     for (AVIMErrorCommand *errorCommand in cmd.failedPidsArray) {
-                        AVIMFailedResult *failedResult = [AVIMFailedResult new];
+                        AVIMOperationFailure *failedResult = [AVIMOperationFailure new];
                         failedResult.code = errorCommand.code;
                         failedResult.reason = errorCommand.reason;
-                        failedResult.failedIds = errorCommand.pidsArray;
+                        failedResult.clientIds = errorCommand.pidsArray;
                         [failedPids addObject:failedResult];
                     }
                     
