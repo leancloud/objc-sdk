@@ -59,7 +59,7 @@ extern NSString * const kTemporaryConversationIdPrefix;
 - (void)addOperationToInternalSerialQueue:(void (^)(AVIMClient *client))block;
 
 - (void)getSignatureWithConversationId:(NSString *)conversationId
-                                action:(NSString *)action
+                                action:(AVIMSignatureAction)action
                      actionOnClientIds:(NSArray<NSString *> *)actionOnClientIds
                               callback:(void (^)(AVIMSignature *signature))callback;
 

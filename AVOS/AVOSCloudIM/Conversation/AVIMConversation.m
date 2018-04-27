@@ -850,11 +850,10 @@ static dispatch_queue_t messageCacheOperationQueue;
         AVIMConvCommand *command = [[AVIMConvCommand alloc] init];
         command.cid = self.conversationId;
         command.mArray = [NSMutableArray arrayWithArray:clientIds];
-        NSString  *actionString = [AVIMCommandFormatter signatureActionForKey:genericCommand.op];
         
         NSArray *clientIds = [command.mArray copy];
 
-        [client getSignatureWithConversationId:command.cid action:actionString actionOnClientIds:clientIds callback:^(AVIMSignature *signature) {
+        [client getSignatureWithConversationId:command.cid action:AVIMSignatureActionAdd actionOnClientIds:clientIds callback:^(AVIMSignature *signature) {
             
             if (signature && signature.error) {
                 
@@ -946,11 +945,10 @@ static dispatch_queue_t messageCacheOperationQueue;
         AVIMConvCommand *command = [[AVIMConvCommand alloc] init];
         command.cid = self.conversationId;
         command.mArray = [NSMutableArray arrayWithArray:clientIds];
-        NSString *actionString = [AVIMCommandFormatter signatureActionForKey:genericCommand.op];
         
         NSArray *clientIds = [command.mArray copy];
         
-        [client getSignatureWithConversationId:command.cid action:actionString actionOnClientIds:clientIds callback:^(AVIMSignature *signature) {
+        [client getSignatureWithConversationId:command.cid action:AVIMSignatureActionRemove actionOnClientIds:clientIds callback:^(AVIMSignature *signature) {
             
             if (signature && signature.error) {
                 
@@ -3079,7 +3077,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         return;
     }
     
-    NSString *action = (isBlockAction ? @"block" : @"unblock");
+    AVIMSignatureAction action = (isBlockAction ? AVIMSignatureActionBlock : AVIMSignatureActionUnblock);
     
     [client getSignatureWithConversationId:conversationId action:action actionOnClientIds:memberIds callback:^(AVIMSignature *signature) {
         

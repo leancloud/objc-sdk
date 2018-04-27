@@ -1518,9 +1518,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
             
         } else {
             
-            NSString *action = @"open";
-            
-            [client getSignatureWithConversationId:nil action:action actionOnClientIds:nil callback:^(AVIMSignature *signature) {
+            [client getSignatureWithConversationId:nil action:AVIMSignatureActionOpen actionOnClientIds:nil callback:^(AVIMSignature *signature) {
                 
                 AssertRunInIMClientQueue;
                 
@@ -1531,7 +1529,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
 }
 
 - (void)getSignatureWithConversationId:(NSString *)conversationId
-                                action:(NSString *)action
+                                action:(AVIMSignatureAction)action
                      actionOnClientIds:(NSArray<NSString *> *)actionOnClientIds
                               callback:(void (^)(AVIMSignature *signature))callback
 {
@@ -2627,7 +2625,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
             [[set allObjects] mutableCopy];
         });
         
-        [client getSignatureWithConversationId:nil action:@"start" actionOnClientIds:[members copy] callback:^(AVIMSignature *signature) {
+        [client getSignatureWithConversationId:nil action:AVIMSignatureActionStart actionOnClientIds:[members copy] callback:^(AVIMSignature *signature) {
             
             AssertRunInIMClientQueue;
             
