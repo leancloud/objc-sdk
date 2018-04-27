@@ -63,12 +63,10 @@
     return [[CLLocation alloc] initWithLatitude:self.latitude longitude:self.longitude];
 }
 
-#if AV_IOS_ONLY
 + (void)geoPointForCurrentLocationInBackground:(void(^)(AVGeoPoint *geoPoint, NSError *error))geoPointHandler
 {
     [[AVLocationManager sharedInstance] updateWithBlock:geoPointHandler];
 }
-#endif
 
 - (double)distanceInRadiansTo:(AVGeoPoint*)point
 {
