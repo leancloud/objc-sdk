@@ -712,7 +712,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 // MARK: -
 
-- (void)fetchWithCallback:(AVIMBooleanResultBlock)callback
+- (void)fetchWithCallback:(void (^)(BOOL, NSError *))callback
 {
     AVIMClient *client = self.imClient;
     
@@ -791,7 +791,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     });
 }
 
-- (void)joinWithCallback:(AVIMBooleanResultBlock)callback
+- (void)joinWithCallback:(void (^)(BOOL, NSError *))callback
 {
     AVIMClient *client = self.imClient;
     
@@ -816,8 +816,8 @@ static dispatch_queue_t messageCacheOperationQueue;
     [self addMembersWithClientIds:@[client.clientId] callback:callback];
 }
 
-- (void)addMembersWithClientIds:(NSArray *)clientIds
-                       callback:(AVIMBooleanResultBlock)callback
+- (void)addMembersWithClientIds:(NSArray<NSString *> *)clientIds
+                       callback:(void (^)(BOOL, NSError *))callback;
 {
     AVIMClient *client = self.imClient;
     
@@ -885,7 +885,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     });
 }
 
-- (void)quitWithCallback:(AVIMBooleanResultBlock)callback
+- (void)quitWithCallback:(void (^)(BOOL, NSError *))callback
 {
     AVIMClient *client = self.imClient;
     
@@ -910,8 +910,8 @@ static dispatch_queue_t messageCacheOperationQueue;
     [self removeMembersWithClientIds:@[client.clientId] callback:callback];
 }
 
-- (void)removeMembersWithClientIds:(NSArray *)clientIds
-                          callback:(AVIMBooleanResultBlock)callback
+- (void)removeMembersWithClientIds:(NSArray<NSString *> *)clientIds
+                          callback:(void (^)(BOOL, NSError *))callback
 {
     AVIMClient *client = self.imClient;
     
@@ -985,7 +985,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     });
 }
 
-- (void)countMembersWithCallback:(AVIMIntegerResultBlock)callback
+- (void)countMembersWithCallback:(void (^)(NSInteger, NSError *))callback
 {
     AVIMClient *client = self.imClient;
     
@@ -1022,9 +1022,13 @@ static dispatch_queue_t messageCacheOperationQueue;
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             if (!error) {
                 AVIMConvCommand *conversationInCommand = inCommand.convMessage;
-                [AVIMBlockHelper callIntegerResultBlock:callback number:conversationInCommand.count error:nil];
+                [self invokeInSpecifiedQueue:^{
+                    callback(conversationInCommand.count, nil);
+                }];
             } else {
-                [AVIMBlockHelper callIntegerResultBlock:callback number:0 error:nil];
+                [self invokeInSpecifiedQueue:^{
+                    callback(0, error);
+                }];
             }
         }];
         [client sendCommand:genericCommand];
@@ -1161,7 +1165,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     }];
 }
 
-- (void)muteWithCallback:(AVIMBooleanResultBlock)callback
+- (void)muteWithCallback:(void (^)(BOOL, NSError *))callback
 {
     AVIMClient *client = self.imClient;
     
@@ -1207,7 +1211,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     });
 }
 
-- (void)unmuteWithCallback:(AVIMBooleanResultBlock)callback
+- (void)unmuteWithCallback:(void (^)(BOOL, NSError *))callback
 {
     AVIMClient *client = self.imClient;
     
@@ -1305,29 +1309,29 @@ static dispatch_queue_t messageCacheOperationQueue;
 }
 
 - (void)sendMessage:(AVIMMessage *)message
-           callback:(AVIMBooleanResultBlock)callback
+           callback:(void (^)(BOOL, NSError *))callback
 {
     [self sendMessage:message option:nil callback:callback];
 }
 
 - (void)sendMessage:(AVIMMessage *)message
              option:(AVIMMessageOption *)option
-           callback:(AVIMBooleanResultBlock)callback
+           callback:(void (^)(BOOL, NSError *))callback
 {
     [self sendMessage:message option:option progressBlock:nil callback:callback];
 }
 
 - (void)sendMessage:(AVIMMessage *)message
-      progressBlock:(AVProgressBlock)progressBlock
-           callback:(AVIMBooleanResultBlock)callback
+      progressBlock:(void (^)(NSInteger))progressBlock
+           callback:(void (^)(BOOL, NSError *))callback
 {
     [self sendMessage:message option:nil progressBlock:progressBlock callback:callback];
 }
 
 - (void)sendMessage:(AVIMMessage *)message
              option:(AVIMMessageOption *)option
-      progressBlock:(AVProgressBlock)progressBlock
-           callback:(AVIMBooleanResultBlock)callback
+      progressBlock:(void (^)(NSInteger))progressBlock
+           callback:(void (^)(BOOL, NSError *))callback
 {
     AVIMClient *client = self.imClient;
     
@@ -2123,7 +2127,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 }
 
 - (void)queryMessagesFromServerWithLimit:(NSUInteger)limit
-                                callback:(AVIMArrayResultBlock)callback
+                                callback:(void (^)(NSArray<AVIMMessage *> *, NSError *))callback
 {
     limit = [self.class validLimit:limit];
     
@@ -2174,7 +2178,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 }
 
 - (void)queryMessagesWithLimit:(NSUInteger)limit
-                      callback:(AVIMArrayResultBlock)callback
+                      callback:(void (^)(NSArray<AVIMMessage *> *, NSError *))callback
 {
     limit = [self.class validLimit:limit];
     
@@ -2263,7 +2267,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 - (void)queryMessagesBeforeId:(NSString *)messageId
                     timestamp:(int64_t)timestamp
                         limit:(NSUInteger)limit
-                     callback:(AVIMArrayResultBlock)callback
+                     callback:(void (^)(NSArray<AVIMMessage *> *, NSError *))callback
 {
     if (messageId == nil) {
         
@@ -2460,7 +2464,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 - (void)queryMessagesInInterval:(AVIMMessageInterval *)interval
                       direction:(AVIMMessageQueryDirection)direction
                           limit:(NSUInteger)limit
-                       callback:(AVIMArrayResultBlock)callback
+                       callback:(void (^)(NSArray<AVIMMessage *> *, NSError *))callback
 {
     AVIMLogsCommand *logsCommand = [[AVIMLogsCommand alloc] init];
 
@@ -2508,7 +2512,7 @@ static dispatch_queue_t messageCacheOperationQueue;
                                        limit:(NSUInteger)limit
                                fromMessageId:(NSString *)messageId
                                fromTimestamp:(int64_t)timestamp
-                                    callback:(void (^)(NSArray *messages, NSError *error))callback
+                                    callback:(void (^)(NSArray<AVIMMessage *> *, NSError *))callback
 {
     AVIMClient *client = self.imClient;
     

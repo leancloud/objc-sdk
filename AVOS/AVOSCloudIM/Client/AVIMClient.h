@@ -390,7 +390,7 @@ __attribute__((warn_unused_result));
  @param clients  An array of clients you want to query.
  @param callback The callback of query.
  */
-- (void)queryOnlineClientsInClients:(NSArray<NSString *> *)clients callback:(AVIMArrayResultBlock)callback;
+- (void)queryOnlineClientsInClients:(NSArray<NSString *> *)clients callback:(void (^)(NSArray<NSString *> * _Nullable clientIds, NSError * _Nullable error))callback;
 
 @end
 

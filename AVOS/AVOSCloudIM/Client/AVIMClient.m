@@ -2821,7 +2821,9 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
     return query;
 }
 
-- (void)queryOnlineClientsInClients:(NSArray<NSString *> *)clients callback:(AVIMArrayResultBlock)callback {
+- (void)queryOnlineClientsInClients:(NSArray<NSString *> *)clients
+                           callback:(void (^)(NSArray<NSString *> *, NSError *))callback
+{
     dispatch_async(_internalSerialQueue, ^{
         AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
 
