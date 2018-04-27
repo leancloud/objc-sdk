@@ -3200,7 +3200,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             }
             number;
         });
-        blacklistCommand.next = next;
+        blacklistCommand.next = ([next isEqualToString:@""] ? nil : next);
         
         LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
         commandWrapper.outCommand = outCommand;
