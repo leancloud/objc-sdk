@@ -394,8 +394,12 @@ class AVIMClientDelegate_TestCase: NSObject, AVIMClientDelegate {
     var memberInfoChangeClosure: ((AVIMConversation, String?, String?, String?) -> Void)?
     var blockByClosure: ((AVIMConversation, String?) -> Void)?
     var unblockByClosure: ((AVIMConversation, String?) -> Void)?
-    var memberBlockByClosure: ((AVIMConversation, String?, [String]?) -> Void)?
-    var memberUnblockByClosure: ((AVIMConversation, String?, [String]?) -> Void)?
+    var membersBlockByClosure: ((AVIMConversation, String?, [String]?) -> Void)?
+    var membersUnblockByClosure: ((AVIMConversation, String?, [String]?) -> Void)?
+    var muteByClosure: ((AVIMConversation, String?) -> Void)?
+    var unmuteByClosure: ((AVIMConversation, String?) -> Void)?
+    var membersMuteByClosure: ((AVIMConversation, String?, [String]?) -> Void)?
+    var membersUnmuteByClosure: ((AVIMConversation, String?, [String]?) -> Void)?
     
     func imClientPaused(_ imClient: AVIMClient) {}
     func imClientResuming(_ imClient: AVIMClient) {}
@@ -431,11 +435,27 @@ class AVIMClientDelegate_TestCase: NSObject, AVIMClientDelegate {
     }
     
     func conversation(_ conversation: AVIMConversation, didMembersBlockBy byClientId: String?, memberIds: [String]?) {
-        self.memberBlockByClosure?(conversation, byClientId, memberIds)
+        self.membersBlockByClosure?(conversation, byClientId, memberIds)
     }
     
     func conversation(_ conversation: AVIMConversation, didMembersUnblockBy byClientId: String?, memberIds: [String]?) {
-        self.memberUnblockByClosure?(conversation, byClientId, memberIds)
+        self.membersUnblockByClosure?(conversation, byClientId, memberIds)
+    }
+    
+    func conversation(_ conversation: AVIMConversation, didMuteBy byClientId: String?) {
+        self.muteByClosure?(conversation, byClientId)
+    }
+    
+    func conversation(_ conversation: AVIMConversation, didMembersMuteBy byClientId: String?, memberIds: [String]?) {
+        self.membersMuteByClosure?(conversation, byClientId, memberIds)
+    }
+    
+    func conversation(_ conversation: AVIMConversation, didUnmuteBy byClientId: String?) {
+        self.unmuteByClosure?(conversation, byClientId)
+    }
+    
+    func conversation(_ conversation: AVIMConversation, didMembersUnmuteBy byClientId: String?, memberIds: [String]?) {
+        self.membersUnmuteByClosure?(conversation, byClientId, memberIds)
     }
     
 }
