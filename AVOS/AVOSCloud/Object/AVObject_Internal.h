@@ -54,6 +54,10 @@ NSString *request_object_id(NSDictionary *request) {
 @property (nonatomic, assign) BOOL hasDataForCloud;
 @property (nonatomic, assign) BOOL hasDataForInitial;
 
+- (NSDictionary *)localDataCopy;
+
+- (void)updateLocalDataWithKey:(NSString *)key object:(id)object;
+
 -(NSMutableArray *)findArrayForKey:(NSString *)key
                 inDictionary:(NSMutableDictionary *)dict
                       create:(BOOL)create;

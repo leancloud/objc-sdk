@@ -1268,12 +1268,13 @@ static BOOL is_sync_callback(dispatch_queue_t queue)
  Avoid session token to be removed after fetching or refreshing.
  */
 - (void)removeLocalData {
-    NSString *sessionToken = self.localData[@"sessionToken"];
+    NSString *sessionToken = self.localDataCopy[@"sessionToken"];
 
     [super removeLocalData];
 
-    if (sessionToken)
-        self.localData[@"sessionToken"] = sessionToken;
+    if (sessionToken) {
+        [self updateLocalDataWithKey:@"sessionToken" object:sessionToken];
+    }
 }
 
 -(NSMutableDictionary *)postData

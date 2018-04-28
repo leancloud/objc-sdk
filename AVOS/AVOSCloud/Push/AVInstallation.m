@@ -205,7 +205,7 @@
         [data setObject:self.apnsTeamId forKey:@"apnsTeamId"];
     }
 
-    NSDictionary *updationData = [AVObjectUtils dictionaryFromObject:self.localData];
+    NSDictionary *updationData = [AVObjectUtils dictionaryFromObject:self.localDataCopy];
 
     [data addEntriesFromDictionary:updationData];
 
