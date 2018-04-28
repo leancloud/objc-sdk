@@ -583,6 +583,40 @@ __attribute__((warn_unused_result));
 - (void)conversation:(AVIMConversation *)conversation didMembersUnblockBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
 
 /**
+ Notification for this client was muted by other client in the conversation.
+ 
+ @param conversation Conversation.
+ @param byClientId Who muting this client.
+ */
+- (void)conversation:(AVIMConversation *)conversation didMuteBy:(NSString * _Nullable)byClientId;
+
+/**
+ Notification for this client was Unmuted by other client in the conversation.
+ 
+ @param conversation Conversation.
+ @param byClientId Who unmuting this client.
+ */
+- (void)conversation:(AVIMConversation *)conversation didUnmuteBy:(NSString * _Nullable)byClientId;
+
+/**
+ Notification for some other clients was muted by a client in the conversation.
+ 
+ @param conversation Conversation.
+ @param byClientId Who muted these clients.
+ @param memberIds Being muted clients's ID array.
+ */
+- (void)conversation:(AVIMConversation *)conversation didMembersMuteBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
+
+/**
+ Notification for some other clients was unmuted by a client in the conversation.
+ 
+ @param conversation Conversation.
+ @param byClientId Who unmuting these clients.
+ @param memberIds Being unmuting clients's ID array.
+ */
+- (void)conversation:(AVIMConversation *)conversation didMembersUnmuteBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
+
+/**
  *  当前聊天状态被暂停，常见于网络断开时触发。
  *  注意：该回调会覆盖 imClientPaused: 方法。
  *  @param imClient 相应的 imClient

@@ -520,9 +520,40 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  @param next Offset, if callback's next is nil or empty, that means there is no more blocked members.
  @param callback Result callback.
  */
-- (void)queryBlockedMembersWithLimit:(NSUInteger)limit
+- (void)queryBlockedMembersWithLimit:(NSInteger)limit
                                 next:(NSString * _Nullable)next
                             callback:(void (^)(NSArray<NSString *> * _Nullable blockedMemberIds, NSString * _Nullable next, NSError * _Nullable error))callback;
+
+// MARK: - Member Mute
+
+/**
+ Muting some members in the conversation.
+ 
+ @param memberIds Who will be muted.
+ @param callback Result callback.
+ */
+- (void)muteMembers:(NSArray<NSString *> *)memberIds
+           callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<AVIMOperationFailure *> * _Nullable failedIds, NSError * _Nullable error))callback;
+
+/**
+ Unmuting some members in the conversation.
+ 
+ @param memberIds Who will be unmuted.
+ @param callback Result callback.
+ */
+- (void)unmuteMembers:(NSArray<NSString *> *)memberIds
+             callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<AVIMOperationFailure *> * _Nullable failedIds, NSError * _Nullable error))callback;
+
+/**
+ Query muted members in the conversation.
+ 
+ @param limit Count of the muted members you want to query.
+ @param next Offset, if callback's next is nil or empty, that means there is no more muted members.
+ @param callback Result callback.
+ */
+- (void)queryMutedMembersWithLimit:(NSInteger)limit
+                              next:(NSString * _Nullable)next
+                          callback:(void (^)(NSArray<NSString *> * _Nullable blockedMemberIds, NSString * _Nullable next, NSError * _Nullable error))callback;
 
 @end
 

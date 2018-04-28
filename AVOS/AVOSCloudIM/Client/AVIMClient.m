@@ -1770,6 +1770,26 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                         [client process_conv_members_unblocked:inCommand];
                     } break;
                         
+                    case AVIMOpType_Shutuped:
+                    {
+                        [client process_conv_shutuped:inCommand];
+                    } break;
+                        
+                    case AVIMOpType_MembersShutuped:
+                    {
+                        [client process_conv_members_shutuped:inCommand];
+                    } break;
+                        
+                    case AVIMOpType_Unshutuped:
+                    {
+                        [client process_conv_unshutuped:inCommand];
+                    } break;
+                        
+                    case AVIMOpType_MembersUnshutuped:
+                    {
+                        [client process_conv_members_unshutuped:inCommand];
+                    } break;
+                        
                     default: break;
                 }
             } break;
@@ -2277,6 +2297,132 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
             [self invokeInSpecifiedQueue:^{
                 
                 [delegate conversation:conversation didMembersUnblockBy:initById memberIds:memberIds];
+            }];
+        }
+    }];
+}
+
+- (void)process_conv_shutuped:(AVIMGenericCommand *)inCommand
+{
+    AssertRunInIMClientQueue;
+    
+    AVIMConvCommand *convCommand = inCommand.convMessage;
+    NSString *conversationId = convCommand.cid;
+    NSString *initById = convCommand.initBy;
+    
+    if (!conversationId) {
+        
+        return;
+    }
+    
+    [self queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+        
+        if (error) { return; }
+        
+        id <AVIMClientDelegate> delegate = self->_delegate;
+        
+        SEL sel = @selector(conversation:didMuteBy:);
+        
+        if (delegate && [delegate respondsToSelector:sel]) {
+            
+            [self invokeInSpecifiedQueue:^{
+                
+                [delegate conversation:conversation didMuteBy:initById];
+            }];
+        }
+    }];
+}
+
+- (void)process_conv_members_shutuped:(AVIMGenericCommand *)inCommand
+{
+    AssertRunInIMClientQueue;
+    
+    AVIMConvCommand *convCommand = inCommand.convMessage;
+    NSString *conversationId = convCommand.cid;
+    NSArray<NSString *> *memberIds = convCommand.mArray;
+    NSString *initById = convCommand.initBy;
+    
+    if (!conversationId) {
+        
+        return;
+    }
+    
+    [self queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+        
+        if (error) { return; }
+        
+        id <AVIMClientDelegate> delegate = self->_delegate;
+        
+        SEL sel = @selector(conversation:didMembersMuteBy:memberIds:);
+        
+        if (delegate && [delegate respondsToSelector:sel]) {
+            
+            [self invokeInSpecifiedQueue:^{
+                
+                [delegate conversation:conversation didMembersMuteBy:initById memberIds:memberIds];
+            }];
+        }
+    }];
+}
+
+- (void)process_conv_unshutuped:(AVIMGenericCommand *)inCommand
+{
+    AssertRunInIMClientQueue;
+    
+    AVIMConvCommand *convCommand = inCommand.convMessage;
+    NSString *conversationId = convCommand.cid;
+    NSString *initById = convCommand.initBy;
+    
+    if (!conversationId) {
+        
+        return;
+    }
+    
+    [self queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+        
+        if (error) { return; }
+        
+        id <AVIMClientDelegate> delegate = self->_delegate;
+        
+        SEL sel = @selector(conversation:didUnmuteBy:);
+        
+        if (delegate && [delegate respondsToSelector:sel]) {
+            
+            [self invokeInSpecifiedQueue:^{
+                
+                [delegate conversation:conversation didUnmuteBy:initById];
+            }];
+        }
+    }];
+}
+
+- (void)process_conv_members_unshutuped:(AVIMGenericCommand *)inCommand
+{
+    AssertRunInIMClientQueue;
+    
+    AVIMConvCommand *convCommand = inCommand.convMessage;
+    NSString *conversationId = convCommand.cid;
+    NSArray<NSString *> *memberIds = convCommand.mArray;
+    NSString *initById = convCommand.initBy;
+    
+    if (!conversationId) {
+        
+        return;
+    }
+    
+    [self queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+        
+        if (error) { return; }
+        
+        id <AVIMClientDelegate> delegate = self->_delegate;
+        
+        SEL sel = @selector(conversation:didMembersUnmuteBy:memberIds:);
+        
+        if (delegate && [delegate respondsToSelector:sel]) {
+            
+            [self invokeInSpecifiedQueue:^{
+                
+                [delegate conversation:conversation didMembersUnmuteBy:initById memberIds:memberIds];
             }];
         }
     }];
