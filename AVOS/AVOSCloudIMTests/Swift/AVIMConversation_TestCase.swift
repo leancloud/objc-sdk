@@ -10,6 +10,95 @@ import XCTest
 
 class AVIMConversation_TestCase: LCIMTestBase {
     
+    // MARK: - Conv Update
+    
+    func test_conv_update() {
+        
+        let conv_update_clientIds: [String] = [
+            "test_conv_update_1",
+            "test_conv_update_2"
+        ]
+        
+        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        guard let client_1: AVIMClient = self.newOpenedClient(clientId: conv_update_clientIds[0], delegate: delegate_1) else {
+            XCTFail()
+            return
+        }
+        
+        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        guard let client_2: AVIMClient = self.newOpenedClient(clientId: conv_update_clientIds[1], delegate: delegate_2) else {
+            XCTFail()
+            return
+        }
+        
+        var conv: AVIMConversation? = nil
+        
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            
+            semaphore.increment()
+            
+            client_1.createConversation(withName: nil, clientIds: conv_update_clientIds, callback: { (conversation: AVIMConversation?, error: Error?) in
+                
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertNotNil(conversation)
+                XCTAssertNotNil(conversation?.conversationId)
+                XCTAssertNil(error)
+                
+                if let _conv: AVIMConversation = conversation {
+                    
+                    conv = _conv
+                }
+            })
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
+        
+        if let conversation: AVIMConversation = conv {
+            
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                
+                let key: String = "a"
+                let value: [String : Any] = [
+                    "__op" : "Increment",
+                    "amount" : 50
+                ]
+                let attrValue: [String : Any] = [
+                    key : value
+                ]
+                
+                conversation["attr"] = attrValue
+                
+                semaphore.increment(2)
+                
+                delegate_2.updateByClosure = { (conv: AVIMConversation, date: Date?, clientId: String?, data: [AnyHashable : Any]?) in
+                    
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                }
+                
+                conversation.update(callback: { (succeeded: Bool, error: Error?) in
+                    
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                    
+                    XCTAssertTrue(succeeded)
+                    XCTAssertNil(error)
+                })
+                
+            }, failure: {
+                
+                XCTFail("timeout")
+            })
+        }
+        
+        self.recycleClient(client_2)
+        self.recycleClient(client_1)
+    }
+    
     // MARK: - Member Info
     
     let test_conv_member_info_clientIds: [String] = [
