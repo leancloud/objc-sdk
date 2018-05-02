@@ -49,18 +49,18 @@ static NSError * AVIMConversation_ParameterInvalidError(NSString *reason)
     return aError;
 }
 
-static void AVIMConversation_mergeNewDictionaryIntoOldDictionary(NSDictionary *newDictionary, NSMutableDictionary *oldDictionary)
+static void AVIMConversation_MergeUpdatedDicIntoOriginDic(NSDictionary *updatedDic, NSMutableDictionary *originDic)
 {
-    if (!newDictionary || !oldDictionary) {
+    if (!updatedDic || !originDic) {
         
         return;
     }
     
-    NSArray *allKeys = [newDictionary allKeys];
+    NSArray *allKeys = [updatedDic allKeys];
     
     for (id key in allKeys) {
         
-        id newValue = newDictionary[key];
+        id newValue = updatedDic[key];
         
         if ([NSString lc__checkingType:key]) {
             
@@ -68,13 +68,13 @@ static void AVIMConversation_mergeNewDictionaryIntoOldDictionary(NSDictionary *n
             
             if (subKeys.count > 1) {
                 
-                id oldSubValue = oldDictionary[subKeys[0]];
+                id oldSubValue = originDic[subKeys[0]];
                 
                 if (!oldSubValue) {
                     
                     oldSubValue = [NSMutableDictionary dictionary];
                     
-                    oldDictionary[subKeys[0]] = oldSubValue;
+                    originDic[subKeys[0]] = oldSubValue;
                 }
                 
                 for (int i = 1; i < subKeys.count; i++) {
@@ -101,11 +101,11 @@ static void AVIMConversation_mergeNewDictionaryIntoOldDictionary(NSDictionary *n
                 }
             } else {
                 
-                oldDictionary[key] = newValue;
+                originDic[key] = newValue;
             }
         } else {
             
-            oldDictionary[key] = newValue;
+            originDic[key] = newValue;
         }
     }
 }
@@ -1049,7 +1049,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             
             NSMutableDictionary *snapshotData = [_rawJSONData mutableCopy];
             
-            AVIMConversation_mergeNewDictionaryIntoOldDictionary(pendingData, snapshotData);
+            AVIMConversation_MergeUpdatedDicIntoOriginDic(pendingData, snapshotData);
             
             self->_snapshotData = snapshotData;
         }
@@ -2663,7 +2663,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     [self internalSyncLock:^{
         
-        AVIMConversation_mergeNewDictionaryIntoOldDictionary(convUpdatedMessage, self->_rawJSONData);
+        AVIMConversation_MergeUpdatedDicIntoOriginDic(convUpdatedMessage, self->_rawJSONData);
     }];
 }
 
@@ -3518,7 +3518,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         
         [self internalSyncLock:^{
             
-            AVIMConversation_mergeNewDictionaryIntoOldDictionary(attributes, self->_rawJSONData);
+            AVIMConversation_MergeUpdatedDicIntoOriginDic(attributes, self->_rawJSONData);
         }];
         
         [self invokeInSpecifiedQueue:^{
