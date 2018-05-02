@@ -390,7 +390,7 @@ __attribute__((warn_unused_result));
  @param clients  An array of clients you want to query.
  @param callback The callback of query.
  */
-- (void)queryOnlineClientsInClients:(NSArray<NSString *> *)clients callback:(AVIMArrayResultBlock)callback;
+- (void)queryOnlineClientsInClients:(NSArray<NSString *> *)clients callback:(void (^)(NSArray<NSString *> * _Nullable clientIds, NSError * _Nullable error))callback;
 
 @end
 
@@ -494,7 +494,7 @@ __attribute__((warn_unused_result));
  @param clientIds - 加入的新成员列表
  @param clientId - 邀请者的 id
  */
-- (void)conversation:(AVIMConversation *)conversation membersAdded:(NSArray *)clientIds byClientId:(NSString *)clientId;
+- (void)conversation:(AVIMConversation *)conversation membersAdded:(NSArray<NSString *> * _Nullable)clientIds byClientId:(NSString * _Nullable)clientId;
 
 /*!
  对话中有成员离开时所有剩余成员都会收到这一通知。
@@ -502,21 +502,21 @@ __attribute__((warn_unused_result));
  @param clientIds - 离开的成员列表
  @param clientId - 操作者的 id
  */
-- (void)conversation:(AVIMConversation *)conversation membersRemoved:(NSArray *)clientIds byClientId:(NSString *)clientId;
+- (void)conversation:(AVIMConversation *)conversation membersRemoved:(NSArray<NSString *> * _Nullable)clientIds byClientId:(NSString * _Nullable)clientId;
 
 /*!
  当前用户被邀请加入对话的通知。
  @param conversation － 所属对话
  @param clientId - 邀请者的 id
  */
-- (void)conversation:(AVIMConversation *)conversation invitedByClientId:(NSString *)clientId;
+- (void)conversation:(AVIMConversation *)conversation invitedByClientId:(NSString * _Nullable)clientId;
 
 /*!
  当前用户被踢出对话的通知。
  @param conversation － 所属对话
  @param clientId - 操作者的 id
  */
-- (void)conversation:(AVIMConversation *)conversation kickedByClientId:(NSString *)clientId;
+- (void)conversation:(AVIMConversation *)conversation kickedByClientId:(NSString * _Nullable)clientId;
 
 /*!
  Notification for conversation property update.
@@ -547,6 +547,74 @@ __attribute__((warn_unused_result));
  @param role Updated role.
  */
 - (void)conversation:(AVIMConversation *)conversation didMemberInfoUpdateBy:(NSString * _Nullable)byClientId memberId:(NSString * _Nullable)memberId role:(NSString * _Nullable)role;
+
+/**
+ Notification for this client was blocked by other client in the conversation.
+
+ @param conversation Conversation.
+ @param byClientId Who blocking this client.
+ */
+- (void)conversation:(AVIMConversation *)conversation didBlockBy:(NSString * _Nullable)byClientId;
+
+/**
+ Notification for this client was Unblocked by other client in the conversation.
+
+ @param conversation Conversation.
+ @param byClientId Who unblocking this client.
+ */
+- (void)conversation:(AVIMConversation *)conversation didUnblockBy:(NSString * _Nullable)byClientId;
+
+/**
+ Notification for some other clients was blocked by a client in the conversation.
+
+ @param conversation Conversation.
+ @param byClientId Who blocking these clients.
+ @param memberIds Being blocked clients's ID array.
+ */
+- (void)conversation:(AVIMConversation *)conversation didMembersBlockBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
+
+/**
+ Notification for some other clients was unblocked by a client in the conversation.
+
+ @param conversation Conversation.
+ @param byClientId Who unblocking these clients.
+ @param memberIds Being unblocked clients's ID array.
+ */
+- (void)conversation:(AVIMConversation *)conversation didMembersUnblockBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
+
+/**
+ Notification for this client was muted by other client in the conversation.
+ 
+ @param conversation Conversation.
+ @param byClientId Who muting this client.
+ */
+- (void)conversation:(AVIMConversation *)conversation didMuteBy:(NSString * _Nullable)byClientId;
+
+/**
+ Notification for this client was Unmuted by other client in the conversation.
+ 
+ @param conversation Conversation.
+ @param byClientId Who unmuting this client.
+ */
+- (void)conversation:(AVIMConversation *)conversation didUnmuteBy:(NSString * _Nullable)byClientId;
+
+/**
+ Notification for some other clients was muted by a client in the conversation.
+ 
+ @param conversation Conversation.
+ @param byClientId Who muted these clients.
+ @param memberIds Being muted clients's ID array.
+ */
+- (void)conversation:(AVIMConversation *)conversation didMembersMuteBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
+
+/**
+ Notification for some other clients was unmuted by a client in the conversation.
+ 
+ @param conversation Conversation.
+ @param byClientId Who unmuting these clients.
+ @param memberIds Being unmuting clients's ID array.
+ */
+- (void)conversation:(AVIMConversation *)conversation didMembersUnmuteBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
 
 /**
  *  当前聊天状态被暂停，常见于网络断开时触发。

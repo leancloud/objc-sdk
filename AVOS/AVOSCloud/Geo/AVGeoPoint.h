@@ -44,7 +44,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)geoPointWithLatitude:(double)latitude longitude:(double)longitude;
 
-#if AV_IOS_ONLY
 /*!
  Fetches the user's current location and returns a new AVGeoPoint object via the
  provided block.
@@ -52,7 +51,6 @@ NS_ASSUME_NONNULL_BEGIN
  argument.
  */
 + (void)geoPointForCurrentLocationInBackground:(void(^)(AVGeoPoint * _Nullable geoPoint, NSError * _Nullable error))geoPointHandler;
-#endif
 
 /** @name Controlling Position */
 

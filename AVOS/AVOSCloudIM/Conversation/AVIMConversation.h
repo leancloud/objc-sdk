@@ -53,6 +53,14 @@ enum : AVIMMessageSendOption {
 
 @end
 
+@interface AVIMOperationFailure : NSObject
+
+@property (nonatomic, assign) NSInteger code;
+@property (nonatomic, strong, nullable) NSString *reason;
+@property (nonatomic, strong, nullable) NSArray<NSString *> *clientIds;
+
+@end
+
 /**
  Enumerations that define message query direction.
  */
@@ -232,7 +240,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  拉取服务器最新数据。
  @param callback － 结果回调
  */
-- (void)fetchWithCallback:(AVIMBooleanResultBlock)callback;
+- (void)fetchWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
  拉取对话最近的回执时间。
@@ -249,25 +257,25 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  加入对话。
  @param callback － 结果回调
  */
-- (void)joinWithCallback:(AVIMBooleanResultBlock)callback;
+- (void)joinWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
  离开对话。
  @param callback － 结果回调
  */
-- (void)quitWithCallback:(AVIMBooleanResultBlock)callback;
+- (void)quitWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
  静音，不再接收此对话的离线推送。
  @param callback － 结果回调
  */
-- (void)muteWithCallback:(AVIMBooleanResultBlock)callback;
+- (void)muteWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
  取消静音，开始接收此对话的离线推送。
  @param callback － 结果回调
  */
-- (void)unmuteWithCallback:(AVIMBooleanResultBlock)callback;
+- (void)unmuteWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
  将对话标记为已读。
@@ -280,22 +288,22 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  @param clientIds － 成员列表
  @param callback － 结果回调
  */
-- (void)addMembersWithClientIds:(NSArray *)clientIds
-                       callback:(AVIMBooleanResultBlock)callback;
+- (void)addMembersWithClientIds:(NSArray<NSString *> *)clientIds
+                       callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
  从对话踢出部分成员。
  @param clientIds － 成员列表
  @param callback － 结果回调
  */
-- (void)removeMembersWithClientIds:(NSArray *)clientIds
-                          callback:(AVIMBooleanResultBlock)callback;
+- (void)removeMembersWithClientIds:(NSArray<NSString *> *)clientIds
+                          callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
  查询成员人数（开放群组即为在线人数）。
  @param callback － 结果回调
  */
-- (void)countMembersWithCallback:(AVIMIntegerResultBlock)callback;
+- (void)countMembersWithCallback:(void (^)(NSInteger count, NSError * _Nullable error))callback;
 
 /*!
  往对话中发送消息。
@@ -303,7 +311,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  @param callback － 结果回调
  */
 - (void)sendMessage:(AVIMMessage *)message
-           callback:(AVIMBooleanResultBlock)callback;
+           callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
  往对话中发送消息。
@@ -313,7 +321,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  */
 - (void)sendMessage:(AVIMMessage *)message
              option:(nullable AVIMMessageOption *)option
-           callback:(AVIMBooleanResultBlock)callback;
+           callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
  往对话中发送消息。
@@ -322,8 +330,8 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  @param callback － 结果回调
  */
 - (void)sendMessage:(AVIMMessage *)message
-      progressBlock:(nullable AVIMProgressBlock)progressBlock
-           callback:(AVIMBooleanResultBlock)callback;
+      progressBlock:(void (^ _Nullable)(NSInteger progress))progressBlock
+           callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
  往对话中发送消息。
@@ -334,8 +342,8 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  */
 - (void)sendMessage:(AVIMMessage *)message
              option:(nullable AVIMMessageOption *)option
-      progressBlock:(nullable AVIMProgressBlock)progressBlock
-           callback:(AVIMBooleanResultBlock)callback;
+      progressBlock:(void (^ _Nullable)(NSInteger progress))progressBlock
+           callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
  Replace a message you sent with a new message.
@@ -346,7 +354,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  */
 - (void)updateMessage:(AVIMMessage *)oldMessage
          toNewMessage:(AVIMMessage *)newMessage
-             callback:(AVIMBooleanResultBlock)callback;
+             callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
  Recall a message.
@@ -377,7 +385,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  @param callback 查询结果回调。
  */
 - (void)queryMessagesFromServerWithLimit:(NSUInteger)limit
-                                callback:(AVIMArrayResultBlock)callback;
+                                callback:(void (^)(NSArray<AVIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;
 
 /*!
  从缓存中查询该会话的最近 limit 条消息。
@@ -392,7 +400,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  @param callback 查询结果回调。
  */
 - (void)queryMessagesWithLimit:(NSUInteger)limit
-                      callback:(AVIMArrayResultBlock)callback;
+                      callback:(void (^)(NSArray<AVIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;
 
 /*!
  查询历史消息，获取某条消息之前的 limit 条消息。
@@ -406,7 +414,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
 - (void)queryMessagesBeforeId:(NSString *)messageId
                     timestamp:(int64_t)timestamp
                         limit:(NSUInteger)limit
-                     callback:(AVIMArrayResultBlock)callback;
+                     callback:(void (^)(NSArray<AVIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;
 
 /**
  Query messages from a message to an another message with specified direction applied.
@@ -419,7 +427,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
 - (void)queryMessagesInInterval:(AVIMMessageInterval *)interval
                       direction:(AVIMMessageQueryDirection)direction
                           limit:(NSUInteger)limit
-                       callback:(AVIMArrayResultBlock)callback;
+                       callback:(void (^)(NSArray<AVIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;
 
 /**
  Query Specific Media Type Message from Server.
@@ -434,9 +442,9 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
                                        limit:(NSUInteger)limit
                                fromMessageId:(NSString * _Nullable)messageId
                                fromTimestamp:(int64_t)timestamp
-                                    callback:(void (^)(NSArray * _Nullable messages, NSError * _Nullable error))callback;
+                                    callback:(void (^)(NSArray<AVIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;
 
-// MARK: - Conversation Member
+// MARK: - Member Info
 
 /**
  Get all member info. using cache as a default.
@@ -484,6 +492,68 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
 - (void)updateMemberRoleWithMemberId:(NSString *)memberId
                                 role:(AVIMConversationMemberRole)role
                             callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
+
+// MARK: - Member Block
+
+/**
+ Blocking some members in the conversation.
+
+ @param memberIds Who will be blocked.
+ @param callback Result callback.
+ */
+- (void)blockMembers:(NSArray<NSString *> *)memberIds
+            callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<AVIMOperationFailure *> * _Nullable failedIds, NSError * _Nullable error))callback;
+
+/**
+ Unblocking some members in the conversation.
+
+ @param memberIds Who will be unblocked.
+ @param callback Result callback.
+ */
+- (void)unblockMembers:(NSArray<NSString *> *)memberIds
+              callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<AVIMOperationFailure *> * _Nullable failedIds, NSError * _Nullable error))callback;
+
+/**
+ Query blocked members in the conversation.
+
+ @param limit Count of the blocked members you want to query.
+ @param next Offset, if callback's next is nil or empty, that means there is no more blocked members.
+ @param callback Result callback.
+ */
+- (void)queryBlockedMembersWithLimit:(NSInteger)limit
+                                next:(NSString * _Nullable)next
+                            callback:(void (^)(NSArray<NSString *> * _Nullable blockedMemberIds, NSString * _Nullable next, NSError * _Nullable error))callback;
+
+// MARK: - Member Mute
+
+/**
+ Muting some members in the conversation.
+ 
+ @param memberIds Who will be muted.
+ @param callback Result callback.
+ */
+- (void)muteMembers:(NSArray<NSString *> *)memberIds
+           callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<AVIMOperationFailure *> * _Nullable failedIds, NSError * _Nullable error))callback;
+
+/**
+ Unmuting some members in the conversation.
+ 
+ @param memberIds Who will be unmuted.
+ @param callback Result callback.
+ */
+- (void)unmuteMembers:(NSArray<NSString *> *)memberIds
+             callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<AVIMOperationFailure *> * _Nullable failedIds, NSError * _Nullable error))callback;
+
+/**
+ Query muted members in the conversation.
+ 
+ @param limit Count of the muted members you want to query.
+ @param next Offset, if callback's next is nil or empty, that means there is no more muted members.
+ @param callback Result callback.
+ */
+- (void)queryMutedMembersWithLimit:(NSInteger)limit
+                              next:(NSString * _Nullable)next
+                          callback:(void (^)(NSArray<NSString *> * _Nullable blockedMemberIds, NSString * _Nullable next, NSError * _Nullable error))callback;
 
 @end
 

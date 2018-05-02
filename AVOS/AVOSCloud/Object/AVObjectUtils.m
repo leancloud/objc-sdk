@@ -485,7 +485,7 @@
 }
 
 + (NSMutableDictionary *)objectSnapshot:(AVObject *)object recursive:(BOOL)recursive {
-    NSArray * objects = @[object.localData, object.estimatedData];
+    NSArray * objects = @[object.localDataCopy, object.estimatedData];
     NSMutableDictionary * result = [NSMutableDictionary dictionary];
     [result setObject:@"Object" forKey:kAVTypeTag];
 

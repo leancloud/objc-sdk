@@ -146,6 +146,10 @@ static void AVIMConversation_mergeNewDictionaryIntoOldDictionary(NSDictionary *n
 
 @end
 
+@implementation AVIMOperationFailure
+
+@end
+
 @implementation AVIMConversation {
     
     NSLock *_lock;
@@ -708,7 +712,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 // MARK: -
 
-- (void)fetchWithCallback:(AVIMBooleanResultBlock)callback
+- (void)fetchWithCallback:(void (^)(BOOL, NSError *))callback
 {
     AVIMClient *client = self.imClient;
     
@@ -787,7 +791,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     });
 }
 
-- (void)joinWithCallback:(AVIMBooleanResultBlock)callback
+- (void)joinWithCallback:(void (^)(BOOL, NSError *))callback
 {
     AVIMClient *client = self.imClient;
     
@@ -812,8 +816,8 @@ static dispatch_queue_t messageCacheOperationQueue;
     [self addMembersWithClientIds:@[client.clientId] callback:callback];
 }
 
-- (void)addMembersWithClientIds:(NSArray *)clientIds
-                       callback:(AVIMBooleanResultBlock)callback
+- (void)addMembersWithClientIds:(NSArray<NSString *> *)clientIds
+                       callback:(void (^)(BOOL, NSError *))callback;
 {
     AVIMClient *client = self.imClient;
     
@@ -846,11 +850,10 @@ static dispatch_queue_t messageCacheOperationQueue;
         AVIMConvCommand *command = [[AVIMConvCommand alloc] init];
         command.cid = self.conversationId;
         command.mArray = [NSMutableArray arrayWithArray:clientIds];
-        NSString  *actionString = [AVIMCommandFormatter signatureActionForKey:genericCommand.op];
         
         NSArray *clientIds = [command.mArray copy];
 
-        [client getSignatureWithConversationId:command.cid action:actionString actionOnClientIds:clientIds callback:^(AVIMSignature *signature) {
+        [client getSignatureWithConversationId:command.cid action:AVIMSignatureActionAdd actionOnClientIds:clientIds callback:^(AVIMSignature *signature) {
             
             if (signature && signature.error) {
                 
@@ -881,7 +884,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     });
 }
 
-- (void)quitWithCallback:(AVIMBooleanResultBlock)callback
+- (void)quitWithCallback:(void (^)(BOOL, NSError *))callback
 {
     AVIMClient *client = self.imClient;
     
@@ -906,8 +909,8 @@ static dispatch_queue_t messageCacheOperationQueue;
     [self removeMembersWithClientIds:@[client.clientId] callback:callback];
 }
 
-- (void)removeMembersWithClientIds:(NSArray *)clientIds
-                          callback:(AVIMBooleanResultBlock)callback
+- (void)removeMembersWithClientIds:(NSArray<NSString *> *)clientIds
+                          callback:(void (^)(BOOL, NSError *))callback
 {
     AVIMClient *client = self.imClient;
     
@@ -942,11 +945,10 @@ static dispatch_queue_t messageCacheOperationQueue;
         AVIMConvCommand *command = [[AVIMConvCommand alloc] init];
         command.cid = self.conversationId;
         command.mArray = [NSMutableArray arrayWithArray:clientIds];
-        NSString *actionString = [AVIMCommandFormatter signatureActionForKey:genericCommand.op];
         
         NSArray *clientIds = [command.mArray copy];
         
-        [client getSignatureWithConversationId:command.cid action:actionString actionOnClientIds:clientIds callback:^(AVIMSignature *signature) {
+        [client getSignatureWithConversationId:command.cid action:AVIMSignatureActionRemove actionOnClientIds:clientIds callback:^(AVIMSignature *signature) {
             
             if (signature && signature.error) {
                 
@@ -981,7 +983,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     });
 }
 
-- (void)countMembersWithCallback:(AVIMIntegerResultBlock)callback
+- (void)countMembersWithCallback:(void (^)(NSInteger, NSError *))callback
 {
     AVIMClient *client = self.imClient;
     
@@ -1018,9 +1020,13 @@ static dispatch_queue_t messageCacheOperationQueue;
         [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
             if (!error) {
                 AVIMConvCommand *conversationInCommand = inCommand.convMessage;
-                [AVIMBlockHelper callIntegerResultBlock:callback number:conversationInCommand.count error:nil];
+                [self invokeInSpecifiedQueue:^{
+                    callback(conversationInCommand.count, nil);
+                }];
             } else {
-                [AVIMBlockHelper callIntegerResultBlock:callback number:0 error:nil];
+                [self invokeInSpecifiedQueue:^{
+                    callback(0, error);
+                }];
             }
         }];
         [client sendCommand:genericCommand];
@@ -1157,7 +1163,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     }];
 }
 
-- (void)muteWithCallback:(AVIMBooleanResultBlock)callback
+- (void)muteWithCallback:(void (^)(BOOL, NSError *))callback
 {
     AVIMClient *client = self.imClient;
     
@@ -1203,7 +1209,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     });
 }
 
-- (void)unmuteWithCallback:(AVIMBooleanResultBlock)callback
+- (void)unmuteWithCallback:(void (^)(BOOL, NSError *))callback
 {
     AVIMClient *client = self.imClient;
     
@@ -1301,29 +1307,29 @@ static dispatch_queue_t messageCacheOperationQueue;
 }
 
 - (void)sendMessage:(AVIMMessage *)message
-           callback:(AVIMBooleanResultBlock)callback
+           callback:(void (^)(BOOL, NSError *))callback
 {
     [self sendMessage:message option:nil callback:callback];
 }
 
 - (void)sendMessage:(AVIMMessage *)message
              option:(AVIMMessageOption *)option
-           callback:(AVIMBooleanResultBlock)callback
+           callback:(void (^)(BOOL, NSError *))callback
 {
     [self sendMessage:message option:option progressBlock:nil callback:callback];
 }
 
 - (void)sendMessage:(AVIMMessage *)message
-      progressBlock:(AVProgressBlock)progressBlock
-           callback:(AVIMBooleanResultBlock)callback
+      progressBlock:(void (^)(NSInteger))progressBlock
+           callback:(void (^)(BOOL, NSError *))callback
 {
     [self sendMessage:message option:nil progressBlock:progressBlock callback:callback];
 }
 
 - (void)sendMessage:(AVIMMessage *)message
              option:(AVIMMessageOption *)option
-      progressBlock:(AVProgressBlock)progressBlock
-           callback:(AVIMBooleanResultBlock)callback
+      progressBlock:(void (^)(NSInteger))progressBlock
+           callback:(void (^)(BOOL, NSError *))callback
 {
     AVIMClient *client = self.imClient;
     
@@ -2119,7 +2125,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 }
 
 - (void)queryMessagesFromServerWithLimit:(NSUInteger)limit
-                                callback:(AVIMArrayResultBlock)callback
+                                callback:(void (^)(NSArray<AVIMMessage *> *, NSError *))callback
 {
     limit = [self.class validLimit:limit];
     
@@ -2170,7 +2176,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 }
 
 - (void)queryMessagesWithLimit:(NSUInteger)limit
-                      callback:(AVIMArrayResultBlock)callback
+                      callback:(void (^)(NSArray<AVIMMessage *> *, NSError *))callback
 {
     limit = [self.class validLimit:limit];
     
@@ -2259,7 +2265,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 - (void)queryMessagesBeforeId:(NSString *)messageId
                     timestamp:(int64_t)timestamp
                         limit:(NSUInteger)limit
-                     callback:(AVIMArrayResultBlock)callback
+                     callback:(void (^)(NSArray<AVIMMessage *> *, NSError *))callback
 {
     if (messageId == nil) {
         
@@ -2456,7 +2462,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 - (void)queryMessagesInInterval:(AVIMMessageInterval *)interval
                       direction:(AVIMMessageQueryDirection)direction
                           limit:(NSUInteger)limit
-                       callback:(AVIMArrayResultBlock)callback
+                       callback:(void (^)(NSArray<AVIMMessage *> *, NSError *))callback
 {
     AVIMLogsCommand *logsCommand = [[AVIMLogsCommand alloc] init];
 
@@ -2504,7 +2510,7 @@ static dispatch_queue_t messageCacheOperationQueue;
                                        limit:(NSUInteger)limit
                                fromMessageId:(NSString *)messageId
                                fromTimestamp:(int64_t)timestamp
-                                    callback:(void (^)(NSArray *messages, NSError *error))callback
+                                    callback:(void (^)(NSArray<AVIMMessage *> *, NSError *))callback
 {
     AVIMClient *client = self.imClient;
     
@@ -2661,7 +2667,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     }];
 }
 
-// MARK: - Conversation Member
+// MARK: - Member Info
 
 - (void)getAllMemberInfoWithCallback:(void (^)(NSArray<AVIMConversationMemberInfo *> *, NSError *))callback
 {
@@ -3027,6 +3033,370 @@ static dispatch_queue_t messageCacheOperationQueue;
         
         [memberInfo updateRawJSONDataWithKey:@"role" object:role];
     }
+}
+
+// MARK: - Member Block
+
+- (void)blockMembers:(NSArray<NSString *> *)memberIds
+            callback:(void (^)(NSArray<NSString *> *, NSArray<AVIMOperationFailure *> *, NSError *))callback
+{
+    [self blockOrUnblockMembers:memberIds isBlockAction:true callback:callback];
+}
+
+- (void)unblockMembers:(NSArray<NSString *> *)memberIds
+              callback:(void (^)(NSArray<NSString *> *, NSArray<AVIMOperationFailure *> *, NSError *))callback
+{
+    [self blockOrUnblockMembers:memberIds isBlockAction:false callback:callback];
+}
+
+- (void)blockOrUnblockMembers:(NSArray<NSString *> *)memberIds
+                isBlockAction:(BOOL)isBlockAction
+                     callback:(void (^)(NSArray<NSString *> *, NSArray<AVIMOperationFailure *> *, NSError *))callback
+{
+    AVIMClient *client = self.imClient;
+    NSString *conversationId = self.conversationId;
+    
+    if (!client || !conversationId) {
+        
+        [self invokeInSpecifiedQueue:^{
+            
+            NSError *error = nil;
+            
+            if (!conversationId) {
+                
+                error = AVIMConversation_ParameterInvalidError(@"conversationId invalid.");
+                
+            } else {
+                
+                error = AVIMConversation_ParameterInvalidError(@"imClient invalid.");
+            }
+            
+            callback(nil, nil, error);
+        }];
+        
+        return;
+    }
+    
+    AVIMSignatureAction action = (isBlockAction ? AVIMSignatureActionBlock : AVIMSignatureActionUnblock);
+    
+    [client getSignatureWithConversationId:conversationId action:action actionOnClientIds:memberIds callback:^(AVIMSignature *signature) {
+        
+        if (signature && signature.error) {
+            
+            [self invokeInSpecifiedQueue:^{
+                
+                callback(nil, nil, signature.error);
+            }];
+            
+            return;
+        }
+        
+        LCIMProtobufCommandWrapper *commandWrapper = ({
+            
+            AVIMGenericCommand *outCommand = [AVIMGenericCommand new];
+            AVIMBlacklistCommand *blacklistCommand = [AVIMBlacklistCommand new];
+            
+            outCommand.cmd = AVIMCommandType_Blacklist;
+            outCommand.op = (isBlockAction ? AVIMOpType_Block : AVIMOpType_Unblock);
+            outCommand.blacklistMessage = blacklistCommand;
+            
+            if (signature && signature.signature && signature.timestamp && signature.nonce) {
+                
+                blacklistCommand.s = signature.signature;
+                blacklistCommand.t = signature.timestamp;
+                blacklistCommand.n = signature.nonce;
+            }
+            
+            blacklistCommand.srcCid = conversationId;
+            blacklistCommand.toPidsArray = memberIds.mutableCopy;
+            
+            LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+            commandWrapper.outCommand = outCommand;
+            
+            commandWrapper;
+        });
+        
+        [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+            
+            [self invokeInSpecifiedQueue:^{
+                
+                if (commandWrapper.error) {
+                    
+                    callback(nil, nil, commandWrapper.error);
+                    
+                } else {
+                    
+                    AVIMBlacklistCommand *cmd = commandWrapper.inCommand.blacklistMessage;
+                    
+                    NSArray<NSString *> *allowedPids = cmd.allowedPidsArray ?: @[];
+                    
+                    NSMutableArray<AVIMOperationFailure *> *failedPids = [NSMutableArray array];
+                    
+                    for (AVIMErrorCommand *errorCommand in cmd.failedPidsArray) {
+                        AVIMOperationFailure *failedResult = [AVIMOperationFailure new];
+                        failedResult.code = errorCommand.code;
+                        failedResult.reason = errorCommand.reason;
+                        failedResult.clientIds = errorCommand.pidsArray;
+                        [failedPids addObject:failedResult];
+                    }
+                    
+                    callback(allowedPids, failedPids, nil);
+                }
+            }];
+        }];
+        
+        [client sendCommandWrapper:commandWrapper];
+    }];
+}
+
+- (void)queryBlockedMembersWithLimit:(NSInteger)limit
+                                next:(NSString * _Nullable)next
+                            callback:(void (^)(NSArray<NSString *> *, NSString *, NSError *))callback
+{
+    AVIMClient *client = self.imClient;
+    NSString *conversationId = self.conversationId;
+    
+    if (!client || !conversationId) {
+        
+        [self invokeInSpecifiedQueue:^{
+            
+            NSError *error = nil;
+            
+            if (!conversationId) {
+                
+                error = AVIMConversation_ParameterInvalidError(@"conversationId invalid.");
+                
+            } else {
+                
+                error = AVIMConversation_ParameterInvalidError(@"imClient invalid.");
+            }
+            
+            callback(nil, nil, error);
+        }];
+        
+        return;
+    }
+    
+    LCIMProtobufCommandWrapper *commandWrapper = ({
+        
+        AVIMGenericCommand *outCommand = [AVIMGenericCommand new];
+        AVIMBlacklistCommand *blacklistCommand = [AVIMBlacklistCommand new];
+        
+        outCommand.cmd = AVIMCommandType_Blacklist;
+        outCommand.op = AVIMOpType_Query;
+        outCommand.blacklistMessage = blacklistCommand;
+        
+        blacklistCommand.srcCid = conversationId;
+        blacklistCommand.limit = ({
+            int32_t number;
+            if (limit <= 0) {
+                number = 50;
+            }
+            else if (limit > 100) {
+                number = 100;
+            }
+            else {
+                number = (int32_t)limit;
+            }
+            number;
+        });
+        blacklistCommand.next = ([next isEqualToString:@""] ? nil : next);
+        
+        LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+        commandWrapper.outCommand = outCommand;
+        
+        commandWrapper;
+    });
+    
+    [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+        
+        [self invokeInSpecifiedQueue:^{
+            
+            if (commandWrapper.error) {
+                
+                callback(nil, nil, commandWrapper.error);
+                
+            } else {
+                
+                AVIMBlacklistCommand *cmd = commandWrapper.inCommand.blacklistMessage;
+                
+                callback(cmd.blockedPidsArray, cmd.next, nil);
+            }
+        }];
+    }];
+    
+    [client sendCommandWrapper:commandWrapper];
+}
+
+// MARK: - Member Mute
+
+- (void)muteMembers:(NSArray<NSString *> *)memberIds
+           callback:(void (^)(NSArray<NSString *> *, NSArray<AVIMOperationFailure *> *, NSError *))callback
+{
+    [self muteOrUnmuteMembers:memberIds isMuteAction:true callback:callback];
+}
+
+- (void)unmuteMembers:(NSArray<NSString *> *)memberIds
+             callback:(void (^)(NSArray<NSString *> *, NSArray<AVIMOperationFailure *> *, NSError *))callback
+{
+    [self muteOrUnmuteMembers:memberIds isMuteAction:false callback:callback];
+}
+
+- (void)muteOrUnmuteMembers:(NSArray<NSString *> *)memberIds
+               isMuteAction:(BOOL)isMuteAction
+                   callback:(void (^)(NSArray<NSString *> *, NSArray<AVIMOperationFailure *> *, NSError *))callback
+{
+    AVIMClient *client = self.imClient;
+    NSString *conversationId = self.conversationId;
+    
+    if (!client || !conversationId) {
+        
+        [self invokeInSpecifiedQueue:^{
+            
+            NSError *error = nil;
+            
+            if (!conversationId) {
+                
+                error = AVIMConversation_ParameterInvalidError(@"conversationId invalid.");
+                
+            } else {
+                
+                error = AVIMConversation_ParameterInvalidError(@"imClient invalid.");
+            }
+            
+            callback(nil, nil, error);
+        }];
+        
+        return;
+    }
+    
+    LCIMProtobufCommandWrapper *commandWrapper = ({
+        
+        AVIMGenericCommand *outCommand = [AVIMGenericCommand new];
+        AVIMConvCommand *convCommand = [AVIMConvCommand new];
+        
+        outCommand.cmd = AVIMCommandType_Conv;
+        outCommand.op = (isMuteAction ? AVIMOpType_AddShutup : AVIMOpType_RemoveShutup);
+        outCommand.convMessage = convCommand;
+        
+        convCommand.cid = conversationId;
+        convCommand.mArray = memberIds.mutableCopy;
+        
+        LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+        commandWrapper.outCommand = outCommand;
+        
+        commandWrapper;
+    });
+    
+    [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+        
+        [self invokeInSpecifiedQueue:^{
+            
+            if (commandWrapper.error) {
+                
+                callback(nil, nil, commandWrapper.error);
+                
+            } else {
+                
+                AVIMConvCommand *cmd = commandWrapper.inCommand.convMessage;
+                
+                NSArray<NSString *> *allowedPids = cmd.allowedPidsArray ?: @[];
+                
+                NSMutableArray<AVIMOperationFailure *> *failedPids = [NSMutableArray array];
+                
+                for (AVIMErrorCommand *errorCommand in cmd.failedPidsArray) {
+                    AVIMOperationFailure *failedResult = [AVIMOperationFailure new];
+                    failedResult.code = errorCommand.code;
+                    failedResult.reason = errorCommand.reason;
+                    failedResult.clientIds = errorCommand.pidsArray;
+                    [failedPids addObject:failedResult];
+                }
+                
+                callback(allowedPids, failedPids, nil);
+            }
+        }];
+    }];
+    
+    [client sendCommandWrapper:commandWrapper];
+}
+
+- (void)queryMutedMembersWithLimit:(NSInteger)limit
+                              next:(NSString * _Nullable)next
+                          callback:(void (^)(NSArray<NSString *> *, NSString *, NSError *))callback
+{
+    AVIMClient *client = self.imClient;
+    NSString *conversationId = self.conversationId;
+    
+    if (!client || !conversationId) {
+        
+        [self invokeInSpecifiedQueue:^{
+            
+            NSError *error = nil;
+            
+            if (!conversationId) {
+                
+                error = AVIMConversation_ParameterInvalidError(@"conversationId invalid.");
+                
+            } else {
+                
+                error = AVIMConversation_ParameterInvalidError(@"imClient invalid.");
+            }
+            
+            callback(nil, nil, error);
+        }];
+        
+        return;
+    }
+    
+    LCIMProtobufCommandWrapper *commandWrapper = ({
+        
+        AVIMGenericCommand *outCommand = [AVIMGenericCommand new];
+        AVIMConvCommand *convCommand = [AVIMConvCommand new];
+        
+        outCommand.cmd = AVIMCommandType_Conv;
+        outCommand.op = AVIMOpType_QueryShutup;
+        outCommand.convMessage = convCommand;
+        
+        convCommand.cid = conversationId;
+        convCommand.limit = ({
+            int32_t number;
+            if (limit <= 0) {
+                number = 50;
+            }
+            else if (limit > 100) {
+                number = 100;
+            }
+            else {
+                number = (int32_t)limit;
+            }
+            number;
+        });
+        convCommand.next = ([next isEqualToString:@""] ? nil : next);
+        
+        LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+        commandWrapper.outCommand = outCommand;
+        
+        commandWrapper;
+    });
+    
+    [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+        
+        [self invokeInSpecifiedQueue:^{
+            
+            if (commandWrapper.error) {
+                
+                callback(nil, nil, commandWrapper.error);
+                
+            } else {
+                
+                AVIMConvCommand *cmd = commandWrapper.inCommand.convMessage;
+                
+                callback(cmd.mArray, cmd.next, nil);
+            }
+        }];
+    }];
+    
+    [client sendCommandWrapper:commandWrapper];
 }
 
 #pragma mark - Keyed Conversation

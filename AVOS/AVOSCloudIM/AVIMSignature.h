@@ -10,6 +10,49 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NSString * const AVIMSignatureAction NS_STRING_ENUM;
+
+/*
+ Related Method:
+ AVIMClient -[openWithCallback:]
+ AVIMClient -[openWithOption:callback:]
+ */
+extern AVIMSignatureAction AVIMSignatureActionOpen;
+
+/*
+ Related Method:
+ AVIMClient -[createConversationWithName:clientIds:callback:]
+ AVIMClient -[createChatRoomWithName:attributes:callback:]
+ AVIMClient -[createTemporaryConversationWithClientIds:timeToLive:callback:]
+ AVIMClient -[createConversationWithName:clientIds:attributes:options:callback:]
+ AVIMClient -[createConversationWithName:clientIds:attributes:options:temporaryTTL:callback:]
+ */
+extern AVIMSignatureAction AVIMSignatureActionStart;
+
+/*
+ Related Method:
+ AVIMConversation -[addMembersWithClientIds:callback:]
+ */
+extern AVIMSignatureAction AVIMSignatureActionAdd;
+
+/*
+ Related Method:
+ AVIMConversation -[removeMembersWithClientIds:callback:]
+ */
+extern AVIMSignatureAction AVIMSignatureActionRemove;
+
+/*
+ Related Method:
+ AVIMConversation -[blockMembers::callback:]
+ */
+extern AVIMSignatureAction AVIMSignatureActionBlock;
+
+/*
+ Related Method:
+ AVIMConversation -[unblockMembers:callback:]
+ */
+extern AVIMSignatureAction AVIMSignatureActionUnblock;
+
 @interface AVIMSignature : NSObject
 
 /**
@@ -41,20 +84,14 @@ NS_ASSUME_NONNULL_BEGIN
  对一个操作进行签名. 注意:本调用会在后台线程被执行
  @param clientId - 操作发起人的 id
  @param conversationId － 操作所属对话的 id
- @param action － 操作的种类，分为：
-            "open": 表示登录一个账户
-            "start": 表示创建一个对话
-            "add": 表示邀请自己或其他人加入对话
-            "remove": 表示从对话中踢出部分人
- @attention 这里的 action 并不对应签名中的 action 常量，详细的签名方法请参考文档：https://leancloud.cn/docs/realtime_v2.html#%E5%BC%80%E5%90%AF%E5%AF%B9%E8%AF%9D%E7%AD%BE%E5%90%8D
-
+ @param action － @see AVIMSignatureAction
  @param clientIds － 操作目标的 id 列表
  @return 一个 AVIMSignature 签名对象.
  */
 - (AVIMSignature *)signatureWithClientId:(NSString *)clientId
-                          conversationId:(nullable NSString *)conversationId
-                                  action:(NSString *)action
-                       actionOnClientIds:(nullable NSArray *)clientIds;
+                          conversationId:(NSString * _Nullable)conversationId
+                                  action:(AVIMSignatureAction)action
+                       actionOnClientIds:(NSArray<NSString *> * _Nullable)clientIds;
 @end
 
 NS_ASSUME_NONNULL_END

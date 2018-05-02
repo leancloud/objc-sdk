@@ -8,6 +8,13 @@
 
 #import "AVIMSignature.h"
 
+AVIMSignatureAction AVIMSignatureActionOpen = @"open";
+AVIMSignatureAction AVIMSignatureActionStart = @"start";
+AVIMSignatureAction AVIMSignatureActionAdd = @"invite";
+AVIMSignatureAction AVIMSignatureActionRemove = @"kick";
+AVIMSignatureAction AVIMSignatureActionBlock = @"block";
+AVIMSignatureAction AVIMSignatureActionUnblock = @"unblock";
+
 @implementation AVIMSignature
 
 @end

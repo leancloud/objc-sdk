@@ -1021,6 +1021,12 @@
 		9AE76C551C3F7CC600325902 /* AVIMCommandCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD143771BD8C6CE0022652C /* AVIMCommandCommon.h */; };
 		9AE76C561C3F7CC600325902 /* AVIMDynamicObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD651D31BD9470900C55F85 /* AVIMDynamicObject.h */; };
 		9AE76C571C3F7CC600325902 /* AVIMDynamicObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD651D41BD9470900C55F85 /* AVIMDynamicObject.m */; };
+		D305470F208F2F7200B547B9 /* AVCloud_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D305470E208F2F7200B547B9 /* AVCloud_TestCase.swift */; };
+		D3054710208F2F7200B547B9 /* AVCloud_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D305470E208F2F7200B547B9 /* AVCloud_TestCase.swift */; };
+		D3054712208F301C00B547B9 /* AVIMClient_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3054711208F301B00B547B9 /* AVIMClient_TestCase.swift */; };
+		D3054713208F301C00B547B9 /* AVIMClient_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3054711208F301B00B547B9 /* AVIMClient_TestCase.swift */; };
+		D3054715208F302D00B547B9 /* AVIMConversation_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3054714208F302D00B547B9 /* AVIMConversation_TestCase.swift */; };
+		D3054716208F302D00B547B9 /* AVIMConversation_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3054714208F302D00B547B9 /* AVIMConversation_TestCase.swift */; };
 		D3078A6620105E9E00A4C5FD /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
 		D3078A6720105E9F00A4C5FD /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
 		D3078A6820105EA000A4C5FD /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
@@ -1049,24 +1055,16 @@
 		D3472E202015CBC200AAD65F /* AVFile_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3472E1E2015CBC200AAD65F /* AVFile_TestCase.swift */; };
 		D34FD72C2068CFE900B7C11B /* AVLiveQuery_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34FD72B2068CFE900B7C11B /* AVLiveQuery_Internal.h */; };
 		D34FD72D2068CFE900B7C11B /* AVLiveQuery_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34FD72B2068CFE900B7C11B /* AVLiveQuery_Internal.h */; };
-		D36A1E0A1FF246C2006EFB5F /* LCIMTestCaseConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */; };
-		D36A1E0B1FF246C2006EFB5F /* LCIMTestCaseConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */; };
 		D36AC7691FFF50AB00BDCA24 /* AVInstallation_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36AC7681FFF50AB00BDCA24 /* AVInstallation_TestCase.swift */; };
 		D36AC76A1FFF50AB00BDCA24 /* AVInstallation_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36AC7681FFF50AB00BDCA24 /* AVInstallation_TestCase.swift */; };
 		D37A04671FF36E6200AD44A9 /* testVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D37A04661FF36E6200AD44A9 /* testVideo.mp4 */; };
 		D37A04681FF36E6200AD44A9 /* testVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D37A04661FF36E6200AD44A9 /* testVideo.mp4 */; };
 		D37A046A1FF3705500AD44A9 /* testFile.md in Resources */ = {isa = PBXBuildFile; fileRef = D37A04691FF3705500AD44A9 /* testFile.md */; };
 		D37A046B1FF3705500AD44A9 /* testFile.md in Resources */ = {isa = PBXBuildFile; fileRef = D37A04691FF3705500AD44A9 /* testFile.md */; };
-		D37CD4111FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */; };
-		D37CD4121FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */; };
-		D3C271372052760200B3B5E7 /* Multi_Clients_Interact_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C271362052760200B3B5E7 /* Multi_Clients_Interact_TestCase.swift */; };
-		D3C271382052760200B3B5E7 /* Multi_Clients_Interact_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C271362052760200B3B5E7 /* Multi_Clients_Interact_TestCase.swift */; };
 		D3CC90CB2069E5BB0082EFD4 /* AVObject_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CC90CA2069E5BB0082EFD4 /* AVObject_TestCase.swift */; };
 		D3CC90CC2069E5BB0082EFD4 /* AVObject_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CC90CA2069E5BB0082EFD4 /* AVObject_TestCase.swift */; };
 		D3CDF4EB1FE8F3810033153E /* LCIMTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */; };
 		D3CDF4EC1FE8F3810033153E /* LCIMTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */; };
-		D3CDF4F01FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */; };
-		D3CDF4F11FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1513,6 +1511,9 @@
 		9AD392491BFD7BE600D28074 /* MessagesProtoOrig.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessagesProtoOrig.pbobjc.m; sourceTree = "<group>"; };
 		9AD651D31BD9470900C55F85 /* AVIMDynamicObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMDynamicObject.h; sourceTree = "<group>"; };
 		9AD651D41BD9470900C55F85 /* AVIMDynamicObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMDynamicObject.m; sourceTree = "<group>"; };
+		D305470E208F2F7200B547B9 /* AVCloud_TestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVCloud_TestCase.swift; sourceTree = "<group>"; };
+		D3054711208F301B00B547B9 /* AVIMClient_TestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVIMClient_TestCase.swift; sourceTree = "<group>"; };
+		D3054714208F302D00B547B9 /* AVIMConversation_TestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVIMConversation_TestCase.swift; sourceTree = "<group>"; };
 		D3078A5A201041B200A4C5FD /* AVOSCloudLiveQuery.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = AVOSCloudLiveQuery.podspec; path = ../AVOSCloudLiveQuery.podspec; sourceTree = "<group>"; };
 		D3078A5B201041B200A4C5FD /* AVOSCloud.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = AVOSCloud.podspec; path = ../AVOSCloud.podspec; sourceTree = "<group>"; };
 		D3078A5C201041B200A4C5FD /* AVOSCloudIMGroupChat.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = AVOSCloudIMGroupChat.podspec; path = ../AVOSCloudIMGroupChat.podspec; sourceTree = "<group>"; };
@@ -1538,15 +1539,11 @@
 		D341F2A22018B6DB00408778 /* _10_MB_.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = _10_MB_.png; sourceTree = "<group>"; };
 		D3472E1E2015CBC200AAD65F /* AVFile_TestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVFile_TestCase.swift; sourceTree = "<group>"; };
 		D34FD72B2068CFE900B7C11B /* AVLiveQuery_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVLiveQuery_Internal.h; sourceTree = "<group>"; };
-		D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseConversation.swift; sourceTree = "<group>"; };
 		D36AC7681FFF50AB00BDCA24 /* AVInstallation_TestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVInstallation_TestCase.swift; sourceTree = "<group>"; };
 		D37A04661FF36E6200AD44A9 /* testVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = testVideo.mp4; sourceTree = "<group>"; };
 		D37A04691FF3705500AD44A9 /* testFile.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = testFile.md; sourceTree = "<group>"; };
-		D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseQuery.swift; sourceTree = "<group>"; };
-		D3C271362052760200B3B5E7 /* Multi_Clients_Interact_TestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Multi_Clients_Interact_TestCase.swift; sourceTree = "<group>"; };
 		D3CC90CA2069E5BB0082EFD4 /* AVObject_TestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVObject_TestCase.swift; sourceTree = "<group>"; };
 		D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestBase.swift; sourceTree = "<group>"; };
-		D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCaseClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2478,6 +2475,7 @@
 				D30DF3F61FDE2CD200F932BC /* AVUser_TestCase.swift */,
 				D36AC7681FFF50AB00BDCA24 /* AVInstallation_TestCase.swift */,
 				D3472E1E2015CBC200AAD65F /* AVFile_TestCase.swift */,
+				D305470E208F2F7200B547B9 /* AVCloud_TestCase.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -2511,10 +2509,8 @@
 				D30DF4111FDE38EE00F932BC /* AVOSCloudIM-iOSTests-Bridging-Header.h */,
 				D30DF4121FDE38EE00F932BC /* AVOSCloudIM-macOSTests-Bridging-Header.h */,
 				D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */,
-				D3CDF4EF1FE8F5830033153E /* LCIMTestCaseClient.swift */,
-				D37CD4101FF0EB9100187AC1 /* LCIMTestCaseQuery.swift */,
-				D36A1E091FF246C2006EFB5F /* LCIMTestCaseConversation.swift */,
-				D3C271362052760200B3B5E7 /* Multi_Clients_Interact_TestCase.swift */,
+				D3054711208F301B00B547B9 /* AVIMClient_TestCase.swift */,
+				D3054714208F302D00B547B9 /* AVIMConversation_TestCase.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -3812,12 +3808,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3054713208F301C00B547B9 /* AVIMClient_TestCase.swift in Sources */,
+				D3054716208F302D00B547B9 /* AVIMConversation_TestCase.swift in Sources */,
 				D3CDF4EC1FE8F3810033153E /* LCIMTestBase.swift in Sources */,
-				D37CD4121FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */,
-				D3C271382052760200B3B5E7 /* Multi_Clients_Interact_TestCase.swift in Sources */,
-				D36A1E0B1FF246C2006EFB5F /* LCIMTestCaseConversation.swift in Sources */,
 				D3078A6720105E9F00A4C5FD /* LCTestBase.swift in Sources */,
-				D3CDF4F11FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3898,6 +3892,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3054710208F2F7200B547B9 /* AVCloud_TestCase.swift in Sources */,
 				D30DF3F81FDE2CD200F932BC /* AVUser_TestCase.swift in Sources */,
 				D30DF4171FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 				D36AC76A1FFF50AB00BDCA24 /* AVInstallation_TestCase.swift in Sources */,
@@ -4168,6 +4163,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D305470F208F2F7200B547B9 /* AVCloud_TestCase.swift in Sources */,
 				D30DF3F71FDE2CD200F932BC /* AVUser_TestCase.swift in Sources */,
 				D30DF4161FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 				D36AC7691FFF50AB00BDCA24 /* AVInstallation_TestCase.swift in Sources */,
@@ -4256,12 +4252,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3054712208F301C00B547B9 /* AVIMClient_TestCase.swift in Sources */,
+				D3054715208F302D00B547B9 /* AVIMConversation_TestCase.swift in Sources */,
 				D3CDF4EB1FE8F3810033153E /* LCIMTestBase.swift in Sources */,
-				D37CD4111FF0EB9100187AC1 /* LCIMTestCaseQuery.swift in Sources */,
-				D3C271372052760200B3B5E7 /* Multi_Clients_Interact_TestCase.swift in Sources */,
-				D36A1E0A1FF246C2006EFB5F /* LCIMTestCaseConversation.swift in Sources */,
 				D3078A6620105E9E00A4C5FD /* LCTestBase.swift in Sources */,
-				D3CDF4F01FE8F5830033153E /* LCIMTestCaseClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,6 +15,8 @@
 
 extern NSInteger const kLC_Code_SessionTokenExpired;
 
+extern NSString * const kTemporaryConversationIdPrefix;
+
 @interface AVIMClient () <AVIMWebSocketWrapperDelegate>
 
 + (NSMutableDictionary *)_userOptions;
@@ -57,7 +59,7 @@ extern NSInteger const kLC_Code_SessionTokenExpired;
 - (void)addOperationToInternalSerialQueue:(void (^)(AVIMClient *client))block;
 
 - (void)getSignatureWithConversationId:(NSString *)conversationId
-                                action:(NSString *)action
+                                action:(AVIMSignatureAction)action
                      actionOnClientIds:(NSArray<NSString *> *)actionOnClientIds
                               callback:(void (^)(AVIMSignature *signature))callback;
 
