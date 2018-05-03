@@ -54,8 +54,7 @@ static BOOL is_sync_callback(dispatch_queue_t queue)
     return [AVUser userTag];
 }
 
-+(void)changeCurrentUser:(AVUser *)newUser
-                    save:(BOOL)save
++ (void)changeCurrentUser:(AVUser *)newUser save:(BOOL)save
 {
     if (newUser && save) {
         NSMutableDictionary * json = [newUser userDictionaryForCache];
@@ -72,31 +71,31 @@ static BOOL is_sync_callback(dispatch_queue_t queue)
 
 + (instancetype)currentUser
 {
-    AVUser * u = [AVPaasClient sharedInstance].currentUser;
-    if (u) {
-        return u;
+    AVUser *user = [AVPaasClient sharedInstance].currentUser;
+    if (user) {
+        return user;
     } else if ([AVPersistenceUtils fileExist:[AVPersistenceUtils currentUserArchivePath]]) {
         NSMutableDictionary *userDict = [NSMutableDictionary dictionaryWithDictionary:[AVPersistenceUtils getJSONFromPath:[AVPersistenceUtils currentUserArchivePath]]];
         if (userDict) {
             if ([AVPersistenceUtils fileExist:[AVPersistenceUtils currentUserClassArchivePath]]) {
                 NSDictionary *classDict = [AVPersistenceUtils getJSONFromPath:[AVPersistenceUtils currentUserClassArchivePath]];
-                u = [NSClassFromString(classDict[@"class"]) user];
+                user = [NSClassFromString(classDict[@"class"]) user];
             } else {
-                u = [self userOrSubclassUser];
+                user = [self userOrSubclassUser];
             }
             
-            [AVObjectUtils copyDictionary:userDict toObject:u];
-            [AVPaasClient sharedInstance].currentUser = u;
-            return u;
+            [AVObjectUtils copyDictionary:userDict toObject:user];
+            [AVPaasClient sharedInstance].currentUser = user;
+            return user;
         }
     }
     if (!enableAutomatic) {
-        return u;
+        return user;
     }
     
-    AVUser *user = [self userOrSubclassUser];
-    [[self class] changeCurrentUser:user save:NO];
-    return user;
+    AVUser *newUser = [self userOrSubclassUser];
+    [[self class] changeCurrentUser:newUser save:NO];
+    return newUser;
 }
 
 - (void)isAuthenticatedWithSessionToken:(NSString *)sessionToken callback:(AVBooleanResultBlock)callback {
@@ -1306,16 +1305,6 @@ static BOOL is_sync_callback(dispatch_queue_t queue)
 +(NSString *)endPoint
 {
     return @"users";
-}
-
-+(BOOL)isAutomaticUserEnabled
-{
-    return enableAutomatic;
-}
-
-+(void)disableAutomaticUser
-{
-    enableAutomatic = NO;
 }
 
 + (AVUser *)userOrSubclassUser {

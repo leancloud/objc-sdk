@@ -24,8 +24,6 @@
 + (AVUser *)userOrSubclassUser;
 
 + (NSString *)userTag;
-+ (BOOL)isAutomaticUserEnabled;
-+ (void)disableAutomaticUser;
 
 + (NSString *)endPoint;
 - (NSString *)internalClassName;
