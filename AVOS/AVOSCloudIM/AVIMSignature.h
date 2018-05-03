@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NSString * const AVIMSignatureAction NS_STRING_ENUM;
+typedef NSString * const AVIMSignatureAction NS_TYPED_ENUM;
 
 /*
  Related Method:
