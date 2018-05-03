@@ -113,31 +113,6 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     [self->_lock unlock];
 }
 
-- (NSDictionary *)localDataCopy
-{
-    __block NSDictionary *value = nil;
-    [self internalSyncLock:^{
-        value = self->_localData.copy;
-    }];
-    return value;
-}
-
-- (NSMutableDictionary *)localDataMutableCopy
-{
-    __block NSMutableDictionary *value = nil;
-    [self internalSyncLock:^{
-        value = self->_localData.mutableCopy;
-    }];
-    return value;
-}
-
-- (void)updateLocalDataWithKey:(NSString *)key object:(id)object
-{
-    [self internalSyncLock:^{
-        self->_localData[key] = object;
-    }];
-}
-
 #pragma mark - Utils Methods
 
 - (BOOL)isDirty {
@@ -298,7 +273,11 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 -(NSArray *)allArray
 {
-    NSArray * array = @[self.localDataCopy, self.estimatedData, self.relationData];
+    __block NSDictionary *localDataCopy = nil;
+    [self internalSyncLock:^{
+        localDataCopy = self->_localData.copy;
+    }];
+    NSArray * array = @[localDataCopy, self.estimatedData, self.relationData];
     return array;
 }
 
@@ -315,7 +294,11 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 -(id)valueForUndefinedKey:(NSString *)key {
     // search in local data and estimated data
     id object = nil;
-    for (NSDictionary * dict in @[self.localDataCopy, self.estimatedData])
+    __block NSDictionary *localDataCopy = nil;
+    [self internalSyncLock:^{
+        localDataCopy = self->_localData.copy;
+    }];
+    for (NSDictionary * dict in @[localDataCopy, self.estimatedData])
     {
         object = [dict objectForKey:key];
         if (object) {
@@ -528,9 +511,12 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 }
 
 -(NSMutableArray *)createArrayForKey:(NSString *)key {
-    id object = [self.localDataCopy objectForKey:key];
+    __block id object = nil;
     NSMutableArray * array = [NSMutableArray array];
-    [self updateLocalDataWithKey:key object:array];
+    [self internalSyncLock:^{
+        object = self->_localData[key];
+        self->_localData[key] = array;
+    }];
     if (object == nil) {
         return array;
     }
@@ -570,7 +556,11 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
             return NO;
         }
     }
-    NSMutableArray *array = [self findArrayForKey:key inDictionary:self.localDataMutableCopy create:YES];
+    __block NSMutableDictionary *localDataMutableCopy = nil;
+    [self internalSyncLock:^{
+        localDataMutableCopy = self->_localData.mutableCopy;
+    }];
+    NSMutableArray *array = [self findArrayForKey:key inDictionary:localDataMutableCopy create:YES];
     if (unique && [array containsObject:object])
     {
         return NO;
@@ -616,7 +606,11 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 - (void)removeObject:(id)object forKey:(NSString *)key
 {
-    NSMutableArray * array = [self findArrayForKey:key inDictionary:self.localDataMutableCopy create:NO];
+    __block NSMutableDictionary *localDataMutableCopy = nil;
+    [self internalSyncLock:^{
+        localDataMutableCopy = self->_localData.mutableCopy;
+    }];
+    NSMutableArray * array = [self findArrayForKey:key inDictionary:localDataMutableCopy create:NO];
     if (!array) {
         if ([AVUtils containsProperty:key inClass:[self class] containSuper:YES filterDynamic:YES]) {
             array = [self valueForKey:key];
@@ -654,7 +648,10 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 -(BOOL)moveToEstimated:(NSString *)key
 {
-    NSNumber * localNumber = [self.localDataCopy valueForKey:key];
+    __block NSNumber * localNumber = nil;
+    [self internalSyncLock:^{
+        localNumber = self->_localData[key];
+    }];
     NSNumber * estimatedNumber = [self.estimatedData valueForKey:key];
     if (localNumber)
     {
@@ -1048,9 +1045,12 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     if ([internalId isEqualToString:self.uuid]) {
         return self;
     }
-    NSDictionary *localData = self.localDataCopy;
-    for (id key in localData) {
-        id object = localData[key];
+    __block NSDictionary *localDataCopy = nil;
+    [self internalSyncLock:^{
+        localDataCopy = self->_localData.copy;
+    }];
+    for (id key in localDataCopy) {
+        id object = localDataCopy[key];
         if ([object isKindOfClass:[AVObject class]]) {
             if ([visitedObjects containsObject:object]) {
                 continue;
@@ -1100,10 +1100,12 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 }
 
 - (void)iterateLocalDataWithBlock:(void(^)(NSString *key, id object))block {
-    NSDictionary *localData = self.localDataCopy;
-
-    for (NSString *key in localData) {
-        block(key, localData[key]);
+    __block NSDictionary *localDataCopy = nil;
+    [self internalSyncLock:^{
+        localDataCopy = self->_localData.copy;
+    }];
+    for (NSString *key in localDataCopy) {
+        block(key, localDataCopy[key]);
     }
 }
 

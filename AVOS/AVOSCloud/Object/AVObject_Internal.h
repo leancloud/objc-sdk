@@ -56,10 +56,6 @@ NSString *request_object_id(NSDictionary *request) {
 
 - (void)internalSyncLock:(void (^)(void))block;
 
-- (NSDictionary *)localDataCopy;
-
-- (void)updateLocalDataWithKey:(NSString *)key object:(id)object;
-
 -(NSMutableArray *)findArrayForKey:(NSString *)key
                 inDictionary:(NSMutableDictionary *)dict
                       create:(BOOL)create;

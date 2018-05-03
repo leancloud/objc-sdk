@@ -17,9 +17,9 @@
 #import "AVFriendQuery.h"
 #import "AVUtils.h"
 
-NSString *const LeanCloudSocialPlatformWeiBo  = @"weibo";
-NSString *const LeanCloudSocialPlatformQQ     = @"qq";
-NSString *const LeanCloudSocialPlatformWeiXin = @"weixin";
+LeanCloudSocialPlatform LeanCloudSocialPlatformWeiBo  = @"weibo";
+LeanCloudSocialPlatform LeanCloudSocialPlatformQQ     = @"qq";
+LeanCloudSocialPlatform LeanCloudSocialPlatformWeiXin = @"weixin";
 
 static BOOL enableAutomatic = NO;
 
@@ -919,7 +919,7 @@ static BOOL is_sync_callback(dispatch_queue_t queue)
     return query;
 }
 
-// MARK: - SNS
+// MARK: - Auth Data
 
 + (void)loginOrSignUpWithAuthData:(NSDictionary *)authData
                          platform:(NSString *)platform
@@ -1268,12 +1268,17 @@ static BOOL is_sync_callback(dispatch_queue_t queue)
  Avoid session token to be removed after fetching or refreshing.
  */
 - (void)removeLocalData {
-    NSString *sessionToken = self.localDataCopy[@"sessionToken"];
+    __block NSString *sessionToken = nil;
+    [self internalSyncLock:^{
+        sessionToken = self.localData[@"sessionToken"];
+    }];
 
     [super removeLocalData];
 
     if (sessionToken) {
-        [self updateLocalDataWithKey:@"sessionToken" object:sessionToken];
+        [self internalSyncLock:^{
+            self.localData[@"sessionToken"] = sessionToken;
+        }];
     }
 }
 
