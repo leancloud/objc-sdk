@@ -271,41 +271,29 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     [aCoder encodeObject:_relationData forKey:@"relationData"];
 }
 
--(NSArray *)allArray
-{
-    __block NSDictionary *localDataCopy = nil;
-    [self internalSyncLock:^{
-        localDataCopy = self->_localData.copy;
-    }];
-    NSArray * array = @[localDataCopy, self.estimatedData, self.relationData];
-    return array;
-}
-
 - (NSArray *)allKeys
 {
-    NSMutableArray * result = [[NSMutableArray alloc] init];
-    for (NSMutableDictionary * dict in [self allArray])
-    {
-        [result addObjectsFromArray:[dict allKeys]];
-    }
-    return [result copy];
+    __block NSMutableArray *result = [NSMutableArray array];
+    [self internalSyncLock:^{
+        for (NSMutableDictionary *dic in @[self->_localData, self.estimatedData, self.relationData]) {
+            [result addObjectsFromArray:dic.allKeys];
+        }
+    }];
+    return result.copy;
 }
 
 -(id)valueForUndefinedKey:(NSString *)key {
     // search in local data and estimated data
-    id object = nil;
-    __block NSDictionary *localDataCopy = nil;
+    __block id object = nil;
     [self internalSyncLock:^{
-        localDataCopy = self->_localData.copy;
-    }];
-    for (NSDictionary * dict in @[localDataCopy, self.estimatedData])
-    {
-        object = [dict objectForKey:key];
-        if (object) {
-            return object;
+        object = self->_localData[key];
+        if (!object) {
+            object = self.estimatedData[key];
         }
+    }];
+    if (object) {
+        return object;
     }
-    
     // dynamic property
     if ([self.relationData objectForKey:key] != nil) {
         object = [self relationForKey:key];
@@ -401,13 +389,15 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 - (void)removeObjectForKey:(NSString *)key
 {
-    BOOL hasKey = NO;
-    for (NSMutableDictionary *dic in [self allArray]) {
-        if ([dic objectForKey:key]) {
-            hasKey = YES;
+    __block BOOL hasKey = NO;
+    [self internalSyncLock:^{
+        for (NSMutableDictionary *dic in @[self->_localData, self.estimatedData, self.relationData]) {
+            if ([dic objectForKey:key]) {
+                hasKey = YES;
+            }
+            [dic removeObjectForKey:key];
         }
-        [dic removeObjectForKey:key];
-    }
+    }];
     if ([AVUtils containsProperty:key inClass:[self class] containSuper:YES filterDynamic:YES]) {
         /* Create a clean object to produce an empty value. */
         [self setValue:[[[self class] alloc] valueForKey:key] forKey:key];
@@ -556,11 +546,10 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
             return NO;
         }
     }
-    __block NSMutableDictionary *localDataMutableCopy = nil;
+    __block NSMutableArray *array = nil;
     [self internalSyncLock:^{
-        localDataMutableCopy = self->_localData.mutableCopy;
+        array = [self findArrayForKey:key inDictionary:self->_localData create:YES];
     }];
-    NSMutableArray *array = [self findArrayForKey:key inDictionary:localDataMutableCopy create:YES];
     if (unique && [array containsObject:object])
     {
         return NO;
@@ -606,11 +595,10 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 - (void)removeObject:(id)object forKey:(NSString *)key
 {
-    __block NSMutableDictionary *localDataMutableCopy = nil;
+    __block NSMutableArray * array = nil;
     [self internalSyncLock:^{
-        localDataMutableCopy = self->_localData.mutableCopy;
+        array = [self findArrayForKey:key inDictionary:self->_localData create:NO];
     }];
-    NSMutableArray * array = [self findArrayForKey:key inDictionary:localDataMutableCopy create:NO];
     if (!array) {
         if ([AVUtils containsProperty:key inClass:[self class] containSuper:YES filterDynamic:YES]) {
             array = [self valueForKey:key];
