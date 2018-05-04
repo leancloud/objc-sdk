@@ -13,7 +13,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NSString * const LeanCloudSocialPlatform NS_TYPED_ENUM;
+typedef NSString * const LeanCloudSocialPlatform NS_TYPED_EXTENSIBLE_ENUM;
 extern LeanCloudSocialPlatform LeanCloudSocialPlatformWeiBo;
 extern LeanCloudSocialPlatform LeanCloudSocialPlatformQQ;
 extern LeanCloudSocialPlatform LeanCloudSocialPlatformWeiXin;
