@@ -13,9 +13,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString * const LeanCloudSocialPlatformWeiBo;
-extern NSString * const LeanCloudSocialPlatformQQ;
-extern NSString * const LeanCloudSocialPlatformWeiXin;
+typedef NSString * const LeanCloudSocialPlatform NS_TYPED_EXTENSIBLE_ENUM;
+extern LeanCloudSocialPlatform LeanCloudSocialPlatformWeiBo;
+extern LeanCloudSocialPlatform LeanCloudSocialPlatformQQ;
+extern LeanCloudSocialPlatform LeanCloudSocialPlatformWeiXin;
 
 /*!
 A LeanCloud Framework User Object that is a local representation of a user persisted to the LeanCloud. This class
@@ -35,7 +36,7 @@ A LeanCloud Framework User Object that is a local representation of a user persi
  Gets the currently logged in user from disk and returns an instance of it.
  @return a AVUser that is the currently logged in user. If there is none, returns nil.
  */
-+ (nullable instancetype)currentUser;
++ (instancetype _Nullable)currentUser;
 
 /*!
  * change the current login user manually.
@@ -43,8 +44,7 @@ A LeanCloud Framework User Object that is a local representation of a user persi
  *  @param save 是否需要把 newUser 保存到本地缓存。如果 newUser==nil && save==YES，则会清除本地缓存
  * Note: 请注意不要随意调用这个函数！
  */
-+(void)changeCurrentUser:(nullable AVUser *)newUser
-                    save:(BOOL)save;
++ (void)changeCurrentUser:(AVUser * _Nullable)newUser save:(BOOL)save;
 
 /// The session token for the AVUser. This is set by the server upon successful authentication.
 @property (nonatomic, copy, nullable) NSString *sessionToken;

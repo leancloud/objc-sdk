@@ -387,6 +387,7 @@ class AVIMClient_TestCase: LCIMTestBase {
 
 class AVIMClientDelegate_TestCase: NSObject, AVIMClientDelegate {
     
+    var updateByClosure: ((AVIMConversation, Date?, String?, [AnyHashable : Any]?) -> Void)?
     var invitedByClosure: ((AVIMConversation, String?) -> Void)?
     var kickedByClosure: ((AVIMConversation, String?) -> Void)?
     var membersAddedClosure: ((AVIMConversation, [String]?, String?) -> Void)?
@@ -405,6 +406,10 @@ class AVIMClientDelegate_TestCase: NSObject, AVIMClientDelegate {
     func imClientResuming(_ imClient: AVIMClient) {}
     func imClientResumed(_ imClient: AVIMClient) {}
     func imClientClosed(_ imClient: AVIMClient, error: Error?) {}
+    
+    func conversation(_ conversation: AVIMConversation, didUpdateAt date: Date?, byClientId clientId: String?, updatedData data: [AnyHashable : Any]?) {
+        self.updateByClosure?(conversation, date, clientId, data)
+    }
     
     func conversation(_ conversation: AVIMConversation, invitedByClientId clientId: String?) {
         self.invitedByClosure?(conversation, clientId)
