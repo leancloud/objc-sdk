@@ -10,7 +10,7 @@ import XCTest
 
 class AVObject_TestCase: LCTestBase {
     
-    func test_associate_AVFile_save() {
+    func test_save_associate_file_object() {
         
         self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             

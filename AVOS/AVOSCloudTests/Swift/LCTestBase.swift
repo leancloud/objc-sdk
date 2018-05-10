@@ -65,7 +65,7 @@ class LCTestBase: XCTestCase {
         
         super.setUp()
         
-        let region: TestRegion = .ConversationMemberInfo
+        let region: TestRegion = .CN_North
         
         let appInfo: (id: String, key: String) = region.appInfo
         
@@ -155,26 +155,17 @@ class RunLoopSemaphore {
     
     var semaphoreValue: Int = 0
     
-    @discardableResult func increment(_ number: Int = 1) -> RunLoopSemaphore {
-        
+    func increment(_ number: Int = 1) {
         assert(number > 0)
-        
         self.semaphoreValue += number
-        
-        return self
     }
     
-    @discardableResult func decrement(_ number: Int = 1) -> RunLoopSemaphore {
-        
+    func decrement(_ number: Int = 1) {
         assert(number > 0)
-        
         self.semaphoreValue -= number
-        
-        return self
     }
     
     fileprivate func waiting() -> Bool {
-        
         return (self.semaphoreValue > 0) ? true : false
     }
     
