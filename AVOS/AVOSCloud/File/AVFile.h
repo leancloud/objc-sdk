@@ -325,14 +325,6 @@ typedef NS_OPTIONS(NSUInteger, AVFileDownloadOption) {
  */
 + (AVFileQuery *)query;
 
-// MARK: - Other
-
-/**
- Use a internal lock to ensure Thread-Safe.
- Default is True.
- */
-+ (void)setEnabledLock:(BOOL)isEnabledLock;
-
 // MARK: - Deprecated
 
 - (void)saveInBackgroundWithBlock:(void (^)(BOOL succeeded, NSError * _Nullable error))block
