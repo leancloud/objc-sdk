@@ -14,7 +14,7 @@ class AVIMClient_TestCase: LCIMTestBase {
     
     func test_client_open_with_avuser() {
         
-        var aUser: AVUser! = nil;
+        var aUser: AVUser! = nil
         
         self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
@@ -43,7 +43,7 @@ class AVIMClient_TestCase: LCIMTestBase {
                         
                         if let _ = user?.objectId, let _ = user?.sessionToken {
                             
-                            aUser = user;
+                            aUser = user
                         }
                     })
                     
@@ -56,7 +56,7 @@ class AVIMClient_TestCase: LCIMTestBase {
                     
                     if let _ = user.objectId, let _ = user.sessionToken {
                         
-                        aUser = user;
+                        aUser = user
                     }
                 }
             })
@@ -92,7 +92,7 @@ class AVIMClient_TestCase: LCIMTestBase {
         })
     }
     
-    // MARK: - Temporary Conversation
+    // MARK: - Create Conversation
     
     func test_create_temp_conv() {
         
@@ -190,154 +190,9 @@ class AVIMClient_TestCase: LCIMTestBase {
         self.recycleClient(client_2)
     }
     
-    func test_client_create_conversation() {
-        
-        guard let client: AVIMClient = self.newOpenedClient(clientId: "\(#function)\(#line)") else {
-            XCTFail()
-            return
-        }
-        
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
-            
-            semaphore.increment()
-            
-            client.createConversation(withName: nil, clientIds: [], attributes: nil, options: [], temporaryTTL: 0, callback: { (conversation: AVIMConversation?, error: Error?) in
-                
-                semaphore.decrement()
-                XCTAssertTrue(Thread.isMainThread)
-                
-                XCTAssertNotNil(conversation)
-                XCTAssertNotNil(conversation?.conversationId)
-                XCTAssertTrue(conversation?.isMember(of: AVIMConversation.self) == true)
-                XCTAssertNil(error)
-            })
-            
-        }, failure: {
-            
-            XCTFail("timeout")
-        })
-        
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
-            
-            let name: String = "\(#function)\(#line)"
-            let clientId: String = "\(#function)\(#line)"
-            let testKey: String = "\(#function)\(#line)"
-            let testValue: String = "\(#function)\(#line)"
-            let attributes: [String : Any] = [testKey : testValue]
-            
-            semaphore.increment()
-            semaphore.increment()
-            
-            client.createConversation(withName: name, clientIds: [clientId], attributes: attributes, options: [], temporaryTTL: 0, callback: { (conversation: AVIMConversation?, error: Error?) in
-                
-                semaphore.decrement()
-                XCTAssertTrue(Thread.isMainThread)
-                
-                XCTAssertNotNil(conversation)
-                XCTAssertNotNil(conversation?.conversationId)
-                XCTAssertTrue(conversation?.isMember(of: AVIMConversation.self) == true)
-                XCTAssertNil(error)
-                
-                if let conversationId: String = conversation?.conversationId {
-                    
-                    client.conversationQuery().getConversationById(conversationId, callback: { (conversation: AVIMConversation?, error: Error?) in
-                        
-                        semaphore.decrement()
-                        XCTAssertTrue(Thread.isMainThread)
-                        
-                        XCTAssertNotNil(conversation)
-                        XCTAssertEqual(conversationId, conversation?.conversationId)
-                        XCTAssertTrue(conversation?.isMember(of: AVIMConversation.self) == true)
-                        XCTAssertNil(error)
-                        
-                        XCTAssertEqual(name, conversation?.name)
-                        XCTAssertTrue( ((conversation?.members as? [String])?.count == 2) &&
-                            ((conversation?.members as? [String])?.contains(clientId) == true) &&
-                            ((conversation?.members as? [String])?.contains(client.clientId) == true)
-                        )
-                        XCTAssertTrue( (conversation?.attributes?.count == 1) &&
-                            ((conversation?.attributes?.keys.first as? String) == testKey) &&
-                            ((conversation?.attributes?[testKey] as? String) == testValue)
-                        )
-                    })
-                    
-                } else {
-                    
-                    XCTFail()
-                }
-            })
-            
-        }, failure: {
-            
-            XCTFail("timeout")
-        })
-        
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
-            
-            semaphore.increment()
-            
-            client.createConversation(withName: nil, clientIds: [], attributes: nil, options: [.transient], temporaryTTL: 0, callback: { (conversation: AVIMConversation?, error: Error?) in
-                
-                semaphore.decrement()
-                XCTAssertTrue(Thread.isMainThread)
-                
-                XCTAssertNotNil(conversation)
-                XCTAssertNotNil(conversation?.conversationId)
-                XCTAssertTrue(conversation?.isMember(of: AVIMChatRoom.self) == true)
-                XCTAssertNil(error)
-            })
-            
-        }, failure: {
-            
-            XCTFail("timeout")
-        })
-        
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
-            
-            semaphore.increment()
-            
-            client.createConversation(withName: nil, clientIds: [], attributes: nil, options: [.temporary], temporaryTTL: 0, callback: { (conversation: AVIMConversation?, error: Error?) in
-                
-                semaphore.decrement()
-                XCTAssertTrue(Thread.isMainThread)
-                
-                XCTAssertNotNil(conversation)
-                XCTAssertNotNil(conversation?.conversationId)
-                XCTAssertTrue(conversation?.isMember(of: AVIMTemporaryConversation.self) == true)
-                XCTAssertTrue((conversation?.temporaryTTL ?? 0) > 0)
-                XCTAssertNil(error)
-            })
-            
-        }, failure: {
-            
-            XCTFail("timeout")
-        })
-        
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
-            
-            semaphore.increment()
-            
-            client.createConversation(withName: nil, clientIds: [], attributes: nil, options: [.unique], temporaryTTL: 0, callback: { (conversation: AVIMConversation?, error: Error?) in
-                
-                semaphore.decrement()
-                XCTAssertTrue(Thread.isMainThread)
-                
-                XCTAssertNotNil(conversation)
-                XCTAssertNotNil(conversation?.conversationId)
-                XCTAssertNotNil(conversation?.uniqueId)
-                XCTAssertTrue(conversation?.isMember(of: AVIMConversation.self) == true)
-                XCTAssertNil(error)
-            })
-            
-        }, failure: {
-            
-            XCTFail("timeout")
-        })
-        
-        self.recycleClient(client)
-    }
+    // MARK: - Session Token
     
-    func test_client_refresh_session_token() {
+    func test_refresh_session_token() {
         
         guard let client: AVIMClient = self.newOpenedClient(clientId: "\(#function)\(#line)") else {
             XCTFail()
@@ -383,10 +238,67 @@ class AVIMClient_TestCase: LCIMTestBase {
         self.recycleClient(client)
     }
     
+    // MARK: - Session Conflict
+    
+    func test_session_conflict() {
+        
+        let clientId: String = "\(#function.substring(to: #function.index(of: "(")!))"
+        let tag: String = "tag"
+        
+        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let installation_1: AVInstallation = AVInstallation()
+        installation_1.deviceToken = UUID().uuidString
+        guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientId, tag: tag, delegate: delegate_1, installation: installation_1) else {
+            XCTFail()
+            return
+        }
+        
+        var _client_2: AVIMClient? = nil
+        
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            
+            semaphore.increment(2)
+            
+            delegate_1.didOfflineClosure = { (client: AVIMClient, error: Error?) in
+                
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertNotNil(error)
+                let _err: NSError? = error as NSError?
+                XCTAssertEqual(_err?.code, 4111)
+                XCTAssertEqual(_err?.domain, kLeanCloudErrorDomain)
+            }
+            
+            let installation_2: AVInstallation = AVInstallation()
+            installation_2.deviceToken = UUID().uuidString
+            let client_2: AVIMClient = AVIMClient(clientId: clientId, tag: tag, installation: installation_2)
+            
+            client_2.open(with: .forceOpen, callback: { (succeeded: Bool, error: Error?) in
+                
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                
+                _client_2 = succeeded ? client_2 : nil
+            })
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
+        
+        self.recycleClient(_client_2)
+        self.recycleClient(client_1)
+    }
+    
 }
 
 class AVIMClientDelegate_TestCase: NSObject, AVIMClientDelegate {
     
+    var didOfflineClosure: ((AVIMClient, Error?) -> Void)?
     var updateByClosure: ((AVIMConversation, Date?, String?, [AnyHashable : Any]?) -> Void)?
     var invitedByClosure: ((AVIMConversation, String?) -> Void)?
     var kickedByClosure: ((AVIMConversation, String?) -> Void)?
@@ -406,6 +318,10 @@ class AVIMClientDelegate_TestCase: NSObject, AVIMClientDelegate {
     func imClientResuming(_ imClient: AVIMClient) {}
     func imClientResumed(_ imClient: AVIMClient) {}
     func imClientClosed(_ imClient: AVIMClient, error: Error?) {}
+    
+    func client(_ client: AVIMClient, didOfflineWithError error: Error?) {
+        self.didOfflineClosure?(client, error)
+    }
     
     func conversation(_ conversation: AVIMConversation, didUpdateAt date: Date?, byClientId clientId: String?, updatedData data: [AnyHashable : Any]?) {
         self.updateByClosure?(conversation, date, clientId, data)

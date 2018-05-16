@@ -160,7 +160,7 @@
         }];
     }
     if (self.installationId==nil && self.deviceToken==nil) {
-        return [AVErrorUtils errorWithCode:kAVErrorInvalidDeviceToken errorText:@"无法保存Installation数据, 请检查deviceToken是否在`application: didRegisterForRemoteNotificationsWithDeviceToken`方法中正常设置"];
+        return LCError(kAVErrorInvalidDeviceToken, @"无法保存Installation数据, 请检查deviceToken是否在`application: didRegisterForRemoteNotificationsWithDeviceToken`方法中正常设置", nil);
     }
 
     return nil;

@@ -32,7 +32,7 @@ static NSString * const kLCFile___source = @"__source";
 static NSString * const kLCFile_bucket = @"bucket";
 
 //### Object ID of File Object ###//
-/// @note Totally, has three Keys to identify 'objectId' in history, @"objectId" is the latest Key.
+/// @note Totally, has three Keys to identify 'objectId' in history, @"objectId" is the latest Key and @"objId" used in IM messages.
 static NSString * const kLCFile_objectId = @"objectId";
 static NSString * const kLCFile_objId = @"objId";
 static NSString * const kLCFile_id = @"id";

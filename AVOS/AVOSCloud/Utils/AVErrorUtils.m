@@ -8,9 +8,10 @@
 
 #import "AVErrorUtils.h"
 #import "AVUtils.h"
-NSString * const kAVErrorDomain = @"AVOS Cloud Error Domain";
-NSString * const kAVErrorUnknownText = @"Error Infomation Unknown";
-NSInteger const kAVErrorUnknownErrorCode = NSIntegerMax;
+
+NSString * const kLeanCloudErrorDomain = @"com.LeanCloud.ErrorDomain";
+NSString * const kLeanCloudRESTAPIResponseError = @"com.leancloud.restapi.response.error";
+
 NSInteger const kAVErrorInternalServer = 1;
 NSInteger const kAVErrorConnectionFailed = 100;
 NSInteger const kAVErrorObjectNotFound = 101;
@@ -119,41 +120,26 @@ NSInteger const kAVErrorFileNotFound = 400;
 /*! File Data not available */
 NSInteger const kAVErrorFileDataNotAvailable = 401;
 
-@implementation AVErrorUtils
-
-+ (NSError *)errorWithCode:(NSInteger)code
+NSError * LCErrorInternal(NSString *failureReason)
 {
-    return [NSError errorWithDomain:kAVErrorDomain
-                               code:code
-                           userInfo:nil];
+    return LCError(kAVErrorInternalServer, failureReason, nil);
 }
 
-+ (NSError *)errorWithText:(NSString *)text
+NSError * LCError(NSInteger code, NSString *failureReason, NSDictionary *userInfo)
 {
-    return [self errorWithCode:0
-                     errorText:text];
+    NSError *error = ({
+        NSMutableDictionary *mutableDictionary = nil;
+        if (userInfo) {
+            mutableDictionary = [NSMutableDictionary dictionaryWithDictionary:userInfo];
+        } else {
+            mutableDictionary = [NSMutableDictionary dictionary];
+        }
+        if (failureReason) {
+            mutableDictionary[NSLocalizedFailureReasonErrorKey] = failureReason;
+        }
+        [NSError errorWithDomain:kLeanCloudErrorDomain
+                            code:code
+                        userInfo:mutableDictionary];
+    });
+    return error;
 }
-
-+ (NSError *)errorWithCode:(NSInteger)code
-                 errorText:(NSString *)text
-{
-    NSDictionary *errorInfo = @{
-                                @"code" : @(code),
-                                @"error" : text
-                                };
-    
-    NSError *err = [NSError errorWithDomain:kAVErrorDomain
-                                       code:code
-                                   userInfo:errorInfo];
-    
-    return err;
-}
-
-+ (NSError *)internalServerError
-{
-    return [NSError errorWithDomain:kAVErrorDomain
-                               code:kAVErrorInternalServer
-                           userInfo:nil];
-}
-
-@end

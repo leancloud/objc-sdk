@@ -10,9 +10,9 @@ import XCTest
 
 class AVFile_TestCase: LCTestBase {
     
-    let remoteURL: URL = URL(string: "http://ac-jmbpc7y4.clouddn.com/d40e9cf44dc5dadf1577.m4a")!
+    let remoteURL: URL = URL(string: "https://lc-nq0awk3l.cn-n1.lcfile.com/yQpOeKBh4V4eJB1xMaRjLgD.png")!
     
-    lazy var smallData: Data = {
+    lazy var smallDataTuple: (data: Data, name: String) = {
         
         let filePath: String = Bundle(for: type(of: self)).path(forResource: "alpacino", ofType: "jpg")!
         
@@ -20,10 +20,10 @@ class AVFile_TestCase: LCTestBase {
         
         let data: Data = try! Data.init(contentsOf: url)
         
-        return data
+        return (data, "image.jpg")
     }()
     
-    lazy var bigData: Data = {
+    lazy var bigDataTuple: (data: Data, name: String) = {
         
         let filePath: String = Bundle(for: type(of: self)).path(forResource: "_10_MB_", ofType: "png")!
         
@@ -31,799 +31,559 @@ class AVFile_TestCase: LCTestBase {
         
         let data: Data = try! Data.init(contentsOf: url)
         
-        return data
+        return (data, "image.png")
     }()
     
-    func test_upload_URL() {
+    func test_upload_remote_url() {
         
-        let t1 = {
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             let remoteURL: URL = self.remoteURL
-            
             let file: AVFile = AVFile(remoteURL: remoteURL)
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            semaphore.increment()
+            
+            file.upload(with: [], progress: nil, completionHandler: { (succeeded: Bool, error: Error?) in
                 
-                semaphore.increment()
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
                 
-                file.upload(with: [], progress: nil, completionHandler: { (succeeded: Bool, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(succeeded)
-                    XCTAssertNil(error)
-                    XCTAssertNotNil(file.objectId())
-                    XCTAssertNotNil(file.url())
-                    XCTAssertEqual(file.url(), remoteURL.absoluteString)
-                })
-                
-            }, failure: {
-                
-                XCTFail("timeout")
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                XCTAssertNotNil(file.objectId())
+                XCTAssertNotNil(file.url())
+                XCTAssertEqual(file.url(), remoteURL.absoluteString)
             })
-        }
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
         
-        t1()
-        
-        let t2 = {
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             let remoteURL: URL = self.remoteURL
-            
+            let file: AVFile = AVFile(remoteURL: remoteURL)
             var hasProgress: Bool = false
             
-            let file: AVFile = AVFile(remoteURL: remoteURL)
+            semaphore.increment()
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            file.upload(with: [], progress: { (number: Int) in
                 
-                semaphore.increment()
+                XCTAssertTrue(Thread.isMainThread)
+                XCTAssertTrue(number >= 0 && number <= 100)
+                hasProgress = true
                 
-                file.upload(with: [], progress: { (number: Int) in
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(number >= 0 && number <= 100)
-                    
-                    hasProgress = true
-                    
-                }, completionHandler: { (succeeded: Bool, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(succeeded)
-                    XCTAssertNil(error)
-                    XCTAssertNotNil(file.objectId())
-                    XCTAssertNotNil(file.url())
-                    XCTAssertEqual(file.url(), remoteURL.absoluteString)
-                })
+            }, completionHandler: { (succeeded: Bool, error: Error?) in
                 
-            }, failure: {
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
                 
-                XCTFail("timeout")
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                XCTAssertNotNil(file.objectId())
+                XCTAssertNotNil(file.url())
+                XCTAssertEqual(file.url(), remoteURL.absoluteString)
+                XCTAssertTrue(hasProgress)
             })
             
-            XCTAssertTrue(hasProgress)
-        }
-        
-        t2()
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
     }
     
     func test_upload_data() {
         
-        let t1 = {
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
-            let uploadData: Data = self.smallData
+            let uploadDataTuple: (data: Data, name: String) = self.smallDataTuple
+            let file: AVFile = AVFile(data: uploadDataTuple.data, name: uploadDataTuple.name)
             
-            let file: AVFile = AVFile(data: uploadData, name: "image.jpg")
+            semaphore.increment()
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            file.upload(with: [], progress: nil, completionHandler: { (succeeded: Bool, error: Error?) in
                 
-                semaphore.increment()
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
                 
-                file.upload(with: [], progress: nil, completionHandler: { (succeeded: Bool, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(succeeded)
-                    XCTAssertNil(error)
-                    XCTAssertNotNil(file.objectId())
-                    XCTAssertNotNil(file.url())
-                    
-                    guard let cachedPath: String = file.persistentCachePath() else {
-                        XCTFail()
-                        return
-                    }
-                    
-                    if FileManager.default.fileExists(atPath: cachedPath) {
-                        
-                        do {
-                            
-                            let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: cachedPath))
-                            XCTAssertEqual(uploadData.count, data.count)
-                            
-                        } catch let err {
-                            
-                            XCTFail("\(err)")
-                        }
-                    } else {
-                        
-                        XCTFail()
-                    }
-                })
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                XCTAssertNotNil(file.objectId())
+                XCTAssertNotNil(file.url())
                 
-            }, failure: {
-                
-                XCTFail("timeout")
+                guard let cachedPath: String = file.persistentCachePath() else {
+                    XCTFail()
+                    return
+                }
+                guard FileManager.default.fileExists(atPath: cachedPath) else {
+                    XCTFail()
+                    return
+                }
+                do {
+                    let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: cachedPath))
+                    XCTAssertEqual(uploadDataTuple.data.count, data.count)
+                } catch let err {
+                    XCTFail("\(err)")
+                }
             })
-        }
-        
-        t1()
-        
-        let t2 = {
             
-            let uploadData: Data = self.bigData
+        }, failure: {
             
-            let file: AVFile = AVFile(data: uploadData, name: "image.png")
-            
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
-                
-                semaphore.increment()
-                
-                file.upload(with: [], progress: nil, completionHandler: { (succeeded: Bool, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(succeeded)
-                    XCTAssertNil(error)
-                    XCTAssertNotNil(file.objectId())
-                    XCTAssertNotNil(file.url())
-                    
-                    guard let cachedPath: String = file.persistentCachePath() else {
-                        XCTFail()
-                        return
-                    }
-                    
-                    if FileManager.default.fileExists(atPath: cachedPath) {
-                        
-                        do {
-                            
-                            let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: cachedPath))
-                            XCTAssertEqual(uploadData.count, data.count)
-                            
-                        } catch let err {
-                            
-                            XCTFail("\(err)")
-                        }
-                    } else {
-                        
-                        XCTFail()
-                    }
-                })
-                
-            }, failure: {
-                
-                XCTFail("timeout")
-            })
-        }
+            XCTFail("timeout")
+        })
         
-        t2()
-        
-        let t3 = {
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
+            let uploaDataTuple: (data: Data, name: String) = self.bigDataTuple
+            let file: AVFile = AVFile(data: uploaDataTuple.data, name: uploaDataTuple.name)
             var hasProgress = false
             
-            let uploaData: Data = self.smallData
+            semaphore.increment()
             
-            let file: AVFile = AVFile(data: uploaData, name: "image.jpg")
-            
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            file.upload(with: [], progress: { (number: Int) in
                 
-                semaphore.increment()
+                XCTAssertTrue(Thread.isMainThread)
+                XCTAssertTrue(number >= 0 && number <= 100)
+                hasProgress = true
                 
-                file.upload(with: [], progress: { (number: Int) in
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(number >= 0 && number <= 100)
-                    
-                    hasProgress = true
-                    
-                }, completionHandler: { (succeeded: Bool, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(succeeded)
-                    XCTAssertNil(error)
-                    XCTAssertNotNil(file.objectId())
-                    XCTAssertNotNil(file.url())
-                    
-                    guard let cachedPath: String = file.persistentCachePath() else {
-                        XCTFail()
-                        return
-                    }
-                    
-                    if FileManager.default.fileExists(atPath: cachedPath) {
-                        
-                        do {
-                            
-                            let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: cachedPath))
-                            XCTAssertEqual(uploaData.count, data.count)
-                            
-                        } catch let err {
-                            
-                            XCTFail("\(err)")
-                        }
-                    } else {
-                        
-                        XCTFail()
-                    }
-                })
+            }, completionHandler: { (succeeded: Bool, error: Error?) in
                 
-            }, failure: {
+                semaphore.decrement()
                 
-                XCTFail("timeout")
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                XCTAssertNotNil(file.objectId())
+                XCTAssertNotNil(file.url())
+                XCTAssertTrue(hasProgress)
+                
+                guard let cachedPath: String = file.persistentCachePath() else {
+                    XCTFail()
+                    return
+                }
+                
+                guard FileManager.default.fileExists(atPath: cachedPath) else {
+                    XCTFail()
+                    return
+                }
+                do {
+                    let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: cachedPath))
+                    XCTAssertEqual(uploaDataTuple.data.count, data.count)
+                } catch let err {
+                    XCTFail("\(err)")
+                }
             })
             
-            XCTAssertTrue(hasProgress)
-        }
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
         
-        t3()
-        
-        let t4 = {
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
-            let uploaData: Data = self.smallData
+            let uploaDataTuple: (data: Data, name: String)  = self.smallDataTuple
+            let file: AVFile = AVFile(data: uploaDataTuple.data, name: uploaDataTuple.name)
             
-            let file: AVFile = AVFile(data: uploaData, name: "image.jpg")
+            semaphore.increment()
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            file.upload(with: [.ignoringCachingData], progress: nil, completionHandler: { (succeeded: Bool, error: Error?) in
                 
-                semaphore.increment()
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
                 
-                file.upload(with: [.ignoringCachingData], progress: nil, completionHandler: { (succeeded: Bool, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(succeeded)
-                    XCTAssertNil(error)
-                    XCTAssertNotNil(file.objectId())
-                    XCTAssertNotNil(file.url())
-                    
-                    guard let cachedPath: String = file.persistentCachePath() else {
-                        XCTFail()
-                        return
-                    }
-                    
-                    XCTAssertFalse(FileManager.default.fileExists(atPath: cachedPath))
-                })
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                XCTAssertNotNil(file.objectId())
+                XCTAssertNotNil(file.url())
                 
-            }, failure: {
-                
-                XCTFail("timeout")
+                guard let cachedPath: String = file.persistentCachePath() else {
+                    XCTFail()
+                    return
+                }
+                XCTAssertFalse(FileManager.default.fileExists(atPath: cachedPath))
             })
-        }
-        
-        t4()
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
     }
     
-    func test_upload_filePath() {
+    func test_upload_file_path() {
         
+        let uploadDataTuple: (data: Data, name: String) = self.bigDataTuple
         let documentsDirectory: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        
-        let filePath: URL = documentsDirectory.appendingPathComponent("_10_MB_.png")
-        
-        let uploadData: Data = self.bigData
-        
+        let filePath: URL = documentsDirectory.appendingPathComponent(uploadDataTuple.name)
         do {
-            
-            try uploadData.write(to: filePath, options: [.atomic])
-            
+            try uploadDataTuple.data.write(to: filePath, options: [.atomic])
         } catch let err {
-            
             XCTFail("\(err)")
         }
-        
         guard FileManager.default.fileExists(atPath: filePath.path) else {
-            
+            XCTFail()
             return
         }
         
-        let t1 = {
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             var file: AVFile! = nil
-            
             do {
-                
                 file = try AVFile(localPath: filePath.path)
-                
             } catch let err {
-                
                 XCTFail("\(err)")
             }
+            guard file != nil else {
+                XCTFail()
+                return
+            }
             
-            guard file != nil else { return }
+            semaphore.increment()
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            file.upload(with: [], progress: nil, completionHandler: { (succeeded: Bool, error: Error?) in
                 
-                semaphore.increment()
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
                 
-                file.upload(with: [], progress: nil, completionHandler: { (succeeded: Bool, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(succeeded)
-                    XCTAssertNil(error)
-                    XCTAssertNotNil(file.objectId())
-                    XCTAssertNotNil(file.url())
-                    
-                    guard let cachedPath: String = file.persistentCachePath() else {
-                        XCTFail()
-                        return
-                    }
-                    
-                    if FileManager.default.fileExists(atPath: cachedPath) {
-                        
-                        do {
-                            
-                            let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: cachedPath))
-                            XCTAssertEqual(uploadData.count, data.count)
-                            
-                        } catch let err {
-                            
-                            XCTFail("\(err)")
-                        }
-                    } else {
-                        
-                        XCTFail()
-                    }
-                })
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                XCTAssertNotNil(file.objectId())
+                XCTAssertNotNil(file.url())
                 
-            }, failure: {
-                
-                XCTFail("timeout")
+                guard let cachedPath: String = file.persistentCachePath() else {
+                    XCTFail()
+                    return
+                }
+                guard FileManager.default.fileExists(atPath: cachedPath) else {
+                    XCTFail()
+                    return
+                }
+                do {
+                    let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: cachedPath))
+                    XCTAssertEqual(uploadDataTuple.data.count, data.count)
+                } catch let err {
+                    XCTFail("\(err)")
+                }
             })
-        }
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
         
-        t1()
-        
-        let t2 = {
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             var file: AVFile! = nil
-            
             do {
-                
                 file = try AVFile(localPath: filePath.path)
-                
             } catch let err {
-                
                 XCTFail("\(err)")
             }
-            
-            guard file != nil else { return }
-            
+            guard file != nil else {
+                XCTFail()
+                return
+            }
             var hasProgress: Bool = false
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            semaphore.increment()
+            
+            file.upload(with: [], progress: { (number: Int) in
                 
-                semaphore.increment()
+                XCTAssertTrue(Thread.isMainThread)
+                XCTAssertTrue(number >= 0 && number <= 100)
+                hasProgress = true
                 
-                file.upload(with: [], progress: { (number: Int) in
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(number >= 0 && number <= 100)
-                    
-                    hasProgress = true
-                    
-                }, completionHandler: { (succeeded: Bool, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(succeeded)
-                    XCTAssertNil(error)
-                    XCTAssertNotNil(file.objectId())
-                    XCTAssertNotNil(file.url())
-                    
-                    guard let cachedPath: String = file.persistentCachePath() else {
-                        XCTFail()
-                        return
-                    }
-                    
-                    if FileManager.default.fileExists(atPath: cachedPath) {
-                        
-                        do {
-                            
-                            let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: cachedPath))
-                            XCTAssertEqual(uploadData.count, data.count)
-                            
-                        } catch let err {
-                            
-                            XCTFail("\(err)")
-                        }
-                    } else {
-                        
-                        XCTFail()
-                    }
-                })
+            }, completionHandler: { (succeeded: Bool, error: Error?) in
                 
-            }, failure: {
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
                 
-                XCTFail("timeout")
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                XCTAssertNotNil(file.objectId())
+                XCTAssertNotNil(file.url())
+                XCTAssertTrue(hasProgress)
+                
+                guard let cachedPath: String = file.persistentCachePath() else {
+                    XCTFail()
+                    return
+                }
+                guard FileManager.default.fileExists(atPath: cachedPath) else {
+                    XCTFail()
+                    return
+                }
+                do {
+                    let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: cachedPath))
+                    XCTAssertEqual(uploadDataTuple.data.count, data.count)
+                } catch let err {
+                    XCTFail("\(err)")
+                }
             })
             
-            XCTAssertTrue(hasProgress)
-        }
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
         
-        t2()
-        
-        let t3 = {
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             var file: AVFile! = nil
-            
             do {
-                
                 file = try AVFile(localPath: filePath.path)
-                
             } catch let err {
-                
                 XCTFail("\(err)")
             }
+            guard file != nil else {
+                XCTFail()
+                return
+            }
             
-            guard file != nil else { return }
+            semaphore.increment()
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            file.upload(with: [.ignoringCachingData], progress: nil, completionHandler: { (succeeded: Bool, error: Error?) in
                 
-                semaphore.increment()
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
                 
-                file.upload(with: [.ignoringCachingData], progress: nil, completionHandler: { (succeeded: Bool, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(succeeded)
-                    XCTAssertNil(error)
-                    XCTAssertNotNil(file.objectId())
-                    XCTAssertNotNil(file.url())
-                    
-                    guard let cachedPath: String = file.persistentCachePath() else {
-                        XCTFail()
-                        return
-                    }
-                    
-                    XCTAssertFalse(FileManager.default.fileExists(atPath: cachedPath))
-                })
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                XCTAssertNotNil(file.objectId())
+                XCTAssertNotNil(file.url())
                 
-            }, failure: {
-                
-                XCTFail("timeout")
+                guard let cachedPath: String = file.persistentCachePath() else {
+                    XCTFail()
+                    return
+                }
+                XCTAssertFalse(FileManager.default.fileExists(atPath: cachedPath))
             })
-        }
-        
-        t3()
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
     }
     
     func test_download_file() {
         
         var downloadFile: AVFile!
-        
-        let uploadData: Data = self.bigData
-        
+        let uploadDataTuple: (data: Data, name: String) = self.bigDataTuple
         let removeItemAtPath: (String) -> Bool = { (path: String) in
-            
             if FileManager.default.fileExists(atPath: path) {
                 do {
-                    
                     try FileManager.default.removeItem(atPath: path)
-                    
                     return true
-                    
                 } catch let err {
-                    
                     XCTFail("\(err)")
-                    
                     return false
                 }
             } else {
-                
                 return true
             }
         }
         
-        let t1 = {
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
-            let file: AVFile = AVFile(data: uploadData, name: "image.jpg")
+            let file: AVFile = AVFile(data: uploadDataTuple.data, name: uploadDataTuple.name)
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            semaphore.increment()
+            
+            file.upload(with: [.ignoringCachingData], progress: nil, completionHandler: { (succeeded: Bool, error: Error?) in
                 
-                semaphore.increment()
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
                 
-                file.upload(with: [.ignoringCachingData], progress: nil, completionHandler: { (succeeded: Bool, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(succeeded)
-                    XCTAssertNil(error)
-                    XCTAssertNotNil(file.objectId())
-                    XCTAssertNotNil(file.url())
-                    
-                    guard let cachedPath: String = file.persistentCachePath() else {
-                        XCTFail()
-                        return
-                    }
-                    
-                    if removeItemAtPath(cachedPath) {
-                        
-                        downloadFile = file
-                    }
-                })
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                XCTAssertNotNil(file.objectId())
+                XCTAssertNotNil(file.url())
                 
-            }, failure: {
+                guard let cachedPath: String = file.persistentCachePath() else {
+                    XCTFail()
+                    return
+                }
                 
-                XCTFail("timeout")
+                if removeItemAtPath(cachedPath) {
+                    downloadFile = file
+                }
             })
-        }
-        
-        t1()
-        
-        guard downloadFile != nil,
-            let cachedPath: String = downloadFile.persistentCachePath() else {
             
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
+        
+        guard downloadFile != nil, let cachedPath: String = downloadFile.persistentCachePath() else {
             XCTFail()
-            
             return
         }
         
-        let t2 = {
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             let _ = removeItemAtPath(cachedPath)
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            semaphore.increment()
+            
+            downloadFile.download(with: [], progress: nil, completionHandler: { (filePath: URL?, error: Error?) in
                 
-                semaphore.increment()
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
                 
-                downloadFile.download(with: [], progress: nil, completionHandler: { (filePath: URL?, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertEqual(filePath?.path, cachedPath)
-                    XCTAssertNil(error)
-                    
-                    if FileManager.default.fileExists(atPath: cachedPath) {
-                        
-                        do {
-                            
-                            let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: cachedPath))
-                            XCTAssertEqual(uploadData.count, data.count)
-                            
-                        } catch let err {
-                            
-                            XCTFail("\(err)")
-                        }
-                    } else {
-                        
-                        XCTFail()
-                    }
-                })
+                XCTAssertEqual(filePath?.path, cachedPath)
+                XCTAssertNil(error)
                 
-            }, failure: {
-                
-                XCTFail("timeout")
+                guard FileManager.default.fileExists(atPath: cachedPath) else {
+                    XCTFail()
+                    return
+                }
+                do {
+                    let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: cachedPath))
+                    XCTAssertEqual(uploadDataTuple.data.count, data.count)
+                } catch let err {
+                    XCTFail("\(err)")
+                }
             })
-        }
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
         
-        t2()
-        
-        let t3 = {
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             let _ = removeItemAtPath(cachedPath)
+            var hasProgress: Bool = false
+            
+            semaphore.increment()
+            
+            downloadFile.download(with: [], progress: { (number: Int) in
+                
+                XCTAssertTrue(Thread.isMainThread)
+                XCTAssertTrue(number >= 0 && number <= 100)
+                hasProgress = true
+                
+            }, completionHandler: { (filePath: URL?, error: Error?) in
+                
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertEqual(filePath?.path, cachedPath)
+                XCTAssertNil(error)
+                XCTAssertTrue(hasProgress)
+                
+                guard FileManager.default.fileExists(atPath: cachedPath) else {
+                    XCTFail()
+                    return
+                }
+                do {
+                    let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: cachedPath))
+                    XCTAssertEqual(uploadDataTuple.data.count, data.count)
+                } catch let err {
+                    XCTFail("\(err)")
+                }
+            })
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
+        
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             var hasProgress: Bool = false
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            semaphore.increment()
+            
+            downloadFile.download(with: [], progress: { (number: Int) in
                 
-                semaphore.increment()
+                XCTAssertTrue(Thread.isMainThread)
+                XCTAssertTrue(number == 100)
+                hasProgress = true
                 
-                downloadFile.download(with: [], progress: { (number: Int) in
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(number >= 0 && number <= 100)
-                    
-                    hasProgress = true
-                    
-                }, completionHandler: { (filePath: URL?, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertEqual(filePath?.path, cachedPath)
-                    XCTAssertNil(error)
-                    
-                    if FileManager.default.fileExists(atPath: cachedPath) {
-                        
-                        do {
-                            
-                            let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: cachedPath))
-                            XCTAssertEqual(uploadData.count, data.count)
-                            
-                        } catch let err {
-                            
-                            XCTFail("\(err)")
-                        }
-                    } else {
-                        
-                        XCTFail()
-                    }
-                })
+            }, completionHandler: { (filePath: URL?, error: Error?) in
                 
-            }, failure: {
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
                 
-                XCTFail("timeout")
+                XCTAssertEqual(filePath?.path, cachedPath)
+                XCTAssertNil(error)
+                XCTAssertTrue(hasProgress)
+                
+                guard FileManager.default.fileExists(atPath: cachedPath) else {
+                    XCTFail()
+                    return
+                }
+                do {
+                    let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: cachedPath))
+                    XCTAssertEqual(uploadDataTuple.data.count, data.count)
+                } catch let err {
+                    XCTFail("\(err)")
+                }
             })
             
-            XCTAssertTrue(hasProgress)
-        }
-        
-        t3()
-        
-        let t4 = {
+        }, failure: {
             
-            var hasProgress: Bool = false
-            
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
-                
-                semaphore.increment()
-                
-                downloadFile.download(with: [], progress: { (number: Int) in
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(number == 100)
-                    
-                    hasProgress = true
-                    
-                }, completionHandler: { (filePath: URL?, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertEqual(filePath?.path, cachedPath)
-                    XCTAssertNil(error)
-                    
-                    if FileManager.default.fileExists(atPath: cachedPath) {
-                        
-                        do {
-                            
-                            let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: cachedPath))
-                            XCTAssertEqual(uploadData.count, data.count)
-                            
-                        } catch let err {
-                            
-                            XCTFail("\(err)")
-                        }
-                    } else {
-                        
-                        XCTFail()
-                    }
-                })
-                
-            }, failure: {
-                
-                XCTFail("timeout")
-            })
-            
-            XCTAssertTrue(hasProgress)
-        }
+            XCTFail("timeout")
+        })
         
-        t4()
-        
-        let t5 = {
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             var not_100_progress_count: Int = 0
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            semaphore.increment()
+            
+            downloadFile.download(with: [.ignoringCachedData], progress: { (number: Int) in
                 
-                semaphore.increment()
+                XCTAssertTrue(Thread.isMainThread)
                 
-                downloadFile.download(with: [.ignoringCachedData], progress: { (number: Int) in
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    if number >= 0 && number != 100 {
-                        
-                        not_100_progress_count += 1
-                    }
-                    
-                }, completionHandler: { (filePath: URL?, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertEqual(filePath?.path, cachedPath)
-                    XCTAssertNil(error)
-                    
-                    if FileManager.default.fileExists(atPath: cachedPath) {
-                        
-                        do {
-                            
-                            let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: cachedPath))
-                            XCTAssertEqual(uploadData.count, data.count)
-                            
-                        } catch let err {
-                            
-                            XCTFail("\(err)")
-                        }
-                    } else {
-                        
-                        XCTFail()
-                    }
-                })
+                if number >= 0 && number != 100 {
+                    not_100_progress_count += 1
+                }
                 
-            }, failure: {
+            }, completionHandler: { (filePath: URL?, error: Error?) in
                 
-                XCTFail("timeout")
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
+                
+                XCTAssertEqual(filePath?.path, cachedPath)
+                XCTAssertNil(error)
+                XCTAssertTrue(not_100_progress_count > 0)
+                
+                guard FileManager.default.fileExists(atPath: cachedPath) else {
+                    XCTFail()
+                    return
+                }
+                do {
+                    let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: cachedPath))
+                    XCTAssertEqual(uploadDataTuple.data.count, data.count)
+                } catch let err {
+                    XCTFail("\(err)")
+                }
             })
             
-            XCTAssertTrue(not_100_progress_count > 0)
-        }
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
         
-        t5()
-        
-        let t6 = {
-            
-            downloadFile.clearPersistentCache()
-            
-            XCTAssertFalse(FileManager.default.fileExists(atPath: cachedPath))
-            
-            AVFile.clearAllPersistentCache()
-            
-            XCTAssertFalse(FileManager.default.fileExists(atPath: URL.init(fileURLWithPath: cachedPath).deletingLastPathComponent().path))
-        }
-        
-        t6()
+        downloadFile.clearPersistentCache()
+        XCTAssertFalse(FileManager.default.fileExists(atPath: cachedPath))
+        AVFile.clearAllPersistentCache()
+        XCTAssertFalse(FileManager.default.fileExists(atPath: URL.init(fileURLWithPath: cachedPath).deletingLastPathComponent().path))
     }
     
-    func test_download_externalURL() {
+    func test_download_external_url() {
         
         let removeItemAtPath: (String) -> Bool = { (path: String) in
-            
             if FileManager.default.fileExists(atPath: path) {
                 do {
-                    
                     try FileManager.default.removeItem(atPath: path)
-                    
                     return true
-                    
                 } catch let err {
-                    
                     XCTFail("\(err)")
-                    
                     return false
                 }
             } else {
-                
                 return true
             }
         }
@@ -832,206 +592,168 @@ class AVFile_TestCase: LCTestBase {
         
         let remoteURL: URL = self.remoteURL
         
-        let t1 = {
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             let file: AVFile = AVFile(remoteURL: remoteURL)
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            semaphore.increment()
+            
+            file.upload(with: [], progress: nil, completionHandler: { (succeeded: Bool, error: Error?) in
                 
-                semaphore.increment()
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
                 
-                file.upload(with: [], progress: nil, completionHandler: { (succeeded: Bool, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(succeeded)
-                    XCTAssertNil(error)
-                    XCTAssertNotNil(file.objectId())
-                    XCTAssertNotNil(file.url())
-                    XCTAssertEqual(file.url(), remoteURL.absoluteString)
-                    
-                    if succeeded {
-                        
-                        externalURLFile = file
-                    }
-                })
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                XCTAssertNotNil(file.objectId())
+                XCTAssertNotNil(file.url())
+                XCTAssertEqual(file.url(), remoteURL.absoluteString)
                 
-            }, failure: {
-                
-                XCTFail("timeout")
+                if succeeded {
+                    externalURLFile = file
+                }
             })
-        }
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
         
-        t1()
-        
-        guard externalURLFile != nil,
-            let cachedPath: String = externalURLFile.persistentCachePath() else {
+        guard externalURLFile != nil, let cachedPath: String = externalURLFile.persistentCachePath() else {
             XCTFail()
             return
         }
         
-        let t2 = {
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             let _ = removeItemAtPath(cachedPath)
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            semaphore.increment()
+            
+            externalURLFile.download(with: [], progress: nil, completionHandler: { (filePath: URL?, error: Error?) in
                 
-                semaphore.increment()
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
                 
-                externalURLFile.download(with: [], progress: nil, completionHandler: { (filePath: URL?, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertNotNil(filePath)
-                    XCTAssertNil(error)
-                    
-                    if let path: String = filePath?.path {
-                        
-                        XCTAssertTrue(FileManager.default.fileExists(atPath: path))
-                    }
-                })
+                XCTAssertNotNil(filePath)
+                XCTAssertNil(error)
                 
-            }, failure: {
-                
-                XCTFail("timeout")
+                if let path: String = filePath?.path {
+                    XCTAssertTrue(FileManager.default.fileExists(atPath: path))
+                } else {
+                    XCTFail()
+                }
             })
-        }
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
         
-        t2()
-        
-        let t3 = {
-            
-            externalURLFile.clearPersistentCache()
-            
-            XCTAssertFalse(FileManager.default.fileExists(atPath: cachedPath))
-            
-            AVFile.clearAllPersistentCache()
-            
-            XCTAssertFalse(FileManager.default.fileExists(atPath: URL.init(fileURLWithPath: cachedPath).deletingLastPathComponent().path))
-        }
-        
-        t3()
+        externalURLFile.clearPersistentCache()
+        XCTAssertFalse(FileManager.default.fileExists(atPath: cachedPath))
+        AVFile.clearAllPersistentCache()
+        XCTAssertFalse(FileManager.default.fileExists(atPath: URL.init(fileURLWithPath: cachedPath).deletingLastPathComponent().path))
     }
     
     func test_cancel_task() {
         
-        let t1 = {
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
-            let uploadData: Data = self.bigData
+            let uploadDataTuple: (data: Data, name: String) = self.bigDataTuple
+            let file: AVFile = AVFile(data: uploadDataTuple.data, name: uploadDataTuple.name)
+            var canceled: Bool = false
             
-            let file: AVFile = AVFile(data: uploadData, name: "image.png")
+            semaphore.increment()
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            file.upload(with: [], progress: { (number: Int) in
                 
-                semaphore.increment()
+                XCTAssertTrue(Thread.isMainThread)
+                file.cancelUploading()
+                canceled = true
                 
-                file.upload(with: [], progress: { (number: Int) in
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    file.cancelUploading()
-                    
-                }, completionHandler: { (succeeded: Bool, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertFalse(succeeded)
-                    XCTAssertNotNil(error)
-                })
+            }, completionHandler: { (succeeded: Bool, error: Error?) in
                 
-            }, failure: {
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
                 
-                XCTFail("timeout")
+                XCTAssertFalse(succeeded)
+                XCTAssertNotNil(error)
+                XCTAssertTrue(canceled)
             })
-        }
-        
-        t1()
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
         
         var downloadCancelFile: AVFile!
         
-        let t2 = {
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
-            let uploadData: Data = self.bigData
+            let uploadDataTuple: (data: Data, name: String) = self.bigDataTuple
+            let file: AVFile = AVFile(data: uploadDataTuple.data, name: uploadDataTuple.name)
             
-            let file: AVFile = AVFile(data: uploadData, name: "image.png")
+            semaphore.increment()
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            file.upload(with: [.ignoringCachingData], progress: nil, completionHandler: { (succeeded: Bool, error: Error?) in
                 
-                semaphore.increment()
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
                 
-                file.upload(with: [.ignoringCachingData], progress: nil, completionHandler: { (succeeded: Bool, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(succeeded)
-                    XCTAssertNil(error)
-                    XCTAssertNotNil(file.objectId())
-                    XCTAssertNotNil(file.url())
-                    
-                    if succeeded {
-                        
-                        downloadCancelFile = file
-                    }
-                })
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                XCTAssertNotNil(file.objectId())
+                XCTAssertNotNil(file.url())
                 
-            }, failure: {
-                
-                XCTFail("timeout")
+                if succeeded {
+                    downloadCancelFile = file
+                }
             })
-        }
-        
-        t2()
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
         
         guard downloadCancelFile != nil else {
             XCTFail()
             return
         }
         
-        let t3 = {
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            var canceled: Bool = false
+            
+            semaphore.increment()
+            
+            downloadCancelFile.download(with: [.ignoringCachedData], progress: { (number: Int) in
                 
-                semaphore.increment()
+                XCTAssertTrue(Thread.isMainThread)
+                downloadCancelFile.cancelDownloading()
+                canceled = true
                 
-                downloadCancelFile.download(with: [.ignoringCachedData], progress: { (number: Int) in
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    downloadCancelFile.cancelDownloading()
-                    
-                }, completionHandler: { (filePath: URL?, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertNil(filePath)
-                    XCTAssertNotNil(error)
-                })
+            }, completionHandler: { (filePath: URL?, error: Error?) in
                 
-            }, failure: {
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
                 
-                XCTFail("timeout")
+                XCTAssertNil(filePath)
+                XCTAssertNotNil(error)
+                XCTAssertTrue(canceled)
             })
-        }
-        
-        t3()
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
     }
     
-    func test_delete_fileObject() {
+    func test_delete_file_object() {
         
         let uploadedFile = { () -> AVFile? in
             
             let remoteURL: URL = self.remoteURL
-            
             let file: AVFile = AVFile(remoteURL: remoteURL)
             
             self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
@@ -1041,7 +763,6 @@ class AVFile_TestCase: LCTestBase {
                 file.upload(with: [], progress: nil, completionHandler: { (succeeded: Bool, error: Error?) in
                     
                     semaphore.decrement()
-                    
                     XCTAssertTrue(Thread.isMainThread)
                     
                     XCTAssertTrue(succeeded)
@@ -1056,87 +777,64 @@ class AVFile_TestCase: LCTestBase {
                 XCTFail("timeout")
             })
             
-            if (file.objectId() != nil) {
-                
-                return file
-                
-            } else {
-                
-                return nil
-            }
+            return file.objectId() != nil ? file : nil
         }
         
-        let t1 = {
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             guard let file: AVFile = uploadedFile() else {
                 XCTFail()
                 return
             }
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            semaphore.increment()
+            
+            file.delete(completionHandler: { (succeeded: Bool, error: Error?) in
                 
-                semaphore.increment()
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
                 
-                file.delete(completionHandler: { (succeeded: Bool, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(succeeded)
-                    XCTAssertNil(error)
-                })
-                
-            }, failure: {
-                
-                XCTFail("timeout")
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
             })
-        }
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
         
-        t1()
-        
-        let t2 = {
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             var array: [AVFile] = []
-            
-            for _ in 0..<5 {
-                
+            for _ in 0..<3 {
                 guard let file: AVFile = uploadedFile() else {
                     continue
                 }
-                
                 array.append(file)
             }
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            semaphore.increment()
+            
+            AVFile.delete(with: array, completionHandler: { (succeeded: Bool, error: Error?) in
                 
-                semaphore.increment()
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
                 
-                AVFile.delete(with: array, completionHandler: { (succeeded: Bool, error: Error?) in
-                    
-                    semaphore.decrement()
-                    
-                    XCTAssertTrue(Thread.isMainThread)
-                    
-                    XCTAssertTrue(succeeded)
-                    XCTAssertNil(error)
-                })
-                
-            }, failure: {
-                
-                XCTFail("timeout")
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
             })
-        }
-        
-        t2()
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
     }
     
-    func test_get_fileObject() {
+    func test_get_file_object() {
         
         let uploadedFile = { () -> AVFile? in
             
             let remoteURL: URL = self.remoteURL
-            
             let file: AVFile = AVFile(remoteURL: remoteURL)
             
             self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
@@ -1146,7 +844,6 @@ class AVFile_TestCase: LCTestBase {
                 file.upload(with: [], progress: nil, completionHandler: { (succeeded: Bool, error: Error?) in
                     
                     semaphore.decrement()
-                    
                     XCTAssertTrue(Thread.isMainThread)
                     
                     XCTAssertTrue(succeeded)
@@ -1161,14 +858,7 @@ class AVFile_TestCase: LCTestBase {
                 XCTFail("timeout")
             })
             
-            if (file.objectId() != nil) {
-                
-                return file
-                
-            } else {
-                
-                return nil
-            }
+            return file.objectId() != nil ? file : nil
         }
         
         guard let objectId: String = uploadedFile()?.objectId() else {

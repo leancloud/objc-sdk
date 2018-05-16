@@ -57,18 +57,6 @@ typedef void (^AVIMCommandResultBlock)(AVIMGenericCommand *outCommand, AVIMGener
 - (BOOL)avim_validateCommand:(NSError **)error;
 
 /*!
- 判断是包含错误信息
- @return 是否包含错误信息
- */
-- (BOOL)avim_hasError;
-
-/*!
- 反序列化时，如果包含错误信息，则将错误信息包装为 NSError 对象
- @return 将错误信息包装为 NSError 对象
- */
-- (NSError *)avim_errorObject;
-
-/*!
  反序列化时获取Command所属的具体的消息类型对象
  @return Command所属的具体的消息类型对象
  */

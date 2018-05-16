@@ -161,10 +161,7 @@ static NSString * const kLCFileTokensProvider_s3 = @"s3";
         
         NSError *aError = ({
             NSString *reason = [NSString stringWithFormat:@"Provider: (%@) can't be matched.", fileTokens.provider];
-            NSDictionary *userInfo = @{ @"reason" : reason };
-            [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                code:0
-                            userInfo:userInfo];
+            LCErrorInternal(reason);
         });
         
         uploadCompletionHandler(false, aError);
@@ -263,10 +260,7 @@ static NSString * const kLCFileTokensProvider_s3 = @"s3";
         
         NSError *aError = ({
             NSString *reason = [NSString stringWithFormat:@"Provider: (%@) can't be matched.", fileTokens.provider];
-            NSDictionary *userInfo = @{ @"reason" : reason };
-            [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                code:0
-                            userInfo:userInfo];
+            LCErrorInternal(reason);
         });
         
         uploadCompletionHandler(false, aError);
@@ -388,10 +382,7 @@ static NSString * const kLCFileTokensProvider_s3 = @"s3";
                 
                 NSError *aError = ({
                     NSString *reason = [NSString stringWithFormat:@"%@", dic];
-                    NSDictionary *userInfo = @{ @"reason" : reason };
-                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                        code:0
-                                    userInfo:userInfo];
+                    LCErrorInternal(reason);
                 });
                 
                 uploadCompletionHandler(false, aError);

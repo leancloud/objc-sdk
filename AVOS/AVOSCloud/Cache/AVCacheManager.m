@@ -85,7 +85,7 @@
             if (diskResult && !isTooOld) {
                 if (block) block(diskResult, nil);
             } else {
-                if (block) block(nil, [NSError errorWithDomain:kAVErrorDomain code:kAVErrorCacheMiss userInfo:nil]);
+                if (block) block(nil, LCError(kAVErrorCacheMiss, nil, nil));
             }
         });
     });

@@ -7,9 +7,9 @@
 //
 
 #import "AVIMAvailability.h"
-
 #import "AVIMCommon.h"
 #import "AVIMSignature.h"
+#import "AVConstants.h"
 
 @class AVIMConversation;
 @class AVIMKeyedConversation;
@@ -344,8 +344,7 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  @param conversationId conversationId
  @return if the Conversation Exist, return the Instance; if not, return nil.
  */
-- (AVIMConversation * _Nullable)conversationForId:(NSString *)conversationId
-__attribute__((warn_unused_result));
+- (AVIMConversation * _Nullable)conversationForId:(NSString *)conversationId LC_WARN_UNUSED_RESULT;
 
 /**
  Remove Conversations Retained by this Client.
@@ -372,15 +371,13 @@ __attribute__((warn_unused_result));
  @param keyedConversation AVIMKeyedConversation 对象。
  @return 已绑定到当前 client 的会话。
  */
-- (AVIMConversation *)conversationWithKeyedConversation:(AVIMKeyedConversation *)keyedConversation
-__attribute__((warn_unused_result));
+- (AVIMConversation *)conversationWithKeyedConversation:(AVIMKeyedConversation *)keyedConversation LC_WARN_UNUSED_RESULT;
 
 /*!
  构造一个对话查询对象
  @return 对话查询对象.
  */
-- (AVIMConversationQuery *)conversationQuery
-__attribute__((warn_unused_result));
+- (AVIMConversationQuery *)conversationQuery LC_WARN_UNUSED_RESULT;
 
 /*!
  Query online clients within the given array of clients.

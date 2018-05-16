@@ -8,23 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString * const kAVErrorDomain;
-extern NSString * const kAVErrorUnknownText;
+FOUNDATION_EXPORT NSError * LCErrorInternal(NSString *failureReason);
 
-typedef NS_ENUM(NSInteger, AVLocalErrorCode) {
-    
-    AVLocalErrorCodeInvalidArgument = -10000
-};
-
-@interface AVErrorUtils : NSObject
-
-+ (NSError *)errorWithCode:(NSInteger)code;
-
-+ (NSError *)errorWithCode:(NSInteger)code
-                 errorText:(NSString *)text;
-
-+ (NSError *)errorWithText:(NSString *)text;
-
-+ (NSError *)internalServerError;
-
-@end
+FOUNDATION_EXPORT NSError * LCError(NSInteger code, NSString *failureReason, NSDictionary *userInfo);

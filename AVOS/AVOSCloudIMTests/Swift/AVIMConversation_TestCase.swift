@@ -116,7 +116,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
-            semaphore.increment().increment()
+            semaphore.increment(2)
             
             client_1.createConversation(withName: nil, clientIds: self.test_conv_member_info_clientIds, callback: { (conversation: AVIMConversation?, error: Error?) in
                 
@@ -161,7 +161,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
-            semaphore.increment().increment().increment()
+            semaphore.increment(3)
             
             client_1.createConversation(withName: nil, clientIds: self.test_conv_member_info_clientIds, callback: { (conversation: AVIMConversation?, error: Error?) in
                 
@@ -209,7 +209,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                             
                         } else {
                             
-                            semaphore.decrement().decrement()
+                            semaphore.decrement(2)
                         }
                     })
                     
@@ -245,7 +245,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
-            semaphore.increment().increment().increment().increment()
+            semaphore.increment(4)
             
             client_1.createConversation(withName: nil, clientIds: self.test_conv_member_info_clientIds, callback: { (conversation: AVIMConversation?, error: Error?) in
                 
@@ -292,13 +292,13 @@ class AVIMConversation_TestCase: LCIMTestBase {
                         
                         if error != nil {
                             
-                            semaphore.decrement().decrement()
+                            semaphore.decrement(2)
                         }
                     })
                     
                 } else {
                     
-                    semaphore.decrement().decrement().decrement()
+                    semaphore.decrement(3)
                 }
             })
             
