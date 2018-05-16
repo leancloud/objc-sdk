@@ -615,10 +615,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         dispatch_async(dispatch_get_main_queue(), ^{
             completionHandler(false, ({
                 NSString *reason = @"File is in uploading, Can't do repeated upload operation.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             }));
         });
         
@@ -737,10 +734,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
         completionHandler(false, ({
             NSString *reason = @"No data or URL to Upload.";
-            NSDictionary *userInfo = @{ @"reason" : reason };
-            [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                code:0
-                            userInfo:userInfo];
+            LCErrorInternal(reason);
         }));
     });
 }
@@ -870,10 +864,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
             
             completionHandler(false, ({
                 NSString *reason = @"response invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             }));
             
             return;
@@ -903,10 +894,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         if (![NSDictionary lc__checkingType:dic]) {
             callback(nil, ({
                 NSString *reason = @"fileTokens response invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             }));
             return;
         }
@@ -952,10 +940,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         dispatch_async(dispatch_get_main_queue(), ^{
             completionHandler(nil, ({
                 NSString *reason = @"File is in downloading, Can't do repeated download operation.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             }));
         });
         
@@ -969,10 +954,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         dispatch_async(dispatch_get_main_queue(), ^{
             completionHandler(nil, ({
                 NSString *reason = @"url is invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             }));
         });
         
@@ -1137,10 +1119,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         if (error) {
             *error = ({
                 NSString *reason = @"objectId invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             });
         }
         return nil;
@@ -1184,10 +1163,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
             
             NSError *aError = ({
                 NSString *reason = @"`objectId` is invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             });
             
             completionHandler(false, aError);
@@ -1265,10 +1241,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
             
             NSError *aError = ({
                 NSString *reason = @"`objectId` is invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             });
             
             completionHandler(nil, aError);
@@ -1295,10 +1268,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
                 
                 NSError *aError = ({
                     NSString *reason = @"Get an invalid Object.";
-                    NSDictionary *userInfo = @{ @"reason" : reason };
-                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                        code:0
-                                    userInfo:userInfo];
+                    LCErrorInternal(reason);
                 });
                 
                 completionHandler(nil, aError);

@@ -19,6 +19,7 @@
 #import "AVObjectUtils.h"
 #import "LCIMConversationCache.h"
 #import "AVIMMessage_Internal.h"
+#import "AVErrorUtils.h"
 
 @implementation AVIMConversationQuery
 
@@ -324,7 +325,7 @@
         } else if (error) {
             [AVIMBlockHelper callConversationResultBlock:callback conversation:nil error:error];
         } else if (objects.count == 0) {
-            NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorConversationNotFound reason:@"Conversation not found."];
+            NSError *error = LCError(kAVIMErrorConversationNotFound, @"Conversation not found.", nil);
             [AVIMBlockHelper callConversationResultBlock:callback conversation:nil error:error];
         }
     }];
@@ -368,13 +369,7 @@
             
             NSString *reason = @"`client` is invalid.";
             
-            NSDictionary *info = @{ @"reason" : reason };
-            
-            NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                                  code:0
-                                              userInfo:info];
-            
-            callback(false, aError);
+            callback(false, LCErrorInternal(reason));
         });
         
         return;
@@ -404,13 +399,7 @@
             
             NSString *reason = @"`client` is invalid.";
             
-            NSDictionary *info = @{ @"reason" : reason };
-            
-            NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                                  code:0
-                                              userInfo:info];
-            
-            callback(nil, aError);
+            callback(nil, LCErrorInternal(reason));
         });
         
         return;

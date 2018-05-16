@@ -87,7 +87,7 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
 
 + (AVCloudQueryResult *)cloudQueryWithCQL:(NSString *)cql pvalues:(NSArray *)pvalues callback:(AVCloudQueryCallback)callback waitUntilDone:(BOOL)wait error:(NSError **)error{
     if (!cql) {
-        NSError *err = [AVErrorUtils errorWithCode:kAVErrorInvalidQuery errorText:@"cql can not be nil"];
+        NSError *err = LCError(kAVErrorInvalidQuery, @"cql can not be nil", nil);
         if (error) {
             *error = err;
         }
@@ -618,7 +618,7 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
         }
         
         if (error == nil && [dict allKeys].count == 0) {
-            error = [AVErrorUtils errorWithCode:kAVErrorObjectNotFound errorText:[NSString stringWithFormat:@"No object with that objectId %@ was found.", objectId]];
+            error = LCError(kAVErrorObjectNotFound, [NSString stringWithFormat:@"No object with that objectId %@ was found.", objectId], nil);
         }
         if (block) {
             block(object, error);
@@ -877,7 +877,7 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
         if (error) {
             [AVUtils callObjectResultBlock:resultBlock object:nil error:error];
         } else if (results.count == 0) {
-            wrappedError = [AVErrorUtils errorWithCode:kAVErrorObjectNotFound errorText:@"no results matched the query"];
+            wrappedError = LCError(kAVErrorObjectNotFound, @"no results matched the query", nil);
             [AVUtils callObjectResultBlock:resultBlock object:nil error:wrappedError];
         } else {
             NSMutableArray * array = [self processResults:results className:className];

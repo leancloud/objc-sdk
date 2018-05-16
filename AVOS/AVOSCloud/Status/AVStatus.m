@@ -167,8 +167,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
 
 +(NSError*)permissionCheck{
     if (![[AVUser currentUser] isAuthDataExistInMemory]) {
-        NSError *error= [AVErrorUtils errorWithCode:kAVErrorUserCannotBeAlteredWithoutSession];
-        return error;
+        return LCError(kAVErrorUserCannotBeAlteredWithoutSession, nil, nil);
     }
     
     return nil;
@@ -278,12 +277,12 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
 
 + (BOOL)deleteInboxStatusForMessageId:(NSUInteger)messageId inboxType:(NSString *)inboxType receiver:(NSString *)receiver error:(NSError *__autoreleasing *)error {
     if (!receiver) {
-        if (error) *error = [AVErrorUtils errorWithCode:AVLocalErrorCodeInvalidArgument errorText:@"Receiver of status can not be nil."];
+        if (error) *error = LCErrorInternal(@"Receiver of status can not be nil.");
         return NO;
     }
 
     if (!inboxType) {
-        if (error) *error = [AVErrorUtils errorWithCode:AVLocalErrorCodeInvalidArgument errorText:@"Inbox type of status can not be nil."];
+        if (error) *error = LCErrorInternal(@"Inbox type of status can not be nil.");
         return NO;
     }
 
@@ -385,11 +384,11 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     NSParameterAssert(self.data);
     
     if ([self objectId]) {
-        return [AVErrorUtils errorWithCode:kAVErrorOperationForbidden errorText:@"status can't be update"];
+        return LCError(kAVErrorOperationForbidden, @"status can't be update", nil);
     }
     
     if ([AVUser currentUser]==nil) {
-        return [AVErrorUtils errorWithCode:kAVErrorOperationForbidden errorText:@"do NOT have an current user, please login first"];
+        return LCError(kAVErrorOperationForbidden, @"do NOT have an current user, please login first", nil);
     }
     
     if (self.source==nil) {
@@ -448,7 +447,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
              }
          }
 
-         [AVUtils callBooleanResultBlock:block error:[AVErrorUtils errorWithCode:kAVErrorInvalidJSON errorText:@"unexpected result return"]];
+         [AVUtils callBooleanResultBlock:block error:LCError(kAVErrorInvalidJSON, @"unexpected result return", nil)];
      }
      failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error) {
          [AVUtils callBooleanResultBlock:block error:error];

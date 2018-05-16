@@ -34,11 +34,11 @@ extern NSString * const kTemporaryConversationIdPrefix;
 
 - (instancetype)initWithClientId:(NSString *)clientId
                              tag:(NSString *)tag
-                    installation:(AVInstallation *)installation;
+                    installation:(AVInstallation *)installation LC_WARN_UNUSED_RESULT;
 
 - (instancetype)initWithUser:(AVUser *)user
                          tag:(NSString *)tag
-                installation:(AVInstallation *)installation;
+                installation:(AVInstallation *)installation LC_WARN_UNUSED_RESULT;
 
 - (void)sendCommand:(AVIMGenericCommand *)command;
 
@@ -46,7 +46,7 @@ extern NSString * const kTemporaryConversationIdPrefix;
 
 - (void)stageMessage:(AVIMMessage *)message;
 - (void)unstageMessageForId:(NSString *)messageId;
-- (AVIMMessage *)stagedMessageForId:(NSString *)messageId;
+- (AVIMMessage *)stagedMessageForId:(NSString *)messageId LC_WARN_UNUSED_RESULT;
 
 - (void)resetUnreadMessagesCountForConversation:(AVIMConversation *)conversation;
 
@@ -70,19 +70,16 @@ extern NSString * const kTemporaryConversationIdPrefix;
  Conversation Memory Cache
  */
 - (AVIMConversation *)getConversationWithId:(NSString *)convId
-                              orNewWithType:(LCIMConvType)convType
-__attribute__((warn_unused_result));
+                              orNewWithType:(LCIMConvType)convType LC_WARN_UNUSED_RESULT;
 
 /*
  Thread-unsafe
  */
 ///
 
-- (AVIMClientStatus)threadUnsafe_status
-__attribute__((warn_unused_result));
+- (AVIMClientStatus)threadUnsafe_status LC_WARN_UNUSED_RESULT;
 
-- (id<AVIMClientDelegate>)threadUnsafe_delegate
-__attribute__((warn_unused_result));
+- (id<AVIMClientDelegate>)threadUnsafe_delegate LC_WARN_UNUSED_RESULT;
 
 ///
 

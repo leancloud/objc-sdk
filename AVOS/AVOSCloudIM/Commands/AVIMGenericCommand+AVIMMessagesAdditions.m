@@ -12,6 +12,7 @@
 #import "AVIMConversationOutCommand.h"
 #import <objc/runtime.h>
 #import "AVIMMessage.h"
+#import "AVErrorUtils.h"
 
 NSString *const kAVIMConversationOperationQuery = @"query";
 
@@ -270,92 +271,7 @@ NSString *const kAVIMConversationOperationQuery = @"query";
  @return 将缺失的字段封装为NSError对象
  */
 - (NSError *)avim_missingKey:(NSString *)key {
-    return [AVIMErrorUtil errorWithCode:kAVIMErrorInvalidCommand reason:[NSString stringWithFormat:@"AVIMGenericCommand or its property -- %@ should %@", [self avim_messageClass], key]];
-}
-
-- (BOOL)avim_hasError {
-    BOOL hasError = YES;
-    do {
-        /* 绝大部分会以errorMessage的形式报错 */
-        if (self.errorMessage.code > 0) {
-            break;
-        }
-        
-        /* 应对情景： App 向一个不存在的 Conversation 发送消息，详见 https://forum.leancloud.cn/t/ios-avim/6125
-         
-         ackMessage {
-            code : 4401
-            reason : "INVALID_MESSAGING_TARGET"
-            t : 1454507717920
-            uid : "sFSadfasdfsd"
-         }
-         */
-        if (self.ackMessage.code > 0) {
-            break;
-        }
-        
-        /* 另外，对于情景：单点登录, 由于未上传 deviceToken 就 open，如果用户没有 force 登录，会报错, 详见 https://leanticket.cn/t/leancloud/925
-         
-         sessionMessage {
-            code: 4111
-            reason: "SESSION_CONFLICT"
-         } 
-         这种情况不仅要在此处处理，同时也要在 `-[AVIMClient processSessionCommand:]` 中进行异常处理。
-         */
-        
-        if (self.sessionMessage.code > 0) {
-            break;
-        }
-        
-        hasError = NO;
-    } while (NO);
-
-    return hasError;
-}
-
-- (NSError *)avim_errorWithCode:(int32_t)code appCode:(int32_t)appCode reason:(NSString *)reason detail:(NSString *)detail {
-    NSError *error = nil;
-    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-    userInfo[kAVIMCodeKey] = @(code);
-    if (reason) {
-        userInfo[kAVIMReasonKey] = reason;
-        userInfo[NSLocalizedFailureReasonErrorKey] = reason;
-    }
-    if (detail) {
-        userInfo[kAVIMDetailKey] = detail;
-        userInfo[NSLocalizedRecoverySuggestionErrorKey] = detail;
-    }
-    if (appCode > 0) {
-        userInfo[kAVIMAppCodeKey] = @(appCode);
-    }
-    error = [NSError errorWithDomain:AVOSCloudIMErrorDomain code:code userInfo:userInfo];
-    return error;
-}
-
-- (NSError *)avim_errorObject {
-    if (![self avim_hasError]) {
-        return nil;
-    }
-    
-    NSError *error = nil;
-    do {
-        if (self.errorMessage.code > 0) {
-            error = [self avim_errorWithCode:self.errorMessage.code appCode:self.errorMessage.appCode reason:self.errorMessage.reason detail:self.errorMessage.detail];
-            break;
-        }
-        
-        if (self.ackMessage.code > 0) {
-            error = [self avim_errorWithCode:self.ackMessage.code appCode:self.ackMessage.appCode reason:self.ackMessage.reason detail:nil];
-            break;
-        }
-        
-        if (self.sessionMessage.code > 0) {
-            error = [self avim_errorWithCode:self.sessionMessage.code appCode:0 reason:self.sessionMessage.reason detail:nil];
-            break;
-        }
-    } while (NO);
-
-    return error;
+    return LCError(kAVIMErrorInvalidCommand, [NSString stringWithFormat:@"AVIMGenericCommand or its property -- %@ should %@", [self avim_messageClass], key], nil);
 }
 
 - (LCIMMessage *)avim_messageCommand {

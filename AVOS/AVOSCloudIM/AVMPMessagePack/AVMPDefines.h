@@ -20,6 +20,4 @@
 
 typedef void (^AVMPCompletion)(NSError *error);
 
-#define AVMPMakeError(CODE, fmt, ...) [NSError errorWithDomain:@"AVMPMessagePack" code:CODE userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:fmt, ##__VA_ARGS__]}]
-
 #define AVMPIfNull(obj, val) ([obj isEqual:NSNull.null] ? val : obj)

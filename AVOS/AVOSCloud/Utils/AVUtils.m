@@ -22,7 +22,6 @@
 
 #import "AVObjectUtils.h"
 #import "AVPaasClient.h"
-#import "AVGlobal.h"
 #import "AVCloudQueryResult.h"
 #import "AVKeychain.h"
 #import "LCURLConnection.h"

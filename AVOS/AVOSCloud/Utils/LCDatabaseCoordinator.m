@@ -75,7 +75,7 @@
 
 - (LCDatabaseQueue *)dbQueue {
     if (!_databasePath) {
-        AVLoggerError(kAVErrorDomain, @"%@: Database path not found.", [[self class] description]);
+        AVLoggerError(AVLoggerDomainDefault, @"%@: Database path not found.", [[self class] description]);
         return nil;
     }
 

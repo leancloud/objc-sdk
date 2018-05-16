@@ -377,8 +377,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }
 
     if ([[AVObject invalidKeys] containsObject:key]) {
-        NSException *exception = [NSException exceptionWithName:kAVErrorDomain reason:[NSString stringWithFormat:@"The key '%@' is reserved.", key] userInfo:nil];
-        [exception raise];
+        [NSException raise:NSInvalidArgumentException format:@"The key '%@' is reserved.", key];
     }
     
     if (self.inSetter) {
@@ -678,8 +677,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 -(void)setACL:(AVACL *)ACL {
     if (ACL && ![ACL isKindOfClass:[AVACL class]]) {
-        NSException *exception = [NSException exceptionWithName:kAVErrorDomain reason:[NSString stringWithFormat:@"An instance of AVACL is required for property 'ACL'."] userInfo:nil];
-        [exception raise];
+        [NSException raise:NSInvalidArgumentException format:@"An instance of AVACL is required for property 'ACL'."];
     }
 
     _ACL = ACL;
@@ -803,7 +801,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     NSString *queryClassName = query.className;
 
     if (queryClassName && ![queryClassName isEqualToString:self.className]) {
-        error = [AVErrorUtils errorWithCode:kAVErrorInvalidClassName errorText:@"Invalid query class name."];
+        error = LCError(kAVErrorInvalidClassName, @"Invalid query class name.", nil);
     }
 
     return error;
@@ -1072,7 +1070,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     __block NSError *blockError;
     [[AVPaasClient sharedInstance] postBatchSaveObject:batchRequest headerMap:[self headerMap] eventually:isEventually block:^(id object, NSError *error) {
         [self copyByUUIDFromDictionary:object];
-        if(![error.domain isEqualToString:kAVErrorDomain]) {
+        if(![error.domain isEqualToString:kLeanCloudErrorDomain]) {
             [self postSave];
         }
         if (error) {
@@ -1556,7 +1554,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     if ([object allKeys].count <= 0) {
         // 返回 {}
         if (error != NULL) {
-            *error = [AVErrorUtils errorWithCode:kAVErrorObjectNotFound errorText:@"not found the object to fetch"];
+            *error = LCError(kAVErrorObjectNotFound, @"not found the object to fetch", nil);
         }
     } else {
         [self removeLocalData];
@@ -1572,7 +1570,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 {
     
     if (![self hasValidObjectId]) {
-        NSError *error = [AVErrorUtils errorWithCode:kAVErrorMissingObjectId errorText:@"Missing ObjectId"];
+        NSError *error = LCError(kAVErrorMissingObjectId, @"Missing ObjectId", nil);
         [AVUtils callObjectResultBlock:resultBlock object:nil error:error];
         return;
     }
@@ -1818,7 +1816,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     for(AVObject * object in [objects copy]) {
         if (object.className.length <= 0 || ![object hasValidObjectId]) {
             if (error != NULL)
-            *error = [AVErrorUtils errorWithCode:kAVErrorMissingObjectId errorText:@"Invaid className or objectId"];
+                *error = LCError(kAVErrorMissingObjectId, @"Invaid className or objectId", nil);
             return NO;
         }
     }

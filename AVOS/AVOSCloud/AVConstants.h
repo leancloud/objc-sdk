@@ -50,7 +50,8 @@ typedef NS_ENUM(int, AVCachePolicy) {
 
 // Errors
 
-extern NSString * _Nonnull const kLeanCloudRESTAPIResponseError;
+FOUNDATION_EXPORT NSString * _Nonnull const kLeanCloudErrorDomain;
+FOUNDATION_EXPORT NSString * _Nonnull const kLeanCloudRESTAPIResponseError;
 
 /*! @abstract 1: Internal server error. No information available. */
 extern NSInteger const kAVErrorInternalServer;
@@ -185,3 +186,5 @@ typedef void (^AVFileResultBlock)(AVFile * _Nullable file, NSError * _Nullable e
 typedef void (^AVDictionaryResultBlock)(NSDictionary * _Nullable dict, NSError * _Nullable error);
 
 #define AV_DEPRECATED(explain) __attribute__((deprecated(explain)))
+
+#define LC_WARN_UNUSED_RESULT __attribute__((warn_unused_result))

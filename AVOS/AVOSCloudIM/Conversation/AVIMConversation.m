@@ -29,6 +29,7 @@
 #import "AVObjectUtils.h"
 #import "AVPaasClient.h"
 #import "AVIMConversationMemberInfo_Internal.h"
+#import "AVErrorUtils.h"
 
 NSString *LCIMClientIdKey = @"clientId";
 NSString *LCIMConversationIdKey = @"conversationId";
@@ -41,10 +42,7 @@ NSNotificationName LCIMConversationDidReceiveMessageNotification = @"LCIMConvers
 static NSError * AVIMConversation_ParameterInvalidError(NSString *reason)
 {
     NSError *aError = ({
-        NSDictionary *userInfo = @{ @"reason" : reason };
-        [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                            code:0
-                        userInfo:userInfo];
+        LCErrorInternal(reason);
     });
     return aError;
 }
@@ -722,10 +720,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             
             NSError *aError = ({
                 NSString *reason = @"`imClient` is invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             });
             
             callback(false, aError);
@@ -801,10 +796,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             
             NSError *aError = ({
                 NSString *reason = @"`imClient` is invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             });
             
             callback(false, aError);
@@ -827,10 +819,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             
             NSError *aError = ({
                 NSString *reason = @"`imClient` is invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             });
             
             callback(false, aError);
@@ -894,10 +883,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             
             NSError *aError = ({
                 NSString *reason = @"`imClient` is invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             });
             
             callback(false, aError);
@@ -920,10 +906,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 
             NSError *aError = ({
                 NSString *reason = @"`imClient` is invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             });
             
             callback(false, aError);
@@ -993,10 +976,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             
             NSError *aError = ({
                 NSString *reason = @"`imClient` is invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             });
             
             callback(0, aError);
@@ -1061,10 +1041,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             
             NSError *aError = ({
                 NSString *reason = @"can't update before last update done.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             });
             
             callback(false, aError);
@@ -1173,10 +1150,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             
             NSError *aError = ({
                 NSString *reason = @"`imClient` is invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             });
             
             callback(false, aError);
@@ -1219,10 +1193,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 
             NSError *aError = ({
                 NSString *reason = @"`imClient` is invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             });
             
             callback(false, aError);
@@ -1336,7 +1307,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     if (!client || client.threadUnsafe_status != AVIMClientStatusOpened) {
         
         message.status = AVIMMessageStatusFailed;
-        NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorClientNotOpen reason:@"You can only send message when the status of the client is opened."];
+        NSError *error = LCError(kAVIMErrorClientNotOpen, @"You can only send message when the status of the client is opened.", nil);
         [AVIMBlockHelper callBooleanResultBlock:callback error:error];
         return;
     }
@@ -1512,10 +1483,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             
             NSError *aError = ({
                 NSString *reason = @"`imClient` is invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             });
             
             callback(false, aError);
@@ -1599,10 +1567,7 @@ static dispatch_queue_t messageCacheOperationQueue;
                         
                         NSError *aError = ({
                             NSString *reason = @"Not get a ACK from In Command.";
-                            NSDictionary *userInfo = @{ @"reason" : reason };
-                            [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                                code:0
-                                            userInfo:userInfo];
+                            LCErrorInternal(reason);
                         });
                         
                         callback(false, aError);
@@ -1725,10 +1690,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             
             NSError *aError = ({
                 NSString *reason = @"`imClient` is invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             });
             
             callback(false, aError);
@@ -1738,12 +1700,12 @@ static dispatch_queue_t messageCacheOperationQueue;
     }
     
     if (!newMessage) {
-        NSError *error = [AVErrorUtils errorWithCode:kAVIMErrorMessageNotFound errorText:@"Cannot update a message to nil."];
+        NSError *error = LCError(kAVIMErrorMessageNotFound, @"Cannot update a message to nil.", nil);
         [AVUtils callBooleanResultBlock:callback error:error];
         return;
     }
     if (![self containsMessage:oldMessage]) {
-        NSError *error = [AVErrorUtils errorWithCode:kAVIMErrorMessageNotFound errorText:@"Cannot find a message to update."];
+        NSError *error = LCError(kAVIMErrorMessageNotFound, @"Cannot find a message to update.", nil);
         [AVUtils callBooleanResultBlock:callback error:error];
         return;
     }
@@ -1774,10 +1736,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             
             NSError *aError = ({
                 NSString *reason = @"`imClient` is invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             });
             
             callback(false, aError, nil);
@@ -1809,17 +1768,9 @@ static dispatch_queue_t messageCacheOperationQueue;
     
     if (errReason) {
         
-        NSString *reason = errReason;
-        
-        NSDictionary *info = @{ @"reason" : reason };
-        
-        NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                              code:0
-                                          userInfo:info];
-        
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            callback(false, aError, nil);
+            callback(false, LCErrorInternal(errReason), nil);
         });
         
         return;
@@ -2020,10 +1971,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             
             NSError *aError = ({
                 NSString *reason = @"`imClient` is invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             });
             
             callback(nil, aError);
@@ -2044,7 +1992,7 @@ static dispatch_queue_t messageCacheOperationQueue;
                     AVIMMessage *message = nil;
                     id data = [logsItem data_p];
                     if (![data isKindOfClass:[NSString class]]) {
-                        AVLoggerError(AVOSCloudIMErrorDomain, @"Received an invalid message.");
+                        AVLoggerError(AVLoggerDomainIM, @"Received an invalid message.");
                         continue;
                     }
                     AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:data];
@@ -2188,8 +2136,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         /* connection is not open, callback error. */
         if (!socketOpened) {
             
-            NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorClientNotOpen
-                                                   reason:@"Client not open when query messages from server."];
+            NSError *error = LCError(kAVIMErrorClientNotOpen, @"Client not open when query messages from server.", nil);
             
             [AVIMBlockHelper callArrayResultBlock:callback
                                             array:nil
@@ -2271,15 +2218,9 @@ static dispatch_queue_t messageCacheOperationQueue;
         
         NSString *reason = @"`messageId` can't be nil";
         
-        NSDictionary *info = @{ @"reason" : reason };
-        
-        NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                              code:0
-                                          userInfo:info];
-        
         [AVIMBlockHelper callArrayResultBlock:callback
                                         array:nil
-                                        error:aError];
+                                        error:LCErrorInternal(reason)];
         
         return;
     }
@@ -2531,13 +2472,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            NSDictionary *info = @{ @"reason" : errReason };
-            
-            NSError *aError = [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                                  code:0
-                                              userInfo:info];
-            
-            callback(nil, aError);
+            callback(nil, LCErrorInternal(errReason));
         });
         
         return;
@@ -2600,7 +2535,7 @@ static dispatch_queue_t messageCacheOperationQueue;
                 
                 if (![data isKindOfClass:[NSString class]]) {
                     
-                    AVLoggerError(AVOSCloudIMErrorDomain, @"Received an invalid message.");
+                    AVLoggerError(AVLoggerDomainIM, @"Received an invalid message.");
                     
                     continue;
                 }
@@ -2832,10 +2767,7 @@ static dispatch_queue_t messageCacheOperationQueue;
                     
                     NSError *aError = ({
                         NSString *reason = @"response invalid.";
-                        NSDictionary *userInfo = @{ @"reason" : reason };
-                        [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                            code:0
-                                        userInfo:userInfo];
+                        LCErrorInternal(reason);
                     });
                     
                     callback(nil, aError);

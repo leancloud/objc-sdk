@@ -28,6 +28,7 @@
 #import "AVIMUserOptions.h"
 #import "AVPaasClient.h"
 #import "AVIMKeyedConversation_internal.h"
+#import "AVErrorUtils.h"
 
 #import <objc/runtime.h>
 #import <libkern/OSAtomic.h>
@@ -536,10 +537,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                 
                 NSError *aError = ({
                     NSString *reason = @"can't open before last open done.";
-                    NSDictionary *userInfo = @{ @"reason" : reason };
-                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                        code:0
-                                    userInfo:userInfo];
+                    LCErrorInternal(reason);
                 });
                 
                 callback(false, aError);
@@ -651,10 +649,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                             
                             NSError *aError = ({
                                 NSString *reason = @"invalid session open.";
-                                NSDictionary *userInfo = @{ @"reason" : reason };
-                                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                                    code:0
-                                                userInfo:userInfo];
+                                LCErrorInternal(reason);
                             });
                             
                             callback(false, aError);
@@ -695,10 +690,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
         
         NSError *aError = ({
             NSString *reason = @"session has not opened or did close.";
-            NSDictionary *userInfo = @{ @"reason" : reason };
-            [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                code:0
-                            userInfo:userInfo];
+            LCErrorInternal(reason);
         });
         
         callback(false, aError);
@@ -859,10 +851,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                 
                 NSError *aError = ({
                     NSString *reason = @"can't do close before last close done.";
-                    NSDictionary *userInfo = @{ @"reason" : reason };
-                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                        code:0
-                                    userInfo:userInfo];
+                    LCErrorInternal(reason);
                 });
                 
                 callback(false, aError);
@@ -876,10 +865,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                 
                 NSError *aError = ({
                     NSString *reason = @"can't do close when not opened.";
-                    NSDictionary *userInfo = @{ @"reason" : reason };
-                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                        code:0
-                                    userInfo:userInfo];
+                    LCErrorInternal(reason);
                 });
                 
                 callback(false, aError);
@@ -987,10 +973,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
         
         NSError *sessionNotOpenError = ({
             NSString *reason = @"session has not opened or did close.";
-            NSDictionary *userInfo = @{ @"reason" : reason };
-            [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                code:0
-                            userInfo:userInfo];
+            LCErrorInternal(reason);
         });
         
         if (!oldSessionToken || self->_status != AVIMClientStatusOpened) {
@@ -1054,10 +1037,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                     
                     NSError *aError = ({
                         NSString *reason = @"invalid session refreshed.";
-                        NSDictionary *userInfo = @{ @"reason" : reason };
-                        [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                            code:0
-                                        userInfo:userInfo];
+                        LCErrorInternal(reason);
                     });
                     
                     callback(nil, aError);
@@ -1441,10 +1421,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                 
                 signature.error = ({
                     NSString *reason = @"AVUser's Session Token is invalid.";
-                    NSDictionary *userInfo = @{ @"reason" : reason };
-                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                        code:0
-                                    userInfo:userInfo];
+                    LCErrorInternal(reason);
                 });
                 
                 callback(signature);
@@ -1493,10 +1470,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                 
                 signature.error = ({
                     NSString *reason = [NSString stringWithFormat:@"response data: %@ is invalid.", (result ?: @"nil")];
-                    NSDictionary *userInfo = @{ @"reason" : reason };
-                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                        code:0
-                                    userInfo:userInfo];
+                    LCErrorInternal(reason);
                 });
                 
                 [client addOperationToInternalSerialQueue:^(AVIMClient *client) {
@@ -1576,8 +1550,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
         
         if (callback) {
             
-            NSError *error = [AVIMErrorUtil errorWithCode:kAVIMErrorClientNotOpen
-                                                   reason:@"Client Not Open when Send a Command."];
+            NSError *error = LCError(kAVIMErrorClientNotOpen, @"Client Not Open when Send a Command.", nil);
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
@@ -1610,10 +1583,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
             commandWrapper.error = ({
                 
                 NSString *reason = @"client not opened.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             });
             
             [commandWrapper executeCallbackAndSetItToNil];
@@ -1627,30 +1597,27 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
 
 // MARK: - AVIMWebSocketWrapperDelegate
 
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socket didOccurError:(LCIMProtobufCommandWrapper *)command
+- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didOccurError:(LCIMProtobufCommandWrapper *)commandWrapper
 {
     [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
         
-        if (command.hasCallback && command.error) {
+        if (commandWrapper.hasCallback && commandWrapper.error) {
             
-            [command executeCallbackAndSetItToNil];
+            [commandWrapper executeCallbackAndSetItToNil];
         }
     }];
 }
 
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socket didReceiveCallback:(LCIMProtobufCommandWrapper *)command
+- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didReceiveCallback:(LCIMProtobufCommandWrapper *)commandWrapper
 {
     [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
         
-        if (command.hasCallback) {
+        if (commandWrapper.hasCallback) {
             
-            [command executeCallbackAndSetItToNil];
+            [commandWrapper executeCallbackAndSetItToNil];
         }
         
-        if (command.inCommand.cmd == AVIMCommandType_Session &&
-            command.inCommand.op == AVIMOpType_Closed &&
-            command.inCommand.sessionMessage &&
-            command.inCommand.sessionMessage.code == kLC_Code_SessionConflict) {
+        if (commandWrapper.error && commandWrapper.error.code == kLC_Code_SessionConflict) {
             
             client->_status = AVIMClientStatusClosed;
             
@@ -1675,31 +1642,20 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                 
                 [client invokeInSpecifiedQueue:^{
                     
-                    NSError *aError = ({
-                        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-                        AVIMSessionCommand *sessionCommand = command.inCommand.sessionMessage;
-                        userInfo[keyPath(sessionCommand, reason)] = sessionCommand.reason;
-                        userInfo[keyPath(sessionCommand, detail)] = sessionCommand.detail;
-                        userInfo[keyPath(sessionCommand, code)] = @(sessionCommand.code);
-                        [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                            code:command.inCommand.sessionMessage.code
-                                        userInfo:userInfo];
-                    });
-                    
-                    [delegate client:client didOfflineWithError:aError];
+                    [delegate client:client didOfflineWithError:commandWrapper.error];
                 }];
             }
         }
     }];
 }
 
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socket didReceiveCommand:(LCIMProtobufCommandWrapper *)command
+- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didReceiveCommand:(LCIMProtobufCommandWrapper *)commandWrapper
 {
-    if (!command.inCommand) { return; }
+    if (!commandWrapper.inCommand) { return; }
     
     [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
         
-        AVIMGenericCommand *inCommand = command.inCommand;
+        AVIMGenericCommand *inCommand = commandWrapper.inCommand;
         
         switch (inCommand.cmd)
         {
@@ -1851,13 +1807,9 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
             [self invokeInSpecifiedQueue:^{
                 
                 NSError *aError = ({
-                    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-                    userInfo[keyPath(sessionCommand, reason)] = sessionCommand.reason;
-                    userInfo[keyPath(sessionCommand, detail)] = sessionCommand.detail;
-                    userInfo[keyPath(sessionCommand, code)] = @(sessionCommand.code);
-                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                        code:sessionCommand.code
-                                    userInfo:userInfo];
+                    LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+                    commandWrapper.inCommand = inCommand;
+                    commandWrapper.error;
                 });
                 
                 [delegate client:self didOfflineWithError:aError];
@@ -2568,10 +2520,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
         
         NSError *queryResultError = ({
             NSString *reason = [NSString stringWithFormat:@"Query result is invalid, data: %@", (JSONObject ?: @"nil")];
-            NSDictionary *userInfo = @{ @"reason" : reason };
-            [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                code:0
-                            userInfo:userInfo];
+            LCErrorInternal(reason);
         });
         
         if (![NSArray lc__checkingType:JSONObject] || JSONObject.count != 1) {
@@ -2729,10 +2678,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                     
                     NSError *aError = ({
                         NSString *reason = [NSString stringWithFormat:@"client id's length should in range [1 %lu].", (unsigned long)kLC_ClientId_MaxLength];
-                        NSDictionary *userInfo = @{ @"reason" : reason };
-                        [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                            code:0
-                                        userInfo:userInfo];
+                        LCErrorInternal(reason);
                     });
                     
                     callback(nil, aError);
@@ -2752,10 +2698,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                 
                 NSError *aError = ({
                     NSString *reason = @"options is invalid.";
-                    NSDictionary *userInfo = @{ @"reason" : reason };
-                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                        code:0
-                                    userInfo:userInfo];
+                    LCErrorInternal(reason);
                 });
                 
                 callback(nil, aError);
@@ -2881,10 +2824,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
                         
                         NSError *aError = ({
                             NSString *reason = @"create conversation failed.";
-                            NSDictionary *userInfo = @{ @"reason" : reason };
-                            [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                                code:0
-                                            userInfo:userInfo];
+                            LCErrorInternal(reason);
                         });
                         
                         callback(nil, aError);
@@ -3029,7 +2969,7 @@ static NSDate * AVIMClient_dateFromString(NSString *string)
 
     AVIMMessage *message = nil;
     if (![directCommand.msg isKindOfClass:[NSString class]]) {
-        AVLoggerError(AVOSCloudIMErrorDomain, @"Received an invalid message.");
+        AVLoggerError(AVLoggerDomainIM, @"Received an invalid message.");
         [self sendAckCommandAccordingToDirectCommand:directCommand andGenericCommand:genericCommand];
         return;
     }

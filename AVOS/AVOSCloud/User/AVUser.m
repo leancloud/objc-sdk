@@ -98,16 +98,7 @@ static BOOL enableAutomatic = NO;
 
 - (void)isAuthenticatedWithSessionToken:(NSString *)sessionToken callback:(AVBooleanResultBlock)callback {
     if (sessionToken == nil) {
-        NSInteger code = 0;
-        NSString *errorReasonText = @"sessionToken is nil";
-        NSDictionary *errorInfo = @{
-                                    @"code" : @(code),
-                                    NSLocalizedDescriptionKey : errorReasonText,
-                                    };
-        NSError *error = [NSError errorWithDomain:kAVErrorDomain
-                                             code:code
-                                         userInfo:errorInfo];
-        [AVUtils callBooleanResultBlock:callback error:error];
+        [AVUtils callBooleanResultBlock:callback error:LCErrorInternal(@"sessionToken is nil")];
         return;
     }
     
@@ -154,7 +145,7 @@ static BOOL enableAutomatic = NO;
     {
         return nil;
     }
-    return [AVErrorUtils errorWithCode:kAVErrorUserCannotBeAlteredWithoutSession];
+    return LCError(kAVErrorUserCannotBeAlteredWithoutSession, nil, nil);
 }
 
 -(void)postSave
@@ -327,11 +318,11 @@ static BOOL enableAutomatic = NO;
     } else {
         NSError *error = nil;
         if (!self.isAuthDataExistInMemory) {
-            error= [AVErrorUtils errorWithCode:kAVErrorUserCannotBeAlteredWithoutSession];
+            error = LCError(kAVErrorUserCannotBeAlteredWithoutSession, nil, nil);
         }
         
         if (!(oldPassword && newPassword)) {
-            error = [AVErrorUtils errorWithCode:kAVErrorUserPasswordMissing];
+            error = LCError(kAVErrorUserPasswordMissing, nil, nil);
         }
         [AVUtils callIdResultBlock:block object:nil error:error];
     }
@@ -341,7 +332,7 @@ static BOOL enableAutomatic = NO;
     NSString *objectId = self.objectId;
 
     if (!objectId) {
-        NSError *error = [AVErrorUtils errorWithCode:kAVErrorUserNotFound errorText:@"User ID not found."];
+        NSError *error = LCError(kAVErrorUserNotFound, @"User ID not found.", nil);
         [AVUtils callBooleanResultBlock:block error:error];
         return;
     }
@@ -349,7 +340,7 @@ static BOOL enableAutomatic = NO;
     NSString *sessionToken = self.sessionToken;
 
     if (!sessionToken) {
-        NSError *error = [AVErrorUtils errorWithCode:kAVErrorUserCannotBeAlteredWithoutSession errorText:@"User session token not found."];
+        NSError *error = LCError(kAVErrorUserCannotBeAlteredWithoutSession, @"User session token not found.", nil);
         [AVUtils callBooleanResultBlock:block error:error];
         return;
     }
@@ -576,17 +567,8 @@ static BOOL enableAutomatic = NO;
 
 + (void)internalBecomeWithSessionTokenInBackground:(NSString *)sessionToken block:(AVUserResultBlock)block {
     if (sessionToken == nil) {
-        NSInteger code = 0;
-        NSString *errorReasonText = @"sessionToken is nil";
-        NSDictionary *errorInfo = @{
-                                    @"code" : @(code),
-                                    NSLocalizedDescriptionKey : errorReasonText,
-                                    };
-        NSError *error = [NSError errorWithDomain:kAVErrorDomain
-                                             code:code
-                                         userInfo:errorInfo];
         if (block) {
-            block(nil, error);
+            block(nil, LCErrorInternal(@"sessionToken is nil"));
         }
         return;
     }
@@ -976,10 +958,7 @@ static BOOL enableAutomatic = NO;
                 
                 callback(false, ({
                     NSString *reason = @"response invalid.";
-                    NSDictionary *userInfo = @{ @"reason" : reason };
-                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                        code:0
-                                    userInfo:userInfo];
+                    LCErrorInternal(reason);
                 }));
             });
             
@@ -1011,10 +990,7 @@ static BOOL enableAutomatic = NO;
             
             NSError *aError = ({
                 NSString *reason = @"objectId invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             });
             
             callback(false, aError);
@@ -1073,10 +1049,7 @@ static BOOL enableAutomatic = NO;
                 
                 callback(false, ({
                     NSString *reason = @"response invalid.";
-                    NSDictionary *userInfo = @{ @"reason" : reason };
-                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                        code:0
-                                    userInfo:userInfo];
+                    LCErrorInternal(reason);
                 }));
             });
             
@@ -1119,10 +1092,7 @@ static BOOL enableAutomatic = NO;
             
             NSError *aError = ({
                 NSString *reason = @"objectId invalid.";
-                NSDictionary *userInfo = @{ @"reason" : reason };
-                [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                    code:0
-                                userInfo:userInfo];
+                LCErrorInternal(reason);
             });
             
             callback(nil, aError);
@@ -1157,10 +1127,7 @@ static BOOL enableAutomatic = NO;
                 
                 callback(nil, ({
                     NSString *reason = @"response invalid.";
-                    NSDictionary *userInfo = @{ @"reason" : reason };
-                    [NSError errorWithDomain:@"LeanCloudErrorDomain"
-                                        code:0
-                                    userInfo:userInfo];
+                    LCErrorInternal(reason);
                 }));
             });
             
@@ -1363,8 +1330,7 @@ static BOOL enableAutomatic = NO;
 
 -(void)follow:(NSString*)userId userDictionary:(NSDictionary *)dictionary andCallback:(AVBooleanResultBlock)callback{
     if (![self isAuthDataExistInMemory]) {
-        NSError *error= [AVErrorUtils errorWithCode:kAVErrorUserCannotBeAlteredWithoutSession];
-        callback(NO,error);
+        callback(NO, LCError(kAVErrorUserCannotBeAlteredWithoutSession, nil, nil));
         return;
     }
     NSDictionary *dict = [AVObjectUtils dictionaryFromObject:dictionary];
@@ -1377,8 +1343,7 @@ static BOOL enableAutomatic = NO;
 
 -(void)unfollow:(NSString *)userId andCallback:(AVBooleanResultBlock)callback{
     if (![self isAuthDataExistInMemory]) {
-        NSError *error= [AVErrorUtils errorWithCode:kAVErrorUserCannotBeAlteredWithoutSession];
-        callback(NO,error);
+        callback(NO, LCError(kAVErrorUserCannotBeAlteredWithoutSession, nil, nil));
         return;
     }
     
@@ -1424,7 +1389,7 @@ static BOOL enableAutomatic = NO;
                 
             }
             @catch (NSException *exception) {
-                error=[AVErrorUtils errorWithCode:kAVErrorInternalServer errorText:@"wrong format return"];
+                error = LCErrorInternal(@"wrong format return");
             }
             @finally {
                 [AVUtils callIdResultBlock:callback object:dict error:error];

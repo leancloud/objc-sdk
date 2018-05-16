@@ -21,11 +21,11 @@
 
 @protocol AVIMWebSocketWrapperDelegate <NSObject>
 
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socket didReceiveCallback:(LCIMProtobufCommandWrapper *)command;
+- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didReceiveCallback:(LCIMProtobufCommandWrapper *)commandWrapper;
 
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socket didReceiveCommand:(LCIMProtobufCommandWrapper *)command;
+- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didReceiveCommand:(LCIMProtobufCommandWrapper *)commandWrapper;
 
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socket didOccurError:(LCIMProtobufCommandWrapper *)command;
+- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didOccurError:(LCIMProtobufCommandWrapper *)commandWrapper;
 
 @end
 

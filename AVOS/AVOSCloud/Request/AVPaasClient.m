@@ -26,9 +26,10 @@
 #import "LCSSLChallenger.h"
 #import "AVConstants.h"
 
-#define MAX_LAG_TIME 5.0
+static NSString * const kLC_code = @"code";
+static NSString * const kLC_error = @"error";
 
-NSString * const kLeanCloudRESTAPIResponseError = @"com.leancloud.restapi.response.error";
+#define MAX_LAG_TIME 5.0
 
 NSString *const LCHeaderFieldNameId = @"X-LC-Id";
 NSString *const LCHeaderFieldNameKey = @"X-LC-Key";
@@ -438,7 +439,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             if (error) {
                 block(nil, error);
             } else {
-                block(nil, [AVErrorUtils errorWithCode:0 errorText:@"The batch count of server response is not equal to request count"]);
+                block(nil, LCErrorInternal(@"The batch count of server response is not equal to request count"));
             }
         } else {
             // 网络请求成功
@@ -631,28 +632,50 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         NSHTTPURLResponse *HTTPResponse = (NSHTTPURLResponse *)response;
 
         if (error) {
-            NSError *newError = ({
-                NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-                [userInfo addEntriesFromDictionary:error.userInfo];
-                userInfo[kLeanCloudRESTAPIResponseError] = responseObject;
-                [NSError errorWithDomain:error.domain
-                                    code:error.code
-                                userInfo:userInfo.copy];
-            });
+            
+            NSError *callbackError = nil;
+            if ([NSDictionary lc__checkingType:responseObject]) {
+                
+                NSMutableDictionary *userInfo = ((NSDictionary *)responseObject).mutableCopy;
+                
+                // decoding 'code'
+                NSNumber *code = [NSNumber lc__decodingDictionary:userInfo key:kLC_code];
+                
+                if (code) {
+                    
+                    // decoding 'error'
+                    NSString *reason = [NSString lc__decodingDictionary:userInfo key:kLC_error];
+                    
+                    [userInfo removeObjectsForKeys:@[kLC_code, kLC_error]];
+                    
+                    /* for compatibility */
+                    id data = error.userInfo[LCNetworkingOperationFailingURLResponseDataErrorKey];
+                    if (data) {
+                        userInfo[LCNetworkingOperationFailingURLResponseDataErrorKey] = data;
+                    }
+                    userInfo[kLeanCloudRESTAPIResponseError] = responseObject;
+                    
+                    callbackError = LCError(code.integerValue, reason, userInfo);
+                } else {
+                    callbackError = error;
+                }
+            } else {
+                callbackError = error;
+            }
+            
+            NSTimeInterval costTime = -([operationEnqueueDate timeIntervalSinceNow] * 1000);
+            AVLoggerDebug(AVLoggerDomainNetwork, LC_REST_RESPONSE_LOG_FORMAT, path, costTime, callbackError);
+            
             if (failureBlock) {
-                failureBlock(HTTPResponse, responseObject, newError);
+                failureBlock(HTTPResponse, responseObject, callbackError);
             }
 
-            NSInteger statusCode = HTTPResponse.statusCode;
-            NSTimeInterval costTime = -([operationEnqueueDate timeIntervalSinceNow] * 1000);
-
-            AVLoggerDebug(AVLoggerDomainNetwork, LC_REST_RESPONSE_LOG_FORMAT, path, costTime, newError);
-
             // Doing network statistics
+            NSInteger statusCode = HTTPResponse.statusCode;
             if ([self shouldStatisticsForPath:path statusCode:statusCode]) {
                 LCNetworkStatistics *statistician = [LCNetworkStatistics sharedInstance];
 
-                if (newError.code == NSURLErrorTimedOut) {
+                if (error.code == NSURLErrorTimedOut) {
                     [statistician addIncrementalAttribute:1 forKey:@"timeout"];
                 } else {
                     [statistician addIncrementalAttribute:1 forKey:[NSString stringWithFormat:@"%ld", (long)statusCode]];
@@ -661,16 +684,16 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
                 [statistician addIncrementalAttribute:1 forKey:@"total"];
             }
         } else {
+            
+            NSTimeInterval costTime = -([operationEnqueueDate timeIntervalSinceNow] * 1000);
+            AVLoggerDebug(AVLoggerDomainNetwork, LC_REST_RESPONSE_LOG_FORMAT, path, costTime, responseObject);
+            
             if (successBlock) {
                 successBlock(HTTPResponse, responseObject);
             }
-
-            NSInteger statusCode = HTTPResponse.statusCode;
-            NSTimeInterval costTime = -([operationEnqueueDate timeIntervalSinceNow] * 1000);
-
-            AVLoggerDebug(AVLoggerDomainNetwork, LC_REST_RESPONSE_LOG_FORMAT, path, costTime, responseObject);
-
+            
             // Doing network statistics
+            NSInteger statusCode = HTTPResponse.statusCode;
             if ([self shouldStatisticsForPath:path statusCode:statusCode]) {
                 LCNetworkStatistics *statistician = [LCNetworkStatistics sharedInstance];
 
