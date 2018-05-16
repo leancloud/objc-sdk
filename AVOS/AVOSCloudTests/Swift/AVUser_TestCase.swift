@@ -65,6 +65,8 @@ class AVUser_TestCase: LCTestBase {
         return user
     }
     
+    // MARK: - Auth Data
+    
     func test_auth_data_login_associate_disassociate() {
         
         var user: AVUser! = AVUser.init()
@@ -389,6 +391,65 @@ class AVUser_TestCase: LCTestBase {
                 XCTFail("timeout")
             })
         }
+    }
+    
+    // MARK: - Error
+    
+    func test_username_taken() {
+        
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            
+            let username: String = "\(#function.substring(to: #function.index(of: "(")!))"
+            let password: String = "123"
+            let user: AVUser = AVUser()
+            user.username = username
+            user.password = password
+                
+            semaphore.increment(2)
+            
+            user.signUpInBackground({ (succeeded: Bool, error: Error?) in
+                
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
+                
+                if succeeded {
+                    
+                    let newUser: AVUser = AVUser()
+                    newUser.username = username
+                    newUser.password = password
+                    
+                    newUser.signUpInBackground({ (succeeded: Bool, error: Error?) in
+                        
+                        semaphore.decrement()
+                        XCTAssertTrue(Thread.isMainThread)
+                        
+                        XCTAssertFalse(succeeded)
+                        XCTAssertNotNil(error)
+                        let _error: NSError? = error as NSError?
+                        XCTAssertEqual(_error?.code, 202)
+                        XCTAssertEqual(_error?.domain, kLeanCloudErrorDomain)
+                        /* for compatibility */
+                        XCTAssertNotNil(_error?.userInfo[kLeanCloudRESTAPIResponseError])
+                        XCTAssertNotNil(_error?.userInfo["com.alamofire.serialization.response.error.data"])
+                    })
+                } else {
+                    
+                    semaphore.decrement()
+                    
+                    XCTAssertNotNil(error)
+                    let _error: NSError? = error as NSError?
+                    XCTAssertEqual(_error?.code, 202)
+                    XCTAssertEqual(_error?.domain, kLeanCloudErrorDomain)
+                    /* for compatibility */
+                    XCTAssertNotNil(_error?.userInfo[kLeanCloudRESTAPIResponseError])
+                    XCTAssertNotNil(_error?.userInfo["com.alamofire.serialization.response.error.data"])
+                }
+            })
+            
+        }, failure: {
+            
+            XCTFail("timeout")
+        })
     }
     
 }

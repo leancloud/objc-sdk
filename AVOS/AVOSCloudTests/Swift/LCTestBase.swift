@@ -65,7 +65,7 @@ class LCTestBase: XCTestCase {
         
         super.setUp()
         
-        let region: TestRegion = .CN_North
+        let region: TestRegion = .ConversationMemberInfo
         
         let appInfo: (id: String, key: String) = region.appInfo
         
