@@ -752,6 +752,7 @@ typedef GPB_ENUM(AVIMConvCommand_FieldNumber) {
   AVIMConvCommand_FieldNumber_Results = 100,
   AVIMConvCommand_FieldNumber_Where = 101,
   AVIMConvCommand_FieldNumber_Attr = 103,
+  AVIMConvCommand_FieldNumber_AttrModified = 104,
 };
 
 @interface AVIMConvCommand : LCIMMessage
@@ -882,6 +883,10 @@ typedef GPB_ENUM(AVIMConvCommand_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) AVIMJsonObjectMessage *attr;
 /** Test to see if @c attr has been set. */
 @property(nonatomic, readwrite) BOOL hasAttr;
+
+@property(nonatomic, readwrite, strong, null_resettable) AVIMJsonObjectMessage *attrModified;
+/** Test to see if @c attrModified has been set. */
+@property(nonatomic, readwrite) BOOL hasAttrModified;
 
 @end
 
