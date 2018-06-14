@@ -34,6 +34,19 @@
 #include<netdb.h>
 #include<arpa/inet.h>
 
+NSInteger LCTimeZoneForSecondsFromGMT = 0;
+NSDate * LCDateFromString(NSString *string)
+{
+    if (!string || string.length == 0) {
+        return nil;
+    }
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:AV_DATE_FORMAT];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:LCTimeZoneForSecondsFromGMT]];
+    NSDate *date = [dateFormatter dateFromString:string];
+    return date;
+}
+
 static dispatch_queue_t AVUtilsDefaultSerialQueue = NULL;
 
 #pragma clang diagnostic push

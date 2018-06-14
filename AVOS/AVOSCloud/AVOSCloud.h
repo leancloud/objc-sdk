@@ -265,6 +265,13 @@ __deprecated_msg("deprecated");
  */
 + (nullable NSDate *)getServerDateAndThrowsWithError:(NSError **)error;
 
+/**
+ Set a time zone offset from Greenwich Mean Time by a given number of seconds.
+ 
+ @param seconds Default is 0.
+ */
++ (void)setTimeZoneForSecondsFromGMT:(NSInteger)seconds;
+
 /*!
  * 异步地获取服务端时间。
  * @param block 回调结果。

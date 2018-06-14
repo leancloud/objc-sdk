@@ -370,6 +370,11 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
     });
 }
 
++ (void)setTimeZoneForSecondsFromGMT:(NSInteger)seconds
+{
+    LCTimeZoneForSecondsFromGMT = seconds;
+}
+
 #pragma mark - Push Notification
 
 + (void)registerForRemoteNotification {

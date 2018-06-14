@@ -14,6 +14,9 @@
 #define keyPath(base, path) ({ __unused typeof(base.path) _; @#path; })
 #define ivarName(base, path) ({ __unused typeof(base->path) _; @#path; })
 
+FOUNDATION_EXPORT NSInteger LCTimeZoneForSecondsFromGMT;
+NSDate * LCDateFromString(NSString *dateString);
+
 /**
  * Check the equality of two security key.
  */
