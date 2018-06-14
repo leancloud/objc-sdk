@@ -232,7 +232,16 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
     if (!object) {
         return [NSNull null];
     } else if ([object isKindOfClass:[AVObject class]]) {
-        return [AVObjectUtils dictionaryFromAVObjectPointer:(AVObject *)object];
+        NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
+        [dict setObject:@"Pointer" forKey:@"__type"];
+        [dict setObject:[object internalClassName] forKey:classNameTag];
+        if ([object hasValidObjectId])
+        {
+            [dict setObject:((AVObject *)object).objectId forKey:@"objectId"];
+            return dict;
+        } else {
+            return NSNull.null;
+        }
     } else {
         return object;
     }
