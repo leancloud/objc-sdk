@@ -145,7 +145,7 @@
     [aCoder encodeBool:self.transient forKey:LC_SEL_STR(transient)];
     [aCoder encodeBool:self.system forKey:LC_SEL_STR(system)];
     [aCoder encodeBool:self.temporary forKey:LC_SEL_STR(temporary)];
-    [aCoder encodeInt32:self.temporaryTTL forKey:LC_SEL_STR(temporaryTTL)];
+    [aCoder encodeInteger:self.temporaryTTL forKey:LC_SEL_STR(temporaryTTL)];
     [aCoder encodeBool:self.muted forKey:LC_SEL_STR(muted)];
     [aCoder encodeBool:self.unique forKey:LC_SEL_STR(unique)];
 }

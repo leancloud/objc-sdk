@@ -185,9 +185,6 @@ class AVIMClient_TestCase: LCIMTestBase {
             
             XCTFail("timeout")
         })
-        
-        self.recycleClient(client_1)
-        self.recycleClient(client_2)
     }
     
     // MARK: - Session Token
@@ -234,8 +231,6 @@ class AVIMClient_TestCase: LCIMTestBase {
             
             XCTFail("timeout")
         })
-        
-        self.recycleClient(client)
     }
     
     // MARK: - Session Conflict
@@ -248,12 +243,10 @@ class AVIMClient_TestCase: LCIMTestBase {
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
         let installation_1: AVInstallation = AVInstallation()
         installation_1.deviceToken = UUID().uuidString
-        guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientId, tag: tag, delegate: delegate_1, installation: installation_1) else {
+        guard let _: AVIMClient = self.newOpenedClient(clientId: clientId, tag: tag, delegate: delegate_1, installation: installation_1) else {
             XCTFail()
             return
         }
-        
-        var _client_2: AVIMClient? = nil
         
         self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
@@ -281,24 +274,24 @@ class AVIMClient_TestCase: LCIMTestBase {
                 
                 XCTAssertTrue(succeeded)
                 XCTAssertNil(error)
-                
-                _client_2 = succeeded ? client_2 : nil
             })
             
         }, failure: {
             
             XCTFail("timeout")
         })
-        
-        self.recycleClient(_client_2)
-        self.recycleClient(client_1)
     }
     
 }
 
 class AVIMClientDelegate_TestCase: NSObject, AVIMClientDelegate {
     
+    var didReceiveTypeMessageClosure: ((AVIMConversation, AVIMTypedMessage) -> Void)?
+    var didReceiveCommonMessageClosure: ((AVIMConversation, AVIMMessage) -> Void)?
     var didOfflineClosure: ((AVIMClient, Error?) -> Void)?
+    var messageHasBeenUpdatedClosure: ((AVIMConversation, AVIMMessage) -> Void)?
+    var messageDeliveredClosure: ((AVIMConversation, AVIMMessage) -> Void)?
+    var didUpdateForKeyClosure: ((AVIMConversation, AVIMConversationUpdatedKey) -> Void)?
     var updateByClosure: ((AVIMConversation, Date?, String?, [AnyHashable : Any]?) -> Void)?
     var invitedByClosure: ((AVIMConversation, String?) -> Void)?
     var kickedByClosure: ((AVIMConversation, String?) -> Void)?
@@ -319,8 +312,28 @@ class AVIMClientDelegate_TestCase: NSObject, AVIMClientDelegate {
     func imClientResumed(_ imClient: AVIMClient) {}
     func imClientClosed(_ imClient: AVIMClient, error: Error?) {}
     
+    func conversation(_ conversation: AVIMConversation, didReceive message: AVIMTypedMessage) {
+        self.didReceiveTypeMessageClosure?(conversation, message)
+    }
+    
+    func conversation(_ conversation: AVIMConversation, didReceiveCommonMessage message: AVIMMessage) {
+        self.didReceiveCommonMessageClosure?(conversation, message)
+    }
+    
     func client(_ client: AVIMClient, didOfflineWithError error: Error?) {
         self.didOfflineClosure?(client, error)
+    }
+    
+    func conversation(_ conversation: AVIMConversation, messageHasBeenUpdated message: AVIMMessage) {
+        self.messageHasBeenUpdatedClosure?(conversation, message)
+    }
+    
+    func conversation(_ conversation: AVIMConversation, messageDelivered message: AVIMMessage) {
+        self.messageDeliveredClosure?(conversation, message)
+    }
+    
+    func conversation(_ conversation: AVIMConversation, didUpdateForKey key: AVIMConversationUpdatedKey) {
+        self.didUpdateForKeyClosure?(conversation, key)
     }
     
     func conversation(_ conversation: AVIMConversation, didUpdateAt date: Date?, byClientId clientId: String?, updatedData data: [AnyHashable : Any]?) {

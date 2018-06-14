@@ -262,14 +262,14 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationQueryOption) {
  @param callback 查询结果回调
  */
 - (void)getConversationById:(NSString *)conversationId
-                   callback:(AVIMConversationResultBlock)callback;
+                   callback:(void (^)(AVIMConversation * _Nullable conversation, NSError * _Nullable error))callback;
 
 /*!
  查询服务器获取一个 AVIMConversation 对象数组
  如果未设置 limit，或 limit 非法，默认返回 10 个结果
  @param callback 查询结果回调
  */
-- (void)findConversationsWithCallback:(AVIMArrayResultBlock)callback;
+- (void)findConversationsWithCallback:(void (^)(NSArray<AVIMConversation *> * _Nullable conversations, NSError * _Nullable error))callback;
 
 /**
  Query array of `AVIMTemporaryConversation` info. if not set `limit`, or `limit` invalid, return 10 or less in default.
@@ -277,7 +277,7 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationQueryOption) {
  @param callback Result of callback.
  */
 - (void)findTemporaryConversationsWith:(NSArray<NSString *> *)tempConvIds
-                              callback:(AVIMArrayResultBlock)callback;
+                              callback:(void (^)(NSArray<AVIMTemporaryConversation *> * _Nullable conversations, NSError * _Nullable error))callback;
 
 @end
 

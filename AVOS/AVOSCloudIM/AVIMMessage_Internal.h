@@ -30,7 +30,7 @@
 /*!
  * Id of local client which owns the message
  */
-@property (nonatomic, copy) NSString *localClientId;
+@property (nonatomic, strong) NSString *localClientId;
 
 /*!
  * Wether message is transient or not
@@ -47,8 +47,6 @@
  */
 - (NSString *)payload;
 
-+ (instancetype)parseMessageWithConversationId:(NSString *)conversationId result:(NSDictionary *)result;
-
 //======================================================================
 //====== override readonly property to readwrite for internal use ======
 //======================================================================
@@ -56,15 +54,17 @@
 /* 表示消息状态*/
 @property (nonatomic, assign) AVIMMessageStatus status;
 /*消息 id*/
-@property (nonatomic, copy) NSString *messageId;
+@property (nonatomic, strong) NSString *messageId;
 /*消息发送/接收方 id*/
-@property (nonatomic, copy) NSString *clientId;
+@property (nonatomic, strong) NSString *clientId;
 /*消息所属对话的 id*/
-@property (nonatomic, copy) NSString *conversationId;
+@property (nonatomic, strong) NSString *conversationId;
 
 @property (nonatomic, assign) int64_t sendTimestamp;
 @property (nonatomic, assign) int64_t deliveredTimestamp;
 @property (nonatomic, assign) int64_t readTimestamp;
+
+@property (nonatomic, strong) NSString *content;
 
 /* Sequence number in cache store. */
 @property (nonatomic, assign) long long seq;

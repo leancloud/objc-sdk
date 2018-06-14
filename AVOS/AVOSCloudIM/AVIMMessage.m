@@ -116,44 +116,4 @@
     return NO;
 }
 
-/*!
- * 
- "msg":"{"_lctype":-1,"_lctext":"1620318941"}",
- "msg_from":"a"
- "msg_mid":"2USGXPmbTEWjt9WnNRZpWQ",
- "msg_timestamp":1480325615220,
- */
-+ (instancetype)parseMessageWithConversationId:(NSString *)conversationId
-                                        result:(NSDictionary *)result
-{
-    id messageContent = result[kConvAttrKey_lastMessage];
-    if((!messageContent) || (messageContent == [NSNull null])) { return nil; }
-    
-    NSString *from = result[kConvAttrKey_lastMessageFrom];
-    NSString *content = (NSString *)messageContent;
-    NSTimeInterval timestamp = [result[kConvAttrKey_lastMessageTimestamp] doubleValue];
-    NSString *messageId = result[kConvAttrKey_lastMessageId];
-    
-    AVIMMessage *message = nil;
-    AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:content];
-    if ([messageObject isValidTypedMessageObject]) {
-        message = [AVIMTypedMessage messageWithMessageObject:messageObject];
-    } else {
-        message = [[AVIMMessage alloc] init];
-    }
-    message.content = content;
-    message.sendTimestamp = timestamp;
-    message.conversationId = conversationId;
-    message.clientId = from;
-    message.messageId = messageId;
-    message.status = AVIMMessageStatusDelivered;
-
-    NSNumber *patchTimestamp = result[@"patch_timestamp"];
-
-    if (patchTimestamp)
-        message.updatedAt = [NSDate dateWithTimeIntervalSince1970:[patchTimestamp doubleValue] / 1000.0];
-
-    return message;
-}
-
 @end

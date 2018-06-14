@@ -1657,6 +1657,7 @@ typedef struct AVIMUnreadCommand__storage_ {
 @dynamic hasResults, results;
 @dynamic hasWhere, where;
 @dynamic hasAttr, attr;
+@dynamic hasAttrModified, attrModified;
 
 typedef struct AVIMConvCommand__storage_ {
   uint32_t _has_storage_[2];
@@ -1686,6 +1687,7 @@ typedef struct AVIMConvCommand__storage_ {
   AVIMJsonObjectMessage *results;
   AVIMJsonObjectMessage *where;
   AVIMJsonObjectMessage *attr;
+  AVIMJsonObjectMessage *attrModified;
   int64_t t;
   int64_t maxReadTimestamp;
   int64_t maxAckTimestamp;
@@ -2012,6 +2014,15 @@ typedef struct AVIMConvCommand__storage_ {
         .flags = LCIMFieldOptional,
         .dataType = GPBDataTypeMessage,
       },
+      {
+        .name = "attrModified",
+        .dataTypeSpecific.className = GPBStringifySymbol(AVIMJsonObjectMessage),
+        .number = AVIMConvCommand_FieldNumber_AttrModified,
+        .hasIndex = 35,
+        .offset = (uint32_t)offsetof(AVIMConvCommand__storage_, attrModified),
+        .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
     };
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[AVIMConvCommand class]
@@ -2023,9 +2034,9 @@ typedef struct AVIMConvCommand__storage_ {
                                          flags:LCIMDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\017\006\006\000\020\t\000\021\t\000\022\007b\000\023\010\000\024\016\000\025\020\000\026\017\000\027\017\000\030\000maxReadTu"
+        "\020\006\006\000\020\t\000\021\t\000\022\007b\000\023\010\000\024\016\000\025\020\000\026\017\000\027\017\000\030\000maxReadTu"
         "ples\000\033\010\000\034\tb\000\035\000tempConvIds\000\036\000allowedPids\000"
-        "\037\000failedPids\000";
+        "\037\000failedPids\000h\014\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");

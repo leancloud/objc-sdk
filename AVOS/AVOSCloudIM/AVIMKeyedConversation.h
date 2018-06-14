@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readonly) BOOL    transient;
 @property (nonatomic, assign, readonly) BOOL    system;
 @property (nonatomic, assign, readonly) BOOL    temporary;
-@property (nonatomic, assign, readonly) int32_t temporaryTTL;
+@property (nonatomic, assign, readonly) NSUInteger temporaryTTL;
 @property (nonatomic, assign, readonly) BOOL    muted;
 
 @end

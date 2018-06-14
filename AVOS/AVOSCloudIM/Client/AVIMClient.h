@@ -23,117 +23,55 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, AVIMClientStatus) {
-    
-    /*
-     
-     Initial Status or Unknown Status
-     
-     Common Scenario:
-     
-     1. After New a Instance of Client
-     
-     2. Closing Client but received an Error
-     
-     */
     AVIMClientStatusNone = 0,
-    
-    /*
-     Client is Opening
-     */
     AVIMClientStatusOpening,
-    
-    /*
-     Client Opened
-     */
     AVIMClientStatusOpened,
-    
-    /*
-     
-     Client Paused
-     
-     Common Scenario:
-     
-     1. Network Unreachable
-     
-     2. iOS App in Background
-     
-     3. ... ...
-     
-     */
     AVIMClientStatusPaused,
-    
-    /*
-     
-     Client is Resuming
-     
-     Common Scenario:
-     
-     1. Network from Unreachable to Reachable
-     
-     2. iOS App from Background to Foreground
-     
-     3. ... ...
-     
-     */
     AVIMClientStatusResuming,
-    
-    /*
-     Client is Closing
-     */
     AVIMClientStatusClosing,
-    
-    /*
-     Client Closed
-     */
     AVIMClientStatusClosed
-    
 };
 
 typedef NS_ENUM(NSUInteger, AVIMClientOpenOption) {
     /*
-     
      Default Option.
-     
      if seted 'tag', then use 'ForceOpen' to open client, this will let other clients(has the same ID and Tag) to be kicked or can't reopen, and now only this client online.
-     
      if not seted 'tag', open client with this option is just a normal open action, it will not kick other client.
-     
      */
     AVIMClientOpenOptionForceOpen = 0,
-    
     /*
-     
      if seted 'tag', then use 'Reopen' option to open client, if client has not been kicked, it can be opened, else if client has been kicked, it can't be opened.
-     
      if not seted 'tag', open client with this option is just a normal open action, it will not be kicked by other client.
-     
      */
     AVIMClientOpenOptionReopen
 };
 
 typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
-    
     /*
      Default conversation. At most allow 500 people to join the conversation.
      */
     AVIMConversationOptionNone = 0,
-    
     /*
      Unique conversation. If the server detects the conversation with that members exists, will return it instead of creating a new one.
      */
     AVIMConversationOptionUnique = 1 << 0,
-    
     /*
      Transient conversation. No headcount limits. But the functionality is limited. No offline messages, no offline notifications, etc.
      */
     AVIMConversationOptionTransient = 1 << 1,
-    
     /*
      Temporary conversation
      */
-    AVIMConversationOptionTemporary = 1 << 2,
-    
+    AVIMConversationOptionTemporary = 1 << 2
 };
+
+typedef NSString * const AVIMConversationUpdatedKey NS_TYPED_EXTENSIBLE_ENUM;
+FOUNDATION_EXPORT AVIMConversationUpdatedKey AVIMConversationUpdatedKeyLastMessage;
+FOUNDATION_EXPORT AVIMConversationUpdatedKey AVIMConversationUpdatedKeyLastMessageAt;
+FOUNDATION_EXPORT AVIMConversationUpdatedKey AVIMConversationUpdatedKeyLastReadAt;
+FOUNDATION_EXPORT AVIMConversationUpdatedKey AVIMConversationUpdatedKeyLastDeliveredAt;
+FOUNDATION_EXPORT AVIMConversationUpdatedKey AVIMConversationUpdatedKeyUnreadMessagesCount;
+FOUNDATION_EXPORT AVIMConversationUpdatedKey AVIMConversationUpdatedKeyUnreadMessagesMentioned;
 
 @interface AVIMClient : NSObject
 
@@ -155,65 +93,41 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
 /**
  Thread-safe for getter & setter.
  */
-@property (nonatomic, weak, nullable) id<AVIMClientDelegate> delegate;
+@property (nonatomic, weak, nullable) id <AVIMClientDelegate> delegate;
 
 /*
  Thread-safe for getter & setter.
  */
-@property (nonatomic, weak, nullable) id<AVIMSignatureDataSource> signatureDataSource;
+@property (nonatomic, weak, nullable) id <AVIMSignatureDataSource> signatureDataSource;
 
 /**
  The ID of this Client.
- 
- see more: -[initWithClientId:] or -[initWithClientId:tag:]
  */
-@property (nonatomic, copy, readonly, nonnull) NSString *clientId;
+@property (nonatomic, strong, readonly, nonnull) NSString *clientId;
 
 /**
  The `AVUser` of this Client.
- 
- see more: -[initWithUser:] or -[initWithUser:tag:]
  */
 @property (nonatomic, strong, readonly, nullable) AVUser *user;
 
 /**
  The Tag of this Client.
- 
- see more: -[initWithClientId:tag:] or -[initWithUser:tag:]
  */
-@property (nonatomic, copy, readonly, nullable) NSString *tag;
-
-/**
- The Status of this Client.
- 
- @note Out of Thread-safe, this property Not Support KVO. Recommend using `AVIMClientDelegate`.
- 
- see more: `AVIMClientStatus`
- */
-@property (nonatomic, assign, readonly) AVIMClientStatus status;
+@property (nonatomic, strong, readonly, nullable) NSString *tag;
 
 /**
  控制是否打开历史消息查询本地缓存的功能, 默认开启
  */
 @property (nonatomic, assign) BOOL messageQueryCacheEnabled;
 
-/**
- Unavailable.
- 
- @return Exception.
- */
 + (instancetype)new NS_UNAVAILABLE;
-
-/**
- Unavailable.
- 
- @return Exception.
- */
 - (instancetype)init NS_UNAVAILABLE;
 
 /**
  Initialization method.
-
+ 
+ @note `clientId`'s length should in range [1, 64].
+ 
  @param clientId Identifie of this Client.
  @return Instance.
  */
@@ -221,9 +135,11 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
 
 /**
  Initialization method.
+ 
+ @note `clientId`'s length should in range [1, 64], `tag` should not use @"default".
 
  @param clientId Identifie of this Client.
- @param tag You can use 'Tag' to implement the feature that the same 'clientId' only used in single device. 'Tag' Can't set with "default", it's a reserved tag.
+ @param tag Set it to implement only one client online.
  @return Instance.
  */
 - (instancetype)initWithClientId:(NSString *)clientId tag:(NSString * _Nullable)tag LC_WARN_UNUSED_RESULT;
@@ -231,19 +147,26 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
 /**
  Initialization method.
 
- @param user The AVUser of this Client.
+ @param user The `AVUser` of this Client.
  @return Instance.
  */
 - (instancetype)initWithUser:(AVUser *)user LC_WARN_UNUSED_RESULT;
 
 /**
  Initialization method.
+ 
+ @note `tag` should not use @"default".
 
- @param user The AVUser of this Client.
-  @param tag You can use 'Tag' to implement the feature that the same 'clientId' only used in single device. 'Tag' Can't set with "default", it's a reserved tag.
+ @param user The `AVUser` of this Client.
+ @param tag Set it to implement only one client online.
  @return Instance.
  */
 - (instancetype)initWithUser:(AVUser *)user tag:(NSString * _Nullable)tag LC_WARN_UNUSED_RESULT;
+
+/**
+ The Status of this Client.
+ */
+- (AVIMClientStatus)status LC_WARN_UNUSED_RESULT;
 
 /**
  Start a Session with Server.
@@ -338,40 +261,48 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
 
 /**
  Get a Exist Conversation Retained by this Client.
- 
  Thread-safe & Sync.
-
+ 
  @param conversationId conversationId
  @return if the Conversation Exist, return the Instance; if not, return nil.
  */
 - (AVIMConversation * _Nullable)conversationForId:(NSString *)conversationId LC_WARN_UNUSED_RESULT;
 
+
 /**
- Remove Conversations Retained by this Client.
- 
+ Get Conversations Retained by this Client.
  Thread-safe & Async.
 
- @param conversationIDArray Array of conversation's ID
+ @param conversationIds ID array.
+ @param callback Result.
+ */
+- (void)getConversationsFromMemoryWith:(NSArray<NSString *> *)conversationIds
+                              callback:(void (^)(NSArray<AVIMConversation *> * _Nullable conversations))callback;
+
+/**
+ Remove Conversations Retained by this Client.
+ Thread-safe & Async.
+ 
+ @param conversationIds Array of conversation's ID
  @param callback Result of Callback, always means success.
  */
-- (void)removeConversationsInMemoryWith:(NSArray<NSString *> *)conversationIDArray
-                               callback:(void(^)(void))callback;
+- (void)removeConversationsInMemoryWith:(NSArray<NSString *> *)conversationIds
+                               callback:(void (^)(void))callback;
 
 /**
  Remove all Conversations Retained by this Client.
- 
  Thread-safe & Async.
  
  @param callback Result of Callback, always means success.
  */
-- (void)removeAllConversationsInMemoryWith:(void(^)(void))callback;
+- (void)removeAllConversationsInMemoryWith:(void (^)(void))callback;
 
 /*!
  创建一个绑定到当前 client 的会话。
  @param keyedConversation AVIMKeyedConversation 对象。
  @return 已绑定到当前 client 的会话。
  */
-- (AVIMConversation *)conversationWithKeyedConversation:(AVIMKeyedConversation *)keyedConversation LC_WARN_UNUSED_RESULT;
+- (AVIMConversation * _Nullable)conversationWithKeyedConversation:(AVIMKeyedConversation *)keyedConversation LC_WARN_UNUSED_RESULT;
 
 /*!
  构造一个对话查询对象
@@ -387,7 +318,8 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  @param clients  An array of clients you want to query.
  @param callback The callback of query.
  */
-- (void)queryOnlineClientsInClients:(NSArray<NSString *> *)clients callback:(void (^)(NSArray<NSString *> * _Nullable clientIds, NSError * _Nullable error))callback;
+- (void)queryOnlineClientsInClients:(NSArray<NSString *> *)clients
+                           callback:(void (^)(NSArray<NSString *> * _Nullable clientIds, NSError * _Nullable error))callback;
 
 @end
 
@@ -523,7 +455,7 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationOption) {
  @param conversation The updated conversation.
  @param key          The property name of updated conversation.
  */
-- (void)conversation:(AVIMConversation *)conversation didUpdateForKey:(NSString *)key;
+- (void)conversation:(AVIMConversation *)conversation didUpdateForKey:(AVIMConversationUpdatedKey)key;
 
 /**
  Notification for conversation's attribution updated.
