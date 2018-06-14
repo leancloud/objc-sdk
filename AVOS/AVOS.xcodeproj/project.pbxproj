@@ -3461,7 +3461,7 @@
 					};
 					8C8419851A5A791300C5C6C4 = {
 						CreatedOnToolsVersion = 6.1.1;
-						LastSwiftMigration = 0920;
+						LastSwiftMigration = 0940;
 					};
 					8C8419901A5A791300C5C6C4 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -3472,7 +3472,7 @@
 					};
 					8C8419CC1A5A796000C5C6C4 = {
 						CreatedOnToolsVersion = 6.1.1;
-						LastSwiftMigration = 0920;
+						LastSwiftMigration = 0940;
 					};
 					D3078A782010739700A4C5FD = {
 						CreatedOnToolsVersion = 9.2;
