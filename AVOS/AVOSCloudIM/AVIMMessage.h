@@ -52,22 +52,22 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  * 消息 id
  */
-@property (nonatomic, copy, readonly, nullable) NSString *messageId;
+@property (nonatomic, strong, readonly, nullable) NSString *messageId;
 
 /*!
  * 消息发送/接收方 id
  */
-@property (nonatomic, copy, readonly, nullable) NSString *clientId;
+@property (nonatomic, strong, readonly, nullable) NSString *clientId;
 
 /*!
  * A flag indicates whether this message mentions all members in conversation or not.
  */
-@property (nonatomic, assign) BOOL mentionAll;
+@property (nonatomic, assign, readwrite) BOOL mentionAll;
 
 /*!
  * An ID list of clients who mentioned by this message.
  */
-@property (nonatomic, strong, nullable) NSArray<NSString *> *mentionList;
+@property (nonatomic, strong, readwrite, nullable) NSArray<NSString *> *mentionList;
 
 /*!
  * Whether current client is mentioned by this message.
@@ -77,12 +77,12 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  * 消息所属对话的 id
  */
-@property (nonatomic, copy, readonly, nullable) NSString *conversationId;
+@property (nonatomic, strong, readonly, nullable) NSString *conversationId;
 
 /*!
  * 消息文本
  */
-@property (nonatomic, copy, nullable) NSString *content;
+@property (nonatomic, strong, readonly, nullable) NSString *content;
 
 /*!
  * 发送时间（精确到毫秒）
@@ -107,9 +107,9 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  The message update time.
  */
-@property (nonatomic, strong, readonly) NSDate *updatedAt;
+@property (nonatomic, strong, readonly, nullable) NSDate *updatedAt;
 
-- (nullable NSString *)payload;
+- (NSString * _Nullable)payload;
 
 /*!
  创建文本消息。

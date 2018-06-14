@@ -18,12 +18,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Latitude. Should be 0~90.
  */
-@property(nonatomic, assign, readonly) float latitude;
+@property(nonatomic, assign, readonly) CGFloat latitude;
 
 /**
  *  Longitude, Should be 0~360.
  */
-@property(nonatomic, assign, readonly) float longitude;
+@property(nonatomic, assign, readonly) CGFloat longitude;
 
 /*!
  创建位置消息。
@@ -33,8 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
  @param attributes － 用户附加属性
  */
 + (instancetype)messageWithText:(nullable NSString *)text
-                       latitude:(float)latitude
-                      longitude:(float)longitude
+                       latitude:(CGFloat)latitude
+                      longitude:(CGFloat)longitude
                      attributes:(nullable NSDictionary *)attributes;
 
 @end

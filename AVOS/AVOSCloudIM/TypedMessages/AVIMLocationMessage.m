@@ -23,8 +23,8 @@
 }
 
 + (instancetype)messageWithText:(NSString *)text
-                       latitude:(float)latitude
-                      longitude:(float)longitude
+                       latitude:(CGFloat)latitude
+                      longitude:(CGFloat)longitude
                      attributes:(NSDictionary *)attributes {
     AVIMLocationMessage *message = [[self alloc] init];
     message.text = text;
@@ -34,11 +34,11 @@
     return message;
 }
 
-- (float)longitude {
+- (CGFloat)longitude {
     return self.location.longitude;
 }
 
-- (float)latitude {
+- (CGFloat)latitude {
     return self.location.latitude;
 }
 

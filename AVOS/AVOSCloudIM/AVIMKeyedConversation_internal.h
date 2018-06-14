@@ -30,7 +30,7 @@
 @property (nonatomic, assign) BOOL    transient;
 @property (nonatomic, assign) BOOL    system;
 @property (nonatomic, assign) BOOL    temporary;
-@property (nonatomic, assign) int32_t temporaryTTL;
+@property (nonatomic, assign) NSUInteger temporaryTTL;
 @property (nonatomic, assign) BOOL    muted;
 
 @property (nonatomic, strong) NSMutableDictionary *properties;
