@@ -13,49 +13,19 @@ enum TestRegion {
     case CN_North
     case CN_East
     case US
-    case WebEngine
-    case ConversationMemberInfo
     
     var appInfo: (id: String, key: String) {
-        
         switch self {
-            
         case .CN_North:
-            
-            return (
-                id: "nq0awk3lh1dpmbkziz54377mryii8ny4xvp6njoygle5nlyg",
-                key: "6vdnmdkdi4fva9i06lt50s4mcsfhppjpzm3zf5zjc9ty4pdz"
-            )
-            
+            return (id: "S5vDI3IeCk1NLLiM1aFg3262-gzGzoHsz",
+                    key: "7g5pPsI55piz2PRLPWK5MPz0")
         case .CN_East:
-            
-            return (
-                id: "uwWkfssEBRtrxVpQWEnFtqfr-9Nh9j0Va",
-                key: "9OaLpoW21lIQtRYzJya4WHUR"
-            )
-            
+            return (id: "uwWkfssEBRtrxVpQWEnFtqfr-9Nh9j0Va",
+                    key: "9OaLpoW21lIQtRYzJya4WHUR")
         case .US:
-            
-            return (
-                id: "kknqydxqd9wdq4cboy1dvvug5ha0ce3i2mrerrdrmr6pla1p",
-                key: "fate582pwsfh97s9o99nw91a152i7ndm9tsy866e6wpezth4"
-            )
-            
-        case .WebEngine:
-            
-            return (
-                id: "tiy1PsmEtJJ1QtHvHzVQLVod-gzGzoHsz",
-                key: "m6HkmlWP3tclhnbbeWurifNl"
-            )
-            
-        case .ConversationMemberInfo:
-            
-            return (
-                id: "anruhhk6visejjip57psvv5uuv8sggrzdfl9pg2bghgsiy35",
-                key: "xhiibo2eiyokjdu2y3kqcb7334rtw4x33zam98buxzkjuq5g"
-            )
+            return (id: "kknqydxqd9wdq4cboy1dvvug5ha0ce3i2mrerrdrmr6pla1p",
+                    key: "fate582pwsfh97s9o99nw91a152i7ndm9tsy866e6wpezth4")
         }
-        
     }
 }
 
@@ -65,7 +35,7 @@ class LCTestBase: XCTestCase {
         
         super.setUp()
         
-        let region: TestRegion = .ConversationMemberInfo
+        let region: TestRegion = .CN_North
         
         let appInfo: (id: String, key: String) = region.appInfo
         
@@ -153,16 +123,21 @@ class LCTestBase: XCTestCase {
 
 class RunLoopSemaphore {
     
+    private var lock: NSLock = NSLock()
     var semaphoreValue: Int = 0
     
     func increment(_ number: Int = 1) {
         assert(number > 0)
+        self.lock.lock()
         self.semaphoreValue += number
+        self.lock.unlock()
     }
     
     func decrement(_ number: Int = 1) {
         assert(number > 0)
+        self.lock.lock()
         self.semaphoreValue -= number
+        self.lock.unlock()
     }
     
     fileprivate func waiting() -> Bool {

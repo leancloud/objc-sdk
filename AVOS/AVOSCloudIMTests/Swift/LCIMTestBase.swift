@@ -10,18 +10,16 @@ import Foundation
 import XCTest
 
 class LCIMTestBase: LCTestBase {
-
-    let isUseCustomTestRTMServer: Bool = true;
-    let customTestRTMServer: String = "wss://rtm51.leancloud.cn"; /* internal test server */
     
-    var clientDustbin: [AVIMClient] = []
+    static var clientDustbin: [AVIMClient] = []
     
-    override func setUp() {
+    override class func setUp() {
         super.setUp()
-        AVOSCloudIM.defaultOptions().rtmServer = self.isUseCustomTestRTMServer ? self.customTestRTMServer : nil
+        AVOSCloudIM.defaultOptions().rtmServer = "wss://rtm51.leancloud.cn"
+        AVIMClient.setUnreadNotificationEnabled(true)
     }
     
-    override func tearDown() {
+    override class func tearDown() {
         for client in self.clientDustbin {
             self.runloopTestingAsync(timeout: 10, async: { (semaphore: RunLoopSemaphore) in
                 semaphore.increment()
@@ -50,13 +48,10 @@ class LCIMTestBase: LCTestBase {
                 openedClient = succeeded ? client : nil
             })
         })
-        return openedClient
-    }
-    
-    func recycleClient(_ client: AVIMClient?) {
-        if let _client: AVIMClient = client {
-            self.clientDustbin.append(_client)
+        if let client: AVIMClient = openedClient {
+            LCIMTestBase.clientDustbin.append(client)
         }
+        return openedClient
     }
     
 }
