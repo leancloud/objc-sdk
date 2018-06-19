@@ -1062,19 +1062,18 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                     [subOriginAttr removeObjectForKey:subKey];
                 }
             } else {
+                // for safe, use deep copy.
                 NSMutableDictionary *mutableDic = subOriginAttr[subKey];
-                if (![NSMutableDictionary lc__checkingType:mutableDic]) {
-                    if ([NSDictionary lc__checkingType:mutableDic]) {
-                        mutableDic = mutableDic.mutableCopy;
+                if ([NSDictionary lc__checkingType:mutableDic]) {
+                    mutableDic = mutableDic.mutableCopy;
+                } else {
+                    if (modifiedValue) {
+                        mutableDic = [NSMutableDictionary dictionary];
                     } else {
-                        if (modifiedValue) {
-                            mutableDic = [NSMutableDictionary dictionary];
-                        } else {
-                            break;
-                        }
+                        break;
                     }
-                    subOriginAttr[subKey] = mutableDic;
                 }
+                subOriginAttr[subKey] = mutableDic;
                 subOriginAttr = mutableDic;
             }
         }
@@ -1118,9 +1117,10 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         }
         
         [self internalSyncLock:^{
-            NSMutableArray *mutedMembers = [NSArray lc__decodingDictionary:self->_rawJSONData key:kLCIMConv_mutedMembers].mutableCopy ?: NSMutableArray.array;
-            [mutedMembers addObject:self->_clientId];
-            self->_rawJSONData[kLCIMConv_mutedMembers] = mutedMembers;
+            NSArray *mutedMembers = [NSArray lc__decodingDictionary:self->_rawJSONData key:kLCIMConv_mutedMembers] ?: @[];
+            NSMutableSet *mutableSet = [NSMutableSet setWithArray:mutedMembers];
+            [mutableSet addObject:self->_clientId];
+            self->_rawJSONData[kLCIMConv_mutedMembers] = mutableSet.allObjects;
         }];
         [self removeCachedConversation];
         
@@ -1167,9 +1167,10 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         }
         
         [self internalSyncLock:^{
-            NSMutableArray *mutedMembers = [NSArray lc__decodingDictionary:self->_rawJSONData key:kLCIMConv_mutedMembers].mutableCopy ?: NSMutableArray.array;
-            [mutedMembers removeObject:self->_clientId];
-            self->_rawJSONData[kLCIMConv_mutedMembers] = mutedMembers;
+            NSArray *mutedMembers = [NSArray lc__decodingDictionary:self->_rawJSONData key:kLCIMConv_mutedMembers] ?: @[];
+            NSMutableSet *mutableSet = [NSMutableSet setWithArray:mutedMembers];
+            [mutableSet removeObject:self->_clientId];
+            self->_rawJSONData[kLCIMConv_mutedMembers] = mutableSet.allObjects;
         }];
         [self removeCachedConversation];
         
@@ -3195,7 +3196,9 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 - (AVIMKeyedConversation *)keyedConversation
 {
-    return nil;
+    AVIMKeyedConversation *keyedConversation = [AVIMKeyedConversation new];
+    keyedConversation.rawDataDic = self.rawJSONDataCopy;
+    return keyedConversation;
 }
 
 // MARK: - Deprecated
