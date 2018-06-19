@@ -2411,7 +2411,20 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
 
 - (AVIMConversation *)conversationWithKeyedConversation:(AVIMKeyedConversation *)keyedConversation
 {
-    return nil;
+    AssertNotRunInInternalSerialQueue(self);
+    NSString *conversationId = keyedConversation.rawDataDic[kLCIMConv_objectId];
+    if (!conversationId) {
+        return nil;
+    }
+    __block AVIMConversation *conv = nil;
+    dispatch_sync(self->_internalSerialQueue, ^{
+        conv = self->_conversationDictionary[conversationId];
+        if (!conv) {
+            conv = [AVIMConversation conversationWithRawJSONData:keyedConversation.rawDataDic.mutableCopy client:self];
+            self->_conversationDictionary[conversationId] = conv;
+        }
+    });
+    return conv;
 }
 
 - (void)conversation:(AVIMConversation *)conversation didUpdateForKeys:(NSArray<AVIMConversationUpdatedKey> *)keys
