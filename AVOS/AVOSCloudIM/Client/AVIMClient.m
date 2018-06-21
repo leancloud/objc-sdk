@@ -2024,7 +2024,9 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                 [conversation setRawJSONData:jsonData];
             } else {
                 conversation = [AVIMConversation conversationWithRawJSONData:jsonData client:self];
-                [self cacheConversationToMemory:conversation];
+                if (conversation) {
+                    [self cacheConversationToMemory:conversation];
+                }
             }
             if (!isTemporaryConversation) {
                 [self->_conversationCache cacheConversations:@[conversation]
@@ -2195,12 +2197,12 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                 return;
             }
             
-            AVIMConvCommand *inConvCommand = commandWrapper.inCommand.convMessage;
-            NSString *conversationId = inConvCommand.cid;
-            
+            AVIMGenericCommand *inCommand = commandWrapper.inCommand;
+            AVIMConvCommand *convCommand = (inCommand.hasConvMessage ? inCommand.convMessage : nil);
+            NSString *conversationId = (convCommand.hasCid ? convCommand.cid : nil);
             if (!conversationId) {
                 [self invokeInSpecifiedQueue:^{
-                    callback(nil, LCErrorInternal(@"in conv command invalid."));
+                    callback(nil, LCErrorInternal(@"in command invalid."));
                 }];
                 return;
             }
@@ -2232,14 +2234,14 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                         if (attributes) {
                             dic[kLCIMConv_attributes] = attributes.mutableCopy;
                         }
-                        if (inConvCommand.cdate) {
-                            dic[kLCIMConv_createdAt] = inConvCommand.cdate;
+                        if (convCommand.hasCdate) {
+                            dic[kLCIMConv_createdAt] = convCommand.cdate;
                         }
-                        if (inConvCommand.tempConvTtl) {
-                            dic[kLCIMConv_temporaryTTL] = @(inConvCommand.tempConvTtl);
+                        if (convCommand.hasTempConvTtl) {
+                            dic[kLCIMConv_temporaryTTL] = @(convCommand.tempConvTtl);
                         }
-                        if (inConvCommand.uniqueId) {
-                            dic[kLCIMConv_uniqueId] = inConvCommand.uniqueId;
+                        if (convCommand.hasUniqueId) {
+                            dic[kLCIMConv_uniqueId] = convCommand.uniqueId;
                         }
                         dic[kLCIMConv_unique] = @(unique);
                         dic[kLCIMConv_transient] = @(transient);
@@ -2251,7 +2253,9 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
                         dic;
                     });
                     conversation = [AVIMConversation conversationWithRawJSONData:dic client:self];
-                    [self cacheConversationToMemory:conversation];
+                    if (conversation) {
+                        [self cacheConversationToMemory:conversation];
+                    }
                 }
                 conversation;
             });
@@ -2418,10 +2422,12 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     }
     __block AVIMConversation *conv = nil;
     dispatch_sync(self->_internalSerialQueue, ^{
-        conv = self->_conversationDictionary[conversationId];
+        conv = [self getConversationFromMemory:conversationId];
         if (!conv) {
             conv = [AVIMConversation conversationWithRawJSONData:keyedConversation.rawDataDic.mutableCopy client:self];
-            self->_conversationDictionary[conversationId] = conv;
+            if (conv) {
+                [self cacheConversationToMemory:conv];
+            }
         }
     });
     return conv;
