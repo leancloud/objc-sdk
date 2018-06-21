@@ -228,39 +228,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         self->_lastReadTimestamp = 0;
         self->_unreadMessagesCount = 0;
         self->_unreadMessagesMentioned = false;
-        self->_lastMessage = ({
-            AVIMMessage *lastMessage = nil;
-            NSString *msgContent = [NSString lc__decodingDictionary:rawJSONData key:kLCIMConv_lastMessage];
-            NSString *msgId = [NSString lc__decodingDictionary:rawJSONData key:kLCIMConv_lastMessageId];
-            NSString *msgFrom = [NSString lc__decodingDictionary:rawJSONData key:kLCIMConv_lastMessageFrom];
-            int64_t msgTimestamp = [NSNumber lc__decodingDictionary:rawJSONData key:kLCIMConv_lastMessageTimestamp].longLongValue;
-            if (msgContent && msgId && msgFrom && msgTimestamp) {
-                AVIMTypedMessageObject *typedMessageObject = [[AVIMTypedMessageObject alloc] initWithJSON:msgContent];
-                if (typedMessageObject.isValidTypedMessageObject) {
-                    lastMessage = [AVIMTypedMessage messageWithMessageObject:typedMessageObject];
-                } else {
-                    lastMessage = [[AVIMMessage alloc] init];
-                }
-                lastMessage.status = AVIMMessageStatusDelivered;
-                lastMessage.conversationId = conversationId;
-                lastMessage.content = msgContent;
-                lastMessage.messageId = msgId;
-                lastMessage.clientId = msgFrom;
-                lastMessage.localClientId = self->_clientId;
-                lastMessage.sendTimestamp = msgTimestamp;
-                lastMessage.updatedAt = ({
-                    NSNumber *patchTimestamp = [NSNumber lc__decodingDictionary:rawJSONData key:kLCIMConv_lastMessagePatchTimestamp];
-                    NSDate *date = nil;
-                    if (patchTimestamp) {
-                        date = [NSDate dateWithTimeIntervalSince1970:(patchTimestamp.doubleValue / 1000.0)];
-                    }
-                    date;
-                });
-                lastMessage.mentionAll = [NSNumber lc__decodingDictionary:rawJSONData key:kLCIMConv_lastMessageMentionAll].boolValue;
-                lastMessage.mentionList = [NSArray lc__decodingDictionary:rawJSONData key:kLCIMConv_lastMessageMentionPids];
-            }
-            lastMessage;
-        });
+        self->_lastMessage = [self decodingLastMessageFromRawJSONData:rawJSONData];
     }
     
     return self;
@@ -504,6 +472,41 @@ static dispatch_queue_t messageCacheOperationQueue;
     return newMessageArrived;
 }
 
+- (AVIMMessage *)decodingLastMessageFromRawJSONData:(NSMutableDictionary *)rawJSONData
+{
+    AVIMMessage *lastMessage = nil;
+    NSString *msgContent = [NSString lc__decodingDictionary:rawJSONData key:kLCIMConv_lastMessage];
+    NSString *msgId = [NSString lc__decodingDictionary:rawJSONData key:kLCIMConv_lastMessageId];
+    NSString *msgFrom = [NSString lc__decodingDictionary:rawJSONData key:kLCIMConv_lastMessageFrom];
+    int64_t msgTimestamp = [NSNumber lc__decodingDictionary:rawJSONData key:kLCIMConv_lastMessageTimestamp].longLongValue;
+    if (msgContent && msgId && msgFrom && msgTimestamp) {
+        AVIMTypedMessageObject *typedMessageObject = [[AVIMTypedMessageObject alloc] initWithJSON:msgContent];
+        if (typedMessageObject.isValidTypedMessageObject) {
+            lastMessage = [AVIMTypedMessage messageWithMessageObject:typedMessageObject];
+        } else {
+            lastMessage = [[AVIMMessage alloc] init];
+        }
+        lastMessage.status = AVIMMessageStatusDelivered;
+        lastMessage.conversationId = self->_conversationId;
+        lastMessage.content = msgContent;
+        lastMessage.messageId = msgId;
+        lastMessage.clientId = msgFrom;
+        lastMessage.localClientId = self->_clientId;
+        lastMessage.sendTimestamp = msgTimestamp;
+        lastMessage.updatedAt = ({
+            NSNumber *patchTimestamp = [NSNumber lc__decodingDictionary:rawJSONData key:kLCIMConv_lastMessagePatchTimestamp];
+            NSDate *date = nil;
+            if (patchTimestamp) {
+                date = [NSDate dateWithTimeIntervalSince1970:(patchTimestamp.doubleValue / 1000.0)];
+            }
+            date;
+        });
+        lastMessage.mentionAll = [NSNumber lc__decodingDictionary:rawJSONData key:kLCIMConv_lastMessageMentionAll].boolValue;
+        lastMessage.mentionList = [NSArray lc__decodingDictionary:rawJSONData key:kLCIMConv_lastMessageMentionPids];
+    }
+    return lastMessage;
+}
+
 - (NSDate *)lastDeliveredAt
 {
     __block int64_t timestamp = 0;
@@ -567,9 +570,17 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (void)setRawJSONData:(NSMutableDictionary *)rawJSONData
 {
+    __block AVIMMessage *lastMessage = nil;
     [self internalSyncLock:^{
         self->_rawJSONData = rawJSONData;
+        lastMessage = [self decodingLastMessageFromRawJSONData:rawJSONData];
     }];
+    AVIMClient *client = self->_imClient;
+    if (client && lastMessage) {
+        [client addOperationToInternalSerialQueue:^(AVIMClient *client) {
+            [self updateLastMessage:lastMessage client:client];
+        }];
+    }
 }
 
 - (void)updateRawJSONDataWith:(NSDictionary *)dictionary
