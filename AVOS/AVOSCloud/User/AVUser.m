@@ -785,6 +785,23 @@ static BOOL enableAutomatic = NO;
     return theResult;
 }
 
++ (void)signUpOrLoginWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
+                                               smsCode:(NSString *)smsCode
+                                              password:(NSString *)password
+                                                 block:(AVUserResultBlock)block
+{    
+    NSDictionary *parameters = @{ mobilePhoneNumberTag: phoneNumber, smsCodeTag: smsCode, passwordTag: password };
+    [[AVPaasClient sharedInstance] postObject:@"usersByMobilePhone" withParameters:parameters block:^(id object, NSError *error) {
+        if (error) {
+            [AVUtils callUserResultBlock:block user:nil error:error];
+            return;
+        }
+        AVUser *user = [self userOrSubclassUser];
+        [self configAndChangeCurrentUserWithUser:user object:object];
+        [AVUtils callUserResultBlock:block user:user error:nil];
+    }];
+}
+
 // MARK: - logout
 
 + (void)logOut {
