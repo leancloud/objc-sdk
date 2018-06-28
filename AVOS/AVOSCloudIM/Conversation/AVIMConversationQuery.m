@@ -315,11 +315,14 @@
     }
 }
 
-- (void)invokeInSpecifiedQueue:(void (^)(void))block
+- (void)invokeInUserInteractQueue:(void (^)(void))block
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        block();
-    });
+    dispatch_queue_t queue = self->_client.userInteractQueue;
+    if (queue) {
+        dispatch_async(queue, ^{
+            block();
+        });
+    }
 }
 
 - (void)getConversationById:(NSString *)conversationId
@@ -331,11 +334,7 @@
             callback(nil, error);
             return;
         }
-        if (conversations && conversations.count == 1) {
-            callback(conversations.firstObject, nil);
-        } else {
-            callback(nil, LCError(kAVIMErrorConversationNotFound, @"conversation not found.", nil));
-        }
+        callback(conversations.firstObject, nil);
     }];
 }
 
@@ -343,7 +342,7 @@
 {
     AVIMClient *client = self.client;
     if (!client) {
-        [self invokeInSpecifiedQueue:^{
+        [self invokeInUserInteractQueue:^{
             callback(nil, LCErrorInternal(@"client invalid."));
         }];
         return;
@@ -389,12 +388,12 @@
         if (commandWrapper.error) {
             if (self.cachePolicy == kAVIMCachePolicyNetworkElseCache) {
                 [self fetchCachedResultsForOutCommand:commandWrapper.outCommand client:client callback:^(NSArray *conversations) {
-                    [self invokeInSpecifiedQueue:^{
+                    [self invokeInUserInteractQueue:^{
                         callback(conversations, nil);
                     }];
                 }];
             } else {
-                [self invokeInSpecifiedQueue:^{
+                [self invokeInUserInteractQueue:^{
                     callback(nil, commandWrapper.error);
                 }];
             }
@@ -408,7 +407,7 @@
                 NSError *error = nil;
                 NSMutableArray<NSMutableDictionary *> *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
                 if (error) {
-                    [self invokeInSpecifiedQueue:^{
+                    [self invokeInUserInteractQueue:^{
                         callback(nil, error);
                     }];
                     return;
@@ -443,7 +442,7 @@
             [client.conversationCache cacheConversations:conversations maxAge:self.cacheMaxAge forCommand:commandWrapper.outCommand.avim_conversationForCache];
         }
         
-        [self invokeInSpecifiedQueue:^{
+        [self invokeInUserInteractQueue:^{
             callback(conversations, nil);
         }];
     }];
@@ -459,7 +458,7 @@
         case kAVIMCachePolicyCacheOnly:
         {
             [self fetchCachedResultsForOutCommand:commandWrapper.outCommand client:client callback:^(NSArray *conversations) {
-                [self invokeInSpecifiedQueue:^{
+                [self invokeInUserInteractQueue:^{
                     callback(conversations, nil);
                 }];
             }];
@@ -468,7 +467,7 @@
         {
             [self fetchCachedResultsForOutCommand:commandWrapper.outCommand client:client callback:^(NSArray *conversations) {
                 if (conversations.count > 0) {
-                    [self invokeInSpecifiedQueue:^{
+                    [self invokeInUserInteractQueue:^{
                         callback(conversations, nil);
                     }];
                 } else {
@@ -479,7 +478,7 @@
         case kAVIMCachePolicyCacheThenNetwork:
         {   // issue
             [self fetchCachedResultsForOutCommand:commandWrapper.outCommand client:client callback:^(NSArray *conversations) {
-                [self invokeInSpecifiedQueue:^{
+                [self invokeInUserInteractQueue:^{
                     callback(conversations, nil);
                 }];
                 [client sendCommandWrapper:commandWrapper];
@@ -494,14 +493,14 @@
 {
     AVIMClient *client = self.client;
     if (!client) {
-        [self invokeInSpecifiedQueue:^{
+        [self invokeInUserInteractQueue:^{
             callback(nil, LCErrorInternal(@"client invalid."));
         }];
         return;
     }
     
     if (!tempConvIds || tempConvIds.count == 0) {
-        [self invokeInSpecifiedQueue:^{
+        [self invokeInUserInteractQueue:^{
             callback(@[], nil);
         }];
         return;
@@ -529,7 +528,7 @@
     [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
-            [self invokeInSpecifiedQueue:^{
+            [self invokeInUserInteractQueue:^{
                 callback(nil, commandWrapper.error);
             }];
             return;
@@ -542,7 +541,7 @@
                 NSError *error = nil;
                 NSMutableArray<NSMutableDictionary *> *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
                 if (error) {
-                    [self invokeInSpecifiedQueue:^{
+                    [self invokeInUserInteractQueue:^{
                         callback(nil, error);
                     }];
                     return;
@@ -573,7 +572,7 @@
             conversations;
         });
         
-        [self invokeInSpecifiedQueue:^{
+        [self invokeInUserInteractQueue:^{
             callback(conversations, nil);
         }];
     }];

@@ -16,15 +16,16 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, AVIMErrorCode) {
-    kAVIMErrorTimeout = 9000,
-    kAVIMErrorConnectionLost,
-    kAVIMErrorClientNotOpen,
-    kAVIMErrorInvalidCommand,
-    kAVIMErrorInvalidArguments,
-    kAVIMErrorMessageNotFound,
-    kAVIMErrorConversationNotFound,
-    kAVIMErrorInvalidData,
-    kAVIMErrorMessageTooLong,
+    // 90XX
+    AVIMErrorCodeCommandTimeout = 9000,
+    AVIMErrorCodeConnectionLost = 9001,
+    AVIMErrorCodeClientNotOpen = 9002,
+    AVIMErrorCodeInvalidCommand = 9003,
+    AVIMErrorCodeCommandDataLengthTooLong = 9008,
+    // 91XX
+    AVIMErrorCodeUpdatingMessageNotAllowed = 9120,
+    AVIMErrorCodeUpdatingMessageNotSent = 9121,
+    AVIMErrorCodeOwnerPromotionNotAllowed = 9130,
 };
 
 /* AVOSCloud IM code key */

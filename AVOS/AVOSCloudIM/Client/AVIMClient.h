@@ -10,6 +10,7 @@
 #import "AVIMCommon.h"
 #import "AVIMSignature.h"
 #import "AVConstants.h"
+#import "AVIMConversationMemberInfo.h"
 
 @class AVIMConversation;
 @class AVIMKeyedConversation;
@@ -91,12 +92,12 @@ FOUNDATION_EXPORT AVIMConversationUpdatedKey AVIMConversationUpdatedKeyUnreadMes
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds;
 
 /**
- Thread-safe for getter & setter.
+ No thread-safe for getter & setter. recommend setting after instantiation.
  */
 @property (nonatomic, weak, nullable) id <AVIMClientDelegate> delegate;
 
 /*
- Thread-safe for getter & setter.
+ No thread-safe for getter & setter. recommend setting after instantiation.
  */
 @property (nonatomic, weak, nullable) id <AVIMSignatureDataSource> signatureDataSource;
 
@@ -475,7 +476,7 @@ FOUNDATION_EXPORT AVIMConversationUpdatedKey AVIMConversationUpdatedKeyUnreadMes
  @param memberId Client ID of being updated.
  @param role Updated role.
  */
-- (void)conversation:(AVIMConversation *)conversation didMemberInfoUpdateBy:(NSString * _Nullable)byClientId memberId:(NSString * _Nullable)memberId role:(NSString * _Nullable)role;
+- (void)conversation:(AVIMConversation *)conversation didMemberInfoUpdateBy:(NSString * _Nullable)byClientId memberId:(NSString * _Nullable)memberId role:(AVIMConversationMemberRole)role;
 
 /**
  Notification for this client was blocked by other client in the conversation.

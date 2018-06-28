@@ -60,12 +60,12 @@ typedef NS_ENUM(NSUInteger, LCIMConvType) {
 - (void)addMembers:(NSArray<NSString *> *)members;
 - (void)removeMembers:(NSArray<NSString *> *)members;
 
-- (AVIMMessage *)process_direct:(AVIMDirectCommand *)directCommand messageId:(NSString *)messageId;
-- (AVIMMessage *)process_rcp:(AVIMRcpCommand *)rcpCommand;
+- (AVIMMessage *)process_direct:(AVIMDirectCommand *)directCommand messageId:(NSString *)messageId isTransientMsg:(BOOL)isTransientMsg;
+- (AVIMMessage *)process_rcp:(AVIMRcpCommand *)rcpCommand isReadRcp:(BOOL)isReadRcp;
 - (NSUInteger)process_unread:(AVIMUnreadTuple *)unreadTuple;
-- (AVIMMessage *)process_patch_modified:(AVIMPatchItem *)patchItem messageId:(NSString *)messageId;
+- (AVIMMessage *)process_patch_modified:(AVIMPatchItem *)patchItem;
 - (void)process_conv_updated_attr:(NSDictionary *)attr attrModified:(NSDictionary *)attrModified;
-- (void)process_member_info_changed:(AVIMGenericCommand *)inCommand;
+- (void)process_member_info_changed:(NSString *)memberId role:(NSString *)role;
 
 @end
 

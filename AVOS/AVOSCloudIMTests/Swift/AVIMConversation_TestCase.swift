@@ -41,13 +41,9 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 XCTAssertNotNil(conv)
                 XCTAssertNil(error)
                 XCTAssertNotNil(conv?.conversationId)
-                if let conv: AVIMConversation = conv {
-                    normalConv = conv
-                }
+                normalConv = conv
             })
-        }, failure: {
-            XCTFail("timeout")
-        })
+        }, failure: { XCTFail("timeout") })
         
         if let normalConv: AVIMConversation = normalConv {
             
@@ -103,9 +99,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     XCTAssertFalse(commonMessage.transient)
                     XCTAssertNil(commonMessage.updatedAt)
                 })
-            }, failure: {
-                XCTFail("timeout")
-            })
+            }, failure: { XCTFail("timeout") })
         }
     }
     
@@ -138,13 +132,9 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 XCTAssertNotNil(conv)
                 XCTAssertNil(error)
                 XCTAssertNotNil(conv?.conversationId)
-                if let conv: AVIMConversation = conv {
-                    normalConv = conv
-                }
+                normalConv = conv
             })
-        }, failure: {
-            XCTFail("timeout")
-        })
+        }, failure: { XCTFail("timeout") })
         
         if let normalConv: AVIMConversation = normalConv {
             
@@ -200,9 +190,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     XCTAssertFalse(textMessage.transient)
                     XCTAssertNil(textMessage.updatedAt)
                 })
-            }, failure: {
-                XCTFail("timeout")
-            })
+            }, failure: { XCTFail("timeout") })
         }
     }
     
@@ -235,13 +223,9 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 XCTAssertNotNil(conv)
                 XCTAssertNil(error)
                 XCTAssertNotNil(conv?.conversationId)
-                if let conv: AVIMConversation = conv {
-                    normalConv = conv
-                }
+                normalConv = conv
             })
-        }, failure: {
-            XCTFail("timeout")
-        })
+        }, failure: { XCTFail("timeout") })
         
         if let normalConv: AVIMConversation = normalConv {
             
@@ -303,9 +287,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     XCTAssertEqual(locationMessage.latitude, latitude)
                     XCTAssertEqual(locationMessage.longitude, longitude)
                 })
-            }, failure: {
-                XCTFail("timeout")
-            })
+            }, failure: { XCTFail("timeout") })
         }
     }
     
@@ -338,13 +320,9 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 XCTAssertNotNil(conv)
                 XCTAssertNil(error)
                 XCTAssertNotNil(conv?.conversationId)
-                if let conv: AVIMConversation = conv {
-                    normalConv = conv
-                }
+                normalConv = conv
             })
-        }, failure: {
-            XCTFail("timeout")
-        })
+        }, failure: { XCTFail("timeout") })
         
         if let normalConv: AVIMConversation = normalConv {
             
@@ -422,9 +400,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     XCTAssertTrue(imageMessage.width > 0)
                     XCTAssertEqual(imageMessage.format, (dataTuple.name as NSString).pathExtension)
                 })
-            }, failure: {
-                XCTFail("timeout")
-            })
+            }, failure: { XCTFail("timeout") })
             
             if let receiveFile: AVFile = receiveFile {
                 self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
@@ -435,9 +411,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                         XCTAssertNotNil(url)
                         XCTAssertNil(error)
                     })
-                }, failure: {
-                    XCTFail("timeout")
-                })
+                }, failure: { XCTFail("timeout") })
             }
         }
     }
@@ -471,13 +445,9 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 XCTAssertNotNil(conv)
                 XCTAssertNil(error)
                 XCTAssertNotNil(conv?.conversationId)
-                if let conv: AVIMConversation = conv {
-                    normalConv = conv
-                }
+                normalConv = conv
             })
-        }, failure: {
-            XCTFail("timeout")
-        })
+        }, failure: { XCTFail("timeout") })
         
         if let normalConv: AVIMConversation = normalConv {
             
@@ -553,9 +523,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     XCTAssertTrue(audioMessage.duration > 0)
                     XCTAssertEqual(audioMessage.format, (dataTuple.name as NSString).pathExtension)
                 })
-            }, failure: {
-                XCTFail("timeout")
-            })
+            }, failure: { XCTFail("timeout") })
             
             if let receiveFile: AVFile = receiveFile {
                 self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
@@ -566,9 +534,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                         XCTAssertNotNil(url)
                         XCTAssertNil(error)
                     })
-                }, failure: {
-                    XCTFail("timeout")
-                })
+                }, failure: { XCTFail("timeout") })
             }
         }
     }
@@ -602,13 +568,9 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 XCTAssertNotNil(conv)
                 XCTAssertNil(error)
                 XCTAssertNotNil(conv?.conversationId)
-                if let conv: AVIMConversation = conv {
-                    normalConv = conv
-                }
+                normalConv = conv
             })
-        }, failure: {
-            XCTFail("timeout")
-        })
+        }, failure: { XCTFail("timeout") })
         
         if let normalConv: AVIMConversation = normalConv {
             
@@ -684,9 +646,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     XCTAssertTrue(videoMessage.duration > 0)
                     XCTAssertEqual(videoMessage.format, (dataTuple.name as NSString).pathExtension)
                 })
-            }, failure: {
-                XCTFail("timeout")
-            })
+            }, failure: { XCTFail("timeout") })
             
             if let receiveFile: AVFile = receiveFile {
                 self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
@@ -697,9 +657,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                         XCTAssertNotNil(url)
                         XCTAssertNil(error)
                     })
-                }, failure: {
-                    XCTFail("timeout")
-                })
+                }, failure: { XCTFail("timeout") })
             }
         }
     }
@@ -733,13 +691,9 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 XCTAssertNotNil(conv)
                 XCTAssertNil(error)
                 XCTAssertNotNil(conv?.conversationId)
-                if let conv: AVIMConversation = conv {
-                    normalConv = conv
-                }
+                normalConv = conv
             })
-        }, failure: {
-            XCTFail("timeout")
-        })
+        }, failure: { XCTFail("timeout") })
         
         if let normalConv: AVIMConversation = normalConv {
             
@@ -809,9 +763,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     XCTAssertFalse(fileMessage.transient)
                     XCTAssertNil(fileMessage.updatedAt)
                 })
-            }, failure: {
-                XCTFail("timeout")
-            })
+            }, failure: { XCTFail("timeout") })
             
             if let receiveFile: AVFile = receiveFile {
                 self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
@@ -822,9 +774,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                         XCTAssertNotNil(url)
                         XCTAssertNil(error)
                     })
-                }, failure: {
-                    XCTFail("timeout")
-                })
+                }, failure: { XCTFail("timeout") })
             }
         }
     }
@@ -858,13 +808,9 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 XCTAssertNotNil(conv)
                 XCTAssertNil(error)
                 XCTAssertNotNil(conv?.conversationId)
-                if let conv: AVIMConversation = conv {
-                    normalConv = conv
-                }
+                normalConv = conv
             })
-        }, failure: {
-            XCTFail("timeout")
-        })
+        }, failure: { XCTFail("timeout") })
         
         if let normalConv: AVIMConversation = normalConv {
             
@@ -940,9 +886,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     XCTAssertFalse(commonMessage.transient)
                     XCTAssertNil(commonMessage.updatedAt)
                 })
-            }, failure: {
-                XCTFail("timeout")
-            })
+            }, failure: { XCTFail("timeout") })
         }
     }
     
@@ -1098,13 +1042,9 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 XCTAssertNotNil(conv)
                 XCTAssertNil(error)
                 XCTAssertNotNil(conv?.conversationId)
-                if let conv: AVIMConversation = conv {
-                    normalConv = conv
-                }
+                normalConv = conv
             })
-        }, failure: {
-            XCTFail("timeout")
-        })
+        }, failure: { XCTFail("timeout") })
         
         if let normalConv: AVIMConversation = normalConv {
             
@@ -1162,9 +1102,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     XCTAssertTrue(commonMessage.transient)
                     XCTAssertNil(commonMessage.updatedAt)
                 })
-            }, failure: {
-                XCTFail("timeout")
-            })
+            }, failure: { XCTFail("timeout") })
         }
     }
     
@@ -1201,9 +1139,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     normalConv = conv
                 }
             })
-        }, failure: {
-            XCTFail("timeout")
-        })
+        }, failure: { XCTFail("timeout") })
         
         if let normalConv: AVIMConversation = normalConv {
             
@@ -1265,15 +1201,13 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     XCTAssertFalse(commonMessage.transient)
                     XCTAssertNil(commonMessage.updatedAt)
                 })
-            }, failure: {
-                XCTFail("timeout")
-            })
+            }, failure: { XCTFail("timeout") })
         }
     }
     
     // MARK: - Message Read & RCP Timestamp Fetch
     
-    func test_message_read_timestamp() {
+    func test_msg_read_timestamp() {
         
         let clientIds: [String] = [
             "\(#function.substring(to: #function.index(of: "(")!))_1",
@@ -1451,6 +1385,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     XCTAssertTrue(commonMessage.sendTimestamp > 0)
                     XCTAssertNotNil(commonMessage.clientId)
                     if succeeded {
+                        XCTAssertTrue(RunLoop.current.run(mode: .defaultRunLoopMode, before: Date(timeIntervalSinceNow: 1.0)))
                         normalConv.update(commonMessage, toNewMessage: newCommonMessage, callback: { (succeeded: Bool, error: Error?) in
                             semaphore.decrement()
                             XCTAssertTrue(Thread.isMainThread)
@@ -1534,6 +1469,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     XCTAssertTrue(commonMessage.sendTimestamp > 0)
                     XCTAssertNotNil(commonMessage.clientId)
                     if succeeded {
+                        XCTAssertTrue(RunLoop.current.run(mode: .defaultRunLoopMode, before: Date(timeIntervalSinceNow: 1.0)))
                         normalConv.recall(commonMessage, callback: { (succeeded: Bool, error: Error?, recalledMessage: AVIMRecalledMessage?) in
                             semaphore.decrement()
                             XCTAssertTrue(Thread.isMainThread)
@@ -2148,207 +2084,269 @@ class AVIMConversation_TestCase: LCIMTestBase {
     
     // MARK: - Member Info
     
-    let test_conv_member_info_clientIds: [String] = [
-        "test_conv_member_info_1",
-        "test_conv_member_info_2",
-        "test_conv_member_info_3"
-    ]
-    
-    func test_get_all_member_info() {
+    func test_conv_member_info_get() {
         
-        guard let client_1: AVIMClient = self.newOpenedClient(clientId: self.test_conv_member_info_clientIds[0]) else {
+        let clientIds: [String] = [
+            "\(#function.substring(to: #function.index(of: "(")!))_1",
+            "\(#function.substring(to: #function.index(of: "(")!))_2",
+            "\(#function.substring(to: #function.index(of: "(")!))_3",
+        ]
+        
+        guard let client: AVIMClient = self.newOpenedClient(clientId: clientIds[0]) else {
             XCTFail()
             return
         }
         
+        var normalConv: AVIMConversation! = nil
+        
         self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
-            
-            semaphore.increment(2)
-            
-            client_1.createConversation(withName: nil, clientIds: self.test_conv_member_info_clientIds, callback: { (conversation: AVIMConversation?, error: Error?) in
-                
+            semaphore.increment(1)
+            client.createConversation(withName: nil, clientIds: clientIds, callback: { (conversation: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
-                
                 XCTAssertNotNil(conversation)
                 XCTAssertNotNil(conversation?.conversationId)
                 XCTAssertNil(error)
-                
-                if let _conversation: AVIMConversation = conversation {
-                    
-                    _conversation.getAllMemberInfo(withIgnoringCache: true, callback: { (memberInfos: [AVIMConversationMemberInfo]?, error: Error?) in
-                        
+                normalConv = conversation
+            })
+        }, failure: { XCTFail("timeout") })
+        
+        if normalConv != nil {
+            
+            for memberId in [clientIds[1], clientIds[2]] {
+                self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                    semaphore.increment()
+                    normalConv.updateMemberRole(withMemberId: memberId, role: .manager, callback: { (succeeded: Bool, error: Error?) in
                         semaphore.decrement()
                         XCTAssertTrue(Thread.isMainThread)
-                        
-                        XCTAssertNotNil(memberInfos)
+                        XCTAssertTrue(succeeded)
                         XCTAssertNil(error)
                     })
-                    
-                } else {
-                    
+                }, failure: { XCTFail("timeout") })
+            }
+            
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                semaphore.increment()
+                normalConv.getAllMemberInfo(callback: { (memberInfos: [AVIMConversationMemberInfo]?, error: Error?) in
                     semaphore.decrement()
-                }
-            })
+                    XCTAssertTrue(Thread.isMainThread)
+                    XCTAssertNotNil(memberInfos)
+                    XCTAssertNil(error)
+                    var memberIdSet: Set = Set<String>()
+                    for item in memberInfos ?? [] {
+                        if let memberId: String = item.memberId() {
+                            memberIdSet.insert(memberId)
+                        }
+                    }
+                    XCTAssertEqual(memberIdSet, Set<String>(clientIds))
+                })
+            }, failure: { XCTFail("timeout") })
             
-        }, failure: {
+            for memberId in clientIds {
+                self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                    semaphore.increment()
+                    normalConv.getMemberInfo(withMemberId: memberId, callback: { (memberInfo: AVIMConversationMemberInfo?, error: Error?) in
+                        semaphore.decrement()
+                        XCTAssertTrue(Thread.isMainThread)
+                        XCTAssertNotNil(memberInfo)
+                        XCTAssertNil(error)
+                        XCTAssertEqual(memberInfo?.conversationId(), normalConv.conversationId)
+                        XCTAssertEqual(memberInfo?.memberId(), memberId)
+                        if memberId == client.clientId {
+                            XCTAssertEqual(memberInfo?.memberId(), normalConv.creator)
+                            XCTAssertEqual(memberInfo?.role(), AVIMConversationMemberRole.owner)
+                            XCTAssertEqual(memberInfo?.isOwner(), true)
+                        } else {
+                            XCTAssertEqual(memberInfo?.role(), AVIMConversationMemberRole.manager)
+                            XCTAssertEqual(memberInfo?.isOwner(), false)
+                        }
+                    })
+                }, failure: { XCTFail("timeout") })
+            }
             
-            XCTFail("timeout")
-        })
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                semaphore.increment()
+                normalConv.getMemberInfo(withIgnoringCache: true, memberId: clientIds[1], callback: { (memberInfo: AVIMConversationMemberInfo?, error: Error?) in
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                    XCTAssertEqual(memberInfo?.conversationId(), normalConv.conversationId)
+                    XCTAssertEqual(memberInfo?.memberId(), clientIds[1])
+                    XCTAssertEqual(memberInfo?.role(), AVIMConversationMemberRole.manager)
+                    XCTAssertEqual(memberInfo?.isOwner(), false)
+                })
+            }, failure: { XCTFail("timeout") })
+        }
     }
     
-    func test_get_member_info() {
+    func test_conv_member_info_update() {
         
-        guard let client_1: AVIMClient = self.newOpenedClient(clientId: self.test_conv_member_info_clientIds[0]) else {
+        let clientIds: [String] = [
+            "\(#function.substring(to: #function.index(of: "(")!))_1",
+            "\(#function.substring(to: #function.index(of: "(")!))_2",
+            "\(#function.substring(to: #function.index(of: "(")!))_3",
+        ]
+        
+        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
+
+        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        guard let client_2: AVIMClient = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
+            XCTFail()
+            return
+        }
+        
+        let delegate_3: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        guard let client_3: AVIMClient = self.newOpenedClient(clientId: clientIds[2], delegate: delegate_3) else {
+            XCTFail()
+            return
+        }
+        
+        var normalConv_1: AVIMConversation! = nil
+        var normalConv_2: AVIMConversation! = nil
+        var normalConv_3: AVIMConversation! = nil
         
         self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment(3)
             
-            client_1.createConversation(withName: nil, clientIds: self.test_conv_member_info_clientIds, callback: { (conversation: AVIMConversation?, error: Error?) in
-                
+            delegate_2.invitedByClosure = { (conv: AVIMConversation, byClientId: String?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
-                
+                XCTAssertNotNil(conv.conversationId)
+                normalConv_2 = conv
+            }
+            
+            delegate_3.invitedByClosure = { (conv: AVIMConversation, byClientId: String?) in
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
+                XCTAssertNotNil(conv.conversationId)
+                normalConv_3 = conv
+            }
+            
+            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conversation: AVIMConversation?, error: Error?) in
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(conversation)
                 XCTAssertNotNil(conversation?.conversationId)
                 XCTAssertNil(error)
+                normalConv_1 = conversation
+            })
+        }, failure: { XCTFail("timeout") })
+        
+        if normalConv_1 != nil, normalConv_2 != nil, normalConv_3 != nil {
+            
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
                 
-                if let _conversation: AVIMConversation = conversation {
-                    
-                    let memberId: String = self.test_conv_member_info_clientIds[1]
-                    let role: AVIMConversationMemberRole = .manager
-                    
-                    _conversation.updateMemberRole(withMemberId: memberId, role: role, callback: { (succeeded: Bool, error: Error?) in
-                        
-                        semaphore.decrement()
-                        XCTAssertTrue(Thread.isMainThread)
-                        
-                        XCTAssertTrue(succeeded)
-                        XCTAssertNil(error)
-                        
-                        if succeeded {
-                            
-                            _conversation.getMemberInfo(withMemberId: memberId, callback: { (memberInfo: AVIMConversationMemberInfo?, error: Error?) in
-                                
-                                semaphore.decrement()
-                                XCTAssertTrue(Thread.isMainThread)
-                                
-                                XCTAssertNotNil(memberInfo)
-                                XCTAssertNil(error)
-                                
-                                if let _memberInfo: AVIMConversationMemberInfo = memberInfo {
-                                    XCTAssertEqual(_memberInfo.memberId(), memberId)
-                                    XCTAssertEqual(_memberInfo.role(), role)
-                                    XCTAssertEqual(_memberInfo.conversationId(), _conversation.conversationId)
-                                    if memberId == client_1.clientId {
-                                        XCTAssertTrue(_memberInfo.isOwner())
-                                    } else {
-                                        XCTAssertFalse(_memberInfo.isOwner())
-                                    }
-                                }
-                            })
-                            
-                        } else {
-                            
-                            semaphore.decrement(2)
-                        }
-                    })
-                    
-                } else {
-                    
+                semaphore.increment(4)
+                
+                delegate_1.memberInfoChangeClosure = { (conv: AVIMConversation, byClientId: String?, memberId: String?, role: AVIMConversationMemberRole) in
                     semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                    XCTAssertEqual(conv.conversationId, normalConv_1.conversationId)
+                    XCTAssertEqual(byClientId, client_1.clientId)
+                    XCTAssertEqual(memberId, client_2.clientId)
+                    XCTAssertEqual(role, .manager)
                 }
-            })
-            
-        }, failure: {
-            
-            XCTFail("timeout")
-        })
-    }
-    
-    func test_update_member_info_role() {
-        
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
-        
-        guard let client_1: AVIMClient = self.newOpenedClient(clientId: self.test_conv_member_info_clientIds[0], delegate: delegate_1) else {
-            XCTFail()
-            return
-        }
-        
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
-        
-        guard let client_2: AVIMClient = self.newOpenedClient(clientId: self.test_conv_member_info_clientIds[1], delegate: delegate_2) else {
-            XCTFail()
-            return
-        }
-        
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
-            
-            semaphore.increment(4)
-            
-            client_1.createConversation(withName: nil, clientIds: self.test_conv_member_info_clientIds, callback: { (conversation: AVIMConversation?, error: Error?) in
                 
-                semaphore.decrement()
-                XCTAssertTrue(Thread.isMainThread)
-                
-                XCTAssertNotNil(conversation)
-                XCTAssertNotNil(conversation?.conversationId)
-                XCTAssertNil(error)
-                
-                if let _conversation: AVIMConversation = conversation {
-                    
-                    let updatingRole: AVIMConversationMemberRole = .manager
-                    
-                    delegate_1.memberInfoChangeClosure = { (conv: AVIMConversation, byClientId: String?, memberId: String?, role: String?) in
-                        
-                        semaphore.decrement()
-                        XCTAssertTrue(Thread.isMainThread)
-                        
-                        XCTAssertEqual(conv.conversationId, _conversation.conversationId)
-                        XCTAssertEqual(byClientId, client_1.clientId)
-                        XCTAssertEqual(memberId, client_2.clientId)
-                        XCTAssertEqual(role, AVIMConversationMemberInfo_StringFromRole(updatingRole))
-                    }
-                    
-                    delegate_2.memberInfoChangeClosure = { (conv: AVIMConversation, byClientId: String?, memberId: String?, role: String?) in
-                        
-                        semaphore.decrement()
-                        XCTAssertTrue(Thread.isMainThread)
-                        
-                        XCTAssertEqual(conv.conversationId, _conversation.conversationId)
-                        XCTAssertEqual(byClientId, client_1.clientId)
-                        XCTAssertEqual(memberId, client_2.clientId)
-                        XCTAssertEqual(role, AVIMConversationMemberInfo_StringFromRole(updatingRole))
-                    }
-                    
-                    _conversation.updateMemberRole(withMemberId: client_2.clientId, role: updatingRole, callback: { (succeeded: Bool, error: Error?) in
-                        
-                        semaphore.decrement()
-                        XCTAssertTrue(Thread.isMainThread)
-                        
-                        XCTAssertTrue(succeeded)
-                        XCTAssertNil(error)
-                        
-                        if error != nil {
-                            
-                            semaphore.decrement(2)
-                        }
-                    })
-                    
-                } else {
-                    
-                    semaphore.decrement(3)
+                delegate_2.memberInfoChangeClosure = { (conv: AVIMConversation, byClientId: String?, memberId: String?, role: AVIMConversationMemberRole) in
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                    XCTAssertEqual(conv.conversationId, normalConv_1.conversationId)
+                    XCTAssertEqual(byClientId, client_1.clientId)
+                    XCTAssertEqual(memberId, client_2.clientId)
+                    XCTAssertEqual(role, .manager)
                 }
-            })
+                
+                delegate_3.memberInfoChangeClosure = { (conv: AVIMConversation, byClientId: String?, memberId: String?, role: AVIMConversationMemberRole) in
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                    XCTAssertEqual(conv.conversationId, normalConv_1.conversationId)
+                    XCTAssertEqual(byClientId, client_1.clientId)
+                    XCTAssertEqual(memberId, client_2.clientId)
+                    XCTAssertEqual(role, .manager)
+                }
+                
+                normalConv_1.updateMemberRole(withMemberId: client_2.clientId, role: .manager, callback: { (succeeded: Bool, error: Error?) in
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                    XCTAssertTrue(succeeded)
+                    XCTAssertNil(error)
+                })
+            }, failure: { XCTFail("timeout") })
             
-        }, failure: {
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                semaphore.increment()
+                normalConv_1.updateMemberRole(withMemberId: client_1.clientId, role: .manager, callback: { (succeeded: Bool, error: Error?) in
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                    XCTAssertFalse(succeeded)
+                    XCTAssertNotNil(error)
+                    XCTAssertEqual((error as NSError?)?.code, AVIMErrorCode.ownerPromotionNotAllowed.rawValue)
+                })
+            }, failure: { XCTFail("timeout") })
             
-            XCTFail("timeout")
-        })
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                semaphore.increment()
+                normalConv_2.updateMemberRole(withMemberId: client_3.clientId, role: .manager, callback: { (succeeded: Bool, error: Error?) in
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                    XCTAssertFalse(succeeded)
+                    XCTAssertNotNil(error)
+                })
+            }, failure: { XCTFail("timeout") })
+            
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                semaphore.increment()
+                normalConv_3.updateMemberRole(withMemberId: client_2.clientId, role: .member, callback: { (succeeded: Bool, error: Error?) in
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                    XCTAssertFalse(succeeded)
+                    XCTAssertNotNil(error)
+                })
+            }, failure: { XCTFail("timeout") })
+            
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                
+                semaphore.increment(4)
+                
+                delegate_1.memberInfoChangeClosure = { (conv: AVIMConversation, byClientId: String?, memberId: String?, role: AVIMConversationMemberRole) in
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                    XCTAssertEqual(conv.conversationId, normalConv_1.conversationId)
+                    XCTAssertEqual(byClientId, client_1.clientId)
+                    XCTAssertEqual(memberId, client_2.clientId)
+                    XCTAssertEqual(role, .member)
+                }
+                
+                delegate_2.memberInfoChangeClosure = { (conv: AVIMConversation, byClientId: String?, memberId: String?, role: AVIMConversationMemberRole) in
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                    XCTAssertEqual(conv.conversationId, normalConv_1.conversationId)
+                    XCTAssertEqual(byClientId, client_1.clientId)
+                    XCTAssertEqual(memberId, client_2.clientId)
+                    XCTAssertEqual(role, .member)
+                }
+                
+                delegate_3.memberInfoChangeClosure = { (conv: AVIMConversation, byClientId: String?, memberId: String?, role: AVIMConversationMemberRole) in
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                    XCTAssertEqual(conv.conversationId, normalConv_1.conversationId)
+                    XCTAssertEqual(byClientId, client_1.clientId)
+                    XCTAssertEqual(memberId, client_2.clientId)
+                    XCTAssertEqual(role, .member)
+                }
+                
+                normalConv_1.updateMemberRole(withMemberId: client_2.clientId, role: .member, callback: { (succeeded: Bool, error: Error?) in
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                    XCTAssertTrue(succeeded)
+                    XCTAssertNil(error)
+                })
+            }, failure: { XCTFail("timeout") })
+        }
     }
     
     // MARK: - Member Block

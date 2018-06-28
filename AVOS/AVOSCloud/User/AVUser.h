@@ -331,6 +331,19 @@ A LeanCloud Framework User Object that is a local representation of a user persi
                                                smsCode:(NSString *)code
                                                  block:(AVUserResultBlock)block;
 
+/**
+ Use mobile phone number & SMS code & password to sign up or login.
+
+ @param phoneNumber Phone number.
+ @param smsCode SMS code.
+ @param password Password.
+ @param block Result callback.
+ */
++ (void)signUpOrLoginWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
+                                               smsCode:(NSString *)smsCode
+                                              password:(NSString *)password
+                                                 block:(AVUserResultBlock)block;
+
 
 /** @name Logging Out */
 

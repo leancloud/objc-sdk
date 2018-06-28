@@ -10,59 +10,50 @@ import XCTest
 
 class AVUser_TestCase: LCTestBase {
     
-    func newAVUser() -> AVUser? {
+    func test_mobile_signup_password() {
         
-        let username: String = UUID().uuidString.replacingOccurrences(of: "-", with: "")
-        let password: String = "123"
+        /// `mobileNumber` & `smsCode` defined in dashboard
+        let mobileNumber: String = "18677777777"
+        let smsCode: String = "375586"
+        let password: String = "12345678"
         
-        var user: AVUser! = AVUser.init()
-        user.username = username
-        user.password = password
+        var aUser: AVUser! = nil
         
         self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
-            
             semaphore.increment()
-            
-            user.signUpInBackground { (succeeded: Bool, error: Error?) in
-             
+            AVUser.signUpOrLoginWithMobilePhoneNumber(inBackground: mobileNumber, smsCode: smsCode, password: password, block: { (user: AVUser?, error:Error?) in
+                semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
-                
-                if let err: NSError = error as NSError? {
-                    
-                    if let response: [String : Any] = err.userInfo[kLeanCloudRESTAPIResponseError] as? [String : Any],
-                        let code: Int = response["code"] as? Int,
-                        code == 202 {
-                        
-                        AVUser.logInWithUsername(inBackground: username, password: password, block: { (aUser: AVUser?, aError: Error?) in
-                            
-                            semaphore.decrement()
-                            
-                            if let _ = aError {
-                                
-                                user = nil
-                                
-                            } else {
-                                
-                                user = aUser
-                            }
-                        })
-                        
-                    } else {
-                        
-                        semaphore.decrement()
-                        user = nil
-                    }
-                } else {
-                    
-                    semaphore.decrement()
-                }
-            }
-        }, failure: {
-            user = nil
-            XCTFail("timeout")
-        })
+                XCTAssertNotNil(user)
+                XCTAssertNil(error)
+                XCTAssertNotNil(user?.objectId)
+                aUser = user
+            })
+        }, failure: { XCTFail("timeout") })
         
-        return user
+        if aUser != nil {
+            
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                semaphore.increment()
+                AVUser.logInWithMobilePhoneNumber(inBackground: mobileNumber, password: password) { (user: AVUser?, error: Error?) in
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                    XCTAssertNotNil(user)
+                    XCTAssertNil(error)
+                    XCTAssertEqual(user?.objectId, aUser.objectId)
+                }
+            }, failure: { XCTFail("timeout") })
+            
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                semaphore.increment()
+                aUser.deleteInBackground { (succeeded: Bool, error: Error?) in
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                    XCTAssertTrue(succeeded)
+                    XCTAssertNil(error)
+                }
+            }, failure: { XCTFail("timeout") })
+        }
     }
     
     // MARK: - Auth Data

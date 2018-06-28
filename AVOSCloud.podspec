@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AVOSCloud'
-  s.version  = '11.1.2'
+  s.version  = '11.2.0'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud Objective-C SDK'
   s.authors  = 'LeanCloud'
@@ -54,8 +54,8 @@ Pod::Spec.new do |s|
     'AVOS/AVOSCloud/User/AVAnonymousUtils.h',
     'AVOS/AVOSCloud/User/AVUser.h',
     'AVOS/AVOSCloud/Utils/AVLogger.h',
-    'AVOS/AVOSCloud/AVAvailability.h',
-    'AVOS/AVOSCloud/Router/LCRouter.h'
+    'AVOS/AVOSCloud/Router/LCRouter.h',
+    'AVOS/AVOSCloud/AVAvailability.h'
 
   s.osx.exclude_files =
         []

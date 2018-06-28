@@ -131,26 +131,6 @@ NSString *const kAVIMConversationOperationQuery = @"query";
     }
 }
 
-- (BOOL)avim_validateCommand:(NSError **)error {
-    BOOL isValidatedCommand = YES;
-    NSString *key;
-    NSArray *requiredConditions = [self avim_requiredConditions];
-    for (NSInvocation *invocation in requiredConditions) {
-        [invocation invoke];
-        [invocation getReturnValue:&isValidatedCommand];
-        if (!isValidatedCommand) {
-            if (error) {
-                SEL selector;
-                [invocation getArgument:&selector atIndex:1];
-                key = NSStringFromSelector(selector);
-                *error = [self avim_missingKey:key];
-            }
-            return NO;
-        }
-    }
-    return isValidatedCommand;
-}
-
 - (NSInvocation *)avim_invocation:(SEL)selector target:(id)target {
     NSMethodSignature* signature = [target methodSignatureForSelector:selector];
     //FIXME:Crash
@@ -260,18 +240,6 @@ NSString *const kAVIMConversationOperationQuery = @"query";
             break;
     }
     return [requiredKeys copy];
-}
-
-/*!
- 仅用于序列化时的内部错误提示，不会暴露给用户
- @param key - key 的格式是 “has+key”，比如 hasCmd
- 错误信息举例：
- error=Error Domain=AVOSCloudIMErrorDomain Code=1 "AVIMGenericCommand or its property -- AVIMSessionCommand should hasCmd" UserInfo={NSLocalizedFailureReason=AVIMGenericCommand or its property -- AVIMSessionCommand should hasCmd, reason=AVIMGenericCommand or its property -- AVIMSessionCommand should hasCmd}
- 
- @return 将缺失的字段封装为NSError对象
- */
-- (NSError *)avim_missingKey:(NSString *)key {
-    return LCError(kAVIMErrorInvalidCommand, [NSString stringWithFormat:@"AVIMGenericCommand or its property -- %@ should %@", [self avim_messageClass], key], nil);
 }
 
 - (LCIMMessage *)avim_messageCommand {
