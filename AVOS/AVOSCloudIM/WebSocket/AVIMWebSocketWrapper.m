@@ -119,31 +119,31 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
     NSString *reason = nil;
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
     
-    AVIMErrorCommand *errorCommand = command.errorMessage;
-    AVIMSessionCommand *sessionCommand = command.sessionMessage;
-    AVIMAckCommand *ackCommand = command.ackMessage;
+    AVIMErrorCommand *errorCommand = (command.hasErrorMessage ? command.errorMessage : nil);
+    AVIMSessionCommand *sessionCommand = (command.hasSessionMessage ? command.sessionMessage : nil);
+    AVIMAckCommand *ackCommand = (command.hasAckMessage ? command.ackMessage : nil);
     
-    if (errorCommand && errorCommand.code > 0) {
+    if (errorCommand && errorCommand.hasCode) {
         code = errorCommand.code;
-        reason = errorCommand.reason;
-        if (errorCommand.appCode) {
+        reason = (errorCommand.hasReason ? errorCommand.reason : nil);
+        if (errorCommand.hasAppCode) {
             userInfo[keyPath(errorCommand, appCode)] = @(errorCommand.appCode);
         }
-        if (errorCommand.detail) {
+        if (errorCommand.hasDetail) {
             userInfo[keyPath(errorCommand, detail)] = errorCommand.detail;
         }
     }
-    else if (sessionCommand && sessionCommand.code > 0) {
+    else if (sessionCommand && sessionCommand.hasCode) {
         code = sessionCommand.code;
-        reason = sessionCommand.reason;
-        if (sessionCommand.detail) {
+        reason = (sessionCommand.hasReason ? sessionCommand.reason : nil);
+        if (sessionCommand.hasDetail) {
             userInfo[keyPath(sessionCommand, detail)] = sessionCommand.detail;
         }
     }
-    else if (ackCommand && ackCommand.code > 0) {
+    else if (ackCommand && ackCommand.hasCode) {
         code = ackCommand.code;
-        reason = ackCommand.reason;
-        if (ackCommand.appCode) {
+        reason = (ackCommand.hasReason ? ackCommand.reason : nil);
+        if (ackCommand.hasAppCode) {
             userInfo[keyPath(ackCommand, appCode)] = @(ackCommand.appCode);
         }
     }
@@ -412,9 +412,10 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
             
             [self _closeWithBlockAfterClose:^{
                 
-                NSString *reason = @"Application is in Background.";
-                
-                NSError *aError = LCErrorInternal(reason);
+                NSError *aError = ({
+                    AVIMErrorCode code = AVIMErrorCodeConnectionLost;
+                    LCError(code, AVIMErrorMessage(code), nil);
+                });
                 
                 if (_openCallbackArray.count > 0) {
                     
@@ -516,9 +517,10 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
             
             [self _closeWithBlockAfterClose:^{
                 
-                NSString *reason = @"Network is Not Reachable.";
-                
-                NSError *aError = LCErrorInternal(reason);
+                NSError *aError = ({
+                    AVIMErrorCode code = AVIMErrorCodeConnectionLost;
+                    LCError(code, AVIMErrorMessage(code), nil);
+                });
                 
                 if (_openCallbackArray.count > 0) {
                     
@@ -565,27 +567,19 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 
 - (void)openWithCallback:(AVIMBooleanResultBlock)callback
 {
-    dispatch_async(_serialQueue, ^{
+    dispatch_async(self->_serialQueue, ^{
         
-        NSString *errReason = nil;
-        
-        if (_isApplicationEnterBackground) {
-            
-            errReason = @"Can't open WebSocket when Application in Background.";
-            
-        } else if (_oldNetworkReachabilityStatus == AFNetworkReachabilityStatusNotReachable) {
-            
-            errReason = @"Can't open WebSocket when Network is Not Reachable.";
-        }
-        
-        if (errReason) {
-            
-            callback(false, LCErrorInternal(errReason));
-            
+        if (self->_isApplicationEnterBackground ||
+            self->_oldNetworkReachabilityStatus == AFNetworkReachabilityStatusNotReachable) {
+            NSError *error = ({
+                AVIMErrorCode code = AVIMErrorCodeConnectionLost;
+                LCError(code, AVIMErrorMessage(code), nil);
+            });
+            callback(false, error);
             return;
         }
         
-        _invokedOpenOnce = true;
+        self->_invokedOpenOnce = true;
         
         [self _openWithCallback:callback blockBeforeOpen:nil];
     });
@@ -810,7 +804,10 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         if (!webSocket ||
             webSocket.readyState != AVIMWebSocketStateConnected) {
             
-            NSError *error = LCError(kAVIMErrorConnectionLost, @"Websocket Not Connected.", nil);
+            NSError *error = ({
+                AVIMErrorCode code = AVIMErrorCodeConnectionLost;
+                LCError(code, AVIMErrorMessage(code), nil);
+            });
             
             if (callback) {
                 
@@ -835,10 +832,12 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         
         NSData *data = [genericCommand data];
         
-        if ([data respondsToSelector:@selector(length)] &&
-            data.length > 5000) {
+        if (data.length > 5000) {
             
-            NSError *error = LCError(kAVIMErrorMessageTooLong, @"The Size of Message Data is Too Large.", nil);
+            NSError *error = ({
+                AVIMErrorCode code = AVIMErrorCodeCommandDataLengthTooLong;
+                LCError(code, AVIMErrorMessage(code), nil);
+            });
             
             if (callback) {
                 
@@ -897,13 +896,12 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
             
             if (delegate) {
                 
-                NSError *aError = ({
-                    
-                    NSString *reason = @"WebSocket not Connected.";
-                    LCErrorInternal(reason);
+                NSError *error = ({
+                    AVIMErrorCode code = AVIMErrorCodeConnectionLost;
+                    LCError(code, AVIMErrorMessage(code), nil);
                 });
                 
-                commandWrapper.error = aError;
+                commandWrapper.error = error;
                 
                 [delegate webSocketWrapper:self didOccurError:commandWrapper];
             }
@@ -928,12 +926,12 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
             
             if (delegate) {
                 
-                NSError *aError = ({
-                    NSString *reason = @"The Size of Message Data is Too Large.";
-                    LCErrorInternal(reason);
+                NSError *error = ({
+                    AVIMErrorCode code = AVIMErrorCodeCommandDataLengthTooLong;
+                    LCError(code, AVIMErrorMessage(code), nil);
                 });
                 
-                commandWrapper.error = aError;
+                commandWrapper.error = error;
                 
                 [delegate webSocketWrapper:self didOccurError:commandWrapper];
             }
@@ -1041,7 +1039,10 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
     
     if (!error) {
         
-        error = LCErrorInternal(@"WebSocket failed with an Unknown Error.");
+        error = ({
+            AVIMErrorCode code = AVIMErrorCodeConnectionLost;
+            LCError(code, AVIMErrorMessage(code), nil);
+        });
     }
     
     AVLoggerError(AVLoggerDomainIM, @"Websocket Open Failed with Error: %@", error);
@@ -1455,12 +1456,13 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
             
             [self _closeWithBlockAfterClose:^{
                 
-                NSString *reason = @"WebSocket Ping Timeout.";
-                
-                NSError *aError = LCErrorInternal(reason);
+                NSError *error = ({
+                    AVIMErrorCode code = AVIMErrorCodeConnectionLost;
+                    LCError(code, AVIMErrorMessage(code), nil);
+                });
                 
                 NSDictionary *userInfo = @{
-                                           @"error" : aError,
+                                           @"error" : error,
                                            @"willReconnect" : @(true)
                                            };
                 
@@ -1503,8 +1505,11 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
             AVIMCommandResultBlock callback = command.callback;
             
             if (callback) {
-                
-                callback(command, nil, LCErrorInternal(@"Command Timeout."));
+                NSError *error = ({
+                    AVIMErrorCode code = AVIMErrorCodeCommandTimeout;
+                    LCError(code, AVIMErrorMessage(code), nil);
+                });
+                callback(command, nil, error);
             }
         } else {
             
@@ -1528,7 +1533,10 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
             
             if (delegate) {
                 
-                commandWrapper.error = LCErrorInternal(@"Command Timeout.");
+                commandWrapper.error = ({
+                    AVIMErrorCode code = AVIMErrorCodeCommandTimeout;
+                    LCError(code, AVIMErrorMessage(code), nil);
+                });
                 
                 [delegate webSocketWrapper:self didOccurError:commandWrapper];
             }

@@ -43,6 +43,7 @@ FOUNDATION_EXPORT NSString * const kTemporaryConversationIdPrefix;
                 installation:(AVInstallation *)installation LC_WARN_UNUSED_RESULT;
 
 - (dispatch_queue_t)internalSerialQueue LC_WARN_UNUSED_RESULT;
+- (dispatch_queue_t)userInteractQueue LC_WARN_UNUSED_RESULT;
 
 - (void)addOperationToInternalSerialQueue:(void (^)(AVIMClient *client))block;
 
