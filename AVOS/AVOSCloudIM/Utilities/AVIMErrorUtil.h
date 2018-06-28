@@ -7,3 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AVIMCommon.h"
+
+FOUNDATION_EXPORT NSString *AVIMErrorMessage(AVIMErrorCode code);
