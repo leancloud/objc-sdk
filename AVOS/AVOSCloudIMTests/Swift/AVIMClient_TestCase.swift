@@ -297,7 +297,7 @@ class AVIMClientDelegate_TestCase: NSObject, AVIMClientDelegate {
     var kickedByClosure: ((AVIMConversation, String?) -> Void)?
     var membersAddedClosure: ((AVIMConversation, [String]?, String?) -> Void)?
     var membersRemovedClosure: ((AVIMConversation, [String]?, String?) -> Void)?
-    var memberInfoChangeClosure: ((AVIMConversation, String?, String?, String?) -> Void)?
+    var memberInfoChangeClosure: ((AVIMConversation, String?, String?, AVIMConversationMemberRole) -> Void)?
     var blockByClosure: ((AVIMConversation, String?) -> Void)?
     var unblockByClosure: ((AVIMConversation, String?) -> Void)?
     var membersBlockByClosure: ((AVIMConversation, String?, [String]?) -> Void)?
@@ -356,7 +356,7 @@ class AVIMClientDelegate_TestCase: NSObject, AVIMClientDelegate {
         self.membersRemovedClosure?(conversation, clientIds, clientId)
     }
     
-    func conversation(_ conversation: AVIMConversation, didMemberInfoUpdateBy byClientId: String?, memberId: String?, role: String?) {
+    func conversation(_ conversation: AVIMConversation, didMemberInfoUpdateBy byClientId: String?, memberId: String?, role: AVIMConversationMemberRole) {
         self.memberInfoChangeClosure?(conversation, byClientId, memberId, role)
     }
     

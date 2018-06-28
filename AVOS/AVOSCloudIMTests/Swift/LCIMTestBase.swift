@@ -19,15 +19,16 @@ class LCIMTestBase: LCTestBase {
         AVIMClient.setUnreadNotificationEnabled(true)
     }
     
-    override class func tearDown() {
-        for client in self.clientDustbin {
-            self.runloopTestingAsync(timeout: 10, async: { (semaphore: RunLoopSemaphore) in
+    override func tearDown() {
+        for client in LCIMTestBase.clientDustbin {
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
                 semaphore.increment()
                 client.close(callback: { (_, _) in
                     semaphore.decrement()
                 })
             })
         }
+        LCIMTestBase.clientDustbin.removeAll()
         super.tearDown()
     }
     

@@ -71,24 +71,19 @@ class LCTestBase: XCTestCase {
         XCTAssertTrue(timeout > 0)
         
         let semaphore: RunLoopSemaphore = RunLoopSemaphore()
-        
         async(semaphore)
         
         let startTimestamp: TimeInterval = Date().timeIntervalSince1970
-        
         while semaphore.waiting() {
-            
-            let date: Date = Date.init(timeIntervalSinceNow: 1.0)
-            
+            let date: Date = Date(timeIntervalSinceNow: 1.0)
             XCTAssertTrue(RunLoop.current.run(mode: .defaultRunLoopMode, before: date))
-            
             if date.timeIntervalSince1970 - startTimestamp > timeout {
-                
                 failure?()
-                
                 return
             }
         }
+        
+        XCTAssertTrue(RunLoop.current.run(mode: .defaultRunLoopMode, before: Date(timeIntervalSinceNow: 1.0)))
     }
     
     static func runloopTestingAsync(
@@ -99,24 +94,19 @@ class LCTestBase: XCTestCase {
         XCTAssertTrue(timeout > 0)
         
         let semaphore: RunLoopSemaphore = RunLoopSemaphore()
-        
         async(semaphore)
         
         let startTimestamp: TimeInterval = Date().timeIntervalSince1970
-        
         while semaphore.waiting() {
-            
-            let date: Date = Date.init(timeIntervalSinceNow: 1.0)
-            
+            let date: Date = Date(timeIntervalSinceNow: 1.0)
             XCTAssertTrue(RunLoop.current.run(mode: .defaultRunLoopMode, before: date))
-            
             if date.timeIntervalSince1970 - startTimestamp > timeout {
-                
                 failure?()
-                
                 return
             }
         }
+        
+        XCTAssertTrue(RunLoop.current.run(mode: .defaultRunLoopMode, before: Date(timeIntervalSinceNow: 1.0)))
     }
     
 }
