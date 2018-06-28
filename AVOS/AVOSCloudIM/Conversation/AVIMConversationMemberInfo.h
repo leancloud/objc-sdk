@@ -19,12 +19,12 @@ NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSUInteger, AVIMConversationMemberRole) {
     AVIMConversationMemberRoleMember = 0,
     AVIMConversationMemberRoleManager = 1,
+    AVIMConversationMemberRoleOwner = 2,
 };
 
 @interface AVIMConversationMemberInfo : NSObject
 
 + (instancetype)new NS_UNAVAILABLE;
-
 - (instancetype)init NS_UNAVAILABLE;
 
 /**

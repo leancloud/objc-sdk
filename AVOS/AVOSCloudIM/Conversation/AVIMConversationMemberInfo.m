@@ -10,27 +10,37 @@
 #import "AVIMConversation_Internal.h"
 #import "AVUtils.h"
 
-NSString * const kAVIMConversationMemberRoleMember_string = @"Member";
-NSString * const kAVIMConversationMemberRoleManager_string = @"Manager";
-
-NSString * AVIMConversationMemberInfo_StringFromRole(AVIMConversationMemberRole role)
+NSString * AVIMConversationMemberInfo_role_to_key(AVIMConversationMemberRole role)
 {
-    switch (role) {
+    switch (role)
+    {
         case AVIMConversationMemberRoleMember:
-            return kAVIMConversationMemberRoleMember_string;
+            return kAVIMConversationMemberRoleMember;
         case AVIMConversationMemberRoleManager:
-            return kAVIMConversationMemberRoleManager_string;
+            return kAVIMConversationMemberRoleManager;
+        case AVIMConversationMemberRoleOwner:
+            return kAVIMConversationMemberRoleOwner;
         default:
             return nil;
     }
 }
 
+AVIMConversationMemberRole AVIMConversationMemberInfo_key_to_role(kAVIMConversationMemberRole key)
+{
+    AVIMConversationMemberRole role = AVIMConversationMemberRoleMember;
+    if ([key isEqualToString:kAVIMConversationMemberRoleMember]) {
+        role = AVIMConversationMemberRoleMember;
+    } else if ([key isEqualToString:kAVIMConversationMemberRoleManager]) {
+        role = AVIMConversationMemberRoleManager;
+    } else if ([key isEqualToString:kAVIMConversationMemberRoleOwner]) {
+        role = AVIMConversationMemberRoleOwner;
+    }
+    return role;
+}
+
 @implementation AVIMConversationMemberInfo {
-    
     __weak AVIMConversation *_conversation;
-    
     NSMutableDictionary *_rawJSONData;
-    
     NSLock *_lock;
 }
 
@@ -48,17 +58,14 @@ NSString * AVIMConversationMemberInfo_StringFromRole(AVIMConversationMemberRole 
     return nil;
 }
 
-- (instancetype)initWithJSON:(NSDictionary *)JSON conversation:(AVIMConversation *)conversation
+- (instancetype)initWithRawJSONData:(NSMutableDictionary *)rawJSONData conversation:(AVIMConversation *)conversation
 {
     self = [super init];
     
     if (self) {
-        
-        _rawJSONData = JSON.mutableCopy ?: [NSMutableDictionary dictionary];
-        
-        _conversation = conversation;
-        
-        _lock = [[NSLock alloc] init];
+        self->_rawJSONData = rawJSONData;
+        self->_conversation = conversation;
+        self->_lock = [[NSLock alloc] init];
     }
     
     return self;
@@ -74,7 +81,6 @@ NSString * AVIMConversationMemberInfo_StringFromRole(AVIMConversationMemberRole 
 - (void)updateRawJSONDataWithKey:(NSString *)key object:(id)object
 {
     [self internalSyncLock:^{
-        
         self->_rawJSONData[key] = object;
     }];
 }
@@ -82,69 +88,39 @@ NSString * AVIMConversationMemberInfo_StringFromRole(AVIMConversationMemberRole 
 - (NSString *)conversationId
 {
     __block NSString *value = nil;
-    
     [self internalSyncLock:^{
-        
-        value = [NSString lc__decodingDictionary:self->_rawJSONData key:@"cid"];
+        value = [NSString lc__decodingDictionary:self->_rawJSONData key:kAVIMConversationMemberInfoKey_conversationId];
     }];
-    
     return value;
 }
 
 - (NSString *)memberId
 {
     __block NSString *value = nil;
-    
     [self internalSyncLock:^{
-        
         /*
-         exist two key for member id.
+         exist two key for member id. firstly decoding 'clientId', secondly decoding 'peerId'.
          */
-        
-        value = [NSString lc__decodingDictionary:self->_rawJSONData key:@"clientId"];
-        
+        value = [NSString lc__decodingDictionary:self->_rawJSONData key:kAVIMConversationMemberInfoKey_memberId_1];
         if (!value) {
-            
-            value = [NSString lc__decodingDictionary:self->_rawJSONData key:@"peerId"];
+            value = [NSString lc__decodingDictionary:self->_rawJSONData key:kAVIMConversationMemberInfoKey_memberId_2];
         }
     }];
-    
     return value;
 }
 
 - (AVIMConversationMemberRole)role
 {
     __block NSString *value = nil;
-    
     [self internalSyncLock:^{
-        
-        value = [NSString lc__decodingDictionary:self->_rawJSONData key:@"role"];
+        value = [NSString lc__decodingDictionary:self->_rawJSONData key:kAVIMConversationMemberInfoKey_role];
     }];
-    
-    AVIMConversationMemberRole role = AVIMConversationMemberRoleMember;
-    
-    if ([value isEqualToString:kAVIMConversationMemberRoleMember_string]) {
-        
-        role = AVIMConversationMemberRoleMember;
-    }
-    else if ([value isEqualToString:kAVIMConversationMemberRoleManager_string]) {
-        
-        role = AVIMConversationMemberRoleManager;
-    }
-    
-    return role;
+    return AVIMConversationMemberInfo_key_to_role(value);
 }
 
 - (BOOL)isOwner
 {
-    AVIMConversation *conversation = self->_conversation;
-    
-    if (!conversation) {
-        
-        return false;
-    }
-    
-    return [conversation.creator isEqualToString:self.memberId] ? true : false;
+    return [self->_conversation.creator isEqualToString:self.memberId];
 }
 
 @end
