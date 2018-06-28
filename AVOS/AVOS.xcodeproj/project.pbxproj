@@ -1504,7 +1504,6 @@
 		D3054714208F302D00B547B9 /* AVIMConversation_TestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVIMConversation_TestCase.swift; sourceTree = "<group>"; };
 		D3078A5A201041B200A4C5FD /* AVOSCloudLiveQuery.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = AVOSCloudLiveQuery.podspec; path = ../AVOSCloudLiveQuery.podspec; sourceTree = "<group>"; };
 		D3078A5B201041B200A4C5FD /* AVOSCloud.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = AVOSCloud.podspec; path = ../AVOSCloud.podspec; sourceTree = "<group>"; };
-		D3078A5C201041B200A4C5FD /* AVOSCloudIMGroupChat.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = AVOSCloudIMGroupChat.podspec; path = ../AVOSCloudIMGroupChat.podspec; sourceTree = "<group>"; };
 		D3078A5D201041B200A4C5FD /* AVOSCloudIM.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = AVOSCloudIM.podspec; path = ../AVOSCloudIM.podspec; sourceTree = "<group>"; };
 		D3078A792010739700A4C5FD /* RuntimeTestDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RuntimeTestDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3078A7B2010739700A4C5FD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -1960,12 +1959,6 @@
 				83DBBDDC1BD0963000E69BDC /* LCIMClientSessionTokenCacheStore.m */,
 				8C841BCE1A5A84C600C5C6C4 /* AVIMCommon.h */,
 				8C841BCF1A5A84C600C5C6C4 /* AVIMCommon.m */,
-				83CFCB5E1B2A5D2700F97C92 /* AVIMKeyedConversation.h */,
-				83CFCB5F1B2A5D2700F97C92 /* AVIMKeyedConversation.m */,
-				834775DB1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h */,
-				8C1F675E1A8B379F00310E65 /* AVIMConversationQuery_Internal.h */,
-				8CBDFDE01A808EA500D67FBE /* AVIMConversationQuery.h */,
-				8CBDFDE11A808EA500D67FBE /* AVIMConversationQuery.m */,
 				8C895DF21A78B73600992A8F /* AVIMMessage_Internal.h */,
 				8C841BD31A5A84C600C5C6C4 /* AVIMMessage.h */,
 				8C841BD41A5A84C600C5C6C4 /* AVIMMessage.m */,
@@ -2403,7 +2396,6 @@
 			children = (
 				D3078A5B201041B200A4C5FD /* AVOSCloud.podspec */,
 				D3078A5D201041B200A4C5FD /* AVOSCloudIM.podspec */,
-				D3078A5C201041B200A4C5FD /* AVOSCloudIMGroupChat.podspec */,
 				D3078A5A201041B200A4C5FD /* AVOSCloudLiveQuery.podspec */,
 			);
 			name = Podspec;
@@ -2465,6 +2457,12 @@
 				D31126A2208F1C7900812135 /* AVIMConversationMemberInfo.h */,
 				D31126A3208F1C7A00812135 /* AVIMConversationMemberInfo_Internal.h */,
 				D31126A1208F1C7900812135 /* AVIMConversationMemberInfo.m */,
+				8CBDFDE01A808EA500D67FBE /* AVIMConversationQuery.h */,
+				8C1F675E1A8B379F00310E65 /* AVIMConversationQuery_Internal.h */,
+				8CBDFDE11A808EA500D67FBE /* AVIMConversationQuery.m */,
+				83CFCB5E1B2A5D2700F97C92 /* AVIMKeyedConversation.h */,
+				834775DB1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h */,
+				83CFCB5F1B2A5D2700F97C92 /* AVIMKeyedConversation.m */,
 			);
 			path = Conversation;
 			sourceTree = "<group>";
