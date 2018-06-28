@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AVOSCloudIM'
-  s.version  = '11.1.2'
+  s.version  = '11.2.0'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud IM Objective-C SDK'
   s.authors  = 'LeanCloud'
@@ -26,8 +26,8 @@ Pod::Spec.new do |s|
     ss.source_files =
       'AVOS/AVOSCloudIM/Protobuf/LCIMExtensionInternals.h',
       'AVOS/AVOSCloudIM/AVIMMessageOption.h',
-      'AVOS/AVOSCloudIM/AVIMKeyedConversation.h',
-      'AVOS/AVOSCloudIM/AVIMConversationQuery.h',
+      'AVOS/AVOSCloudIM/Conversation/AVIMKeyedConversation.h',
+      'AVOS/AVOSCloudIM/Conversation/AVIMConversationQuery.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMTextMessage.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMDescriptor.h',
       'AVOS/AVOSCloudIM/Vendor/SocketRocket/AVIMWebSocket.h',
@@ -59,7 +59,6 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/Commands/AVIMCommandFormatter.h',
       'AVOS/AVOSCloudIM/MessageCache/CacheStore/LCIMConversationQueryCacheStore.h',
       'AVOS/AVOSCloudIM/Conversation/AVIMConversation.h',
-      'AVOS/AVOSCloudIM/Conversation/AVIMConversationMemberInfo.h',
       'AVOS/AVOSCloudIM/AVIMMessage.h',
       'AVOS/AVOSCloudIM/InternalObjects/AVIMGeneralObject.h',
       'AVOS/AVOSCloudIM/AVIMSignature.h',
@@ -87,15 +86,16 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/AVMPMessagePack/avmp.h',
       'AVOS/AVOSCloudIM/InternalObjects/AVIMTypedMessageObject.h',
       'AVOS/AVOSCloudIM/Commands/AVIMConversationOutCommand.h',
+      'AVOS/AVOSCloudIM/Conversation/AVIMConversationMemberInfo.h',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMStruct.pbobjc.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMDescriptor_PackagePrivate.h',
+      'AVOS/AVOSCloudIM/Conversation/AVIMConversationMemberInfo_Internal.h',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMApi.pbobjc.h',
-      'AVOS/AVOSCloudIM/AVIMConversationQuery_Internal.h',
+      'AVOS/AVOSCloudIM/Conversation/AVIMConversationQuery_Internal.h',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMSourceContext.pbobjc.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMDictionary_PackagePrivate.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMExtensionRegistry.h',
       'AVOS/AVOSCloudIM/Conversation/AVIMConversation_Internal.h',
-      'AVOS/AVOSCloudIM/Conversation/AVIMConversationMemberInfo_Internal.h',
       'AVOS/AVOSCloudIM/MessageCache/CacheStore/LCIMMessageCacheStoreSQL.h',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMAny.pbobjc.h',
       'AVOS/AVOSCloudIM/Utilities/AVIMRuntimeHelper.h',
@@ -116,7 +116,7 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/MessageCache/CacheStore/LCIMConversationCacheStore.h',
       'AVOS/AVOSCloudIM/LCIMClientSessionTokenCacheStore.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMUnknownField.h',
-      'AVOS/AVOSCloudIM/AVIMKeyedConversation_internal.h',
+      'AVOS/AVOSCloudIM/Conversation/AVIMKeyedConversation_internal.h',
       'AVOS/AVOSCloudIM/AVMPMessagePack/AVMPMessagePackWriter.h',
       'AVOS/AVOSCloudIM/AVMPMessagePack/AVMPOrderedDictionary.h',
       'AVOS/AVOSCloudIM/AVMPMessagePack/AVMPMessagePackReader.h',
@@ -130,6 +130,7 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/Commands/AVIMDynamicObject.m',
       'AVOS/AVOSCloudIM/InternalObjects/AVIMTypedMessageObject.m',
       'AVOS/AVOSCloudIM/MessageCache/CacheStore/LCIMConversationCacheStore.m',
+      'AVOS/AVOSCloudIM/Conversation/AVIMConversationMemberInfo.m',
       'AVOS/AVOSCloudIM/Protobuf/LCIMUtilities.m',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMAny.pbobjc.m',
       'AVOS/AVOSCloudIM/Commands/AVIMDirectCommand+DirectCommandAdditions.m',
@@ -160,7 +161,7 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/TypedMessages/AVIMRecalledMessage.m',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMFieldMask.pbobjc.m',
       'AVOS/AVOSCloudIM/MessageCache/LCIMConversationCache.m',
-      'AVOS/AVOSCloudIM/AVIMConversationQuery.m',
+      'AVOS/AVOSCloudIM/Conversation/AVIMConversationQuery.m',
       'AVOS/AVOSCloudIM/Protobuf/LCIMUnknownField.m',
       'AVOS/AVOSCloudIM/AVIMCommon.m',
       'AVOS/AVOSCloudIM/MessageCache/LCIMMessageCache.m',
@@ -168,7 +169,6 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMType.pbobjc.m',
       'AVOS/AVOSCloudIM/AVIMMessage.m',
       'AVOS/AVOSCloudIM/Conversation/AVIMConversation.m',
-      'AVOS/AVOSCloudIM/Conversation/AVIMConversationMemberInfo.m',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMWrappers.pbobjc.m',
       'AVOS/AVOSCloudIM/Protobuf/LCIMExtensionInternals.m',
       'AVOS/AVOSCloudIM/Protobuf/LCIMExtensionRegistry.m',
@@ -189,12 +189,12 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/Utilities/AVIMErrorUtil.m',
       'AVOS/AVOSCloudIM/AVMPMessagePack/AVMPMessagePackReader.m',
       'AVOS/AVOSCloudIM/AVMPMessagePack/AVMPMessagePackWriter.m',
-      'AVOS/AVOSCloudIM/AVIMKeyedConversation.m'
+      'AVOS/AVOSCloudIM/Conversation/AVIMKeyedConversation.m'
 
     ss.public_header_files =
       'AVOS/AVOSCloudIM/AVIMMessageOption.h',
-      'AVOS/AVOSCloudIM/AVIMKeyedConversation.h',
-      'AVOS/AVOSCloudIM/AVIMConversationQuery.h',
+      'AVOS/AVOSCloudIM/Conversation/AVIMKeyedConversation.h',
+      'AVOS/AVOSCloudIM/Conversation/AVIMConversationQuery.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMTextMessage.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMRecalledMessage.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMLocationMessage.h',
@@ -206,11 +206,11 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/Client/AVIMClient.h',
       'AVOS/AVOSCloudIM/AVIMCommon.h',
       'AVOS/AVOSCloudIM/Conversation/AVIMConversation.h',
-      'AVOS/AVOSCloudIM/Conversation/AVIMConversationMemberInfo.h',
       'AVOS/AVOSCloudIM/AVIMMessage.h',
       'AVOS/AVOSCloudIM/AVIMSignature.h',
       'AVOS/AVOSCloudIM/AVIMAvailability.h',
       'AVOS/AVOSCloudIM/AVIMOptions.h',
+      'AVOS/AVOSCloudIM/Conversation/AVIMConversationMemberInfo.h',
       'AVOS/AVOSCloudIM/AVOSCloudIM.h',
       'AVOS/AVOSCloudIM/AVIMUserOptions.h'
 
