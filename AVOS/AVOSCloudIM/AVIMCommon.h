@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
+#if __has_include(<AVOSCloud/AVConstants.h>)
+#import <AVOSCloud/AVConstants.h>
+#else
+#import "AVConstants.h"
+#endif
 
 @class AVIMConversation;
 @class AVIMChatRoom;

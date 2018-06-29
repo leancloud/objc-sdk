@@ -9,7 +9,6 @@
 #import "AVIMAvailability.h"
 #import "AVIMCommon.h"
 #import "AVIMSignature.h"
-#import "AVConstants.h"
 #import "AVIMConversationMemberInfo.h"
 
 @class AVIMConversation;
