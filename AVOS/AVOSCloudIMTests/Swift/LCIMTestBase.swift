@@ -42,6 +42,9 @@ class LCIMTestBase: LCTestBase {
         var openedClient: AVIMClient?
         self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
             let client: AVIMClient = AVIMClient(clientId: clientId, tag: tag, installation: installation)
+            client.assertInternalQuietCallback = { (error: Error?) in
+                XCTAssertNil(error)
+            }
             client.delegate = delegate
             semaphore.increment()
             client.open(with: .forceOpen, callback: { (succeeded: Bool, error: Error?) in
