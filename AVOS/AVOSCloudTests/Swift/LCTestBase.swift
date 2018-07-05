@@ -23,8 +23,8 @@ enum TestRegion {
             return (id: "uwWkfssEBRtrxVpQWEnFtqfr-9Nh9j0Va",
                     key: "9OaLpoW21lIQtRYzJya4WHUR")
         case .US:
-            return (id: "kknqydxqd9wdq4cboy1dvvug5ha0ce3i2mrerrdrmr6pla1p",
-                    key: "fate582pwsfh97s9o99nw91a152i7ndm9tsy866e6wpezth4")
+            return (id: "eX7urCufwLd6X5mHxt7V12nL-MdYXbMMI",
+                    key: "PrmzHPnRXjXezS54KryuHMG6")
         }
     }
 }
@@ -32,19 +32,13 @@ enum TestRegion {
 class LCTestBase: XCTestCase {
     
     override class func setUp() {
-        
         super.setUp()
         
         let region: TestRegion = .CN_North
-        
         let appInfo: (id: String, key: String) = region.appInfo
-        
         if region == .US {
-            
             AVOSCloud.setServiceRegion(.US)
-            
         } else {
-            
             AVOSCloud.setServiceRegion(.CN)
         }
         
@@ -52,12 +46,13 @@ class LCTestBase: XCTestCase {
         LCRouter.sharedInstance().cleanCache(forKey: "LCRTMRouterCacheKey")
         
         AVOSCloud.setApplicationId(appInfo.id, clientKey: appInfo.key)
-        
         AVOSCloud.setAllLogsEnabled(true)
+        for item in Array<AVServiceModule>(arrayLiteral: .API, .engine, .push, .statistics) {
+            AVOSCloud.setServerURLString("beta.leancloud.cn", for: item)
+        }
     }
     
     override class func tearDown() {
-        
         super.tearDown()
     }
     
