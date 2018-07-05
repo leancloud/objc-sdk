@@ -823,6 +823,11 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         [self->_installation addUniqueObject:self->_clientId forKey:@"channels"];
         [self->_installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (error) {
+#if DEBUG
+                if (self.assertInternalQuietCallback) {
+                    self.assertInternalQuietCallback(error);
+                }
+#endif
                 AVLoggerError(AVLoggerDomainIM, @"%@", error);
                 if (error.code != kAVErrorInvalidChannelName && delayInterval > 0) {
                     [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
@@ -860,6 +865,11 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         [self->_installation removeObject:self->_clientId forKey:@"channels"];
         [self->_installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (error) {
+#if DEBUG
+                if (self.assertInternalQuietCallback) {
+                    self.assertInternalQuietCallback(error);
+                }
+#endif
                 AVLoggerError(AVLoggerDomainIM, @"%@", error);
                 if (error.code != kAVErrorInvalidChannelName && delayInterval > 0) {
                     [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
@@ -906,6 +916,11 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         });
         [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
             if (commandWrapper.error) {
+#if DEBUG
+                if (self.assertInternalQuietCallback) {
+                    self.assertInternalQuietCallback(commandWrapper.error);
+                }
+#endif
                 AVLoggerError(AVLoggerDomainIM, @"%@", commandWrapper.error);
                 if (delayInterval > 0) {
                     [self uploadDeviceToken:delayInterval * 2];

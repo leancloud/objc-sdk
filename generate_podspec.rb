@@ -148,7 +148,11 @@ def generateAVOSCloudLiveQuery()
 end
 
 $version = ARGV[0]
-generateAVOSCloud()
-generateAVOSCloudIM()
-generateAVOSCloudLiveQuery()
-puts 'generate podspec success.'
+if $version == 'public_header_files'
+  puts public_header_files('AVOSCloud-iOS') + public_header_files('AVOSCloudIM-iOS') + public_header_files('AVOSCloudLiveQuery-iOS')
+else
+  generateAVOSCloud()
+  generateAVOSCloudIM()
+  generateAVOSCloudLiveQuery()
+  puts 'generate podspec success.'
+end

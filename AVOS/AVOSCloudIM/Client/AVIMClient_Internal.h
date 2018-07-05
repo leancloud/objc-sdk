@@ -28,6 +28,7 @@ FOUNDATION_EXPORT NSString * const kTemporaryConversationIdPrefix;
 @interface AVIMClient () <AVIMWebSocketWrapperDelegate>
 
 #if DEBUG
+@property (nonatomic, copy) void (^ assertInternalQuietCallback)(NSError *error);
 - (void)assertRunInInternalSerialQueue;
 - (void)assertNotRunInInternalSerialQueue;
 #endif

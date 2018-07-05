@@ -57,10 +57,7 @@ func bash(command: String, arguments: [String]) -> Result {
     )
     switch commandPathResult {
     case .success(let info):
-        guard let path: String = (info as? String)?.trimmingCharacters(in: .whitespacesAndNewlines),
-            !path.isEmpty
-            else { return .fail("❌ not found a path for '\(command)'.") }
-        return script_processor(launchPath: path, arguments: arguments)
+        return script_processor(launchPath: (info as! String).trimmingCharacters(in: .whitespacesAndNewlines), arguments: arguments)
     case .fail(_):
         return commandPathResult
     }
@@ -90,8 +87,8 @@ func build() -> Result {
     )
     switch xcodebuild_list_result {
     case .success(let info):
-        let lines: [String] = (info as! String).components(separatedBy: CharacterSet.newlines)
-            .map { $0.trimmingCharacters(in: CharacterSet.whitespaces) }
+        let lines: [String] = (info as! String).components(separatedBy: .newlines)
+            .map { $0.trimmingCharacters(in: .whitespaces) }
         schemes = {
             guard var startIndex: Int = lines.index(of: "Schemes:") else { return [] }
             guard let endIndex: Int = lines[startIndex...].index(of: "") else { return [] }
@@ -152,6 +149,33 @@ func build() -> Result {
     return build_result
 }
 
+func validate_version(version: String) -> Result {
+    
+    let versionComponents: [String] = version.components(separatedBy: ".")
+    guard versionComponents.count == 3 else {
+        return .fail("invalid version: \(version)")
+    }
+    for number in versionComponents {
+        if Int(number) == nil {
+            return .fail("invalid version: \(version)")
+        }
+    }
+    return .success(version)
+}
+
+func current_version() -> Result {
+    do {
+        let filePath: String = "AVOS/AVOSCloud/UserAgent.h"
+        let version: String = (try String(contentsOfFile: filePath, encoding: .utf8)).replacingOccurrences(of: "#define SDK_VERSION @\"v", with: "").replacingOccurrences(of: "\"", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
+        switch validate_version(version: version) {
+        case .success(_): return .success(version)
+        case .fail(_): return .fail("invalid version: \(version) in \(filePath)")
+        }
+    } catch {
+        return .fail("\(error)")
+    }
+}
+
 func generate_podspec(version: String) -> Result {
     
     let check_installed_xcodeproj_result: Result = bash(
@@ -189,16 +213,16 @@ func git_commit_push(version: String) -> Result {
         arguments: ["add", "-A"]
     )
     switch git_add_result {
-    case .success(_): break
+    case .success(let info): print(info as! String)
     case .fail(_): return git_add_result
     }
     
     let git_commit_result: Result = bash(
         command: "git",
-        arguments: ["commit", "-a", "-m", "\"Release v\(version)\""]
+        arguments: ["commit", "-a", "-m", "Release v\(version)"]
     )
     switch git_commit_result {
-    case .success(_): break
+    case .success(let info): print(info as! String)
     case .fail(_): return git_commit_result
     }
     
@@ -221,21 +245,107 @@ func pod_trunk_push() {
     for item in ["AVOSCloud.podspec", "AVOSCloudIM.podspec", "AVOSCloudLiveQuery.podspec"] {
         switch bash(command: "pod", arguments: ["trunk", "push", item, "--allow-warnings"]) {
         case .success(let info): print(info as! String)
-        case .fail(let error): print(error)
+        case .fail(let error):
+            print(error)
+            return
         }
         switch bash(command: "pod", arguments: ["repo", "update"]) {
         case .success(let info): print(info as! String)
-        case .fail(let error): print(error)
+        case .fail(let error):
+            print(error)
+            return
         }
+    }
+}
+
+func doc_update() {
+    
+    let check_installed_appledoc_result: Result = bash(
+        command: "appledoc",
+        arguments: ["--version"]
+    )
+    switch check_installed_appledoc_result {
+    case .success(_): break
+    case .fail(let error):
+        print(error)
+        return
+    }
+    
+    let tempHeadersFolder: String = "all_public_header_files_tmp/"
+    let tempOutputFolder: String = "html/"
+    guard !FileManager.default.fileExists(atPath: tempHeadersFolder),
+        !FileManager.default.fileExists(atPath: tempOutputFolder) else
+    {
+        print("name conflicts when create folder '\(tempHeadersFolder)'")
+        return
+    }
+    
+    let apiDocFolder: String = "../api-docs/api/iOS"
+    var apiDocFolderIsDirectory: ObjCBool = true
+    guard FileManager.default.fileExists(atPath: apiDocFolder, isDirectory: &apiDocFolderIsDirectory),
+        apiDocFolderIsDirectory.boolValue == true else
+    {
+        print("not found iOS doc folder path '\(apiDocFolder)', see https://github.com/leancloud/api-docs")
+        return
+    }
+    
+    switch current_version() {
+    case .success(let info):
+        let version: String = info as! String
+        do {
+            switch bash(command: "ruby", arguments: ["generate_podspec.rb", "public_header_files"]) {
+            case .success(let info):
+                try FileManager.default.createDirectory(atPath: tempHeadersFolder, withIntermediateDirectories: true, attributes: nil)
+                let filePaths: [String] = (info as! String).components(separatedBy: .newlines)
+                    .map { $0.trimmingCharacters(in: .whitespaces) }
+                    .filter { !$0.isEmpty }
+                for item in filePaths {
+                    try FileManager.default.copyItem(atPath: item, toPath: "\(tempHeadersFolder)\(item.components(separatedBy: "/").last!)")
+                }
+            case .fail(let error):
+                print(error)
+                return
+            }
+            
+            let appledocResult: Result = bash(command: "appledoc", arguments:[
+                "--create-html",
+                "--project-version", version,
+                "--output", "./",
+                "--company-id", "LeanCloud",
+                "--project-company", "LeanCloud, Inc.",
+                "--project-name", "LeanCloud Objective-C SDK",
+                "--keep-undocumented-objects",
+                "--keep-undocumented-members",
+                "--no-install-docset",
+                "--no-create-docset",
+                tempHeadersFolder]
+            )
+            try FileManager.default.removeItem(atPath: tempHeadersFolder)
+            var tempOutputFolderIsDirectory: ObjCBool = true
+            if FileManager.default.fileExists(atPath: tempOutputFolder, isDirectory: &tempOutputFolderIsDirectory),
+                tempOutputFolderIsDirectory.boolValue == true
+            {
+                try FileManager.default.removeItem(atPath: apiDocFolder)
+                try FileManager.default.moveItem(atPath: tempOutputFolder, toPath: apiDocFolder)
+            } else {
+                print("not found \(tempOutputFolder) folder")
+            }
+            switch appledocResult {
+            case .success(let info):
+                print(info as! String)
+            case .fail(let error):
+                print(error)
+            }
+        } catch {
+            print(error)
+        }
+    case .fail(let error): print(error)
     }
 }
 
 func main () {
     let arguments = CommandLine.arguments
-    if arguments.count < 2 {
-        print("❌ error arguments.")
-        return
-    } else {
+    if arguments.count >= 2 {
         switch arguments[1] {
         case "build":
             switch build() {
@@ -254,35 +364,42 @@ func main () {
             case .success(let info): print(info as! String)
             case .fail(let error): print(error)
             }
-        case "release":
-            pod_trunk_push()
-        default:
-            let version: String = arguments[1]
-            let versionComponents = version.components(separatedBy: ".")
-            for number in versionComponents {
-                if Int(number) == nil || versionComponents.count != 3 {
-                    fatalError("version: \(version) invalid.")
+        case "release": pod_trunk_push()
+        case "doc": doc_update()
+        default: print("❌ error arguments.")
+        }
+    } else {
+        switch current_version() {
+        case .success(let info):
+            let currentVersion: String = info as! String
+            print("current version: \(currentVersion)\n")
+            print("if you want to release with new version, please input version: \n")
+            let newVersion: String = readLine()!
+            switch validate_version(version: newVersion) {
+            case .success(_):
+                switch build() {
+                case .success(let info): print(info as! String)
+                case .fail(let error):
+                    print(error)
+                    return
                 }
+                switch generate_podspec(version: newVersion) {
+                case .success(let info): print(info as! String)
+                case .fail(let error):
+                    print(error)
+                    return
+                }
+                switch git_commit_push(version: newVersion) {
+                case .success(let info): print(info as! String)
+                case .fail(let error):
+                    print(error)
+                    return
+                }
+            case .fail(let error): print(error)
             }
-            switch build() {
-            case .success(let info): print(info as! String)
-            case .fail(let error):
-                print(error)
-                return
-            }
-            switch generate_podspec(version: version) {
-            case .success(let info): print(info as! String)
-            case .fail(let error):
-                print(error)
-                return
-            }
-            switch git_commit_push(version: version) {
-            case .success(let info): print(info as! String)
-            case .fail(let error):
-                print(error)
-                return
-            }
+        case .fail(let error): print(error)
         }
     }
 }
+
 main()
