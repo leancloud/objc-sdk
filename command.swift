@@ -343,38 +343,46 @@ func doc_update() {
     }
 }
 
+let help: String =
+"""
+
+-v, --version
+    Current version of all frameworks in CocoaPods.
+
+-b, --build
+    Build all framework targets with configurations.
+
+-p, --podspec_generate <version>
+    Generate all podspec with specific version.
+
+-r, --release
+    Pod trunk push.
+
+-d, --doc_update
+    Update API document.
+
+-h, --help
+    Usage help.
+
+"""
+
 func main () {
     let arguments = CommandLine.arguments
-    if arguments.count >= 2 {
-        switch arguments[1] {
-        case "build":
-            switch build() {
-            case .success(let info): print(info as! String)
-            case .fail(let error): print(error)
-            }
-        case "podspec":
-            let version: String = arguments[2]
-            let versionComponents = version.components(separatedBy: ".")
-            for number in versionComponents {
-                if Int(number) == nil || versionComponents.count != 3 {
-                    fatalError("version: \(version) invalid.")
-                }
-            }
-            switch generate_podspec(version: version) {
-            case .success(let info): print(info as! String)
-            case .fail(let error): print(error)
-            }
-        case "release": pod_trunk_push()
-        case "doc": doc_update()
-        default: print("❌ error arguments.")
-        }
-    } else {
+    guard arguments.count >= 2 else {
+        print("❌ error arguments.\n\(help)")
+        return
+    }
+    switch arguments[1] {
+    case "-v", "--version":
         switch current_version() {
         case .success(let info):
             let currentVersion: String = info as! String
-            print("current version: \(currentVersion)\n")
-            print("if you want to release with new version, please input version: \n")
-            let newVersion: String = readLine()!
+            print("\ncurrent version is \(currentVersion)")
+            print("\ndo you want to commit with new version? [<new_version>/n(N)] \n")
+            let newVersion = readLine()!
+            if newVersion == "n" || newVersion == "N" {
+                return
+            }
             switch validate_version(version: newVersion) {
             case .success(_):
                 switch build() {
@@ -395,10 +403,45 @@ func main () {
                     print(error)
                     return
                 }
-            case .fail(let error): print(error)
+            case .fail(let error):
+                print(error)
+                return
             }
-        case .fail(let error): print(error)
+        case .fail(let error):
+            print(error)
+            return
         }
+    case "-b", "--build":
+        switch build() {
+        case .success(let info): print(info as! String)
+        case .fail(let error):
+            print(error)
+            return
+        }
+    case "-p", "--podspec_generate":
+        guard arguments.count >= 3 else {
+            print("❌ need a version")
+            return
+        }
+        let version: String = arguments[2]
+        switch validate_version(version: version) {
+        case .success(_):
+            switch generate_podspec(version: version) {
+            case .success(let info): print(info as! String)
+            case .fail(let error):
+                print(error)
+                return
+            }
+        case .fail(let error):
+            print(error)
+            return
+        }
+    case "-r", "--release": pod_trunk_push()
+    case "-d", "--doc_update": doc_update()
+    case "-h", "--help": print(help)
+    default:
+        print("❌ error arguments.\n\(help)")
+        return
     }
 }
 
