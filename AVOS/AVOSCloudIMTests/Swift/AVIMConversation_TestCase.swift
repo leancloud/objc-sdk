@@ -1229,9 +1229,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 XCTAssertNotNil(conv)
                 XCTAssertNil(error)
                 XCTAssertNotNil(conv?.conversationId)
-                if let conv: AVIMConversation = conv {
-                    normalConv = conv
-                }
+                normalConv = conv
             })
         }, failure: { XCTFail("timeout") })
         
@@ -1288,6 +1286,98 @@ class AVIMConversation_TestCase: LCIMTestBase {
                     XCTAssertFalse(commonMessage.mentioned)
                     XCTAssertTrue(commonMessage.mentionAll)
                     XCTAssertEqual(commonMessage.mentionList, clientIds)
+                    XCTAssertEqual(commonMessage.content, content)
+                    XCTAssertTrue(commonMessage.sendTimestamp > 0)
+                    XCTAssertTrue(commonMessage.deliveredTimestamp == 0)
+                    XCTAssertTrue(commonMessage.readTimestamp == 0)
+                    XCTAssertFalse(commonMessage.transient)
+                    XCTAssertNil(commonMessage.updatedAt)
+                })
+            }, failure: { XCTFail("timeout") })
+        }
+    }
+    
+    func test_msg_send_sync() {
+        
+        let clientId: String = "\(#function.substring(to: #function.index(of: "(")!))"
+        
+        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let installation_1: AVInstallation = AVInstallation()
+        installation_1.deviceToken = UUID().uuidString
+        guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientId, delegate: delegate_1, installation: installation_1) else {
+            XCTFail()
+            return
+        }
+        
+        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let installation_2: AVInstallation = AVInstallation()
+        installation_2.deviceToken = UUID().uuidString
+        guard let _: AVIMClient = self.newOpenedClient(clientId: clientId, delegate: delegate_2, installation: installation_2) else {
+            XCTFail()
+            return
+        }
+        
+        var normalConv: AVIMConversation! = nil
+        
+        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            semaphore.increment()
+            client_1.createConversation(withName: nil, clientIds: [clientId, "\(clientId)_1"], callback: { (conv: AVIMConversation?, error: Error?) in
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
+                XCTAssertNotNil(conv)
+                XCTAssertNil(error)
+                XCTAssertNotNil(conv?.conversationId)
+                normalConv = conv
+            })
+        }, failure: { XCTFail("timeout") })
+        
+        if normalConv != nil {
+            
+            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                
+                let content: String = "test"
+                let commonMessage: AVIMMessage = AVIMMessage.init(content: content)
+                
+                semaphore.increment(2)
+                
+                delegate_2.didReceiveCommonMessageClosure = { (conv: AVIMConversation, message: AVIMMessage) in
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                    XCTAssertEqual(conv.clientId, clientId)
+                    XCTAssertEqual(conv.conversationId, normalConv.conversationId)
+                    XCTAssertEqual(message.mediaType, .none)
+                    XCTAssertEqual(message.ioType, .out)
+                    XCTAssertEqual(message.status, .sent)
+                    XCTAssertNotNil(message.messageId)
+                    XCTAssertEqual(message.clientId, clientId)
+                    XCTAssertEqual(message.localClientId, clientId)
+                    XCTAssertEqual(message.conversationId, conv.conversationId)
+                    XCTAssertFalse(message.mentioned)
+                    XCTAssertFalse(message.mentionAll)
+                    XCTAssertTrue((message.mentionList ?? []).count == 0)
+                    XCTAssertEqual(message.content, content)
+                    XCTAssertTrue(message.sendTimestamp > 0)
+                    XCTAssertTrue(message.deliveredTimestamp == 0)
+                    XCTAssertTrue(message.readTimestamp == 0)
+                    XCTAssertFalse(message.transient)
+                    XCTAssertNil(message.updatedAt)
+                }
+                
+                normalConv.send(commonMessage, callback: { (succeeded: Bool, error: Error?) in
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                    XCTAssertTrue(succeeded)
+                    XCTAssertNil(error)
+                    XCTAssertEqual(commonMessage.mediaType, .none)
+                    XCTAssertEqual(commonMessage.ioType, .out)
+                    XCTAssertEqual(commonMessage.status, .sent)
+                    XCTAssertNotNil(commonMessage.messageId)
+                    XCTAssertEqual(commonMessage.clientId, clientId)
+                    XCTAssertEqual(commonMessage.localClientId, clientId)
+                    XCTAssertEqual(commonMessage.conversationId, normalConv.conversationId)
+                    XCTAssertFalse(commonMessage.mentioned)
+                    XCTAssertFalse(commonMessage.mentionAll)
+                    XCTAssertTrue((commonMessage.mentionList ?? []).count == 0)
                     XCTAssertEqual(commonMessage.content, content)
                     XCTAssertTrue(commonMessage.sendTimestamp > 0)
                     XCTAssertTrue(commonMessage.deliveredTimestamp == 0)
