@@ -3004,10 +3004,12 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     }
     AssertRunInInternalSerialQueue(client);
     
-    NSString *fromId = (directCommand.hasFromPeerId ? directCommand.fromPeerId : nil);
     NSString *content = (directCommand.hasMsg ? directCommand.msg : nil);
     int64_t timestamp = (directCommand.hasTimestamp ? directCommand.timestamp : 0);
-    if (!fromId || !content || !timestamp || [fromId isEqualToString:self->_clientId]) {
+    if (!content || !timestamp) {
+        /// @note
+        /// 1. message must with `msg` and `timestamp`, otherwise it's invalid.
+        /// 2. directCommand's other properties is nullable or optional.
         return nil;
     }
     
@@ -3021,7 +3023,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         }
         message.conversationId = self->_conversationId;
         message.messageId = messageId;
-        message.clientId = fromId;
+        message.clientId = (directCommand.hasFromPeerId ? directCommand.fromPeerId : nil);
         message.localClientId = self->_clientId;
         message.content = content;
         message.transient = isTransientMsg;
@@ -3031,7 +3033,11 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         message.mentionAll = (directCommand.hasMentionAll ? directCommand.mentionAll : false);
         message.mentionList = directCommand.mentionPidsArray;
         message.updatedAt = (directCommand.hasPatchTimestamp ? [NSDate dateWithTimeIntervalSince1970:(directCommand.patchTimestamp / 1000.0)] : nil);
-        message.status = AVIMMessageStatusDelivered;
+        if (message.ioType == AVIMMessageIOTypeOut) {
+            message.status = AVIMMessageStatusSent;
+        } else {
+            message.status = AVIMMessageStatusDelivered;
+        }
         message;
     });
     
