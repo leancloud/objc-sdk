@@ -47,9 +47,9 @@ class LCTestBase: XCTestCase {
         
         AVOSCloud.setApplicationId(appInfo.id, clientKey: appInfo.key)
         AVOSCloud.setAllLogsEnabled(true)
-        for item in Array<AVServiceModule>(arrayLiteral: .API, .engine, .push, .statistics) {
-            AVOSCloud.setServerURLString("beta.leancloud.cn", for: item)
-        }
+//        for item in Array<AVServiceModule>(arrayLiteral: .API, .engine, .push, .statistics) {
+//            AVOSCloud.setServerURLString("beta.leancloud.cn", for: item)
+//        }
     }
     
     override class func tearDown() {
