@@ -12,7 +12,7 @@ class AVObject_TestCase: LCTestBase {
     
     func test_save_associate_file_object() {
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let filePath: String = Bundle(for: type(of: self)).path(forResource: "_10_MB_", ofType: "png")!
             

@@ -16,7 +16,7 @@ class AVIMClient_TestCase: LCIMTestBase {
         
         var aUser: AVUser! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let user: AVUser = AVUser()
             user.username = "\(#function)\(#line)"
@@ -71,7 +71,7 @@ class AVIMClient_TestCase: LCIMTestBase {
             return
         }
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let client: AVIMClient = AVIMClient(user: aUser)
             
@@ -97,18 +97,18 @@ class AVIMClient_TestCase: LCIMTestBase {
     func test_create_temp_conv() {
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
-        guard let client_1: AVIMClient = self.newOpenedClient(clientId: "\(#function.substring(to: #function.index(of: "(")!))_\(#line)", delegate: delegate_1) else {
+        guard let client_1: AVIMClient = self.newOpenedClient(clientId: "\(#function[..<#function.index(of: "(")!])_\(#line)", delegate: delegate_1) else {
             XCTFail()
             return
         }
         
         let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
-        guard let client_2: AVIMClient = self.newOpenedClient(clientId: "\(#function.substring(to: #function.index(of: "(")!))_\(#line)", delegate: delegate_2) else {
+        guard let client_2: AVIMClient = self.newOpenedClient(clientId: "\(#function[..<#function.index(of: "(")!])_\(#line)", delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment(5)
             
@@ -196,7 +196,7 @@ class AVIMClient_TestCase: LCIMTestBase {
             return
         }
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment()
             semaphore.increment()
@@ -237,7 +237,7 @@ class AVIMClient_TestCase: LCIMTestBase {
     
     func test_session_conflict() {
         
-        let clientId: String = "\(#function.substring(to: #function.index(of: "(")!))"
+        let clientId: String = "\(#function[..<#function.index(of: "(")!])"
         let tag: String = "tag"
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -248,7 +248,7 @@ class AVIMClient_TestCase: LCIMTestBase {
             return
         }
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment(2)
             

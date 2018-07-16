@@ -36,7 +36,7 @@ class AVFile_TestCase: LCTestBase {
     
     func test_upload_remote_url() {
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let remoteURL: URL = self.remoteURL
             let file: AVFile = AVFile(remoteURL: remoteURL)
@@ -60,7 +60,7 @@ class AVFile_TestCase: LCTestBase {
             XCTFail("timeout")
         })
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let remoteURL: URL = self.remoteURL
             let file: AVFile = AVFile(remoteURL: remoteURL)
@@ -95,7 +95,7 @@ class AVFile_TestCase: LCTestBase {
     
     func test_upload_data() {
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let uploadDataTuple: (data: Data, name: String) = self.smallDataTuple
             let file: AVFile = AVFile(data: uploadDataTuple.data, name: uploadDataTuple.name)
@@ -133,7 +133,7 @@ class AVFile_TestCase: LCTestBase {
             XCTFail("timeout")
         })
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let uploaDataTuple: (data: Data, name: String) = self.bigDataTuple
             let file: AVFile = AVFile(data: uploaDataTuple.data, name: uploaDataTuple.name)
@@ -181,7 +181,7 @@ class AVFile_TestCase: LCTestBase {
             XCTFail("timeout")
         })
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let uploaDataTuple: (data: Data, name: String)  = self.smallDataTuple
             let file: AVFile = AVFile(data: uploaDataTuple.data, name: uploaDataTuple.name)
@@ -226,7 +226,7 @@ class AVFile_TestCase: LCTestBase {
             return
         }
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             var file: AVFile! = nil
             do {
@@ -272,7 +272,7 @@ class AVFile_TestCase: LCTestBase {
             XCTFail("timeout")
         })
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             var file: AVFile! = nil
             do {
@@ -326,7 +326,7 @@ class AVFile_TestCase: LCTestBase {
             XCTFail("timeout")
         })
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             var file: AVFile! = nil
             do {
@@ -382,7 +382,7 @@ class AVFile_TestCase: LCTestBase {
             }
         }
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let file: AVFile = AVFile(data: uploadDataTuple.data, name: uploadDataTuple.name)
             
@@ -418,7 +418,7 @@ class AVFile_TestCase: LCTestBase {
             return
         }
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let _ = removeItemAtPath(cachedPath)
             
@@ -449,7 +449,7 @@ class AVFile_TestCase: LCTestBase {
             XCTFail("timeout")
         })
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let _ = removeItemAtPath(cachedPath)
             var hasProgress: Bool = false
@@ -488,7 +488,7 @@ class AVFile_TestCase: LCTestBase {
             XCTFail("timeout")
         })
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             var hasProgress: Bool = false
             
@@ -526,7 +526,7 @@ class AVFile_TestCase: LCTestBase {
             XCTFail("timeout")
         })
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             var not_100_progress_count: Int = 0
             
@@ -592,7 +592,7 @@ class AVFile_TestCase: LCTestBase {
         
         let remoteURL: URL = self.remoteURL
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let file: AVFile = AVFile(remoteURL: remoteURL)
             
@@ -624,7 +624,7 @@ class AVFile_TestCase: LCTestBase {
             return
         }
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let _ = removeItemAtPath(cachedPath)
             
@@ -658,7 +658,7 @@ class AVFile_TestCase: LCTestBase {
     
     func test_cancel_task() {
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let uploadDataTuple: (data: Data, name: String) = self.bigDataTuple
             let file: AVFile = AVFile(data: uploadDataTuple.data, name: uploadDataTuple.name)
@@ -689,7 +689,7 @@ class AVFile_TestCase: LCTestBase {
         
         var downloadCancelFile: AVFile!
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let uploadDataTuple: (data: Data, name: String) = self.bigDataTuple
             let file: AVFile = AVFile(data: uploadDataTuple.data, name: uploadDataTuple.name)
@@ -721,7 +721,7 @@ class AVFile_TestCase: LCTestBase {
             return
         }
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             var canceled: Bool = false
             
@@ -756,7 +756,7 @@ class AVFile_TestCase: LCTestBase {
             let remoteURL: URL = self.remoteURL
             let file: AVFile = AVFile(remoteURL: remoteURL)
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment()
                 
@@ -780,7 +780,7 @@ class AVFile_TestCase: LCTestBase {
             return file.objectId() != nil ? file : nil
         }
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             guard let file: AVFile = uploadedFile() else {
                 XCTFail()
@@ -803,7 +803,7 @@ class AVFile_TestCase: LCTestBase {
             XCTFail("timeout")
         })
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             var array: [AVFile] = []
             for _ in 0..<3 {
@@ -837,7 +837,7 @@ class AVFile_TestCase: LCTestBase {
             let remoteURL: URL = self.remoteURL
             let file: AVFile = AVFile(remoteURL: remoteURL)
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment()
                 
@@ -866,7 +866,7 @@ class AVFile_TestCase: LCTestBase {
             return
         }
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment()
             

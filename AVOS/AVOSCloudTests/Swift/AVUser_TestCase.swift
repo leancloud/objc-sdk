@@ -19,7 +19,7 @@ class AVUser_TestCase: LCTestBase {
         
         var aUser: AVUser! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             AVUser.signUpOrLoginWithMobilePhoneNumber(inBackground: mobileNumber, smsCode: smsCode, password: password, block: { (user: AVUser?, error:Error?) in
                 semaphore.decrement()
@@ -33,7 +33,7 @@ class AVUser_TestCase: LCTestBase {
         
         if aUser != nil {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 semaphore.increment()
                 AVUser.logInWithMobilePhoneNumber(inBackground: mobileNumber, password: password) { (user: AVUser?, error: Error?) in
                     semaphore.decrement()
@@ -44,7 +44,7 @@ class AVUser_TestCase: LCTestBase {
                 }
             }, failure: { XCTFail("timeout") })
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 semaphore.increment()
                 aUser.deleteInBackground { (succeeded: Bool, error: Error?) in
                     semaphore.decrement()
@@ -62,13 +62,13 @@ class AVUser_TestCase: LCTestBase {
         
         var user: AVUser! = AVUser.init()
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let testTag: String = "_1"
             
             let authData: [String : Any] = [
                 "access_token" : "access_token_test" + testTag,
-                "openid" : "\(#function.substring(to: #function.index(of: "(")!))" + testTag
+                "openid" : "\(#function[..<#function.index(of: "(")!])" + testTag
             ]
             let platformId: String = LeanCloudSocialPlatform.weiXin.rawValue + testTag
             
@@ -107,13 +107,13 @@ class AVUser_TestCase: LCTestBase {
             
             let authData: [String : Any] = [
                 "access_token" : "access_token_test" + testTag,
-                "openid" : "\(#function.substring(to: #function.index(of: "(")!))" + testTag
+                "openid" : "\(#function[..<#function.index(of: "(")!])" + testTag
             ]
             
             let options: AVUserAuthDataLoginOption = AVUserAuthDataLoginOption()
             options.platform = LeanCloudSocialPlatform.weiXin
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment()
                 
@@ -141,7 +141,7 @@ class AVUser_TestCase: LCTestBase {
             
             if let _ = user {
                 
-                self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     
                     semaphore.increment()
                     
@@ -169,17 +169,17 @@ class AVUser_TestCase: LCTestBase {
     
     func test_auth_data_union_id() {
         
-        let unionId: String = "\(#function.substring(to: #function.index(of: "(")!))"
+        let unionId: String = "\(#function[..<#function.index(of: "(")!])"
         var user_1: AVUser! = AVUser()
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let testTag: String = "_1"
             let platformId: String = LeanCloudSocialPlatform.weiXin.rawValue + testTag
             
             let authData: [String : Any] = [
                 "access_token" : "access_token_test" + testTag,
-                "openid" : "\(#function.substring(to: #function.index(of: "(")!))" + testTag
+                "openid" : "\(#function[..<#function.index(of: "(")!])" + testTag
             ]
             
             let options: AVUserAuthDataLoginOption = AVUserAuthDataLoginOption()
@@ -218,11 +218,11 @@ class AVUser_TestCase: LCTestBase {
             let testTag: String = "_2"
             let platformId: String = LeanCloudSocialPlatform.weiXin.rawValue + testTag
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let authData: [String : Any] = [
                     "access_token" : "access_token_test" + testTag,
-                    "openid" : "\(#function.substring(to: #function.index(of: "(")!))" + testTag
+                    "openid" : "\(#function[..<#function.index(of: "(")!])" + testTag
                 ]
                 
                 let options: AVUserAuthDataLoginOption = AVUserAuthDataLoginOption()
@@ -257,7 +257,7 @@ class AVUser_TestCase: LCTestBase {
             
             if let _ = user_2 {
                 
-                self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     
                     semaphore.increment()
                     
@@ -285,7 +285,7 @@ class AVUser_TestCase: LCTestBase {
         var user: AVUser! = AVUser()
         let authData: [String : Any] = [
             "access_token" : "access_token_test",
-            "openid" : "\(#function.substring(to: #function.index(of: "(")!))"
+            "openid" : "\(#function[..<#function.index(of: "(")!])"
         ]
         let platformId: String = LeanCloudSocialPlatform.weiXin.rawValue
         
@@ -293,7 +293,7 @@ class AVUser_TestCase: LCTestBase {
         options.platform = LeanCloudSocialPlatform.weiXin
         options.failOnNotExist = true
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment()
             
@@ -326,7 +326,7 @@ class AVUser_TestCase: LCTestBase {
         
         if let _ = user {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 user.mobilePhoneNumber = {
                     let letters : NSString = "0123456789"
@@ -364,7 +364,7 @@ class AVUser_TestCase: LCTestBase {
         
         if let _deletingUser: AVUser = deletingUser {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment()
                 
@@ -388,9 +388,9 @@ class AVUser_TestCase: LCTestBase {
     
     func test_username_taken() {
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
-            let username: String = "\(#function.substring(to: #function.index(of: "(")!))"
+            let username: String = "\(#function[..<#function.index(of: "(")!])"
             let password: String = "123"
             let user: AVUser = AVUser()
             user.username = username

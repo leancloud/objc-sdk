@@ -15,8 +15,8 @@ class AVIMConversation_TestCase: LCIMTestBase {
     func test_msg_send_common() {
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2"
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -33,7 +33,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var normalConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -47,7 +47,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if let normalConv: AVIMConversation = normalConv {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let content: String = "test"
                 let commonMessage: AVIMMessage = AVIMMessage.init(content: content)
@@ -106,8 +106,8 @@ class AVIMConversation_TestCase: LCIMTestBase {
     func test_msg_send_type_text() {
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2"
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -124,7 +124,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var normalConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -138,7 +138,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if let normalConv: AVIMConversation = normalConv {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let text: String = "test"
                 let textMessage: AVIMTextMessage = AVIMTextMessage.init(text: text, attributes: nil)
@@ -197,8 +197,8 @@ class AVIMConversation_TestCase: LCIMTestBase {
     func test_msg_send_type_location() {
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2"
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -215,7 +215,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var normalConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -229,7 +229,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if let normalConv: AVIMConversation = normalConv {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let text: String = "test"
                 let latitude: CGFloat = 22
@@ -294,8 +294,8 @@ class AVIMConversation_TestCase: LCIMTestBase {
     func test_msg_send_type_image() {
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2"
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -312,7 +312,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var normalConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -328,7 +328,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
             
             var receiveFile: AVFile! = nil
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let text: String = "test"
                 let dataTuple: (data: Data, name: String) = {
@@ -403,7 +403,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
             }, failure: { XCTFail("timeout") })
             
             if let receiveFile: AVFile = receiveFile {
-                self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     semaphore.increment()
                     receiveFile.download(completionHandler: { (url: URL?, error: Error?) in
                         semaphore.decrement()
@@ -419,8 +419,8 @@ class AVIMConversation_TestCase: LCIMTestBase {
     func test_msg_send_type_audio() {
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2"
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -437,7 +437,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var normalConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -453,7 +453,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
             
             var receiveFile: AVFile! = nil
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let text: String = "test"
                 let dataTuple: (data: Data, name: String) = {
@@ -526,7 +526,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
             }, failure: { XCTFail("timeout") })
             
             if let receiveFile: AVFile = receiveFile {
-                self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     semaphore.increment()
                     receiveFile.download(completionHandler: { (url: URL?, error: Error?) in
                         semaphore.decrement()
@@ -542,8 +542,8 @@ class AVIMConversation_TestCase: LCIMTestBase {
     func test_msg_send_type_video() {
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2"
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -560,7 +560,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var normalConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -576,7 +576,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
             
             var receiveFile: AVFile! = nil
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let text: String = "test"
                 let dataTuple: (data: Data, name: String) = {
@@ -649,7 +649,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
             }, failure: { XCTFail("timeout") })
             
             if let receiveFile: AVFile = receiveFile {
-                self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     semaphore.increment()
                     receiveFile.download(completionHandler: { (url: URL?, error: Error?) in
                         semaphore.decrement()
@@ -665,8 +665,8 @@ class AVIMConversation_TestCase: LCIMTestBase {
     func test_msg_send_type_file() {
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2"
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -683,7 +683,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var normalConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -699,7 +699,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
             
             var receiveFile: AVFile! = nil
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let text: String = "test"
                 let dataTuple: (data: Data, name: String) = {
@@ -766,7 +766,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
             }, failure: { XCTFail("timeout") })
             
             if let receiveFile: AVFile = receiveFile {
-                self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     semaphore.increment()
                     receiveFile.download(completionHandler: { (url: URL?, error: Error?) in
                         semaphore.decrement()
@@ -784,8 +784,8 @@ class AVIMConversation_TestCase: LCIMTestBase {
         AVIMCustomTypedMessage.registerSubclass()
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2"
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -802,7 +802,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var normalConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -816,7 +816,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if let normalConv: AVIMConversation = normalConv {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let text: String = "test"
                 let customMessage: AVIMCustomTypedMessage = AVIMCustomTypedMessage()
@@ -876,8 +876,8 @@ class AVIMConversation_TestCase: LCIMTestBase {
     func test_msg_send_need_receipt() {
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2"
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -894,7 +894,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var normalConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -908,7 +908,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if let normalConv: AVIMConversation = normalConv {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let content: String = "test"
                 let commonMessage: AVIMMessage = AVIMMessage.init(content: content)
@@ -987,8 +987,8 @@ class AVIMConversation_TestCase: LCIMTestBase {
     func test_msg_send_priority() {
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2"
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -1005,7 +1005,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var normalConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment(3)
             client_1.createConversation(withName: nil, clientIds: clientIds, attributes: nil, options: [.transient], callback: { (conv: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -1045,7 +1045,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
             
             for item in priorityArray {
                 
-                self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     
                     let content: String = "test"
                     let commonMessage: AVIMMessage = AVIMMessage.init(content: content)
@@ -1110,8 +1110,8 @@ class AVIMConversation_TestCase: LCIMTestBase {
     func test_msg_send_transient() {
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2"
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -1128,7 +1128,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var normalConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -1142,7 +1142,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if let normalConv: AVIMConversation = normalConv {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let content: String = "test"
                 let commonMessage: AVIMMessage = AVIMMessage.init(content: content)
@@ -1203,8 +1203,8 @@ class AVIMConversation_TestCase: LCIMTestBase {
     func test_msg_send_mention() {
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2"
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -1221,7 +1221,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var normalConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -1235,7 +1235,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if let normalConv: AVIMConversation = normalConv {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let content: String = "test"
                 let commonMessage: AVIMMessage = AVIMMessage.init(content: content)
@@ -1299,7 +1299,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
     
     func test_msg_send_sync() {
         
-        let clientId: String = "\(#function.substring(to: #function.index(of: "(")!))"
+        let clientId: String = "\(#function[..<#function.index(of: "(")!])"
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
         let installation_1: AVInstallation = AVInstallation()
@@ -1319,7 +1319,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var normalConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client_1.createConversation(withName: nil, clientIds: [clientId, "\(clientId)_1"], callback: { (conv: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -1333,7 +1333,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if normalConv != nil {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let content: String = "test"
                 let commonMessage: AVIMMessage = AVIMMessage.init(content: content)
@@ -1394,8 +1394,8 @@ class AVIMConversation_TestCase: LCIMTestBase {
     func test_msg_read_timestamp() {
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2"
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -1406,7 +1406,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var uniqueConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client_1.createConversation(withName: nil, clientIds: clientIds, attributes: nil, options: [.unique], callback: { (conv: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -1424,7 +1424,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
             
             for i in 0..<messageCount {
                 
-                self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     semaphore.increment()
                     let content: String = "test_\(i)"
                     let commonMessage: AVIMMessage = AVIMMessage.init(content: content)
@@ -1441,7 +1441,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
             let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
             client_2.delegate = delegate_2
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 semaphore.increment(4)
                 delegate_2.didUpdateForKeyClosure = { (conv: AVIMConversation, updatedKey: AVIMConversationUpdatedKey) in
                     if updatedKey == .unreadMessagesCount {
@@ -1470,7 +1470,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 })
             }, failure: { XCTFail("timeout") })
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 semaphore.increment(2)
                 delegate_1.didUpdateForKeyClosure = { (conv: AVIMConversation, updatedKey: AVIMConversationUpdatedKey) in
                     if updatedKey == AVIMConversationUpdatedKey.lastDeliveredAt {
@@ -1487,7 +1487,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 uniqueConv.fetchReceiptTimestampsInBackground()
             }, failure: { XCTFail("timeout") })
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 semaphore.increment()
                 client_2.close(callback: { (succeeded: Bool, error: Error?) in
                     semaphore.decrement()
@@ -1504,8 +1504,8 @@ class AVIMConversation_TestCase: LCIMTestBase {
     func test_msg_modify() {
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2",
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2",
         ]
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -1522,7 +1522,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var normalConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -1536,7 +1536,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if normalConv != nil {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let content: String = "test"
                 let commonMessage: AVIMMessage = AVIMMessage.init(content: content)
@@ -1592,8 +1592,8 @@ class AVIMConversation_TestCase: LCIMTestBase {
     func test_msg_recall() {
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2",
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2",
         ]
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -1610,7 +1610,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var normalConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -1624,7 +1624,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if normalConv != nil {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let content: String = "test"
                 let commonMessage: AVIMMessage = AVIMMessage.init(content: content)
@@ -1679,9 +1679,9 @@ class AVIMConversation_TestCase: LCIMTestBase {
     func test_conv_member_join_quit() {
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2",
-            "\(#function.substring(to: #function.index(of: "(")!))_3",
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2",
+            "\(#function[..<#function.index(of: "(")!])_3",
         ]
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -1705,7 +1705,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         var normalConv: AVIMConversation!
         let originClientIds: [String] = [client_1.clientId, client_2.clientId]
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment(3)
             delegate_1.membersAddedClosure = { (conv: AVIMConversation, members: [String]?, byId: String?) in
                 semaphore.decrement()
@@ -1741,7 +1741,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if normalConv != nil, let normalConvId: String = normalConv.conversationId {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment(7)
                 
@@ -1829,9 +1829,9 @@ class AVIMConversation_TestCase: LCIMTestBase {
     func test_conv_member_add_remove() {
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2",
-            "\(#function.substring(to: #function.index(of: "(")!))_3",
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2",
+            "\(#function[..<#function.index(of: "(")!])_3",
         ]
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -1855,7 +1855,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         var normalConv: AVIMConversation!
         let originClientIds: [String] = [client_1.clientId, client_2.clientId]
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment(3)
             delegate_1.membersAddedClosure = { (conv: AVIMConversation, members: [String]?, byId: String?) in
                 semaphore.decrement()
@@ -1891,7 +1891,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if normalConv != nil, let normalConvId: String = normalConv.conversationId {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment(8)
                 
@@ -1990,14 +1990,14 @@ class AVIMConversation_TestCase: LCIMTestBase {
     
     func test_conv_count_member() {
         
-        guard let client: AVIMClient = self.newOpenedClient(clientId: "\(#function.substring(to: #function.index(of: "(")!))") else {
+        guard let client: AVIMClient = self.newOpenedClient(clientId: "\(#function[..<#function.index(of: "(")!])") else {
             XCTFail()
             return
         }
         
         var chatRoom: AVIMChatRoom! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client.createChatRoom(withName: nil, attributes: nil, callback: { (conv: AVIMChatRoom?, error: Error?) in
                 semaphore.decrement()
@@ -2011,7 +2011,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if chatRoom != nil {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 semaphore.increment()
                 chatRoom.countMembers(callback: { (memberCount: Int, error: Error?) in
                     semaphore.decrement()
@@ -2028,8 +2028,8 @@ class AVIMConversation_TestCase: LCIMTestBase {
     func test_conv_attr_update() {
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2",
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2",
         ]
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -2063,7 +2063,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var normalConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client_1.createConversation(withName: nil, clientIds: clientIds, attributes: [key3: "value_3"], options: [], callback: { (conversation: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -2077,7 +2077,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if normalConv != nil {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 normalConv["\(keyPrefix).\(key1)"] = value1
                 normalConv["\(keyPrefix).\(key2)"] = value2
@@ -2123,14 +2123,14 @@ class AVIMConversation_TestCase: LCIMTestBase {
     
     func test_conv_attr_fetch() {
         
-        guard let client: AVIMClient = self.newOpenedClient(clientId: "\(#function.substring(to: #function.index(of: "(")!))") else {
+        guard let client: AVIMClient = self.newOpenedClient(clientId: "\(#function[..<#function.index(of: "(")!])") else {
             XCTFail()
             return
         }
         
         var normalConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client.createConversation(withName: nil, clientIds: [], callback: { (conv: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -2144,7 +2144,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if normalConv != nil {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 semaphore.increment()
                 normalConv.fetch(callback: { (succeeded: Bool, error: Error?) in
                     semaphore.decrement()
@@ -2160,14 +2160,14 @@ class AVIMConversation_TestCase: LCIMTestBase {
     
     func test_conv_mute_unmute() {
         
-        guard let client: AVIMClient = self.newOpenedClient(clientId: "\(#function.substring(to: #function.index(of: "(")!))") else {
+        guard let client: AVIMClient = self.newOpenedClient(clientId: "\(#function[..<#function.index(of: "(")!])") else {
             XCTFail()
             return
         }
         
         var normalConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client.createConversation(withName: nil, clientIds: [], callback: { (conv: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -2181,7 +2181,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if normalConv != nil {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 semaphore.increment()
                 normalConv.mute(callback: { (succeeded: Bool, error: Error?) in
                     semaphore.decrement()
@@ -2192,7 +2192,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 })
             }, failure: { XCTFail("timeout") })
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 semaphore.increment()
                 normalConv.unmute(callback: { (succeeded: Bool, error: Error?) in
                     semaphore.decrement()
@@ -2209,14 +2209,14 @@ class AVIMConversation_TestCase: LCIMTestBase {
     
     func test_conv_query() {
         
-        let clientId: String = "\(#function.substring(to: #function.index(of: "(")!))"
+        let clientId: String = "\(#function[..<#function.index(of: "(")!])"
         
         guard let client: AVIMClient = self.newOpenedClient(clientId: clientId) else {
             XCTFail()
             return
         }
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment(3)
             
@@ -2271,9 +2271,9 @@ class AVIMConversation_TestCase: LCIMTestBase {
     func test_conv_member_info_get() {
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2",
-            "\(#function.substring(to: #function.index(of: "(")!))_3",
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2",
+            "\(#function[..<#function.index(of: "(")!])_3",
         ]
         
         guard let client: AVIMClient = self.newOpenedClient(clientId: clientIds[0]) else {
@@ -2283,7 +2283,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var normalConv: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment(1)
             client.createConversation(withName: nil, clientIds: clientIds, callback: { (conversation: AVIMConversation?, error: Error?) in
                 semaphore.decrement()
@@ -2298,7 +2298,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         if normalConv != nil {
             
             for memberId in [clientIds[1], clientIds[2]] {
-                self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     semaphore.increment()
                     normalConv.updateMemberRole(withMemberId: memberId, role: .manager, callback: { (succeeded: Bool, error: Error?) in
                         semaphore.decrement()
@@ -2309,7 +2309,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 }, failure: { XCTFail("timeout") })
             }
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 semaphore.increment()
                 normalConv.getAllMemberInfo(callback: { (memberInfos: [AVIMConversationMemberInfo]?, error: Error?) in
                     semaphore.decrement()
@@ -2327,7 +2327,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
             }, failure: { XCTFail("timeout") })
             
             for memberId in clientIds {
-                self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+                RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     semaphore.increment()
                     normalConv.getMemberInfo(withMemberId: memberId, callback: { (memberInfo: AVIMConversationMemberInfo?, error: Error?) in
                         semaphore.decrement()
@@ -2348,7 +2348,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 }, failure: { XCTFail("timeout") })
             }
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 semaphore.increment()
                 normalConv.getMemberInfo(withIgnoringCache: true, memberId: clientIds[1], callback: { (memberInfo: AVIMConversationMemberInfo?, error: Error?) in
                     semaphore.decrement()
@@ -2365,9 +2365,9 @@ class AVIMConversation_TestCase: LCIMTestBase {
     func test_conv_member_info_update() {
         
         let clientIds: [String] = [
-            "\(#function.substring(to: #function.index(of: "(")!))_1",
-            "\(#function.substring(to: #function.index(of: "(")!))_2",
-            "\(#function.substring(to: #function.index(of: "(")!))_3",
+            "\(#function[..<#function.index(of: "(")!])_1",
+            "\(#function[..<#function.index(of: "(")!])_2",
+            "\(#function[..<#function.index(of: "(")!])_3",
         ]
         
         let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
@@ -2392,7 +2392,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         var normalConv_2: AVIMConversation! = nil
         var normalConv_3: AVIMConversation! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment(3)
             
@@ -2422,7 +2422,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if normalConv_1 != nil, normalConv_2 != nil, normalConv_3 != nil {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment(4)
                 
@@ -2461,7 +2461,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 })
             }, failure: { XCTFail("timeout") })
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 semaphore.increment()
                 normalConv_1.updateMemberRole(withMemberId: client_1.clientId, role: .manager, callback: { (succeeded: Bool, error: Error?) in
                     semaphore.decrement()
@@ -2472,7 +2472,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 })
             }, failure: { XCTFail("timeout") })
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 semaphore.increment()
                 normalConv_2.updateMemberRole(withMemberId: client_3.clientId, role: .manager, callback: { (succeeded: Bool, error: Error?) in
                     semaphore.decrement()
@@ -2482,7 +2482,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 })
             }, failure: { XCTFail("timeout") })
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 semaphore.increment()
                 normalConv_3.updateMemberRole(withMemberId: client_2.clientId, role: .member, callback: { (succeeded: Bool, error: Error?) in
                     semaphore.decrement()
@@ -2492,7 +2492,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 })
             }, failure: { XCTFail("timeout") })
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment(4)
                 
@@ -2564,7 +2564,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var conversation_0: AVIMConversation!
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment()
             
@@ -2593,7 +2593,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if conversation_0 != nil {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment(4)
                 
@@ -2654,7 +2654,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 XCTFail("timeout")
             })
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment(3)
                 
@@ -2707,7 +2707,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
                 XCTFail("timeout")
             })
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment(4)
                 
@@ -2786,7 +2786,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var aConversation: AVIMConversation!
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment()
             
@@ -2812,7 +2812,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if let conversation: AVIMConversation = aConversation {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment()
                 
@@ -2878,7 +2878,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
             clientIds[2]
         ]
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment(5)
             
@@ -2964,7 +2964,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if let conversation: AVIMConversation = conversation_0 {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment(3)
                 
@@ -3021,7 +3021,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if let conversation: AVIMConversation = conversation_0 {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment(4)
                 
@@ -3103,7 +3103,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         var aConversation: AVIMConversation!
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment()
             
@@ -3129,7 +3129,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         if let conversation: AVIMConversation = aConversation {
             
-            self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 semaphore.increment()
                 
