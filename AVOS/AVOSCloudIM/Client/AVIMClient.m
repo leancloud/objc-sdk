@@ -1490,6 +1490,9 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         AVIMJsonObjectMessage *jsonObjectMessage = (convCommand.hasAttr ? convCommand.attr : nil);
         NSString *jsonString = (jsonObjectMessage.hasData_p ? jsonObjectMessage.data_p : nil);
         NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+        if (!data) {
+            return;
+        }
         NSError *error = nil;
         NSDictionary *attr = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
         if (error || ![NSDictionary lc__checkingType:attr]) {
@@ -1502,6 +1505,9 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
         AVIMJsonObjectMessage *jsonObjectMessage = (convCommand.hasAttrModified ? convCommand.attrModified : nil);
         NSString *jsonString = (jsonObjectMessage.hasData_p ? jsonObjectMessage.data_p : nil);
         NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+        if (!data) {
+            return;
+        }
         NSError *error = nil;
         NSDictionary *attrModified = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
         if (error || ![NSDictionary lc__checkingType:attrModified]) {
@@ -2008,6 +2014,15 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
             NSString *jsonString = commandWrapper.inCommand.convMessage.results.data_p;
             NSMutableDictionary *jsonData = ({
                 NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+                if (!data) {
+                    NSError *error = ({
+                        AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
+                        LCError(code, AVIMErrorMessage(code), nil);
+                    });
+                    AVLoggerError(AVLoggerDomainIM, @"%@", error);
+                    invokeAllCallback_block(nil, error);
+                    return;
+                }
                 NSError *error = nil;
                 NSMutableArray<NSMutableDictionary *> *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
                 if (error) {

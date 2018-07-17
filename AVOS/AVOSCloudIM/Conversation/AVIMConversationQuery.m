@@ -404,6 +404,15 @@
             NSMutableArray<NSMutableDictionary *> *results = ({
                 NSString *jsonString = commandWrapper.inCommand.convMessage.results.data_p;
                 NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+                if (!data) {
+                    [self invokeInUserInteractQueue:^{
+                        callback(nil, ({
+                            AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
+                            LCError(code, AVIMErrorMessage(code), nil);
+                        }));
+                    }];
+                    return;
+                }
                 NSError *error = nil;
                 NSMutableArray<NSMutableDictionary *> *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
                 if (error) {
@@ -538,6 +547,15 @@
             NSMutableArray<NSMutableDictionary *> *results = ({
                 NSString *jsonString = commandWrapper.inCommand.convMessage.results.data_p;
                 NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+                if (!data) {
+                    [self invokeInUserInteractQueue:^{
+                        callback(nil, ({
+                            AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
+                            LCError(code, AVIMErrorMessage(code), nil);
+                        }));
+                    }];
+                    return;
+                }
                 NSError *error = nil;
                 NSMutableArray<NSMutableDictionary *> *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
                 if (error) {

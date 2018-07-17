@@ -1019,6 +1019,13 @@ static dispatch_queue_t messageCacheOperationQueue;
             AVIMJsonObjectMessage *jsonObjectCommand = (convCommand.hasAttrModified ? convCommand.attrModified : nil);
             NSString *jsonString = (jsonObjectCommand.hasData_p ? jsonObjectCommand.data_p : nil);
             NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+            if (!data) {
+                callback(false, ({
+                    AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
+                    LCError(code, AVIMErrorMessage(code), nil);
+                }));
+                return;
+            }
             NSError *error = nil;
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
             if (error || ![NSDictionary lc__checkingType:dic]) {
