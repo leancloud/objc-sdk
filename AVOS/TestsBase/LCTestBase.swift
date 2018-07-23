@@ -23,7 +23,7 @@ class LCTestBase: XCTestCase {
         }
     }
     
-    static var lcShared: Int = {
+    static var shared: Int = {
         
         LCRouter.sharedInstance().cleanCache(forKey: "LCAppRouterCacheKey")
         LCRouter.sharedInstance().cleanCache(forKey: "LCRTMRouterCacheKey")
@@ -64,7 +64,7 @@ class LCTestBase: XCTestCase {
     
     override class func setUp() {
         super.setUp()
-        let _ = LCTestBase.lcShared
+        let _ = LCTestBase.shared
     }
     
 }

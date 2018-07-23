@@ -19,13 +19,13 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_2: AVIMClient = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
@@ -110,13 +110,13 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_2: AVIMClient = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
@@ -201,13 +201,13 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_2: AVIMClient = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
@@ -298,13 +298,13 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_2: AVIMClient = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
@@ -423,13 +423,13 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_2: AVIMClient = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
@@ -546,13 +546,13 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_2: AVIMClient = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
@@ -669,13 +669,13 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_2: AVIMClient = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
@@ -788,13 +788,13 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_2: AVIMClient = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
@@ -880,13 +880,13 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_2: AVIMClient = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
@@ -991,13 +991,13 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_2: AVIMClient = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
@@ -1114,13 +1114,13 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_2: AVIMClient = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
@@ -1207,13 +1207,13 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_2: AVIMClient = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
@@ -1301,7 +1301,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         let clientId: String = "\(#function[..<#function.index(of: "(")!])"
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         let installation_1: AVInstallation = AVInstallation()
         installation_1.deviceToken = UUID().uuidString
         guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientId, delegate: delegate_1, installation: installation_1) else {
@@ -1309,7 +1309,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         let installation_2: AVInstallation = AVInstallation()
         installation_2.deviceToken = UUID().uuidString
         guard let _: AVIMClient = self.newOpenedClient(clientId: clientId, delegate: delegate_2, installation: installation_2) else {
@@ -1398,7 +1398,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "\(#function[..<#function.index(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
@@ -1438,7 +1438,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
             }
             
             let client_2: AVIMClient = AVIMClient(clientId: clientIds[1], tag: nil)
-            let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+            let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
             client_2.delegate = delegate_2
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
@@ -1508,13 +1508,13 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "\(#function[..<#function.index(of: "(")!])_2",
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1 = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let _ = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
@@ -1596,13 +1596,13 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "\(#function[..<#function.index(of: "(")!])_2",
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1 = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let _ = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
@@ -1674,6 +1674,101 @@ class AVIMConversation_TestCase: LCIMTestBase {
         }
     }
     
+    // MARK: - Handle Batch Unread Message
+    
+    func test_batch_unread_handle() {
+        
+        guard !LCTestEnvironment.sharedInstance().isServerTesting else {
+            return
+        }
+        
+        let funcName: String = "\(#function[..<#function.index(of: "(")!])"
+        var clientIds: [String] = []
+        for i in 0..<20 {
+            clientIds.append("\(funcName)\(i)")
+        }
+        
+        var sentMessageConversationIds: [String] = []
+        
+        for item in clientIds[0..<10] {
+            guard let client: AVIMClient = self.newOpenedClient(clientId: item, assertInternalQuietCallback: false) else {
+                continue
+            }
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
+                semaphore.increment(2)
+                client.createConversation(withName: nil, clientIds: [item, funcName], callback: { (conv: AVIMConversation?, error: Error?) in
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                    if let conv: AVIMConversation = conv {
+                        let textMessage: AVIMTextMessage = AVIMTextMessage(text: "a", attributes: nil)
+                        conv.send(textMessage, callback: { (succeeded: Bool, error: Error?) in
+                            semaphore.decrement()
+                            XCTAssertTrue(Thread.isMainThread)
+                            if succeeded { sentMessageConversationIds.append(conv.conversationId!) }
+                        })
+                    } else {
+                        semaphore.decrement()
+                    }
+                })
+            })
+        }
+        
+        for item in clientIds[10..<20] {
+            guard let client: AVIMClient = self.newOpenedClient(clientId: item, assertInternalQuietCallback: false) else {
+                continue
+            }
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
+                semaphore.increment(2)
+                client.createTemporaryConversation(withClientIds: [item, funcName], timeToLive: 0, callback: { (conv: AVIMTemporaryConversation?, error: Error?) in
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                    if let conv: AVIMTemporaryConversation = conv {
+                        let textMessage: AVIMTextMessage = AVIMTextMessage(text: "a", attributes: nil)
+                        conv.send(textMessage, callback: { (succeeded: Bool, error: Error?) in
+                            semaphore.decrement()
+                            XCTAssertTrue(Thread.isMainThread)
+                            if succeeded { sentMessageConversationIds.append(conv.conversationId!) }
+                        })
+                    } else {
+                        semaphore.decrement()
+                    }
+                })
+            })
+        }
+        
+        guard sentMessageConversationIds.count > 0 else {
+            XCTFail()
+            return
+        }
+        
+        let client: AVIMClient = AVIMClient(clientId: funcName)
+        let delegate: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
+        client.delegate = delegate
+        
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
+            semaphore.increment(sentMessageConversationIds.count + 1)
+            delegate.didUpdateForKeyClosure = { (conv: AVIMConversation, updatedKey: AVIMConversationUpdatedKey) in
+                if updatedKey == AVIMConversationUpdatedKey.unreadMessagesCount,
+                    conv.unreadMessagesCount > 0
+                {
+                    XCTAssertTrue(Thread.isMainThread)
+                    if sentMessageConversationIds.contains(conv.conversationId!) {
+                        semaphore.decrement()
+                        conv.readInBackground()
+                    } else {
+                        conv.readInBackground()
+                    }
+                }
+            }
+            client.open(callback: { (succeeded: Bool, error: Error?) in
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+            })
+        }, failure: { XCTFail("timeout") })
+    }
+    
     // MARK: - Conversation Member
     
     func test_conv_member_join_quit() {
@@ -1684,19 +1779,19 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "\(#function[..<#function.index(of: "(")!])_3",
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1 = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_2 = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        let delegate_3: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_3: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_3 = self.newOpenedClient(clientId: clientIds[2], delegate: delegate_3) else {
             XCTFail()
             return
@@ -1834,19 +1929,19 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "\(#function[..<#function.index(of: "(")!])_3",
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1 = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_2 = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        let delegate_3: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_3: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_3 = self.newOpenedClient(clientId: clientIds[2], delegate: delegate_3) else {
             XCTFail()
             return
@@ -2032,13 +2127,13 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "\(#function[..<#function.index(of: "(")!])_2",
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let _: AVIMClient = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
@@ -2370,19 +2465,19 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "\(#function[..<#function.index(of: "(")!])_3",
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
 
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_2: AVIMClient = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        let delegate_3: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_3: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_3: AVIMClient = self.newOpenedClient(clientId: clientIds[2], delegate: delegate_3) else {
             XCTFail()
             return
@@ -2544,19 +2639,19 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "test_conv_block_member_4"
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1: AVIMClient = self.newOpenedClient(clientId: cliendIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let _: AVIMClient = self.newOpenedClient(clientId: cliendIds[1], delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        let delegate_3: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_3: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let _: AVIMClient = self.newOpenedClient(clientId: cliendIds[3], delegate: delegate_3) else {
             XCTFail()
             return
@@ -2853,19 +2948,19 @@ class AVIMConversation_TestCase: LCIMTestBase {
             "test_conv_shutup_member_4"
         ]
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client_1: AVIMClient = self.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let _: AVIMClient = self.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        let delegate_3: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_3: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let _: AVIMClient = self.newOpenedClient(clientId: clientIds[3], delegate: delegate_3) else {
             XCTFail()
             return

@@ -11,14 +11,14 @@ import XCTest
 
 class LCIMTestBase: LCTestBase {
     
-    static var lcimShared: Int = {
+    static var sharedIM: Int = {
         AVIMClient.setUnreadNotificationEnabled(true)
         return 0
     }()
     
     override class func setUp() {
         super.setUp()
-        let _ = LCIMTestBase.lcimShared
+        let _ = LCIMTestBase.sharedIM
     }
     
     static var clientDustbin: [AVIMClient] = []
@@ -40,14 +40,15 @@ class LCIMTestBase: LCTestBase {
         clientId: String,
         tag: String? = nil,
         delegate: AVIMClientDelegate? = nil,
-        installation: AVInstallation = AVInstallation.default()
+        installation: AVInstallation = AVInstallation.default(),
+        assertInternalQuietCallback: Bool = true
         ) -> AVIMClient?
     {
-        var openedClient: AVIMClient?
+        var openedClient: AVIMClient? = nil
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             let client: AVIMClient = AVIMClient(clientId: clientId, tag: tag, installation: installation)
-            client.assertInternalQuietCallback = { (error: Error?) in
-                XCTAssertNil(error)
+            if assertInternalQuietCallback {
+                client.assertInternalQuietCallback = { XCTAssertNil($0) }
             }
             client.delegate = delegate
             semaphore.increment()

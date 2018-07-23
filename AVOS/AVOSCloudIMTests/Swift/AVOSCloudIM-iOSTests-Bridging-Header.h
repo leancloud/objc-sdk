@@ -9,3 +9,5 @@
 #import "AVIMConversation_Internal.h"
 #import "AVIMConversationMemberInfo_Internal.h"
 #import "AVIMMessage_Internal.h"
+#import "AVIMClientInternalConversationManager_Internal.h"
+#import "AVPaasClient.h"
