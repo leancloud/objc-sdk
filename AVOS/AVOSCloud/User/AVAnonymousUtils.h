@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
      </ul>
  </ul>
  */
+__deprecated_msg("Deprecated. use AVUser instead.")
 @interface AVAnonymousUtils : NSObject
 
 /*! @name Creating an Anonymous User */
@@ -38,14 +39,14 @@ NS_ASSUME_NONNULL_BEGIN
  @param block The block to execute when anonymous user creation is complete. The block should have the following argument signature:
  (AVUser *user, NSError *error)
  */
-+ (void)logInWithBlock:(AVUserResultBlock)block;
++ (void)logInWithBlock:(AVUserResultBlock)block __deprecated_msg("Deprecated. use +[AVUser loginAnonymouslyWithCallback:] instead.");
 
 /*!
  Creates an anonymous user.  The selector for the callback should look like: (AVUser *)user error:(NSError *)error
  @param target Target object for the selector.
  @param selector The selector that will be called when the asynchronous request is complete.
  */
-+ (void)logInWithTarget:(id)target selector:(SEL)selector;
++ (void)logInWithTarget:(id)target selector:(SEL)selector __deprecated_msg("Deprecated. use +[AVUser loginAnonymouslyWithCallback:] instead.");
 
 /*! @name Determining Whether a AVUser is Anonymous */
 
@@ -54,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param user User to check for anonymity. The user must be logged in on this device.
  @return True if the user is anonymous.  False if the user is not the current user or is not anonymous.
  */
-+ (BOOL)isLinkedWithUser:(AVUser *)user;
++ (BOOL)isLinkedWithUser:(AVUser *)user __deprecated_msg("Deprecated. use -[AVUser isAnonymous:] instead.");
 
 @end
 
