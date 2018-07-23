@@ -8,19 +8,16 @@
 
 #import "AVIMCommon.h"
 #import "AVIMMessage.h"
-#import "AVIMTypedMessage.h"
-#import "AVIMKeyedConversation.h"
-#import "AVIMAvailability.h"
 #import "AVIMMessageOption.h"
-#import "AVIMRecalledMessage.h"
-#import "AVIMConversationMemberInfo.h"
 
 @class AVIMClient;
+@class AVIMKeyedConversation;
+@class AVIMRecalledMessage;
+@class AVIMConversationMemberInfo;
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef uint64_t AVIMMessageSendOption
-AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.4.0. Use AVIMMessageOption instead.");
+typedef uint64_t AVIMMessageSendOption __deprecated_msg("Deprecated in AVOSCloudIM SDK 3.4.0. Use AVIMMessageOption instead.");
 
 enum : AVIMMessageSendOption {
     /// Default message.
@@ -29,7 +26,7 @@ enum : AVIMMessageSendOption {
     AVIMMessageSendOptionTransient = 1 << 0,
     /// When receiver receives the message, in sender part, -[AVIMClientDelegate conversation:messageDelivered:] will be called.
     AVIMMessageSendOptionRequestReceipt = 1 << 1,
-} AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.4.0. Use AVIMMessageOption instead.");
+} __deprecated_msg("Deprecated in AVOSCloudIM SDK 3.4.0. Use AVIMMessageOption instead.");
 
 @interface AVIMMessageIntervalBound : NSObject
 
@@ -572,7 +569,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  */
 - (void)sendMessage:(AVIMMessage *)message
             options:(AVIMMessageSendOption)options
-           callback:(AVIMBooleanResultBlock)callback AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.4.0. Use -[AVIMConversation sendMessage:option:callback:] instead.");
+           callback:(AVIMBooleanResultBlock)callback __deprecated_msg("Deprecated in AVOSCloudIM SDK 3.4.0. Use -[AVIMConversation sendMessage:option:callback:] instead.");
 
 /*!
  往对话中发送消息。
@@ -584,7 +581,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
 - (void)sendMessage:(AVIMMessage *)message
             options:(AVIMMessageSendOption)options
       progressBlock:(nullable AVIMProgressBlock)progressBlock
-           callback:(AVIMBooleanResultBlock)callback AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.4.0. Use -[AVIMConversation sendMessage:option:progressBlock:callback:] instead.");
+           callback:(AVIMBooleanResultBlock)callback __deprecated_msg("Deprecated in AVOSCloudIM SDK 3.4.0. Use -[AVIMConversation sendMessage:option:progressBlock:callback:] instead.");
 
 /*!
  发送更新。
@@ -592,13 +589,13 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  @param callback － 结果回调
  */
 - (void)update:(NSDictionary *)updateDict
-      callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 3.7.0. Use -[AVIMConversation updateWithCallback:] instead.");
+      callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback __deprecated_msg("Deprecated in AVOSCloudIM SDK 3.7.0. Use -[AVIMConversation updateWithCallback:] instead.");
 
 /*!
  标记该会话已读。
  将服务端该会话的未读消息数置零。
  */
-- (void)markAsReadInBackground AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 4.3.0. Use -[AVIMConversation readInBackground] instead.");
+- (void)markAsReadInBackground __deprecated_msg("Deprecated in AVOSCloudIM SDK 4.3.0. Use -[AVIMConversation readInBackground] instead.");
 
 @end
 

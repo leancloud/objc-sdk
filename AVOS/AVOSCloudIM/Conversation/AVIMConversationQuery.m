@@ -6,19 +6,16 @@
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMConversationQuery.h"
-#import "MessagesProtoOrig.pbobjc.h"
-#import "AVIMCommandCommon.h"
-#import "AVUtils.h"
-#import "AVIMConversation.h"
-#import "AVIMConversation_Internal.h"
 #import "AVIMConversationQuery_Internal.h"
 #import "AVIMClient_Internal.h"
-#import "AVIMBlockHelper.h"
-#import "AVIMErrorUtil.h"
-#import "AVObjectUtils.h"
+#import "AVIMClientInternalConversationManager_Internal.h"
+#import "AVIMConversation_Internal.h"
+
 #import "LCIMConversationCache.h"
-#import "AVIMMessage_Internal.h"
+#import "AVIMErrorUtil.h"
+
+#import "AVUtils.h"
+#import "AVObjectUtils.h"
 #import "AVErrorUtils.h"
 
 @implementation AVIMConversationQuery
@@ -432,14 +429,14 @@
                 if (!conversationId) {
                     continue;
                 }
-                AVIMConversation *conv = [client getConversationFromMemory:conversationId];
+                AVIMConversation *conv = [client.conversationManager conversationForId:conversationId];
                 if (conv) {
                     [conv setRawJSONData:jsonDic];
                     [conversations addObject:conv];
                 } else {
                     conv = [AVIMConversation conversationWithRawJSONData:jsonDic client:client];
                     if (conv) {
-                        [client cacheConversationToMemory:conv];
+                        [client.conversationManager insertConversation:conv];
                         [conversations addObject:conv];
                     }
                 }
@@ -575,14 +572,14 @@
                 if (!conversationId) {
                     continue;
                 }
-                AVIMTemporaryConversation *tempConv = (AVIMTemporaryConversation *)[client getConversationFromMemory:conversationId];
+                AVIMTemporaryConversation *tempConv = (AVIMTemporaryConversation *)[client.conversationManager conversationForId:conversationId];
                 if (tempConv) {
                     [tempConv setRawJSONData:jsonDic];
                     [conversations addObject:tempConv];
                 } else {
                     tempConv = [AVIMTemporaryConversation conversationWithRawJSONData:jsonDic client:client];
                     if (tempConv) {
-                        [client cacheConversationToMemory:tempConv];
+                        [client.conversationManager insertConversation:tempConv];
                         [conversations addObject:tempConv];
                     }
                 }
@@ -607,12 +604,12 @@
         [client addOperationToInternalSerialQueue:^(AVIMClient *client) {
             NSMutableArray *results = [NSMutableArray array];
             for (AVIMConversation *conv in conversations) {
-                AVIMConversation *convInMemory = [client getConversationFromMemory:conv.conversationId];
+                AVIMConversation *convInMemory = [client.conversationManager conversationForId:conv.conversationId];
                 if (convInMemory) {
                     [results addObject:convInMemory];
                 } else {
                     [results addObject:conv];
-                    [client cacheConversationToMemory:conv];
+                    [client.conversationManager insertConversation:conv];
                 }
             }
             callback(results);

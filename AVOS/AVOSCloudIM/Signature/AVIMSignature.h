@@ -10,49 +10,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NSString * const AVIMSignatureAction NS_TYPED_EXTENSIBLE_ENUM;
-
-/*
- Related Method:
- AVIMClient -[openWithCallback:]
- AVIMClient -[openWithOption:callback:]
- */
-extern AVIMSignatureAction AVIMSignatureActionOpen;
-
-/*
- Related Method:
- AVIMClient -[createConversationWithName:clientIds:callback:]
- AVIMClient -[createChatRoomWithName:attributes:callback:]
- AVIMClient -[createTemporaryConversationWithClientIds:timeToLive:callback:]
- AVIMClient -[createConversationWithName:clientIds:attributes:options:callback:]
- AVIMClient -[createConversationWithName:clientIds:attributes:options:temporaryTTL:callback:]
- */
-extern AVIMSignatureAction AVIMSignatureActionStart;
-
-/*
- Related Method:
- AVIMConversation -[addMembersWithClientIds:callback:]
- */
-extern AVIMSignatureAction AVIMSignatureActionAdd;
-
-/*
- Related Method:
- AVIMConversation -[removeMembersWithClientIds:callback:]
- */
-extern AVIMSignatureAction AVIMSignatureActionRemove;
-
-/*
- Related Method:
- AVIMConversation -[blockMembers::callback:]
- */
-extern AVIMSignatureAction AVIMSignatureActionBlock;
-
-/*
- Related Method:
- AVIMConversation -[unblockMembers:callback:]
- */
-extern AVIMSignatureAction AVIMSignatureActionUnblock;
-
 @interface AVIMSignature : NSObject
 
 /**

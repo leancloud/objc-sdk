@@ -8,7 +8,6 @@
 
 @import Foundation;
 #import "AVIMCommandCommon.h"
-#import "AVIMSignature.h"
 
 FOUNDATION_EXPORT const NSInteger LCIMErrorCodeSessionTokenExpired;
 
