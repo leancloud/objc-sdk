@@ -2092,11 +2092,11 @@
 		8C841A9B1A5A7A0000C5C6C4 /* User */ = {
 			isa = PBXGroup;
 			children = (
+				8C841A9E1A5A7A0000C5C6C4 /* AVUser.h */,
+				8C841AA01A5A7A0000C5C6C4 /* AVUser_Internal.h */,
+				8C841A9F1A5A7A0000C5C6C4 /* AVUser.m */,
 				8C841A9C1A5A7A0000C5C6C4 /* AVAnonymousUtils.h */,
 				8C841A9D1A5A7A0000C5C6C4 /* AVAnonymousUtils.m */,
-				8C841A9E1A5A7A0000C5C6C4 /* AVUser.h */,
-				8C841A9F1A5A7A0000C5C6C4 /* AVUser.m */,
-				8C841AA01A5A7A0000C5C6C4 /* AVUser_Internal.h */,
 			);
 			path = User;
 			sourceTree = "<group>";
