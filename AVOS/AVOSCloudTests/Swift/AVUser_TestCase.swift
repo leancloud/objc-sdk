@@ -384,6 +384,22 @@ class AVUser_TestCase: LCTestBase {
         }
     }
     
+    // MARK: - Anonymous
+    
+    func test_login_anonymous() {
+        
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
+            semaphore.increment()
+            AVUser.loginAnonymously(callback: { (user: AVUser?, error: Error?) in
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
+                XCTAssertNotNil(user)
+                XCTAssertNil(error)
+                if let user = user { XCTAssertTrue(user.isAnonymous()) }
+            })
+        }, failure: { XCTFail("timeout") })
+    }
+    
     // MARK: - Error
     
     func test_username_taken() {
