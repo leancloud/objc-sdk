@@ -6,11 +6,7 @@
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMKeyedConversation.h"
 #import "AVIMKeyedConversation_internal.h"
-#import "AVIMClient_Internal.h"
-#import "AVIMConversation.h"
-#import "AVIMConversation_Internal.h"
 
 @implementation AVIMKeyedConversation
 

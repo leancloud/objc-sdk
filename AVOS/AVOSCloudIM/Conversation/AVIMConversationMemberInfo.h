@@ -6,21 +6,9 @@
 //  Copyright © 2018 LeanCloud Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "AVIMCommon.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-/**
- Conversation Member Role
- 
- - AVIMConversationMemberRoleMember: Member
- - AVIMConversationMemberRoleManager: Manager
- */
-typedef NS_ENUM(NSUInteger, AVIMConversationMemberRole) {
-    AVIMConversationMemberRoleMember = 0,
-    AVIMConversationMemberRoleManager = 1,
-    AVIMConversationMemberRoleOwner = 2,
-};
 
 @interface AVIMConversationMemberInfo : NSObject
 

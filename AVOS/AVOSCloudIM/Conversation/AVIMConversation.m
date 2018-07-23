@@ -6,29 +6,26 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMCommon.h"
 #import "AVIMConversation_Internal.h"
-#import "AVIMClient.h"
 #import "AVIMClient_Internal.h"
-#import "AVIMBlockHelper.h"
+#import "AVIMKeyedConversation_internal.h"
+#import "AVIMConversationQuery_Internal.h"
+#import "AVIMConversationMemberInfo_Internal.h"
 #import "AVIMTypedMessage_Internal.h"
-#import "AVIMGeneralObject.h"
-#import "AVIMConversationQuery.h"
+#import "AVIMRecalledMessage.h"
+#import "AVIMSignature.h"
+
 #import "LCIMMessageCache.h"
 #import "LCIMMessageCacheStore.h"
-#import "AVIMKeyedConversation_internal.h"
-#import "AVErrorUtils.h"
-#import "AVFile_Internal.h"
-#import "AVIMUserOptions.h"
-#import "AVIMErrorUtil.h"
 #import "LCIMConversationCache.h"
-#import "MessagesProtoOrig.pbobjc.h"
-#import "AVUtils.h"
-#import "AVIMRuntimeHelper.h"
-#import "AVIMRecalledMessage.h"
-#import "AVObjectUtils.h"
+
+#import "AVIMBlockHelper.h"
+#import "AVIMGeneralObject.h"
+#import "AVIMErrorUtil.h"
+
+#import "AVFile_Internal.h"
 #import "AVPaasClient.h"
-#import "AVIMConversationMemberInfo_Internal.h"
+#import "AVUtils.h"
 #import "AVErrorUtils.h"
 
 @implementation AVIMMessageIntervalBound
@@ -99,6 +96,10 @@
     
     // message cache for rcp
     NSMutableDictionary<NSString *, AVIMMessage *> *_rcpMessageTable;
+    
+#if DEBUG
+    dispatch_queue_t _internalSerialQueue;
+#endif
 }
 
 static dispatch_queue_t messageCacheOperationQueue;
@@ -215,6 +216,9 @@ static dispatch_queue_t messageCacheOperationQueue;
         self->_lock = [[NSLock alloc] init];
         
         self->_imClient = client;
+#if DEBUG
+        self->_internalSerialQueue = client.internalSerialQueue;
+#endif
         self->_conversationId = conversationId;
         self->_clientId = client.clientId;
         
@@ -427,7 +431,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (BOOL)updateLastMessage:(AVIMMessage *)message client:(AVIMClient *)client
 {
-    AssertRunInInternalSerialQueue(client);
+    AssertRunInQueue(self->_internalSerialQueue);
     __block BOOL updated = false;
     __block BOOL newMessageArrived = false;
     [self internalSyncLock:^{
@@ -711,9 +715,9 @@ static dispatch_queue_t messageCacheOperationQueue;
     
     clientIds = ({
         for (NSString *item in clientIds) {
-            if (item.length > kLC_ClientId_MaxLength || item.length == 0) {
+            if (item.length > clientIdLengthLimit || item.length == 0) {
                 [self invokeInUserInteractQueue:^{
-                    callback(false, LCErrorInternal([NSString stringWithFormat:@"client id's length should in range [1 %lu].", kLC_ClientId_MaxLength]));
+                    callback(false, LCErrorInternal([NSString stringWithFormat:@"client id's length should in range [1 %lu].", clientIdLengthLimit]));
                 }];
                 return;
             }
@@ -723,7 +727,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     
     [client getSignatureWithConversationId:self->_conversationId action:AVIMSignatureActionAdd actionOnClientIds:clientIds callback:^(AVIMSignature *signature) {
         
-        AssertRunInInternalSerialQueue(client);
+        AssertRunInQueue(self->_internalSerialQueue);
         
         if (signature && signature.error) {
             [self invokeInUserInteractQueue:^{
@@ -796,9 +800,9 @@ static dispatch_queue_t messageCacheOperationQueue;
     
     clientIds = ({
         for (NSString *item in clientIds) {
-            if (item.length > kLC_ClientId_MaxLength || item.length == 0) {
+            if (item.length > clientIdLengthLimit || item.length == 0) {
                 [self invokeInUserInteractQueue:^{
-                    callback(false, LCErrorInternal([NSString stringWithFormat:@"client id's length should in range [1 %lu].", kLC_ClientId_MaxLength]));
+                    callback(false, LCErrorInternal([NSString stringWithFormat:@"client id's length should in range [1 %lu].", clientIdLengthLimit]));
                 }];
                 return;
             }
@@ -808,7 +812,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     
     [client getSignatureWithConversationId:self->_conversationId action:AVIMSignatureActionAdd actionOnClientIds:clientIds callback:^(AVIMSignature *signature) {
         
-        AssertRunInInternalSerialQueue(client);
+        AssertRunInQueue(self->_internalSerialQueue);
         
         if (signature && signature.error) {
             [self invokeInUserInteractQueue:^{
@@ -1019,6 +1023,13 @@ static dispatch_queue_t messageCacheOperationQueue;
             AVIMJsonObjectMessage *jsonObjectCommand = (convCommand.hasAttrModified ? convCommand.attrModified : nil);
             NSString *jsonString = (jsonObjectCommand.hasData_p ? jsonObjectCommand.data_p : nil);
             NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+            if (!data) {
+                callback(false, ({
+                    AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
+                    LCError(code, AVIMErrorMessage(code), nil);
+                }));
+                return;
+            }
             NSError *error = nil;
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
             if (error || ![NSDictionary lc__checkingType:dic]) {
@@ -2511,7 +2522,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     
     [client getSessionTokenWithForcingRefresh:forcingRefreshIMSessionToken callback:^(NSString *sessionToken, NSError *error) {
         
-        AssertRunInInternalSerialQueue(client);
+        AssertRunInQueue(self->_internalSerialQueue);
         NSParameterAssert(sessionToken);
         
         if (error) {
@@ -2583,7 +2594,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             }];
         } failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error) {
             if ([NSDictionary lc__checkingType:responseObject] &&
-                [responseObject[@"code"] integerValue] == kLC_Code_SessionTokenExpired &&
+                [responseObject[@"code"] integerValue] == errorCodeSessionTokenExpired &&
                 recursionCount < 3) {
                 [self getAllMemberInfoWithIgnoringCache:ignoringCache
                            forcingRefreshIMSessionToken:true
@@ -2756,7 +2767,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     
     [client getSignatureWithConversationId:self->_conversationId action:action actionOnClientIds:memberIds callback:^(AVIMSignature *signature) {
         
-        AssertRunInInternalSerialQueue(client);
+        AssertRunInQueue(self->_internalSerialQueue);
         
         if (signature && signature.error) {
             [self invokeInUserInteractQueue:^{
@@ -2999,10 +3010,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 - (AVIMMessage *)process_direct:(AVIMDirectCommand *)directCommand messageId:(NSString *)messageId isTransientMsg:(BOOL)isTransientMsg
 {
     AVIMClient *client = self->_imClient;
-    if (!client) {
-        return nil;
-    }
-    AssertRunInInternalSerialQueue(client);
+    AssertRunInQueue(self->_internalSerialQueue);
     
     NSString *content = (directCommand.hasMsg ? directCommand.msg : nil);
     int64_t timestamp = (directCommand.hasTimestamp ? directCommand.timestamp : 0);
@@ -3058,15 +3066,16 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     return message;
 }
 
-- (NSUInteger)process_unread:(AVIMUnreadTuple *)unreadTuple
+- (NSInteger)process_unread:(AVIMUnreadTuple *)unreadTuple
 {
     AVIMClient *client = self->_imClient;
-    if (!client) {
-        return 0;
-    }
-    AssertRunInInternalSerialQueue(client);
+    AssertRunInQueue(self->_internalSerialQueue);
     
-    NSUInteger unreadCount = (unreadTuple.hasUnread ? unreadTuple.unread : 0);
+    if (!unreadTuple || !unreadTuple.hasUnread) {
+        return -1;
+    }
+    
+    NSInteger unreadCount = unreadTuple.unread;
     BOOL mentioned = (unreadTuple.hasMentioned ? unreadTuple.mentioned : false);
     
     if (unreadCount > 0) {
@@ -3104,7 +3113,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                 [client conversation:self didUpdateForKeys:@[AVIMConversationUpdatedKeyUnreadMessagesCount]];
             }
         }
-    } else {
+    } else if (unreadCount == 0) {
         [self internalSyncLock:^{
             self->_unreadMessagesCount = 0;
         }];
@@ -3120,10 +3129,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 - (AVIMMessage *)process_patch_modified:(AVIMPatchItem *)patchItem
 {
     AVIMClient *client = self->_imClient;
-    if (!client) {
-        return nil;
-    }
-    AssertRunInInternalSerialQueue(client);
+    AssertRunInQueue(self->_internalSerialQueue);
     
     NSString *content = (patchItem.hasData_p ? patchItem.data_p : nil);
     NSString *messageId = (patchItem.hasMid ? patchItem.mid : nil);
@@ -3168,10 +3174,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 - (AVIMMessage *)process_rcp:(AVIMRcpCommand *)rcpCommand isReadRcp:(BOOL)isReadRcp
 {
     AVIMClient *client = self->_imClient;
-    if (!client) {
-        return nil;
-    }
-    AssertRunInInternalSerialQueue(client);
+    AssertRunInQueue(self->_internalSerialQueue);
     
     NSString *messageId = (rcpCommand.hasId_p ? rcpCommand.id_p : nil);
     int64_t timestamp = (rcpCommand.hasT ? rcpCommand.t : 0);
@@ -3203,11 +3206,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 - (void)process_conv_updated_attr:(NSDictionary *)attr attrModified:(NSDictionary *)attrModified
 {
-    AVIMClient *client = self->_imClient;
-    if (!client) {
-        return;
-    }
-    AssertRunInInternalSerialQueue(client);
+    AssertRunInQueue(self->_internalSerialQueue);
     
     [self internalSyncLock:^{
         process_attr_and_attrModified(attr, attrModified, self->_rawJSONData);
@@ -3218,11 +3217,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 - (void)process_member_info_changed:(NSString *)memberId role:(NSString *)role
 {
-    AVIMClient *client = self->_imClient;
-    if (!client) {
-        return;
-    }
-    AssertRunInInternalSerialQueue(client);
+    AssertRunInQueue(self->_internalSerialQueue);
     
     if (!memberId || !role) {
         return;

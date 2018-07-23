@@ -7,7 +7,6 @@
 //
 
 #import "AVIMConversation.h"
-#import "AVConstants.h"
 #import "MessagesProtoOrig.pbobjc.h"
 
 // conversation
@@ -62,7 +61,7 @@ typedef NS_ENUM(NSUInteger, LCIMConvType) {
 
 - (AVIMMessage *)process_direct:(AVIMDirectCommand *)directCommand messageId:(NSString *)messageId isTransientMsg:(BOOL)isTransientMsg;
 - (AVIMMessage *)process_rcp:(AVIMRcpCommand *)rcpCommand isReadRcp:(BOOL)isReadRcp;
-- (NSUInteger)process_unread:(AVIMUnreadTuple *)unreadTuple;
+- (NSInteger)process_unread:(AVIMUnreadTuple *)unreadTuple;
 - (AVIMMessage *)process_patch_modified:(AVIMPatchItem *)patchItem;
 - (void)process_conv_updated_attr:(NSDictionary *)attr attrModified:(NSDictionary *)attrModified;
 - (void)process_member_info_changed:(NSString *)memberId role:(NSString *)role;

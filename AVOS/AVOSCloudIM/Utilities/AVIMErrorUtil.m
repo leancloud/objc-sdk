@@ -11,6 +11,7 @@
 NSString *AVIMErrorMessage(AVIMErrorCode code)
 {
     switch (code) {
+            // 90xx
         case AVIMErrorCodeCommandTimeout:
             return @"Web Socket command timeout.";
         case AVIMErrorCodeConnectionLost:
@@ -21,6 +22,9 @@ NSString *AVIMErrorMessage(AVIMErrorCode code)
             return @"Web Socket command received from server is invalid.";
         case AVIMErrorCodeCommandDataLengthTooLong:
             return @"Web socket command data length is too long.";
+            // 91XX
+        case AVIMErrorCodeConversationNotFound:
+            return @"Conversation not found.";
         case AVIMErrorCodeUpdatingMessageNotAllowed:
             return @"Updating message from others is not allowed.";
         case AVIMErrorCodeUpdatingMessageNotSent:

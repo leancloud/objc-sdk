@@ -6,17 +6,21 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-
-// In this header, you should import all the public headers of your framework using statements like #import <AVOSCloudIM/PublicHeader.h>
-
-// Public headers
+// misc
 #import "AVIMAvailability.h"
 #import "AVIMCommon.h"
+#import "AVIMUserOptions.h"
+#import "AVIMOptions.h"
+// client
 #import "AVIMClient.h"
+#import "AVIMClientInternalConversationManager.h"
+// conversation
 #import "AVIMConversation.h"
 #import "AVIMConversationMemberInfo.h"
 #import "AVIMKeyedConversation.h"
+// query
 #import "AVIMConversationQuery.h"
+// message
 #import "AVIMMessage.h"
 #import "AVIMMessageOption.h"
 #import "AVIMTypedMessage.h"
@@ -27,9 +31,9 @@
 #import "AVIMLocationMessage.h"
 #import "AVIMFileMessage.h"
 #import "AVIMRecalledMessage.h"
+// signature
 #import "AVIMSignature.h"
-#import "AVIMUserOptions.h"
-#import "AVIMOptions.h"
+
 
 NS_ASSUME_NONNULL_BEGIN
 

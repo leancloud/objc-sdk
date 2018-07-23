@@ -6,8 +6,6 @@
 //  Copyright © 2016 LeanCloud Inc. All rights reserved.
 //
 
-#import <AVOSCloud/AVOSCloud.h>
-
 #import "AVOSCloudIM.h"
 
 @implementation AVOSCloudIM

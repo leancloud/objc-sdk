@@ -16,7 +16,7 @@ class AVIMClient_TestCase: LCIMTestBase {
         
         var aUser: AVUser! = nil
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let user: AVUser = AVUser()
             user.username = "\(#function)\(#line)"
@@ -71,7 +71,7 @@ class AVIMClient_TestCase: LCIMTestBase {
             return
         }
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let client: AVIMClient = AVIMClient(user: aUser)
             
@@ -96,19 +96,19 @@ class AVIMClient_TestCase: LCIMTestBase {
     
     func test_create_temp_conv() {
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
-        guard let client_1: AVIMClient = self.newOpenedClient(clientId: "\(#function.substring(to: #function.index(of: "(")!))_\(#line)", delegate: delegate_1) else {
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
+        guard let client_1: AVIMClient = self.newOpenedClient(clientId: "\(#function[..<#function.index(of: "(")!])_\(#line)", delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
-        guard let client_2: AVIMClient = self.newOpenedClient(clientId: "\(#function.substring(to: #function.index(of: "(")!))_\(#line)", delegate: delegate_2) else {
+        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
+        guard let client_2: AVIMClient = self.newOpenedClient(clientId: "\(#function[..<#function.index(of: "(")!])_\(#line)", delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment(5)
             
@@ -196,7 +196,7 @@ class AVIMClient_TestCase: LCIMTestBase {
             return
         }
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment()
             semaphore.increment()
@@ -237,10 +237,10 @@ class AVIMClient_TestCase: LCIMTestBase {
     
     func test_session_conflict() {
         
-        let clientId: String = "\(#function.substring(to: #function.index(of: "(")!))"
+        let clientId: String = "\(#function[..<#function.index(of: "(")!])"
         let tag: String = "tag"
         
-        let delegate_1: AVIMClientDelegate_TestCase = AVIMClientDelegate_TestCase()
+        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         let installation_1: AVInstallation = AVInstallation()
         installation_1.deviceToken = UUID().uuidString
         guard let _: AVIMClient = self.newOpenedClient(clientId: clientId, tag: tag, delegate: delegate_1, installation: installation_1) else {
@@ -248,7 +248,7 @@ class AVIMClient_TestCase: LCIMTestBase {
             return
         }
         
-        self.runloopTestingAsync(async: { (semaphore: RunLoopSemaphore) in
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             semaphore.increment(2)
             
@@ -282,9 +282,102 @@ class AVIMClient_TestCase: LCIMTestBase {
         })
     }
     
+    // MARK: - Conversation Management
+    
+    func test_conv_management() {
+        
+        guard !LCTestEnvironment.sharedInstance().isServerTesting else {
+            return
+        }
+        
+        let clientId: String = "\(#function[..<#function.index(of: "(")!])"
+        let customBatchQueryLimit: UInt = 5
+        AVIMClientInternalConversationManager.setBatchQueryLimit(customBatchQueryLimit)
+        defer {
+            AVIMClientInternalConversationManager.setBatchQueryLimit(20)
+        }
+        
+        guard let client: AVIMClient = self.newOpenedClient(clientId: clientId) else {
+            XCTFail()
+            return
+        }
+        
+        let limit: Int = Int(customBatchQueryLimit * 2 + 1)
+        var conversationIds: [String] = []
+        
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
+            let query: AVIMConversationQuery = client.conversationQuery()
+            query.limit = limit
+            query.cachePolicy = .networkOnly
+            semaphore.increment(1 + limit)
+            query.findConversations(callback: { (convs: [AVIMConversation]?, error: Error?) in
+                semaphore.decrement()
+                XCTAssertTrue(Thread.isMainThread)
+                XCTAssertNotNil(convs)
+                XCTAssertNil(error)
+                if let convs: [AVIMConversation] = convs {
+                    if convs.count == limit {
+                        semaphore.decrement(limit)
+                        for conv in convs {
+                            conversationIds.append(conv.conversationId!)
+                        }
+                    } else {
+                        if convs.count > 0 {
+                            semaphore.decrement(convs.count)
+                            for conv in convs {
+                                conversationIds.append(conv.conversationId!)
+                            }
+                        }
+                        for _ in 0..<(limit - convs.count) {
+                            client.createConversation(withName: nil, clientIds: [clientId, "A"], callback: { (conv: AVIMConversation?, error: Error?) in
+                                semaphore.decrement()
+                                XCTAssertTrue(Thread.isMainThread)
+                                XCTAssertNotNil(conv)
+                                XCTAssertNil(error)
+                                if let conv: AVIMConversation = conv {
+                                    conversationIds.append(conv.conversationId!)
+                                }
+                            })
+                        }
+                    }
+                } else {
+                    semaphore.decrement(limit)
+                }
+            })
+        }, failure: { XCTFail("timeout") })
+        
+        if conversationIds.count == limit {
+            
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
+                semaphore.increment()
+                client.removeAllConversationsInMemory {
+                    semaphore.decrement()
+                    XCTAssertTrue(Thread.isMainThread)
+                }
+            }, failure: { XCTFail("timeout") })
+            
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
+                semaphore.increment(conversationIds.count)
+                client.addOperation(toInternalSerialQueue: { _ in
+                    client.conversationManager.queryConversations(withIds: NSMutableArray(array: conversationIds), callback: { (conv: AVIMConversation?, error: Error?) in
+                        DispatchQueue.main.async {
+                            semaphore.decrement()
+                            XCTAssertTrue(Thread.isMainThread)
+                            XCTAssertNotNil(conv)
+                            XCTAssertNil(error)
+                            if let conv: AVIMConversation = conv {
+                                XCTAssertTrue(conversationIds.contains(conv.conversationId!))
+                            }
+                        }
+                    })
+                })
+            }, failure: { XCTFail("timeout") })
+        }
+    }
+    
 }
 
-class AVIMClientDelegate_TestCase: NSObject, AVIMClientDelegate {
+class AVIMClientDelegateWrapper: NSObject, AVIMClientDelegate {
     
     var didReceiveTypeMessageClosure: ((AVIMConversation, AVIMTypedMessage) -> Void)?
     var didReceiveCommonMessageClosure: ((AVIMConversation, AVIMMessage) -> Void)?

@@ -6,19 +6,19 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMAvailability.h"
 #import "AVIMCommon.h"
-#import "AVIMSignature.h"
-#import "AVIMConversationMemberInfo.h"
 
 @class AVIMConversation;
+@class AVIMChatRoom;
+@class AVIMServiceConversation;
+@class AVIMTemporaryConversation;
 @class AVIMKeyedConversation;
+@class AVIMConversationQuery;
 @class AVIMMessage;
 @class AVIMTypedMessage;
-@class AVIMConversationQuery;
-@class AVUser;
 
 @protocol AVIMClientDelegate;
+@protocol AVIMSignatureDataSource;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -410,10 +410,10 @@ FOUNDATION_EXPORT AVIMConversationUpdatedKey AVIMConversationUpdatedKeyUnreadMes
 - (void)conversation:(AVIMConversation *)conversation messageDelivered:(AVIMMessage *)message;
 
 /**
- Callback which called when a message has been updated.
+ Invoking when the sent message has been updated.
  
- @param conversation The conversation which the message belongs to.
- @param message      The new message which has been updated.
+ @param conversation The conversation which the sent message belongs to.
+ @param message      The updated message.
  */
 - (void)conversation:(AVIMConversation *)conversation messageHasBeenUpdated:(AVIMMessage *)message;
 
@@ -560,7 +560,7 @@ __deprecated_msg("use -[imClientClosed:error:] instead.");
  @param unread 未读消息数量。
  */
 - (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread
-AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 4.3.0. Instead, use `-[AVIMClientDelegate conversation:propertyDidUpdate:]` instead.");
+__deprecated_msg("Deprecated in AVOSCloudIM SDK 4.3.0. Instead, use `-[AVIMClientDelegate conversation:propertyDidUpdate:]` instead.");
 
 @end
 
@@ -572,7 +572,7 @@ AVIM_DEPRECATED("Deprecated in AVOSCloudIM SDK 4.3.0. Instead, use `-[AVIMClient
  * @param userOptions 用户选项。
  */
 + (void)setUserOptions:(NSDictionary *)userOptions
-AVIM_DEPRECATED("Deprecated in v5.1.0. Do not use it any more.");
+__deprecated_msg("Deprecated in v5.1.0. Do not use it any more.");
 
 @end
 
