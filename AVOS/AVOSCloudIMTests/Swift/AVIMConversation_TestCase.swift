@@ -1684,13 +1684,14 @@ class AVIMConversation_TestCase: LCIMTestBase {
         
         let funcName: String = "\(#function[..<#function.index(of: "(")!])"
         var clientIds: [String] = []
-        for i in 0..<20 {
+        let batchSize: Int = 30
+        for i in 0..<batchSize {
             clientIds.append("\(funcName)\(i)")
         }
         
         var sentMessageConversationIds: [String] = []
         
-        for item in clientIds[0..<10] {
+        for item in clientIds[0..<(batchSize / 2)] {
             guard let client: AVIMClient = self.newOpenedClient(clientId: item, assertInternalQuietCallback: false) else {
                 continue
             }
@@ -1713,7 +1714,7 @@ class AVIMConversation_TestCase: LCIMTestBase {
             })
         }
         
-        for item in clientIds[10..<20] {
+        for item in clientIds[(batchSize / 2)..<batchSize] {
             guard let client: AVIMClient = self.newOpenedClient(clientId: item, assertInternalQuietCallback: false) else {
                 continue
             }
