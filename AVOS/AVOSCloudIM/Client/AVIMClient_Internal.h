@@ -8,30 +8,32 @@
 
 #import "AVIMClient.h"
 #import "AVIMWebSocketWrapper.h"
-#import "LCIMConversationCache.h"
-#import "AVIMConversation_Internal.h"
 
-@class AVInstallation;
+@class LCIMConversationCache;
+@class AVIMClientInternalConversationManager;
 
 #if DEBUG
-#define AssertRunInInternalSerialQueue(client) [client assertRunInInternalSerialQueue]
-#define AssertNotRunInInternalSerialQueue(client) [client assertNotRunInInternalSerialQueue]
+void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
+#define AssertRunInQueue(queue) assertContextOfQueue(queue, true);
+#define AssertNotRunInQueue(queue) assertContextOfQueue(queue, false);
 #else
-#define AssertRunInInternalSerialQueue(client)
-#define AssertNotRunInInternalSerialQueue(client)
+#define AssertRunInQueue(queue)
+#define AssertNotRunInQueue(queue)
 #endif
 
-FOUNDATION_EXPORT NSUInteger const kLC_ClientId_MaxLength;
-FOUNDATION_EXPORT NSInteger const kLC_Code_SessionTokenExpired;
+FOUNDATION_EXPORT NSUInteger const clientIdLengthLimit;
+FOUNDATION_EXPORT NSInteger const errorCodeSessionTokenExpired;
 FOUNDATION_EXPORT NSString * const kTemporaryConversationIdPrefix;
 
 @interface AVIMClient () <AVIMWebSocketWrapperDelegate>
 
 #if DEBUG
 @property (nonatomic, copy) void (^ assertInternalQuietCallback)(NSError *error);
-- (void)assertRunInInternalSerialQueue;
-- (void)assertNotRunInInternalSerialQueue;
 #endif
+@property (nonatomic, strong, readonly) dispatch_queue_t internalSerialQueue;
+@property (nonatomic, strong, readonly) dispatch_queue_t userInteractQueue;
+@property (nonatomic, strong, readonly) AVIMClientInternalConversationManager *conversationManager;
+@property (nonatomic, strong, readonly) LCIMConversationCache *conversationCache;
 
 + (NSMutableDictionary *)_userOptions;
 
@@ -42,9 +44,6 @@ FOUNDATION_EXPORT NSString * const kTemporaryConversationIdPrefix;
 - (instancetype)initWithUser:(AVUser *)user
                          tag:(NSString *)tag
                 installation:(AVInstallation *)installation LC_WARN_UNUSED_RESULT;
-
-- (dispatch_queue_t)internalSerialQueue LC_WARN_UNUSED_RESULT;
-- (dispatch_queue_t)userInteractQueue LC_WARN_UNUSED_RESULT;
 
 - (void)addOperationToInternalSerialQueue:(void (^)(AVIMClient *client))block;
 
@@ -61,12 +60,6 @@ FOUNDATION_EXPORT NSString * const kTemporaryConversationIdPrefix;
                                  callback:(void (^)(NSString *sessionToken, NSError *error))callback;
 
 - (void)conversation:(AVIMConversation *)conversation didUpdateForKeys:(NSArray<AVIMConversationUpdatedKey> *)keys;
-
-- (void)cacheConversationToMemory:(AVIMConversation *)conversation;
-
-- (AVIMConversation *)getConversationFromMemory:(NSString *)conversationId LC_WARN_UNUSED_RESULT;
-
-- (LCIMConversationCache *)conversationCache LC_WARN_UNUSED_RESULT;
 
 - (void)sendCommand:(AVIMGenericCommand *)command;
 
