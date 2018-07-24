@@ -229,7 +229,7 @@ static NSUInteger batchQueryLimit = 20;
     outCommand.cmd = AVIMCommandType_Conv;
     outCommand.op = AVIMOpType_Query;
     outCommand.convMessage = convCommand;
-    convCommand.limit = (int32_t)(batchQueryLimit);
+    convCommand.limit = (int32_t)conversationIds.count;
     if (isTemporary) {
         convCommand.tempConvIdsArray = conversationIds.mutableCopy;
     } else {

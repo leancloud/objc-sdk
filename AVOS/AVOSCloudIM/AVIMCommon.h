@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 // MARK: - Error
 
 /// error code
-typedef NS_ENUM(NSUInteger, AVIMErrorCode) {
+typedef NS_ENUM(NSInteger, AVIMErrorCode) {
     /// 90XX
     AVIMErrorCodeCommandTimeout = 9000,
     AVIMErrorCodeConnectionLost = 9001,
