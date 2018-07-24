@@ -32,13 +32,6 @@ NSInteger const errorCodeSessionTokenExpired = 4112;
 static NSString * const kClientTagDefault = @"default";
 NSString * const kTemporaryConversationIdPrefix = @"_tmp:";
 
-AVIMConversationUpdatedKey AVIMConversationUpdatedKeyLastMessage = @"lastMessage";
-AVIMConversationUpdatedKey AVIMConversationUpdatedKeyLastMessageAt = @"lastMessageAt";
-AVIMConversationUpdatedKey AVIMConversationUpdatedKeyLastReadAt = @"lastReadAt";
-AVIMConversationUpdatedKey AVIMConversationUpdatedKeyLastDeliveredAt = @"lastDeliveredAt";
-AVIMConversationUpdatedKey AVIMConversationUpdatedKeyUnreadMessagesCount = @"unreadMessagesCount";
-AVIMConversationUpdatedKey AVIMConversationUpdatedKeyUnreadMessagesMentioned = @"unreadMessagesMentioned";
-
 // @see https://github.com/leancloud/avoscloud-push/blob/develop/push-server/doc/protocol.md 
 typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     LCIMSessionConfigOptions_Patch = 1 << 0,
@@ -106,6 +99,18 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 + (instancetype)alloc
 {
+#if DEBUG
+    assert([kAVIMCodeKey isEqualToString:keyPath(AVIMErrorCommand.alloc, code)]);
+    assert([kAVIMAppCodeKey isEqualToString:keyPath(AVIMErrorCommand.alloc, appCode)]);
+    assert([kAVIMDetailKey isEqualToString:keyPath(AVIMErrorCommand.alloc, detail)]);
+    assert([kAVIMReasonKey isEqualToString:keyPath(AVIMErrorCommand.alloc, reason)]);
+    assert([AVIMConversationUpdatedKeyLastMessage isEqualToString:keyPath(AVIMConversation.alloc, lastMessage)]);
+    assert([AVIMConversationUpdatedKeyLastMessageAt isEqualToString:keyPath(AVIMConversation.alloc, lastMessageAt)]);
+    assert([AVIMConversationUpdatedKeyLastReadAt isEqualToString:keyPath(AVIMConversation.alloc, lastReadAt)]);
+    assert([AVIMConversationUpdatedKeyLastDeliveredAt isEqualToString:keyPath(AVIMConversation.alloc, lastDeliveredAt)]);
+    assert([AVIMConversationUpdatedKeyUnreadMessagesCount isEqualToString:keyPath(AVIMConversation.alloc, unreadMessagesCount)]);
+    assert([AVIMConversationUpdatedKeyUnreadMessagesMentioned isEqualToString:keyPath(AVIMConversation.alloc, unreadMessagesMentioned)]);
+#endif
     clientHasInstantiated = YES;
     return [super alloc];
 }
@@ -173,15 +178,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                                  tag:(NSString *)tag
                         installation:(AVInstallation *)installation
 {
-#if DEBUG
-    assert([AVIMConversationUpdatedKeyLastMessage isEqualToString:keyPath(AVIMConversation.alloc, lastMessage)]);
-    assert([AVIMConversationUpdatedKeyLastMessageAt isEqualToString:keyPath(AVIMConversation.alloc, lastMessageAt)]);
-    assert([AVIMConversationUpdatedKeyLastReadAt isEqualToString:keyPath(AVIMConversation.alloc, lastReadAt)]);
-    assert([AVIMConversationUpdatedKeyLastDeliveredAt isEqualToString:keyPath(AVIMConversation.alloc, lastDeliveredAt)]);
-    assert([AVIMConversationUpdatedKeyUnreadMessagesCount isEqualToString:keyPath(AVIMConversation.alloc, unreadMessagesCount)]);
-    assert([AVIMConversationUpdatedKeyUnreadMessagesMentioned isEqualToString:keyPath(AVIMConversation.alloc, unreadMessagesMentioned)]);
-#endif
-    
     self->_clientId = ({
         if (!clientId || clientId.length > clientIdLengthLimit || clientId.length == 0) {
             [NSException raise:NSInvalidArgumentException

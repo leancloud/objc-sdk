@@ -6,12 +6,10 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-// misc
-#import "AVIMAvailability.h"
+// constant
 #import "AVIMCommon.h"
-#import "AVIMUserOptions.h"
-#import "AVIMOptions.h"
 // client
+#import "AVIMClientProtocol.h"
 #import "AVIMClient.h"
 #import "AVIMClientInternalConversationManager.h"
 // conversation
@@ -36,6 +34,12 @@
 
 
 NS_ASSUME_NONNULL_BEGIN
+
+@interface AVIMOptions : NSObject
+
+@property (nonatomic, copy, nullable) NSString *RTMServer;
+
+@end
 
 @interface AVOSCloudIM : NSObject
 
