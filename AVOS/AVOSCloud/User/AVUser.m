@@ -1210,6 +1210,40 @@ static BOOL enableAutomatic = NO;
     }];
 }
 
+// MARK: - Anonymous
+
++ (void)loginAnonymouslyWithCallback:(void (^)(AVUser * _Nullable user, NSError * _Nullable error))callback
+{
+    NSDictionary *parameters = ({
+        NSString *anonymousId = [[NSUserDefaults standardUserDefaults] objectForKey:AnonymousIdKey];
+        if (!anonymousId) {
+            anonymousId = [AVUtils generateCompactUUID];
+            [[NSUserDefaults standardUserDefaults] setObject:anonymousId forKey:AnonymousIdKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+        @{ authDataTag: @{ anonymousTag: @{ @"id": anonymousId } } };
+    });
+    [AVPaasClient.sharedInstance postObject:@"users" withParameters:parameters block:^(id object, NSError *error) {
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                callback(nil, error);
+            });
+            return;
+        }
+        AVUser *user = [AVUser userOrSubclassUser];
+        [AVObjectUtils copyDictionary:object toObject:user];
+        [AVUser changeCurrentUser:user save:YES];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            callback(user, nil);
+        });
+    }];
+}
+
+- (BOOL)isAnonymous
+{
+    return [[self linkedServiceNames] containsObject:anonymousTag];
+}
+
 #pragma mark - Override from AVObject
 
 /**

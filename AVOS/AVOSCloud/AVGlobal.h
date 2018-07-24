@@ -25,6 +25,7 @@
 #define deviceTypeTag   @"deviceType"
 #define installationIdTag @"installationId"
 #define authDataTag @"authData"
+#define anonymousTag @"anonymous"
 
 #define enableTag       @"enable"
 

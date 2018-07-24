@@ -464,6 +464,22 @@ A LeanCloud Framework User Object that is a local representation of a user persi
 - (void)disassociateWithPlatformId:(NSString *)platformId
                           callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
+// MARK: - Anonymous
+
+/**
+ Login anonymously.
+
+ @param callback Result callback.
+ */
++ (void)loginAnonymouslyWithCallback:(void (^)(AVUser * _Nullable user, NSError * _Nullable error))callback;
+
+/**
+ Check whether the instance of AVUser is anonymous.
+
+ @return Result.
+ */
+- (BOOL)isAnonymous;
+
 @end
 
 @interface AVUserShortMessageRequestOptions : AVDynamicObject

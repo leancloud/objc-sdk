@@ -12,7 +12,6 @@
 #import "AVIMErrorUtil.h"
 #import "AVIMBlockHelper.h"
 #import "AVIMClient_Internal.h"
-#import "AVIMUserOptions.h"
 #import "AVPaasClient.h"
 #import "AVOSCloud_Internal.h"
 #import "LCRouter.h"
