@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AVOSCloudIM'
-  s.version  = '11.2.3'
+  s.version  = '11.3.0'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud IM Objective-C SDK'
   s.authors  = 'LeanCloud'
@@ -64,8 +64,8 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/InternalObjects/AVIMGeneralObject.h',
       'AVOS/AVOSCloudIM/Signature/AVIMSignature.h',
       'AVOS/AVOSCloudIM/AVMPMessagePack/AVMPMessagePack.h',
+      'AVOS/AVOSCloudIM/Client/AVIMClientProtocol.h',
       'AVOS/AVOSCloudIM/InternalObjects/AVIMMessageObject.h',
-      'AVOS/AVOSCloudIM/AVIMAvailability.h',
       'AVOS/AVOSCloudIM/MessageCache/LCIMConversationCache.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMMessage.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMUtilities.h',
@@ -83,7 +83,6 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/Protobuf/LCIMRootObject_PackagePrivate.h',
       'AVOS/AVOSCloudIM/AVMPMessagePack/AVMPDefines.h',
       'AVOS/AVOSCloudIM/Utilities/AVIMBlockHelper.h',
-      'AVOS/AVOSCloudIM/AVIMOptions.h',
       'AVOS/AVOSCloudIM/AVMPMessagePack/avmp.h',
       'AVOS/AVOSCloudIM/InternalObjects/AVIMTypedMessageObject.h',
       'AVOS/AVOSCloudIM/Commands/AVIMConversationOutCommand.h',
@@ -114,7 +113,6 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/AVOSCloudIM.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMBootstrap.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMProtocolBuffers_RuntimeSupport.h',
-      'AVOS/AVOSCloudIM/AVIMUserOptions.h',
       'AVOS/AVOSCloudIM/MessageCache/CacheStore/LCIMConversationCacheStore.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMUnknownField.h',
       'AVOS/AVOSCloudIM/Conversation/AVIMKeyedConversation_internal.h',
@@ -124,7 +122,6 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMTimestamp.pbobjc.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMUnknownFieldSet.m',
       'AVOS/AVOSCloudIM/MessageCache/CacheStore/LCIMMessageCacheStore.m',
-      'AVOS/AVOSCloudIM/AVIMUserOptions.m',
       'AVOS/AVOSCloudIM/Client/AVIMClientInternalConversationManager.m',
       'AVOS/AVOSCloudIM/InternalObjects/AVIMGeneralObject.m',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMAudioMessage.m',
@@ -145,7 +142,6 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/Protobuf/LCIMRootObject.m',
       'AVOS/AVOSCloudIM/AVMPMessagePack/AVMPOrderedDictionary.m',
       'AVOS/AVOSCloudIM/Utilities/AVIMBlockHelper.m',
-      'AVOS/AVOSCloudIM/AVIMOptions.m',
       'AVOS/AVOSCloudIM/Message/AVIMMessageOption.m',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMApi.pbobjc.m',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMVideoMessage.m',
@@ -209,12 +205,10 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/Conversation/AVIMConversation.h',
       'AVOS/AVOSCloudIM/Message/AVIMMessage.h',
       'AVOS/AVOSCloudIM/Signature/AVIMSignature.h',
-      'AVOS/AVOSCloudIM/AVIMAvailability.h',
-      'AVOS/AVOSCloudIM/AVIMOptions.h',
+      'AVOS/AVOSCloudIM/Client/AVIMClientProtocol.h',
       'AVOS/AVOSCloudIM/Conversation/AVIMConversationMemberInfo.h',
       'AVOS/AVOSCloudIM/Client/AVIMClientInternalConversationManager.h',
-      'AVOS/AVOSCloudIM/AVOSCloudIM.h',
-      'AVOS/AVOSCloudIM/AVIMUserOptions.h'
+      'AVOS/AVOSCloudIM/AVOSCloudIM.h'
 
     ss.exclude_files =
       'AVOS/AVOSCloudIM/Protobuf/*.{h,m}',
