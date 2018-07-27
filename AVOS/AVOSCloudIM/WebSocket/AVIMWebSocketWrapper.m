@@ -87,9 +87,7 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 {
     if (self->_callback) {
         self->_callback(self);
-        /*
-         set to nil to avoid cycle retain
-         */
+        /// set to nil to avoid cycle retain
         self->_callback = nil;
     }
 }

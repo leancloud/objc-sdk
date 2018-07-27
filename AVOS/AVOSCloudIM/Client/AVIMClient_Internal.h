@@ -22,10 +22,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 #define AssertNotRunInQueue(queue)
 #endif
 
-FOUNDATION_EXPORT NSUInteger const clientIdLengthLimit;
-FOUNDATION_EXPORT NSInteger const errorCodeSessionTokenExpired;
-FOUNDATION_EXPORT NSString * const kTemporaryConversationIdPrefix;
-
 @interface AVIMClient () <AVIMWebSocketWrapperDelegate>
 
 #if DEBUG
@@ -49,8 +45,7 @@ FOUNDATION_EXPORT NSString * const kTemporaryConversationIdPrefix;
 - (void)addOperationToInternalSerialQueue:(void (^)(AVIMClient *client))block;
 
 - (void)sendCommandWrapper:(LCIMProtobufCommandWrapper *)commandWrapper;
-
-- (void)_sendCommandWrapper:(LCIMProtobufCommandWrapper *)commandWrapper;
+- (void)sendCommand:(AVIMGenericCommand *)command;
 
 - (void)getSignatureWithConversationId:(NSString *)conversationId
                                 action:(AVIMSignatureAction)action
@@ -61,7 +56,5 @@ FOUNDATION_EXPORT NSString * const kTemporaryConversationIdPrefix;
                                  callback:(void (^)(NSString *sessionToken, NSError *error))callback;
 
 - (void)conversation:(AVIMConversation *)conversation didUpdateForKeys:(NSArray<AVIMConversationUpdatedKey> *)keys;
-
-- (void)sendCommand:(AVIMGenericCommand *)command;
 
 @end

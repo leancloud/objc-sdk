@@ -20,6 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// error code
 typedef NS_ENUM(NSInteger, AVIMErrorCode) {
+    /// 41XX
+    AVIMErrorCodeSessionConflict = 4111,
+    AVIMErrorCodeSessionTokenExpired = 4112,
     /// 90XX
     AVIMErrorCodeCommandTimeout = 9000,
     AVIMErrorCodeConnectionLost = 9001,
@@ -112,6 +115,14 @@ typedef NS_ENUM(NSUInteger, AVIMCachePolicy) {
     kAVIMCachePolicyCacheThenNetwork = 5,
 };
 
+// MARK: - Message
+
+/// Enumerations that define message query direction.
+typedef NS_ENUM(NSUInteger, AVIMMessageQueryDirection) {
+    AVIMMessageQueryDirectionFromNewToOld = 0,
+    AVIMMessageQueryDirectionFromOldToNew = 1,
+};
+
 // MARK: - Signature
 
 /// Signature Action
@@ -133,14 +144,14 @@ typedef void(^AVIMChatRoomResultBlock)(AVIMChatRoom * _Nullable, NSError * _Null
 typedef void(^AVIMTemporaryConversationResultBlock)(AVIMTemporaryConversation * _Nullable, NSError * _Nullable);
 typedef void(^AVIMProgressBlock)(NSInteger);
 
-/*
- * 开启未读通知，关闭离线消息推送。
- */
 FOUNDATION_EXPORT NSString * const AVIMUserOptionUseUnread __deprecated_msg("deprecated. use +[AVIMClient setUnreadNotificationEnabled:] instead.");
-
-/*
- * 自定义消息传输协议。如果没有特殊目的，不应该使用这个选项。
- */
 FOUNDATION_EXPORT NSString * const AVIMUserOptionCustomProtocols __deprecated_msg("deprecated. do not use it any more.");
+
+typedef uint64_t AVIMMessageSendOption __deprecated_msg("deprecated. use AVIMMessageOption instead.");
+enum : AVIMMessageSendOption {
+    AVIMMessageSendOptionNone = 0,
+    AVIMMessageSendOptionTransient = 1 << 0,
+    AVIMMessageSendOptionRequestReceipt = 1 << 1,
+} __deprecated_msg("deprecated. use AVIMMessageOption instead.");
 
 NS_ASSUME_NONNULL_END

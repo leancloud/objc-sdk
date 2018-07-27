@@ -17,20 +17,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef uint64_t AVIMMessageSendOption __deprecated_msg("Deprecated in AVOSCloudIM SDK 3.4.0. Use AVIMMessageOption instead.");
-
-enum : AVIMMessageSendOption {
-    /// Default message.
-    AVIMMessageSendOptionNone = 0,
-    /// Transient message. Not saved in the sever. Discard if the receiver is offline.
-    AVIMMessageSendOptionTransient = 1 << 0,
-    /// When receiver receives the message, in sender part, -[AVIMClientDelegate conversation:messageDelivered:] will be called.
-    AVIMMessageSendOptionRequestReceipt = 1 << 1,
-} __deprecated_msg("Deprecated in AVOSCloudIM SDK 3.4.0. Use AVIMMessageOption instead.");
-
 @interface AVIMMessageIntervalBound : NSObject
 
-@property (nonatomic,   copy, nullable) NSString *messageId;
+@property (nonatomic, copy, nullable) NSString *messageId;
 @property (nonatomic, assign) int64_t timestamp;
 @property (nonatomic, assign) BOOL closed;
 
@@ -57,14 +46,6 @@ enum : AVIMMessageSendOption {
 @property (nonatomic, strong, nullable) NSArray<NSString *> *clientIds;
 
 @end
-
-/**
- Enumerations that define message query direction.
- */
-typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
-    AVIMMessageQueryDirectionFromNewToOld = 0,
-    AVIMMessageQueryDirectionFromOldToNew
-};
 
 @interface AVIMConversation : NSObject
 
@@ -222,11 +203,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  */
 - (AVIMKeyedConversation * _Nullable)keyedConversation;
 
-/*!
- 拉取服务器最新数据。
- @param callback － 结果回调
- */
-- (void)fetchWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
+// MARK: - RCP Timestamps & Read
 
 /*!
  拉取对话最近的回执时间。
@@ -234,22 +211,26 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
 - (void)fetchReceiptTimestampsInBackground;
 
 /*!
+ 将对话标记为已读。
+ 该方法将本地对话中其他成员发出的最新消息标记为已读，该消息的发送者会收到已读通知。
+ */
+- (void)readInBackground;
+
+// MARK: - Conversation Update
+
+/*!
+ 拉取服务器最新数据。
+ @param callback － 结果回调
+ */
+- (void)fetchWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
+
+/*!
  发送更新。
  @param callback － 结果回调
  */
 - (void)updateWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
-/*!
- 加入对话。
- @param callback － 结果回调
- */
-- (void)joinWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
-
-/*!
- 离开对话。
- @param callback － 结果回调
- */
-- (void)quitWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
+// MARK: - Conversation Mute
 
 /*!
  静音，不再接收此对话的离线推送。
@@ -263,11 +244,19 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  */
 - (void)unmuteWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
+// MARK: - Members
+
 /*!
- 将对话标记为已读。
- 该方法将本地对话中其他成员发出的最新消息标记为已读，该消息的发送者会收到已读通知。
+ 加入对话。
+ @param callback － 结果回调
  */
-- (void)readInBackground;
+- (void)joinWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
+
+/*!
+ 离开对话。
+ @param callback － 结果回调
+ */
+- (void)quitWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
  邀请新成员加入对话。
@@ -290,6 +279,8 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  @param callback － 结果回调
  */
 - (void)countMembersWithCallback:(void (^)(NSInteger count, NSError * _Nullable error))callback;
+
+// MARK: - Message Send
 
 /*!
  往对话中发送消息。
@@ -331,6 +322,8 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
       progressBlock:(void (^ _Nullable)(NSInteger progress))progressBlock
            callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
+// MARK: - Message Update
+
 /*!
  Replace a message you sent with a new message.
 
@@ -351,6 +344,8 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
 - (void)recallMessage:(AVIMMessage *)oldMessage
              callback:(void (^)(BOOL succeeded, NSError * _Nullable error, AVIMRecalledMessage * _Nullable recalledMessage))callback;
 
+// MARK: - Message Cache
+
 /*!
  Add a message to cache.
 
@@ -364,6 +359,8 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  @param message The message which you want to remove from cache.
  */
 - (void)removeMessageFromCache:(AVIMMessage *)message;
+
+// MARK: - Message Query
 
 /*!
  从服务端拉取该会话的最近 limit 条消息。
@@ -539,7 +536,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  */
 - (void)queryMutedMembersWithLimit:(NSInteger)limit
                               next:(NSString * _Nullable)next
-                          callback:(void (^)(NSArray<NSString *> * _Nullable blockedMemberIds, NSString * _Nullable next, NSError * _Nullable error))callback;
+                          callback:(void (^)(NSArray<NSString *> * _Nullable mutedMemberIds, NSString * _Nullable next, NSError * _Nullable error))callback;
 
 @end
 
@@ -549,8 +546,18 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
 
 @interface AVIMServiceConversation : AVIMConversation
 
+/**
+ Add ID of conversation's client to conversation's members.
+
+ @param callback Result callback.
+ */
 - (void)subscribeWithCallback:(void(^)(BOOL, NSError * _Nullable))callback;
 
+/**
+ Remove ID of conversation's client from conversation's members.
+ 
+ @param callback Result callback.
+ */
 - (void)unsubscribeWithCallback:(void(^)(BOOL, NSError * _Nullable))callback;
 
 @end
@@ -559,7 +566,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
 
 @end
 
-@interface AVIMConversation (AVDeprecated)
+@interface AVIMConversation (deprecated)
 
 /*!
  往对话中发送消息。
@@ -569,7 +576,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  */
 - (void)sendMessage:(AVIMMessage *)message
             options:(AVIMMessageSendOption)options
-           callback:(AVIMBooleanResultBlock)callback __deprecated_msg("Deprecated in AVOSCloudIM SDK 3.4.0. Use -[AVIMConversation sendMessage:option:callback:] instead.");
+           callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback __deprecated_msg("deprecated. use -[sendMessage:option:callback:] instead.");
 
 /*!
  往对话中发送消息。
@@ -581,7 +588,7 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
 - (void)sendMessage:(AVIMMessage *)message
             options:(AVIMMessageSendOption)options
       progressBlock:(nullable AVIMProgressBlock)progressBlock
-           callback:(AVIMBooleanResultBlock)callback __deprecated_msg("Deprecated in AVOSCloudIM SDK 3.4.0. Use -[AVIMConversation sendMessage:option:progressBlock:callback:] instead.");
+           callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback __deprecated_msg("deprecated. use -[sendMessage:option:progressBlock:callback:] instead.");
 
 /*!
  发送更新。
@@ -589,13 +596,13 @@ typedef NS_ENUM(NSInteger, AVIMMessageQueryDirection) {
  @param callback － 结果回调
  */
 - (void)update:(NSDictionary *)updateDict
-      callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback __deprecated_msg("Deprecated in AVOSCloudIM SDK 3.7.0. Use -[AVIMConversation updateWithCallback:] instead.");
+      callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback __deprecated_msg("deprecated. use -[updateWithCallback:] instead.");
 
 /*!
  标记该会话已读。
  将服务端该会话的未读消息数置零。
  */
-- (void)markAsReadInBackground __deprecated_msg("Deprecated in AVOSCloudIM SDK 4.3.0. Use -[AVIMConversation readInBackground] instead.");
+- (void)markAsReadInBackground __deprecated_msg("deprecated. use -[readInBackground] instead.");
 
 @end
 

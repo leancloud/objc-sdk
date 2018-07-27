@@ -9,32 +9,7 @@
 #import "AVIMConversation.h"
 #import "MessagesProtoOrig.pbobjc.h"
 
-// conversation
-static NSString * const kLCIMConv_objectId = @"objectId";
-static NSString * const kLCIMConv_uniqueId = @"uniqueId";
-static NSString * const kLCIMConv_name = @"name";
-static NSString * const kLCIMConv_creator = @"c";
-static NSString * const kLCIMConv_createdAt = @"createdAt";
-static NSString * const kLCIMConv_updatedAt = @"updatedAt";
-static NSString * const kLCIMConv_lastMessageAt = @"lm";
-static NSString * const kLCIMConv_attributes = @"attr";
-static NSString * const kLCIMConv_members = @"m";
-static NSString * const kLCIMConv_mutedMembers = @"mu";
-static NSString * const kLCIMConv_unique = @"unique";
-static NSString * const kLCIMConv_transient = @"tr";
-static NSString * const kLCIMConv_system = @"sys";
-static NSString * const kLCIMConv_temporary = @"temp";
-static NSString * const kLCIMConv_temporaryTTL = @"ttl";
-// message
-static NSString * const kLCIMConv_convType = @"conv_type";
-static NSString * const kLCIMConv_lastMessage = @"msg";
-static NSString * const kLCIMConv_lastMessageId = @"msg_mid";
-static NSString * const kLCIMConv_lastMessageFrom = @"msg_from";
-static NSString * const kLCIMConv_lastMessageTimestamp = @"msg_timestamp";
-static NSString * const kLCIMConv_lastMessagePatchTimestamp = @"patch_timestamp";
-static NSString * const kLCIMConv_lastMessageBinary = @"bin";
-static NSString * const kLCIMConv_lastMessageMentionAll = @"mention_all";
-static NSString * const kLCIMConv_lastMessageMentionPids = @"mention_pids";
+
 
 /* Use this enum to match command's value(`convType`) */
 typedef NS_ENUM(NSUInteger, LCIMConvType) {

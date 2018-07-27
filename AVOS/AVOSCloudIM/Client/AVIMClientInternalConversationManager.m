@@ -132,7 +132,7 @@ static NSUInteger batchQueryLimit = 20;
                 if (![NSMutableDictionary lc__checkingType:rawJSONData]) {
                     continue;
                 }
-                NSString *conversationId = [NSString lc__decodingDictionary:rawJSONData key:kLCIMConv_objectId];
+                NSString *conversationId = [NSString lc__decodingDictionary:rawJSONData key:AVIMConversationKeyObjectId];
                 if (!conversationId) {
                     continue;
                 }
@@ -172,7 +172,7 @@ static NSUInteger batchQueryLimit = 20;
         for (NSString *convId in batchIds) {
             self.callbacksMap[convId] = [NSMutableArray arrayWithObject:callback];
         }
-        [client _sendCommandWrapper:commandWrapper];
+        [client sendCommandWrapper:commandWrapper];
     }
 }
 
@@ -236,9 +236,9 @@ static NSUInteger batchQueryLimit = 20;
         convCommand.where = ({
             id JSONObject = nil;
             if (conversationIds.count == 1) {
-                JSONObject = @{ kLCIMConv_objectId: conversationIds.firstObject };
+                JSONObject = @{ AVIMConversationKeyObjectId: conversationIds.firstObject };
             } else {
-                JSONObject = @{ kLCIMConv_objectId: @{ @"$in": conversationIds } };
+                JSONObject = @{ AVIMConversationKeyObjectId: @{ @"$in": conversationIds } };
             }
             NSError *error0 = nil;
             NSData *data = [NSJSONSerialization dataWithJSONObject:JSONObject options:0 error:&error0];

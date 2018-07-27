@@ -325,7 +325,7 @@
 - (void)getConversationById:(NSString *)conversationId
                    callback:(void (^)(AVIMConversation * _Nullable, NSError * _Nullable))callback
 {
-    [self whereKey:kLCIMConv_objectId equalTo:conversationId];
+    [self whereKey:AVIMConversationKeyObjectId equalTo:conversationId];
     [self findConversationsWithCallback:^(NSArray<AVIMConversation *> * _Nullable conversations, NSError * _Nullable error) {
         if (error) {
             callback(nil, error);
@@ -425,7 +425,7 @@
                 if (![NSMutableDictionary lc__checkingType:jsonDic]) {
                     continue;
                 }
-                NSString *conversationId = [NSString lc__decodingDictionary:jsonDic key:kLCIMConv_objectId];
+                NSString *conversationId = [NSString lc__decodingDictionary:jsonDic key:AVIMConversationKeyObjectId];
                 if (!conversationId) {
                     continue;
                 }
@@ -568,7 +568,7 @@
                 if (![NSMutableDictionary lc__checkingType:jsonDic]) {
                     continue;
                 }
-                NSString *conversationId = [NSString lc__decodingDictionary:jsonDic key:kLCIMConv_objectId];
+                NSString *conversationId = [NSString lc__decodingDictionary:jsonDic key:AVIMConversationKeyObjectId];
                 if (!conversationId) {
                     continue;
                 }
