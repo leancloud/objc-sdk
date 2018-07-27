@@ -5,6 +5,7 @@
 #import "LCTestEnvironment.h"
 #import "AVOSCloud.h"
 #import "AVOSCloudIM.h"
+#import "AVIMCommon_Internal.h"
 #import "AVIMClient_Internal.h"
 #import "AVIMConversation_Internal.h"
 #import "AVIMConversationMemberInfo_Internal.h"
