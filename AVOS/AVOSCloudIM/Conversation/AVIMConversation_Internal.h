@@ -36,9 +36,6 @@ static NSString * const kLCIMConv_lastMessageBinary = @"bin";
 static NSString * const kLCIMConv_lastMessageMentionAll = @"mention_all";
 static NSString * const kLCIMConv_lastMessageMentionPids = @"mention_pids";
 
-/// it's a key. the value from dic, True: 开启未读通知; False: 关闭离线消息推送。
-static NSString *const kAVIMUserOptionUseUnread = @"AVIMUserOptionUseUnread";
-
 /* Use this enum to match command's value(`convType`) */
 typedef NS_ENUM(NSUInteger, LCIMConvType) {
     LCIMConvTypeNormal = 1,

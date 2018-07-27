@@ -110,6 +110,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     assert([AVIMConversationUpdatedKeyLastDeliveredAt isEqualToString:keyPath(AVIMConversation.alloc, lastDeliveredAt)]);
     assert([AVIMConversationUpdatedKeyUnreadMessagesCount isEqualToString:keyPath(AVIMConversation.alloc, unreadMessagesCount)]);
     assert([AVIMConversationUpdatedKeyUnreadMessagesMentioned isEqualToString:keyPath(AVIMConversation.alloc, unreadMessagesMentioned)]);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    assert([kAVIMUserOptionUseUnread isEqualToString:AVIMUserOptionUseUnread]);
+#pragma clang diagnostic pop
 #endif
     clientHasInstantiated = YES;
     return [super alloc];
@@ -2309,45 +2313,40 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     return self->_conversationCache;
 }
 
-+ (NSMutableDictionary *)_userOptions {
+// MARK: - IM Protocol Options
+
++ (NSMutableDictionary *)sessionProtocolOptions
+{
     static dispatch_once_t onceToken;
-    static NSMutableDictionary *userOptions;
-
+    static NSMutableDictionary *options;
     dispatch_once(&onceToken, ^{
-        userOptions = [NSMutableDictionary dictionary];
+        options = [NSMutableDictionary dictionary];
     });
-
-    return userOptions;
-}
-
-+ (void)_setUserOptions:(NSDictionary *)userOptions {
-    if (clientHasInstantiated) {
-        [NSException raise:NSInternalInconsistencyException format:@"AVIMClient user options should be set before instantiation"];
-    }
-    
-    if (!userOptions)
-        return;
-    
-    [self._userOptions addEntriesFromDictionary:userOptions];
+    return options;
 }
 
 + (void)setUnreadNotificationEnabled:(BOOL)enabled
 {
-    NSDictionary *options = @{ kAVIMUserOptionUseUnread : @(enabled) };
-    [self _setUserOptions:options];
+    if (clientHasInstantiated) {
+        [NSException raise:NSInternalInconsistencyException
+                    format:@"this method should be invoked before instantiation of AVIMClient."];
+        return;
+    }
+    AVIMClient.sessionProtocolOptions[kAVIMUserOptionUseUnread] = @(enabled);
 }
 
-// MARK: - Deprecated
-
-+ (void)setUserOptions:(NSDictionary *)userOptions {
+/// deprecated
++ (void)setUserOptions:(NSDictionary *)userOptions
+{
     if (clientHasInstantiated) {
-        [NSException raise:NSInternalInconsistencyException format:@"AVIMClient user options should be set before instantiation"];
-    }
-    
-    if (!userOptions)
+        [NSException raise:NSInternalInconsistencyException
+                    format:@"this method should be invoked before instantiation of AVIMClient."];
         return;
-    
-    [self._userOptions addEntriesFromDictionary:userOptions];
+    }
+    if (!userOptions) {
+        return;
+    }
+    [AVIMClient.sessionProtocolOptions addEntriesFromDictionary:userOptions];
 }
 
 @end

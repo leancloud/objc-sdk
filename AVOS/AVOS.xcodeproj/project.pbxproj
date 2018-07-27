@@ -1029,6 +1029,8 @@
 		D3C53FCD2106D84A00D48686 /* AVIMClientProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C53FCB2106D84A00D48686 /* AVIMClientProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D3CC90CB2069E5BB0082EFD4 /* AVObject_TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CC90CA2069E5BB0082EFD4 /* AVObject_TestCase.swift */; };
 		D3CDF4EB1FE8F3810033153E /* LCIMTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */; };
+		D3D80081210AFC7F0058F86C /* AVIMCommon_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D80080210AFC7F0058F86C /* AVIMCommon_Internal.h */; };
+		D3D80082210AFC7F0058F86C /* AVIMCommon_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D80080210AFC7F0058F86C /* AVIMCommon_Internal.h */; };
 		D3F8747B20F8B1690035C7D1 /* LCTestEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F8747A20F8B1690035C7D1 /* LCTestEnvironment.m */; };
 		D3F8747D20F8B1690035C7D1 /* LCTestEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F8747A20F8B1690035C7D1 /* LCTestEnvironment.m */; };
 		D3F8747F20F8B1690035C7D1 /* LCTestEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F8747A20F8B1690035C7D1 /* LCTestEnvironment.m */; };
@@ -1467,6 +1469,7 @@
 		D3C53FCB2106D84A00D48686 /* AVIMClientProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVIMClientProtocol.h; sourceTree = "<group>"; };
 		D3CC90CA2069E5BB0082EFD4 /* AVObject_TestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVObject_TestCase.swift; sourceTree = "<group>"; };
 		D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestBase.swift; sourceTree = "<group>"; };
+		D3D80080210AFC7F0058F86C /* AVIMCommon_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVIMCommon_Internal.h; sourceTree = "<group>"; };
 		D3F8747920F8B1690035C7D1 /* LCTestEnvironment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCTestEnvironment.h; sourceTree = "<group>"; };
 		D3F8747A20F8B1690035C7D1 /* LCTestEnvironment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCTestEnvironment.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1866,6 +1869,7 @@
 				8C8419C71A5A796000C5C6C4 /* AVOSCloudIM.h */,
 				83AB6DF71C3CFEA70064BE17 /* AVOSCloudIM.m */,
 				8C841BCE1A5A84C600C5C6C4 /* AVIMCommon.h */,
+				D3D80080210AFC7F0058F86C /* AVIMCommon_Internal.h */,
 				8C841BCF1A5A84C600C5C6C4 /* AVIMCommon.m */,
 				D31126AA208F1E4A00812135 /* Client */,
 				D31126AB208F1E8400812135 /* Conversation */,
@@ -2522,6 +2526,7 @@
 				704F3BE91BE0D0810033245C /* AVIMGeneralObject.h in Headers */,
 				9AD27C541E1418DB002F9C7C /* LCIMSourceContext.pbobjc.h in Headers */,
 				9A2F1B151CF6F6FA00BE52F2 /* LCIMCodedOutputStream.h in Headers */,
+				D3D80082210AFC7F0058F86C /* AVIMCommon_Internal.h in Headers */,
 				704F3BEA1BE0D0810033245C /* AVIMMessageObject.h in Headers */,
 				704F3BEB1BE0D0810033245C /* LCIMMessageCache.h in Headers */,
 				704F3BEC1BE0D0810033245C /* LCIMConversationCache.h in Headers */,
@@ -3054,6 +3059,7 @@
 				9AD27C431E1418DB002F9C7C /* LCIMApi.pbobjc.h in Headers */,
 				9AE76C3E1C3F7C5F00325902 /* AVIMConversationQuery_Internal.h in Headers */,
 				9AD27C531E1418DB002F9C7C /* LCIMSourceContext.pbobjc.h in Headers */,
+				D3D80081210AFC7F0058F86C /* AVIMCommon_Internal.h in Headers */,
 				9A2F1B2B1CF6F6FA00BE52F2 /* LCIMDictionary_PackagePrivate.h in Headers */,
 				9A2F1B341CF6F6FA00BE52F2 /* LCIMExtensionRegistry.h in Headers */,
 				8C841C101A5A84C600C5C6C4 /* AVIMConversation_Internal.h in Headers */,

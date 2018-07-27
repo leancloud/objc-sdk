@@ -117,7 +117,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     if (limit <= 0) { limit = 20; }
     
-    BOOL useUnread = [AVIMClient._userOptions[kAVIMUserOptionUseUnread] boolValue];
+    BOOL useUnread = [AVIMClient.sessionProtocolOptions[kAVIMUserOptionUseUnread] boolValue];
     
     NSUInteger max = useUnread ? 100 : 1000;
     
@@ -1802,7 +1802,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         return;
     }
     
-    NSDictionary *userOptions = [AVIMClient _userOptions];
+    NSDictionary *userOptions = [AVIMClient sessionProtocolOptions];
     
     BOOL useUnread = [userOptions[kAVIMUserOptionUseUnread] boolValue];
     

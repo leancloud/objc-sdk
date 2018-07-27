@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
+#import "AVIMCommon_Internal.h"
 #import "AVIMClient.h"
 #import "AVIMWebSocketWrapper.h"
 
@@ -35,7 +36,7 @@ FOUNDATION_EXPORT NSString * const kTemporaryConversationIdPrefix;
 @property (nonatomic, strong, readonly) AVIMClientInternalConversationManager *conversationManager;
 @property (nonatomic, strong, readonly) LCIMConversationCache *conversationCache;
 
-+ (NSMutableDictionary *)_userOptions;
++ (NSMutableDictionary *)sessionProtocolOptions;
 
 - (instancetype)initWithClientId:(NSString *)clientId
                              tag:(NSString *)tag

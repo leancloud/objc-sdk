@@ -688,7 +688,7 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
     }
     
     NSMutableSet *protocols = [NSMutableSet set];
-    NSDictionary *userOptions = [AVIMClient _userOptions];
+    NSDictionary *userOptions = [AVIMClient sessionProtocolOptions];
     
     if ([userOptions[kAVIMUserOptionUseUnread] boolValue]) {
         
