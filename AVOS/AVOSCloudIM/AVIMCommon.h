@@ -99,6 +99,13 @@ typedef NS_ENUM(NSUInteger, AVIMConversationMemberRole) {
 
 // MARK: - Query
 
+/// Query Option
+typedef NS_OPTIONS(uint64_t, AVIMConversationQueryOption) {
+    AVIMConversationQueryOptionNone = 0,
+    AVIMConversationQueryOptionCompact = 1 << 0, /**< 不返回成员列表 */
+    AVIMConversationQueryOptionWithMessage = 1 << 1, /**< 返回对话最近一条消息 */
+};
+
 /// Cache policy
 typedef NS_ENUM(NSUInteger, AVIMCachePolicy) {
     /// Query from server and do not save result to local cache.

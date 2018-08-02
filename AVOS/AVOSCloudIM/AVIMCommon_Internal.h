@@ -54,3 +54,21 @@ static AVIMConversationKey AVIMConversationKeyLastMessagePatchTimestamp = @"patc
 static AVIMConversationKey AVIMConversationKeyLastMessageBinary = @"bin";
 static AVIMConversationKey AVIMConversationKeyLastMessageMentionAll = @"mention_all";
 static AVIMConversationKey AVIMConversationKeyLastMessageMentionPids = @"mention_pids";
+
+/// Use this enum to match command's value(`convType`)
+typedef NS_ENUM(NSUInteger, LCIMConvType) {
+    LCIMConvTypeNormal = 1,
+    LCIMConvTypeTransient = 2,
+    LCIMConvTypeSystem = 3,
+    LCIMConvTypeTemporary = 4,
+};
+
+typedef NSString * const AVIMConversationMemberInfoKey NS_TYPED_EXTENSIBLE_ENUM;
+static AVIMConversationMemberInfoKey AVIMConversationMemberInfoKeyConversationId = @"cid";
+static AVIMConversationMemberInfoKey AVIMConversationMemberInfoKeyMemberId = @"clientId";
+static AVIMConversationMemberInfoKey AVIMConversationMemberInfoKeyRole = @"role";
+
+typedef NSString * const AVIMConversationMemberRoleKey NS_TYPED_EXTENSIBLE_ENUM;
+static AVIMConversationMemberRoleKey AVIMConversationMemberRoleKeyMember = @"Member";
+static AVIMConversationMemberRoleKey AVIMConversationMemberRoleKeyManager = @"Manager";
+static AVIMConversationMemberRoleKey AVIMConversationMemberRoleKeyOwner = @"Owner";
