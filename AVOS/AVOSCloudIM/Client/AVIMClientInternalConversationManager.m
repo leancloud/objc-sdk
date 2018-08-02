@@ -70,15 +70,14 @@ static NSUInteger batchQueryLimit = 20;
 {
     AssertRunInQueue(self.internalSerialQueue);
     NSParameterAssert(conversationId);
-    [self queryConversationsWithIds:[NSMutableArray arrayWithObject:conversationId] callback:callback];
+    [self queryConversationsWithIds:@[conversationId] callback:callback];
 }
 
-- (void)queryConversationsWithIds:(NSMutableArray<NSString *> *)conversationIds
+- (void)queryConversationsWithIds:(NSArray<NSString *> *)conversationIds
                          callback:(void (^)(AVIMConversation *conversation, NSError *error))callback
 {
     AssertRunInQueue(self.internalSerialQueue);
     NSParameterAssert(conversationIds);
-    NSParameterAssert([conversationIds isKindOfClass:[NSMutableArray class]]);
     
     AVIMClient *client = self.client;
     
@@ -176,7 +175,7 @@ static NSUInteger batchQueryLimit = 20;
     }
 }
 
-- (NSMutableArray<NSArray *> *)slicingConversationIds:(NSMutableArray<NSString *> *)conversationIds
+- (NSMutableArray<NSArray *> *)slicingConversationIds:(NSArray<NSString *> *)conversationIds
                                              callback:(void (^)(AVIMConversation *conversation, NSError *error))callback
 {
     NSMutableArray<NSString *> *normalIds = [NSMutableArray array];

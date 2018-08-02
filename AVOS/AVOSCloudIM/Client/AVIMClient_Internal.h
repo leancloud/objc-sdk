@@ -12,6 +12,7 @@
 
 @class LCIMConversationCache;
 @class AVIMClientInternalConversationManager;
+@class AVIMClientPushManager;
 
 #if DEBUG
 void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
@@ -24,12 +25,12 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 
 @interface AVIMClient () <AVIMWebSocketWrapperDelegate>
 
-#if DEBUG
-@property (nonatomic, copy) void (^ assertInternalQuietCallback)(NSError *error);
-#endif
 @property (nonatomic, strong, readonly) dispatch_queue_t internalSerialQueue;
+@property (nonatomic, strong, readonly) dispatch_queue_t signatureQueue;
 @property (nonatomic, strong, readonly) dispatch_queue_t userInteractQueue;
+@property (nonatomic, strong, readonly) AVIMWebSocketWrapper *socketWrapper;
 @property (nonatomic, strong, readonly) AVIMClientInternalConversationManager *conversationManager;
+@property (nonatomic, strong, readonly) AVIMClientPushManager *pushManager;
 @property (nonatomic, strong, readonly) LCIMConversationCache *conversationCache;
 
 + (NSMutableDictionary *)sessionProtocolOptions;

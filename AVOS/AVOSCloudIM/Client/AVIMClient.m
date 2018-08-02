@@ -8,6 +8,7 @@
 
 #import "AVIMClient_Internal.h"
 #import "AVIMClientInternalConversationManager_Internal.h"
+#import "AVIMClientPushManager.h"
 #import "AVIMConversation_Internal.h"
 #import "AVIMKeyedConversation_internal.h"
 #import "AVIMConversationMemberInfo_Internal.h"
@@ -22,8 +23,6 @@
 #import "AVUtils.h"
 #import "AVPaasClient.h"
 #import "AVErrorUtils.h"
-
-static BOOL clientHasInstantiated = false;
 
 #if DEBUG
 void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
@@ -48,36 +47,15 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     AVIMClientStatus _status;
     BOOL _messageQueryCacheEnabled;
     
-    // web socket
-    AVIMWebSocketWrapper *_socketWrapper;
-    
     // session
     int64_t _sessionConfigBitmap;
     NSString *_sessionToken;
     NSTimeInterval _sessionTokenExpireTimestamp;
     int64_t _lastPatchTimestamp;
     int64_t _lastUnreadTimestamp;
-    
-    // APNs
-    AVInstallation *_installation;
-    NSString *_deviceToken;
-    dispatch_block_t _addClientIdToChannels_block;
-    dispatch_block_t _removeClientIdToChannels_block;
-    dispatch_block_t _uploadDeviceToken_block;
-    BOOL _isDeviceTokenUploaded;
-    
-    // internal queue
-    dispatch_queue_t _internalSerialQueue;
-    dispatch_queue_t _signatureQueue;
-    // user interact queue
-    dispatch_queue_t _userInteractQueue;
-    
-    // internal conversation manager
-    AVIMClientInternalConversationManager *_conversationManager;
-    
-    // conversation disk cache
-    LCIMConversationCache *_conversationCache;
 }
+
+static BOOL clientHasInstantiated = false;
 
 + (instancetype)alloc
 {
@@ -236,21 +214,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                      object:socketWrapper];
         socketWrapper;
     });
-
-    self->_installation = ({
-        self->_deviceToken = installation.deviceToken;
-        self->_isDeviceTokenUploaded = false;
-        self->_addClientIdToChannels_block = nil;
-        self->_removeClientIdToChannels_block = nil;
-        self->_uploadDeviceToken_block = nil;
-        [installation addObserver:self
-                       forKeyPath:keyPath(installation, deviceToken)
-                          options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew)
-                          context:nil];
-        installation;
-    });
     
     self->_conversationManager = [[AVIMClientInternalConversationManager alloc] initWithClient:self];
+    
+    self->_pushManager = [[AVIMClientPushManager alloc] initWithInstallation:installation client:self];
     
     self->_conversationCache = ({
         LCIMConversationCache *cache = [[LCIMConversationCache alloc] initWithClientId:self->_clientId];
@@ -267,21 +234,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self->_installation removeObserver:self forKeyPath:keyPath(self->_installation, deviceToken)];
     [self->_socketWrapper close];
 }
 
 // MARK: - Queue
-
-- (dispatch_queue_t)internalSerialQueue
-{
-    return self->_internalSerialQueue;
-}
-
-- (dispatch_queue_t)userInteractQueue
-{
-    return self->_userInteractQueue;
-}
 
 - (void)addOperationToInternalSerialQueue:(void (^)(AVIMClient *client))block
 {
@@ -370,17 +326,15 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             }];
             return;
         }
-        
         if (self->_status == AVIMClientStatusOpened) {
             [self invokeInUserInteractQueue:^{
                 callback(true, nil);
             }];
             return;
         }
-        
         if (self->_status == AVIMClientStatusOpening) {
             [self invokeInUserInteractQueue:^{
-                callback(false, LCErrorInternal(@"can't open before last open done."));
+                callback(false, LCErrorInternal(@"in opening, do not open repeatedly."));
             }];
             return;
         }
@@ -432,8 +386,8 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                         sessionCommand.t = signature.timestamp;
                         sessionCommand.n = signature.nonce;
                     }
-                    sessionCommand.deviceToken = client->_deviceToken ?: AVUtils.deviceUUID;
-                    sessionCommand.ua = @"ios" @"/" SDK_VERSION;
+                    sessionCommand.deviceToken = client->_pushManager.deviceToken ?: AVUtils.deviceUUID;
+                    sessionCommand.ua = @"ios/" SDK_VERSION;
                     
                     LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
                     commandWrapper.outCommand = outCommand;
@@ -472,9 +426,8 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                     
                     client->_status = AVIMClientStatusOpened;
                     [client setSessionToken:sessionToken ttl:(sessionCommand.hasStTtl ? sessionCommand.stTtl : 0)];
-                    [client addClientIdToChannels:0];
-                    [client resetUploadingDeviceToken];
-                    [client uploadDeviceToken:0];
+                    [client->_pushManager uploadDeviceTokenWithCallback:nil];
+                    [client->_pushManager addingClientIdToChannels];
                     
                     [client invokeInUserInteractQueue:^{
                         callback(true, nil);
@@ -492,28 +445,23 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     AssertRunInQueue(self->_internalSerialQueue);
     
     NSString *imSessionToken = self->_sessionToken;
-    
     if (!imSessionToken) {
         callback(false, LCErrorInternal(@"session not open or did close."));
         return;
     }
-    
     if (self->_status == AVIMClientStatusOpened) {
         callback(true, nil);
         return;
     }
     
     LCIMProtobufCommandWrapper * (^ newReopenCommand_block)(AVIMSignature *, NSString *) = ^(AVIMSignature *signature, NSString *sessionToken) {
-        
         AVIMGenericCommand *outCommand = [AVIMGenericCommand new];
         AVIMSessionCommand *sessionCommand = [AVIMSessionCommand new];
-        
         outCommand.cmd = AVIMCommandType_Session;
         outCommand.op = AVIMOpType_Open;
         outCommand.appId = [AVOSCloud getApplicationId];
         outCommand.peerId = self->_clientId;
         outCommand.sessionMessage = sessionCommand;
-        
         sessionCommand.r = true;
         if (sessionToken) {
             sessionCommand.st = sessionToken;
@@ -529,7 +477,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             if (self->_sessionConfigBitmap) {
                 sessionCommand.configBitmap = self->_sessionConfigBitmap;
             }
-            sessionCommand.deviceToken = self->_deviceToken ?: AVUtils.deviceUUID;
+            sessionCommand.deviceToken = self->_pushManager.deviceToken ?: AVUtils.deviceUUID;
             sessionCommand.ua = @"ios" @"/" SDK_VERSION;
         }
         if (self->_lastPatchTimestamp) {
@@ -538,57 +486,12 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         if (self->_lastUnreadTimestamp) {
             sessionCommand.lastUnreadNotifTime = self->_lastUnreadTimestamp;
         }
-        
         LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
         commandWrapper.outCommand = outCommand;
-        
         return commandWrapper;
     };
     
-    void(^ handleSessionTokenExpired_block)(void) = ^(void) {
-        [self getSessionOpenSignatureWithCallback:^(AVIMSignature *signature) {
-            AssertRunInQueue(self->_internalSerialQueue);
-            if (signature && signature.error) {
-                callback(false, signature.error);
-                return;
-            }
-            LCIMProtobufCommandWrapper *commandWrapper = newReopenCommand_block(signature, nil);
-            [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
-                if (commandWrapper.error) {
-                    callback(false, commandWrapper.error);
-                    return;
-                }
-                AVIMGenericCommand *inCommand = commandWrapper.inCommand;
-                AVIMSessionCommand *sessionCommand = (inCommand.hasSessionMessage ? inCommand.sessionMessage : nil);
-                NSString *sessionToken = (sessionCommand.hasSt ? sessionCommand.st : nil);
-                if (!sessionToken) {
-                    callback(false, ({
-                        AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
-                        LCError(code, AVIMErrorMessage(code), nil);
-                    }));
-                    return;
-                }
-                self->_status = AVIMClientStatusOpened;
-                [self setSessionToken:sessionToken ttl:(sessionCommand.hasStTtl ? sessionCommand.stTtl : 0)];
-                if (!self->_isDeviceTokenUploaded) {
-                    [self uploadDeviceToken:0];
-                }
-                callback(true, nil);
-            }];
-            [self->_socketWrapper sendCommandWrapper:commandWrapper];
-        }];
-    };
-    
-    LCIMProtobufCommandWrapper *commandWrapper = newReopenCommand_block(nil, imSessionToken);
-    [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
-        if (commandWrapper.error) {
-            if (commandWrapper.error.code == AVIMErrorCodeSessionTokenExpired) {
-                handleSessionTokenExpired_block();
-            } else {
-                callback(false, commandWrapper.error);
-            }
-            return;
-        }
+    void(^ handleInCommandBlock)(LCIMProtobufCommandWrapper *) = ^(LCIMProtobufCommandWrapper *commandWrapper) {
         AVIMGenericCommand *inCommand = commandWrapper.inCommand;
         AVIMSessionCommand *sessionCommand = (inCommand.hasSessionMessage ? inCommand.sessionMessage : nil);
         NSString *sessionToken = (sessionCommand.hasSt ? sessionCommand.st : nil);
@@ -601,12 +504,39 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         }
         self->_status = AVIMClientStatusOpened;
         [self setSessionToken:sessionToken ttl:(sessionCommand.hasStTtl ? sessionCommand.stTtl : 0)];
-        if (!self->_isDeviceTokenUploaded) {
-            [self uploadDeviceToken:0];
-        }
+        [self->_pushManager uploadDeviceTokenWithCallback:nil];
+        [self->_pushManager addingClientIdToChannels];
         callback(true, nil);
+    };
+    
+    LCIMProtobufCommandWrapper *commandWrapper1 = newReopenCommand_block(nil, imSessionToken);
+    [commandWrapper1 setCallback:^(LCIMProtobufCommandWrapper *commandWrapper1) {
+        if (commandWrapper1.error) {
+            if (commandWrapper1.error.code == AVIMErrorCodeSessionTokenExpired) {
+                [self getSessionOpenSignatureWithCallback:^(AVIMSignature *signature) {
+                    AssertRunInQueue(self->_internalSerialQueue);
+                    if (signature && signature.error) {
+                        callback(false, signature.error);
+                        return;
+                    }
+                    LCIMProtobufCommandWrapper *commandWrapper2 = newReopenCommand_block(signature, nil);
+                    [commandWrapper2 setCallback:^(LCIMProtobufCommandWrapper *commandWrapper2) {
+                        if (commandWrapper2.error) {
+                            callback(false, commandWrapper2.error);
+                            return;
+                        }
+                        handleInCommandBlock(commandWrapper2);
+                    }];
+                    [self->_socketWrapper sendCommandWrapper:commandWrapper2];
+                }];
+            } else {
+                callback(false, commandWrapper1.error);
+            }
+            return;
+        }
+        handleInCommandBlock(commandWrapper1);
     }];
-    [self->_socketWrapper sendCommandWrapper:commandWrapper];
+    [self->_socketWrapper sendCommandWrapper:commandWrapper1];
 }
 
 // MARK: - Client Close
@@ -663,8 +593,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             
             client->_status = AVIMClientStatusClosed;
             [client clearSessionTokenAndTTL];
-            [client removeClientIdFromChannels:0];
-            [client resetUploadingDeviceToken];
+            [client->_pushManager removingClientIdFromChannels];
             [client->_socketWrapper close];
             
             [client invokeInUserInteractQueue:^{
@@ -757,187 +686,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         } else {
             
             callback(oldSessionToken, nil);
-        }
-    }];
-}
-
-// MARK: - APNs
-
-- (void)addClientIdToChannels:(NSUInteger)delayInterval
-{
-    AssertRunInQueue(self->_internalSerialQueue);
-    
-    if (self->_removeClientIdToChannels_block) {
-        dispatch_block_cancel(self->_removeClientIdToChannels_block);
-        self->_removeClientIdToChannels_block = nil;
-    }
-    
-    if (self->_addClientIdToChannels_block) {
-        dispatch_block_cancel(self->_addClientIdToChannels_block);
-        self->_addClientIdToChannels_block = nil;
-    }
-    
-    if (!self->_deviceToken || self->_deviceToken.length == 0) {
-        return;
-    }
-    
-    dispatch_block_t block = dispatch_block_create(0, ^{
-        self->_addClientIdToChannels_block = nil;
-        [self->_installation addUniqueObject:self->_clientId forKey:@"channels"];
-        [self->_installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (error) {
-#if DEBUG
-                if (self.assertInternalQuietCallback) {
-                    self.assertInternalQuietCallback(error);
-                }
-#endif
-                AVLoggerError(AVLoggerDomainIM, @"%@", error);
-                if (error.code != kAVErrorInvalidChannelName) {
-                    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-                        if (delayInterval == 0) {
-                            [client addClientIdToChannels:1];
-                        } else {
-                            [client addClientIdToChannels:delayInterval * 2];
-                        }
-                    }];
-                }
-            }
-        }];
-    });
-    self->_addClientIdToChannels_block = block;
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delayInterval * NSEC_PER_SEC), self->_internalSerialQueue, block);
-}
-
-- (void)removeClientIdFromChannels:(NSUInteger)delayInterval
-{
-    AssertRunInQueue(self->_internalSerialQueue);
-    
-    if (self->_addClientIdToChannels_block) {
-        dispatch_block_cancel(self->_addClientIdToChannels_block);
-        self->_addClientIdToChannels_block = nil;
-    }
-    
-    if (self->_removeClientIdToChannels_block) {
-        dispatch_block_cancel(self->_removeClientIdToChannels_block);
-        self->_removeClientIdToChannels_block = nil;
-    }
-    
-    if (!self->_deviceToken || self->_deviceToken.length == 0) {
-        return;
-    }
-    
-    dispatch_block_t block = dispatch_block_create(0, ^{
-        self->_removeClientIdToChannels_block = nil;
-        [self->_installation removeObject:self->_clientId forKey:@"channels"];
-        [self->_installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (error) {
-#if DEBUG
-                if (self.assertInternalQuietCallback) {
-                    self.assertInternalQuietCallback(error);
-                }
-#endif
-                AVLoggerError(AVLoggerDomainIM, @"%@", error);
-                if (error.code != kAVErrorInvalidChannelName) {
-                    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-                        if (delayInterval == 0) {
-                            [client removeClientIdFromChannels:1];
-                        } else {
-                            [client removeClientIdFromChannels:delayInterval * 2];
-                        }
-                    }];
-                }
-            }
-        }];
-    });
-    self->_removeClientIdToChannels_block = block;
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delayInterval * NSEC_PER_SEC), self->_internalSerialQueue, block);
-}
-
-- (void)uploadDeviceToken:(NSUInteger)delayInterval
-{
-    AssertRunInQueue(self->_internalSerialQueue);
-    
-    NSString *deviceToken = self->_deviceToken;
-    
-    if (!deviceToken || deviceToken.length == 0 || self->_status != AVIMClientStatusOpened) {
-        return;
-    }
-    
-    if (self->_uploadDeviceToken_block) {
-        dispatch_block_cancel(self->_uploadDeviceToken_block);
-        self->_uploadDeviceToken_block = nil;
-    }
-    
-    dispatch_block_t block = dispatch_block_create(0, ^{
-        self->_uploadDeviceToken_block = nil;
-        LCIMProtobufCommandWrapper *commandWrapper = ({
-            AVIMGenericCommand *outCommand = [[AVIMGenericCommand alloc] init];
-            AVIMReportCommand *reportCommand = [[AVIMReportCommand alloc] init];
-            outCommand.cmd = AVIMCommandType_Report;
-            outCommand.op = AVIMOpType_Upload;
-            outCommand.reportMessage = reportCommand;
-            reportCommand.initiative = true;
-            reportCommand.type = @"token";
-            reportCommand.data_p = deviceToken;
-            LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
-            commandWrapper.outCommand = outCommand;
-            commandWrapper;
-        });
-        [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
-            if (commandWrapper.error) {
-#if DEBUG
-                if (self.assertInternalQuietCallback) {
-                    self.assertInternalQuietCallback(commandWrapper.error);
-                }
-#endif
-                AVLoggerError(AVLoggerDomainIM, @"%@", commandWrapper.error);
-                if (delayInterval == 0) {
-                    [self uploadDeviceToken:1];
-                } else {
-                    [self uploadDeviceToken:delayInterval * 2];
-                }
-            } else {
-                self->_isDeviceTokenUploaded = true;
-            }
-        }];
-        [self sendCommandWrapper:commandWrapper];
-    });
-    self->_uploadDeviceToken_block = block;
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delayInterval * NSEC_PER_SEC), self->_internalSerialQueue, block);
-}
-
-- (void)resetUploadingDeviceToken
-{
-    AssertRunInQueue(self->_internalSerialQueue);
-    
-    self->_isDeviceTokenUploaded = false;
-    if (self->_uploadDeviceToken_block) {
-        dispatch_block_cancel(self->_uploadDeviceToken_block);
-        self->_uploadDeviceToken_block = nil;
-    }
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath
-                      ofObject:(id)object
-                        change:(NSDictionary<NSKeyValueChangeKey,id> *)change
-                       context:(void *)context
-{
-    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-        if (object == client->_installation) {
-            if (keyPath == keyPath(client->_installation, deviceToken)) {
-                NSString *value = [NSString lc__decodingDictionary:change key:NSKeyValueChangeNewKey];
-                if (value && value.length != 0 && ![value isEqualToString:client->_deviceToken]) {
-                    client->_deviceToken = value;
-                    if (client->_sessionToken) {
-                        [client addClientIdToChannels:0];
-                        [client resetUploadingDeviceToken];
-                        [client uploadDeviceToken:0];
-                    }
-                }
-            }
         }
     }];
 }
@@ -1175,8 +923,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         if (commandWrapper.error && commandWrapper.error.code == AVIMErrorCodeSessionConflict) {
             client->_status = AVIMClientStatusClosed;
             [client clearSessionTokenAndTTL];
-            [client removeClientIdFromChannels:0];
-            [client resetUploadingDeviceToken];
+            [client->_pushManager removingClientIdFromChannels];
             id <AVIMClientDelegate> delegate = client->_delegate;
             SEL sel = @selector(client:didOfflineWithError:);
             if (delegate && [delegate respondsToSelector:sel]) {
@@ -1318,8 +1065,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     int32_t code = (sessionCommand.hasCode ? sessionCommand.code : 0);
     
     if (code == AVIMErrorCodeSessionConflict) {
-        [self removeClientIdFromChannels:0];
-        [self resetUploadingDeviceToken];
+        [self->_pushManager removingClientIdFromChannels];
         id <AVIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(client:didOfflineWithError:);
         if (delegate && [delegate respondsToSelector:sel]) {
@@ -2044,49 +1790,42 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             AVIMConversation *conversation = ({
                 AVIMConversation *conversation = [self->_conversationManager conversationForId:conversationId];
                 if (conversation) {
-                    if (unique) {
-                        NSMutableDictionary *dic = ({
-                            NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-                            if (name) {
-                                dic[AVIMConversationKeyName] = name;
-                            }
-                            if (attributes) {
-                                dic[AVIMConversationKeyAttributes] = attributes.mutableCopy;
-                            }
-                            (dic.count > 0 ? dic : nil);
-                        });
-                        if (dic) {
-                            [conversation updateRawJSONDataWith:dic];
-                        }
+                    NSMutableDictionary *mutableDic = [NSMutableDictionary dictionary];
+                    if (name) {
+                        mutableDic[AVIMConversationKeyName] = name;
                     }
+                    if (attributes) {
+                        mutableDic[AVIMConversationKeyAttributes] = attributes.mutableCopy;
+                    }
+                    [conversation updateRawJSONDataWith:mutableDic];
                 } else {
-                    NSMutableDictionary *dic = ({
-                        NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+                    NSMutableDictionary *mutableDic = ({
+                        NSMutableDictionary *mutableDic = [NSMutableDictionary dictionary];
                         if (name) {
-                            dic[AVIMConversationKeyName] = name;
+                            mutableDic[AVIMConversationKeyName] = name;
                         }
                         if (attributes) {
-                            dic[AVIMConversationKeyAttributes] = attributes.mutableCopy;
+                            mutableDic[AVIMConversationKeyAttributes] = attributes.mutableCopy;
                         }
                         if (convCommand.hasCdate) {
-                            dic[AVIMConversationKeyCreatedAt] = convCommand.cdate;
+                            mutableDic[AVIMConversationKeyCreatedAt] = convCommand.cdate;
                         }
                         if (convCommand.hasTempConvTtl) {
-                            dic[AVIMConversationKeyTemporaryTTL] = @(convCommand.tempConvTtl);
+                            mutableDic[AVIMConversationKeyTemporaryTTL] = @(convCommand.tempConvTtl);
                         }
                         if (convCommand.hasUniqueId) {
-                            dic[AVIMConversationKeyUniqueId] = convCommand.uniqueId;
+                            mutableDic[AVIMConversationKeyUniqueId] = convCommand.uniqueId;
                         }
-                        dic[AVIMConversationKeyUnique] = @(unique);
-                        dic[AVIMConversationKeyTransient] = @(transient);
-                        dic[AVIMConversationKeySystem] = @(false);
-                        dic[AVIMConversationKeyTemporary] = @(temporary);
-                        dic[AVIMConversationKeyCreator] = self->_clientId;
-                        dic[AVIMConversationKeyMembers] = members;
-                        dic[AVIMConversationKeyObjectId] = conversationId;
-                        dic;
+                        mutableDic[AVIMConversationKeyUnique] = @(unique);
+                        mutableDic[AVIMConversationKeyTransient] = @(transient);
+                        mutableDic[AVIMConversationKeySystem] = @(false);
+                        mutableDic[AVIMConversationKeyTemporary] = @(temporary);
+                        mutableDic[AVIMConversationKeyCreator] = self->_clientId;
+                        mutableDic[AVIMConversationKeyMembers] = members;
+                        mutableDic[AVIMConversationKeyObjectId] = conversationId;
+                        mutableDic;
                     });
-                    conversation = [AVIMConversation conversationWithRawJSONData:dic client:self];
+                    conversation = [AVIMConversation conversationWithRawJSONData:mutableDic client:self];
                     if (conversation) {
                         [self->_conversationManager insertConversation:conversation];
                     }
@@ -2277,16 +2016,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             }];
         }
     }
-}
-
-- (AVIMClientInternalConversationManager *)conversationManager
-{
-    return self->_conversationManager;
-}
-
-- (LCIMConversationCache *)conversationCache
-{
-    return self->_conversationCache;
 }
 
 // MARK: - IM Protocol Options
