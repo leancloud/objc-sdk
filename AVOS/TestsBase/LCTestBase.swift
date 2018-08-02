@@ -23,7 +23,8 @@ class LCTestBase: XCTestCase {
         }
     }
     
-    static var shared: Int = {
+    override class func setUp() {
+        super.setUp()
         
         LCRouter.sharedInstance().cleanCache(forKey: "LCAppRouterCacheKey")
         LCRouter.sharedInstance().cleanCache(forKey: "LCRTMRouterCacheKey")
@@ -58,13 +59,18 @@ class LCTestBase: XCTestCase {
         }
         
         AVOSCloud.setAllLogsEnabled(true)
-        
-        return 0
-    }()
+    }
     
-    override class func setUp() {
+    override class func tearDown() {
+        super.tearDown()
+    }
+    
+    override func setUp() {
         super.setUp()
-        let _ = LCTestBase.shared
+    }
+    
+    override func tearDown() {
+        super.tearDown()
     }
     
 }
@@ -93,7 +99,7 @@ class RunLoopSemaphore {
     }
     
     static func wait(timeout: TimeInterval = 30, async: (RunLoopSemaphore) -> Void, failure: (() -> Void)? = nil) {
-        XCTAssertTrue(timeout > 0)
+        XCTAssertTrue(timeout >= 0)
         defer {
             XCTAssertTrue(RunLoop.current.run(mode: .defaultRunLoopMode, before: Date(timeIntervalSinceNow: 1.0)))
         }
