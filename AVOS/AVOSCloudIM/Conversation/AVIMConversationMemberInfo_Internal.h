@@ -7,20 +7,10 @@
 //
 
 #import "AVIMConversationMemberInfo.h"
+#import "AVIMCommon_Internal.h"
 
-typedef NSString * const kAVIMConversationMemberInfoKey NS_TYPED_EXTENSIBLE_ENUM;
-static kAVIMConversationMemberInfoKey kAVIMConversationMemberInfoKey_conversationId = @"cid";
-static kAVIMConversationMemberInfoKey kAVIMConversationMemberInfoKey_memberId_1 = @"clientId";
-static kAVIMConversationMemberInfoKey kAVIMConversationMemberInfoKey_memberId_2 = @"peerId";
-static kAVIMConversationMemberInfoKey kAVIMConversationMemberInfoKey_role = @"role";
-
-typedef NSString * const kAVIMConversationMemberRole NS_TYPED_EXTENSIBLE_ENUM;
-static kAVIMConversationMemberRole kAVIMConversationMemberRoleMember = @"Member";
-static kAVIMConversationMemberRole kAVIMConversationMemberRoleManager = @"Manager";
-static kAVIMConversationMemberRole kAVIMConversationMemberRoleOwner = @"Owner";
-
-FOUNDATION_EXPORT NSString * AVIMConversationMemberInfo_role_to_key(AVIMConversationMemberRole role);
-FOUNDATION_EXPORT AVIMConversationMemberRole AVIMConversationMemberInfo_key_to_role(kAVIMConversationMemberRole key);
+AVIMConversationMemberRoleKey AVIMConversationMemberInfo_role_to_key(AVIMConversationMemberRole role);
+AVIMConversationMemberRole AVIMConversationMemberInfo_key_to_role(AVIMConversationMemberRoleKey key);
 
 @class AVIMConversation;
 

@@ -35,13 +35,11 @@
                            closed:(BOOL)closed
 {
     self = [super init];
-
     if (self) {
-        _messageId = [messageId copy];
-        _timestamp = timestamp;
-        _closed = closed;
+        self->_messageId = [messageId copy];
+        self->_timestamp = timestamp;
+        self->_closed = closed;
     }
-
     return self;
 }
 
@@ -53,12 +51,10 @@
                           endIntervalBound:(AVIMMessageIntervalBound *)endIntervalBound
 {
     self = [super init];
-
     if (self) {
-        _startIntervalBound = startIntervalBound;
-        _endIntervalBound = endIntervalBound;
+        self->_startIntervalBound = startIntervalBound;
+        self->_endIntervalBound = endIntervalBound;
     }
-
     return self;
 }
 
@@ -624,11 +620,6 @@ static dispatch_queue_t messageCacheOperationQueue;
     }];
 }
 
-- (void)setObject:(id)object forKeyedSubscript:(NSString *)key
-{
-    [self setObject:object forKey:key];
-}
-
 - (id)objectForKey:(NSString *)key
 {
     __block id object = nil;
@@ -636,6 +627,11 @@ static dispatch_queue_t messageCacheOperationQueue;
         object = self->_rawJSONData[key];
     }];
     return object;
+}
+
+- (void)setObject:(id)object forKeyedSubscript:(NSString *)key
+{
+    [self setObject:object forKey:key];
 }
 
 - (id)objectForKeyedSubscript:(NSString *)key
@@ -2571,14 +2567,14 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                 NSString *creator = [self creator];
                 if (!memberInfoTable[creator]) {
                     NSMutableDictionary<NSString *, NSString *> *mutableDic = [NSMutableDictionary dictionary];
-                    mutableDic[kAVIMConversationMemberInfoKey_conversationId] = self->_conversationId;
-                    mutableDic[kAVIMConversationMemberInfoKey_memberId_1] = creator;
-                    mutableDic[kAVIMConversationMemberInfoKey_role] = kAVIMConversationMemberRoleOwner;
+                    mutableDic[AVIMConversationMemberInfoKeyConversationId] = self->_conversationId;
+                    mutableDic[AVIMConversationMemberInfoKeyMemberId] = creator;
+                    mutableDic[AVIMConversationMemberInfoKeyRole] = AVIMConversationMemberRoleKeyOwner;
                     memberInfoTable[creator] = [[AVIMConversationMemberInfo alloc] initWithRawJSONData:mutableDic conversation:self];
                 }
                 memberInfoTable;
             });
-            /// get memberInfos before set memberInfoTable to avoid thread-unsafe.
+            /// get memberInfos before set memberInfoTable for thread-safe.
             /// step 1.
             NSArray<AVIMConversationMemberInfo *> *memberInfos = memberInfoTable.allValues;
             /// step 2.
@@ -2675,7 +2671,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         return;
     }
     
-    NSString *roleKey = AVIMConversationMemberInfo_role_to_key(role);
+    NSString *roleString = AVIMConversationMemberInfo_role_to_key(role);
     
     LCIMProtobufCommandWrapper *commandWrapper = ({
         
@@ -2692,8 +2688,8 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         convCommand.info = convMemberInfo;
         
         convMemberInfo.pid = memberId;
-        if (roleKey) {
-            convMemberInfo.role = roleKey;
+        if (roleString) {
+            convMemberInfo.role = roleString;
         } else {
             [self invokeInUserInteractQueue:^{
                 callback(false, LCErrorInternal(@"role invalid."));
@@ -2715,15 +2711,20 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             return;
         }
         
-        __block AVIMConversationMemberInfo *memberInfo = nil;
         [self internalSyncLock:^{
             if (self->_memberInfoTable) {
-                memberInfo = self->_memberInfoTable[memberId];
+                AVIMConversationMemberInfo *memberInfo = self->_memberInfoTable[memberId];
+                if (memberInfo) {
+                    [memberInfo updateRawJSONDataWithKey:AVIMConversationMemberInfoKeyRole object:roleString];
+                } else {
+                    NSMutableDictionary<NSString *, NSString *> *mutableDic = [NSMutableDictionary dictionary];
+                    mutableDic[AVIMConversationMemberInfoKeyConversationId] = self->_conversationId;
+                    mutableDic[AVIMConversationMemberInfoKeyMemberId] = memberId;
+                    mutableDic[AVIMConversationMemberInfoKeyRole] = roleString;
+                    self->_memberInfoTable[memberId] = [[AVIMConversationMemberInfo alloc] initWithRawJSONData:mutableDic conversation:self];
+                }
             }
         }];
-        if (memberInfo) {
-            [memberInfo updateRawJSONDataWithKey:kAVIMConversationMemberInfoKey_role object:roleKey];
-        }
         
         [self invokeInUserInteractQueue:^{
             callback(true, nil);
@@ -3219,15 +3220,20 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         return;
     }
     
-    __block AVIMConversationMemberInfo *memberInfo = nil;
     [self internalSyncLock:^{
         if (self->_memberInfoTable) {
-            memberInfo = self->_memberInfoTable[memberId];
+            AVIMConversationMemberInfo *memberInfo = self->_memberInfoTable[memberId];
+            if (memberInfo) {
+                [memberInfo updateRawJSONDataWithKey:AVIMConversationMemberInfoKeyRole object:role];
+            } else {
+                NSMutableDictionary<NSString *, NSString *> *mutableDic = [NSMutableDictionary dictionary];
+                mutableDic[AVIMConversationMemberInfoKeyConversationId] = self->_conversationId;
+                mutableDic[AVIMConversationMemberInfoKeyMemberId] = memberId;
+                mutableDic[AVIMConversationMemberInfoKeyRole] = role;
+                self->_memberInfoTable[memberId] = [[AVIMConversationMemberInfo alloc] initWithRawJSONData:mutableDic conversation:self];
+            }
         }
     }];
-    if (memberInfo) {
-        [memberInfo updateRawJSONDataWithKey:kAVIMConversationMemberInfoKey_role object:role];
-    }
 }
 
 #pragma mark - Keyed Conversation

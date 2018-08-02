@@ -7,17 +7,8 @@
 //
 
 #import "AVIMConversation.h"
+#import "AVIMCommon_Internal.h"
 #import "MessagesProtoOrig.pbobjc.h"
-
-
-
-/* Use this enum to match command's value(`convType`) */
-typedef NS_ENUM(NSUInteger, LCIMConvType) {
-    LCIMConvTypeNormal = 1,
-    LCIMConvTypeTransient = 2,
-    LCIMConvTypeSystem = 3,
-    LCIMConvTypeTemporary = 4
-};
 
 @interface AVIMConversation ()
 
@@ -31,20 +22,23 @@ typedef NS_ENUM(NSUInteger, LCIMConvType) {
 - (void)addMembers:(NSArray<NSString *> *)members;
 - (void)removeMembers:(NSArray<NSString *> *)members;
 
-- (AVIMMessage *)process_direct:(AVIMDirectCommand *)directCommand messageId:(NSString *)messageId isTransientMsg:(BOOL)isTransientMsg;
-- (AVIMMessage *)process_rcp:(AVIMRcpCommand *)rcpCommand isReadRcp:(BOOL)isReadRcp;
-- (NSInteger)process_unread:(AVIMUnreadTuple *)unreadTuple;
-- (AVIMMessage *)process_patch_modified:(AVIMPatchItem *)patchItem;
+- (AVIMMessage *)process_direct:(AVIMDirectCommand *)directCommand messageId:(NSString *)messageId isTransientMsg:(BOOL)isTransientMsg LC_WARN_UNUSED_RESULT;
+- (AVIMMessage *)process_rcp:(AVIMRcpCommand *)rcpCommand isReadRcp:(BOOL)isReadRcp LC_WARN_UNUSED_RESULT;
+- (NSInteger)process_unread:(AVIMUnreadTuple *)unreadTuple LC_WARN_UNUSED_RESULT;
+- (AVIMMessage *)process_patch_modified:(AVIMPatchItem *)patchItem LC_WARN_UNUSED_RESULT;
 - (void)process_conv_updated_attr:(NSDictionary *)attr attrModified:(NSDictionary *)attrModified;
 - (void)process_member_info_changed:(NSString *)memberId role:(NSString *)role;
 
 @end
 
 @interface AVIMChatRoom ()
+
 @end
 
 @interface AVIMServiceConversation ()
+
 @end
 
 @interface AVIMTemporaryConversation ()
+
 @end
