@@ -24,6 +24,12 @@
         sharedInstance.APP_REGION = ([LC_APP_REGION isEqualToString:defaultString] ? nil : LC_APP_REGION);
         sharedInstance.isServerTesting = (LC_SERVER_TESTING ? true : false);
     });
+    NSLog(@"LCTestEnvironment: URL_API = %@", sharedInstance.URL_API);
+    NSLog(@"LCTestEnvironment: URL_RTM = %@", sharedInstance.URL_RTM);
+    NSLog(@"LCTestEnvironment: APP_ID = %@", sharedInstance.APP_ID);
+    NSLog(@"LCTestEnvironment: APP_KEY = %@", sharedInstance.APP_KEY);
+    NSLog(@"LCTestEnvironment: APP_REGION = %@", sharedInstance.APP_REGION);
+    NSLog(@"LCTestEnvironment: isServerTesting = %@", (sharedInstance.isServerTesting ? @"true" : @"false"));
     return sharedInstance;
 }
 

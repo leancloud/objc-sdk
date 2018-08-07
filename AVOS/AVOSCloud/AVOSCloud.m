@@ -188,9 +188,9 @@ static BOOL LCSSLPinningEnabled = false;
 }
 
 + (void)setServiceRegion:(AVServiceRegion)serviceRegion {
-    if (LCInitialized) {
-        [NSException raise:NSInternalInconsistencyException format:@"Service region should be set before +[AVOSCloud setApplicationId:clientKey:]."];
-    }
+//    if (LCInitialized) {
+//        [NSException raise:NSInternalInconsistencyException format:@"Service region should be set before +[AVOSCloud setApplicationId:clientKey:]."];
+//    }
 
     LCEffectiveServiceRegion = serviceRegion;
 }
