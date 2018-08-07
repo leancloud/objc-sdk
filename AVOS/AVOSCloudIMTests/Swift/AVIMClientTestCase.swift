@@ -1,5 +1,5 @@
 //
-//  AVIMClient_TestCase.swift
+//  AVIMClientTestCase.swift
 //  AVOS
 //
 //  Created by zapcannon87 on 2018/4/11.
@@ -8,7 +8,7 @@
 
 import XCTest
 
-class AVIMClient_TestCase: LCIMTestBase {
+class AVIMClientTestCase: LCIMTestBase {
     
     // MARK: - Server Testing
     

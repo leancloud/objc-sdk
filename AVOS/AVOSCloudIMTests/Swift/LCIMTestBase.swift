@@ -11,8 +11,6 @@ import XCTest
 
 class LCIMTestBase: LCTestBase {
     
-    static var clientDustbin: [AVIMClient] = []
-    
     override class func setUp() {
         super.setUp()
         AVIMClient.setUnreadNotificationEnabled(true)
@@ -39,30 +37,11 @@ class LCIMTestBase: LCTestBase {
         super.tearDown()
     }
     
-    func newOpenedClient(
-        clientId: String,
-        tag: String? = nil,
-        delegate: AVIMClientDelegate? = nil,
-        installation: AVInstallation = AVInstallation.default(),
-        openOption: AVIMClientOpenOption = .forceOpen
-        ) -> AVIMClient?
-    {
-        var client: AVIMClient! = AVIMClient(clientId: clientId, tag: tag, installation: installation)
-        if let delegate: AVIMClientDelegate = delegate {
-            client.delegate = delegate
-        }
-        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
-            semaphore.increment()
-            client.open(with: openOption, callback: { (succeeded: Bool, error: Error?) in
-                semaphore.decrement()
-                if !succeeded { client = nil }
-            })
-        }, failure: { client = nil })
-        if client != nil {
-            LCIMTestBase.clientDustbin.append(client)
-        }
-        return client
-    }
+}
+
+extension LCIMTestBase {
+    
+    static var clientDustbin: [AVIMClient] = []
     
     static func newOpenedClient(
         clientId: String,
@@ -87,6 +66,26 @@ class LCIMTestBase: LCTestBase {
             LCIMTestBase.clientDustbin.append(client)
         }
         return client
+    }
+    
+    static func newConversation(
+        client: AVIMClient,
+        clientIds: [String],
+        name: String? = nil,
+        attributes: [AnyHashable : Any]? = nil,
+        options: AVIMConversationOption = [],
+        temporaryTTL: Int32 = 0
+        ) -> AVIMConversation?
+    {
+        var conversation: AVIMConversation? = nil
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
+            semaphore.increment()
+            client.createConversation(withName: name, clientIds: clientIds, attributes: attributes, options: options, temporaryTTL: temporaryTTL, callback: { (conv: AVIMConversation?, error: Error?) in
+                semaphore.decrement()
+                conversation = conv
+            })
+        }, failure: { XCTFail("timeout") })
+        return conversation
     }
     
 }

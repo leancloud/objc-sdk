@@ -10,7 +10,9 @@ import XCTest
 
 class AVUser_TestCase: LCTestBase {
     
-    func test_mobile_signup_password() {
+    func testc_mobile_signup_password() {
+        
+        if self.isServerTesting { return }
         
         /// `mobileNumber` & `smsCode` defined in dashboard
         let mobileNumber: String = "18677777777"
@@ -58,7 +60,9 @@ class AVUser_TestCase: LCTestBase {
     
     // MARK: - Auth Data
     
-    func test_auth_data_login_associate_disassociate() {
+    func testc_auth_data_login_associate_disassociate() {
+        
+        if self.isServerTesting { return }
         
         var user: AVUser! = AVUser.init()
         
@@ -167,7 +171,9 @@ class AVUser_TestCase: LCTestBase {
         }
     }
     
-    func test_auth_data_union_id() {
+    func testc_auth_data_union_id() {
+        
+        if self.isServerTesting { return }
         
         let unionId: String = "\(#function[..<#function.index(of: "(")!])"
         var user_1: AVUser! = AVUser()
@@ -278,7 +284,9 @@ class AVUser_TestCase: LCTestBase {
         }
     }
     
-    func test_auth_data_fail_on_not_exist() {
+    func testc_auth_data_fail_on_not_exist() {
+        
+        if self.isServerTesting { return }
         
         var deletingUser: AVUser?
         
@@ -386,7 +394,9 @@ class AVUser_TestCase: LCTestBase {
     
     // MARK: - Anonymous
     
-    func test_login_anonymous() {
+    func testc_login_anonymous() {
+        
+        if self.isServerTesting { return }
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
@@ -402,7 +412,9 @@ class AVUser_TestCase: LCTestBase {
     
     // MARK: - Error
     
-    func test_username_taken() {
+    func testc_username_taken() {
+        
+        if self.isServerTesting { return }
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             

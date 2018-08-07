@@ -29,8 +29,6 @@ class ViewController: UIViewController {
         self.client = AVIMClient(clientId: "RuntimeTestDemo", tag: "test")
         self.client.delegate = self
         
-        assert(self.client.status == .none)
-        
         let query: AVQuery = AVQuery.init(className: "_File")
         query.whereKeyExists("objectId")
         self.liveQuery = AVLiveQuery(query: query)
@@ -237,36 +235,26 @@ extension ViewController: AVIMClientDelegate {
     func imClientPaused(_ imClient: AVIMClient) {
         
         assert(Thread.isMainThread)
-        
-        assert(imClient.status == .paused)
     }
     
     func imClientResuming(_ imClient: AVIMClient) {
         
         assert(Thread.isMainThread)
-        
-        assert(imClient.status == .resuming)
     }
     
     func imClientResumed(_ imClient: AVIMClient) {
         
         assert(Thread.isMainThread)
-        
-        assert(imClient.status == .opened)
     }
     
     func imClientClosed(_ imClient: AVIMClient, error: Error?) {
         
         assert(Thread.isMainThread)
-        
-        assert(imClient.status == .closed)
     }
     
     func client(_ client: AVIMClient, didOfflineWithError error: Error?) {
         
         assert(Thread.isMainThread)
-        
-        assert(client.status == .closed)
         
         let alert: UIAlertController = UIAlertController(title: "Offline", message: "\(String(describing: error))", preferredStyle: .alert)
         
