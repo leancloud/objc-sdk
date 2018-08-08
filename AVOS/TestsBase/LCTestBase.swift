@@ -33,9 +33,6 @@ class LCTestBase: XCTestCase {
         if let URL_API: String = env.url_API {
             AVOSCloud.setServerURLString(URL_API, for: .API)
         }
-        if let URL_RTM: String = env.url_RTM {
-            AVOSCloud.setServerURLString(URL_RTM, for: .RTM)
-        }
         
         /// set app id & key
         if let appId: String = env.app_ID, let appKey: String = env.app_KEY {
