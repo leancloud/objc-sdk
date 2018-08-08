@@ -332,7 +332,7 @@ class AVIMClientTestCase: LCIMTestBase {
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             client.addOperation(toInternalSerialQueue: { (_) in
-                client.pushManager.uploadDeviceToken(callback: { (error: Error?) in
+                client.pushManager.uploadingDeviceToken(false, callback: { (error: Error?) in
                     semaphore.decrement()
                     XCTAssertNil(error)
                 })
