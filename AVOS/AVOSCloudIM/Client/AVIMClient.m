@@ -426,7 +426,7 @@ static BOOL clientHasInstantiated = false;
                     
                     client->_status = AVIMClientStatusOpened;
                     [client setSessionToken:sessionToken ttl:(sessionCommand.hasStTtl ? sessionCommand.stTtl : 0)];
-                    [client->_pushManager uploadDeviceTokenWithCallback:nil];
+                    [client->_pushManager uploadingDeviceToken];
                     [client->_pushManager addingClientIdToChannels];
                     
                     [client invokeInUserInteractQueue:^{
@@ -504,7 +504,7 @@ static BOOL clientHasInstantiated = false;
         }
         self->_status = AVIMClientStatusOpened;
         [self setSessionToken:sessionToken ttl:(sessionCommand.hasStTtl ? sessionCommand.stTtl : 0)];
-        [self->_pushManager uploadDeviceTokenWithCallback:nil];
+        [self->_pushManager uploadingDeviceToken];
         [self->_pushManager addingClientIdToChannels];
         callback(true, nil);
     };

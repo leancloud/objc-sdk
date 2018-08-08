@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger, AddClientIdToChannelsStatus) {
 
 @property (nonatomic, strong) NSString *clientId;
 @property (nonatomic, assign) AddClientIdToChannelsStatus addClientIdToChannelsStatus;
+@property (nonatomic, assign) BOOL isDeviceTokenUploaded;
 
 @end
 
@@ -44,11 +45,9 @@ typedef NS_ENUM(NSInteger, AddClientIdToChannelsStatus) {
         self->_clientId = client.clientId;
         self->_deviceToken = installation.deviceToken;
         self->_addClientIdToChannelsStatus = AddClientIdToChannelsStatusNone;
+        self->_isDeviceTokenUploaded = false;
         
-        [self->_installation addObserver:self
-                              forKeyPath:keyPath(self->_installation, deviceToken)
-                                 options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew)
-                                 context:nil];
+        [installation addObserver:self forKeyPath:keyPath(installation, deviceToken) options:NSKeyValueObservingOptionNew context:nil];
     }
     return self;
 }
@@ -63,20 +62,22 @@ typedef NS_ENUM(NSInteger, AddClientIdToChannelsStatus) {
                         change:(NSDictionary<NSKeyValueChangeKey,id> *)change
                        context:(void *)context
 {
-    if (object == self.installation &&
-        [keyPath isEqualToString:keyPath(self.installation, deviceToken)])
-    {
+    if (object == self.installation && [keyPath isEqualToString:keyPath(self.installation, deviceToken)]) {
         NSString *newDeviceToken = [NSString lc__decodingDictionary:change key:NSKeyValueChangeNewKey];
         if (newDeviceToken && newDeviceToken.length != 0) {
             [self.client addOperationToInternalSerialQueue:^(AVIMClient *client) {
                 if (![self.deviceToken isEqualToString:newDeviceToken]) {
+                    /// update local device token
                     self->_deviceToken = newDeviceToken;
+                    /// reset status
+                    if (self.addClientIdToChannelsStatus != AddClientIdToChannelsStatusError) {
+                        self.addClientIdToChannelsStatus = AddClientIdToChannelsStatusNone;
+                    }
+                    self.isDeviceTokenUploaded = false;
+                    /// update remote device token
                     if (client.status == AVIMClientStatusOpened) {
-                        [self uploadDeviceTokenWithCallback:nil];
-                        if (self.addClientIdToChannelsStatus != AddClientIdToChannelsStatusError) {
-                            self.addClientIdToChannelsStatus = AddClientIdToChannelsStatusNone;
-                            [self addingClientIdToChannels];
-                        }
+                        [self uploadingDeviceToken];
+                        [self addingClientIdToChannels];
                     }
                 }
             }];
@@ -98,14 +99,16 @@ typedef NS_ENUM(NSInteger, AddClientIdToChannelsStatus) {
         [self.client addOperationToInternalSerialQueue:^(AVIMClient *client) {
             if (error) {
                 AVLoggerError(AVLoggerDomainIM, @"%@", error);
-                if (error.code == kAVErrorInvalidChannelName) {
+                if ([error.domain isEqualToString:kLeanCloudErrorDomain]) {
                     self.addClientIdToChannelsStatus = AddClientIdToChannelsStatusError;
-                } else {
+                }
+                else if (self.addClientIdToChannelsStatus != AddClientIdToChannelsStatusError) {
                     self.addClientIdToChannelsStatus = AddClientIdToChannelsStatusNone;
                 }
-            }
-            else if (self.addClientIdToChannelsStatus == AddClientIdToChannelsStatusSaving) {
-                self.addClientIdToChannelsStatus = AddClientIdToChannelsStatusSaved;
+            } else {
+                if (self.addClientIdToChannelsStatus == AddClientIdToChannelsStatusSaving) {
+                    self.addClientIdToChannelsStatus = AddClientIdToChannelsStatusSaved;
+                }
             }
         }];
     }];
@@ -124,29 +127,44 @@ typedef NS_ENUM(NSInteger, AddClientIdToChannelsStatus) {
         [self.client addOperationToInternalSerialQueue:^(AVIMClient *client) {
             if (error) {
                 AVLoggerError(AVLoggerDomainIM, @"%@", error);
-                if (error.code == kAVErrorInvalidChannelName) {
+                if ([error.domain isEqualToString:kLeanCloudErrorDomain]) {
                     self.addClientIdToChannelsStatus = AddClientIdToChannelsStatusError;
-                    return;
                 }
+                else if (self.addClientIdToChannelsStatus != AddClientIdToChannelsStatusError) {
+                    self.addClientIdToChannelsStatus = AddClientIdToChannelsStatusNone;
+                }
+            } else {
+                self.addClientIdToChannelsStatus = AddClientIdToChannelsStatusNone;
             }
-            self.addClientIdToChannelsStatus = AddClientIdToChannelsStatusNone;
         }];
     }];
 }
 
 - (void)saveInstallationWithAddingClientId:(BOOL)addingClientId callback:(void (^)(BOOL succeeded, NSError *error))callback
 {
+    NSString *object = self.clientId;
+    NSString *key = keyPath(self.installation, channels);
     if (addingClientId) {
-        [self.installation addUniqueObject:self.clientId forKey:@"channels"];
+        [self.installation addUniqueObject:object forKey:key];
     } else {
-        [self.installation removeObject:self.clientId forKey:@"channels"];
+        [self.installation removeObject:object forKey:key];
     }
     [self.installation saveInBackgroundWithBlock:callback];
 }
 
-- (void)uploadDeviceTokenWithCallback:(void (^)(NSError *error))callback
+- (void)uploadingDeviceToken
+{
+    [self uploadingDeviceToken:self.isDeviceTokenUploaded callback:nil];
+}
+
+- (void)uploadingDeviceToken:(BOOL)isUploaded callback:(void (^)(NSError *error))callback
 {
     AssertRunInQueue(self->_internalSerialQueue);
+    
+    if (isUploaded) {
+        if (callback) { callback(nil); }
+        return;
+    }
     
     if (!self.deviceToken || self.deviceToken.length == 0) {
         if (callback) { callback(nil); }
@@ -173,12 +191,11 @@ typedef NS_ENUM(NSInteger, AddClientIdToChannelsStatus) {
         commandWrapper;
     });
     [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
-        if (callback) {
-            if (commandWrapper.error) {
-                callback(commandWrapper.error);
-            } else {
-                callback(nil);
-            }
+        if (commandWrapper.error) {
+            if (callback) { callback(commandWrapper.error); }
+        } else {
+            self.isDeviceTokenUploaded = true;
+            if (callback) { callback(nil); }
         }
     }];
     [client sendCommandWrapper:commandWrapper];

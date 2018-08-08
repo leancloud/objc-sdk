@@ -21,7 +21,10 @@
 
 - (void)addingClientIdToChannels;
 - (void)removingClientIdFromChannels;
+- (void)uploadingDeviceToken;
+
+/// for unit test
 - (void)saveInstallationWithAddingClientId:(BOOL)addingClientId callback:(void (^)(BOOL succeeded, NSError *error))callback;
-- (void)uploadDeviceTokenWithCallback:(void (^)(NSError *error))callback;
+- (void)uploadingDeviceToken:(BOOL)isUploaded callback:(void (^)(NSError *error))callback;
 
 @end
