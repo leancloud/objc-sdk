@@ -7,6 +7,7 @@
 //
 
 #import "AVPersistenceUtils.h"
+#import <TargetConditionals.h>
 #import "AVUtils.h"
 
 #define LCRootDirName @"LeanCloud"
@@ -14,19 +15,13 @@
 
 @implementation AVPersistenceUtils
 
-#pragma mark - Base Path
-
-/// Base path, all paths depend it
-+ (NSString *)homeDirectoryPath {
-#if AV_IOS_ONLY
+// MARK: - Home Directory: ~/
++ (NSString *)homeDirectory
+{
+#if TARGET_OS_IPHONE
     return NSHomeDirectory();
-#else
-    return [self osxBaseDirectoryPath];
-#endif
-}
-
-/// ~/Library/Application Support/LeanCloud/appId
-+ (NSString *)osxBaseDirectoryPath {
+#elif TARGET_OS_OSX
+    /// ~/Library/Application Support/LeanCloud/appId
     NSAssert([AVOSCloud getApplicationId] != nil, @"Please call +[AVOSCloud setApplicationId:clientKey:] first.");
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *directoryPath = [paths firstObject];
@@ -34,6 +29,51 @@
     directoryPath = [directoryPath stringByAppendingPathComponent:[AVOSCloud getApplicationId]];
     [self createDirectoryIfNeeded:directoryPath];
     return directoryPath;
+#else
+    return nil;
+#endif
+}
+
+// MARK: - ~/Library
++ (NSString *)homeDirectoryLibrary
+{
+    return [[self homeDirectory] stringByAppendingPathComponent:@"Library"];
+}
+
+// MARK: - ~/Library/Application Support
++ (NSString *)homeDirectoryLibraryApplicationSupport
+{
+    return [[self homeDirectoryLibrary] stringByAppendingPathComponent:@"Application Support"];
+}
+
+// MARK: - ~/Library/Application Support/com.leancloud.data
++ (NSString *)homeDirectoryLibraryApplicationSupportLeanCloudData
+{
+    return [[self homeDirectoryLibraryApplicationSupport] stringByAppendingPathComponent:@"com.leancloud.data"];
+}
+
+// MARK: - ~/Library/Application Support/com.leancloud.data/Router
++ (NSString *)homeDirectoryLibraryApplicationSupportLeanCloudDataRouter
+{
+    return [[self homeDirectoryLibraryApplicationSupportLeanCloudData] stringByAppendingPathComponent:@"Router"];
+}
+
+// MARK: - ~/Library/Caches
++ (NSString *)homeDirectoryLibraryCaches
+{
+    return [[self homeDirectoryLibrary] stringByAppendingPathComponent:@"Caches"];
+}
+
+// MARK: - ~/Library/Caches/com.leancloud.caches
++ (NSString *)homeDirectoryLibraryCachesLeanCloudCaches
+{
+    return [[self homeDirectoryLibraryCaches] stringByAppendingPathComponent:@"com.leancloud.caches"];
+}
+
+// MARK: - ~/Library/Caches/com.leancloud.caches/Files
++ (NSString *)homeDirectoryLibraryCachesLeanCloudCachesFiles
+{
+    return [[self homeDirectoryLibraryCachesLeanCloudCaches] stringByAppendingPathComponent:@"Files"];
 }
 
 #pragma mark - ~/Documents
@@ -72,33 +112,16 @@
     return path;
 }
 
-#pragma mark - ~/Library/Caches
-
-+ (NSString *)RD_Library_Caches
-{
-    return [[self homeDirectoryPath] stringByAppendingPathComponent:@"Library/Caches"];
-}
-
-+ (NSString *)RD_Library_Caches_LeanCloud
-{
-    return [[self homeDirectoryPath] stringByAppendingPathComponent:@"Library/Caches/com.leancloud.caches"];
-}
-
-+ (NSString *)RD_Library_Caches_LeanCloud_Files
-{
-    return [[self homeDirectoryPath] stringByAppendingPathComponent:@"Library/Caches/com.leancloud.caches/Files"];
-}
-
 // ~/Library/Caches/AVPaasCache, for AVCacheManager
 + (NSString *)avCacheDirectory {
-    NSString *ret = [[AVPersistenceUtils RD_Library_Caches] stringByAppendingPathComponent:@"AVPaasCache"];
+    NSString *ret = [[AVPersistenceUtils homeDirectoryLibraryCaches] stringByAppendingPathComponent:@"AVPaasCache"];
     [self createDirectoryIfNeeded:ret];
     return ret;
 }
 
 // ~/Library/Caches/LeanCloud/MessageCache
 + (NSString *)messageCachePath {
-    NSString *path = [self RD_Library_Caches];
+    NSString *path = [self homeDirectoryLibraryCaches];
     
     path = [path stringByAppendingPathComponent:LCRootDirName];
     path = [path stringByAppendingPathComponent:LCMessageCacheDirName];
@@ -123,7 +146,7 @@
 + (NSString *)libraryDirectory {
     static NSString *path = nil;
     if (!path) {
-        path = [[self homeDirectoryPath] stringByAppendingPathComponent:@"Library"];
+        path = [[self homeDirectory] stringByAppendingPathComponent:@"Library"];
     }
     return path;
 }
