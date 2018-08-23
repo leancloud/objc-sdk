@@ -10,75 +10,47 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-FOUNDATION_EXPORT NSString *const LCServiceModuleAPI;
-FOUNDATION_EXPORT NSString *const LCServiceModuleEngine;
-FOUNDATION_EXPORT NSString *const LCServiceModulePush;
-FOUNDATION_EXPORT NSString *const LCServiceModuleRTM;
-FOUNDATION_EXPORT NSString *const LCServiceModuleStatistics;
-
-FOUNDATION_EXPORT NSString *const LCRouterDidUpdateNotification;
+typedef NSString * const RouterCacheKey NS_TYPED_EXTENSIBLE_ENUM;
+FOUNDATION_EXPORT RouterCacheKey RouterCacheKeyApp;
+FOUNDATION_EXPORT RouterCacheKey RouterCacheKeyRTM;
 
 @interface LCRouter : NSObject
 
 + (instancetype)sharedInstance;
 
 /**
- Get cached App-Router server table
+ Custom API version.
+
+ @param APIVersion Format eg. '1.1'.
  */
-- (NSDictionary * _Nullable)cachedAppRouterServerTable;
++ (void)setAPIVersion:(NSString *)APIVersion;
 
 /**
- Get cached RTM server table.
+ Custom RTM router API path.
+
+ @param RTMRouterPath Format eg. '/v1/route'.
  */
-- (NSDictionary * _Nullable)cachedRTMServerTable;
++ (void)setRTMRouterPath:(NSString *)RTMRouterPath;
 
 /**
- Fetch RTM server table asynchronously.
+ Custom router cache directory path.
 
- If fetching did succeed, it will cache the RTM server table for later use.
-
- @param block The callback of fetching result.
+ @param directoryPath Path.
  */
-- (void)fetchRTMServerTableInBackground:(void(^_Nullable)(NSDictionary *RTMServerTable, NSError *error))block;
++ (void)setRouterCacheDirectoryPath:(NSString *)directoryPath;
 
 /**
- Get URL string for storage server.
+ Clean disk cache.
 
- @param path The API endpoint.
+ @param key Cache type.
+ @param error Error.
  */
-- (NSString *)URLStringForPath:(NSString *)path;
+- (void)cleanCacheWithKey:(RouterCacheKey)key error:(NSError * __autoreleasing *)error;
 
-/**
- Get batch path for the given path.
+// MARK: - Deprecated
 
- @brief Add a version prefix to the path.
-        For example, if the path given by you is "book", this method will return "/1.1/book".
-
- @param path The API endpoint.
- */
-- (NSString *)batchPathForPath:(NSString *)path;
-
-/**
- Preset URL string for a service module.
-
- The preset URL has the highest priority, it will override app router's result.
-
- @param URLString     The URL string of service module.
- @param serviceModule The service module which you want to preset.
- */
-- (void)presetURLString:(NSString *)URLString forServiceModule:(NSString *)serviceModule;
-
-/**
- Update router asynchronously.
- */
-- (void)updateInBackground;
-
-/**
- Clean router cache.
-
- @param key Key for cache.
- */
-- (void)cleanRouterCacheForKey:(NSString *)key;
+/// for compatibility
+- (NSString *)URLStringForPath:(NSString *)path __deprecated;
 
 @end
 
