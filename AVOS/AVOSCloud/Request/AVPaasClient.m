@@ -20,7 +20,7 @@
 #import "AVScheduler.h"
 #import "AVObjectUtils.h"
 #import "LCNetworkStatistics.h"
-#import "LCRouter.h"
+#import "LCRouter_Internal.h"
 #import "SDMacros.h"
 #import "AVOSCloud_Internal.h"
 #import "LCSSLChallenger.h"
@@ -270,7 +270,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     NSURL *URL = [NSURL URLWithString:path];
 
     if (!URL.scheme.length) {
-        NSString *URLString = [[LCRouter sharedInstance] URLStringForPath:path];
+        NSString *URLString = [[LCRouter sharedInstance] appURLForPath:path appID:[AVOSCloud getApplicationId]];
         URL = [NSURL URLWithString:URLString];
     }
 

@@ -14,7 +14,7 @@
 #import "AVIMClient_Internal.h"
 #import "AVPaasClient.h"
 #import "AVOSCloud_Internal.h"
-#import "LCRouter.h"
+#import "LCRouter_Internal.h"
 #import "SDMacros.h"
 #import "AVOSCloudIM.h"
 #import "AVIMConversation_Internal.h"
@@ -1237,35 +1237,7 @@ NSString *const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         return;
     }
     
-    LCRouter *router = LCRouter.sharedInstance;
-    
-    NSDictionary *RTMServerTable = router.cachedRTMServerTable;
-    
-    if (RTMServerTable) {
-        
-        NSString *primary   = RTMServerTable[@"server"];
-        
-        NSString *secondary = RTMServerTable[@"secondary"];
-        
-        if (_preferToUseSecondaryRTMServer) {
-            
-            RTMServer = secondary ?: primary;
-            
-        } else {
-            
-            RTMServer = primary ?: secondary;
-        }
-        
-        if (RTMServer) {
-            
-            callback(RTMServer, nil);
-            
-            return;
-        }
-    }
-    
-    [router fetchRTMServerTableInBackground:^(NSDictionary *RTMServerTable, NSError *error){
-        
+    [[LCRouter sharedInstance] getRTMURLWithAppID:[AVOSCloud getApplicationId] callback:^(NSDictionary *RTMServerTable, NSError *error) {
         dispatch_async(_serialQueue, ^{
             
             if (RTMServerTable) {

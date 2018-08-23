@@ -1017,12 +1017,17 @@
 		D328B8E920FEE2200039091A /* AVIMClientInternalConversationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D328B8E620FEE2200039091A /* AVIMClientInternalConversationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D328B8EA20FEE2200039091A /* AVIMClientInternalConversationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D328B8E720FEE2200039091A /* AVIMClientInternalConversationManager.m */; };
 		D328B8EB20FEE2200039091A /* AVIMClientInternalConversationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D328B8E720FEE2200039091A /* AVIMClientInternalConversationManager.m */; };
+		D336C570212D02A2008D0E3E /* LCRouterTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D336C56F212D02A2008D0E3E /* LCRouterTestCase.swift */; };
 		D33B830A210F1679001D1CCD /* AVIMClientPushManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D33B8308210F1679001D1CCD /* AVIMClientPushManager.h */; };
 		D33B830B210F1679001D1CCD /* AVIMClientPushManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D33B8308210F1679001D1CCD /* AVIMClientPushManager.h */; };
 		D33B830C210F1679001D1CCD /* AVIMClientPushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D33B8309210F1679001D1CCD /* AVIMClientPushManager.m */; };
 		D33B830D210F1679001D1CCD /* AVIMClientPushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D33B8309210F1679001D1CCD /* AVIMClientPushManager.m */; };
 		D341F2A32018B6DB00408778 /* _10_MB_.png in Resources */ = {isa = PBXBuildFile; fileRef = D341F2A22018B6DB00408778 /* _10_MB_.png */; };
 		D3472E1F2015CBC200AAD65F /* AVFileTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3472E1E2015CBC200AAD65F /* AVFileTestCase.swift */; };
+		D34EBDCD211C20FF0092A538 /* LCRouter_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */; };
+		D34EBDCE211C20FF0092A538 /* LCRouter_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */; };
+		D34EBDCF211C20FF0092A538 /* LCRouter_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */; };
+		D34EBDD0211C20FF0092A538 /* LCRouter_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */; };
 		D34FD72C2068CFE900B7C11B /* AVLiveQuery_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34FD72B2068CFE900B7C11B /* AVLiveQuery_Internal.h */; };
 		D34FD72D2068CFE900B7C11B /* AVLiveQuery_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34FD72B2068CFE900B7C11B /* AVLiveQuery_Internal.h */; };
 		D37A04671FF36E6200AD44A9 /* testVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D37A04661FF36E6200AD44A9 /* testVideo.mp4 */; };
@@ -1464,10 +1469,12 @@
 		D328B8E120FC85200039091A /* LCLiveQueryTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCLiveQueryTestBase.swift; sourceTree = "<group>"; };
 		D328B8E620FEE2200039091A /* AVIMClientInternalConversationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVIMClientInternalConversationManager.h; sourceTree = "<group>"; };
 		D328B8E720FEE2200039091A /* AVIMClientInternalConversationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVIMClientInternalConversationManager.m; sourceTree = "<group>"; };
+		D336C56F212D02A2008D0E3E /* LCRouterTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCRouterTestCase.swift; sourceTree = "<group>"; };
 		D33B8308210F1679001D1CCD /* AVIMClientPushManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVIMClientPushManager.h; sourceTree = "<group>"; };
 		D33B8309210F1679001D1CCD /* AVIMClientPushManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVIMClientPushManager.m; sourceTree = "<group>"; };
 		D341F2A22018B6DB00408778 /* _10_MB_.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = _10_MB_.png; sourceTree = "<group>"; };
 		D3472E1E2015CBC200AAD65F /* AVFileTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVFileTestCase.swift; sourceTree = "<group>"; };
+		D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCRouter_Internal.h; sourceTree = "<group>"; };
 		D34FD72B2068CFE900B7C11B /* AVLiveQuery_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVLiveQuery_Internal.h; sourceTree = "<group>"; };
 		D37A04661FF36E6200AD44A9 /* testVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = testVideo.mp4; sourceTree = "<group>"; };
 		D37A04691FF3705500AD44A9 /* testFile.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = testFile.md; sourceTree = "<group>"; };
@@ -1762,6 +1769,7 @@
 			isa = PBXGroup;
 			children = (
 				83F9A2C51CE014430002E21B /* LCRouter.h */,
+				D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */,
 				83F9A2C61CE014430002E21B /* LCRouter.m */,
 			);
 			path = Router;
@@ -2343,6 +2351,7 @@
 				D30DF3F61FDE2CD200F932BC /* AVUserTestCase.swift */,
 				D3472E1E2015CBC200AAD65F /* AVFileTestCase.swift */,
 				D305470E208F2F7200B547B9 /* AVCloudTestCase.swift */,
+				D336C56F212D02A2008D0E3E /* LCRouterTestCase.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -2579,6 +2588,7 @@
 				70CA7FFD1BDE4313000A3B21 /* AVRelation.h in Headers */,
 				70CA80001BDE4313000A3B21 /* AVSubclassing.h in Headers */,
 				70CA80011BDE4313000A3B21 /* AVInstallation.h in Headers */,
+				D34EBDCE211C20FF0092A538 /* LCRouter_Internal.h in Headers */,
 				70CA80031BDE4313000A3B21 /* AVPush.h in Headers */,
 				70CA80051BDE4313000A3B21 /* AVCloudQueryResult.h in Headers */,
 				83FCB9AB1CEDC57C007D8712 /* LCNetworking.h in Headers */,
@@ -2762,6 +2772,7 @@
 				8320F9511C1918C60024B45E /* AVCloudQueryResult_Internal.h in Headers */,
 				8320F9541C1918C60024B45E /* AVPush_Internal.h in Headers */,
 				83FCB9AD1CEDC57C007D8712 /* LCNetworking.h in Headers */,
+				D34EBDD0211C20FF0092A538 /* LCRouter_Internal.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2802,6 +2813,7 @@
 				83D8CED41C17DAF50094279D /* AVRole.h in Headers */,
 				830EB9F71C44D68400BA917F /* AVSaveOption.h in Headers */,
 				83D8CED51C17DAF50094279D /* AVAnalytics.h in Headers */,
+				D34EBDCF211C20FF0092A538 /* LCRouter_Internal.h in Headers */,
 				83D8CED61C17DAF50094279D /* AVConstants.h in Headers */,
 				83D8CED71C17DAF50094279D /* AVOSCloud.h in Headers */,
 				83D8CED81C17DAF50094279D /* AVCloud.h in Headers */,
@@ -2905,6 +2917,7 @@
 				830EB9F41C44D68400BA917F /* AVSaveOption.h in Headers */,
 				8C841AB31A5A7A0000C5C6C4 /* AVAnalytics.h in Headers */,
 				8C841AC21A5A7A0000C5C6C4 /* AVConstants.h in Headers */,
+				D34EBDCD211C20FF0092A538 /* LCRouter_Internal.h in Headers */,
 				8C84198C1A5A791300C5C6C4 /* AVOSCloud.h in Headers */,
 				8C841ACE1A5A7A0000C5C6C4 /* AVCloud.h in Headers */,
 				83DF02B01AF86032000E289C /* LCDatabase.h in Headers */,
@@ -3903,6 +3916,7 @@
 				D305470F208F2F7200B547B9 /* AVCloudTestCase.swift in Sources */,
 				D30DF3F71FDE2CD200F932BC /* AVUserTestCase.swift in Sources */,
 				D30DF4161FDE38EF00F932BC /* LCTestBase.swift in Sources */,
+				D336C570212D02A2008D0E3E /* LCRouterTestCase.swift in Sources */,
 				D3CC90CB2069E5BB0082EFD4 /* AVObjectTestCase.swift in Sources */,
 				D3F8747B20F8B1690035C7D1 /* LCTestEnvironment.m in Sources */,
 				D3472E1F2015CBC200AAD65F /* AVFileTestCase.swift in Sources */,
@@ -4604,10 +4618,10 @@
 					"DEBUG=1",
 					"$(inherited)",
 					"LC_URL_API=$(LC_URL_API)",
-					"LC_URL_RTM=$(LC_URL_RTM)",
+					"LC_URL_RTMRouter=$(LC_URL_RTMRouter)",
+					"LC_URL_RTMServer=$(LC_URL_RTMServer)",
 					"LC_APP_ID=$(LC_APP_ID)",
 					"LC_APP_KEY=$(LC_APP_KEY)",
-					"LC_APP_REGION=$(LC_APP_REGION)",
 					"LC_SERVER_TESTING=$(LC_SERVER_TESTING)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -4620,10 +4634,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LC_APP_ID = "\\@\\\"default\\\"";
 				LC_APP_KEY = "\\@\\\"default\\\"";
-				LC_APP_REGION = "\\@\\\"default\\\"";
 				LC_SERVER_TESTING = 0;
 				LC_URL_API = "\\@\\\"default\\\"";
-				LC_URL_RTM = "\\@\\\"default\\\"";
+				LC_URL_RTMRouter = "\\@\\\"default\\\"";
+				LC_URL_RTMServer = "\\@\\\"default\\\"";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.AVOSCloudLiveQueryTests;
@@ -4666,10 +4680,10 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"LC_URL_API=$(LC_URL_API)",
-					"LC_URL_RTM=$(LC_URL_RTM)",
+					"LC_URL_RTMRouter=$(LC_URL_RTMRouter)",
+					"LC_URL_RTMServer=$(LC_URL_RTMServer)",
 					"LC_APP_ID=$(LC_APP_ID)",
 					"LC_APP_KEY=$(LC_APP_KEY)",
-					"LC_APP_REGION=$(LC_APP_REGION)",
 					"LC_SERVER_TESTING=$(LC_SERVER_TESTING)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -4682,10 +4696,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LC_APP_ID = "\\@\\\"default\\\"";
 				LC_APP_KEY = "\\@\\\"default\\\"";
-				LC_APP_REGION = "\\@\\\"default\\\"";
 				LC_SERVER_TESTING = 0;
 				LC_URL_API = "\\@\\\"default\\\"";
-				LC_URL_RTM = "\\@\\\"default\\\"";
+				LC_URL_RTMRouter = "\\@\\\"default\\\"";
+				LC_URL_RTMServer = "\\@\\\"default\\\"";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = cn.leancloud.AVOSCloudLiveQueryTests;
@@ -5202,10 +5216,10 @@
 					"DEBUG=1",
 					"$(inherited)",
 					"LC_URL_API=$(LC_URL_API)",
-					"LC_URL_RTM=$(LC_URL_RTM)",
+					"LC_URL_RTMRouter=$(LC_URL_RTMRouter)",
+					"LC_URL_RTMServer=$(LC_URL_RTMServer)",
 					"LC_APP_ID=$(LC_APP_ID)",
 					"LC_APP_KEY=$(LC_APP_KEY)",
-					"LC_APP_REGION=$(LC_APP_REGION)",
 					"LC_SERVER_TESTING=$(LC_SERVER_TESTING)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
@@ -5219,10 +5233,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LC_APP_ID = "\\@\\\"default\\\"";
 				LC_APP_KEY = "\\@\\\"default\\\"";
-				LC_APP_REGION = "\\@\\\"default\\\"";
 				LC_SERVER_TESTING = 0;
 				LC_URL_API = "\\@\\\"default\\\"";
-				LC_URL_RTM = "\\@\\\"default\\\"";
+				LC_URL_RTMRouter = "\\@\\\"default\\\"";
+				LC_URL_RTMServer = "\\@\\\"default\\\"";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = (
@@ -5264,10 +5278,10 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"LC_URL_API=$(LC_URL_API)",
-					"LC_URL_RTM=$(LC_URL_RTM)",
+					"LC_URL_RTMRouter=$(LC_URL_RTMRouter)",
+					"LC_URL_RTMServer=$(LC_URL_RTMServer)",
 					"LC_APP_ID=$(LC_APP_ID)",
 					"LC_APP_KEY=$(LC_APP_KEY)",
-					"LC_APP_REGION=$(LC_APP_REGION)",
 					"LC_SERVER_TESTING=$(LC_SERVER_TESTING)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -5280,10 +5294,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LC_APP_ID = "\\@\\\"default\\\"";
 				LC_APP_KEY = "\\@\\\"default\\\"";
-				LC_APP_REGION = "\\@\\\"default\\\"";
 				LC_SERVER_TESTING = 0;
 				LC_URL_API = "\\@\\\"default\\\"";
-				LC_URL_RTM = "\\@\\\"default\\\"";
+				LC_URL_RTMRouter = "\\@\\\"default\\\"";
+				LC_URL_RTMServer = "\\@\\\"default\\\"";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
@@ -5459,10 +5473,10 @@
 					"DEBUG=1",
 					"$(inherited)",
 					"LC_URL_API=$(LC_URL_API)",
-					"LC_URL_RTM=$(LC_URL_RTM)",
+					"LC_URL_RTMRouter=$(LC_URL_RTMRouter)",
+					"LC_URL_RTMServer=$(LC_URL_RTMServer)",
 					"LC_APP_ID=$(LC_APP_ID)",
 					"LC_APP_KEY=$(LC_APP_KEY)",
-					"LC_APP_REGION=$(LC_APP_REGION)",
 					"LC_SERVER_TESTING=$(LC_SERVER_TESTING)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
@@ -5476,10 +5490,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LC_APP_ID = "\\@\\\"default\\\"";
 				LC_APP_KEY = "\\@\\\"default\\\"";
-				LC_APP_REGION = "\\@\\\"default\\\"";
 				LC_SERVER_TESTING = 0;
 				LC_URL_API = "\\@\\\"default\\\"";
-				LC_URL_RTM = "\\@\\\"default\\\"";
+				LC_URL_RTMRouter = "\\@\\\"default\\\"";
+				LC_URL_RTMServer = "\\@\\\"default\\\"";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -5521,10 +5535,10 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"LC_URL_API=$(LC_URL_API)",
-					"LC_URL_RTM=$(LC_URL_RTM)",
+					"LC_URL_RTMRouter=$(LC_URL_RTMRouter)",
+					"LC_URL_RTMServer=$(LC_URL_RTMServer)",
 					"LC_APP_ID=$(LC_APP_ID)",
 					"LC_APP_KEY=$(LC_APP_KEY)",
-					"LC_APP_REGION=$(LC_APP_REGION)",
 					"LC_SERVER_TESTING=$(LC_SERVER_TESTING)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -5537,10 +5551,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LC_APP_ID = "\\@\\\"default\\\"";
 				LC_APP_KEY = "\\@\\\"default\\\"";
-				LC_APP_REGION = "\\@\\\"default\\\"";
 				LC_SERVER_TESTING = 0;
 				LC_URL_API = "\\@\\\"default\\\"";
-				LC_URL_RTM = "\\@\\\"default\\\"";
+				LC_URL_RTMRouter = "\\@\\\"default\\\"";
+				LC_URL_RTMServer = "\\@\\\"default\\\"";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "$(inherited)";

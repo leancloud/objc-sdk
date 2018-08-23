@@ -12,7 +12,7 @@
 #import "AVObjectUtils.h"
 #import "AVPersistenceUtils.h"
 #import "AVErrorUtils.h"
-#import "LCRouter.h"
+#import "LCRouter_Internal.h"
 
 @implementation AVInstallation
 
