@@ -13,8 +13,9 @@ class LCIMTestBase: LCTestBase {
     
     override class func setUp() {
         super.setUp()
-        if let URL_RTM: String = LCTestEnvironment.sharedInstance().url_RTM {
-            AVOSCloudIM.defaultOptions().rtmServer = URL_RTM
+        /// custom RTM server URL
+        if let RTMServerURL: String = LCTestEnvironment.sharedInstance().url_RTMServer {
+            AVOSCloudIM.defaultOptions().rtmServer = RTMServerURL
         }
         AVIMClient.setUnreadNotificationEnabled(true)
     }

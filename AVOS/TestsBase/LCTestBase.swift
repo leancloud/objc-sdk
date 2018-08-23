@@ -13,28 +13,22 @@ class LCTestBase: XCTestCase {
     override class func setUp() {
         super.setUp()
         
-        LCRouter.sharedInstance().cleanCache(forKey: "LCAppRouterCacheKey")
-        LCRouter.sharedInstance().cleanCache(forKey: "LCRTMRouterCacheKey")
-        
         let env: LCTestEnvironment = LCTestEnvironment.sharedInstance()
         
-        /// set region
-        if let region: String = env.app_REGION {
-            switch region.uppercased() {
-            case "US": AVOSCloud.setServiceRegion(.US)
-            case "CN": AVOSCloud.setServiceRegion(.CN)
-            default: AVOSCloud.setServiceRegion(.CN)
-            }
-        } else {
-            AVOSCloud.setServiceRegion(.CN)
+        /// custom url for API
+        if let APIURL: String = env.url_API {
+            AVOSCloud.setServerURLString(APIURL, for: .API)
+            AVOSCloud.setServerURLString(APIURL, for: .push)
+            AVOSCloud.setServerURLString(APIURL, for: .statistics)
+            AVOSCloud.setServerURLString(APIURL, for: .engine)
         }
         
-        /// set url for API & RTM
-        if let URL_API: String = env.url_API {
-            AVOSCloud.setServerURLString(URL_API, for: .API)
+        /// custom url for RTM router
+        if let RTMRouterURL: String = env.url_RTMRouter {
+            AVOSCloud.setServerURLString(RTMRouterURL, for: .RTM)
         }
         
-        /// set app id & key
+        /// custom app id & key
         if let appId: String = env.app_ID, let appKey: String = env.app_KEY {
             AVOSCloud.setApplicationId(appId, clientKey: appKey)
         } else {

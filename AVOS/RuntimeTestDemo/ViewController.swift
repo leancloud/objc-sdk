@@ -15,7 +15,9 @@ class ViewController: UIViewController {
     
     var client: AVIMClient!
     
-    var liveQuery: AVLiveQuery!
+    var liveQuery1: AVLiveQuery!
+    var liveQuery2: AVLiveQuery!
+    var query: AVQuery!
     var isShowFileCallbackAlert: Bool = false
     
     @IBOutlet weak var tableView: UITableView!
@@ -29,10 +31,19 @@ class ViewController: UIViewController {
         self.client = AVIMClient(clientId: "RuntimeTestDemo", tag: "test")
         self.client.delegate = self
         
+        AVUser.loginAnonymously { (_, _) in
+            
+        }
+        
         let query: AVQuery = AVQuery.init(className: "_File")
         query.whereKeyExists("objectId")
-        self.liveQuery = AVLiveQuery(query: query)
-        self.liveQuery.delegate = self
+        self.query = query
+        self.liveQuery1 = AVLiveQuery(query: query)
+        self.liveQuery1.delegate = self
+        self.liveQuery2 = AVLiveQuery(query: query)
+        self.liveQuery2.delegate = self
+        
+        self.tableView.reloadData()
     }
     
     func showAlert(title: String, message: String) {
@@ -50,43 +61,9 @@ class ViewController: UIViewController {
 
 extension ViewController {
     
-    func imLogin() {
+    @objc func liveQuery2SubscribeFile() {
         
-        self.client.open { (success: Bool, error: Error?) in
-            
-            if success {
-                
-                self.showAlert(title: "Success", message: "Login")
-                
-            } else {
-                
-                self.showAlert(title: "Error", message: "\(String(describing: error))")
-            }
-        }
-    }
-    
-    func imReopen() {
-        
-        self.client.open(with: .reopen) { (success: Bool, error: Error?) in
-            
-            if success {
-                
-                self.showAlert(title: "Success", message: "Login")
-                
-            } else {
-                
-                self.showAlert(title: "Error", message: "\(String(describing: error))")
-            }
-        }
-    }
-    
-    func changeDeviceToken() {
-        AVInstallation.default().deviceToken = UUID().uuidString
-    }
-    
-    func liveQuerySubscribeFile() {
-        
-        self.liveQuery.subscribe { (succeeded: Bool, error: Error?) in
+        self.liveQuery2.subscribe { (succeeded: Bool, error: Error?) in
             
             guard succeeded else {
                 
@@ -100,11 +77,9 @@ extension ViewController {
         }
     }
     
-    func createFile() {
+    @objc func liveQuery2UnsubscribeFile() {
         
-        let file: AVFile = AVFile.init(remoteURL: URL(string: "http://ac-jmbpc7y4.clouddn.com/d40e9cf44dc5dadf1577.m4a")!)
-        
-        file.upload { (succeeded: Bool, error: Error?) in
+        self.liveQuery2.unsubscribe { (succeeded: Bool, error: Error?) in
             
             guard succeeded else {
                 
@@ -113,14 +88,55 @@ extension ViewController {
                 return
             }
             
-            if self.isShowFileCallbackAlert {
+            self.isShowFileCallbackAlert = true
+            self.showAlert(title: "Live Query", message: "Unsubscribe Succeeded")
+        }
+    }
+    
+    @objc func userLogout() {
+        AVUser.logOut()
+        AVUser.loginAnonymously { (_, _) in
+            
+        }
+    }
+    
+    @objc func liveQuery1SubscribeFile() {
+        
+        self.liveQuery1.subscribe { (succeeded: Bool, error: Error?) in
+            
+            guard succeeded else {
                 
+                self.showAlert(title: "Error", message: "\(String(describing: error))")
+                
+                return
+            }
+            
+            self.isShowFileCallbackAlert = false
+            self.showAlert(title: "Live Query", message: "Subscribe Succeeded")
+        }
+    }
+    
+    @objc func createFile() {
+        
+        let file: AVFile = AVFile.init(remoteURL: URL(string: "http://ac-jmbpc7y4.clouddn.com/d40e9cf44dc5dadf1577.m4a")!)
+
+        file.upload { (succeeded: Bool, error: Error?) in
+
+            guard succeeded else {
+
+                self.showAlert(title: "Error", message: "\(String(describing: error))")
+
+                return
+            }
+
+            if self.isShowFileCallbackAlert {
+
                 self.showAlert(title: "Succeeded", message: "Create File")
             }
         }
     }
     
-    func deleteFile(with objectId: String) {
+    @objc func deleteFile(with objectId: String) {
         
         AVFile.getWithObjectId(objectId) { (file: AVFile?, error: Error?) in
             
@@ -148,9 +164,9 @@ extension ViewController {
         }
     }
     
-    func liveQueryUnsubscribeFile() {
+    @objc func liveQuery1UnsubscribeFile() {
         
-        self.liveQuery.unsubscribe { (succeeded: Bool, error: Error?) in
+        self.liveQuery1.unsubscribe { (succeeded: Bool, error: Error?) in
             
             guard succeeded else {
                 
@@ -176,19 +192,19 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell")!
         switch indexPath.row {
         case 0:
-            cell.textLabel?.text = "IM Login"
+            cell.textLabel?.text = "\(#selector(self.liveQuery2SubscribeFile))"
         case 1:
-            cell.textLabel?.text = "IM Reopen"
+            cell.textLabel?.text = "\(#selector(self.liveQuery2UnsubscribeFile))"
         case 2:
-            cell.textLabel?.text = "Change Device Token"
+            cell.textLabel?.text = "\(#selector(self.userLogout))"
         case 3:
-            cell.textLabel?.text = "Live Query Subscribe _File"
+            cell.textLabel?.text = "\(#selector(self.liveQuery1SubscribeFile))"
         case 4:
-            cell.textLabel?.text = "Create a File"
+            cell.textLabel?.text = "\(#selector(self.createFile))"
         case 5:
-            cell.textLabel?.text = "Delete a File"
+            cell.textLabel?.text = "\(#selector(self.deleteFile(with:)))"
         case 6:
-            cell.textLabel?.text = "Live Query Unsubscribe _File"
+            cell.textLabel?.text = "\(#selector(self.liveQuery1UnsubscribeFile))"
         default:
             fatalError()
         }
@@ -199,13 +215,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         switch indexPath.row {
         case 0:
-            self.imLogin()
+            self.liveQuery2SubscribeFile()
         case 1:
-            self.imReopen()
+            self.liveQuery2UnsubscribeFile()
         case 2:
-            self.changeDeviceToken()
+            self.userLogout()
         case 3:
-            self.liveQuerySubscribeFile()
+            self.liveQuery1SubscribeFile()
         case 4:
             self.createFile()
         case 5:
@@ -223,7 +239,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             
             self.present(alert, animated: true, completion: nil)
         case 6:
-            self.liveQueryUnsubscribeFile()
+            self.liveQuery1UnsubscribeFile()
         default:
             fatalError()
         }
@@ -273,7 +289,11 @@ extension ViewController: AVLiveQueryDelegate {
         
         assert(self.isShowFileCallbackAlert == false)
         
-        self.showAlert(title: "Object Did Create", message: "\(object)")
+        if liveQuery == self.liveQuery1 {
+            self.showAlert(title: "1. Object Did Create", message: "\(object)")
+        } else if liveQuery == self.liveQuery2 {
+            self.showAlert(title: "2. Object Did Create", message: "\(object)")
+        }
     }
     
     func liveQuery(_ liveQuery: AVLiveQuery, objectDidDelete object: Any) {
@@ -281,6 +301,11 @@ extension ViewController: AVLiveQueryDelegate {
         assert(self.isShowFileCallbackAlert == false)
         
         self.showAlert(title: "Object Did Delete", message: "\(object)")
+        if liveQuery == self.liveQuery1 {
+            self.showAlert(title: "1. Object Did Delete", message: "\(object)")
+        } else if liveQuery == self.liveQuery2 {
+            self.showAlert(title: "2. Object Did Delete", message: "\(object)")
+        }
     }
     
 }
