@@ -11,7 +11,7 @@
 #import "AVQuery_Internal.h"
 #import "AVInstallation_Internal.h"
 #import "AVObjectUtils.h"
-#import "LCRouter.h"
+#import "LCRouter_Internal.h"
 
 /*!
  A class which defines a push notification that can be sent from
@@ -43,7 +43,7 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
 
 +(NSString *)myObjectPath
 {
-    return [[LCRouter sharedInstance] URLStringForPath:@"push"];
+    return [[LCRouter sharedInstance] appURLForPath:@"push" appID:[AVOSCloud getApplicationId]];
 }
 
 -(id)init

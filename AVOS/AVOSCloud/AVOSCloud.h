@@ -67,18 +67,6 @@
 #import "AVAnalytics.h"
 #endif
 
-/**
- *  Storage Type
- */
-typedef NS_ENUM(NSInteger, AVStorageType) {
-    AVStorageTypeQiniu = 0,
-    AVStorageTypeParse,
-    AVStorageTypeS3,
-    AVStorageTypeQCloud,
-    /* Default service region */
-    AVStorageTypeDefault = AVStorageTypeQiniu
-} __deprecated_msg("deprecated");
-
 typedef enum AVLogLevel : NSUInteger {
     AVLogLevelNone      = 0,
     AVLogLevelError     = 1 << 0,
@@ -87,14 +75,6 @@ typedef enum AVLogLevel : NSUInteger {
     AVLogLevelVerbose   = 1 << 3,
     AVLogLevelDefault   = AVLogLevelError | AVLogLevelWarning
 } AVLogLevel;
-
-typedef NS_ENUM(NSInteger, AVServiceRegion) {
-    AVServiceRegionCN = 1,
-    AVServiceRegionUS,
-
-    /* Default service region */
-    AVServiceRegionDefault = AVServiceRegionCN
-};
 
 typedef NS_ENUM(NSInteger, AVServiceModule) {
     AVServiceModuleAPI = 1,
@@ -156,7 +136,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (NSString *)getClientKey;
 
-
 /**
  *  开启LastModify支持, 减少流量消耗。默认关闭。
  *  @param enabled 开启
@@ -172,20 +151,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  清空LastModify缓存
  */
-+(void)clearLastModifyCache;
-
-/**
- *  Set third party file storage service. If uses China server, you can use QCloud or Qiniu, the default is Qiniu, if uses US server, the default is AWS S3.
- *  @param type Qiniu, QCloud or AWS S3.
- */
-+ (void)setStorageType:(AVStorageType)type
-__deprecated_msg("deprecated");
-
-/**
- * Use specified region.
- * If not specified, AVServiceRegionCN will be used.
- */
-+ (void)setServiceRegion:(AVServiceRegion)region;
++ (void)clearLastModifyCache;
 
 /**
  Custom server URL for specific service module.
@@ -193,8 +159,7 @@ __deprecated_msg("deprecated");
  @param URLString     The URL string of service module.
  @param serviceModule The service module which you want to customize.
  */
-+ (void)setServerURLString:(NSString *)URLString
-          forServiceModule:(AVServiceModule)serviceModule;
++ (void)setServerURLString:(NSString * _Nullable)URLString forServiceModule:(AVServiceModule)serviceModule;
 
 /**
  *  Get the timeout interval for network requests. Default is kAVDefaultNetworkTimeoutInterval (10 seconds)
@@ -237,7 +202,6 @@ __deprecated_msg("deprecated");
  */
 + (NSInteger)fileCacheExpiredDays;
 
-
 /**
  *  set File Cache Expired Days, default is 30 days
  *
@@ -279,21 +243,6 @@ __deprecated_msg("deprecated");
 + (void)getServerDateWithBlock:(void(^)(NSDate * _Nullable date, NSError * _Nullable error))block;
 
 #pragma mark - Push Notification
-
-/**
- * Register remote notification with all types (badge, alert, sound) and empty categories.
- */
-+ (void)registerForRemoteNotification AV_TV_UNAVAILABLE AV_WATCH_UNAVAILABLE
-    AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.5.0. It will be removed in future.");
-
-/**
- * Register remote notification with types.
- * @param types Notification types.
- * @param categories A set of UIUserNotificationCategory objects that define the groups of actions a notification may include.
- * NOTE: categories only supported by iOS 8 and later. If application run below iOS 8, categories will be ignored.
- */
-+ (void)registerForRemoteNotificationTypes:(NSUInteger)types categories:(nullable NSSet *)categories AV_TV_UNAVAILABLE AV_WATCH_UNAVAILABLE
-    AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.5.0. It will be removed in future.");
 
 /**
  Handle device token registered from APNs.
@@ -339,7 +288,36 @@ __deprecated_msg("deprecated");
 
 #pragma mark - Deprecated API
 
+typedef NS_ENUM(NSInteger, AVStorageType) {
+    AVStorageTypeQiniu = 0,
+    AVStorageTypeParse,
+    AVStorageTypeS3,
+    AVStorageTypeQCloud,
+    /* Default service region */
+    AVStorageTypeDefault = AVStorageTypeQiniu
+} __deprecated;
+
+typedef NS_ENUM(NSInteger, AVServiceRegion) {
+    AVServiceRegionCN = 1,
+    AVServiceRegionUS,
+    
+    /* Default service region */
+    AVServiceRegionDefault = AVServiceRegionCN
+} __deprecated;
+
 @interface AVOSCloud (AVDeprecated)
+
+/**
+ *  Set third party file storage service. If uses China server, you can use QCloud or Qiniu, the default is Qiniu, if uses US server, the default is AWS S3.
+ *  @param type Qiniu, QCloud or AWS S3.
+ */
++ (void)setStorageType:(AVStorageType)type __deprecated;
+
+/**
+ * Use specified region.
+ * If not specified, AVServiceRegionCN will be used.
+ */
++ (void)setServiceRegion:(AVServiceRegion)region __deprecated;
 
 /*!
  *  请求短信验证码，需要开启手机短信验证 API 选项。
@@ -388,6 +366,19 @@ __deprecated_msg("deprecated");
 +(void)requestVoiceCodeWithPhoneNumber:(NSString *)phoneNumber
                                    IDD:(nullable NSString *)IDD
                               callback:(AVBooleanResultBlock)callback AV_DEPRECATED("Deprecated in AVOSCloud SDK 4.5.0. Use +[AVSMS requestShortMessageForPhoneNumber:options:callback:] instead.");
+
+/**
+ * Register remote notification with all types (badge, alert, sound) and empty categories.
+ */
++ (void)registerForRemoteNotification AV_TV_UNAVAILABLE AV_WATCH_UNAVAILABLE AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.5.0. It will be removed in future.");
+
+/**
+ * Register remote notification with types.
+ * @param types Notification types.
+ * @param categories A set of UIUserNotificationCategory objects that define the groups of actions a notification may include.
+ * NOTE: categories only supported by iOS 8 and later. If application run below iOS 8, categories will be ignored.
+ */
++ (void)registerForRemoteNotificationTypes:(NSUInteger)types categories:(nullable NSSet *)categories AV_TV_UNAVAILABLE AV_WATCH_UNAVAILABLE AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.5.0. It will be removed in future.");
 
 @end
 

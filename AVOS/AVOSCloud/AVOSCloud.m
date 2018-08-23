@@ -22,14 +22,12 @@
 #import "LCNetworkStatistics.h"
 #import "AVObjectUtils.h"
 
-#import "LCRouter.h"
+#import "LCRouter_Internal.h"
 #import "SDMacros.h"
 
 static AVVerbosePolicy _verbosePolicy = kAVVerboseShow;
 
 static BOOL LCInitialized = NO;
-
-AVServiceRegion LCEffectiveServiceRegion = AVServiceRegionDefault;
 
 static BOOL LCSSLPinningEnabled = false;
 
@@ -90,11 +88,6 @@ static BOOL LCSSLPinningEnabled = false;
     printf("----------------------------------------------------------\n");
 }
 
-+ (void)updateRouterInBackground {
-    LCRouter *router = [LCRouter sharedInstance];
-    [router updateInBackground];
-}
-
 + (void)initializePaasClient {
     AVPaasClient *paasClient = [AVPaasClient sharedInstance];
 
@@ -115,9 +108,8 @@ static BOOL LCSSLPinningEnabled = false;
     }
 
     [self initializePaasClient];
-    [self updateRouterInBackground];
     [[LCNetworkStatistics sharedInstance] start];
-
+    [LCRouter sharedInstance];
 #if !TARGET_OS_WATCH
     [AVAnalytics startInternally];
 #endif
@@ -164,59 +156,18 @@ static BOOL LCSSLPinningEnabled = false;
     [[AVPaasClient sharedInstance] clearLastModifyCache];
 }
 
-+ (void)setStorageType:(AVStorageType)storageType
++ (void)setServerURLString:(NSString * _Nullable)URLString forServiceModule:(AVServiceModule)serviceModule
 {
-}
-
-+ (NSString *)pushGroupForServiceRegion:(AVServiceRegion)serviceRegion {
-    NSString *pushGroup = nil;
-
-    switch (serviceRegion) {
-    case AVServiceRegionCN:
-        pushGroup = @"g0";
-        break;
-    case AVServiceRegionUS:
-        pushGroup = @"a0";
-        break;
-    }
-
-    if (!pushGroup) {
-        pushGroup = [self pushGroupForServiceRegion:AVServiceRegionDefault];
-    }
-
-    return pushGroup;
-}
-
-+ (void)setServiceRegion:(AVServiceRegion)serviceRegion {
-    if (LCInitialized) {
-        [NSException raise:NSInternalInconsistencyException format:@"Service region should be set before +[AVOSCloud setApplicationId:clientKey:]."];
-    }
-
-    LCEffectiveServiceRegion = serviceRegion;
-}
-
-+ (NSString *)stringFromServiceModule:(AVServiceModule)serviceModule {
+    NSString *key = nil;
     switch (serviceModule) {
-    case AVServiceModuleAPI:
-        return LCServiceModuleAPI;
-    case AVServiceModuleEngine:
-        return LCServiceModuleEngine;
-    case AVServiceModulePush:
-        return LCServiceModulePush;
-    case AVServiceModuleRTM:
-        return LCServiceModuleRTM;
-    case AVServiceModuleStatistics:
-        return LCServiceModuleStatistics;
+        case AVServiceModuleAPI: key = RouterKeyAppAPIServer; break;
+        case AVServiceModuleRTM: key = RouterKeyAppRTMRouterServer; break;
+        case AVServiceModulePush: key = RouterKeyAppPushServer; break;
+        case AVServiceModuleEngine: key = RouterKeyAppEngineServer; break;
+        case AVServiceModuleStatistics: key = RouterKeyAppStatsServer; break;
+        default: return;
     }
-
-    return nil;
-}
-
-+ (void)setServerURLString:(NSString *)URLString
-          forServiceModule:(AVServiceModule)serviceModule
-{
-    NSString *key = [self stringFromServiceModule:serviceModule];
-    [[LCRouter sharedInstance] presetURLString:URLString forServiceModule:key];
+    [[LCRouter sharedInstance] customAppServerURL:URLString key:key];
 }
 
 #pragma mark - Network
@@ -264,66 +215,6 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
 
 + (void)setFileCacheExpiredDays:(NSInteger)days {
     [AVScheduler sharedInstance].fileCacheExpiredDays = days;
-}
-
-+(void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
-                            callback:(AVBooleanResultBlock)callback {
-    [self requestSmsCodeWithPhoneNumber:phoneNumber appName:nil operation:nil timeToLive:0 callback:callback];
-}
-
-+(void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
-                             appName:(NSString *)appName
-                           operation:(NSString *)operation
-                          timeToLive:(NSUInteger)ttl
-                            callback:(AVBooleanResultBlock)callback {
-    NSParameterAssert(phoneNumber);
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-//    [dict setObject:phoneNumber forKey:@"mobilePhoneNumber"];
-    if (appName) {
-        [dict setObject:appName forKey:@"name"];
-    }
-    if (operation) {
-        [dict setObject:operation forKey:@"op"];
-    }
-    if (ttl > 0) {
-        [dict setObject:[NSNumber numberWithUnsignedInteger:ttl] forKey:@"ttl"];
-    }
-    [self requestSmsCodeWithPhoneNumber:phoneNumber templateName:nil variables:dict callback:callback];
-}
-
-+(void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
-                        templateName:(NSString *)templateName
-                           variables:(NSDictionary *)variables
-                            callback:(AVBooleanResultBlock)callback {
-    NSParameterAssert(phoneNumber);
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    [dict setObject:phoneNumber forKey:@"mobilePhoneNumber"];
-    if (templateName) {
-        [dict setObject:templateName forKey:@"template"];
-    }
-    [dict addEntriesFromDictionary:variables];
-    [[AVPaasClient sharedInstance] postObject:@"requestSmsCode" withParameters:dict block:^(id object, NSError *error) {
-        [AVUtils callBooleanResultBlock:callback error:error];
-    }];
-}
-
-+ (void)requestVoiceCodeWithPhoneNumber:(NSString *)phoneNumber
-                                    IDD:(NSString *)IDD
-                               callback:(AVBooleanResultBlock)callback {
-    NSParameterAssert(phoneNumber);
-
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-
-    params[@"smsType"] = @"voice";
-    params[@"mobilePhoneNumber"] = phoneNumber;
-
-    if (IDD) {
-        params[@"IDD"] = IDD;
-    }
-
-    [[AVPaasClient sharedInstance] postObject:@"requestSmsCode" withParameters:params block:^(id object, NSError *error) {
-        [AVUtils callBooleanResultBlock:callback error:error];
-    }];
 }
 
 +(void)verifySmsCode:(NSString *)code mobilePhoneNumber:(NSString *)phoneNumber callback:(AVBooleanResultBlock)callback {
@@ -377,38 +268,6 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
 
 #pragma mark - Push Notification
 
-+ (void)registerForRemoteNotification {
-#if AV_TARGET_OS_IOS
-    [self registerForRemoteNotificationTypes:
-     UIRemoteNotificationTypeBadge |
-     UIRemoteNotificationTypeAlert |
-     UIRemoteNotificationTypeSound categories:nil];
-#elif AV_TARGET_OS_OSX
-    [self registerForRemoteNotificationTypes:
-     NSRemoteNotificationTypeAlert |
-     NSRemoteNotificationTypeBadge |
-     NSRemoteNotificationTypeSound categories:nil];
-#endif
-}
-
-+ (void)registerForRemoteNotificationTypes:(NSUInteger)types categories:(NSSet *)categories {
-#if AV_TARGET_OS_IOS
-    UIApplication *application = [UIApplication sharedApplication];
-
-    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0) {
-        [application registerForRemoteNotificationTypes:types];
-    } else {
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
-
-        [application registerUserNotificationSettings:settings];
-        [application registerForRemoteNotifications];
-    }
-#elif AV_TARGET_OS_OSX
-    NSApplication *application = [NSApplication sharedApplication];
-    [application registerForRemoteNotificationTypes:types];
-#endif
-}
-
 + (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     [self handleRemoteNotificationsWithDeviceToken:deviceToken
@@ -454,6 +313,106 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
             AVLoggerInfo(AVLoggerDomainIM, @"Installation saved OK, object id: %@.", weakInstallation.objectId);
         }
     }];
+}
+
+// MARK: - Deprecated
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
++ (void)setStorageType:(AVStorageType)storageType {}
++ (void)setServiceRegion:(AVServiceRegion)serviceRegion {}
+#pragma clang diagnostic pop
+
++(void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
+                            callback:(AVBooleanResultBlock)callback {
+    [self requestSmsCodeWithPhoneNumber:phoneNumber appName:nil operation:nil timeToLive:0 callback:callback];
+}
+
++(void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
+                             appName:(NSString *)appName
+                           operation:(NSString *)operation
+                          timeToLive:(NSUInteger)ttl
+                            callback:(AVBooleanResultBlock)callback {
+    NSParameterAssert(phoneNumber);
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    //    [dict setObject:phoneNumber forKey:@"mobilePhoneNumber"];
+    if (appName) {
+        [dict setObject:appName forKey:@"name"];
+    }
+    if (operation) {
+        [dict setObject:operation forKey:@"op"];
+    }
+    if (ttl > 0) {
+        [dict setObject:[NSNumber numberWithUnsignedInteger:ttl] forKey:@"ttl"];
+    }
+    [self requestSmsCodeWithPhoneNumber:phoneNumber templateName:nil variables:dict callback:callback];
+}
+
++(void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
+                        templateName:(NSString *)templateName
+                           variables:(NSDictionary *)variables
+                            callback:(AVBooleanResultBlock)callback {
+    NSParameterAssert(phoneNumber);
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:phoneNumber forKey:@"mobilePhoneNumber"];
+    if (templateName) {
+        [dict setObject:templateName forKey:@"template"];
+    }
+    [dict addEntriesFromDictionary:variables];
+    [[AVPaasClient sharedInstance] postObject:@"requestSmsCode" withParameters:dict block:^(id object, NSError *error) {
+        [AVUtils callBooleanResultBlock:callback error:error];
+    }];
+}
+
++ (void)requestVoiceCodeWithPhoneNumber:(NSString *)phoneNumber
+                                    IDD:(NSString *)IDD
+                               callback:(AVBooleanResultBlock)callback {
+    NSParameterAssert(phoneNumber);
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    
+    params[@"smsType"] = @"voice";
+    params[@"mobilePhoneNumber"] = phoneNumber;
+    
+    if (IDD) {
+        params[@"IDD"] = IDD;
+    }
+    
+    [[AVPaasClient sharedInstance] postObject:@"requestSmsCode" withParameters:params block:^(id object, NSError *error) {
+        [AVUtils callBooleanResultBlock:callback error:error];
+    }];
+}
+
++ (void)registerForRemoteNotification {
+#if AV_TARGET_OS_IOS
+    [self registerForRemoteNotificationTypes:
+     UIRemoteNotificationTypeBadge |
+     UIRemoteNotificationTypeAlert |
+     UIRemoteNotificationTypeSound categories:nil];
+#elif AV_TARGET_OS_OSX
+    [self registerForRemoteNotificationTypes:
+     NSRemoteNotificationTypeAlert |
+     NSRemoteNotificationTypeBadge |
+     NSRemoteNotificationTypeSound categories:nil];
+#endif
+}
+
++ (void)registerForRemoteNotificationTypes:(NSUInteger)types categories:(NSSet *)categories {
+#if AV_TARGET_OS_IOS
+    UIApplication *application = [UIApplication sharedApplication];
+    
+    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0) {
+        [application registerForRemoteNotificationTypes:types];
+    } else {
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
+        
+        [application registerUserNotificationSettings:settings];
+        [application registerForRemoteNotifications];
+    }
+#elif AV_TARGET_OS_OSX
+    NSApplication *application = [NSApplication sharedApplication];
+    [application registerForRemoteNotificationTypes:types];
+#endif
 }
 
 @end

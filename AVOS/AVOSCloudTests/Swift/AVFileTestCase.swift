@@ -34,7 +34,9 @@ class AVFile_TestCase: LCTestBase {
         return (data, "image.png")
     }()
     
-    func test_upload_remote_url() {
+    func testc_upload_remote_url() {
+        
+        if self.isServerTesting { return }
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
@@ -93,7 +95,9 @@ class AVFile_TestCase: LCTestBase {
         })
     }
     
-    func test_upload_data() {
+    func testc_upload_data() {
+        
+        if self.isServerTesting { return }
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
@@ -211,7 +215,9 @@ class AVFile_TestCase: LCTestBase {
         })
     }
     
-    func test_upload_file_path() {
+    func testc_upload_file_path() {
+        
+        if self.isServerTesting { return }
         
         let uploadDataTuple: (data: Data, name: String) = self.bigDataTuple
         let documentsDirectory: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -364,7 +370,9 @@ class AVFile_TestCase: LCTestBase {
         })
     }
     
-    func test_download_file() {
+    func testc_download_file() {
+        
+        if self.isServerTesting { return }
         
         var downloadFile: AVFile!
         let uploadDataTuple: (data: Data, name: String) = self.bigDataTuple
@@ -572,7 +580,9 @@ class AVFile_TestCase: LCTestBase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: URL.init(fileURLWithPath: cachedPath).deletingLastPathComponent().path))
     }
     
-    func test_download_external_url() {
+    func testc_download_external_url() {
+        
+        if self.isServerTesting { return }
         
         let removeItemAtPath: (String) -> Bool = { (path: String) in
             if FileManager.default.fileExists(atPath: path) {
@@ -656,7 +666,9 @@ class AVFile_TestCase: LCTestBase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: URL.init(fileURLWithPath: cachedPath).deletingLastPathComponent().path))
     }
     
-    func test_cancel_task() {
+    func testc_cancel_task() {
+        
+        if self.isServerTesting { return }
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
@@ -749,7 +761,9 @@ class AVFile_TestCase: LCTestBase {
         })
     }
     
-    func test_delete_file_object() {
+    func testc_delete_file_object() {
+        
+        if self.isServerTesting { return }
         
         let uploadedFile = { () -> AVFile? in
             
@@ -830,7 +844,9 @@ class AVFile_TestCase: LCTestBase {
         })
     }
     
-    func test_get_file_object() {
+    func testc_get_file_object() {
+        
+        if self.isServerTesting { return }
         
         let uploadedFile = { () -> AVFile? in
             

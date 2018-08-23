@@ -10,29 +10,29 @@
 #import "AVIMConversation_Internal.h"
 #import "AVUtils.h"
 
-NSString * AVIMConversationMemberInfo_role_to_key(AVIMConversationMemberRole role)
+AVIMConversationMemberRoleKey AVIMConversationMemberInfo_role_to_key(AVIMConversationMemberRole role)
 {
     switch (role)
     {
         case AVIMConversationMemberRoleMember:
-            return kAVIMConversationMemberRoleMember;
+            return AVIMConversationMemberRoleKeyMember;
         case AVIMConversationMemberRoleManager:
-            return kAVIMConversationMemberRoleManager;
+            return AVIMConversationMemberRoleKeyManager;
         case AVIMConversationMemberRoleOwner:
-            return kAVIMConversationMemberRoleOwner;
+            return AVIMConversationMemberRoleKeyOwner;
         default:
             return nil;
     }
 }
 
-AVIMConversationMemberRole AVIMConversationMemberInfo_key_to_role(kAVIMConversationMemberRole key)
+AVIMConversationMemberRole AVIMConversationMemberInfo_key_to_role(AVIMConversationMemberRoleKey key)
 {
     AVIMConversationMemberRole role = AVIMConversationMemberRoleMember;
-    if ([key isEqualToString:kAVIMConversationMemberRoleMember]) {
+    if ([key isEqualToString:AVIMConversationMemberRoleKeyMember]) {
         role = AVIMConversationMemberRoleMember;
-    } else if ([key isEqualToString:kAVIMConversationMemberRoleManager]) {
+    } else if ([key isEqualToString:AVIMConversationMemberRoleKeyManager]) {
         role = AVIMConversationMemberRoleManager;
-    } else if ([key isEqualToString:kAVIMConversationMemberRoleOwner]) {
+    } else if ([key isEqualToString:AVIMConversationMemberRoleKeyOwner]) {
         role = AVIMConversationMemberRoleOwner;
     }
     return role;
@@ -44,30 +44,26 @@ AVIMConversationMemberRole AVIMConversationMemberInfo_key_to_role(kAVIMConversat
     NSLock *_lock;
 }
 
-+ (instancetype)new NS_UNAVAILABLE
++ (instancetype)new
 {
-    [NSException raise:NSInternalInconsistencyException
-                format:@"This Method is Unavailable."];
+    [NSException raise:NSInternalInconsistencyException format:@"not allow."];
     return nil;
 }
 
-- (instancetype)init NS_UNAVAILABLE
+- (instancetype)init
 {
-    [NSException raise:NSInternalInconsistencyException
-                format:@"This Method is Unavailable."];
+    [NSException raise:NSInternalInconsistencyException format:@"not allow."];
     return nil;
 }
 
 - (instancetype)initWithRawJSONData:(NSMutableDictionary *)rawJSONData conversation:(AVIMConversation *)conversation
 {
     self = [super init];
-    
     if (self) {
         self->_rawJSONData = rawJSONData;
         self->_conversation = conversation;
         self->_lock = [[NSLock alloc] init];
     }
-    
     return self;
 }
 
@@ -89,7 +85,7 @@ AVIMConversationMemberRole AVIMConversationMemberInfo_key_to_role(kAVIMConversat
 {
     __block NSString *value = nil;
     [self internalSyncLock:^{
-        value = [NSString lc__decodingDictionary:self->_rawJSONData key:kAVIMConversationMemberInfoKey_conversationId];
+        value = [NSString lc__decodingDictionary:self->_rawJSONData key:AVIMConversationMemberInfoKeyConversationId];
     }];
     return value;
 }
@@ -98,13 +94,7 @@ AVIMConversationMemberRole AVIMConversationMemberInfo_key_to_role(kAVIMConversat
 {
     __block NSString *value = nil;
     [self internalSyncLock:^{
-        /*
-         exist two key for member id. firstly decoding 'clientId', secondly decoding 'peerId'.
-         */
-        value = [NSString lc__decodingDictionary:self->_rawJSONData key:kAVIMConversationMemberInfoKey_memberId_1];
-        if (!value) {
-            value = [NSString lc__decodingDictionary:self->_rawJSONData key:kAVIMConversationMemberInfoKey_memberId_2];
-        }
+        value = [NSString lc__decodingDictionary:self->_rawJSONData key:AVIMConversationMemberInfoKeyMemberId];
     }];
     return value;
 }
@@ -113,7 +103,7 @@ AVIMConversationMemberRole AVIMConversationMemberInfo_key_to_role(kAVIMConversat
 {
     __block NSString *value = nil;
     [self internalSyncLock:^{
-        value = [NSString lc__decodingDictionary:self->_rawJSONData key:kAVIMConversationMemberInfoKey_role];
+        value = [NSString lc__decodingDictionary:self->_rawJSONData key:AVIMConversationMemberInfoKeyRole];
     }];
     return AVIMConversationMemberInfo_key_to_role(value);
 }

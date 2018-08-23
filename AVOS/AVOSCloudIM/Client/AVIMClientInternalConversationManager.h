@@ -12,6 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AVIMClientInternalConversationManager : NSObject
 
+/**
+ Limit of client internal batch query for conversations.
+
+ @param limit Default is 20.
+ */
 + (void)setBatchQueryLimit:(NSUInteger)limit;
 
 @end

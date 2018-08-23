@@ -1024,15 +1024,21 @@ static Byte ivBuff[]   = {0xA,1,0xB,5,4,0xF,7,9,0x17,3,1,6,8,0xC,0xD,91};
 
 + (instancetype)lc__decodingDictionary:(NSDictionary *)dictionary key:(NSString *)key
 {
-    return [self lc__decodingWithKey:key fromDic:dictionary];
+    if (!dictionary || !key) {
+        return nil;
+    }
+    id value = dictionary[key];
+    if (value && [value isKindOfClass:self]) {
+        return value;
+    } else {
+        return nil;
+    }
 }
 
 + (instancetype)lc__decodingWithKey:(NSString *)key fromDic:(NSDictionary *)dic
 {
     if (!key || !dic) { return nil; }
-    
     id value = dic[key];
-    
     return (value && [value isKindOfClass:self]) ? value : nil;
 }
 

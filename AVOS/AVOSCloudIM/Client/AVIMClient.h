@@ -72,7 +72,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Initialization method.
  
- @note `clientId`'s length should in range [1, 64].
+ @note `clientId`'s length should in range [1, 64], and all characters must be letters, digits, or the underscore.
  
  @param clientId Identifie of this Client.
  @return Instance.
@@ -82,7 +82,8 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Initialization method.
  
- @note `clientId`'s length should in range [1, 64], `tag` should not use @"default".
+ @note `clientId`'s length should in range [1, 64], and all characters must be letters, digits, or the underscore.
+ @note `tag` should not use @"default".
 
  @param clientId Identifie of this Client.
  @param tag Set it to implement only one client online.

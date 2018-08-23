@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMCommon.h"
+#import "AVIMCommon_Internal.h"
 
 // MARK: - Error
 

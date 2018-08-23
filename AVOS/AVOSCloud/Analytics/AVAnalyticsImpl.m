@@ -14,7 +14,7 @@
 #import "AVGlobal.h"
 #import "AVUtils.h"
 #import "AVErrorUtils.h"
-#import "LCRouter.h"
+#import "LCRouter_Internal.h"
 
 static NSString *const kAVOnlineConfig = @"AVOS_ONLINE_CONFIG";
 
@@ -383,7 +383,7 @@ static NSString *const kAVOnlineConfig = @"AVOS_ONLINE_CONFIG";
 
 +(NSString *)myObjectPath
 {
-    return [[LCRouter sharedInstance] URLStringForPath:@"stats"];
+    return [[LCRouter sharedInstance] appURLForPath:@"stats" appID:[AVOSCloud getApplicationId]];
 }
 
 -(void)sendSessions {

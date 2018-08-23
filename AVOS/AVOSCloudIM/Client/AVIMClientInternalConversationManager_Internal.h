@@ -13,10 +13,10 @@
 
 @interface AVIMClientInternalConversationManager ()
 
-@property (nonatomic, weak) AVIMClient *client;
 #if DEBUG
 @property (nonatomic, strong) dispatch_queue_t internalSerialQueue;
 #endif
+@property (nonatomic, weak) AVIMClient *client;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableArray<void (^)(AVIMConversation *, NSError *)> *> *callbacksMap;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, AVIMConversation *> *conversationMap;
 
@@ -30,7 +30,7 @@
 - (void)queryConversationWithId:(NSString *)conversationId
                        callback:(void (^)(AVIMConversation *conversation, NSError *error))callback;
 
-- (void)queryConversationsWithIds:(NSMutableArray<NSString *> *)conversationIds
+- (void)queryConversationsWithIds:(NSArray<NSString *> *)conversationIds
                          callback:(void (^)(AVIMConversation *conversation, NSError *error))callback;
 
 

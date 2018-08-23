@@ -10,7 +10,8 @@
 
 @interface AVPersistenceUtils : NSObject
 
-+ (NSString *)RD_Library_Caches_LeanCloud_Files;
++ (NSString *)homeDirectoryLibraryApplicationSupportLeanCloudDataRouter;
++ (NSString *)homeDirectoryLibraryCachesLeanCloudCachesFiles;
 
 + (NSString *)avCacheDirectory;
 

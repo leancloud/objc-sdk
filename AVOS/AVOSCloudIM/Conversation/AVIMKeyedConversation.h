@@ -8,8 +8,6 @@
 
 #import "AVIMCommon.h"
 
-@class AVIMClient;
-@class AVIMConversation;
 @class AVIMMessage;
 
 NS_ASSUME_NONNULL_BEGIN

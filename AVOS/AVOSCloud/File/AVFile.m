@@ -17,7 +17,7 @@ static NSString * AVFile_CustomPersistentCacheDirectory = nil;
 
 static NSString * AVFile_PersistentCacheDirectory()
 {
-    return AVFile_CustomPersistentCacheDirectory ?: [AVPersistenceUtils RD_Library_Caches_LeanCloud_Files];
+    return AVFile_CustomPersistentCacheDirectory ?: [AVPersistenceUtils homeDirectoryLibraryCachesLeanCloudCachesFiles];
 }
 
 static NSString * AVFile_CompactUUID()

@@ -325,10 +325,17 @@
 - (void)getConversationById:(NSString *)conversationId
                    callback:(void (^)(AVIMConversation * _Nullable, NSError * _Nullable))callback
 {
-    [self whereKey:kLCIMConv_objectId equalTo:conversationId];
+    [self whereKey:AVIMConversationKeyObjectId equalTo:conversationId];
     [self findConversationsWithCallback:^(NSArray<AVIMConversation *> * _Nullable conversations, NSError * _Nullable error) {
         if (error) {
             callback(nil, error);
+            return;
+        }
+        if (!conversations.firstObject && self.cachePolicy != kAVIMCachePolicyCacheOnly) {
+            callback(nil, ({
+                AVIMErrorCode code = AVIMErrorCodeConversationNotFound;
+                LCError(code, AVIMErrorMessage(code), nil);
+            }));
             return;
         }
         callback(conversations.firstObject, nil);
@@ -349,7 +356,6 @@
         
         AVIMGenericCommand *outCommand = [AVIMGenericCommand new];
         AVIMConvCommand *convCommand = [AVIMConvCommand new];
-        AVIMJsonObjectMessage *jsonObjectMessage = [AVIMJsonObjectMessage new];
         
         outCommand.cmd = AVIMCommandType_Conv;
         outCommand.op = AVIMOpType_Query;
@@ -371,6 +377,7 @@
         }
         NSString *whereString = self.whereString;
         if (whereString) {
+            AVIMJsonObjectMessage *jsonObjectMessage = [AVIMJsonObjectMessage new];
             convCommand.where = jsonObjectMessage;
             jsonObjectMessage.data_p = whereString;
         }
@@ -397,35 +404,43 @@
             return;
         }
         
-        NSArray<AVIMConversation *> *conversations = ({
-            NSMutableArray<NSMutableDictionary *> *results = ({
-                NSString *jsonString = commandWrapper.inCommand.convMessage.results.data_p;
-                NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-                if (!data) {
-                    [self invokeInUserInteractQueue:^{
-                        callback(nil, ({
-                            AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
-                            LCError(code, AVIMErrorMessage(code), nil);
-                        }));
-                    }];
-                    return;
-                }
-                NSError *error = nil;
-                NSMutableArray<NSMutableDictionary *> *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-                if (error) {
-                    [self invokeInUserInteractQueue:^{
-                        callback(nil, error);
-                    }];
-                    return;
-                }
-                results;
-            });
+        AVIMGenericCommand *inCommand = commandWrapper.inCommand;
+        AVIMConvCommand *convCommand = (inCommand.hasConvMessage ? inCommand.convMessage : nil);
+        AVIMJsonObjectMessage *jsonObjectMessage = (convCommand.hasResults ? convCommand.results : nil);
+        NSString *jsonString = (jsonObjectMessage.hasData_p ? jsonObjectMessage.data_p : nil);
+        
+        NSMutableArray<NSMutableDictionary *> *results = ({
+            NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+            if (!data) {
+                [self invokeInUserInteractQueue:^{
+                    callback(nil, ({
+                        AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
+                        LCError(code, AVIMErrorMessage(code), nil);
+                    }));
+                }];
+                return;
+            }
+            NSError *error = nil;
+            NSMutableArray<NSMutableDictionary *> *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+            if (error || ![NSMutableArray lc__checkingType:results]) {
+                [self invokeInUserInteractQueue:^{
+                    callback(nil, error ?: ({
+                        AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
+                        LCError(code, AVIMErrorMessage(code), nil);
+                    }));
+                }];
+                return;
+            }
+            results;
+        });
+        
+        NSMutableArray<AVIMConversation *> *conversations = ({
             NSMutableArray<AVIMConversation *> *conversations = [NSMutableArray array];
             for (NSMutableDictionary *jsonDic in results) {
                 if (![NSMutableDictionary lc__checkingType:jsonDic]) {
                     continue;
                 }
-                NSString *conversationId = [NSString lc__decodingDictionary:jsonDic key:kLCIMConv_objectId];
+                NSString *conversationId = [NSString lc__decodingDictionary:jsonDic key:AVIMConversationKeyObjectId];
                 if (!conversationId) {
                     continue;
                 }
@@ -505,12 +520,17 @@
         return;
     }
     
-    if (!tempConvIds || tempConvIds.count == 0) {
+    if (tempConvIds.count == 0) {
         [self invokeInUserInteractQueue:^{
             callback(@[], nil);
         }];
         return;
     }
+    
+    tempConvIds = ({
+        NSMutableSet *set = [NSMutableSet setWithArray:tempConvIds];
+        set.allObjects;
+    });
     
     LCIMProtobufCommandWrapper *commandWrapper = ({
         
@@ -524,6 +544,7 @@
         if (self.option) {
             convCommand.flag = self.option;
         }
+        convCommand.limit = (int32_t)tempConvIds.count;
         convCommand.tempConvIdsArray = tempConvIds.mutableCopy;
         
         LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
@@ -540,35 +561,43 @@
             return;
         }
         
+        AVIMGenericCommand *inCommand = commandWrapper.inCommand;
+        AVIMConvCommand *convCommand = (inCommand.hasConvMessage ? inCommand.convMessage : nil);
+        AVIMJsonObjectMessage *jsonObjectMessage = (convCommand.hasResults ? convCommand.results : nil);
+        NSString *jsonString = (jsonObjectMessage.hasData_p ? jsonObjectMessage.data_p : nil);
+        
+        NSMutableArray<NSMutableDictionary *> *results = ({
+            NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+            if (!data) {
+                [self invokeInUserInteractQueue:^{
+                    callback(nil, ({
+                        AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
+                        LCError(code, AVIMErrorMessage(code), nil);
+                    }));
+                }];
+                return;
+            }
+            NSError *error = nil;
+            NSMutableArray<NSMutableDictionary *> *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+            if (error || ![NSMutableArray lc__checkingType:results]) {
+                [self invokeInUserInteractQueue:^{
+                    callback(nil, error ?: ({
+                        AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
+                        LCError(code, AVIMErrorMessage(code), nil);
+                    }));
+                }];
+                return;
+            }
+            results;
+        });
+        
         NSArray<AVIMTemporaryConversation *> *conversations = ({
-            NSMutableArray<NSMutableDictionary *> *results = ({
-                NSString *jsonString = commandWrapper.inCommand.convMessage.results.data_p;
-                NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-                if (!data) {
-                    [self invokeInUserInteractQueue:^{
-                        callback(nil, ({
-                            AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
-                            LCError(code, AVIMErrorMessage(code), nil);
-                        }));
-                    }];
-                    return;
-                }
-                NSError *error = nil;
-                NSMutableArray<NSMutableDictionary *> *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-                if (error) {
-                    [self invokeInUserInteractQueue:^{
-                        callback(nil, error);
-                    }];
-                    return;
-                }
-                results;
-            });
             NSMutableArray<AVIMTemporaryConversation *> *conversations = [NSMutableArray array];
             for (NSMutableDictionary *jsonDic in results) {
                 if (![NSMutableDictionary lc__checkingType:jsonDic]) {
                     continue;
                 }
-                NSString *conversationId = [NSString lc__decodingDictionary:jsonDic key:kLCIMConv_objectId];
+                NSString *conversationId = [NSString lc__decodingDictionary:jsonDic key:AVIMConversationKeyObjectId];
                 if (!conversationId) {
                     continue;
                 }

@@ -10,7 +10,9 @@ import XCTest
 
 class AVObject_TestCase: LCTestBase {
     
-    func test_save_associate_file_object() {
+    func testc_save_associate_file_object() {
+        
+        if self.isServerTesting { return }
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
@@ -42,28 +44,6 @@ class AVObject_TestCase: LCTestBase {
             
             XCTFail("timeout")
         })
-    }
-    
-    func test_temp() {
-        
-        let object: AVObject = AVObject(className: "Comment")
-        object["targetTodoFolder"] = AVObject(className: "TodoFolder", objectId: "5590cdfde4b00f7adb5860c8")
-        object.save()
-        
-        let query: AVQuery = AVQuery(className: "Comment")
-        query.whereKey("targetTodoFolder", equalTo: AVObject(className: "TodoFolder"))
-        guard let results: [AVObject] = query.findObjects() as? [AVObject] else {
-            XCTFail()
-            return
-        }
-        
-        var found = false
-        for item in results {
-            if item.objectId == object.objectId {
-                found = true
-            }
-        }
-        XCTAssertFalse(found)
     }
     
 }

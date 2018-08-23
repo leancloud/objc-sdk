@@ -70,15 +70,14 @@ static NSUInteger batchQueryLimit = 20;
 {
     AssertRunInQueue(self.internalSerialQueue);
     NSParameterAssert(conversationId);
-    [self queryConversationsWithIds:[NSMutableArray arrayWithObject:conversationId] callback:callback];
+    [self queryConversationsWithIds:@[conversationId] callback:callback];
 }
 
-- (void)queryConversationsWithIds:(NSMutableArray<NSString *> *)conversationIds
+- (void)queryConversationsWithIds:(NSArray<NSString *> *)conversationIds
                          callback:(void (^)(AVIMConversation *conversation, NSError *error))callback
 {
     AssertRunInQueue(self.internalSerialQueue);
     NSParameterAssert(conversationIds);
-    NSParameterAssert([conversationIds isKindOfClass:[NSMutableArray class]]);
     
     AVIMClient *client = self.client;
     
@@ -132,7 +131,7 @@ static NSUInteger batchQueryLimit = 20;
                 if (![NSMutableDictionary lc__checkingType:rawJSONData]) {
                     continue;
                 }
-                NSString *conversationId = [NSString lc__decodingDictionary:rawJSONData key:kLCIMConv_objectId];
+                NSString *conversationId = [NSString lc__decodingDictionary:rawJSONData key:AVIMConversationKeyObjectId];
                 if (!conversationId) {
                     continue;
                 }
@@ -172,11 +171,11 @@ static NSUInteger batchQueryLimit = 20;
         for (NSString *convId in batchIds) {
             self.callbacksMap[convId] = [NSMutableArray arrayWithObject:callback];
         }
-        [client _sendCommandWrapper:commandWrapper];
+        [client sendCommandWrapper:commandWrapper];
     }
 }
 
-- (NSMutableArray<NSArray *> *)slicingConversationIds:(NSMutableArray<NSString *> *)conversationIds
+- (NSMutableArray<NSArray *> *)slicingConversationIds:(NSArray<NSString *> *)conversationIds
                                              callback:(void (^)(AVIMConversation *conversation, NSError *error))callback
 {
     NSMutableArray<NSString *> *normalIds = [NSMutableArray array];
@@ -236,9 +235,9 @@ static NSUInteger batchQueryLimit = 20;
         convCommand.where = ({
             id JSONObject = nil;
             if (conversationIds.count == 1) {
-                JSONObject = @{ kLCIMConv_objectId: conversationIds.firstObject };
+                JSONObject = @{ AVIMConversationKeyObjectId: conversationIds.firstObject };
             } else {
-                JSONObject = @{ kLCIMConv_objectId: @{ @"$in": conversationIds } };
+                JSONObject = @{ AVIMConversationKeyObjectId: @{ @"$in": conversationIds } };
             }
             NSError *error0 = nil;
             NSData *data = [NSJSONSerialization dataWithJSONObject:JSONObject options:0 error:&error0];

@@ -7,6 +7,7 @@
 //
 
 #import "AVIMKeyedConversation_internal.h"
+#import "AVIMMessage.h"
 
 @implementation AVIMKeyedConversation
 

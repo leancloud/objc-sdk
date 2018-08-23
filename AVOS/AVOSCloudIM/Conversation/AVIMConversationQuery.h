@@ -12,12 +12,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_OPTIONS(uint64_t, AVIMConversationQueryOption) {
-    AVIMConversationQueryOptionNone = 0,
-    AVIMConversationQueryOptionCompact = 1 << 0, /**< 不返回成员列表 */
-    AVIMConversationQueryOptionWithMessage = 1 << 1, /**< 返回对话最近一条消息 */
-};
-
 @interface AVIMConversationQuery : NSObject
 
 /*!
@@ -268,10 +262,12 @@ typedef NS_OPTIONS(uint64_t, AVIMConversationQueryOption) {
  */
 - (void)findConversationsWithCallback:(void (^)(NSArray<AVIMConversation *> * _Nullable conversations, NSError * _Nullable error))callback;
 
+
 /**
- Query array of `AVIMTemporaryConversation` info. if not set `limit`, or `limit` invalid, return 10 or less in default.
- @param tempConvIds Array of queried conversation's id.
- @param callback Result of callback.
+ Find temporary conversations from server.
+
+ @param tempConvIds ID array of temporary conversations.
+ @param callback Result callback.
  */
 - (void)findTemporaryConversationsWith:(NSArray<NSString *> *)tempConvIds
                               callback:(void (^)(NSArray<AVIMTemporaryConversation *> * _Nullable conversations, NSError * _Nullable error))callback;
