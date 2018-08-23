@@ -156,7 +156,7 @@ static BOOL LCSSLPinningEnabled = false;
     [[AVPaasClient sharedInstance] clearLastModifyCache];
 }
 
-+ (void)setServerURLString:(NSString *)URLString forServiceModule:(AVServiceModule)serviceModule
++ (void)setServerURLString:(NSString * _Nullable)URLString forServiceModule:(AVServiceModule)serviceModule
 {
     NSString *key = nil;
     switch (serviceModule) {

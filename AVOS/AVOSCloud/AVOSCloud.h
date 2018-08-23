@@ -159,7 +159,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param URLString     The URL string of service module.
  @param serviceModule The service module which you want to customize.
  */
-+ (void)setServerURLString:(NSString *)URLString forServiceModule:(AVServiceModule)serviceModule;
++ (void)setServerURLString:(NSString * _Nullable)URLString forServiceModule:(AVServiceModule)serviceModule;
 
 /**
  *  Get the timeout interval for network requests. Default is kAVDefaultNetworkTimeoutInterval (10 seconds)

@@ -179,6 +179,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
 
 - (void)cleanCacheWithKey:(RouterCacheKey)key error:(NSError * __autoreleasing *)error
 {
+    NSParameterAssert(key);
     NSString *filePath = [[LCRouter routerCacheDirectoryPath] stringByAppendingPathComponent:key];
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
         [[NSFileManager defaultManager] removeItemAtPath:filePath error:error];
@@ -274,6 +275,8 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
 
 - (NSString *)appRouterFallbackURLWithKey:(NSString *)key appID:(NSString *)appID
 {
+    NSParameterAssert(key);
+    NSParameterAssert(appID);
     /// fallback server URL
     NSString *appDomain = nil;
     if ([appID rangeOfString:@"-"].location == NSNotFound || [appID hasSuffix:AppIDSuffixCN]) {
@@ -298,6 +301,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
 
 - (NSString *)RTMRouterURLForAppID:(NSString *)appID
 {
+    NSParameterAssert(appID);
     return [self appURLForPath:[LCRouter RTMRouterPath] appID:appID];
 }
 
@@ -407,6 +411,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
 
 - (NSString *)batchPathForPath:(NSString *)path
 {
+    NSParameterAssert(path);
     return pathWithVersion(path);
 }
 
@@ -415,7 +420,11 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
 - (void)customAppServerURL:(NSString *)URLString key:(RouterKey)key
 {
     if (!key) { return; }
-    self->_customAppServerTable[key] = URLString;
+    if (URLString) {
+        self->_customAppServerTable[key] = URLString;
+    } else {
+        [self->_customAppServerTable removeObjectForKey:key];
+    }
     LCNetworkStatistics.sharedInstance.ignoreAlwaysCollectIfCustomedService = true;
 }
 
@@ -442,6 +451,9 @@ static BOOL shouldUpdateRouterData(NSDictionary *routerDataTuple)
 
 static RouterKey serverKeyForPath(NSString *path)
 {
+#if DEBUG
+    assert(path);
+#endif
     if ([path hasPrefix:@"call"] || [path hasPrefix:@"functions"]) {
         return RouterKeyAppEngineServer;
     } else if ([path hasPrefix:@"push"] || [path hasPrefix:@"installations"]) {
@@ -457,6 +469,10 @@ static RouterKey serverKeyForPath(NSString *path)
 
 static NSString * absoluteURLStringWithHostAndPath(NSString *host, NSString *path)
 {
+#if DEBUG
+    assert(host);
+    assert(path);
+#endif
     NSString *unifiedHost = ({
         NSString *unifiedHost = nil;
         /// For "example.com:8080", the scheme is "example.com". Here, we need a farther check.
