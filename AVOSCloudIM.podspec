@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AVOSCloudIM'
-  s.version  = '11.3.0'
+  s.version  = '11.4.0'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud IM Objective-C SDK'
   s.authors  = 'LeanCloud'
@@ -93,6 +93,7 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMApi.pbobjc.h',
       'AVOS/AVOSCloudIM/Conversation/AVIMConversationQuery_Internal.h',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMSourceContext.pbobjc.h',
+      'AVOS/AVOSCloudIM/AVIMCommon_Internal.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMDictionary_PackagePrivate.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMExtensionRegistry.h',
       'AVOS/AVOSCloudIM/Conversation/AVIMConversation_Internal.h',
@@ -109,6 +110,7 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/Utilities/AVIMErrorUtil.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMCodedInputStream_PackagePrivate.h',
       'AVOS/AVOSCloudIM/Commands/MessagesProtoOrig.pbobjc.h',
+      'AVOS/AVOSCloudIM/Client/AVIMClientPushManager.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMArray_PackagePrivate.h',
       'AVOS/AVOSCloudIM/AVOSCloudIM.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMBootstrap.h',
@@ -169,6 +171,7 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMWrappers.pbobjc.m',
       'AVOS/AVOSCloudIM/Protobuf/LCIMExtensionInternals.m',
       'AVOS/AVOSCloudIM/Protobuf/LCIMExtensionRegistry.m',
+      'AVOS/AVOSCloudIM/Client/AVIMClientPushManager.m',
       'AVOS/AVOSCloudIM/Vendor/SocketRocket/AVIMWebSocket.m',
       'AVOS/AVOSCloudIM/AVOSCloudIM.m',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMTimestamp.pbobjc.m',
