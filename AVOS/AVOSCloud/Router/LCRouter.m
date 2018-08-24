@@ -136,7 +136,7 @@ static NSString * LCRouterCacheDirectoryPath = nil;
 + (NSString *)routerCacheDirectoryPath
 {
     if (!LCRouterCacheDirectoryPath) {
-        LCRouterCacheDirectoryPath = [AVPersistenceUtils homeDirectoryLibraryApplicationSupportLeanCloudDataRouter];
+        LCRouterCacheDirectoryPath = [AVPersistenceUtils homeDirectoryLibraryCachesLeanCloudCachesRouter];
     }
     return LCRouterCacheDirectoryPath;
 }
