@@ -7,25 +7,23 @@
 //
 
 #import "AVIMCommon.h"
-#import "AVIMCommandCommon.h"
+#import "MessagesProtoOrig.pbobjc.h"
 
 @class AVIMWebSocketWrapper;
 @class LCIMProtobufCommandWrapper;
-
-#define AVIM_NOTIFICATION_WEBSOCKET_OPENED    @"AVIM_NOTIFICATION_WEBSOCKET_OPENED"
-#define AVIM_NOTIFICATION_WEBSOCKET_CLOSED    @"AVIM_NOTIFICATION_WEBSOCKET_CLOSED"
-#define AVIM_NOTIFICATION_WEBSOCKET_RECONNECT @"AVIM_NOTIFICATION_WEBSOCKET_RECONNECT"
-#define AVIM_NOTIFICATION_WEBSOCKET_COMMAND   @"AVIM_NOTIFICATION_WEBSOCKET_COMMAND"
 
 // MARK: - Delegate Protocol
 
 @protocol AVIMWebSocketWrapperDelegate <NSObject>
 
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didReceiveCallback:(LCIMProtobufCommandWrapper *)commandWrapper;
-
+- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didReceiveCommandCallback:(LCIMProtobufCommandWrapper *)commandWrapper;
 - (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didReceiveCommand:(LCIMProtobufCommandWrapper *)commandWrapper;
-
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didOccurError:(LCIMProtobufCommandWrapper *)commandWrapper;
+- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didCommandEncounterError:(LCIMProtobufCommandWrapper *)commandWrapper;
+@optional
+- (void)webSocketWrapperInReconnecting:(AVIMWebSocketWrapper *)socketWrapper;
+- (void)webSocketWrapperDidReopen:(AVIMWebSocketWrapper *)socketWrapper;
+- (void)webSocketWrapperDidPause:(AVIMWebSocketWrapper *)socketWrapper;
+- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didCloseWithError:(NSError *)error;
 
 @end
 
@@ -34,17 +32,9 @@
 @interface AVIMWebSocketWrapper : NSObject
 
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds;
-
-+ (instancetype)newWithDelegate:(id <AVIMWebSocketWrapperDelegate>)delegate;
-
-+ (instancetype)newByLiveQuery;
-
-- (void)openWithCallback:(AVIMBooleanResultBlock)callback;
-
+- (instancetype)initWithDelegate:(id<AVIMWebSocketWrapperDelegate>)delegate;
+- (void)openWithCallback:(void (^)(BOOL succeeded, NSError *error))callback;
 - (void)close;
-
-- (void)sendCommand:(AVIMGenericCommand *)genericCommand;
-
 - (void)sendCommandWrapper:(LCIMProtobufCommandWrapper *)commandWrapper;
 
 @end
@@ -54,15 +44,11 @@
 @interface LCIMProtobufCommandWrapper : NSObject
 
 @property (nonatomic, strong) AVIMGenericCommand *outCommand;
-
 @property (nonatomic, strong) AVIMGenericCommand *inCommand;
-
 @property (nonatomic, strong) NSError *error;
 
 - (void)setCallback:(void (^)(LCIMProtobufCommandWrapper *commandWrapper))callback;
-
 - (BOOL)hasCallback;
-
 - (void)executeCallbackAndSetItToNil;
 
 @end

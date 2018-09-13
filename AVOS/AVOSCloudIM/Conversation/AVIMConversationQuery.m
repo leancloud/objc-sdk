@@ -18,6 +18,8 @@
 #import "AVObjectUtils.h"
 #import "AVErrorUtils.h"
 
+#import "AVIMGenericCommand+AVIMMessagesAdditions.h"
+
 @implementation AVIMConversationQuery
 
 +(NSDictionary *)dictionaryFromGeoPoint:(AVGeoPoint *)point {

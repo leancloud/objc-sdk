@@ -15,6 +15,7 @@
 #import "AVIMConversationQuery_Internal.h"
 #import "AVIMTypedMessage_Internal.h"
 #import "AVIMSignature.h"
+#import "AVIMGenericCommand+AVIMMessagesAdditions.h"
 
 #import "LCIMConversationCache.h"
 #import "AVIMErrorUtil.h"
@@ -53,6 +54,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     NSTimeInterval _sessionTokenExpireTimestamp;
     int64_t _lastPatchTimestamp;
     int64_t _lastUnreadTimestamp;
+    BOOL _isInSessionOpenHandshaking;
 }
 
 static BOOL clientHasInstantiated = false;
@@ -170,6 +172,7 @@ static BOOL clientHasInstantiated = false;
     self->_sessionTokenExpireTimestamp = 0;
     self->_lastPatchTimestamp = 0;
     self->_lastUnreadTimestamp = 0;
+    self->_isInSessionOpenHandshaking = false;
     
     self->_messageQueryCacheEnabled = true;
     
@@ -197,23 +200,7 @@ static BOOL clientHasInstantiated = false;
     });
     self->_userInteractQueue = dispatch_get_main_queue();
     
-    self->_socketWrapper = ({
-        AVIMWebSocketWrapper *socketWrapper = [AVIMWebSocketWrapper newWithDelegate:self];
-        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-        [center addObserver:self
-                   selector:@selector(websocketOpened:)
-                       name:AVIM_NOTIFICATION_WEBSOCKET_OPENED
-                     object:socketWrapper];
-        [center addObserver:self
-                   selector:@selector(websocketClosed:)
-                       name:AVIM_NOTIFICATION_WEBSOCKET_CLOSED
-                     object:socketWrapper];
-        [center addObserver:self
-                   selector:@selector(websocketReconnect:)
-                       name:AVIM_NOTIFICATION_WEBSOCKET_RECONNECT
-                     object:socketWrapper];
-        socketWrapper;
-    });
+    self->_socketWrapper = [[AVIMWebSocketWrapper alloc] initWithDelegate:self];
     
     self->_conversationManager = [[AVIMClientInternalConversationManager alloc] initWithClient:self];
     
@@ -229,11 +216,8 @@ static BOOL clientHasInstantiated = false;
     });
 }
 
-// MARK: - Dealloc
-
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self->_socketWrapper close];
 }
 
@@ -396,6 +380,8 @@ static BOOL clientHasInstantiated = false;
                 
                 [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
                     
+                    client->_isInSessionOpenHandshaking = false;
+                    
                     if (commandWrapper.error) {
                         if (client->_status == AVIMClientStatusOpening) {
                             client->_status = AVIMClientStatusClosed;
@@ -434,27 +420,22 @@ static BOOL clientHasInstantiated = false;
                     }];
                 }];
                 
+                client->_isInSessionOpenHandshaking = true;
                 [client->_socketWrapper sendCommandWrapper:commandWrapper];
             }];
         }];
     }];
 }
 
-- (void)resumeWithCallback:(void (^)(BOOL succeeded, NSError *error))callback
+- (void)resumeWithSessionToken:(NSString *)sessionToken callback:(void (^)(BOOL succeeded, NSError *error))callback
 {
     AssertRunInQueue(self->_internalSerialQueue);
-    
-    NSString *imSessionToken = self->_sessionToken;
-    if (!imSessionToken) {
-        callback(false, LCErrorInternal(@"session not open or did close."));
-        return;
-    }
     if (self->_status == AVIMClientStatusOpened) {
         callback(true, nil);
         return;
     }
     
-    LCIMProtobufCommandWrapper * (^ newReopenCommand_block)(AVIMSignature *, NSString *) = ^(AVIMSignature *signature, NSString *sessionToken) {
+    LCIMProtobufCommandWrapper * (^ newReopenCommandBlock)(AVIMSignature *, NSString *) = ^(AVIMSignature *signature, NSString *sessionToken) {
         AVIMGenericCommand *outCommand = [AVIMGenericCommand new];
         AVIMSessionCommand *sessionCommand = [AVIMSessionCommand new];
         outCommand.cmd = AVIMCommandType_Session;
@@ -509,32 +490,33 @@ static BOOL clientHasInstantiated = false;
         callback(true, nil);
     };
     
-    LCIMProtobufCommandWrapper *commandWrapper1 = newReopenCommand_block(nil, imSessionToken);
+    LCIMProtobufCommandWrapper *commandWrapper1 = newReopenCommandBlock(nil, sessionToken);
     [commandWrapper1 setCallback:^(LCIMProtobufCommandWrapper *commandWrapper1) {
         if (commandWrapper1.error) {
-            if (commandWrapper1.error.code == AVIMErrorCodeSessionTokenExpired) {
+            NSError *error = commandWrapper1.error;
+            if (error.code == AVIMErrorCodeSessionTokenExpired && [error.domain isEqualToString:kLeanCloudErrorDomain]) {
                 [self getSessionOpenSignatureWithCallback:^(AVIMSignature *signature) {
                     AssertRunInQueue(self->_internalSerialQueue);
-                    if (signature && signature.error) {
+                    if (signature.error) {
                         callback(false, signature.error);
-                        return;
+                    } else {
+                        LCIMProtobufCommandWrapper *commandWrapper2 = newReopenCommandBlock(signature, nil);
+                        [commandWrapper2 setCallback:^(LCIMProtobufCommandWrapper *commandWrapper2) {
+                            if (commandWrapper2.error) {
+                                callback(false, commandWrapper2.error);
+                            } else {
+                                handleInCommandBlock(commandWrapper2);
+                            }
+                        }];
+                        [self->_socketWrapper sendCommandWrapper:commandWrapper2];
                     }
-                    LCIMProtobufCommandWrapper *commandWrapper2 = newReopenCommand_block(signature, nil);
-                    [commandWrapper2 setCallback:^(LCIMProtobufCommandWrapper *commandWrapper2) {
-                        if (commandWrapper2.error) {
-                            callback(false, commandWrapper2.error);
-                            return;
-                        }
-                        handleInCommandBlock(commandWrapper2);
-                    }];
-                    [self->_socketWrapper sendCommandWrapper:commandWrapper2];
                 }];
             } else {
                 callback(false, commandWrapper1.error);
             }
-            return;
+        } else {
+            handleInCommandBlock(commandWrapper1);
         }
-        handleInCommandBlock(commandWrapper1);
     }];
     [self->_socketWrapper sendCommandWrapper:commandWrapper1];
 }
@@ -690,87 +672,6 @@ static BOOL clientHasInstantiated = false;
     }];
 }
 
-// MARK: - WebSocket Notification
-
-- (void)websocketOpened:(NSNotification *)notification
-{
-    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-        
-        if (!client->_sessionToken) {
-            return;
-        }
-        
-        [client resumeWithCallback:^(BOOL succeeded, NSError *error) {
-            if (error) {
-                AVLoggerError(AVLoggerDomainIM, @"%@", error);
-            } else {
-                id <AVIMClientDelegate> delegate = client->_delegate;
-                if (delegate) {
-                    [client invokeInUserInteractQueue:^{
-                        [delegate imClientResumed:client];
-                    }];
-                }
-            }
-        }];
-    }];
-}
-
-- (void)websocketClosed:(NSNotification *)notification
-{
-    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-        
-        if (!client->_sessionToken) {
-            return;
-        }
-        
-        BOOL willReconnect = [notification.userInfo[@"willReconnect"] boolValue];
-        if (willReconnect) {
-            client->_status = AVIMClientStatusPaused;
-            id<AVIMClientDelegate> delegate = client->_delegate;
-            if (delegate) {
-                [client invokeInUserInteractQueue:^{
-                    [delegate imClientPaused:client];
-                }];
-            }
-        } else {
-            NSError *error = notification.userInfo[@"error"];
-            client->_status = AVIMClientStatusClosed;
-            [client clearSessionTokenAndTTL];
-            id<AVIMClientDelegate> delegate = client->_delegate;
-            if (delegate) {
-                [client invokeInUserInteractQueue:^{
-                    [delegate imClientClosed:client error:error];
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-                    SEL sel = @selector(imClientPaused:error:);
-                    if ([delegate respondsToSelector:sel]) {
-                        [delegate imClientPaused:client error:error];
-                    }
-#pragma clang diagnostic pop
-                }];
-            }
-        }
-    }];
-}
-
-- (void)websocketReconnect:(NSNotification *)notification
-{
-    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-        
-        if (!client->_sessionToken) {
-            return;
-        }
-        
-        client->_status = AVIMClientStatusResuming;
-        id <AVIMClientDelegate> delegate = client->_delegate;
-        if (delegate) {
-            [client invokeInUserInteractQueue:^{
-                [delegate imClientResuming:client];
-            }];
-        }
-    }];
-}
-
 // MARK: - Signature
 
 - (void)getSessionOpenSignatureWithCallback:(void (^)(AVIMSignature *signature))callback
@@ -861,29 +762,6 @@ static BOOL clientHasInstantiated = false;
 
 // MARK: - Command Send
 
-- (void)sendCommand:(AVIMGenericCommand *)command
-{
-    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-        [client _sendCommand:command];
-    }];
-}
-
-- (void)_sendCommand:(AVIMGenericCommand *)command
-{
-    AssertRunInQueue(self->_internalSerialQueue);
-    if (self->_status != AVIMClientStatusOpened) {
-        void (^ callback)(AVIMGenericCommand *, AVIMGenericCommand *, NSError *) = command.callback;
-        if (callback) {
-            callback(command, nil, ({
-                AVIMErrorCode code = AVIMErrorCodeClientNotOpen;
-                LCError(code, AVIMErrorMessage(code), nil);
-            }));
-        }
-        return;
-    }
-    [self->_socketWrapper sendCommand:command];
-}
-
 - (void)sendCommandWrapper:(LCIMProtobufCommandWrapper *)commandWrapper
 {
     [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
@@ -903,16 +781,7 @@ static BOOL clientHasInstantiated = false;
 
 // MARK: - WebSocket Delegate
 
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didOccurError:(LCIMProtobufCommandWrapper *)commandWrapper
-{
-    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-        if (commandWrapper.hasCallback && commandWrapper.error) {
-            [commandWrapper executeCallbackAndSetItToNil];
-        }
-    }];
-}
-
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didReceiveCallback:(LCIMProtobufCommandWrapper *)commandWrapper
+- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didReceiveCommandCallback:(LCIMProtobufCommandWrapper *)commandWrapper
 {
     [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
         
@@ -937,9 +806,7 @@ static BOOL clientHasInstantiated = false;
 
 - (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didReceiveCommand:(LCIMProtobufCommandWrapper *)commandWrapper
 {
-    if (!commandWrapper.inCommand) {
-        return;
-    }
+    if (!commandWrapper.inCommand) { return; }
     [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
         AVIMGenericCommand *inCommand = commandWrapper.inCommand;
         AVIMCommandType commandType = (inCommand.hasCmd ? inCommand.cmd : -1);
@@ -1045,6 +912,76 @@ static BOOL clientHasInstantiated = false;
             } break;
             default: break;
         }
+    }];
+}
+
+- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didCommandEncounterError:(LCIMProtobufCommandWrapper *)commandWrapper
+{
+    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+        if (commandWrapper.hasCallback && commandWrapper.error) {
+            [commandWrapper executeCallbackAndSetItToNil];
+        }
+    }];
+}
+
+- (void)webSocketWrapperDidReopen:(AVIMWebSocketWrapper *)socketWrapper
+{
+    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+        NSString *sessionToken = client->_sessionToken;
+        if (!sessionToken) { return; }
+        if (client->_isInSessionOpenHandshaking) { return; }
+        [client resumeWithSessionToken:sessionToken callback:^(BOOL succeeded, NSError *error) {
+            id<AVIMClientDelegate> delegate = client->_delegate;
+            [client invokeInUserInteractQueue:^{
+                if (error) {
+                    AVLoggerError(AVLoggerDomainIM, @"session resuming failed with error: %@", error);
+                    [delegate imClientPaused:client];
+                } else {
+                    [delegate imClientResumed:client];
+                }
+            }];
+        }];
+    }];
+}
+
+- (void)webSocketWrapperInReconnecting:(AVIMWebSocketWrapper *)socketWrapper
+{
+    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+        if (!client->_sessionToken) { return; }
+        client->_status = AVIMClientStatusResuming;
+        [client invokeInUserInteractQueue:^{
+            [client->_delegate imClientResuming:client];
+        }];
+    }];
+}
+
+- (void)webSocketWrapperDidPause:(AVIMWebSocketWrapper *)socketWrapper
+{
+    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+        if (!client->_sessionToken) { return; }
+        client->_status = AVIMClientStatusPaused;
+        [client invokeInUserInteractQueue:^{
+            [client->_delegate imClientPaused:client];
+        }];
+    }];
+}
+
+- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didCloseWithError:(NSError *)error
+{
+    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+        if (!client->_sessionToken) { return; }
+        client->_status = AVIMClientStatusClosed;
+        [client clearSessionTokenAndTTL];
+        id<AVIMClientDelegate> delegate = client->_delegate;
+        [client invokeInUserInteractQueue:^{
+            [delegate imClientClosed:client error:error];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+            if ([delegate respondsToSelector:@selector(imClientPaused:error:)]) {
+                [delegate imClientPaused:client error:error];
+            }
+#pragma clang diagnostic pop
+        }];
     }];
 }
 

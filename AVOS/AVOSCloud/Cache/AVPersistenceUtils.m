@@ -40,24 +40,6 @@
     return [[self homeDirectory] stringByAppendingPathComponent:@"Library"];
 }
 
-// MARK: - ~/Library/Application Support
-+ (NSString *)homeDirectoryLibraryApplicationSupport
-{
-    return [[self homeDirectoryLibrary] stringByAppendingPathComponent:@"Application Support"];
-}
-
-// MARK: - ~/Library/Application Support/com.leancloud.data
-+ (NSString *)homeDirectoryLibraryApplicationSupportLeanCloudData
-{
-    return [[self homeDirectoryLibraryApplicationSupport] stringByAppendingPathComponent:@"com.leancloud.data"];
-}
-
-// MARK: - ~/Library/Application Support/com.leancloud.data/Router
-+ (NSString *)homeDirectoryLibraryApplicationSupportLeanCloudDataRouter
-{
-    return [[self homeDirectoryLibraryApplicationSupportLeanCloudData] stringByAppendingPathComponent:@"Router"];
-}
-
 // MARK: - ~/Library/Caches
 + (NSString *)homeDirectoryLibraryCaches
 {
@@ -74,6 +56,12 @@
 + (NSString *)homeDirectoryLibraryCachesLeanCloudCachesFiles
 {
     return [[self homeDirectoryLibraryCachesLeanCloudCaches] stringByAppendingPathComponent:@"Files"];
+}
+
+// MARK: - ~/Library/Caches/com.leancloud.caches/Router
++ (NSString *)homeDirectoryLibraryCachesLeanCloudCachesRouter
+{
+    return [[self homeDirectoryLibraryCachesLeanCloudCaches] stringByAppendingPathComponent:@"Router"];
 }
 
 #pragma mark - ~/Documents
