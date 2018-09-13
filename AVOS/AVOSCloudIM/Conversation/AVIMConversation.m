@@ -28,6 +28,8 @@
 #import "AVUtils.h"
 #import "AVErrorUtils.h"
 
+#import "AVIMGenericCommand+AVIMMessagesAdditions.h"
+
 @implementation AVIMMessageIntervalBound
 
 - (instancetype)initWithMessageId:(NSString *)messageId
@@ -1819,108 +1821,88 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         genericCommand.cmd = AVIMCommandType_Ack;
         genericCommand.ackMessage = ackCommand;
         
-        dispatch_async(client.internalSerialQueue, ^{
-            
-            [client sendCommand:genericCommand];
-        });
+        LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+        commandWrapper.outCommand = genericCommand;
+        [client sendCommandWrapper:commandWrapper];
     }
 }
 
 - (void)queryMessagesFromServerWithCommand:(AVIMGenericCommand *)genericCommand
-                                  callback:(AVIMArrayResultBlock)callback
+                                  callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback
 {
     AVIMClient *client = self->_imClient;
-    
     if (!client) {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            NSError *aError = ({
-                NSString *reason = @"`imClient` is invalid.";
-                LCErrorInternal(reason);
-            });
-            
-            callback(nil, aError);
-        });
-        
+        [self invokeInUserInteractQueue:^{
+            callback(nil, LCErrorInternal(@"client invalid."));
+        }];
         return;
     }
     
-    AVIMLogsCommand *logsOutCommand = genericCommand.logsMessage;
-    dispatch_async(client.internalSerialQueue, ^{
-        [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error) {
-            
-            [client addOperationToInternalSerialQueue:^(AVIMClient *client) {
-                
-                if (!error) {
-                    AVIMLogsCommand *logsInCommand = inCommand.logsMessage;
-                    AVIMLogsCommand *logsOutCommand = outCommand.logsMessage;
-                    NSArray *logs = [logsInCommand.logsArray copy];
-                    NSMutableArray *messages = [[NSMutableArray alloc] init];
-                    for (AVIMLogItem *logsItem in logs) {
-                        AVIMMessage *message = nil;
-                        id data = [logsItem data_p];
-                        if (![data isKindOfClass:[NSString class]]) {
-                            AVLoggerError(AVLoggerDomainIM, @"Received an invalid message.");
-                            continue;
-                        }
-                        AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:data];
-                        if ([messageObject isValidTypedMessageObject]) {
-                            AVIMTypedMessage *m = [AVIMTypedMessage messageWithMessageObject:messageObject];
-                            message = m;
-                        } else {
-                            AVIMMessage *m = [[AVIMMessage alloc] init];
-                            m.content = data;
-                            message = m;
-                        }
-                        message.conversationId = logsOutCommand.cid;
-                        message.sendTimestamp = [logsItem timestamp];
-                        message.clientId = [logsItem from];
-                        message.messageId = [logsItem msgId];
-                        message.mentionAll = logsItem.mentionAll;
-                        message.mentionList = [logsItem.mentionPidsArray copy];
-                        
-                        if (logsItem.hasPatchTimestamp)
-                            message.updatedAt = [NSDate dateWithTimeIntervalSince1970:(logsItem.patchTimestamp / 1000.0)];
-                        
-                        [messages addObject:message];
-                    }
-                    
-                    if (messages.firstObject) {
-                        [self updateLastMessage:messages.firstObject client:client];
-                    }
-                    
-                    [self postprocessMessages:messages];
-                    [self sendACKIfNeeded:messages];
-                    
-                    [AVIMBlockHelper callArrayResultBlock:callback array:messages error:nil];
-                } else {
-                    [AVIMBlockHelper callArrayResultBlock:callback array:nil error:error];
-                }
+    LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+    commandWrapper.outCommand = genericCommand;
+    [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+        if (commandWrapper.error) {
+            [self invokeInUserInteractQueue:^{
+                callback(nil, commandWrapper.error);
             }];
+            return;
+        }
+        AVIMLogsCommand *logsInCommand = commandWrapper.inCommand.logsMessage;
+        AVIMLogsCommand *logsOutCommand = commandWrapper.outCommand.logsMessage;
+        NSArray *logs = [logsInCommand.logsArray copy];
+        NSMutableArray *messages = [[NSMutableArray alloc] init];
+        for (AVIMLogItem *logsItem in logs) {
+            AVIMMessage *message = nil;
+            id data = [logsItem data_p];
+            if (![data isKindOfClass:[NSString class]]) {
+                AVLoggerError(AVLoggerDomainIM, @"Received an invalid message.");
+                continue;
+            }
+            AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:data];
+            if ([messageObject isValidTypedMessageObject]) {
+                AVIMTypedMessage *m = [AVIMTypedMessage messageWithMessageObject:messageObject];
+                message = m;
+            } else {
+                AVIMMessage *m = [[AVIMMessage alloc] init];
+                m.content = data;
+                message = m;
+            }
+            message.conversationId = logsOutCommand.cid;
+            message.sendTimestamp = [logsItem timestamp];
+            message.clientId = [logsItem from];
+            message.messageId = [logsItem msgId];
+            message.mentionAll = logsItem.mentionAll;
+            message.mentionList = [logsItem.mentionPidsArray copy];
+            if (logsItem.hasPatchTimestamp) {
+                message.updatedAt = [NSDate dateWithTimeIntervalSince1970:(logsItem.patchTimestamp / 1000.0)];
+            }
+            [messages addObject:message];
+        }
+        if (messages.firstObject) {
+            [self updateLastMessage:messages.firstObject client:client];
+        }
+        [self postprocessMessages:messages];
+        [self sendACKIfNeeded:messages];
+        [self invokeInUserInteractQueue:^{
+            callback(messages, nil);
         }];
-        [genericCommand avim_addRequiredKeyWithCommand:logsOutCommand];
-        [client sendCommand:genericCommand];
-    });
+    }];
+    [client sendCommandWrapper:commandWrapper];
 }
 
 - (void)queryMessagesFromServerBeforeId:(NSString *)messageId
                               timestamp:(int64_t)timestamp
                                   limit:(NSUInteger)limit
-                               callback:(AVIMArrayResultBlock)callback
+                               callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback
 {
     AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
-    genericCommand.needResponse = YES;
-    genericCommand.cmd = AVIMCommandType_Logs;
-    genericCommand.peerId = self->_imClient.clientId;
-    
     AVIMLogsCommand *logsCommand = [[AVIMLogsCommand alloc] init];
+    genericCommand.cmd = AVIMCommandType_Logs;
+    genericCommand.logsMessage = logsCommand;
     logsCommand.cid    = _conversationId;
     logsCommand.mid    = messageId;
     logsCommand.t      = [self.class validTimestamp:timestamp];
     logsCommand.l      = (int32_t)[self.class validLimit:limit];
-    
-    [genericCommand avim_addRequiredKeyWithCommand:logsCommand];
     [self queryMessagesFromServerWithCommand:genericCommand callback:callback];
 }
 
@@ -1929,25 +1911,23 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                             toMessageId:(NSString *)toMessageId
                             toTimestamp:(int64_t)toTimestamp
                                   limit:(NSUInteger)limit
-                               callback:(AVIMArrayResultBlock)callback
+                               callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback
 {
     AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
     AVIMLogsCommand *logsCommand = [[AVIMLogsCommand alloc] init];
-    genericCommand.needResponse = YES;
     genericCommand.cmd = AVIMCommandType_Logs;
-    genericCommand.peerId = self->_imClient.clientId;
+    genericCommand.logsMessage = logsCommand;
     logsCommand.cid    = _conversationId;
     logsCommand.mid    = messageId;
     logsCommand.tmid   = toMessageId;
     logsCommand.tt     = MAX(toTimestamp, 0);
     logsCommand.t      = MAX(timestamp, 0);
     logsCommand.l      = (int32_t)[self.class validLimit:limit];
-    [genericCommand avim_addRequiredKeyWithCommand:logsCommand];
     [self queryMessagesFromServerWithCommand:genericCommand callback:callback];
 }
 
 - (void)queryMessagesFromServerWithLimit:(NSUInteger)limit
-                                callback:(void (^)(NSArray<AVIMMessage *> *, NSError *))callback
+                                callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback
 {
     limit = [self.class validLimit:limit];
     
@@ -1998,7 +1978,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 }
 
 - (void)queryMessagesWithLimit:(NSUInteger)limit
-                      callback:(void (^)(NSArray<AVIMMessage *> *, NSError *))callback
+                      callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback
 {
     limit = [self.class validLimit:limit];
     
@@ -2089,7 +2069,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 - (void)queryMessagesBeforeId:(NSString *)messageId
                     timestamp:(int64_t)timestamp
                         limit:(NSUInteger)limit
-                     callback:(void (^)(NSArray<AVIMMessage *> *, NSError *))callback
+                     callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback
 {
     if (messageId == nil) {
         
@@ -2280,7 +2260,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 - (void)queryMessagesInInterval:(AVIMMessageInterval *)interval
                       direction:(AVIMMessageQueryDirection)direction
                           limit:(NSUInteger)limit
-                       callback:(void (^)(NSArray<AVIMMessage *> *, NSError *))callback
+                       callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback
 {
     AVIMLogsCommand *logsCommand = [[AVIMLogsCommand alloc] init];
 
@@ -2309,9 +2289,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         logsCommand.tt = tt;
 
     AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
-    genericCommand.needResponse = YES;
     genericCommand.cmd = AVIMCommandType_Logs;
-    genericCommand.peerId = self->_imClient.clientId;
     genericCommand.logsMessage = logsCommand;
 
     [self queryMessagesFromServerWithCommand:genericCommand callback:callback];
@@ -2328,145 +2306,81 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                                        limit:(NSUInteger)limit
                                fromMessageId:(NSString *)messageId
                                fromTimestamp:(int64_t)timestamp
-                                    callback:(void (^)(NSArray<AVIMMessage *> *, NSError *))callback
+                                    callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback
 {
     AVIMClient *client = self->_imClient;
-    
     NSString *convId = self.conversationId;
-    
     NSString *errReason = nil;
-    
     if (!convId) {
-        
         errReason = @"`conversationId` is invalid.";
-        
     } else if (!client) {
-        
         errReason = @"`imClient` is invalid.";;
     }
-    
     if (errReason) {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
+        [self invokeInUserInteractQueue:^{
             callback(nil, LCErrorInternal(errReason));
-        });
-        
+        }];
         return;
     }
     
     AVIMLogsCommand *logsCommand = [[AVIMLogsCommand alloc] init];
-    
     logsCommand.cid = convId;
-    
     logsCommand.lctype = type;
-    
     logsCommand.l = (int32_t)[self.class validLimit:limit];
-    
-    if (messageId) {
-        
-        logsCommand.mid = messageId;
-    }
-    
+    if (messageId) { logsCommand.mid = messageId; }
     logsCommand.t = [self.class validTimestamp:timestamp];
-    
     AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
-    
     genericCommand.cmd = AVIMCommandType_Logs;
     genericCommand.logsMessage = logsCommand;
     
-    [genericCommand setNeedResponse:true];
-    
-    __weak typeof(self) weakSelf = self;
-    
-    [genericCommand setCallback:^(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error){
-        
-        dispatch_async(client.internalSerialQueue, ^{
-            
-            AVIMConversation *strongSelf = weakSelf;
-            
-            if (!strongSelf) { return; }
-            
-            if (error) {
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                    callback(nil, error);
-                });
-                
-                return;
+    LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+    commandWrapper.outCommand = genericCommand;
+    [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+        if (commandWrapper.error) {
+            [self invokeInUserInteractQueue:^{
+                callback(nil, commandWrapper.error);
+            }];
+            return;
+        }
+        AVIMLogsCommand *logsInCommand = commandWrapper.inCommand.logsMessage;
+        AVIMLogsCommand *logsOutCommand = commandWrapper.outCommand.logsMessage;
+        NSMutableArray *messageArray = [[NSMutableArray alloc] init];
+        NSEnumerator *reverseLogsArray = logsInCommand.logsArray.reverseObjectEnumerator;
+        for (AVIMLogItem *logsItem in reverseLogsArray) {
+            AVIMMessage *message = nil;
+            id data = [logsItem data_p];
+            if (![data isKindOfClass:[NSString class]]) {
+                AVLoggerError(AVLoggerDomainIM, @"Received an invalid message.");
+                continue;
             }
-           
-            AVIMLogsCommand *logsInCommand = inCommand.logsMessage;
-            AVIMLogsCommand *logsOutCommand = outCommand.logsMessage;
-            
-            NSMutableArray *messageArray = [[NSMutableArray alloc] init];
-            
-            NSEnumerator *reverseLogsArray = logsInCommand.logsArray.reverseObjectEnumerator;
-            
-            for (AVIMLogItem *logsItem in reverseLogsArray) {
-                
-                AVIMMessage *message = nil;
-                
-                id data = [logsItem data_p];
-                
-                if (![data isKindOfClass:[NSString class]]) {
-                    
-                    AVLoggerError(AVLoggerDomainIM, @"Received an invalid message.");
-                    
-                    continue;
-                }
-                
-                AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:data];
-                
-                if ([messageObject isValidTypedMessageObject]) {
-                    
-                    AVIMTypedMessage *m = [AVIMTypedMessage messageWithMessageObject:messageObject];
-                    
-                    message = m;
-                    
-                } else {
-                    
-                    AVIMMessage *m = [[AVIMMessage alloc] init];
-                    
-                    m.content = data;
-                    
-                    message = m;
-                }
-                
-                message.clientId = logsItem.from;
-                message.conversationId = logsOutCommand.cid;
-                
-                message.messageId = logsItem.msgId;
-                message.sendTimestamp = logsItem.timestamp;
-                
-                message.mentionAll = logsItem.mentionAll;
-                message.mentionList = logsItem.mentionPidsArray;
-                
-                if (logsItem.hasPatchTimestamp) {
-                    
-                    message.updatedAt = [NSDate dateWithTimeIntervalSince1970:(logsItem.patchTimestamp / 1000.0)];
-                }
-                
-                message.status = AVIMMessageStatusSent;
-                message.localClientId = client.clientId;
-                
-                [messageArray addObject:message];
+            AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:data];
+            if ([messageObject isValidTypedMessageObject]) {
+                AVIMTypedMessage *m = [AVIMTypedMessage messageWithMessageObject:messageObject];
+                message = m;
+            } else {
+                AVIMMessage *m = [[AVIMMessage alloc] init];
+                m.content = data;
+                message = m;
             }
-            
-            [strongSelf sendACKIfNeeded:messageArray];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                callback(messageArray, nil);
-            });
-        });
+            message.clientId = logsItem.from;
+            message.conversationId = logsOutCommand.cid;
+            message.messageId = logsItem.msgId;
+            message.sendTimestamp = logsItem.timestamp;
+            message.mentionAll = logsItem.mentionAll;
+            message.mentionList = logsItem.mentionPidsArray;
+            if (logsItem.hasPatchTimestamp) {
+                message.updatedAt = [NSDate dateWithTimeIntervalSince1970:(logsItem.patchTimestamp / 1000.0)];
+            }
+            message.status = AVIMMessageStatusSent;
+            message.localClientId = client.clientId;
+            [messageArray addObject:message];
+        }
+        [self sendACKIfNeeded:messageArray];
+        [self invokeInUserInteractQueue:^{
+            callback(messageArray, nil);
+        }];
     }];
-    
-    dispatch_async(client.internalSerialQueue, ^{
-        
-        [client sendCommand:genericCommand];
-    });
+    [client sendCommandWrapper:commandWrapper];
 }
 
 // MARK: - Member Info
@@ -3287,28 +3201,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 - (void)markAsReadInBackground
 {
-    AVIMClient *client = self->_imClient;
-    
-    if (!client) {
-        
-        return;
-    }
-    
-    __weak typeof(self) ws = self;
-    
-    dispatch_async(client.internalSerialQueue, ^{
-        [ws.imClient sendCommand:({
-            AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
-            genericCommand.needResponse = YES;
-            genericCommand.cmd = AVIMCommandType_Read;
-            genericCommand.peerId = ws.imClient.clientId;
-            
-            AVIMReadCommand *readCommand = [[AVIMReadCommand alloc] init];
-            readCommand.cid = ws.conversationId;
-            [genericCommand avim_addRequiredKeyWithCommand:readCommand];
-            genericCommand;
-        })];
-    });
+    [self readInBackground];
 }
 
 @end

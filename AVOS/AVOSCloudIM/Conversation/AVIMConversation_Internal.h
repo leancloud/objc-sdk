@@ -29,6 +29,20 @@
 - (void)process_conv_updated_attr:(NSDictionary *)attr attrModified:(NSDictionary *)attrModified;
 - (void)process_member_info_changed:(NSString *)memberId role:(NSString *)role;
 
+- (void)queryMessagesFromServerBeforeId:(NSString *)messageId
+                              timestamp:(int64_t)timestamp
+                                  limit:(NSUInteger)limit
+                               callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback;
+
+- (void)queryMessagesFromServerBeforeId:(NSString *)messageId
+                              timestamp:(int64_t)timestamp
+                            toMessageId:(NSString *)toMessageId
+                            toTimestamp:(int64_t)toTimestamp
+                                  limit:(NSUInteger)limit
+                               callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback;
+
+
+
 @end
 
 @interface AVIMChatRoom ()
