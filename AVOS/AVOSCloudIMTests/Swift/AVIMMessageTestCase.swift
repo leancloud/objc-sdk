@@ -1594,6 +1594,73 @@ class AVIMMessageTestCase: LCIMTestBase {
         }
     }
     
+    // MARK: - Message Query
+    
+    func testc_msg_query() {
+        if self.isServerTesting {
+            return
+        }
+        let clientId1: String = String(#function[..<#function.index(of: "(")!]) + "1"
+        let clientId2: String = String(#function[..<#function.index(of: "(")!]) + "2"
+        
+        guard let client1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1) else {
+            XCTFail()
+            return
+        }
+        
+        guard let conversation: AVIMConversation = LCIMTestBase.newConversation(client: client1, clientIds: [clientId1, clientId2]) else {
+            XCTFail()
+            return
+        }
+        
+        var sentMessages: [AVIMMessage] = []
+        for _ in 0..<10 {
+            RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
+                let message: AVIMMessage = AVIMMessage.init(content: "test")
+                semaphore.increment()
+                conversation.send(message, callback: { (succeeded: Bool, error: Error?) in
+                    XCTAssertTrue(Thread.isMainThread)
+                    semaphore.decrement()
+                    XCTAssertTrue({ if succeeded { sentMessages.append(message) }; return succeeded }())
+                    XCTAssertNil(error)
+                })
+            }, failure: { XCTFail("timeout") })
+        }
+        
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
+            semaphore.increment()
+            conversation.queryMessagesFromServer(beforeId: sentMessages.last?.messageId, timestamp: sentMessages.last?.sendTimestamp ?? 0, limit: 10, callback: { (messages: [AVIMMessage]?, error: Error?) in
+                XCTAssertTrue(Thread.isMainThread)
+                semaphore.decrement()
+                XCTAssertEqual(messages?.count, sentMessages.count - 1)
+                XCTAssertNil(error)
+            })
+        }, failure: { XCTFail("timeout") })
+        
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
+            semaphore.increment()
+            conversation.queryMessagesFromServer(beforeId: sentMessages.last?.messageId, timestamp: sentMessages.last?.sendTimestamp ?? 0, toMessageId: sentMessages.first?.messageId, toTimestamp: sentMessages.first?.sendTimestamp ?? 0, limit: 10, callback: { (messages: [AVIMMessage]?, error: Error?) in
+                XCTAssertTrue(Thread.isMainThread)
+                semaphore.decrement()
+                XCTAssertEqual(messages?.count, sentMessages.count - 2)
+                XCTAssertNil(error)
+            })
+        }, failure: { XCTFail("timeout") })
+        
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
+            semaphore.increment()
+            let startBound: AVIMMessageIntervalBound = AVIMMessageIntervalBound(messageId: sentMessages.last?.messageId, timestamp: sentMessages.last?.sendTimestamp ?? 0, closed: true)
+            let endBound: AVIMMessageIntervalBound = AVIMMessageIntervalBound(messageId: sentMessages.first?.messageId, timestamp: sentMessages.first?.sendTimestamp ?? 0, closed: true)
+            let interval: AVIMMessageInterval = AVIMMessageInterval(start: startBound, end: endBound)
+            conversation.queryMessages(in: interval, direction: .fromNewToOld, limit: 10, callback: { (message: [AVIMMessage]?, error: Error?) in
+                XCTAssertTrue(Thread.isMainThread)
+                semaphore.decrement()
+                XCTAssertEqual(message?.count, sentMessages.count)
+                XCTAssertNil(error)
+            })
+        }, failure: { XCTFail("timeout") })
+    }
+    
 }
 
 class AVIMCustomTypedMessage: AVIMTypedMessage, AVIMTypedMessageSubclassing {

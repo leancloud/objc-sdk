@@ -8,28 +8,99 @@
 
 import XCTest
 
-class LCLiveQueryTestBase: LCIMTestBase {
+class LCLiveQueryTestBase: LCTestBase {
+    
+    override class func setUp() {
+        super.setUp()
+        if let RTMServerURL: String = LCTestEnvironment.sharedInstance().url_RTMServer {
+            AVOSCloudIM.defaultOptions().rtmServer = RTMServerURL
+        }
+    }
     
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    override class func tearDown() {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    override func tearDown() {
+        super.tearDown()
     }
     
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func testc_live_query() {
+        
+        if self.isServerTesting {
+            return
         }
+        
+        let query: AVQuery = AVQuery(className: "Todo")
+        query.whereKeyExists("objectId")
+        
+        let liveQuery: AVLiveQuery = AVLiveQuery(query: query)
+        let liveQueryDelegate: AVLiveQueryDelegateWrapper = AVLiveQueryDelegateWrapper()
+        liveQuery.delegate = liveQueryDelegate
+        
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
+            semaphore.increment()
+            liveQuery.subscribe(callback: { (succeeded: Bool, error: Error?) in
+                XCTAssertTrue(Thread.isMainThread)
+                semaphore.decrement()
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+            })
+        }, failure: { XCTFail("timeout") })
+        
+        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
+            let todo: AVObject = AVObject(className: "Todo")
+            semaphore.increment(2)
+            liveQueryDelegate.objectDidCreateClosure = { (liveQuery: AVLiveQuery, object: Any) in
+                XCTAssertTrue(Thread.isMainThread)
+                semaphore.decrement()
+                XCTAssertEqual(todo.objectId, (object as? AVObject)?.objectId)
+            }
+            todo.saveInBackground({ (succeeded: Bool, error: Error?) in
+                XCTAssertTrue(Thread.isMainThread)
+                semaphore.decrement()
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+            })
+        }, failure: { XCTFail("timeout") })
+    }
+    
+}
+
+class AVLiveQueryDelegateWrapper: NSObject, AVLiveQueryDelegate {
+    
+    var userDidLoginClosure: ((AVLiveQuery, AVUser) -> Void)?
+    func liveQuery(_ liveQuery: AVLiveQuery, userDidLogin user: AVUser) {
+        self.userDidLoginClosure?(liveQuery, user)
+    }
+    
+    var objectDidCreateClosure: ((AVLiveQuery, Any) -> Void)?
+    func liveQuery(_ liveQuery: AVLiveQuery, objectDidCreate object: Any) {
+        self.objectDidCreateClosure?(liveQuery, object)
+    }
+    
+    var objectDidDeleteClosure: ((AVLiveQuery, Any) -> Void)?
+    func liveQuery(_ liveQuery: AVLiveQuery, objectDidDelete object: Any) {
+        self.objectDidDeleteClosure?(liveQuery, object)
+    }
+    
+    var objectDidEnterWithUpdatedKeysClosure: ((AVLiveQuery, Any, [String]) -> Void)?
+    func liveQuery(_ liveQuery: AVLiveQuery, objectDidEnter object: Any, updatedKeys: [String]) {
+        self.objectDidEnterWithUpdatedKeysClosure?(liveQuery, object, updatedKeys)
+    }
+    
+    var objectDidLeaveWithUpdatedKeysClosure: ((AVLiveQuery, Any, [String]) -> Void)?
+    func liveQuery(_ liveQuery: AVLiveQuery, objectDidLeave object: Any, updatedKeys: [String]) {
+        self.objectDidLeaveWithUpdatedKeysClosure?(liveQuery, object, updatedKeys)
+    }
+    
+    var objectDidUpdateWithUpdatedKeysClosure: ((AVLiveQuery, Any, [String]) -> Void)?
+    func liveQuery(_ liveQuery: AVLiveQuery, objectDidUpdate object: Any, updatedKeys: [String]) {
+        self.objectDidUpdateWithUpdatedKeysClosure?(liveQuery, object, updatedKeys)
     }
     
 }
