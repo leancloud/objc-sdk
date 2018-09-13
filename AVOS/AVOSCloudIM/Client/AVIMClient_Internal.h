@@ -13,6 +13,7 @@
 @class LCIMConversationCache;
 @class AVIMClientInternalConversationManager;
 @class AVIMClientPushManager;
+@class AVIMSignature;
 
 #if DEBUG
 void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
@@ -46,7 +47,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 - (void)addOperationToInternalSerialQueue:(void (^)(AVIMClient *client))block;
 
 - (void)sendCommandWrapper:(LCIMProtobufCommandWrapper *)commandWrapper;
-- (void)sendCommand:(AVIMGenericCommand *)command;
 
 - (void)getSignatureWithConversationId:(NSString *)conversationId
                                 action:(AVIMSignatureAction)action

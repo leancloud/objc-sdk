@@ -13,6 +13,7 @@
 #import "AVErrorUtils.h"
 #import "AVUtils.h"
 #import "LCIMConversationCache.h"
+#import "AVIMGenericCommand+AVIMMessagesAdditions.h"
 
 static NSUInteger batchQueryLimit = 20;
 
