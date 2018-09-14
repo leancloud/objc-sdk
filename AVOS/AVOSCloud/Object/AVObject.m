@@ -44,11 +44,6 @@ static BOOL convertingNullToNil = YES;
 + (NSArray *)invalidKeys;
 + (NSString *)parseClassName;
 
-/**
- * Operation queue for requests of object's CRUD.
- */
-@property (nonatomic, readonly, strong) NSRecursiveLock *requestLock;
-
 - (void)iteratePropertiesWithBlock:(void(^)(id object))block withAccessed:(NSMutableSet *)accessed;
 - (void)iterateDescendantObjectsWithBlock:(void(^)(id object))block;
 
@@ -94,15 +89,14 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 #pragma clang diagnostic pop
 
 @implementation AVObject {
-    
     NSLock *_lock;
+    NSRecursiveLock *_requestLock;
 }
 
 @synthesize uuid = _uuid;
 @synthesize isPointer = _isPointer;
 @synthesize operationQueue = _operationQueue;
 @synthesize running = _running;
-@synthesize requestLock = _requestLock;
 
 // MARK: - Internal Sync Lock
 
@@ -142,19 +136,6 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         _uuid = [AVUtils generateCompactUUID];
     }
     return _uuid;
-}
-
-- (NSRecursiveLock *)requestLock {
-    if (_requestLock)
-        return _requestLock;
-
-    @synchronized(self) {
-        if (!_requestLock) {
-            _requestLock = [[NSRecursiveLock alloc] init];
-        }
-    }
-
-    return _requestLock;
 }
 
 #pragma mark - API
@@ -221,7 +202,8 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     self = [super init];
     if (self)
     {
-        _lock = [[NSLock alloc] init];
+        self->_lock = [[NSLock alloc] init];
+        self->_requestLock = [[NSRecursiveLock alloc] init];
         _className = [[self class] parseClassName];
         _localData = [[NSMutableDictionary alloc] init];
         _estimatedData = [[NSMutableDictionary alloc] init];
@@ -752,11 +734,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
     NSError *requestError = nil;
 
-    [self.requestLock lock];
-
-    @onExit {
-        [self.requestLock unlock];
-    };
+    [self->_requestLock lock];
 
     /* Perform save request. */
     do {
@@ -786,6 +764,8 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
                              error:&requestError];
         }
     } while (NO);
+    
+    [self->_requestLock unlock];
 
     if (error) {
         *error = requestError;
