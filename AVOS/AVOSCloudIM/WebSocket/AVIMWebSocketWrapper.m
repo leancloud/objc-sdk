@@ -240,9 +240,11 @@ static NSString * const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         self->_reachabilityMonitor = [LCNetworkReachabilityManager manager];
         __weak typeof(self) weakSelf = self;
         [self->_reachabilityMonitor setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-            weakSelf.currentNetworkReachabilityStatus = status;
-            AVLoggerInfo(AVLoggerDomainIM, @"<websocket wrapper address: %p> network reachability status: %@.", weakSelf, @(status));
-            [weakSelf addOperationToInternalSerialQueue:^(AVIMWebSocketWrapper *websocketWrapper) {
+            AVIMWebSocketWrapper *strongSelf = weakSelf;
+            if (!strongSelf) { return; }
+            strongSelf.currentNetworkReachabilityStatus = status;
+            AVLoggerInfo(AVLoggerDomainIM, @"<websocket wrapper address: %p> network reachability status: %@.", strongSelf, @(status));
+            [strongSelf addOperationToInternalSerialQueue:^(AVIMWebSocketWrapper *websocketWrapper) {
                 if (websocketWrapper.currentNetworkReachabilityStatus == AFNetworkReachabilityStatusNotReachable) {
                     [websocketWrapper internalClose];
                     if (websocketWrapper->_activatingReconnection) {
@@ -662,6 +664,9 @@ static NSArray<NSString *> * RTMProtocols()
 {
     AssertRunInQueue(self->_internalSerialQueue);
     if (!self->_activatingReconnection) { return; }
+    AVIMWebSocket *websocket = self->_websocket;
+    if (websocket && websocket.readyState == AVIMWebSocketStateConnected) { return; }
+    AVLoggerInfo(AVLoggerDomainIM, @"<websocket wrapper address: %p> try reconnecting.", self);
     id<AVIMWebSocketWrapperDelegate> delegate = self->_delegate;
     if ([delegate respondsToSelector:@selector(webSocketWrapperInReconnecting:)]) {
         [delegate webSocketWrapperInReconnecting:self];
