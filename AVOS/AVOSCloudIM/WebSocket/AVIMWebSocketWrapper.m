@@ -178,6 +178,7 @@ static NSString * const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
     
     AVIMWebSocket *_websocket;
     LCNetworkReachabilityManager *_reachabilityMonitor;
+    BOOL _didInitNetworkReachabilityStatus;
 }
 
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds
@@ -228,35 +229,45 @@ static NSString * const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         self->_websocket = nil;
         
 #if TARGET_OS_IOS
-        self.isApplicationInBackground = false;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.isApplicationInBackground = (UIApplication.sharedApplication.applicationState == UIApplicationStateBackground);
-        });
+        self->_isApplicationInBackground = (UIApplication.sharedApplication.applicationState == UIApplicationStateBackground);
         [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(applicationDidEnterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
         [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(applicationWillEnterForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
 #endif
         
-        self.currentNetworkReachabilityStatus = AFNetworkReachabilityStatusUnknown;
-        self->_reachabilityMonitor = [LCNetworkReachabilityManager manager];
         __weak typeof(self) weakSelf = self;
+        self->_reachabilityMonitor = [LCNetworkReachabilityManager manager];
+        // this is not real init for Network Reachability Status, but need it to handle follow-up event.
+        self->_currentNetworkReachabilityStatus = AFNetworkReachabilityStatusUnknown;
+        self->_didInitNetworkReachabilityStatus = false;
         [self->_reachabilityMonitor setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
             AVIMWebSocketWrapper *strongSelf = weakSelf;
             if (!strongSelf) { return; }
-            strongSelf.currentNetworkReachabilityStatus = status;
             AVLoggerInfo(AVLoggerDomainIM, @"<websocket wrapper address: %p> network reachability status: %@.", strongSelf, @(status));
-            [strongSelf addOperationToInternalSerialQueue:^(AVIMWebSocketWrapper *websocketWrapper) {
-                if (websocketWrapper.currentNetworkReachabilityStatus == AFNetworkReachabilityStatusNotReachable) {
-                    [websocketWrapper internalClose];
-                    if (websocketWrapper->_activatingReconnection) {
-                        id<AVIMWebSocketWrapperDelegate> delegate = websocketWrapper->_delegate;
-                        if ([delegate respondsToSelector:@selector(webSocketWrapperDidPause:)]) {
-                            [delegate webSocketWrapperDidPause:websocketWrapper];
+            AFNetworkReachabilityStatus oldStatus = strongSelf.currentNetworkReachabilityStatus;
+            strongSelf.currentNetworkReachabilityStatus = status;
+            if (strongSelf->_didInitNetworkReachabilityStatus) {
+                if (status == oldStatus) {
+                    // should dealt with status as state machine.
+                    // so if the status not changed, do nothing.
+                    // ref: https://github.com/ashleymills/Reachability.swift/issues/95#issuecomment-229401474
+                } else if (status == AFNetworkReachabilityStatusNotReachable) {
+                    [strongSelf addOperationToInternalSerialQueue:^(AVIMWebSocketWrapper *websocketWrapper) {
+                        [websocketWrapper internalClose];
+                        if (websocketWrapper->_activatingReconnection) {
+                            id<AVIMWebSocketWrapperDelegate> delegate = websocketWrapper->_delegate;
+                            if ([delegate respondsToSelector:@selector(webSocketWrapperDidPause:)]) {
+                                [delegate webSocketWrapperDidPause:websocketWrapper];
+                            }
                         }
-                    }
+                    }];
                 } else {
-                    [websocketWrapper tryReconnecting];
+                    [strongSelf addOperationToInternalSerialQueue:^(AVIMWebSocketWrapper *websocketWrapper) {
+                        [websocketWrapper tryReconnecting];
+                    }];
                 }
-            }];
+            } else {
+                strongSelf->_didInitNetworkReachabilityStatus = true;
+            }
         }];
         [self->_reachabilityMonitor startMonitoring];
     }
@@ -274,26 +285,36 @@ static NSString * const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 #if TARGET_OS_IOS
 - (void)applicationDidEnterBackground
 {
-    self.isApplicationInBackground = true;
     AVLoggerInfo(AVLoggerDomainIM, @"<websocket wrapper address: %p> application did enter background.", self);
-    [self addOperationToInternalSerialQueue:^(AVIMWebSocketWrapper *websocketWrapper) {
-        [websocketWrapper internalClose];
-        if (websocketWrapper->_activatingReconnection) {
-            id<AVIMWebSocketWrapperDelegate> delegate = websocketWrapper->_delegate;
-            if ([delegate respondsToSelector:@selector(webSocketWrapperDidPause:)]) {
-                [delegate webSocketWrapperDidPause:websocketWrapper];
-            }
-        }
-    }];
+    [self handleApplicationStateIsInBackground:true];
 }
 
 - (void)applicationWillEnterForeground
 {
     AVLoggerInfo(AVLoggerDomainIM, @"<websocket wrapper address: %p> application will enter foreground.", self);
-    self.isApplicationInBackground = false;
-    [self addOperationToInternalSerialQueue:^(AVIMWebSocketWrapper *websocketWrapper) {
-        [websocketWrapper tryReconnecting];
-    }];
+    [self handleApplicationStateIsInBackground:false];
+}
+
+- (void)handleApplicationStateIsInBackground:(BOOL)isInBackground
+{
+    BOOL newStatus = isInBackground;
+    BOOL oldStatus = self.isApplicationInBackground;
+    self.isApplicationInBackground = newStatus;
+    if (newStatus != oldStatus) {
+        [self addOperationToInternalSerialQueue:^(AVIMWebSocketWrapper *websocketWrapper) {
+            if (isInBackground) {
+                [websocketWrapper internalClose];
+                if (websocketWrapper->_activatingReconnection) {
+                    id<AVIMWebSocketWrapperDelegate> delegate = websocketWrapper->_delegate;
+                    if ([delegate respondsToSelector:@selector(webSocketWrapperDidPause:)]) {
+                        [delegate webSocketWrapperDidPause:websocketWrapper];
+                    }
+                }
+            } else {
+                [websocketWrapper tryReconnecting];
+            }
+        }];
+    }
 }
 #endif
 
@@ -332,19 +353,24 @@ static NSArray<NSString *> * RTMProtocols()
         if (websocket && websocket.readyState == AVIMWebSocketStateConnected) {
             callback(true, nil);
         } else {
-            [websocketWrapper internalOpenWithCallback:callback];
+            [websocketWrapper internalOpenWithCallback:callback delegateBlock:nil];
         }
     }];
 }
 
 - (void)internalOpenWithCallback:(void (^)(BOOL succeeded, NSError *error))callback
+                   delegateBlock:(void (^)(void))delegateBlock
 {
     AssertRunInQueue(self->_internalSerialQueue);
     if (self->_openCallbacks) {
         [self->_openCallbacks addObject:callback];
     } else {
         self->_openCallbacks = [NSMutableArray arrayWithObject:callback];
-        [self tryDiscardOldWebsocket];
+        [self purgeWithError:({
+            AVIMErrorCode code = AVIMErrorCodeConnectionLost;
+            LCError(code, AVIMErrorMessage(code), nil);
+        })];
+        if (delegateBlock) { delegateBlock(); }
         [self getRTMServerWithCallback:^(NSString *server, NSError *error) {
             AssertRunInQueue(self->_internalSerialQueue);
             NSAssert(self->_websocket == nil, @"wrapper's websocket should be nil.");
@@ -664,13 +690,8 @@ static NSArray<NSString *> * RTMProtocols()
 {
     AssertRunInQueue(self->_internalSerialQueue);
     if (!self->_activatingReconnection) { return; }
-    AVIMWebSocket *websocket = self->_websocket;
-    if (websocket && websocket.readyState == AVIMWebSocketStateConnected) { return; }
     AVLoggerInfo(AVLoggerDomainIM, @"<websocket wrapper address: %p> try reconnecting.", self);
     id<AVIMWebSocketWrapperDelegate> delegate = self->_delegate;
-    if ([delegate respondsToSelector:@selector(webSocketWrapperInReconnecting:)]) {
-        [delegate webSocketWrapperInReconnecting:self];
-    }
     [self internalOpenWithCallback:^(BOOL succeeded, NSError *error) {
         AssertRunInQueue(self->_internalSerialQueue);
         if (error) {
@@ -687,6 +708,11 @@ static NSArray<NSString *> * RTMProtocols()
             if ([delegate respondsToSelector:@selector(webSocketWrapperDidReopen:)]) {
                 [delegate webSocketWrapperDidReopen:self];
             }
+        }
+    } delegateBlock:^{
+        AssertRunInQueue(self->_internalSerialQueue);
+        if ([delegate respondsToSelector:@selector(webSocketWrapperInReconnecting:)]) {
+            [delegate webSocketWrapperInReconnecting:self];
         }
     }];
 }
@@ -717,22 +743,16 @@ static NSArray<NSString *> * RTMProtocols()
     }
 }
 
-- (void)tryDiscardOldWebsocket
+- (void)purgeWithError:(NSError *)error
 {
     AssertRunInQueue(self->_internalSerialQueue);
+    // discard websocket
     if (self->_websocket) {
         AVLoggerInfo(AVLoggerDomainIM, @"<address: %p> websocket discard.", self->_websocket);
         [self->_websocket setDelegate:nil];
         [self->_websocket close];
         self->_websocket = nil;
     }
-}
-
-- (void)purgeWithError:(NSError *)error
-{
-    AssertRunInQueue(self->_internalSerialQueue);
-    // discard websocket
-    [self tryDiscardOldWebsocket];
     // reset ping sender
     [self tryStopPingSender];
     // stop timeout checker
