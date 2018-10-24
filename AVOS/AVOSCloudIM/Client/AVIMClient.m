@@ -1919,7 +1919,80 @@ static BOOL clientHasInstantiated = false;
 - (AVIMConversation *)conversationWithKeyedConversation:(AVIMKeyedConversation *)keyedConversation
 {
     AssertNotRunInQueue(self->_internalSerialQueue);
-    NSString *conversationId = keyedConversation.rawDataDic[AVIMConversationKeyObjectId];
+    NSString *conversationId = nil;
+    NSMutableDictionary *rawDataDic = [keyedConversation.rawDataDic mutableCopy];
+    if (rawDataDic) {
+        conversationId = [NSString lc__decodingDictionary:rawDataDic key:AVIMConversationKeyObjectId];
+    } else {
+        rawDataDic = [NSMutableDictionary dictionary];
+        if (keyedConversation.conversationId) {
+            conversationId = keyedConversation.conversationId;
+            rawDataDic[AVIMConversationKeyObjectId] = conversationId;
+        }
+        if (keyedConversation.creator) {
+            rawDataDic[AVIMConversationKeyCreator] = keyedConversation.creator;
+        }
+        if (keyedConversation.createAt) {
+            rawDataDic[AVIMConversationKeyCreatedAt] = keyedConversation.createAt;
+        }
+        if (keyedConversation.updateAt) {
+            rawDataDic[AVIMConversationKeyUpdatedAt] = keyedConversation.updateAt;
+        }
+        if (keyedConversation.lastMessage) {
+            AVIMMessage *message = keyedConversation.lastMessage;
+            if (message.content) {
+                rawDataDic[AVIMConversationKeyLastMessageContent] = message.content;
+            }
+            if (message.messageId) {
+                rawDataDic[AVIMConversationKeyLastMessageId] = message.messageId;
+            }
+            if (message.clientId) {
+                rawDataDic[AVIMConversationKeyLastMessageFrom] = message.clientId;
+            }
+            if (message.sendTimestamp) {
+                rawDataDic[AVIMConversationKeyLastMessageTimestamp] = @(message.sendTimestamp);
+            }
+            if (message.updatedAt) {
+                rawDataDic[AVIMConversationKeyLastMessagePatchTimestamp] = @(message.updatedAt.timeIntervalSince1970 * 1000.0);
+            }
+            if (message.mentionAll) {
+                rawDataDic[AVIMConversationKeyLastMessageMentionAll] = @(message.mentionAll);
+            }
+            if (message.mentionList) {
+                rawDataDic[AVIMConversationKeyLastMessageMentionPids] = message.mentionList;
+            }
+        }
+        if (keyedConversation.name) {
+            rawDataDic[AVIMConversationKeyName] = keyedConversation.name;
+        }
+        if (keyedConversation.members) {
+            rawDataDic[AVIMConversationKeyMembers] = keyedConversation.members;
+        }
+        if (keyedConversation.attributes) {
+            rawDataDic[AVIMConversationKeyAttributes] = keyedConversation.attributes;
+        }
+        if (keyedConversation.uniqueId) {
+            rawDataDic[AVIMConversationKeyUniqueId] = keyedConversation.uniqueId;
+        }
+        if (keyedConversation.unique) {
+            rawDataDic[AVIMConversationKeyUnique] = @(keyedConversation.unique);
+        }
+        if (keyedConversation.transient) {
+            rawDataDic[AVIMConversationKeyTransient] = @(keyedConversation.transient);
+        }
+        if (keyedConversation.system) {
+            rawDataDic[AVIMConversationKeySystem] = @(keyedConversation.system);
+        }
+        if (keyedConversation.temporary) {
+            rawDataDic[AVIMConversationKeyTemporary] = @(keyedConversation.temporary);
+        }
+        if (keyedConversation.temporaryTTL) {
+            rawDataDic[AVIMConversationKeyTemporaryTTL] = @(keyedConversation.temporaryTTL);
+        }
+        if (keyedConversation.muted) {
+            rawDataDic[AVIMConversationKeyMutedMembers] = @(keyedConversation.muted);
+        }
+    }
     if (!conversationId) {
         return nil;
     }
@@ -1927,7 +2000,7 @@ static BOOL clientHasInstantiated = false;
     dispatch_sync(self->_internalSerialQueue, ^{
         conv = [self->_conversationManager conversationForId:conversationId];
         if (!conv) {
-            conv = [AVIMConversation conversationWithRawJSONData:keyedConversation.rawDataDic.mutableCopy client:self];
+            conv = [AVIMConversation conversationWithRawJSONData:rawDataDic client:self];
             if (conv) {
                 [self->_conversationManager insertConversation:conv];
             }

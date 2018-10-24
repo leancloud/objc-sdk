@@ -264,20 +264,38 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (NSDate *)createAt
 {
-    __block NSString *value = nil;
+    __block id value = nil;
     [self internalSyncLock:^{
         value = [NSString lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyCreatedAt];
+        if (!value) {
+            value = [NSDate lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyCreatedAt];
+        }
     }];
-    return LCDateFromString(value);
+    if ([NSString lc__checkingType:value]) {
+        return LCDateFromString(value);
+    } else if ([NSDate lc__checkingType:value]) {
+        return value;
+    } else {
+        return nil;
+    }
 }
 
 - (NSDate *)updateAt
 {
-    __block NSString *value = nil;
+    __block id value = nil;
     [self internalSyncLock:^{
         value = [NSString lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyUpdatedAt];
+        if (!value) {
+            value = [NSDate lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyUpdatedAt];
+        }
     }];
-    return LCDateFromString(value);
+    if ([NSString lc__checkingType:value]) {
+        return LCDateFromString(value);
+    } else if ([NSDate lc__checkingType:value]) {
+        return value;
+    } else {
+        return nil;
+    }
 }
 
 - (NSString *)name
@@ -337,11 +355,20 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (BOOL)muted
 {
-    __block NSArray *value = nil;
+    __block id value = nil;
     [self internalSyncLock:^{
         value = [NSArray lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyMutedMembers].copy;
+        if (!value) {
+            value = [NSNumber lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyMutedMembers];
+        }
     }];
-    return value ? [value containsObject:self->_clientId] : false;
+    if ([NSArray lc__checkingType:value]) {
+        return [value containsObject:self->_clientId];
+    } else if ([NSNumber lc__checkingType:value]) {
+        return [(NSNumber *)value boolValue];
+    } else {
+        return false;
+    }
 }
 
 - (NSDictionary *)attributes
@@ -3155,6 +3182,25 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 - (AVIMKeyedConversation *)keyedConversation
 {
     AVIMKeyedConversation *keyedConversation = [AVIMKeyedConversation new];
+    keyedConversation.conversationId = self.conversationId;
+    keyedConversation.clientId = self.clientId;
+    keyedConversation.creator = self.creator;
+    keyedConversation.createAt = self.createAt;
+    keyedConversation.updateAt = self.updateAt;
+    keyedConversation.lastMessageAt = self.lastMessageAt;
+    keyedConversation.lastDeliveredAt = self.lastDeliveredAt;
+    keyedConversation.lastReadAt = self.lastReadAt;
+    keyedConversation.lastMessage = self.lastMessage;
+    keyedConversation.name = self.name;
+    keyedConversation.members = self.members;
+    keyedConversation.attributes = self.attributes;
+    keyedConversation.uniqueId = self.uniqueId;
+    keyedConversation.unique = self.unique;
+    keyedConversation.transient = self.transient;
+    keyedConversation.system = self.system;
+    keyedConversation.temporary = self.temporary;
+    keyedConversation.temporaryTTL = self.temporaryTTL;
+    keyedConversation.muted = self.muted;
     keyedConversation.rawDataDic = self.rawJSONDataCopy;
     return keyedConversation;
 }
