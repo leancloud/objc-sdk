@@ -307,7 +307,7 @@ class AVIMConversationTestCase: LCIMTestBase {
                         }
                     })
                 } else {
-                    semaphore.decrement()
+                    semaphore.decrement(2)
                     XCTFail()
                 }
             })
