@@ -1938,30 +1938,6 @@ static BOOL clientHasInstantiated = false;
         if (keyedConversation.updateAt) {
             rawDataDic[AVIMConversationKeyUpdatedAt] = keyedConversation.updateAt;
         }
-        if (keyedConversation.lastMessage) {
-            AVIMMessage *message = keyedConversation.lastMessage;
-            if (message.content) {
-                rawDataDic[AVIMConversationKeyLastMessageContent] = message.content;
-            }
-            if (message.messageId) {
-                rawDataDic[AVIMConversationKeyLastMessageId] = message.messageId;
-            }
-            if (message.clientId) {
-                rawDataDic[AVIMConversationKeyLastMessageFrom] = message.clientId;
-            }
-            if (message.sendTimestamp) {
-                rawDataDic[AVIMConversationKeyLastMessageTimestamp] = @(message.sendTimestamp);
-            }
-            if (message.updatedAt) {
-                rawDataDic[AVIMConversationKeyLastMessagePatchTimestamp] = @(message.updatedAt.timeIntervalSince1970 * 1000.0);
-            }
-            if (message.mentionAll) {
-                rawDataDic[AVIMConversationKeyLastMessageMentionAll] = @(message.mentionAll);
-            }
-            if (message.mentionList) {
-                rawDataDic[AVIMConversationKeyLastMessageMentionPids] = message.mentionList;
-            }
-        }
         if (keyedConversation.name) {
             rawDataDic[AVIMConversationKeyName] = keyedConversation.name;
         }
@@ -1991,6 +1967,39 @@ static BOOL clientHasInstantiated = false;
         }
         if (keyedConversation.muted) {
             rawDataDic[AVIMConversationKeyMutedMembers] = @(keyedConversation.muted);
+        }
+    }
+    if (keyedConversation.lastMessage) {
+        AVIMMessage *message = keyedConversation.lastMessage;
+        [rawDataDic removeObjectsForKeys:({
+            @[AVIMConversationKeyLastMessageContent,
+              AVIMConversationKeyLastMessageId,
+              AVIMConversationKeyLastMessageFrom,
+              AVIMConversationKeyLastMessageTimestamp,
+              AVIMConversationKeyLastMessagePatchTimestamp,
+              AVIMConversationKeyLastMessageMentionAll,
+              AVIMConversationKeyLastMessageMentionPids];
+        })];
+        if (message.content) {
+            rawDataDic[AVIMConversationKeyLastMessageContent] = message.content;
+        }
+        if (message.messageId) {
+            rawDataDic[AVIMConversationKeyLastMessageId] = message.messageId;
+        }
+        if (message.clientId) {
+            rawDataDic[AVIMConversationKeyLastMessageFrom] = message.clientId;
+        }
+        if (message.sendTimestamp) {
+            rawDataDic[AVIMConversationKeyLastMessageTimestamp] = @(message.sendTimestamp);
+        }
+        if (message.updatedAt) {
+            rawDataDic[AVIMConversationKeyLastMessagePatchTimestamp] = @(message.updatedAt.timeIntervalSince1970 * 1000.0);
+        }
+        if (message.mentionAll) {
+            rawDataDic[AVIMConversationKeyLastMessageMentionAll] = @(message.mentionAll);
+        }
+        if (message.mentionList) {
+            rawDataDic[AVIMConversationKeyLastMessageMentionPids] = message.mentionList;
         }
     }
     if (!conversationId) {
