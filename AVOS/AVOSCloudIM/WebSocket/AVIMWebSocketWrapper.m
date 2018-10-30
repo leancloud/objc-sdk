@@ -459,14 +459,19 @@ static NSArray<NSString *> * RTMProtocols()
         mutableDictionary;
     })];
     AVLoggerError(AVLoggerDomainIM, @"<address: %p> websocket did close by remote with error: %@.", webSocket, error);
-    self->_activatingReconnection = false;
     [self purgeWithError:error];
     if (self->_openCallbacks) {
         [self invokeOpenCallbacksWithSucceeded:false error:error];
     } else {
         id<AVIMWebSocketWrapperDelegate> delegate = self->_delegate;
-        if ([delegate respondsToSelector:@selector(webSocketWrapper:didCloseWithError:)]) {
-            [delegate webSocketWrapper:self didCloseWithError:error];
+        if (wasClean) {
+            if ([delegate respondsToSelector:@selector(webSocketWrapper:didCloseWithError:)]) {
+                [delegate webSocketWrapper:self didCloseWithError:error];
+            }
+        } else {
+            if ([delegate respondsToSelector:@selector(webSocketWrapperDidPause:)]) {
+                [delegate webSocketWrapperDidPause:self];
+            }
         }
     }
 }
