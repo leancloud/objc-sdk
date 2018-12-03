@@ -110,9 +110,6 @@ static BOOL LCSSLPinningEnabled = false;
     [self initializePaasClient];
     [[LCNetworkStatistics sharedInstance] start];
     [LCRouter sharedInstance];
-#if !TARGET_OS_WATCH
-    [AVAnalytics startInternally];
-#endif
 
     LCInitialized = YES;
 }
