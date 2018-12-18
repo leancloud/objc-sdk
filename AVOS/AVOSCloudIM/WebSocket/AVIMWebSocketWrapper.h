@@ -34,6 +34,7 @@
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds;
 - (instancetype)initWithDelegate:(id<AVIMWebSocketWrapperDelegate>)delegate;
 - (void)openWithCallback:(void (^)(BOOL succeeded, NSError *error))callback;
+- (void)setActivatingReconnectionEnabled:(BOOL)enabled;
 - (void)close;
 - (void)sendCommandWrapper:(LCIMProtobufCommandWrapper *)commandWrapper;
 

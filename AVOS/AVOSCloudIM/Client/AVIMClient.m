@@ -218,6 +218,7 @@ static BOOL clientHasInstantiated = false;
 
 - (void)dealloc
 {
+    [self->_socketWrapper setActivatingReconnectionEnabled:false];
     [self->_socketWrapper close];
 }
 
@@ -414,6 +415,7 @@ static BOOL clientHasInstantiated = false;
                     [client setSessionToken:sessionToken ttl:(sessionCommand.hasStTtl ? sessionCommand.stTtl : 0)];
                     [client->_pushManager uploadingDeviceToken];
                     [client->_pushManager addingClientIdToChannels];
+                    [client->_socketWrapper setActivatingReconnectionEnabled:true];
                     
                     [client invokeInUserInteractQueue:^{
                         callback(true, nil);
@@ -576,6 +578,7 @@ static BOOL clientHasInstantiated = false;
             client->_status = AVIMClientStatusClosed;
             [client clearSessionTokenAndTTL];
             [client->_pushManager removingClientIdFromChannels];
+            [client->_socketWrapper setActivatingReconnectionEnabled:false];
             [client->_socketWrapper close];
             
             [client invokeInUserInteractQueue:^{
@@ -793,6 +796,8 @@ static BOOL clientHasInstantiated = false;
             client->_status = AVIMClientStatusClosed;
             [client clearSessionTokenAndTTL];
             [client->_pushManager removingClientIdFromChannels];
+            [client->_socketWrapper setActivatingReconnectionEnabled:false];
+            [client->_socketWrapper close];
             id <AVIMClientDelegate> delegate = client->_delegate;
             SEL sel = @selector(client:didOfflineWithError:);
             if (delegate && [delegate respondsToSelector:sel]) {
@@ -935,7 +940,10 @@ static BOOL clientHasInstantiated = false;
             [client invokeInUserInteractQueue:^{
                 if (error) {
                     AVLoggerError(AVLoggerDomainIM, @"session resuming failed with error: %@", error);
-                    [delegate imClientPaused:client];
+                    if ([error.domain isEqualToString:kLeanCloudErrorDomain] &&
+                        error.code == AVIMErrorCodeCommandTimeout) {
+                        [client webSocketWrapperDidReopen:socketWrapper];
+                    }
                 } else {
                     [delegate imClientResumed:client];
                 }
@@ -947,7 +955,9 @@ static BOOL clientHasInstantiated = false;
 - (void)webSocketWrapperInReconnecting:(AVIMWebSocketWrapper *)socketWrapper
 {
     [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-        if (!client->_sessionToken) { return; }
+        if (!client->_sessionToken || client->_status == AVIMClientStatusResuming) {
+            return;
+        }
         client->_status = AVIMClientStatusResuming;
         [client invokeInUserInteractQueue:^{
             [client->_delegate imClientResuming:client];
@@ -958,7 +968,9 @@ static BOOL clientHasInstantiated = false;
 - (void)webSocketWrapperDidPause:(AVIMWebSocketWrapper *)socketWrapper
 {
     [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-        if (!client->_sessionToken) { return; }
+        if (!client->_sessionToken || client->_status == AVIMClientStatusPaused) {
+            return;
+        }
         client->_status = AVIMClientStatusPaused;
         [client invokeInUserInteractQueue:^{
             [client->_delegate imClientPaused:client];
@@ -972,6 +984,8 @@ static BOOL clientHasInstantiated = false;
         if (!client->_sessionToken) { return; }
         client->_status = AVIMClientStatusClosed;
         [client clearSessionTokenAndTTL];
+        [client->_socketWrapper setActivatingReconnectionEnabled:false];
+        [client->_socketWrapper close];
         id<AVIMClientDelegate> delegate = client->_delegate;
         [client invokeInUserInteractQueue:^{
             [delegate imClientClosed:client error:error];
@@ -1003,6 +1017,8 @@ static BOOL clientHasInstantiated = false;
     
     if (code == AVIMErrorCodeSessionConflict) {
         [self->_pushManager removingClientIdFromChannels];
+        [self->_socketWrapper setActivatingReconnectionEnabled:false];
+        [self->_socketWrapper close];
         id <AVIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(client:didOfflineWithError:);
         if (delegate && [delegate respondsToSelector:sel]) {
