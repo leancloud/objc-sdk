@@ -179,6 +179,8 @@ static NSString * const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
     AVIMWebSocket *_websocket;
     LCNetworkReachabilityManager *_reachabilityMonitor;
     BOOL _didInitNetworkReachabilityStatus;
+    
+    dispatch_block_t _openTimeoutBlock;
 }
 
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds
@@ -227,6 +229,7 @@ static NSString * const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         self->_timeoutCheckerTimerSource = nil;
         
         self->_websocket = nil;
+        self->_openTimeoutBlock = nil;
         
 #if TARGET_OS_IOS
         self->_isApplicationInBackground = (UIApplication.sharedApplication.applicationState == UIApplicationStateBackground);
@@ -394,6 +397,10 @@ static NSArray<NSString *> * RTMProtocols()
     AssertRunInQueue(self->_internalSerialQueue);
     NSParameterAssert(webSocket == self->_websocket);
     AVLoggerInfo(AVLoggerDomainIM, @"<address: %p> websocket did open.", webSocket);
+    if (self->_openTimeoutBlock) {
+        dispatch_block_cancel(self->_openTimeoutBlock);
+        self->_openTimeoutBlock = nil;
+    }
     [self startPingSender];
     [self startTimeoutChecker];
     if (self->_openCallback) {
@@ -730,6 +737,19 @@ static NSArray<NSString *> * RTMProtocols()
                 [self->_websocket setDelegateDispatchQueue:self->_internalSerialQueue];
                 [self->_websocket setDelegate:self];
                 [self->_websocket open];
+                __weak typeof(self) weakSelf = self;
+                self->_openTimeoutBlock = dispatch_block_create(0, ^{
+                    self->_openTimeoutBlock = nil;
+                    NSError *error = ({
+                        AVIMErrorCode code = AVIMErrorCodeConnectionLost;
+                        NSString *reason = @"Due to opening timed out, connection lost.";
+                        LCError(code, reason, nil);
+                    });
+                    [weakSelf purgeWithError:error];
+                    [weakSelf pauseWithError:error];
+                    [weakSelf tryConnecting:false];
+                });
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(AVIMWebSocketDefaultTimeoutInterval * NSEC_PER_SEC)), self->_internalSerialQueue, self->_openTimeoutBlock);
                 AVLoggerInfo(AVLoggerDomainIM, @"<address: %p> websocket open with URL: %@, protocols: %@.", self->_websocket, URL, protocols);
             }
         }
@@ -771,6 +791,10 @@ static NSArray<NSString *> * RTMProtocols()
         [self->_websocket setDelegate:nil];
         [self->_websocket close];
         self->_websocket = nil;
+    }
+    if (self->_openTimeoutBlock) {
+        dispatch_block_cancel(self->_openTimeoutBlock);
+        self->_openTimeoutBlock = nil;
     }
     // reset ping sender
     [self tryStopPingSender];
