@@ -1034,6 +1034,8 @@
 		D37A046A1FF3705500AD44A9 /* testFile.md in Resources */ = {isa = PBXBuildFile; fileRef = D37A04691FF3705500AD44A9 /* testFile.md */; };
 		D3939CC720FEE621001C9F5C /* AVIMClientInternalConversationManager_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3939CC620FEE621001C9F5C /* AVIMClientInternalConversationManager_Internal.h */; };
 		D3939CC820FEE621001C9F5C /* AVIMClientInternalConversationManager_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3939CC620FEE621001C9F5C /* AVIMClientInternalConversationManager_Internal.h */; };
+		D3A3028921C9EC5300A6C09D /* IMTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A3028821C9EC5300A6C09D /* IMTestViewController.swift */; };
+		D3A3028B21C9EC6600A6C09D /* LiveQueryTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A3028A21C9EC6600A6C09D /* LiveQueryTestViewController.swift */; };
 		D3C53FCC2106D84A00D48686 /* AVIMClientProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C53FCB2106D84A00D48686 /* AVIMClientProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D3C53FCD2106D84A00D48686 /* AVIMClientProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C53FCB2106D84A00D48686 /* AVIMClientProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D3CC90CB2069E5BB0082EFD4 /* AVObjectTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CC90CA2069E5BB0082EFD4 /* AVObjectTestCase.swift */; };
@@ -1479,6 +1481,8 @@
 		D37A04661FF36E6200AD44A9 /* testVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = testVideo.mp4; sourceTree = "<group>"; };
 		D37A04691FF3705500AD44A9 /* testFile.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = testFile.md; sourceTree = "<group>"; };
 		D3939CC620FEE621001C9F5C /* AVIMClientInternalConversationManager_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVIMClientInternalConversationManager_Internal.h; sourceTree = "<group>"; };
+		D3A3028821C9EC5300A6C09D /* IMTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMTestViewController.swift; sourceTree = "<group>"; };
+		D3A3028A21C9EC6600A6C09D /* LiveQueryTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveQueryTestViewController.swift; sourceTree = "<group>"; };
 		D3C53FCB2106D84A00D48686 /* AVIMClientProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVIMClientProtocol.h; sourceTree = "<group>"; };
 		D3CC90CA2069E5BB0082EFD4 /* AVObjectTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVObjectTestCase.swift; sourceTree = "<group>"; };
 		D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestBase.swift; sourceTree = "<group>"; };
@@ -2335,6 +2339,8 @@
 			children = (
 				D3078A7B2010739700A4C5FD /* AppDelegate.swift */,
 				D3078A7D2010739700A4C5FD /* ViewController.swift */,
+				D3A3028821C9EC5300A6C09D /* IMTestViewController.swift */,
+				D3A3028A21C9EC6600A6C09D /* LiveQueryTestViewController.swift */,
 				D3078A7F2010739700A4C5FD /* Main.storyboard */,
 				D3078A822010739700A4C5FD /* Assets.xcassets */,
 				D3078A842010739700A4C5FD /* LaunchScreen.storyboard */,
@@ -3376,6 +3382,7 @@
 					};
 					D3078A782010739700A4C5FD = {
 						CreatedOnToolsVersion = 9.2;
+						DevelopmentTeam = G76VD4892G;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -4017,6 +4024,8 @@
 			files = (
 				D3078A7E2010739700A4C5FD /* ViewController.swift in Sources */,
 				D3078A7C2010739700A4C5FD /* AppDelegate.swift in Sources */,
+				D3A3028921C9EC5300A6C09D /* IMTestViewController.swift in Sources */,
+				D3A3028B21C9EC6600A6C09D /* LiveQueryTestViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4131,7 +4140,6 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.avoscloud.AVOSCloudIMOSX;
 				PRODUCT_NAME = AVOSCloudIM;
-				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -4192,7 +4200,6 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.avoscloud.AVOSCloudIMOSX;
 				PRODUCT_NAME = AVOSCloudIM;
-				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -4263,7 +4270,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.AVOSCloud-macOS";
 				PRODUCT_NAME = AVOSCloud;
-				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -4326,7 +4332,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.AVOSCloud-macOS";
 				PRODUCT_NAME = AVOSCloud;
-				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -4390,7 +4395,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = AVOSCloud;
-				PROVISIONING_PROFILE = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4450,7 +4454,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = AVOSCloud;
-				PROVISIONING_PROFILE = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4892,7 +4895,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = AVOSCloud;
-				PROVISIONING_PROFILE = "";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4953,7 +4955,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = AVOSCloud;
-				PROVISIONING_PROFILE = "";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5007,7 +5008,6 @@
 					"-licucore",
 					"-ObjC",
 				);
-				PROVISIONING_PROFILE = "2a6f2f85-65c9-4344-b118-8977505bcf3b";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -5052,7 +5052,6 @@
 					"-licucore",
 					"-ObjC",
 				);
-				PROVISIONING_PROFILE = "2a6f2f85-65c9-4344-b118-8977505bcf3b";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
@@ -5116,7 +5115,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.AVOSCloud-iOS";
 				PRODUCT_NAME = AVOSCloud;
-				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -5177,7 +5175,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.AVOSCloud-iOS";
 				PRODUCT_NAME = AVOSCloud;
-				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -5245,7 +5242,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "cn.leancloud.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "AVOSCloudTests/Swift/AVOSCloud-iOSTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -5306,7 +5302,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "cn.leancloud.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "AVOSCloudTests/Swift/AVOSCloud-iOSTests-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
@@ -5373,7 +5368,6 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = AVOSCloudIM;
-				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -5434,7 +5428,6 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.avoscloud.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = AVOSCloudIM;
-				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -5500,7 +5493,6 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "cn.leancloud.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "AVOSCloudIMTests/Swift/AVOSCloudIM-iOSTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -5560,7 +5552,6 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "cn.leancloud.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "AVOSCloudIMTests/Swift/AVOSCloudIM-iOSTests-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
@@ -5588,6 +5579,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = G76VD4892G;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -5603,6 +5595,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = LeanCloud.RuntimeTestDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
@@ -5629,6 +5622,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = G76VD4892G;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -5639,6 +5633,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = LeanCloud.RuntimeTestDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
