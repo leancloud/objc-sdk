@@ -477,16 +477,19 @@ static BOOL clientHasInstantiated = false;
     void(^ handleInCommandBlock)(LCIMProtobufCommandWrapper *) = ^(LCIMProtobufCommandWrapper *commandWrapper) {
         AVIMGenericCommand *inCommand = commandWrapper.inCommand;
         AVIMSessionCommand *sessionCommand = (inCommand.hasSessionMessage ? inCommand.sessionMessage : nil);
-        NSString *sessionToken = (sessionCommand.hasSt ? sessionCommand.st : nil);
-        if (!sessionToken) {
+        if (!(sessionCommand && inCommand.cmd == AVIMCommandType_Session && inCommand.op == AVIMOpType_Opened)) {
             callback(false, ({
                 AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
                 LCError(code, AVIMErrorMessage(code), nil);
             }));
             return;
         }
+        NSString *sessionToken = (sessionCommand.hasSt ? sessionCommand.st : nil);
+        int32_t ttl = (sessionCommand.hasStTtl ? sessionCommand.stTtl : 0);
+        if (sessionToken && ttl) {
+            [self setSessionToken:sessionToken ttl:ttl];
+        }
         self->_status = AVIMClientStatusOpened;
-        [self setSessionToken:sessionToken ttl:(sessionCommand.hasStTtl ? sessionCommand.stTtl : 0)];
         [self->_pushManager uploadingDeviceToken];
         [self->_pushManager addingClientIdToChannels];
         callback(true, nil);
