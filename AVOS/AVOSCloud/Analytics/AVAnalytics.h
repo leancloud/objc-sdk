@@ -47,6 +47,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface AVAnalytics : NSObject
 
 /**
+ Start analytics.
+ */
++ (void)start AV_DEPRECATED("Analytics is deprecated.");
+
+/**
  *  设置渠道名称, 如果不设置, 默认是 `App Store`
  *
  *  @param channel 渠道名称

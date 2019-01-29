@@ -245,5 +245,8 @@ static NSString * currentSessionId;
     }];
 }
 
++ (void)start {
+    [self startInternally];
+}
 
 @end
