@@ -27,6 +27,7 @@
  */
 
 static BOOL _isProduction = YES;
+static BOOL _isIgnoreProd = false;
 
 NSString *const kAVPushTargetPlatformIOS = @"ios";
 NSString *const kAVPushTargetPlatformAndroid = @"android";
@@ -152,6 +153,10 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
 
 + (void)setProductionMode:(BOOL)isProduction {
     _isProduction = isProduction;
+}
+
++ (void)setIgnoreProdParameterEnabled:(BOOL)isIgnoreProd {
+    _isIgnoreProd = isIgnoreProd;
 }
 
 + (BOOL)sendPushMessage:(AVPush *)push
@@ -291,7 +296,9 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
     if (!_isProduction) {
         prod = @"dev";
     }
-    [data setObject:prod forKey:@"prod"];
+    if (!_isIgnoreProd) {
+        [data setObject:prod forKey:@"prod"];
+    }
     if (self.pushQuery)
     {
         [data addEntriesFromDictionary:[self queryData]];
@@ -333,7 +340,7 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
     NSString *path = [AVPush myObjectPath];
     [[AVPaasClient sharedInstance] postObject:path
                                withParameters:[self postData]
-                                   eventually:YES
+                                   eventually:false
                                         block:^(id object, NSError *error) {
                                                 [AVUtils callBooleanResultBlock:block error:error];
     }];

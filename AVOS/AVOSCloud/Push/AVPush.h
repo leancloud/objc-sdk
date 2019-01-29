@@ -41,6 +41,13 @@ extern NSString *const kAVPushTargetPlatformWindowsPhone;
  */
 + (void)setProductionMode:(BOOL)isProduction;
 
+/**
+ Default is false, if set true, AVPush will remove 'prod' Key-Value.
+
+ @param isIgnoreProd trigger.
+ */
++ (void)setIgnoreProdParameterEnabled:(BOOL)isIgnoreProd;
+
 /*! @name Configuring a Push Notification */
 
 /*!
