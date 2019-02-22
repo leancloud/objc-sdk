@@ -1016,24 +1016,20 @@ static BOOL clientHasInstantiated = false;
     self->_status = AVIMClientStatusClosed;
     [self clearSessionTokenAndTTL];
     
-    int32_t code = (sessionCommand.hasCode ? sessionCommand.code : 0);
-    
-    if (code == AVIMErrorCodeSessionConflict) {
-        [self->_pushManager removingClientIdFromChannels];
-        [self->_socketWrapper setActivatingReconnectionEnabled:false];
-        [self->_socketWrapper close];
-        id <AVIMClientDelegate> delegate = self->_delegate;
-        SEL sel = @selector(client:didOfflineWithError:);
-        if (delegate && [delegate respondsToSelector:sel]) {
-            [self invokeInUserInteractQueue:^{
-                NSError *aError = ({
-                    LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
-                    commandWrapper.inCommand = inCommand;
-                    commandWrapper.error;
-                });
-                [delegate client:self didOfflineWithError:aError];
-            }];
-        }
+    [self->_pushManager removingClientIdFromChannels];
+    [self->_socketWrapper setActivatingReconnectionEnabled:false];
+    [self->_socketWrapper close];
+    id <AVIMClientDelegate> delegate = self->_delegate;
+    SEL sel = @selector(client:didOfflineWithError:);
+    if (delegate && [delegate respondsToSelector:sel]) {
+        [self invokeInUserInteractQueue:^{
+            NSError *aError = ({
+                LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+                commandWrapper.inCommand = inCommand;
+                commandWrapper.error;
+            });
+            [delegate client:self didOfflineWithError:aError];
+        }];
     }
 }
 
