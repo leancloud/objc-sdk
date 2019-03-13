@@ -77,6 +77,7 @@ typedef GPB_ENUM(AVIMCommandType) {
   AVIMCommandType_Patch = 18,
   AVIMCommandType_Pubsub = 19,
   AVIMCommandType_Blacklist = 20,
+  AVIMCommandType_Goaway = 21,
 };
 
 LCIMEnumDescriptor *AVIMCommandType_EnumDescriptor(void);
@@ -172,6 +173,8 @@ typedef GPB_ENUM(AVIMOpType) {
   AVIMOpType_Unblocked = 173,
   AVIMOpType_MembersBlocked = 174,
   AVIMOpType_MembersUnblocked = 175,
+  AVIMOpType_CheckBlock = 176,
+  AVIMOpType_CheckResult = 177,
   AVIMOpType_AddShutup = 180,
   AVIMOpType_RemoveShutup = 181,
   AVIMOpType_QueryShutup = 182,
@@ -182,6 +185,9 @@ typedef GPB_ENUM(AVIMOpType) {
   AVIMOpType_Unshutuped = 187,
   AVIMOpType_MembersShutuped = 188,
   AVIMOpType_MembersUnshutuped = 189,
+
+  /** check_result define in 177 */
+  AVIMOpType_CheckShutup = 190,
 };
 
 LCIMEnumDescriptor *AVIMOpType_EnumDescriptor(void);
@@ -513,6 +519,7 @@ typedef GPB_ENUM(AVIMErrorCommand_FieldNumber) {
   AVIMErrorCommand_FieldNumber_AppCode = 3,
   AVIMErrorCommand_FieldNumber_Detail = 4,
   AVIMErrorCommand_FieldNumber_PidsArray = 5,
+  AVIMErrorCommand_FieldNumber_AppMsg = 6,
 };
 
 @interface AVIMErrorCommand : LCIMMessage
@@ -534,6 +541,10 @@ typedef GPB_ENUM(AVIMErrorCommand_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *pidsArray;
 /** The number of items in @c pidsArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger pidsArray_Count;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *appMsg;
+/** Test to see if @c appMsg has been set. */
+@property(nonatomic, readwrite) BOOL hasAppMsg;
 
 @end
 
@@ -651,6 +662,7 @@ typedef GPB_ENUM(AVIMAckCommand_FieldNumber) {
   AVIMAckCommand_FieldNumber_Type = 9,
   AVIMAckCommand_FieldNumber_IdsArray = 10,
   AVIMAckCommand_FieldNumber_AppCode = 11,
+  AVIMAckCommand_FieldNumber_AppMsg = 12,
 };
 
 @interface AVIMAckCommand : LCIMMessage
@@ -694,6 +706,10 @@ typedef GPB_ENUM(AVIMAckCommand_FieldNumber) {
 @property(nonatomic, readwrite) int32_t appCode;
 
 @property(nonatomic, readwrite) BOOL hasAppCode;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *appMsg;
+/** Test to see if @c appMsg has been set. */
+@property(nonatomic, readwrite) BOOL hasAppMsg;
+
 @end
 
 #pragma mark - AVIMUnreadCommand
@@ -1162,6 +1178,8 @@ typedef GPB_ENUM(AVIMPatchItem_FieldNumber) {
   AVIMPatchItem_FieldNumber_BinaryMsg = 8,
   AVIMPatchItem_FieldNumber_MentionAll = 9,
   AVIMPatchItem_FieldNumber_MentionPidsArray = 10,
+  AVIMPatchItem_FieldNumber_PatchCode = 11,
+  AVIMPatchItem_FieldNumber_PatchReason = 12,
 };
 
 @interface AVIMPatchItem : LCIMMessage
@@ -1201,6 +1219,13 @@ typedef GPB_ENUM(AVIMPatchItem_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *mentionPidsArray;
 /** The number of items in @c mentionPidsArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger mentionPidsArray_Count;
+
+@property(nonatomic, readwrite) int64_t patchCode;
+
+@property(nonatomic, readwrite) BOOL hasPatchCode;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *patchReason;
+/** Test to see if @c patchReason has been set. */
+@property(nonatomic, readwrite) BOOL hasPatchReason;
 
 @end
 

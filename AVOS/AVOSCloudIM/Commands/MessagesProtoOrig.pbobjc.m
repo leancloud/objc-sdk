@@ -13,7 +13,9 @@
  #import "LCIMProtocolBuffers_RuntimeSupport.h"
 #endif
 
- #import "MessagesProtoOrig.pbobjc.h"
+#import <stdatomic.h>
+
+#import "MessagesProtoOrig.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push
@@ -46,13 +48,13 @@ static LCIMFileDescriptor *AVIMMessagesProtoOrigRoot_FileDescriptor(void) {
 #pragma mark - Enum AVIMCommandType
 
 LCIMEnumDescriptor *AVIMCommandType_EnumDescriptor(void) {
-  static LCIMEnumDescriptor *descriptor = NULL;
+  static _Atomic(LCIMEnumDescriptor*) descriptor = nil;
   if (!descriptor) {
     static const char *valueNames =
         "Session\000Conv\000Direct\000Ack\000Rcp\000Unread\000Logs\000"
         "Error\000Login\000Data\000Room\000Read\000Presence\000Repo"
         "rt\000Echo\000Loggedin\000Logout\000Loggedout\000Patch\000"
-        "Pubsub\000Blacklist\000";
+        "Pubsub\000Blacklist\000Goaway\000";
     static const int32_t values[] = {
         AVIMCommandType_Session,
         AVIMCommandType_Conv,
@@ -75,8 +77,9 @@ LCIMEnumDescriptor *AVIMCommandType_EnumDescriptor(void) {
         AVIMCommandType_Patch,
         AVIMCommandType_Pubsub,
         AVIMCommandType_Blacklist,
+        AVIMCommandType_Goaway,
     };
-    static const char *extraTextFormatInfo = "\025\000\'\000\001$\000\002&\000\003#\000\004#\000\005&\000\006$\000\007%\000\010%\000\t$\000\n$\000\013$\000\014(\000\r&\000\016$\000\017(\000\020&\000\021)\000\022%\000\023&\000\024)\000";
+    static const char *extraTextFormatInfo = "\026\000\'\000\001$\000\002&\000\003#\000\004#\000\005&\000\006$\000\007%\000\010%\000\t$\000\n$\000\013$\000\014(\000\r&\000\016$\000\017(\000\020&\000\021)\000\022%\000\023&\000\024)\000\025&\000";
     LCIMEnumDescriptor *worker =
         [LCIMEnumDescriptor allocDescriptorForName:GPBNSStringifySymbol(AVIMCommandType)
                                        valueNames:valueNames
@@ -84,7 +87,8 @@ LCIMEnumDescriptor *AVIMCommandType_EnumDescriptor(void) {
                                             count:(uint32_t)(sizeof(values) / sizeof(int32_t))
                                      enumVerifier:AVIMCommandType_IsValidValue
                               extraTextFormatInfo:extraTextFormatInfo];
-    if (!OSAtomicCompareAndSwapPtrBarrier(nil, worker, (void * volatile *)&descriptor)) {
+    LCIMEnumDescriptor *expected = nil;
+    if (!atomic_compare_exchange_strong(&descriptor, &expected, worker)) {
       [worker release];
     }
   }
@@ -114,6 +118,7 @@ BOOL AVIMCommandType_IsValidValue(int32_t value__) {
     case AVIMCommandType_Patch:
     case AVIMCommandType_Pubsub:
     case AVIMCommandType_Blacklist:
+    case AVIMCommandType_Goaway:
       return YES;
     default:
       return NO;
@@ -123,7 +128,7 @@ BOOL AVIMCommandType_IsValidValue(int32_t value__) {
 #pragma mark - Enum AVIMOpType
 
 LCIMEnumDescriptor *AVIMOpType_EnumDescriptor(void) {
-  static LCIMEnumDescriptor *descriptor = NULL;
+  static _Atomic(LCIMEnumDescriptor*) descriptor = nil;
   if (!descriptor) {
     static const char *valueNames =
         "Open\000Add\000Remove\000Close\000Opened\000Closed\000Quer"
@@ -138,10 +143,11 @@ LCIMEnumDescriptor *AVIMOpType_EnumDescriptor(void) {
         "d\000Unsubscribe\000Unsubscribed\000IsSubscribed\000"
         "Modify\000Modified\000Block\000Unblock\000Blocked\000Un"
         "blocked\000MembersBlocked\000MembersUnblocked\000"
-        "AddShutup\000RemoveShutup\000QueryShutup\000Shutu"
-        "pAdded\000ShutupRemoved\000ShutupResult\000Shutup"
-        "ed\000Unshutuped\000MembersShutuped\000MembersUns"
-        "hutuped\000";
+        "CheckBlock\000CheckResult\000AddShutup\000RemoveS"
+        "hutup\000QueryShutup\000ShutupAdded\000ShutupRemo"
+        "ved\000ShutupResult\000Shutuped\000Unshutuped\000Mem"
+        "bersShutuped\000MembersUnshutuped\000CheckShut"
+        "up\000";
     static const int32_t values[] = {
         AVIMOpType_Open,
         AVIMOpType_Add,
@@ -198,6 +204,8 @@ LCIMEnumDescriptor *AVIMOpType_EnumDescriptor(void) {
         AVIMOpType_Unblocked,
         AVIMOpType_MembersBlocked,
         AVIMOpType_MembersUnblocked,
+        AVIMOpType_CheckBlock,
+        AVIMOpType_CheckResult,
         AVIMOpType_AddShutup,
         AVIMOpType_RemoveShutup,
         AVIMOpType_QueryShutup,
@@ -208,8 +216,9 @@ LCIMEnumDescriptor *AVIMOpType_EnumDescriptor(void) {
         AVIMOpType_Unshutuped,
         AVIMOpType_MembersShutuped,
         AVIMOpType_MembersUnshutuped,
+        AVIMOpType_CheckShutup,
     };
-    static const char *extraTextFormatInfo = "A\000$\000\001#\000\002&\000\003%\000\004&\000\005&\000\006%\000\007%\246\000\010(\000\t%\000\n\'\000\013\'\000\014)\000\r%\000\016\'\000\017&\000\020\'\246\000\021$\000\022\'\244\000\023\'\000\024%\000\025&\000\026&\000\027\'\000\030$\000\031&\000\032&\000\033\'\000\034#\244\000\035\"\246\000\036&\244\246\000\037&\244\247\000 &\244\247\000!$\000\"&\000#%\000$$\000%&\000&\'\000\'&\000(&\000)(\000*)\000+*\000,+\000-,\000.\"\252\000/&\0000(\0001%\0002\'\0003\'\0004)\0005\'\247\0006\'\251\0007#\246\0008&\246\0009%\246\000:&\245\000;&\247\000<&\246\000=(\000>*\000?\'\250\000@\'\252\000";
+    static const char *extraTextFormatInfo = "D\000$\000\001#\000\002&\000\003%\000\004&\000\005&\000\006%\000\007%\246\000\010(\000\t%\000\n\'\000\013\'\000\014)\000\r%\000\016\'\000\017&\000\020\'\246\000\021$\000\022\'\244\000\023\'\000\024%\000\025&\000\026&\000\027\'\000\030$\000\031&\000\032&\000\033\'\000\034#\244\000\035\"\246\000\036&\244\246\000\037&\244\247\000 &\244\247\000!$\000\"&\000#%\000$$\000%&\000&\'\000\'&\000(&\000)(\000*)\000+*\000,+\000-,\000.\"\252\000/&\0000(\0001%\0002\'\0003\'\0004)\0005\'\247\0006\'\251\0007%\245\0008%\246\0009#\246\000:&\246\000;%\246\000<&\245\000=&\247\000>&\246\000?(\000@*\000A\'\250\000B\'\252\000C%\246\000";
     LCIMEnumDescriptor *worker =
         [LCIMEnumDescriptor allocDescriptorForName:GPBNSStringifySymbol(AVIMOpType)
                                        valueNames:valueNames
@@ -217,7 +226,8 @@ LCIMEnumDescriptor *AVIMOpType_EnumDescriptor(void) {
                                             count:(uint32_t)(sizeof(values) / sizeof(int32_t))
                                      enumVerifier:AVIMOpType_IsValidValue
                               extraTextFormatInfo:extraTextFormatInfo];
-    if (!OSAtomicCompareAndSwapPtrBarrier(nil, worker, (void * volatile *)&descriptor)) {
+    LCIMEnumDescriptor *expected = nil;
+    if (!atomic_compare_exchange_strong(&descriptor, &expected, worker)) {
       [worker release];
     }
   }
@@ -281,6 +291,8 @@ BOOL AVIMOpType_IsValidValue(int32_t value__) {
     case AVIMOpType_Unblocked:
     case AVIMOpType_MembersBlocked:
     case AVIMOpType_MembersUnblocked:
+    case AVIMOpType_CheckBlock:
+    case AVIMOpType_CheckResult:
     case AVIMOpType_AddShutup:
     case AVIMOpType_RemoveShutup:
     case AVIMOpType_QueryShutup:
@@ -291,6 +303,7 @@ BOOL AVIMOpType_IsValidValue(int32_t value__) {
     case AVIMOpType_Unshutuped:
     case AVIMOpType_MembersShutuped:
     case AVIMOpType_MembersUnshutuped:
+    case AVIMOpType_CheckShutup:
       return YES;
     default:
       return NO;
@@ -300,7 +313,7 @@ BOOL AVIMOpType_IsValidValue(int32_t value__) {
 #pragma mark - Enum AVIMStatusType
 
 LCIMEnumDescriptor *AVIMStatusType_EnumDescriptor(void) {
-  static LCIMEnumDescriptor *descriptor = NULL;
+  static _Atomic(LCIMEnumDescriptor*) descriptor = nil;
   if (!descriptor) {
     static const char *valueNames =
         "On\000Off\000";
@@ -316,7 +329,8 @@ LCIMEnumDescriptor *AVIMStatusType_EnumDescriptor(void) {
                                             count:(uint32_t)(sizeof(values) / sizeof(int32_t))
                                      enumVerifier:AVIMStatusType_IsValidValue
                               extraTextFormatInfo:extraTextFormatInfo];
-    if (!OSAtomicCompareAndSwapPtrBarrier(nil, worker, (void * volatile *)&descriptor)) {
+    LCIMEnumDescriptor *expected = nil;
+    if (!atomic_compare_exchange_strong(&descriptor, &expected, worker)) {
       [worker release];
     }
   }
@@ -368,7 +382,9 @@ typedef struct AVIMJsonObjectMessage__storage_ {
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(AVIMJsonObjectMessage__storage_)
                                          flags:LCIMDescriptorInitializationFlag_None];
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -514,7 +530,9 @@ typedef struct AVIMUnreadTuple__storage_ {
         "\003\007\016\000\t\t\000\n\010\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -670,7 +688,9 @@ typedef struct AVIMLogItem__storage_ {
         "\007\004\005\000\005\005\000\006\006\000\007\016\000\010\n\000\t\000mentionPids\000\013\010\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -740,7 +760,9 @@ typedef struct AVIMConvMemberInfo__storage_ {
         "\001\003\006\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -804,7 +826,9 @@ typedef struct AVIMDataCommand__storage_ {
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(AVIMDataCommand__storage_)
                                          flags:LCIMDescriptorInitializationFlag_None];
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -1049,7 +1073,9 @@ typedef struct AVIMSessionCommand__storage_ {
         "Ids\000\013\005\000\016\013\000\021\023\000\022\r\000\023\014\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -1066,6 +1092,7 @@ typedef struct AVIMSessionCommand__storage_ {
 @dynamic hasAppCode, appCode;
 @dynamic hasDetail, detail;
 @dynamic pidsArray, pidsArray_Count;
+@dynamic hasAppMsg, appMsg;
 
 typedef struct AVIMErrorCommand__storage_ {
   uint32_t _has_storage_[1];
@@ -1074,6 +1101,7 @@ typedef struct AVIMErrorCommand__storage_ {
   NSString *reason;
   NSString *detail;
   NSMutableArray *pidsArray;
+  NSString *appMsg;
 } AVIMErrorCommand__storage_;
 
 // This method is threadsafe because it is initially called
@@ -1127,6 +1155,15 @@ typedef struct AVIMErrorCommand__storage_ {
         .flags = LCIMFieldRepeated,
         .dataType = GPBDataTypeString,
       },
+      {
+        .name = "appMsg",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMErrorCommand_FieldNumber_AppMsg,
+        .hasIndex = 4,
+        .offset = (uint32_t)offsetof(AVIMErrorCommand__storage_, appMsg),
+        .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
     };
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[AVIMErrorCommand class]
@@ -1138,10 +1175,12 @@ typedef struct AVIMErrorCommand__storage_ {
                                          flags:LCIMDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\001\003\007\000";
+        "\002\003\007\000\006\006\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -1393,7 +1432,9 @@ typedef struct AVIMDirectCommand__storage_ {
         "Pids\000\025\n\000\026\010\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -1416,6 +1457,7 @@ typedef struct AVIMDirectCommand__storage_ {
 @dynamic hasType, type;
 @dynamic idsArray, idsArray_Count;
 @dynamic hasAppCode, appCode;
+@dynamic hasAppMsg, appMsg;
 
 typedef struct AVIMAckCommand__storage_ {
   uint32_t _has_storage_[1];
@@ -1427,6 +1469,7 @@ typedef struct AVIMAckCommand__storage_ {
   NSString *uid;
   NSString *type;
   NSMutableArray *idsArray;
+  NSString *appMsg;
   int64_t t;
   int64_t fromts;
   int64_t tots;
@@ -1537,6 +1580,15 @@ typedef struct AVIMAckCommand__storage_ {
         .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt32,
       },
+      {
+        .name = "appMsg",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMAckCommand_FieldNumber_AppMsg,
+        .hasIndex = 10,
+        .offset = (uint32_t)offsetof(AVIMAckCommand__storage_, appMsg),
+        .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
     };
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[AVIMAckCommand class]
@@ -1548,10 +1600,12 @@ typedef struct AVIMAckCommand__storage_ {
                                          flags:LCIMDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\001\013\007\000";
+        "\002\013\007\000\014\006\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -1610,7 +1664,9 @@ typedef struct AVIMUnreadCommand__storage_ {
         "\001\002\t\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -2039,7 +2095,9 @@ typedef struct AVIMConvCommand__storage_ {
         "\037\000failedPids\000h\014\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -2152,7 +2210,9 @@ typedef struct AVIMRoomCommand__storage_ {
         "\003\001\006\000\006\000roomPeerIds\000\007\010\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -2354,7 +2414,9 @@ typedef struct AVIMLogsCommand__storage_ {
         "\002\013\t\000\014\n\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -2365,7 +2427,7 @@ typedef struct AVIMLogsCommand__storage_ {
 #pragma mark - Enum AVIMLogsCommand_QueryDirection
 
 LCIMEnumDescriptor *AVIMLogsCommand_QueryDirection_EnumDescriptor(void) {
-  static LCIMEnumDescriptor *descriptor = NULL;
+  static _Atomic(LCIMEnumDescriptor*) descriptor = nil;
   if (!descriptor) {
     static const char *valueNames =
         "Old\000New\000";
@@ -2379,7 +2441,8 @@ LCIMEnumDescriptor *AVIMLogsCommand_QueryDirection_EnumDescriptor(void) {
                                            values:values
                                             count:(uint32_t)(sizeof(values) / sizeof(int32_t))
                                      enumVerifier:AVIMLogsCommand_QueryDirection_IsValidValue];
-    if (!OSAtomicCompareAndSwapPtrBarrier(nil, worker, (void * volatile *)&descriptor)) {
+    LCIMEnumDescriptor *expected = nil;
+    if (!atomic_compare_exchange_strong(&descriptor, &expected, worker)) {
       [worker release];
     }
   }
@@ -2474,7 +2537,9 @@ typedef struct AVIMRcpCommand__storage_ {
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(AVIMRcpCommand__storage_)
                                          flags:LCIMDescriptorInitializationFlag_None];
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -2539,7 +2604,9 @@ typedef struct AVIMReadTuple__storage_ {
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(AVIMReadTuple__storage_)
                                          flags:LCIMDescriptorInitializationFlag_None];
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -2609,7 +2676,9 @@ typedef struct AVIMMaxReadTuple__storage_ {
         "\002\002\017\000\003\020\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -2674,7 +2743,9 @@ typedef struct AVIMReadCommand__storage_ {
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(AVIMReadCommand__storage_)
                                          flags:LCIMDescriptorInitializationFlag_None];
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -2747,7 +2818,9 @@ typedef struct AVIMPresenceCommand__storage_ {
         "\001\002\000sessionPeerIds\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -2811,7 +2884,9 @@ typedef struct AVIMReportCommand__storage_ {
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(AVIMReportCommand__storage_)
                                          flags:LCIMDescriptorInitializationFlag_None];
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -2833,6 +2908,8 @@ typedef struct AVIMReportCommand__storage_ {
 @dynamic hasBinaryMsg, binaryMsg;
 @dynamic hasMentionAll, mentionAll;
 @dynamic mentionPidsArray, mentionPidsArray_Count;
+@dynamic hasPatchCode, patchCode;
+@dynamic hasPatchReason, patchReason;
 
 typedef struct AVIMPatchItem__storage_ {
   uint32_t _has_storage_[1];
@@ -2842,8 +2919,10 @@ typedef struct AVIMPatchItem__storage_ {
   NSString *from;
   NSData *binaryMsg;
   NSMutableArray *mentionPidsArray;
+  NSString *patchReason;
   int64_t timestamp;
   int64_t patchTimestamp;
+  int64_t patchCode;
 } AVIMPatchItem__storage_;
 
 // This method is threadsafe because it is initially called
@@ -2942,6 +3021,24 @@ typedef struct AVIMPatchItem__storage_ {
         .flags = (LCIMFieldFlags)(LCIMFieldRepeated | LCIMFieldTextFormatNameCustom),
         .dataType = GPBDataTypeString,
       },
+      {
+        .name = "patchCode",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMPatchItem_FieldNumber_PatchCode,
+        .hasIndex = 11,
+        .offset = (uint32_t)offsetof(AVIMPatchItem__storage_, patchCode),
+        .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "patchReason",
+        .dataTypeSpecific.className = NULL,
+        .number = AVIMPatchItem_FieldNumber_PatchReason,
+        .hasIndex = 12,
+        .offset = (uint32_t)offsetof(AVIMPatchItem__storage_, patchReason),
+        .flags = (LCIMFieldFlags)(LCIMFieldOptional | LCIMFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
     };
     LCIMDescriptor *localDescriptor =
         [LCIMDescriptor allocDescriptorForClass:[AVIMPatchItem class]
@@ -2953,10 +3050,12 @@ typedef struct AVIMPatchItem__storage_ {
                                          flags:LCIMDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\004\006\016\000\010\t\000\t\n\000\n\000mentionPids\000";
+        "\006\006\016\000\010\t\000\t\n\000\n\000mentionPids\000\013\t\000\014\013\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -3015,7 +3114,9 @@ typedef struct AVIMPatchCommand__storage_ {
         "\001\002\r\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -3124,7 +3225,9 @@ typedef struct AVIMPubsubCommand__storage_ {
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(AVIMPubsubCommand__storage_)
                                          flags:LCIMDescriptorInitializationFlag_None];
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -3305,7 +3408,9 @@ typedef struct AVIMBlacklistCommand__storage_ {
         "\000blockedCids\000\n\000allowedPids\000\013\000failedPids\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -3643,7 +3748,9 @@ typedef struct AVIMGenericCommand__storage_ {
         "n\013\000o\013\000p\017\000q\r\000r\014\000s\r\000t\020\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    NSAssert(descriptor == nil, @"Startup recursed!");
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
     descriptor = localDescriptor;
   }
   return descriptor;
