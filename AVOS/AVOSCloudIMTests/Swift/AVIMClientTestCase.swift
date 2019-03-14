@@ -340,4 +340,32 @@ class AVIMClientTestCase: LCIMTestBase {
         }, failure: { XCTFail("timeout") })
     }
     
+    func test_goaway() {
+        AVOSCloudIM.defaultOptions().rtmServer = "wss://rtm51.leancloud.cn";
+        
+        guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: String(#function[..<#function.index(of: "(")!])) else {
+            XCTFail()
+            return
+        }
+        let delegator = AVIMClientDelegateWrapper()
+        client.delegate = delegator
+        
+        AVOSCloudIM.defaultOptions().rtmServer = nil;
+        
+        let exp = expectation(description: "test goaway")
+        exp.expectedFulfillmentCount = 3
+        LCRouter.sharedInstance().getRTMURLWithAppID(AVOSCloud.getApplicationId()) { (response, error) in
+            XCTAssertNotNil(response)
+            XCTAssertNil(error)
+            exp.fulfill()
+        }
+        delegator.pausedClosure = { _ in
+            exp.fulfill()
+        }
+        delegator.resumedClosure = { _ in
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 90)
+    }
+    
 }
