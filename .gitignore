@@ -1,3 +1,6 @@
+# Local Config
+script_config.json
+
 # Xcode
 .DS_Store
 build/
