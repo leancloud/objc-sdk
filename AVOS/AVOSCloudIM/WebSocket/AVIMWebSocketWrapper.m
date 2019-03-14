@@ -513,6 +513,9 @@ static NSArray<NSString *> * RTMProtocols()
         LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
         commandWrapper.inCommand = inCommand;
         [delegate webSocketWrapper:self didReceiveCommand:commandWrapper];
+        if (!inCommand.hasPeerId) {
+            [self handleGoawayWith:inCommand];
+        }
     }
 }
 
@@ -830,6 +833,27 @@ static NSArray<NSString *> * RTMProtocols()
     uint16_t result = self->_serialIndex;
     self->_serialIndex = (self->_serialIndex + 1) % (UINT16_MAX + 1);
     return result;
+}
+
+- (void)handleGoawayWith:(AVIMGenericCommand *)command
+{
+    AssertRunInQueue(self->_internalSerialQueue);
+    if (command.cmd != AVIMCommandType_Goaway) {
+        return;
+    }
+    NSError *error;
+    [[LCRouter sharedInstance] cleanCacheWithKey:RouterCacheKeyRTM error:&error];
+    if (error) {
+        AVLoggerError(AVLoggerDomainIM, @"%@", error);
+        return;
+    }
+    error = ({
+        AVIMErrorCode code = AVIMErrorCodeConnectionLost;
+        LCError(code, @"Connection did close by local peer.", nil);
+    });
+    [self purgeWithError:error];
+    [self pauseWithError:error];
+    [self tryConnecting:false];
 }
 
 @end
