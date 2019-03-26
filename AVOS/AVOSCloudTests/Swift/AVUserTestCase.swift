@@ -471,4 +471,44 @@ class AVUser_TestCase: LCTestBase {
         })
     }
     
+    func testLoginByEmail() {
+        let user = AVUser()
+        let username = UUID().uuidString.replacingOccurrences(of: "-", with: "")
+        user.username = username
+        let password = UUID().uuidString.replacingOccurrences(of: "-", with: "")
+        user.password = password
+        let email = "\(UUID().uuidString.replacingOccurrences(of: "-", with: ""))@email.com"
+        user.email = email
+        
+        do {
+            try user.signUpAndThrows()
+        } catch {
+            XCTFail("\(error)")
+        }
+        
+        let exp1 = expectation(description: "login by email")
+        AVUser.login(withEmail: email, password: password) { (sameUser, error) in
+            XCTAssertNotNil(sameUser)
+            XCTAssertFalse(user === sameUser)
+            XCTAssertEqual(user.objectId, sameUser?.objectId)
+            XCTAssertEqual(username, sameUser?.username)
+            XCTAssertEqual(email, sameUser?.email)
+            XCTAssertNil(error)
+            exp1.fulfill()
+        }
+        wait(for: [exp1], timeout: 30)
+        
+        let exp2 = expectation(description: "login by username")
+        AVUser.logInWithUsername(inBackground: username, password: password) { (sameUser, error) in
+            XCTAssertNotNil(sameUser)
+            XCTAssertFalse(user === sameUser)
+            XCTAssertEqual(user.objectId, sameUser?.objectId)
+            XCTAssertEqual(username, sameUser?.username)
+            XCTAssertEqual(email, sameUser?.email)
+            XCTAssertNil(error)
+            exp2.fulfill()
+        }
+        wait(for: [exp2], timeout: 30)
+    }
+    
 }
