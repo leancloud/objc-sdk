@@ -375,13 +375,6 @@ static BOOL enableAutomatic = NO;
                        }];
 }
 
-+(NSDictionary *)userParameter:(NSString *)username
-                      password:(NSString *)password
-{
-    NSDictionary * parameters = @{usernameTag: username, passwordTag:password};
-    return parameters;
-}
-
 // MARK: - login with username & password
 
 + (instancetype)logInWithUsername:(NSString *)username
@@ -395,7 +388,7 @@ static BOOL enableAutomatic = NO;
                         error:(NSError **)error
 {
     __block AVUser * resultUser = nil;
-    [[self class] logInWithUsername:username password:password block:^(AVUser *user, NSError *error) {
+    [[self class] logInWithUsername:username email:nil password:password block:^(AVUser *user, NSError *error) {
         resultUser = user;
     } waitUntilDone:YES error:error];
     return resultUser;
@@ -404,7 +397,7 @@ static BOOL enableAutomatic = NO;
 + (void)logInWithUsernameInBackground:(NSString *)username
                              password:(NSString *)password
 {
-    [[self class] logInWithUsername:username password:password block:nil waitUntilDone:YES error:nil];
+    [[self class] logInWithUsername:username email:nil password:password block:nil waitUntilDone:YES error:nil];
 }
 
 + (void)logInWithUsernameInBackground:(NSString *)username
@@ -423,14 +416,21 @@ static BOOL enableAutomatic = NO;
                              password:(NSString *)password
                                 block:(AVUserResultBlock)block
 {
-    [[self class] logInWithUsername:username password:password block:^(AVUser *user, NSError * error) {
+    [[self class] logInWithUsername:username email:nil password:password block:^(AVUser *user, NSError * error) {
         [AVUtils callUserResultBlock:block user:user error:error];
     }
     waitUntilDone:NO error:nil];
     
 }
+    
++ (void)loginWithEmail:(NSString *)email password:(NSString *)password block:(AVUserResultBlock)block {
+    [[self class] logInWithUsername:nil email:email password:password block:^(AVUser * _Nullable user, NSError * _Nullable error) {
+        [AVUtils callUserResultBlock:block user:user error:error];
+    } waitUntilDone:false error:nil];
+}
 
 + (BOOL)logInWithUsername:(NSString *)username
+                    email:(NSString *)email
                  password:(NSString *)password
                     block:(AVUserResultBlock)block
             waitUntilDone:(BOOL)wait
@@ -440,7 +440,10 @@ static BOOL enableAutomatic = NO;
     BOOL __block hasCalledBack = NO;
     NSError __block *blockError = nil;
     
-    NSDictionary * parameters = [[self class] userParameter:username password:password];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    if (username) { parameters[usernameTag] = username; }
+    if (email) { parameters[emailTag] = email; }
+    if (password) { parameters[passwordTag] = password; }
     [[AVPaasClient sharedInstance] postObject:@"login" withParameters:parameters block:^(id object, NSError *error) {
         AVUser * user = nil;
         if (error == nil)

@@ -248,6 +248,15 @@ A LeanCloud Framework User Object that is a local representation of a user persi
                              password:(NSString *)password
                                 block:(AVUserResultBlock)block;
 
+/**
+ Login by email and password.
+
+ @param email The email string.
+ @param password The password string.
+ @param block callback.
+ */
++ (void)loginWithEmail:(NSString *)email password:(NSString *)password block:(AVUserResultBlock)block;
+
 //phoneNumber + password
 /*!
  *  使用手机号码和密码登录
