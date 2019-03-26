@@ -90,8 +90,8 @@ func build() -> Result {
         let lines: [String] = (info as! String).components(separatedBy: .newlines)
             .map { $0.trimmingCharacters(in: .whitespaces) }
         schemes = {
-            guard var startIndex: Int = lines.index(of: "Schemes:") else { return [] }
-            guard let endIndex: Int = lines[startIndex...].index(of: "") else { return [] }
+            guard var startIndex: Int = lines.firstIndex(of: "Schemes:") else { return [] }
+            guard let endIndex: Int = lines[startIndex...].firstIndex(of: "") else { return [] }
             startIndex += 1
             guard startIndex < endIndex else { return [] }
             let arraySlice: ArraySlice<String> = lines[startIndex..<endIndex].filter {
@@ -100,8 +100,8 @@ func build() -> Result {
             return Array(arraySlice)
         }()
         buildConfigurations = {
-            guard var startIndex: Int = lines.index(of: "Build Configurations:") else { return [] }
-            guard let endIndex: Int = lines[startIndex...].index(of: "") else { return [] }
+            guard var startIndex: Int = lines.firstIndex(of: "Build Configurations:") else { return [] }
+            guard let endIndex: Int = lines[startIndex...].firstIndex(of: "") else { return [] }
             startIndex += 1
             guard startIndex < endIndex else { return [] }
             let arraySlice: ArraySlice<String> = lines[startIndex..<endIndex]
