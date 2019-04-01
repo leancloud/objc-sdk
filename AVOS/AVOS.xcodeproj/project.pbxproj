@@ -1030,6 +1030,7 @@
 		D3A3028B21C9EC6600A6C09D /* LiveQueryTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A3028A21C9EC6600A6C09D /* LiveQueryTestViewController.swift */; };
 		D3C53FCC2106D84A00D48686 /* AVIMClientProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C53FCB2106D84A00D48686 /* AVIMClientProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D3C53FCD2106D84A00D48686 /* AVIMClientProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C53FCB2106D84A00D48686 /* AVIMClientProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D3CC5D282252242A00B3C778 /* AVQueryTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CC5D272252242A00B3C778 /* AVQueryTestCase.swift */; };
 		D3CC90CB2069E5BB0082EFD4 /* AVObjectTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CC90CA2069E5BB0082EFD4 /* AVObjectTestCase.swift */; };
 		D3CDF4EB1FE8F3810033153E /* LCIMTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */; };
 		D3D80081210AFC7F0058F86C /* AVIMCommon_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D80080210AFC7F0058F86C /* AVIMCommon_Internal.h */; };
@@ -1474,6 +1475,7 @@
 		D3A3028821C9EC5300A6C09D /* IMTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMTestViewController.swift; sourceTree = "<group>"; };
 		D3A3028A21C9EC6600A6C09D /* LiveQueryTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveQueryTestViewController.swift; sourceTree = "<group>"; };
 		D3C53FCB2106D84A00D48686 /* AVIMClientProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVIMClientProtocol.h; sourceTree = "<group>"; };
+		D3CC5D272252242A00B3C778 /* AVQueryTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVQueryTestCase.swift; sourceTree = "<group>"; };
 		D3CC90CA2069E5BB0082EFD4 /* AVObjectTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVObjectTestCase.swift; sourceTree = "<group>"; };
 		D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestBase.swift; sourceTree = "<group>"; };
 		D3D80080210AFC7F0058F86C /* AVIMCommon_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVIMCommon_Internal.h; sourceTree = "<group>"; };
@@ -2346,6 +2348,7 @@
 				D3472E1E2015CBC200AAD65F /* AVFileTestCase.swift */,
 				D305470E208F2F7200B547B9 /* AVCloudTestCase.swift */,
 				D336C56F212D02A2008D0E3E /* LCRouterTestCase.swift */,
+				D3CC5D272252242A00B3C778 /* AVQueryTestCase.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -3902,6 +3905,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D305470F208F2F7200B547B9 /* AVCloudTestCase.swift in Sources */,
+				D3CC5D282252242A00B3C778 /* AVQueryTestCase.swift in Sources */,
 				D30DF3F71FDE2CD200F932BC /* AVUserTestCase.swift in Sources */,
 				D30DF4161FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 				D336C570212D02A2008D0E3E /* LCRouterTestCase.swift in Sources */,
