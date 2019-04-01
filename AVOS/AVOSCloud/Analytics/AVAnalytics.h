@@ -35,7 +35,6 @@ typedef NS_ENUM(int, AVReportPolicy) {
 } ;
 
 @protocol AVAnalyticsDelegate;
-@class CLLocation;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -315,12 +314,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 
 + (void)setLatitude:(double)latitude longitude:(double)longitude;
-
-/** 为了更精确的统计用户地理位置，可以调用此方法传入经纬度信息
- @param location CLLocation *型的地理信息
- */
-+ (void)setLocation:(CLLocation *)location;
-
 
 /**
  *  设置自定义信息
