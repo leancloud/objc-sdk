@@ -108,9 +108,9 @@
         
         self.apnsTeamId = teamId;
         
-        [self.requestManager synchronize:^{
+        [self._requestManager synchronize:^{
             
-            [self updateInstallationDictionary:[self.requestManager setDict]];
+            [self updateInstallationDictionary:[self._requestManager setDict]];
         }];
     }
 }
@@ -155,8 +155,8 @@
 
 -(NSError *)preSave {
     if ([self isDirty]) {
-        [self.requestManager synchronize:^{
-            [self updateInstallationDictionary:[self.requestManager setDict]];
+        [self._requestManager synchronize:^{
+            [self updateInstallationDictionary:[self._requestManager setDict]];
         }];
     }
     if (self.installationId==nil && self.deviceToken==nil) {
@@ -207,7 +207,7 @@
 
     __block NSDictionary *localDataCopy = nil;
     [self internalSyncLock:^{
-        localDataCopy = self.localData.copy;
+        localDataCopy = self._localData.copy;
     }];
     NSDictionary *updationData = [AVObjectUtils dictionaryFromObject:localDataCopy];
 

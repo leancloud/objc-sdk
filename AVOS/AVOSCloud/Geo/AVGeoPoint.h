@@ -6,8 +6,6 @@
 
 #import <Foundation/Foundation.h>
 
-@class CLLocation;
-
 NS_ASSUME_NONNULL_BEGIN
 
 /*!
@@ -29,14 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)geoPoint;
 
 /*!
- Creates a new AVGeoPoint object for the given CLLocation, set to the location's
- coordinates.
- @param location CLLocation object, with set latitude and longitude.
- @return a new AVGeoPoint at specified location.
- */
-+ (instancetype)geoPointWithLocation:(CLLocation *)location;
-
-/*!
  Creates a new AVGeoPoint object with the specified latitude and longitude.
  @param latitude Latitude of point in degrees.
  @param longitude Longitude of point in degrees.
@@ -44,44 +34,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)geoPointWithLatitude:(double)latitude longitude:(double)longitude;
 
-/*!
- Fetches the user's current location and returns a new AVGeoPoint object via the
- provided block.
- @param geoPointHandler A block which takes the newly created AVGeoPoint as an
- argument.
- */
-+ (void)geoPointForCurrentLocationInBackground:(void(^)(AVGeoPoint * _Nullable geoPoint, NSError * _Nullable error))geoPointHandler;
-
 /** @name Controlling Position */
 
 /// Latitude of point in degrees.  Valid range (-90.0, 90.0).
 @property (nonatomic) double latitude;
 /// Longitude of point in degrees.  Valid range (-180.0, 180.0).
 @property (nonatomic) double longitude;
-
-/** @name Calculating Distance */
-
-/*!
- Get distance in radians from this point to specified point.
- @param point AVGeoPoint location of other point.
- @return distance in radians
- */
-- (double)distanceInRadiansTo:(AVGeoPoint*)point;
-
-/*!
- Get distance in miles from this point to specified point.
- @param point AVGeoPoint location of other point.
- @return distance in miles
- */
-- (double)distanceInMilesTo:(AVGeoPoint*)point;
-
-/*!
- Get distance in kilometers from this point to specified point.
- @param point AVGeoPoint location of other point.
- @return distance in kilometers
- */
-- (double)distanceInKilometersTo:(AVGeoPoint*)point;
-
 
 @end
 

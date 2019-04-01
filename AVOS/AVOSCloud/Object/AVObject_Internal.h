@@ -39,20 +39,20 @@ NSString *request_object_id(NSDictionary *request) {
 @property (nonatomic, strong) NSDate *updatedAt;
 @property (nonatomic, strong) NSDate *createdAt;
 
-@property (nonatomic, strong) NSMutableDictionary *localData;
-@property (nonatomic, strong) NSMutableDictionary *estimatedData;
-@property (nonatomic, strong) NSMutableDictionary *relationData;
+@property (nonatomic, strong) NSMutableDictionary *_localData;
+@property (nonatomic, strong) NSMutableDictionary *_estimatedData;
+@property (nonatomic, strong) NSMutableDictionary *_relationData;
 
-@property (nonatomic,   copy, readonly) NSString *uuid;
-@property (nonatomic, assign) BOOL isPointer;
-@property (nonatomic, assign) BOOL running;
-@property (nonatomic, strong) AVRequestOperationQueue *operationQueue;
-@property (nonatomic, strong) AVRequestManager *requestManager;
+@property (nonatomic,   copy) NSString *_uuid;
+@property (nonatomic, assign) BOOL _isPointer;
+@property (nonatomic, assign) BOOL _running;
+@property (nonatomic, strong) AVRequestOperationQueue *_operationQueue;
+@property (nonatomic, strong) AVRequestManager *_requestManager;
 
-@property (nonatomic, assign) BOOL submit;
-@property (nonatomic, assign) BOOL inSetter;
-@property (nonatomic, assign) BOOL hasDataForCloud;
-@property (nonatomic, assign) BOOL hasDataForInitial;
+@property (nonatomic, assign) BOOL _submit;
+@property (nonatomic, assign) BOOL _inSetter;
+@property (nonatomic, assign) BOOL _hasDataForCloud;
+@property (nonatomic, assign) BOOL _hasDataForInitial;
 
 - (void)internalSyncLock:(void (^)(void))block;
 

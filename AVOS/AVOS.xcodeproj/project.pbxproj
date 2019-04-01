@@ -112,7 +112,6 @@
 		70CA7F811BDE3721000A3B21 /* AVFileQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 701881F31BC6777200432D43 /* AVFileQuery.m */; };
 		70CA7F841BDE3721000A3B21 /* LCFileTaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A1B1A5A79FF00C5C6C4 /* LCFileTaskManager.m */; };
 		70CA7F851BDE3721000A3B21 /* AVGeoPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A1E1A5A79FF00C5C6C4 /* AVGeoPoint.m */; };
-		70CA7F861BDE3721000A3B21 /* AVLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A211A5A79FF00C5C6C4 /* AVLocationManager.m */; };
 		70CA7F871BDE3721000A3B21 /* AVObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A521A5A79FF00C5C6C4 /* AVObject.m */; };
 		70CA7F881BDE3721000A3B21 /* AVObjectUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A551A5A79FF00C5C6C4 /* AVObjectUtils.m */; };
 		70CA7F891BDE3721000A3B21 /* AVRelation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A571A5A79FF00C5C6C4 /* AVRelation.m */; };
@@ -170,7 +169,6 @@
 		70CA7FF51BDE42F6000A3B21 /* LCFileTaskManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A1A1A5A79FF00C5C6C4 /* LCFileTaskManager.h */; };
 		70CA7FF61BDE42F6000A3B21 /* AVGeoPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A1D1A5A79FF00C5C6C4 /* AVGeoPoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		70CA7FF71BDE42F6000A3B21 /* AVGeoPoint_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A1F1A5A79FF00C5C6C4 /* AVGeoPoint_Internal.h */; };
-		70CA7FF81BDE42F6000A3B21 /* AVLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A201A5A79FF00C5C6C4 /* AVLocationManager.h */; };
 		70CA7FF91BDE4313000A3B21 /* AVObject+Subclass.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A501A5A79FF00C5C6C4 /* AVObject+Subclass.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		70CA7FFA1BDE4313000A3B21 /* AVObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A511A5A79FF00C5C6C4 /* AVObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		70CA7FFB1BDE4313000A3B21 /* AVObject_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A531A5A79FF00C5C6C4 /* AVObject_Internal.h */; };
@@ -286,7 +284,6 @@
 		8320F8B21C1918C60024B45E /* AVErrorUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841AA31A5A7A0000C5C6C4 /* AVErrorUtils.m */; };
 		8320F8B31C1918C60024B45E /* LCDatabaseMigrator.m in Sources */ = {isa = PBXBuildFile; fileRef = 830E7CFB1B1CAD3B005F4B22 /* LCDatabaseMigrator.m */; };
 		8320F8B61C1918C60024B45E /* LCResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DF02AF1AF86032000E289C /* LCResultSet.m */; };
-		8320F8B71C1918C60024B45E /* AVLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A211A5A79FF00C5C6C4 /* AVLocationManager.m */; };
 		8320F8B81C1918C60024B45E /* AVStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A791A5A7A0000C5C6C4 /* AVStatus.m */; };
 		8320F8BB1C1918C60024B45E /* AVGeoPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A1E1A5A79FF00C5C6C4 /* AVGeoPoint.m */; };
 		8320F8BC1C1918C60024B45E /* AVCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419FB1A5A79FF00C5C6C4 /* AVCacheManager.m */; };
@@ -329,7 +326,6 @@
 		8320F9001C1918C60024B45E /* AVUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A9E1A5A7A0000C5C6C4 /* AVUser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8320F9011C1918C60024B45E /* AVLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841AA61A5A7A0000C5C6C4 /* AVLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8320F9021C1918C60024B45E /* AVGlobal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419F41A5A79FF00C5C6C4 /* AVGlobal.h */; };
-		8320F9041C1918C60024B45E /* AVLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A201A5A79FF00C5C6C4 /* AVLocationManager.h */; };
 		8320F90F1C1918C60024B45E /* AVHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841AA41A5A7A0000C5C6C4 /* AVHelpers.h */; };
 		8320F9111C1918C60024B45E /* LCDatabaseCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 830E7CFE1B1CB07B005F4B22 /* LCDatabaseCommon.h */; };
 		8320F9121C1918C60024B45E /* LCResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DF02AE1AF86032000E289C /* LCResultSet.h */; };
@@ -515,7 +511,6 @@
 		83D8CEAB1C17DAF50094279D /* AVErrorUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841AA31A5A7A0000C5C6C4 /* AVErrorUtils.m */; };
 		83D8CEAC1C17DAF50094279D /* LCDatabaseMigrator.m in Sources */ = {isa = PBXBuildFile; fileRef = 830E7CFB1B1CAD3B005F4B22 /* LCDatabaseMigrator.m */; };
 		83D8CEAF1C17DAF50094279D /* LCResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DF02AF1AF86032000E289C /* LCResultSet.m */; };
-		83D8CEB01C17DAF50094279D /* AVLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A211A5A79FF00C5C6C4 /* AVLocationManager.m */; };
 		83D8CEB11C17DAF50094279D /* AVStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A791A5A7A0000C5C6C4 /* AVStatus.m */; };
 		83D8CEB41C17DAF50094279D /* AVGeoPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A1E1A5A79FF00C5C6C4 /* AVGeoPoint.m */; };
 		83D8CEB51C17DAF50094279D /* AVCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419FB1A5A79FF00C5C6C4 /* AVCacheManager.m */; };
@@ -561,7 +556,6 @@
 		83D8CEF91C17DAF50094279D /* AVUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A9E1A5A7A0000C5C6C4 /* AVUser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83D8CEFA1C17DAF50094279D /* AVLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841AA61A5A7A0000C5C6C4 /* AVLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83D8CEFB1C17DAF50094279D /* AVGlobal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419F41A5A79FF00C5C6C4 /* AVGlobal.h */; };
-		83D8CEFD1C17DAF50094279D /* AVLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A201A5A79FF00C5C6C4 /* AVLocationManager.h */; };
 		83D8CF081C17DAF50094279D /* AVHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841AA41A5A7A0000C5C6C4 /* AVHelpers.h */; };
 		83D8CF0A1C17DAF50094279D /* LCDatabaseCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 830E7CFE1B1CB07B005F4B22 /* LCDatabaseCommon.h */; };
 		83D8CF0B1C17DAF50094279D /* LCResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DF02AE1AF86032000E289C /* LCResultSet.h */; };
@@ -730,8 +724,6 @@
 		8C841AE71A5A7A0000C5C6C4 /* AVGeoPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A1D1A5A79FF00C5C6C4 /* AVGeoPoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C841AE81A5A7A0000C5C6C4 /* AVGeoPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A1E1A5A79FF00C5C6C4 /* AVGeoPoint.m */; };
 		8C841AE91A5A7A0000C5C6C4 /* AVGeoPoint_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A1F1A5A79FF00C5C6C4 /* AVGeoPoint_Internal.h */; };
-		8C841AEA1A5A7A0000C5C6C4 /* AVLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A201A5A79FF00C5C6C4 /* AVLocationManager.h */; };
-		8C841AEB1A5A7A0000C5C6C4 /* AVLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A211A5A79FF00C5C6C4 /* AVLocationManager.m */; };
 		8C841B171A5A7A0000C5C6C4 /* AVObject+Subclass.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A501A5A79FF00C5C6C4 /* AVObject+Subclass.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C841B181A5A7A0000C5C6C4 /* AVObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A511A5A79FF00C5C6C4 /* AVObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C841B191A5A7A0000C5C6C4 /* AVObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A521A5A79FF00C5C6C4 /* AVObject.m */; };
@@ -1038,6 +1030,7 @@
 		D3A3028B21C9EC6600A6C09D /* LiveQueryTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A3028A21C9EC6600A6C09D /* LiveQueryTestViewController.swift */; };
 		D3C53FCC2106D84A00D48686 /* AVIMClientProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C53FCB2106D84A00D48686 /* AVIMClientProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D3C53FCD2106D84A00D48686 /* AVIMClientProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C53FCB2106D84A00D48686 /* AVIMClientProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D3CC5D282252242A00B3C778 /* AVQueryTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CC5D272252242A00B3C778 /* AVQueryTestCase.swift */; };
 		D3CC90CB2069E5BB0082EFD4 /* AVObjectTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CC90CA2069E5BB0082EFD4 /* AVObjectTestCase.swift */; };
 		D3CDF4EB1FE8F3810033153E /* LCIMTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */; };
 		D3D80081210AFC7F0058F86C /* AVIMCommon_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D80080210AFC7F0058F86C /* AVIMCommon_Internal.h */; };
@@ -1270,8 +1263,6 @@
 		8C841A1D1A5A79FF00C5C6C4 /* AVGeoPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVGeoPoint.h; sourceTree = "<group>"; };
 		8C841A1E1A5A79FF00C5C6C4 /* AVGeoPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVGeoPoint.m; sourceTree = "<group>"; };
 		8C841A1F1A5A79FF00C5C6C4 /* AVGeoPoint_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVGeoPoint_Internal.h; sourceTree = "<group>"; };
-		8C841A201A5A79FF00C5C6C4 /* AVLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVLocationManager.h; sourceTree = "<group>"; };
-		8C841A211A5A79FF00C5C6C4 /* AVLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVLocationManager.m; sourceTree = "<group>"; };
 		8C841A501A5A79FF00C5C6C4 /* AVObject+Subclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVObject+Subclass.h"; sourceTree = "<group>"; };
 		8C841A511A5A79FF00C5C6C4 /* AVObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVObject.h; sourceTree = "<group>"; };
 		8C841A521A5A79FF00C5C6C4 /* AVObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVObject.m; sourceTree = "<group>"; };
@@ -1484,6 +1475,7 @@
 		D3A3028821C9EC5300A6C09D /* IMTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMTestViewController.swift; sourceTree = "<group>"; };
 		D3A3028A21C9EC6600A6C09D /* LiveQueryTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveQueryTestViewController.swift; sourceTree = "<group>"; };
 		D3C53FCB2106D84A00D48686 /* AVIMClientProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVIMClientProtocol.h; sourceTree = "<group>"; };
+		D3CC5D272252242A00B3C778 /* AVQueryTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVQueryTestCase.swift; sourceTree = "<group>"; };
 		D3CC90CA2069E5BB0082EFD4 /* AVObjectTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVObjectTestCase.swift; sourceTree = "<group>"; };
 		D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestBase.swift; sourceTree = "<group>"; };
 		D3D80080210AFC7F0058F86C /* AVIMCommon_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVIMCommon_Internal.h; sourceTree = "<group>"; };
@@ -1993,8 +1985,6 @@
 				8C841A1D1A5A79FF00C5C6C4 /* AVGeoPoint.h */,
 				8C841A1E1A5A79FF00C5C6C4 /* AVGeoPoint.m */,
 				8C841A1F1A5A79FF00C5C6C4 /* AVGeoPoint_Internal.h */,
-				8C841A201A5A79FF00C5C6C4 /* AVLocationManager.h */,
-				8C841A211A5A79FF00C5C6C4 /* AVLocationManager.m */,
 			);
 			path = Geo;
 			sourceTree = "<group>";
@@ -2358,6 +2348,7 @@
 				D3472E1E2015CBC200AAD65F /* AVFileTestCase.swift */,
 				D305470E208F2F7200B547B9 /* AVCloudTestCase.swift */,
 				D336C56F212D02A2008D0E3E /* LCRouterTestCase.swift */,
+				D3CC5D272252242A00B3C778 /* AVQueryTestCase.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -2681,7 +2672,6 @@
 				83FCB9C41CEDC57C007D8712 /* LCURLRequestSerialization.h in Headers */,
 				8302AED71C192A0700E13F8A /* LCURLConnection.h in Headers */,
 				70CA7FF71BDE42F6000A3B21 /* AVGeoPoint_Internal.h in Headers */,
-				70CA7FF81BDE42F6000A3B21 /* AVLocationManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2734,7 +2724,6 @@
 				8320F9011C1918C60024B45E /* AVLogger.h in Headers */,
 				830EBA031C44F3D600BA917F /* AVSaveOption_internal.h in Headers */,
 				8320F9021C1918C60024B45E /* AVGlobal.h in Headers */,
-				8320F9041C1918C60024B45E /* AVLocationManager.h in Headers */,
 				83331D511EB9A34000CADC9C /* AVDynamicObject_Internal.h in Headers */,
 				83BE73101D810651008ED3CF /* metamacros.h in Headers */,
 				83FCB9BC1CEDC57C007D8712 /* LCSecurityPolicy.h in Headers */,
@@ -2851,7 +2840,6 @@
 				83D8CEF91C17DAF50094279D /* AVUser.h in Headers */,
 				83D8CEFA1C17DAF50094279D /* AVLogger.h in Headers */,
 				83D8CEFB1C17DAF50094279D /* AVGlobal.h in Headers */,
-				83D8CEFD1C17DAF50094279D /* AVLocationManager.h in Headers */,
 				83331D561EB9D55100CADC9C /* NSDictionary+LeanCloud.h in Headers */,
 				9A404DD51CE5A9BA00DEB3DC /* LCRouter.h in Headers */,
 				83B0E5861F28375900EE1A75 /* JRSwizzle.h in Headers */,
@@ -2954,7 +2942,6 @@
 				8C841B591A5A7A0000C5C6C4 /* AVUser.h in Headers */,
 				8C841B601A5A7A0000C5C6C4 /* AVLogger.h in Headers */,
 				8C841AC31A5A7A0000C5C6C4 /* AVGlobal.h in Headers */,
-				8C841AEA1A5A7A0000C5C6C4 /* AVLocationManager.h in Headers */,
 				83331D541EB9D55100CADC9C /* NSDictionary+LeanCloud.h in Headers */,
 				83B0E5841F28375900EE1A75 /* JRSwizzle.h in Headers */,
 				8C841B5E1A5A7A0000C5C6C4 /* AVHelpers.h in Headers */,
@@ -3392,6 +3379,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -3642,7 +3630,6 @@
 				70CA7F811BDE3721000A3B21 /* AVFileQuery.m in Sources */,
 				70CA7F841BDE3721000A3B21 /* LCFileTaskManager.m in Sources */,
 				70CA7F851BDE3721000A3B21 /* AVGeoPoint.m in Sources */,
-				70CA7F861BDE3721000A3B21 /* AVLocationManager.m in Sources */,
 				70CA7F871BDE3721000A3B21 /* AVObject.m in Sources */,
 				70CA7F881BDE3721000A3B21 /* AVObjectUtils.m in Sources */,
 				835092171EB1ECB7000DA884 /* AVDynamicObject.m in Sources */,
@@ -3718,7 +3705,6 @@
 				83FCB9CB1CEDC57C007D8712 /* LCURLRequestSerialization.m in Sources */,
 				8320F8B31C1918C60024B45E /* LCDatabaseMigrator.m in Sources */,
 				8320F8B61C1918C60024B45E /* LCResultSet.m in Sources */,
-				8320F8B71C1918C60024B45E /* AVLocationManager.m in Sources */,
 				8320F8B81C1918C60024B45E /* AVStatus.m in Sources */,
 				8320F8BB1C1918C60024B45E /* AVGeoPoint.m in Sources */,
 				8320F8BC1C1918C60024B45E /* AVCacheManager.m in Sources */,
@@ -3819,7 +3805,6 @@
 				83FCB9A71CEDC57C007D8712 /* LCHTTPSessionManager.m in Sources */,
 				83D8CEAF1C17DAF50094279D /* LCResultSet.m in Sources */,
 				83331D5A1EB9D55100CADC9C /* NSDictionary+LeanCloud.m in Sources */,
-				83D8CEB01C17DAF50094279D /* AVLocationManager.m in Sources */,
 				83FCB9CA1CEDC57C007D8712 /* LCURLRequestSerialization.m in Sources */,
 				83D8CEB11C17DAF50094279D /* AVStatus.m in Sources */,
 				83D8CEB41C17DAF50094279D /* AVGeoPoint.m in Sources */,
@@ -3892,7 +3877,6 @@
 				83FCB9A41CEDC57C007D8712 /* LCHTTPSessionManager.m in Sources */,
 				83DF02BA1AF86032000E289C /* LCResultSet.m in Sources */,
 				83331D581EB9D55100CADC9C /* NSDictionary+LeanCloud.m in Sources */,
-				8C841AEB1A5A7A0000C5C6C4 /* AVLocationManager.m in Sources */,
 				83FCB9C71CEDC57C007D8712 /* LCURLRequestSerialization.m in Sources */,
 				8C841B3B1A5A7A0000C5C6C4 /* AVStatus.m in Sources */,
 				8C841AE81A5A7A0000C5C6C4 /* AVGeoPoint.m in Sources */,
@@ -3921,6 +3905,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D305470F208F2F7200B547B9 /* AVCloudTestCase.swift in Sources */,
+				D3CC5D282252242A00B3C778 /* AVQueryTestCase.swift in Sources */,
 				D30DF3F71FDE2CD200F932BC /* AVUserTestCase.swift in Sources */,
 				D30DF4161FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 				D336C570212D02A2008D0E3E /* LCRouterTestCase.swift in Sources */,
