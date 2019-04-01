@@ -425,7 +425,7 @@
 {
     NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
     [dict setObject:[object internalClassName] forKey:classNameTag];
-    NSString *cid = [object objectId] != nil ? [object objectId] : [object uuid];
+    NSString *cid = [object objectId] != nil ? [object objectId] : [object _uuid];
     [dict setObject:cid forKey:@"cid"];
     [dict setObject:key forKey:@"key"];
     return dict;
@@ -487,9 +487,9 @@
 + (NSMutableDictionary *)objectSnapshot:(AVObject *)object recursive:(BOOL)recursive {
     __block NSDictionary *localDataCopy = nil;
     [object internalSyncLock:^{
-        localDataCopy = object.localData.copy;
+        localDataCopy = object._localData.copy;
     }];
-    NSArray * objects = @[localDataCopy, object.estimatedData];
+    NSArray * objects = @[localDataCopy, object._estimatedData];
     NSMutableDictionary * result = [NSMutableDictionary dictionary];
     [result setObject:@"Object" forKey:kAVTypeTag];
 
@@ -505,7 +505,7 @@
         }
     }
 
-    NSArray * keys = [object.relationData allKeys];
+    NSArray * keys = [object._relationData allKeys];
 
     for(NSString * key in keys) {
         NSString * childClassName = [object childClassNameForRelation:key];
@@ -516,18 +516,18 @@
     }
     
     NSSet *ignoreKeys = [NSSet setWithObjects:
-                         @"localData",
-                         @"relationData",
-                         @"estimatedData",
-                         @"isPointer",
-                         @"running",
-                         @"operationQueue",
-                         @"requestManager",
-                         @"inSetter",
-                         @"uuid",
-                         @"submit",
-                         @"hasDataForInitial",
-                         @"hasDataForCloud",
+                         @"_localData",
+                         @"_relationData",
+                         @"_estimatedData",
+                         @"_isPointer",
+                         @"_running",
+                         @"_operationQueue",
+                         @"_requestManager",
+                         @"_inSetter",
+                         @"_uuid",
+                         @"_submit",
+                         @"_hasDataForInitial",
+                         @"_hasDataForCloud",
                          @"fetchWhenSave",
                          @"isNew", // from AVUser
                          nil];
@@ -581,7 +581,7 @@
     AVObject *object = [AVObjectUtils avObjectForClass:className];
     [AVObjectUtils copyDictionary:src toObject:object];
     if ([AVObjectUtils isPointerDictionary:src]) {
-        object.isPointer = YES;
+        object._isPointer = YES;
     }
     return object;
 }

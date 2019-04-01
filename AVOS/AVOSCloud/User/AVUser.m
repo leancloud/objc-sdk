@@ -37,10 +37,6 @@ static BOOL enableAutomatic = NO;
 @dynamic password;
 @dynamic email;
 @dynamic mobilePhoneVerified;
-@dynamic facebookToken;
-@dynamic twitterToken;
-@dynamic sinaWeiboToken;
-@dynamic qqWeiboToken;
 @dynamic mobilePhoneNumber;
 
 + (void)load {
@@ -232,7 +228,7 @@ static BOOL enableAutomatic = NO;
 
 -(NSMutableDictionary *)initialBodyData {
     NSMutableDictionary *body = [NSMutableDictionary dictionary];
-    NSMutableDictionary *dict = [[self.requestManager jsonForCloud] firstObject];
+    NSMutableDictionary *dict = [[self._requestManager jsonForCloud] firstObject];
 
     if (dict) {
         [body addEntriesFromDictionary:dict];
@@ -987,7 +983,7 @@ static BOOL enableAutomatic = NO;
         
         [self setNewFlag:true];
         [AVObjectUtils copyDictionary:dic toObject:self];
-        [self.requestManager clear];
+        [self._requestManager clear];
         [AVUser changeCurrentUser:self save:YES];
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -1255,14 +1251,14 @@ static BOOL enableAutomatic = NO;
 - (void)removeLocalData {
     __block NSString *sessionToken = nil;
     [self internalSyncLock:^{
-        sessionToken = self.localData[@"sessionToken"];
+        sessionToken = self._localData[@"sessionToken"];
     }];
 
     [super removeLocalData];
 
     if (sessionToken) {
         [self internalSyncLock:^{
-            self.localData[@"sessionToken"] = sessionToken;
+            self._localData[@"sessionToken"] = sessionToken;
         }];
     }
 }
@@ -1308,7 +1304,7 @@ static BOOL enableAutomatic = NO;
     
     [AVObjectUtils copyDictionary:dic toObject:user];
     
-    [user.requestManager clear];
+    [user._requestManager clear];
     
     [self changeCurrentUser:user save:YES];
 }
@@ -1324,10 +1320,7 @@ static BOOL enableAutomatic = NO;
 }
 
 - (BOOL)isAuthDataExistInMemory {
-    if (self.sessionToken.length > 0 ||
-        self.sinaWeiboToken.length > 0 ||
-        [self objectForKey:authDataTag]) // for sns user
-    {
+    if (self.sessionToken.length > 0 || [self objectForKey:authDataTag]) {
         return YES;
     }
     return NO;

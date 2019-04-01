@@ -83,7 +83,7 @@
 }
 
 -(NSMutableDictionary *)initialBodyData {
-    return [self.requestManager initialSetAndAddRelationDict];
+    return [self._requestManager initialSetAndAddRelationDict];
 }
 
 -(void)setName:(NSString *)name {
