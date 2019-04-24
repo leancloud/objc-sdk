@@ -38,6 +38,7 @@
     self = [super init];
     if (self) {
         _cacheQueue = dispatch_queue_create("avos.paas.cacheQueue", DISPATCH_QUEUE_SERIAL);
+        _diskCachePath = [AVCacheManager path];
     }
     return self;
 }
@@ -45,13 +46,6 @@
 #pragma mark - Accessors
 + (NSString *)path {
     return [AVPersistenceUtils avCacheDirectory];
-}
-
-- (NSString *)diskCachePath {
-    if (!_diskCachePath) {
-        _diskCachePath = [AVCacheManager path];
-    }
-    return _diskCachePath;
 }
 
 - (NSString *)pathForKey:(NSString *)key {
