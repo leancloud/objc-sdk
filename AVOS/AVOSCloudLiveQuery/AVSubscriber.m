@@ -248,6 +248,7 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
                 if (subscriber.alive) {
                     [subscriber.backoffTimer reset];
                     [subscriber invokeAllLoginCallbackWithSucceeded:true error:nil];
+                    [subscriber.webSocket setActivatingReconnectionEnabled:true];
                 } else {
                     [subscriber resentLoginCommand];
                 }
@@ -287,9 +288,14 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
             [self.backoffTimer reset];
             [self invokeAllLoginCallbackWithSucceeded:true error:nil];
             NSArray<AVLiveQuery *> *livingObjects = [self->_weakLiveQueryObjectTable allObjects];
+            BOOL liveQueryExist = false;
             for (AVLiveQuery *item in livingObjects) {
-                [item resubscribe];
+                if (item) {
+                    liveQueryExist = true;
+                    [item resubscribe];
+                }
             }
+            [self.webSocket setActivatingReconnectionEnabled:liveQueryExist];
         } else {
             NSTimeInterval after = [self.backoffTimer timeIntervalAndCalculateNext];
             dispatch_time_t when = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(after * NSEC_PER_SEC));
