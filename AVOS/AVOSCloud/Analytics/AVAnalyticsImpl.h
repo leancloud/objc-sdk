@@ -14,10 +14,7 @@
 @interface AVAnalyticsImpl : NSObject
 
 @property (nonatomic, readwrite) BOOL enableAnalytics;
-@property (nonatomic, readwrite) BOOL enableCrashReport;
-@property (nonatomic, readwrite) BOOL enableIgnoreCrash;
 @property (nonatomic, readwrite) BOOL enableDebugLog;
-@property (nonatomic, retain) NSDictionary *ignoreCrashAlertStrings;
 @property (nonatomic, readwrite) AVReportPolicy reportPolicy;
 @property (nonatomic, readwrite) BOOL enableReport;
 @property (nonatomic, readwrite, copy) NSString * appChannel;
@@ -28,7 +25,6 @@
 
 +(AVAnalyticsImpl *)sharedInstance;
 
--(void)setEnableCrashReport:(BOOL)enabled completion:(void (^)(void))completion;
 -(void)beginSession;
 -(void)endSession;
 -(AVAnalyticsSession *)currentSession;
@@ -53,12 +49,6 @@
           label:(NSString *)label
             key:(NSString *)key
      attributes:(NSDictionary *)attributes;
-
-/**
- *  send crash report
- *  @param exception the exception with trace userinfo
- */
--(void)addException:(NSException *)exception;
 
 -(void)setLatitude:(double)latitude longitude:(double)longitude;
 -(void)clearLocation;

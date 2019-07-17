@@ -8,7 +8,6 @@
 
 #import "AVAnalyticsImpl.h"
 #import "AVAnalyticsSession.h"
-#import "AVExceptionHandler.h"
 #import "AVPaasClient.h"
 #import "AVAnalyticsUtils.h"
 #import "AVGlobal.h"
@@ -63,7 +62,6 @@ static NSString *const kAVOnlineConfig = @"AVOS_ONLINE_CONFIG";
     
     _sendInterval = AV_DEFAULT_REPORT_INTERVAL;
     _enableDebugLog = NO;
-//    _enableCrashReport = YES;
     _reportPolicy = AV_SEND_INTERVAL;
     _enableReport = YES;
     _enableAnalytics = YES;
@@ -98,77 +96,6 @@ static NSString *const kAVOnlineConfig = @"AVOS_ONLINE_CONFIG";
     }
     self.enableReport = [[dict valueForKey:enableTag] boolValue];
     self.onlineConfig = [dict valueForKey:@"parameters"];
-}
-
--(void)_enableCrashReportRunloop{
-    [AVExceptionHandler installAVOSUncaughtExceptionHandler];
-}
-
--(void)setEnableCrashReport:(BOOL)e {
-    [self setEnableCrashReport:e completion:nil];
-}
-
--(void)setEnableCrashReport:(BOOL)enabled completion:(void (^)(void))completion {
-    _enableCrashReport = enabled;
-    if (self.enableCrashReport) {
-        //tick exception handler out of main runloop,
-        //in case some app start with a crash in `application:didFinishLaunchingWithOptions:`
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [AVExceptionHandler installAVOSUncaughtExceptionHandler];
-            if (completion) {
-                completion();
-            }
-        });
-    } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [AVExceptionHandler uninstallAVOSUncaughtExceptionHandler];
-            if (completion) {
-                completion();
-            }
-        });
-    }
-}
--(void)addException:(NSException *)exception{
-    if (!self.enableAnalytics) {
-        return;
-    }
-    
-    NSArray *trace=[[exception userInfo] objectForKey:AVOS_UncaughtExceptionHandlerAddressesKey];
-    NSString *strace=nil;
-    
-    if (trace.count>0) {
-        strace=[trace componentsJoinedByString:@"\n"];
-    } else {
-        strace=@"";
-    }
-    
-    NSMutableDictionary * dict = [AVAnalyticsUtils deviceInfo];
-    
-    [dict addEntriesFromDictionary:@{
-                                     @"type": [exception name],
-                                     @"reason": [exception reason],
-                                     @"stack_trace": strace,
-                                     @"time":  @([AVAnalyticsUtils currentTimestamp]),
-                                     }];
-    
-    if (self.customInfo != nil) {
-        [dict setObject:self.customInfo forKey:@"customInfo"];
-    }
-    
-    //add app build uuid to match dSYM
-    [dict setObject:[AVExceptionHandler appBuildUUID] forKey:@"build_uuid"];
-    
-    [[AVPaasClient sharedInstance] postObject:[[[self class] myObjectPath] stringByAppendingPathComponent:@"crash"]
-                               withParameters:dict
-                                   eventually:YES
-                                        block:^(id object, NSError *error)
-     {
-         if (error == nil) {
-             AVLoggerI(@"Save success %@", [object description]);
-         } else {
-             AVLoggerI(@"Save failed %@ error %@", dict, error);
-         }
-     }];
 }
 
 -(AVAnalyticsSession *)currentSession
