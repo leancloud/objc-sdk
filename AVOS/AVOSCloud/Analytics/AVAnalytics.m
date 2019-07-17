@@ -88,35 +88,16 @@ static NSString * currentSessionId;
     [AVAnalyticsImpl sharedInstance].enableAnalytics = value;
 }
 
-+(void)setCrashReportEnabled:(BOOL)value
-{
-    [AVAnalyticsImpl sharedInstance].enableCrashReport = value;
++(void)setCrashReportEnabled:(BOOL)value {
 }
 
 +(void)setCrashReportEnabled:(BOOL)value completion:(void (^)(void))completion {
-    [[AVAnalyticsImpl sharedInstance] setEnableCrashReport:value completion:completion];
 }
 
 + (void)setCrashReportEnabled:(BOOL)value andIgnore:(BOOL)ignore {
-    [[self class] setCrashReportEnabled:value];
-    [AVAnalyticsImpl sharedInstance].enableIgnoreCrash = ignore;
 }
 
 + (void)setCrashReportEnabled:(BOOL)value withIgnoreAlertTitle:(NSString*)alertTitle andMessage:(NSString*)alertMsg andQuitTitle:(NSString*)alertQuit andContinueTitle:(NSString*)alertContinue {
-    [[self class] setCrashReportEnabled:value];
-    if (value) {
-        [AVAnalyticsImpl sharedInstance].enableIgnoreCrash = YES;
-        
-        NSMutableDictionary *dict=[NSMutableDictionary dictionaryWithCapacity:5];
-        if (alertTitle) [dict setObject:alertTitle forKey:@"title"];
-        if (alertMsg)   [dict setObject:alertMsg forKey:@"msg"];
-        if (alertQuit)  [dict setObject:alertQuit forKey:@"quit"];
-        if (alertContinue) [dict setObject:alertContinue forKey:@"continue"];
-        
-        if (dict.count>0) {
-            [AVAnalyticsImpl sharedInstance].ignoreCrashAlertStrings = dict;
-        }
-    }
 }
 
 + (void)logPageView:(NSString *)pageName seconds:(int)seconds
