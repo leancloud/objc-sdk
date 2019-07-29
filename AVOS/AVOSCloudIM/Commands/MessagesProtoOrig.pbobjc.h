@@ -1375,6 +1375,8 @@ typedef GPB_ENUM(AVIMGenericCommand_FieldNumber) {
   AVIMGenericCommand_FieldNumber_Priority = 7,
   AVIMGenericCommand_FieldNumber_Service = 8,
   AVIMGenericCommand_FieldNumber_ServerTs = 9,
+  AVIMGenericCommand_FieldNumber_ClientTs = 10,
+  AVIMGenericCommand_FieldNumber_NotificationType = 11,
   AVIMGenericCommand_FieldNumber_DataMessage = 101,
   AVIMGenericCommand_FieldNumber_SessionMessage = 102,
   AVIMGenericCommand_FieldNumber_ErrorMessage = 103,
@@ -1425,6 +1427,12 @@ typedef GPB_ENUM(AVIMGenericCommand_FieldNumber) {
 @property(nonatomic, readwrite) int64_t serverTs;
 
 @property(nonatomic, readwrite) BOOL hasServerTs;
+@property(nonatomic, readwrite) int64_t clientTs;
+
+@property(nonatomic, readwrite) BOOL hasClientTs;
+@property(nonatomic, readwrite) int32_t notificationType;
+
+@property(nonatomic, readwrite) BOOL hasNotificationType;
 @property(nonatomic, readwrite, strong, null_resettable) AVIMDataCommand *dataMessage;
 /** Test to see if @c dataMessage has been set. */
 @property(nonatomic, readwrite) BOOL hasDataMessage;
