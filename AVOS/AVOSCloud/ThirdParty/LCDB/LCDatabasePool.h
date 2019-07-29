@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "sqlite3.h"
+#import <sqlite3.h>
 
 @class LCDatabase;
 
