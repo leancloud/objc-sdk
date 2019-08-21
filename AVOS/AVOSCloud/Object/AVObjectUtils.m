@@ -617,7 +617,9 @@
 
 +(NSDictionary *)dictionaryFromFile:(AVFile *)file
 {
-    return [file rawJSONDataCopy];
+    NSMutableDictionary *dic = [file rawJSONDataMutableCopy];
+    [dic setObject:@"File" forKey:@"__type"];
+    return dic;
 }
 
 +(NSDictionary *)dictionaryFromACL:(AVACL *)acl {

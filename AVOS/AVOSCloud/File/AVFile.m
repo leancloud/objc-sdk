@@ -96,7 +96,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
         _lock = [[NSLock alloc] init];
         
-        _rawJSONData = [NSMutableDictionary dictionaryWithObject:AVFile.className forKey:kLCFile___type];
+        _rawJSONData = [NSMutableDictionary dictionary];
     }
     
     return self;
@@ -310,7 +310,9 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:_rawJSONData forKey:@"dictionary"];
+    NSMutableDictionary *dic = [_rawJSONData mutableCopy];
+    [dic setObject:@"File" forKey:@"__type"];
+    [aCoder encodeObject:dic forKey:@"dictionary"];
 }
 
 // MARK: - Lock
