@@ -14,6 +14,8 @@ class AVObject_TestCase: LCTestBase {
         
         if self.isServerTesting { return }
         
+        var objectID: String?
+        
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let filePath: String = Bundle(for: type(of: self)).path(forResource: "_10_MB_", ofType: "png")!
@@ -35,7 +37,7 @@ class AVObject_TestCase: LCTestBase {
                 semaphore.decrement()
                 
                 XCTAssertTrue(Thread.isMainThread)
-                
+                objectID = avObject.objectId
                 XCTAssertTrue(succeeded)
                 XCTAssertNil(error)
             })
@@ -44,6 +46,11 @@ class AVObject_TestCase: LCTestBase {
             
             XCTFail("timeout")
         })
+        
+        if let objectID = objectID {
+            let object = AVObject(className: "Todo", objectId: objectID)
+            XCTAssertTrue(object.fetch())
+        }
     }
 
     func testc_fetch_all_objects() {
