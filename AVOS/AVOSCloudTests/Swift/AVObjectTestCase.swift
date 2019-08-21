@@ -95,4 +95,9 @@ class AVObject_TestCase: LCTestBase {
         })
     }
     
+    func testInstallation() {
+        AVInstallation.default().deviceToken = UUID().uuidString
+        XCTAssertTrue(AVInstallation.default().save())
+    }
+    
 }
