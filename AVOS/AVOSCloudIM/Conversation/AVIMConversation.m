@@ -1326,6 +1326,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     }
     
     if (client.status != AVIMClientStatusOpened) {
+        message.status = AVIMMessageStatusFailed;
         [self invokeInUserInteractQueue:^{
             callback(false, ({
                 AVIMErrorCode code = AVIMErrorCodeClientNotOpen;

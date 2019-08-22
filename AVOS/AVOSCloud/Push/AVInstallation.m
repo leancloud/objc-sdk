@@ -48,6 +48,14 @@
     dispatch_once(&onceToken, ^{
         
         installation = [[AVInstallation alloc] init];
+        
+        NSString *path = [AVPersistenceUtils currentInstallationArchivePath];
+        if ([AVPersistenceUtils fileExist:path]) {
+            NSMutableDictionary *installationDict = [NSMutableDictionary dictionaryWithDictionary:[AVPersistenceUtils getJSONFromPath:path]];
+            if (installationDict) {
+                [AVObjectUtils copyDictionary:installationDict toObject:installation];
+            }
+        }
     });
     
     return installation;
@@ -61,14 +69,6 @@
         self.deviceType = [AVInstallation deviceType];
         self.timeZone   = [[NSTimeZone systemTimeZone] name];
         self.apnsTopic  = [NSBundle mainBundle].bundleIdentifier;
-        
-        NSString *path = [AVPersistenceUtils currentInstallationArchivePath];
-        if ([AVPersistenceUtils fileExist:path]) {
-            NSMutableDictionary *installationDict = [NSMutableDictionary dictionaryWithDictionary:[AVPersistenceUtils getJSONFromPath:path]];
-            if (installationDict) {
-                [AVObjectUtils copyDictionary:installationDict toObject:self];
-            }
-        }
     }
     return self;
 }
@@ -132,6 +132,8 @@
 
 - (NSMutableDictionary *)installationDictionaryForCache {
     NSMutableDictionary *data = [self postData];
+    [data removeObjectForKey:@"__type"];
+    [data removeObjectForKey:@"className"];
     return data;
 }
 
