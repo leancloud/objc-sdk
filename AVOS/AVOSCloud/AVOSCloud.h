@@ -307,6 +307,8 @@ typedef NS_ENUM(NSInteger, AVServiceRegion) {
 
 @interface AVOSCloud (AVDeprecated)
 
++ (void)startNetworkStatistics __deprecated;
+
 /**
  *  Set third party file storage service. If uses China server, you can use QCloud or Qiniu, the default is Qiniu, if uses US server, the default is AWS S3.
  *  @param type Qiniu, QCloud or AWS S3.

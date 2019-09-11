@@ -10,8 +10,6 @@
 
 @interface LCNetworkStatistics : NSObject
 
-@property (nonatomic, assign) BOOL ignoreAlwaysCollectIfCustomedService;
-
 + (instancetype)sharedInstance;
 
 - (void)addIncrementalAttribute:(NSInteger)amount forKey:(NSString *)key;
