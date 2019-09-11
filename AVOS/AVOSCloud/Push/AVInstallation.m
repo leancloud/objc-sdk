@@ -73,6 +73,20 @@
     return self;
 }
 
+- (NSString *)hexadecimalStringFromData:(NSData *)data
+{
+    NSUInteger dataLength = data.length;
+    if (dataLength == 0) {
+        return nil;
+    }
+    const unsigned char *dataBuffer = data.bytes;
+    NSMutableString *hexString  = [NSMutableString stringWithCapacity:(dataLength * 2)];
+    for (int i = 0; i < dataLength; ++i) {
+        [hexString appendFormat:@"%02.2hhx", dataBuffer[i]];
+    }
+    return [hexString copy];
+}
+
 - (void)setDeviceTokenFromData:(NSData *)deviceTokenData
 {
     [self setDeviceTokenFromData:deviceTokenData
@@ -82,34 +96,16 @@
 - (void)setDeviceTokenFromData:(NSData *)deviceTokenData
                         teamId:(NSString *)teamId
 {
-    if (!deviceTokenData || deviceTokenData.length == 0) {
-        
+    NSString *newDeviceToken = [self hexadecimalStringFromData:deviceTokenData];
+    if (!newDeviceToken) {
         return;
     }
-    
-    NSCharacterSet *charactersSet = [NSCharacterSet characterSetWithCharactersInString:@"<>"];
-    
-    NSString *newDeviceToken = [deviceTokenData.description stringByTrimmingCharactersInSet:charactersSet];
-    
-    newDeviceToken = [newDeviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
-    
-    if (newDeviceToken.length == 0) {
-        
-        return;
-    }
-    
     NSString *oldDeviceToken = self.deviceToken;
-    
     NSString *oldTeamId = self.apnsTeamId;
-    
     if (![oldDeviceToken isEqualToString:newDeviceToken] || ![teamId isEqualToString:oldTeamId]) {
-        
         self.deviceToken = newDeviceToken;
-        
         self.apnsTeamId = teamId;
-        
         [self._requestManager synchronize:^{
-            
             [self updateInstallationDictionary:[self._requestManager setDict]];
         }];
     }
