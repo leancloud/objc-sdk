@@ -108,7 +108,6 @@ static BOOL LCSSLPinningEnabled = false;
     }
 
     [self initializePaasClient];
-    [[LCNetworkStatistics sharedInstance] start];
     [LCRouter sharedInstance];
 
     LCInitialized = YES;
@@ -313,6 +312,10 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
 }
 
 // MARK: - Deprecated
+
++ (void)startNetworkStatistics {
+    [[LCNetworkStatistics sharedInstance] start];
+}
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"

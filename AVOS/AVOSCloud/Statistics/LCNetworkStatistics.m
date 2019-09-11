@@ -59,7 +59,6 @@ static NSInteger LCNetworkStatisticsCacheSize     = 20;
 
     if (self) {
         _cachedStatisticDictLock = [[NSRecursiveLock alloc] init];
-        _ignoreAlwaysCollectIfCustomedService = false;
     }
 
     return self;
@@ -241,11 +240,6 @@ static NSInteger LCNetworkStatisticsCacheSize     = 20;
 
 - (void)startInBackground
 {
-    if (self.ignoreAlwaysCollectIfCustomedService) {
-        
-        return;
-    }
-    
     NSAssert(![NSThread isMainThread], @"This method must run in background.");
 
     AV_WAIT_WITH_ROUTINE_TIL_TRUE(!self.enable, LCNetworkStatisticsCheckInterval, ({

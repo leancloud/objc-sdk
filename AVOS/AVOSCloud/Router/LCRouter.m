@@ -11,7 +11,6 @@
 #import "AVErrorUtils.h"
 #import "AVPaasClient.h"
 #import "AVPersistenceUtils.h"
-#import "LCNetworkStatistics.h"
 
 RouterCacheKey RouterCacheKeyApp = @"RouterCacheDataApp";
 RouterCacheKey RouterCacheKeyRTM = @"RouterCacheDataRTM";
@@ -425,7 +424,6 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
     } else {
         [self->_customAppServerTable removeObjectForKey:key];
     }
-    LCNetworkStatistics.sharedInstance.ignoreAlwaysCollectIfCustomedService = true;
 }
 
 // MARK: - Misc
