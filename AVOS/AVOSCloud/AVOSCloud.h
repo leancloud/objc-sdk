@@ -115,12 +115,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** @name Connecting to LeanCloud */
 
+/// Setup ID, Key and Server URL of the application.
+/// @param applicationId The applicaiton id for your LeanCloud application.
+/// @param clientKey The client key for your LeanCloud application.
+/// @param serverURLString The server url for your LeanCloud application.
++ (void)setApplicationId:(nonnull NSString *)applicationId
+               clientKey:(nonnull NSString *)clientKey
+         serverURLString:(nonnull NSString *)serverURLString;
+
 /*!
  Sets the applicationId and clientKey of your application.
  @param applicationId The applicaiton id for your LeanCloud application.
  @param clientKey The client key for your LeanCloud application.
  */
-+ (void)setApplicationId:(NSString *)applicationId clientKey:(NSString *)clientKey;
++ (void)setApplicationId:(nonnull NSString *)applicationId
+               clientKey:(nonnull NSString *)clientKey;
 
 /**
  *  get Application Id
@@ -155,11 +164,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Custom server URL for specific service module.
-
+ 
  @param URLString     The URL string of service module.
  @param serviceModule The service module which you want to customize.
  */
-+ (void)setServerURLString:(NSString * _Nullable)URLString forServiceModule:(AVServiceModule)serviceModule;
++ (void)setServerURLString:(nullable NSString *)URLString
+          forServiceModule:(AVServiceModule)serviceModule;
 
 /**
  *  Get the timeout interval for network requests. Default is kAVDefaultNetworkTimeoutInterval (10 seconds)

@@ -98,8 +98,26 @@ static BOOL LCSSLPinningEnabled = false;
     [paasClient handleAllArchivedRequests];
 }
 
-+ (void)setApplicationId:(NSString *)applicationId clientKey:(NSString *)clientKey
++ (void)setApplicationId:(NSString *)applicationId
+               clientKey:(NSString *)clientKey
+         serverURLString:(NSString *)serverURLString
 {
+    [[LCRouter sharedInstance] setServerURLString:serverURLString];
+    [AVOSCloud setApplicationId:applicationId clientKey:clientKey];
+}
+
++ (void)setApplicationId:(NSString *)applicationId
+               clientKey:(NSString *)clientKey
+{
+    AppDomain appDomain = [LCRouter appDomainForAppID:applicationId];
+    if ([appDomain isEqualToString:AppDomainCN] ||
+        [appDomain isEqualToString:AppDomainCE]) {
+        if (![LCRouter sharedInstance].serverURLString) {
+            [NSException raise:NSInternalInconsistencyException
+                        format:@"Server URL not set."] ;
+        }
+    }
+    
     [AVOSCloud sharedInstance]->_applicationId = applicationId;
     [AVOSCloud sharedInstance]->_applicationKey = clientKey;
 
@@ -108,7 +126,6 @@ static BOOL LCSSLPinningEnabled = false;
     }
 
     [self initializePaasClient];
-    [LCRouter sharedInstance];
 
     LCInitialized = YES;
 }
@@ -152,7 +169,8 @@ static BOOL LCSSLPinningEnabled = false;
     [[AVPaasClient sharedInstance] clearLastModifyCache];
 }
 
-+ (void)setServerURLString:(NSString * _Nullable)URLString forServiceModule:(AVServiceModule)serviceModule
++ (void)setServerURLString:(NSString *)URLString
+          forServiceModule:(AVServiceModule)serviceModule
 {
     NSString *key = nil;
     switch (serviceModule) {
