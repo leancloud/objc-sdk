@@ -162,42 +162,6 @@ _out:
 }
 #endif
 
-BOOL LCSecKeyIsEqual(SecKeyRef key1, SecKeyRef key2) {
-#if TARGET_OS_IOS || TARGET_OS_WATCH || TARGET_OS_TV
-    return [(__bridge id)key1 isEqual:(__bridge id)key2];
-#else
-    return [LCSecKeyGetData(key1) isEqual:LCSecKeyGetData(key2)];
-#endif
-}
-
-SecKeyRef LCGetPublicKeyFromCertificate(SecCertificateRef cert) {
-    SecKeyRef result = NULL;
-    SecCertificateRef certs[] = {cert};
-    CFArrayRef certArr = CFArrayCreate(NULL, (const void **)certs, 1, NULL);
-
-    SecPolicyRef policy = SecPolicyCreateBasicX509();
-
-    SecTrustRef trust;
-    __Require_noErr_Quiet(SecTrustCreateWithCertificates(certArr, policy, &trust), _out);
-    __Require_noErr_Quiet(SecTrustEvaluate(trust, NULL), _out);
-
-    result = SecTrustCopyPublicKey(trust);
-
-_out:
-    if (policy) CFRelease(policy);
-    if (certArr) CFRelease(certArr);
-    if (trust) CFRelease(trust);
-
-    return result;
-}
-
-SecCertificateRef LCGetCertificateFromBase64String(NSString *base64) {
-    NSData *certData = [NSData AVdataFromBase64String:base64];
-    SecCertificateRef cert = SecCertificateCreateWithData(NULL, (__bridge CFDataRef)(certData));
-
-    return cert;
-}
-
 @implementation AVUtils
 
 + (void)initialize {

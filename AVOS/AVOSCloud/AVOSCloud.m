@@ -7,7 +7,6 @@
 //
 
 #import "AVOSCloud.h"
-#import "AVOSCloud_Internal.h"
 #import "AVPaasClient.h"
 #import "AVScheduler.h"
 #import "AVPersistenceUtils.h"
@@ -26,10 +25,6 @@
 #import "SDMacros.h"
 
 static AVVerbosePolicy _verbosePolicy = kAVVerboseShow;
-
-static BOOL LCInitialized = NO;
-
-static BOOL LCSSLPinningEnabled = false;
 
 @implementation AVOSCloud {
     
@@ -50,22 +45,6 @@ static BOOL LCSSLPinningEnabled = false;
     });
     
     return sharedInstance;
-}
-
-+ (void)setSSLPinningEnabled:(BOOL)enabled
-{
-    if (LCInitialized) {
-        
-        [NSException raise:NSInternalInconsistencyException
-                    format:@"SSL Pinning Enabled should be set before +[AVOSCloud setApplicationId:clientKey:]."];
-    }
-    
-    LCSSLPinningEnabled = enabled;
-}
-
-+ (BOOL)isSSLPinningEnabled
-{
-    return LCSSLPinningEnabled;
 }
 
 + (void)setAllLogsEnabled:(BOOL)enabled {
@@ -126,8 +105,6 @@ static BOOL LCSSLPinningEnabled = false;
     }
 
     [self initializePaasClient];
-
-    LCInitialized = YES;
 }
 
 + (BOOL)isTwoArrayEqual:(NSArray *)array withAnotherArray:(NSArray *)anotherArray

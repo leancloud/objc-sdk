@@ -17,21 +17,6 @@
 FOUNDATION_EXPORT NSInteger LCTimeZoneForSecondsFromGMT;
 NSDate * LCDateFromString(NSString *dateString);
 
-/**
- * Check the equality of two security key.
- */
-BOOL LCSecKeyIsEqual(SecKeyRef key1, SecKeyRef key2);
-
-/**
- * Get public key of given certificate.
- */
-SecKeyRef LCGetPublicKeyFromCertificate(SecCertificateRef cert);
-
-/**
- * Make certificate from base64 string.
- */
-SecCertificateRef LCGetCertificateFromBase64String(NSString *base64);
-
 #if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
     #import <MobileCoreServices/MobileCoreServices.h>
 #else

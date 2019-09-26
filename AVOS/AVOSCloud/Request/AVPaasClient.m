@@ -22,8 +22,6 @@
 #import "LCNetworkStatistics.h"
 #import "LCRouter_Internal.h"
 #import "SDMacros.h"
-#import "AVOSCloud_Internal.h"
-#import "LCSSLChallenger.h"
 #import "AVConstants.h"
 
 static NSString * const kLC_code = @"code";
@@ -171,18 +169,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
             LCURLSessionManager *manager = [[LCURLSessionManager alloc] initWithSessionConfiguration:configuration];
             manager.completionQueue = _completionQueue;
-
-            if ([AVOSCloud isSSLPinningEnabled]) {
-                
-                [manager setSessionDidReceiveAuthenticationChallengeBlock:
-                 ^NSURLSessionAuthChallengeDisposition(NSURLSession * _Nonnull session,
-                                                       NSURLAuthenticationChallenge * _Nonnull challenge,
-                                                       NSURLCredential *__autoreleasing  _Nullable * _Nullable credential)
-                 {
-                     [[LCSSLChallenger sharedInstance] acceptChallenge:challenge];
-                     return NSURLSessionAuthChallengeUseCredential;
-                 }];
-            }
 
             /* Remove all null value of result. */
             LCJSONResponseSerializer *responseSerializer = (LCJSONResponseSerializer *)manager.responseSerializer;

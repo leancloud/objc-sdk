@@ -93,14 +93,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface AVOSCloud : NSObject
 
-/**
- A switch of SSL Pinning for all LeanCloud's HTTPS Requests.
- Default is False.
- 
- @param enabled Set whatever you want if you master SSL & SSL Pinning.
- */
-+ (void)setSSLPinningEnabled:(BOOL)enabled;
-
 /*!
  * Enable logs of all levels and domains. When define DEBUG macro, it's enabled, otherwise, it's not enabled. This is recommended. But you can set it NO, and call AVLogger's methods to control which domains' log should be output.
  */
