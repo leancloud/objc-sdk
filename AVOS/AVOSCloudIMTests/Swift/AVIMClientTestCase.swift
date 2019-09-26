@@ -14,7 +14,7 @@ class AVIMClientTestCase: LCIMTestBase {
     
     func tests_session_open_close() {
         
-        var client: AVIMClient! = AVIMClient(clientId: String(#function[..<#function.index(of: "(")!]))
+        var client: AVIMClient! = AVIMClient(clientId: String(#function[..<#function.firstIndex(of: "(")!]))
         let delegate: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         client.delegate = delegate
         
@@ -43,7 +43,7 @@ class AVIMClientTestCase: LCIMTestBase {
     
     func tests_session_conflict() {
         
-        let clientId: String = String(#function[..<#function.index(of: "(")!])
+        let clientId: String = String(#function[..<#function.firstIndex(of: "(")!])
         let tag: String = "tag"
         
         let delegate1 = AVIMClientDelegateWrapper()
@@ -106,7 +106,7 @@ class AVIMClientTestCase: LCIMTestBase {
     
     func tests_session_refresh() {
         
-        guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: String(#function[..<#function.index(of: "(")!])) else {
+        guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: String(#function[..<#function.firstIndex(of: "(")!])) else {
             XCTFail()
             return
         }
@@ -136,8 +136,8 @@ class AVIMClientTestCase: LCIMTestBase {
     
     func tests_session_query() {
         
-        let clientId1: String = String(#function[..<#function.index(of: "(")!]) + "1"
-        let clientId2: String = String(#function[..<#function.index(of: "(")!]) + "2"
+        let clientId1: String = String(#function[..<#function.firstIndex(of: "(")!]) + "1"
+        let clientId2: String = String(#function[..<#function.firstIndex(of: "(")!]) + "2"
         
         guard let client1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1) else {
             XCTFail()
@@ -177,9 +177,9 @@ class AVIMClientTestCase: LCIMTestBase {
     
     func tests_conv_start() {
         
-        let clientId1: String = String(#function[..<#function.index(of: "(")!]) + "1"
-        let clientId2: String = String(#function[..<#function.index(of: "(")!]) + "2"
-        let clientId3: String = String(#function[..<#function.index(of: "(")!]) + "3"
+        let clientId1: String = String(#function[..<#function.firstIndex(of: "(")!]) + "1"
+        let clientId2: String = String(#function[..<#function.firstIndex(of: "(")!]) + "2"
+        let clientId3: String = String(#function[..<#function.firstIndex(of: "(")!]) + "3"
         
         guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1) else {
             XCTFail()
@@ -227,7 +227,7 @@ class AVIMClientTestCase: LCIMTestBase {
     
     func tests_conv_batch_query() {
         
-        let clientId: String = String(#function[..<#function.index(of: "(")!])
+        let clientId: String = String(#function[..<#function.firstIndex(of: "(")!])
         guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId) else {
             XCTFail()
             return
@@ -304,7 +304,7 @@ class AVIMClientTestCase: LCIMTestBase {
         
         let installation: AVInstallation = AVInstallation()
         installation.deviceToken = UUID().uuidString
-        guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: String(#function[..<#function.index(of: "(")!]), installation: installation) else {
+        guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: String(#function[..<#function.firstIndex(of: "(")!]), installation: installation) else {
             XCTFail()
             return
         }
@@ -343,7 +343,7 @@ class AVIMClientTestCase: LCIMTestBase {
     func test_goaway() {
         AVOSCloudIM.defaultOptions().rtmServer = "wss://rtm51.leancloud.cn";
         
-        guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: String(#function[..<#function.index(of: "(")!])) else {
+        guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: String(#function[..<#function.firstIndex(of: "(")!])) else {
             XCTFail()
             return
         }

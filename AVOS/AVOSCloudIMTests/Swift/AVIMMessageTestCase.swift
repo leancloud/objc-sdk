@@ -17,8 +17,8 @@ class AVIMMessageTestCase: LCIMTestBase {
         if self.isServerTesting { return }
         
         let clientIds: [String] = [
-            "\(#function[..<#function.index(of: "(")!])_1",
-            "\(#function[..<#function.index(of: "(")!])_2"
+            "\(#function[..<#function.firstIndex(of: "(")!])_1",
+            "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
@@ -110,8 +110,8 @@ class AVIMMessageTestCase: LCIMTestBase {
         if self.isServerTesting { return }
         
         let clientIds: [String] = [
-            "\(#function[..<#function.index(of: "(")!])_1",
-            "\(#function[..<#function.index(of: "(")!])_2"
+            "\(#function[..<#function.firstIndex(of: "(")!])_1",
+            "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
@@ -203,8 +203,8 @@ class AVIMMessageTestCase: LCIMTestBase {
         if self.isServerTesting { return }
         
         let clientIds: [String] = [
-            "\(#function[..<#function.index(of: "(")!])_1",
-            "\(#function[..<#function.index(of: "(")!])_2"
+            "\(#function[..<#function.firstIndex(of: "(")!])_1",
+            "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
@@ -302,8 +302,8 @@ class AVIMMessageTestCase: LCIMTestBase {
         if self.isServerTesting { return }
         
         let clientIds: [String] = [
-            "\(#function[..<#function.index(of: "(")!])_1",
-            "\(#function[..<#function.index(of: "(")!])_2"
+            "\(#function[..<#function.firstIndex(of: "(")!])_1",
+            "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
@@ -429,8 +429,8 @@ class AVIMMessageTestCase: LCIMTestBase {
         if self.isServerTesting { return }
         
         let clientIds: [String] = [
-            "\(#function[..<#function.index(of: "(")!])_1",
-            "\(#function[..<#function.index(of: "(")!])_2"
+            "\(#function[..<#function.firstIndex(of: "(")!])_1",
+            "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
@@ -554,8 +554,8 @@ class AVIMMessageTestCase: LCIMTestBase {
         if self.isServerTesting { return }
         
         let clientIds: [String] = [
-            "\(#function[..<#function.index(of: "(")!])_1",
-            "\(#function[..<#function.index(of: "(")!])_2"
+            "\(#function[..<#function.firstIndex(of: "(")!])_1",
+            "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
@@ -679,8 +679,8 @@ class AVIMMessageTestCase: LCIMTestBase {
         if self.isServerTesting { return }
         
         let clientIds: [String] = [
-            "\(#function[..<#function.index(of: "(")!])_1",
-            "\(#function[..<#function.index(of: "(")!])_2"
+            "\(#function[..<#function.firstIndex(of: "(")!])_1",
+            "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
@@ -800,8 +800,8 @@ class AVIMMessageTestCase: LCIMTestBase {
         AVIMCustomTypedMessage.registerSubclass()
         
         let clientIds: [String] = [
-            "\(#function[..<#function.index(of: "(")!])_1",
-            "\(#function[..<#function.index(of: "(")!])_2"
+            "\(#function[..<#function.firstIndex(of: "(")!])_1",
+            "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
@@ -894,8 +894,8 @@ class AVIMMessageTestCase: LCIMTestBase {
         if self.isServerTesting { return }
         
         let clientIds: [String] = [
-            "\(#function[..<#function.index(of: "(")!])_1",
-            "\(#function[..<#function.index(of: "(")!])_2"
+            "\(#function[..<#function.firstIndex(of: "(")!])_1",
+            "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
@@ -1007,8 +1007,8 @@ class AVIMMessageTestCase: LCIMTestBase {
         if self.isServerTesting { return }
         
         let clientIds: [String] = [
-            "\(#function[..<#function.index(of: "(")!])_1",
-            "\(#function[..<#function.index(of: "(")!])_2"
+            "\(#function[..<#function.firstIndex(of: "(")!])_1",
+            "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
@@ -1132,8 +1132,8 @@ class AVIMMessageTestCase: LCIMTestBase {
         if self.isServerTesting { return }
         
         let clientIds: [String] = [
-            "\(#function[..<#function.index(of: "(")!])_1",
-            "\(#function[..<#function.index(of: "(")!])_2"
+            "\(#function[..<#function.firstIndex(of: "(")!])_1",
+            "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
@@ -1227,8 +1227,8 @@ class AVIMMessageTestCase: LCIMTestBase {
         if self.isServerTesting { return }
         
         let clientIds: [String] = [
-            "\(#function[..<#function.index(of: "(")!])_1",
-            "\(#function[..<#function.index(of: "(")!])_2"
+            "\(#function[..<#function.firstIndex(of: "(")!])_1",
+            "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
         let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
@@ -1325,7 +1325,7 @@ class AVIMMessageTestCase: LCIMTestBase {
         
         if self.isServerTesting { return }
         
-        let clientId: String = "\(#function[..<#function.index(of: "(")!])"
+        let clientId: String = "\(#function[..<#function.firstIndex(of: "(")!])"
         
         let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         let installation_1: AVInstallation = AVInstallation()
@@ -1422,8 +1422,8 @@ class AVIMMessageTestCase: LCIMTestBase {
         if self.isServerTesting { return }
         
         let clientIds: [String] = [
-            "\(#function[..<#function.index(of: "(")!])_1",
-            "\(#function[..<#function.index(of: "(")!])_2",
+            "\(#function[..<#function.firstIndex(of: "(")!])_1",
+            "\(#function[..<#function.firstIndex(of: "(")!])_2",
         ]
         
         let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
@@ -1487,7 +1487,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(commonMessage.sendTimestamp > 0)
                     XCTAssertNotNil(commonMessage.clientId)
                     if succeeded {
-                        XCTAssertTrue(RunLoop.current.run(mode: .defaultRunLoopMode, before: Date(timeIntervalSinceNow: 1.0)))
+                        XCTAssertTrue(RunLoop.current.run(mode: RunLoop.Mode.default, before: Date(timeIntervalSinceNow: 1.0)))
                         normalConv.update(commonMessage, toNewMessage: newCommonMessage, callback: { (succeeded: Bool, error: Error?) in
                             semaphore.decrement()
                             XCTAssertTrue(Thread.isMainThread)
@@ -1512,8 +1512,8 @@ class AVIMMessageTestCase: LCIMTestBase {
         if self.isServerTesting { return }
         
         let clientIds: [String] = [
-            "\(#function[..<#function.index(of: "(")!])_1",
-            "\(#function[..<#function.index(of: "(")!])_2",
+            "\(#function[..<#function.firstIndex(of: "(")!])_1",
+            "\(#function[..<#function.firstIndex(of: "(")!])_2",
         ]
         
         let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
@@ -1573,7 +1573,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(commonMessage.sendTimestamp > 0)
                     XCTAssertNotNil(commonMessage.clientId)
                     if succeeded {
-                        XCTAssertTrue(RunLoop.current.run(mode: .defaultRunLoopMode, before: Date(timeIntervalSinceNow: 1.0)))
+                        XCTAssertTrue(RunLoop.current.run(mode: RunLoop.Mode.default, before: Date(timeIntervalSinceNow: 1.0)))
                         normalConv.recall(commonMessage, callback: { (succeeded: Bool, error: Error?, recalledMessage: AVIMRecalledMessage?) in
                             semaphore.decrement()
                             XCTAssertTrue(Thread.isMainThread)
@@ -1600,8 +1600,8 @@ class AVIMMessageTestCase: LCIMTestBase {
         if self.isServerTesting {
             return
         }
-        let clientId1: String = String(#function[..<#function.index(of: "(")!]) + "1"
-        let clientId2: String = String(#function[..<#function.index(of: "(")!]) + "2"
+        let clientId1: String = String(#function[..<#function.firstIndex(of: "(")!]) + "1"
+        let clientId2: String = String(#function[..<#function.firstIndex(of: "(")!]) + "2"
         
         guard let client1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1) else {
             XCTFail()
