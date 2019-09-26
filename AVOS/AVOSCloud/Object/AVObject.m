@@ -24,8 +24,6 @@
 #import <libkern/OSAtomic.h>
 
 #import "AVUser_Internal.h"
-#import "SDMacros.h"
-#import "EXTScope.h"
 
 #define AV_BATCH_SAVE_SIZE 100
 #define AV_BATCH_CONCURRENT_SIZE 20
@@ -788,12 +786,8 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     if (!params.count)
         return;
 
-    @weakify(self);
     [requests enumerateObjectsWithOptions:NSEnumerationReverse
-                               usingBlock:^(NSMutableDictionary * _Nonnull request, NSUInteger idx, BOOL * _Nonnull stop)
-    {
-        @strongify(self);
-
+                               usingBlock:^(NSMutableDictionary * _Nonnull request, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([request_method(request) isEqualToString:@"PUT"] &&
             [request_internal_id(request) isEqualToString:self.objectId]) {
             request[@"params"] = params;

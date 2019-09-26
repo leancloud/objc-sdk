@@ -22,7 +22,6 @@
 #import "AVObjectUtils.h"
 
 #import "LCRouter_Internal.h"
-#import "SDMacros.h"
 
 static AVVerbosePolicy _verbosePolicy = kAVVerboseShow;
 
@@ -287,21 +286,20 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
                constructingInstallationWithBlock:(void (^)(AVInstallation *))block
 {
     AVInstallation *installation = [AVInstallation defaultInstallation];
-
-    @weakify(installation, weakInstallation);
-
     [installation setDeviceTokenFromData:deviceToken
                                   teamId:teamId];
-
     if (block) {
         block(installation);
     }
-
     [installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (error) {
-            AVLoggerError(AVLoggerDomainIM, @"Installation saved failed, reason: %@.", error.localizedDescription);
+            AVLoggerError(AVLoggerDomainIM,
+                          @"Installation saved failed, reason: %@.",
+                          error.localizedDescription);
         } else {
-            AVLoggerInfo(AVLoggerDomainIM, @"Installation saved OK, object id: %@.", weakInstallation.objectId);
+            AVLoggerInfo(AVLoggerDomainIM,
+                         @"Installation saved OK, object id: %@.",
+                         installation.objectId);
         }
     }];
 }

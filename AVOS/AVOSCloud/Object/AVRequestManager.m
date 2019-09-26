@@ -11,7 +11,6 @@
 #import "AVObjectUtils.h"
 #import "AVObject_Internal.h"
 #import "AVACL_Internal.h"
-#import "EXTScope.h"
 
 typedef enum {
     SET,
@@ -97,16 +96,11 @@ typedef enum {
 }
 
 - (void)synchronize:(void (^)(void))action {
-    if (!action)
-        return;
-
-    [_lock lock];
-
-    @onExit {
+    if (action) {
+        [_lock lock];
+        action();
         [_lock unlock];
-    };
-
-    action();
+    }
 }
 
 -(NSMutableArray *)findArrayInDict:(NSMutableDictionary *)dict

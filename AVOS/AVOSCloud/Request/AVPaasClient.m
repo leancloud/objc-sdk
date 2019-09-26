@@ -21,7 +21,6 @@
 #import "AVObjectUtils.h"
 #import "LCNetworkStatistics.h"
 #import "LCRouter_Internal.h"
-#import "SDMacros.h"
 #import "AVConstants.h"
 
 static NSString * const kLC_code = @"code";
@@ -529,13 +528,9 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         }
     }
 
-    @weakify(self);
-
     [self performRequest:mutableRequest
                  success:^(NSHTTPURLResponse *response, id responseObject)
     {
-        @strongify(self);
-
         if (block) {
             
             block(responseObject, nil);
@@ -555,15 +550,11 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     }
               failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error)
     {
-        @strongify(self);
-
         NSInteger statusCode = response.statusCode;
 
         if (statusCode == 304) {
             // 304 is not error
             [[AVCacheManager sharedInstance] getWithKey:URLString maxCacheAge:3600 * 24 * 30 block:^(id object, NSError *error) {
-                @strongify(self);
-
                 if (error) {
                     if (retryTimes < 3) {
                         [self.lastModify removeObjectForKey:[URLString AVMD5String]];
@@ -778,10 +769,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         [self.runningArchivedRequests addObject:path];
     }
 
-    @weakify(self);
     [self performRequest:request saveResult:NO block:^(id object, NSError *error) {
-        @strongify(self);
-
         if (!error) {
             [fileManager removeItemAtPath:path error:NULL];
         } else {
