@@ -1296,7 +1296,9 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         NSError *anError;
         if (![self postBatchRequests:subRequests forObjects:subObjects error:&anError]) {
             saveOK = NO;
-            *error = anError;
+            if (error) {
+                *error = anError;
+            }
         }
     }
     return saveOK;
@@ -1308,7 +1310,9 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     NSError *fileUploadError = nil;
     
     if (![self saveDescendantFileOfObjects:objects error:&fileUploadError]) {
-        *error = fileUploadError;
+        if (error) {
+            *error = fileUploadError;
+        }
         return NO;
     }
     
@@ -1316,7 +1320,9 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     NSError *requestPostError = nil;
 
     if (![self saveDescendantRequestsOfObjects:objects error:&requestPostError]) {
-        *error = requestPostError;
+        if (error) {
+            *error = requestPostError;
+        }
         return NO;
     }
 
