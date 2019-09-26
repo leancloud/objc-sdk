@@ -796,29 +796,6 @@ class AVFile_TestCase: LCTestBase {
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
-            guard let file: AVFile = uploadedFile() else {
-                XCTFail()
-                return
-            }
-            
-            semaphore.increment()
-            
-            file.delete(completionHandler: { (succeeded: Bool, error: Error?) in
-                
-                semaphore.decrement()
-                XCTAssertTrue(Thread.isMainThread)
-                
-                XCTAssertTrue(succeeded)
-                XCTAssertNil(error)
-            })
-            
-        }, failure: {
-            
-            XCTFail("timeout")
-        })
-        
-        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
-            
             var array: [AVFile] = []
             for _ in 0..<3 {
                 guard let file: AVFile = uploadedFile() else {

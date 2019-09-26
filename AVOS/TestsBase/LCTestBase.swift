@@ -13,6 +13,8 @@ class LCTestBase: XCTestCase {
     override class func setUp() {
         super.setUp()
         
+        AVOSCloud.setAllLogsEnabled(true)
+        
         let env: LCTestEnvironment = LCTestEnvironment.sharedInstance()
         
         /// custom url for API
@@ -33,22 +35,18 @@ class LCTestBase: XCTestCase {
             AVOSCloud.setApplicationId(appId, clientKey: appKey)
         } else {
             let testApp: TestApp = .ChinaNorth
-            AVOSCloud.setApplicationId(testApp.appInfo.id, clientKey: testApp.appInfo.key)
+            switch testApp {
+            case .ChinaNorth, .ChinaEast:
+                AVOSCloud.setApplicationId(
+                    testApp.appInfo.id,
+                    clientKey: testApp.appInfo.key,
+                    serverURLString: testApp.appInfo.serverURL)
+            case .US:
+                AVOSCloud.setApplicationId(
+                    testApp.appInfo.id,
+                    clientKey: testApp.appInfo.key)
+            }
         }
-        
-        AVOSCloud.setAllLogsEnabled(true)
-    }
-    
-    override class func tearDown() {
-        super.tearDown()
-    }
-    
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
     }
     
 }
@@ -63,11 +61,20 @@ extension LCTestBase {
         case ChinaNorth
         case ChinaEast
         case US
-        var appInfo: (id: String, key: String) {
+        var appInfo: (id: String, key: String, serverURL: String) {
             switch self {
-            case .ChinaNorth: return (id: "S5vDI3IeCk1NLLiM1aFg3262-gzGzoHsz", key: "7g5pPsI55piz2PRLPWK5MPz0")
-            case .ChinaEast: return (id: "uwWkfssEBRtrxVpQWEnFtqfr-9Nh9j0Va", key: "9OaLpoW21lIQtRYzJya4WHUR")
-            case .US: return (id: "eX7urCufwLd6X5mHxt7V12nL-MdYXbMMI", key: "PrmzHPnRXjXezS54KryuHMG6")
+            case .ChinaNorth:
+                return (id: "S5vDI3IeCk1NLLiM1aFg3262-gzGzoHsz",
+                        key: "7g5pPsI55piz2PRLPWK5MPz0",
+                        serverURL: "https://s5vdi3ie.lc-cn-n1-shared.com")
+            case .ChinaEast:
+                return (id: "skhiVsqIk7NLVdtHaUiWn0No-9Nh9j0Va",
+                        key: "T3TEAIcL8Ls5XGPsGz41B1bz",
+                        serverURL: "https://skhivsqi.lc-cn-e1-shared.com")
+            case .US:
+                return (id: "eX7urCufwLd6X5mHxt7V12nL-MdYXbMMI",
+                        key: "PrmzHPnRXjXezS54KryuHMG6",
+                        serverURL: "")
             }
         }
     }

@@ -12,6 +12,8 @@ import XCTest
 class LCIMTestBase: LCTestBase {
     
     override class func setUp() {
+        LCRouter.sharedInstance().cleanCache(withKey: .app, error: nil)
+        LCRouter.sharedInstance().cleanCache(withKey: .RTM, error: nil)
         super.setUp()
         /// custom RTM server URL
         if let RTMServerURL: String = LCTestEnvironment.sharedInstance().url_RTMServer {
