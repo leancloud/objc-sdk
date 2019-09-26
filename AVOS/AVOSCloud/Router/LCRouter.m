@@ -85,16 +85,9 @@ static RouterCacheKey RouterCacheKeyTimestamp = @"timestamp";
 
 // MARK: - API Version
 
-static NSString * LCAPIVersion = @"1.1";
-
 + (NSString *)APIVersion
 {
-    return LCAPIVersion;
-}
-
-+ (void)setAPIVersion:(NSString *)APIVersion
-{
-    LCAPIVersion = APIVersion;
+    return @"1.1";
 }
 
 static NSString * pathWithVersion(NSString *path)
@@ -111,33 +104,16 @@ static NSString * pathWithVersion(NSString *path)
 
 // MARK: - RTM Router Path
 
-static NSString * LCRTMRouterPath = @"/v1/route";
-
 + (NSString *)RTMRouterPath
 {
-    return LCRTMRouterPath;
-}
-
-+ (void)setRTMRouterPath:(NSString *)RTMRouterPath
-{
-    LCRTMRouterPath = RTMRouterPath;
+    return @"/v1/route";
 }
 
 // MARK: - Disk Cache
 
-static NSString * LCRouterCacheDirectoryPath = nil;
-
-+ (void)setRouterCacheDirectoryPath:(NSString *)directoryPath
-{
-    LCRouterCacheDirectoryPath = directoryPath;
-}
-
 + (NSString *)routerCacheDirectoryPath
 {
-    if (!LCRouterCacheDirectoryPath) {
-        LCRouterCacheDirectoryPath = [AVPersistenceUtils homeDirectoryLibraryCachesLeanCloudCachesRouter];
-    }
-    return LCRouterCacheDirectoryPath;
+    return [AVPersistenceUtils homeDirectoryLibraryCachesLeanCloudCachesRouter];
 }
 
 static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
