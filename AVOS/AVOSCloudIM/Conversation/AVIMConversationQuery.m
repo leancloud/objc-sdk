@@ -247,19 +247,33 @@
     [self addWhereItem:dict forKey:key];
 }
 
+/**
+ * Converts a string into a regex that matches it.
+ * Surrounding with \Q .. \E does this, we just need to escape \E's in
+ * the text separately.
+ */
+static NSString * quote(NSString *string)
+{
+    NSString *replacedString = [string stringByReplacingOccurrencesOfString:@"\\E" withString:@"\\E\\\\E\\Q"];
+    if (replacedString) {
+        replacedString = [[@"\\Q" stringByAppendingString:replacedString] stringByAppendingString:@"\\E"];
+    }
+    return replacedString;
+}
+
 - (void)whereKey:(NSString *)key containsString:(NSString *)substring
 {
-    [self whereKey:key matchesRegex:[NSString stringWithFormat:@".*%@.*",substring]];
+    [self whereKey:key matchesRegex:[NSString stringWithFormat:@".*%@.*", quote(substring)]];
 }
 
 - (void)whereKey:(NSString *)key hasPrefix:(NSString *)prefix
 {
-    [self whereKey:key matchesRegex:[NSString stringWithFormat:@"^%@.*",prefix]];
+    [self whereKey:key matchesRegex:[NSString stringWithFormat:@"^%@.*", quote(prefix)]];
 }
 
 - (void)whereKey:(NSString *)key hasSuffix:(NSString *)suffix
 {
-    [self whereKey:key matchesRegex:[NSString stringWithFormat:@".*%@$",suffix]];
+    [self whereKey:key matchesRegex:[NSString stringWithFormat:@".*%@$", quote(suffix)]];
 }
 
 - (void)orderByAscending:(NSString *)key
