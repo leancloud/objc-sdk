@@ -323,20 +323,6 @@ static const char *getPropertyType(objc_property_t property)
     return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 }
 
-+(void)performSelectorIfCould:(id)target
-                     selector:(SEL)selector
-                       object:(id)arg1
-                       object:(id)arg2
-{
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-    if ([target respondsToSelector:selector])
-    {
-        [target performSelector:selector withObject:arg1 withObject:arg2];
-    }
-#pragma clang diagnostic pop
-}
-
 + (NSString *)generateUUID
 {
     CFUUIDRef theUUID = CFUUIDCreate(NULL);

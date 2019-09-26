@@ -41,13 +41,6 @@ __deprecated_msg("Deprecated. use AVUser instead.")
  */
 + (void)logInWithBlock:(AVUserResultBlock)block __deprecated_msg("Deprecated. use +[AVUser loginAnonymouslyWithCallback:] instead.");
 
-/*!
- Creates an anonymous user.  The selector for the callback should look like: (AVUser *)user error:(NSError *)error
- @param target Target object for the selector.
- @param selector The selector that will be called when the asynchronous request is complete.
- */
-+ (void)logInWithTarget:(id)target selector:(SEL)selector __deprecated_msg("Deprecated. use +[AVUser loginAnonymouslyWithCallback:] instead.");
-
 /*! @name Determining Whether a AVUser is Anonymous */
 
 /*!

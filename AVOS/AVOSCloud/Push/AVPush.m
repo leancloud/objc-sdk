@@ -218,19 +218,6 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
     [AVPush sendPushMessage:push wait:YES block:block error:nil];
 }
 
-+ (void)sendPushMessageToChannelInBackground:(NSString *)channel
-                                 withMessage:(NSString *)message
-                                      target:(id)target
-                                    selector:(SEL)selector
-{
-    AVPush * push = [AVPush push];
-    [push setChannel:channel];
-    [push setMessage:message];
-    [AVPush sendPushMessage:push wait:YES block:^(BOOL succeeded, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:@(succeeded) object:error];
-    } error:nil];
-}
-
 + (BOOL)sendPushMessageToQuery:(AVQuery *)query
                    withMessage:(NSString *)message
                          error:(NSError **)theError
@@ -346,13 +333,6 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
     }];
 }
 
-- (void)sendPushInBackgroundWithTarget:(id)target selector:(SEL)selector
-{
-    [self sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:@(succeeded) object:error];
-    }];
-}
-
 + (BOOL)sendPushDataToChannel:(NSString *)channel
                      withData:(NSDictionary *)data
                         error:(NSError **)error
@@ -380,19 +360,6 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
     [push setChannel:channel];
     [push setData:data];
     [AVPush sendPushMessage:push wait:NO block:block error:nil];
-}
-
-+ (void)sendPushDataToChannelInBackground:(NSString *)channel
-                                 withData:(NSDictionary *)data
-                                   target:(id)target
-                                 selector:(SEL)selector
-{
-    AVPush * push = [AVPush push];
-    [push setChannel:channel];
-    [push setData:data];
-    [AVPush sendPushMessage:push wait:NO block:^(BOOL succeeded, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:@(succeeded) object:error];
-    } error:nil];
 }
 
 + (BOOL)sendPushDataToQuery:(AVQuery *)query
@@ -438,14 +405,6 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
 {
     [AVPush getSubscribedChannelsWithBlock:^(NSSet *channels, NSError *error) {
         [AVUtils callSetResultBlock:block set:channels error:error];
-    } wait:NO error:nil];
-}
-
-+ (void)getSubscribedChannelsInBackgroundWithTarget:(id)target
-                                           selector:(SEL)selector
-{
-    [AVPush getSubscribedChannelsWithBlock:^(NSSet *channels, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:channels object:error];
     } wait:NO error:nil];
 }
 
@@ -509,15 +468,6 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
     [installation saveInBackgroundWithBlock:block];
 }
 
-+ (void)subscribeToChannelInBackground:(NSString *)channel
-                                target:(id)target
-                              selector:(SEL)selector
-{
-    AVInstallation * installation = [AVInstallation defaultInstallation];
-    [installation addUniqueObject:channel forKey:channelsTag];
-    [installation saveInBackgroundWithTarget:target selector:selector];
-}
-
 + (BOOL)unsubscribeFromChannel:(NSString *)channel error:(NSError **)error
 {
     AVInstallation * installation = [AVInstallation defaultInstallation];
@@ -539,15 +489,6 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
     AVInstallation * installation = [AVInstallation defaultInstallation];
     [installation removeObject:channel forKey:channelsTag];
     [installation saveInBackgroundWithBlock:block];
-}
-
-+ (void)unsubscribeFromChannelInBackground:(NSString *)channel
-                                    target:(id)target
-                                  selector:(SEL)selector
-{
-    AVInstallation * installation = [AVInstallation defaultInstallation];
-    [installation removeObject:channel forKey:channelsTag];
-    [installation saveInBackgroundWithTarget:target selector:selector];
 }
 
 @end

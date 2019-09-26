@@ -287,21 +287,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)saveInBackgroundWithOption:(nullable AVSaveOption *)option eventually:(BOOL)eventually block:(AVBooleanResultBlock)block;
 
 /*!
- Saves the AVObject asynchronously and calls the given callback.
- @param target The object to call selector on.
- @param selector The selector to call. It should have the following signature: (void)callbackWithResult:(NSNumber *)result error:(NSError *)error. error will be nil on success and set if there was an error. [result boolValue] will tell you whether the call succeeded or not.
- */
-- (void)saveInBackgroundWithTarget:(id)target selector:(SEL)selector;
-
-/*!
- * Saves the AVObject with option asynchronously and calls the given callback.
- * @param option   Option for current save.
- * @param target   The object to call selector on.
- * @param selector The selector to call. It should have the following signature: (void)callbackWithResult:(NSNumber *)result error:(NSError *)error. error will be nil on success and set if there was an error. [result boolValue] will tell you whether the call succeeded or not.
- */
-- (void)saveInBackgroundWithOption:(nullable AVSaveOption *)option target:(id)target selector:(SEL)selector;
-
-/*!
   @see saveEventually:
  */
 - (void)saveEventually;
@@ -358,16 +343,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)saveAllInBackground:(NSArray *)objects
                       block:(AVBooleanResultBlock)block;
 
-/*!
- Saves a collection of objects all at once asynchronously and calls a callback when done.
- @param objects The array of objects to save.
- @param target The object to call selector on.
- @param selector The selector to call. It should have the following signature: (void)callbackWithError:(NSError *)error. error will be nil on success and set if there was an error.
- */
-+ (void)saveAllInBackground:(NSArray *)objects
-                     target:(id)target
-                   selector:(SEL)selector;
-
 #pragma mark - Refresh
 
 /*! @name Getting an Object from LeanCloud */
@@ -419,12 +394,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)refreshInBackgroundWithKeys:(NSArray *)keys
                               block:(AVObjectResultBlock)block;
 
-/*!
- Refreshes the AVObject asynchronously and calls the given callback.
- @param target The target on which the selector will be called.
- @param selector The selector to call. It should have the following signature: (void)callbackWithResult:(AVObject *)refreshedObject error:(NSError *)error. error will be nil on success and set if there was an error. refreshedObject will be the AVObject with the refreshed data.
- */
-- (void)refreshInBackgroundWithTarget:(id)target selector:(SEL)selector;
 #endif
 
 #pragma mark - Fetch
@@ -507,25 +476,10 @@ NS_ASSUME_NONNULL_BEGIN
                             block:(AVObjectResultBlock)block;
 
 /*!
- Fetches the AVObject asynchronously and calls the given callback.
- @param target The target on which the selector will be called.
- @param selector The selector to call. It should have the following signature: (void)callbackWithResult:(AVObject *)refreshedObject error:(NSError *)error. error will be nil on success and set if there was an error. refreshedObject will be the AVObject with the refreshed data.
- */
-- (void)fetchInBackgroundWithTarget:(id)target selector:(SEL)selector;
-
-/*!
  Fetches the AVObject's data asynchronously if isDataAvailable is false, then calls the callback block.
  @param block The block to execute.  The block should have the following argument signature: (AVObject *object, NSError *error)
  */
 - (void)fetchIfNeededInBackgroundWithBlock:(AVObjectResultBlock)block;
-
-/*!
- Fetches the AVObject's data asynchronously if isDataAvailable is false, then calls the callback.
- @param target The target on which the selector will be called.
- @param selector The selector to call.  It should have the following signature: (void)callbackWithResult:(AVObject *)fetchedObject error:(NSError *)error. error will be nil on success and set if there was an error.
- */
-- (void)fetchIfNeededInBackgroundWithTarget:(id)target
-                                   selector:(SEL)selector;
 
 /*! @name Getting Many Objects from LeanCloud */
 
@@ -566,33 +520,12 @@ NS_ASSUME_NONNULL_BEGIN
                        block:(AVArrayResultBlock)block;
 
 /*!
- Fetches all of the AVObjects with the current data from the server asynchronously and calls the given callback.
- @param objects The list of objects to fetch.
- @param target The target on which the selector will be called.
- @param selector The selector to call. It should have the following signature: (void)callbackWithResult:(NSArray *)fetchedObjects error:(NSError *)error. error will be nil on success and set if there was an error. fetchedObjects will the array of AVObjects that were fetched.
- */
-+ (void)fetchAllInBackground:(NSArray *)objects
-                      target:(id)target
-                    selector:(SEL)selector;
-
-/*!
  Fetches all of the AVObjects with the current data from the server asynchronously and calls the given block.
  @param objects The list of objects to fetch.
  @param block The block to execute. The block should have the following argument signature: (NSArray *objects, NSError *error)
  */
 + (void)fetchAllIfNeededInBackground:(NSArray *)objects
                                block:(AVArrayResultBlock)block;
-
-/*!
- Fetches all of the AVObjects with the current data from the server asynchronously and calls the given callback.
- @param objects The list of objects to fetch.
- @param target The target on which the selector will be called.
- @param selector The selector to call. It should have the following signature: (void)callbackWithResult:(NSArray *)fetchedObjects error:(NSError *)error. error will be nil on success and set if there was an error. fetchedObjects will the array of AVObjects
- that were fetched.
- */
-+ (void)fetchAllIfNeededInBackground:(NSArray *)objects
-                              target:(id)target
-                            selector:(SEL)selector;
 
 #pragma mark - Delete
 
@@ -627,14 +560,6 @@ NS_ASSUME_NONNULL_BEGIN
  @param block The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
  */
 - (void)deleteInBackgroundWithBlock:(AVBooleanResultBlock)block;
-
-/*!
- Deletes the AVObject asynchronously and calls the given callback.
- @param target The object to call selector on.
- @param selector The selector to call. It should have the following signature: (void)callbackWithResult:(NSNumber *)result error:(NSError *)error. error will be nil on success and set if there was an error. [result boolValue] will tell you whether the call succeeded or not.
- */
-- (void)deleteInBackgroundWithTarget:(id)target
-                            selector:(SEL)selector;
 
 /*!
  Deletes this object from the server at some unspecified time in the future, even if LeanCloud is currently inaccessible.

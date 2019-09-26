@@ -47,13 +47,6 @@
     }];
 }
 
-+ (void)logInWithTarget:(id)target selector:(SEL)selector
-{
-    [AVAnonymousUtils logInWithBlock:^(AVUser *user, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:user object:error];
-    }];
-}
-
 + (BOOL)isLinkedWithUser:(AVUser *)user
 {
     if ([[user linkedServiceNames] containsObject:@"anonymous"])

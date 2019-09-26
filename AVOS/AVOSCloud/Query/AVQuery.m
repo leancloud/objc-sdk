@@ -635,24 +635,6 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
     }];
 }
 
-/*!
- Gets a AVObject asynchronously.
-
- This mutates the AVQuery
-
- @param objectId The id of the object being requested.
- @param target The target for the callback selector.
- @param selector The selector for the callback. It should have the following signature: (void)callbackWithResult:(AVObject *)result error:(NSError *)error. result will be nil if error is set and vice versa.
- */
-- (void)getObjectInBackgroundWithId:(NSString *)objectId
-                             target:(id)target
-                           selector:(SEL)selector
-{
-    [self getObjectInBackgroundWithId:objectId block:^(AVObject *object, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:object object:error];
-    }];
-}
-
 #pragma mark -
 #pragma mark Getting Users
 
@@ -798,18 +780,6 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
 - (void)processEnd:(BOOL)end {
     
 }
-/*!
- Finds objects asynchronously and calls the given callback with the results.
- @param target The object to call the selector on.
- @param selector The selector to call. It should have the following signature: (void)callbackWithResult:(NSArray *)result error:(NSError *)error. result will be nil if error is set and vice versa.
- */
-- (void)findObjectsInBackgroundWithTarget:(id)target
-                                 selector:(SEL)selector
-{
-    [self findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:objects object:error];
-    }];
-}
 
 - (void)deleteAllInBackgroundWithBlock:(AVBooleanResultBlock)block {
     [self findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -912,21 +882,6 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
     return theResultObject;
 }
 
-/*!
- Gets an object asynchronously and calls the given callback with the results.
-
- This mutates the AVQuery.
-
- @param target The object to call the selector on.
- @param selector The selector to call. It should have the following signature: (void)callbackWithResult:(AVObject *)result error:(NSError *)error. result will be nil if error is set OR no object was found matching the query. error will be nil if result is set OR if the query succeeded, but found no results.
- */
-- (void)getFirstObjectInBackgroundWithTarget:(id)target selector:(SEL)selector
-{
-    [self getFirstObjectInBackgroundWithBlock:^(AVObject *object, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:object object:error];
-    }];
-}
-
 #pragma mark -
 #pragma mark Count methods
 
@@ -997,17 +952,6 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
 
     if (theError != NULL) *theError = blockError;
     return theResultCount;
-}
-
-/*!
-  Counts objects asynchronously and calls the given callback with the count.
- @param target The object to call the selector on.
- @param selector The selector to call. It should have the following signature: (void)callbackWithResult:(NSNumber *)result error:(NSError *)error. */
-- (void)countObjectsInBackgroundWithTarget:(id)target selector:(SEL)selector
-{
-    [self countObjectsInBackgroundWithBlock:^(NSInteger number, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:@(number) object:error];
-    }];
 }
 
 #pragma mark -

@@ -574,23 +574,6 @@ __deprecated_msg("deprecated, use -[disassociateWithPlatformId:callback:] instea
 - (void)signUpInBackground AV_DEPRECATED("2.6.10");
 
 /*!
- Signs up the user asynchronously. Make sure that password and username are set. This will also enforce that the username isn't already taken.
- @param target Target object for the selector.
- @param selector The selector that will be called when the asynchrounous request is complete. It should have the following signature: `(void)callbackWithResult:(NSNumber *)result error:(NSError **)error`. error will be nil on success and set if there was an error. `[result boolValue]` will tell you whether the call succeeded or not.
- */
-- (void)signUpInBackgroundWithTarget:(id)target selector:(SEL)selector AV_DEPRECATED("2.6.10");
-
-/*!
- update user's password
- @param oldPassword old password
- @param newPassword new password
- @param target Target object for the selector.
- @param selector The selector that will be called when the asynchrounous request is complete. It should have the following signature: `(void)callbackWithResult:(id)object error:(NSError *)error`. error will be nil on success and set if there was an error.
- @warning the user must have logged in, and provide both oldPassword and newPassword, otherwise can't update password successfully.
- */
-- (void)updatePassword:(NSString *)oldPassword newPassword:(NSString *)newPassword withTarget:(id)target selector:(SEL)selector AV_DEPRECATED("2.6.10");
-
-/*!
  Makes a request to login a user with specified credentials. Returns an instance
  of the successfully logged in AVUser. This will also cache the user locally so
  that calls to userFromCurrentUser will use the latest logged in user.
@@ -611,38 +594,15 @@ __deprecated_msg("deprecated, use -[disassociateWithPlatformId:callback:] instea
 + (void)logInWithUsernameInBackground:(NSString *)username
                              password:(NSString *)password AV_DEPRECATED("2.6.10");
 
-/*!
- Makes an asynchronous request to login a user with specified credentials.
- Returns an instance of the successfully logged in AVUser. This will also cache
- the user locally so that calls to userFromCurrentUser will use the latest logged in user.
- The selector for the callback should look like: myCallback:(AVUser *)user error:(NSError **)error
- @param username The username of the user.
- @param password The password of the user.
- @param target Target object for the selector.
- @param selector The selector that will be called when the asynchrounous request is complete.
- */
-+ (void)logInWithUsernameInBackground:(NSString *)username
-                             password:(NSString *)password
-                               target:(id)target
-                             selector:(SEL)selector AV_DEPRECATED("2.6.10");
-
 + (nullable instancetype)logInWithMobilePhoneNumber:(NSString *)phoneNumber
                                            password:(NSString *)password AV_DEPRECATED("2.6.10");
 + (void)logInWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
                                       password:(NSString *)password AV_DEPRECATED("2.6.10");
-+ (void)logInWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
-                                      password:(NSString *)password
-                                        target:(id)target
-                                      selector:(SEL)selector AV_DEPRECATED("2.6.10");
 
 + (nullable instancetype)logInWithMobilePhoneNumber:(NSString *)phoneNumber
                                             smsCode:(NSString *)code AV_DEPRECATED("2.6.10");
 + (void)logInWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
                                        smsCode:(NSString *)code AV_DEPRECATED("2.6.10");
-+ (void)logInWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
-                                       smsCode:(NSString *)code
-                                        target:(id)target
-                                      selector:(SEL)selector AV_DEPRECATED("2.6.10");
 
 /*!
  Send a password reset request for a specified email. If a user account exists with that email,
@@ -659,18 +619,6 @@ __deprecated_msg("deprecated, use -[disassociateWithPlatformId:callback:] instea
  @param email Email of the account to send a reset password request.
  */
 + (void)requestPasswordResetForEmailInBackground:(NSString *)email AV_DEPRECATED("2.6.10");
-
-/*!
- Send a password reset request asynchronously for a specified email and sets an error object.
- If a user account exists with that email, an email will be sent to that address with instructions
- on how to reset their password.
- @param email Email of the account to send a reset password request.
- @param target Target object for the selector.
- @param selector The selector that will be called when the asynchronous request is complete. It should have the following signature: (void)callbackWithResult:(NSNumber *)result error:(NSError **)error. error will be nil on success and set if there was an error. [result boolValue] will tell you whether the call succeeded or not.
- */
-+ (void)requestPasswordResetForEmailInBackground:(NSString *)email
-                                          target:(id)target
-                                        selector:(SEL)selector AV_DEPRECATED("2.6.10");
 
 /*!
  Whether the user is an authenticated object for the device. An authenticated AVUser is one that is obtained via

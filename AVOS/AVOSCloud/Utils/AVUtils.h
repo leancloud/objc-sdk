@@ -52,11 +52,6 @@ NSDate * LCDateFromString(NSString *dateString);
 
 + (NSString *)jsonStringFromArray:(NSArray *)array;
 
-+ (void)performSelectorIfCould:(id)target
-                      selector:(SEL)selector
-                        object:(id)arg1
-                        object:(id)arg2;
-
 + (NSString *)generateUUID;
 + (NSString *)generateCompactUUID;
 + (NSString *)deviceUUID;

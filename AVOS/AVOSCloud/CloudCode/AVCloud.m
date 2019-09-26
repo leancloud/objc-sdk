@@ -85,13 +85,6 @@
     });
 }
 
-+ (void)callFunctionInBackground:(NSString *)function withParameters:(NSDictionary *)parameters target:(id)target selector:(SEL)selector
-{
-    [[self class] callFunctionInBackground:function withParameters:parameters block:^(id object, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:object object:error];
-    }];
-}
-
 + (id)rpcFunction:(NSString *)function withParameters:(id)parameters {
     return [self rpcFunction:function withParameters:parameters error:NULL];
 }
@@ -137,12 +130,6 @@
          
          [AVUtils callIdResultBlock:block object:nil error:inError];
      }];
-}
-
-+ (void)rpcFunctionInBackground:(NSString *)function withParameters:(id)parameters target:(id)target selector:(SEL)selector {
-    [self rpcFunctionInBackground:function withParameters:parameters block:^(id object, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:object object:error];
-    }];
 }
 
 #pragma mark - Data from LeanEngine

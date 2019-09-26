@@ -1120,23 +1120,6 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     return nil;
 }
 
-- (void)saveInBackgroundWithTarget:(id)target selector:(SEL)selector
-{
-    @weakify(self);
-    [self saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        @strongify(self);
-        [AVUtils performSelectorIfCould:target selector:selector object:self object:error];
-    }];
-}
-
-- (void)saveInBackgroundWithOption:(AVSaveOption *)option target:(id)target selector:(SEL)selector {
-    @weakify(self);
-    [self saveInBackgroundWithOption:option block:^(BOOL succeeded, NSError *error) {
-        @strongify(self);
-        [AVUtils performSelectorIfCould:target selector:selector object:self object:error];
-    }];
-}
-
 - (void)saveEventually
 {
     [self saveEventually:^(BOOL succeeded, NSError * _Nullable error) {
@@ -1346,15 +1329,6 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     });
 }
 
-+ (void)saveAllInBackground:(NSArray *)objects
-                     target:(id)target
-                   selector:(SEL)selector
-{
-    [[self class] saveAllInBackground:objects block:^(BOOL succeeded, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:@(succeeded) object:error];
-    }];
-}
-
 - (BOOL)isDataAvailable
 {
     return self.objectId.length > 0 && self.createdAt != nil;
@@ -1436,26 +1410,6 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         return NO;
     }
     return YES;
-}
-
-- (void)refreshInBackgroundWithTarget:(id)target selector:(SEL)selector
-{
-    NSString * path = [self myObjectPath];
-    [[AVPaasClient sharedInstance] getObject:path withParameters:nil block:^(id object, NSError *error) {
-        if (error == nil)
-        {
-            [self removeLocalData];
-            [AVObjectUtils copyDictionary:object toObject:self];
-        }
-        else
-        {
-            
-        }
-        if (self == [AVUser currentUser]) {
-            [[self class] changeCurrentUser:(AVUser *)self save:YES];
-        }
-        [AVUtils performSelectorIfCould:target selector:selector object:object object:error];
-    }];
 }
 
 #pragma mark - Fetch
@@ -1573,13 +1527,6 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }];
 }
 
-- (void)fetchInBackgroundWithTarget:(id)target selector:(SEL)selector
-{
-    [self fetchInBackgroundWithBlock:^(AVObject *object, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:object object:error];
-    }];
-}
-
 - (void)fetchIfNeededInBackgroundWithBlock:(AVObjectResultBlock)block
 {
     if (![self isDataAvailable]) {
@@ -1589,14 +1536,6 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     } else {
         if (block) block(self, nil);
     }
-}
-
-- (void)fetchIfNeededInBackgroundWithTarget:(id)target
-                                   selector:(SEL)selector
-{
-    [self fetchIfNeededInBackgroundWithBlock:^(AVObject *object, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:object object:error];
-    }];
 }
 
 + (void)fetchAll:(NSArray *)objects
@@ -1683,15 +1622,6 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     });
 }
 
-+ (void)fetchAllInBackground:(NSArray *)objects
-                      target:(id)target
-                    selector:(SEL)selector
-{
-    [[self class] fetchAllInBackground:objects block:^(NSArray *objects, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:objects object:error];
-    }];
-}
-
 + (void)fetchAllIfNeededInBackground:(NSArray *)objects
                                block:(AVArrayResultBlock)block
 {
@@ -1700,15 +1630,6 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         [[self class] fetchAllIfNeeded:objects error:&error];
         [AVUtils callArrayResultBlock:block array:objects error:error];
     });
-}
-
-+ (void)fetchAllIfNeededInBackground:(NSArray *)objects
-                              target:(id)target
-                            selector:(SEL)selector
-{
-    [[self class] fetchAllIfNeededInBackground:objects block:^(NSArray *objects, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:objects object:error];
-    }];
 }
 
 #pragma mark - delete
@@ -1769,14 +1690,6 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         if (block) {
             block(error == nil, error);
         }
-    }];
-}
-
-- (void)deleteInBackgroundWithTarget:(id)target
-                            selector:(SEL)selector
-{
-    [self deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:@(succeeded) object:error];
     }];
 }
 
