@@ -381,7 +381,7 @@ static NSString * quote(NSString *string)
             convCommand.sort = self.order;
         }
         if (self.option) {
-            convCommand.flag = self.option;
+            convCommand.flag = (int32_t)self.option;
         }
         if (self.skip) {
             convCommand.skip = (int32_t)self.skip;
@@ -558,7 +558,7 @@ static NSString * quote(NSString *string)
         outCommand.convMessage = convCommand;
         
         if (self.option) {
-            convCommand.flag = self.option;
+            convCommand.flag = (int32_t)self.option;
         }
         convCommand.limit = (int32_t)tempConvIds.count;
         convCommand.tempConvIdsArray = tempConvIds.mutableCopy;

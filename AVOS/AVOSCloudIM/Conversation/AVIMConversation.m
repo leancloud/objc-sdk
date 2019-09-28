@@ -1494,7 +1494,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         outCommand.cmd = AVIMCommandType_Direct;
         outCommand.directMessage = directCommand;
         if (transientConv && priority) {
-            outCommand.priority = priority;
+            outCommand.priority = (int32_t)priority;
         }
         
         directCommand.cid = self->_conversationId;
