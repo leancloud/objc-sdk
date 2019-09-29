@@ -11,7 +11,6 @@
 #import "AVUser_Internal.h"
 #import "AVGeoPoint_Internal.h"
 #import "AVCacheManager.h"
-#import "AVInstallation_Internal.h"
 #import "AVErrorUtils.h"
 #import "AVObjectUtils.h"
 #import "AVQuery_Internal.h"

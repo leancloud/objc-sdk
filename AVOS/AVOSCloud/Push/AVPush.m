@@ -417,7 +417,7 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
     NSError __block *blockError = nil;
     __block  NSSet * resultSet = nil;
 
-    AVQuery * query = [AVInstallation installationQuery];
+    AVQuery * query = [AVInstallation query];
     [query whereKey:deviceTokenTag equalTo:[AVInstallation defaultInstallation].deviceToken];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (objects.count > 0)

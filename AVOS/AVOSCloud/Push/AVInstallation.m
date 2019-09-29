@@ -3,11 +3,9 @@
 //  LeanCloud
 
 #import <Foundation/Foundation.h>
-#import "AVObject_Internal.h"
-#import "AVQuery.h"
-#import "AVInstallation.h"
-#import "AVPaasClient.h"
 #import "AVInstallation_Internal.h"
+#import "AVObject_Internal.h"
+#import "AVPaasClient.h"
 #import "AVUtils.h"
 #import "AVObjectUtils.h"
 #import "AVPersistenceUtils.h"
@@ -16,102 +14,51 @@
 
 @implementation AVInstallation
 
++ (NSString *)className
+{
+    return @"_Installation";
+}
+
++ (NSString *)endPoint
+{
+    return @"installations";
+}
+
++ (instancetype)installation
+{
+    return [[AVInstallation alloc] init];
+}
+
 + (AVQuery *)query
 {
-    AVQuery *query = [[AVQuery alloc] initWithClassName:@"_Installation"];
-    return query;
+    return [[AVQuery alloc] initWithClassName:[AVInstallation className]];
 }
 
-+(AVQuery *)installationQuery
++ (instancetype)defaultInstallation
 {
-    AVQuery *query = [[AVQuery alloc] initWithClassName:[AVInstallation className]];
-    return query;
-}
-
-+(NSString *)installationTag
-{
-    return @"Installation";
-}
-
-+(AVInstallation *)installation
-{
-    AVInstallation * installation = [[AVInstallation alloc] init];
-    return installation;
-}
-
-+ (AVInstallation *)defaultInstallation
-{
-    static AVInstallation *installation = nil;
-    
+    static AVInstallation *instance;
     static dispatch_once_t onceToken;
-    
     dispatch_once(&onceToken, ^{
-        
-        installation = [[AVInstallation alloc] init];
-        
+        instance = [AVInstallation installation];
         NSString *path = [AVPersistenceUtils currentInstallationArchivePath];
-        if ([AVPersistenceUtils fileExist:path]) {
-            NSMutableDictionary *installationDict = [NSMutableDictionary dictionaryWithDictionary:[AVPersistenceUtils getJSONFromPath:path]];
-            if (installationDict) {
-                [AVObjectUtils copyDictionary:installationDict toObject:installation];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+            NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:
+                                               [AVPersistenceUtils getJSONFromPath:path]];
+            if (dictionary) {
+                [AVObjectUtils copyDictionary:dictionary
+                                     toObject:instance];
             }
         }
     });
-    
-    return installation;
+    return instance;
 }
 
-- (id)init
++ (instancetype)currentInstallation
 {
-    self = [super init];
-    if (self) {
-        self.className  = [AVInstallation className];
-        self.deviceType = [AVInstallation deviceType];
-        self.timeZone   = [[NSTimeZone systemTimeZone] name];
-        self.apnsTopic  = [NSBundle mainBundle].bundleIdentifier;
-    }
-    return self;
+    return [AVInstallation defaultInstallation];
 }
 
-- (NSString *)hexadecimalStringFromData:(NSData *)data
-{
-    NSUInteger dataLength = data.length;
-    if (dataLength == 0) {
-        return nil;
-    }
-    const unsigned char *dataBuffer = data.bytes;
-    NSMutableString *hexString  = [NSMutableString stringWithCapacity:(dataLength * 2)];
-    for (int i = 0; i < dataLength; ++i) {
-        [hexString appendFormat:@"%02.2hhx", dataBuffer[i]];
-    }
-    return [hexString copy];
-}
-
-- (void)setDeviceTokenFromData:(NSData *)deviceTokenData
-{
-    [self setDeviceTokenFromData:deviceTokenData
-                          teamId:nil];
-}
-
-- (void)setDeviceTokenFromData:(NSData *)deviceTokenData
-                        teamId:(NSString *)teamId
-{
-    NSString *newDeviceToken = [self hexadecimalStringFromData:deviceTokenData];
-    if (!newDeviceToken) {
-        return;
-    }
-    NSString *oldDeviceToken = self.deviceToken;
-    NSString *oldTeamId = self.apnsTeamId;
-    if (![oldDeviceToken isEqualToString:newDeviceToken] || ![teamId isEqualToString:oldTeamId]) {
-        self.deviceToken = newDeviceToken;
-        self.apnsTeamId = teamId;
-        [self._requestManager synchronize:^{
-            [self updateInstallationDictionary:[self._requestManager setDict]];
-        }];
-    }
-}
-
-+(NSString *)deviceType
++ (NSString *)deviceType
 {
 #if TARGET_OS_TV
     return @"tvos";
@@ -119,184 +66,160 @@
     return @"watchos";
 #elif TARGET_OS_IOS
     return @"ios";
-#elif AV_TARGET_OS_OSX
-    return @"osx";
+#elif TARGET_OS_OSX
+    return @"macos";
 #else
-    return @"unknown";
+    return nil;
 #endif
 }
 
-- (NSMutableDictionary *)installationDictionaryForCache {
-    NSMutableDictionary *data = [self postData];
-    [data removeObjectForKey:@"__type"];
-    [data removeObjectForKey:@"className"];
-    return data;
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.className = [AVInstallation className];
+        _deviceType = [AVInstallation deviceType];
+        _timeZone = [[NSTimeZone systemTimeZone] name];
+        _apnsTopic = [NSBundle mainBundle].bundleIdentifier;
+    }
+    return self;
 }
 
-- (void)saveInstallationToLocalCache {
-    [AVPersistenceUtils saveJSON:[self installationDictionaryForCache]
-                          toPath:[AVPersistenceUtils currentInstallationArchivePath]];
+- (NSString *)hexadecimalStringFromData:(NSData *)data
+{
+    NSUInteger dataLength = data.length;
+    if (!dataLength) {
+        return nil;
+    }
+    const unsigned char *dataBuffer = data.bytes;
+    NSMutableString *hexString = [NSMutableString stringWithCapacity:(dataLength * 2)];
+    for (int i = 0; i < dataLength; ++i) {
+        [hexString appendFormat:@"%02.2hhx", dataBuffer[i]];
+    }
+    return hexString;
 }
 
-- (BOOL)isDirty {
-    if ([super isDirty]) {
-        return YES;
-    } else if ([AVInstallation defaultInstallation] == self) {
-        /* If cache expired, we deem that it is dirty. */
-        if (!self.updatedAt || [self.updatedAt timeIntervalSinceNow] < - 60 * 60 * 24) {
-            return YES;
+- (void)setDeviceTokenFromData:(NSData *)deviceTokenData
+                        teamId:(NSString *)teamId
+{
+    NSString *deviceTokenHexString = [self hexadecimalStringFromData:deviceTokenData];
+    if (![deviceTokenHexString length]) {
+        return;
+    }
+    [self setDeviceTokenHexString:deviceTokenHexString
+                           teamId:teamId];
+}
+
+- (void)setDeviceTokenHexString:(NSString *)deviceTokenString
+                         teamId:(NSString *)teamId
+{
+    [self setDeviceToken:deviceTokenString];
+    [self setApnsTeamId:teamId];
+}
+
+- (void)postProcessBatchRequests:(NSMutableArray *)requests
+{
+    NSString *batchPath = [[LCRouter sharedInstance] batchPathForPath:[AVInstallation endPoint]];
+    for (NSMutableDictionary *request in [requests copy]) {
+        if ([request_path(request) hasPrefix:batchPath] &&
+            ([request_method(request) isEqualToString:@"PUT"] ||
+             [request_method(request) isEqualToString:@"POST"])) {
+            request[@"method"] = @"POST";
+            request[@"path"] = batchPath;
+            NSMutableDictionary *body = request[@"body"];
+            [body removeObjectForKey:keyPath(self, createdAt)];
+            [body removeObjectForKey:keyPath(self, updatedAt)];
+            if (self.deviceToken) {
+                body[keyPath(self, deviceToken)] = self.deviceToken;
+            }
+            if (self.apnsTeamId) {
+                body[keyPath(self, apnsTeamId)] = self.apnsTeamId;
+            }
+            if (self.objectId) {
+                body[keyPath(self, objectId)] = self.objectId;
+            }
+            if (self.deviceType) {
+                body[keyPath(self, deviceType)] = self.deviceType;
+            }
+            if (self.timeZone) {
+                body[keyPath(self, timeZone)] = self.timeZone;
+            }
+            if (self.apnsTopic) {
+                body[keyPath(self, apnsTopic)] = self.apnsTopic;
+            }
         }
     }
-
-    return NO;
 }
 
--(NSError *)preSave {
-    if ([self isDirty]) {
-        [self._requestManager synchronize:^{
-            [self updateInstallationDictionary:[self._requestManager setDict]];
-        }];
+- (NSError *)preSave
+{
+    if (![self.deviceToken length]) {
+        return LCError(9976, @"deviceToken not found.", nil);
     }
-    if (self.installationId==nil && self.deviceToken==nil) {
-        return LCError(kAVErrorInvalidDeviceToken, @"无法保存Installation数据, 请检查deviceToken是否在`application: didRegisterForRemoteNotificationsWithDeviceToken`方法中正常设置", nil);
+    if (![self.apnsTeamId length]) {
+        return LCError(9976, @"apnsTeamId not found.", nil);
     }
-
     return nil;
 }
 
--(void)postSave {
+- (void)postSave
+{
     [super postSave];
-    [self saveInstallationToLocalCache];
+    if (self == [AVInstallation defaultInstallation]) {
+        NSMutableDictionary *data = [self postData];
+        [data removeObjectForKey:@"__type"];
+        [data removeObjectForKey:@"className"];
+        [AVPersistenceUtils saveJSON:data toPath:[AVPersistenceUtils currentInstallationArchivePath]];
+    }
 }
 
--(NSMutableDictionary *)updateInstallationDictionary:(NSMutableDictionary * )data
-{
-    [data addEntriesFromDictionary:@{
-        badgeTag: @(self.badge),
-        deviceTypeTag: [AVInstallation deviceType],
-        timeZoneTag: self.timeZone,
-    }];
-
-    if (self.objectId) {
-        [data setObject:self.objectId forKey:@"objectId"];
-    }
-    if (self.channels)
-    {
-        [data setObject:self.channels forKey:channelsTag];
-    }
-    if (self.installationId)
-    {
-        [data setObject:self.installationId forKey:installationIdTag];
-    }
-    if (self.deviceToken)
-    {
-        [data setObject:self.deviceToken forKey:deviceTokenTag];
-    }
-    if (self.deviceProfile)
-    {
-        [data setObject:self.deviceProfile forKey:deviceProfileTag];
-    }
-    if (self.apnsTopic) {
-        [data setObject:self.apnsTopic forKey:topicTag];
-    }
-    if (self.apnsTeamId) {
-        [data setObject:self.apnsTeamId forKey:@"apnsTeamId"];
-    }
-
-    __block NSDictionary *localDataCopy = nil;
-    [self internalSyncLock:^{
-        localDataCopy = self._localData.copy;
-    }];
-    NSDictionary *updationData = [AVObjectUtils dictionaryFromObject:localDataCopy];
-
-    [data addEntriesFromDictionary:updationData];
-
-    return data;
-}
-
-+(NSString *)className
-{
-    return @"_Installation";
-}
-
-+(NSString *)endPoint
-{
-    return @"installations";    
-}
-
--(void)setBadge:(NSInteger)badge {
+- (void)setBadge:(NSInteger)badge {
     _badge = badge;
-    [self addSetRequest:badgeTag object:@(self.badge)];
+    [self addSetRequest:keyPath(self, badge) object:@(badge)];
 }
 
--(void)setChannels:(NSArray *)channels {
-    if ([_channels isEqual:channels]) {
-        return;
-    }
+- (void)setChannels:(NSArray *)channels {
     _channels = channels;
-    [self addSetRequest:channelsTag object:self.channels];
+    [self addSetRequest:keyPath(self, channels) object:channels];
 }
 
--(void)setDeviceToken:(NSString *)deviceToken {
-    if ([_deviceToken isEqualToString:deviceToken]) {
-        return;
-    }
-    _deviceToken = deviceToken;
-    [self addSetRequest:deviceTokenTag object:self.deviceToken];
+- (void)setDeviceToken:(NSString *)deviceToken {
+    _deviceToken = [deviceToken copy];
+    [self addSetRequest:keyPath(self, deviceToken) object:_deviceToken];
 }
 
--(void)setDeviceProfile:(NSString *)deviceProfile {
-    if ([_deviceProfile isEqualToString:deviceProfile]) {
-        return;
-    }
-    _deviceProfile = deviceProfile;
-    [self addSetRequest:deviceProfileTag object:self.deviceProfile];
+- (void)setDeviceProfile:(NSString *)deviceProfile {
+    _deviceProfile = [deviceProfile copy];
+    [self addSetRequest:keyPath(self, deviceProfile) object:_deviceProfile];
 }
 
-- (void)setApnsTopic:(NSString *)apnsTopic
-{
-    if (_apnsTopic && [_apnsTopic isEqualToString:apnsTopic]) {
-        
-        return;
-    }
-    
-    _apnsTopic = apnsTopic;
-    
-    [self addSetRequest:@"apnsTopic" object:apnsTopic];
+- (void)setApnsTopic:(NSString *)apnsTopic {
+    _apnsTopic = [apnsTopic copy];
+    [self addSetRequest:keyPath(self, apnsTopic) object:_apnsTopic];
 }
 
-- (void)setApnsTeamId:(NSString *)apnsTeamId
-{
-    if (_apnsTeamId && [_apnsTeamId isEqualToString:apnsTeamId]) {
-        
-        return;
-    }
-    
-    _apnsTeamId = apnsTeamId;
-    
-    [self addSetRequest:@"apnsTeamId" object:apnsTeamId];
+- (void)setApnsTeamId:(NSString *)apnsTeamId {
+    _apnsTeamId = [apnsTeamId copy];
+    [self addSetRequest:keyPath(self, apnsTeamId) object:_apnsTeamId];
 }
 
-- (void)postProcessBatchRequests:(NSMutableArray *)requests {
-    NSString *path = [[self class] endPoint];
-    NSString *batchPath = [[LCRouter sharedInstance] batchPathForPath:path];
-
-    for (NSMutableDictionary *request in [requests copy]) {
-        if ([request_path(request) hasPrefix:batchPath] && [request_method(request) isEqualToString:@"PUT"]) {
-            request[@"method"] = @"POST";
-            request[@"path"]   = batchPath;
-            request[@"body"][@"objectId"]    = self.objectId;
-            request[@"body"][@"deviceType"]  = self.deviceType;
-            request[@"body"][@"deviceToken"] = self.deviceToken;
-        }
-    }
+- (void)setTimeZone:(NSString *)timeZone {
+    _timeZone = [timeZone copy];
+    [self addSetRequest:keyPath(self, timeZone) object:_timeZone];
 }
 
-// MARK: - Deprecated
+- (void)setDeviceType:(NSString *)deviceType {
+    _deviceType = [deviceType copy];
+    [self addSetRequest:keyPath(self, deviceType) object:_deviceType];
+}
 
-+ (AVInstallation *)currentInstallation
-{
-    return [AVInstallation defaultInstallation];
+- (void)setInstallationId:(NSString *)installationId {
+    _installationId = [installationId copy];
+    [self addSetRequest:keyPath(self, installationId) object:_installationId];
+}
+
+- (void)updateChannels:(NSArray *)channels {
+    _channels = channels;
 }
 
 @end

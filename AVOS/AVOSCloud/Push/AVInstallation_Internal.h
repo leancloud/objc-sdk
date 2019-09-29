@@ -10,15 +10,9 @@
 
 @interface AVInstallation ()
 
-@property (nonatomic, copy) NSString *timeZone;
-@property (nonatomic, copy) NSString *deviceType;
-
-+ (AVQuery *)installationQuery;
-+ (AVInstallation *)installation;
-
-+ (NSString *)deviceType;
-
 + (NSString *)className;
 + (NSString *)endPoint;
+
+- (void)updateChannels:(NSArray *)channels;
 
 @end
