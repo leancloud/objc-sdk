@@ -35,21 +35,17 @@ NSString *const LCHeaderFieldNameSession = @"X-LC-Session";
 NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 #define LC_REST_REQUEST_LOG_FORMAT \
-    @"\n\n" \
-    @"------ BEGIN LeanCloud REST Request -------\n" \
+    @"\n------ BEGIN LeanCloud REST Request -------\n" \
     @"path: %@\n" \
     @"curl: %@\n" \
-    @"------ END --------------------------------\n" \
-    @"\n"
+    @"------ END --------------------------------"
 
 #define LC_REST_RESPONSE_LOG_FORMAT \
-    @"\n\n" \
-    @"------ BEGIN LeanCloud REST Response ------\n" \
+    @"\n------ BEGIN LeanCloud REST Response ------\n" \
     @"path: %@\n" \
     @"cost: %.3fms\n" \
     @"response: %@\n" \
-    @"------ END --------------------------------\n" \
-    @"\n"
+    @"------ END --------------------------------"
 
 @implementation NSMutableString (URLRequestFormatter)
 
@@ -61,46 +57,35 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 @implementation NSURLRequest (curl)
 
-- (NSString *)cURLCommand{
-    NSMutableString *command = [NSMutableString stringWithString:@"curl -i -k"];
+- (NSString *)cURLCommand
+{
+    NSMutableString *command = [NSMutableString stringWithString:@"curl -v \\\n"];
     
-    [command appendCommandLineArgument:[NSString stringWithFormat:@"-X %@", [self HTTPMethod]]];
-
-    if ([[[self HTTPMethod] uppercaseString] isEqualToString:@"GET"])
-        [command appendCommandLineArgument:@"-G"];
-
-    NSData *data = [self HTTPBody];
-    if ([data length] > 0) {
-        NSString *HTTPBodyString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        [command appendCommandLineArgument:[NSString stringWithFormat:@"-d '%@'", HTTPBodyString]];
-    }
+    [command appendCommandLineArgument:[NSString stringWithFormat:@"-X %@ \\\n", [self HTTPMethod]]];
     
     NSString *acceptEncodingHeader = [[self allHTTPHeaderFields] valueForKey:@"Accept-Encoding"];
     if (acceptEncodingHeader && [acceptEncodingHeader rangeOfString:@"gzip"].location != NSNotFound) {
-        [command appendCommandLineArgument:@"--compressed"];
+        [command appendCommandLineArgument:@"--compressed \\\n"];
     }
     
     if ([self URL]) {
         NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[self URL]];
         for (NSHTTPCookie *cookie in cookies) {
-            [command appendCommandLineArgument:[NSString stringWithFormat:@"--cookie \"%@=%@\"", [cookie name], [cookie value]]];
+            [command appendCommandLineArgument:[NSString stringWithFormat:@"--cookie \"%@=%@\" \\\n", [cookie name], [cookie value]]];
         }
     }
 
     NSMutableDictionary<NSString *, NSString *> *headers = [[self allHTTPHeaderFields] mutableCopy];
-
-    /* Remove signature for security. */
-    [headers removeObjectForKey:@"X-LC-Sign"];
     
     for (NSString * field in headers) {
-        [command appendCommandLineArgument:[NSString stringWithFormat:@"-H %@", [NSString stringWithFormat:@"'%@: %@'", field, [[self valueForHTTPHeaderField:field] stringByReplacingOccurrencesOfString:@"\'" withString:@"\\\'"]]]];
+        [command appendCommandLineArgument:[NSString stringWithFormat:@"-H %@ \\\n", [NSString stringWithFormat:@"'%@: %@'", field, [[self valueForHTTPHeaderField:field] stringByReplacingOccurrencesOfString:@"\'" withString:@"\\\'"]]]];
     }
 
     if ([self URL].query.length > 0) {
         NSString *query = [self URL].query;
         NSArray *components = [query componentsSeparatedByString:@"&"];
         for (NSString *component in components) {
-            [command appendCommandLineArgument:[NSString stringWithFormat:@"--data-urlencode \'%@\'", component.stringByRemovingPercentEncoding]];
+            [command appendCommandLineArgument:[NSString stringWithFormat:@"--data-urlencode \'%@\' \\\n", component.stringByRemovingPercentEncoding]];
         }
     }
 
@@ -111,6 +96,12 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         basicUrl = [absoluteString substringToIndex:range.location];
     } else {
         basicUrl = absoluteString;
+    }
+    
+    NSData *data = [self HTTPBody];
+    if ([data length] > 0) {
+        NSString *HTTPBodyString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        [command appendCommandLineArgument:[NSString stringWithFormat:@"-d '%@' \\\n", HTTPBodyString]];
     }
     
     [command appendCommandLineArgument:[NSString stringWithFormat:@"\"%@\"", basicUrl]];
