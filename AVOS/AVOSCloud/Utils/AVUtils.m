@@ -17,8 +17,6 @@
 #import "AVRole_Internal.h"
 #import "AVFile.h"
 #import "AVFile_Internal.h"
-#import "AVInstallation.h"
-#import "AVInstallation_Internal.h"
 
 #import "AVObjectUtils.h"
 #import "AVPaasClient.h"
