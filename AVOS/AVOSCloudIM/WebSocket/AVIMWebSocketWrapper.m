@@ -23,18 +23,14 @@
 #import <TargetConditionals.h>
 
 #define LCIM_OUT_COMMAND_LOG_FORMAT \
-    @"\n\n" \
-    @"------ BEGIN LeanCloud IM Out Command ------\n" \
+    @"\n------ BEGIN LeanCloud IM Out Command ------\n" \
     @"content: %@\n"                                  \
-    @"------ END ---------------------------------\n" \
-    @"\n"
+    @"------ END ---------------------------------" \
 
 #define LCIM_IN_COMMAND_LOG_FORMAT \
-    @"\n\n" \
-    @"------ BEGIN LeanCloud IM In Command ------\n" \
+    @"\n------ BEGIN LeanCloud IM In Command ------\n" \
     @"content: %@\n"                                 \
-    @"------ END --------------------------------\n" \
-    @"\n"
+    @"------ END --------------------------------"
 
 // 180s
 #define PingInterval (60.0 * 3.0)
