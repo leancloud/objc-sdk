@@ -372,7 +372,7 @@ static BOOL clientHasInstantiated = false;
                         sessionCommand.n = signature.nonce;
                     }
                     sessionCommand.deviceToken = client->_pushManager.deviceToken ?: AVUtils.deviceUUID;
-                    sessionCommand.ua = @"ios/" SDK_VERSION;
+                    sessionCommand.ua = USER_AGENT;
                     
                     LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
                     commandWrapper.outCommand = outCommand;
@@ -461,7 +461,7 @@ static BOOL clientHasInstantiated = false;
                 sessionCommand.configBitmap = self->_sessionConfigBitmap;
             }
             sessionCommand.deviceToken = self->_pushManager.deviceToken ?: AVUtils.deviceUUID;
-            sessionCommand.ua = @"ios" @"/" SDK_VERSION;
+            sessionCommand.ua = USER_AGENT;
         }
         if (self->_lastPatchTimestamp) {
             sessionCommand.lastPatchTime = self->_lastPatchTimestamp;
