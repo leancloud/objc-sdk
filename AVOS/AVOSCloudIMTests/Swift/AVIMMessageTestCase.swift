@@ -1329,7 +1329,7 @@ class AVIMMessageTestCase: LCIMTestBase {
         
         let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         let installation_1: AVInstallation = AVInstallation()
-        installation_1.deviceToken = UUID().uuidString
+        installation_1.setDeviceTokenHexString(UUID().uuidString, teamId: "LeanCloud")
         guard let client_1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId, delegate: delegate_1, installation: installation_1) else {
             XCTFail()
             return
@@ -1337,7 +1337,7 @@ class AVIMMessageTestCase: LCIMTestBase {
         
         let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         let installation_2: AVInstallation = AVInstallation()
-        installation_2.deviceToken = UUID().uuidString
+        installation_2.setDeviceTokenHexString(UUID().uuidString, teamId: "LeanCloud")
         guard let _: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId, delegate: delegate_2, installation: installation_2) else {
             XCTFail()
             return

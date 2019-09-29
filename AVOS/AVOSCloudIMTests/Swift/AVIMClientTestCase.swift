@@ -49,7 +49,7 @@ class AVIMClientTestCase: LCIMTestBase {
         let delegate1 = AVIMClientDelegateWrapper()
         var client1: AVIMClient! = {
             let client: AVIMClient  = AVIMClient(clientId: clientId, tag: tag, installation: AVInstallation())
-            client.pushManager.installation.deviceToken = UUID().uuidString
+            client.pushManager.installation.setDeviceTokenHexString(UUID().uuidString, teamId: "LeanCloud")
             client.delegate = delegate1
             return client
         }()
@@ -68,7 +68,7 @@ class AVIMClientTestCase: LCIMTestBase {
             
             var client2: AVIMClient! = {
                 let client: AVIMClient  = AVIMClient(clientId: clientId, tag: tag, installation: AVInstallation())
-                client.pushManager.installation.deviceToken = UUID().uuidString
+                client.pushManager.installation.setDeviceTokenHexString(UUID().uuidString, teamId: "LeanCloud")
                 return client
             }()
             
@@ -303,7 +303,7 @@ class AVIMClientTestCase: LCIMTestBase {
     func tests_push() {
         
         let installation: AVInstallation = AVInstallation()
-        installation.deviceToken = UUID().uuidString
+        installation.setDeviceTokenHexString(UUID().uuidString, teamId: "LeanCloud")
         guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: String(#function[..<#function.firstIndex(of: "(")!]), installation: installation) else {
             XCTFail()
             return

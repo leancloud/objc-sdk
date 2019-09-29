@@ -990,6 +990,7 @@
 		D3F8747B20F8B1690035C7D1 /* LCTestEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F8747A20F8B1690035C7D1 /* LCTestEnvironment.m */; };
 		D3F8747D20F8B1690035C7D1 /* LCTestEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F8747A20F8B1690035C7D1 /* LCTestEnvironment.m */; };
 		D3F8747F20F8B1690035C7D1 /* LCTestEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F8747A20F8B1690035C7D1 /* LCTestEnvironment.m */; };
+		D3FF8D35233E0B2A00017A45 /* AVInstallationTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FF8D34233E0B2A00017A45 /* AVInstallationTestCase.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1419,6 +1420,7 @@
 		D3D80080210AFC7F0058F86C /* AVIMCommon_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVIMCommon_Internal.h; sourceTree = "<group>"; };
 		D3F8747920F8B1690035C7D1 /* LCTestEnvironment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCTestEnvironment.h; sourceTree = "<group>"; };
 		D3F8747A20F8B1690035C7D1 /* LCTestEnvironment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCTestEnvironment.m; sourceTree = "<group>"; };
+		D3FF8D34233E0B2A00017A45 /* AVInstallationTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVInstallationTestCase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2241,6 +2243,7 @@
 				D305470E208F2F7200B547B9 /* AVCloudTestCase.swift */,
 				D336C56F212D02A2008D0E3E /* LCRouterTestCase.swift */,
 				D3CC5D272252242A00B3C778 /* AVQueryTestCase.swift */,
+				D3FF8D34233E0B2A00017A45 /* AVInstallationTestCase.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -3753,6 +3756,7 @@
 				D30DF3F71FDE2CD200F932BC /* AVUserTestCase.swift in Sources */,
 				D30DF4161FDE38EF00F932BC /* LCTestBase.swift in Sources */,
 				D336C570212D02A2008D0E3E /* LCRouterTestCase.swift in Sources */,
+				D3FF8D35233E0B2A00017A45 /* AVInstallationTestCase.swift in Sources */,
 				D3CC90CB2069E5BB0082EFD4 /* AVObjectTestCase.swift in Sources */,
 				D3F8747B20F8B1690035C7D1 /* LCTestEnvironment.m in Sources */,
 				D3472E1F2015CBC200AAD65F /* AVFileTestCase.swift in Sources */,

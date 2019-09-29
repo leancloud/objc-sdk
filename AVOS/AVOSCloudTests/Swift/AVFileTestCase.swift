@@ -221,7 +221,11 @@ class AVFile_TestCase: LCTestBase {
         
         let uploadDataTuple: (data: Data, name: String) = self.bigDataTuple
         let documentsDirectory: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let filePath: URL = documentsDirectory.appendingPathComponent(uploadDataTuple.name)
+        try! FileManager.default.createDirectory(
+            at: documentsDirectory,
+            withIntermediateDirectories: true,
+            attributes: nil)
+        let filePath: URL = documentsDirectory.appendingPathComponent(uploadDataTuple.name, isDirectory: false)
         do {
             try uploadDataTuple.data.write(to: filePath, options: [.atomic])
         } catch let err {
