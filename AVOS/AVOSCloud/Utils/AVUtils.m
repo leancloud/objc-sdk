@@ -143,23 +143,6 @@ static int b62_encode(char* out, const void *data, int length)
     return (int)(out-start);
 }
 
-#if !TARGET_OS_IOS && !TARGET_OS_WATCH && !TARGET_OS_TV
-static NSData * LCSecKeyGetData(SecKeyRef key) {
-    CFDataRef data = NULL;
-
-    __Require_noErr_Quiet(SecItemExport(key, kSecFormatUnknown, kSecItemPemArmour, NULL, &data), _out);
-
-    return (__bridge_transfer NSData *)data;
-
-_out:
-    if (data) {
-        CFRelease(data);
-    }
-
-    return nil;
-}
-#endif
-
 @implementation AVUtils
 
 + (void)initialize {
@@ -867,15 +850,15 @@ static Byte ivBuff[]   = {0xA,1,0xB,5,4,0xF,7,9,0x17,3,1,6,8,0xC,0xD,91};
     
     NSData *salt = [NSData dataWithBytes:saltBuff length:kCCKeySizeAES128];
     
-    int result = CCKeyDerivationPBKDF(kCCPBKDF2,        // algorithm算法
-                                      password.UTF8String,  // password密码
-                                      password.length,      // passwordLength密码的长度
-                                      salt.bytes,           // salt内容
-                                      salt.length,          // saltLen长度
-                                      kCCPRFHmacAlgSHA1,    // PRF
-                                      kAVPBKDFRounds,         // rounds循环次数
-                                      derivedKey.mutableBytes, // derivedKey
-                                      derivedKey.length);   // derivedKeyLen derive:出自
+    __unused int result = CCKeyDerivationPBKDF(kCCPBKDF2,        // algorithm算法
+                                               password.UTF8String,  // password密码
+                                               password.length,      // passwordLength密码的长度
+                                               salt.bytes,           // salt内容
+                                               salt.length,          // saltLen长度
+                                               kCCPRFHmacAlgSHA1,    // PRF
+                                               kAVPBKDFRounds,         // rounds循环次数
+                                               derivedKey.mutableBytes, // derivedKey
+                                               derivedKey.length);   // derivedKeyLen derive:出自
     
     NSAssert(result == kCCSuccess,
              @"Unable to create AES key for spassword: %d", result);

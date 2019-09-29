@@ -1042,7 +1042,7 @@ static BOOL enableAutomatic = NO;
                 LCErrorInternal(reason);
             });
             
-            callback(nil, aError);
+            callback(false, aError);
         });
         
         return;
@@ -1060,7 +1060,7 @@ static BOOL enableAutomatic = NO;
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                callback(nil, error);
+                callback(false, error);
             });
             
             return;
@@ -1072,7 +1072,7 @@ static BOOL enableAutomatic = NO;
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                callback(nil, ({
+                callback(false, ({
                     NSString *reason = @"response invalid.";
                     LCErrorInternal(reason);
                 }));
@@ -1096,7 +1096,7 @@ static BOOL enableAutomatic = NO;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            callback(self, nil);
+            callback(true, nil);
         });
     }];
 }

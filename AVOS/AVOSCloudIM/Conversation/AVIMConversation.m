@@ -742,7 +742,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         for (NSString *item in clientIds) {
             if (item.length > kClientIdLengthLimit || item.length == 0) {
                 [self invokeInUserInteractQueue:^{
-                    callback(false, LCErrorInternal([NSString stringWithFormat:@"client id's length should in range [1 %lu].", kClientIdLengthLimit]));
+                    callback(false, LCErrorInternal([NSString stringWithFormat:@"client id's length should in range [1 %lu].", (unsigned long)kClientIdLengthLimit]));
                 }];
                 return;
             }
@@ -827,7 +827,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         for (NSString *item in clientIds) {
             if (item.length > kClientIdLengthLimit || item.length == 0) {
                 [self invokeInUserInteractQueue:^{
-                    callback(false, LCErrorInternal([NSString stringWithFormat:@"client id's length should in range [1 %lu].", kClientIdLengthLimit]));
+                    callback(false, LCErrorInternal([NSString stringWithFormat:@"client id's length should in range [1 %lu].", (unsigned long)kClientIdLengthLimit]));
                 }];
                 return;
             }
