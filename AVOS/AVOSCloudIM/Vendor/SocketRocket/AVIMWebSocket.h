@@ -38,12 +38,6 @@ typedef enum AVIMStatusCode : NSInteger {
     AVIMStatusCodeMessageTooBig = 1009,
 } AVIMStatusCode;
 
-typedef NS_ENUM(NSInteger, AVIMSSLPinningMode) {
-    AVIMSSLPinningModeNone        = 0,
-    AVIMSSLPinningModeCertificate = 1,
-    AVIMSSLPinningModePublicKey   = 2
-};
-
 @class AVIMWebSocket;
 
 extern NSString *const AVIMWebSocketErrorDomain;
@@ -71,7 +65,6 @@ extern NSString *const AVIMHTTPResponseErrorKey;
 // This returns the negotiated protocol.
 // It will be nil until after the handshake completes.
 @property (nonatomic, readonly, copy) NSString *protocol;
-@property (nonatomic, assign) AVIMSSLPinningMode SSLPinningMode;
 
 // Protocols should be an array of strings that turn into Sec-WebSocket-Protocol.
 - (id)initWithURLRequest:(NSURLRequest *)request protocols:(NSArray *)protocols allowsUntrustedSSLCertificates:(BOOL)allowsUntrustedSSLCertificates;
@@ -120,22 +113,6 @@ extern NSString *const AVIMHTTPResponseErrorKey;
 - (void)webSocket:(AVIMWebSocket *)webSocket didFailWithError:(NSError *)error;
 - (void)webSocket:(AVIMWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
 - (void)webSocket:(AVIMWebSocket *)webSocket didReceivePong:(NSData *)pongPayload;
-
-@end
-
-#pragma mark - NSURLRequest (CertificateAdditions)
-
-@interface NSURLRequest (CertificateAdditions)
-
-@property (nonatomic, retain, readonly) NSArray *AVIM_SSLPinnedCertificates;
-
-@end
-
-#pragma mark - NSMutableURLRequest (CertificateAdditions)
-
-@interface NSMutableURLRequest (CertificateAdditions)
-
-@property (nonatomic, retain) NSArray *AVIM_SSLPinnedCertificates;
 
 @end
 

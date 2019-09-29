@@ -72,7 +72,7 @@ class AVUser_TestCase: LCTestBase {
             
             let authData: [String : Any] = [
                 "access_token" : "access_token_test" + testTag,
-                "openid" : "\(#function[..<#function.index(of: "(")!])" + testTag
+                "openid" : "\(#function[..<#function.firstIndex(of: "(")!])" + testTag
             ]
             let platformId: String = LeanCloudSocialPlatform.weiXin.rawValue + testTag
             
@@ -111,7 +111,7 @@ class AVUser_TestCase: LCTestBase {
             
             let authData: [String : Any] = [
                 "access_token" : "access_token_test" + testTag,
-                "openid" : "\(#function[..<#function.index(of: "(")!])" + testTag
+                "openid" : "\(#function[..<#function.firstIndex(of: "(")!])" + testTag
             ]
             
             let options: AVUserAuthDataLoginOption = AVUserAuthDataLoginOption()
@@ -175,7 +175,7 @@ class AVUser_TestCase: LCTestBase {
         
         if self.isServerTesting { return }
         
-        let unionId: String = "\(#function[..<#function.index(of: "(")!])"
+        let unionId: String = "\(#function[..<#function.firstIndex(of: "(")!])"
         var user_1: AVUser! = AVUser()
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
@@ -185,7 +185,7 @@ class AVUser_TestCase: LCTestBase {
             
             let authData: [String : Any] = [
                 "access_token" : "access_token_test" + testTag,
-                "openid" : "\(#function[..<#function.index(of: "(")!])" + testTag
+                "openid" : "\(#function[..<#function.firstIndex(of: "(")!])" + testTag
             ]
             
             let options: AVUserAuthDataLoginOption = AVUserAuthDataLoginOption()
@@ -228,7 +228,7 @@ class AVUser_TestCase: LCTestBase {
                 
                 let authData: [String : Any] = [
                     "access_token" : "access_token_test" + testTag,
-                    "openid" : "\(#function[..<#function.index(of: "(")!])" + testTag
+                    "openid" : "\(#function[..<#function.firstIndex(of: "(")!])" + testTag
                 ]
                 
                 let options: AVUserAuthDataLoginOption = AVUserAuthDataLoginOption()
@@ -293,7 +293,7 @@ class AVUser_TestCase: LCTestBase {
         var user: AVUser! = AVUser()
         let authData: [String : Any] = [
             "access_token" : "access_token_test",
-            "openid" : "\(#function[..<#function.index(of: "(")!])"
+            "openid" : "\(#function[..<#function.firstIndex(of: "(")!])"
         ]
         let platformId: String = LeanCloudSocialPlatform.weiXin.rawValue
         
@@ -418,7 +418,7 @@ class AVUser_TestCase: LCTestBase {
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
-            let username: String = "\(#function[..<#function.index(of: "(")!])"
+            let username: String = "\(#function[..<#function.firstIndex(of: "(")!])"
             let password: String = "123"
             let user: AVUser = AVUser()
             user.username = username

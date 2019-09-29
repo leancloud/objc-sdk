@@ -14,8 +14,8 @@ class AVIMConversationTestCase: LCIMTestBase {
     
     func tests_conv_read_maxread() {
         
-        let clientId1: String = String(#function[..<#function.index(of: "(")!]) + "1"
-        let clientId2: String = String(#function[..<#function.index(of: "(")!]) + "2"
+        let clientId1: String = String(#function[..<#function.firstIndex(of: "(")!]) + "1"
+        let clientId2: String = String(#function[..<#function.firstIndex(of: "(")!]) + "2"
         
         let delegate1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1, delegate: delegate1) else {
@@ -91,9 +91,9 @@ class AVIMConversationTestCase: LCIMTestBase {
     func tests_conv_add_remove() {
         
         let clientIds: [String] = [
-            String(#function[..<#function.index(of: "(")!]) + "1",
-            String(#function[..<#function.index(of: "(")!]) + "2",
-            String(#function[..<#function.index(of: "(")!]) + "3"
+            String(#function[..<#function.firstIndex(of: "(")!]) + "1",
+            String(#function[..<#function.firstIndex(of: "(")!]) + "2",
+            String(#function[..<#function.firstIndex(of: "(")!]) + "3"
         ]
         
         let delegate1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
@@ -257,8 +257,8 @@ class AVIMConversationTestCase: LCIMTestBase {
     
     func tests_conv_count() {
         
-        let clientId1: String = String(#function[..<#function.index(of: "(")!]) + "1"
-        let clientId2: String = String(#function[..<#function.index(of: "(")!]) + "2"
+        let clientId1: String = String(#function[..<#function.firstIndex(of: "(")!]) + "1"
+        let clientId2: String = String(#function[..<#function.firstIndex(of: "(")!]) + "2"
         
         guard let client1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1) else {
             XCTFail()
@@ -316,8 +316,8 @@ class AVIMConversationTestCase: LCIMTestBase {
     
     func tests_conv_update() {
         
-        let clientId1: String = String(#function[..<#function.index(of: "(")!]) + "1"
-        let clientId2: String = String(#function[..<#function.index(of: "(")!]) + "2"
+        let clientId1: String = String(#function[..<#function.firstIndex(of: "(")!]) + "1"
+        let clientId2: String = String(#function[..<#function.firstIndex(of: "(")!]) + "2"
         
         let delegate1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1, delegate: delegate1) else {
@@ -376,8 +376,8 @@ class AVIMConversationTestCase: LCIMTestBase {
     
     func tests_conv_mute_unmute() {
         
-        let clientId1: String = String(#function[..<#function.index(of: "(")!]) + "1"
-        let clientId2: String = String(#function[..<#function.index(of: "(")!]) + "2"
+        let clientId1: String = String(#function[..<#function.firstIndex(of: "(")!]) + "1"
+        let clientId2: String = String(#function[..<#function.firstIndex(of: "(")!]) + "2"
         
         guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1) else {
             XCTFail()
@@ -414,8 +414,8 @@ class AVIMConversationTestCase: LCIMTestBase {
     
     func tests_conv_query() {
         
-        let clientId1: String = "\(#function[..<#function.index(of: "(")!])" + "1"
-        let clientId2: String = "\(#function[..<#function.index(of: "(")!])" + "2"
+        let clientId1: String = "\(#function[..<#function.firstIndex(of: "(")!])" + "1"
+        let clientId2: String = "\(#function[..<#function.firstIndex(of: "(")!])" + "2"
         
         guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1) else {
             XCTFail()
@@ -467,9 +467,9 @@ class AVIMConversationTestCase: LCIMTestBase {
     
     func tests_conv_memberinfo_get_update() {
         
-        let clientId1: String = String(#function[..<#function.index(of: "(")!]) + "1"
-        let clientId2: String = String(#function[..<#function.index(of: "(")!]) + "2"
-        let clientId3: String = String(#function[..<#function.index(of: "(")!]) + "3"
+        let clientId1: String = String(#function[..<#function.firstIndex(of: "(")!]) + "1"
+        let clientId2: String = String(#function[..<#function.firstIndex(of: "(")!]) + "2"
+        let clientId3: String = String(#function[..<#function.firstIndex(of: "(")!]) + "3"
         
         let delegate1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1, delegate: delegate1) else {
@@ -544,10 +544,10 @@ class AVIMConversationTestCase: LCIMTestBase {
     
     func tests_blacklist_block_query_unblock() {
         
-        let clientId1: String = String(#function[..<#function.index(of: "(")!]) + "1"
-        let clientId2: String = String(#function[..<#function.index(of: "(")!]) + "2"
-        let clientId3: String = String(#function[..<#function.index(of: "(")!]) + "3"
-        let clientId4: String = String(#function[..<#function.index(of: "(")!]) + "4"
+        let clientId1: String = String(#function[..<#function.firstIndex(of: "(")!]) + "1"
+        let clientId2: String = String(#function[..<#function.firstIndex(of: "(")!]) + "2"
+        let clientId3: String = String(#function[..<#function.firstIndex(of: "(")!]) + "3"
+        let clientId4: String = String(#function[..<#function.firstIndex(of: "(")!]) + "4"
         
         let delegate1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1, delegate: delegate1) else {
@@ -650,10 +650,10 @@ class AVIMConversationTestCase: LCIMTestBase {
     
     func tests_conv_shutup_add_query_remove() {
         
-        let clientId1: String = String(#function[..<#function.index(of: "(")!]) + "1"
-        let clientId2: String = String(#function[..<#function.index(of: "(")!]) + "2"
-        let clientId3: String = String(#function[..<#function.index(of: "(")!]) + "3"
-        let clientId4: String = String(#function[..<#function.index(of: "(")!]) + "4"
+        let clientId1: String = String(#function[..<#function.firstIndex(of: "(")!]) + "1"
+        let clientId2: String = String(#function[..<#function.firstIndex(of: "(")!]) + "2"
+        let clientId3: String = String(#function[..<#function.firstIndex(of: "(")!]) + "3"
+        let clientId4: String = String(#function[..<#function.firstIndex(of: "(")!]) + "4"
         
         let delegate1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let client1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1, delegate: delegate1) else {

@@ -742,7 +742,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         for (NSString *item in clientIds) {
             if (item.length > kClientIdLengthLimit || item.length == 0) {
                 [self invokeInUserInteractQueue:^{
-                    callback(false, LCErrorInternal([NSString stringWithFormat:@"client id's length should in range [1 %lu].", kClientIdLengthLimit]));
+                    callback(false, LCErrorInternal([NSString stringWithFormat:@"client id's length should in range [1 %lu].", (unsigned long)kClientIdLengthLimit]));
                 }];
                 return;
             }
@@ -827,7 +827,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         for (NSString *item in clientIds) {
             if (item.length > kClientIdLengthLimit || item.length == 0) {
                 [self invokeInUserInteractQueue:^{
-                    callback(false, LCErrorInternal([NSString stringWithFormat:@"client id's length should in range [1 %lu].", kClientIdLengthLimit]));
+                    callback(false, LCErrorInternal([NSString stringWithFormat:@"client id's length should in range [1 %lu].", (unsigned long)kClientIdLengthLimit]));
                 }];
                 return;
             }
@@ -1494,7 +1494,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         outCommand.cmd = AVIMCommandType_Direct;
         outCommand.directMessage = directCommand;
         if (transientConv && priority) {
-            outCommand.priority = priority;
+            outCommand.priority = (int32_t)priority;
         }
         
         directCommand.cid = self->_conversationId;

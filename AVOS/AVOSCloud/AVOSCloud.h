@@ -67,6 +67,16 @@
 #import "AVAnalytics.h"
 #endif
 
+typedef enum : NSUInteger {
+    kAVVerboseShow,
+    kAVVerboseNone,
+#if DEBUG
+    kAVVerboseAuto = kAVVerboseShow
+#else
+    kAVVerboseAuto = kAVVerboseNone
+#endif
+} AVVerbosePolicy;
+
 typedef enum AVLogLevel : NSUInteger {
     AVLogLevelNone      = 0,
     AVLogLevelError     = 1 << 0,
@@ -84,8 +94,6 @@ typedef NS_ENUM(NSInteger, AVServiceModule) {
     AVServiceModuleStatistics
 };
 
-#define kAVDefaultNetworkTimeoutInterval 10.0
-
 NS_ASSUME_NONNULL_BEGIN
 
 /**
@@ -93,34 +101,23 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface AVOSCloud : NSObject
 
-/**
- A switch of SSL Pinning for all LeanCloud's HTTPS Requests.
- Default is False.
- 
- @param enabled Set whatever you want if you master SSL & SSL Pinning.
- */
-+ (void)setSSLPinningEnabled:(BOOL)enabled;
+// MARK: ID, Key and Server URL
 
-/*!
- * Enable logs of all levels and domains. When define DEBUG macro, it's enabled, otherwise, it's not enabled. This is recommended. But you can set it NO, and call AVLogger's methods to control which domains' log should be output.
- */
-+ (void)setAllLogsEnabled:(BOOL)enabled;
-
-/**
- *  设置SDK信息显示
- *  @param verbosePolicy SDK信息显示策略，kAVVerboseShow为显示，
- *         kAVVerboseNone为不显示，kAVVerboseAuto在DEBUG时显示
- */
-+ (void)setVerbosePolicy:(AVVerbosePolicy)verbosePolicy;
-
-/** @name Connecting to LeanCloud */
+/// Setup ID, Key and Server URL of the application.
+/// @param applicationId The applicaiton id for your LeanCloud application.
+/// @param clientKey The client key for your LeanCloud application.
+/// @param serverURLString The server url for your LeanCloud application.
++ (void)setApplicationId:(nonnull NSString *)applicationId
+               clientKey:(nonnull NSString *)clientKey
+         serverURLString:(nonnull NSString *)serverURLString;
 
 /*!
  Sets the applicationId and clientKey of your application.
  @param applicationId The applicaiton id for your LeanCloud application.
  @param clientKey The client key for your LeanCloud application.
  */
-+ (void)setApplicationId:(NSString *)applicationId clientKey:(NSString *)clientKey;
++ (void)setApplicationId:(nonnull NSString *)applicationId
+               clientKey:(nonnull NSString *)clientKey;
 
 /**
  *  get Application Id
@@ -135,6 +132,17 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return Client Key
  */
 + (NSString *)getClientKey;
+
+/**
+ Custom server URL for specific service module.
+ 
+ @param URLString     The URL string of service module.
+ @param serviceModule The service module which you want to customize.
+ */
++ (void)setServerURLString:(nullable NSString *)URLString
+          forServiceModule:(AVServiceModule)serviceModule;
+
+// MARK: Last Modify
 
 /**
  *  开启LastModify支持, 减少流量消耗。默认关闭。
@@ -153,16 +161,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (void)clearLastModifyCache;
 
-/**
- Custom server URL for specific service module.
-
- @param URLString     The URL string of service module.
- @param serviceModule The service module which you want to customize.
- */
-+ (void)setServerURLString:(NSString * _Nullable)URLString forServiceModule:(AVServiceModule)serviceModule;
+// MARK: HTTP Request Timeout Interval
 
 /**
- *  Get the timeout interval for network requests. Default is kAVDefaultNetworkTimeoutInterval (10 seconds)
+ *  Get the timeout interval for network requests. Default is 60 seconds.
  *
  *  @return timeout interval
  */
@@ -175,11 +177,28 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (void)setNetworkTimeoutInterval:(NSTimeInterval)time;
 
-// log
+// MARK: Log
+
+/*!
+ * Enable logs of all levels and domains. When define DEBUG macro, it's enabled, otherwise, it's not enabled. This is recommended. But you can set it NO, and call AVLogger's methods to control which domains' log should be output.
+ */
++ (void)setAllLogsEnabled:(BOOL)enabled;
+
+/**
+ *  设置SDK信息显示
+ *  @param verbosePolicy SDK信息显示策略，kAVVerboseShow为显示，
+ *         kAVVerboseNone为不显示，kAVVerboseAuto在DEBUG时显示
+ */
++ (void)setVerbosePolicy:(AVVerbosePolicy)verbosePolicy;
+
+/// Set log level.
+/// @param level The level of log.
 + (void)setLogLevel:(AVLogLevel)level;
+
+/// Get log level.
 + (AVLogLevel)logLevel;
 
-#pragma mark Schedule work
+// MARK: Schedule work
 
 /**
  *  get the query cache expired days
@@ -209,6 +228,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (void)setFileCacheExpiredDays:(NSInteger)days;
 
+// MARK: SMS
+
 /*!
  *  验证短信验证码，需要开启手机短信验证 API 选项。
  *  发送验证码给服务器进行验证。
@@ -216,7 +237,11 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param phoneNumber 11位电话号码
  *  @param callback 回调结果
  */
-+(void)verifySmsCode:(NSString *)code mobilePhoneNumber:(NSString *)phoneNumber callback:(AVBooleanResultBlock)callback;
++ (void)verifySmsCode:(NSString *)code
+    mobilePhoneNumber:(NSString *)phoneNumber
+             callback:(AVBooleanResultBlock)callback;
+
+// MARK: Date
 
 /*!
  * 获取服务端时间。
@@ -242,51 +267,25 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (void)getServerDateWithBlock:(void(^)(NSDate * _Nullable date, NSError * _Nullable error))block;
 
-#pragma mark - Push Notification
+// MARK: Push
 
-/**
- Handle device token registered from APNs.
- This method should be called in -[UIApplication application:didRegisterForRemoteNotificationsWithDeviceToken:].
-
- @param deviceToken Device token issued by APNs.
- */
-+ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
-
-/**
- Handle device token registered from APNs, with a team ID.
- This method should be called in -[UIApplication application:didRegisterForRemoteNotificationsWithDeviceToken:].
-
- @param deviceToken Device token issued by APNs.
- @param teamId Team ID.
- */
+/// Convenient method for setting the device token of APNs and the team ID of Apple Developer Account.
+/// @param deviceToken The device token of APNs.
+/// @param teamId The team ID of Apple Developer Account.
 + (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-                                          teamId:(NSString * _Nullable)teamId;
+                                          teamId:(NSString *)teamId;
 
-/**
- Handle device token registered from APNs.
- This method should be called in -[UIApplication application:didRegisterForRemoteNotificationsWithDeviceToken:].
-
- @param deviceToken Device token issued by APNs.
- @param block Constructing block of [AVInstallation defaultInstallation].
- */
+/// Convenient method for setting the device token of APNs and the team ID of Apple Developer Account.
+/// @param deviceToken The device token of APNs.
+/// @param teamId The team ID of Apple Developer Account.
+/// @param block The constructing block before saving.
 + (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-               constructingInstallationWithBlock:(void(^ _Nullable)(AVInstallation *currentInstallation))block;
-
-/**
- Handle device token registered from APNs, with a team ID.
- This method should be called in -[UIApplication application:didRegisterForRemoteNotificationsWithDeviceToken:].
-
- @param deviceToken Device token issued by APNs.
- @param teamId Team ID.
- @param block Constructing block of [AVInstallation defaultInstallation].
- */
-+ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-                                          teamId:(NSString * _Nullable)teamId
-               constructingInstallationWithBlock:(void(^ _Nullable)(AVInstallation *))block;
+                                          teamId:(NSString *)teamId
+               constructingInstallationWithBlock:(nullable void (^)(AVInstallation *))block;
 
 @end
 
-#pragma mark - Deprecated API
+// MARK: Deprecated
 
 typedef NS_ENUM(NSInteger, AVStorageType) {
     AVStorageTypeQiniu = 0,
@@ -307,6 +306,7 @@ typedef NS_ENUM(NSInteger, AVServiceRegion) {
 
 @interface AVOSCloud (AVDeprecated)
 
+/// Start Network Statistics
 + (void)startNetworkStatistics __deprecated;
 
 /**
@@ -328,7 +328,8 @@ typedef NS_ENUM(NSInteger, AVServiceRegion) {
  *  @param callback 回调结果
  */
 +(void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
-                            callback:(AVBooleanResultBlock)callback AV_DEPRECATED("Deprecated in AVOSCloud SDK 4.5.0. Use +[AVSMS requestShortMessageForPhoneNumber:options:callback:] instead.");
+                            callback:(AVBooleanResultBlock)callback
+__deprecated_msg("deprecated, use +[AVSMS requestShortMessageForPhoneNumber:options:callback:] instead.");
 
 /*!
  *  请求短信验证码，需要开启手机短信验证 API 选项。
@@ -343,7 +344,8 @@ typedef NS_ENUM(NSInteger, AVServiceRegion) {
                              appName:(nullable NSString *)appName
                            operation:(nullable NSString *)operation
                           timeToLive:(NSUInteger)ttl
-                            callback:(AVBooleanResultBlock)callback AV_DEPRECATED("Deprecated in AVOSCloud SDK 4.5.0. Use +[AVSMS requestShortMessageForPhoneNumber:options:callback:] instead.");
+                            callback:(AVBooleanResultBlock)callback
+__deprecated_msg("deprecated, use +[AVSMS requestShortMessageForPhoneNumber:options:callback:] instead.");
 
 /*!
  *  请求短信验证码，需要开启手机短信验证 API 选项。
@@ -356,7 +358,8 @@ typedef NS_ENUM(NSInteger, AVServiceRegion) {
 +(void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
                         templateName:(nullable NSString *)templateName
                            variables:(nullable NSDictionary *)variables
-                            callback:(AVBooleanResultBlock)callback AV_DEPRECATED("Deprecated in AVOSCloud SDK 4.5.0. Use +[AVSMS requestShortMessageForPhoneNumber:options:callback:] instead.");
+                            callback:(AVBooleanResultBlock)callback
+__deprecated_msg("deprecated, use +[AVSMS requestShortMessageForPhoneNumber:options:callback:] instead.");
 
 /*!
  * 请求语音短信验证码，需要开启手机短信验证 API 选项
@@ -367,20 +370,8 @@ typedef NS_ENUM(NSInteger, AVServiceRegion) {
  */
 +(void)requestVoiceCodeWithPhoneNumber:(NSString *)phoneNumber
                                    IDD:(nullable NSString *)IDD
-                              callback:(AVBooleanResultBlock)callback AV_DEPRECATED("Deprecated in AVOSCloud SDK 4.5.0. Use +[AVSMS requestShortMessageForPhoneNumber:options:callback:] instead.");
-
-/**
- * Register remote notification with all types (badge, alert, sound) and empty categories.
- */
-+ (void)registerForRemoteNotification AV_TV_UNAVAILABLE AV_WATCH_UNAVAILABLE AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.5.0. It will be removed in future.");
-
-/**
- * Register remote notification with types.
- * @param types Notification types.
- * @param categories A set of UIUserNotificationCategory objects that define the groups of actions a notification may include.
- * NOTE: categories only supported by iOS 8 and later. If application run below iOS 8, categories will be ignored.
- */
-+ (void)registerForRemoteNotificationTypes:(NSUInteger)types categories:(nullable NSSet *)categories AV_TV_UNAVAILABLE AV_WATCH_UNAVAILABLE AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.5.0. It will be removed in future.");
+                              callback:(AVBooleanResultBlock)callback
+__deprecated_msg("deprecated, use +[AVSMS requestShortMessageForPhoneNumber:options:callback:] instead.");
 
 @end
 

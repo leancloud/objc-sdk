@@ -21,9 +21,6 @@
 #import "AVObjectUtils.h"
 #import "LCNetworkStatistics.h"
 #import "LCRouter_Internal.h"
-#import "SDMacros.h"
-#import "AVOSCloud_Internal.h"
-#import "LCSSLChallenger.h"
 #import "AVConstants.h"
 
 static NSString * const kLC_code = @"code";
@@ -38,21 +35,17 @@ NSString *const LCHeaderFieldNameSession = @"X-LC-Session";
 NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 #define LC_REST_REQUEST_LOG_FORMAT \
-    @"\n\n" \
-    @"------ BEGIN LeanCloud REST Request -------\n" \
+    @"\n------ BEGIN LeanCloud REST Request -------\n" \
     @"path: %@\n" \
     @"curl: %@\n" \
-    @"------ END --------------------------------\n" \
-    @"\n"
+    @"------ END --------------------------------"
 
 #define LC_REST_RESPONSE_LOG_FORMAT \
-    @"\n\n" \
-    @"------ BEGIN LeanCloud REST Response ------\n" \
+    @"\n------ BEGIN LeanCloud REST Response ------\n" \
     @"path: %@\n" \
     @"cost: %.3fms\n" \
     @"response: %@\n" \
-    @"------ END --------------------------------\n" \
-    @"\n"
+    @"------ END --------------------------------"
 
 @implementation NSMutableString (URLRequestFormatter)
 
@@ -64,46 +57,35 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 @implementation NSURLRequest (curl)
 
-- (NSString *)cURLCommand{
-    NSMutableString *command = [NSMutableString stringWithString:@"curl -i -k"];
+- (NSString *)cURLCommand
+{
+    NSMutableString *command = [NSMutableString stringWithString:@"curl -v \\\n"];
     
-    [command appendCommandLineArgument:[NSString stringWithFormat:@"-X %@", [self HTTPMethod]]];
-
-    if ([[[self HTTPMethod] uppercaseString] isEqualToString:@"GET"])
-        [command appendCommandLineArgument:@"-G"];
-
-    NSData *data = [self HTTPBody];
-    if ([data length] > 0) {
-        NSString *HTTPBodyString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        [command appendCommandLineArgument:[NSString stringWithFormat:@"-d '%@'", HTTPBodyString]];
-    }
+    [command appendCommandLineArgument:[NSString stringWithFormat:@"-X %@ \\\n", [self HTTPMethod]]];
     
     NSString *acceptEncodingHeader = [[self allHTTPHeaderFields] valueForKey:@"Accept-Encoding"];
     if (acceptEncodingHeader && [acceptEncodingHeader rangeOfString:@"gzip"].location != NSNotFound) {
-        [command appendCommandLineArgument:@"--compressed"];
+        [command appendCommandLineArgument:@"--compressed \\\n"];
     }
     
     if ([self URL]) {
         NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[self URL]];
         for (NSHTTPCookie *cookie in cookies) {
-            [command appendCommandLineArgument:[NSString stringWithFormat:@"--cookie \"%@=%@\"", [cookie name], [cookie value]]];
+            [command appendCommandLineArgument:[NSString stringWithFormat:@"--cookie \"%@=%@\" \\\n", [cookie name], [cookie value]]];
         }
     }
 
     NSMutableDictionary<NSString *, NSString *> *headers = [[self allHTTPHeaderFields] mutableCopy];
-
-    /* Remove signature for security. */
-    [headers removeObjectForKey:@"X-LC-Sign"];
     
     for (NSString * field in headers) {
-        [command appendCommandLineArgument:[NSString stringWithFormat:@"-H %@", [NSString stringWithFormat:@"'%@: %@'", field, [[self valueForHTTPHeaderField:field] stringByReplacingOccurrencesOfString:@"\'" withString:@"\\\'"]]]];
+        [command appendCommandLineArgument:[NSString stringWithFormat:@"-H %@ \\\n", [NSString stringWithFormat:@"'%@: %@'", field, [[self valueForHTTPHeaderField:field] stringByReplacingOccurrencesOfString:@"\'" withString:@"\\\'"]]]];
     }
 
     if ([self URL].query.length > 0) {
         NSString *query = [self URL].query;
         NSArray *components = [query componentsSeparatedByString:@"&"];
         for (NSString *component in components) {
-            [command appendCommandLineArgument:[NSString stringWithFormat:@"--data-urlencode \'%@\'", component.stringByRemovingPercentEncoding]];
+            [command appendCommandLineArgument:[NSString stringWithFormat:@"--data-urlencode \'%@\' \\\n", component.stringByRemovingPercentEncoding]];
         }
     }
 
@@ -114,6 +96,12 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         basicUrl = [absoluteString substringToIndex:range.location];
     } else {
         basicUrl = absoluteString;
+    }
+    
+    NSData *data = [self HTTPBody];
+    if ([data length] > 0) {
+        NSString *HTTPBodyString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        [command appendCommandLineArgument:[NSString stringWithFormat:@"-d '%@' \\\n", HTTPBodyString]];
     }
     
     [command appendCommandLineArgument:[NSString stringWithFormat:@"\"%@\"", basicUrl]];
@@ -148,7 +136,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     dispatch_once(&once, ^{
         sharedInstance = [[self alloc] init];
         sharedInstance.productionMode = YES;
-        sharedInstance.timeoutInterval = kAVDefaultNetworkTimeoutInterval;
+        sharedInstance.timeoutInterval = 60.0;
         
         sharedInstance.applicationIdField = LCHeaderFieldNameId;
         sharedInstance.applicationKeyField = LCHeaderFieldNameKey;
@@ -171,18 +159,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
             LCURLSessionManager *manager = [[LCURLSessionManager alloc] initWithSessionConfiguration:configuration];
             manager.completionQueue = _completionQueue;
-
-            if ([AVOSCloud isSSLPinningEnabled]) {
-                
-                [manager setSessionDidReceiveAuthenticationChallengeBlock:
-                 ^NSURLSessionAuthChallengeDisposition(NSURLSession * _Nonnull session,
-                                                       NSURLAuthenticationChallenge * _Nonnull challenge,
-                                                       NSURLCredential *__autoreleasing  _Nullable * _Nullable credential)
-                 {
-                     [[LCSSLChallenger sharedInstance] acceptChallenge:challenge];
-                     return NSURLSessionAuthChallengeUseCredential;
-                 }];
-            }
 
             /* Remove all null value of result. */
             LCJSONResponseSerializer *responseSerializer = (LCJSONResponseSerializer *)manager.responseSerializer;
@@ -543,13 +519,9 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         }
     }
 
-    @weakify(self);
-
     [self performRequest:mutableRequest
                  success:^(NSHTTPURLResponse *response, id responseObject)
     {
-        @strongify(self);
-
         if (block) {
             
             block(responseObject, nil);
@@ -569,15 +541,11 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     }
               failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error)
     {
-        @strongify(self);
-
         NSInteger statusCode = response.statusCode;
 
         if (statusCode == 304) {
             // 304 is not error
             [[AVCacheManager sharedInstance] getWithKey:URLString maxCacheAge:3600 * 24 * 30 block:^(id object, NSError *error) {
-                @strongify(self);
-
                 if (error) {
                     if (retryTimes < 3) {
                         [self.lastModify removeObjectForKey:[URLString AVMD5String]];
@@ -792,10 +760,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         [self.runningArchivedRequests addObject:path];
     }
 
-    @weakify(self);
     [self performRequest:request saveResult:NO block:^(id object, NSError *error) {
-        @strongify(self);
-
         if (!error) {
             [fileManager removeItemAtPath:path error:NULL];
         } else {

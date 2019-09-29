@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AVOSCloudIM'
-  s.version  = '11.6.7'
+  s.version  = '12.0.0-beta.1'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud IM Objective-C SDK'
   s.authors  = 'LeanCloud'
@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
 
   s.platform = :ios, :osx
 
-  s.ios.deployment_target = '7.0'
+  s.ios.deployment_target = '8.0'
   s.osx.deployment_target = '10.9'
 
   s.source = {
@@ -99,9 +99,7 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/Conversation/AVIMConversation_Internal.h',
       'AVOS/AVOSCloudIM/MessageCache/CacheStore/LCIMMessageCacheStoreSQL.h',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMAny.pbobjc.h',
-      'AVOS/AVOSCloudIM/Utilities/AVIMRuntimeHelper.h',
       'AVOS/AVOSCloudIM/Protobuf/LCIMRuntimeTypes.h',
-      'AVOS/AVOSCloudIM/Vendor/SDMacros/SDMacros.h',
       'AVOS/AVOSCloudIM/Client/AVIMClientInternalConversationManager.h',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMDuration.pbobjc.h',
       'AVOS/AVOSCloudIM/Commands/AVIMDirectCommand+DirectCommandAdditions.h',
@@ -135,7 +133,6 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMAny.pbobjc.m',
       'AVOS/AVOSCloudIM/Commands/AVIMDirectCommand+DirectCommandAdditions.m',
       'AVOS/AVOSCloudIM/MessageCache/CacheStore/LCIMConversationQueryCacheStore.m',
-      'AVOS/AVOSCloudIM/Utilities/AVIMRuntimeHelper.m',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/LCIMStruct.pbobjc.m',
       'AVOS/AVOSCloudIM/Commands/AVIMConversationOutCommand.m',
       'AVOS/AVOSCloudIM/Client/AVIMClient.m',

@@ -147,7 +147,7 @@ static BOOL clientHasInstantiated = false;
     self->_clientId = ({
         if (!clientId || clientId.length > kClientIdLengthLimit || clientId.length == 0) {
             [NSException raise:NSInvalidArgumentException
-                        format:@"clientId invalid or length not in range [1 %lu].", kClientIdLengthLimit];
+                        format:@"clientId invalid or length not in range [1 %lu].", (unsigned long)kClientIdLengthLimit];
         }
         clientId.copy;
     });
@@ -372,7 +372,7 @@ static BOOL clientHasInstantiated = false;
                         sessionCommand.n = signature.nonce;
                     }
                     sessionCommand.deviceToken = client->_pushManager.deviceToken ?: AVUtils.deviceUUID;
-                    sessionCommand.ua = @"ios/" SDK_VERSION;
+                    sessionCommand.ua = USER_AGENT;
                     
                     LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
                     commandWrapper.outCommand = outCommand;
@@ -461,7 +461,7 @@ static BOOL clientHasInstantiated = false;
                 sessionCommand.configBitmap = self->_sessionConfigBitmap;
             }
             sessionCommand.deviceToken = self->_pushManager.deviceToken ?: AVUtils.deviceUUID;
-            sessionCommand.ua = @"ios" @"/" SDK_VERSION;
+            sessionCommand.ua = USER_AGENT;
         }
         if (self->_lastPatchTimestamp) {
             sessionCommand.lastPatchTime = self->_lastPatchTimestamp;
@@ -1619,7 +1619,7 @@ static BOOL clientHasInstantiated = false;
     for (NSString *item in clientIds) {
         if (item.length > kClientIdLengthLimit || item.length == 0) {
             [self invokeInUserInteractQueue:^{
-                callback(nil, LCErrorInternal([NSString stringWithFormat:@"client id's length should in range [1 %lu].", kClientIdLengthLimit]));
+                callback(nil, LCErrorInternal([NSString stringWithFormat:@"client id's length should in range [1 %lu].", (unsigned long)kClientIdLengthLimit]));
             }];
             return;
         }
@@ -1874,7 +1874,7 @@ static BOOL clientHasInstantiated = false;
         NSUInteger clientsCountMax = 20;
         if (clients.count > clientsCountMax) {
             [self invokeInUserInteractQueue:^{
-                callback(nil, LCErrorInternal([NSString stringWithFormat:@"clients count beyond max %lu", clientsCountMax]));
+                callback(nil, LCErrorInternal([NSString stringWithFormat:@"clients count beyond max %lu", (unsigned long)clientsCountMax]));
             }];
             return;
         }

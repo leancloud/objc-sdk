@@ -458,19 +458,6 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 - (void)getObjectInBackgroundWithId:(NSString *)objectId
                               block:(AVObjectResultBlock)block;
 
-/*!
- Gets a AVObject asynchronously.
- 
- This mutates the AVQuery
- 
- @param objectId The id of the object being requested.
- @param target The target for the callback selector.
- @param selector The selector for the callback. It should have the following signature: (void)callbackWithResult:(AVObject *)result error:(NSError *)error. result will be nil if error is set and vice versa.
- */
-- (void)getObjectInBackgroundWithId:(NSString *)objectId
-                             target:(id)target
-                           selector:(SEL)selector;
-
 #pragma mark -
 #pragma mark Getting Users
 
@@ -529,14 +516,6 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 - (void)findObjectsInBackgroundWithBlock:(AVArrayResultBlock)block;
 
 /*!
- Finds objects asynchronously and calls the given callback with the results.
- @param target The object to call the selector on.
- @param selector The selector to call. It should have the following signature: (void)callbackWithResult:(NSArray *)result error:(NSError *)error. result will be nil if error is set and vice versa.
- */
-- (void)findObjectsInBackgroundWithTarget:(id)target selector:(SEL)selector;
-
-
-/*!
  Remove objects asynchronously and calls the given block with the results.
  @param block The block to execute. The block should have the following argument signature:(NSArray *objects, NSError *error)
  */
@@ -579,16 +558,6 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
  */
 - (void)getFirstObjectInBackgroundWithBlock:(AVObjectResultBlock)block;
 
-/*!
- Gets an object asynchronously and calls the given callback with the results.
- 
- This mutates the AVQuery.
- 
- @param target The object to call the selector on.
- @param selector The selector to call. It should have the following signature: (void)callbackWithResult:(AVObject *)result error:(NSError *)error. result will be nil if error is set OR no object was found matching the query. error will be nil if result is set OR if the query succeeded, but found no results.
- */
-- (void)getFirstObjectInBackgroundWithTarget:(id)target selector:(SEL)selector;
-
 #pragma mark -
 #pragma mark Count methods
 
@@ -619,12 +588,6 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
  (int count, NSError *error) 
  */
 - (void)countObjectsInBackgroundWithBlock:(AVIntegerResultBlock)block;
-
-/*!
-  Counts objects asynchronously and calls the given callback with the count.
- @param target The object to call the selector on.
- @param selector The selector to call. It should have the following signature: (void)callbackWithResult:(NSNumber *)result error:(NSError *)error. */
-- (void)countObjectsInBackgroundWithTarget:(id)target selector:(SEL)selector;
 
 #pragma mark -
 #pragma mark Cancel methods

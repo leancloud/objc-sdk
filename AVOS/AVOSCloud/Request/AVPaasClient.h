@@ -9,15 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "AVConstants.h"
 #import "AVACL.h"
-#import "AVInstallation.h"
 #import "AVOSCloud.h"
 #import "UserAgent.h"
 
-#if AV_IOS_ONLY
-#define USER_AGENT [NSString stringWithFormat:@"AVOS Cloud iOS-%@ SDK", SDK_VERSION]
-#else
-#define USER_AGENT [NSString stringWithFormat:@"AVOS Cloud OSX-%@ SDK", SDK_VERSION]
-#endif
+static NSString *const USER_AGENT = @"LeanCloud-Objc-SDK/" SDK_VERSION;
 
 FOUNDATION_EXPORT NSString *const LCHeaderFieldNameId;
 FOUNDATION_EXPORT NSString *const LCHeaderFieldNameKey;

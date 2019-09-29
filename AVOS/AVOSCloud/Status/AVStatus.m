@@ -12,7 +12,6 @@
 #import "AVObjectUtils.h"
 #import "AVObject_Internal.h"
 #import "AVQuery_Internal.h"
-#import "SDMacros.h"
 #import "AVUtils.h"
 #import "AVUser_Internal.h"
 
@@ -429,12 +428,9 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     AVPaasClient *client = [AVPaasClient sharedInstance];
     NSURLRequest *request = [client requestWithPath:@"statuses" method:@"POST" headers:nil parameters:body];
 
-    @weakify(self);
-
     [client
      performRequest:request
      success:^(NSHTTPURLResponse *response, id responseObject) {
-         @strongify(self);
          if ([responseObject isKindOfClass:[NSDictionary class]]) {
              NSString *objectId = responseObject[@"objectId"];
 

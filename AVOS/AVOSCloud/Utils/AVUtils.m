@@ -17,8 +17,6 @@
 #import "AVRole_Internal.h"
 #import "AVFile.h"
 #import "AVFile_Internal.h"
-#import "AVInstallation.h"
-#import "AVInstallation_Internal.h"
 
 #import "AVObjectUtils.h"
 #import "AVPaasClient.h"
@@ -143,59 +141,6 @@ static int b62_encode(char* out, const void *data, int length)
             break;
     }
     return (int)(out-start);
-}
-
-#if !TARGET_OS_IOS && !TARGET_OS_WATCH && !TARGET_OS_TV
-static NSData * LCSecKeyGetData(SecKeyRef key) {
-    CFDataRef data = NULL;
-
-    __Require_noErr_Quiet(SecItemExport(key, kSecFormatUnknown, kSecItemPemArmour, NULL, &data), _out);
-
-    return (__bridge_transfer NSData *)data;
-
-_out:
-    if (data) {
-        CFRelease(data);
-    }
-
-    return nil;
-}
-#endif
-
-BOOL LCSecKeyIsEqual(SecKeyRef key1, SecKeyRef key2) {
-#if TARGET_OS_IOS || TARGET_OS_WATCH || TARGET_OS_TV
-    return [(__bridge id)key1 isEqual:(__bridge id)key2];
-#else
-    return [LCSecKeyGetData(key1) isEqual:LCSecKeyGetData(key2)];
-#endif
-}
-
-SecKeyRef LCGetPublicKeyFromCertificate(SecCertificateRef cert) {
-    SecKeyRef result = NULL;
-    SecCertificateRef certs[] = {cert};
-    CFArrayRef certArr = CFArrayCreate(NULL, (const void **)certs, 1, NULL);
-
-    SecPolicyRef policy = SecPolicyCreateBasicX509();
-
-    SecTrustRef trust;
-    __Require_noErr_Quiet(SecTrustCreateWithCertificates(certArr, policy, &trust), _out);
-    __Require_noErr_Quiet(SecTrustEvaluate(trust, NULL), _out);
-
-    result = SecTrustCopyPublicKey(trust);
-
-_out:
-    if (policy) CFRelease(policy);
-    if (certArr) CFRelease(certArr);
-    if (trust) CFRelease(trust);
-
-    return result;
-}
-
-SecCertificateRef LCGetCertificateFromBase64String(NSString *base64) {
-    NSData *certData = [NSData AVdataFromBase64String:base64];
-    SecCertificateRef cert = SecCertificateCreateWithData(NULL, (__bridge CFDataRef)(certData));
-
-    return cert;
 }
 
 @implementation AVUtils
@@ -357,20 +302,6 @@ static const char *getPropertyType(objc_property_t property)
     NSData* data = [NSJSONSerialization dataWithJSONObject:array
                                                    options:0 error:nil];
     return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-}
-
-+(void)performSelectorIfCould:(id)target
-                     selector:(SEL)selector
-                       object:(id)arg1
-                       object:(id)arg2
-{
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-    if ([target respondsToSelector:selector])
-    {
-        [target performSelector:selector withObject:arg1 withObject:arg2];
-    }
-#pragma clang diagnostic pop
 }
 
 + (NSString *)generateUUID
@@ -919,15 +850,15 @@ static Byte ivBuff[]   = {0xA,1,0xB,5,4,0xF,7,9,0x17,3,1,6,8,0xC,0xD,91};
     
     NSData *salt = [NSData dataWithBytes:saltBuff length:kCCKeySizeAES128];
     
-    int result = CCKeyDerivationPBKDF(kCCPBKDF2,        // algorithm算法
-                                      password.UTF8String,  // password密码
-                                      password.length,      // passwordLength密码的长度
-                                      salt.bytes,           // salt内容
-                                      salt.length,          // saltLen长度
-                                      kCCPRFHmacAlgSHA1,    // PRF
-                                      kAVPBKDFRounds,         // rounds循环次数
-                                      derivedKey.mutableBytes, // derivedKey
-                                      derivedKey.length);   // derivedKeyLen derive:出自
+    __unused int result = CCKeyDerivationPBKDF(kCCPBKDF2,        // algorithm算法
+                                               password.UTF8String,  // password密码
+                                               password.length,      // passwordLength密码的长度
+                                               salt.bytes,           // salt内容
+                                               salt.length,          // saltLen长度
+                                               kCCPRFHmacAlgSHA1,    // PRF
+                                               kAVPBKDFRounds,         // rounds循环次数
+                                               derivedKey.mutableBytes, // derivedKey
+                                               derivedKey.length);   // derivedKeyLen derive:出自
     
     NSAssert(result == kCCSuccess,
              @"Unable to create AES key for spassword: %d", result);

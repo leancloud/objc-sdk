@@ -19,27 +19,6 @@ FOUNDATION_EXPORT RouterCacheKey RouterCacheKeyRTM;
 + (instancetype)sharedInstance;
 
 /**
- Custom API version.
-
- @param APIVersion Format eg. '1.1'.
- */
-+ (void)setAPIVersion:(NSString *)APIVersion;
-
-/**
- Custom RTM router API path.
-
- @param RTMRouterPath Format eg. '/v1/route'.
- */
-+ (void)setRTMRouterPath:(NSString *)RTMRouterPath;
-
-/**
- Custom router cache directory path.
-
- @param directoryPath Path.
- */
-+ (void)setRouterCacheDirectoryPath:(NSString *)directoryPath;
-
-/**
  Clean disk cache.
 
  @param key Cache type.

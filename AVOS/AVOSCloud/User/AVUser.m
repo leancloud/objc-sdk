@@ -281,19 +281,6 @@ static BOOL enableAutomatic = NO;
     
 }
 
-- (void)signUpInBackgroundWithTarget:(id)target selector:(SEL)selector
-{
-    [self signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:@(succeeded) object:error];
-    }];
-}
-
-- (void)updatePassword:(NSString *)oldPassword newPassword:(NSString *)newPassword withTarget:(id)target selector:(SEL)selector {
-    [self updatePassword:oldPassword newPassword:newPassword block:^(id object, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:object object:error];
-    }];
-}
-
 - (void)updatePassword:(NSString *)oldPassword newPassword:(NSString *)newPassword block:(AVIdResultBlock)block {
     if (self.isAuthDataExistInMemory && oldPassword && newPassword) {
         NSString *path = [NSString stringWithFormat:@"users/%@/updatePassword", self.objectId];
@@ -398,18 +385,6 @@ static BOOL enableAutomatic = NO;
 
 + (void)logInWithUsernameInBackground:(NSString *)username
                              password:(NSString *)password
-                               target:(id)target
-                             selector:(SEL)selector
-{
-    [[self class] logInWithUsernameInBackground:username
-                                       password:password
-                                          block:^(AVUser *user, NSError *error) {
-                                              [AVUtils performSelectorIfCould:target selector:selector object:user object:error];
-                                          }];
-}
-
-+ (void)logInWithUsernameInBackground:(NSString *)username
-                             password:(NSString *)password
                                 block:(AVUserResultBlock)block
 {
     [[self class] logInWithUsername:username email:nil password:password block:^(AVUser *user, NSError * error) {
@@ -493,18 +468,6 @@ static BOOL enableAutomatic = NO;
                              password:(NSString *)password
 {
     [self logInWithMobilePhoneNumber:phoneNumber password:password block:nil waitUntilDone:YES error:nil];
-}
-
-+ (void)logInWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
-                             password:(NSString *)password
-                               target:(id)target
-                             selector:(SEL)selector
-{
-    [self logInWithMobilePhoneNumberInBackground:phoneNumber
-                                       password:password
-                                          block:^(AVUser *user, NSError *error) {
-                                              [AVUtils performSelectorIfCould:target selector:selector object:user object:error];
-                                          }];
 }
 
 + (void)logInWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
@@ -646,18 +609,6 @@ static BOOL enableAutomatic = NO;
 
 + (void)logInWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
                                       smsCode:(NSString *)code
-                                        target:(id)target
-                                      selector:(SEL)selector
-{
-    [self logInWithMobilePhoneNumberInBackground:phoneNumber
-                                        smsCode:code
-                                           block:^(AVUser *user, NSError *error) {
-                                               [AVUtils performSelectorIfCould:target selector:selector object:user object:error];
-                                           }];
-}
-
-+ (void)logInWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
-                                      smsCode:(NSString *)code
                                          block:(AVUserResultBlock)block
 {
     [self logInWithMobilePhoneNumber:phoneNumber smsCode:code block:^(AVUser *user, NSError * error) {
@@ -724,17 +675,6 @@ static BOOL enableAutomatic = NO;
 + (void)signUpOrLoginWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
                                                smsCode:(NSString *)code {
     [self signUpOrLoginWithMobilePhoneNumber:phoneNumber smsCode:code block:nil waitUntilDone:YES error:nil];
-}
-
-+ (void)signUpOrLoginWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
-                                               smsCode:(NSString *)code
-                                                target:(id)target
-                                              selector:(SEL)selector {
-    [self signUpOrLoginWithMobilePhoneNumberInBackground:phoneNumber
-                                                 smsCode:code
-                                                   block:^(AVUser *user, NSError *error) {
-                                                       [AVUtils performSelectorIfCould:target selector:selector object:user object:error];
-                                                   }];
 }
 
 + (void)signUpOrLoginWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
@@ -847,15 +787,6 @@ static BOOL enableAutomatic = NO;
     [[self class] requestPasswordResetForEmailInBackground:email block:^(BOOL succeeded, NSError *error) {
         
     }];
-}
-
-+ (void)requestPasswordResetForEmailInBackground:(NSString *)email
-                                          target:(id)target
-                                        selector:(SEL)selector
-{
-    [[self class] requestPasswordResetForEmailInBackground:email block:^(BOOL succeeded, NSError *error) {
-        [AVUtils performSelectorIfCould:target selector:selector object:@(succeeded) object:error];
-    }];    
 }
 
 + (void)requestPasswordResetForEmailInBackground:(NSString *)email
@@ -1111,7 +1042,7 @@ static BOOL enableAutomatic = NO;
                 LCErrorInternal(reason);
             });
             
-            callback(nil, aError);
+            callback(false, aError);
         });
         
         return;
@@ -1129,7 +1060,7 @@ static BOOL enableAutomatic = NO;
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                callback(nil, error);
+                callback(false, error);
             });
             
             return;
@@ -1141,7 +1072,7 @@ static BOOL enableAutomatic = NO;
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                callback(nil, ({
+                callback(false, ({
                     NSString *reason = @"response invalid.";
                     LCErrorInternal(reason);
                 }));
@@ -1165,7 +1096,7 @@ static BOOL enableAutomatic = NO;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            callback(self, nil);
+            callback(true, nil);
         });
     }];
 }

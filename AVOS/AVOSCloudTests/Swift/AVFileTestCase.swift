@@ -221,7 +221,11 @@ class AVFile_TestCase: LCTestBase {
         
         let uploadDataTuple: (data: Data, name: String) = self.bigDataTuple
         let documentsDirectory: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let filePath: URL = documentsDirectory.appendingPathComponent(uploadDataTuple.name)
+        try! FileManager.default.createDirectory(
+            at: documentsDirectory,
+            withIntermediateDirectories: true,
+            attributes: nil)
+        let filePath: URL = documentsDirectory.appendingPathComponent(uploadDataTuple.name, isDirectory: false)
         do {
             try uploadDataTuple.data.write(to: filePath, options: [.atomic])
         } catch let err {
@@ -793,29 +797,6 @@ class AVFile_TestCase: LCTestBase {
             
             return file.objectId() != nil ? file : nil
         }
-        
-        RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
-            
-            guard let file: AVFile = uploadedFile() else {
-                XCTFail()
-                return
-            }
-            
-            semaphore.increment()
-            
-            file.delete(completionHandler: { (succeeded: Bool, error: Error?) in
-                
-                semaphore.decrement()
-                XCTAssertTrue(Thread.isMainThread)
-                
-                XCTAssertTrue(succeeded)
-                XCTAssertNil(error)
-            })
-            
-        }, failure: {
-            
-            XCTFail("timeout")
-        })
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             

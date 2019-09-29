@@ -43,15 +43,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)callFunctionInBackground:(NSString *)function withParameters:(nullable NSDictionary *)parameters block:(AVIdResultBlock)block;
 
 /*!
- Calls the given cloud function with the parameters provided asynchronously and runs the callback when it is done.
- @param function The function name to call.
- @param parameters The parameters to send to the function.
- @param target The object to call the selector on.
- @param selector The selector to call. It should have the following signature: (void)callbackWithResult:(id) result error:(NSError *)error. result will be nil if error is set and vice versa.
- */
-+ (void)callFunctionInBackground:(NSString *)function withParameters:(nullable NSDictionary *)parameters target:(id)target selector:(SEL)selector;
-
-/*!
  Calls the given cloud function with the parameters passed in by RPC.
  @param function The function name to call.
  @param parameters The parameters to send to the function.
@@ -75,15 +66,6 @@ NS_ASSUME_NONNULL_BEGIN
  @param block The block to execute. The block should have the following argument signature:(id result, NSError *error).
  */
 + (void)rpcFunctionInBackground:(NSString *)function withParameters:(nullable id)parameters block:(AVIdResultBlock)block;
-
-/*!
- Calls the given cloud function with the parameters provided by RPC asynchronously and runs the callback when it is done.
- @param function The function name to call.
- @param parameters The parameters to send to the function.
- @param target The object to call the selector on.
- @param selector The selector to call. It should have the following signature: (void)callbackWithResult:(id) result error:(NSError *)error. result will be nil if error is set and vice versa.
- */
-+ (void)rpcFunctionInBackground:(NSString *)function withParameters:(nullable id)parameters target:(id)target selector:(SEL)selector;
 
 /**
  *  Set call what production mode's cloud code
