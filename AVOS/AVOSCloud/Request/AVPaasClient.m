@@ -136,7 +136,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     dispatch_once(&once, ^{
         sharedInstance = [[self alloc] init];
         sharedInstance.productionMode = YES;
-        sharedInstance.timeoutInterval = kAVDefaultNetworkTimeoutInterval;
+        sharedInstance.timeoutInterval = 60.0;
         
         sharedInstance.applicationIdField = LCHeaderFieldNameId;
         sharedInstance.applicationKeyField = LCHeaderFieldNameKey;

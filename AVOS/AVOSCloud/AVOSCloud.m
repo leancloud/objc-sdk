@@ -23,27 +23,21 @@
 
 #import "LCRouter_Internal.h"
 
-static AVVerbosePolicy _verbosePolicy = kAVVerboseShow;
-
 @implementation AVOSCloud {
-    
     NSString *_applicationId;
-    
     NSString *_applicationKey;
+    AVVerbosePolicy _verbosePolicy;
 }
 
 + (instancetype)sharedInstance
 {
-    static AVOSCloud *sharedInstance = nil;
-    
+    static AVOSCloud *instance;
     static dispatch_once_t onceToken;
-    
     dispatch_once(&onceToken, ^{
-        
-        sharedInstance = [[AVOSCloud alloc] init];
+        instance = [[AVOSCloud alloc] init];
+        instance->_verbosePolicy = kAVVerboseAuto;
     });
-    
-    return sharedInstance;
+    return instance;
 }
 
 + (void)setAllLogsEnabled:(BOOL)enabled {
@@ -51,10 +45,11 @@ static AVVerbosePolicy _verbosePolicy = kAVVerboseShow;
 }
 
 + (void)setVerbosePolicy:(AVVerbosePolicy)verbosePolicy {
-    _verbosePolicy = verbosePolicy;
+    [AVOSCloud sharedInstance]->_verbosePolicy = verbosePolicy;
 }
 
-+ (void)logApplicationInfo {
++ (void)logApplicationInfo
+{
     const char *s = (const char *)AVOSCloud_Art_inc;
     printf("%s\n", s);
     printf("appid: %s\n", [[self getApplicationId] UTF8String]);
@@ -66,12 +61,13 @@ static AVVerbosePolicy _verbosePolicy = kAVVerboseShow;
     printf("----------------------------------------------------------\n");
 }
 
-+ (void)initializePaasClient {
++ (void)initializePaasClient
+{
     AVPaasClient *paasClient = [AVPaasClient sharedInstance];
-
+    
     paasClient.applicationId = [self getApplicationId];
     paasClient.clientKey     = [self getClientKey];
-
+    
     // always handle offline requests, include analytics collection
     [paasClient handleAllArchivedRequests];
 }
@@ -98,50 +94,34 @@ static AVVerbosePolicy _verbosePolicy = kAVVerboseShow;
     
     [AVOSCloud sharedInstance]->_applicationId = applicationId;
     [AVOSCloud sharedInstance]->_applicationKey = clientKey;
-
-    if (_verbosePolicy == kAVVerboseShow) {
+    
+    [self initializePaasClient];
+    
+    if ([AVOSCloud sharedInstance]->_verbosePolicy == kAVVerboseShow) {
         [self logApplicationInfo];
     }
-
-    [self initializePaasClient];
 }
 
-+ (BOOL)isTwoArrayEqual:(NSArray *)array withAnotherArray:(NSArray *)anotherArray
-{
-    if (array.count != anotherArray.count) {
-        return NO;
-    }
-    
-    NSSet *set = [NSSet setWithArray:array];
-    NSMutableSet *set1 = [NSMutableSet setWithSet:set];
-    NSSet *set2 = [NSSet setWithArray:anotherArray];
-    [set1 unionSet:set2];
-
-    return set1.count == array.count;
-}
-
-+ (NSString *)getApplicationId
-{
++ (NSString *)getApplicationId {
     return [AVOSCloud sharedInstance]->_applicationId;
 }
 
-+ (NSString *)getClientKey
-{
++ (NSString *)getClientKey {
     return [AVOSCloud sharedInstance]->_applicationKey;
 }
 
-+ (void)setLastModifyEnabled:(BOOL)enabled{
++ (void)setLastModifyEnabled:(BOOL)enabled {
     [AVPaasClient sharedInstance].isLastModifyEnabled=enabled;
 }
 
 /**
  *  获取是否开启LastModify支持
  */
-+ (BOOL)getLastModifyEnabled{
++ (BOOL)getLastModifyEnabled {
     return [AVPaasClient sharedInstance].isLastModifyEnabled;
 }
 
-+(void)clearLastModifyCache {
++ (void)clearLastModifyCache {
     [[AVPaasClient sharedInstance] clearLastModifyCache];
 }
 
@@ -150,12 +130,23 @@ static AVVerbosePolicy _verbosePolicy = kAVVerboseShow;
 {
     NSString *key = nil;
     switch (serviceModule) {
-        case AVServiceModuleAPI: key = RouterKeyAppAPIServer; break;
-        case AVServiceModuleRTM: key = RouterKeyAppRTMRouterServer; break;
-        case AVServiceModulePush: key = RouterKeyAppPushServer; break;
-        case AVServiceModuleEngine: key = RouterKeyAppEngineServer; break;
-        case AVServiceModuleStatistics: key = RouterKeyAppStatsServer; break;
-        default: return;
+        case AVServiceModuleAPI:
+            key = RouterKeyAppAPIServer;
+            break;
+        case AVServiceModuleRTM:
+            key = RouterKeyAppRTMRouterServer;
+            break;
+        case AVServiceModulePush:
+            key = RouterKeyAppPushServer;
+            break;
+        case AVServiceModuleEngine:
+            key = RouterKeyAppEngineServer;
+            break;
+        case AVServiceModuleStatistics:
+            key = RouterKeyAppStatsServer;
+            break;
+        default:
+            return;
     }
     [[LCRouter sharedInstance] customAppServerURL:URLString key:key];
 }
@@ -207,7 +198,10 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
     [AVScheduler sharedInstance].fileCacheExpiredDays = days;
 }
 
-+(void)verifySmsCode:(NSString *)code mobilePhoneNumber:(NSString *)phoneNumber callback:(AVBooleanResultBlock)callback {
++ (void)verifySmsCode:(NSString *)code
+    mobilePhoneNumber:(NSString *)phoneNumber
+             callback:(AVBooleanResultBlock)callback
+{
     NSParameterAssert(code);
     NSParameterAssert(phoneNumber);
     
@@ -259,26 +253,11 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
 #pragma mark - Push Notification
 
 + (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-{
-    [self handleRemoteNotificationsWithDeviceToken:deviceToken
-                                            teamId:nil
-                 constructingInstallationWithBlock:nil];
-}
-
-+ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
                                           teamId:(NSString *)teamId
 {
-    [self handleRemoteNotificationsWithDeviceToken:deviceToken
-                                            teamId:teamId
-                 constructingInstallationWithBlock:nil];
-}
-
-+ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-               constructingInstallationWithBlock:(void (^)(AVInstallation *))block
-{
-    [self handleRemoteNotificationsWithDeviceToken:deviceToken
-                                            teamId:nil
-                 constructingInstallationWithBlock:block];
+    [AVOSCloud handleRemoteNotificationsWithDeviceToken:deviceToken
+                                                 teamId:teamId
+                      constructingInstallationWithBlock:nil];
 }
 
 + (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
@@ -293,13 +272,9 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
     }
     [installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (error) {
-            AVLoggerError(AVLoggerDomainIM,
-                          @"Installation saved failed, reason: %@.",
-                          error.localizedDescription);
+            AVLoggerError(AVLoggerDomainDefault, @"default installation save failed: %@", error);
         } else {
-            AVLoggerInfo(AVLoggerDomainIM,
-                         @"Installation saved OK, object id: %@.",
-                         installation.objectId);
+            AVLoggerInfo(AVLoggerDomainDefault, @"default installation save success");
         }
     }];
 }
@@ -374,38 +349,6 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
     [[AVPaasClient sharedInstance] postObject:@"requestSmsCode" withParameters:params block:^(id object, NSError *error) {
         [AVUtils callBooleanResultBlock:callback error:error];
     }];
-}
-
-+ (void)registerForRemoteNotification {
-#if AV_TARGET_OS_IOS
-    [self registerForRemoteNotificationTypes:
-     UIRemoteNotificationTypeBadge |
-     UIRemoteNotificationTypeAlert |
-     UIRemoteNotificationTypeSound categories:nil];
-#elif AV_TARGET_OS_OSX
-    [self registerForRemoteNotificationTypes:
-     NSRemoteNotificationTypeAlert |
-     NSRemoteNotificationTypeBadge |
-     NSRemoteNotificationTypeSound categories:nil];
-#endif
-}
-
-+ (void)registerForRemoteNotificationTypes:(NSUInteger)types categories:(NSSet *)categories {
-#if AV_TARGET_OS_IOS
-    UIApplication *application = [UIApplication sharedApplication];
-    
-    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0) {
-        [application registerForRemoteNotificationTypes:types];
-    } else {
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
-        
-        [application registerUserNotificationSettings:settings];
-        [application registerForRemoteNotifications];
-    }
-#elif AV_TARGET_OS_OSX
-    NSApplication *application = [NSApplication sharedApplication];
-    [application registerForRemoteNotificationTypes:types];
-#endif
 }
 
 @end
