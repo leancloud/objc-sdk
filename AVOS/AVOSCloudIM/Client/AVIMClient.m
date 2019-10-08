@@ -445,29 +445,27 @@ static BOOL clientHasInstantiated = false;
         outCommand.appId = [AVOSCloud getApplicationId];
         outCommand.peerId = self->_clientId;
         outCommand.sessionMessage = sessionCommand;
+        sessionCommand.deviceToken = self->_pushManager.deviceToken ?: AVUtils.deviceUUID;
+        sessionCommand.ua = USER_AGENT;
         sessionCommand.r = true;
-        if (sessionToken) {
-            sessionCommand.st = sessionToken;
-        } else {
-            if (signature && signature.signature && signature.timestamp && signature.nonce) {
-                sessionCommand.s = signature.signature;
-                sessionCommand.t = signature.timestamp;
-                sessionCommand.n = signature.nonce;
-            }
-            if (self->_tag) {
-                sessionCommand.tag = self->_tag;
-            }
-            if (self->_sessionConfigBitmap) {
-                sessionCommand.configBitmap = self->_sessionConfigBitmap;
-            }
-            sessionCommand.deviceToken = self->_pushManager.deviceToken ?: AVUtils.deviceUUID;
-            sessionCommand.ua = USER_AGENT;
+        if (self->_tag) {
+            sessionCommand.tag = self->_tag;
+        }
+        if (self->_sessionConfigBitmap) {
+            sessionCommand.configBitmap = self->_sessionConfigBitmap;
         }
         if (self->_lastPatchTimestamp) {
             sessionCommand.lastPatchTime = self->_lastPatchTimestamp;
         }
         if (self->_lastUnreadTimestamp) {
             sessionCommand.lastUnreadNotifTime = self->_lastUnreadTimestamp;
+        }
+        if (sessionToken) {
+            sessionCommand.st = sessionToken;
+        } else if (signature && signature.signature && signature.timestamp && signature.nonce) {
+            sessionCommand.s = signature.signature;
+            sessionCommand.t = signature.timestamp;
+            sessionCommand.n = signature.nonce;
         }
         LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
         commandWrapper.outCommand = outCommand;
