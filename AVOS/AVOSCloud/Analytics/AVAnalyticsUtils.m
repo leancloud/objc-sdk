@@ -12,7 +12,7 @@
     #import <WatchKit/WatchKit.h>
 #endif
 
-#if AV_TARGET_OS_IOS
+#if TARGET_OS_IOS && !TARGET_OS_SIMULATOR
     #import <CoreTelephony/CTTelephonyNetworkInfo.h>
     #import <CoreTelephony/CTCarrier.h>
 #endif
@@ -198,7 +198,7 @@ static NSString *const WWANType = @"WWAN";
 +(NSString *)carrier {
     NSString *carrier = nil;
 
-#if AV_TARGET_OS_IOS
+#if TARGET_OS_IOS && !TARGET_OS_SIMULATOR
     CTTelephonyNetworkInfo *phoneInfo = [[CTTelephonyNetworkInfo alloc] init];
     CTCarrier *phoneCarrier = [phoneInfo subscriberCellularProvider];
     carrier = [phoneCarrier carrierName];
