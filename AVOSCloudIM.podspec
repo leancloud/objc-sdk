@@ -231,7 +231,4 @@ Pod::Spec.new do |s|
   end
 
   s.dependency 'AVOSCloud', "#{s.version}"
-
-  s.libraries =
-    'icucore'
 end

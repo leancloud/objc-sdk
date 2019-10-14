@@ -75,40 +75,4 @@ Pod::Spec.new do |s|
 
   s.resources =
     'AVOS/AVOSCloud/AVOSCloud_Art.inc'
-
-  s.xcconfig = {'OTHER_LDFLAGS' => '-ObjC'}
-
-  s.ios.frameworks =
-    'CFNetwork',
-    'CoreGraphics',
-    'CoreLocation',
-    'CoreTelephony',
-    'MobileCoreServices',
-    'QuartzCore',
-    'Security',
-    'SystemConfiguration'
-
-  s.osx.frameworks =
-    'CoreLocation',
-    'CoreServices',
-    'SystemConfiguration'
-
-  s.tvos.frameworks =
-    'CFNetwork',
-    'CoreGraphics',
-    'CoreLocation',
-    'MobileCoreServices',
-    'QuartzCore',
-    'Security'
-
-  s.watchos.frameworks =
-    'CoreGraphics',
-    'CoreLocation',
-    'MobileCoreServices',
-    'Security'
-
-  s.libraries =
-    'icucore',
-    'sqlite3',
-    'z'
 end

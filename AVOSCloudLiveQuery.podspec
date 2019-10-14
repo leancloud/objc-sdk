@@ -26,13 +26,6 @@ Pod::Spec.new do |s|
     'AVOS/AVOSCloudLiveQuery/AVLiveQuery.h',
     'AVOS/AVOSCloudLiveQuery/AVOSCloudLiveQuery.h'
 
-  s.preserve_paths =
-   'AVOS/AVOSCloudIM/Protobuf/google'
-
-  s.pod_target_xcconfig = {
-    'HEADER_SEARCH_PATHS' => '"$(PODS_ROOT)/AVOSCloudIM/AVOS/AVOSCloudIM/Protobuf"'
-  }
-
   s.dependency 'AVOSCloud', "#{s.version}"
   s.dependency 'AVOSCloudIM', "#{s.version}"
 end
