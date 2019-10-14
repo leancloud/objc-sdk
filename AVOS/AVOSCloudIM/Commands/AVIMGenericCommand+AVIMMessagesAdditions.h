@@ -46,7 +46,7 @@ typedef void (^AVIMCommandResultBlock)(AVIMGenericCommand *outCommand, AVIMGener
  反序列化时获取Command所属的具体的消息类型对象
  @return Command所属的具体的消息类型对象
  */
-- (LCIMMessage *)avim_messageCommand;
+- (LCGPBMessage *)avim_messageCommand;
 
 /*!
  做 conversation 缓存时，为了使 key 能兼容，需要将 AVIMGenericCommand 对象转换为 AVIMConversationOutCommand 对象

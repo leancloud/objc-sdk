@@ -180,8 +180,8 @@ NSString *const kAVIMConversationOperationQuery = @"query";
     return [requiredKeys copy];
 }
 
-- (LCIMMessage *)avim_messageCommand {
-    LCIMMessage *result = nil;
+- (LCGPBMessage *)avim_messageCommand {
+    LCGPBMessage *result = nil;
     AVIMCommandType commandType = self.cmd;
     switch (commandType) {
             
@@ -264,7 +264,7 @@ NSString *const kAVIMConversationOperationQuery = @"query";
 }
 
 - (NSString *)avim_messageClass {
-    LCIMMessage *command = [self avim_messageCommand];
+    LCGPBMessage *command = [self avim_messageCommand];
     Class class = [command class];
     NSString *avim_messageClass = NSStringFromClass(class);
     return avim_messageClass;

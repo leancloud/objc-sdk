@@ -773,90 +773,6 @@
 		8CBDFDE21A808EA500D67FBE /* AVIMConversationQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CBDFDE01A808EA500D67FBE /* AVIMConversationQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CBDFDE31A808EA500D67FBE /* AVIMConversationQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBDFDE11A808EA500D67FBE /* AVIMConversationQuery.m */; };
 		8CEEABCA1ABC179300B9E757 /* alpacino.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8CEEABAD1ABC179300B9E757 /* alpacino.jpg */; };
-		9A2F1AFE1CF6F6FA00BE52F2 /* LCIMArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1A981CF6F6F900BE52F2 /* LCIMArray.h */; };
-		9A2F1B001CF6F6FA00BE52F2 /* LCIMArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1A981CF6F6F900BE52F2 /* LCIMArray.h */; };
-		9A2F1B011CF6F6FA00BE52F2 /* LCIMArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1A991CF6F6F900BE52F2 /* LCIMArray.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B031CF6F6FA00BE52F2 /* LCIMArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1A991CF6F6F900BE52F2 /* LCIMArray.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B041CF6F6FA00BE52F2 /* LCIMArray_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1A9A1CF6F6F900BE52F2 /* LCIMArray_PackagePrivate.h */; };
-		9A2F1B061CF6F6FA00BE52F2 /* LCIMArray_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1A9A1CF6F6F900BE52F2 /* LCIMArray_PackagePrivate.h */; };
-		9A2F1B071CF6F6FA00BE52F2 /* LCIMBootstrap.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1A9B1CF6F6F900BE52F2 /* LCIMBootstrap.h */; };
-		9A2F1B091CF6F6FA00BE52F2 /* LCIMBootstrap.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1A9B1CF6F6F900BE52F2 /* LCIMBootstrap.h */; };
-		9A2F1B0A1CF6F6FA00BE52F2 /* LCIMCodedInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1A9C1CF6F6F900BE52F2 /* LCIMCodedInputStream.h */; };
-		9A2F1B0C1CF6F6FA00BE52F2 /* LCIMCodedInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1A9C1CF6F6F900BE52F2 /* LCIMCodedInputStream.h */; };
-		9A2F1B0D1CF6F6FA00BE52F2 /* LCIMCodedInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1A9D1CF6F6F900BE52F2 /* LCIMCodedInputStream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B0F1CF6F6FA00BE52F2 /* LCIMCodedInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1A9D1CF6F6F900BE52F2 /* LCIMCodedInputStream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B101CF6F6FA00BE52F2 /* LCIMCodedInputStream_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1A9E1CF6F6F900BE52F2 /* LCIMCodedInputStream_PackagePrivate.h */; };
-		9A2F1B121CF6F6FA00BE52F2 /* LCIMCodedInputStream_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1A9E1CF6F6F900BE52F2 /* LCIMCodedInputStream_PackagePrivate.h */; };
-		9A2F1B131CF6F6FA00BE52F2 /* LCIMCodedOutputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1A9F1CF6F6F900BE52F2 /* LCIMCodedOutputStream.h */; };
-		9A2F1B151CF6F6FA00BE52F2 /* LCIMCodedOutputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1A9F1CF6F6F900BE52F2 /* LCIMCodedOutputStream.h */; };
-		9A2F1B161CF6F6FA00BE52F2 /* LCIMCodedOutputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AA01CF6F6F900BE52F2 /* LCIMCodedOutputStream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B181CF6F6FA00BE52F2 /* LCIMCodedOutputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AA01CF6F6F900BE52F2 /* LCIMCodedOutputStream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B191CF6F6FA00BE52F2 /* LCIMCodedOutputStream_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AA11CF6F6F900BE52F2 /* LCIMCodedOutputStream_PackagePrivate.h */; };
-		9A2F1B1B1CF6F6FA00BE52F2 /* LCIMCodedOutputStream_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AA11CF6F6F900BE52F2 /* LCIMCodedOutputStream_PackagePrivate.h */; };
-		9A2F1B1C1CF6F6FA00BE52F2 /* LCIMDescriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AA21CF6F6F900BE52F2 /* LCIMDescriptor.h */; };
-		9A2F1B1E1CF6F6FA00BE52F2 /* LCIMDescriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AA21CF6F6F900BE52F2 /* LCIMDescriptor.h */; };
-		9A2F1B1F1CF6F6FA00BE52F2 /* LCIMDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AA31CF6F6F900BE52F2 /* LCIMDescriptor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B211CF6F6FA00BE52F2 /* LCIMDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AA31CF6F6F900BE52F2 /* LCIMDescriptor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B221CF6F6FA00BE52F2 /* LCIMDescriptor_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AA41CF6F6F900BE52F2 /* LCIMDescriptor_PackagePrivate.h */; };
-		9A2F1B241CF6F6FA00BE52F2 /* LCIMDescriptor_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AA41CF6F6F900BE52F2 /* LCIMDescriptor_PackagePrivate.h */; };
-		9A2F1B251CF6F6FA00BE52F2 /* LCIMDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AA51CF6F6F900BE52F2 /* LCIMDictionary.h */; };
-		9A2F1B271CF6F6FA00BE52F2 /* LCIMDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AA51CF6F6F900BE52F2 /* LCIMDictionary.h */; };
-		9A2F1B281CF6F6FA00BE52F2 /* LCIMDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AA61CF6F6F900BE52F2 /* LCIMDictionary.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B2A1CF6F6FA00BE52F2 /* LCIMDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AA61CF6F6F900BE52F2 /* LCIMDictionary.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B2B1CF6F6FA00BE52F2 /* LCIMDictionary_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AA71CF6F6F900BE52F2 /* LCIMDictionary_PackagePrivate.h */; };
-		9A2F1B2D1CF6F6FA00BE52F2 /* LCIMDictionary_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AA71CF6F6F900BE52F2 /* LCIMDictionary_PackagePrivate.h */; };
-		9A2F1B2E1CF6F6FA00BE52F2 /* LCIMExtensionInternals.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AA81CF6F6F900BE52F2 /* LCIMExtensionInternals.h */; };
-		9A2F1B301CF6F6FA00BE52F2 /* LCIMExtensionInternals.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AA81CF6F6F900BE52F2 /* LCIMExtensionInternals.h */; };
-		9A2F1B311CF6F6FA00BE52F2 /* LCIMExtensionInternals.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AA91CF6F6F900BE52F2 /* LCIMExtensionInternals.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B331CF6F6FA00BE52F2 /* LCIMExtensionInternals.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AA91CF6F6F900BE52F2 /* LCIMExtensionInternals.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B341CF6F6FA00BE52F2 /* LCIMExtensionRegistry.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AAA1CF6F6F900BE52F2 /* LCIMExtensionRegistry.h */; };
-		9A2F1B361CF6F6FA00BE52F2 /* LCIMExtensionRegistry.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AAA1CF6F6F900BE52F2 /* LCIMExtensionRegistry.h */; };
-		9A2F1B371CF6F6FA00BE52F2 /* LCIMExtensionRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AAB1CF6F6F900BE52F2 /* LCIMExtensionRegistry.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B391CF6F6FA00BE52F2 /* LCIMExtensionRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AAB1CF6F6F900BE52F2 /* LCIMExtensionRegistry.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B3A1CF6F6FA00BE52F2 /* LCIMMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AAC1CF6F6F900BE52F2 /* LCIMMessage.h */; };
-		9A2F1B3C1CF6F6FA00BE52F2 /* LCIMMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AAC1CF6F6F900BE52F2 /* LCIMMessage.h */; };
-		9A2F1B3D1CF6F6FA00BE52F2 /* LCIMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AAD1CF6F6F900BE52F2 /* LCIMMessage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B3F1CF6F6FA00BE52F2 /* LCIMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AAD1CF6F6F900BE52F2 /* LCIMMessage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B401CF6F6FA00BE52F2 /* LCIMMessage_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AAE1CF6F6F900BE52F2 /* LCIMMessage_PackagePrivate.h */; };
-		9A2F1B421CF6F6FA00BE52F2 /* LCIMMessage_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AAE1CF6F6F900BE52F2 /* LCIMMessage_PackagePrivate.h */; };
-		9A2F1B431CF6F6FA00BE52F2 /* LCIMProtocolBuffers.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AAF1CF6F6F900BE52F2 /* LCIMProtocolBuffers.h */; };
-		9A2F1B451CF6F6FA00BE52F2 /* LCIMProtocolBuffers.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AAF1CF6F6F900BE52F2 /* LCIMProtocolBuffers.h */; };
-		9A2F1B461CF6F6FA00BE52F2 /* LCIMProtocolBuffers_RuntimeSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AB01CF6F6FA00BE52F2 /* LCIMProtocolBuffers_RuntimeSupport.h */; };
-		9A2F1B481CF6F6FA00BE52F2 /* LCIMProtocolBuffers_RuntimeSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AB01CF6F6FA00BE52F2 /* LCIMProtocolBuffers_RuntimeSupport.h */; };
-		9A2F1B491CF6F6FA00BE52F2 /* LCIMRootObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AB11CF6F6FA00BE52F2 /* LCIMRootObject.h */; };
-		9A2F1B4B1CF6F6FA00BE52F2 /* LCIMRootObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AB11CF6F6FA00BE52F2 /* LCIMRootObject.h */; };
-		9A2F1B4C1CF6F6FA00BE52F2 /* LCIMRootObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AB21CF6F6FA00BE52F2 /* LCIMRootObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B4E1CF6F6FA00BE52F2 /* LCIMRootObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AB21CF6F6FA00BE52F2 /* LCIMRootObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B4F1CF6F6FA00BE52F2 /* LCIMRootObject_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AB31CF6F6FA00BE52F2 /* LCIMRootObject_PackagePrivate.h */; };
-		9A2F1B511CF6F6FA00BE52F2 /* LCIMRootObject_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AB31CF6F6FA00BE52F2 /* LCIMRootObject_PackagePrivate.h */; };
-		9A2F1B521CF6F6FA00BE52F2 /* LCIMRuntimeTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AB41CF6F6FA00BE52F2 /* LCIMRuntimeTypes.h */; };
-		9A2F1B541CF6F6FA00BE52F2 /* LCIMRuntimeTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AB41CF6F6FA00BE52F2 /* LCIMRuntimeTypes.h */; };
-		9A2F1B551CF6F6FA00BE52F2 /* LCIMUnknownField.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AB51CF6F6FA00BE52F2 /* LCIMUnknownField.h */; };
-		9A2F1B571CF6F6FA00BE52F2 /* LCIMUnknownField.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AB51CF6F6FA00BE52F2 /* LCIMUnknownField.h */; };
-		9A2F1B581CF6F6FA00BE52F2 /* LCIMUnknownField.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AB61CF6F6FA00BE52F2 /* LCIMUnknownField.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B5A1CF6F6FA00BE52F2 /* LCIMUnknownField.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AB61CF6F6FA00BE52F2 /* LCIMUnknownField.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B5B1CF6F6FA00BE52F2 /* LCIMUnknownField_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AB71CF6F6FA00BE52F2 /* LCIMUnknownField_PackagePrivate.h */; };
-		9A2F1B5D1CF6F6FA00BE52F2 /* LCIMUnknownField_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AB71CF6F6FA00BE52F2 /* LCIMUnknownField_PackagePrivate.h */; };
-		9A2F1B5E1CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AB81CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.h */; };
-		9A2F1B601CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AB81CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.h */; };
-		9A2F1B611CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AB91CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B631CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AB91CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B641CF6F6FA00BE52F2 /* LCIMUnknownFieldSet_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1ABA1CF6F6FA00BE52F2 /* LCIMUnknownFieldSet_PackagePrivate.h */; };
-		9A2F1B661CF6F6FA00BE52F2 /* LCIMUnknownFieldSet_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1ABA1CF6F6FA00BE52F2 /* LCIMUnknownFieldSet_PackagePrivate.h */; };
-		9A2F1B671CF6F6FA00BE52F2 /* LCIMUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1ABB1CF6F6FA00BE52F2 /* LCIMUtilities.h */; };
-		9A2F1B691CF6F6FA00BE52F2 /* LCIMUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1ABB1CF6F6FA00BE52F2 /* LCIMUtilities.h */; };
-		9A2F1B6A1CF6F6FA00BE52F2 /* LCIMUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1ABC1CF6F6FA00BE52F2 /* LCIMUtilities.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B6C1CF6F6FA00BE52F2 /* LCIMUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1ABC1CF6F6FA00BE52F2 /* LCIMUtilities.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B6D1CF6F6FA00BE52F2 /* LCIMUtilities_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1ABD1CF6F6FA00BE52F2 /* LCIMUtilities_PackagePrivate.h */; };
-		9A2F1B6F1CF6F6FA00BE52F2 /* LCIMUtilities_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1ABD1CF6F6FA00BE52F2 /* LCIMUtilities_PackagePrivate.h */; };
-		9A2F1B701CF6F6FA00BE52F2 /* LCIMWellKnownTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1ABE1CF6F6FA00BE52F2 /* LCIMWellKnownTypes.h */; };
-		9A2F1B721CF6F6FA00BE52F2 /* LCIMWellKnownTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1ABE1CF6F6FA00BE52F2 /* LCIMWellKnownTypes.h */; };
-		9A2F1B731CF6F6FA00BE52F2 /* LCIMWellKnownTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1ABF1CF6F6FA00BE52F2 /* LCIMWellKnownTypes.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B751CF6F6FA00BE52F2 /* LCIMWellKnownTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1ABF1CF6F6FA00BE52F2 /* LCIMWellKnownTypes.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B761CF6F6FA00BE52F2 /* LCIMWireFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AC01CF6F6FA00BE52F2 /* LCIMWireFormat.h */; };
-		9A2F1B781CF6F6FA00BE52F2 /* LCIMWireFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A2F1AC01CF6F6FA00BE52F2 /* LCIMWireFormat.h */; };
-		9A2F1B791CF6F6FA00BE52F2 /* LCIMWireFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AC11CF6F6FA00BE52F2 /* LCIMWireFormat.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9A2F1B7B1CF6F6FA00BE52F2 /* LCIMWireFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F1AC11CF6F6FA00BE52F2 /* LCIMWireFormat.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9A404DD41CE5A9B700DEB3DC /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F9A2C51CE014430002E21B /* LCRouter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A404DD51CE5A9BA00DEB3DC /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F9A2C51CE014430002E21B /* LCRouter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A404DD61CE5A9BB00DEB3DC /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F9A2C51CE014430002E21B /* LCRouter.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -871,46 +787,6 @@
 		9ACE83DC1BD6420E00CE2103 /* AVIMCommandFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 9ACE83DA1BD6420E00CE2103 /* AVIMCommandFormatter.h */; };
 		9ACE83DD1BD6420E00CE2103 /* AVIMCommandFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ACE83DB1BD6420E00CE2103 /* AVIMCommandFormatter.m */; };
 		9AD143781BD8C6CE0022652C /* AVIMCommandCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD143771BD8C6CE0022652C /* AVIMCommandCommon.h */; };
-		9AD27C3F1E1418DB002F9C7C /* LCIMAny.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C2B1E1418DB002F9C7C /* LCIMAny.pbobjc.h */; };
-		9AD27C401E1418DB002F9C7C /* LCIMAny.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C2B1E1418DB002F9C7C /* LCIMAny.pbobjc.h */; };
-		9AD27C411E1418DB002F9C7C /* LCIMAny.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C2C1E1418DB002F9C7C /* LCIMAny.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9AD27C421E1418DB002F9C7C /* LCIMAny.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C2C1E1418DB002F9C7C /* LCIMAny.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9AD27C431E1418DB002F9C7C /* LCIMApi.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C2D1E1418DB002F9C7C /* LCIMApi.pbobjc.h */; };
-		9AD27C441E1418DB002F9C7C /* LCIMApi.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C2D1E1418DB002F9C7C /* LCIMApi.pbobjc.h */; };
-		9AD27C451E1418DB002F9C7C /* LCIMApi.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C2E1E1418DB002F9C7C /* LCIMApi.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9AD27C461E1418DB002F9C7C /* LCIMApi.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C2E1E1418DB002F9C7C /* LCIMApi.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9AD27C471E1418DB002F9C7C /* LCIMDuration.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C2F1E1418DB002F9C7C /* LCIMDuration.pbobjc.h */; };
-		9AD27C481E1418DB002F9C7C /* LCIMDuration.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C2F1E1418DB002F9C7C /* LCIMDuration.pbobjc.h */; };
-		9AD27C491E1418DB002F9C7C /* LCIMDuration.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C301E1418DB002F9C7C /* LCIMDuration.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9AD27C4A1E1418DB002F9C7C /* LCIMDuration.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C301E1418DB002F9C7C /* LCIMDuration.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9AD27C4B1E1418DB002F9C7C /* LCIMEmpty.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C311E1418DB002F9C7C /* LCIMEmpty.pbobjc.h */; };
-		9AD27C4C1E1418DB002F9C7C /* LCIMEmpty.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C311E1418DB002F9C7C /* LCIMEmpty.pbobjc.h */; };
-		9AD27C4D1E1418DB002F9C7C /* LCIMEmpty.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C321E1418DB002F9C7C /* LCIMEmpty.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9AD27C4E1E1418DB002F9C7C /* LCIMEmpty.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C321E1418DB002F9C7C /* LCIMEmpty.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9AD27C4F1E1418DB002F9C7C /* LCIMFieldMask.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C331E1418DB002F9C7C /* LCIMFieldMask.pbobjc.h */; };
-		9AD27C501E1418DB002F9C7C /* LCIMFieldMask.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C331E1418DB002F9C7C /* LCIMFieldMask.pbobjc.h */; };
-		9AD27C511E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C341E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9AD27C521E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C341E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9AD27C531E1418DB002F9C7C /* LCIMSourceContext.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C351E1418DB002F9C7C /* LCIMSourceContext.pbobjc.h */; };
-		9AD27C541E1418DB002F9C7C /* LCIMSourceContext.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C351E1418DB002F9C7C /* LCIMSourceContext.pbobjc.h */; };
-		9AD27C551E1418DB002F9C7C /* LCIMSourceContext.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C361E1418DB002F9C7C /* LCIMSourceContext.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9AD27C561E1418DB002F9C7C /* LCIMSourceContext.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C361E1418DB002F9C7C /* LCIMSourceContext.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9AD27C571E1418DB002F9C7C /* LCIMStruct.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C371E1418DB002F9C7C /* LCIMStruct.pbobjc.h */; };
-		9AD27C581E1418DB002F9C7C /* LCIMStruct.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C371E1418DB002F9C7C /* LCIMStruct.pbobjc.h */; };
-		9AD27C591E1418DB002F9C7C /* LCIMStruct.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C381E1418DB002F9C7C /* LCIMStruct.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9AD27C5A1E1418DB002F9C7C /* LCIMStruct.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C381E1418DB002F9C7C /* LCIMStruct.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9AD27C5B1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C391E1418DB002F9C7C /* LCIMTimestamp.pbobjc.h */; };
-		9AD27C5C1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C391E1418DB002F9C7C /* LCIMTimestamp.pbobjc.h */; };
-		9AD27C5D1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C3A1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9AD27C5E1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C3A1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9AD27C5F1E1418DB002F9C7C /* LCIMType.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C3B1E1418DB002F9C7C /* LCIMType.pbobjc.h */; };
-		9AD27C601E1418DB002F9C7C /* LCIMType.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C3B1E1418DB002F9C7C /* LCIMType.pbobjc.h */; };
-		9AD27C611E1418DB002F9C7C /* LCIMType.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C3C1E1418DB002F9C7C /* LCIMType.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9AD27C621E1418DB002F9C7C /* LCIMType.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C3C1E1418DB002F9C7C /* LCIMType.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9AD27C631E1418DB002F9C7C /* LCIMWrappers.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C3D1E1418DB002F9C7C /* LCIMWrappers.pbobjc.h */; };
-		9AD27C641E1418DB002F9C7C /* LCIMWrappers.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD27C3D1E1418DB002F9C7C /* LCIMWrappers.pbobjc.h */; };
-		9AD27C651E1418DB002F9C7C /* LCIMWrappers.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C3E1E1418DB002F9C7C /* LCIMWrappers.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9AD27C661E1418DB002F9C7C /* LCIMWrappers.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD27C3E1E1418DB002F9C7C /* LCIMWrappers.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9AD392421BFC395200D28074 /* AVIMConversationOutCommand.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD392401BFC395200D28074 /* AVIMConversationOutCommand.h */; };
 		9AD392431BFC395200D28074 /* AVIMConversationOutCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AD392411BFC395200D28074 /* AVIMConversationOutCommand.m */; };
 		9AD392461BFC411300D28074 /* AVIMGenericCommand+AVIMMessagesAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AD392441BFC411300D28074 /* AVIMGenericCommand+AVIMMessagesAdditions.h */; };
@@ -985,6 +861,130 @@
 		D3CC5D282252242A00B3C778 /* AVQueryTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CC5D272252242A00B3C778 /* AVQueryTestCase.swift */; };
 		D3CC90CB2069E5BB0082EFD4 /* AVObjectTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CC90CA2069E5BB0082EFD4 /* AVObjectTestCase.swift */; };
 		D3CDF4EB1FE8F3810033153E /* LCIMTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */; };
+		D3D6E47723544F590048E58F /* LCGPBExtensionRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E43923544F520048E58F /* LCGPBExtensionRegistry.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E47823544F590048E58F /* LCGPBExtensionRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E43923544F520048E58F /* LCGPBExtensionRegistry.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E47923544F590048E58F /* LCGPBApi.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E43A23544F520048E58F /* LCGPBApi.pbobjc.h */; };
+		D3D6E47A23544F590048E58F /* LCGPBApi.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E43A23544F520048E58F /* LCGPBApi.pbobjc.h */; };
+		D3D6E47B23544F590048E58F /* LCGPBEmpty.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E43B23544F520048E58F /* LCGPBEmpty.pbobjc.h */; };
+		D3D6E47C23544F590048E58F /* LCGPBEmpty.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E43B23544F520048E58F /* LCGPBEmpty.pbobjc.h */; };
+		D3D6E47D23544F590048E58F /* LCGPBDictionary_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E43C23544F530048E58F /* LCGPBDictionary_PackagePrivate.h */; };
+		D3D6E47E23544F590048E58F /* LCGPBDictionary_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E43C23544F530048E58F /* LCGPBDictionary_PackagePrivate.h */; };
+		D3D6E47F23544F590048E58F /* LCGPBApi.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E43D23544F530048E58F /* LCGPBApi.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E48023544F590048E58F /* LCGPBApi.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E43D23544F530048E58F /* LCGPBApi.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E48123544F590048E58F /* LCGPBTimestamp.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E43E23544F530048E58F /* LCGPBTimestamp.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E48223544F590048E58F /* LCGPBTimestamp.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E43E23544F530048E58F /* LCGPBTimestamp.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E48323544F590048E58F /* LCGPBWrappers.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E43F23544F530048E58F /* LCGPBWrappers.pbobjc.h */; };
+		D3D6E48423544F590048E58F /* LCGPBWrappers.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E43F23544F530048E58F /* LCGPBWrappers.pbobjc.h */; };
+		D3D6E48523544F590048E58F /* LCGPBType.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E44023544F530048E58F /* LCGPBType.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E48623544F590048E58F /* LCGPBType.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E44023544F530048E58F /* LCGPBType.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E48723544F590048E58F /* LCGPBFieldMask.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E44123544F530048E58F /* LCGPBFieldMask.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E48823544F590048E58F /* LCGPBFieldMask.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E44123544F530048E58F /* LCGPBFieldMask.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E48923544F590048E58F /* LCGPBCodedOutputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E44223544F530048E58F /* LCGPBCodedOutputStream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E48A23544F590048E58F /* LCGPBCodedOutputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E44223544F530048E58F /* LCGPBCodedOutputStream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E48B23544F590048E58F /* LCGPBWellKnownTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E44323544F530048E58F /* LCGPBWellKnownTypes.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E48C23544F590048E58F /* LCGPBWellKnownTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E44323544F530048E58F /* LCGPBWellKnownTypes.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E48D23544F590048E58F /* LCGPBTimestamp.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44423544F530048E58F /* LCGPBTimestamp.pbobjc.h */; };
+		D3D6E48E23544F590048E58F /* LCGPBTimestamp.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44423544F530048E58F /* LCGPBTimestamp.pbobjc.h */; };
+		D3D6E48F23544F590048E58F /* LCGPBMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44523544F530048E58F /* LCGPBMessage.h */; };
+		D3D6E49023544F590048E58F /* LCGPBMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44523544F530048E58F /* LCGPBMessage.h */; };
+		D3D6E49123544F590048E58F /* LCGPBUnknownFieldSet.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E44623544F530048E58F /* LCGPBUnknownFieldSet.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E49223544F590048E58F /* LCGPBUnknownFieldSet.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E44623544F530048E58F /* LCGPBUnknownFieldSet.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E49323544F590048E58F /* LCGPBSourceContext.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44723544F530048E58F /* LCGPBSourceContext.pbobjc.h */; };
+		D3D6E49423544F590048E58F /* LCGPBSourceContext.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44723544F530048E58F /* LCGPBSourceContext.pbobjc.h */; };
+		D3D6E49523544F590048E58F /* LCGPBCodedInputStream_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44823544F530048E58F /* LCGPBCodedInputStream_PackagePrivate.h */; };
+		D3D6E49623544F590048E58F /* LCGPBCodedInputStream_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44823544F530048E58F /* LCGPBCodedInputStream_PackagePrivate.h */; };
+		D3D6E49723544F590048E58F /* LCGPBDuration.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44923544F540048E58F /* LCGPBDuration.pbobjc.h */; };
+		D3D6E49823544F590048E58F /* LCGPBDuration.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44923544F540048E58F /* LCGPBDuration.pbobjc.h */; };
+		D3D6E49923544F590048E58F /* LCGPBUnknownField.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E44A23544F540048E58F /* LCGPBUnknownField.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E49A23544F590048E58F /* LCGPBUnknownField.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E44A23544F540048E58F /* LCGPBUnknownField.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E49B23544F590048E58F /* LCGPBDescriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44B23544F540048E58F /* LCGPBDescriptor.h */; };
+		D3D6E49C23544F590048E58F /* LCGPBDescriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44B23544F540048E58F /* LCGPBDescriptor.h */; };
+		D3D6E49D23544F590048E58F /* LCGPBUnknownFieldSet_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44C23544F540048E58F /* LCGPBUnknownFieldSet_PackagePrivate.h */; };
+		D3D6E49E23544F590048E58F /* LCGPBUnknownFieldSet_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44C23544F540048E58F /* LCGPBUnknownFieldSet_PackagePrivate.h */; };
+		D3D6E49F23544F590048E58F /* LCGPBUtilities_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44D23544F540048E58F /* LCGPBUtilities_PackagePrivate.h */; };
+		D3D6E4A023544F590048E58F /* LCGPBUtilities_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44D23544F540048E58F /* LCGPBUtilities_PackagePrivate.h */; };
+		D3D6E4A123544F590048E58F /* LCGPBProtocolBuffers.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44E23544F540048E58F /* LCGPBProtocolBuffers.h */; };
+		D3D6E4A223544F590048E58F /* LCGPBProtocolBuffers.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44E23544F540048E58F /* LCGPBProtocolBuffers.h */; };
+		D3D6E4A323544F590048E58F /* LCGPBRootObject_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44F23544F540048E58F /* LCGPBRootObject_PackagePrivate.h */; };
+		D3D6E4A423544F590048E58F /* LCGPBRootObject_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E44F23544F540048E58F /* LCGPBRootObject_PackagePrivate.h */; };
+		D3D6E4A523544F590048E58F /* LCGPBDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E45023544F540048E58F /* LCGPBDescriptor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4A623544F590048E58F /* LCGPBDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E45023544F540048E58F /* LCGPBDescriptor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4A723544F590048E58F /* LCGPBUnknownFieldSet.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E45123544F550048E58F /* LCGPBUnknownFieldSet.h */; };
+		D3D6E4A823544F590048E58F /* LCGPBUnknownFieldSet.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E45123544F550048E58F /* LCGPBUnknownFieldSet.h */; };
+		D3D6E4A923544F590048E58F /* LCGPBCodedInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E45223544F550048E58F /* LCGPBCodedInputStream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4AA23544F590048E58F /* LCGPBCodedInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E45223544F550048E58F /* LCGPBCodedInputStream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4AB23544F590048E58F /* LCGPBArray.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E45323544F550048E58F /* LCGPBArray.h */; };
+		D3D6E4AC23544F590048E58F /* LCGPBArray.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E45323544F550048E58F /* LCGPBArray.h */; };
+		D3D6E4AD23544F590048E58F /* LCGPBUnknownField_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E45423544F550048E58F /* LCGPBUnknownField_PackagePrivate.h */; };
+		D3D6E4AE23544F590048E58F /* LCGPBUnknownField_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E45423544F550048E58F /* LCGPBUnknownField_PackagePrivate.h */; };
+		D3D6E4AF23544F590048E58F /* LCGPBEmpty.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E45523544F550048E58F /* LCGPBEmpty.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4B023544F590048E58F /* LCGPBEmpty.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E45523544F550048E58F /* LCGPBEmpty.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4B123544F590048E58F /* LCGPBStruct.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E45623544F550048E58F /* LCGPBStruct.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4B223544F590048E58F /* LCGPBStruct.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E45623544F550048E58F /* LCGPBStruct.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4B323544F590048E58F /* LCGPBRootObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E45723544F550048E58F /* LCGPBRootObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4B423544F590048E58F /* LCGPBRootObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E45723544F550048E58F /* LCGPBRootObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4B523544F590048E58F /* LCGPBDuration.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E45823544F550048E58F /* LCGPBDuration.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4B623544F590048E58F /* LCGPBDuration.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E45823544F550048E58F /* LCGPBDuration.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4B723544F590048E58F /* LCGPBArray_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E45923544F560048E58F /* LCGPBArray_PackagePrivate.h */; };
+		D3D6E4B823544F590048E58F /* LCGPBArray_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E45923544F560048E58F /* LCGPBArray_PackagePrivate.h */; };
+		D3D6E4B923544F590048E58F /* LCGPBAny.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E45A23544F560048E58F /* LCGPBAny.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4BA23544F590048E58F /* LCGPBAny.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E45A23544F560048E58F /* LCGPBAny.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4BB23544F590048E58F /* LCGPBStruct.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E45B23544F560048E58F /* LCGPBStruct.pbobjc.h */; };
+		D3D6E4BC23544F590048E58F /* LCGPBStruct.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E45B23544F560048E58F /* LCGPBStruct.pbobjc.h */; };
+		D3D6E4BD23544F590048E58F /* LCGPBCodedInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E45C23544F560048E58F /* LCGPBCodedInputStream.h */; };
+		D3D6E4BE23544F590048E58F /* LCGPBCodedInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E45C23544F560048E58F /* LCGPBCodedInputStream.h */; };
+		D3D6E4BF23544F590048E58F /* LCGPBAny.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E45D23544F560048E58F /* LCGPBAny.pbobjc.h */; };
+		D3D6E4C023544F590048E58F /* LCGPBAny.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E45D23544F560048E58F /* LCGPBAny.pbobjc.h */; };
+		D3D6E4C123544F590048E58F /* LCGPBDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E45E23544F560048E58F /* LCGPBDictionary.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4C223544F590048E58F /* LCGPBDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E45E23544F560048E58F /* LCGPBDictionary.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4C323544F590048E58F /* LCGPBRootObject.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E45F23544F560048E58F /* LCGPBRootObject.h */; };
+		D3D6E4C423544F590048E58F /* LCGPBRootObject.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E45F23544F560048E58F /* LCGPBRootObject.h */; };
+		D3D6E4C523544F590048E58F /* LCGPBWellKnownTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46023544F560048E58F /* LCGPBWellKnownTypes.h */; };
+		D3D6E4C623544F590048E58F /* LCGPBWellKnownTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46023544F560048E58F /* LCGPBWellKnownTypes.h */; };
+		D3D6E4C723544F590048E58F /* LCGPBWrappers.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E46123544F560048E58F /* LCGPBWrappers.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4C823544F590048E58F /* LCGPBWrappers.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E46123544F560048E58F /* LCGPBWrappers.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4C923544F590048E58F /* LCGPBUnknownField.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46223544F570048E58F /* LCGPBUnknownField.h */; };
+		D3D6E4CA23544F590048E58F /* LCGPBUnknownField.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46223544F570048E58F /* LCGPBUnknownField.h */; };
+		D3D6E4CB23544F590048E58F /* LCGPBMessage_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46323544F570048E58F /* LCGPBMessage_PackagePrivate.h */; };
+		D3D6E4CC23544F590048E58F /* LCGPBMessage_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46323544F570048E58F /* LCGPBMessage_PackagePrivate.h */; };
+		D3D6E4CD23544F590048E58F /* LCGPBCodedOutputStream_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46423544F570048E58F /* LCGPBCodedOutputStream_PackagePrivate.h */; };
+		D3D6E4CE23544F590048E58F /* LCGPBCodedOutputStream_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46423544F570048E58F /* LCGPBCodedOutputStream_PackagePrivate.h */; };
+		D3D6E4CF23544F590048E58F /* LCGPBRuntimeTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46523544F570048E58F /* LCGPBRuntimeTypes.h */; };
+		D3D6E4D023544F590048E58F /* LCGPBRuntimeTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46523544F570048E58F /* LCGPBRuntimeTypes.h */; };
+		D3D6E4D123544F590048E58F /* LCGPBUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46623544F570048E58F /* LCGPBUtilities.h */; };
+		D3D6E4D223544F590048E58F /* LCGPBUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46623544F570048E58F /* LCGPBUtilities.h */; };
+		D3D6E4D323544F590048E58F /* LCGPBExtensionInternals.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46723544F570048E58F /* LCGPBExtensionInternals.h */; };
+		D3D6E4D423544F590048E58F /* LCGPBExtensionInternals.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46723544F570048E58F /* LCGPBExtensionInternals.h */; };
+		D3D6E4D523544F590048E58F /* LCGPBWireFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46823544F580048E58F /* LCGPBWireFormat.h */; };
+		D3D6E4D623544F590048E58F /* LCGPBWireFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46823544F580048E58F /* LCGPBWireFormat.h */; };
+		D3D6E4D723544F590048E58F /* LCGPBArray.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E46923544F580048E58F /* LCGPBArray.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4D823544F590048E58F /* LCGPBArray.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E46923544F580048E58F /* LCGPBArray.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4D923544F590048E58F /* LCGPBDescriptor_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46A23544F580048E58F /* LCGPBDescriptor_PackagePrivate.h */; };
+		D3D6E4DA23544F590048E58F /* LCGPBDescriptor_PackagePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46A23544F580048E58F /* LCGPBDescriptor_PackagePrivate.h */; };
+		D3D6E4DB23544F590048E58F /* LCGPBExtensionRegistry.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46B23544F580048E58F /* LCGPBExtensionRegistry.h */; };
+		D3D6E4DC23544F590048E58F /* LCGPBExtensionRegistry.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46B23544F580048E58F /* LCGPBExtensionRegistry.h */; };
+		D3D6E4DD23544F590048E58F /* LCGPBDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46C23544F580048E58F /* LCGPBDictionary.h */; };
+		D3D6E4DE23544F590048E58F /* LCGPBDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46C23544F580048E58F /* LCGPBDictionary.h */; };
+		D3D6E4DF23544F590048E58F /* LCGPBBootstrap.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46D23544F580048E58F /* LCGPBBootstrap.h */; };
+		D3D6E4E023544F590048E58F /* LCGPBBootstrap.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46D23544F580048E58F /* LCGPBBootstrap.h */; };
+		D3D6E4E123544F590048E58F /* LCGPBCodedOutputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46E23544F580048E58F /* LCGPBCodedOutputStream.h */; };
+		D3D6E4E223544F590048E58F /* LCGPBCodedOutputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E46E23544F580048E58F /* LCGPBCodedOutputStream.h */; };
+		D3D6E4E323544F590048E58F /* LCGPBExtensionInternals.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E46F23544F580048E58F /* LCGPBExtensionInternals.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4E423544F590048E58F /* LCGPBExtensionInternals.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E46F23544F580048E58F /* LCGPBExtensionInternals.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4E523544F590048E58F /* LCGPBType.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E47023544F590048E58F /* LCGPBType.pbobjc.h */; };
+		D3D6E4E623544F590048E58F /* LCGPBType.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E47023544F590048E58F /* LCGPBType.pbobjc.h */; };
+		D3D6E4E723544F590048E58F /* LCGPBWireFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E47123544F590048E58F /* LCGPBWireFormat.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4E823544F590048E58F /* LCGPBWireFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E47123544F590048E58F /* LCGPBWireFormat.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4E923544F590048E58F /* LCGPBFieldMask.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E47223544F590048E58F /* LCGPBFieldMask.pbobjc.h */; };
+		D3D6E4EA23544F5A0048E58F /* LCGPBFieldMask.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E47223544F590048E58F /* LCGPBFieldMask.pbobjc.h */; };
+		D3D6E4EB23544F5A0048E58F /* LCGPBUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E47323544F590048E58F /* LCGPBUtilities.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4EC23544F5A0048E58F /* LCGPBUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E47323544F590048E58F /* LCGPBUtilities.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4ED23544F5A0048E58F /* LCGPBProtocolBuffers_RuntimeSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E47423544F590048E58F /* LCGPBProtocolBuffers_RuntimeSupport.h */; };
+		D3D6E4EE23544F5A0048E58F /* LCGPBProtocolBuffers_RuntimeSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D6E47423544F590048E58F /* LCGPBProtocolBuffers_RuntimeSupport.h */; };
+		D3D6E4EF23544F5A0048E58F /* LCGPBMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E47523544F590048E58F /* LCGPBMessage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4F023544F5A0048E58F /* LCGPBMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E47523544F590048E58F /* LCGPBMessage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4F123544F5A0048E58F /* LCGPBSourceContext.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E47623544F590048E58F /* LCGPBSourceContext.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		D3D6E4F223544F5A0048E58F /* LCGPBSourceContext.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E47623544F590048E58F /* LCGPBSourceContext.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		D3D80081210AFC7F0058F86C /* AVIMCommon_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D80080210AFC7F0058F86C /* AVIMCommon_Internal.h */; };
 		D3D80082210AFC7F0058F86C /* AVIMCommon_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D80080210AFC7F0058F86C /* AVIMCommon_Internal.h */; };
 		D3F8747B20F8B1690035C7D1 /* LCTestEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F8747A20F8B1690035C7D1 /* LCTestEnvironment.m */; };
@@ -1300,74 +1300,12 @@
 		8CBDFDE01A808EA500D67FBE /* AVIMConversationQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMConversationQuery.h; sourceTree = "<group>"; };
 		8CBDFDE11A808EA500D67FBE /* AVIMConversationQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMConversationQuery.m; sourceTree = "<group>"; };
 		8CEEABAD1ABC179300B9E757 /* alpacino.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = alpacino.jpg; sourceTree = "<group>"; };
-		9A2F1A981CF6F6F900BE52F2 /* LCIMArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMArray.h; sourceTree = "<group>"; };
-		9A2F1A991CF6F6F900BE52F2 /* LCIMArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMArray.m; sourceTree = "<group>"; };
-		9A2F1A9A1CF6F6F900BE52F2 /* LCIMArray_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMArray_PackagePrivate.h; sourceTree = "<group>"; };
-		9A2F1A9B1CF6F6F900BE52F2 /* LCIMBootstrap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMBootstrap.h; sourceTree = "<group>"; };
-		9A2F1A9C1CF6F6F900BE52F2 /* LCIMCodedInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMCodedInputStream.h; sourceTree = "<group>"; };
-		9A2F1A9D1CF6F6F900BE52F2 /* LCIMCodedInputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMCodedInputStream.m; sourceTree = "<group>"; };
-		9A2F1A9E1CF6F6F900BE52F2 /* LCIMCodedInputStream_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMCodedInputStream_PackagePrivate.h; sourceTree = "<group>"; };
-		9A2F1A9F1CF6F6F900BE52F2 /* LCIMCodedOutputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMCodedOutputStream.h; sourceTree = "<group>"; };
-		9A2F1AA01CF6F6F900BE52F2 /* LCIMCodedOutputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMCodedOutputStream.m; sourceTree = "<group>"; };
-		9A2F1AA11CF6F6F900BE52F2 /* LCIMCodedOutputStream_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMCodedOutputStream_PackagePrivate.h; sourceTree = "<group>"; };
-		9A2F1AA21CF6F6F900BE52F2 /* LCIMDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMDescriptor.h; sourceTree = "<group>"; };
-		9A2F1AA31CF6F6F900BE52F2 /* LCIMDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMDescriptor.m; sourceTree = "<group>"; };
-		9A2F1AA41CF6F6F900BE52F2 /* LCIMDescriptor_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMDescriptor_PackagePrivate.h; sourceTree = "<group>"; };
-		9A2F1AA51CF6F6F900BE52F2 /* LCIMDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMDictionary.h; sourceTree = "<group>"; };
-		9A2F1AA61CF6F6F900BE52F2 /* LCIMDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMDictionary.m; sourceTree = "<group>"; };
-		9A2F1AA71CF6F6F900BE52F2 /* LCIMDictionary_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMDictionary_PackagePrivate.h; sourceTree = "<group>"; };
-		9A2F1AA81CF6F6F900BE52F2 /* LCIMExtensionInternals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMExtensionInternals.h; sourceTree = "<group>"; };
-		9A2F1AA91CF6F6F900BE52F2 /* LCIMExtensionInternals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMExtensionInternals.m; sourceTree = "<group>"; };
-		9A2F1AAA1CF6F6F900BE52F2 /* LCIMExtensionRegistry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMExtensionRegistry.h; sourceTree = "<group>"; };
-		9A2F1AAB1CF6F6F900BE52F2 /* LCIMExtensionRegistry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMExtensionRegistry.m; sourceTree = "<group>"; };
-		9A2F1AAC1CF6F6F900BE52F2 /* LCIMMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessage.h; sourceTree = "<group>"; };
-		9A2F1AAD1CF6F6F900BE52F2 /* LCIMMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMMessage.m; sourceTree = "<group>"; };
-		9A2F1AAE1CF6F6F900BE52F2 /* LCIMMessage_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessage_PackagePrivate.h; sourceTree = "<group>"; };
-		9A2F1AAF1CF6F6F900BE52F2 /* LCIMProtocolBuffers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMProtocolBuffers.h; sourceTree = "<group>"; };
-		9A2F1AB01CF6F6FA00BE52F2 /* LCIMProtocolBuffers_RuntimeSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMProtocolBuffers_RuntimeSupport.h; sourceTree = "<group>"; };
-		9A2F1AB11CF6F6FA00BE52F2 /* LCIMRootObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMRootObject.h; sourceTree = "<group>"; };
-		9A2F1AB21CF6F6FA00BE52F2 /* LCIMRootObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMRootObject.m; sourceTree = "<group>"; };
-		9A2F1AB31CF6F6FA00BE52F2 /* LCIMRootObject_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMRootObject_PackagePrivate.h; sourceTree = "<group>"; };
-		9A2F1AB41CF6F6FA00BE52F2 /* LCIMRuntimeTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMRuntimeTypes.h; sourceTree = "<group>"; };
-		9A2F1AB51CF6F6FA00BE52F2 /* LCIMUnknownField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMUnknownField.h; sourceTree = "<group>"; };
-		9A2F1AB61CF6F6FA00BE52F2 /* LCIMUnknownField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMUnknownField.m; sourceTree = "<group>"; };
-		9A2F1AB71CF6F6FA00BE52F2 /* LCIMUnknownField_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMUnknownField_PackagePrivate.h; sourceTree = "<group>"; };
-		9A2F1AB81CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMUnknownFieldSet.h; sourceTree = "<group>"; };
-		9A2F1AB91CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMUnknownFieldSet.m; sourceTree = "<group>"; };
-		9A2F1ABA1CF6F6FA00BE52F2 /* LCIMUnknownFieldSet_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMUnknownFieldSet_PackagePrivate.h; sourceTree = "<group>"; };
-		9A2F1ABB1CF6F6FA00BE52F2 /* LCIMUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMUtilities.h; sourceTree = "<group>"; };
-		9A2F1ABC1CF6F6FA00BE52F2 /* LCIMUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMUtilities.m; sourceTree = "<group>"; };
-		9A2F1ABD1CF6F6FA00BE52F2 /* LCIMUtilities_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMUtilities_PackagePrivate.h; sourceTree = "<group>"; };
-		9A2F1ABE1CF6F6FA00BE52F2 /* LCIMWellKnownTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMWellKnownTypes.h; sourceTree = "<group>"; };
-		9A2F1ABF1CF6F6FA00BE52F2 /* LCIMWellKnownTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMWellKnownTypes.m; sourceTree = "<group>"; };
-		9A2F1AC01CF6F6FA00BE52F2 /* LCIMWireFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMWireFormat.h; sourceTree = "<group>"; };
-		9A2F1AC11CF6F6FA00BE52F2 /* LCIMWireFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMWireFormat.m; sourceTree = "<group>"; };
 		9A62AE551DF813C100EE0973 /* TestTypedMessage.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestTypedMessage.json; sourceTree = "<group>"; };
 		9A7C67D51C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVIMDirectCommand+DirectCommandAdditions.h"; sourceTree = "<group>"; };
 		9A7C67D61C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AVIMDirectCommand+DirectCommandAdditions.m"; sourceTree = "<group>"; };
 		9ACE83DA1BD6420E00CE2103 /* AVIMCommandFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMCommandFormatter.h; sourceTree = "<group>"; };
 		9ACE83DB1BD6420E00CE2103 /* AVIMCommandFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMCommandFormatter.m; sourceTree = "<group>"; };
 		9AD143771BD8C6CE0022652C /* AVIMCommandCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMCommandCommon.h; sourceTree = "<group>"; };
-		9AD27C2B1E1418DB002F9C7C /* LCIMAny.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMAny.pbobjc.h; sourceTree = "<group>"; };
-		9AD27C2C1E1418DB002F9C7C /* LCIMAny.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMAny.pbobjc.m; sourceTree = "<group>"; };
-		9AD27C2D1E1418DB002F9C7C /* LCIMApi.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMApi.pbobjc.h; sourceTree = "<group>"; };
-		9AD27C2E1E1418DB002F9C7C /* LCIMApi.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMApi.pbobjc.m; sourceTree = "<group>"; };
-		9AD27C2F1E1418DB002F9C7C /* LCIMDuration.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMDuration.pbobjc.h; sourceTree = "<group>"; };
-		9AD27C301E1418DB002F9C7C /* LCIMDuration.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMDuration.pbobjc.m; sourceTree = "<group>"; };
-		9AD27C311E1418DB002F9C7C /* LCIMEmpty.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMEmpty.pbobjc.h; sourceTree = "<group>"; };
-		9AD27C321E1418DB002F9C7C /* LCIMEmpty.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMEmpty.pbobjc.m; sourceTree = "<group>"; };
-		9AD27C331E1418DB002F9C7C /* LCIMFieldMask.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMFieldMask.pbobjc.h; sourceTree = "<group>"; };
-		9AD27C341E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMFieldMask.pbobjc.m; sourceTree = "<group>"; };
-		9AD27C351E1418DB002F9C7C /* LCIMSourceContext.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMSourceContext.pbobjc.h; sourceTree = "<group>"; };
-		9AD27C361E1418DB002F9C7C /* LCIMSourceContext.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMSourceContext.pbobjc.m; sourceTree = "<group>"; };
-		9AD27C371E1418DB002F9C7C /* LCIMStruct.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMStruct.pbobjc.h; sourceTree = "<group>"; };
-		9AD27C381E1418DB002F9C7C /* LCIMStruct.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMStruct.pbobjc.m; sourceTree = "<group>"; };
-		9AD27C391E1418DB002F9C7C /* LCIMTimestamp.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMTimestamp.pbobjc.h; sourceTree = "<group>"; };
-		9AD27C3A1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMTimestamp.pbobjc.m; sourceTree = "<group>"; };
-		9AD27C3B1E1418DB002F9C7C /* LCIMType.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMType.pbobjc.h; sourceTree = "<group>"; };
-		9AD27C3C1E1418DB002F9C7C /* LCIMType.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMType.pbobjc.m; sourceTree = "<group>"; };
-		9AD27C3D1E1418DB002F9C7C /* LCIMWrappers.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMWrappers.pbobjc.h; sourceTree = "<group>"; };
-		9AD27C3E1E1418DB002F9C7C /* LCIMWrappers.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMWrappers.pbobjc.m; sourceTree = "<group>"; };
 		9AD392401BFC395200D28074 /* AVIMConversationOutCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMConversationOutCommand.h; sourceTree = "<group>"; };
 		9AD392411BFC395200D28074 /* AVIMConversationOutCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMConversationOutCommand.m; sourceTree = "<group>"; };
 		9AD392441BFC411300D28074 /* AVIMGenericCommand+AVIMMessagesAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVIMGenericCommand+AVIMMessagesAdditions.h"; sourceTree = "<group>"; };
@@ -1417,6 +1355,68 @@
 		D3CC5D272252242A00B3C778 /* AVQueryTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVQueryTestCase.swift; sourceTree = "<group>"; };
 		D3CC90CA2069E5BB0082EFD4 /* AVObjectTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVObjectTestCase.swift; sourceTree = "<group>"; };
 		D3CDF4EA1FE8F3810033153E /* LCIMTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestBase.swift; sourceTree = "<group>"; };
+		D3D6E43923544F520048E58F /* LCGPBExtensionRegistry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBExtensionRegistry.m; sourceTree = "<group>"; };
+		D3D6E43A23544F520048E58F /* LCGPBApi.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBApi.pbobjc.h; sourceTree = "<group>"; };
+		D3D6E43B23544F520048E58F /* LCGPBEmpty.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBEmpty.pbobjc.h; sourceTree = "<group>"; };
+		D3D6E43C23544F530048E58F /* LCGPBDictionary_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBDictionary_PackagePrivate.h; sourceTree = "<group>"; };
+		D3D6E43D23544F530048E58F /* LCGPBApi.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBApi.pbobjc.m; sourceTree = "<group>"; };
+		D3D6E43E23544F530048E58F /* LCGPBTimestamp.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBTimestamp.pbobjc.m; sourceTree = "<group>"; };
+		D3D6E43F23544F530048E58F /* LCGPBWrappers.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBWrappers.pbobjc.h; sourceTree = "<group>"; };
+		D3D6E44023544F530048E58F /* LCGPBType.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBType.pbobjc.m; sourceTree = "<group>"; };
+		D3D6E44123544F530048E58F /* LCGPBFieldMask.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBFieldMask.pbobjc.m; sourceTree = "<group>"; };
+		D3D6E44223544F530048E58F /* LCGPBCodedOutputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBCodedOutputStream.m; sourceTree = "<group>"; };
+		D3D6E44323544F530048E58F /* LCGPBWellKnownTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBWellKnownTypes.m; sourceTree = "<group>"; };
+		D3D6E44423544F530048E58F /* LCGPBTimestamp.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBTimestamp.pbobjc.h; sourceTree = "<group>"; };
+		D3D6E44523544F530048E58F /* LCGPBMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBMessage.h; sourceTree = "<group>"; };
+		D3D6E44623544F530048E58F /* LCGPBUnknownFieldSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBUnknownFieldSet.m; sourceTree = "<group>"; };
+		D3D6E44723544F530048E58F /* LCGPBSourceContext.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBSourceContext.pbobjc.h; sourceTree = "<group>"; };
+		D3D6E44823544F530048E58F /* LCGPBCodedInputStream_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBCodedInputStream_PackagePrivate.h; sourceTree = "<group>"; };
+		D3D6E44923544F540048E58F /* LCGPBDuration.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBDuration.pbobjc.h; sourceTree = "<group>"; };
+		D3D6E44A23544F540048E58F /* LCGPBUnknownField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBUnknownField.m; sourceTree = "<group>"; };
+		D3D6E44B23544F540048E58F /* LCGPBDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBDescriptor.h; sourceTree = "<group>"; };
+		D3D6E44C23544F540048E58F /* LCGPBUnknownFieldSet_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBUnknownFieldSet_PackagePrivate.h; sourceTree = "<group>"; };
+		D3D6E44D23544F540048E58F /* LCGPBUtilities_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBUtilities_PackagePrivate.h; sourceTree = "<group>"; };
+		D3D6E44E23544F540048E58F /* LCGPBProtocolBuffers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBProtocolBuffers.h; sourceTree = "<group>"; };
+		D3D6E44F23544F540048E58F /* LCGPBRootObject_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBRootObject_PackagePrivate.h; sourceTree = "<group>"; };
+		D3D6E45023544F540048E58F /* LCGPBDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBDescriptor.m; sourceTree = "<group>"; };
+		D3D6E45123544F550048E58F /* LCGPBUnknownFieldSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBUnknownFieldSet.h; sourceTree = "<group>"; };
+		D3D6E45223544F550048E58F /* LCGPBCodedInputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBCodedInputStream.m; sourceTree = "<group>"; };
+		D3D6E45323544F550048E58F /* LCGPBArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBArray.h; sourceTree = "<group>"; };
+		D3D6E45423544F550048E58F /* LCGPBUnknownField_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBUnknownField_PackagePrivate.h; sourceTree = "<group>"; };
+		D3D6E45523544F550048E58F /* LCGPBEmpty.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBEmpty.pbobjc.m; sourceTree = "<group>"; };
+		D3D6E45623544F550048E58F /* LCGPBStruct.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBStruct.pbobjc.m; sourceTree = "<group>"; };
+		D3D6E45723544F550048E58F /* LCGPBRootObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBRootObject.m; sourceTree = "<group>"; };
+		D3D6E45823544F550048E58F /* LCGPBDuration.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBDuration.pbobjc.m; sourceTree = "<group>"; };
+		D3D6E45923544F560048E58F /* LCGPBArray_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBArray_PackagePrivate.h; sourceTree = "<group>"; };
+		D3D6E45A23544F560048E58F /* LCGPBAny.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBAny.pbobjc.m; sourceTree = "<group>"; };
+		D3D6E45B23544F560048E58F /* LCGPBStruct.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBStruct.pbobjc.h; sourceTree = "<group>"; };
+		D3D6E45C23544F560048E58F /* LCGPBCodedInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBCodedInputStream.h; sourceTree = "<group>"; };
+		D3D6E45D23544F560048E58F /* LCGPBAny.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBAny.pbobjc.h; sourceTree = "<group>"; };
+		D3D6E45E23544F560048E58F /* LCGPBDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBDictionary.m; sourceTree = "<group>"; };
+		D3D6E45F23544F560048E58F /* LCGPBRootObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBRootObject.h; sourceTree = "<group>"; };
+		D3D6E46023544F560048E58F /* LCGPBWellKnownTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBWellKnownTypes.h; sourceTree = "<group>"; };
+		D3D6E46123544F560048E58F /* LCGPBWrappers.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBWrappers.pbobjc.m; sourceTree = "<group>"; };
+		D3D6E46223544F570048E58F /* LCGPBUnknownField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBUnknownField.h; sourceTree = "<group>"; };
+		D3D6E46323544F570048E58F /* LCGPBMessage_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBMessage_PackagePrivate.h; sourceTree = "<group>"; };
+		D3D6E46423544F570048E58F /* LCGPBCodedOutputStream_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBCodedOutputStream_PackagePrivate.h; sourceTree = "<group>"; };
+		D3D6E46523544F570048E58F /* LCGPBRuntimeTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBRuntimeTypes.h; sourceTree = "<group>"; };
+		D3D6E46623544F570048E58F /* LCGPBUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBUtilities.h; sourceTree = "<group>"; };
+		D3D6E46723544F570048E58F /* LCGPBExtensionInternals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBExtensionInternals.h; sourceTree = "<group>"; };
+		D3D6E46823544F580048E58F /* LCGPBWireFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBWireFormat.h; sourceTree = "<group>"; };
+		D3D6E46923544F580048E58F /* LCGPBArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBArray.m; sourceTree = "<group>"; };
+		D3D6E46A23544F580048E58F /* LCGPBDescriptor_PackagePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBDescriptor_PackagePrivate.h; sourceTree = "<group>"; };
+		D3D6E46B23544F580048E58F /* LCGPBExtensionRegistry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBExtensionRegistry.h; sourceTree = "<group>"; };
+		D3D6E46C23544F580048E58F /* LCGPBDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBDictionary.h; sourceTree = "<group>"; };
+		D3D6E46D23544F580048E58F /* LCGPBBootstrap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBBootstrap.h; sourceTree = "<group>"; };
+		D3D6E46E23544F580048E58F /* LCGPBCodedOutputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBCodedOutputStream.h; sourceTree = "<group>"; };
+		D3D6E46F23544F580048E58F /* LCGPBExtensionInternals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBExtensionInternals.m; sourceTree = "<group>"; };
+		D3D6E47023544F590048E58F /* LCGPBType.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBType.pbobjc.h; sourceTree = "<group>"; };
+		D3D6E47123544F590048E58F /* LCGPBWireFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBWireFormat.m; sourceTree = "<group>"; };
+		D3D6E47223544F590048E58F /* LCGPBFieldMask.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBFieldMask.pbobjc.h; sourceTree = "<group>"; };
+		D3D6E47323544F590048E58F /* LCGPBUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBUtilities.m; sourceTree = "<group>"; };
+		D3D6E47423544F590048E58F /* LCGPBProtocolBuffers_RuntimeSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBProtocolBuffers_RuntimeSupport.h; sourceTree = "<group>"; };
+		D3D6E47523544F590048E58F /* LCGPBMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBMessage.m; sourceTree = "<group>"; };
+		D3D6E47623544F590048E58F /* LCGPBSourceContext.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBSourceContext.pbobjc.m; sourceTree = "<group>"; };
 		D3D80080210AFC7F0058F86C /* AVIMCommon_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVIMCommon_Internal.h; sourceTree = "<group>"; };
 		D3F8747920F8B1690035C7D1 /* LCTestEnvironment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCTestEnvironment.h; sourceTree = "<group>"; };
 		D3F8747A20F8B1690035C7D1 /* LCTestEnvironment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCTestEnvironment.m; sourceTree = "<group>"; };
@@ -2124,79 +2124,70 @@
 		9A2F1A811CF6F6F900BE52F2 /* Protobuf */ = {
 			isa = PBXGroup;
 			children = (
-				9AD27C2A1E1418DB002F9C7C /* protobuf */,
-				9A2F1A981CF6F6F900BE52F2 /* LCIMArray.h */,
-				9A2F1A991CF6F6F900BE52F2 /* LCIMArray.m */,
-				9A2F1A9A1CF6F6F900BE52F2 /* LCIMArray_PackagePrivate.h */,
-				9A2F1A9B1CF6F6F900BE52F2 /* LCIMBootstrap.h */,
-				9A2F1A9C1CF6F6F900BE52F2 /* LCIMCodedInputStream.h */,
-				9A2F1A9D1CF6F6F900BE52F2 /* LCIMCodedInputStream.m */,
-				9A2F1A9E1CF6F6F900BE52F2 /* LCIMCodedInputStream_PackagePrivate.h */,
-				9A2F1A9F1CF6F6F900BE52F2 /* LCIMCodedOutputStream.h */,
-				9A2F1AA01CF6F6F900BE52F2 /* LCIMCodedOutputStream.m */,
-				9A2F1AA11CF6F6F900BE52F2 /* LCIMCodedOutputStream_PackagePrivate.h */,
-				9A2F1AA21CF6F6F900BE52F2 /* LCIMDescriptor.h */,
-				9A2F1AA31CF6F6F900BE52F2 /* LCIMDescriptor.m */,
-				9A2F1AA41CF6F6F900BE52F2 /* LCIMDescriptor_PackagePrivate.h */,
-				9A2F1AA51CF6F6F900BE52F2 /* LCIMDictionary.h */,
-				9A2F1AA61CF6F6F900BE52F2 /* LCIMDictionary.m */,
-				9A2F1AA71CF6F6F900BE52F2 /* LCIMDictionary_PackagePrivate.h */,
-				9A2F1AA81CF6F6F900BE52F2 /* LCIMExtensionInternals.h */,
-				9A2F1AA91CF6F6F900BE52F2 /* LCIMExtensionInternals.m */,
-				9A2F1AAA1CF6F6F900BE52F2 /* LCIMExtensionRegistry.h */,
-				9A2F1AAB1CF6F6F900BE52F2 /* LCIMExtensionRegistry.m */,
-				9A2F1AAC1CF6F6F900BE52F2 /* LCIMMessage.h */,
-				9A2F1AAD1CF6F6F900BE52F2 /* LCIMMessage.m */,
-				9A2F1AAE1CF6F6F900BE52F2 /* LCIMMessage_PackagePrivate.h */,
-				9A2F1AAF1CF6F6F900BE52F2 /* LCIMProtocolBuffers.h */,
-				9A2F1AB01CF6F6FA00BE52F2 /* LCIMProtocolBuffers_RuntimeSupport.h */,
-				9A2F1AB11CF6F6FA00BE52F2 /* LCIMRootObject.h */,
-				9A2F1AB21CF6F6FA00BE52F2 /* LCIMRootObject.m */,
-				9A2F1AB31CF6F6FA00BE52F2 /* LCIMRootObject_PackagePrivate.h */,
-				9A2F1AB41CF6F6FA00BE52F2 /* LCIMRuntimeTypes.h */,
-				9A2F1AB51CF6F6FA00BE52F2 /* LCIMUnknownField.h */,
-				9A2F1AB61CF6F6FA00BE52F2 /* LCIMUnknownField.m */,
-				9A2F1AB71CF6F6FA00BE52F2 /* LCIMUnknownField_PackagePrivate.h */,
-				9A2F1AB81CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.h */,
-				9A2F1AB91CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.m */,
-				9A2F1ABA1CF6F6FA00BE52F2 /* LCIMUnknownFieldSet_PackagePrivate.h */,
-				9A2F1ABB1CF6F6FA00BE52F2 /* LCIMUtilities.h */,
-				9A2F1ABC1CF6F6FA00BE52F2 /* LCIMUtilities.m */,
-				9A2F1ABD1CF6F6FA00BE52F2 /* LCIMUtilities_PackagePrivate.h */,
-				9A2F1ABE1CF6F6FA00BE52F2 /* LCIMWellKnownTypes.h */,
-				9A2F1ABF1CF6F6FA00BE52F2 /* LCIMWellKnownTypes.m */,
-				9A2F1AC01CF6F6FA00BE52F2 /* LCIMWireFormat.h */,
-				9A2F1AC11CF6F6FA00BE52F2 /* LCIMWireFormat.m */,
+				D3D6E45D23544F560048E58F /* LCGPBAny.pbobjc.h */,
+				D3D6E45A23544F560048E58F /* LCGPBAny.pbobjc.m */,
+				D3D6E43A23544F520048E58F /* LCGPBApi.pbobjc.h */,
+				D3D6E43D23544F530048E58F /* LCGPBApi.pbobjc.m */,
+				D3D6E45923544F560048E58F /* LCGPBArray_PackagePrivate.h */,
+				D3D6E45323544F550048E58F /* LCGPBArray.h */,
+				D3D6E46923544F580048E58F /* LCGPBArray.m */,
+				D3D6E46D23544F580048E58F /* LCGPBBootstrap.h */,
+				D3D6E44823544F530048E58F /* LCGPBCodedInputStream_PackagePrivate.h */,
+				D3D6E45C23544F560048E58F /* LCGPBCodedInputStream.h */,
+				D3D6E45223544F550048E58F /* LCGPBCodedInputStream.m */,
+				D3D6E46423544F570048E58F /* LCGPBCodedOutputStream_PackagePrivate.h */,
+				D3D6E46E23544F580048E58F /* LCGPBCodedOutputStream.h */,
+				D3D6E44223544F530048E58F /* LCGPBCodedOutputStream.m */,
+				D3D6E46A23544F580048E58F /* LCGPBDescriptor_PackagePrivate.h */,
+				D3D6E44B23544F540048E58F /* LCGPBDescriptor.h */,
+				D3D6E45023544F540048E58F /* LCGPBDescriptor.m */,
+				D3D6E43C23544F530048E58F /* LCGPBDictionary_PackagePrivate.h */,
+				D3D6E46C23544F580048E58F /* LCGPBDictionary.h */,
+				D3D6E45E23544F560048E58F /* LCGPBDictionary.m */,
+				D3D6E44923544F540048E58F /* LCGPBDuration.pbobjc.h */,
+				D3D6E45823544F550048E58F /* LCGPBDuration.pbobjc.m */,
+				D3D6E43B23544F520048E58F /* LCGPBEmpty.pbobjc.h */,
+				D3D6E45523544F550048E58F /* LCGPBEmpty.pbobjc.m */,
+				D3D6E46723544F570048E58F /* LCGPBExtensionInternals.h */,
+				D3D6E46F23544F580048E58F /* LCGPBExtensionInternals.m */,
+				D3D6E46B23544F580048E58F /* LCGPBExtensionRegistry.h */,
+				D3D6E43923544F520048E58F /* LCGPBExtensionRegistry.m */,
+				D3D6E47223544F590048E58F /* LCGPBFieldMask.pbobjc.h */,
+				D3D6E44123544F530048E58F /* LCGPBFieldMask.pbobjc.m */,
+				D3D6E46323544F570048E58F /* LCGPBMessage_PackagePrivate.h */,
+				D3D6E44523544F530048E58F /* LCGPBMessage.h */,
+				D3D6E47523544F590048E58F /* LCGPBMessage.m */,
+				D3D6E47423544F590048E58F /* LCGPBProtocolBuffers_RuntimeSupport.h */,
+				D3D6E44E23544F540048E58F /* LCGPBProtocolBuffers.h */,
+				D3D6E44F23544F540048E58F /* LCGPBRootObject_PackagePrivate.h */,
+				D3D6E45F23544F560048E58F /* LCGPBRootObject.h */,
+				D3D6E45723544F550048E58F /* LCGPBRootObject.m */,
+				D3D6E46523544F570048E58F /* LCGPBRuntimeTypes.h */,
+				D3D6E44723544F530048E58F /* LCGPBSourceContext.pbobjc.h */,
+				D3D6E47623544F590048E58F /* LCGPBSourceContext.pbobjc.m */,
+				D3D6E45B23544F560048E58F /* LCGPBStruct.pbobjc.h */,
+				D3D6E45623544F550048E58F /* LCGPBStruct.pbobjc.m */,
+				D3D6E44423544F530048E58F /* LCGPBTimestamp.pbobjc.h */,
+				D3D6E43E23544F530048E58F /* LCGPBTimestamp.pbobjc.m */,
+				D3D6E47023544F590048E58F /* LCGPBType.pbobjc.h */,
+				D3D6E44023544F530048E58F /* LCGPBType.pbobjc.m */,
+				D3D6E45423544F550048E58F /* LCGPBUnknownField_PackagePrivate.h */,
+				D3D6E46223544F570048E58F /* LCGPBUnknownField.h */,
+				D3D6E44A23544F540048E58F /* LCGPBUnknownField.m */,
+				D3D6E44C23544F540048E58F /* LCGPBUnknownFieldSet_PackagePrivate.h */,
+				D3D6E45123544F550048E58F /* LCGPBUnknownFieldSet.h */,
+				D3D6E44623544F530048E58F /* LCGPBUnknownFieldSet.m */,
+				D3D6E44D23544F540048E58F /* LCGPBUtilities_PackagePrivate.h */,
+				D3D6E46623544F570048E58F /* LCGPBUtilities.h */,
+				D3D6E47323544F590048E58F /* LCGPBUtilities.m */,
+				D3D6E46023544F560048E58F /* LCGPBWellKnownTypes.h */,
+				D3D6E44323544F530048E58F /* LCGPBWellKnownTypes.m */,
+				D3D6E46823544F580048E58F /* LCGPBWireFormat.h */,
+				D3D6E47123544F590048E58F /* LCGPBWireFormat.m */,
+				D3D6E43F23544F530048E58F /* LCGPBWrappers.pbobjc.h */,
+				D3D6E46123544F560048E58F /* LCGPBWrappers.pbobjc.m */,
 			);
 			path = Protobuf;
-			sourceTree = "<group>";
-		};
-		9AD27C2A1E1418DB002F9C7C /* protobuf */ = {
-			isa = PBXGroup;
-			children = (
-				9AD27C2B1E1418DB002F9C7C /* LCIMAny.pbobjc.h */,
-				9AD27C2C1E1418DB002F9C7C /* LCIMAny.pbobjc.m */,
-				9AD27C2D1E1418DB002F9C7C /* LCIMApi.pbobjc.h */,
-				9AD27C2E1E1418DB002F9C7C /* LCIMApi.pbobjc.m */,
-				9AD27C2F1E1418DB002F9C7C /* LCIMDuration.pbobjc.h */,
-				9AD27C301E1418DB002F9C7C /* LCIMDuration.pbobjc.m */,
-				9AD27C311E1418DB002F9C7C /* LCIMEmpty.pbobjc.h */,
-				9AD27C321E1418DB002F9C7C /* LCIMEmpty.pbobjc.m */,
-				9AD27C331E1418DB002F9C7C /* LCIMFieldMask.pbobjc.h */,
-				9AD27C341E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m */,
-				9AD27C351E1418DB002F9C7C /* LCIMSourceContext.pbobjc.h */,
-				9AD27C361E1418DB002F9C7C /* LCIMSourceContext.pbobjc.m */,
-				9AD27C371E1418DB002F9C7C /* LCIMStruct.pbobjc.h */,
-				9AD27C381E1418DB002F9C7C /* LCIMStruct.pbobjc.m */,
-				9AD27C391E1418DB002F9C7C /* LCIMTimestamp.pbobjc.h */,
-				9AD27C3A1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.m */,
-				9AD27C3B1E1418DB002F9C7C /* LCIMType.pbobjc.h */,
-				9AD27C3C1E1418DB002F9C7C /* LCIMType.pbobjc.m */,
-				9AD27C3D1E1418DB002F9C7C /* LCIMWrappers.pbobjc.h */,
-				9AD27C3E1E1418DB002F9C7C /* LCIMWrappers.pbobjc.m */,
-			);
-			name = protobuf;
-			path = google/protobuf;
 			sourceTree = "<group>";
 		};
 		D3078A592010417800A4C5FD /* Podspec */ = {
@@ -2366,102 +2357,102 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A2F1B601CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.h in Headers */,
 				831E295B1D882CBB006E502B /* AVIMMessageOption.h in Headers */,
+				D3D6E4DE23544F590048E58F /* LCGPBDictionary.h in Headers */,
 				9AE76C4F1C3F7CC600325902 /* AVIMConversationOutCommand.h in Headers */,
+				D3D6E47C23544F590048E58F /* LCGPBEmpty.pbobjc.h in Headers */,
+				D3D6E4A823544F590048E58F /* LCGPBUnknownFieldSet.h in Headers */,
 				704F3BBD1BE0D07E0033245C /* AVIMClient.h in Headers */,
 				704F3BC01BE0D07E0033245C /* AVIMConversation.h in Headers */,
 				704F3BC11BE0D07E0033245C /* AVIMKeyedConversation.h in Headers */,
+				D3D6E4CA23544F590048E58F /* LCGPBUnknownField.h in Headers */,
 				83BE439C1D242905000C7AC3 /* AVIMWebSocket.h in Headers */,
 				830F15A11F010F260009B4D0 /* AVIMRecalledMessage.h in Headers */,
+				D3D6E4D423544F590048E58F /* LCGPBExtensionInternals.h in Headers */,
 				704F3BC41BE0D07E0033245C /* AVIMConversationQuery.h in Headers */,
+				D3D6E4CC23544F590048E58F /* LCGPBMessage_PackagePrivate.h in Headers */,
 				704F3BC81BE0D07E0033245C /* AVIMMessage.h in Headers */,
-				9A2F1B661CF6F6FA00BE52F2 /* LCIMUnknownFieldSet_PackagePrivate.h in Headers */,
 				704F3BC91BE0D07E0033245C /* AVIMSignature.h in Headers */,
 				9AE76C561C3F7CC600325902 /* AVIMDynamicObject.h in Headers */,
-				9A2F1B301CF6F6FA00BE52F2 /* LCIMExtensionInternals.h in Headers */,
+				D3D6E47E23544F590048E58F /* LCGPBDictionary_PackagePrivate.h in Headers */,
+				D3D6E4D223544F590048E58F /* LCGPBUtilities.h in Headers */,
 				704F3BF31BE0D0820033245C /* AVIMAudioMessage.h in Headers */,
+				D3D6E4E623544F590048E58F /* LCGPBType.pbobjc.h in Headers */,
+				D3D6E4E223544F590048E58F /* LCGPBCodedOutputStream.h in Headers */,
 				704F3BF41BE0D0820033245C /* AVIMImageMessage.h in Headers */,
+				D3D6E4DA23544F590048E58F /* LCGPBDescriptor_PackagePrivate.h in Headers */,
 				D3939CC820FEE621001C9F5C /* AVIMClientInternalConversationManager_Internal.h in Headers */,
 				704F3BF51BE0D0820033245C /* AVIMLocationMessage.h in Headers */,
+				D3D6E49023544F590048E58F /* LCGPBMessage.h in Headers */,
 				704F3BF61BE0D0820033245C /* AVIMTextMessage.h in Headers */,
-				9AD27C641E1418DB002F9C7C /* LCIMWrappers.pbobjc.h in Headers */,
+				D3D6E49823544F590048E58F /* LCGPBDuration.pbobjc.h in Headers */,
 				9AE76C4D1C3F7CC600325902 /* MessagesProtoOrig.pbobjc.h in Headers */,
-				9A2F1B481CF6F6FA00BE52F2 /* LCIMProtocolBuffers_RuntimeSupport.h in Headers */,
 				704F3BF81BE0D0820033245C /* AVIMTypedMessage.h in Headers */,
+				D3D6E4AC23544F590048E58F /* LCGPBArray.h in Headers */,
 				704F3BF91BE0D0820033245C /* AVIMVideoMessage.h in Headers */,
 				704F3BFA1BE0D0820033245C /* AVIMFileMessage.h in Headers */,
-				9AD27C4C1E1418DB002F9C7C /* LCIMEmpty.pbobjc.h in Headers */,
 				704F3BBE1BE0D07E0033245C /* AVIMCommon.h in Headers */,
+				D3D6E47A23544F590048E58F /* LCGPBApi.pbobjc.h in Headers */,
 				704F3BD01BE0D07F0033245C /* AVOSCloudIM.h in Headers */,
-				9AD27C501E1418DB002F9C7C /* LCIMFieldMask.pbobjc.h in Headers */,
 				704F3BBC1BE0D07E0033245C /* AVIMClient_Internal.h in Headers */,
-				9A2F1B121CF6F6FA00BE52F2 /* LCIMCodedInputStream_PackagePrivate.h in Headers */,
-				9A2F1B061CF6F6FA00BE52F2 /* LCIMArray_PackagePrivate.h in Headers */,
-				9A2F1B781CF6F6FA00BE52F2 /* LCIMWireFormat.h in Headers */,
 				704F3BBF1BE0D07E0033245C /* AVIMConversation_Internal.h in Headers */,
-				9A2F1B271CF6F6FA00BE52F2 /* LCIMDictionary.h in Headers */,
 				704F3BC21BE0D07E0033245C /* AVIMKeyedConversation_internal.h in Headers */,
 				704F3BC31BE0D07E0033245C /* AVIMConversationQuery_Internal.h in Headers */,
-				9A2F1B4B1CF6F6FA00BE52F2 /* LCIMRootObject.h in Headers */,
 				704F3BC71BE0D07E0033245C /* AVIMMessage_Internal.h in Headers */,
+				D3D6E49623544F590048E58F /* LCGPBCodedInputStream_PackagePrivate.h in Headers */,
 				D3C53FCD2106D84A00D48686 /* AVIMClientProtocol.h in Headers */,
+				D3D6E49C23544F590048E58F /* LCGPBDescriptor.h in Headers */,
 				704F3BCA1BE0D07E0033245C /* avmp.h in Headers */,
 				704F3BCB1BE0D07E0033245C /* AVMPDefines.h in Headers */,
 				704F3BCC1BE0D07F0033245C /* AVMPMessagePack.h in Headers */,
-				9AD27C601E1418DB002F9C7C /* LCIMType.pbobjc.h in Headers */,
 				704F3BCD1BE0D07F0033245C /* AVMPMessagePackReader.h in Headers */,
 				704F3BCE1BE0D07F0033245C /* AVMPMessagePackWriter.h in Headers */,
-				9A2F1B511CF6F6FA00BE52F2 /* LCIMRootObject_PackagePrivate.h in Headers */,
 				704F3BCF1BE0D07F0033245C /* AVMPOrderedDictionary.h in Headers */,
-				9A2F1B421CF6F6FA00BE52F2 /* LCIMMessage_PackagePrivate.h in Headers */,
-				9A2F1B1E1CF6F6FA00BE52F2 /* LCIMDescriptor.h in Headers */,
+				D3D6E4D623544F590048E58F /* LCGPBWireFormat.h in Headers */,
 				9AE76C531C3F7CC600325902 /* AVIMCommandFormatter.h in Headers */,
-				9A2F1B571CF6F6FA00BE52F2 /* LCIMUnknownField.h in Headers */,
-				9A2F1B541CF6F6FA00BE52F2 /* LCIMRuntimeTypes.h in Headers */,
+				D3D6E4C023544F590048E58F /* LCGPBAny.pbobjc.h in Headers */,
 				9A7C67D91C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.h in Headers */,
-				9A2F1B5D1CF6F6FA00BE52F2 /* LCIMUnknownField_PackagePrivate.h in Headers */,
-				9A2F1B0C1CF6F6FA00BE52F2 /* LCIMCodedInputStream.h in Headers */,
-				9A2F1B2D1CF6F6FA00BE52F2 /* LCIMDictionary_PackagePrivate.h in Headers */,
+				D3D6E4A023544F590048E58F /* LCGPBUtilities_PackagePrivate.h in Headers */,
 				9AE76C551C3F7CC600325902 /* AVIMCommandCommon.h in Headers */,
-				9A2F1B1B1CF6F6FA00BE52F2 /* LCIMCodedOutputStream_PackagePrivate.h in Headers */,
 				D31126A7208F1C7A00812135 /* AVIMConversationMemberInfo.h in Headers */,
 				704F3BE81BE0D0810033245C /* AVIMTypedMessageObject.h in Headers */,
-				9AD27C581E1418DB002F9C7C /* LCIMStruct.pbobjc.h in Headers */,
+				D3D6E4A223544F590048E58F /* LCGPBProtocolBuffers.h in Headers */,
 				D31126A9208F1C7A00812135 /* AVIMConversationMemberInfo_Internal.h in Headers */,
-				9A2F1B3C1CF6F6FA00BE52F2 /* LCIMMessage.h in Headers */,
-				9AD27C441E1418DB002F9C7C /* LCIMApi.pbobjc.h in Headers */,
 				704F3BE91BE0D0810033245C /* AVIMGeneralObject.h in Headers */,
-				9AD27C541E1418DB002F9C7C /* LCIMSourceContext.pbobjc.h in Headers */,
-				9A2F1B151CF6F6FA00BE52F2 /* LCIMCodedOutputStream.h in Headers */,
 				D3D80082210AFC7F0058F86C /* AVIMCommon_Internal.h in Headers */,
+				D3D6E4DC23544F590048E58F /* LCGPBExtensionRegistry.h in Headers */,
 				704F3BEA1BE0D0810033245C /* AVIMMessageObject.h in Headers */,
 				704F3BEB1BE0D0810033245C /* LCIMMessageCache.h in Headers */,
+				D3D6E4EE23544F5A0048E58F /* LCGPBProtocolBuffers_RuntimeSupport.h in Headers */,
 				704F3BEC1BE0D0810033245C /* LCIMConversationCache.h in Headers */,
-				9AD27C401E1418DB002F9C7C /* LCIMAny.pbobjc.h in Headers */,
-				9A2F1B091CF6F6FA00BE52F2 /* LCIMBootstrap.h in Headers */,
 				704F3BED1BE0D0810033245C /* LCIMCacheStore.h in Headers */,
 				D328B8E920FEE2200039091A /* AVIMClientInternalConversationManager.h in Headers */,
+				D3D6E4C623544F590048E58F /* LCGPBWellKnownTypes.h in Headers */,
+				D3D6E4E023544F590048E58F /* LCGPBBootstrap.h in Headers */,
 				704F3BEE1BE0D0810033245C /* LCIMMessageCacheStore.h in Headers */,
-				9AD27C481E1418DB002F9C7C /* LCIMDuration.pbobjc.h in Headers */,
 				704F3BEF1BE0D0810033245C /* LCIMMessageCacheStoreSQL.h in Headers */,
+				D3D6E48423544F590048E58F /* LCGPBWrappers.pbobjc.h in Headers */,
+				D3D6E49423544F590048E58F /* LCGPBSourceContext.pbobjc.h in Headers */,
 				704F3BF01BE0D0810033245C /* LCIMConversationCacheStore.h in Headers */,
+				D3D6E4EA23544F5A0048E58F /* LCGPBFieldMask.pbobjc.h in Headers */,
 				9AE76C511C3F7CC600325902 /* AVIMGenericCommand+AVIMMessagesAdditions.h in Headers */,
 				704F3BF11BE0D0810033245C /* LCIMConversationCacheStoreSQL.h in Headers */,
-				9A2F1B361CF6F6FA00BE52F2 /* LCIMExtensionRegistry.h in Headers */,
-				9A2F1B241CF6F6FA00BE52F2 /* LCIMDescriptor_PackagePrivate.h in Headers */,
 				704F3BF21BE0D0820033245C /* LCIMConversationQueryCacheStore.h in Headers */,
+				D3D6E4BC23544F590048E58F /* LCGPBStruct.pbobjc.h in Headers */,
 				D33B830B210F1679001D1CCD /* AVIMClientPushManager.h in Headers */,
 				704F3BF71BE0D0820033245C /* AVIMTypedMessage_Internal.h in Headers */,
-				9A2F1B691CF6F6FA00BE52F2 /* LCIMUtilities.h in Headers */,
-				9A2F1B001CF6F6FA00BE52F2 /* LCIMArray.h in Headers */,
-				9A2F1B721CF6F6FA00BE52F2 /* LCIMWellKnownTypes.h in Headers */,
+				D3D6E48E23544F590048E58F /* LCGPBTimestamp.pbobjc.h in Headers */,
 				704F3BFB1BE0D0830033245C /* AVIMBlockHelper.h in Headers */,
+				D3D6E4B823544F590048E58F /* LCGPBArray_PackagePrivate.h in Headers */,
+				D3D6E49E23544F590048E58F /* LCGPBUnknownFieldSet_PackagePrivate.h in Headers */,
+				D3D6E4C423544F590048E58F /* LCGPBRootObject.h in Headers */,
 				704F3BFD1BE0D0830033245C /* AVIMErrorUtil.h in Headers */,
-				9A2F1B6F1CF6F6FA00BE52F2 /* LCIMUtilities_PackagePrivate.h in Headers */,
-				9A2F1B451CF6F6FA00BE52F2 /* LCIMProtocolBuffers.h in Headers */,
+				D3D6E4D023544F590048E58F /* LCGPBRuntimeTypes.h in Headers */,
+				D3D6E4CE23544F590048E58F /* LCGPBCodedOutputStream_PackagePrivate.h in Headers */,
+				D3D6E4A423544F590048E58F /* LCGPBRootObject_PackagePrivate.h in Headers */,
+				D3D6E4AE23544F590048E58F /* LCGPBUnknownField_PackagePrivate.h in Headers */,
+				D3D6E4BE23544F590048E58F /* LCGPBCodedInputStream.h in Headers */,
 				704F3C001BE0D0830033245C /* AVIMWebSocketWrapper.h in Headers */,
-				9AD27C5C1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2871,102 +2862,102 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A2F1B2E1CF6F6FA00BE52F2 /* LCIMExtensionInternals.h in Headers */,
 				831E295A1D882CBB006E502B /* AVIMMessageOption.h in Headers */,
+				D3D6E4DD23544F590048E58F /* LCGPBDictionary.h in Headers */,
 				83CFCB601B2A5D2700F97C92 /* AVIMKeyedConversation.h in Headers */,
+				D3D6E47B23544F590048E58F /* LCGPBEmpty.pbobjc.h in Headers */,
+				D3D6E4A723544F590048E58F /* LCGPBUnknownFieldSet.h in Headers */,
 				8CBDFDE21A808EA500D67FBE /* AVIMConversationQuery.h in Headers */,
 				8C9A92781A70AF1800CA4912 /* AVIMTextMessage.h in Headers */,
-				9A2F1B1C1CF6F6FA00BE52F2 /* LCIMDescriptor.h in Headers */,
 				83BE439A1D242905000C7AC3 /* AVIMWebSocket.h in Headers */,
+				D3D6E4C923544F590048E58F /* LCGPBUnknownField.h in Headers */,
 				830F15A01F010F260009B4D0 /* AVIMRecalledMessage.h in Headers */,
-				9A2F1B251CF6F6FA00BE52F2 /* LCIMDictionary.h in Headers */,
-				9A2F1B761CF6F6FA00BE52F2 /* LCIMWireFormat.h in Headers */,
 				8C9A92761A70AF1800CA4912 /* AVIMLocationMessage.h in Headers */,
+				D3D6E4D323544F590048E58F /* LCGPBExtensionInternals.h in Headers */,
 				8C9A92721A70AF1800CA4912 /* AVIMAudioMessage.h in Headers */,
-				9A2F1B131CF6F6FA00BE52F2 /* LCIMCodedOutputStream.h in Headers */,
-				9A2F1B641CF6F6FA00BE52F2 /* LCIMUnknownFieldSet_PackagePrivate.h in Headers */,
+				D3D6E4CB23544F590048E58F /* LCGPBMessage_PackagePrivate.h in Headers */,
 				8C9A927C1A70AF1800CA4912 /* AVIMVideoMessage.h in Headers */,
 				833E1F631B69F629002A691C /* AVIMFileMessage.h in Headers */,
-				9A2F1B491CF6F6FA00BE52F2 /* LCIMRootObject.h in Headers */,
 				D3939CC720FEE621001C9F5C /* AVIMClientInternalConversationManager_Internal.h in Headers */,
+				D3D6E47D23544F590048E58F /* LCGPBDictionary_PackagePrivate.h in Headers */,
+				D3D6E4D123544F590048E58F /* LCGPBUtilities.h in Headers */,
 				8C9A927A1A70AF1800CA4912 /* AVIMTypedMessage.h in Headers */,
-				9A2F1B701CF6F6FA00BE52F2 /* LCIMWellKnownTypes.h in Headers */,
-				9AD27C631E1418DB002F9C7C /* LCIMWrappers.pbobjc.h in Headers */,
+				D3D6E4E523544F590048E58F /* LCGPBType.pbobjc.h in Headers */,
+				D3D6E4E123544F590048E58F /* LCGPBCodedOutputStream.h in Headers */,
 				8C9A92741A70AF1800CA4912 /* AVIMImageMessage.h in Headers */,
+				D3D6E4D923544F590048E58F /* LCGPBDescriptor_PackagePrivate.h in Headers */,
 				839A35671D2A1DC000B3AF1D /* AVIMMessage_Internal.h in Headers */,
-				9A2F1B5E1CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.h in Headers */,
-				9A2F1B401CF6F6FA00BE52F2 /* LCIMMessage_PackagePrivate.h in Headers */,
-				9AD27C4B1E1418DB002F9C7C /* LCIMEmpty.pbobjc.h in Headers */,
 				9AD392461BFC411300D28074 /* AVIMGenericCommand+AVIMMessagesAdditions.h in Headers */,
-				9A2F1AFE1CF6F6FA00BE52F2 /* LCIMArray.h in Headers */,
-				9AD27C4F1E1418DB002F9C7C /* LCIMFieldMask.pbobjc.h in Headers */,
+				D3D6E48F23544F590048E58F /* LCGPBMessage.h in Headers */,
 				8C9A927F1A70AF5C00CA4912 /* AVIMTypedMessage_Internal.h in Headers */,
+				D3D6E49723544F590048E58F /* LCGPBDuration.pbobjc.h in Headers */,
 				83F745F11B91732D00437259 /* LCIMMessageCacheStore.h in Headers */,
 				8C841C0C1A5A84C600C5C6C4 /* AVIMClient.h in Headers */,
+				D3D6E4AB23544F590048E58F /* LCGPBArray.h in Headers */,
 				8C841C0E1A5A84C600C5C6C4 /* AVIMCommon.h in Headers */,
 				9ACE83DC1BD6420E00CE2103 /* AVIMCommandFormatter.h in Headers */,
 				834B4A9C1B94080500A7ADBC /* LCIMConversationQueryCacheStore.h in Headers */,
+				D3D6E47923544F590048E58F /* LCGPBApi.pbobjc.h in Headers */,
 				8C841C111A5A84C600C5C6C4 /* AVIMConversation.h in Headers */,
 				8C841C131A5A84C600C5C6C4 /* AVIMMessage.h in Headers */,
 				8C2FED541A67C2DA0056F945 /* AVIMGeneralObject.h in Headers */,
 				8C841C151A5A84C600C5C6C4 /* AVIMSignature.h in Headers */,
 				8C895DDD1A78A5D900992A8F /* AVMPMessagePack.h in Headers */,
 				D3C53FCC2106D84A00D48686 /* AVIMClientProtocol.h in Headers */,
+				D3D6E49523544F590048E58F /* LCGPBCodedInputStream_PackagePrivate.h in Headers */,
 				8C895DF01A78B0B700992A8F /* AVIMMessageObject.h in Headers */,
+				D3D6E49B23544F590048E58F /* LCGPBDescriptor.h in Headers */,
 				834B4A8E1B93ED3F00A7ADBC /* LCIMConversationCache.h in Headers */,
-				9A2F1B3A1CF6F6FA00BE52F2 /* LCIMMessage.h in Headers */,
-				9A2F1B671CF6F6FA00BE52F2 /* LCIMUtilities.h in Headers */,
-				9AD27C5F1E1418DB002F9C7C /* LCIMType.pbobjc.h in Headers */,
 				9AD651D51BD9470900C55F85 /* AVIMDynamicObject.h in Headers */,
 				838AF12A1AFE58F600B8965E /* LCIMMessageCache.h in Headers */,
 				9AD143781BD8C6CE0022652C /* AVIMCommandCommon.h in Headers */,
 				8C841C0B1A5A84C600C5C6C4 /* AVIMClient_Internal.h in Headers */,
 				83F745FD1B9177F100437259 /* LCIMConversationCacheStoreSQL.h in Headers */,
+				D3D6E4D523544F590048E58F /* LCGPBWireFormat.h in Headers */,
 				83F745F61B91735B00437259 /* LCIMCacheStore.h in Headers */,
-				9A2F1B5B1CF6F6FA00BE52F2 /* LCIMUnknownField_PackagePrivate.h in Headers */,
-				9A2F1B0A1CF6F6FA00BE52F2 /* LCIMCodedInputStream.h in Headers */,
-				9A2F1B431CF6F6FA00BE52F2 /* LCIMProtocolBuffers.h in Headers */,
+				D3D6E4BF23544F590048E58F /* LCGPBAny.pbobjc.h in Headers */,
 				8C841C461A5A84C600C5C6C4 /* AVIMWebSocketWrapper.h in Headers */,
-				9A2F1B4F1CF6F6FA00BE52F2 /* LCIMRootObject_PackagePrivate.h in Headers */,
+				D3D6E49F23544F590048E58F /* LCGPBUtilities_PackagePrivate.h in Headers */,
 				8C895DDC1A78A5D900992A8F /* AVMPDefines.h in Headers */,
 				8C841C3E1A5A84C600C5C6C4 /* AVIMBlockHelper.h in Headers */,
 				8C895DDB1A78A5D900992A8F /* avmp.h in Headers */,
+				D3D6E4A123544F590048E58F /* LCGPBProtocolBuffers.h in Headers */,
 				8CA1571F1A5E8556003C2532 /* AVIMTypedMessageObject.h in Headers */,
 				9AD392421BFC395200D28074 /* AVIMConversationOutCommand.h in Headers */,
 				D31126A6208F1C7A00812135 /* AVIMConversationMemberInfo.h in Headers */,
-				9AD27C571E1418DB002F9C7C /* LCIMStruct.pbobjc.h in Headers */,
-				9A2F1B221CF6F6FA00BE52F2 /* LCIMDescriptor_PackagePrivate.h in Headers */,
+				D3D6E4DB23544F590048E58F /* LCGPBExtensionRegistry.h in Headers */,
 				D31126A8208F1C7A00812135 /* AVIMConversationMemberInfo_Internal.h in Headers */,
-				9AD27C431E1418DB002F9C7C /* LCIMApi.pbobjc.h in Headers */,
 				9AE76C3E1C3F7C5F00325902 /* AVIMConversationQuery_Internal.h in Headers */,
-				9AD27C531E1418DB002F9C7C /* LCIMSourceContext.pbobjc.h in Headers */,
+				D3D6E4ED23544F5A0048E58F /* LCGPBProtocolBuffers_RuntimeSupport.h in Headers */,
 				D3D80081210AFC7F0058F86C /* AVIMCommon_Internal.h in Headers */,
-				9A2F1B2B1CF6F6FA00BE52F2 /* LCIMDictionary_PackagePrivate.h in Headers */,
-				9A2F1B341CF6F6FA00BE52F2 /* LCIMExtensionRegistry.h in Headers */,
 				8C841C101A5A84C600C5C6C4 /* AVIMConversation_Internal.h in Headers */,
 				83F745F31B91732D00437259 /* LCIMMessageCacheStoreSQL.h in Headers */,
-				9AD27C3F1E1418DB002F9C7C /* LCIMAny.pbobjc.h in Headers */,
-				9A2F1B521CF6F6FA00BE52F2 /* LCIMRuntimeTypes.h in Headers */,
+				D3D6E4C523544F590048E58F /* LCGPBWellKnownTypes.h in Headers */,
+				D3D6E4DF23544F590048E58F /* LCGPBBootstrap.h in Headers */,
 				D328B8E820FEE2200039091A /* AVIMClientInternalConversationManager.h in Headers */,
-				9AD27C471E1418DB002F9C7C /* LCIMDuration.pbobjc.h in Headers */,
 				9A7C67D71C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.h in Headers */,
-				9A2F1B191CF6F6FA00BE52F2 /* LCIMCodedOutputStream_PackagePrivate.h in Headers */,
-				9A2F1B6D1CF6F6FA00BE52F2 /* LCIMUtilities_PackagePrivate.h in Headers */,
+				D3D6E48323544F590048E58F /* LCGPBWrappers.pbobjc.h in Headers */,
+				D3D6E49323544F590048E58F /* LCGPBSourceContext.pbobjc.h in Headers */,
 				8C630C811A6EB259008F1B00 /* AVIMErrorUtil.h in Headers */,
-				9A2F1B101CF6F6FA00BE52F2 /* LCIMCodedInputStream_PackagePrivate.h in Headers */,
+				D3D6E4E923544F590048E58F /* LCGPBFieldMask.pbobjc.h in Headers */,
 				9AD3924A1BFD7BE600D28074 /* MessagesProtoOrig.pbobjc.h in Headers */,
 				D33B830A210F1679001D1CCD /* AVIMClientPushManager.h in Headers */,
-				9A2F1B041CF6F6FA00BE52F2 /* LCIMArray_PackagePrivate.h in Headers */,
 				8C8419C81A5A796000C5C6C4 /* AVOSCloudIM.h in Headers */,
-				9A2F1B071CF6F6FA00BE52F2 /* LCIMBootstrap.h in Headers */,
-				9A2F1B461CF6F6FA00BE52F2 /* LCIMProtocolBuffers_RuntimeSupport.h in Headers */,
+				D3D6E4BB23544F590048E58F /* LCGPBStruct.pbobjc.h in Headers */,
 				83F745FA1B9177DE00437259 /* LCIMConversationCacheStore.h in Headers */,
-				9A2F1B551CF6F6FA00BE52F2 /* LCIMUnknownField.h in Headers */,
 				834775DC1B2A693400B5AF2E /* AVIMKeyedConversation_internal.h in Headers */,
+				D3D6E48D23544F590048E58F /* LCGPBTimestamp.pbobjc.h in Headers */,
 				8C895DE41A78A5D900992A8F /* AVMPMessagePackWriter.h in Headers */,
+				D3D6E4B723544F590048E58F /* LCGPBArray_PackagePrivate.h in Headers */,
+				D3D6E49D23544F590048E58F /* LCGPBUnknownFieldSet_PackagePrivate.h in Headers */,
+				D3D6E4C323544F590048E58F /* LCGPBRootObject.h in Headers */,
 				8C895DE61A78A5D900992A8F /* AVMPOrderedDictionary.h in Headers */,
+				D3D6E4CF23544F590048E58F /* LCGPBRuntimeTypes.h in Headers */,
+				D3D6E4CD23544F590048E58F /* LCGPBCodedOutputStream_PackagePrivate.h in Headers */,
+				D3D6E4A323544F590048E58F /* LCGPBRootObject_PackagePrivate.h in Headers */,
+				D3D6E4AD23544F590048E58F /* LCGPBUnknownField_PackagePrivate.h in Headers */,
+				D3D6E4BD23544F590048E58F /* LCGPBCodedInputStream.h in Headers */,
 				8C895DE01A78A5D900992A8F /* AVMPMessagePackReader.h in Headers */,
-				9AD27C5B1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3379,69 +3370,69 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A2F1B631CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.m in Sources */,
+				D3D6E48223544F590048E58F /* LCGPBTimestamp.pbobjc.m in Sources */,
 				704F3C061BE0D5650033245C /* avmp.c in Sources */,
 				704F3B851BE0D05C0033245C /* AVIMClient.m in Sources */,
 				704F3B861BE0D05C0033245C /* AVIMCommon.m in Sources */,
 				D328B8EB20FEE2200039091A /* AVIMClientInternalConversationManager.m in Sources */,
 				9A7C67DC1C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.m in Sources */,
+				D3D6E4C823544F590048E58F /* LCGPBWrappers.pbobjc.m in Sources */,
 				704F3B871BE0D05C0033245C /* AVIMConversation.m in Sources */,
+				D3D6E4B023544F590048E58F /* LCGPBEmpty.pbobjc.m in Sources */,
 				704F3B881BE0D05C0033245C /* AVIMKeyedConversation.m in Sources */,
 				704F3B891BE0D05C0033245C /* AVIMConversationQuery.m in Sources */,
-				9A2F1B6C1CF6F6FA00BE52F2 /* LCIMUtilities.m in Sources */,
+				D3D6E48623544F590048E58F /* LCGPBType.pbobjc.m in Sources */,
 				D31126A5208F1C7A00812135 /* AVIMConversationMemberInfo.m in Sources */,
-				9AD27C421E1418DB002F9C7C /* LCIMAny.pbobjc.m in Sources */,
+				D3D6E4E423544F590048E58F /* LCGPBExtensionInternals.m in Sources */,
+				D3D6E47823544F590048E58F /* LCGPBExtensionRegistry.m in Sources */,
 				704F3B8B1BE0D05C0033245C /* AVIMMessage.m in Sources */,
 				704F3B8C1BE0D05C0033245C /* AVIMSignature.m in Sources */,
 				704F3B8D1BE0D05C0033245C /* AVMPMessagePackReader.m in Sources */,
-				9AD27C5A1E1418DB002F9C7C /* LCIMStruct.pbobjc.m in Sources */,
 				704F3B8E1BE0D05C0033245C /* AVMPMessagePackWriter.m in Sources */,
 				704F3B8F1BE0D05C0033245C /* AVMPOrderedDictionary.m in Sources */,
-				9A2F1B751CF6F6FA00BE52F2 /* LCIMWellKnownTypes.m in Sources */,
-				9AD27C4A1E1418DB002F9C7C /* LCIMDuration.pbobjc.m in Sources */,
-				9A2F1B4E1CF6F6FA00BE52F2 /* LCIMRootObject.m in Sources */,
+				D3D6E4E823544F590048E58F /* LCGPBWireFormat.m in Sources */,
 				9AE76C571C3F7CC600325902 /* AVIMDynamicObject.m in Sources */,
 				831E295D1D882CBB006E502B /* AVIMMessageOption.m in Sources */,
-				9AD27C461E1418DB002F9C7C /* LCIMApi.pbobjc.m in Sources */,
 				9AE76C501C3F7CC600325902 /* AVIMConversationOutCommand.m in Sources */,
-				9AD27C561E1418DB002F9C7C /* LCIMSourceContext.pbobjc.m in Sources */,
-				9A2F1B3F1CF6F6FA00BE52F2 /* LCIMMessage.m in Sources */,
 				704F3BA61BE0D05C0033245C /* AVIMTypedMessageObject.m in Sources */,
-				9A2F1B0F1CF6F6FA00BE52F2 /* LCIMCodedInputStream.m in Sources */,
 				704F3BA71BE0D05C0033245C /* AVIMGeneralObject.m in Sources */,
-				9A2F1B031CF6F6FA00BE52F2 /* LCIMArray.m in Sources */,
+				D3D6E4F023544F5A0048E58F /* LCGPBMessage.m in Sources */,
 				9AE76C4E1C3F7CC600325902 /* MessagesProtoOrig.pbobjc.m in Sources */,
 				704F3BA81BE0D05C0033245C /* AVIMMessageObject.m in Sources */,
+				D3D6E4EC23544F5A0048E58F /* LCGPBUtilities.m in Sources */,
 				704F3BA91BE0D05C0033245C /* LCIMMessageCache.m in Sources */,
-				9A2F1B2A1CF6F6FA00BE52F2 /* LCIMDictionary.m in Sources */,
+				D3D6E4AA23544F590048E58F /* LCGPBCodedInputStream.m in Sources */,
 				704F3BAA1BE0D05C0033245C /* LCIMConversationCache.m in Sources */,
 				830F15A31F010F260009B4D0 /* AVIMRecalledMessage.m in Sources */,
-				9AD27C521E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m in Sources */,
 				9AE76C521C3F7CC600325902 /* AVIMGenericCommand+AVIMMessagesAdditions.m in Sources */,
+				D3D6E4C223544F590048E58F /* LCGPBDictionary.m in Sources */,
 				83AB6DFA1C3CFEA70064BE17 /* AVOSCloudIM.m in Sources */,
-				9A2F1B5A1CF6F6FA00BE52F2 /* LCIMUnknownField.m in Sources */,
 				704F3BAB1BE0D05C0033245C /* LCIMCacheStore.m in Sources */,
+				D3D6E49A23544F590048E58F /* LCGPBUnknownField.m in Sources */,
+				D3D6E48C23544F590048E58F /* LCGPBWellKnownTypes.m in Sources */,
+				D3D6E4A623544F590048E58F /* LCGPBDescriptor.m in Sources */,
 				704F3BAC1BE0D05C0033245C /* LCIMMessageCacheStore.m in Sources */,
-				9A2F1B211CF6F6FA00BE52F2 /* LCIMDescriptor.m in Sources */,
-				9AD27C621E1418DB002F9C7C /* LCIMType.pbobjc.m in Sources */,
 				704F3BAD1BE0D05C0033245C /* LCIMConversationCacheStore.m in Sources */,
 				704F3BAE1BE0D05C0033245C /* LCIMConversationQueryCacheStore.m in Sources */,
-				9AD27C661E1418DB002F9C7C /* LCIMWrappers.pbobjc.m in Sources */,
-				9A2F1B331CF6F6FA00BE52F2 /* LCIMExtensionInternals.m in Sources */,
 				D33B830D210F1679001D1CCD /* AVIMClientPushManager.m in Sources */,
-				9A2F1B391CF6F6FA00BE52F2 /* LCIMExtensionRegistry.m in Sources */,
 				83BE439F1D242905000C7AC3 /* AVIMWebSocket.m in Sources */,
 				704F3BAF1BE0D05C0033245C /* AVIMAudioMessage.m in Sources */,
-				9AD27C5E1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.m in Sources */,
-				9AD27C4E1E1418DB002F9C7C /* LCIMEmpty.pbobjc.m in Sources */,
+				D3D6E4B623544F590048E58F /* LCGPBDuration.pbobjc.m in Sources */,
 				704F3BB01BE0D05C0033245C /* AVIMImageMessage.m in Sources */,
-				9A2F1B7B1CF6F6FA00BE52F2 /* LCIMWireFormat.m in Sources */,
+				D3D6E4B223544F590048E58F /* LCGPBStruct.pbobjc.m in Sources */,
+				D3D6E48023544F590048E58F /* LCGPBApi.pbobjc.m in Sources */,
+				D3D6E49223544F590048E58F /* LCGPBUnknownFieldSet.m in Sources */,
+				D3D6E4D823544F590048E58F /* LCGPBArray.m in Sources */,
 				704F3BB11BE0D05C0033245C /* AVIMLocationMessage.m in Sources */,
 				704F3BB21BE0D05C0033245C /* AVIMTextMessage.m in Sources */,
+				D3D6E48823544F590048E58F /* LCGPBFieldMask.pbobjc.m in Sources */,
 				704F3BB31BE0D05C0033245C /* AVIMTypedMessage.m in Sources */,
 				704F3BB41BE0D05C0033245C /* AVIMVideoMessage.m in Sources */,
-				9A2F1B181CF6F6FA00BE52F2 /* LCIMCodedOutputStream.m in Sources */,
+				D3D6E4B423544F590048E58F /* LCGPBRootObject.m in Sources */,
+				D3D6E4F223544F5A0048E58F /* LCGPBSourceContext.pbobjc.m in Sources */,
 				704F3BB51BE0D05C0033245C /* AVIMFileMessage.m in Sources */,
+				D3D6E48A23544F590048E58F /* LCGPBCodedOutputStream.m in Sources */,
+				D3D6E4BA23544F590048E58F /* LCGPBAny.pbobjc.m in Sources */,
 				704F3BB61BE0D05C0033245C /* AVIMBlockHelper.m in Sources */,
 				704F3BB81BE0D05C0033245C /* AVIMErrorUtil.m in Sources */,
 				704F3BBB1BE0D05C0033245C /* AVIMWebSocketWrapper.m in Sources */,
@@ -3767,69 +3758,69 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A2F1B611CF6F6FA00BE52F2 /* LCIMUnknownFieldSet.m in Sources */,
+				D3D6E48123544F590048E58F /* LCGPBTimestamp.pbobjc.m in Sources */,
 				83F745F21B91732D00437259 /* LCIMMessageCacheStore.m in Sources */,
 				D328B8EA20FEE2200039091A /* AVIMClientInternalConversationManager.m in Sources */,
 				8C2FED551A67C2DA0056F945 /* AVIMGeneralObject.m in Sources */,
 				8C9A92731A70AF1800CA4912 /* AVIMAudioMessage.m in Sources */,
 				9AD651D61BD9470900C55F85 /* AVIMDynamicObject.m in Sources */,
+				D3D6E4C723544F590048E58F /* LCGPBWrappers.pbobjc.m in Sources */,
 				8CA157201A5E8556003C2532 /* AVIMTypedMessageObject.m in Sources */,
+				D3D6E4AF23544F590048E58F /* LCGPBEmpty.pbobjc.m in Sources */,
 				83F745FB1B9177DE00437259 /* LCIMConversationCacheStore.m in Sources */,
 				D31126A4208F1C7A00812135 /* AVIMConversationMemberInfo.m in Sources */,
-				9A2F1B6A1CF6F6FA00BE52F2 /* LCIMUtilities.m in Sources */,
-				9AD27C411E1418DB002F9C7C /* LCIMAny.pbobjc.m in Sources */,
+				D3D6E48523544F590048E58F /* LCGPBType.pbobjc.m in Sources */,
 				9A7C67DA1C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.m in Sources */,
+				D3D6E4E323544F590048E58F /* LCGPBExtensionInternals.m in Sources */,
+				D3D6E47723544F590048E58F /* LCGPBExtensionRegistry.m in Sources */,
 				834B4A9D1B94080500A7ADBC /* LCIMConversationQueryCacheStore.m in Sources */,
-				9AD27C591E1418DB002F9C7C /* LCIMStruct.pbobjc.m in Sources */,
 				9AD392431BFC395200D28074 /* AVIMConversationOutCommand.m in Sources */,
 				8C841C0D1A5A84C600C5C6C4 /* AVIMClient.m in Sources */,
-				9A2F1B731CF6F6FA00BE52F2 /* LCIMWellKnownTypes.m in Sources */,
-				9AD27C491E1418DB002F9C7C /* LCIMDuration.pbobjc.m in Sources */,
-				9A2F1B4C1CF6F6FA00BE52F2 /* LCIMRootObject.m in Sources */,
 				8C895DE71A78A5D900992A8F /* AVMPOrderedDictionary.m in Sources */,
 				8C841C3F1A5A84C600C5C6C4 /* AVIMBlockHelper.m in Sources */,
+				D3D6E4E723544F590048E58F /* LCGPBWireFormat.m in Sources */,
 				831E295C1D882CBB006E502B /* AVIMMessageOption.m in Sources */,
-				9AD27C451E1418DB002F9C7C /* LCIMApi.pbobjc.m in Sources */,
 				8C9A927D1A70AF1800CA4912 /* AVIMVideoMessage.m in Sources */,
-				9AD27C551E1418DB002F9C7C /* LCIMSourceContext.pbobjc.m in Sources */,
-				9A2F1B3D1CF6F6FA00BE52F2 /* LCIMMessage.m in Sources */,
 				8C841C161A5A84C600C5C6C4 /* AVIMSignature.m in Sources */,
-				9A2F1B0D1CF6F6FA00BE52F2 /* LCIMCodedInputStream.m in Sources */,
 				9AD392471BFC411300D28074 /* AVIMGenericCommand+AVIMMessagesAdditions.m in Sources */,
-				9A2F1B011CF6F6FA00BE52F2 /* LCIMArray.m in Sources */,
 				8C895DF11A78B0B700992A8F /* AVIMMessageObject.m in Sources */,
+				D3D6E4EF23544F5A0048E58F /* LCGPBMessage.m in Sources */,
 				8C9A927B1A70AF1800CA4912 /* AVIMTypedMessage.m in Sources */,
-				9A2F1B281CF6F6FA00BE52F2 /* LCIMDictionary.m in Sources */,
 				9ACE83DD1BD6420E00CE2103 /* AVIMCommandFormatter.m in Sources */,
+				D3D6E4EB23544F5A0048E58F /* LCGPBUtilities.m in Sources */,
 				830F15A21F010F260009B4D0 /* AVIMRecalledMessage.m in Sources */,
-				9AD27C511E1418DB002F9C7C /* LCIMFieldMask.pbobjc.m in Sources */,
+				D3D6E4A923544F590048E58F /* LCGPBCodedInputStream.m in Sources */,
 				834B4A8F1B93ED3F00A7ADBC /* LCIMConversationCache.m in Sources */,
 				8CBDFDE31A808EA500D67FBE /* AVIMConversationQuery.m in Sources */,
-				9A2F1B581CF6F6FA00BE52F2 /* LCIMUnknownField.m in Sources */,
 				8C841C0F1A5A84C600C5C6C4 /* AVIMCommon.m in Sources */,
+				D3D6E4C123544F590048E58F /* LCGPBDictionary.m in Sources */,
 				838AF12B1AFE58F600B8965E /* LCIMMessageCache.m in Sources */,
-				9A2F1B1F1CF6F6FA00BE52F2 /* LCIMDescriptor.m in Sources */,
-				9AD27C611E1418DB002F9C7C /* LCIMType.pbobjc.m in Sources */,
 				8C841C141A5A84C600C5C6C4 /* AVIMMessage.m in Sources */,
+				D3D6E49923544F590048E58F /* LCGPBUnknownField.m in Sources */,
+				D3D6E48B23544F590048E58F /* LCGPBWellKnownTypes.m in Sources */,
+				D3D6E4A523544F590048E58F /* LCGPBDescriptor.m in Sources */,
 				8C841C121A5A84C600C5C6C4 /* AVIMConversation.m in Sources */,
-				9AD27C651E1418DB002F9C7C /* LCIMWrappers.pbobjc.m in Sources */,
-				9A2F1B311CF6F6FA00BE52F2 /* LCIMExtensionInternals.m in Sources */,
-				9A2F1B371CF6F6FA00BE52F2 /* LCIMExtensionRegistry.m in Sources */,
 				D33B830C210F1679001D1CCD /* AVIMClientPushManager.m in Sources */,
 				83BE439D1D242905000C7AC3 /* AVIMWebSocket.m in Sources */,
 				83AB6DF81C3CFEA70064BE17 /* AVOSCloudIM.m in Sources */,
-				9AD27C5D1E1418DB002F9C7C /* LCIMTimestamp.pbobjc.m in Sources */,
-				9AD27C4D1E1418DB002F9C7C /* LCIMEmpty.pbobjc.m in Sources */,
-				9A2F1B791CF6F6FA00BE52F2 /* LCIMWireFormat.m in Sources */,
 				8C9A92791A70AF1800CA4912 /* AVIMTextMessage.m in Sources */,
 				83F745F71B91735B00437259 /* LCIMCacheStore.m in Sources */,
+				D3D6E4B523544F590048E58F /* LCGPBDuration.pbobjc.m in Sources */,
 				8C841C471A5A84C600C5C6C4 /* AVIMWebSocketWrapper.m in Sources */,
+				D3D6E4B123544F590048E58F /* LCGPBStruct.pbobjc.m in Sources */,
+				D3D6E47F23544F590048E58F /* LCGPBApi.pbobjc.m in Sources */,
+				D3D6E49123544F590048E58F /* LCGPBUnknownFieldSet.m in Sources */,
+				D3D6E4D723544F590048E58F /* LCGPBArray.m in Sources */,
 				833E1F641B69F629002A691C /* AVIMFileMessage.m in Sources */,
-				9A2F1B161CF6F6FA00BE52F2 /* LCIMCodedOutputStream.m in Sources */,
 				8C9A92751A70AF1800CA4912 /* AVIMImageMessage.m in Sources */,
+				D3D6E48723544F590048E58F /* LCGPBFieldMask.pbobjc.m in Sources */,
 				9AD3924B1BFD7BE600D28074 /* MessagesProtoOrig.pbobjc.m in Sources */,
 				8C9A92771A70AF1800CA4912 /* AVIMLocationMessage.m in Sources */,
+				D3D6E4B323544F590048E58F /* LCGPBRootObject.m in Sources */,
+				D3D6E4F123544F5A0048E58F /* LCGPBSourceContext.pbobjc.m in Sources */,
 				8C895DDA1A78A5D900992A8F /* avmp.c in Sources */,
+				D3D6E48923544F590048E58F /* LCGPBCodedOutputStream.m in Sources */,
+				D3D6E4B923544F590048E58F /* LCGPBAny.pbobjc.m in Sources */,
 				8C630C821A6EB259008F1B00 /* AVIMErrorUtil.m in Sources */,
 				8C895DE11A78A5D900992A8F /* AVMPMessagePackReader.m in Sources */,
 				8C895DE51A78A5D900992A8F /* AVMPMessagePackWriter.m in Sources */,
