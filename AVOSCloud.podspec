@@ -68,4 +68,7 @@ Pod::Spec.new do |s|
 
   s.resources =
     'AVOS/AVOSCloud/AVOSCloud_Art.inc'
+    
+  s.library =
+    'sqlite3'
 end
