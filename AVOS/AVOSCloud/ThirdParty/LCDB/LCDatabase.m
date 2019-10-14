@@ -354,7 +354,7 @@ static int FMDBDatabaseBusyHandler(void *f, int count) {
 }
 
 - (BOOL)rekeyWithData:(NSData *)keyData {
-#ifdef SQLITE_HAS_CODEC
+#ifdef LC_SQLITE_HAS_CODEC
     if (!keyData) {
         return NO;
     }
@@ -379,7 +379,7 @@ static int FMDBDatabaseBusyHandler(void *f, int count) {
 }
 
 - (BOOL)setKeyWithData:(NSData *)keyData {
-#ifdef SQLITE_HAS_CODEC
+#ifdef LC_SQLITE_HAS_CODEC
     if (!keyData) {
         return NO;
     }
