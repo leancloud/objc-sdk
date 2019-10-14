@@ -9,14 +9,10 @@ Pod::Spec.new do |s|
     :file => 'LICENSE'
   }
 
-  s.platform = :ios, :osx, :tvos, :watchos
-
   s.ios.deployment_target     = '8.0'
   s.osx.deployment_target     = '10.9'
   s.tvos.deployment_target    = '9.0'
   s.watchos.deployment_target = '2.0'
-
-  s.requires_arc = true
 
   s.source = {
     :git => "https://github.com/leancloud/objc-sdk.git",
@@ -56,9 +52,6 @@ Pod::Spec.new do |s|
     'AVOS/AVOSCloud/Utils/AVLogger.h',
     'AVOS/AVOSCloud/Router/LCRouter.h',
     'AVOS/AVOSCloud/AVAvailability.h'
-
-  s.osx.exclude_files =
-        []
 
   s.watchos.exclude_files =
     'AVOS/AVOSCloud/Analytics/AVAnalytics.h',

@@ -9,8 +9,6 @@ Pod::Spec.new do |s|
     :file => 'LICENSE'
   }
 
-  s.platform = :ios, :osx
-
   s.ios.deployment_target = '8.0'
   s.osx.deployment_target = '10.9'
 
