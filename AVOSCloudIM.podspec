@@ -228,13 +228,6 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/Protobuf/*.h',
       'AVOS/AVOSCloudIM/Protobuf/google/protobuf/*.h',
       'AVOS/AVOSCloudIM/Commands/MessagesProtoOrig.pbobjc.h'
-
-    ss.preserve_paths =
-      'AVOS/AVOSCloudIM/Protobuf/google'
-
-    ss.pod_target_xcconfig = {
-      'HEADER_SEARCH_PATHS' => '"$(PODS_ROOT)/AVOSCloudIM/AVOS/AVOSCloudIM/Protobuf"'
-    }
   end
 
   s.dependency 'AVOSCloud', "#{s.version}"
