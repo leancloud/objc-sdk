@@ -8,7 +8,7 @@
 #endif
 
 #if LCGPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <Protobuf/LCGPBProtocolBuffers.h>
+ #import <protobuf/LCGPBProtocolBuffers.h>
 #else
  #import "LCGPBProtocolBuffers.h"
 #endif
