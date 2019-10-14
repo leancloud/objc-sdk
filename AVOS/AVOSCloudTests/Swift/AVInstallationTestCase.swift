@@ -94,7 +94,7 @@ class AVInstallation_TestCase: LCTestBase {
         installation.setDeviceTokenHexString(
             UUID().uuidString,
             teamId: teamId)
-        installation.deviceProfile = UUID().uuidString.replacingOccurrences(of: "-", with: "")
+        installation.deviceProfile = "test"
         XCTAssertTrue(installation.save())
         XCTAssertNotNil(installation.deviceProfile)
     }

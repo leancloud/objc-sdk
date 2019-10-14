@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AVOSCloud'
-  s.version  = '12.0.0'
+  s.version  = '12.0.1-beta.1'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud Objective-C SDK'
   s.authors  = 'LeanCloud'
@@ -9,14 +9,10 @@ Pod::Spec.new do |s|
     :file => 'LICENSE'
   }
 
-  s.platform = :ios, :osx, :tvos, :watchos
-
   s.ios.deployment_target     = '8.0'
   s.osx.deployment_target     = '10.9'
   s.tvos.deployment_target    = '9.0'
   s.watchos.deployment_target = '2.0'
-
-  s.requires_arc = true
 
   s.source = {
     :git => "https://github.com/leancloud/objc-sdk.git",
@@ -57,9 +53,6 @@ Pod::Spec.new do |s|
     'AVOS/AVOSCloud/Router/LCRouter.h',
     'AVOS/AVOSCloud/AVAvailability.h'
 
-  s.osx.exclude_files =
-        []
-
   s.watchos.exclude_files =
     'AVOS/AVOSCloud/Analytics/AVAnalytics.h',
     'AVOS/AVOSCloud/Analytics/AVAnalyticsImpl.h',
@@ -75,40 +68,7 @@ Pod::Spec.new do |s|
 
   s.resources =
     'AVOS/AVOSCloud/AVOSCloud_Art.inc'
-
-  s.xcconfig = {'OTHER_LDFLAGS' => '-ObjC'}
-
-  s.ios.frameworks =
-    'CFNetwork',
-    'CoreGraphics',
-    'CoreLocation',
-    'CoreTelephony',
-    'MobileCoreServices',
-    'QuartzCore',
-    'Security',
-    'SystemConfiguration'
-
-  s.osx.frameworks =
-    'CoreLocation',
-    'CoreServices',
-    'SystemConfiguration'
-
-  s.tvos.frameworks =
-    'CFNetwork',
-    'CoreGraphics',
-    'CoreLocation',
-    'MobileCoreServices',
-    'QuartzCore',
-    'Security'
-
-  s.watchos.frameworks =
-    'CoreGraphics',
-    'CoreLocation',
-    'MobileCoreServices',
-    'Security'
-
-  s.libraries =
-    'icucore',
-    'sqlite3',
-    'z'
+    
+  s.library =
+    'sqlite3'
 end
