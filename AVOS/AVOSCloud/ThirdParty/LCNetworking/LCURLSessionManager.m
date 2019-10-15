@@ -159,11 +159,13 @@ typedef void (^AFURLSessionTaskCompletionHandler)(NSURLResponse *response, id re
         __typeof__(weakTask) strongTask = weakTask;
         [strongTask suspend];
     }];
-    if ([self.uploadProgress respondsToSelector:@selector(setResumingHandler:)]) {
-        [self.uploadProgress setResumingHandler:^{
-            __typeof__(weakTask) strongTask = weakTask;
-            [strongTask resume];
-        }];
+    if (@available(iOS 9.0, macOS 10.11, *)) {
+        if ([self.uploadProgress respondsToSelector:@selector(setResumingHandler:)]) {
+            [self.uploadProgress setResumingHandler:^{
+                __typeof__(weakTask) strongTask = weakTask;
+                [strongTask resume];
+            }];
+        }
     }
 
     [self.downloadProgress setCancellable:YES];
@@ -176,12 +178,13 @@ typedef void (^AFURLSessionTaskCompletionHandler)(NSURLResponse *response, id re
         __typeof__(weakTask) strongTask = weakTask;
         [strongTask suspend];
     }];
-
-    if ([self.downloadProgress respondsToSelector:@selector(setResumingHandler:)]) {
-        [self.downloadProgress setResumingHandler:^{
-            __typeof__(weakTask) strongTask = weakTask;
-            [strongTask resume];
-        }];
+    if (@available(iOS 9.0, macOS 10.11, *)) {
+        if ([self.downloadProgress respondsToSelector:@selector(setResumingHandler:)]) {
+            [self.downloadProgress setResumingHandler:^{
+                __typeof__(weakTask) strongTask = weakTask;
+                [strongTask resume];
+            }];
+        }
     }
 
     [task addObserver:self
@@ -1159,6 +1162,8 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
     }
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
 - (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session {
     if (self.didFinishEventsForBackgroundURLSession) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -1166,6 +1171,7 @@ didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
         });
     }
 }
+#pragma clang diagnostic pop
 
 #pragma mark - NSURLSessionDownloadDelegate
 

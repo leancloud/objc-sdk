@@ -140,10 +140,6 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     return object;
 }
 
-+ (instancetype)objectWithoutDataWithObjectId:(NSString *)objectId {
-    return [self objectWithObjectId:objectId];
-}
-
 + (instancetype)objectWithClassName:(NSString *)className
 {
     AVObject *object = [[self alloc] initWithClassName:className];
@@ -154,10 +150,6 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     AVObject *object = [self objectWithClassName:className];
     object.objectId = objectId;
     return object;
-}
-
-+ (instancetype)objectWithoutDataWithClassName:(NSString *)className objectId:(NSString *)objectId {
-    return [self objectWithClassName:className objectId:objectId];
 }
 
 + (instancetype)objectWithClassName:(NSString *)className dictionary:(NSDictionary *)dictionary
@@ -429,10 +421,6 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 -(NSString *)internalClassName
 {
     return self.className;
-}
-
-- (AVRelation *)relationforKey:(NSString *)key {
-    return [self relationForKey:key];
 }
 
 - (AVRelation *)relationForKey:(NSString *)key {
@@ -2023,6 +2011,23 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     [self._estimatedData removeAllObjects];
     [self._requestManager clear];
 }
+
+// MARK: Deprecated
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
++ (instancetype)objectWithoutDataWithObjectId:(NSString *)objectId {
+    return [self objectWithObjectId:objectId];
+}
+
++ (instancetype)objectWithoutDataWithClassName:(NSString *)className objectId:(NSString *)objectId {
+    return [self objectWithClassName:className objectId:objectId];
+}
+
+- (AVRelation *)relationforKey:(NSString *)key {
+    return [self relationForKey:key];
+}
+#pragma clang diagnostic pop
 
 @end
 

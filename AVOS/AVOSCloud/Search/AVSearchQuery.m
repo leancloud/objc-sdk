@@ -131,7 +131,7 @@
             self.sid = [object objectForKey:@"sid"];
 
             id hits = [object objectForKey:@"hits"];
-            _hits = [hits respondsToSelector:@selector(integerValue)] ? [hits integerValue] : 0;
+            self->_hits = [hits respondsToSelector:@selector(integerValue)] ? [hits integerValue] : 0;
         }
         else
         {

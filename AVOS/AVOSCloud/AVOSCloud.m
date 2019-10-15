@@ -281,15 +281,14 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
 
 // MARK: - Deprecated
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
 + (void)startNetworkStatistics {
     [[LCNetworkStatistics sharedInstance] start];
 }
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 + (void)setStorageType:(AVStorageType)storageType {}
 + (void)setServiceRegion:(AVServiceRegion)serviceRegion {}
-#pragma clang diagnostic pop
 
 +(void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
                             callback:(AVBooleanResultBlock)callback {
@@ -350,5 +349,6 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
         [AVUtils callBooleanResultBlock:callback error:error];
     }];
 }
+#pragma clang diagnostic pop
 
 @end
