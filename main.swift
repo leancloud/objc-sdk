@@ -216,7 +216,7 @@ class HubTask: Task {
             "pull-request",
             "-b", "leancloud:master",
             "-m", message,
-            "-p", "-o"])
+            "-f", "-p", "-o"])
             .excute() else {
                 throw TaskError()
         }
