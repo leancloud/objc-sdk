@@ -2072,7 +2072,10 @@ static BOOL clientHasInstantiated = false;
     AVIMClient.sessionProtocolOptions[kAVIMUserOptionUseUnread] = @(enabled);
 }
 
-/// deprecated
+// MARK: Deprecated
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
 + (void)setUserOptions:(NSDictionary *)userOptions
 {
     if (clientHasInstantiated) {
@@ -2085,5 +2088,6 @@ static BOOL clientHasInstantiated = false;
     }
     [AVIMClient.sessionProtocolOptions addEntriesFromDictionary:userOptions];
 }
+#pragma clang diagnostic pop
 
 @end

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1100"
+   LastUpgradeVersion = "1110"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "838CE3361EC980DE00B24F5B"
+               BlueprintIdentifier = "D305F7E02355A02A00222EBC"
                BuildableName = "AVOSCloudLiveQuery.framework"
                BlueprintName = "AVOSCloudLiveQuery-macOS"
                ReferencedContainer = "container:AVOS.xcodeproj">
@@ -40,15 +40,6 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "838CE3361EC980DE00B24F5B"
-            BuildableName = "AVOSCloudLiveQuery.framework"
-            BlueprintName = "AVOSCloudLiveQuery-macOS"
-            ReferencedContainer = "container:AVOS.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -59,7 +50,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "838CE3361EC980DE00B24F5B"
+            BlueprintIdentifier = "D305F7E02355A02A00222EBC"
             BuildableName = "AVOSCloudLiveQuery.framework"
             BlueprintName = "AVOSCloudLiveQuery-macOS"
             ReferencedContainer = "container:AVOS.xcodeproj">
