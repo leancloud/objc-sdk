@@ -62,7 +62,7 @@
 // Router
 #import "LCRouter.h"
 
-#if TARGET_OS_IOS && !TARGET_OS_WATCH
+#if !TARGET_OS_WATCH
 // Analytics
 #import "AVAnalytics.h"
 #endif
