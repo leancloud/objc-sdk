@@ -236,16 +236,28 @@ class PodTask: Task {
         }
     }
     
-    static func trunkPush(path: String) throws {
-        _ = PodTask(arguments: ["repo", "update"]).excute()
+    static func trunkPush(
+        path: String,
+        repoUpdate: Bool,
+        wait: Bool)
+        throws
+    {
+        if repoUpdate {
+            _ = PodTask(arguments: ["repo", "update"]).excute()
+        }
         if PodTask(arguments: ["trunk", "push", path, "--allow-warnings"]).excute() {
-            print("wait for 5 minutes ...")
-            sleep(60 * 5)
+            if wait {
+                print("wait for 10 minutes ...")
+                sleep(60 * 10)
+            }
         } else {
             print("[?] try pod trunk push \(path) again? [yes/no]")
             if let input = readLine()?.trimmingCharacters(in: .whitespaces).lowercased(),
                 ["y", "ye", "yes"].contains(input) {
-                try PodTask.trunkPush(path: path)
+                try PodTask.trunkPush(
+                    path: path,
+                    repoUpdate: repoUpdate,
+                    wait: wait)
             } else {
                 throw TaskError()
             }
@@ -254,8 +266,11 @@ class PodTask: Task {
     
     static func trunkPush(paths: [String]) throws {
         try version()
-        try paths.forEach { (path) in
-            try PodTask.trunkPush(path: path)
+        for (index, path) in paths.enumerated() {
+            try PodTask.trunkPush(
+                path: path,
+                repoUpdate: (index != 0),
+                wait: (index != (paths.count - 1)))
         }
     }
 }
