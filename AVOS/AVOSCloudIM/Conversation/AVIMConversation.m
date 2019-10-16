@@ -3208,6 +3208,8 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 // MARK: - Deprecated
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
 - (void)sendMessage:(AVIMMessage *)message
             options:(AVIMMessageSendOption)options
            callback:(AVIMBooleanResultBlock)callback
@@ -3250,6 +3252,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 {
     [self readInBackground];
 }
+#pragma clang diagnostic pop
 
 @end
 
