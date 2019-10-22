@@ -236,16 +236,28 @@ class PodTask: Task {
         }
     }
     
-    static func trunkPush(path: String) throws {
-        _ = PodTask(arguments: ["repo", "update"]).excute()
+    static func trunkPush(
+        path: String,
+        repoUpdate: Bool,
+        wait: Bool)
+        throws
+    {
+        if repoUpdate {
+            _ = PodTask(arguments: ["repo", "update"]).excute()
+        }
         if PodTask(arguments: ["trunk", "push", path, "--allow-warnings"]).excute() {
-            print("wait for 5 minutes ...")
-            sleep(60 * 5)
+            if wait {
+                print("wait for 10 minutes ...")
+                sleep(60 * 10)
+            }
         } else {
             print("[?] try pod trunk push \(path) again? [yes/no]")
             if let input = readLine()?.trimmingCharacters(in: .whitespaces).lowercased(),
                 ["y", "ye", "yes"].contains(input) {
-                try PodTask.trunkPush(path: path)
+                try PodTask.trunkPush(
+                    path: path,
+                    repoUpdate: repoUpdate,
+                    wait: wait)
             } else {
                 throw TaskError()
             }
@@ -254,8 +266,11 @@ class PodTask: Task {
     
     static func trunkPush(paths: [String]) throws {
         try version()
-        try paths.forEach { (path) in
-            try PodTask.trunkPush(path: path)
+        for (index, path) in paths.enumerated() {
+            try PodTask.trunkPush(
+                path: path,
+                repoUpdate: (index != 0),
+                wait: (index != (paths.count - 1)))
         }
     }
 }
@@ -340,15 +355,160 @@ class VersionUpdater {
     }
 }
 
+class AppledocTask: Task {
+    static let publicHeaders = [
+        "./AVOS/AVOSCloud/Captcha/AVCaptcha.h",
+        "./AVOS/AVOSCloud/Utils/AVDynamicObject.h",
+        "./AVOS/AVOSCloud/SMS/AVSMS.h",
+        "./AVOS/AVOSCloud/ACL/AVACL.h",
+        "./AVOS/AVOSCloud/ACL/AVRole.h",
+        "./AVOS/AVOSCloud/Object/AVSaveOption.h",
+        "./AVOS/AVOSCloud/Analytics/AVAnalytics.h",
+        "./AVOS/AVOSCloud/AVConstants.h",
+        "./AVOS/AVOSCloud/AVOSCloud.h",
+        "./AVOS/AVOSCloud/CloudCode/AVCloud.h",
+        "./AVOS/AVOSCloud/File/AVFile.h",
+        "./AVOS/AVOSCloud/Geo/AVGeoPoint.h",
+        "./AVOS/AVOSCloud/Object/AVObject+Subclass.h",
+        "./AVOS/AVOSCloud/Object/AVObject.h",
+        "./AVOS/AVOSCloud/Object/AVRelation.h",
+        "./AVOS/AVOSCloud/Object/AVSubclassing.h",
+        "./AVOS/AVOSCloud/Push/AVInstallation.h",
+        "./AVOS/AVOSCloud/File/AVFileQuery.h",
+        "./AVOS/AVOSCloud/Push/AVPush.h",
+        "./AVOS/AVOSCloud/Query/AVCloudQueryResult.h",
+        "./AVOS/AVOSCloud/Query/AVQuery.h",
+        "./AVOS/AVOSCloud/Search/AVSearchQuery.h",
+        "./AVOS/AVOSCloud/Search/AVSearchSortBuilder.h",
+        "./AVOS/AVOSCloud/Status/AVStatus.h",
+        "./AVOS/AVOSCloud/User/AVAnonymousUtils.h",
+        "./AVOS/AVOSCloud/User/AVUser.h",
+        "./AVOS/AVOSCloud/Utils/AVLogger.h",
+        "./AVOS/AVOSCloud/Router/LCRouter.h",
+        "./AVOS/AVOSCloud/AVAvailability.h",
+        "./AVOS/AVOSCloudIM/Message/AVIMMessageOption.h",
+        "./AVOS/AVOSCloudIM/Conversation/AVIMKeyedConversation.h",
+        "./AVOS/AVOSCloudIM/Conversation/AVIMConversationQuery.h",
+        "./AVOS/AVOSCloudIM/TypedMessages/AVIMTextMessage.h",
+        "./AVOS/AVOSCloudIM/TypedMessages/AVIMRecalledMessage.h",
+        "./AVOS/AVOSCloudIM/TypedMessages/AVIMLocationMessage.h",
+        "./AVOS/AVOSCloudIM/TypedMessages/AVIMAudioMessage.h",
+        "./AVOS/AVOSCloudIM/TypedMessages/AVIMVideoMessage.h",
+        "./AVOS/AVOSCloudIM/TypedMessages/AVIMFileMessage.h",
+        "./AVOS/AVOSCloudIM/TypedMessages/AVIMTypedMessage.h",
+        "./AVOS/AVOSCloudIM/TypedMessages/AVIMImageMessage.h",
+        "./AVOS/AVOSCloudIM/Client/AVIMClient.h",
+        "./AVOS/AVOSCloudIM/AVIMCommon.h",
+        "./AVOS/AVOSCloudIM/Conversation/AVIMConversation.h",
+        "./AVOS/AVOSCloudIM/Message/AVIMMessage.h",
+        "./AVOS/AVOSCloudIM/Signature/AVIMSignature.h",
+        "./AVOS/AVOSCloudIM/Client/AVIMClientProtocol.h",
+        "./AVOS/AVOSCloudIM/Conversation/AVIMConversationMemberInfo.h",
+        "./AVOS/AVOSCloudIM/Client/AVIMClientInternalConversationManager.h",
+        "./AVOS/AVOSCloudIM/AVOSCloudIM.h",
+        "./AVOS/AVOSCloudLiveQuery/AVLiveQuery.h",
+        "./AVOS/AVOSCloudLiveQuery/AVOSCloudLiveQuery.h"
+    ]
+    static let APIDocsRepoObjcDirectory = "../api-docs/api/iOS"
+    static let APIDocsTempDirectory = "./api-docs"
+    static let APIDocsTempHTMLDirectory = "./api-docs/html"
+    
+    convenience init(arguments: [String] = []) {
+        self.init(
+            launchPath: "/usr/bin/env",
+            arguments: ["appledoc"] + arguments)
+    }
+    
+    static func version() throws {
+        guard AppledocTask(arguments: ["--version"]).excute() else {
+            throw TaskError()
+        }
+    }
+    
+    static func checkAPIDocsRepoObjcDirectory() throws {
+        var isDirectory: ObjCBool = false
+        guard FileManager.default.fileExists(atPath: APIDocsRepoObjcDirectory, isDirectory: &isDirectory),
+            isDirectory.boolValue else {
+                throw TaskError()
+        }
+    }
+    
+    static func checkAPIDocsTempHTMLDirectory() throws {
+        var isDirectory: ObjCBool = false
+        guard FileManager.default.fileExists(atPath: APIDocsTempHTMLDirectory, isDirectory: &isDirectory),
+            isDirectory.boolValue else {
+                throw TaskError()
+        }
+    }
+    
+    static func generateDocumentation(currentVersion: VersionUpdater.Version) throws {
+        _ = AppledocTask(arguments: [
+            "--create-html",
+            "--output", APIDocsTempDirectory,
+            "--project-name", "LeanCloud Objective-C SDK",
+            "--project-version", currentVersion.versionString,
+            "--project-company", "LeanCloud",
+            "--company-id", "LeanCloud",
+            "--keep-undocumented-objects", "--keep-undocumented-members",
+            "--no-create-docset", "--no-install-docset", "--no-publish-docset"]
+            + (FileManager.default.fileExists(atPath: APIDocsTempDirectory) ? ["--clean-output"] : [])
+            + publicHeaders)
+            .excute()
+        try checkAPIDocsTempHTMLDirectory()
+    }
+    
+    static func moveGeneratedDocumentationToRepo() throws {
+        try FileManager.default.removeItem(atPath: APIDocsRepoObjcDirectory)
+        try FileManager.default.moveItem(
+            atPath: APIDocsTempHTMLDirectory,
+            toPath: APIDocsRepoObjcDirectory)
+        try FileManager.default.removeItem(atPath: APIDocsTempDirectory)
+    }
+    
+    static func commitPush() throws {
+        guard GitTask(arguments: [
+            "-C", APIDocsRepoObjcDirectory, "pull"])
+            .excute() else {
+                throw TaskError()
+        }
+        guard GitTask(arguments: [
+            "-C", APIDocsRepoObjcDirectory,
+            "add", "-A"])
+            .excute() else {
+                throw TaskError()
+        }
+        guard GitTask(arguments: [
+            "-C", APIDocsRepoObjcDirectory,
+            "commit", "-a", "-m", "update objc sdk docs"])
+            .excute() else {
+                throw TaskError()
+        }
+        guard GitTask(arguments: [
+            "-C", APIDocsRepoObjcDirectory, "push"])
+            .excute() else {
+                throw TaskError()
+        }
+    }
+    
+    static func update(currentVersion: VersionUpdater.Version) throws {
+        try version()
+        try checkAPIDocsRepoObjcDirectory()
+        try generateDocumentation(currentVersion: currentVersion)
+        try moveGeneratedDocumentationToRepo()
+        try commitPush()
+    }
+}
+
 class CLI {
     
     static func help() {
         print("""
             Actions:\n
-            b, build            Building all schemes
-            pr, pull-request    New pull request from current head to base master
-            pt, pod-trunk       Publish all podspecs
-            h, help             Show help info
+            b, build                Building all schemes
+            pr, pull-request        New pull request from current head to base master
+            pt, pod-trunk           Publish all podspecs
+            h, help                 Show help info
+            adu, api-docs-update    Update API Docs
             """)
     }
     
@@ -385,6 +545,11 @@ class CLI {
             "AVOSCloudLiveQuery.podspec"])
     }
     
+    static func apiDocsUpdate() throws {
+        try AppledocTask.update(
+            currentVersion: try VersionUpdater.currentVersion())
+    }
+    
     static func read() -> [String] {
         var args = CommandLine.arguments
         args.removeFirst()
@@ -399,6 +564,8 @@ class CLI {
             try pullRequest()
         case "pt", "pod-trunk":
             try podTrunk()
+        case "adu", "api-docs-update":
+            try apiDocsUpdate()
         case "h", "help":
             help()
         default:
