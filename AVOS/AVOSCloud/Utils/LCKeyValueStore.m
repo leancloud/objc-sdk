@@ -91,19 +91,21 @@ static OSSpinLock dbQueueLock = OS_SPINLOCK_INIT;
 
 - (NSData *)dataForKey:(NSString *)key {
     __block NSData *data = nil;
-
-    LC_OPEN_DATABASE(db, ({
-        NSArray *args = @[key];
-        NSString *SQL = [self formatSQL:LC_SQL_SELECT_KEY_VALUE_FMT withTableName:[self tableName]];
-        LCResultSet *result = [db executeQuery:SQL withArgumentsInArray:args];
-
-        if ([result next]) {
-            data = [result dataForColumn:LC_FIELD_VALUE];
-        }
-
-        [result close];
-    }));
-
+    
+    if ([key length]) {
+        LC_OPEN_DATABASE(db, ({
+            NSArray *args = @[key];
+            NSString *SQL = [self formatSQL:LC_SQL_SELECT_KEY_VALUE_FMT withTableName:[self tableName]];
+            LCResultSet *result = [db executeQuery:SQL withArgumentsInArray:args];
+            
+            if ([result next]) {
+                data = [result dataForColumn:LC_FIELD_VALUE];
+            }
+            
+            [result close];
+        }));
+    }
+    
     return data;
 }
 
