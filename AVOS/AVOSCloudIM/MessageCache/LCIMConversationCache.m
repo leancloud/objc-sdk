@@ -25,6 +25,7 @@
 
     if (self) {
         _clientId = [clientId copy];
+        _queryCacheStore = [[LCIMConversationQueryCacheStore alloc] initWithClientId:clientId];
     }
 
     return self;
@@ -105,12 +106,6 @@
 
         return _cacheStore;
     }
-}
-
-- (LCIMConversationQueryCacheStore *)queryCacheStore {
-    return _queryCacheStore ?: (
-        _queryCacheStore = [[LCIMConversationQueryCacheStore alloc] initWithClientId:self.clientId]
-    );
 }
 
 @end
