@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AVOSCloudLiveQuery'
-  s.version  = '12.0.3'
+  s.version  = '12.0.4'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud LiveQuery Objective-C SDK'
   s.authors  = 'LeanCloud'

@@ -169,6 +169,12 @@
         NSMutableDictionary *data = [self postData];
         [data removeObjectForKey:@"__type"];
         [data removeObjectForKey:@"className"];
+        if (self.deviceToken) {
+            data[keyPath(self, deviceToken)] = self.deviceToken;
+        }
+        if (self.apnsTeamId) {
+            data[keyPath(self, apnsTeamId)] = self.apnsTeamId;
+        }
         [AVPersistenceUtils saveJSON:data toPath:[AVPersistenceUtils currentInstallationArchivePath]];
     }
 }
