@@ -76,7 +76,7 @@
                clientKey:(NSString *)clientKey
          serverURLString:(NSString *)serverURLString
 {
-    [[LCRouter sharedInstance] setServerURLString:serverURLString];
+    [LCRouter setServerURLString:serverURLString];
     [AVOSCloud setApplicationId:applicationId clientKey:clientKey];
 }
 
@@ -86,7 +86,7 @@
     AppDomain appDomain = [LCRouter appDomainForAppID:applicationId];
     if ([appDomain isEqualToString:AppDomainCN] ||
         [appDomain isEqualToString:AppDomainCE]) {
-        if (![LCRouter sharedInstance].serverURLString) {
+        if (![LCRouter serverURLString]) {
             [NSException raise:NSInternalInconsistencyException
                         format:@"Server URL not set."] ;
         }
@@ -148,7 +148,7 @@
         default:
             return;
     }
-    [[LCRouter sharedInstance] customAppServerURL:URLString key:key];
+    [LCRouter customAppServerURL:URLString key:key];
 }
 
 #pragma mark - Network
