@@ -838,6 +838,10 @@
 		D33B830C210F1679001D1CCD /* AVIMClientPushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D33B8309210F1679001D1CCD /* AVIMClientPushManager.m */; };
 		D33B830D210F1679001D1CCD /* AVIMClientPushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D33B8309210F1679001D1CCD /* AVIMClientPushManager.m */; };
 		D341F2A32018B6DB00408778 /* _10_MB_.png in Resources */ = {isa = PBXBuildFile; fileRef = D341F2A22018B6DB00408778 /* _10_MB_.png */; };
+		D3460577238BE9390027E1D5 /* AVOSCloud_macOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3460576238BE9390027E1D5 /* AVOSCloud_macOSTests.swift */; };
+		D3460579238BE9390027E1D5 /* AVOSCloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70CA7F681BDE2DC3000A3B21 /* AVOSCloud.framework */; };
+		D346057F238BE9840027E1D5 /* LCTestEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F8747A20F8B1690035C7D1 /* LCTestEnvironment.m */; };
+		D3460580238BE9880027E1D5 /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
 		D3472E1F2015CBC200AAD65F /* AVFileTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3472E1E2015CBC200AAD65F /* AVFileTestCase.swift */; };
 		D34EBDCD211C20FF0092A538 /* LCRouter_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */; };
 		D34EBDCE211C20FF0092A538 /* LCRouter_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */; };
@@ -1050,6 +1054,13 @@
 			remoteInfo = "AVOSCloudIM-macOS";
 		};
 		D305F7FC2355A6C400222EBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 70CA7F671BDE2DC3000A3B21;
+			remoteInfo = "AVOSCloud-macOS";
+		};
+		D346057A238BE9390027E1D5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8C84197B1A5A78E100C5C6C4 /* Project object */;
 			proxyType = 1;
@@ -1377,6 +1388,10 @@
 		D33B8308210F1679001D1CCD /* AVIMClientPushManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVIMClientPushManager.h; sourceTree = "<group>"; };
 		D33B8309210F1679001D1CCD /* AVIMClientPushManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVIMClientPushManager.m; sourceTree = "<group>"; };
 		D341F2A22018B6DB00408778 /* _10_MB_.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = _10_MB_.png; sourceTree = "<group>"; };
+		D3460574238BE9390027E1D5 /* AVOSCloud-macOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AVOSCloud-macOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D3460576238BE9390027E1D5 /* AVOSCloud_macOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVOSCloud_macOSTests.swift; sourceTree = "<group>"; };
+		D3460578238BE9390027E1D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D3460585238BEC060027E1D5 /* AVOSCloud-macOSTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVOSCloud-macOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		D3472E1E2015CBC200AAD65F /* AVFileTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVFileTestCase.swift; sourceTree = "<group>"; };
 		D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCRouter_Internal.h; sourceTree = "<group>"; };
 		D34FD72B2068CFE900B7C11B /* AVLiveQuery_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVLiveQuery_Internal.h; sourceTree = "<group>"; };
@@ -1549,6 +1564,14 @@
 			files = (
 				D305F7FA2355A6C400222EBC /* AVOSCloud.framework in Frameworks */,
 				D305F7FF2355A6D100222EBC /* AVOSCloudIM.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3460571238BE9390027E1D5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D3460579238BE9390027E1D5 /* AVOSCloud.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1742,6 +1765,7 @@
 				838CE3271EC97E6F00B24F5B /* AVOSCloudLiveQueryTests */,
 				7085D5321BEA2A0A00449DC1 /* Resources */,
 				D305F7AE2355771B00222EBC /* CLI */,
+				D3460575238BE9390027E1D5 /* AVOSCloud-macOSTests */,
 				8C8419871A5A791300C5C6C4 /* Products */,
 				D328B8E320FC863F0039091A /* Frameworks */,
 			);
@@ -1764,6 +1788,7 @@
 				838CE3231EC97E6E00B24F5B /* AVOSCloudLiveQuery-iOSTests.xctest */,
 				D305F7A72355760100222EBC /* CLI */,
 				D305F7E12355A02A00222EBC /* AVOSCloudLiveQuery.framework */,
+				D3460574238BE9390027E1D5 /* AVOSCloud-macOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2329,6 +2354,16 @@
 				70DA62471B4BD21B00D95D4D /* testImage.png */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		D3460575238BE9390027E1D5 /* AVOSCloud-macOSTests */ = {
+			isa = PBXGroup;
+			children = (
+				D3460585238BEC060027E1D5 /* AVOSCloud-macOSTests-Bridging-Header.h */,
+				D3460576238BE9390027E1D5 /* AVOSCloud_macOSTests.swift */,
+				D3460578238BE9390027E1D5 /* Info.plist */,
+			);
+			path = "AVOSCloud-macOSTests";
 			sourceTree = "<group>";
 		};
 		D3472E212015D2AF00AAD65F /* Resources */ = {
@@ -3213,6 +3248,24 @@
 			productReference = D305F7E12355A02A00222EBC /* AVOSCloudLiveQuery.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		D3460573238BE9390027E1D5 /* AVOSCloud-macOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D346057E238BE9390027E1D5 /* Build configuration list for PBXNativeTarget "AVOSCloud-macOSTests" */;
+			buildPhases = (
+				D3460570238BE9390027E1D5 /* Sources */,
+				D3460571238BE9390027E1D5 /* Frameworks */,
+				D3460572238BE9390027E1D5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D346057B238BE9390027E1D5 /* PBXTargetDependency */,
+			);
+			name = "AVOSCloud-macOSTests";
+			productName = "AVOSCloud-macOSTests";
+			productReference = D3460574238BE9390027E1D5 /* AVOSCloud-macOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -3220,7 +3273,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = AV;
-				LastSwiftUpdateCheck = 1110;
+				LastSwiftUpdateCheck = 1120;
 				LastUpgradeCheck = 1110;
 				ORGANIZATIONNAME = "LeanCloud Inc.";
 				TargetAttributes = {
@@ -3265,6 +3318,11 @@
 						DevelopmentTeam = 7J5XFNL99Q;
 						ProvisioningStyle = Manual;
 					};
+					D3460573238BE9390027E1D5 = {
+						CreatedOnToolsVersion = 11.2.1;
+						DevelopmentTeam = 7J5XFNL99Q;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = 8C84197E1A5A78E100C5C6C4 /* Build configuration list for PBXProject "AVOS" */;
@@ -3292,6 +3350,7 @@
 				8C8419CC1A5A796000C5C6C4 /* AVOSCloudIM-iOSTests */,
 				838CE3221EC97E6E00B24F5B /* AVOSCloudLiveQuery-iOSTests */,
 				D305F7A62355760100222EBC /* CLI */,
+				D3460573238BE9390027E1D5 /* AVOSCloud-macOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -3381,6 +3440,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		D305F7DF2355A02A00222EBC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3460572238BE9390027E1D5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3873,6 +3939,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D3460570238BE9390027E1D5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D346057F238BE9840027E1D5 /* LCTestEnvironment.m in Sources */,
+				D3460577238BE9390027E1D5 /* AVOSCloud_macOSTests.swift in Sources */,
+				D3460580238BE9880027E1D5 /* LCTestBase.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -3925,6 +4001,11 @@
 			isa = PBXTargetDependency;
 			target = 70CA7F671BDE2DC3000A3B21 /* AVOSCloud-macOS */;
 			targetProxy = D305F7FC2355A6C400222EBC /* PBXContainerItemProxy */;
+		};
+		D346057B238BE9390027E1D5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 70CA7F671BDE2DC3000A3B21 /* AVOSCloud-macOS */;
+			targetProxy = D346057A238BE9390027E1D5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -4846,6 +4927,72 @@
 			};
 			name = Release;
 		};
+		D346057C238BE9390027E1D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 7J5XFNL99Q;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					"LC_URL_API=$(LC_URL_API)",
+					"LC_URL_RTMRouter=$(LC_URL_RTMRouter)",
+					"LC_URL_RTMServer=$(LC_URL_RTMServer)",
+					"LC_APP_ID=$(LC_APP_ID)",
+					"LC_APP_KEY=$(LC_APP_KEY)",
+					"LC_SERVER_TESTING=$(LC_SERVER_TESTING)",
+				);
+				INFOPLIST_FILE = "AVOSCloud-macOSTests/Info.plist";
+				LC_APP_ID = "\\@\\\"default\\\"";
+				LC_APP_KEY = "\\@\\\"default\\\"";
+				LC_SERVER_TESTING = 0;
+				LC_URL_API = "\\@\\\"default\\\"";
+				LC_URL_RTMRouter = "\\@\\\"default\\\"";
+				LC_URL_RTMServer = "\\@\\\"default\\\"";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = "LeanCloud.AVOSCloud-macOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "AVOSCloud-macOSTests/AVOSCloud-macOSTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		D346057D238BE9390027E1D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 7J5XFNL99Q;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"LC_URL_API=$(LC_URL_API)",
+					"LC_URL_RTMRouter=$(LC_URL_RTMRouter)",
+					"LC_URL_RTMServer=$(LC_URL_RTMServer)",
+					"LC_APP_ID=$(LC_APP_ID)",
+					"LC_APP_KEY=$(LC_APP_KEY)",
+					"LC_SERVER_TESTING=$(LC_SERVER_TESTING)",
+				);
+				INFOPLIST_FILE = "AVOSCloud-macOSTests/Info.plist";
+				LC_APP_ID = "\\@\\\"default\\\"";
+				LC_APP_KEY = "\\@\\\"default\\\"";
+				LC_SERVER_TESTING = 0;
+				LC_URL_API = "\\@\\\"default\\\"";
+				LC_URL_RTMRouter = "\\@\\\"default\\\"";
+				LC_URL_RTMServer = "\\@\\\"default\\\"";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = "LeanCloud.AVOSCloud-macOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "AVOSCloud-macOSTests/AVOSCloud-macOSTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -4962,6 +5109,15 @@
 			buildConfigurations = (
 				D305F7E72355A02A00222EBC /* Debug */,
 				D305F7E82355A02A00222EBC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D346057E238BE9390027E1D5 /* Build configuration list for PBXNativeTarget "AVOSCloud-macOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D346057C238BE9390027E1D5 /* Debug */,
+				D346057D238BE9390027E1D5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

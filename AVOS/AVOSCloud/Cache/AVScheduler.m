@@ -15,16 +15,6 @@
 
 static NSUInteger const ExpiredDays = 30;
 
-// 60s * 15 = 15min
-//static NSUInteger const AVTimerInterval = 60 * 15;
-static NSUInteger const AVTimerInterval = 15; // for debug
-static NSUInteger const AVHourCount = 3600 / AVTimerInterval;
-
-@interface AVScheduler ()
-@property (nonatomic, strong) NSTimer *timer;
-@property (nonatomic, assign) NSInteger firedCount;
-@end
-
 @implementation AVScheduler
 
 + (AVScheduler *)sharedInstance {
@@ -38,13 +28,8 @@ static NSUInteger const AVHourCount = 3600 / AVTimerInterval;
 }
 
 - (void)setup {
-    // default setting
     self.queryCacheExpiredDays = ExpiredDays;
     self.fileCacheExpiredDays = ExpiredDays;
-    ////
-    
-    self.firedCount = 0;
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:AVTimerInterval target:self selector:@selector(timerFired:) userInfo:nil repeats:YES];
     
 #if !TARGET_OS_WATCH
 #if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
@@ -62,16 +47,8 @@ static NSUInteger const AVHourCount = 3600 / AVTimerInterval;
 #endif
 }
 
-- (void)clean {
-    [_timer invalidate];
-    _timer = nil;
-    _firedCount = 0;
-
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 - (void)dealloc {
-    [self clean];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Schedule
@@ -108,23 +85,6 @@ static NSUInteger const AVHourCount = 3600 / AVTimerInterval;
 
 - (void)clearCache {
     [AVCacheManager clearCacheMoreThanDays:self.queryCacheExpiredDays];
-}
-
-#pragma mark Timer
-
-- (void)timerFired:(id)sender {
-    self.firedCount++;
-
-    if ((self.firedCount % AVHourCount) == 0) {
-        [self hourlyFired];
-    }
-}
-
-- (void)hourlyFired {
-#if TARGET_OS_WATCH
-    [self handleArchivedRequests];
-    [self clearCache];
-#endif
 }
 
 @end

@@ -17,18 +17,28 @@ RouterCacheKey RouterCacheKeyRTM = @"RouterCacheDataRTM";
 static RouterCacheKey RouterCacheKeyData = @"data";
 static RouterCacheKey RouterCacheKeyTimestamp = @"timestamp";
 
+static NSString *serverURLString;
+/// { 'module key' : 'URL' }
+static NSMutableDictionary<NSString *, NSString *> *customAppServerTable;
+
 @implementation LCRouter {
     /// { 'app ID' : 'app router data tuple' }
     NSMutableDictionary<NSString *, NSDictionary *> *_appRouterMap;
     /// { 'app ID' : 'RTM router data tuple' }
     NSMutableDictionary<NSString *, NSDictionary *> *_RTMRouterMap;
-    /// { 'module key' : 'URL' }
-    NSMutableDictionary<NSString *, NSString *> *_customAppServerTable;
     
     NSLock *_lock;
     NSDictionary<NSString *, NSString *> *_keyToModule;
     /// { 'app ID' : 'callback array' }
     NSMutableDictionary<NSString *, NSMutableArray<void (^)(NSDictionary *, NSError *)> *> *_RTMRouterCallbacksMap;
+}
+
++ (NSString *)serverURLString {
+    return serverURLString;
+}
+
++ (void)setServerURLString:(NSString *)URLString {
+    serverURLString = URLString;
 }
 
 + (instancetype)sharedInstance
@@ -71,7 +81,6 @@ static RouterCacheKey RouterCacheKeyTimestamp = @"timestamp";
         self->_isUpdatingAppRouter = false;
         self->_RTMRouterCallbacksMap = [NSMutableDictionary dictionary];
         
-        self->_customAppServerTable = [NSMutableDictionary dictionary];
         self->_keyToModule = ({
             @{ RouterKeyAppAPIServer : AppModuleAPI,
                RouterKeyAppEngineServer : AppModuleEngine,
@@ -222,14 +231,14 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
     };
     
     ({  /// get server URL from custom server table.
-        NSString *customServerURL = [NSString lc__decodingDictionary:self->_customAppServerTable key:serverKey];
+        NSString *customServerURL = [NSString lc__decodingDictionary:customAppServerTable key:serverKey];
         if ([customServerURL length]) {
             return constructedURL(customServerURL);
         }
     });
     
-    if ([self.serverURLString length]) {
-        return constructedURL(self.serverURLString);
+    if ([LCRouter serverURLString].length) {
+        return constructedURL([LCRouter serverURLString]);
     }
     
     if ([appID hasSuffix:AppIDSuffixUS]) {
@@ -408,13 +417,16 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
 
 // MARK: - Custom App URL
 
-- (void)customAppServerURL:(NSString *)URLString key:(RouterKey)key
++ (void)customAppServerURL:(NSString *)URLString key:(RouterKey)key
 {
+    if (!customAppServerTable) {
+        customAppServerTable = [NSMutableDictionary dictionary];
+    }
     if (!key) { return; }
     if (URLString) {
-        self->_customAppServerTable[key] = URLString;
+        customAppServerTable[key] = URLString;
     } else {
-        [self->_customAppServerTable removeObjectForKey:key];
+        [customAppServerTable removeObjectForKey:key];
     }
 }
 

@@ -49,6 +49,10 @@ class LCTestBase: XCTestCase {
         }
     }
     
+    override class func tearDown() {
+        AVFile.clearAllPersistentCache()
+        super.tearDown()
+    }
 }
 
 extension LCTestBase {

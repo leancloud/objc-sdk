@@ -42,11 +42,14 @@ static RouterKey RouterKeyRTMServer = @"server";
 @interface LCRouter ()
 
 @property (atomic, assign) BOOL isUpdatingAppRouter;
-@property (nonatomic, strong) NSString *serverURLString;
 
 /// internal
 
 + (NSString *)appDomainForAppID:(NSString *)appID;
+
++ (NSString *)serverURLString;
+
++ (void)setServerURLString:(NSString *)URLString;
 
 - (NSString *)appURLForPath:(NSString *)path appID:(NSString *)appID;
 
@@ -54,7 +57,7 @@ static RouterKey RouterKeyRTMServer = @"server";
 
 - (NSString *)batchPathForPath:(NSString *)path;
 
-- (void)customAppServerURL:(NSString *)URLString key:(RouterKey)key;
++ (void)customAppServerURL:(NSString *)URLString key:(RouterKey)key;
 
 /// unit test
 

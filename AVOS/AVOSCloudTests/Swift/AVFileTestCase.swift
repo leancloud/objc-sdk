@@ -884,4 +884,26 @@ class AVFile_TestCase: LCTestBase {
         })
     }
     
+    func testc_multiple_download() {
+        let uploadExp = expectation(description: "upload file")
+        let file = AVFile(data: self.bigDataTuple.data, name: self.bigDataTuple.name)
+        file.upload { (success, error) in
+            XCTAssertTrue(success)
+            XCTAssertNil(error)
+            uploadExp.fulfill()
+        }
+        wait(for: [uploadExp], timeout: 60)
+        
+        let downloadExp = expectation(description: "multiple download file")
+        downloadExp.expectedFulfillmentCount = 5
+        for i in 0..<downloadExp.expectedFulfillmentCount {
+            let file = AVFile(objectId: file.objectId()! + "\(i)", url: file.url()!)
+            file.download(completionHandler: { (fileURL, error) in
+                XCTAssertNotNil(fileURL)
+                XCTAssertNil(error)
+                downloadExp.fulfill()
+            })
+        }
+        wait(for: [downloadExp], timeout: 60)
+    }
 }

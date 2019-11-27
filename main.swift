@@ -195,6 +195,25 @@ class GitTask: Task {
             throw TaskError()
         }
     }
+    
+    static func lastReleasableMessage() -> String? {
+        var message: String?
+        _ = GitTask(
+            arguments: ["log", "-10", "--pretty=%B|cat"])
+            .excute(printOutput: false) {
+                let data = ($0.standardOutput as! Pipe).fileHandleForReading.readDataToEndOfFile()
+                message = String(data: data, encoding: .utf8)?
+                    .components(separatedBy: .newlines)
+                    .map({ s in s.trimmingCharacters(in: .whitespacesAndNewlines) })
+                    .first(where: { (s) -> Bool in
+                        s.hasPrefix("feat") ||
+                            s.hasPrefix("fix") ||
+                            s.hasPrefix("refactor") ||
+                            s.hasPrefix("docs")
+                    })
+        }
+        return message
+    }
 }
 
 class HubTask: Task {
@@ -505,10 +524,11 @@ class CLI {
         print("""
             Actions:\n
             b, build                Building all schemes
+            vu, version-update      Updating SDK version
             pr, pull-request        New pull request from current head to base master
             pt, pod-trunk           Publish all podspecs
-            h, help                 Show help info
             adu, api-docs-update    Update API Docs
+            h, help                 Show help info
             """)
     }
     
@@ -516,26 +536,30 @@ class CLI {
         try XcodebuildTask.building()
     }
     
-    static func pullRequest() throws {
-        var currentVersion = try VersionUpdater.currentVersion()
+    static func versionUpdate() throws {
+        let currentVersion = try VersionUpdater.currentVersion()
         print("""
             Current Version is \(currentVersion.versionString)
-            [?] do you want to update it before releasing? [<new-semantic-version>/no]
+            [?] do you want to update it ? [<new-semantic-version>/no]
             """)
         if let input = readLine()?.trimmingCharacters(in: .whitespaces).lowercased() {
-            if ["n", "no", "not"].contains(input.lowercased()) {
-                // skip
-            } else {
+            if !["n", "no", "not"].contains(input.lowercased()) {
                 let newVersion = try VersionUpdater.Version(string: input)
                 guard newVersion.versionString != currentVersion.versionString else {
                     throw TaskError(description: "[!] Version no change")
                 }
                 try VersionUpdater.newVersion(newVersion, replace: currentVersion)
                 try GitTask.commitAll(with: "release: \(newVersion.versionString)")
-                currentVersion = newVersion
             }
         }
-        try HubTask.pullRequest(with: "release: \(currentVersion.versionString)")
+    }
+    
+    static func pullRequest() throws {
+        if let message = GitTask.lastReleasableMessage() {
+            try HubTask.pullRequest(with: message)
+        } else {
+            throw TaskError(description: "Not get a releasable Message.")
+        }
     }
     
     static func podTrunk() throws {
@@ -560,6 +584,8 @@ class CLI {
         switch action {
         case "b", "build":
             try build()
+        case "vu", "version-update":
+            try versionUpdate()
         case "pr", "pull-request":
             try pullRequest()
         case "pt", "pod-trunk":
@@ -569,7 +595,8 @@ class CLI {
         case "h", "help":
             help()
         default:
-            print("[!] Unknown Action: `\(action)`")
+            print("[!] Unknown Action: `\(action)`\n")
+            help()
         }
     }
     
@@ -579,7 +606,8 @@ class CLI {
         case 1:
             try process(action: args[0])
         default:
-            print("[!] Unknown Command: `\(args.joined(separator: " "))`")
+            print("[!] Unknown Command: `\(args.joined(separator: " "))`\n")
+            help()
         }
     }
 }
