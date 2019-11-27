@@ -129,6 +129,8 @@
             NSMutableDictionary *body = request[@"body"];
             [body removeObjectForKey:keyPath(self, createdAt)];
             [body removeObjectForKey:keyPath(self, updatedAt)];
+            [body removeObjectForKey:kAVTypeTag];
+            [body removeObjectForKey:classNameTag];
             if (self.deviceToken) {
                 body[keyPath(self, deviceToken)] = self.deviceToken;
             }
@@ -167,8 +169,6 @@
     [super postSave];
     if (self == [AVInstallation defaultInstallation]) {
         NSMutableDictionary *data = [self postData];
-        [data removeObjectForKey:@"__type"];
-        [data removeObjectForKey:@"className"];
         if (self.deviceToken) {
             data[keyPath(self, deviceToken)] = self.deviceToken;
         }
