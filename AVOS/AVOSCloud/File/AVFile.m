@@ -86,6 +86,11 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     return [[AVFile alloc] initWithRawJSONData:[avObject dictionaryForObject]];
 }
 
++ (instancetype)fileWithObjectId:(NSString *)objectId url:(NSString *)url
+{
+    return [[AVFile alloc] initWithRawJSONData:@{kLCFile_objectId: objectId, kLCFile_url: url}.mutableCopy];
+}
+
 // MARK: - Initialization
 
 - (instancetype)init

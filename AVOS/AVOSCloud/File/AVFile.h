@@ -81,6 +81,12 @@ typedef NS_OPTIONS(NSUInteger, AVFileDownloadOption) {
  */
 + (instancetype)fileWithAVObject:(AVObject *)avObject;
 
+/// Create file from `objectId` and `url`
+/// @param objectId The ID of the File.
+/// @param url The url of the File.
++ (instancetype)fileWithObjectId:(NSString *)objectId
+                             url:(NSString *)url;
+
 // MARK: - Property
 
 /*!
