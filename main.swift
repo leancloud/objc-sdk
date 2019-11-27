@@ -72,6 +72,21 @@ class Task {
     }
 }
 
+class OpenTask: Task {
+    convenience init(arguments: [String] = []) {
+        self.init(
+            launchPath: "/usr/bin/env",
+            arguments: ["open"] + arguments)
+    }
+    
+    static func url(_ urlString: String) throws {
+        guard let _ = URL(string: urlString),
+            OpenTask(arguments: [urlString]).excute() else {
+                throw TaskError()
+        }
+    }
+}
+
 class XcodebuildTask: Task {
     static let projectPath = "./AVOS/AVOS.xcodeproj"
     
@@ -515,6 +530,7 @@ class AppledocTask: Task {
         try generateDocumentation(currentVersion: currentVersion)
         try moveGeneratedDocumentationToRepo()
         try commitPush()
+        try OpenTask.url("http://jenkins.avoscloud.com/job/cn-api-doc-prod-ucloud/build")
     }
 }
 
