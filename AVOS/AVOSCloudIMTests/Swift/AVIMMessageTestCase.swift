@@ -837,6 +837,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                 let text: String = "test"
                 let customMessage: AVIMCustomTypedMessage = AVIMCustomTypedMessage()
                 customMessage.text = text
+                customMessage.setObject("value", forKey: "key")
                 
                 semaphore.increment(2)
                 
@@ -861,6 +862,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(message.readTimestamp == 0)
                     XCTAssertFalse(message.transient)
                     XCTAssertNil(message.updatedAt)
+                    XCTAssertEqual(message.object(forKey: "key") as? String, "value")
                 }
                 
                 normalConv.send(customMessage, callback: { (succeeded: Bool, error: Error?) in
