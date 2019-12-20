@@ -1,4 +1,4 @@
-// AFNetworkReachabilityManager.h
+// LCNetworkReachabilityManager.h
 // Copyright (c) 2011–2016 Alamofire Software Foundation ( http://alamofire.org/ )
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,30 +24,30 @@
 #if !TARGET_OS_WATCH
 #import <SystemConfiguration/SystemConfiguration.h>
 
-typedef NS_ENUM(NSInteger, AFNetworkReachabilityStatus) {
-    AFNetworkReachabilityStatusUnknown          = -1,
-    AFNetworkReachabilityStatusNotReachable     = 0,
-    AFNetworkReachabilityStatusReachableViaWWAN = 1,
-    AFNetworkReachabilityStatusReachableViaWiFi = 2,
+typedef NS_ENUM(NSInteger, LCNetworkReachabilityStatus) {
+    LCNetworkReachabilityStatusUnknown          = -1,
+    LCNetworkReachabilityStatusNotReachable     = 0,
+    LCNetworkReachabilityStatusReachableViaWWAN = 1,
+    LCNetworkReachabilityStatusReachableViaWiFi = 2,
 };
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- `AFNetworkReachabilityManager` monitors the reachability of domains, and addresses for both WWAN and WiFi network interfaces.
+ `LCNetworkReachabilityManager` monitors the reachability of domains, and addresses for both WWAN and WiFi network interfaces.
 
  Reachability can be used to determine background information about why a network operation failed, or to trigger a network operation retrying when a connection is established. It should not be used to prevent a user from initiating a network request, as it's possible that an initial request may be required to establish reachability.
 
  See Apple's Reachability Sample Code ( https://developer.apple.com/library/ios/samplecode/reachability/ )
 
- @warning Instances of `AFNetworkReachabilityManager` must be started with `-startMonitoring` before reachability status can be determined.
+ @warning Instances of `LCNetworkReachabilityManager` must be started with `-startMonitoring` before reachability status can be determined.
  */
 @interface LCNetworkReachabilityManager : NSObject
 
 /**
  The current network reachability status.
  */
-@property (readonly, nonatomic, assign) AFNetworkReachabilityStatus networkReachabilityStatus;
+@property (readonly, nonatomic, assign) LCNetworkReachabilityStatus networkReachabilityStatus;
 
 /**
  Whether or not the network is currently reachable.
@@ -63,6 +63,8 @@ NS_ASSUME_NONNULL_BEGIN
  Whether or not the network is currently reachable via WiFi.
  */
 @property (readonly, nonatomic, assign, getter = isReachableViaWiFi) BOOL reachableViaWiFi;
+
+@property (nonatomic, strong) dispatch_queue_t reachabilityQueue;
 
 ///---------------------
 /// @name Initialization
@@ -107,6 +109,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (instancetype)initWithReachability:(SCNetworkReachabilityRef)reachability NS_DESIGNATED_INITIALIZER;
 
+/**
+ *  Unavailable initializer
+ */
++ (instancetype)new NS_UNAVAILABLE;
+
+/**
+ *  Unavailable initializer
+ */
+- (instancetype)init NS_UNAVAILABLE;
+
 ///--------------------------------------------------
 /// @name Starting & Stopping Reachability Monitoring
 ///--------------------------------------------------
@@ -139,7 +151,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param block A block object to be executed when the network availability of the `baseURL` host changes.. This block has no return value and takes a single argument which represents the various reachability states from the device to the `baseURL`.
  */
-- (void)setReachabilityStatusChangeBlock:(nullable void (^)(AFNetworkReachabilityStatus status))block;
+- (void)setReachabilityStatusChangeBlock:(nullable void (^)(LCNetworkReachabilityStatus status))block;
 
 @end
 
@@ -150,34 +162,34 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  ## Network Reachability
 
- The following constants are provided by `AFNetworkReachabilityManager` as possible network reachability statuses.
+ The following constants are provided by `LCNetworkReachabilityManager` as possible network reachability statuses.
 
  enum {
- AFNetworkReachabilityStatusUnknown,
- AFNetworkReachabilityStatusNotReachable,
- AFNetworkReachabilityStatusReachableViaWWAN,
- AFNetworkReachabilityStatusReachableViaWiFi,
+ LCNetworkReachabilityStatusUnknown,
+ LCNetworkReachabilityStatusNotReachable,
+ LCNetworkReachabilityStatusReachableViaWWAN,
+ LCNetworkReachabilityStatusReachableViaWiFi,
  }
 
- `AFNetworkReachabilityStatusUnknown`
+ `LCNetworkReachabilityStatusUnknown`
  The `baseURL` host reachability is not known.
 
- `AFNetworkReachabilityStatusNotReachable`
+ `LCNetworkReachabilityStatusNotReachable`
  The `baseURL` host cannot be reached.
 
- `AFNetworkReachabilityStatusReachableViaWWAN`
+ `LCNetworkReachabilityStatusReachableViaWWAN`
  The `baseURL` host can be reached via a cellular connection, such as EDGE or GPRS.
 
- `AFNetworkReachabilityStatusReachableViaWiFi`
+ `LCNetworkReachabilityStatusReachableViaWiFi`
  The `baseURL` host can be reached via a Wi-Fi connection.
 
  ### Keys for Notification UserInfo Dictionary
 
  Strings that are used as keys in a `userInfo` dictionary in a network reachability status change notification.
 
- `AFNetworkingReachabilityNotificationStatusItem`
- A key in the userInfo dictionary in a `AFNetworkingReachabilityDidChangeNotification` notification.
- The corresponding value is an `NSNumber` object representing the `AFNetworkReachabilityStatus` value for the current reachability status.
+ `LCNetworkingReachabilityNotificationStatusItem`
+ A key in the userInfo dictionary in a `LCNetworkingReachabilityDidChangeNotification` notification.
+ The corresponding value is an `NSNumber` object representing the `LCNetworkReachabilityStatus` value for the current reachability status.
  */
 
 ///--------------------
@@ -186,7 +198,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Posted when network reachability changes.
- This notification assigns no notification object. The `userInfo` dictionary contains an `NSNumber` object under the `AFNetworkingReachabilityNotificationStatusItem` key, representing the `AFNetworkReachabilityStatus` value for the current network reachability.
+ This notification assigns no notification object. The `userInfo` dictionary contains an `NSNumber` object under the `LCNetworkingReachabilityNotificationStatusItem` key, representing the `LCNetworkReachabilityStatus` value for the current network reachability.
 
  @warning In order for network reachability to be monitored, include the `SystemConfiguration` framework in the active target's "Link Binary With Library" build phase, and add `#import <SystemConfiguration/SystemConfiguration.h>` to the header prefix of the project (`Prefix.pch`).
  */
@@ -198,9 +210,9 @@ FOUNDATION_EXPORT NSString * const LCNetworkingReachabilityNotificationStatusIte
 ///--------------------
 
 /**
- Returns a localized string representation of an `AFNetworkReachabilityStatus` value.
+ Returns a localized string representation of an `LCNetworkReachabilityStatus` value.
  */
-FOUNDATION_EXPORT NSString * LCStringFromNetworkReachabilityStatus(AFNetworkReachabilityStatus status);
+FOUNDATION_EXPORT NSString * LCStringFromNetworkReachabilityStatus(LCNetworkReachabilityStatus status);
 
 NS_ASSUME_NONNULL_END
 #endif

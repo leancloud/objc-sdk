@@ -1,4 +1,4 @@
-// AFURLSessionManager.h
+// LCURLSessionManager.h
 // Copyright (c) 2011–2016 Alamofire Software Foundation ( http://alamofire.org/ )
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,20 +25,21 @@
 #import "LCURLResponseSerialization.h"
 #import "LCURLRequestSerialization.h"
 #import "LCSecurityPolicy.h"
+#import "LCCompatibilityMacros.h"
 #if !TARGET_OS_WATCH
 #import "LCNetworkReachabilityManager.h"
 #endif
 
 /**
- `AFURLSessionManager` creates and manages an `NSURLSession` object based on a specified `NSURLSessionConfiguration` object, which conforms to `<NSURLSessionTaskDelegate>`, `<NSURLSessionDataDelegate>`, `<NSURLSessionDownloadDelegate>`, and `<NSURLSessionDelegate>`.
+ `LCURLSessionManager` creates and manages an `NSURLSession` object based on a specified `NSURLSessionConfiguration` object, which conforms to `<NSURLSessionTaskDelegate>`, `<NSURLSessionDataDelegate>`, `<NSURLSessionDownloadDelegate>`, and `<NSURLSessionDelegate>`.
 
  ## Subclassing Notes
 
- This is the base class for `AFHTTPSessionManager`, which adds functionality specific to making HTTP requests. If you are looking to extend `AFURLSessionManager` specifically for HTTP, consider subclassing `AFHTTPSessionManager` instead.
+ This is the base class for `LCHTTPSessionManager`, which adds functionality specific to making HTTP requests. If you are looking to extend `LCURLSessionManager` specifically for HTTP, consider subclassing `LCHTTPSessionManager` instead.
 
  ## NSURLSession & NSURLSessionTask Delegate Methods
 
- `AFURLSessionManager` implements the following delegate methods:
+ `LCURLSessionManager` implements the following delegate methods:
 
  ### `NSURLSessionDelegate`
 
@@ -71,7 +72,7 @@
 
  ## Network Reachability Monitoring
 
- Network reachability status and change monitoring is available through the `reachabilityManager` property. Applications may choose to monitor network reachability conditions in order to prevent or suspend any outbound requests. See `AFNetworkReachabilityManager` for more details.
+ Network reachability status and change monitoring is available through the `reachabilityManager` property. Applications may choose to monitor network reachability conditions in order to prevent or suspend any outbound requests. See `LCNetworkReachabilityManager` for more details.
 
  ## NSCoding Caveats
 
@@ -100,7 +101,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic, strong) NSOperationQueue *operationQueue;
 
 /**
- Responses sent from the server in data tasks created with `dataTaskWithRequest:success:failure:` and run using the `GET` / `POST` / et al. convenience methods are automatically validated and serialized by the response serializer. By default, this property is set to an instance of `AFJSONResponseSerializer`.
+ Responses sent from the server in data tasks created with `dataTaskWithRequest:success:failure:` and run using the `GET` / `POST` / et al. convenience methods are automatically validated and serialized by the response serializer. By default, this property is set to an instance of `LCJSONResponseSerializer`.
 
  @warning `responseSerializer` must not be `nil`.
  */
@@ -111,7 +112,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///-------------------------------
 
 /**
- The security policy used by created session to evaluate server trust for secure connections. `AFURLSessionManager` uses the `defaultPolicy` unless otherwise specified.
+ The security policy used by created session to evaluate server trust for secure connections. `LCURLSessionManager` uses the `defaultPolicy` unless otherwise specified.
  */
 @property (nonatomic, strong) LCSecurityPolicy *securityPolicy;
 
@@ -121,7 +122,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///--------------------------------------
 
 /**
- The network reachability manager. `AFURLSessionManager` uses the `sharedManager` by default.
+ The network reachability manager. `LCURLSessionManager` uses the `sharedManager` by default.
  */
 @property (readwrite, nonatomic, strong) LCNetworkReachabilityManager *reachabilityManager;
 #endif
@@ -208,7 +209,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param completionHandler A block object to be executed when the task finishes. This block has no return value and takes three arguments: the server response, the response object created by that serializer, and the error that occurred, if any.
  */
 - (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
-                            completionHandler:(nullable void (^)(NSURLResponse *response, id _Nullable responseObject,  NSError * _Nullable error))completionHandler;
+                            completionHandler:(nullable void (^)(NSURLResponse *response, id _Nullable responseObject,  NSError * _Nullable error))completionHandler DEPRECATED_ATTRIBUTE;
 
 /**
  Creates an `NSURLSessionDataTask` with the specified request.
@@ -354,7 +355,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param block A block object to be executed when an HTTP request is attempting to perform a redirection to a different URL. The block returns the request to be made for the redirection, and takes four arguments: the session, the task, the redirection response, and the request corresponding to the redirection response.
  */
-- (void)setTaskWillPerformHTTPRedirectionBlock:(nullable NSURLRequest * (^)(NSURLSession *session, NSURLSessionTask *task, NSURLResponse *response, NSURLRequest *request))block;
+- (void)setTaskWillPerformHTTPRedirectionBlock:(nullable NSURLRequest * _Nullable (^)(NSURLSession *session, NSURLSessionTask *task, NSURLResponse *response, NSURLRequest *request))block;
 
 /**
  Sets a block to be executed when a session task has received a request specific authentication challenge, as handled by the `NSURLSessionTaskDelegate` method `URLSession:task:didReceiveChallenge:completionHandler:`.
@@ -414,7 +415,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param block A block object to be executed once all messages enqueued for a session have been delivered. The block has no return value and takes a single argument: the session.
  */
-- (void)setDidFinishEventsForBackgroundURLSessionBlock:(nullable void (^)(NSURLSession *session))block;
+- (void)setDidFinishEventsForBackgroundURLSessionBlock:(nullable void (^)(NSURLSession *session))block LC_API_UNAVAILABLE(macos);
 
 ///-----------------------------------------------
 /// @name Setting Download Task Delegate Callbacks
@@ -423,7 +424,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Sets a block to be executed when a download task has completed a download, as handled by the `NSURLSessionDownloadDelegate` method `URLSession:downloadTask:didFinishDownloadingToURL:`.
 
- @param block A block object to be executed when a download task has completed. The block returns the URL the download should be moved to, and takes three arguments: the session, the download task, and the temporary location of the downloaded file. If the file manager encounters an error while attempting to move the temporary file to the destination, an `AFURLSessionDownloadTaskDidFailToMoveFileNotification` will be posted, with the download task as its object, and the user info of the error.
+ @param block A block object to be executed when a download task has completed. The block returns the URL the download should be moved to, and takes three arguments: the session, the download task, and the temporary location of the downloaded file. If the file manager encounters an error while attempting to move the temporary file to the destination, an `LCURLSessionDownloadTaskDidFailToMoveFileNotification` will be posted, with the download task as its object, and the user info of the error.
  */
 - (void)setDownloadTaskDidFinishDownloadingBlock:(nullable NSURL * _Nullable  (^)(NSURLSession *session, NSURLSessionDownloadTask *downloadTask, NSURL *location))block;
 
@@ -473,27 +474,27 @@ FOUNDATION_EXPORT NSString * const LCURLSessionDidInvalidateNotification;
 FOUNDATION_EXPORT NSString * const LCURLSessionDownloadTaskDidFailToMoveFileNotification;
 
 /**
- The raw response data of the task. Included in the userInfo dictionary of the `AFNetworkingTaskDidCompleteNotification` if response data exists for the task.
+ The raw response data of the task. Included in the userInfo dictionary of the `LCNetworkingTaskDidCompleteNotification` if response data exists for the task.
  */
 FOUNDATION_EXPORT NSString * const LCNetworkingTaskDidCompleteResponseDataKey;
 
 /**
- The serialized response object of the task. Included in the userInfo dictionary of the `AFNetworkingTaskDidCompleteNotification` if the response was serialized.
+ The serialized response object of the task. Included in the userInfo dictionary of the `LCNetworkingTaskDidCompleteNotification` if the response was serialized.
  */
 FOUNDATION_EXPORT NSString * const LCNetworkingTaskDidCompleteSerializedResponseKey;
 
 /**
- The response serializer used to serialize the response. Included in the userInfo dictionary of the `AFNetworkingTaskDidCompleteNotification` if the task has an associated response serializer.
+ The response serializer used to serialize the response. Included in the userInfo dictionary of the `LCNetworkingTaskDidCompleteNotification` if the task has an associated response serializer.
  */
 FOUNDATION_EXPORT NSString * const LCNetworkingTaskDidCompleteResponseSerializerKey;
 
 /**
- The file path associated with the download task. Included in the userInfo dictionary of the `AFNetworkingTaskDidCompleteNotification` if an the response data has been stored directly to disk.
+ The file path associated with the download task. Included in the userInfo dictionary of the `LCNetworkingTaskDidCompleteNotification` if an the response data has been stored directly to disk.
  */
 FOUNDATION_EXPORT NSString * const LCNetworkingTaskDidCompleteAssetPathKey;
 
 /**
- Any error associated with the task, or the serialization of the response. Included in the userInfo dictionary of the `AFNetworkingTaskDidCompleteNotification` if an error exists.
+ Any error associated with the task, or the serialization of the response. Included in the userInfo dictionary of the `LCNetworkingTaskDidCompleteNotification` if an error exists.
  */
 FOUNDATION_EXPORT NSString * const LCNetworkingTaskDidCompleteErrorKey;
 

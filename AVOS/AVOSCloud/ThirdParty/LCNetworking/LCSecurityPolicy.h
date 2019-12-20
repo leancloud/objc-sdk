@@ -1,4 +1,4 @@
-// AFSecurityPolicy.h
+// LCSecurityPolicy.h
 // Copyright (c) 2011–2016 Alamofire Software Foundation ( http://alamofire.org/ )
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,14 +22,14 @@
 #import <Foundation/Foundation.h>
 #import <Security/Security.h>
 
-typedef NS_ENUM(NSUInteger, AFSSLPinningMode) {
-    AFSSLPinningModeNone,
-    AFSSLPinningModePublicKey,
-    AFSSLPinningModeCertificate,
+typedef NS_ENUM(NSUInteger, LCSSLPinningMode) {
+    LCSSLPinningModeNone,
+    LCSSLPinningModePublicKey,
+    LCSSLPinningModeCertificate,
 };
 
 /**
- `AFSecurityPolicy` evaluates server trust against pinned X.509 certificates and public keys over secure connections.
+ `LCSecurityPolicy` evaluates server trust against pinned X.509 certificates and public keys over secure connections.
 
  Adding pinned SSL certificates to your app helps prevent man-in-the-middle attacks and other vulnerabilities. Applications dealing with sensitive customer data or financial information are strongly encouraged to route all communication over an HTTPS connection with SSL pinning configured and enabled.
  */
@@ -39,9 +39,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface LCSecurityPolicy : NSObject <NSSecureCoding, NSCopying>
 
 /**
- The criteria by which server trust should be evaluated against the pinned SSL certificates. Defaults to `AFSSLPinningModeNone`.
+ The criteria by which server trust should be evaluated against the pinned SSL certificates. Defaults to `LCSSLPinningModeNone`.
  */
-@property (readonly, nonatomic, assign) AFSSLPinningMode SSLPinningMode;
+@property (readonly, nonatomic, assign) LCSSLPinningMode SSLPinningMode;
 
 /**
  The certificates used to evaluate server trust according to the SSL pinning mode. 
@@ -95,7 +95,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @return A new security policy.
  */
-+ (instancetype)policyWithPinningMode:(AFSSLPinningMode)pinningMode;
++ (instancetype)policyWithPinningMode:(LCSSLPinningMode)pinningMode;
 
 /**
  Creates and returns a security policy with the specified pinning mode.
@@ -105,7 +105,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @return A new security policy.
  */
-+ (instancetype)policyWithPinningMode:(AFSSLPinningMode)pinningMode withPinnedCertificates:(NSSet <NSData *> *)pinnedCertificates;
++ (instancetype)policyWithPinningMode:(LCSSLPinningMode)pinningMode withPinnedCertificates:(NSSet <NSData *> *)pinnedCertificates;
 
 ///------------------------------
 /// @name Evaluating Server Trust
@@ -135,20 +135,20 @@ NS_ASSUME_NONNULL_END
 /**
  ## SSL Pinning Modes
 
- The following constants are provided by `AFSSLPinningMode` as possible SSL pinning modes.
+ The following constants are provided by `LCSSLPinningMode` as possible SSL pinning modes.
 
  enum {
- AFSSLPinningModeNone,
- AFSSLPinningModePublicKey,
- AFSSLPinningModeCertificate,
+ LCSSLPinningModeNone,
+ LCSSLPinningModePublicKey,
+ LCSSLPinningModeCertificate,
  }
 
- `AFSSLPinningModeNone`
+ `LCSSLPinningModeNone`
  Do not used pinned certificates to validate servers.
 
- `AFSSLPinningModePublicKey`
+ `LCSSLPinningModePublicKey`
  Validate host certificates against public keys of pinned certificates.
 
- `AFSSLPinningModeCertificate`
+ `LCSSLPinningModeCertificate`
  Validate host certificates against pinned certificates.
 */

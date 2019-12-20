@@ -164,14 +164,14 @@ static NSString *const WWANType = @"WWAN";
     [reachabilityManager startMonitoring];
 
     switch (reachabilityManager.networkReachabilityStatus) {
-    case AFNetworkReachabilityStatusUnknown:
-        break;
-    case AFNetworkReachabilityStatusNotReachable:
-        break;
-    case AFNetworkReachabilityStatusReachableViaWiFi:
-        type = WiFiType;
-    case AFNetworkReachabilityStatusReachableViaWWAN:
-        type = WWANType;
+        case LCNetworkReachabilityStatusUnknown:
+            break;
+        case LCNetworkReachabilityStatusNotReachable:
+            break;
+        case LCNetworkReachabilityStatusReachableViaWiFi:
+            type = WiFiType;
+        case LCNetworkReachabilityStatusReachableViaWWAN:
+            type = WWANType;
     }
 
     return type;

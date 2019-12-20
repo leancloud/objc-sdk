@@ -145,7 +145,7 @@ static NSString * const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 @interface AVIMWebSocketWrapper () <AVIMWebSocketDelegate>
 
 @property (atomic, assign) BOOL isApplicationInBackground;
-@property (atomic, assign) AFNetworkReachabilityStatus currentNetworkReachabilityStatus;
+@property (atomic, assign) LCNetworkReachabilityStatus currentNetworkReachabilityStatus;
 
 @end
 
@@ -235,16 +235,16 @@ static NSString * const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         __weak typeof(self) weakSelf = self;
         self->_reachabilityMonitor = [LCNetworkReachabilityManager manager];
         // this is not real init for Network Reachability Status, but need it to handle follow-up event.
-        self->_currentNetworkReachabilityStatus = AFNetworkReachabilityStatusUnknown;
+        self->_currentNetworkReachabilityStatus = LCNetworkReachabilityStatusUnknown;
         self->_didInitNetworkReachabilityStatus = false;
-        [self->_reachabilityMonitor setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus newStatus) {
+        [self->_reachabilityMonitor setReachabilityStatusChangeBlock:^(LCNetworkReachabilityStatus newStatus) {
             AVIMWebSocketWrapper *strongSelf = weakSelf;
             if (!strongSelf) { return; }
             AVLoggerInfo(AVLoggerDomainIM, @"<websocket wrapper address: %p> network reachability status: %@.", strongSelf, @(newStatus));
-            AFNetworkReachabilityStatus oldStatus = strongSelf.currentNetworkReachabilityStatus;
+            LCNetworkReachabilityStatus oldStatus = strongSelf.currentNetworkReachabilityStatus;
             strongSelf.currentNetworkReachabilityStatus = newStatus;
             if (strongSelf->_didInitNetworkReachabilityStatus) {
-                if (oldStatus != AFNetworkReachabilityStatusNotReachable && newStatus == AFNetworkReachabilityStatusNotReachable) {
+                if (oldStatus != LCNetworkReachabilityStatusNotReachable && newStatus == LCNetworkReachabilityStatusNotReachable) {
                     [strongSelf addOperationToInternalSerialQueue:^(AVIMWebSocketWrapper *websocketWrapper) {
                         NSError *error = ({
                             AVIMErrorCode code = AVIMErrorCodeConnectionLost;
@@ -254,7 +254,7 @@ static NSString * const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
                         [websocketWrapper purgeWithError:error];
                         [websocketWrapper pauseWithError:error];
                     }];
-                } else if (oldStatus != newStatus && newStatus != AFNetworkReachabilityStatusNotReachable) {
+                } else if (oldStatus != newStatus && newStatus != LCNetworkReachabilityStatusNotReachable) {
                     [strongSelf addOperationToInternalSerialQueue:^(AVIMWebSocketWrapper *websocketWrapper) {
                         NSError *error = ({
                             AVIMErrorCode code = AVIMErrorCodeConnectionLost;
@@ -646,7 +646,7 @@ static NSArray<NSString *> * RTMProtocols()
             LCError(code, reason, nil);
         });
     }
-    if (self.currentNetworkReachabilityStatus == AFNetworkReachabilityStatusNotReachable) {
+    if (self.currentNetworkReachabilityStatus == LCNetworkReachabilityStatusNotReachable) {
         return ({
             AVIMErrorCode code = AVIMErrorCodeConnectionLost;
             NSString *reason = @"Due to network unavailable, connection lost.";
