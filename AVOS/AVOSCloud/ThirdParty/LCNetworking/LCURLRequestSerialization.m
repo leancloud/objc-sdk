@@ -27,8 +27,8 @@
 #import <CoreServices/CoreServices.h>
 #endif
 
-NSString * const LCURLRequestSerializationErrorDomain = @"com.leancloud.error.serialization.request";
-NSString * const LCNetworkingOperationFailingURLRequestErrorKey = @"com.leancloud.serialization.request.error.response";
+NSString * const LCURLRequestSerializationErrorDomain = @"com.alamofire.error.serialization.request";
+NSString * const LCNetworkingOperationFailingURLRequestErrorKey = @"com.alamofire.serialization.request.error.response";
 
 typedef NSString * (^LCQueryStringSerializationBlock)(NSURLRequest *request, id parameters, NSError *__autoreleasing *error);
 

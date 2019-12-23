@@ -31,9 +31,9 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-NSString * const LCURLResponseSerializationErrorDomain = @"com.leancloud.error.serialization.response";
-NSString * const LCNetworkingOperationFailingURLResponseErrorKey = @"com.leancloud.serialization.response.error.response";
-NSString * const LCNetworkingOperationFailingURLResponseDataErrorKey = @"com.leancloud.serialization.response.error.data";
+NSString * const LCURLResponseSerializationErrorDomain = @"com.alamofire.error.serialization.response";
+NSString * const LCNetworkingOperationFailingURLResponseErrorKey = @"com.alamofire.serialization.response.error.response";
+NSString * const LCNetworkingOperationFailingURLResponseDataErrorKey = @"com.alamofire.serialization.response.error.data";
 
 static NSError * LCErrorWithUnderlyingError(NSError *error, NSError *underlyingError) {
     if (!error) {
