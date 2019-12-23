@@ -234,8 +234,8 @@ static NSString * const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
         
         __weak typeof(self) weakSelf = self;
         self->_reachabilityMonitor = [LCNetworkReachabilityManager manager];
-        // this is not real init for Network Reachability Status, but need it to handle follow-up event.
-        self->_currentNetworkReachabilityStatus = LCNetworkReachabilityStatusUnknown;
+        self->_reachabilityMonitor.reachabilityQueue = self->_internalSerialQueue;
+        self->_currentNetworkReachabilityStatus = self->_reachabilityMonitor.networkReachabilityStatus;
         self->_didInitNetworkReachabilityStatus = false;
         [self->_reachabilityMonitor setReachabilityStatusChangeBlock:^(LCNetworkReachabilityStatus newStatus) {
             AVIMWebSocketWrapper *strongSelf = weakSelf;
@@ -245,26 +245,22 @@ static NSString * const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
             strongSelf.currentNetworkReachabilityStatus = newStatus;
             if (strongSelf->_didInitNetworkReachabilityStatus) {
                 if (oldStatus != LCNetworkReachabilityStatusNotReachable && newStatus == LCNetworkReachabilityStatusNotReachable) {
-                    [strongSelf addOperationToInternalSerialQueue:^(AVIMWebSocketWrapper *websocketWrapper) {
-                        NSError *error = ({
-                            AVIMErrorCode code = AVIMErrorCodeConnectionLost;
-                            NSString *reason = @"Due to network unavailable, connection lost.";
-                            LCError(code, reason, nil);
-                        });
-                        [websocketWrapper purgeWithError:error];
-                        [websocketWrapper pauseWithError:error];
-                    }];
+                    NSError *error = ({
+                        AVIMErrorCode code = AVIMErrorCodeConnectionLost;
+                        NSString *reason = @"Due to network unavailable, connection lost.";
+                        LCError(code, reason, nil);
+                    });
+                    [strongSelf purgeWithError:error];
+                    [strongSelf pauseWithError:error];
                 } else if (oldStatus != newStatus && newStatus != LCNetworkReachabilityStatusNotReachable) {
-                    [strongSelf addOperationToInternalSerialQueue:^(AVIMWebSocketWrapper *websocketWrapper) {
-                        NSError *error = ({
-                            AVIMErrorCode code = AVIMErrorCodeConnectionLost;
-                            NSString *reason = @"Due to network interface did change, connection lost.";
-                            LCError(code, reason, nil);
-                        });
-                        [websocketWrapper purgeWithError:error];
-                        [websocketWrapper pauseWithError:error];
-                        [websocketWrapper tryConnecting:false];
-                    }];
+                    NSError *error = ({
+                        AVIMErrorCode code = AVIMErrorCodeConnectionLost;
+                        NSString *reason = @"Due to network interface did change, connection lost.";
+                        LCError(code, reason, nil);
+                    });
+                    [strongSelf purgeWithError:error];
+                    [strongSelf pauseWithError:error];
+                    [strongSelf tryConnecting:false];
                 }
             } else {
                 strongSelf->_didInitNetworkReachabilityStatus = true;
