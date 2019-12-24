@@ -240,9 +240,12 @@ static const size_t  LCRTMMaxFrameSize        = 32;
                                          (__bridge CFStringRef)protocols);
     }
    
+    /// Objc SDK should not set Origin Header.
+    /*
     CFHTTPMessageSetHeaderFieldValue(urlRequest,
                                      (__bridge CFStringRef)headerOriginName,
                                      (__bridge CFStringRef)[self origin]);
+    */
     
     for(NSString *key in self.headers) {
         CFHTTPMessageSetHeaderFieldValue(urlRequest,
