@@ -76,6 +76,7 @@ typedef NS_ENUM(NSUInteger, LCRTMInternalErrorCode) {
 @property(nonatomic, strong, nullable)NSData *fragBuffer;
 @property(nonatomic, strong, nullable)NSMutableDictionary *headers;
 @property(nonatomic, strong, nullable)NSArray *optProtocols;
+@property(atomic, assign)BOOL isConnected;
 @property(nonatomic, assign)BOOL isCreated;
 @property(nonatomic, assign)BOOL didDisconnect;
 @property(nonatomic, assign)BOOL certValidated;
@@ -365,7 +366,7 @@ static const size_t  LCRTMMaxFrameSize        = 32;
     self.outputStream = nil;
     self.inputStream = nil;
     self.isRunLoop = NO;
-    _isConnected = NO;
+    self.isConnected = NO;
     self.certValidated = NO;
     [self doDisconnect:error];
 }
@@ -441,14 +442,13 @@ static const size_t  LCRTMMaxFrameSize        = 32;
     if(totalSize > 0) {
         BOOL status = [self validateResponse:buffer length:totalSize responseStatusCode:responseStatusCode];
         if (status == YES) {
-            _isConnected = YES;
+            self.isConnected = YES;
             __weak typeof(self) weakSelf = self;
             dispatch_async(self.queue,^{
-                if([self.delegate respondsToSelector:@selector(websocketDidConnect:)]) {
-                    [weakSelf.delegate websocketDidConnect:self];
-                }
-                if(weakSelf.onConnect) {
-                    weakSelf.onConnect();
+                LCRTMWebSocket *strongSelf = weakSelf;
+                if (!strongSelf) { return; }
+                if([strongSelf respondsToSelector:@selector(websocketDidConnect:)]) {
+                    [strongSelf.delegate websocketDidConnect:strongSelf];
                 }
             });
             totalSize += 1; //skip the last \n
@@ -584,6 +584,14 @@ static const size_t  LCRTMMaxFrameSize        = 32;
             data = [NSData dataWithBytes:(buffer+offset) length:len];
         }
         if(receivedOpcode == LCRTMOpCodePong) {
+            __weak typeof(self) weakSelf = self;
+            dispatch_async(self.queue,^{
+                LCRTMWebSocket *strongSelf = weakSelf;
+                if (!strongSelf) { return; }
+                if([strongSelf.delegate respondsToSelector:@selector(websocket:didReceivePong:)]) {
+                    [strongSelf.delegate websocket:strongSelf didReceivePong:data];
+                }
+            });
             NSInteger step = (offset+len);
             NSInteger extra = bufferLen-step;
             if(extra > 0) {
@@ -660,21 +668,19 @@ static const size_t  LCRTMMaxFrameSize        = 32;
             }
             __weak typeof(self) weakSelf = self;
             dispatch_async(self.queue,^{
-                if([weakSelf.delegate respondsToSelector:@selector(websocket:didReceiveMessage:)]) {
-                    [weakSelf.delegate websocket:weakSelf didReceiveMessage:str];
-                }
-                if(weakSelf.onText) {
-                    weakSelf.onText(str);
+                LCRTMWebSocket *strongSelf = weakSelf;
+                if (!strongSelf) { return; }
+                if([strongSelf.delegate respondsToSelector:@selector(websocket:didReceiveMessage:)]) {
+                    [strongSelf.delegate websocket:strongSelf didReceiveMessage:str];
                 }
             });
         } else if(response.code == LCRTMOpCodeBinaryFrame) {
             __weak typeof(self) weakSelf = self;
             dispatch_async(self.queue,^{
-                if([weakSelf.delegate respondsToSelector:@selector(websocket:didReceiveData:)]) {
-                    [weakSelf.delegate websocket:weakSelf didReceiveData:data];
-                }
-                if(weakSelf.onData) {
-                    weakSelf.onData(data);
+                LCRTMWebSocket *strongSelf = weakSelf;
+                if (!strongSelf) { return; }
+                if([strongSelf.delegate respondsToSelector:@selector(websocket:didReceiveData:)]) {
+                    [strongSelf.delegate websocket:strongSelf didReceiveData:data];
                 }
             });
         }
@@ -760,13 +766,12 @@ static const size_t  LCRTMMaxFrameSize        = 32;
     if(!self.didDisconnect) {
         __weak typeof(self) weakSelf = self;
         dispatch_async(self.queue, ^{
-            weakSelf.didDisconnect = YES;
-            [weakSelf disconnect];
-            if([weakSelf.delegate respondsToSelector:@selector(websocketDidDisconnect:error:)]) {
-                [weakSelf.delegate websocketDidDisconnect:weakSelf error:error];
-            }
-            if(weakSelf.onDisconnect) {
-                weakSelf.onDisconnect(error);
+            LCRTMWebSocket *strongSelf = weakSelf;
+            if (!strongSelf) { return; }
+            strongSelf.didDisconnect = YES;
+            [strongSelf disconnect];
+            if([strongSelf.delegate respondsToSelector:@selector(websocketDidDisconnect:error:)]) {
+                [strongSelf.delegate websocketDidDisconnect:strongSelf error:error];
             }
         });
     }

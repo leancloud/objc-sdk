@@ -58,6 +58,12 @@
  */
 -(void)websocket:(nonnull LCRTMWebSocket*)socket didReceiveData:(nullable NSData*)data;
 
+/**
+ The websocket got a pong.
+ @param socket is the current socket object.
+ */
+-(void)websocket:(nonnull LCRTMWebSocket*)socket didReceivePong:(nullable NSData*)data;
+
 @end
 
 @interface LCRTMWebSocket : NSObject
@@ -111,7 +117,7 @@
 /**
  returns if the socket is conneted or not.
  */
-@property(nonatomic, assign, readonly)BOOL isConnected;
+@property(atomic, assign, readonly)BOOL isConnected;
 
 /**
  Enable VOIP support on the socket, so it can be used in the background for VOIP calls.
@@ -135,25 +141,5 @@
  Default setting is dispatch_get_main_queue.
  */
 @property(nonatomic, strong, nullable)dispatch_queue_t queue;
-
-/**
- Block property to use on connect.
- */
-@property(nonatomic, strong, nullable)void (^onConnect)(void);
-
-/**
- Block property to use on disconnect.
- */
-@property(nonatomic, strong, nullable)void (^onDisconnect)(NSError*_Nullable);
-
-/**
- Block property to use on receiving data.
- */
-@property(nonatomic, strong, nullable)void (^onData)(NSData*_Nullable);
-
-/**
- Block property to use on receiving text.
- */
-@property(nonatomic, strong, nullable)void (^onText)(NSString*_Nullable);
 
 @end
