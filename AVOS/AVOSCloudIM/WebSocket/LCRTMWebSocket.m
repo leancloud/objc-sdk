@@ -40,7 +40,7 @@ typedef NS_ENUM(NSUInteger, LCRTMCloseCode) {
     LCRTMCloseCodeProtocolUnhandledType  = 1003,
     // 1004 reserved.
     LCRTMCloseCodeNoStatusReceived       = 1005,
-    //1006 reserved.
+    // 1006 reserved.
     LCRTMCloseCodeEncoding               = 1007,
     LCRTMCloseCodePolicyViolated         = 1008,
     LCRTMCloseCodeMessageTooBig          = 1009
@@ -48,7 +48,11 @@ typedef NS_ENUM(NSUInteger, LCRTMCloseCode) {
 
 typedef NS_ENUM(NSUInteger, LCRTMInternalErrorCode) {
     // 0-999 WebSocket status codes not used
-    LCRTMOutputStreamWriteError  = 1
+    LCRTMOutputStreamWriteError = 1, //Output stream error during write
+    LCRTMInvalidSSLError        = 2, //Invalid SSL certificate
+    LCRTMWriteTimeoutError      = 3, //The socket timed out waiting to be ready to write
+    LCRTMUpgradeError           = 4, //There was an error during the HTTP upgrade
+    LCRTMCloseError             = 5  //There was an error during the close (socket probably has been dereferenced)
 };
 
 #define kLCRTMInternalHTTPStatusWebSocket 101
@@ -67,9 +71,10 @@ typedef NS_ENUM(NSUInteger, LCRTMInternalErrorCode) {
 @interface LCRTMWebSocket ()<NSStreamDelegate>
 
 @property(nonatomic, strong, nonnull)NSURL *url;
-@property(nonatomic, strong, null_unspecified)NSInputStream *inputStream;
-@property(nonatomic, strong, null_unspecified)NSOutputStream *outputStream;
-@property(nonatomic, strong, null_unspecified)NSOperationQueue *writeQueue;
+@property(nonatomic, strong, nonnull)NSOperationQueue *writeQueue;
+@property(nonatomic, strong, nonnull)dispatch_queue_t streamQueue;
+@property(nonatomic, strong)NSInputStream *inputStream;
+@property(nonatomic, strong)NSOutputStream *outputStream;
 @property(nonatomic, assign)BOOL isRunLoop;
 @property(nonatomic, strong, nonnull)NSMutableArray *readStack;
 @property(nonatomic, strong, nonnull)NSMutableArray *inputQueue;
@@ -116,17 +121,18 @@ static const size_t  LCRTMMaxFrameSize        = 32;
 //Default initializer
 - (instancetype)initWithURL:(NSURL *)url protocols:(NSArray*)protocols
 {
-    if(self = [super init]) {
+    self = [super init];
+    if (self) {
         self.certValidated = NO;
         self.voipEnabled = NO;
         self.selfSignedSSL = NO;
         self.queue = dispatch_get_main_queue();
+        self.streamQueue = dispatch_queue_create("LCRTMWebSocket.streamQueue", DISPATCH_QUEUE_SERIAL);
         self.url = url;
         self.readStack = [NSMutableArray new];
         self.inputQueue = [NSMutableArray new];
         self.optProtocols = protocols;
     }
-    
     return self;
 }
 /////////////////////////////////////////////////////////////////////////////
@@ -182,7 +188,7 @@ static const size_t  LCRTMMaxFrameSize        = 32;
 
 - (NSString *)origin;
 {
-    NSString *scheme = [_url.scheme lowercaseString];
+    NSString *scheme = [self.url.scheme lowercaseString];
     
     if ([scheme isEqualToString:@"wss"]) {
         scheme = @"https";
@@ -190,10 +196,10 @@ static const size_t  LCRTMMaxFrameSize        = 32;
         scheme = @"http";
     }
     
-    if (_url.port) {
-        return [NSString stringWithFormat:@"%@://%@:%@/", scheme, _url.host, _url.port];
+    if (self.url.port) {
+        return [NSString stringWithFormat:@"%@://%@:%@/", scheme, self.url.host, self.url.port];
     } else {
-        return [NSString stringWithFormat:@"%@://%@/", scheme, _url.host];
+        return [NSString stringWithFormat:@"%@://%@/", scheme, self.url.host];
     }
 }
 
@@ -208,7 +214,7 @@ static const size_t  LCRTMMaxFrameSize        = 32;
                                                              kCFHTTPVersion1_1);
     CFRelease(url);
     
-    NSNumber *port = _url.port;
+    NSNumber *port = self.url.port;
     if (!port) {
         if([self.url.scheme isEqualToString:@"wss"] || [self.url.scheme isEqualToString:@"https"]){
             port = @(443);
@@ -280,7 +286,8 @@ static const size_t  LCRTMMaxFrameSize        = 32;
     
     self.inputStream = (__bridge_transfer NSInputStream *)readStream;
     self.inputStream.delegate = self;
-    self.outputStream = (__bridge_transfer NSOutputStream *)writeStream;
+    NSOutputStream *outputStream = (__bridge_transfer NSOutputStream *)writeStream;
+    self.outputStream = outputStream;
     self.outputStream.delegate = self;
     if([self.url.scheme isEqualToString:@"wss"] || [self.url.scheme isEqualToString:@"https"]) {
         [self.inputStream setProperty:NSStreamSocketSecurityLevelNegotiatedSSL forKey:NSStreamSocketSecurityLevelKey];
@@ -301,13 +308,37 @@ static const size_t  LCRTMMaxFrameSize        = 32;
         [self.inputStream setProperty:settings forKey:key];
         [self.outputStream setProperty:settings forKey:key];
     }
+    CFReadStreamSetDispatchQueue((__bridge CFReadStreamRef)self.inputStream, self.streamQueue);
+    CFWriteStreamSetDispatchQueue((__bridge CFWriteStreamRef)self.outputStream, self.streamQueue);
+    [self.inputStream open];
+    [self.outputStream open];
+    
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(self.streamQueue, ^{
+        NSTimeInterval timeout = (60 * 1000000);
+        while (!outputStream.hasSpaceAvailable) {
+            usleep(100);
+            timeout -= 100;
+            if (timeout < 0) {
+                NSError *error = [LCRTMWebSocket errorWithDetail:@"Timed out waiting for the socket to be ready for a write" code:LCRTMWriteTimeoutError];
+                [weakSelf disconnectStream:error];
+                return;
+            } else if (outputStream.streamError) {
+                [weakSelf disconnectStream:outputStream.streamError];
+                return;
+            } else if (!weakSelf) {
+                return;
+            }
+        }
+        NSBlockOperation *op = [NSBlockOperation blockOperationWithBlock:^{
+            [outputStream write:[data bytes] maxLength:[data length]];
+        }];
+        [weakSelf.writeQueue addOperation:op];
+    });
+    
     self.isRunLoop = YES;
     [self.inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     [self.outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [self.inputStream open];
-    [self.outputStream open];
-    size_t dataLen = [data length];
-    [self.outputStream write:[data bytes] maxLength:dataLen];
     while (self.isRunLoop) {
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
     }
@@ -324,7 +355,7 @@ static const size_t  LCRTMMaxFrameSize        = 32;
         if([self.security isValid:trust domain:domain]) {
             self.certValidated = YES;
         } else {
-            [self disconnectStream:[self errorWithDetail:@"Invalid SSL certificate" code:1]];
+            [self disconnectStream:[LCRTMWebSocket errorWithDetail:@"Invalid SSL certificate" code:1]];
             return;
         }
     }
@@ -358,16 +389,28 @@ static const size_t  LCRTMMaxFrameSize        = 32;
 }
 /////////////////////////////////////////////////////////////////////////////
 - (void)disconnectStream:(NSError*)error {
-    [self.writeQueue waitUntilAllOperationsAreFinished];
-    [self.inputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [self.outputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [self.outputStream close];
-    [self.inputStream close];
-    self.outputStream = nil;
-    self.inputStream = nil;
+    if (error) {
+        [self.writeQueue cancelAllOperations];
+    } else {
+        [self.writeQueue waitUntilAllOperationsAreFinished];
+    }
+    if (self.inputStream) {
+        self.inputStream.delegate = nil;
+        CFReadStreamSetDispatchQueue((__bridge CFReadStreamRef)self.inputStream, NULL);
+        [self.inputStream close];
+        self.inputStream = nil;
+    }
+    if (self.outputStream) {
+        self.outputStream.delegate = nil;
+        CFWriteStreamSetDispatchQueue((__bridge CFWriteStreamRef)self.outputStream, NULL);
+        [self.outputStream close];
+        self.outputStream = nil;
+    }
+    
     self.isRunLoop = NO;
     self.isConnected = NO;
     self.certValidated = NO;
+    
     [self doDisconnect:error];
 }
 /////////////////////////////////////////////////////////////////////////////
@@ -392,7 +435,7 @@ static const size_t  LCRTMMaxFrameSize        = 32;
                 NSLog(@"response (%ld) = \"%s\"", responseStatusCode, buffer);
 #endif
                 if(status == NO) {
-                    [self doDisconnect:[self errorWithDetail:@"Invalid HTTP upgrade" code:1 userInfo:@{@"HTTPResponseStatusCode" : @(responseStatusCode)}]];
+                    [self doDisconnect:[LCRTMWebSocket errorWithDetail:@"Invalid HTTP upgrade" code:1 userInfo:@{@"HTTPResponseStatusCode" : @(responseStatusCode)}]];
                 }
             } else {
                 BOOL process = NO;
@@ -447,7 +490,7 @@ static const size_t  LCRTMMaxFrameSize        = 32;
             dispatch_async(self.queue,^{
                 LCRTMWebSocket *strongSelf = weakSelf;
                 if (!strongSelf) { return; }
-                if([strongSelf respondsToSelector:@selector(websocketDidConnect:)]) {
+                if([strongSelf.delegate respondsToSelector:@selector(websocketDidConnect:)]) {
                     [strongSelf.delegate websocketDidConnect:strongSelf];
                 }
             });
@@ -513,18 +556,18 @@ static const size_t  LCRTMMaxFrameSize        = 32;
         uint8_t payloadLen = (LCRTMPayloadLenMask & buffer[1]);
         NSInteger offset = 2; //how many bytes do we need to skip for the header
         if((isMasked  || (LCRTMRSVMask & buffer[0])) && receivedOpcode != LCRTMOpCodePong) {
-            [self doDisconnect:[self errorWithDetail:@"masked and rsv data is not currently supported" code:LCRTMCloseCodeProtocolError]];
+            [self doDisconnect:[LCRTMWebSocket errorWithDetail:@"masked and rsv data is not currently supported" code:LCRTMCloseCodeProtocolError]];
             [self writeError:LCRTMCloseCodeProtocolError];
             return;
         }
         BOOL isControlFrame = (receivedOpcode == LCRTMOpCodeConnectionClose || receivedOpcode == LCRTMOpCodePing);
         if(!isControlFrame && (receivedOpcode != LCRTMOpCodeBinaryFrame && receivedOpcode != LCRTMOpCodeContinueFrame && receivedOpcode != LCRTMOpCodeTextFrame && receivedOpcode != LCRTMOpCodePong)) {
-            [self doDisconnect:[self errorWithDetail:[NSString stringWithFormat:@"unknown opcode: 0x%x",receivedOpcode] code:LCRTMCloseCodeProtocolError]];
+            [self doDisconnect:[LCRTMWebSocket errorWithDetail:[NSString stringWithFormat:@"unknown opcode: 0x%x",receivedOpcode] code:LCRTMCloseCodeProtocolError]];
             [self writeError:LCRTMCloseCodeProtocolError];
             return;
         }
         if(isControlFrame && !isFin) {
-            [self doDisconnect:[self errorWithDetail:@"control frames can't be fragmented" code:LCRTMCloseCodeProtocolError]];
+            [self doDisconnect:[LCRTMWebSocket errorWithDetail:@"control frames can't be fragmented" code:LCRTMCloseCodeProtocolError]];
             [self writeError:LCRTMCloseCodeProtocolError];
             return;
         }
@@ -553,7 +596,7 @@ static const size_t  LCRTMMaxFrameSize        = 32;
                 }
             }
             [self writeError:code];
-            [self doDisconnect:[self errorWithDetail:@"continue frame before a binary or text frame" code:code]];
+            [self doDisconnect:[LCRTMWebSocket errorWithDetail:@"continue frame before a binary or text frame" code:code]];
             return;
         }
         if(isControlFrame && payloadLen > 125) {
@@ -604,14 +647,14 @@ static const size_t  LCRTMMaxFrameSize        = 32;
             response = nil; //don't append pings
         }
         if(!isFin && receivedOpcode == LCRTMOpCodeContinueFrame && !response) {
-            [self doDisconnect:[self errorWithDetail:@"continue frame before a binary or text frame" code:LCRTMCloseCodeProtocolError]];
+            [self doDisconnect:[LCRTMWebSocket errorWithDetail:@"continue frame before a binary or text frame" code:LCRTMCloseCodeProtocolError]];
             [self writeError:LCRTMCloseCodeProtocolError];
             return;
         }
         BOOL isNew = NO;
         if(!response) {
             if(receivedOpcode == LCRTMOpCodeContinueFrame) {
-                [self doDisconnect:[self errorWithDetail:@"first frame can't be a continue frame" code:LCRTMCloseCodeProtocolError]];
+                [self doDisconnect:[LCRTMWebSocket errorWithDetail:@"first frame can't be a continue frame" code:LCRTMCloseCodeProtocolError]];
                 [self writeError:LCRTMCloseCodeProtocolError];
                 return;
             }
@@ -624,7 +667,7 @@ static const size_t  LCRTMMaxFrameSize        = 32;
             if(receivedOpcode == LCRTMOpCodeContinueFrame) {
                 response.bytesLeft = dataLength;
             } else {
-                [self doDisconnect:[self errorWithDetail:@"second and beyond of fragment message must be a continue frame" code:LCRTMCloseCodeProtocolError]];
+                [self doDisconnect:[LCRTMWebSocket errorWithDetail:@"second and beyond of fragment message must be a continue frame" code:LCRTMCloseCodeProtocolError]];
                 [self writeError:LCRTMCloseCodeProtocolError];
                 return;
             }
@@ -701,10 +744,10 @@ static const size_t  LCRTMMaxFrameSize        = 32;
     
     __weak typeof(self) weakSelf = self;
     [self.writeQueue addOperationWithBlock:^{
-        if(!weakSelf || !weakSelf.isConnected) {
+        LCRTMWebSocket *strongSelf = weakSelf;
+        if(!strongSelf || !strongSelf.isConnected) {
             return;
         }
-        typeof(weakSelf) strongSelf = weakSelf;
         uint64_t offset = 2; //how many bytes do we need to skip for the header
         uint8_t *bytes = (uint8_t*)[data bytes];
         uint64_t dataLength = data.length;
@@ -748,7 +791,7 @@ static const size_t  LCRTMMaxFrameSize        = 32;
             if(len < 0 || len == NSNotFound) {
                 NSError *error = strongSelf.outputStream.streamError;
                 if(!error) {
-                    error = [strongSelf errorWithDetail:@"output stream error during write" code:LCRTMOutputStreamWriteError];
+                    error = [LCRTMWebSocket errorWithDetail:@"output stream error during write" code:LCRTMOutputStreamWriteError];
                 }
                 [strongSelf doDisconnect:error];
                 break;
@@ -764,12 +807,14 @@ static const size_t  LCRTMMaxFrameSize        = 32;
 /////////////////////////////////////////////////////////////////////////////
 - (void)doDisconnect:(NSError*)error {
     if(!self.didDisconnect) {
+        self.didDisconnect = YES;
         __weak typeof(self) weakSelf = self;
         dispatch_async(self.queue, ^{
             LCRTMWebSocket *strongSelf = weakSelf;
             if (!strongSelf) { return; }
-            strongSelf.didDisconnect = YES;
+            
             [strongSelf disconnect];
+            
             if([strongSelf.delegate respondsToSelector:@selector(websocketDidDisconnect:error:)]) {
                 [strongSelf.delegate websocketDidDisconnect:strongSelf error:error];
             }
@@ -777,18 +822,18 @@ static const size_t  LCRTMMaxFrameSize        = 32;
     }
 }
 /////////////////////////////////////////////////////////////////////////////
-- (NSError*)errorWithDetail:(NSString*)detail code:(NSInteger)code
-{
++ (NSError *)errorWithDetail:(NSString *)detail code:(NSInteger)code {
     return [self errorWithDetail:detail code:code userInfo:nil];
 }
-- (NSError*)errorWithDetail:(NSString*)detail code:(NSInteger)code userInfo:(NSDictionary *)userInfo
-{
-    NSMutableDictionary* details = [NSMutableDictionary dictionary];
-    details[detail] = NSLocalizedDescriptionKey;
++ (NSError *)errorWithDetail:(NSString *)detail code:(NSInteger)code userInfo:(NSDictionary *)userInfo {
+    NSMutableDictionary *info;
     if (userInfo) {
-        [details addEntriesFromDictionary:userInfo];
+        info = [NSMutableDictionary dictionaryWithDictionary:userInfo];
+    } else {
+        info = [NSMutableDictionary dictionary];
     }
-    return [[NSError alloc] initWithDomain:@"LCRTMWebSocket" code:code userInfo:details];
+    info[NSLocalizedFailureReasonErrorKey] = detail;
+    return [NSError errorWithDomain:@"LCRTMWebSocket" code:code userInfo:info];
 }
 /////////////////////////////////////////////////////////////////////////////
 - (void)writeError:(uint16_t)code {

@@ -30,7 +30,6 @@
  */
 @protocol LCRTMWebSocketDelegate <NSObject>
 
-@optional
 /**
  The websocket connected to its host.
  @param socket is the current socket object.
@@ -68,8 +67,8 @@
 
 @interface LCRTMWebSocket : NSObject
 
-@property(nonatomic,weak, nullable)id<LCRTMWebSocketDelegate>delegate;
-@property(nonatomic, readonly, nonnull) NSURL *url;
+@property(nonatomic, weak, nullable)id<LCRTMWebSocketDelegate> delegate;
+@property(nonatomic, strong, readonly, nonnull)NSURL *url;
 
 /**
  constructor to create a new websocket.
@@ -140,6 +139,6 @@
  Set your own custom queue.
  Default setting is dispatch_get_main_queue.
  */
-@property(nonatomic, strong, nullable)dispatch_queue_t queue;
+@property(nonatomic, strong, nonnull)dispatch_queue_t queue;
 
 @end

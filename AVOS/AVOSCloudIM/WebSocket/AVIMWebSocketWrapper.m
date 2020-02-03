@@ -407,6 +407,10 @@ static NSArray<NSString *> * RTMProtocols()
 - (void)websocketDidDisconnect:(LCRTMWebSocket *)socket error:(NSError *)error {
     AssertRunInQueue(self->_internalSerialQueue);
     NSParameterAssert(socket == self->_websocket);
+    if (!error) {
+        NSString *reason = @"Connection did close by remote peer.";
+        error = LCError(AVIMErrorCodeConnectionLost, reason, nil);
+    }
     AVLoggerError(AVLoggerDomainIM, @"<address: %p> websocket did disconnect with error: %@.", socket, error);
     self->_useSecondaryServer = !self->_useSecondaryServer;
     [self purgeWithError:error];
@@ -487,6 +491,10 @@ static NSArray<NSString *> * RTMProtocols()
             [self handleGoawayWith:inCommand];
         }
     }
+}
+
+- (void)websocket:(LCRTMWebSocket *)socket didReceiveMessage:(NSString *)string {
+    /// NOP
 }
 
 // MARK: - Ping Sender
