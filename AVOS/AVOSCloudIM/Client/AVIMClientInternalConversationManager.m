@@ -129,10 +129,10 @@ static NSUInteger batchQueryLimit = 20;
             NSMutableArray<NSString *> *remainingIds = batchIds.mutableCopy;
             
             for (NSMutableDictionary *rawJSONData in queryResults) {
-                if (![NSMutableDictionary lc__checkingType:rawJSONData]) {
+                if (![NSMutableDictionary _lc_is_type_of:rawJSONData]) {
                     continue;
                 }
-                NSString *conversationId = [NSString lc__decodingDictionary:rawJSONData key:AVIMConversationKeyObjectId];
+                NSString *conversationId = [NSString _lc_decoding:rawJSONData key:AVIMConversationKeyObjectId];
                 if (!conversationId) {
                     continue;
                 }
@@ -280,7 +280,7 @@ static NSUInteger batchQueryLimit = 20;
         }
         return nil;
     }
-    if (![NSMutableArray lc__checkingType:results]) {
+    if (![NSMutableArray _lc_is_type_of:results]) {
         if (error) {
             *error = ({
                 AVIMErrorCode code = AVIMErrorCodeInvalidCommand;

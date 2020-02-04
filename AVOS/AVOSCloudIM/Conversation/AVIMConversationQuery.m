@@ -438,7 +438,7 @@ static NSString * quote(NSString *string)
             }
             NSError *error = nil;
             NSMutableArray<NSMutableDictionary *> *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-            if (error || ![NSMutableArray lc__checkingType:results]) {
+            if (error || ![NSMutableArray _lc_is_type_of:results]) {
                 [self invokeInUserInteractQueue:^{
                     callback(nil, error ?: ({
                         AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
@@ -453,10 +453,10 @@ static NSString * quote(NSString *string)
         NSMutableArray<AVIMConversation *> *conversations = ({
             NSMutableArray<AVIMConversation *> *conversations = [NSMutableArray array];
             for (NSMutableDictionary *jsonDic in results) {
-                if (![NSMutableDictionary lc__checkingType:jsonDic]) {
+                if (![NSMutableDictionary _lc_is_type_of:jsonDic]) {
                     continue;
                 }
-                NSString *conversationId = [NSString lc__decodingDictionary:jsonDic key:AVIMConversationKeyObjectId];
+                NSString *conversationId = [NSString _lc_decoding:jsonDic key:AVIMConversationKeyObjectId];
                 if (!conversationId) {
                     continue;
                 }
@@ -595,7 +595,7 @@ static NSString * quote(NSString *string)
             }
             NSError *error = nil;
             NSMutableArray<NSMutableDictionary *> *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-            if (error || ![NSMutableArray lc__checkingType:results]) {
+            if (error || ![NSMutableArray _lc_is_type_of:results]) {
                 [self invokeInUserInteractQueue:^{
                     callback(nil, error ?: ({
                         AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
@@ -610,10 +610,10 @@ static NSString * quote(NSString *string)
         NSArray<AVIMTemporaryConversation *> *conversations = ({
             NSMutableArray<AVIMTemporaryConversation *> *conversations = [NSMutableArray array];
             for (NSMutableDictionary *jsonDic in results) {
-                if (![NSMutableDictionary lc__checkingType:jsonDic]) {
+                if (![NSMutableDictionary _lc_is_type_of:jsonDic]) {
                     continue;
                 }
-                NSString *conversationId = [NSString lc__decodingDictionary:jsonDic key:AVIMConversationKeyObjectId];
+                NSString *conversationId = [NSString _lc_decoding:jsonDic key:AVIMConversationKeyObjectId];
                 if (!conversationId) {
                     continue;
                 }

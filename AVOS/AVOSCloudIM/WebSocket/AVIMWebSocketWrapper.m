@@ -321,7 +321,7 @@ static NSArray<NSString *> * RTMProtocols()
 {
     NSMutableSet<NSString *> *protocols = [NSMutableSet set];
     NSDictionary *userOptions = [AVIMClient sessionProtocolOptions];
-    NSNumber *useUnread = [NSNumber lc__decodingDictionary:userOptions key:kAVIMUserOptionUseUnread];
+    NSNumber *useUnread = [NSNumber _lc_decoding:userOptions key:kAVIMUserOptionUseUnread];
     if (useUnread.boolValue) {
         [protocols addObject:AVIMProtocolPROTOBUF3];
     } else {
@@ -329,11 +329,11 @@ static NSArray<NSString *> * RTMProtocols()
     }
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    NSArray *customProtocols = [NSArray lc__decodingDictionary:userOptions key:AVIMUserOptionCustomProtocols];
+    NSArray *customProtocols = [NSArray _lc_decoding:userOptions key:AVIMUserOptionCustomProtocols];
     if (customProtocols) {
         [protocols removeAllObjects];
         for (NSString *protocol in customProtocols) {
-            if ([NSString lc__checkingType:protocol]) {
+            if ([NSString _lc_is_type_of:protocol]) {
                 [protocols addObject:protocol];
             }
         }
@@ -744,8 +744,8 @@ static NSArray<NSString *> * RTMProtocols()
                 if (error) {
                     callback(nil, error);
                 } else {
-                    NSString *primaryServer = [NSString lc__decodingDictionary:dictionary key:RouterKeyRTMServer];
-                    NSString *secondaryServer = [NSString lc__decodingDictionary:dictionary key:RouterKeyRTMSecondary];
+                    NSString *primaryServer = [NSString _lc_decoding:dictionary key:RouterKeyRTMServer];
+                    NSString *secondaryServer = [NSString _lc_decoding:dictionary key:RouterKeyRTMSecondary];
                     NSString *server = ((websocketWrapper->_useSecondaryServer ? secondaryServer : primaryServer) ?: primaryServer);
                     if (server) {
                         callback(server, nil);

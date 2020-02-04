@@ -1,35 +1,19 @@
-name-template: 'next version'
+name-template: 'Next Version'
 tag-template: '$NEXT_PATCH_VERSION'
 categories:
   - title: '⚠️ Breaking Changes' 
     labels:
-      - 'feat!:'
-      - 'feat!('
+      - 'feat!'
   - title: '🚀 New Features'
     labels:
-      - 'feat:'
-      - 'feat('
+      - 'feat'
   - title: '🐛 Bug Fixes'
     labels:
-      - 'fix:'
-      - 'fix('
+      - 'fix'
   - title: '🧰 Maintenance'
     labels:
-      - 'refactor:'
-      - 'refactor('
-      - 'docs:'
-      - 'docs('
-exclude-labels:
-  - 'chore:'
-  - 'chore('
-  - 'test:'
-  - 'test('
-  - 'style:'
-  - 'style('
-  - 'cosm:'
-  - 'cosm('
-  - 'build:'
-  - 'build('
+      - 'refactor'
+      - 'docs'
 change-template: '* $TITLE (#$NUMBER)'
 template: |
   $CHANGES

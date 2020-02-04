@@ -195,6 +195,7 @@ class AVIMClientTestCase: LCIMTestBase {
                 XCTAssertNil(error)
                 XCTAssertNotNil(conv?.conversationId)
                 XCTAssertNotNil(conv?.createAt)
+                XCTAssertNotNil(conv?.createdAt)
             })
         }, failure: { XCTFail("timeout") })
         
@@ -207,6 +208,7 @@ class AVIMClientTestCase: LCIMTestBase {
                 XCTAssertNil(error)
                 XCTAssertNotNil(conv?.conversationId)
                 XCTAssertNotNil(conv?.createAt)
+                XCTAssertNotNil(conv?.createdAt)
             })
         }, failure: { XCTFail("timeout") })
         
@@ -220,6 +222,7 @@ class AVIMClientTestCase: LCIMTestBase {
                 XCTAssertNil(error)
                 XCTAssertNotNil(conv?.conversationId)
                 XCTAssertNotNil(conv?.createAt)
+                XCTAssertNotNil(conv?.createdAt)
                 XCTAssertEqual(conv?.temporaryTTL, UInt(temporaryTTL))
             })
         }, failure: { XCTFail("timeout") })

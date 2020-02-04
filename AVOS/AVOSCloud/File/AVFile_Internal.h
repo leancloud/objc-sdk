@@ -37,9 +37,6 @@ static NSString * const kLCFile_objectId = @"objectId";
 static NSString * const kLCFile_objId = @"objId";
 static NSString * const kLCFile_id = @"id";
 //### Object ID of File Object ###//
-
-static NSString * const kLCFile_createdAt = @"createdAt";
-static NSString * const kLCFile_updatedAt = @"updatedAt";
 //# _File : {} #//
 
 @interface AVFile ()

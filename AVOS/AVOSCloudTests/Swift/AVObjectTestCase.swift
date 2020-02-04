@@ -95,4 +95,30 @@ class AVObject_TestCase: LCTestBase {
         })
     }
     
+    func testDate() {
+        let className = "AVObjectTestCase"
+        let object = AVObject(className: className)
+        object.setObject(Date(), forKey: "date")
+        let exp1 = expectation(description: "save date")
+        object.saveInBackground { (success, error) in
+            XCTAssertTrue(success)
+            XCTAssertNil(error)
+            XCTAssertNotNil(object["date"] as? Date)
+            XCTAssertNotNil(object.createdAt)
+            exp1.fulfill()
+        }
+        wait(for: [exp1], timeout: 60)
+        
+        let fetchObject = AVObject(className: className, objectId: object.objectId!)
+        let exp2 = expectation(description: "fetch object")
+        fetchObject.fetchInBackground { (object, error) in
+            XCTAssertNotNil(object)
+            XCTAssertNil(error)
+            XCTAssertNotNil(object?["date"] as? Date)
+            XCTAssertNotNil(object?.createdAt)
+            XCTAssertNotNil(object?.updatedAt)
+            exp2.fulfill()
+        }
+        wait(for: [exp2], timeout: 60)
+    }
 }

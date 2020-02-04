@@ -80,8 +80,8 @@ static NSString * const kLCFileTokensProvider_s3 = @"s3";
                                       progress:(void (^)(NSProgress *uploadProgress))uploadProgressBlock
                              completionHandler:(void (^)(BOOL success, NSError *error))uploadCompletionHandler
 {
-    NSString *file_key = [NSString lc__decodingWithKey:kLCFile_key fromDic:fileParameters];
-    NSString *file_mimeType = [NSString lc__decodingWithKey:kLCFile_mime_type fromDic:fileParameters];
+    NSString *file_key = [NSString _lc_decoding:fileParameters key:kLCFile_key];
+    NSString *file_mimeType = [NSString _lc_decoding:fileParameters key:kLCFile_mime_type];
     NSString *file_token = fileTokens.token;
     NSString *file_uploadUrl = fileTokens.uploadUrl;
     
@@ -177,8 +177,8 @@ static NSString * const kLCFileTokensProvider_s3 = @"s3";
                                            progress:(void (^)(NSProgress *uploadProgress))uploadProgressBlock
                                   completionHandler:(void (^)(BOOL success, NSError *error))uploadCompletionHandler
 {
-    NSString *file_key = [NSString lc__decodingWithKey:kLCFile_key fromDic:fileParameters];
-    NSString *file_mimeType = [NSString lc__decodingWithKey:kLCFile_mime_type fromDic:fileParameters];
+    NSString *file_key = [NSString _lc_decoding:fileParameters key:kLCFile_key];
+    NSString *file_mimeType = [NSString _lc_decoding:fileParameters key:kLCFile_mime_type];
     NSString *file_token = fileTokens.token;
     NSString *file_uploadUrl = fileTokens.uploadUrl;
     
@@ -377,7 +377,7 @@ static NSString * const kLCFileTokensProvider_s3 = @"s3";
                 return;
             }
             
-            if (![NSDictionary lc__checkingType:dic] ||
+            if (![NSDictionary _lc_is_type_of:dic] ||
                 [dic[@"code"] integerValue] != 0) {
                 
                 NSError *aError = ({

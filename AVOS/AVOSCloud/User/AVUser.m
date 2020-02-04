@@ -328,18 +328,16 @@ static BOOL enableAutomatic = NO;
 
     [HTTPClient performRequest:request
                        success:^(NSHTTPURLResponse *response, id result) {
-                           self.sessionToken = result[@"sessionToken"];
-                           self.updatedAt = [AVObjectUtils dateFromString:result[@"updatedAt"]];
-
-                           if ([self isEqual:[AVUser currentUser]]) {
-                               [AVUser changeCurrentUser:self save:YES];
-                           }
-
-                           [AVUtils callBooleanResultBlock:block error:nil];
-                       }
+        self.sessionToken = result[@"sessionToken"];
+        self.updatedAt = [AVDate dateFromValue:result[@"updatedAt"]];
+        if ([self isEqual:[AVUser currentUser]]) {
+            [AVUser changeCurrentUser:self save:YES];
+        }
+        [AVUtils callBooleanResultBlock:block error:nil];
+    }
                        failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error) {
-                           [AVUtils callBooleanResultBlock:block error:error];
-                       }];
+        [AVUtils callBooleanResultBlock:block error:error];
+    }];
 }
 
 // MARK: - login with username & password
@@ -835,7 +833,7 @@ static BOOL enableAutomatic = NO;
         
         NSDictionary *dic = (NSDictionary *)object;
         
-        if (![NSDictionary lc__checkingType:dic]) {
+        if (![NSDictionary _lc_is_type_of:dic]) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
@@ -926,7 +924,7 @@ static BOOL enableAutomatic = NO;
         
         NSDictionary *dic = (NSDictionary *)object;
         
-        if (![NSDictionary lc__checkingType:dic]) {
+        if (![NSDictionary _lc_is_type_of:dic]) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
@@ -944,7 +942,7 @@ static BOOL enableAutomatic = NO;
         NSDictionary *oldAuthData = [self objectForKey:authDataTag];
         NSDictionary *newAuthData = parameters[authDataTag];
         
-        if ([NSDictionary lc__checkingType:oldAuthData]) {
+        if ([NSDictionary _lc_is_type_of:oldAuthData]) {
             
             NSMutableDictionary *mutableCopy = oldAuthData.mutableCopy;
             [mutableCopy addEntriesFromDictionary:newAuthData];
@@ -1004,7 +1002,7 @@ static BOOL enableAutomatic = NO;
         
         NSDictionary *dic = (NSDictionary *)object;
         
-        if (![NSDictionary lc__checkingType:dic]) {
+        if (![NSDictionary _lc_is_type_of:dic]) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
@@ -1021,7 +1019,7 @@ static BOOL enableAutomatic = NO;
         
         NSDictionary *oldAuthData = [self objectForKey:authDataTag];
         
-        if ([NSDictionary lc__checkingType:oldAuthData]) {
+        if ([NSDictionary _lc_is_type_of:oldAuthData]) {
             
             NSMutableDictionary *mutableCopy = oldAuthData.mutableCopy;
             [mutableCopy removeObjectForKey:platformId];

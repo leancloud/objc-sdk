@@ -180,6 +180,7 @@ class XcodebuildTask: Task {
     {
         try version()
         let xcodeproj = try getXcodeproj(name: project)
+        let start = Date()
         try xcodeproj.project.schemes.forEach { (scheme) in
             try schemeSuffixes.forEach { (schemeSuffix) in
                 guard scheme.hasSuffix(schemeSuffix.rawValue) else {
@@ -195,6 +196,7 @@ class XcodebuildTask: Task {
                 }
             }
         }
+        print("\nBuilding Time Cost: \(Date().timeIntervalSince(start) / 60.0) minutes.\n")
     }
 }
 
@@ -214,14 +216,15 @@ class GitTask: Task {
     static func lastReleasableMessage() -> String? {
         var message: String?
         _ = GitTask(
-            arguments: ["log", "-10", "--pretty=%B|cat"])
+            arguments: ["log", "-16", "--pretty=%B|cat"])
             .excute(printOutput: false) {
                 let data = ($0.standardOutput as! Pipe).fileHandleForReading.readDataToEndOfFile()
                 message = String(data: data, encoding: .utf8)?
                     .components(separatedBy: .newlines)
                     .map({ s in s.trimmingCharacters(in: .whitespacesAndNewlines) })
                     .first(where: { (s) -> Bool in
-                        s.hasPrefix("feat") ||
+                        s.hasPrefix("release") ||
+                            s.hasPrefix("feat") ||
                             s.hasPrefix("fix") ||
                             s.hasPrefix("refactor") ||
                             s.hasPrefix("docs")
@@ -244,13 +247,34 @@ class HubTask: Task {
         }
     }
     
+    enum ReleaseDrafterLabel: String {
+        case breakingChanges = "feat!"
+        case newFeatures = "feat"
+        case bugFixes = "fix"
+        case maintenanceRefactor = "refactor"
+        case maintenanceDocs = "docs"
+    }
+    
     static func pullRequest(with message: String) throws {
         try version()
+        var label: String?
+        if message.hasPrefix(ReleaseDrafterLabel.breakingChanges.rawValue) {
+            label = ReleaseDrafterLabel.breakingChanges.rawValue
+        } else if message.hasPrefix(ReleaseDrafterLabel.newFeatures.rawValue) {
+            label = ReleaseDrafterLabel.newFeatures.rawValue
+        } else if message.hasPrefix(ReleaseDrafterLabel.bugFixes.rawValue) {
+            label = ReleaseDrafterLabel.bugFixes.rawValue
+        } else if message.hasPrefix(ReleaseDrafterLabel.maintenanceRefactor.rawValue) {
+            label = ReleaseDrafterLabel.maintenanceRefactor.rawValue
+        } else if message.hasPrefix(ReleaseDrafterLabel.maintenanceDocs.rawValue) {
+            label = ReleaseDrafterLabel.maintenanceDocs.rawValue
+        }
         guard HubTask(arguments: [
             "pull-request",
-            "-b", "leancloud:master",
-            "-m", message,
-            "-f", "-p", "-o"])
+            "--base", "leancloud:master",
+            "--message", message,
+            "--force", "--push", "--browse"]
+            + (label != nil ? ["--labels", label!] : []))
             .excute() else {
                 throw TaskError()
         }

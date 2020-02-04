@@ -150,7 +150,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
         
         status.objectId=data[@"objectId"];
         status.type=data[@"inboxType"];
-        status.createdAt=[AVObjectUtils dateFromString:data[@"createdAt"]];
+        status.createdAt = [AVDate dateFromValue:data[@"createdAt"]];
         status.messageId=[data[@"messageId"] integerValue];
         status.source=[AVObjectUtils avobjectFromDictionary:data[@"source"]];
         
@@ -436,8 +436,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
 
              if (objectId) {
                  self.objectId = objectId;
-                 self.createdAt = [AVObjectUtils dateFromString:responseObject[@"createdAt"]];
-
+                 self.createdAt = [AVDate dateFromValue:responseObject[@"createdAt"]];
                  [AVUtils callBooleanResultBlock:block error:nil];
                  return;
              }

@@ -15,9 +15,6 @@
 #define keyPath(base, path) ({ __unused typeof(base.path) _; @#path; })
 #define ivarName(base, path) ({ __unused typeof(base->path) _; @#path; })
 
-FOUNDATION_EXPORT NSInteger LCTimeZoneForSecondsFromGMT;
-NSDate * LCDateFromString(NSString *dateString);
-
 #if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
     #import <MobileCoreServices/MobileCoreServices.h>
 #else
@@ -157,14 +154,13 @@ do {                                       \
 - (NSString *)AVAES256Decrypt;
 @end
 
-@interface NSObject (__LeanCloud__)
+@interface NSObject (LeanCloudObjcSDK)
 
-+ (BOOL)lc__checkingType:(id)instance __attribute__((warn_unused_result));
++ (BOOL)_lc_is_type_of:(id)instance
+__attribute__((warn_unused_result));
 
-+ (instancetype)lc__decodingDictionary:(NSDictionary *)dictionary
-                                   key:(NSString *)key __attribute__((warn_unused_result));
-
-+ (instancetype)lc__decodingWithKey:(NSString *)key
-                            fromDic:(NSDictionary *)dic __attribute__((warn_unused_result));
++ (instancetype)_lc_decoding:(NSDictionary *)dictionary
+                         key:(NSString *)key
+__attribute__((warn_unused_result));
 
 @end

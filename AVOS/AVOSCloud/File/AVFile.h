@@ -139,6 +139,12 @@ typedef NS_OPTIONS(NSUInteger, AVFileDownloadOption) {
  */
 @property (nonatomic, strong, nullable) AVACL *ACL;
 
+/// Created date.
+@property (nonatomic, strong, readonly, nullable) NSDate *createdAt;
+
+/// Updated date.
+@property (nonatomic, strong, readonly, nullable) NSDate *updatedAt;
+
 /*!
  Request headers for file uploading.
  
