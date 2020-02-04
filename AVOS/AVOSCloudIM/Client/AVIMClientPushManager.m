@@ -63,7 +63,7 @@ typedef NS_ENUM(NSInteger, AddClientIdToChannelsStatus) {
                        context:(void *)context
 {
     if (object == self.installation && [keyPath isEqualToString:keyPath(self.installation, deviceToken)]) {
-        NSString *newDeviceToken = [NSString lc__decodingDictionary:change key:NSKeyValueChangeNewKey];
+        NSString *newDeviceToken = [NSString _lc_decoding:change key:NSKeyValueChangeNewKey];
         if (newDeviceToken && newDeviceToken.length != 0) {
             [self.client addOperationToInternalSerialQueue:^(AVIMClient *client) {
                 if (![self.deviceToken isEqualToString:newDeviceToken]) {

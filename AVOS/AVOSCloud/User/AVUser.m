@@ -833,7 +833,7 @@ static BOOL enableAutomatic = NO;
         
         NSDictionary *dic = (NSDictionary *)object;
         
-        if (![NSDictionary lc__checkingType:dic]) {
+        if (![NSDictionary _lc_is_type_of:dic]) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
@@ -924,7 +924,7 @@ static BOOL enableAutomatic = NO;
         
         NSDictionary *dic = (NSDictionary *)object;
         
-        if (![NSDictionary lc__checkingType:dic]) {
+        if (![NSDictionary _lc_is_type_of:dic]) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
@@ -942,7 +942,7 @@ static BOOL enableAutomatic = NO;
         NSDictionary *oldAuthData = [self objectForKey:authDataTag];
         NSDictionary *newAuthData = parameters[authDataTag];
         
-        if ([NSDictionary lc__checkingType:oldAuthData]) {
+        if ([NSDictionary _lc_is_type_of:oldAuthData]) {
             
             NSMutableDictionary *mutableCopy = oldAuthData.mutableCopy;
             [mutableCopy addEntriesFromDictionary:newAuthData];
@@ -1002,7 +1002,7 @@ static BOOL enableAutomatic = NO;
         
         NSDictionary *dic = (NSDictionary *)object;
         
-        if (![NSDictionary lc__checkingType:dic]) {
+        if (![NSDictionary _lc_is_type_of:dic]) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
@@ -1019,7 +1019,7 @@ static BOOL enableAutomatic = NO;
         
         NSDictionary *oldAuthData = [self objectForKey:authDataTag];
         
-        if ([NSDictionary lc__checkingType:oldAuthData]) {
+        if ([NSDictionary _lc_is_type_of:oldAuthData]) {
             
             NSMutableDictionary *mutableCopy = oldAuthData.mutableCopy;
             [mutableCopy removeObjectForKey:platformId];

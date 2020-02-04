@@ -85,7 +85,7 @@ AVIMConversationMemberRole AVIMConversationMemberInfo_key_to_role(AVIMConversati
 {
     __block NSString *value = nil;
     [self internalSyncLock:^{
-        value = [NSString lc__decodingDictionary:self->_rawJSONData key:AVIMConversationMemberInfoKeyConversationId];
+        value = [NSString _lc_decoding:self->_rawJSONData key:AVIMConversationMemberInfoKeyConversationId];
     }];
     return value;
 }
@@ -94,7 +94,7 @@ AVIMConversationMemberRole AVIMConversationMemberInfo_key_to_role(AVIMConversati
 {
     __block NSString *value = nil;
     [self internalSyncLock:^{
-        value = [NSString lc__decodingDictionary:self->_rawJSONData key:AVIMConversationMemberInfoKeyMemberId];
+        value = [NSString _lc_decoding:self->_rawJSONData key:AVIMConversationMemberInfoKeyMemberId];
     }];
     return value;
 }
@@ -103,7 +103,7 @@ AVIMConversationMemberRole AVIMConversationMemberInfo_key_to_role(AVIMConversati
 {
     __block NSString *value = nil;
     [self internalSyncLock:^{
-        value = [NSString lc__decodingDictionary:self->_rawJSONData key:AVIMConversationMemberInfoKeyRole];
+        value = [NSString _lc_decoding:self->_rawJSONData key:AVIMConversationMemberInfoKeyRole];
     }];
     return AVIMConversationMemberInfo_key_to_role(value);
 }

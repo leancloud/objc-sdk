@@ -270,9 +270,9 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
         _pathExtension = ({
             
-            NSString *pathExtension = [[NSString lc__decodingDictionary:_rawJSONData key:kLCFile_name] pathExtension];
+            NSString *pathExtension = [[NSString _lc_decoding:_rawJSONData key:kLCFile_name] pathExtension];
             if (!pathExtension) {
-                pathExtension = [[NSString lc__decodingDictionary:_rawJSONData key:kLCFile_url] pathExtension];
+                pathExtension = [[NSString _lc_decoding:_rawJSONData key:kLCFile_url] pathExtension];
             }
             pathExtension;
         });
@@ -299,9 +299,9 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
             
             _pathExtension = ({
                 
-                NSString *pathExtension = [[NSString lc__decodingDictionary:_rawJSONData key:kLCFile_name] pathExtension];
+                NSString *pathExtension = [[NSString _lc_decoding:_rawJSONData key:kLCFile_name] pathExtension];
                 if (!pathExtension) {
-                    pathExtension = [[NSString lc__decodingDictionary:_rawJSONData key:kLCFile_url] pathExtension];
+                    pathExtension = [[NSString _lc_decoding:_rawJSONData key:kLCFile_url] pathExtension];
                 }
                 pathExtension;
             });
@@ -396,7 +396,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     
     [self internalSyncLock:^{
         
-        name = [NSString lc__decodingWithKey:kLCFile_name fromDic:self->_rawJSONData];
+        name = [NSString _lc_decoding:self->_rawJSONData key:kLCFile_name];
     }];
     
     return name;
@@ -420,7 +420,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 
     [self internalSyncLock:^{
         
-        url = [NSString lc__decodingWithKey:kLCFile_url fromDic:self->_rawJSONData];
+        url = [NSString _lc_decoding:self->_rawJSONData key:kLCFile_url];
     }];
 
     return url;
@@ -537,7 +537,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     
     [self internalSyncLock:^{
         
-        mimeType = [NSString lc__decodingWithKey:kLCFile_mime_type fromDic:self->_rawJSONData];
+        mimeType = [NSString _lc_decoding:self->_rawJSONData key:kLCFile_mime_type];
     }];
     
     return mimeType;
@@ -875,7 +875,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
             return;
         }
         
-        if (![NSDictionary lc__checkingType:object]) {
+        if (![NSDictionary _lc_is_type_of:object]) {
             
             completionHandler(false, ({
                 NSString *reason = @"response invalid.";
@@ -906,7 +906,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
         NSDictionary *dic = (NSDictionary *)object;
         
-        if (![NSDictionary lc__checkingType:dic]) {
+        if (![NSDictionary _lc_is_type_of:dic]) {
             callback(nil, ({
                 NSString *reason = @"fileTokens response invalid.";
                 LCErrorInternal(reason);
@@ -1277,7 +1277,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
             return;
         }
         
-        if (![NSDictionary lc__checkingType:object]) {
+        if (![NSDictionary _lc_is_type_of:object]) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
@@ -1375,15 +1375,15 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 {
     /* @note For compatibility, should decoding multiple keys ... ... */
     
-    NSString *value = [NSString lc__decodingWithKey:kLCFile_objectId fromDic:dic];
+    NSString *value = [NSString _lc_decoding:dic key:kLCFile_objectId];
     
     if (value) { return value; }
     
-    value = [NSString lc__decodingWithKey:kLCFile_objId fromDic:dic];
+    value = [NSString _lc_decoding:dic key:kLCFile_objId];
     
     if (value) { return value; }
     
-    value = [NSString lc__decodingWithKey:kLCFile_id fromDic:dic];
+    value = [NSString _lc_decoding:dic key:kLCFile_id];
     
     return value;
 }
@@ -1392,11 +1392,11 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 {
     /* @note For compatibility, should decoding multiple keys ... ... */
     
-    NSDictionary *value = [NSDictionary lc__decodingWithKey:kLCFile_metaData fromDic:dic];
+    NSDictionary *value = [NSDictionary _lc_decoding:dic key:kLCFile_metaData];
     
     if (value) { return value; }
     
-    value = [NSDictionary lc__decodingWithKey:kLCFile_metadata fromDic:dic];
+    value = [NSDictionary _lc_decoding:dic key:kLCFile_metadata];
     
     return value;
 }
@@ -1498,7 +1498,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
     } else {
         
-        _provider = [NSString lc__decodingWithKey:@"provider" fromDic:_rawDic];
+        _provider = [NSString _lc_decoding:_rawDic key:@"provider"];
         
         return _provider;
     }
@@ -1512,7 +1512,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
     } else {
         
-        _objectId = [NSString lc__decodingWithKey:@"objectId" fromDic:_rawDic];
+        _objectId = [NSString _lc_decoding:_rawDic key:@"objectId"];
         
         return _objectId;
     }
@@ -1526,7 +1526,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
     } else {
         
-        _token = [NSString lc__decodingWithKey:@"token" fromDic:_rawDic];
+        _token = [NSString _lc_decoding:_rawDic key:@"token"];
         
         return _token;
     }
@@ -1542,7 +1542,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
     } else {
         
-        _bucket = [NSString lc__decodingWithKey:@"bucket" fromDic:_rawDic];
+        _bucket = [NSString _lc_decoding:_rawDic key:@"bucket"];
         
         return _bucket;
     }
@@ -1556,7 +1556,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
     } else {
         
-        _url = [NSString lc__decodingWithKey:@"url" fromDic:_rawDic];
+        _url = [NSString _lc_decoding:_rawDic key:@"url"];
         
         return _url;
     }
@@ -1570,7 +1570,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
     } else {
         
-        _uploadUrl = [NSString lc__decodingWithKey:@"upload_url" fromDic:_rawDic];
+        _uploadUrl = [NSString _lc_decoding:_rawDic key:@"upload_url"];
         
         return _uploadUrl;
     }

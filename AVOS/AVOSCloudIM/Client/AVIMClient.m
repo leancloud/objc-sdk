@@ -703,10 +703,10 @@ static BOOL clientHasInstantiated = false;
             });
         
             [paasClient performRequest:request success:^(NSHTTPURLResponse *response, id result) {
-                if ([NSDictionary lc__checkingType:result]) {
-                    NSString *sign = [NSString lc__decodingDictionary:result key:@"signature"];
-                    int64_t timestamp = [[NSNumber lc__decodingDictionary:result key:@"timestamp"] longLongValue];
-                    NSString *nonce = [NSString lc__decodingDictionary:result key:@"nonce"];
+                if ([NSDictionary _lc_is_type_of:result]) {
+                    NSString *sign = [NSString _lc_decoding:result key:@"signature"];
+                    int64_t timestamp = [[NSNumber _lc_decoding:result key:@"timestamp"] longLongValue];
+                    NSString *nonce = [NSString _lc_decoding:result key:@"nonce"];
                     if (sign && timestamp && nonce) {
                         AVIMSignature *signature = ({
                             AVIMSignature *signature = [AVIMSignature new];
@@ -1149,7 +1149,7 @@ static BOOL clientHasInstantiated = false;
         }
         NSError *error = nil;
         NSDictionary *attr = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-        if (error || ![NSDictionary lc__checkingType:attr]) {
+        if (error || ![NSDictionary _lc_is_type_of:attr]) {
             return;
         }
         attr;
@@ -1164,7 +1164,7 @@ static BOOL clientHasInstantiated = false;
         }
         NSError *error = nil;
         NSDictionary *attrModified = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-        if (error || ![NSDictionary lc__checkingType:attrModified]) {
+        if (error || ![NSDictionary _lc_is_type_of:attrModified]) {
             return;
         }
         attrModified;
@@ -1939,7 +1939,7 @@ static BOOL clientHasInstantiated = false;
     NSString *conversationId = nil;
     NSMutableDictionary *rawDataDic = [keyedConversation.rawDataDic mutableCopy];
     if (rawDataDic) {
-        conversationId = [NSString lc__decodingDictionary:rawDataDic key:AVIMConversationKeyObjectId];
+        conversationId = [NSString _lc_decoding:rawDataDic key:AVIMConversationKeyObjectId];
     } else {
         rawDataDic = [NSMutableDictionary dictionary];
         if (keyedConversation.conversationId) {

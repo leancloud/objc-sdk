@@ -52,7 +52,7 @@
 }
 
 + (NSDate *)dateFromDictionary:(NSDictionary *)dictionary {
-    NSString *iso8601String = [NSString lc__decodingDictionary:dictionary key:@"iso"];
+    NSString *iso8601String = [NSString _lc_decoding:dictionary key:@"iso"];
     if (iso8601String) {
         return [self dateFromString:iso8601String];
     } else {
@@ -61,9 +61,9 @@
 }
 
 + (NSDate *)dateFromValue:(id)value {
-    if ([NSString lc__checkingType:value]) {
+    if ([NSString _lc_is_type_of:value]) {
         return [self dateFromString:value];
-    } else if ([NSDictionary lc__checkingType:value]) {
+    } else if ([NSDictionary _lc_is_type_of:value]) {
         return [self dateFromDictionary:value];
     } else {
         return nil;
