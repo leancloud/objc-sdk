@@ -295,19 +295,17 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
         [data addEntriesFromDictionary:[self pushChannelsData]];
     }
     
-    if (self.expirationDate)
-    {
-        [data setObject:[AVObjectUtils stringFromDate:self.expirationDate] forKey:@"expiration_time"];
-    }
-    if (self.expireTimeInterval > 0)
-    {
-        NSDate * currentDate = [NSDate date];
-        [data setObject:[AVObjectUtils stringFromDate:currentDate] forKey:@"push_time"];
-        [data setObject:@(self.expireTimeInterval) forKey:@"expiration_interval"];
-    }
-    
     if (self.pushTime) {
-        [data setObject:[AVObjectUtils stringFromDate:self.pushTime] forKey:@"push_time"];
+        data[@"push_time"] = [AVDate stringFromDate:self.pushTime];
+    }
+    if (self.expirationDate) {
+        data[@"expiration_time"] = [AVDate stringFromDate:self.expirationDate];
+    }
+    if (self.expireTimeInterval > 0) {
+        if (!self.pushTime) {
+            data[@"push_time"] = [AVDate stringFromDate:[NSDate date]];
+        }
+        data[@"expiration_interval"] = @(self.expireTimeInterval);
     }
     
     if (self.pushTarget.count > 0)

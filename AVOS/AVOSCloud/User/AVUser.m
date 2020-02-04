@@ -328,18 +328,16 @@ static BOOL enableAutomatic = NO;
 
     [HTTPClient performRequest:request
                        success:^(NSHTTPURLResponse *response, id result) {
-                           self.sessionToken = result[@"sessionToken"];
-                           self.updatedAt = [AVObjectUtils dateFromString:result[@"updatedAt"]];
-
-                           if ([self isEqual:[AVUser currentUser]]) {
-                               [AVUser changeCurrentUser:self save:YES];
-                           }
-
-                           [AVUtils callBooleanResultBlock:block error:nil];
-                       }
+        self.sessionToken = result[@"sessionToken"];
+        self.updatedAt = [AVDate dateFromValue:result[@"updatedAt"]];
+        if ([self isEqual:[AVUser currentUser]]) {
+            [AVUser changeCurrentUser:self save:YES];
+        }
+        [AVUtils callBooleanResultBlock:block error:nil];
+    }
                        failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error) {
-                           [AVUtils callBooleanResultBlock:block error:error];
-                       }];
+        [AVUtils callBooleanResultBlock:block error:error];
+    }];
 }
 
 // MARK: - login with username & password

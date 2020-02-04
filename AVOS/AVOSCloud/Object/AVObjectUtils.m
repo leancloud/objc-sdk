@@ -22,6 +22,56 @@
 #import "AVRelation_Internal.h"
 #import "AVUtils.h"
 
+@implementation AVDate
+
++ (NSDateFormatter *)iso8601DateFormatter {
+    static NSDateFormatter *dateFormatter;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+        dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+        dateFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+    });
+    return dateFormatter;
+}
+
++ (NSString *)stringFromDate:(NSDate *)date {
+    return [[self iso8601DateFormatter] stringFromDate:date];
+}
+
++ (NSDictionary *)dictionaryFromDate:(NSDate *)date {
+    return @{
+        @"__type": @"Date",
+        @"iso": [self stringFromDate:date],
+    };
+}
+
++ (NSDate *)dateFromString:(NSString *)string {
+    return [[self iso8601DateFormatter] dateFromString:string];
+}
+
++ (NSDate *)dateFromDictionary:(NSDictionary *)dictionary {
+    NSString *iso8601String = [NSString lc__decodingDictionary:dictionary key:@"iso"];
+    if (iso8601String) {
+        return [self dateFromString:iso8601String];
+    } else {
+        return nil;
+    }
+}
+
++ (NSDate *)dateFromValue:(id)value {
+    if ([NSString lc__checkingType:value]) {
+        return [self dateFromString:value];
+    } else if ([NSDictionary lc__checkingType:value]) {
+        return [self dateFromDictionary:value];
+    } else {
+        return nil;
+    }
+}
+
+@end
+
 @implementation AVObjectUtils
 
 #pragma mark - Check type
@@ -93,40 +143,6 @@
 
 #pragma mark - Simple objecitive-c object from server side dictionary
 
-+(NSDateFormatter *)dateFormatter{
-    static NSDateFormatter *dateFormatter;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:AV_DATE_FORMAT];
-        [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    });
-    
-    return dateFormatter;
-}
-
-+(NSString *)stringFromDate:(NSDate *)date
-{
-    NSString *strDate = [[self.class dateFormatter] stringFromDate:date];
-    return strDate;
-}
-
-+(NSDate *)dateFromString:(NSString *)string
-{
-    if (string == nil || [string isKindOfClass:[NSNull class]]) {
-        return [NSDate date];
-    }
-    
-    NSDate *date = [[self.class dateFormatter] dateFromString:string];
-
-    return date;
-}
-
-+(NSDate *)dateFromDictionary:(NSDictionary *)dict
-{
-    return [AVObjectUtils dateFromString:[dict valueForKey:@"iso"]];
-}
-
 +(NSData *)dataFromDictionary:(NSDictionary *)dict
 {
     NSString * string = [dict valueForKey:@"base64"];
@@ -191,10 +207,8 @@
         AVGeoPoint * point = [AVObjectUtils geoPointFromDictionary:dict];
         return point;
     }
-    else if ([AVObjectUtils isDate:type])
-    {
-        NSDate * date = [AVObjectUtils dateFromDictionary:dict];
-        return date;
+    else if ([AVObjectUtils isDate:type]) {
+        return [AVDate dateFromDictionary:dict];;
     }
     else if ([AVObjectUtils isData:type])
     {
@@ -255,10 +269,10 @@
     {
         [target setObject:[AVObjectUtils aclFromDictionary:dict] forKey:ACLTag submit:NO];
     }
-    else if ([AVObjectUtils isDate:type])
-    {
-        NSDate * date = [AVObjectUtils dateFromDictionary:dict];
-        [target setObject:date forKey:key submit:NO];
+    else if ([AVObjectUtils isDate:type]) {
+        [target setObject:[AVDate dateFromDictionary:dict]
+                   forKey:key
+                   submit:NO];
     }
     else if ([AVObjectUtils isData:type])
     {
@@ -303,24 +317,14 @@
     }
 }
 
-+(NSDate *)dateFromValue:(id)value {
-    NSDate * date = nil;
-    if ([value isKindOfClass:[NSDictionary class]]) {
-        date = [AVObjectUtils dateFromDictionary:value];
-    } else if ([value isKindOfClass:[NSString class]]) {
-        date = [AVObjectUtils dateFromString:value];
-    }
-    return date;
-}
-
 +(void)updateObjectProperty:(AVObject *)target
                         key:(NSString *)key
                       value:(NSObject *)value
 {
-    if ([key isEqualToString:@"createdAt"] ) {
-        target.createdAt = [AVObjectUtils dateFromValue:value];
+    if ([key isEqualToString:@"createdAt"]) {
+        target.createdAt = [AVDate dateFromValue:value];
     } else if ([key isEqualToString:@"updatedAt"]) {
-        target.updatedAt = [AVObjectUtils dateFromValue:value];
+        target.updatedAt = [AVDate dateFromValue:value];
     } else if ([key isEqualToString:ACLTag]) {
         AVACL * acl = [AVObjectUtils aclFromDictionary:(NSDictionary *)value];
         [target setObject:acl forKey:key submit:NO];
@@ -603,12 +607,6 @@
     return [AVGeoPoint dictionaryFromGeoPoint:point];
 }
 
-+(NSDictionary *)dictionaryFromDate:(NSDate *)date
-{
-    NSString *strDate = [AVObjectUtils stringFromDate:date];
-    return @{@"__type": @"Date", @"iso":strDate};
-}
-
 +(NSDictionary *)dictionaryFromData:(NSData *)data
 {
     NSString *base64 = [data AVbase64EncodedString];
@@ -658,7 +656,7 @@
     } else if ([obj isKindOfClass:[AVGeoPoint class]]) {
         return [AVObjectUtils dictionaryFromGeoPoint:obj];
     } else if ([obj isKindOfClass:[NSDate class]]) {
-        return [AVObjectUtils dictionaryFromDate:obj];
+        return [AVDate dictionaryFromDate:obj];
     } else if ([obj isKindOfClass:[NSData class]]) {
         return [AVObjectUtils dictionaryFromData:obj];
     } else if ([obj isKindOfClass:[AVFile class]]) {

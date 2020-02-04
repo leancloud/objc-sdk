@@ -362,6 +362,14 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     }];
 }
 
+- (NSDate *)createdAt {
+    return [AVDate dateFromValue:self->_rawJSONData[@"createdAt"]];
+}
+
+- (NSDate *)updatedAt {
+    return [AVDate dateFromValue:self->_rawJSONData[@"updatedAt"]];
+}
+
 - (NSDictionary<NSString *,NSString *> *)uploadingHeaders
 {
     __block NSDictionary<NSString *,NSString *> *dic = nil;

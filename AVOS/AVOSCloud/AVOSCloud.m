@@ -212,42 +212,41 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
     }];
 }
 
-+ (NSDate *)getServerDate:(NSError *__autoreleasing *)error {
-    __block NSDate *date = nil;
-    __block NSError *errorStrong;
-    __block BOOL finished = NO;
+// MARK: Date
 
-    [[AVPaasClient sharedInstance] getObject:@"date" withParameters:nil block:^(id object, NSError *error_) {
-        if (error) errorStrong = error_;
-        if (!error_) date = [AVObjectUtils dateFromDictionary:object];
-        finished = YES;
++ (NSDate *)getServerDate:(NSError *__autoreleasing  _Nullable *)errorPtr {
+    __block NSDate *date;
+    __block NSError *err;
+    __block BOOL finished = false;
+    [[AVPaasClient sharedInstance] getObject:@"date"
+                              withParameters:nil
+                                       block:^(id object, NSError *error) {
+        if (error) {
+            err = error;
+        } else {
+            date = [AVDate dateFromDictionary:object];
+        }
+        finished = true;
     }];
-
     AV_WAIT_TIL_TRUE(finished, 0.1);
-
-    if (error) {
-        *error = errorStrong;
+    if (errorPtr) {
+        *errorPtr = err;
     }
-
     return date;
 }
 
-+ (NSDate *)getServerDateAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
++ (NSDate *)getServerDateAndThrowsWithError:(NSError *__autoreleasing  _Nullable *)error {
     return [self getServerDate:error];
 }
 
-+ (void)getServerDateWithBlock:(void (^)(NSDate *, NSError *))block {
++ (void)getServerDateWithBlock:(void (^)(NSDate * _Nullable, NSError * _Nullable))block {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSError *error = nil;
-        NSDate  *date  = [self getServerDate:&error];
-
-        [AVUtils callIdResultBlock:block object:date error:error];
+        NSError *error;
+        NSDate *date = [self getServerDate:&error];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            block(date, error);
+        });
     });
-}
-
-+ (void)setTimeZoneForSecondsFromGMT:(NSInteger)seconds
-{
-    LCTimeZoneForSecondsFromGMT = seconds;
 }
 
 #pragma mark - Push Notification
@@ -279,7 +278,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
     }];
 }
 
-// MARK: - Deprecated
+// MARK: Deprecated
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-implementations"
@@ -289,6 +288,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
 
 + (void)setStorageType:(AVStorageType)storageType {}
 + (void)setServiceRegion:(AVServiceRegion)serviceRegion {}
++ (void)setTimeZoneForSecondsFromGMT:(NSInteger)seconds {}
 
 +(void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
                             callback:(AVBooleanResultBlock)callback {

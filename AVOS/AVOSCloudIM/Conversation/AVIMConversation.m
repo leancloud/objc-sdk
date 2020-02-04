@@ -25,6 +25,7 @@
 
 #import "AVFile_Internal.h"
 #import "AVPaasClient.h"
+#import "AVObjectUtils.h"
 #import "AVUtils.h"
 #import "AVErrorUtils.h"
 
@@ -262,39 +263,35 @@ static dispatch_queue_t messageCacheOperationQueue;
     return value;
 }
 
-- (NSDate *)createAt
-{
-    __block id value = nil;
+- (NSDate *)createAt {
+    return [self createdAt];
+}
+
+- (NSDate *)createdAt {
+    __block id value;
     [self internalSyncLock:^{
-        value = [NSString lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyCreatedAt];
-        if (!value) {
-            value = [NSDate lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyCreatedAt];
-        }
+        value = self->_rawJSONData[AVIMConversationKeyCreatedAt];
     }];
-    if ([NSString lc__checkingType:value]) {
-        return LCDateFromString(value);
-    } else if ([NSDate lc__checkingType:value]) {
+    if ([NSDate lc__checkingType:value]) {
         return value;
     } else {
-        return nil;
+        return [AVDate dateFromValue:value];
     }
 }
 
-- (NSDate *)updateAt
-{
-    __block id value = nil;
+- (NSDate *)updateAt {
+    return [self updatedAt];
+}
+
+- (NSDate *)updatedAt {
+    __block id value;
     [self internalSyncLock:^{
-        value = [NSString lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyUpdatedAt];
-        if (!value) {
-            value = [NSDate lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyUpdatedAt];
-        }
+        value = self->_rawJSONData[AVIMConversationKeyUpdatedAt];
     }];
-    if ([NSString lc__checkingType:value]) {
-        return LCDateFromString(value);
-    } else if ([NSDate lc__checkingType:value]) {
+    if ([NSDate lc__checkingType:value]) {
         return value;
     } else {
-        return nil;
+        return [AVDate dateFromValue:value];
     }
 }
 
@@ -3186,8 +3183,8 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     keyedConversation.conversationId = self.conversationId;
     keyedConversation.clientId = self.clientId;
     keyedConversation.creator = self.creator;
-    keyedConversation.createAt = self.createAt;
-    keyedConversation.updateAt = self.updateAt;
+    keyedConversation.createAt = self.createdAt;
+    keyedConversation.updateAt = self.updatedAt;
     keyedConversation.lastMessageAt = self.lastMessageAt;
     keyedConversation.lastDeliveredAt = self.lastDeliveredAt;
     keyedConversation.lastReadAt = self.lastReadAt;
