@@ -440,6 +440,10 @@ class AVIMConversationTestCase: LCIMTestBase {
                 XCTAssertNotNil(conv)
                 XCTAssertNil(error)
                 XCTAssertEqual(conv?.conversationId, normalConvId)
+                XCTAssertNotNil(conv?.createAt)
+                XCTAssertNotNil(conv?.createdAt)
+                XCTAssertNotNil(conv?.updateAt)
+                XCTAssertNotNil(conv?.updatedAt)
             })
         }, failure: { XCTFail("timeout") })
         
