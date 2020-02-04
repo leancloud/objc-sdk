@@ -602,17 +602,17 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         if (error) {
             
             NSError *callbackError = nil;
-            if ([NSDictionary lc__checkingType:responseObject]) {
+            if ([NSDictionary _lc_is_type_of:responseObject]) {
                 
                 NSMutableDictionary *userInfo = ((NSDictionary *)responseObject).mutableCopy;
                 
                 // decoding 'code'
-                NSNumber *code = [NSNumber lc__decodingDictionary:userInfo key:kLC_code];
+                NSNumber *code = [NSNumber _lc_decoding:userInfo key:kLC_code];
                 
                 if (code) {
                     
                     // decoding 'error'
-                    NSString *reason = [NSString lc__decodingDictionary:userInfo key:kLC_error];
+                    NSString *reason = [NSString _lc_decoding:userInfo key:kLC_error];
                     
                     [userInfo removeObjectsForKeys:@[kLC_code, kLC_error]];
                     

@@ -12,13 +12,22 @@
 #import "AVACL.h"
 #import "AVObject.h"
 
+@interface AVDate : NSObject
+
++ (NSDateFormatter *)iso8601DateFormatter;
+
++ (NSString *)stringFromDate:(NSDate *)date;
++ (NSDictionary *)dictionaryFromDate:(NSDate *)date;
++ (NSDate *)dateFromString:(NSString *)string;
++ (NSDate *)dateFromDictionary:(NSDictionary *)dictionary;
++ (NSDate *)dateFromValue:(id)value;
+
+@end
+
 @interface AVObjectUtils : NSObject
 
 
 #pragma mark - Simple objecitive-c object from cloud side dictionary
-+(NSString *)stringFromDate:(NSDate *)date;
-+(NSDate *)dateFromDictionary:(NSDictionary *)dict;
-+(NSDate *)dateFromString:(NSString *)string;
 +(NSData *)dataFromDictionary:(NSDictionary *)dict;
 +(AVGeoPoint *)geoPointFromDictionary:(NSDictionary *)dict;
 +(AVACL *)aclFromDictionary:(NSDictionary *)dict;
@@ -35,7 +44,6 @@
 +(NSMutableArray *)dictionaryFromArray:(NSArray *)array;
 +(NSDictionary *)dictionaryFromAVObjectPointer:(AVObject *)object;
 +(NSDictionary *)dictionaryFromGeoPoint:(AVGeoPoint *)point;
-+(NSDictionary *)dictionaryFromDate:(NSDate *)date;
 +(NSDictionary *)dictionaryFromData:(NSData *)data;
 +(NSDictionary *)dictionaryFromFile:(AVFile *)file;
 +(NSDictionary *)dictionaryFromACL:(AVACL *)acl;

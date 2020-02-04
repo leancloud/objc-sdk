@@ -243,29 +243,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 // MARK: Date
 
-/*!
- * 获取服务端时间。
- */
+/// Get current server date synchronously.
+/// @param error Pointer to `NSError *`.
 + (nullable NSDate *)getServerDate:(NSError **)error;
 
-/*!
- An alias of `+[AVOSCloud getServerDate:]` methods that supports Swift exception.
- @seealso `+[AVPush getServerDate:]`
- */
+/// Get current server date synchronously.
+/// @param error Pointer to `NSError *`.
 + (nullable NSDate *)getServerDateAndThrowsWithError:(NSError **)error;
 
-/**
- Set a time zone offset from Greenwich Mean Time by a given number of seconds.
- 
- @param seconds Default is 0.
- */
-+ (void)setTimeZoneForSecondsFromGMT:(NSInteger)seconds;
-
-/*!
- * 异步地获取服务端时间。
- * @param block 回调结果。
- */
-+ (void)getServerDateWithBlock:(void(^)(NSDate * _Nullable date, NSError * _Nullable error))block;
+/// Get current server date asynchronously.
+/// @param block Result callback.
++ (void)getServerDateWithBlock:(void (^)(NSDate *_Nullable date, NSError *_Nullable error))block;
 
 // MARK: Push
 
@@ -287,39 +275,32 @@ NS_ASSUME_NONNULL_BEGIN
 
 // MARK: Deprecated
 
+@interface AVOSCloud (AVDeprecated)
+
++ (void)startNetworkStatistics __deprecated;
+
 typedef NS_ENUM(NSInteger, AVStorageType) {
     AVStorageTypeQiniu = 0,
     AVStorageTypeParse,
     AVStorageTypeS3,
     AVStorageTypeQCloud,
-    /* Default service region */
-    AVStorageTypeDefault = AVStorageTypeQiniu
+    AVStorageTypeDefault = AVStorageTypeQiniu,
 } __deprecated;
+
++ (void)setStorageType:(AVStorageType)type
+__deprecated_msg("No need any more, now it is NOP.");
 
 typedef NS_ENUM(NSInteger, AVServiceRegion) {
     AVServiceRegionCN = 1,
     AVServiceRegionUS,
-    
-    /* Default service region */
-    AVServiceRegionDefault = AVServiceRegionCN
+    AVServiceRegionDefault = AVServiceRegionCN,
 } __deprecated;
 
-@interface AVOSCloud (AVDeprecated)
++ (void)setServiceRegion:(AVServiceRegion)region
+__deprecated_msg("No need any more, now it is NOP.");
 
-/// Start Network Statistics
-+ (void)startNetworkStatistics __deprecated;
-
-/**
- *  Set third party file storage service. If uses China server, you can use QCloud or Qiniu, the default is Qiniu, if uses US server, the default is AWS S3.
- *  @param type Qiniu, QCloud or AWS S3.
- */
-+ (void)setStorageType:(AVStorageType)type __deprecated;
-
-/**
- * Use specified region.
- * If not specified, AVServiceRegionCN will be used.
- */
-+ (void)setServiceRegion:(AVServiceRegion)region __deprecated;
++ (void)setTimeZoneForSecondsFromGMT:(NSInteger)seconds
+__deprecated_msg("No need any more, now it is NOP.");
 
 /*!
  *  请求短信验证码，需要开启手机短信验证 API 选项。

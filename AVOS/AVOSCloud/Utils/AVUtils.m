@@ -32,19 +32,6 @@
 #include<netdb.h>
 #include<arpa/inet.h>
 
-NSInteger LCTimeZoneForSecondsFromGMT = 0;
-NSDate * LCDateFromString(NSString *string)
-{
-    if (!string || string.length == 0) {
-        return nil;
-    }
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:AV_DATE_FORMAT];
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:LCTimeZoneForSecondsFromGMT]];
-    NSDate *date = [dateFormatter dateFromString:string];
-    return date;
-}
-
 static dispatch_queue_t AVUtilsDefaultSerialQueue = NULL;
 
 #pragma clang diagnostic push
@@ -925,52 +912,18 @@ static Byte ivBuff[]   = {0xA,1,0xB,5,4,0xF,7,9,0x17,3,1,6,8,0xC,0xD,91};
 
 @end
 
+@implementation NSObject (LeanCloudObjcSDK)
 
-
-@implementation NSDate (AVServerTimezone)
-
-+(NSDate *)serverTimeZoneDateFromString:(NSString*)fullTimeString {
-    static NSDateFormatter *dateFormatter = nil;
-    
-    static int serverTimeZone=8*3600;
-    if (dateFormatter==nil) {
-        dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:serverTimeZone]];
-    }
-    
-    NSDate *bdate = [dateFormatter dateFromString:fullTimeString];
-    
-    return bdate;
++ (BOOL)_lc_is_type_of:(id)instance {
+    return instance && [instance isKindOfClass:self];
 }
 
-@end
-
-@implementation NSObject (__LeanCloud__)
-
-+ (BOOL)lc__checkingType:(id)instance
++ (instancetype)_lc_decoding:(NSDictionary *)dictionary
+                         key:(NSString *)key
 {
-    return (instance && [instance isKindOfClass:self]);
-}
-
-+ (instancetype)lc__decodingDictionary:(NSDictionary *)dictionary key:(NSString *)key
-{
-    if (!dictionary || !key) {
-        return nil;
-    }
+    if (!key) { return nil; }
     id value = dictionary[key];
-    if (value && [value isKindOfClass:self]) {
-        return value;
-    } else {
-        return nil;
-    }
-}
-
-+ (instancetype)lc__decodingWithKey:(NSString *)key fromDic:(NSDictionary *)dic
-{
-    if (!key || !dic) { return nil; }
-    id value = dic[key];
-    return (value && [value isKindOfClass:self]) ? value : nil;
+    return [value isKindOfClass:self] ? value : nil;
 }
 
 @end

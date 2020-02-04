@@ -42,11 +42,11 @@
         attributes ? [NSKeyedArchiver archivedDataWithRootObject:attributes] : NSNull.null;
     });
     id createAt = ({
-        NSDate *date = conversation.createAt;
+        NSDate *date = conversation.createdAt;
         date ? @(date.timeIntervalSince1970) : NSNull.null;
     });
     id updateAt = ({
-        NSDate *date = conversation.updateAt;
+        NSDate *date = conversation.updatedAt;
         date ? @(date.timeIntervalSince1970) : NSNull.null;
     });
     id lastMessageAt = ({

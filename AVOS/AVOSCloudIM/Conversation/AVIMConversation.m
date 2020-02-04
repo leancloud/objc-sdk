@@ -25,6 +25,7 @@
 
 #import "AVFile_Internal.h"
 #import "AVPaasClient.h"
+#import "AVObjectUtils.h"
 #import "AVUtils.h"
 #import "AVErrorUtils.h"
 
@@ -156,17 +157,17 @@ static dispatch_queue_t messageCacheOperationQueue;
 + (instancetype)conversationWithRawJSONData:(NSMutableDictionary *)rawJSONData
                                      client:(AVIMClient *)client
 {
-    NSString *conversationId = [NSString lc__decodingDictionary:rawJSONData key:AVIMConversationKeyObjectId];
+    NSString *conversationId = [NSString _lc_decoding:rawJSONData key:AVIMConversationKeyObjectId];
     if (!conversationId || !client) {
         return nil;
     }
     
     AVIMConversation *conv = ({
-        LCIMConvType convType = [NSNumber lc__decodingDictionary:rawJSONData key:AVIMConversationKeyConvType].unsignedIntegerValue;
+        LCIMConvType convType = [NSNumber _lc_decoding:rawJSONData key:AVIMConversationKeyConvType].unsignedIntegerValue;
         if (!convType) {
-            BOOL transient = [NSNumber lc__decodingDictionary:rawJSONData key:AVIMConversationKeyTransient].boolValue;
-            BOOL system = [NSNumber lc__decodingDictionary:rawJSONData key:AVIMConversationKeySystem].boolValue;
-            BOOL temporary = [NSNumber lc__decodingDictionary:rawJSONData key:AVIMConversationKeyTemporary].boolValue;
+            BOOL transient = [NSNumber _lc_decoding:rawJSONData key:AVIMConversationKeyTransient].boolValue;
+            BOOL system = [NSNumber _lc_decoding:rawJSONData key:AVIMConversationKeySystem].boolValue;
+            BOOL temporary = [NSNumber _lc_decoding:rawJSONData key:AVIMConversationKeyTemporary].boolValue;
             if (transient && !system && !temporary) {
                 convType = LCIMConvTypeTransient;
             } else if (system && !transient && !temporary) {
@@ -257,44 +258,40 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     __block NSString *value = nil;
     [self internalSyncLock:^{
-        value = [NSString lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyCreator];
+        value = [NSString _lc_decoding:self->_rawJSONData key:AVIMConversationKeyCreator];
     }];
     return value;
 }
 
-- (NSDate *)createAt
-{
-    __block id value = nil;
+- (NSDate *)createAt {
+    return [self createdAt];
+}
+
+- (NSDate *)createdAt {
+    __block id value;
     [self internalSyncLock:^{
-        value = [NSString lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyCreatedAt];
-        if (!value) {
-            value = [NSDate lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyCreatedAt];
-        }
+        value = self->_rawJSONData[AVIMConversationKeyCreatedAt];
     }];
-    if ([NSString lc__checkingType:value]) {
-        return LCDateFromString(value);
-    } else if ([NSDate lc__checkingType:value]) {
+    if ([NSDate _lc_is_type_of:value]) {
         return value;
     } else {
-        return nil;
+        return [AVDate dateFromValue:value];
     }
 }
 
-- (NSDate *)updateAt
-{
-    __block id value = nil;
+- (NSDate *)updateAt {
+    return [self updatedAt];
+}
+
+- (NSDate *)updatedAt {
+    __block id value;
     [self internalSyncLock:^{
-        value = [NSString lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyUpdatedAt];
-        if (!value) {
-            value = [NSDate lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyUpdatedAt];
-        }
+        value = self->_rawJSONData[AVIMConversationKeyUpdatedAt];
     }];
-    if ([NSString lc__checkingType:value]) {
-        return LCDateFromString(value);
-    } else if ([NSDate lc__checkingType:value]) {
+    if ([NSDate _lc_is_type_of:value]) {
         return value;
     } else {
-        return nil;
+        return [AVDate dateFromValue:value];
     }
 }
 
@@ -302,7 +299,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     __block NSString *value = nil;
     [self internalSyncLock:^{
-        value = [NSString lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyName];
+        value = [NSString _lc_decoding:self->_rawJSONData key:AVIMConversationKeyName];
     }];
     return value;
 }
@@ -311,7 +308,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     __block NSArray *value = nil;
     [self internalSyncLock:^{
-        value = [NSArray lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyMembers].copy;
+        value = [NSArray _lc_decoding:self->_rawJSONData key:AVIMConversationKeyMembers].copy;
     }];
     return value;
 }
@@ -322,7 +319,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         return;
     }
     [self internalSyncLock:^{
-        NSArray *originMembers = [NSArray lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyMembers] ?: @[];
+        NSArray *originMembers = [NSArray _lc_decoding:self->_rawJSONData key:AVIMConversationKeyMembers] ?: @[];
         self->_rawJSONData[AVIMConversationKeyMembers] = ({
             NSMutableSet *set = [NSMutableSet setWithArray:originMembers];
             [set addObjectsFromArray:members];
@@ -338,7 +335,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         return;
     }
     [self internalSyncLock:^{
-        NSArray *originMembers = [NSArray lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyMembers] ?: @[];
+        NSArray *originMembers = [NSArray _lc_decoding:self->_rawJSONData key:AVIMConversationKeyMembers] ?: @[];
         self->_rawJSONData[AVIMConversationKeyMembers] = ({
             NSMutableSet *set = [NSMutableSet setWithArray:originMembers];
             for (NSString *memberId in members) {
@@ -357,14 +354,14 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     __block id value = nil;
     [self internalSyncLock:^{
-        value = [NSArray lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyMutedMembers].copy;
+        value = [NSArray _lc_decoding:self->_rawJSONData key:AVIMConversationKeyMutedMembers].copy;
         if (!value) {
-            value = [NSNumber lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyMutedMembers];
+            value = [NSNumber _lc_decoding:self->_rawJSONData key:AVIMConversationKeyMutedMembers];
         }
     }];
-    if ([NSArray lc__checkingType:value]) {
+    if ([NSArray _lc_is_type_of:value]) {
         return [value containsObject:self->_clientId];
-    } else if ([NSNumber lc__checkingType:value]) {
+    } else if ([NSNumber _lc_is_type_of:value]) {
         return [(NSNumber *)value boolValue];
     } else {
         return false;
@@ -375,7 +372,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     __block NSDictionary *value = nil;
     [self internalSyncLock:^{
-        value = [NSDictionary lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyAttributes].copy;
+        value = [NSDictionary _lc_decoding:self->_rawJSONData key:AVIMConversationKeyAttributes].copy;
     }];
     return value;
 }
@@ -384,7 +381,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     __block NSString *value = nil;
     [self internalSyncLock:^{
-        value = [NSString lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyUniqueId];
+        value = [NSString _lc_decoding:self->_rawJSONData key:AVIMConversationKeyUniqueId];
     }];
     return value;
 }
@@ -393,7 +390,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     __block NSNumber *value = nil;
     [self internalSyncLock:^{
-        value = [NSNumber lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyUnique];
+        value = [NSNumber _lc_decoding:self->_rawJSONData key:AVIMConversationKeyUnique];
     }];
     return value.boolValue;
 }
@@ -402,7 +399,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     __block NSNumber *value = nil;
     [self internalSyncLock:^{
-        value = [NSNumber lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyTransient];
+        value = [NSNumber _lc_decoding:self->_rawJSONData key:AVIMConversationKeyTransient];
     }];
     return value.boolValue;
 }
@@ -411,7 +408,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     __block NSNumber *value = nil;
     [self internalSyncLock:^{
-        value = [NSNumber lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeySystem];
+        value = [NSNumber _lc_decoding:self->_rawJSONData key:AVIMConversationKeySystem];
     }];
     return value.boolValue;
 }
@@ -420,7 +417,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     __block NSNumber *value = nil;
     [self internalSyncLock:^{
-        value = [NSNumber lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyTemporary];
+        value = [NSNumber _lc_decoding:self->_rawJSONData key:AVIMConversationKeyTemporary];
     }];
     return value.boolValue;
 }
@@ -429,7 +426,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     __block NSNumber *value = nil;
     [self internalSyncLock:^{
-        value = [NSNumber lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyTemporaryTTL];
+        value = [NSNumber _lc_decoding:self->_rawJSONData key:AVIMConversationKeyTemporaryTTL];
     }];
     return value.unsignedIntegerValue;
 }
@@ -504,10 +501,10 @@ static dispatch_queue_t messageCacheOperationQueue;
 - (AVIMMessage *)decodingLastMessageFromRawJSONData:(NSMutableDictionary *)rawJSONData
 {
     AVIMMessage *lastMessage = nil;
-    NSString *msgContent = [NSString lc__decodingDictionary:rawJSONData key:AVIMConversationKeyLastMessageContent];
-    NSString *msgId = [NSString lc__decodingDictionary:rawJSONData key:AVIMConversationKeyLastMessageId];
-    NSString *msgFrom = [NSString lc__decodingDictionary:rawJSONData key:AVIMConversationKeyLastMessageFrom];
-    int64_t msgTimestamp = [NSNumber lc__decodingDictionary:rawJSONData key:AVIMConversationKeyLastMessageTimestamp].longLongValue;
+    NSString *msgContent = [NSString _lc_decoding:rawJSONData key:AVIMConversationKeyLastMessageContent];
+    NSString *msgId = [NSString _lc_decoding:rawJSONData key:AVIMConversationKeyLastMessageId];
+    NSString *msgFrom = [NSString _lc_decoding:rawJSONData key:AVIMConversationKeyLastMessageFrom];
+    int64_t msgTimestamp = [NSNumber _lc_decoding:rawJSONData key:AVIMConversationKeyLastMessageTimestamp].longLongValue;
     if (msgContent && msgId && msgFrom && msgTimestamp) {
         AVIMTypedMessageObject *typedMessageObject = [[AVIMTypedMessageObject alloc] initWithJSON:msgContent];
         if (typedMessageObject.isValidTypedMessageObject) {
@@ -523,15 +520,15 @@ static dispatch_queue_t messageCacheOperationQueue;
         lastMessage.localClientId = self->_clientId;
         lastMessage.sendTimestamp = msgTimestamp;
         lastMessage.updatedAt = ({
-            NSNumber *patchTimestamp = [NSNumber lc__decodingDictionary:rawJSONData key:AVIMConversationKeyLastMessagePatchTimestamp];
+            NSNumber *patchTimestamp = [NSNumber _lc_decoding:rawJSONData key:AVIMConversationKeyLastMessagePatchTimestamp];
             NSDate *date = nil;
             if (patchTimestamp) {
                 date = [NSDate dateWithTimeIntervalSince1970:(patchTimestamp.doubleValue / 1000.0)];
             }
             date;
         });
-        lastMessage.mentionAll = [NSNumber lc__decodingDictionary:rawJSONData key:AVIMConversationKeyLastMessageMentionAll].boolValue;
-        lastMessage.mentionList = [NSArray lc__decodingDictionary:rawJSONData key:AVIMConversationKeyLastMessageMentionPids];
+        lastMessage.mentionAll = [NSNumber _lc_decoding:rawJSONData key:AVIMConversationKeyLastMessageMentionAll].boolValue;
+        lastMessage.mentionList = [NSArray _lc_decoding:rawJSONData key:AVIMConversationKeyLastMessageMentionPids];
     }
     return lastMessage;
 }
@@ -1057,7 +1054,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             }
             NSError *error = nil;
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-            if (error || ![NSDictionary lc__checkingType:dic]) {
+            if (error || ![NSDictionary _lc_is_type_of:dic]) {
                 callback(false, error ?: ({
                     AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
                     LCError(code, AVIMErrorMessage(code), nil);
@@ -1095,7 +1092,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                     modifiedValue = subModifiedAttr[subKey];
                 } else {
                     NSDictionary *dic = subModifiedAttr[subKey];
-                    if ([NSDictionary lc__checkingType:dic]) {
+                    if ([NSDictionary _lc_is_type_of:dic]) {
                         subModifiedAttr = dic;
                     } else {
                         break;
@@ -1117,7 +1114,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             } else {
                 // for safe, use deep copy.
                 NSMutableDictionary *mutableDic = subOriginAttr[subKey];
-                if ([NSDictionary lc__checkingType:mutableDic]) {
+                if ([NSDictionary _lc_is_type_of:mutableDic]) {
                     mutableDic = mutableDic.mutableCopy;
                 } else {
                     if (modifiedValue) {
@@ -1170,7 +1167,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         }
         
         [self internalSyncLock:^{
-            NSArray *mutedMembers = [NSArray lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyMutedMembers] ?: @[];
+            NSArray *mutedMembers = [NSArray _lc_decoding:self->_rawJSONData key:AVIMConversationKeyMutedMembers] ?: @[];
             NSMutableSet *mutableSet = [NSMutableSet setWithArray:mutedMembers];
             [mutableSet addObject:self->_clientId];
             self->_rawJSONData[AVIMConversationKeyMutedMembers] = mutableSet.allObjects;
@@ -1220,7 +1217,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         }
         
         [self internalSyncLock:^{
-            NSArray *mutedMembers = [NSArray lc__decodingDictionary:self->_rawJSONData key:AVIMConversationKeyMutedMembers] ?: @[];
+            NSArray *mutedMembers = [NSArray _lc_decoding:self->_rawJSONData key:AVIMConversationKeyMutedMembers] ?: @[];
             NSMutableSet *mutableSet = [NSMutableSet setWithArray:mutedMembers];
             [mutableSet removeObject:self->_clientId];
             self->_rawJSONData[AVIMConversationKeyMutedMembers] = mutableSet.allObjects;
@@ -2488,7 +2485,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                              parameters:@{ @"client_id": self->_clientId, @"where": whereString }];
         });
         [paasClient performRequest:request success:^(NSHTTPURLResponse *response, id responseObject) {
-            if (![NSDictionary lc__checkingType:responseObject]) {
+            if (![NSDictionary _lc_is_type_of:responseObject]) {
                 [self invokeInUserInteractQueue:^{
                     callback(nil, LCErrorInternal(@"response invalid."));
                 }];
@@ -2496,9 +2493,9 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             }
             NSMutableDictionary<NSString *, AVIMConversationMemberInfo *> *memberInfoTable = ({
                 NSMutableDictionary<NSString *, AVIMConversationMemberInfo *> *memberInfoTable = [NSMutableDictionary dictionary];
-                NSArray *memberInfoDatas = [NSArray lc__decodingDictionary:responseObject key:@"results"];
+                NSArray *memberInfoDatas = [NSArray _lc_decoding:responseObject key:@"results"];
                 for (NSDictionary *dic in memberInfoDatas) {
-                    if ([NSDictionary lc__checkingType:dic]) {
+                    if ([NSDictionary _lc_is_type_of:dic]) {
                         AVIMConversationMemberInfo *memberInfo = [[AVIMConversationMemberInfo alloc] initWithRawJSONData:dic.mutableCopy conversation:self];
                         NSString *memberId = memberInfo.memberId;
                         if (memberId) {
@@ -2527,7 +2524,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                 callback(memberInfos, nil);
             }];
         } failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error) {
-            if ([NSDictionary lc__checkingType:responseObject] &&
+            if ([NSDictionary _lc_is_type_of:responseObject] &&
                 [responseObject[@"code"] integerValue] == AVIMErrorCodeSessionTokenExpired &&
                 recursionCount < 2) {
                 [self getAllMemberInfoWithIgnoringCache:ignoringCache
@@ -3186,8 +3183,8 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     keyedConversation.conversationId = self.conversationId;
     keyedConversation.clientId = self.clientId;
     keyedConversation.creator = self.creator;
-    keyedConversation.createAt = self.createAt;
-    keyedConversation.updateAt = self.updateAt;
+    keyedConversation.createAt = self.createdAt;
+    keyedConversation.updateAt = self.updatedAt;
     keyedConversation.lastMessageAt = self.lastMessageAt;
     keyedConversation.lastDeliveredAt = self.lastDeliveredAt;
     keyedConversation.lastReadAt = self.lastReadAt;

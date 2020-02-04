@@ -21,6 +21,7 @@
 #import "AVIMErrorUtil.h"
 
 #import "UserAgent.h"
+#import "AVObjectUtils.h"
 #import "AVUtils.h"
 #import "AVPaasClient.h"
 #import "AVErrorUtils.h"
@@ -702,10 +703,10 @@ static BOOL clientHasInstantiated = false;
             });
         
             [paasClient performRequest:request success:^(NSHTTPURLResponse *response, id result) {
-                if ([NSDictionary lc__checkingType:result]) {
-                    NSString *sign = [NSString lc__decodingDictionary:result key:@"signature"];
-                    int64_t timestamp = [[NSNumber lc__decodingDictionary:result key:@"timestamp"] longLongValue];
-                    NSString *nonce = [NSString lc__decodingDictionary:result key:@"nonce"];
+                if ([NSDictionary _lc_is_type_of:result]) {
+                    NSString *sign = [NSString _lc_decoding:result key:@"signature"];
+                    int64_t timestamp = [[NSNumber _lc_decoding:result key:@"timestamp"] longLongValue];
+                    NSString *nonce = [NSString _lc_decoding:result key:@"nonce"];
                     if (sign && timestamp && nonce) {
                         AVIMSignature *signature = ({
                             AVIMSignature *signature = [AVIMSignature new];
@@ -1148,7 +1149,7 @@ static BOOL clientHasInstantiated = false;
         }
         NSError *error = nil;
         NSDictionary *attr = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-        if (error || ![NSDictionary lc__checkingType:attr]) {
+        if (error || ![NSDictionary _lc_is_type_of:attr]) {
             return;
         }
         attr;
@@ -1163,14 +1164,17 @@ static BOOL clientHasInstantiated = false;
         }
         NSError *error = nil;
         NSDictionary *attrModified = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-        if (error || ![NSDictionary lc__checkingType:attrModified]) {
+        if (error || ![NSDictionary _lc_is_type_of:attrModified]) {
             return;
         }
         attrModified;
     });
     
     NSString *initById = (convCommand.hasInitBy ? convCommand.initBy : nil);
-    NSDate *updateDate = LCDateFromString((convCommand.hasUdate ? convCommand.udate : nil));
+    NSDate *updatedAt;
+    if (convCommand.hasUdate) {
+        updatedAt = [AVDate dateFromString:convCommand.udate];
+    }
     
     [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
         if (error) { return; }
@@ -1179,7 +1183,7 @@ static BOOL clientHasInstantiated = false;
         SEL sel = @selector(conversation:didUpdateAt:byClientId:updatedData:);
         if (delegate && [delegate respondsToSelector:sel]) {
             [self invokeInUserInteractQueue:^{
-                [delegate conversation:conversation didUpdateAt:updateDate byClientId:initById updatedData:attrModified];
+                [delegate conversation:conversation didUpdateAt:updatedAt byClientId:initById updatedData:attrModified];
             }];
         }
     }];
@@ -1935,7 +1939,7 @@ static BOOL clientHasInstantiated = false;
     NSString *conversationId = nil;
     NSMutableDictionary *rawDataDic = [keyedConversation.rawDataDic mutableCopy];
     if (rawDataDic) {
-        conversationId = [NSString lc__decodingDictionary:rawDataDic key:AVIMConversationKeyObjectId];
+        conversationId = [NSString _lc_decoding:rawDataDic key:AVIMConversationKeyObjectId];
     } else {
         rawDataDic = [NSMutableDictionary dictionary];
         if (keyedConversation.conversationId) {
@@ -1946,10 +1950,10 @@ static BOOL clientHasInstantiated = false;
             rawDataDic[AVIMConversationKeyCreator] = keyedConversation.creator;
         }
         if (keyedConversation.createAt) {
-            rawDataDic[AVIMConversationKeyCreatedAt] = keyedConversation.createAt;
+            rawDataDic[AVIMConversationKeyCreatedAt] = [AVDate stringFromDate:keyedConversation.createAt];
         }
         if (keyedConversation.updateAt) {
-            rawDataDic[AVIMConversationKeyUpdatedAt] = keyedConversation.updateAt;
+            rawDataDic[AVIMConversationKeyUpdatedAt] = [AVDate stringFromDate:keyedConversation.updateAt];
         }
         if (keyedConversation.name) {
             rawDataDic[AVIMConversationKeyName] = keyedConversation.name;

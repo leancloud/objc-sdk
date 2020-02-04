@@ -55,6 +55,7 @@ class AVFile_TestCase: LCTestBase {
                 XCTAssertNotNil(file.objectId())
                 XCTAssertNotNil(file.url())
                 XCTAssertEqual(file.url(), remoteURL.absoluteString)
+                XCTAssertNotNil(file.createdAt)
             })
             
         }, failure: {
@@ -115,6 +116,7 @@ class AVFile_TestCase: LCTestBase {
                 XCTAssertNil(error)
                 XCTAssertNotNil(file.objectId())
                 XCTAssertNotNil(file.url())
+                XCTAssertNotNil(file.createdAt)
                 
                 guard let cachedPath: String = file.persistentCachePath() else {
                     XCTFail()
@@ -260,6 +262,7 @@ class AVFile_TestCase: LCTestBase {
                 XCTAssertNil(error)
                 XCTAssertNotNil(file.objectId())
                 XCTAssertNotNil(file.url())
+                XCTAssertNotNil(file.createdAt)
                 
                 guard let cachedPath: String = file.persistentCachePath() else {
                     XCTFail()
@@ -876,6 +879,8 @@ class AVFile_TestCase: LCTestBase {
                 XCTAssertNotNil(file)
                 XCTAssertEqual(file?.objectId(), objectId)
                 XCTAssertNil(error)
+                XCTAssertNotNil(file?.createdAt)
+                XCTAssertNotNil(file?.updatedAt)
             })
             
         }, failure: {
