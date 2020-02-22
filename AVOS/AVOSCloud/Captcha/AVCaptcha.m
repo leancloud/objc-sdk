@@ -67,13 +67,15 @@
 
     [[AVPaasClient sharedInstance] postObject:@"verifyCaptcha" withParameters:parameters block:^(id object, NSError *error) {
         if (error) {
-            [AVUtils callIdResultBlock:callback object:object error:error];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                callback(nil, error);
+            });
             return;
         }
-
         NSString *validationToken = object[@"validate_token"];
-
-        [AVUtils callIdResultBlock:callback object:validationToken error:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            callback(validationToken, nil);
+        });
     }];
 }
 
