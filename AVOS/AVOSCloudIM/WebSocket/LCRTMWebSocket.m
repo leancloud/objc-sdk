@@ -856,3 +856,31 @@ static const size_t  LCRTMMaxFrameSize        = 32;
 
 @end
 /////////////////////////////////////////////////////////////////////////////
+
+@interface LCRTMFoundationTransport : NSObject <NSStreamDelegate>
+
+@property (nonatomic, strong) dispatch_queue_t workQueue;
+@property (nonatomic, strong) NSInputStream *inputStream;
+@property (nonatomic, strong) NSOutputStream *outputStream;
+@property (nonatomic, assign) BOOL isOpened;
+
+@end
+
+@implementation LCRTMFoundationTransport
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _workQueue = dispatch_queue_create("LCRTMFoundationTransport.workQueue", NULL);
+        _isOpened = false;
+    }
+    return self;
+}
+
+- (void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode
+{
+    
+}
+
+@end
