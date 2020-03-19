@@ -21,6 +21,8 @@
 
 #import "LCRTMWebSocket.h"
 
+#import "AVErrorUtils.h"
+
 //get the opCode from the packet
 typedef NS_ENUM(NSUInteger, LCRTMOpCode) {
     LCRTMOpCodeContinueFrame = 0x0,
@@ -857,9 +859,21 @@ static const size_t  LCRTMMaxFrameSize        = 32;
 @end
 /////////////////////////////////////////////////////////////////////////////
 
+@protocol LCRTMFoundationTransportDelegate <NSObject>
+
+- (void)connected;
+- (void)cancelled;
+- (void)failedWithError:(NSError *)error;
+- (void)receive:(NSData *)data;
+
+@end
+
 @interface LCRTMFoundationTransport : NSObject <NSStreamDelegate>
 
+@property (nonatomic, weak) id <LCRTMFoundationTransportDelegate> delegate;
+@property (nonatomic, strong) dispatch_queue_t delegateQueue;
 @property (nonatomic, strong) dispatch_queue_t workQueue;
+@property (nonatomic, strong) dispatch_queue_t writeQueue;
 @property (nonatomic, strong) NSInputStream *inputStream;
 @property (nonatomic, strong) NSOutputStream *outputStream;
 @property (nonatomic, assign) BOOL isOpened;
@@ -872,10 +886,102 @@ static const size_t  LCRTMMaxFrameSize        = 32;
 {
     self = [super init];
     if (self) {
+        _delegateQueue = dispatch_get_main_queue();
         _workQueue = dispatch_queue_create("LCRTMFoundationTransport.workQueue", NULL);
+        _writeQueue = dispatch_queue_create("LCRTMFoundationTransport.writeQueue", NULL);
         _isOpened = false;
     }
     return self;
+}
+
+- (void)connectURL:(NSURL *)URL timeout:(NSTimeInterval)timeout
+{
+    if (!URL.host) {
+        dispatch_async(self.delegateQueue, ^{
+            [self.delegate failedWithError:LCError(9976, @"Invalid request.", @{
+                @"URL": (URL ?: @"nil"),
+            })];
+        });
+        return;
+    }
+    NSNumber *port = URL.port;
+    if (!port) {
+        if (URL.scheme && [@[@"wss", @"https"] containsObject:URL.scheme]) {
+            port = @443;
+        } else {
+            port = @80;
+        }
+    }
+    CFReadStreamRef readStreamRef;
+    CFWriteStreamRef writeStreamRef;
+    CFStreamCreatePairWithSocketToHost(NULL,
+                                       (__bridge CFStringRef)(URL.host),
+                                       port.unsignedIntValue,
+                                       &readStreamRef,
+                                       &writeStreamRef);
+    self.inputStream = (__bridge_transfer NSInputStream *)(readStreamRef);
+    self.outputStream = (__bridge_transfer NSOutputStream *)(writeStreamRef);
+    if (!self.inputStream || !self.outputStream) {
+        dispatch_async(self.delegateQueue, ^{
+            [self.delegate failedWithError:LCError(9976, @"Socket creating failed.", @{
+                @"host": URL.host,
+                @"port": port,
+            })];
+        });
+        return;
+    }
+    self.inputStream.delegate = self;
+    self.outputStream.delegate = self;
+    self.isOpened = false;
+    CFReadStreamSetDispatchQueue((__bridge CFReadStreamRef)self.inputStream, self.workQueue);
+    CFWriteStreamSetDispatchQueue((__bridge CFWriteStreamRef)self.outputStream, self.workQueue);
+    [self.inputStream open];
+    [self.outputStream open];
+    __weak typeof(self) ws = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_SEC)), self.workQueue, ^{
+        LCRTMFoundationTransport *ss = ws;
+        if (!ss) {
+            return;
+        }
+        if (!ss.isOpened) {
+            dispatch_async(self.delegateQueue, ^{
+                [ss.delegate failedWithError:LCError(9001, @"Socket opening timeout.", @{
+                    @"host": URL.host,
+                    @"port": port,
+                })];
+            });
+            return;
+        }
+    });
+}
+
+- (void)disconnect
+{
+    dispatch_async(self.workQueue, ^{
+        [self _disconnect];
+    });
+}
+
+- (void)_disconnect
+{
+    if (self.inputStream) {
+        self.inputStream.delegate = nil;
+        CFReadStreamSetDispatchQueue((__bridge CFReadStreamRef)self.inputStream, NULL);
+        [self.inputStream close];
+        self.inputStream = nil;
+    }
+    if (self.outputStream) {
+        self.outputStream.delegate = nil;
+        CFWriteStreamSetDispatchQueue((__bridge CFWriteStreamRef)self.outputStream, NULL);
+        [self.outputStream close];
+        self.outputStream = nil;
+    }
+    self.isOpened = false;
+}
+
+- (void)write:(NSData *)data error:(NSError * __autoreleasing *)errPtr
+{
+    
 }
 
 - (void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode
