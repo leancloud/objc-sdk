@@ -41,8 +41,10 @@ FOUNDATION_EXPORT NSString *const LCHeaderFieldNameProduction;
 // only for cloud code yet
 @property (nonatomic, assign) BOOL productionMode;
 
-
 @property (nonatomic, assign) BOOL isLastModifyEnabled;
+
+@property (nonatomic, strong) NSLock *lock;
+
 -(void)clearLastModifyCache;
 
 - (AVACL *)updatedDefaultACL;
