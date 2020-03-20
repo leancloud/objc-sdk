@@ -114,12 +114,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 @property (nonatomic, strong) LCURLSessionManager *sessionManager;
 
-// The client is singleton, so the queue doesn't need release
-#if OS_OBJECT_USE_OBJC
 @property (nonatomic, strong) dispatch_queue_t completionQueue;
-#else
-@property (nonatomic, assign) dispatch_queue_t completionQueue;
-#endif
 
 @property (nonatomic, strong) NSMutableSet *runningArchivedRequests;
 
@@ -166,6 +161,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
             manager;
         });
+        _lock = [[NSLock alloc] init];
     }
 
     return self;
@@ -678,7 +674,9 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             dispatch_semaphore_signal(semaphore);
     }];
 
+    [self.lock lock];
     [self.requestTable setObject:dataTask forKey:request.URL.absoluteString];
+    [self.lock unlock];
 
     [dataTask resume];
 

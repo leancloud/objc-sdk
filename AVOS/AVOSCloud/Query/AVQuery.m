@@ -982,7 +982,9 @@ static NSString * quote(NSString *string)
        Detail discussion: https://github.com/leancloud/paas/issues/828
        We should deprecate this method in future.
      */
+    [[AVPaasClient sharedInstance].lock lock];
     NSMapTable *table = [[AVPaasClient sharedInstance].requestTable copy];
+    [[AVPaasClient sharedInstance].lock unlock];
     NSString *URLString = [[AVPaasClient sharedInstance] absoluteStringFromPath:[self queryPath] parameters:self.parameters];
 
     for (NSString *key in table) {
