@@ -146,6 +146,7 @@ static NSString * const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 
 @property (atomic, assign) BOOL isApplicationInBackground;
 @property (atomic, assign) LCNetworkReachabilityStatus currentNetworkReachabilityStatus;
+@property (nonatomic) BOOL isWebSocketOpened;
 
 @end
 
@@ -275,6 +276,7 @@ static NSString * const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 {
     [NSNotificationCenter.defaultCenter removeObserver:self];
     [self->_reachabilityMonitor stopMonitoring];
+    [self->_websocket safeClean];
 }
 
 // MARK: - Application Notification
@@ -346,7 +348,7 @@ static NSArray<NSString *> * RTMProtocols()
 {
     [self addOperationToInternalSerialQueue:^(AVIMWebSocketWrapper *websocketWrapper) {
         LCRTMWebSocket *websocket = websocketWrapper->_websocket;
-        if (websocket && websocket.isConnected) {
+        if (websocket && websocketWrapper.isWebSocketOpened) {
             callback(true, nil);
         } else {
             [websocketWrapper purgeWithError:({
@@ -383,10 +385,12 @@ static NSArray<NSString *> * RTMProtocols()
 
 // MARK: - Websocket Open & Close Notification
 
-- (void)websocketDidConnect:(LCRTMWebSocket *)socket {
+- (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didOpenWithProtocol:(NSString *)protocol
+{
     AssertRunInQueue(self->_internalSerialQueue);
     NSParameterAssert(socket == self->_websocket);
-    AVLoggerInfo(AVLoggerDomainIM, @"<address: %p> websocket did open.", socket);
+    AVLoggerInfo(AVLoggerDomainIM, @"<address: %p> websocket did open with protocol: %@.", socket, protocol ?: @"nil");
+    self.isWebSocketOpened = true;
     if (self->_openTimeoutBlock) {
         dispatch_block_cancel(self->_openTimeoutBlock);
         self->_openTimeoutBlock = nil;
@@ -404,7 +408,8 @@ static NSArray<NSString *> * RTMProtocols()
     }
 }
 
-- (void)websocketDidDisconnect:(LCRTMWebSocket *)socket error:(NSError *)error {
+- (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didCloseWithError:(NSError *)error
+{
     AssertRunInQueue(self->_internalSerialQueue);
     NSParameterAssert(socket == self->_websocket);
     if (!error) {
@@ -428,7 +433,7 @@ static NSArray<NSString *> * RTMProtocols()
         }
         LCRTMWebSocket *webSocket = websocketWrapper->_websocket;
         id<AVIMWebSocketWrapperDelegate> delegate = websocketWrapper->_delegate;
-        if (!webSocket || !webSocket.isConnected) {
+        if (!webSocket || !websocketWrapper.isWebSocketOpened) {
             commandWrapper.error = ({
                 AVIMErrorCode code = AVIMErrorCodeConnectionLost;
                 LCError(code, AVIMErrorMessage(code), nil);
@@ -456,45 +461,48 @@ static NSArray<NSString *> * RTMProtocols()
             websocketWrapper->_commandWrapperMap[index] = commandWrapper;
             [websocketWrapper->_serialIndexArray addObject:index];
         }
-        AVLoggerInfo(AVLoggerDomainIM, LCIM_OUT_COMMAND_LOG_FORMAT, [commandWrapper.outCommand avim_description]);
-        [webSocket writeData:data];
+        [webSocket sendMessage:[LCRTMWebSocketMessage messageWithData:data] completion:^{
+            AVLoggerInfo(AVLoggerDomainIM, LCIM_OUT_COMMAND_LOG_FORMAT, [commandWrapper.outCommand avim_description]);
+        }];
     }];
 }
 
-- (void)websocket:(LCRTMWebSocket *)socket didReceiveData:(NSData *)data {
-    AssertRunInQueue(self->_internalSerialQueue);
-    AVIMGenericCommand *inCommand = ({
-        NSError *error = nil;
-        AVIMGenericCommand *inCommand = [AVIMGenericCommand parseFromData:data error:&error];
-        if (!inCommand) {
-            AVLoggerError(AVLoggerDomainIM, @"did receive message with error: %@", error);
-            return;
-        }
-        inCommand;
-    });
-    AVLoggerInfo(AVLoggerDomainIM, LCIM_IN_COMMAND_LOG_FORMAT, [inCommand avim_description]);
-    id<AVIMWebSocketWrapperDelegate> delegate = self->_delegate;
-    if (inCommand.hasI && inCommand.i > 0) {
-        NSNumber *index = @(inCommand.i);
-        LCIMProtobufCommandWrapper *commandWrapper = self->_commandWrapperMap[index];
-        if (commandWrapper) {
-            [self->_commandWrapperMap removeObjectForKey:index];
-            [self->_serialIndexArray removeObject:index];
+- (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didReceiveMessage:(LCRTMWebSocketMessage *)message
+{
+    if (message.type == LCRTMWebSocketMessageTypeData) {
+        NSData *data = message.data;
+        AssertRunInQueue(self->_internalSerialQueue);
+        AVIMGenericCommand *inCommand = ({
+            NSError *error = nil;
+            AVIMGenericCommand *inCommand = [AVIMGenericCommand parseFromData:data error:&error];
+            if (!inCommand) {
+                AVLoggerError(AVLoggerDomainIM, @"did receive message with error: %@", error);
+                return;
+            }
+            inCommand;
+        });
+        AVLoggerInfo(AVLoggerDomainIM, LCIM_IN_COMMAND_LOG_FORMAT, [inCommand avim_description]);
+        id<AVIMWebSocketWrapperDelegate> delegate = self->_delegate;
+        if (inCommand.hasI && inCommand.i > 0) {
+            NSNumber *index = @(inCommand.i);
+            LCIMProtobufCommandWrapper *commandWrapper = self->_commandWrapperMap[index];
+            if (commandWrapper) {
+                [self->_commandWrapperMap removeObjectForKey:index];
+                [self->_serialIndexArray removeObject:index];
+                commandWrapper.inCommand = inCommand;
+                [delegate webSocketWrapper:self didReceiveCommandCallback:commandWrapper];
+            }
+        } else {
+            LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
             commandWrapper.inCommand = inCommand;
-            [delegate webSocketWrapper:self didReceiveCommandCallback:commandWrapper];
+            [delegate webSocketWrapper:self didReceiveCommand:commandWrapper];
+            if (!inCommand.hasPeerId) {
+                [self handleGoawayWith:inCommand];
+            }
         }
     } else {
-        LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
-        commandWrapper.inCommand = inCommand;
-        [delegate webSocketWrapper:self didReceiveCommand:commandWrapper];
-        if (!inCommand.hasPeerId) {
-            [self handleGoawayWith:inCommand];
-        }
+        // NOP
     }
-}
-
-- (void)websocket:(LCRTMWebSocket *)socket didReceiveMessage:(NSString *)string {
-    /// NOP
 }
 
 // MARK: - Ping Sender
@@ -528,18 +536,31 @@ static NSArray<NSString *> * RTMProtocols()
 {
     AssertRunInQueue(self->_internalSerialQueue);
     LCRTMWebSocket *websocket = self->_websocket;
-    if (!websocket || !websocket.isConnected) {
+    if (!websocket || !self.isWebSocketOpened) {
         return;
     }
-    AVLoggerInfo(AVLoggerDomainIM, @"<address: %p> websocket send ping.", websocket);
     self->_lastPingTimestamp = NSDate.date.timeIntervalSince1970;
-    [websocket writePing:[NSData data]];
+    NSString *address = [NSString stringWithFormat:@"%p", websocket];
+    [websocket sendPing:[NSData data] completion:^{
+        AVLoggerInfo(AVLoggerDomainIM, @"<address: %@> websocket send ping.", address);
+    }];
 }
 
-- (void)websocket:(LCRTMWebSocket *)socket didReceivePong:(NSData *)data {
+- (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didReceivePong:(NSData *)data
+{
     AssertRunInQueue(self->_internalSerialQueue);
     AVLoggerInfo(AVLoggerDomainIM, @"<address: %p> websocket did receive pong.", socket);
     self->_didReceivePong = true;
+}
+
+- (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didReceivePing:(NSData *)data
+{
+    AssertRunInQueue(self->_internalSerialQueue);
+    AVLoggerInfo(AVLoggerDomainIM, @"<address: %p> websocket did receive ping.", socket);
+    NSString *address = [NSString stringWithFormat:@"%p", socket];
+    [socket sendPong:data completion:^{
+        AVLoggerInfo(AVLoggerDomainIM, @"<address: %@> websocket send pong.", address);
+    }];
 }
 
 // MARK: - Timeout Checker
@@ -710,9 +731,10 @@ static NSArray<NSString *> * RTMProtocols()
                 NSArray<NSString *> *protocols = RTMProtocols();
                 NSURL *URL = [NSURL URLWithString:server];
                 self->_websocket = [[LCRTMWebSocket alloc] initWithURL:URL protocols:protocols];
-                self->_websocket.queue = self->_internalSerialQueue;
+                self->_websocket.delegateQueue = self->_internalSerialQueue;
                 self->_websocket.delegate = self;
-                [self->_websocket connect];
+                [self->_websocket.request setValue:nil forHTTPHeaderField:@"Origin"];
+                [self->_websocket open];
                 __weak typeof(self) weakSelf = self;
                 self->_openTimeoutBlock = dispatch_block_create(0, ^{
                     self->_openTimeoutBlock = nil;
@@ -761,11 +783,14 @@ static NSArray<NSString *> * RTMProtocols()
 - (void)purgeWithError:(NSError *)error
 {
     AssertRunInQueue(self->_internalSerialQueue);
+    self.isWebSocketOpened = false;
     // discard websocket
     if (self->_websocket) {
         AVLoggerInfo(AVLoggerDomainIM, @"<address: %p> websocket discard.", self->_websocket);
         self->_websocket.delegate = nil;
-        [self->_websocket disconnect];
+        [self->_websocket closeWithCloseCode:LCRTMWebSocketCloseCodeNormalClosure
+                                      reason:nil];
+        [self->_websocket safeClean];
         self->_websocket = nil;
     }
     if (self->_openTimeoutBlock) {
