@@ -1,4 +1,4 @@
-// AFURLResponseSerialization.h
+// LCURLResponseSerialization.h
 // Copyright (c) 2011–2016 Alamofire Software Foundation ( http://alamofire.org/ )
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,7 +25,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- The `AFURLResponseSerialization` protocol is adopted by an object that decodes data into a more useful object representation, according to details in the server response. Response serializers may additionally perform validation on the incoming response and data.
+ The `LCURLResponseSerialization` protocol is adopted by an object that decodes data into a more useful object representation, according to details in the server response. Response serializers may additionally perform validation on the incoming response and data.
 
  For example, a JSON response serializer may check for an acceptable status code (`2XX` range) and content type (`application/json`), decoding a valid JSON response into an object.
  */
@@ -49,18 +49,15 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark -
 
 /**
- `AFHTTPResponseSerializer` conforms to the `AFURLRequestSerialization` & `AFURLResponseSerialization` protocols, offering a concrete base implementation of query string / URL form-encoded parameter serialization and default request headers, as well as response status code and content type validation.
+ `LCHTTPResponseSerializer` conforms to the `LCURLRequestSerialization` & `LCURLResponseSerialization` protocols, offering a concrete base implementation of query string / URL form-encoded parameter serialization and default request headers, as well as response status code and content type validation.
 
- Any request or response serializer dealing with HTTP is encouraged to subclass `AFHTTPResponseSerializer` in order to ensure consistent default behavior.
+ Any request or response serializer dealing with HTTP is encouraged to subclass `LCHTTPResponseSerializer` in order to ensure consistent default behavior.
  */
 @interface LCHTTPResponseSerializer : NSObject <LCURLResponseSerialization>
 
 - (instancetype)init;
 
-/**
- The string encoding used to serialize data received from the server, when no string encoding is specified by the response. `NSUTF8StringEncoding` by default.
- */
-@property (nonatomic, assign) NSStringEncoding stringEncoding;
+@property (nonatomic, assign) NSStringEncoding stringEncoding DEPRECATED_MSG_ATTRIBUTE("The string encoding is never used. LCHTTPResponseSerializer only validates status codes and content types but does not try to decode the received data in any way.");
 
 /**
  Creates and returns a serializer with default configuration.
@@ -104,13 +101,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /**
- `AFJSONResponseSerializer` is a subclass of `AFHTTPResponseSerializer` that validates and decodes JSON responses.
+ `LCJSONResponseSerializer` is a subclass of `LCHTTPResponseSerializer` that validates and decodes JSON responses.
 
- By default, `AFJSONResponseSerializer` accepts the following MIME types, which includes the official standard, `application/json`, as well as other commonly-used types:
+ By default, `LCJSONResponseSerializer` accepts the following MIME types, which includes the official standard, `application/json`, as well as other commonly-used types:
 
  - `application/json`
  - `text/json`
  - `text/javascript`
+
+ In RFC 7159 - Section 8.1, it states that JSON text is required to be encoded in UTF-8, UTF-16, or UTF-32, and the default encoding is UTF-8. NSJSONSerialization provides support for all the encodings listed in the specification, and recommends UTF-8 for efficiency. Using an unsupported encoding will result in serialization error. See the `NSJSONSerialization` documentation for more details.
  */
 @interface LCJSONResponseSerializer : LCHTTPResponseSerializer
 
@@ -138,9 +137,9 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark -
 
 /**
- `AFXMLParserResponseSerializer` is a subclass of `AFHTTPResponseSerializer` that validates and decodes XML responses as an `NSXMLParser` objects.
+ `LCXMLParserResponseSerializer` is a subclass of `LCHTTPResponseSerializer` that validates and decodes XML responses as an `NSXMLParser` objects.
 
- By default, `AFXMLParserResponseSerializer` accepts the following MIME types, which includes the official standard, `application/xml`, as well as other commonly-used types:
+ By default, `LCXMLParserResponseSerializer` accepts the following MIME types, which includes the official standard, `application/xml`, as well as other commonly-used types:
 
  - `application/xml`
  - `text/xml`
@@ -154,9 +153,9 @@ NS_ASSUME_NONNULL_BEGIN
 #ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
 
 /**
- `AFXMLDocumentResponseSerializer` is a subclass of `AFHTTPResponseSerializer` that validates and decodes XML responses as an `NSXMLDocument` objects.
+ `LCXMLDocumentResponseSerializer` is a subclass of `LCHTTPResponseSerializer` that validates and decodes XML responses as an `NSXMLDocument` objects.
 
- By default, `AFXMLDocumentResponseSerializer` accepts the following MIME types, which includes the official standard, `application/xml`, as well as other commonly-used types:
+ By default, `LCXMLDocumentResponseSerializer` accepts the following MIME types, which includes the official standard, `application/xml`, as well as other commonly-used types:
 
  - `application/xml`
  - `text/xml`
@@ -166,7 +165,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)init;
 
 /**
- Input and output options specifically intended for `NSXMLDocument` objects. For possible values, see the `NSJSONSerialization` documentation section "NSJSONReadingOptions". `0` by default.
+ Input and output options specifically intended for `NSXMLDocument` objects. For possible values, see the `NSXMLDocument` documentation section "Input and Output Options". `0` by default.
  */
 @property (nonatomic, assign) NSUInteger options;
 
@@ -184,9 +183,9 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark -
 
 /**
- `AFPropertyListResponseSerializer` is a subclass of `AFHTTPResponseSerializer` that validates and decodes XML responses as an `NSXMLDocument` objects.
+ `LCPropertyListResponseSerializer` is a subclass of `LCHTTPResponseSerializer` that validates and decodes XML responses as an `NSXMLDocument` objects.
 
- By default, `AFPropertyListResponseSerializer` accepts the following MIME types:
+ By default, `LCPropertyListResponseSerializer` accepts the following MIME types:
 
  - `application/x-plist`
  */
@@ -218,9 +217,9 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark -
 
 /**
- `AFImageResponseSerializer` is a subclass of `AFHTTPResponseSerializer` that validates and decodes image responses.
+ `LCImageResponseSerializer` is a subclass of `LCHTTPResponseSerializer` that validates and decodes image responses.
 
- By default, `AFImageResponseSerializer` accepts the following MIME types, which correspond to the image formats supported by UIImage or NSImage:
+ By default, `LCImageResponseSerializer` accepts the following MIME types, which correspond to the image formats supported by UIImage or NSImage:
 
  - `image/tiff`
  - `image/jpeg`
@@ -252,7 +251,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark -
 
 /**
- `AFCompoundSerializer` is a subclass of `AFHTTPResponseSerializer` that delegates the response serialization to the first `AFHTTPResponseSerializer` object that returns an object for `responseObjectForResponse:data:error:`, falling back on the default behavior of `AFHTTPResponseSerializer`. This is useful for supporting multiple potential types and structures of server responses with a single serializer.
+ `LCCompoundSerializer` is a subclass of `LCHTTPResponseSerializer` that delegates the response serialization to the first `LCHTTPResponseSerializer` object that returns an object for `responseObjectForResponse:data:error:`, falling back on the default behavior of `LCHTTPResponseSerializer`. This is useful for supporting multiple potential types and structures of server responses with a single serializer.
  */
 @interface LCCompoundResponseSerializer : LCHTTPResponseSerializer
 
@@ -264,7 +263,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Creates and returns a compound serializer comprised of the specified response serializers.
 
- @warning Each response serializer specified must be a subclass of `AFHTTPResponseSerializer`, and response to `-validateResponse:data:error:`.
+ @warning Each response serializer specified must be a subclass of `LCHTTPResponseSerializer`, and response to `-validateResponse:data:error:`.
  */
 + (instancetype)compoundSerializerWithResponseSerializers:(NSArray <id<LCURLResponseSerialization>> *)responseSerializers;
 
@@ -279,12 +278,12 @@ NS_ASSUME_NONNULL_BEGIN
 
  The following error domain is predefined.
 
- - `NSString * const AFURLResponseSerializationErrorDomain`
+ - `NSString * const LCURLResponseSerializationErrorDomain`
 
  ### Constants
 
- `AFURLResponseSerializationErrorDomain`
- AFURLResponseSerializer errors. Error codes for `AFURLResponseSerializationErrorDomain` correspond to codes in `NSURLErrorDomain`.
+ `LCURLResponseSerializationErrorDomain`
+ LCURLResponseSerializer errors. Error codes for `LCURLResponseSerializationErrorDomain` correspond to codes in `NSURLErrorDomain`.
  */
 FOUNDATION_EXPORT NSString * const LCURLResponseSerializationErrorDomain;
 
@@ -293,16 +292,16 @@ FOUNDATION_EXPORT NSString * const LCURLResponseSerializationErrorDomain;
 
  These keys may exist in the user info dictionary, in addition to those defined for NSError.
 
- - `NSString * const AFNetworkingOperationFailingURLResponseErrorKey`
- - `NSString * const AFNetworkingOperationFailingURLResponseDataErrorKey`
+ - `NSString * const LCNetworkingOperationFailingURLResponseErrorKey`
+ - `NSString * const LCNetworkingOperationFailingURLResponseDataErrorKey`
 
  ### Constants
 
- `AFNetworkingOperationFailingURLResponseErrorKey`
- The corresponding value is an `NSURLResponse` containing the response of the operation associated with an error. This key is only present in the `AFURLResponseSerializationErrorDomain`.
+ `LCNetworkingOperationFailingURLResponseErrorKey`
+ The corresponding value is an `NSURLResponse` containing the response of the operation associated with an error. This key is only present in the `LCURLResponseSerializationErrorDomain`.
 
- `AFNetworkingOperationFailingURLResponseDataErrorKey`
- The corresponding value is an `NSData` containing the original data of the operation associated with an error. This key is only present in the `AFURLResponseSerializationErrorDomain`.
+ `LCNetworkingOperationFailingURLResponseDataErrorKey`
+ The corresponding value is an `NSData` containing the original data of the operation associated with an error. This key is only present in the `LCURLResponseSerializationErrorDomain`.
  */
 FOUNDATION_EXPORT NSString * const LCNetworkingOperationFailingURLResponseErrorKey;
 

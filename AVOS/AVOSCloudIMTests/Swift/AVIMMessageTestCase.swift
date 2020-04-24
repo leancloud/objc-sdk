@@ -837,6 +837,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                 let text: String = "test"
                 let customMessage: AVIMCustomTypedMessage = AVIMCustomTypedMessage()
                 customMessage.text = text
+                customMessage.setObject("value", forKey: "key")
                 
                 semaphore.increment(2)
                 
@@ -861,6 +862,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(message.readTimestamp == 0)
                     XCTAssertFalse(message.transient)
                     XCTAssertNil(message.updatedAt)
+                    XCTAssertEqual(message.object(forKey: "key") as? String, "value")
                 }
                 
                 normalConv.send(customMessage, callback: { (succeeded: Bool, error: Error?) in
@@ -1487,7 +1489,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(commonMessage.sendTimestamp > 0)
                     XCTAssertNotNil(commonMessage.clientId)
                     if succeeded {
-                        XCTAssertTrue(RunLoop.current.run(mode: RunLoop.Mode.default, before: Date(timeIntervalSinceNow: 1.0)))
+                        sleep(1)
                         normalConv.update(commonMessage, toNewMessage: newCommonMessage, callback: { (succeeded: Bool, error: Error?) in
                             semaphore.decrement()
                             XCTAssertTrue(Thread.isMainThread)
@@ -1573,7 +1575,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(commonMessage.sendTimestamp > 0)
                     XCTAssertNotNil(commonMessage.clientId)
                     if succeeded {
-                        XCTAssertTrue(RunLoop.current.run(mode: RunLoop.Mode.default, before: Date(timeIntervalSinceNow: 1.0)))
+                        sleep(1)
                         normalConv.recall(commonMessage, callback: { (succeeded: Bool, error: Error?, recalledMessage: AVIMRecalledMessage?) in
                             semaphore.decrement()
                             XCTAssertTrue(Thread.isMainThread)

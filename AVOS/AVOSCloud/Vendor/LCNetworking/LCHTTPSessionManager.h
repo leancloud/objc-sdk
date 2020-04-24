@@ -1,4 +1,4 @@
-// AFHTTPSessionManager.h
+// LCHTTPSessionManager.h
 // Copyright (c) 2011–2016 Alamofire Software Foundation ( http://alamofire.org/ )
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -34,23 +34,23 @@
 #import "LCURLSessionManager.h"
 
 /**
- `AFHTTPSessionManager` is a subclass of `AFURLSessionManager` with convenience methods for making HTTP requests. When a `baseURL` is provided, requests made with the `GET` / `POST` / et al. convenience methods can be made with relative paths.
+ `LCHTTPSessionManager` is a subclass of `LCURLSessionManager` with convenience methods for making HTTP requests. When a `baseURL` is provided, requests made with the `GET` / `POST` / et al. convenience methods can be made with relative paths.
 
  ## Subclassing Notes
 
- Developers targeting iOS 7 or Mac OS X 10.9 or later that deal extensively with a web service are encouraged to subclass `AFHTTPSessionManager`, providing a class method that returns a shared singleton object on which authentication and other configuration can be shared across the application.
+ Developers targeting iOS 7 or Mac OS X 10.9 or later that deal extensively with a web service are encouraged to subclass `LCHTTPSessionManager`, providing a class method that returns a shared singleton object on which authentication and other configuration can be shared across the application.
 
- For developers targeting iOS 6 or Mac OS X 10.8 or earlier, `AFHTTPRequestOperationManager` may be used to similar effect.
+ For developers targeting iOS 6 or Mac OS X 10.8 or earlier, `LCHTTPRequestOperationManager` may be used to similar effect.
 
  ## Methods to Override
 
- To change the behavior of all data task operation construction, which is also used in the `GET` / `POST` / et al. convenience methods, override `dataTaskWithRequest:completionHandler:`.
+ To change the behavior of all data task operation construction, which is also used in the `GET` / `POST` / et al. convenience methods, override `dataTaskWithRequest:uploadProgress:downloadProgress:completionHandler:`.
 
  ## Serialization
 
- Requests created by an HTTP client will contain default headers and encode parameters according to the `requestSerializer` property, which is an object conforming to `<AFURLRequestSerialization>`.
+ Requests created by an HTTP client will contain default headers and encode parameters according to the `requestSerializer` property, which is an object conforming to `<LCURLRequestSerialization>`.
 
- Responses received from the server are automatically validated and serialized by the `responseSerializers` property, which is an object conforming to `<AFURLResponseSerialization>`
+ Responses received from the server are automatically validated and serialized by the `responseSerializers` property, which is an object conforming to `<LCURLResponseSerialization>`
 
  ## URL Construction Using Relative Paths
 
@@ -81,30 +81,39 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic, strong, nullable) NSURL *baseURL;
 
 /**
- Requests created with `requestWithMethod:URLString:parameters:` & `multipartFormRequestWithMethod:URLString:parameters:constructingBodyWithBlock:` are constructed with a set of default headers using a parameter serialization specified by this property. By default, this is set to an instance of `AFHTTPRequestSerializer`, which serializes query string parameters for `GET`, `HEAD`, and `DELETE` requests, or otherwise URL-form-encodes HTTP message bodies.
+ Requests created with `requestWithMethod:URLString:parameters:` & `multipartFormRequestWithMethod:URLString:parameters:constructingBodyWithBlock:` are constructed with a set of default headers using a parameter serialization specified by this property. By default, this is set to an instance of `LCHTTPRequestSerializer`, which serializes query string parameters for `GET`, `HEAD`, and `DELETE` requests, or otherwise URL-form-encodes HTTP message bodies.
 
  @warning `requestSerializer` must not be `nil`.
  */
 @property (nonatomic, strong) LCHTTPRequestSerializer <LCURLRequestSerialization> * requestSerializer;
 
 /**
- Responses sent from the server in data tasks created with `dataTaskWithRequest:success:failure:` and run using the `GET` / `POST` / et al. convenience methods are automatically validated and serialized by the response serializer. By default, this property is set to an instance of `AFJSONResponseSerializer`.
+ Responses sent from the server in data tasks created with `dataTaskWithRequest:success:failure:` and run using the `GET` / `POST` / et al. convenience methods are automatically validated and serialized by the response serializer. By default, this property is set to an instance of `LCJSONResponseSerializer`.
 
  @warning `responseSerializer` must not be `nil`.
  */
 @property (nonatomic, strong) LCHTTPResponseSerializer <LCURLResponseSerialization> * responseSerializer;
+
+///-------------------------------
+/// @name Managing Security Policy
+///-------------------------------
+
+/**
+ The security policy used by created session to evaluate server trust for secure connections. `LCURLSessionManager` uses the `defaultPolicy` unless otherwise specified. A security policy configured with `LCSSLPinningModePublicKey` or `LCSSLPinningModeCertificate` can only be applied on a session manager initialized with a secure base URL (i.e. https). Applying a security policy with pinning enabled on an insecure session manager throws an `Invalid Security Policy` exception.
+ */
+@property (nonatomic, strong) LCSecurityPolicy *securityPolicy;
 
 ///---------------------
 /// @name Initialization
 ///---------------------
 
 /**
- Creates and returns an `AFHTTPSessionManager` object.
+ Creates and returns an `LCHTTPSessionManager` object.
  */
 + (instancetype)manager;
 
 /**
- Initializes an `AFHTTPSessionManager` object with the specified base URL.
+ Initializes an `LCHTTPSessionManager` object with the specified base URL.
 
  @param url The base URL for the HTTP client.
 
@@ -113,7 +122,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithBaseURL:(nullable NSURL *)url;
 
 /**
- Initializes an `AFHTTPSessionManager` object with the specified base URL.
+ Initializes an `LCHTTPSessionManager` object with the specified base URL.
 
  This is the designated initializer.
 
@@ -214,7 +223,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param URLString The URL string used to create the request URL.
  @param parameters The parameters to be encoded according to the client request serializer.
- @param block A block that takes a single argument and appends data to the HTTP body. The block argument is an object adopting the `AFMultipartFormData` protocol.
+ @param block A block that takes a single argument and appends data to the HTTP body. The block argument is an object adopting the `LCMultipartFormData` protocol.
  @param success A block object to be executed when the task finishes successfully. This block has no return value and takes two arguments: the data task, and the response object created by the client response serializer.
  @param failure A block object to be executed when the task finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a two arguments: the data task and the error describing the network or parsing error that occurred.
 
@@ -231,7 +240,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param URLString The URL string used to create the request URL.
  @param parameters The parameters to be encoded according to the client request serializer.
- @param block A block that takes a single argument and appends data to the HTTP body. The block argument is an object adopting the `AFMultipartFormData` protocol.
+ @param block A block that takes a single argument and appends data to the HTTP body. The block argument is an object adopting the `LCMultipartFormData` protocol.
  @param uploadProgress A block object to be executed when the upload progress is updated. Note this block is called on the session queue, not the main queue.
  @param success A block object to be executed when the task finishes successfully. This block has no return value and takes two arguments: the data task, and the response object created by the client response serializer.
  @param failure A block object to be executed when the task finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a two arguments: the data task and the error describing the network or parsing error that occurred.

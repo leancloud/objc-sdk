@@ -523,12 +523,15 @@ class AppledocTask: Task {
         try FileManager.default.removeItem(atPath: APIDocsTempDirectory)
     }
     
-    static func commitPush() throws {
+    static func commitPull() throws {
         guard GitTask(arguments: [
             "-C", APIDocsRepoObjcDirectory, "pull"])
             .excute() else {
                 throw TaskError()
         }
+    }
+    
+    static func commitPush() throws {
         guard GitTask(arguments: [
             "-C", APIDocsRepoObjcDirectory,
             "add", "-A"])
@@ -551,6 +554,7 @@ class AppledocTask: Task {
     static func update(currentVersion: VersionUpdater.Version) throws {
         try version()
         try checkAPIDocsRepoObjcDirectory()
+        try commitPull()
         try generateDocumentation(currentVersion: currentVersion)
         try moveGeneratedDocumentationToRepo()
         try commitPush()

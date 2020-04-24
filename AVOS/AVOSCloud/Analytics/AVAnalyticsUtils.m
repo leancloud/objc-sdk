@@ -149,34 +149,6 @@ static NSString * identifierForVendorTag = @"identifierForVendor";
 
 #if !TARGET_OS_WATCH
 
-static NSString *const WiFiType = @"WiFi";
-static NSString *const WWANType = @"WWAN";
-
-+(BOOL)isWiFiConnection {
-    return [[AVAnalyticsUtils connectionType] isEqualToString:WiFiType];
-}
-
-+(NSString *)connectionType
-{
-    NSString *type = @"";
-    LCNetworkReachabilityManager *reachabilityManager = [LCNetworkReachabilityManager sharedManager];
-
-    [reachabilityManager startMonitoring];
-
-    switch (reachabilityManager.networkReachabilityStatus) {
-    case AFNetworkReachabilityStatusUnknown:
-        break;
-    case AFNetworkReachabilityStatusNotReachable:
-        break;
-    case AFNetworkReachabilityStatusReachableViaWiFi:
-        type = WiFiType;
-    case AFNetworkReachabilityStatusReachableViaWWAN:
-        type = WWANType;
-    }
-
-    return type;
-}
-
 +(NSString *)deviceId
 {
     static NSString * uniqueIdentifier = nil;
@@ -302,9 +274,6 @@ static NSString *const WWANType = @"WWAN";
     if (sdkType) { dynamicDic[@"os"] = sdkType; }
 
 #if !TARGET_OS_WATCH
-    NSString *connectionType = [AVAnalyticsUtils connectionType];
-    if (connectionType) { dynamicDic[@"access"] = connectionType; }
-    
     NSString *carrier = [AVAnalyticsUtils carrier];
     if (carrier) { dynamicDic[@"carrier"] = carrier; }
 #endif

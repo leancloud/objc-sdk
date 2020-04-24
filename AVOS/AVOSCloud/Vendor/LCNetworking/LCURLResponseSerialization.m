@@ -1,4 +1,4 @@
-// AFURLResponseSerialization.m
+// LCURLResponseSerialization.m
 // Copyright (c) 2011–2016 Alamofire Software Foundation ( http://alamofire.org/ )
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -35,7 +35,7 @@ NSString * const LCURLResponseSerializationErrorDomain = @"com.alamofire.error.s
 NSString * const LCNetworkingOperationFailingURLResponseErrorKey = @"com.alamofire.serialization.response.error.response";
 NSString * const LCNetworkingOperationFailingURLResponseDataErrorKey = @"com.alamofire.serialization.response.error.data";
 
-static NSError * AFErrorWithUnderlyingError(NSError *error, NSError *underlyingError) {
+static NSError * LCErrorWithUnderlyingError(NSError *error, NSError *underlyingError) {
     if (!error) {
         return underlyingError;
     }
@@ -50,21 +50,21 @@ static NSError * AFErrorWithUnderlyingError(NSError *error, NSError *underlyingE
     return [[NSError alloc] initWithDomain:error.domain code:error.code userInfo:mutableUserInfo];
 }
 
-static BOOL AFErrorOrUnderlyingErrorHasCodeInDomain(NSError *error, NSInteger code, NSString *domain) {
+static BOOL LCErrorOrUnderlyingErrorHasCodeInDomain(NSError *error, NSInteger code, NSString *domain) {
     if ([error.domain isEqualToString:domain] && error.code == code) {
         return YES;
     } else if (error.userInfo[NSUnderlyingErrorKey]) {
-        return AFErrorOrUnderlyingErrorHasCodeInDomain(error.userInfo[NSUnderlyingErrorKey], code, domain);
+        return LCErrorOrUnderlyingErrorHasCodeInDomain(error.userInfo[NSUnderlyingErrorKey], code, domain);
     }
 
     return NO;
 }
 
-static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingOptions readingOptions) {
+static id LCJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingOptions readingOptions) {
     if ([JSONObject isKindOfClass:[NSArray class]]) {
         NSMutableArray *mutableArray = [NSMutableArray arrayWithCapacity:[(NSArray *)JSONObject count]];
         for (id value in (NSArray *)JSONObject) {
-            [mutableArray addObject:AFJSONObjectByRemovingKeysWithNullValues(value, readingOptions)];
+            [mutableArray addObject:LCJSONObjectByRemovingKeysWithNullValues(value, readingOptions)];
         }
 
         return (readingOptions & NSJSONReadingMutableContainers) ? mutableArray : [NSArray arrayWithArray:mutableArray];
@@ -75,7 +75,7 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
             if (!value || [value isEqual:[NSNull null]]) {
                 [mutableDictionary removeObjectForKey:key];
             } else if ([value isKindOfClass:[NSArray class]] || [value isKindOfClass:[NSDictionary class]]) {
-                mutableDictionary[key] = AFJSONObjectByRemovingKeysWithNullValues(value, readingOptions);
+                mutableDictionary[key] = LCJSONObjectByRemovingKeysWithNullValues(value, readingOptions);
             }
         }
 
@@ -96,8 +96,6 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     if (!self) {
         return nil;
     }
-
-    self.stringEncoding = NSUTF8StringEncoding;
 
     self.acceptableStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(200, 100)];
     self.acceptableContentTypes = nil;
@@ -120,7 +118,7 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
 
             if ([data length] > 0 && [response URL]) {
                 NSMutableDictionary *mutableUserInfo = [@{
-                                                          NSLocalizedDescriptionKey: [NSString stringWithFormat:NSLocalizedStringFromTable(@"Request failed: unacceptable content-type: %@", @"AFNetworking", nil), [response MIMEType]],
+                                                          NSLocalizedDescriptionKey: [NSString stringWithFormat:NSLocalizedStringFromTable(@"Request failed: unacceptable content-type: %@", @"LCNetworking", nil), [response MIMEType]],
                                                           NSURLErrorFailingURLErrorKey:[response URL],
                                                           LCNetworkingOperationFailingURLResponseErrorKey: response,
                                                         } mutableCopy];
@@ -128,7 +126,7 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
                     mutableUserInfo[LCNetworkingOperationFailingURLResponseDataErrorKey] = data;
                 }
 
-                validationError = AFErrorWithUnderlyingError([NSError errorWithDomain:LCURLResponseSerializationErrorDomain code:NSURLErrorCannotDecodeContentData userInfo:mutableUserInfo], validationError);
+                validationError = LCErrorWithUnderlyingError([NSError errorWithDomain:LCURLResponseSerializationErrorDomain code:NSURLErrorCannotDecodeContentData userInfo:mutableUserInfo], validationError);
             }
 
             responseIsValid = NO;
@@ -136,7 +134,7 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
 
         if (self.acceptableStatusCodes && ![self.acceptableStatusCodes containsIndex:(NSUInteger)response.statusCode] && [response URL]) {
             NSMutableDictionary *mutableUserInfo = [@{
-                                               NSLocalizedDescriptionKey: [NSString stringWithFormat:NSLocalizedStringFromTable(@"Request failed: %@ (%ld)", @"AFNetworking", nil), [NSHTTPURLResponse localizedStringForStatusCode:response.statusCode], (long)response.statusCode],
+                                               NSLocalizedDescriptionKey: [NSString stringWithFormat:NSLocalizedStringFromTable(@"Request failed: %@ (%ld)", @"LCNetworking", nil), [NSHTTPURLResponse localizedStringForStatusCode:response.statusCode], (long)response.statusCode],
                                                NSURLErrorFailingURLErrorKey:[response URL],
                                                LCNetworkingOperationFailingURLResponseErrorKey: response,
                                        } mutableCopy];
@@ -145,7 +143,7 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
                 mutableUserInfo[LCNetworkingOperationFailingURLResponseDataErrorKey] = data;
             }
 
-            validationError = AFErrorWithUnderlyingError([NSError errorWithDomain:LCURLResponseSerializationErrorDomain code:NSURLErrorBadServerResponse userInfo:mutableUserInfo], validationError);
+            validationError = LCErrorWithUnderlyingError([NSError errorWithDomain:LCURLResponseSerializationErrorDomain code:NSURLErrorBadServerResponse userInfo:mutableUserInfo], validationError);
 
             responseIsValid = NO;
         }
@@ -158,7 +156,7 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     return responseIsValid;
 }
 
-#pragma mark - AFURLResponseSerialization
+#pragma mark - LCURLResponseSerialization
 
 - (id)responseObjectForResponse:(NSURLResponse *)response
                            data:(NSData *)data
@@ -230,35 +228,40 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     return self;
 }
 
-#pragma mark - AFURLResponseSerialization
+#pragma mark - LCURLResponseSerialization
 
 - (id)responseObjectForResponse:(NSURLResponse *)response
                            data:(NSData *)data
                           error:(NSError *__autoreleasing *)error
 {
     if (![self validateResponse:(NSHTTPURLResponse *)response data:data error:error]) {
-        if (!error || AFErrorOrUnderlyingErrorHasCodeInDomain(*error, NSURLErrorCannotDecodeContentData, LCURLResponseSerializationErrorDomain)) {
+        if (!error || LCErrorOrUnderlyingErrorHasCodeInDomain(*error, NSURLErrorCannotDecodeContentData, LCURLResponseSerializationErrorDomain)) {
             return nil;
         }
     }
 
-    id responseObject = nil;
-    NSError *serializationError = nil;
     // Workaround for behavior of Rails to return a single space for `head :ok` (a workaround for a bug in Safari), which is not interpreted as valid input by NSJSONSerialization.
     // See https://github.com/rails/rails/issues/1742
     BOOL isSpace = [data isEqualToData:[NSData dataWithBytes:" " length:1]];
-    if (data.length > 0 && !isSpace) {
-        responseObject = [NSJSONSerialization JSONObjectWithData:data options:self.readingOptions error:&serializationError];
-    } else {
+    
+    if (data.length == 0 || isSpace) {
         return nil;
     }
+    
+    NSError *serializationError = nil;
+    
+    id responseObject = [NSJSONSerialization JSONObjectWithData:data options:self.readingOptions error:&serializationError];
 
-    if (self.removesKeysWithNullValues && responseObject) {
-        responseObject = AFJSONObjectByRemovingKeysWithNullValues(responseObject, self.readingOptions);
+    if (!responseObject)
+    {
+        if (error) {
+            *error = LCErrorWithUnderlyingError(serializationError, *error);
+        }
+        return nil;
     }
-
-    if (error) {
-        *error = AFErrorWithUnderlyingError(serializationError, *error);
+    
+    if (self.removesKeysWithNullValues) {
+        return LCJSONObjectByRemovingKeysWithNullValues(responseObject, self.readingOptions);
     }
 
     return responseObject;
@@ -288,7 +291,7 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
 #pragma mark - NSCopying
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    LCJSONResponseSerializer *serializer = [[[self class] allocWithZone:zone] init];
+    LCJSONResponseSerializer *serializer = [super copyWithZone:zone];
     serializer.readingOptions = self.readingOptions;
     serializer.removesKeysWithNullValues = self.removesKeysWithNullValues;
 
@@ -318,14 +321,14 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     return self;
 }
 
-#pragma mark - AFURLResponseSerialization
+#pragma mark - LCURLResponseSerialization
 
 - (id)responseObjectForResponse:(NSHTTPURLResponse *)response
                            data:(NSData *)data
                           error:(NSError *__autoreleasing *)error
 {
     if (![self validateResponse:(NSHTTPURLResponse *)response data:data error:error]) {
-        if (!error || AFErrorOrUnderlyingErrorHasCodeInDomain(*error, NSURLErrorCannotDecodeContentData, LCURLResponseSerializationErrorDomain)) {
+        if (!error || LCErrorOrUnderlyingErrorHasCodeInDomain(*error, NSURLErrorCannotDecodeContentData, LCURLResponseSerializationErrorDomain)) {
             return nil;
         }
     }
@@ -363,14 +366,14 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     return self;
 }
 
-#pragma mark - AFURLResponseSerialization
+#pragma mark - LCURLResponseSerialization
 
 - (id)responseObjectForResponse:(NSURLResponse *)response
                            data:(NSData *)data
                           error:(NSError *__autoreleasing *)error
 {
     if (![self validateResponse:(NSHTTPURLResponse *)response data:data error:error]) {
-        if (!error || AFErrorOrUnderlyingErrorHasCodeInDomain(*error, NSURLErrorCannotDecodeContentData, LCURLResponseSerializationErrorDomain)) {
+        if (!error || LCErrorOrUnderlyingErrorHasCodeInDomain(*error, NSURLErrorCannotDecodeContentData, LCURLResponseSerializationErrorDomain)) {
             return nil;
         }
     }
@@ -378,10 +381,14 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     NSError *serializationError = nil;
     NSXMLDocument *document = [[NSXMLDocument alloc] initWithData:data options:self.options error:&serializationError];
 
-    if (error) {
-        *error = AFErrorWithUnderlyingError(serializationError, *error);
+    if (!document)
+    {
+        if (error) {
+            *error = LCErrorWithUnderlyingError(serializationError, *error);
+        }
+        return nil;
     }
-
+    
     return document;
 }
 
@@ -407,7 +414,7 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
 #pragma mark - NSCopying
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    LCXMLDocumentResponseSerializer *serializer = [[[self class] allocWithZone:zone] init];
+    LCXMLDocumentResponseSerializer *serializer = [super copyWithZone:zone];
     serializer.options = self.options;
 
     return serializer;
@@ -446,27 +453,32 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
     return self;
 }
 
-#pragma mark - AFURLResponseSerialization
+#pragma mark - LCURLResponseSerialization
 
 - (id)responseObjectForResponse:(NSURLResponse *)response
                            data:(NSData *)data
                           error:(NSError *__autoreleasing *)error
 {
     if (![self validateResponse:(NSHTTPURLResponse *)response data:data error:error]) {
-        if (!error || AFErrorOrUnderlyingErrorHasCodeInDomain(*error, NSURLErrorCannotDecodeContentData, LCURLResponseSerializationErrorDomain)) {
+        if (!error || LCErrorOrUnderlyingErrorHasCodeInDomain(*error, NSURLErrorCannotDecodeContentData, LCURLResponseSerializationErrorDomain)) {
             return nil;
         }
     }
 
-    id responseObject;
-    NSError *serializationError = nil;
-
-    if (data) {
-        responseObject = [NSPropertyListSerialization propertyListWithData:data options:self.readOptions format:NULL error:&serializationError];
+    if (!data) {
+        return nil;
     }
-
-    if (error) {
-        *error = AFErrorWithUnderlyingError(serializationError, *error);
+    
+    NSError *serializationError = nil;
+    
+    id responseObject = [NSPropertyListSerialization propertyListWithData:data options:self.readOptions format:NULL error:&serializationError];
+    
+    if (!responseObject)
+    {
+        if (error) {
+            *error = LCErrorWithUnderlyingError(serializationError, *error);
+        }
+        return nil;
     }
 
     return responseObject;
@@ -496,7 +508,7 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
 #pragma mark - NSCopying
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    LCPropertyListResponseSerializer *serializer = [[[self class] allocWithZone:zone] init];
+    LCPropertyListResponseSerializer *serializer = [super copyWithZone:zone];
     serializer.format = self.format;
     serializer.readOptions = self.readOptions;
 
@@ -511,15 +523,15 @@ static id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingO
 #import <CoreGraphics/CoreGraphics.h>
 #import <UIKit/UIKit.h>
 
-@interface UIImage (AFNetworkingSafeImageLoading)
-+ (UIImage *)af_safeImageWithData:(NSData *)data;
+@interface UIImage (LCNetworkingSafeImageLoading)
++ (UIImage *)lc_safeImageWithData:(NSData *)data;
 @end
 
 static NSLock* imageLock = nil;
 
-@implementation UIImage (AFNetworkingSafeImageLoading)
+@implementation UIImage (LCNetworkingSafeImageLoading)
 
-+ (UIImage *)af_safeImageWithData:(NSData *)data {
++ (UIImage *)lc_safeImageWithData:(NSData *)data {
     UIImage* image = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -534,8 +546,8 @@ static NSLock* imageLock = nil;
 
 @end
 
-static UIImage * AFImageWithDataAtScale(NSData *data, CGFloat scale) {
-    UIImage *image = [UIImage af_safeImageWithData:data];
+static UIImage * LCImageWithDataAtScale(NSData *data, CGFloat scale) {
+    UIImage *image = [UIImage lc_safeImageWithData:data];
     if (image.images) {
         return image;
     }
@@ -543,7 +555,7 @@ static UIImage * AFImageWithDataAtScale(NSData *data, CGFloat scale) {
     return [[UIImage alloc] initWithCGImage:[image CGImage] scale:scale orientation:image.imageOrientation];
 }
 
-static UIImage * AFInflatedImageFromResponseWithDataAtScale(NSHTTPURLResponse *response, NSData *data, CGFloat scale) {
+static UIImage * LCInflatedImageFromResponseWithDataAtScale(NSHTTPURLResponse *response, NSData *data, CGFloat scale) {
     if (!data || [data length] == 0) {
         return nil;
     }
@@ -560,7 +572,7 @@ static UIImage * AFInflatedImageFromResponseWithDataAtScale(NSHTTPURLResponse *r
             CGColorSpaceRef imageColorSpace = CGImageGetColorSpace(imageRef);
             CGColorSpaceModel imageColorSpaceModel = CGColorSpaceGetModel(imageColorSpace);
 
-            // CGImageCreateWithJPEGDataProvider does not properly handle CMKY, so fall back to AFImageWithDataAtScale
+            // CGImageCreateWithJPEGDataProvider does not properly handle CMKY, so fall back to LCImageWithDataAtScale
             if (imageColorSpaceModel == kCGColorSpaceModelCMYK) {
                 CGImageRelease(imageRef);
                 imageRef = NULL;
@@ -570,7 +582,7 @@ static UIImage * AFInflatedImageFromResponseWithDataAtScale(NSHTTPURLResponse *r
 
     CGDataProviderRelease(dataProvider);
 
-    UIImage *image = AFImageWithDataAtScale(data, scale);
+    UIImage *image = LCImageWithDataAtScale(data, scale);
     if (!imageRef) {
         if (image.images || !image) {
             return image;
@@ -658,23 +670,23 @@ static UIImage * AFInflatedImageFromResponseWithDataAtScale(NSHTTPURLResponse *r
     return self;
 }
 
-#pragma mark - AFURLResponseSerializer
+#pragma mark - LCURLResponseSerializer
 
 - (id)responseObjectForResponse:(NSURLResponse *)response
                            data:(NSData *)data
                           error:(NSError *__autoreleasing *)error
 {
     if (![self validateResponse:(NSHTTPURLResponse *)response data:data error:error]) {
-        if (!error || AFErrorOrUnderlyingErrorHasCodeInDomain(*error, NSURLErrorCannotDecodeContentData, LCURLResponseSerializationErrorDomain)) {
+        if (!error || LCErrorOrUnderlyingErrorHasCodeInDomain(*error, NSURLErrorCannotDecodeContentData, LCURLResponseSerializationErrorDomain)) {
             return nil;
         }
     }
 
 #if TARGET_OS_IOS || TARGET_OS_TV || TARGET_OS_WATCH
     if (self.automaticallyInflatesResponseImage) {
-        return AFInflatedImageFromResponseWithDataAtScale((NSHTTPURLResponse *)response, data, self.imageScale);
+        return LCInflatedImageFromResponseWithDataAtScale((NSHTTPURLResponse *)response, data, self.imageScale);
     } else {
-        return AFImageWithDataAtScale(data, self.imageScale);
+        return LCImageWithDataAtScale(data, self.imageScale);
     }
 #else
     // Ensure that the image is set to it's correct pixel width and height
@@ -722,7 +734,7 @@ static UIImage * AFInflatedImageFromResponseWithDataAtScale(NSHTTPURLResponse *r
 #pragma mark - NSCopying
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    LCImageResponseSerializer *serializer = [[[self class] allocWithZone:zone] init];
+    LCImageResponseSerializer *serializer = [super copyWithZone:zone];
 
 #if TARGET_OS_IOS || TARGET_OS_TV || TARGET_OS_WATCH
     serializer.imageScale = self.imageScale;
@@ -749,7 +761,7 @@ static UIImage * AFInflatedImageFromResponseWithDataAtScale(NSHTTPURLResponse *r
     return serializer;
 }
 
-#pragma mark - AFURLResponseSerialization
+#pragma mark - LCURLResponseSerialization
 
 - (id)responseObjectForResponse:(NSURLResponse *)response
                            data:(NSData *)data
@@ -764,7 +776,7 @@ static UIImage * AFInflatedImageFromResponseWithDataAtScale(NSHTTPURLResponse *r
         id responseObject = [serializer responseObjectForResponse:response data:data error:&serializerError];
         if (responseObject) {
             if (error) {
-                *error = AFErrorWithUnderlyingError(serializerError, *error);
+                *error = LCErrorWithUnderlyingError(serializerError, *error);
             }
 
             return responseObject;
@@ -796,7 +808,7 @@ static UIImage * AFInflatedImageFromResponseWithDataAtScale(NSHTTPURLResponse *r
 #pragma mark - NSCopying
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    LCCompoundResponseSerializer *serializer = [[[self class] allocWithZone:zone] init];
+    LCCompoundResponseSerializer *serializer = [super copyWithZone:zone];
     serializer.responseSerializers = self.responseSerializers;
 
     return serializer;

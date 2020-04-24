@@ -1,4 +1,4 @@
-// AFURLRequestSerialization.h
+// LCURLRequestSerialization.h
 // Copyright (c) 2011–2016 Alamofire Software Foundation ( http://alamofire.org/ )
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -56,7 +56,7 @@ FOUNDATION_EXPORT NSString * LCPercentEscapedStringFromString(NSString *string);
 FOUNDATION_EXPORT NSString * LCQueryStringFromParameters(NSDictionary *parameters);
 
 /**
- The `AFURLRequestSerialization` protocol is adopted by an object that encodes parameters for a specified HTTP requests. Request serializers may encode parameters as query strings, HTTP bodies, setting the appropriate HTTP header fields as necessary.
+ The `LCURLRequestSerialization` protocol is adopted by an object that encodes parameters for a specified HTTP requests. Request serializers may encode parameters as query strings, HTTP bodies, setting the appropriate HTTP header fields as necessary.
 
  For example, a JSON request serializer may set the HTTP body of the request to a JSON representation, and set the `Content-Type` HTTP header field value to `application/json`.
  */
@@ -82,16 +82,16 @@ FOUNDATION_EXPORT NSString * LCQueryStringFromParameters(NSDictionary *parameter
 /**
 
  */
-typedef NS_ENUM(NSUInteger, AFHTTPRequestQueryStringSerializationStyle) {
-    AFHTTPRequestQueryStringDefaultStyle = 0,
+typedef NS_ENUM(NSUInteger, LCHTTPRequestQueryStringSerializationStyle) {
+    LCHTTPRequestQueryStringDefaultStyle = 0,
 };
 
 @protocol LCMultipartFormData;
 
 /**
- `AFHTTPRequestSerializer` conforms to the `AFURLRequestSerialization` & `AFURLResponseSerialization` protocols, offering a concrete base implementation of query string / URL form-encoded parameter serialization and default request headers, as well as response status code and content type validation.
+ `LCHTTPRequestSerializer` conforms to the `LCURLRequestSerialization` & `LCURLResponseSerialization` protocols, offering a concrete base implementation of query string / URL form-encoded parameter serialization and default request headers, as well as response status code and content type validation.
 
- Any request or response serializer dealing with HTTP is encouraged to subclass `AFHTTPRequestSerializer` in order to ensure consistent default behavior.
+ Any request or response serializer dealing with HTTP is encouraged to subclass `LCHTTPRequestSerializer` in order to ensure consistent default behavior.
  */
 @interface LCHTTPRequestSerializer : NSObject <LCURLRequestSerialization>
 
@@ -207,9 +207,9 @@ forHTTPHeaderField:(NSString *)field;
 
  @param style The serialization style.
 
- @see AFHTTPRequestQueryStringSerializationStyle
+ @see LCHTTPRequestQueryStringSerializationStyle
  */
-- (void)setQueryStringSerializationWithStyle:(AFHTTPRequestQueryStringSerializationStyle)style;
+- (void)setQueryStringSerializationWithStyle:(LCHTTPRequestQueryStringSerializationStyle)style;
 
 /**
  Set the a custom method of query string serialization according to the specified block.
@@ -247,7 +247,7 @@ forHTTPHeaderField:(NSString *)field;
  @param method The HTTP method for the request. This parameter must not be `GET` or `HEAD`, or `nil`.
  @param URLString The URL string used to create the request URL.
  @param parameters The parameters to be encoded and set in the request HTTP body.
- @param block A block that takes a single argument and appends data to the HTTP body. The block argument is an object adopting the `AFMultipartFormData` protocol.
+ @param block A block that takes a single argument and appends data to the HTTP body. The block argument is an object adopting the `LCMultipartFormData` protocol.
  @param error The error that occurred while constructing the request.
 
  @return An `NSMutableURLRequest` object
@@ -265,7 +265,7 @@ forHTTPHeaderField:(NSString *)field;
  @param fileURL The file URL to write multipart form contents to.
  @param handler A handler block to execute.
 
- @discussion There is a bug in `NSURLSessionTask` that causes requests to not send a `Content-Length` header when streaming contents from an HTTP body, which is notably problematic when interacting with the Amazon S3 webservice. As a workaround, this method takes a request constructed with `multipartFormRequestWithMethod:URLString:parameters:constructingBodyWithBlock:error:`, or any other request with an `HTTPBodyStream`, writes the contents to the specified file and returns a copy of the original request with the `HTTPBodyStream` property set to `nil`. From here, the file can either be passed to `AFURLSessionManager -uploadTaskWithRequest:fromFile:progress:completionHandler:`, or have its contents read into an `NSData` that's assigned to the `HTTPBody` property of the request.
+ @discussion There is a bug in `NSURLSessionTask` that causes requests to not send a `Content-Length` header when streaming contents from an HTTP body, which is notably problematic when interacting with the Amazon S3 webservice. As a workaround, this method takes a request constructed with `multipartFormRequestWithMethod:URLString:parameters:constructingBodyWithBlock:error:`, or any other request with an `HTTPBodyStream`, writes the contents to the specified file and returns a copy of the original request with the `HTTPBodyStream` property set to `nil`. From here, the file can either be passed to `LCURLSessionManager -uploadTaskWithRequest:fromFile:progress:completionHandler:`, or have its contents read into an `NSData` that's assigned to the `HTTPBody` property of the request.
 
  @see https://github.com/AFNetworking/AFNetworking/issues/1398
  */
@@ -278,7 +278,7 @@ forHTTPHeaderField:(NSString *)field;
 #pragma mark -
 
 /**
- The `AFMultipartFormData` protocol defines the methods supported by the parameter in the block argument of `AFHTTPRequestSerializer -multipartFormRequestWithMethod:URLString:parameters:constructingBodyWithBlock:`.
+ The `LCMultipartFormData` protocol defines the methods supported by the parameter in the block argument of `LCHTTPRequestSerializer -multipartFormRequestWithMethod:URLString:parameters:constructingBodyWithBlock:`.
  */
 @protocol LCMultipartFormData
 
@@ -365,7 +365,7 @@ forHTTPHeaderField:(NSString *)field;
 /**
  Throttles request bandwidth by limiting the packet size and adding a delay for each chunk read from the upload stream.
 
- When uploading over a 3G or EDGE connection, requests may fail with "request body stream exhausted". Setting a maximum packet size and delay according to the recommended values (`kAFUploadStream3GSuggestedPacketSize` and `kAFUploadStream3GSuggestedDelay`) lowers the risk of the input stream exceeding its allocated bandwidth. Unfortunately, there is no definite way to distinguish between a 3G, EDGE, or LTE connection over `NSURLConnection`. As such, it is not recommended that you throttle bandwidth based solely on network reachability. Instead, you should consider checking for the "request body stream exhausted" in a failure block, and then retrying the request with throttled bandwidth.
+ When uploading over a 3G or EDGE connection, requests may fail with "request body stream exhausted". Setting a maximum packet size and delay according to the recommended values (`kLCUploadStream3GSuggestedPacketSize` and `kLCUploadStream3GSuggestedDelay`) lowers the risk of the input stream exceeding its allocated bandwidth. Unfortunately, there is no definite way to distinguish between a 3G, EDGE, or LTE connection over `NSURLConnection`. As such, it is not recommended that you throttle bandwidth based solely on network reachability. Instead, you should consider checking for the "request body stream exhausted" in a failure block, and then retrying the request with throttled bandwidth.
 
  @param numberOfBytes Maximum packet size, in number of bytes. The default packet size for an input stream is 16kb.
  @param delay Duration of delay each time a packet is read. By default, no delay is set.
@@ -378,7 +378,7 @@ forHTTPHeaderField:(NSString *)field;
 #pragma mark -
 
 /**
- `AFJSONRequestSerializer` is a subclass of `AFHTTPRequestSerializer` that encodes parameters as JSON using `NSJSONSerialization`, setting the `Content-Type` of the encoded request to `application/json`.
+ `LCJSONRequestSerializer` is a subclass of `LCHTTPRequestSerializer` that encodes parameters as JSON using `NSJSONSerialization`, setting the `Content-Type` of the encoded request to `application/json`.
  */
 @interface LCJSONRequestSerializer : LCHTTPRequestSerializer
 
@@ -399,7 +399,7 @@ forHTTPHeaderField:(NSString *)field;
 #pragma mark -
 
 /**
- `AFPropertyListRequestSerializer` is a subclass of `AFHTTPRequestSerializer` that encodes parameters as JSON using `NSPropertyListSerializer`, setting the `Content-Type` of the encoded request to `application/x-plist`.
+ `LCPropertyListRequestSerializer` is a subclass of `LCHTTPRequestSerializer` that encodes parameters as JSON using `NSPropertyListSerializer`, setting the `Content-Type` of the encoded request to `application/x-plist`.
  */
 @interface LCPropertyListRequestSerializer : LCHTTPRequestSerializer
 
@@ -437,12 +437,12 @@ forHTTPHeaderField:(NSString *)field;
 
  The following error domain is predefined.
 
- - `NSString * const AFURLRequestSerializationErrorDomain`
+ - `NSString * const LCURLRequestSerializationErrorDomain`
 
  ### Constants
 
- `AFURLRequestSerializationErrorDomain`
- AFURLRequestSerializer errors. Error codes for `AFURLRequestSerializationErrorDomain` correspond to codes in `NSURLErrorDomain`.
+ `LCURLRequestSerializationErrorDomain`
+ LCURLRequestSerializer errors. Error codes for `LCURLRequestSerializationErrorDomain` correspond to codes in `NSURLErrorDomain`.
  */
 FOUNDATION_EXPORT NSString * const LCURLRequestSerializationErrorDomain;
 
@@ -451,12 +451,12 @@ FOUNDATION_EXPORT NSString * const LCURLRequestSerializationErrorDomain;
 
  These keys may exist in the user info dictionary, in addition to those defined for NSError.
 
- - `NSString * const AFNetworkingOperationFailingURLRequestErrorKey`
+ - `NSString * const LCNetworkingOperationFailingURLRequestErrorKey`
 
  ### Constants
 
- `AFNetworkingOperationFailingURLRequestErrorKey`
- The corresponding value is an `NSURLRequest` containing the request of the operation associated with an error. This key is only present in the `AFURLRequestSerializationErrorDomain`.
+ `LCNetworkingOperationFailingURLRequestErrorKey`
+ The corresponding value is an `NSURLRequest` containing the request of the operation associated with an error. This key is only present in the `LCURLRequestSerializationErrorDomain`.
  */
 FOUNDATION_EXPORT NSString * const LCNetworkingOperationFailingURLRequestErrorKey;
 
@@ -467,10 +467,10 @@ FOUNDATION_EXPORT NSString * const LCNetworkingOperationFailingURLRequestErrorKe
 
  ### Constants
 
- `kAFUploadStream3GSuggestedPacketSize`
+ `kLCUploadStream3GSuggestedPacketSize`
  Maximum packet size, in number of bytes. Equal to 16kb.
 
- `kAFUploadStream3GSuggestedDelay`
+ `kLCUploadStream3GSuggestedDelay`
  Duration of delay each time a packet is read. Equal to 0.2 seconds.
  */
 FOUNDATION_EXPORT NSUInteger const kLCUploadStream3GSuggestedPacketSize;

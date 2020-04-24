@@ -36,7 +36,7 @@ class LCTestBase: XCTestCase {
         } else {
             let testApp: TestApp = .ChinaNorth
             switch testApp {
-            case .ChinaNorth, .ChinaEast:
+            case .ChinaNorth, .ChinaEast, .USOld:
                 AVOSCloud.setApplicationId(
                     testApp.appInfo.id,
                     clientKey: testApp.appInfo.key,
@@ -65,6 +65,7 @@ extension LCTestBase {
         case ChinaNorth
         case ChinaEast
         case US
+        case USOld
         var appInfo: (id: String, key: String, serverURL: String) {
             switch self {
             case .ChinaNorth:
@@ -76,9 +77,13 @@ extension LCTestBase {
                         key: "T3TEAIcL8Ls5XGPsGz41B1bz",
                         serverURL: "https://skhivsqi.lc-cn-e1-shared.com")
             case .US:
-                return (id: "eX7urCufwLd6X5mHxt7V12nL-MdYXbMMI",
-                        key: "PrmzHPnRXjXezS54KryuHMG6",
+                return (id: "jenSt9nvWtuJtmurdE28eg5M-MdYXbMMI",
+                        key: "8VLPsDlskJi8KsKppED4xKS0",
                         serverURL: "")
+            case .USOld:
+                return (id: "kknqydxqd9wdq4cboy1dvvug5ha0ce3i2mrerrdrmr6pla1p",
+                        key: "fate582pwsfh97s9o99nw91a152i7ndm9tsy866e6wpezth4",
+                        serverURL: "https://beta-us.leancloud.cn")
             }
         }
     }

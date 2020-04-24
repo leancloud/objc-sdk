@@ -344,7 +344,7 @@ class AVIMClientTestCase: LCIMTestBase {
     }
     
     func test_goaway() {
-        AVOSCloudIM.defaultOptions().rtmServer = "wss://rtm51.leancloud.cn";
+        AVOSCloudIM.defaultOptions().rtmServer = "wss://cn-n1-core-k8s-cell-12.leancloud.cn";
         
         guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: String(#function[..<#function.firstIndex(of: "(")!])) else {
             XCTFail()
