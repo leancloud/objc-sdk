@@ -12,6 +12,50 @@ class AVIMMessageTestCase: LCIMTestBase {
     
     // MARK: - Message Send
     
+    func testSendAndReceiveLargeSizeMessage() {
+        let delegate1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
+        let delegate2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
+        guard let client1 = LCIMTestBase.newOpenedClient(clientId: uuid, delegate: delegate1),
+            let client2 = LCIMTestBase.newOpenedClient(clientId: uuid, delegate: delegate2) else {
+                XCTFail()
+                return
+        }
+        var conversation: AVIMConversation!
+        expecting { (exp) in
+            client1.createConversation(
+                withName: nil,
+                clientIds: [client1.clientId, client2.clientId])
+            { (conv, error) in
+                if let conv = conv {
+                    conversation = conv
+                } else {
+                    XCTAssertNil(error)
+                }
+                exp.fulfill()
+            }
+        }
+        var content: String = "LargeSize"
+        for _ in 0...8 {
+            content += content
+        }
+        expecting(
+            description: "send and receive message",
+            count: 50)
+        { (exp) in
+            delegate2.didReceiveCommonMessageClosure = { (conv: AVIMConversation, message: AVIMMessage) in
+                exp.fulfill()
+            }
+            for _ in 0..<25 {
+                let message = AVIMMessage(content: content)
+                conversation.send(message, callback: { (succeeded: Bool, error: Error?) in
+                    XCTAssertTrue(succeeded)
+                    XCTAssertNil(error)
+                    exp.fulfill()
+                })
+            }
+        }
+    }
+    
     func testc_msg_send_common() {
         
         if self.isServerTesting { return }
