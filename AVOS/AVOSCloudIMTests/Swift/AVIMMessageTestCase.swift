@@ -13,8 +13,8 @@ class AVIMMessageTestCase: LCIMTestBase {
     // MARK: - Message Send
     
     func testSendAndReceiveLargeSizeMessage() {
-        let delegate1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        let delegate2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
+        let delegate1 = AVIMClientDelegateWrapper()
+        let delegate2 = AVIMClientDelegateWrapper()
         guard let client1 = LCIMTestBase.newOpenedClient(clientId: uuid, delegate: delegate1),
             let client2 = LCIMTestBase.newOpenedClient(clientId: uuid, delegate: delegate2) else {
                 XCTFail()
@@ -42,7 +42,7 @@ class AVIMMessageTestCase: LCIMTestBase {
             description: "send and receive message",
             count: 50)
         { (exp) in
-            delegate2.didReceiveCommonMessageClosure = { (conv: AVIMConversation, message: AVIMMessage) in
+            delegate2.didReceiveCommonMessageClosure = { (_, _) in
                 exp.fulfill()
             }
             for _ in 0..<25 {
