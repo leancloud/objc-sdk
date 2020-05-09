@@ -276,7 +276,7 @@ static NSString * const AVIMProtocolPROTOBUF3 = @"lc.protobuf2.3";
 {
     [NSNotificationCenter.defaultCenter removeObserver:self];
     [self->_reachabilityMonitor stopMonitoring];
-    [self->_websocket safeClean];
+    [self->_websocket clean];
 }
 
 // MARK: - Application Notification
@@ -790,7 +790,7 @@ static NSArray<NSString *> * RTMProtocols()
         self->_websocket.delegate = nil;
         [self->_websocket closeWithCloseCode:LCRTMWebSocketCloseCodeNormalClosure
                                       reason:nil];
-        [self->_websocket safeClean];
+        [self->_websocket clean];
         self->_websocket = nil;
     }
     if (self->_openTimeoutBlock) {
