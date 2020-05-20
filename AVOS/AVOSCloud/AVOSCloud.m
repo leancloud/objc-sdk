@@ -22,30 +22,18 @@
 #import "AVObjectUtils.h"
 
 #import "LCRouter_Internal.h"
+#import "AVApplication.h"
 
-@implementation AVOSCloud {
-    NSString *_applicationId;
-    NSString *_applicationKey;
-    AVVerbosePolicy _verbosePolicy;
-}
+@implementation AVOSCloud
 
-+ (instancetype)sharedInstance
-{
-    static AVOSCloud *instance;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        instance = [[AVOSCloud alloc] init];
-        instance->_verbosePolicy = kAVVerboseAuto;
-    });
-    return instance;
-}
+static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
 
 + (void)setAllLogsEnabled:(BOOL)enabled {
     [AVLogger setAllLogsEnabled:enabled];
 }
 
 + (void)setVerbosePolicy:(AVVerbosePolicy)verbosePolicy {
-    [AVOSCloud sharedInstance]->_verbosePolicy = verbosePolicy;
+    gVerbosePolicy = verbosePolicy;
 }
 
 + (void)logApplicationInfo
@@ -92,22 +80,22 @@
         }
     }
     
-    [AVOSCloud sharedInstance]->_applicationId = applicationId;
-    [AVOSCloud sharedInstance]->_applicationKey = clientKey;
+    [[AVApplication defaultInstance] setWithIdentifier:applicationId
+                                                   key:clientKey];
     
     [self initializePaasClient];
     
-    if ([AVOSCloud sharedInstance]->_verbosePolicy == kAVVerboseShow) {
+    if (gVerbosePolicy == kAVVerboseShow) {
         [self logApplicationInfo];
     }
 }
 
 + (NSString *)getApplicationId {
-    return [AVOSCloud sharedInstance]->_applicationId;
+    return [AVApplication defaultInstance].identifier;
 }
 
 + (NSString *)getClientKey {
-    return [AVOSCloud sharedInstance]->_applicationKey;
+    return [AVApplication defaultInstance].key;
 }
 
 + (void)setLastModifyEnabled:(BOOL)enabled {
