@@ -65,7 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly, nullable) NSString *creator;
 
 /**
- *  The creation time of the conversation.
+ *  An alias for createdAt. createdAt is preferred.
  */
 @property (nonatomic, strong, readonly, nullable) NSDate *createAt;
 
@@ -73,7 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly, nullable) NSDate *createdAt;
 
 /**
- *  The last updating time of the conversation. When fields like name, members changes, this time will changes.
+ * An alias for updatedAt. updatedAt is preferred.
  */
 @property (nonatomic, strong, readonly, nullable) NSDate *updateAt;
 
