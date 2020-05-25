@@ -80,8 +80,8 @@ static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
         }
     }
     
-    [[AVApplication defaultInstance] setWithIdentifier:applicationId
-                                                   key:clientKey];
+    [[AVApplication defaultApplication] setWithIdentifier:applicationId
+                                                      key:clientKey];
     
     [self initializePaasClient];
     
@@ -91,11 +91,11 @@ static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
 }
 
 + (NSString *)getApplicationId {
-    return [AVApplication defaultInstance].identifier;
+    return [AVApplication defaultApplication].identifier;
 }
 
 + (NSString *)getClientKey {
-    return [AVApplication defaultInstance].key;
+    return [AVApplication defaultApplication].key;
 }
 
 + (void)setLastModifyEnabled:(BOOL)enabled {

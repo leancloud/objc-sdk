@@ -10,7 +10,7 @@
 
 @implementation AVApplication
 
-+ (instancetype)defaultInstance
++ (instancetype)defaultApplication
 {
     static AVApplication *instance;
     static dispatch_once_t onceToken;
