@@ -8,6 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-FOUNDATION_EXPORT NSError * LCErrorInternal(NSString *failureReason);
+typedef NS_ENUM(NSInteger, AVErrorInternalErrorCode) {
+    AVErrorInternalErrorCodeNotFound        = 9973,
+    AVErrorInternalErrorCodeInvalidType     = 9974,
+    AVErrorInternalErrorCodeMalformedData   = 9975,
+    AVErrorInternalErrorCodeInconsistency   = 9976,
+    AVErrorInternalErrorCodeUnderlyingError = 9977,
+};
 
-FOUNDATION_EXPORT NSError * LCError(NSInteger code, NSString *failureReason, NSDictionary *userInfo);
+FOUNDATION_EXPORT NSError *LCError(NSInteger code, NSString *failureReason, NSDictionary *userInfo);
+FOUNDATION_EXPORT NSError *LCErrorInternal(NSString *failureReason);

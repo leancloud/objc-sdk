@@ -120,26 +120,23 @@ NSInteger const kAVErrorFileNotFound = 400;
 /*! File Data not available */
 NSInteger const kAVErrorFileDataNotAvailable = 401;
 
-NSError * LCErrorInternal(NSString *failureReason)
+NSError *LCError(NSInteger code, NSString *failureReason, NSDictionary *userInfo)
 {
-    return LCError(kAVErrorInternalServer, failureReason, nil);
+    NSMutableDictionary *mutableDictionary;
+    if (userInfo) {
+        mutableDictionary = [NSMutableDictionary dictionaryWithDictionary:userInfo];
+    } else {
+        mutableDictionary = [NSMutableDictionary dictionary];
+    }
+    if (failureReason) {
+        mutableDictionary[NSLocalizedFailureReasonErrorKey] = failureReason;
+    }
+    return [NSError errorWithDomain:kLeanCloudErrorDomain
+                               code:code
+                           userInfo:mutableDictionary];
 }
 
-NSError * LCError(NSInteger code, NSString *failureReason, NSDictionary *userInfo)
+NSError *LCErrorInternal(NSString *failureReason)
 {
-    NSError *error = ({
-        NSMutableDictionary *mutableDictionary = nil;
-        if (userInfo) {
-            mutableDictionary = [NSMutableDictionary dictionaryWithDictionary:userInfo];
-        } else {
-            mutableDictionary = [NSMutableDictionary dictionary];
-        }
-        if (failureReason) {
-            mutableDictionary[NSLocalizedFailureReasonErrorKey] = failureReason;
-        }
-        [NSError errorWithDomain:kLeanCloudErrorDomain
-                            code:code
-                        userInfo:mutableDictionary];
-    });
-    return error;
+    return LCError(kAVErrorInternalServer, failureReason, nil);
 }
