@@ -25,13 +25,22 @@ FOUNDATION_EXPORT LCIMProtocol const LCIMProtocol1;
 
 typedef NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, LCRTMConnection *> *> * LCRTMInstantMessagingRegistry;
 typedef NSMutableDictionary<NSString *, LCRTMConnection *> * LCRTMLiveQueryRegistryRegistry;
+typedef void(^LCRTMConnectionOutCommandCallback)(AVIMGenericCommand * _Nullable inCommand, NSError * _Nullable error);
 
 @interface LCRTMServiceConsumer : NSObject
 
-@property (nonatomic) AVApplication *application;
-@property (nonatomic) LCRTMService service;
-@property (nonatomic) NSString *peerID;
-@property (nonatomic) LCIMProtocol protocol;
+@property (nonatomic, readonly) AVApplication *application;
+@property (nonatomic, readonly) LCRTMService service;
+@property (nonatomic, readonly) LCIMProtocol protocol;
+@property (nonatomic, readonly) NSString *peerID;
+
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
+
+- (instancetype)initWithApplication:(AVApplication *)application
+                            service:(LCRTMService)service
+                           protocol:(LCIMProtocol)protocol
+                             peerID:(NSString *)peerID NS_DESIGNATED_INITIALIZER;
 
 @end
 
@@ -59,9 +68,42 @@ typedef NSMutableDictionary<NSString *, LCRTMConnection *> * LCRTMLiveQueryRegis
 
 - (void)LCRTMConnectionDidConnect:(LCRTMConnection *)connection;
 
-- (void)LCRTMConnection:(LCRTMConnection *)connection didDisconnectWithError:(NSError *)error;
+- (void)LCRTMConnection:(LCRTMConnection *)connection didDisconnectWithError:(NSError * _Nullable)error;
 
 - (void)LCRTMConnection:(LCRTMConnection *)connection didReceiveCommand:(AVIMGenericCommand *)inCommand;
+
+@end
+
+@interface LCRTMConnectionDelegator : NSObject
+
+@property (nonatomic, readonly) NSString *peerID;
+@property (nonatomic, readonly) dispatch_queue_t queue;
+@property (nonatomic, weak) id<LCRTMConnectionDelegate> delegate;
+
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
+
+- (instancetype)initWithPeerID:(NSString *)peerID
+                      delegate:(id<LCRTMConnectionDelegate>)delegate
+                         queue:(dispatch_queue_t)queue NS_DESIGNATED_INITIALIZER;
+
+@end
+
+@interface LCRTMConnectionOutCommand : NSObject
+
+@property (nonatomic, readonly) NSString *peerID;
+@property (nonatomic) AVIMGenericCommand *command;
+@property (nonatomic, nullable) dispatch_queue_t callingQueue;
+@property (nonatomic, nullable) LCRTMConnectionOutCommandCallback callback;
+@property (nonatomic, nullable) NSDate *expiration;
+
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
+
+- (instancetype)initWithPeerID:(NSString *)peerID
+                       command:(AVIMGenericCommand *)command
+                  callingQueue:(dispatch_queue_t _Nullable)callingQueue
+                      callback:(LCRTMConnectionOutCommandCallback _Nullable)callback NS_DESIGNATED_INITIALIZER;
 
 @end
 
@@ -69,6 +111,8 @@ typedef NSMutableDictionary<NSString *, LCRTMConnection *> * LCRTMLiveQueryRegis
 
 @property (nonatomic, readonly) AVApplication *application;
 @property (nonatomic, readonly) LCIMProtocol protocol;
+@property (nonatomic) NSMutableDictionary<NSString *, LCRTMConnectionDelegator *> *instantMessagingDelegatorMap;
+@property (nonatomic) NSMutableDictionary<NSString *, LCRTMConnectionDelegator *> *liveQueryDelegatorMap;
 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;

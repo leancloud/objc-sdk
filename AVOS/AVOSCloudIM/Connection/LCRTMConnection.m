@@ -58,6 +58,21 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
 
 @implementation LCRTMServiceConsumer
 
+- (instancetype)initWithApplication:(AVApplication *)application
+                            service:(LCRTMService)service
+                           protocol:(LCIMProtocol)protocol
+                             peerID:(NSString *)peerID
+{
+    self = [super init];
+    if (self) {
+        _application = application;
+        _service = service;
+        _protocol = protocol;
+        _peerID = peerID;
+    }
+    return self;
+}
+
 @end
 
 @implementation LCRTMConnectionManager
@@ -186,6 +201,42 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
 
 @end
 
+@implementation LCRTMConnectionDelegator
+
+- (instancetype)initWithPeerID:(NSString *)peerID
+                      delegate:(id<LCRTMConnectionDelegate>)delegate
+                         queue:(dispatch_queue_t)queue
+{
+    self = [super init];
+    if (self) {
+        _peerID = peerID;
+        _delegate = delegate;
+        _queue = queue;
+    }
+    return self;
+}
+
+@end
+
+@implementation LCRTMConnectionOutCommand
+
+- (instancetype)initWithPeerID:(NSString *)peerID
+                       command:(AVIMGenericCommand *)command
+                  callingQueue:(dispatch_queue_t)callingQueue
+                      callback:(LCRTMConnectionOutCommandCallback)callback
+{
+    self = [super init];
+    if (self) {
+        _peerID = peerID;
+        _command = command;
+        _callingQueue = callingQueue;
+        _callback = callback;
+    }
+    return self;
+}
+
+@end
+
 @implementation LCRTMConnection
 
 - (instancetype)initWithApplication:(AVApplication *)application
@@ -196,6 +247,8 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
     if (self) {
         _application = application;
         _protocol = protocol;
+        _instantMessagingDelegatorMap = [NSMutableDictionary dictionary];
+        _liveQueryDelegatorMap = [NSMutableDictionary dictionary];
         _serialQueue = dispatch_queue_create("LCRTMConnection.serialQueue", NULL);
 #if DEBUG
         dispatch_queue_set_specific(_serialQueue,
