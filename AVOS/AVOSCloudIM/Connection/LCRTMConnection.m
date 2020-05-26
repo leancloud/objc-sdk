@@ -7,8 +7,22 @@
 //
 
 #import "LCRTMConnection.h"
+
 #import "AVApplication.h"
 #import "AVErrorUtils.h"
+
+#if !TARGET_OS_WATCH
+#import "LCNetworkReachabilityManager.h"
+#endif
+
+#import <TargetConditionals.h>
+#if TARGET_OS_IOS || TARGET_OS_TV
+#import <UIKit/UIKit.h>
+typedef NS_ENUM(NSUInteger, LCRTMConnectionAppState) {
+    LCRTMConnectionAppStateBackground,
+    LCRTMConnectionAppStateForeground,
+};
+#endif
 
 LCIMProtocol const LCIMProtocol3 = @"lc.protobuf2.3";
 LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
@@ -24,6 +38,15 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
 @interface LCRTMConnection ()
 
 @property (nonatomic) dispatch_queue_t serialQueue;
+#if TARGET_OS_IOS || TARGET_OS_TV
+@property (nonatomic) LCRTMConnectionAppState previousAppState;
+@property (nonatomic) id<NSObject> enterBackgroundObserver;
+@property (nonatomic) id<NSObject> enterForegroundObserver;
+#endif
+#if !TARGET_OS_WATCH
+@property (nonatomic) LCNetworkReachabilityStatus previousReachabilityStatus;
+@property (nonatomic) LCNetworkReachabilityManager *reachabilityManager;
+#endif
 
 - (instancetype)initWithApplication:(AVApplication *)application
                            protocol:(LCIMProtocol)protocol
@@ -174,8 +197,88 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
         _application = application;
         _protocol = protocol;
         _serialQueue = dispatch_queue_create("LCRTMConnection.serialQueue", NULL);
+#if DEBUG
+        dispatch_queue_set_specific(_serialQueue,
+                                    (__bridge void *)_serialQueue,
+                                    (__bridge void *)_serialQueue,
+                                    NULL);
+#endif
+        __weak typeof(self) weakSelf = self;
+#if TARGET_OS_IOS || TARGET_OS_TV
+        if (NSThread.isMainThread) {
+            _previousAppState = UIApplication.sharedApplication.applicationState;
+        } else {
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                _previousAppState = UIApplication.sharedApplication.applicationState;
+            });
+        }
+        NSOperationQueue *appStateQueue = [[NSOperationQueue alloc] init];
+        appStateQueue.underlyingQueue = _serialQueue;
+        _enterBackgroundObserver = [NSNotificationCenter.defaultCenter
+                                    addObserverForName:UIApplicationDidEnterBackgroundNotification
+                                    object:nil
+                                    queue:appStateQueue
+                                    usingBlock:^(NSNotification * _Nonnull note) {
+            [weakSelf applicationStateChanged:LCRTMConnectionAppStateBackground];
+        }];
+        _enterForegroundObserver = [NSNotificationCenter.defaultCenter
+                                    addObserverForName:UIApplicationWillEnterForegroundNotification
+                                    object:nil
+                                    queue:appStateQueue
+                                    usingBlock:^(NSNotification * _Nonnull note) {
+            [weakSelf applicationStateChanged:LCRTMConnectionAppStateForeground];
+        }];
+#endif
+#if !TARGET_OS_WATCH
+        _reachabilityManager = [LCNetworkReachabilityManager manager];
+        _reachabilityManager.reachabilityQueue = _serialQueue;
+        _previousReachabilityStatus = _reachabilityManager.networkReachabilityStatus;
+        [_reachabilityManager setReachabilityStatusChangeBlock:^(LCNetworkReachabilityStatus status) {
+            [weakSelf networkReachabilityStatusChanged:status];
+        }];
+        [_reachabilityManager startMonitoring];
+#endif
     }
     return self;
 }
+
+- (void)dealloc
+{
+#if TARGET_OS_IOS || TARGET_OS_TV
+    if (self.enterBackgroundObserver) {
+        [NSNotificationCenter.defaultCenter removeObserver:self.enterBackgroundObserver];
+    }
+    if (self.enterForegroundObserver) {
+        [NSNotificationCenter.defaultCenter removeObserver:self.enterForegroundObserver];
+    }
+#endif
+#if !TARGET_OS_WATCH
+    [self.reachabilityManager stopMonitoring];
+#endif
+}
+
+- (BOOL)assertSpecificSerialQueue
+{
+#if DEBUG
+    void *specificKey = (__bridge void *)_serialQueue;
+    return dispatch_get_specific(specificKey) == specificKey;
+#else
+    return true;
+#endif
+}
+
+#if TARGET_OS_IOS || TARGET_OS_TV
+- (void)applicationStateChanged:(LCRTMConnectionAppState)state
+{
+    NSParameterAssert([self assertSpecificSerialQueue]);
+}
+#endif
+
+#if !TARGET_OS_WATCH
+- (void)networkReachabilityStatusChanged:(LCNetworkReachabilityStatus)status
+{
+    NSParameterAssert([self assertSpecificSerialQueue]);
+}
+#endif
 
 @end
