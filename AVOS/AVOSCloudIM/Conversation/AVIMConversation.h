@@ -64,18 +64,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, readonly, nullable) NSString *creator;
 
-/**
- *  The creation time of the conversation.
- */
-@property (nonatomic, strong, readonly, nullable) NSDate *createAt;
-
 /// The creation time of the conversation.
 @property (nonatomic, strong, readonly, nullable) NSDate *createdAt;
-
-/**
- *  The last updating time of the conversation. When fields like name, members changes, this time will changes.
- */
-@property (nonatomic, strong, readonly, nullable) NSDate *updateAt;
 
 /// The last updating time of the conversation. When fields like name, members changes, this time will changes.
 @property (nonatomic, strong, readonly, nullable) NSDate *updatedAt;
@@ -168,6 +158,12 @@ NS_ASSUME_NONNULL_BEGIN
  *  The AVIMClient object which this conversation belongs to.
  */
 @property (nonatomic, weak, readonly, nullable) AVIMClient *imClient;
+
+@property (nonatomic, strong, readonly, nullable) NSDate *createAt
+__deprecated_msg("Deprecated, use `createdAt` instead.");
+
+@property (nonatomic, strong, readonly, nullable) NSDate *updateAt
+__deprecated_msg("Deprecated, use `updatedAt` instead.");
 
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
