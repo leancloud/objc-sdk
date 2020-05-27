@@ -7,6 +7,7 @@
 //
 
 #import "LCRTMConnection.h"
+#import "LCRTMWebSocket.h"
 
 #import "AVApplication.h"
 #import "AVErrorUtils.h"
@@ -16,6 +17,7 @@
 #endif
 
 #import <TargetConditionals.h>
+
 #if TARGET_OS_IOS || TARGET_OS_TV
 #import <UIKit/UIKit.h>
 typedef NS_ENUM(NSUInteger, LCRTMConnectionAppState) {
@@ -35,6 +37,56 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
 
 @end
 
+@interface LCRTMConnectionOutCommand : NSObject
+
+@property (nonatomic, readonly) NSString *peerID;
+@property (nonatomic) AVIMGenericCommand *command;
+@property (nonatomic, nullable) dispatch_queue_t callingQueue;
+@property (nonatomic, nullable) NSMutableArray<LCRTMConnectionOutCommandCallback> *callbacks;
+@property (nonatomic, nullable) NSDate *expiration;
+
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
+
+- (instancetype)initWithPeerID:(NSString *)peerID
+                       command:(AVIMGenericCommand *)command
+                  callingQueue:(dispatch_queue_t _Nullable)callingQueue
+                      callback:(LCRTMConnectionOutCommandCallback _Nullable)callback NS_DESIGNATED_INITIALIZER;
+
+- (BOOL)microIdempotentFor:(AVIMGenericCommand *)outCommand
+                      from:(NSString *)peerID;
+
+@end
+
+@interface LCRTMConnectionTimer : NSObject
+
+@property (nonatomic, readonly) NSTimeInterval pingpongInterval;
+@property (nonatomic, readonly) NSTimeInterval pingTimeout;
+@property (nonatomic) NSTimeInterval lastPingSentTimestamp;
+@property (nonatomic) NSTimeInterval lastPongReceivedTimestamp;
+@property (nonatomic, readonly) dispatch_source_t source;
+@property (nonatomic, readonly) LCRTMWebSocket *socket;
+@property (nonatomic) NSMutableArray<NSNumber *> *outCommandIndexSequence;
+@property (nonatomic) NSMutableDictionary<NSNumber *, LCRTMConnectionOutCommand *> *outCommandCollection;
+@property (nonatomic) UInt16 index;
+#if DEBUG
+@property (nonatomic, readonly) dispatch_queue_t queue;
+#endif
+
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
+
+- (instancetype)initWithQueue:(dispatch_queue_t)queue
+                       socket:(LCRTMWebSocket *)socket NS_DESIGNATED_INITIALIZER;
+
+- (BOOL)tryThrottling:(AVIMGenericCommand *)outCommand
+                 from:(NSString *)peerID
+             callback:(LCRTMConnectionOutCommandCallback)callback;
+
+- (UInt16)nextIndex;
+
+@end
+
 @interface LCRTMConnection ()
 
 @property (nonatomic) dispatch_queue_t serialQueue;
@@ -47,6 +99,12 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
 @property (nonatomic) LCNetworkReachabilityStatus previousReachabilityStatus;
 @property (nonatomic) LCNetworkReachabilityManager *reachabilityManager;
 #endif
+@property (nonatomic) NSString *defaultInstantMessagingPeerID;
+@property (nonatomic) BOOL needPeerIDForEveryCommand;
+@property (nonatomic) LCRTMConnectionTimer *timer;
+@property (nonatomic) LCRTMWebSocket *socket;
+@property (nonatomic) BOOL useSecondaryServer;
+@property (nonatomic) NSTimeInterval reconnectingDelayInterval;
 
 - (instancetype)initWithApplication:(AVApplication *)application
                            protocol:(LCIMProtocol)protocol
@@ -230,9 +288,119 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
         _peerID = peerID;
         _command = command;
         _callingQueue = callingQueue;
-        _callback = callback;
+        if (callback) {
+            _callbacks = [NSMutableArray arrayWithObject:callback];
+        }
     }
     return self;
+}
+
+- (BOOL)microIdempotentFor:(AVIMGenericCommand *)outCommand
+                      from:(NSString *)peerID
+{
+    if (![self.peerID isEqualToString:peerID] ||
+        outCommand.cmd == AVIMCommandType_Direct ||
+        (outCommand.cmd == AVIMCommandType_Conv &&
+         (outCommand.op == AVIMOpType_Start ||
+          outCommand.op == AVIMOpType_Update ||
+          outCommand.op == AVIMOpType_Members))) {
+        return false;
+    }
+    if (self.command.hasI) {
+        outCommand.i = self.command.i;
+    }
+    return [outCommand isEqual:self.command];
+}
+
+@end
+
+@implementation LCRTMConnectionTimer
+
+- (instancetype)initWithQueue:(dispatch_queue_t)queue
+                       socket:(LCRTMWebSocket *)socket
+{
+    self = [super init];
+    if (self) {
+#if DEBUG
+        _queue = queue;
+#endif
+        _pingpongInterval = 180.0;
+        _pingTimeout = 20.0;
+        _lastPingSentTimestamp = 0;
+        _lastPongReceivedTimestamp = 0;
+        _source = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
+        _socket = socket;
+        _outCommandIndexSequence = [NSMutableArray array];
+        _outCommandCollection = [NSMutableDictionary dictionary];
+        _index = 0;
+        __weak typeof(self) weakSelf = self;
+        dispatch_source_set_event_handler(_source, ^{
+            LCRTMConnectionTimer *timer = weakSelf;
+            if (timer) {
+                NSDate *currentDate = [NSDate date];
+                [timer checkCommandTimeout:currentDate];
+                [timer checkPingPong:currentDate];
+            }
+        });
+        dispatch_source_set_timer(_source,
+                                  DISPATCH_TIME_NOW,
+                                  NSEC_PER_SEC * 1.0,
+                                  NSEC_PER_SEC * 0);
+        dispatch_resume(_source);
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    if (self.source) {
+        dispatch_source_cancel(self.source);
+    }
+}
+
+- (BOOL)assertSpecificQueue
+{
+#if DEBUG
+    void *specificKey = (__bridge void *)_queue;
+    return dispatch_get_specific(specificKey) == specificKey;
+#else
+    return true;
+#endif
+}
+
+- (void)checkCommandTimeout:(NSDate *)currentDate
+{
+    NSParameterAssert([self assertSpecificQueue]);
+}
+
+- (void)checkPingPong:(NSDate *)currentDate
+{
+    NSParameterAssert([self assertSpecificQueue]);
+}
+
+- (BOOL)tryThrottling:(AVIMGenericCommand *)outCommand
+                 from:(NSString *)peerID
+             callback:(LCRTMConnectionOutCommandCallback)callback
+{
+    NSParameterAssert([self assertSpecificQueue]);
+    for (NSNumber *i in self.outCommandIndexSequence) {
+        LCRTMConnectionOutCommand *command = self.outCommandCollection[i];
+        if ([command microIdempotentFor:outCommand from:peerID]) {
+            [command.callbacks addObject:callback];
+            return true;
+        }
+    }
+    return false;
+}
+
+- (UInt16)nextIndex
+{
+    NSParameterAssert([self assertSpecificQueue]);
+    if (self.index == UINT16_MAX) {
+        self.index = 0;
+    }
+    self.index += 1;
+    return self.index;
 }
 
 @end

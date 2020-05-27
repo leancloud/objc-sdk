@@ -89,24 +89,6 @@ typedef void(^LCRTMConnectionOutCommandCallback)(AVIMGenericCommand * _Nullable 
 
 @end
 
-@interface LCRTMConnectionOutCommand : NSObject
-
-@property (nonatomic, readonly) NSString *peerID;
-@property (nonatomic) AVIMGenericCommand *command;
-@property (nonatomic, nullable) dispatch_queue_t callingQueue;
-@property (nonatomic, nullable) LCRTMConnectionOutCommandCallback callback;
-@property (nonatomic, nullable) NSDate *expiration;
-
-- (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)new NS_UNAVAILABLE;
-
-- (instancetype)initWithPeerID:(NSString *)peerID
-                       command:(AVIMGenericCommand *)command
-                  callingQueue:(dispatch_queue_t _Nullable)callingQueue
-                      callback:(LCRTMConnectionOutCommandCallback _Nullable)callback NS_DESIGNATED_INITIALIZER;
-
-@end
-
 @interface LCRTMConnection : NSObject
 
 @property (nonatomic, readonly) AVApplication *application;
