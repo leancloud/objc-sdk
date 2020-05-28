@@ -108,8 +108,9 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
 @property (nonatomic) BOOL needPeerIDForEveryCommand;
 @property (nonatomic) LCRTMConnectionTimer *timer;
 @property (nonatomic) LCRTMWebSocket *socket;
+@property (nonatomic) dispatch_block_t previousConnectingBlock;
 @property (nonatomic) BOOL useSecondaryServer;
-@property (nonatomic) NSTimeInterval connectingDelayInterval;
+@property (nonatomic) NSUInteger connectingDelayInterval;
 @property (nonatomic) NSUInteger connectingFailedCount;
 @property (nonatomic) BOOL isRouting;
 
@@ -379,7 +380,8 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
             if ([command.expiration compare:currentDate] == NSOrderedDescending) {
                 break;
             } else {
-                NSError *error = LCError(AVIMErrorCodeCommandTimeout, @"Command timeout.", nil);
+                NSError *error = LCError(AVIMErrorCodeCommandTimeout,
+                                         @"Command timeout.", nil);
                 for (LCRTMConnectionOutCommandCallback callback in command.callbacks) {
                     dispatch_async(command.callingQueue, ^{
                         callback(nil, error);
@@ -465,7 +467,8 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
             self.source = nil;
         }
         if (self.outCommandIndexSequence.count > 0) {
-            NSError *error = LCError(AVIMErrorCodeConnectionLost, @"Connection lost.", nil);
+            NSError *error = LCError(AVIMErrorCodeConnectionLost,
+                                     @"Connection lost.", nil);
             for (NSNumber *i in self.outCommandIndexSequence) {
                 LCRTMConnectionOutCommand *command = self.outCommandCollection[i];
                 if (command) {
@@ -508,8 +511,9 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
         _needPeerIDForEveryCommand = false;
         _timer = nil;
         _socket = nil;
+        _previousConnectingBlock = nil;
         _useSecondaryServer = false;
-        _connectingDelayInterval = 1.0;
+        _connectingDelayInterval = 0;
         _connectingFailedCount = 0;
         _isRouting = false;
 #if DEBUG
@@ -600,8 +604,48 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
 
 - (BOOL)hasDelegator
 {
+    NSParameterAssert([self assertSpecificSerialQueue]);
     return (self.instantMessagingDelegatorMap.count > 0 ||
             self.liveQueryDelegatorMap.count > 0);
+}
+
+- (NSError *)checkEnvironment
+{
+    NSParameterAssert([self assertSpecificSerialQueue]);
+#if TARGET_OS_IOS || TARGET_OS_TV
+    if (self.previousAppState == LCRTMConnectionAppStateBackground) {
+        return LCError(AVIMErrorCodeConnectionLost,
+                       @"Application did enter background, connection lost.", nil);
+    }
+#endif
+#if !TARGET_OS_WATCH
+    if (self.previousReachabilityStatus == LCNetworkReachabilityStatusNotReachable) {
+        return LCError(AVIMErrorCodeConnectionLost,
+                       @"Network not reachable, connection lost.", nil);
+    }
+#endif
+    return nil;
+}
+
+- (BOOL)canConnecting
+{
+    NSParameterAssert([self assertSpecificSerialQueue]);
+    return (!self.socket &&
+            [self hasDelegator] &&
+            ![self checkEnvironment]);
+}
+
+- (NSUInteger)nextConnectingDelayInterval
+{
+    NSParameterAssert([self assertSpecificSerialQueue]);
+    if (self.connectingDelayInterval == 0) {
+        self.connectingDelayInterval = 1;
+    } else if (self.connectingDelayInterval > 15) {
+        self.connectingDelayInterval = 30;
+    } else {
+        self.connectingDelayInterval *= 2;
+    }
+    return self.connectingDelayInterval;
 }
 
 - (void)connectWithServiceConsumer:(LCRTMServiceConsumer *)serviceConsumer
@@ -625,11 +669,29 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
                 [delegator.delegate LCRTMConnectionDidConnect:self];
             });
         } else if (!self.socket && !self.timer) {
-            
+            NSError *error = [self checkEnvironment];
+            if (error) {
+                dispatch_async(delegator.queue, ^{
+                    [delegator.delegate LCRTMConnection:self didDisconnectWithError:error];
+                });
+            } else {
+                [self tryConnectingWithDelayInterval:(self.connectingFailedCount > 10
+                                                      ? [self nextConnectingDelayInterval]
+                                                      : 0)];
+            }
         } else {
             /* in connecting, just wait. */
         }
     });
+}
+
+- (void)tryConnectingWithDelayInterval:(NSUInteger)delayInterval
+{
+    NSParameterAssert([self assertSpecificSerialQueue]);
+    if (![self canConnecting]) {
+        return;
+    }
+    
 }
 
 // MARK: LCRTMWebSocket Delegate
