@@ -9,6 +9,7 @@
 #import "LCRTMConnection.h"
 #import "LCRTMWebSocket.h"
 
+#import "AVIMCommon_Internal.h"
 #import "AVApplication.h"
 #import "AVErrorUtils.h"
 
@@ -64,11 +65,11 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
 @property (nonatomic, readonly) NSTimeInterval pingTimeout;
 @property (nonatomic) NSTimeInterval lastPingSentTimestamp;
 @property (nonatomic) NSTimeInterval lastPongReceivedTimestamp;
-@property (nonatomic, readonly) dispatch_source_t source;
+@property (nonatomic) dispatch_source_t source;
 @property (nonatomic, readonly) LCRTMWebSocket *socket;
 @property (nonatomic) NSMutableArray<NSNumber *> *outCommandIndexSequence;
 @property (nonatomic) NSMutableDictionary<NSNumber *, LCRTMConnectionOutCommand *> *outCommandCollection;
-@property (nonatomic) UInt16 index;
+@property (nonatomic) SInt32 index;
 #if DEBUG
 @property (nonatomic, readonly) dispatch_queue_t queue;
 #endif
@@ -83,11 +84,15 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
                  from:(NSString *)peerID
              callback:(LCRTMConnectionOutCommandCallback)callback;
 
-- (UInt16)nextIndex;
+- (void)handleCallbackCommand:(AVIMGenericCommand *)inCommand;
+
+- (SInt32)nextIndex;
+
+- (void)cleanInCurrentQueue:(BOOL)inCurrentQueue;
 
 @end
 
-@interface LCRTMConnection ()
+@interface LCRTMConnection () <LCRTMWebSocketDelegate>
 
 @property (nonatomic) dispatch_queue_t serialQueue;
 #if TARGET_OS_IOS || TARGET_OS_TV
@@ -104,7 +109,9 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
 @property (nonatomic) LCRTMConnectionTimer *timer;
 @property (nonatomic) LCRTMWebSocket *socket;
 @property (nonatomic) BOOL useSecondaryServer;
-@property (nonatomic) NSTimeInterval reconnectingDelayInterval;
+@property (nonatomic) NSTimeInterval connectingDelayInterval;
+@property (nonatomic) NSUInteger connectingFailedCount;
+@property (nonatomic) BOOL isRouting;
 
 - (instancetype)initWithApplication:(AVApplication *)application
                            protocol:(LCIMProtocol)protocol
@@ -333,29 +340,23 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
         _outCommandIndexSequence = [NSMutableArray array];
         _outCommandCollection = [NSMutableDictionary dictionary];
         _index = 0;
-        __weak typeof(self) weakSelf = self;
+        __weak typeof(self) ws = self;
         dispatch_source_set_event_handler(_source, ^{
-            LCRTMConnectionTimer *timer = weakSelf;
-            if (timer) {
+            LCRTMConnectionTimer *ss = ws;
+            if (ss) {
                 NSDate *currentDate = [NSDate date];
-                [timer checkCommandTimeout:currentDate];
-                [timer checkPingPong:currentDate];
+                [ss checkCommandTimeout:currentDate];
+                [ss checkPingPong:currentDate];
             }
         });
+        NSTimeInterval interval = 1.0;
         dispatch_source_set_timer(_source,
                                   DISPATCH_TIME_NOW,
-                                  NSEC_PER_SEC * 1.0,
-                                  NSEC_PER_SEC * 0);
+                                  NSEC_PER_SEC * interval,
+                                  NSEC_PER_SEC * interval);
         dispatch_resume(_source);
     }
     return self;
-}
-
-- (void)dealloc
-{
-    if (self.source) {
-        dispatch_source_cancel(self.source);
-    }
 }
 
 - (BOOL)assertSpecificQueue
@@ -371,11 +372,47 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
 - (void)checkCommandTimeout:(NSDate *)currentDate
 {
     NSParameterAssert([self assertSpecificQueue]);
+    NSUInteger len = 0;
+    for (NSNumber *i in self.outCommandIndexSequence) {
+        LCRTMConnectionOutCommand *command = self.outCommandCollection[i];
+        if (command) {
+            if ([command.expiration compare:currentDate] == NSOrderedDescending) {
+                break;
+            } else {
+                NSError *error = LCError(AVIMErrorCodeCommandTimeout, @"Command timeout.", nil);
+                for (LCRTMConnectionOutCommandCallback callback in command.callbacks) {
+                    dispatch_async(command.callingQueue, ^{
+                        callback(nil, error);
+                    });
+                }
+                [self.outCommandCollection removeObjectForKey:i];
+                len += 1;
+            }
+        } else {
+            len += 1;
+        }
+    }
+    if (len > 0) {
+        [self.outCommandIndexSequence removeObjectsInRange:NSMakeRange(0, len)];
+    }
 }
 
 - (void)checkPingPong:(NSDate *)currentDate
 {
     NSParameterAssert([self assertSpecificQueue]);
+    NSTimeInterval currentTimestamp = currentDate.timeIntervalSince1970;
+    BOOL isPingSentAndPongNotReceived = (self.lastPingSentTimestamp > self.lastPongReceivedTimestamp);
+    BOOL isLastPingTimeout = (isPingSentAndPongNotReceived &&
+                              (currentTimestamp > self.lastPingSentTimestamp + self.pingTimeout));
+    BOOL shouldNextPingPong = (!isPingSentAndPongNotReceived &&
+                               (currentTimestamp > self.lastPongReceivedTimestamp + self.pingpongInterval));
+    if (isLastPingTimeout || shouldNextPingPong) {
+        __weak typeof(self) ws = self;
+        [self.socket sendPing:[NSData data] completion:^{
+            // TODO: log
+            ws.lastPingSentTimestamp = currentTimestamp;
+        }];
+    }
 }
 
 - (BOOL)tryThrottling:(AVIMGenericCommand *)outCommand
@@ -393,14 +430,63 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
     return false;
 }
 
-- (UInt16)nextIndex
+- (void)handleCallbackCommand:(AVIMGenericCommand *)inCommand
 {
     NSParameterAssert([self assertSpecificQueue]);
-    if (self.index == UINT16_MAX) {
+    NSNumber *i = @(inCommand.i);
+    LCRTMConnectionOutCommand *command = self.outCommandCollection[i];
+    if (command) {
+        for (LCRTMConnectionOutCommandCallback callback in command.callbacks) {
+            dispatch_async(command.callingQueue, ^{
+                callback(inCommand, nil);
+            });
+        }
+        [self.outCommandIndexSequence removeObject:i];
+        [self.outCommandCollection removeObjectForKey:i];
+    }
+}
+
+- (SInt32)nextIndex
+{
+    NSParameterAssert([self assertSpecificQueue]);
+    if (self.index == INT32_MAX) {
         self.index = 0;
     }
     self.index += 1;
     return self.index;
+}
+
+- (void)cleanInCurrentQueue:(BOOL)inCurrentQueue
+{
+    void(^clean)(void) = ^(void) {
+        NSParameterAssert([self assertSpecificQueue]);
+        if (self.source) {
+            dispatch_source_cancel(self.source);
+            self.source = nil;
+        }
+        if (self.outCommandIndexSequence.count > 0) {
+            NSError *error = LCError(AVIMErrorCodeConnectionLost, @"Connection lost.", nil);
+            for (NSNumber *i in self.outCommandIndexSequence) {
+                LCRTMConnectionOutCommand *command = self.outCommandCollection[i];
+                if (command) {
+                    for (LCRTMConnectionOutCommandCallback callback in command.callbacks) {
+                        dispatch_async(command.callingQueue, ^{
+                            callback(nil, error);
+                        });
+                    }
+                }
+            }
+            [self.outCommandIndexSequence removeAllObjects];
+            [self.outCommandCollection removeAllObjects];
+        }
+    };
+    if (inCurrentQueue) {
+        clean();
+    } else {
+        dispatch_async(self.queue, ^{
+            clean();
+        });
+    }
 }
 
 @end
@@ -418,13 +504,21 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
         _instantMessagingDelegatorMap = [NSMutableDictionary dictionary];
         _liveQueryDelegatorMap = [NSMutableDictionary dictionary];
         _serialQueue = dispatch_queue_create("LCRTMConnection.serialQueue", NULL);
+        _defaultInstantMessagingPeerID = nil;
+        _needPeerIDForEveryCommand = false;
+        _timer = nil;
+        _socket = nil;
+        _useSecondaryServer = false;
+        _connectingDelayInterval = 1.0;
+        _connectingFailedCount = 0;
+        _isRouting = false;
 #if DEBUG
         dispatch_queue_set_specific(_serialQueue,
                                     (__bridge void *)_serialQueue,
                                     (__bridge void *)_serialQueue,
                                     NULL);
 #endif
-        __weak typeof(self) weakSelf = self;
+        __weak typeof(self) ws = self;
 #if TARGET_OS_IOS || TARGET_OS_TV
         if (NSThread.isMainThread) {
             _previousAppState = UIApplication.sharedApplication.applicationState;
@@ -440,14 +534,14 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
                                     object:nil
                                     queue:appStateQueue
                                     usingBlock:^(NSNotification * _Nonnull note) {
-            [weakSelf applicationStateChanged:LCRTMConnectionAppStateBackground];
+            [ws applicationStateChanged:LCRTMConnectionAppStateBackground];
         }];
         _enterForegroundObserver = [NSNotificationCenter.defaultCenter
                                     addObserverForName:UIApplicationWillEnterForegroundNotification
                                     object:nil
                                     queue:appStateQueue
                                     usingBlock:^(NSNotification * _Nonnull note) {
-            [weakSelf applicationStateChanged:LCRTMConnectionAppStateForeground];
+            [ws applicationStateChanged:LCRTMConnectionAppStateForeground];
         }];
 #endif
 #if !TARGET_OS_WATCH
@@ -455,7 +549,7 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
         _reachabilityManager.reachabilityQueue = _serialQueue;
         _previousReachabilityStatus = _reachabilityManager.networkReachabilityStatus;
         [_reachabilityManager setReachabilityStatusChangeBlock:^(LCNetworkReachabilityStatus status) {
-            [weakSelf networkReachabilityStatusChanged:status];
+            [ws networkReachabilityStatusChanged:status];
         }];
         [_reachabilityManager startMonitoring];
 #endif
@@ -476,6 +570,8 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
 #if !TARGET_OS_WATCH
     [self.reachabilityManager stopMonitoring];
 #endif
+    [self.timer cleanInCurrentQueue:false];
+    [self.socket clean];
 }
 
 - (BOOL)assertSpecificSerialQueue
@@ -501,5 +597,66 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
     NSParameterAssert([self assertSpecificSerialQueue]);
 }
 #endif
+
+- (BOOL)hasDelegator
+{
+    return (self.instantMessagingDelegatorMap.count > 0 ||
+            self.liveQueryDelegatorMap.count > 0);
+}
+
+- (void)connectWithServiceConsumer:(LCRTMServiceConsumer *)serviceConsumer
+                         delegator:(LCRTMConnectionDelegator *)delegator
+{
+    dispatch_async(self.serialQueue, ^{
+        if (serviceConsumer.service == LCRTMServiceInstantMessaging) {
+            if (self.defaultInstantMessagingPeerID) {
+                if (![self.defaultInstantMessagingPeerID isEqualToString:serviceConsumer.peerID]) {
+                    self.needPeerIDForEveryCommand = true;
+                }
+            } else {
+                self.defaultInstantMessagingPeerID = serviceConsumer.peerID;
+            }
+            self.instantMessagingDelegatorMap[delegator.peerID] = delegator;
+        } else if (serviceConsumer.service == LCRTMServiceLiveQuery) {
+            self.liveQueryDelegatorMap[delegator.peerID] = delegator;
+        }
+        if (self.socket && self.timer) {
+            dispatch_async(delegator.queue, ^{
+                [delegator.delegate LCRTMConnectionDidConnect:self];
+            });
+        } else if (!self.socket && !self.timer) {
+            
+        } else {
+            /* in connecting, just wait. */
+        }
+    });
+}
+
+// MARK: LCRTMWebSocket Delegate
+
+- (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didOpenWithProtocol:(NSString *)protocol
+{
+    
+}
+
+- (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didCloseWithError:(NSError *)error
+{
+    
+}
+
+- (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didReceiveMessage:(LCRTMWebSocketMessage *)message
+{
+    
+}
+
+- (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didReceivePing:(NSData *)data
+{
+    
+}
+
+- (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didReceivePong:(NSData *)data
+{
+    
+}
 
 @end

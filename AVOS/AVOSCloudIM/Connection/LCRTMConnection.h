@@ -99,6 +99,9 @@ typedef void(^LCRTMConnectionOutCommandCallback)(AVIMGenericCommand * _Nullable 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;
 
+- (void)connectWithServiceConsumer:(LCRTMServiceConsumer *)serviceConsumer
+                         delegator:(LCRTMConnectionDelegator *)delegator;
+
 @end
 
 NS_ASSUME_NONNULL_END
