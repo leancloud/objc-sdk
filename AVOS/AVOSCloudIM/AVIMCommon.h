@@ -21,24 +21,25 @@ NS_ASSUME_NONNULL_BEGIN
 /// error code
 typedef NS_ENUM(NSInteger, AVIMErrorCode) {
     /// 41XX
-    AVIMErrorCodeSessionConflict = 4111,
-    AVIMErrorCodeSessionTokenExpired = 4112,
+    AVIMErrorCodeSessionConflict            = 4111,
+    AVIMErrorCodeSessionTokenExpired        = 4112,
     /// 90XX
-    AVIMErrorCodeCommandTimeout = 9000,
-    AVIMErrorCodeConnectionLost = 9001,
-    AVIMErrorCodeClientNotOpen = 9002,
-    AVIMErrorCodeInvalidCommand = 9003,
-    AVIMErrorCodeCommandDataLengthTooLong = 9008,
+    AVIMErrorCodeCommandTimeout             = 9000,
+    AVIMErrorCodeConnectionLost             = 9001,
+    AVIMErrorCodeClientNotOpen              = 9002,
+    AVIMErrorCodeInvalidCommand             = 9003,
+    AVIMErrorCodeCommandDataLengthTooLong   = 9008,
     /// 91XX
-    AVIMErrorCodeConversationNotFound = 9100,
-    AVIMErrorCodeUpdatingMessageNotAllowed = 9120,
-    AVIMErrorCodeUpdatingMessageNotSent = 9121,
-    AVIMErrorCodeOwnerPromotionNotAllowed = 9130,
+    AVIMErrorCodeConversationNotFound       = 9100,
+    AVIMErrorCodeUpdatingMessageNotAllowed  = 9120,
+    AVIMErrorCodeUpdatingMessageNotSent     = 9121,
+    AVIMErrorCodeOwnerPromotionNotAllowed   = 9130,
 };
 
 /// error user info key
 FOUNDATION_EXPORT NSString * const kAVIMCodeKey;
 FOUNDATION_EXPORT NSString * const kAVIMAppCodeKey;
+FOUNDATION_EXPORT NSString * const kAVIMAppMsgKey;
 FOUNDATION_EXPORT NSString * const kAVIMReasonKey;
 FOUNDATION_EXPORT NSString * const kAVIMDetailKey;
 

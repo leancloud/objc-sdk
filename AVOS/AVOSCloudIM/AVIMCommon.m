@@ -10,10 +10,11 @@
 
 // MARK: - Error
 
-NSString * const kAVIMCodeKey = @"code";
-NSString * const kAVIMAppCodeKey = @"appCode";
-NSString * const kAVIMReasonKey  = @"reason";
-NSString * const kAVIMDetailKey  = @"detail";
+NSString * const kAVIMCodeKey       = @"code";
+NSString * const kAVIMAppCodeKey    = @"appCode";
+NSString * const kAVIMAppMsgKey     = @"appMsg";
+NSString * const kAVIMReasonKey     = @"reason";
+NSString * const kAVIMDetailKey     = @"detail";
 
 // MARK: - Conversation
 
