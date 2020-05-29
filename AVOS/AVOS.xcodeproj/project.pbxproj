@@ -796,6 +796,10 @@
 		D34EBDCF211C20FF0092A538 /* LCRouter_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */; };
 		D34EBDD0211C20FF0092A538 /* LCRouter_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */; };
 		D34FD72C2068CFE900B7C11B /* AVLiveQuery_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34FD72B2068CFE900B7C11B /* AVLiveQuery_Internal.h */; };
+		D3596DAD2480EEED002D2D22 /* AVApplication_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3596DAC2480EEED002D2D22 /* AVApplication_Internal.h */; };
+		D3596DAE2480EEED002D2D22 /* AVApplication_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3596DAC2480EEED002D2D22 /* AVApplication_Internal.h */; };
+		D3596DAF2480EEED002D2D22 /* AVApplication_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3596DAC2480EEED002D2D22 /* AVApplication_Internal.h */; };
+		D3596DB02480EEED002D2D22 /* AVApplication_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3596DAC2480EEED002D2D22 /* AVApplication_Internal.h */; };
 		D3700B742475244E00678B2B /* LCRTMConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B722475244E00678B2B /* LCRTMConnection.h */; };
 		D3700B752475244E00678B2B /* LCRTMConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B722475244E00678B2B /* LCRTMConnection.h */; };
 		D3700B762475244E00678B2B /* LCRTMConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D3700B732475244E00678B2B /* LCRTMConnection.m */; };
@@ -1398,6 +1402,7 @@
 		D3472E1E2015CBC200AAD65F /* AVFileTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVFileTestCase.swift; sourceTree = "<group>"; };
 		D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCRouter_Internal.h; sourceTree = "<group>"; };
 		D34FD72B2068CFE900B7C11B /* AVLiveQuery_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVLiveQuery_Internal.h; sourceTree = "<group>"; };
+		D3596DAC2480EEED002D2D22 /* AVApplication_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVApplication_Internal.h; sourceTree = "<group>"; };
 		D3700B722475244E00678B2B /* LCRTMConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCRTMConnection.h; sourceTree = "<group>"; };
 		D3700B732475244E00678B2B /* LCRTMConnection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCRTMConnection.m; sourceTree = "<group>"; };
 		D3700B782475345C00678B2B /* AVApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVApplication.h; sourceTree = "<group>"; };
@@ -1809,6 +1814,7 @@
 				8C84198B1A5A791300C5C6C4 /* AVOSCloud.h */,
 				8C8419F81A5A79FF00C5C6C4 /* AVOSCloud.m */,
 				D3700B782475345C00678B2B /* AVApplication.h */,
+				D3596DAC2480EEED002D2D22 /* AVApplication_Internal.h */,
 				D3700B792475345C00678B2B /* AVApplication.m */,
 				8C8419DC1A5A79FF00C5C6C4 /* ACL */,
 				8C8419E31A5A79FF00C5C6C4 /* Analytics */,
@@ -2550,6 +2556,7 @@
 				70CA7FE71BDE42F6000A3B21 /* AVConstants.h in Headers */,
 				70CA7FFD1BDE4313000A3B21 /* AVRelation.h in Headers */,
 				70CA80001BDE4313000A3B21 /* AVSubclassing.h in Headers */,
+				D3596DAE2480EEED002D2D22 /* AVApplication_Internal.h in Headers */,
 				70CA80011BDE4313000A3B21 /* AVInstallation.h in Headers */,
 				D34EBDCE211C20FF0092A538 /* LCRouter_Internal.h in Headers */,
 				70CA80031BDE4313000A3B21 /* AVPush.h in Headers */,
@@ -2676,6 +2683,7 @@
 				9A404DD61CE5A9BB00DEB3DC /* LCRouter.h in Headers */,
 				D37EE4C823ACF39700AACE99 /* LCURLSessionManager.h in Headers */,
 				8320F8F81C1918C60024B45E /* AVSearchQuery.h in Headers */,
+				D3596DB02480EEED002D2D22 /* AVApplication_Internal.h in Headers */,
 				8320F8FB1C1918C60024B45E /* LCDatabaseCoordinator.h in Headers */,
 				8320F8FC1C1918C60024B45E /* AVSearchSortBuilder.h in Headers */,
 				8320F8FD1C1918C60024B45E /* AVStatus.h in Headers */,
@@ -2752,6 +2760,7 @@
 				83D8CED41C17DAF50094279D /* AVRole.h in Headers */,
 				830EB9F71C44D68400BA917F /* AVSaveOption.h in Headers */,
 				83D8CED51C17DAF50094279D /* AVAnalytics.h in Headers */,
+				D3596DAF2480EEED002D2D22 /* AVApplication_Internal.h in Headers */,
 				D34EBDCF211C20FF0092A538 /* LCRouter_Internal.h in Headers */,
 				83D8CED61C17DAF50094279D /* AVConstants.h in Headers */,
 				83D8CED71C17DAF50094279D /* AVOSCloud.h in Headers */,
@@ -2850,6 +2859,7 @@
 				8C841AB01A5A7A0000C5C6C4 /* AVRole.h in Headers */,
 				830EB9F41C44D68400BA917F /* AVSaveOption.h in Headers */,
 				8C841AB31A5A7A0000C5C6C4 /* AVAnalytics.h in Headers */,
+				D3596DAD2480EEED002D2D22 /* AVApplication_Internal.h in Headers */,
 				8C841AC21A5A7A0000C5C6C4 /* AVConstants.h in Headers */,
 				D34EBDCD211C20FF0092A538 /* LCRouter_Internal.h in Headers */,
 				8C84198C1A5A791300C5C6C4 /* AVOSCloud.h in Headers */,

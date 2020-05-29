@@ -6,7 +6,7 @@
 //  Copyright © 2020 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVApplication.h"
+#import "AVApplication_Internal.h"
 
 @implementation AVApplication
 
@@ -24,6 +24,24 @@
 {
     _identifier = [identifier copy];
     _key = [key copy];
+}
+
+- (NSString *)identifierThrowException
+{
+    if (!self.identifier) {
+        [NSException raise:NSInternalInconsistencyException
+                    format:@"Application identifier not found."];
+    }
+    return self.identifier;
+}
+
+- (NSString *)keyThrowException
+{
+    if (!self.key) {
+        [NSException raise:NSInternalInconsistencyException
+                    format:@"Application key not found."];
+    }
+    return self.key;
 }
 
 @end

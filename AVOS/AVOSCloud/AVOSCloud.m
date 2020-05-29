@@ -22,7 +22,7 @@
 #import "AVObjectUtils.h"
 
 #import "LCRouter_Internal.h"
-#import "AVApplication.h"
+#import "AVApplication_Internal.h"
 
 @implementation AVOSCloud
 
@@ -76,7 +76,7 @@ static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
         [appDomain isEqualToString:AppDomainCE]) {
         if (![LCRouter serverURLString]) {
             [NSException raise:NSInternalInconsistencyException
-                        format:@"Server URL not set."] ;
+                        format:@"Server URL not found."] ;
         }
     }
     
@@ -91,11 +91,11 @@ static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
 }
 
 + (NSString *)getApplicationId {
-    return [AVApplication defaultApplication].identifier;
+    return [[AVApplication defaultApplication] identifierThrowException];
 }
 
 + (NSString *)getClientKey {
-    return [AVApplication defaultApplication].key;
+    return [[AVApplication defaultApplication] keyThrowException];
 }
 
 + (void)setLastModifyEnabled:(BOOL)enabled {
