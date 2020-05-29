@@ -429,7 +429,7 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
     [self.outputStream open];
     __weak typeof(self) ws = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
-                                 (int64_t)((self.request.timeoutInterval ?: 60.0) * NSEC_PER_SEC)),
+                                 NSEC_PER_SEC * (self.request.timeoutInterval ?: 60.0)),
                    self.readQueue, ^{
         LCRTMWebSocket *ss = ws;
         if (!ss) { return; }
@@ -727,7 +727,7 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
                             length:bufferLength - httpResponseSize];
 }
 
-- (NSUInteger)processDataFrames:(uint8_t *)buffer
+- (NSUInteger)processDataFrames:(UInt8 *)buffer
                          length:(NSUInteger)bufferLength
 {
     NSParameterAssert([self assertSpecificReadQueue]);
@@ -881,7 +881,7 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
     }
     NSData *data = [[key stringByAppendingString:@"258EAFA5-E914-47DA-95CA-C5AB0DC85B11"]
                     dataUsingEncoding:NSUTF8StringEncoding];
-    uint8_t digest[CC_SHA1_DIGEST_LENGTH];
+    UInt8 digest[CC_SHA1_DIGEST_LENGTH];
     CC_SHA1(data.bytes, (CC_LONG)data.length, digest);
     return [[[NSData dataWithBytes:digest length:CC_SHA1_DIGEST_LENGTH]
              base64EncodedStringWithOptions:0]
