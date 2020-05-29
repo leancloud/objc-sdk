@@ -117,7 +117,6 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 @property (nonatomic) BOOL useSecondaryServer;
 @property (nonatomic) NSUInteger connectingDelayInterval;
 @property (nonatomic) NSUInteger connectingFailedCount;
-@property (nonatomic) BOOL isRouting;
 
 - (instancetype)initWithApplication:(AVApplication *)application
                            protocol:(LCIMProtocol)protocol
@@ -346,14 +345,14 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
         _outCommandIndexSequence = [NSMutableArray array];
         _outCommandCollection = [NSMutableDictionary dictionary];
         _index = 0;
-        __weak typeof(self) ws = self;
         dispatch_source_set_event_handler(_source, ^{
-            LCRTMConnectionTimer *ss = ws;
-            if (ss) {
-                NSDate *currentDate = [NSDate date];
-                [ss checkCommandTimeout:currentDate];
-                [ss checkPingPong:currentDate];
-            }
+            /*
+             For performance, not use weak-self,
+             so need to call `-cleanInCurrentQueue:` to break retain-cycle before release it.
+             */
+            NSDate *currentDate = [NSDate date];
+            [self checkCommandTimeout:currentDate];
+            [self checkPingPong:currentDate];
         });
         UInt64 interval = 1;
         dispatch_source_set_timer(_source,
@@ -363,6 +362,11 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
         dispatch_resume(_source);
     }
     return self;
+}
+
+- (void)dealloc
+{
+    // TODO: log
 }
 
 - (BOOL)assertSpecificQueue
@@ -525,7 +529,6 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
         _useSecondaryServer = false;
         _connectingDelayInterval = 0;
         _connectingFailedCount = 0;
-        _isRouting = false;
 #if DEBUG
         dispatch_queue_set_specific(_serialQueue,
                                     (__bridge void *)_serialQueue,
@@ -573,6 +576,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 
 - (void)dealloc
 {
+    // TODO: log
 #if TARGET_OS_IOS || TARGET_OS_TV
     if (self.enterBackgroundObserver) {
         [NSNotificationCenter.defaultCenter removeObserver:self.enterBackgroundObserver];
@@ -823,31 +827,61 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
     });
 }
 
+- (void)tryCleanConnectionWithError:(NSError *)error
+{
+    NSParameterAssert([self assertSpecificSerialQueue]);
+    self.defaultInstantMessagingPeerID = nil;
+    self.needPeerIDForEveryCommand = false;
+    if (self.previousConnectingBlock) {
+        dispatch_block_cancel(self.previousConnectingBlock);
+        self.previousConnectingBlock = nil;
+    }
+    if (self.timer) {
+        [self.timer cleanInCurrentQueue:true];
+        self.timer = nil;
+    }
+    if (self.socket) {
+        self.socket.delegate = nil;
+        [self.socket closeWithCloseCode:LCRTMWebSocketCloseCodeNormalClosure
+                                 reason:nil];
+        [self.socket clean];
+        self.socket = nil;
+    }
+    if (error) {
+        for (LCRTMConnectionDelegator *delegator in [self allDelegators]) {
+            dispatch_async(delegator.queue, ^{
+                [delegator.delegate LCRTMConnection:self didDisconnectWithError:error];
+            });
+        }
+    }
+}
+
 // MARK: LCRTMWebSocket Delegate
 
 - (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didOpenWithProtocol:(NSString *)protocol
 {
-    
+    NSParameterAssert([self assertSpecificSerialQueue]);
 }
 
 - (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didCloseWithError:(NSError *)error
 {
-    
+    NSParameterAssert([self assertSpecificSerialQueue]);
+    self.useSecondaryServer = !self.useSecondaryServer;
 }
 
 - (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didReceiveMessage:(LCRTMWebSocketMessage *)message
 {
-    
+    NSParameterAssert([self assertSpecificSerialQueue]);
 }
 
 - (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didReceivePing:(NSData *)data
 {
-    
+    NSParameterAssert([self assertSpecificSerialQueue]);
 }
 
 - (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didReceivePong:(NSData *)data
 {
-    
+    NSParameterAssert([self assertSpecificSerialQueue]);
 }
 
 @end
