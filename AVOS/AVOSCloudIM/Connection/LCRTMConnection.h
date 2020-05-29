@@ -91,6 +91,8 @@ typedef void(^LCRTMConnectionOutCommandCallback)(AVIMGenericCommand * _Nullable 
 
 @interface LCRTMConnection : NSObject
 
++ (void)setConnectingTimeoutInterval:(NSTimeInterval)timeoutInterval;
+
 @property (nonatomic, readonly) AVApplication *application;
 @property (nonatomic, readonly) LCIMProtocol protocol;
 @property (nonatomic) NSMutableDictionary<NSString *, LCRTMConnectionDelegator *> *instantMessagingDelegatorMap;
@@ -101,6 +103,8 @@ typedef void(^LCRTMConnectionOutCommandCallback)(AVIMGenericCommand * _Nullable 
 
 - (void)connectWithServiceConsumer:(LCRTMServiceConsumer *)serviceConsumer
                          delegator:(LCRTMConnectionDelegator *)delegator;
+
+- (void)removeDelegatorWithServiceConsumer:(LCRTMServiceConsumer *)serviceConsumer;
 
 @end
 

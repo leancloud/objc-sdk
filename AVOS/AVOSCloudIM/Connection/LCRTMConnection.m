@@ -9,9 +9,12 @@
 #import "LCRTMConnection.h"
 #import "LCRTMWebSocket.h"
 
-#import "AVIMCommon_Internal.h"
-#import "AVApplication.h"
+#import "AVApplication_Internal.h"
+#import "LCRouter_Internal.h"
+#import "AVUtils.h"
 #import "AVErrorUtils.h"
+#import "AVOSCloudIM.h"
+#import "AVIMCommon_Internal.h"
 
 #if !TARGET_OS_WATCH
 #import "LCNetworkReachabilityManager.h"
@@ -29,6 +32,8 @@ typedef NS_ENUM(NSUInteger, LCRTMConnectionAppState) {
 
 LCIMProtocol const LCIMProtocol3 = @"lc.protobuf2.3";
 LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
+
+static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 
 // MARK: Interface
 
@@ -169,7 +174,7 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
                                            error:(NSError * __autoreleasing *)error
 {
     return (LCRTMConnection *)[self synchronize:^id{
-        NSString *appID = serviceConsumer.application.identifier;
+        NSString *appID = [serviceConsumer.application identifierThrowException];
         LCRTMConnection *connection;
         if (serviceConsumer.service == LCRTMServiceInstantMessaging) {
             LCRTMInstantMessagingRegistry registry = [self registryFromProtocol:serviceConsumer.protocol];
@@ -228,7 +233,7 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
 - (void)unregisterWithServiceConsumer:(LCRTMServiceConsumer *)serviceConsumer
 {
     [self synchronize:^id{
-        NSString *appID = serviceConsumer.application.identifier;
+        NSString *appID = [serviceConsumer.application identifierThrowException];
         if (serviceConsumer.service == LCRTMServiceInstantMessaging) {
             LCRTMInstantMessagingRegistry registry = [self registryFromProtocol:serviceConsumer.protocol];
             NSMutableDictionary<NSString *, LCRTMConnection *> *connectionMap = registry[appID];
@@ -350,7 +355,7 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
                 [ss checkPingPong:currentDate];
             }
         });
-        NSTimeInterval interval = 1.0;
+        UInt64 interval = 1;
         dispatch_source_set_timer(_source,
                                   DISPATCH_TIME_NOW,
                                   NSEC_PER_SEC * interval,
@@ -496,6 +501,11 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
 
 @implementation LCRTMConnection
 
++ (void)setConnectingTimeoutInterval:(NSTimeInterval)timeoutInterval
+{
+    gLCRTMConnectionConnectingTimeoutInterval = timeoutInterval;
+}
+
 - (instancetype)initWithApplication:(AVApplication *)application
                            protocol:(LCIMProtocol)protocol
                               error:(NSError *__autoreleasing *)error
@@ -609,6 +619,13 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
             self.liveQueryDelegatorMap.count > 0);
 }
 
+- (NSArray<LCRTMConnectionDelegator *> *)allDelegators
+{
+    NSParameterAssert([self assertSpecificSerialQueue]);
+    return [self.instantMessagingDelegatorMap.allValues
+            arrayByAddingObjectsFromArray:self.liveQueryDelegatorMap.allValues];
+}
+
 - (NSError *)checkEnvironment
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
@@ -691,7 +708,119 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
     if (![self canConnecting]) {
         return;
     }
-    
+    for (LCRTMConnectionDelegator *delegator in [self allDelegators]) {
+        dispatch_async(delegator.queue, ^{
+            [delegator.delegate LCRTMConnectionInConnecting:self];
+        });
+    }
+    if (self.previousConnectingBlock) {
+        dispatch_block_cancel(self.previousConnectingBlock);
+        self.previousConnectingBlock = nil;
+    }
+    __weak typeof(self) ws = self;
+    self.previousConnectingBlock = dispatch_block_create(0, ^{
+        LCRTMConnection *ss = ws;
+        if (ss) {
+            NSParameterAssert([ss assertSpecificSerialQueue]);
+            ss.previousConnectingBlock = nil;
+            [ss connect];
+        }
+    });
+    if (delayInterval > 0) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
+                                     NSEC_PER_SEC * delayInterval),
+                       self.serialQueue,
+                       self.previousConnectingBlock);
+    } else {
+        self.previousConnectingBlock();
+    }
+}
+
+- (void)connect
+{
+    NSParameterAssert([self assertSpecificSerialQueue]);
+    [self getRTMServerWithCompletion:^(LCRTMConnection *connection, NSURL *serverURL, NSError *error) {
+        NSParameterAssert([connection assertSpecificSerialQueue]);
+        if (![connection canConnecting]) {
+            return;
+        }
+        if (serverURL) {
+            connection.socket = [[LCRTMWebSocket alloc] initWithURL:serverURL
+                                                          protocols:@[connection.protocol]];
+            [connection.socket.request setValue:nil
+                             forHTTPHeaderField:@"Origin"];
+            if (gLCRTMConnectionConnectingTimeoutInterval > 0) {
+                connection.socket.request.timeoutInterval = gLCRTMConnectionConnectingTimeoutInterval;
+            }
+            connection.socket.delegateQueue = connection.serialQueue;
+            connection.socket.delegate = connection;
+            [connection.socket open];
+        } else {
+            for (LCRTMConnectionDelegator *delegator in [connection allDelegators]) {
+                dispatch_async(delegator.queue, ^{
+                    [delegator.delegate LCRTMConnection:connection didDisconnectWithError:error];
+                });
+            }
+            [connection tryConnectingWithDelayInterval:[connection nextConnectingDelayInterval]];
+        }
+    }];
+}
+
+- (void)getRTMServerWithCompletion:(void(^)(LCRTMConnection *connection, NSURL *serverURL, NSError *error))completion
+{
+    NSParameterAssert([self assertSpecificSerialQueue]);
+    if ([AVOSCloudIM defaultOptions].RTMServer) {
+        completion(self, [NSURL URLWithString:[AVOSCloudIM defaultOptions].RTMServer], nil);
+    } else {
+        __weak typeof(self) ws = self;
+        [[LCRouter sharedInstance] getRTMURLWithAppID:[self.application identifierThrowException]
+                                             callback:^(NSDictionary *dictionary, NSError *error) {
+            LCRTMConnection *ss = ws;
+            if (!ss) {
+                return;
+            }
+            if (error) {
+                dispatch_async(ss.serialQueue, ^{
+                    completion(ss, nil, error);
+                });
+            } else {
+                NSString *primaryServer = [NSString _lc_decoding:dictionary
+                                                             key:RouterKeyRTMServer];
+                NSString *secondaryServer = [NSString _lc_decoding:dictionary
+                                                               key:RouterKeyRTMSecondary];
+                dispatch_async(ss.serialQueue, ^{
+                    NSString *server = ((ss.useSecondaryServer
+                                         ? secondaryServer
+                                         : primaryServer)
+                                        ?: primaryServer);
+                    NSURL *serverURL;
+                    if (server) {
+                        serverURL = [NSURL URLWithString:server];
+                    }
+                    completion(ss,
+                               serverURL,
+                               (serverURL
+                                ? nil
+                                : LCError(AVErrorInternalErrorCodeNotFound,
+                                          @"RTM server URL not found.", nil)));
+                });
+            }
+        }];
+    }
+}
+
+- (void)removeDelegatorWithServiceConsumer:(LCRTMServiceConsumer *)serviceConsumer
+{
+    dispatch_async(self.serialQueue, ^{
+        if (serviceConsumer.service == LCRTMServiceInstantMessaging) {
+            [self.instantMessagingDelegatorMap removeObjectForKey:serviceConsumer.peerID];
+        } else if (serviceConsumer.service == LCRTMServiceLiveQuery) {
+            [self.liveQueryDelegatorMap removeObjectForKey:serviceConsumer.peerID];
+        } else {
+            [NSException raise:NSInternalInconsistencyException
+                        format:@"should not happen"];
+        }
+    });
 }
 
 // MARK: LCRTMWebSocket Delegate
