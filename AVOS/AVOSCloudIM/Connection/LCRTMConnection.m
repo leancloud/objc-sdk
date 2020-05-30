@@ -603,16 +603,44 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 }
 
 #if TARGET_OS_IOS || TARGET_OS_TV
-- (void)applicationStateChanged:(LCRTMConnectionAppState)state
+- (void)applicationStateChanged:(LCRTMConnectionAppState)newState
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
+    LCRTMConnectionAppState oldState = self.previousAppState;
+    self.previousAppState = newState;
+    if (oldState == LCRTMConnectionAppStateBackground &&
+        newState == LCRTMConnectionAppStateForeground) {
+        [self tryConnectingWithDelay:false];
+    } else if (oldState == LCRTMConnectionAppStateForeground &&
+               newState == LCRTMConnectionAppStateBackground) {
+        [self tryCleanConnectionWithError:
+         LCError(AVIMErrorCodeConnectionLost,
+                 @"Application did enter background, connection lost.", nil)];
+        self.connectingDelayInterval = 0;
+    }
 }
 #endif
 
 #if !TARGET_OS_WATCH
-- (void)networkReachabilityStatusChanged:(LCNetworkReachabilityStatus)status
+- (void)networkReachabilityStatusChanged:(LCNetworkReachabilityStatus)newStatus
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
+    LCNetworkReachabilityStatus oldStatus = self.previousReachabilityStatus;
+    self.previousReachabilityStatus = newStatus;
+    if (oldStatus != LCNetworkReachabilityStatusNotReachable &&
+        newStatus == LCNetworkReachabilityStatusNotReachable) {
+        [self tryCleanConnectionWithError:
+         LCError(AVIMErrorCodeConnectionLost,
+                 @"Network not reachable, connection lost.", nil)];
+        self.connectingDelayInterval = 0;
+    } else if (oldStatus != newStatus &&
+               newStatus != LCNetworkReachabilityStatusNotReachable) {
+        [self tryCleanConnectionWithError:
+         LCError(AVIMErrorCodeConnectionLost,
+                 @"Network interface changed, connection lost.", nil)];
+        self.connectingDelayInterval = 0;
+        [self tryConnectingWithDelay:false];
+    }
 }
 #endif
 
@@ -696,9 +724,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
                     [delegator.delegate LCRTMConnection:self didDisconnectWithError:error];
                 });
             } else {
-                [self tryConnectingWithDelayInterval:(self.connectingFailedCount > 10
-                                                      ? [self nextConnectingDelayInterval]
-                                                      : 0)];
+                [self tryConnectingWithDelay:(self.connectingFailedCount > 10)];
             }
         } else {
             /* in connecting, just wait. */
@@ -706,7 +732,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
     });
 }
 
-- (void)tryConnectingWithDelayInterval:(NSUInteger)delayInterval
+- (void)tryConnectingWithDelay:(BOOL)delay
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
     if (![self canConnecting]) {
@@ -730,9 +756,9 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
             [ss connect];
         }
     });
-    if (delayInterval > 0) {
+    if (delay) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
-                                     NSEC_PER_SEC * delayInterval),
+                                     NSEC_PER_SEC * [self nextConnectingDelayInterval]),
                        self.serialQueue,
                        self.previousConnectingBlock);
     } else {
@@ -765,7 +791,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
                     [delegator.delegate LCRTMConnection:connection didDisconnectWithError:error];
                 });
             }
-            [connection tryConnectingWithDelayInterval:[connection nextConnectingDelayInterval]];
+            [connection tryConnectingWithDelay:true];
         }
     }];
 }
@@ -853,6 +879,25 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
                 [delegator.delegate LCRTMConnection:self didDisconnectWithError:error];
             });
         }
+    }
+}
+
+- (void)handleGoaway:(AVIMGenericCommand *)inCommand
+{
+    NSParameterAssert([self assertSpecificSerialQueue]);
+    if (inCommand.cmd == AVIMCommandType_Goaway) {
+        NSError *error;
+        [[LCRouter sharedInstance] cleanCacheWithApplication:self.application
+                                                         key:RouterCacheKeyRTM
+                                                       error:&error];
+        if (error) {
+            // TODO: log
+        }
+        [self tryCleanConnectionWithError:
+         LCError(AVIMErrorCodeConnectionLost,
+                 @"Connection did close by remote peer.", nil)];
+        self.connectingDelayInterval = 0;
+        [self tryConnectingWithDelay:false];
     }
 }
 
