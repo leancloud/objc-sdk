@@ -106,6 +106,12 @@ typedef void(^LCRTMConnectionOutCommandCallback)(AVIMGenericCommand * _Nullable 
 
 - (void)removeDelegatorWithServiceConsumer:(LCRTMServiceConsumer *)serviceConsumer;
 
+- (void)sendCommand:(AVIMGenericCommand *)command
+            service:(LCRTMService)service
+             peerID:(NSString *)peerID
+            onQueue:(dispatch_queue_t _Nullable)queue
+           callback:(LCRTMConnectionOutCommandCallback _Nullable)callback;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -46,21 +46,22 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 @interface LCRTMConnectionOutCommand : NSObject
 
 @property (nonatomic, readonly) NSString *peerID;
-@property (nonatomic) AVIMGenericCommand *command;
-@property (nonatomic, nullable) dispatch_queue_t callingQueue;
-@property (nonatomic, nullable) NSMutableArray<LCRTMConnectionOutCommandCallback> *callbacks;
-@property (nonatomic, nullable) NSDate *expiration;
+@property (nonatomic, readonly) AVIMGenericCommand *command;
+@property (nonatomic, readonly) dispatch_queue_t callingQueue;
+@property (nonatomic, readonly) NSMutableArray<LCRTMConnectionOutCommandCallback> *callbacks;
+@property (nonatomic, readonly) NSDate *expiration;
 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;
 
 - (instancetype)initWithPeerID:(NSString *)peerID
                        command:(AVIMGenericCommand *)command
-                  callingQueue:(dispatch_queue_t _Nullable)callingQueue
-                      callback:(LCRTMConnectionOutCommandCallback _Nullable)callback NS_DESIGNATED_INITIALIZER;
+                  callingQueue:(dispatch_queue_t)callingQueue
+                      callback:(LCRTMConnectionOutCommandCallback)callback NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)microIdempotentFor:(AVIMGenericCommand *)outCommand
-                      from:(NSString *)peerID;
+                      from:(NSString *)peerID
+                     queue:(dispatch_queue_t)queue;
 
 @end
 
@@ -87,7 +88,11 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 
 - (BOOL)tryThrottling:(AVIMGenericCommand *)outCommand
                  from:(NSString *)peerID
+                queue:(dispatch_queue_t)queue
              callback:(LCRTMConnectionOutCommandCallback)callback;
+
+- (void)appendOutCommand:(LCRTMConnectionOutCommand *)outCommand
+                   index:(NSNumber *)index;
 
 - (void)handleCallbackCommand:(AVIMGenericCommand *)inCommand;
 
@@ -110,7 +115,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 @property (nonatomic) LCNetworkReachabilityManager *reachabilityManager;
 #endif
 @property (nonatomic) NSString *defaultInstantMessagingPeerID;
-@property (nonatomic) BOOL needPeerIDForEveryCommand;
+@property (nonatomic) BOOL needPeerIDForEveryCommandOfInstantMessaging;
 @property (nonatomic) LCRTMConnectionTimer *timer;
 @property (nonatomic) LCRTMWebSocket *socket;
 @property (nonatomic) dispatch_block_t previousConnectingBlock;
@@ -300,17 +305,18 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
         _peerID = peerID;
         _command = command;
         _callingQueue = callingQueue;
-        if (callback) {
-            _callbacks = [NSMutableArray arrayWithObject:callback];
-        }
+        _callbacks = [NSMutableArray arrayWithObject:callback];
+        _expiration = [NSDate dateWithTimeIntervalSinceNow:30.0];
     }
     return self;
 }
 
 - (BOOL)microIdempotentFor:(AVIMGenericCommand *)outCommand
                       from:(NSString *)peerID
+                     queue:(dispatch_queue_t)queue
 {
     if (![self.peerID isEqualToString:peerID] ||
+        self.callingQueue != queue ||
         outCommand.cmd == AVIMCommandType_Direct ||
         (outCommand.cmd == AVIMCommandType_Conv &&
          (outCommand.op == AVIMOpType_Start ||
@@ -321,7 +327,9 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
     if (self.command.hasI) {
         outCommand.i = self.command.i;
     }
-    return [outCommand isEqual:self.command];
+    return (outCommand.cmd == self.command.cmd &&
+            outCommand.op == self.command.op &&
+            [outCommand isEqual:self.command]);
 }
 
 @end
@@ -428,17 +436,28 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 
 - (BOOL)tryThrottling:(AVIMGenericCommand *)outCommand
                  from:(NSString *)peerID
+                queue:(dispatch_queue_t)queue
              callback:(LCRTMConnectionOutCommandCallback)callback
 {
     NSParameterAssert([self assertSpecificQueue]);
     for (NSNumber *i in self.outCommandIndexSequence) {
         LCRTMConnectionOutCommand *command = self.outCommandCollection[i];
-        if ([command microIdempotentFor:outCommand from:peerID]) {
+        if ([command microIdempotentFor:outCommand
+                                   from:peerID
+                                  queue:queue]) {
             [command.callbacks addObject:callback];
             return true;
         }
     }
     return false;
+}
+
+- (void)appendOutCommand:(LCRTMConnectionOutCommand *)outCommand
+                   index:(NSNumber *)index
+{
+    NSParameterAssert([self assertSpecificQueue]);
+    [self.outCommandIndexSequence addObject:index];
+    self.outCommandCollection[index] = outCommand;
 }
 
 - (void)handleCallbackCommand:(AVIMGenericCommand *)inCommand
@@ -522,7 +541,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
         _liveQueryDelegatorMap = [NSMutableDictionary dictionary];
         _serialQueue = dispatch_queue_create("LCRTMConnection.serialQueue", NULL);
         _defaultInstantMessagingPeerID = nil;
-        _needPeerIDForEveryCommand = false;
+        _needPeerIDForEveryCommandOfInstantMessaging = false;
         _timer = nil;
         _socket = nil;
         _previousConnectingBlock = nil;
@@ -702,13 +721,6 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 {
     dispatch_async(self.serialQueue, ^{
         if (serviceConsumer.service == LCRTMServiceInstantMessaging) {
-            if (self.defaultInstantMessagingPeerID) {
-                if (![self.defaultInstantMessagingPeerID isEqualToString:serviceConsumer.peerID]) {
-                    self.needPeerIDForEveryCommand = true;
-                }
-            } else {
-                self.defaultInstantMessagingPeerID = serviceConsumer.peerID;
-            }
             self.instantMessagingDelegatorMap[delegator.peerID] = delegator;
         } else if (serviceConsumer.service == LCRTMServiceLiveQuery) {
             self.liveQueryDelegatorMap[delegator.peerID] = delegator;
@@ -857,7 +869,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
     self.defaultInstantMessagingPeerID = nil;
-    self.needPeerIDForEveryCommand = false;
+    self.needPeerIDForEveryCommandOfInstantMessaging = false;
     if (self.previousConnectingBlock) {
         dispatch_block_cancel(self.previousConnectingBlock);
         self.previousConnectingBlock = nil;
@@ -898,6 +910,85 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
                  @"Connection did close by remote peer.", nil)];
         self.connectingDelayInterval = 0;
         [self tryConnectingWithDelay:false];
+    }
+}
+
+- (void)sendCommand:(AVIMGenericCommand *)command
+            service:(LCRTMService)service
+             peerID:(NSString *)peerID
+            onQueue:(dispatch_queue_t)queue
+           callback:(LCRTMConnectionOutCommandCallback)callback
+{
+    dispatch_async(self.serialQueue, ^{
+        if (!self.socket ||
+            !self.timer) {
+            if (queue && callback) {
+                dispatch_async(queue, ^{
+                    callback(nil, LCError(AVIMErrorCodeConnectionLost,
+                                          @"Connection lost.", nil));
+                });
+            }
+            return;
+        }
+        if (service == LCRTMServiceInstantMessaging) {
+            [self tryPadPeerID:peerID forCommand:command];
+        }
+        if (queue && callback) {
+            if ([self.timer tryThrottling:command
+                                     from:peerID
+                                    queue:queue
+                                 callback:callback]) {
+                return;
+            }
+            command.i = [self.timer nextIndex];
+        }
+        NSData *data = [command data];
+        if (!data) {
+            if (queue && callback) {
+                dispatch_async(queue, ^{
+                    callback(nil, LCError(AVIMErrorCodeInvalidCommand,
+                                          @"Serializing out command failed.", nil));
+                });
+            }
+            return;
+        } else if (data.length > (1024 * 5)) {
+            if (queue && callback) {
+                dispatch_async(queue, ^{
+                    callback(nil, LCError(AVIMErrorCodeCommandDataLengthTooLong,
+                                          @"The size of the out command should less than 5KB.", nil));
+                });
+            }
+            return;
+        }
+        if (queue && callback) {
+            [self.timer appendOutCommand:[[LCRTMConnectionOutCommand alloc]
+                                          initWithPeerID:peerID
+                                          command:command
+                                          callingQueue:queue
+                                          callback:callback]
+                                   index:@(command.i)];
+        }
+        [self.socket sendMessage:[LCRTMWebSocketMessage messageWithData:data] completion:^{
+            // TODO: log
+        }];
+    });
+}
+
+- (void)tryPadPeerID:(NSString *)peerID
+          forCommand:(AVIMGenericCommand *)command
+{
+    NSParameterAssert([self assertSpecificSerialQueue]);
+    if (command.cmd == AVIMCommandType_Session &&
+        command.op == AVIMOpType_Open) {
+        if (self.defaultInstantMessagingPeerID) {
+            if (![self.defaultInstantMessagingPeerID isEqualToString:peerID]) {
+                self.needPeerIDForEveryCommandOfInstantMessaging = true;
+            }
+        } else {
+            self.defaultInstantMessagingPeerID = peerID;
+        }
+    } else if (self.needPeerIDForEveryCommandOfInstantMessaging) {
+        command.peerId = peerID;
     }
 }
 
