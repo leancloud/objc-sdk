@@ -7,6 +7,7 @@
 //
 
 #import "LCRouter_Internal.h"
+#import "AVApplication_Internal.h"
 #import "AVUtils.h"
 #import "AVErrorUtils.h"
 #import "AVPaasClient.h"
@@ -168,6 +169,23 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
         [[NSFileManager defaultManager] removeItemAtPath:filePath error:error];
     }
+}
+
+- (void)cleanCacheWithApplication:(AVApplication *)application
+                              key:(RouterCacheKey)key
+                            error:(NSError * __autoreleasing *)error
+{
+    NSString *appID = [application identifierThrowException];
+    if (key == RouterCacheKeyApp) {
+        [self->_lock lock];
+        [self->_appRouterMap removeObjectForKey:appID];
+        [self->_lock unlock];
+    } else if (key == RouterCacheKeyRTM) {
+        [self->_lock lock];
+        [self->_RTMRouterMap removeObjectForKey:appID];
+        [self->_lock unlock];
+    }
+    [self cleanCacheWithKey:key error:error];
 }
 
 // MARK: - App Router

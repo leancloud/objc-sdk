@@ -39,6 +39,8 @@ static RouterKey RouterKeyRTMGroupUrl = @"groupUrl";
 static RouterKey RouterKeyRTMSecondary = @"secondary";
 static RouterKey RouterKeyRTMServer = @"server";
 
+@class AVApplication;
+
 @interface LCRouter ()
 
 @property (atomic, assign) BOOL isUpdatingAppRouter;
@@ -58,6 +60,10 @@ static RouterKey RouterKeyRTMServer = @"server";
 - (NSString *)batchPathForPath:(NSString *)path;
 
 + (void)customAppServerURL:(NSString *)URLString key:(RouterKey)key;
+
+- (void)cleanCacheWithApplication:(AVApplication *)application
+                              key:(RouterCacheKey)key
+                            error:(NSError * __autoreleasing *)error;
 
 /// unit test
 
