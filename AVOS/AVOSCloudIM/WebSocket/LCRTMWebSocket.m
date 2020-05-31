@@ -839,7 +839,9 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
     frame.offset += (NSUInteger)writtenBytes;
     if (frame.offset == frame.payload.length) {
         if (frame.completion) {
-            frame.completion();
+            dispatch_async(self.delegateQueue, ^{
+                frame.completion();
+            });
         }
         if (frame.opcode == LCRTMWebSocketOpcodeConnectionClose) {
             [self purgeOutputResource:true];
