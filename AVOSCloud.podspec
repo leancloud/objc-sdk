@@ -57,13 +57,11 @@ Pod::Spec.new do |s|
     'AVOS/AVOSCloud/Analytics/AVAnalytics.h',
     'AVOS/AVOSCloud/Analytics/AVAnalyticsImpl.h',
     'AVOS/AVOSCloud/Analytics/AVAnalyticsSession.h',
-    'AVOS/AVOSCloud/Utils/AVReachability.h',
     'AVOS/AVOSCloud/Analytics/AVAnalytics_Internal.h',
     'AVOS/AVOSCloud/Analytics/AVAnalyticsActivity.h',
     'AVOS/AVOSCloud/Analytics/AVAnalyticsSession.m',
     'AVOS/AVOSCloud/Analytics/AVAnalyticsImpl.m',
     'AVOS/AVOSCloud/Analytics/AVAnalyticsActivity.m',
-    'AVOS/AVOSCloud/Utils/AVReachability.m',
     'AVOS/AVOSCloud/Analytics/AVAnalytics.m'
 
   s.resources =
