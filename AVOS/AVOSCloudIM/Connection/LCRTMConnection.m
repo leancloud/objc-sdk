@@ -41,6 +41,11 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 @interface LCRTMConnectionManager ()
 
 @property (nonatomic) NSLock *lock;
+@property (nonatomic) NSMutableDictionary<NSString *, NSNumber *> *connectingDelayIntervalMap;
+
+- (NSInteger)nextConnectingDelayIntervalForApplication:(AVApplication *)application;
+
+- (void)resetConnectingDelayIntervalForApplication:(AVApplication *)application;
 
 @end
 
@@ -123,8 +128,6 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 @property (nonatomic) LCRTMWebSocket *socket;
 @property (nonatomic) dispatch_block_t previousConnectingBlock;
 @property (nonatomic) BOOL useSecondaryServer;
-@property (nonatomic) NSUInteger connectingDelayInterval;
-@property (nonatomic) NSUInteger connectingFailedCount;
 
 - (instancetype)initWithApplication:(AVApplication *)application
                            protocol:(LCIMProtocol)protocol
@@ -170,6 +173,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
     self = [super init];
     if (self) {
         _lock = [NSLock new];
+        _connectingDelayIntervalMap = [NSMutableDictionary dictionary];
         _imProtobuf3Registry = [NSMutableDictionary dictionary];
         _imProtobuf1Registry = [NSMutableDictionary dictionary];
         _liveQueryRegistry = [NSMutableDictionary dictionary];
@@ -262,6 +266,32 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
     result = block();
     [self.lock unlock];
     return result;
+}
+
+- (NSInteger)nextConnectingDelayIntervalForApplication:(AVApplication *)application
+{
+    NSString *appID = [application identifierThrowException];
+    NSInteger interval;
+    [self.lock lock];
+    interval = (self.connectingDelayIntervalMap[appID] ?: @(-2)).integerValue;
+    if (interval < 1) {
+        interval += 1;
+    } else if (interval > 15) {
+        interval = 30;
+    } else {
+        interval *= 2;
+    }
+    self.connectingDelayIntervalMap[appID] = @(interval);
+    [self.lock unlock];
+    return interval;
+}
+
+- (void)resetConnectingDelayIntervalForApplication:(AVApplication *)application
+{
+    NSString *appID = [application identifierThrowException];
+    [self.lock lock];
+    self.connectingDelayIntervalMap[appID] = @(-2);
+    [self.lock unlock];
 }
 
 - (LCRTMInstantMessagingRegistry)registryFromProtocol:(LCIMProtocol)protocol
@@ -557,8 +587,6 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
         _socket = nil;
         _previousConnectingBlock = nil;
         _useSecondaryServer = false;
-        _connectingDelayInterval = 0;
-        _connectingFailedCount = 0;
 #if DEBUG
         dispatch_queue_set_specific(_serialQueue,
                                     (__bridge void *)_serialQueue,
@@ -594,7 +622,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 #if !TARGET_OS_WATCH
         _reachabilityManager = [LCNetworkReachabilityManager manager];
         _reachabilityManager.reachabilityQueue = _serialQueue;
-        _previousReachabilityStatus = _reachabilityManager.networkReachabilityStatus;
+        _previousReachabilityStatus = [_reachabilityManager currentNetworkReachabilityStatus];
         [_reachabilityManager setReachabilityStatusChangeBlock:^(LCNetworkReachabilityStatus status) {
             [ws networkReachabilityStatusChanged:status];
         }];
@@ -640,13 +668,13 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
     self.previousAppState = newState;
     if (oldState == LCRTMConnectionAppStateBackground &&
         newState == LCRTMConnectionAppStateForeground) {
-        [self tryConnectingWithDelay:false];
+        [self tryConnecting];
     } else if (oldState == LCRTMConnectionAppStateForeground &&
                newState == LCRTMConnectionAppStateBackground) {
         [self tryCleanConnectionWithError:
          LCError(AVIMErrorCodeConnectionLost,
                  @"Application did enter background, connection lost.", nil)];
-        self.connectingDelayInterval = 0;
+        [self resetConnectingDelayInterval];
     }
 }
 #endif
@@ -662,14 +690,14 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
         [self tryCleanConnectionWithError:
          LCError(AVIMErrorCodeConnectionLost,
                  @"Network not reachable, connection lost.", nil)];
-        self.connectingDelayInterval = 0;
+        [self resetConnectingDelayInterval];
     } else if (oldStatus != newStatus &&
                newStatus != LCNetworkReachabilityStatusNotReachable) {
         [self tryCleanConnectionWithError:
          LCError(AVIMErrorCodeConnectionLost,
                  @"Network interface changed, connection lost.", nil)];
-        self.connectingDelayInterval = 0;
-        [self tryConnectingWithDelay:false];
+        [self resetConnectingDelayInterval];
+        [self tryConnecting];
     }
 }
 #endif
@@ -714,17 +742,16 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
             ![self checkEnvironment]);
 }
 
-- (NSUInteger)nextConnectingDelayInterval
+- (NSInteger)nextConnectingDelayInterval
 {
-    NSParameterAssert([self assertSpecificSerialQueue]);
-    if (self.connectingDelayInterval == 0) {
-        self.connectingDelayInterval = 1;
-    } else if (self.connectingDelayInterval > 15) {
-        self.connectingDelayInterval = 30;
-    } else {
-        self.connectingDelayInterval *= 2;
-    }
-    return self.connectingDelayInterval;
+    return [[LCRTMConnectionManager sharedManager]
+            nextConnectingDelayIntervalForApplication:self.application];
+}
+
+- (void)resetConnectingDelayInterval
+{
+    [[LCRTMConnectionManager sharedManager]
+     resetConnectingDelayIntervalForApplication:self.application];
 }
 
 - (void)connectWithServiceConsumer:(LCRTMServiceConsumer *)serviceConsumer
@@ -747,7 +774,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
                     [delegator.delegate LCRTMConnection:self didDisconnectWithError:error];
                 });
             } else {
-                [self tryConnectingWithDelay:(self.connectingFailedCount > 10)];
+                [self tryConnecting];
             }
         } else {
             /* in connecting, just wait. */
@@ -755,7 +782,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
     });
 }
 
-- (void)tryConnectingWithDelay:(BOOL)delay
+- (void)tryConnecting
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
     if (![self canConnecting]) {
@@ -779,9 +806,10 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
             [ss connect];
         }
     });
-    if (delay) {
+    NSInteger delayInterval = [self nextConnectingDelayInterval];
+    if (delayInterval > 0) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
-                                     NSEC_PER_SEC * [self nextConnectingDelayInterval]),
+                                     NSEC_PER_SEC * delayInterval),
                        self.serialQueue,
                        self.previousConnectingBlock);
     } else {
@@ -814,7 +842,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
                     [delegator.delegate LCRTMConnection:connection didDisconnectWithError:error];
                 });
             }
-            [connection tryConnectingWithDelay:true];
+            [connection tryConnecting];
         }
     }];
 }
@@ -917,8 +945,8 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
         [self tryCleanConnectionWithError:
          LCError(AVIMErrorCodeConnectionLost,
                  @"Connection did close by remote peer.", nil)];
-        self.connectingDelayInterval = 0;
-        [self tryConnectingWithDelay:false];
+        [self resetConnectingDelayInterval];
+        [self tryConnecting];
     }
 }
 
@@ -1011,8 +1039,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
     // TODO: log
     self.defaultInstantMessagingPeerID = nil;
     self.needPeerIDForEveryCommandOfInstantMessaging = false;
-    self.connectingDelayInterval = 0;
-    self.connectingFailedCount = 0;
+    [self resetConnectingDelayInterval];
     self.timer = [[LCRTMConnectionTimer alloc] initWithQueue:self.serialQueue
                                                       socket:socket];
     for (LCRTMConnectionDelegator *delegator in [self allDelegators]) {
@@ -1033,7 +1060,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
     }
     [self tryCleanConnectionWithError:error];
     self.useSecondaryServer = !self.useSecondaryServer;
-    [self tryConnectingWithDelay:true];
+    [self tryConnecting];
 }
 
 - (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didReceiveMessage:(LCRTMWebSocketMessage *)message
