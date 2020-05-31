@@ -163,8 +163,8 @@ static void LCNetworkReachabilityReleaseCallback(const void *info) {
     }
 
     _networkReachability = CFRetain(reachability);
-    self.networkReachabilityStatus = LCNetworkReachabilityStatusUnknown;
-    self.reachabilityQueue = dispatch_get_main_queue();
+    _networkReachabilityStatus = LCNetworkReachabilityStatusUnknown;
+    _reachabilityQueue = dispatch_get_main_queue();
 
     return self;
 }
@@ -200,6 +200,17 @@ static void LCNetworkReachabilityReleaseCallback(const void *info) {
 }
 
 #pragma mark -
+
+- (LCNetworkReachabilityStatus)currentNetworkReachabilityStatus {
+    SCNetworkReachabilityFlags flags;
+    if (self.networkReachability &&
+        SCNetworkReachabilityGetFlags(self.networkReachability, &flags)) {
+        self.networkReachabilityStatus = LCNetworkReachabilityStatusForFlags(flags);
+    } else {
+        self.networkReachabilityStatus = LCNetworkReachabilityStatusUnknown;
+    }
+    return self.networkReachabilityStatus;
+}
 
 - (void)startMonitoring {
     [self stopMonitoring];
