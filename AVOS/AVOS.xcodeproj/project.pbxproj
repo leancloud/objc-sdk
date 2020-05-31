@@ -791,6 +791,8 @@
 		D346057F238BE9840027E1D5 /* LCTestEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F8747A20F8B1690035C7D1 /* LCTestEnvironment.m */; };
 		D3460580238BE9880027E1D5 /* LCTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF4151FDE38EF00F932BC /* LCTestBase.swift */; };
 		D3472E1F2015CBC200AAD65F /* AVFileTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3472E1E2015CBC200AAD65F /* AVFileTestCase.swift */; };
+		D34C417E2483C3FD00CD2459 /* LCRTMConnection_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34C417D2483C3FD00CD2459 /* LCRTMConnection_Internal.h */; };
+		D34C417F2483C3FD00CD2459 /* LCRTMConnection_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34C417D2483C3FD00CD2459 /* LCRTMConnection_Internal.h */; };
 		D34EBDCD211C20FF0092A538 /* LCRouter_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */; };
 		D34EBDCE211C20FF0092A538 /* LCRouter_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */; };
 		D34EBDCF211C20FF0092A538 /* LCRouter_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */; };
@@ -1400,6 +1402,7 @@
 		D3460578238BE9390027E1D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D3460585238BEC060027E1D5 /* AVOSCloud-macOSTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVOSCloud-macOSTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		D3472E1E2015CBC200AAD65F /* AVFileTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVFileTestCase.swift; sourceTree = "<group>"; };
+		D34C417D2483C3FD00CD2459 /* LCRTMConnection_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCRTMConnection_Internal.h; sourceTree = "<group>"; };
 		D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCRouter_Internal.h; sourceTree = "<group>"; };
 		D34FD72B2068CFE900B7C11B /* AVLiveQuery_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVLiveQuery_Internal.h; sourceTree = "<group>"; };
 		D3596DAC2480EEED002D2D22 /* AVApplication_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVApplication_Internal.h; sourceTree = "<group>"; };
@@ -2400,6 +2403,7 @@
 			isa = PBXGroup;
 			children = (
 				D3700B722475244E00678B2B /* LCRTMConnection.h */,
+				D34C417D2483C3FD00CD2459 /* LCRTMConnection_Internal.h */,
 				D3700B732475244E00678B2B /* LCRTMConnection.m */,
 			);
 			path = Connection;
@@ -2477,6 +2481,7 @@
 				704F3BF91BE0D0820033245C /* AVIMVideoMessage.h in Headers */,
 				704F3BFA1BE0D0820033245C /* AVIMFileMessage.h in Headers */,
 				704F3BBE1BE0D07E0033245C /* AVIMCommon.h in Headers */,
+				D34C417F2483C3FD00CD2459 /* LCRTMConnection_Internal.h in Headers */,
 				D3700B752475244E00678B2B /* LCRTMConnection.h in Headers */,
 				D3D6E47A23544F590048E58F /* LCGPBApi.pbobjc.h in Headers */,
 				704F3BD01BE0D07F0033245C /* AVOSCloudIM.h in Headers */,
@@ -2983,6 +2988,7 @@
 				8C841C0E1A5A84C600C5C6C4 /* AVIMCommon.h in Headers */,
 				9ACE83DC1BD6420E00CE2103 /* AVIMCommandFormatter.h in Headers */,
 				834B4A9C1B94080500A7ADBC /* LCIMConversationQueryCacheStore.h in Headers */,
+				D34C417E2483C3FD00CD2459 /* LCRTMConnection_Internal.h in Headers */,
 				D3700B742475244E00678B2B /* LCRTMConnection.h in Headers */,
 				D3D6E47923544F590048E58F /* LCGPBApi.pbobjc.h in Headers */,
 				8C841C111A5A84C600C5C6C4 /* AVIMConversation.h in Headers */,
