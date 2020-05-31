@@ -8,7 +8,9 @@
 
 #import "LCNetworkStatistics.h"
 #import "LCKeyValueStore.h"
+#if !TARGET_OS_WATCH
 #import "AVAnalyticsUtils.h"
+#endif
 #import "AVPaasClient.h"
 #import "AVUtils.h"
 #import <libkern/OSAtomic.h>
@@ -118,40 +120,30 @@ static NSInteger LCNetworkStatisticsCacheSize     = 20;
 
 - (void)uploadStatisticsInfo:(NSDictionary *)statisticsInfo
 {
-    NSMutableDictionary *payloadDic = [NSMutableDictionary dictionaryWithCapacity:2];
-    
+    NSMutableDictionary *payloadDic = [NSMutableDictionary dictionary];
     if (statisticsInfo) { payloadDic[@"attributes"] = statisticsInfo; }
-    
-    NSMutableDictionary *clientDic = [NSMutableDictionary dictionaryWithCapacity:4];
-    
-    NSDictionary *deviceInfo = [AVAnalyticsUtils deviceInfo];
-    
 #if !TARGET_OS_WATCH
 #if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
+    NSMutableDictionary *clientDic = [NSMutableDictionary dictionaryWithCapacity:4];
+    NSDictionary *deviceInfo = [AVAnalyticsUtils deviceInfo];
     id deviceId = deviceInfo[@"device_id"];
     if (deviceId) { clientDic[@"id"] = deviceId; }
-#endif
-#endif
-    
     id platform = deviceInfo[@"os"];
     if (platform) { clientDic[@"platform"] = platform; }
-    
     id appVersion = deviceInfo[@"app_version"];
     if (appVersion) { clientDic[@"app_version"] = appVersion; }
-    
     id sdkVersion = deviceInfo[@"sdk_version"];
     if (sdkVersion) { clientDic[@"sdk_version"] = sdkVersion; }
-    
     payloadDic[@"client"] = clientDic;
-
+#endif
+#endif
     AVPaasClient *client = [AVPaasClient sharedInstance];
     NSURLRequest *request = [client requestWithPath:@"always_collect" method:@"POST" headers:nil parameters:payloadDic];
-
     [client
      performRequest:request
      success:^(NSHTTPURLResponse *response, id responseObject) {
-         [self statisticsInfoDidUpload];
-     }
+        [self statisticsInfoDidUpload];
+    }
      failure:nil];
 }
 

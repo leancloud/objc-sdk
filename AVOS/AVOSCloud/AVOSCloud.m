@@ -13,11 +13,11 @@
 
 #if !TARGET_OS_WATCH
 #import "AVAnalytics_Internal.h"
+#import "AVAnalyticsUtils.h"
 #endif
 
 #import "AVUtils.h"
 #include "AVOSCloud_Art.inc"
-#import "AVAnalyticsUtils.h"
 #import "LCNetworkStatistics.h"
 #import "AVObjectUtils.h"
 
@@ -41,11 +41,13 @@ static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
     const char *s = (const char *)AVOSCloud_Art_inc;
     printf("%s\n", s);
     printf("appid: %s\n", [[self getApplicationId] UTF8String]);
+#if !TARGET_OS_WATCH
     NSDictionary *dict = [AVAnalyticsUtils deviceInfo];
     for (NSString *key in dict) {
         id value = [dict objectForKey:key];
         printf("%s: %s\n", [key UTF8String], [[NSString stringWithFormat:@"%@", value] UTF8String]);
     }
+#endif
     printf("----------------------------------------------------------\n");
 }
 
