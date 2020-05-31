@@ -21,6 +21,17 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
 
 static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 
+static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState state) {
+    switch (state) {
+        case LCRTMConnectionAppStateBackground:
+            return @"background";
+        case LCRTMConnectionAppStateForeground:
+            return @"foreground";
+        default:
+            return @"";
+    }
+}
+
 @implementation LCRTMServiceConsumer
 
 - (instancetype)initWithApplication:(AVApplication *)application
@@ -258,9 +269,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 {
     self = [super init];
     if (self) {
-#if DEBUG
         _queue = queue;
-#endif
         _pingpongInterval = 180.0;
         _pingTimeout = 20.0;
         _lastPingSentTimestamp = 0;
@@ -291,7 +300,10 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 
 - (void)dealloc
 {
-    // TODO: log
+    AVLoggerInfo(AVLoggerDomainIM,
+                 @"\n%@: %p"
+                 @"\n\tdealloc.",
+                 NSStringFromClass([self class]), self);
 }
 
 - (BOOL)assertSpecificQueue
@@ -307,8 +319,23 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 - (void)receivePong
 {
     NSParameterAssert([self assertSpecificQueue]);
-    // TODO: log
+    AVLoggerDebug(AVLoggerDomainIM,
+                  @"\n%@: %p"
+                  @"\n\tpong received.",
+                  NSStringFromClass([self class]), self);
     self.lastPongReceivedTimestamp = [NSDate date].timeIntervalSince1970;
+}
+
+- (void)sendPongWithData:(NSData *)data
+{
+    NSParameterAssert([self assertSpecificQueue]);
+    [self.socket sendPong:data completion:^{
+        NSParameterAssert([self assertSpecificQueue]);
+        AVLoggerDebug(AVLoggerDomainIM,
+                      @"\n%@: %p"
+                      @"\n\tpong sent.",
+                      NSStringFromClass([self class]), self);
+    }];
 }
 
 - (void)checkCommandTimeout:(NSDate *)currentDate
@@ -352,7 +379,10 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
     if (isLastPingTimeout || shouldNextPingPong) {
         [self.socket sendPing:[NSData data] completion:^{
             NSParameterAssert([self assertSpecificQueue]);
-            // TODO: log
+            AVLoggerDebug(AVLoggerDomainIM,
+                          @"\n%@: %p"
+                          @"\n\tping sent.",
+                          NSStringFromClass([self class]), self);
             self.lastPingSentTimestamp = currentTimestamp;
         }];
     }
@@ -400,7 +430,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
     }
 }
 
-- (SInt32)nextIndex
+- (int32_t)nextIndex
 {
     NSParameterAssert([self assertSpecificQueue]);
     if (self.index == INT32_MAX) {
@@ -464,7 +494,11 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
         _protocol = protocol;
         _instantMessagingDelegatorMap = [NSMutableDictionary dictionary];
         _liveQueryDelegatorMap = [NSMutableDictionary dictionary];
-        _serialQueue = dispatch_queue_create("LCRTMConnection.serialQueue", NULL);
+        _serialQueue = dispatch_queue_create([NSString stringWithFormat:
+                                              @"LC.Objc.%@.%@",
+                                              NSStringFromClass([self class]),
+                                              keyPath(self, serialQueue)].UTF8String,
+                                             NULL);
         _defaultInstantMessagingPeerID = nil;
         _needPeerIDForEveryCommandOfInstantMessaging = false;
         _timer = nil;
@@ -518,7 +552,10 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 
 - (void)dealloc
 {
-    // TODO: log
+    AVLoggerInfo(AVLoggerDomainIM,
+                 @"\n%@: %p"
+                 @"\n\tdealloc.",
+                 NSStringFromClass([self class]), self);
 #if TARGET_OS_IOS || TARGET_OS_TV
     if (self.enterBackgroundObserver) {
         [NSNotificationCenter.defaultCenter removeObserver:self.enterBackgroundObserver];
@@ -537,7 +574,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 - (BOOL)assertSpecificSerialQueue
 {
 #if DEBUG
-    void *specificKey = (__bridge void *)_serialQueue;
+    void *specificKey = (__bridge void *)(self.serialQueue);
     return dispatch_get_specific(specificKey) == specificKey;
 #else
     return true;
@@ -548,6 +585,11 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 - (void)applicationStateChanged:(LCRTMConnectionAppState)newState
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
+    AVLoggerInfo(AVLoggerDomainIM,
+                 @"\n%@: %p"
+                 @"\n\tapplication state: %@.",
+                 NSStringFromClass([self class]), self,
+                 LCRTMStringFromConnectionAppState(newState));
     LCRTMConnectionAppState oldState = self.previousAppState;
     self.previousAppState = newState;
     if (oldState == LCRTMConnectionAppStateBackground &&
@@ -567,6 +609,11 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 - (void)networkReachabilityStatusChanged:(LCNetworkReachabilityStatus)newStatus
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
+    AVLoggerInfo(AVLoggerDomainIM,
+                 @"\n%@: %p"
+                 @"\n\tnetwork reachability status: %@.",
+                 NSStringFromClass([self class]), self,
+                 LCStringFromNetworkReachabilityStatus(newStatus));
     LCNetworkReachabilityStatus oldStatus = self.previousReachabilityStatus;
     self.previousReachabilityStatus = newStatus;
     if (oldStatus != LCNetworkReachabilityStatusNotReachable &&
@@ -762,12 +809,12 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
                     if (server) {
                         serverURL = [NSURL URLWithString:server];
                     }
-                    completion(ss,
-                               serverURL,
-                               (serverURL
-                                ? nil
-                                : LCError(AVErrorInternalErrorCodeNotFound,
-                                          @"RTM server URL not found.", nil)));
+                    NSError *error;
+                    if (!serverURL) {
+                        error = LCError(AVErrorInternalErrorCodeNotFound,
+                                        @"RTM server URL not found.", nil);
+                    }
+                    completion(ss, serverURL, error);
                 });
             }
         }];
@@ -889,9 +936,23 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
                                           callback:callback]
                                    index:@(command.i)];
         }
-        [self.socket sendMessage:[LCRTMWebSocketMessage messageWithData:data] completion:^{
-            NSParameterAssert([self assertSpecificSerialQueue]);
-            // TODO: log
+#if DEBUG
+        void *specificKey = (__bridge void *)(self.serialQueue);
+#endif
+        LCRTMWebSocket *socket = self.socket;
+        [socket sendMessage:[LCRTMWebSocketMessage messageWithData:data] completion:^{
+#if DEBUG
+            assert(dispatch_get_specific(specificKey) == specificKey);
+#endif
+            AVLoggerDebug(AVLoggerDomainIM,
+                          @"\n------ BEGIN LeanCloud Out Command"
+                          @"\n%@: %p"
+                          @"\nService: %d"
+                          @"\nPID: %@"
+                          @"\n%@"
+                          @"\n------ END",
+                          NSStringFromClass([socket class]), socket,
+                          service, peerID, command);
         }];
     });
 }
@@ -920,7 +981,11 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
     NSParameterAssert(self.socket == socket && !self.timer);
-    // TODO: log
+    AVLoggerDebug(AVLoggerDomainIM,
+                  @"\n%@: %p"
+                  @"\n\tdid open with request: %@",
+                  NSStringFromClass([socket class]), socket,
+                  socket.request);
     self.defaultInstantMessagingPeerID = nil;
     self.needPeerIDForEveryCommandOfInstantMessaging = false;
     [self resetConnectingDelayInterval];
@@ -937,11 +1002,15 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
     NSParameterAssert(self.socket == socket);
-    // TODO: log
     if (!error) {
         error = LCError(AVIMErrorCodeConnectionLost,
                         @"Connection did close by remote peer.", nil);
     }
+    AVLoggerError(AVLoggerDomainIM,
+                  @"\n%@: %p"
+                  @"\n\tdid close with error: %@",
+                  NSStringFromClass([socket class]), socket,
+                  error);
     [self tryCleanConnectionWithError:error];
     self.useSecondaryServer = !self.useSecondaryServer;
     [self tryConnecting];
@@ -960,7 +1029,13 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
             AVLoggerError(AVLoggerDomainIM, @"%@", error);
             return;
         }
-        // TODO: log
+        AVLoggerDebug(AVLoggerDomainIM,
+                      @"\n------ BEGIN LeanCloud In Command"
+                      @"\n%@: %p"
+                      @"\n%@"
+                      @"\n------ END",
+                      NSStringFromClass([socket class]), socket,
+                      inCommand);
         if (inCommand.hasI) {
             [self.timer handleCallbackCommand:inCommand];
         } else {
@@ -995,10 +1070,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
     NSParameterAssert(self.socket == socket && self.timer);
-    [self.socket sendPong:data completion:^{
-        NSParameterAssert([self assertSpecificSerialQueue]);
-        // TODO: log
-    }];
+    [self.timer sendPongWithData:data];
 }
 
 - (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didReceivePong:(NSData *)data

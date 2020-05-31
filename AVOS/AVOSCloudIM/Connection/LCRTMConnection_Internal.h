@@ -23,10 +23,16 @@ typedef NS_ENUM(NSUInteger, LCRTMConnectionAppState) {
 };
 #endif
 
+typedef NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, LCRTMConnection *> *> * LCRTMInstantMessagingRegistry;
+typedef NSMutableDictionary<NSString *, LCRTMConnection *> * LCRTMLiveQueryRegistryRegistry;
+
 @interface LCRTMConnectionManager ()
 
 @property (nonatomic) NSLock *lock;
 @property (nonatomic) NSMutableDictionary<NSString *, NSNumber *> *connectingDelayIntervalMap;
+@property (nonatomic) LCRTMInstantMessagingRegistry imProtobuf3Registry;
+@property (nonatomic) LCRTMInstantMessagingRegistry imProtobuf1Registry;
+@property (nonatomic) LCRTMLiveQueryRegistryRegistry liveQueryRegistry;
 
 - (NSInteger)nextConnectingDelayIntervalForApplication:(AVApplication *)application;
 
@@ -58,6 +64,7 @@ typedef NS_ENUM(NSUInteger, LCRTMConnectionAppState) {
 
 @interface LCRTMConnectionTimer : NSObject
 
+@property (nonatomic, readonly) dispatch_queue_t queue;
 @property (nonatomic, readonly) NSTimeInterval pingpongInterval;
 @property (nonatomic, readonly) NSTimeInterval pingTimeout;
 @property (nonatomic) NSTimeInterval lastPingSentTimestamp;
@@ -66,10 +73,7 @@ typedef NS_ENUM(NSUInteger, LCRTMConnectionAppState) {
 @property (nonatomic) LCRTMWebSocket *socket;
 @property (nonatomic) NSMutableArray<NSNumber *> *outCommandIndexSequence;
 @property (nonatomic) NSMutableDictionary<NSNumber *, LCRTMConnectionOutCommand *> *outCommandCollection;
-@property (nonatomic) SInt32 index;
-#if DEBUG
-@property (nonatomic, readonly) dispatch_queue_t queue;
-#endif
+@property (nonatomic) int32_t index;
 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;
@@ -78,6 +82,7 @@ typedef NS_ENUM(NSUInteger, LCRTMConnectionAppState) {
                        socket:(LCRTMWebSocket *)socket NS_DESIGNATED_INITIALIZER;
 
 - (void)receivePong;
+- (void)sendPongWithData:(NSData *)data;
 
 - (BOOL)tryThrottling:(AVIMGenericCommand *)outCommand
                  from:(NSString *)peerID
@@ -89,7 +94,7 @@ typedef NS_ENUM(NSUInteger, LCRTMConnectionAppState) {
 
 - (void)handleCallbackCommand:(AVIMGenericCommand *)inCommand;
 
-- (SInt32)nextIndex;
+- (int32_t)nextIndex;
 
 - (void)cleanInCurrentQueue:(BOOL)inCurrentQueue;
 
@@ -98,6 +103,8 @@ typedef NS_ENUM(NSUInteger, LCRTMConnectionAppState) {
 @interface LCRTMConnection () <LCRTMWebSocketDelegate>
 
 @property (nonatomic) dispatch_queue_t serialQueue;
+@property (nonatomic) NSMutableDictionary<NSString *, LCRTMConnectionDelegator *> *instantMessagingDelegatorMap;
+@property (nonatomic) NSMutableDictionary<NSString *, LCRTMConnectionDelegator *> *liveQueryDelegatorMap;
 #if TARGET_OS_IOS || TARGET_OS_TV
 @property (nonatomic) LCRTMConnectionAppState previousAppState;
 @property (nonatomic) id<NSObject> enterBackgroundObserver;

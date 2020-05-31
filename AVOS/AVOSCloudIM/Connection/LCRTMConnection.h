@@ -23,8 +23,6 @@ typedef NSString * LCIMProtocol NS_STRING_ENUM;
 FOUNDATION_EXPORT LCIMProtocol const LCIMProtocol3;
 FOUNDATION_EXPORT LCIMProtocol const LCIMProtocol1;
 
-typedef NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, LCRTMConnection *> *> * LCRTMInstantMessagingRegistry;
-typedef NSMutableDictionary<NSString *, LCRTMConnection *> * LCRTMLiveQueryRegistryRegistry;
 typedef void(^LCRTMConnectionOutCommandCallback)(AVIMGenericCommand * _Nullable inCommand, NSError * _Nullable error);
 
 @interface LCRTMServiceConsumer : NSObject
@@ -47,10 +45,6 @@ typedef void(^LCRTMConnectionOutCommandCallback)(AVIMGenericCommand * _Nullable 
 @interface LCRTMConnectionManager : NSObject
 
 + (instancetype)sharedManager;
-
-@property (nonatomic) LCRTMInstantMessagingRegistry imProtobuf3Registry;
-@property (nonatomic) LCRTMInstantMessagingRegistry imProtobuf1Registry;
-@property (nonatomic) LCRTMLiveQueryRegistryRegistry liveQueryRegistry;
 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;
@@ -95,8 +89,6 @@ typedef void(^LCRTMConnectionOutCommandCallback)(AVIMGenericCommand * _Nullable 
 
 @property (nonatomic, readonly) AVApplication *application;
 @property (nonatomic, readonly) LCIMProtocol protocol;
-@property (nonatomic) NSMutableDictionary<NSString *, LCRTMConnectionDelegator *> *instantMessagingDelegatorMap;
-@property (nonatomic) NSMutableDictionary<NSString *, LCRTMConnectionDelegator *> *liveQueryDelegatorMap;
 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;
