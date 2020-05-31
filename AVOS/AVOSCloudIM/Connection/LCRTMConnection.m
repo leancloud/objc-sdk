@@ -11,6 +11,7 @@
 
 #import "AVApplication_Internal.h"
 #import "LCRouter_Internal.h"
+#import "AVLogger.h"
 #import "AVUtils.h"
 #import "AVErrorUtils.h"
 #import "AVOSCloudIM.h"
@@ -72,7 +73,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 @property (nonatomic) NSTimeInterval lastPingSentTimestamp;
 @property (nonatomic) NSTimeInterval lastPongReceivedTimestamp;
 @property (nonatomic) dispatch_source_t source;
-@property (nonatomic, readonly) LCRTMWebSocket *socket;
+@property (nonatomic) LCRTMWebSocket *socket;
 @property (nonatomic) NSMutableArray<NSNumber *> *outCommandIndexSequence;
 @property (nonatomic) NSMutableDictionary<NSNumber *, LCRTMConnectionOutCommand *> *outCommandCollection;
 @property (nonatomic) SInt32 index;
@@ -85,6 +86,8 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 
 - (instancetype)initWithQueue:(dispatch_queue_t)queue
                        socket:(LCRTMWebSocket *)socket NS_DESIGNATED_INITIALIZER;
+
+- (void)receivePong;
 
 - (BOOL)tryThrottling:(AVIMGenericCommand *)outCommand
                  from:(NSString *)peerID
@@ -387,6 +390,13 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 #endif
 }
 
+- (void)receivePong
+{
+    NSParameterAssert([self assertSpecificQueue]);
+    // TODO: log
+    self.lastPongReceivedTimestamp = [NSDate date].timeIntervalSince1970;
+}
+
 - (void)checkCommandTimeout:(NSDate *)currentDate
 {
     NSParameterAssert([self assertSpecificQueue]);
@@ -426,10 +436,10 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
     BOOL shouldNextPingPong = (!isPingSentAndPongNotReceived &&
                                (currentTimestamp > self.lastPongReceivedTimestamp + self.pingpongInterval));
     if (isLastPingTimeout || shouldNextPingPong) {
-        __weak typeof(self) ws = self;
         [self.socket sendPing:[NSData data] completion:^{
+            NSParameterAssert([self assertSpecificQueue]);
             // TODO: log
-            ws.lastPingSentTimestamp = currentTimestamp;
+            self.lastPingSentTimestamp = currentTimestamp;
         }];
     }
 }
@@ -494,6 +504,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
             dispatch_source_cancel(self.source);
             self.source = nil;
         }
+        self.socket = nil;
         if (self.outCommandIndexSequence.count > 0) {
             NSError *error = LCError(AVIMErrorCodeConnectionLost,
                                      @"Connection lost.", nil);
@@ -868,8 +879,6 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 - (void)tryCleanConnectionWithError:(NSError *)error
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
-    self.defaultInstantMessagingPeerID = nil;
-    self.needPeerIDForEveryCommandOfInstantMessaging = false;
     if (self.previousConnectingBlock) {
         dispatch_block_cancel(self.previousConnectingBlock);
         self.previousConnectingBlock = nil;
@@ -903,7 +912,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
                                                          key:RouterCacheKeyRTM
                                                        error:&error];
         if (error) {
-            // TODO: log
+            AVLoggerError(AVLoggerDomainIM, @"%@", error);
         }
         [self tryCleanConnectionWithError:
          LCError(AVIMErrorCodeConnectionLost,
@@ -969,6 +978,7 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
                                    index:@(command.i)];
         }
         [self.socket sendMessage:[LCRTMWebSocketMessage messageWithData:data] completion:^{
+            NSParameterAssert([self assertSpecificSerialQueue]);
             // TODO: log
         }];
     });
@@ -997,27 +1007,94 @@ static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 - (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didOpenWithProtocol:(NSString *)protocol
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
+    NSParameterAssert(self.socket == socket && !self.timer);
+    // TODO: log
+    self.defaultInstantMessagingPeerID = nil;
+    self.needPeerIDForEveryCommandOfInstantMessaging = false;
+    self.connectingDelayInterval = 0;
+    self.connectingFailedCount = 0;
+    self.timer = [[LCRTMConnectionTimer alloc] initWithQueue:self.serialQueue
+                                                      socket:socket];
+    for (LCRTMConnectionDelegator *delegator in [self allDelegators]) {
+        dispatch_async(delegator.queue, ^{
+            [delegator.delegate LCRTMConnectionDidConnect:self];
+        });
+    }
 }
 
 - (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didCloseWithError:(NSError *)error
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
+    NSParameterAssert(self.socket == socket);
+    // TODO: log
+    if (!error) {
+        error = LCError(AVIMErrorCodeConnectionLost,
+                        @"Connection did close by remote peer.", nil);
+    }
+    [self tryCleanConnectionWithError:error];
     self.useSecondaryServer = !self.useSecondaryServer;
+    [self tryConnectingWithDelay:true];
 }
 
 - (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didReceiveMessage:(LCRTMWebSocketMessage *)message
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
+    NSParameterAssert(self.socket == socket && self.timer);
+    if (message.type == LCRTMWebSocketMessageTypeData &&
+        message.data) {
+        NSError *error;
+        AVIMGenericCommand *inCommand = [AVIMGenericCommand parseFromData:message.data
+                                                                    error:&error];
+        if (error) {
+            AVLoggerError(AVLoggerDomainIM, @"%@", error);
+            return;
+        }
+        // TODO: log
+        if (inCommand.hasI) {
+            [self.timer handleCallbackCommand:inCommand];
+        } else {
+            LCRTMConnectionDelegator *delegator;
+            if (inCommand.service == LCRTMServiceInstantMessaging) {
+                NSString *peerID = (inCommand.hasPeerId
+                                    ? inCommand.peerId
+                                    : self.defaultInstantMessagingPeerID);
+                if (peerID) {
+                    delegator = self.instantMessagingDelegatorMap[peerID];
+                }
+            } else if (inCommand.service == LCRTMServiceLiveQuery) {
+                NSString *installationID = (inCommand.hasInstallationId
+                                            ? inCommand.installationId
+                                            : nil);
+                if (installationID) {
+                    delegator = self.liveQueryDelegatorMap[installationID];
+                }
+            }
+            if (delegator) {
+                dispatch_async(delegator.queue, ^{
+                    [delegator.delegate LCRTMConnection:self
+                                      didReceiveCommand:inCommand];
+                });
+            }
+        }
+        [self handleGoaway:inCommand];
+    }
 }
 
 - (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didReceivePing:(NSData *)data
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
+    NSParameterAssert(self.socket == socket && self.timer);
+    [self.socket sendPong:data completion:^{
+        NSParameterAssert([self assertSpecificSerialQueue]);
+        // TODO: log
+    }];
 }
 
 - (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didReceivePong:(NSData *)data
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
+    NSParameterAssert(self.socket == socket && self.timer);
+    [self.timer receivePong];
 }
 
 @end

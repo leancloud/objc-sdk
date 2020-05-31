@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class LCRTMConnection;
 @class AVApplication;
 
-typedef NS_ENUM(NSUInteger, LCRTMService) {
+typedef NS_ENUM(int32_t, LCRTMService) {
     LCRTMServiceLiveQuery = 1,
     LCRTMServiceInstantMessaging = 2,
 };
