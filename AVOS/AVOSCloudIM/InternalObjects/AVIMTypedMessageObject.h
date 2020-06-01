@@ -11,7 +11,7 @@
 
 @interface AVIMTypedMessageObject : AVIMDynamicObject
 
-@property(nonatomic, assign) int8_t         _lctype;
+@property(nonatomic, assign) int32_t        _lctype;
 @property(nonatomic,   copy) NSString      *_lctext;
 @property(nonatomic, strong) NSDictionary  *_lcfile;
 @property(nonatomic, strong) NSDictionary  *_lcloc;

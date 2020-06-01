@@ -724,7 +724,8 @@ static void setter_fAtomic(id self, SEL _cmd, float value) {
 }
 
 - (id)objectForKey:(NSString *)key {
-    return [_localData objectForKey:key];
+    id object = [_localData objectForKey:key];
+    return [object isEqual:[NSNull null]] ? nil : object;
 }
 
 - (id)objectForKeyedSubscript:(NSString *)key {

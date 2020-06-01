@@ -101,8 +101,14 @@ NSMutableDictionary const *_typeDict = nil;
     Class class = [self classForMediaType:mediaType];
     AVIMTypedMessage *message = [[class alloc] init];
     message.messageObject = messageObject;
-    message.file = [self fileFromDictionary:messageObject._lcfile];
-    message.location = [self locationFromDictionary:messageObject._lcloc];
+    id lcfile = messageObject._lcfile;
+    if ([lcfile isKindOfClass:[NSDictionary class]]) {
+        message.file = [self fileFromDictionary:lcfile];
+    }
+    id lcloc = messageObject._lcloc;
+    if ([lcloc isKindOfClass:[NSDictionary class]]) {
+        message.location = [self locationFromDictionary:lcloc];
+    }
     return message;
 }
 
@@ -142,8 +148,14 @@ NSMutableDictionary const *_typeDict = nil;
         NSData *data = [coder decodeObjectForKey:@"typedMessage"];
         AVIMTypedMessageObject *object = [[AVIMTypedMessageObject alloc] initWithMessagePack:data];
         self.messageObject = object;
-        self.file = [[self class] fileFromDictionary:object._lcfile];
-        self.location = [[self class] locationFromDictionary:object._lcloc];
+        id lcfile = object._lcfile;
+        if ([lcfile isKindOfClass:[NSDictionary class]]) {
+            self.file = [[self class] fileFromDictionary:lcfile];
+        }
+        id lcloc = object._lcloc;
+        if ([lcloc isKindOfClass:[NSDictionary class]]) {
+            self.location = [[self class] locationFromDictionary:lcloc];
+        }
     }
     return self;
 }
@@ -164,7 +176,8 @@ NSMutableDictionary const *_typeDict = nil;
 }
 
 - (NSString *)text {
-    return self.messageObject._lctext;
+    NSString *text = self.messageObject._lctext;
+    return [text isKindOfClass:[NSString class]] ? text : nil;
 }
 
 - (void)setText:(NSString *)text {
@@ -172,7 +185,8 @@ NSMutableDictionary const *_typeDict = nil;
 }
 
 - (NSDictionary *)attributes {
-    return self.messageObject._lcattrs;
+    NSDictionary *lcattrs = self.messageObject._lcattrs;
+    return [lcattrs isKindOfClass:[NSDictionary class]] ? lcattrs : nil;
 }
 
 - (void)setAttributes:(NSDictionary *)attributes {
@@ -185,8 +199,9 @@ NSMutableDictionary const *_typeDict = nil;
 
     NSDictionary *dictionary = self.messageObject._lcfile;
 
-    if (dictionary)
+    if ([dictionary isKindOfClass:[NSDictionary class]]) {
         return [[AVFile alloc] initWithRawJSONData:dictionary.mutableCopy];
+    }
 
     return nil;
 }
@@ -202,8 +217,9 @@ NSMutableDictionary const *_typeDict = nil;
 
     NSDictionary *dictionary = self.messageObject._lcloc;
 
-    if (dictionary)
+    if ([dictionary isKindOfClass:[NSDictionary class]]) {
         return [AVGeoPoint geoPointFromDictionary:dictionary];
+    }
 
     return nil;
 }

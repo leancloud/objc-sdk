@@ -11,7 +11,7 @@
 
 @implementation AVIMTypedMessageObject
 
-LC_FORWARD_PROPERTY_ACCESSOR_NUMBER         (_lctype,  set_lctype, int8_t)
+LC_FORWARD_PROPERTY_ACCESSOR_NUMBER         (_lctype,  set_lctype, int32_t)
 LC_FORWARD_PROPERTY_ACCESSOR_OBJECT_COPY    (_lctext,  set_lctext)
 LC_FORWARD_PROPERTY_ACCESSOR_OBJECT         (_lcfile,  set_lcfile)
 LC_FORWARD_PROPERTY_ACCESSOR_OBJECT         (_lcattrs, set_lcattrs)
