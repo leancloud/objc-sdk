@@ -507,7 +507,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     int64_t msgTimestamp = [NSNumber _lc_decoding:rawJSONData key:AVIMConversationKeyLastMessageTimestamp].longLongValue;
     if (msgContent && msgId && msgFrom && msgTimestamp) {
         AVIMTypedMessageObject *typedMessageObject = [[AVIMTypedMessageObject alloc] initWithJSON:msgContent];
-        if (typedMessageObject.isValidTypedMessageObject) {
+        if ([typedMessageObject isValidTypedMessageObject]) {
             lastMessage = [AVIMTypedMessage messageWithMessageObject:typedMessageObject];
         } else {
             lastMessage = [[AVIMMessage alloc] init];
@@ -2960,7 +2960,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     AVIMMessage *message = ({
         AVIMMessage *message = nil;
         AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:content];
-        if (messageObject.isValidTypedMessageObject) {
+        if ([messageObject isValidTypedMessageObject]) {
             message = [AVIMTypedMessage messageWithMessageObject:messageObject];
         } else {
             message = [[AVIMMessage alloc] init];
@@ -3023,7 +3023,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             NSString *fromId = (unreadTuple.hasFrom ? unreadTuple.from : nil);
             if (content && messageId && timestamp && fromId) {
                 AVIMTypedMessageObject *typedMessageObject = [[AVIMTypedMessageObject alloc] initWithJSON:content];
-                if (typedMessageObject.isValidTypedMessageObject) {
+                if ([typedMessageObject isValidTypedMessageObject]) {
                     lastMessage = [AVIMTypedMessage messageWithMessageObject:typedMessageObject];
                 } else {
                     lastMessage = [[AVIMMessage alloc] init];

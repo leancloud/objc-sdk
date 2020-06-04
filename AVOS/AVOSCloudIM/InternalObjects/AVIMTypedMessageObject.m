@@ -8,34 +8,57 @@
 
 #import "AVIMTypedMessageObject.h"
 #import "AVIMTypedMessage_Internal.h"
+#import "AVUtils.h"
 
 @implementation AVIMTypedMessageObject
 
-LC_FORWARD_PROPERTY_ACCESSOR_NUMBER         (_lctype,  set_lctype, int32_t)
-LC_FORWARD_PROPERTY_ACCESSOR_OBJECT_COPY    (_lctext,  set_lctext)
-LC_FORWARD_PROPERTY_ACCESSOR_OBJECT         (_lcfile,  set_lcfile)
-LC_FORWARD_PROPERTY_ACCESSOR_OBJECT         (_lcattrs, set_lcattrs)
-LC_FORWARD_PROPERTY_ACCESSOR_OBJECT         (_lcloc,   set_lcloc)
+- (int32_t)_lctype {
+    return [NSNumber _lc_decoding:self.localData key:@"_lctype"].intValue;
+}
 
-- (BOOL)isValidTypedMessageObject {
-    BOOL hasTypeKey = [self hasKey:@"_lctype"];
-    if (!hasTypeKey) {
-        return NO;
-    }
-    id type = [self objectForKey:@"_lctype"];
-    if (![type isKindOfClass:[NSNumber class]]) {
-        return NO;
-    }
-    __block BOOL isSupportedThisVersion = NO;
-    [_typeDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        if ([key intValue] == [type intValue]) {
-            isSupportedThisVersion = YES;
-            *stop = YES;
-            return;
-        }
-    }];
-    BOOL isValidTypedMessageObject = hasTypeKey && isSupportedThisVersion;
-    return isValidTypedMessageObject;
+- (void)set_lctype:(int32_t)_lctype {
+    [self setObject:@(_lctype) forKey:@"_lctype"];
+}
+
+- (NSString *)_lctext {
+    return [NSString _lc_decoding:self.localData key:@"_lctext"];
+}
+
+- (void)set_lctext:(NSString *)_lctext {
+    [self setObject:_lctext forKey:@"_lctext"];
+}
+
+- (NSDictionary *)_lcfile {
+    return [NSDictionary _lc_decoding:self.localData key:@"_lcfile"];
+}
+
+- (void)set_lcfile:(NSDictionary *)_lcfile {
+    [self setObject:_lcfile forKey:@"_lcfile"];
+}
+
+- (NSDictionary *)_lcattrs {
+    return [NSDictionary _lc_decoding:self.localData key:@"_lcattrs"];
+}
+
+- (void)set_lcattrs:(NSDictionary *)_lcattrs {
+    [self setObject:_lcattrs forKey:@"_lcattrs"];
+}
+
+- (NSDictionary *)_lcloc {
+    return [NSDictionary _lc_decoding:self.localData key:@"_lcloc"];
+}
+
+- (void)set_lcloc:(NSDictionary *)_lcloc {
+    [self setObject:_lcloc forKey:@"_lcloc"];
+}
+
+- (BOOL)isValidTypedMessageObject
+{
+    NSNumber *typeNumber = [NSNumber _lc_decoding:self.localData
+                                              key:@"_lctype"];
+    return (typeNumber
+            ? ([_typeDict objectForKey:typeNumber])
+            : false);
 }
 
 @end

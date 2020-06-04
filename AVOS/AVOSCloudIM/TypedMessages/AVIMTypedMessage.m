@@ -13,30 +13,26 @@
 #import "AVIMGeneralObject.h"
 #import "AVIMMessage_Internal.h"
 #import "AVFile_Internal.h"
+#import "AVGeoPoint_Internal.h"
 
-NSMutableDictionary const *_typeDict = nil;
-
-@interface AVGeoPoint ()
-
-+(NSDictionary *)dictionaryFromGeoPoint:(AVGeoPoint *)point;
-+(AVGeoPoint *)geoPointFromDictionary:(NSDictionary *)dict;
-
-@end
+NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
 
 @implementation AVIMTypedMessage
 
 @synthesize file = _file;
 @synthesize location = _location;
 
-+ (void)registerSubclass {
++ (void)registerSubclass
+{
     if ([self conformsToProtocol:@protocol(AVIMTypedMessageSubclassing)]) {
         Class<AVIMTypedMessageSubclassing> class = self;
-        AVIMMessageMediaType mediaType = [class classMediaType];
-        [self registerClass:class forMediaType:mediaType];
+        [self registerClass:class
+               forMediaType:[class classMediaType]];
     }
 }
 
-+ (Class)classForMediaType:(AVIMMessageMediaType)mediaType {
++ (Class)classForMediaType:(AVIMMessageMediaType)mediaType
+{
     Class class = [_typeDict objectForKey:@(mediaType)];
     if (!class) {
         class = [AVIMTypedMessage class];
@@ -44,13 +40,17 @@ NSMutableDictionary const *_typeDict = nil;
     return class;
 }
 
-+ (void)registerClass:(Class)class forMediaType:(AVIMMessageMediaType)mediaType {
++ (void)registerClass:(Class)class
+         forMediaType:(AVIMMessageMediaType)mediaType
+{
     if (!_typeDict) {
-        _typeDict = [[NSMutableDictionary alloc] init];
+        _typeDict = [NSMutableDictionary dictionary];
     }
-    Class c = [_typeDict objectForKey:@(mediaType)];
-    if (!c || [class isSubclassOfClass:c]) {
-        [_typeDict setObject:class forKey:@(mediaType)];
+    NSNumber *mediaTypeNumber = @(mediaType);
+    Class typeClass = [_typeDict objectForKey:mediaTypeNumber];
+    if (!typeClass ||
+        [class isSubclassOfClass:typeClass]) {
+        [_typeDict setObject:class forKey:mediaTypeNumber];
     }
 }
 
@@ -58,23 +58,22 @@ NSMutableDictionary const *_typeDict = nil;
                attachedFilePath:(NSString *)attachedFilePath
                      attributes:(NSDictionary *)attributes
 {
-    NSError *error = nil;
-    
-    AVFile *file = [AVFile fileWithLocalPath:attachedFilePath error:&error];
-    
+    NSError *error;
+    AVFile *file = [AVFile fileWithLocalPath:attachedFilePath
+                                       error:&error];
     if (error) {
-        
-        AVLoggerError(AVLoggerDomainStorage, @"Error: %@", error);
-        
+        AVLoggerError(AVLoggerDomainIM, @"%@", error);
         return nil;
     }
-    
-    return [self messageWithText:text file:file attributes:attributes];
+    return [self messageWithText:text
+                            file:file
+                      attributes:attributes];
 }
 
 + (instancetype)messageWithText:(NSString *)text
                            file:(AVFile *)file
-                     attributes:(NSDictionary *)attributes {
+                     attributes:(NSDictionary *)attributes
+{
     AVIMTypedMessage *message = [[self alloc] init];
     message.text = text;
     message.attributes = attributes;
@@ -82,42 +81,29 @@ NSMutableDictionary const *_typeDict = nil;
     return message;
 }
 
-+ (AVFile *)fileFromDictionary:(NSDictionary *)dictionary {
++ (AVFile *)fileFromDictionary:(NSDictionary *)dictionary
+{
     return dictionary ? [[AVFile alloc] initWithRawJSONData:dictionary.mutableCopy] : nil;
 }
 
-+ (AVGeoPoint *)locationFromDictionary:(NSDictionary *)dictionary {
-    if (dictionary) {
-        AVIMGeneralObject *object = [[AVIMGeneralObject alloc] initWithDictionary:dictionary];
-        AVGeoPoint *location = [AVGeoPoint geoPointWithLatitude:object.latitude longitude:object.longitude];
-        return location;
-    } else {
-        return nil;
-    }
++ (AVGeoPoint *)locationFromDictionary:(NSDictionary *)dictionary
+{
+    return dictionary ? [AVGeoPoint geoPointFromDictionary:dictionary] : nil;
 }
 
-+ (instancetype)messageWithMessageObject:(AVIMTypedMessageObject *)messageObject {
++ (instancetype)messageWithMessageObject:(AVIMTypedMessageObject *)messageObject
+{
     AVIMMessageMediaType mediaType = messageObject._lctype;
     Class class = [self classForMediaType:mediaType];
     AVIMTypedMessage *message = [[class alloc] init];
     message.messageObject = messageObject;
-    id lcfile = messageObject._lcfile;
-    if ([lcfile isKindOfClass:[NSDictionary class]]) {
-        message.file = [self fileFromDictionary:lcfile];
-    }
-    id lcloc = messageObject._lcloc;
-    if ([lcloc isKindOfClass:[NSDictionary class]]) {
-        message.location = [self locationFromDictionary:lcloc];
-    }
+    [message setFileIvar:[self fileFromDictionary:messageObject._lcfile]];
+    [message setLocationIvar:[self locationFromDictionary:messageObject._lcloc]];
     return message;
 }
 
-+ (instancetype)messageWithDictionary:(NSDictionary *)dictionary {
-    AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithDictionary:dictionary];
-    return [self messageWithMessageObject:messageObject];
-}
-
-- (id)copyWithZone:(NSZone *)zone {
+- (id)copyWithZone:(NSZone *)zone
+{
     AVIMTypedMessage *message = [super copyWithZone:zone];
     if (message) {
         message.messageObject = self.messageObject;
@@ -127,17 +113,23 @@ NSMutableDictionary const *_typeDict = nil;
     return message;
 }
 
-- (void)encodeWithCoder:(NSCoder *)coder {
+- (void)encodeWithCoder:(NSCoder *)coder
+{
     [super encodeWithCoder:coder];
     NSData *data = [self.messageObject messagePack];
-    [coder encodeObject:data forKey:@"typedMessage"];
+    if (data) {
+        [coder encodeObject:data forKey:@"typedMessage"];
+    }
 }
 
-- (instancetype)init {
+- (instancetype)init
+{
     if (![self conformsToProtocol:@protocol(AVIMTypedMessageSubclassing)]) {
-        [NSException raise:@"AVIMNotSubclassException" format:@"Class does not conform AVIMTypedMessageSubclassing protocol."];
+        [NSException raise:NSInternalInconsistencyException
+                    format:@"This Class does not conform `AVIMTypedMessageSubclassing` protocol."];
     }
-    if ((self = [super init])) {
+    self = [super init];
+    if (self) {
         self.mediaType = [[self class] classMediaType];
     }
     return self;
@@ -160,90 +152,141 @@ NSMutableDictionary const *_typeDict = nil;
     return self;
 }
 
-- (AVIMTypedMessageObject *)messageObject {
+- (AVIMTypedMessageObject *)messageObject
+{
     if (!_messageObject) {
         _messageObject = [[AVIMTypedMessageObject alloc] init];
     }
     return _messageObject;
 }
 
-- (AVIMMessageMediaType)mediaType {
+- (AVIMMessageMediaType)mediaType
+{
     return self.messageObject._lctype;
 }
 
-- (void)setMediaType:(AVIMMessageMediaType)mediaType {
+- (void)setMediaType:(AVIMMessageMediaType)mediaType
+{
     self.messageObject._lctype = mediaType;
 }
 
-- (NSString *)text {
-    NSString *text = self.messageObject._lctext;
-    return [text isKindOfClass:[NSString class]] ? text : nil;
+- (NSString *)text
+{
+    return self.messageObject._lctext;
 }
 
-- (void)setText:(NSString *)text {
+- (void)setText:(NSString *)text
+{
     self.messageObject._lctext = text;
 }
 
-- (NSDictionary *)attributes {
-    NSDictionary *lcattrs = self.messageObject._lcattrs;
-    return [lcattrs isKindOfClass:[NSDictionary class]] ? lcattrs : nil;
+- (NSDictionary *)attributes
+{
+    return self.messageObject._lcattrs;
 }
 
-- (void)setAttributes:(NSDictionary *)attributes {
+- (void)setAttributes:(NSDictionary *)attributes
+{
     self.messageObject._lcattrs = attributes;
 }
 
-- (AVFile *)file {
-    if (_file)
+- (AVFile *)file
+{
+    if (_file) {
         return _file;
-
+    }
     NSDictionary *dictionary = self.messageObject._lcfile;
-
-    if ([dictionary isKindOfClass:[NSDictionary class]]) {
-        return [[AVFile alloc] initWithRawJSONData:dictionary.mutableCopy];
+    if (dictionary) {
+        _file = [[AVFile alloc] initWithRawJSONData:dictionary.mutableCopy];
     }
-
-    return nil;
+    return _file;
 }
 
-- (void)setFile:(AVFile *)file {
+- (void)setFile:(AVFile *)file
+{
     _file = file;
-    self.messageObject._lcfile = file ? [file rawJSONDataCopy] : nil;
-}
-
-- (AVGeoPoint *)location {
-    if (_location)
-        return _location;
-
-    NSDictionary *dictionary = self.messageObject._lcloc;
-
-    if ([dictionary isKindOfClass:[NSDictionary class]]) {
-        return [AVGeoPoint geoPointFromDictionary:dictionary];
+    if (file) {
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+        NSString *objectId = file.objectId;
+        if (objectId) {
+            dictionary[@"objId"] = objectId;
+        }
+        NSString *url = file.url;
+        if (url) {
+            dictionary[@"url"] = url;
+        }
+        NSMutableDictionary *metaData = file.metaData.mutableCopy;
+        NSString *name = file.name;
+        if (metaData || name) {
+            if (!metaData) {
+                metaData = [NSMutableDictionary dictionary];
+            }
+            if (name) {
+                metaData[@"name"] = name;
+            }
+            dictionary[@"metaData"] = metaData;
+        }
+        if (dictionary.count > 0) {
+            self.messageObject._lcfile = dictionary;
+        } else {
+            self.messageObject._lcfile = nil;
+        }
+    } else {
+        self.messageObject._lcfile = nil;
     }
-
-    return nil;
 }
 
-- (void)setLocation:(AVGeoPoint *)location {
+- (void)setFileIvar:(AVFile *)file
+{
+    _file = file;
+}
+
+- (AVGeoPoint *)location
+{
+    if (_location) {
+        return _location;
+    }
+    NSDictionary *dictionary = self.messageObject._lcloc;
+    if (dictionary) {
+        _location = [AVGeoPoint geoPointFromDictionary:dictionary];
+    }
+    return _location;
+}
+
+- (void)setLocation:(AVGeoPoint *)location
+{
     _location = location;
-    self.messageObject._lcloc = location ? [AVGeoPoint dictionaryFromGeoPoint:location] : nil;
+    if (location) {
+        self.messageObject._lcloc = @{
+            @"latitude": @(location.latitude),
+            @"longitude": @(location.longitude),
+        };
+    } else {
+        self.messageObject._lcloc = nil;
+    }
 }
 
-- (void)setObject:(id)object forKey:(NSString *)key {
+- (void)setLocationIvar:(AVGeoPoint *)location
+{
+    _location = location;
+}
+
+- (void)setObject:(id)object forKey:(NSString *)key
+{
     [self.messageObject setObject:object forKey:key];
 }
 
-- (id)objectForKey:(NSString *)key {
+- (id)objectForKey:(NSString *)key
+{
     return [self.messageObject objectForKey:key];
 }
 
-- (NSString *)payload {
-    NSDictionary *dict = [self.messageObject dictionary];
-
-    if (dict.count > 0) {
+- (NSString *)payload
+{
+    if (self.messageObject.localData.count > 0) {
         return [self.messageObject JSONString];
     } else {
-        return self.content;
+        return [super payload];
     }
 }
 

@@ -27,10 +27,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface AVIMTypedMessage : AVIMMessage
 
-@property (nonatomic,   copy, nullable)           NSString             *text;       // 消息文本
-@property (nonatomic, strong, nullable)           NSDictionary         *attributes; // 自定义属性
-@property (nonatomic, strong, readonly, nullable) AVFile               *file;       // 附件
-@property (nonatomic, strong, readonly, nullable) AVGeoPoint           *location;   // 位置
+@property (nonatomic, nullable)           NSString             *text;       // 消息文本
+@property (nonatomic, nullable)           NSDictionary         *attributes; // 自定义属性
+@property (nonatomic, readonly, nullable) AVFile               *file;       // 附件
+@property (nonatomic, readonly, nullable) AVGeoPoint           *location;   // 位置
 
 /**
  * Add custom property for message.

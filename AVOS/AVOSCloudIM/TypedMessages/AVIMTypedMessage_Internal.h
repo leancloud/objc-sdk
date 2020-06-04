@@ -10,17 +10,14 @@
 #import "AVIMTypedMessageObject.h"
 #import "AVIMMessage_Internal.h"
 
-extern NSMutableDictionary const *_typeDict;
+extern NSMutableDictionary<NSNumber *, Class> const *_typeDict;
 
 @interface AVIMTypedMessage ()
 
-@property (nonatomic, strong) AVFile *file;
-@property (nonatomic, strong) AVGeoPoint *location;
-@property (nonatomic, strong) AVIMTypedMessageObject *messageObject;
-
-+ (Class)classForMediaType:(AVIMMessageMediaType)mediaType;
+@property (nonatomic) AVFile *file;
+@property (nonatomic) AVGeoPoint *location;
+@property (nonatomic) AVIMTypedMessageObject *messageObject;
 
 + (instancetype)messageWithMessageObject:(AVIMTypedMessageObject *)messageObject;
-+ (instancetype)messageWithDictionary:(NSDictionary *)dictionary;
 
 @end
