@@ -10,7 +10,7 @@
 #import "AVMPMessagePack.h"
 
 @implementation AVIMDynamicObject {
-    NSMutableDictionary *_localData;
+    NSMutableDictionary<NSString *, id> *_localData;
 }
 
 - (instancetype)init
@@ -26,7 +26,8 @@
 {
     self = [super init];
     if (self) {
-        _localData = [dictionary mutableCopy];
+        _localData = ([dictionary mutableCopy]
+                      ?: [NSMutableDictionary dictionary]);
     }
     return self;
 }
@@ -35,7 +36,8 @@
 {
     self = [super init];
     if (self) {
-        _localData = mutableDictionary;
+        _localData = (mutableDictionary
+                      ?: [NSMutableDictionary dictionary]);
     }
     return self;
 }
@@ -47,26 +49,31 @@
         return nil;
     }
     NSError *error;
-    NSMutableDictionary *dic = [NSJSONSerialization JSONObjectWithData:data
-                                                               options:NSJSONReadingMutableContainers
-                                                                 error:&error];
+    NSMutableDictionary *mutableDictionary = ({
+        [NSJSONSerialization JSONObjectWithData:data
+                                        options:NSJSONReadingMutableContainers
+                                          error:&error];
+    });
     if (error) {
         return nil;
     }
-    return ([dic isKindOfClass:[NSDictionary class]]
-            ? [self initWithMutableDictionary:dic]
+    return ([mutableDictionary isKindOfClass:[NSDictionary class]]
+            ? [self initWithMutableDictionary:mutableDictionary]
             : nil);
 }
 
 - (instancetype)initWithMessagePack:(NSData *)data
 {
+    if (!data) {
+        return nil;
+    }
     NSDictionary *dic = [AVMPMessagePackReader readData:data options:0 error:nil];
     return ([dic isKindOfClass:[NSDictionary class]]
             ? [self initWithDictionary:dic]
             : nil);
 }
 
-- (NSMutableDictionary *)localData
+- (NSMutableDictionary<NSString *, id> *)localData
 {
     return _localData;
 }
@@ -81,7 +88,7 @@
     if (![key isKindOfClass:[NSString class]]) {
         return nil;
     }
-    id object = [_localData objectForKey:key];
+    id object = [self.localData objectForKey:key];
     return [object isEqual:[NSNull null]] ? nil : object;
 }
 
@@ -96,7 +103,7 @@
         return;
     }
     if (object && ![object isEqual:[NSNull null]]) {
-        [_localData setObject:object forKey:key];
+        [self.localData setObject:object forKey:key];
     } else {
         [self removeObjectForKey:key];
     }
@@ -112,7 +119,7 @@
     if (![key isKindOfClass:[NSString class]]) {
         return;
     }
-    [_localData removeObjectForKey:key];
+    [self.localData removeObjectForKey:key];
 }
 
 - (NSDictionary *)rawDictionary
@@ -127,23 +134,23 @@
         return nil;
     }
     [visitedObjects addObject:self];
-    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-    for (NSString *key in _localData) {
-        id object = [_localData objectForKey:key];
+    NSMutableDictionary *mutableDictionary = [NSMutableDictionary dictionary];
+    for (NSString *key in self.localData) {
+        id object = [self.localData objectForKey:key];
         if (object) {
             if ([object isKindOfClass:[AVIMDynamicObject class]]) {
-                NSDictionary *childDic = [object rawDictionaryWithVisitedObjects:visitedObjects];
-                if (childDic) {
-                    [dic setObject:childDic forKey:key];
+                NSDictionary *childDictionary = [object rawDictionaryWithVisitedObjects:visitedObjects];
+                if (childDictionary) {
+                    [mutableDictionary setObject:childDictionary forKey:key];
                 }
             } else if ([object isEqual:[NSNull null]]) {
                 /* remove null */
             } else {
-                [dic setObject:object forKey:key];
+                [mutableDictionary setObject:object forKey:key];
             }
         }
     }
-    return dic;
+    return mutableDictionary;
 }
 
 - (NSString *)JSONString

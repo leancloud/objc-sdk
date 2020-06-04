@@ -62,7 +62,7 @@
 
 @interface AVIMDynamicObject : NSObject
 
-@property (nonatomic, readonly) NSMutableDictionary *localData;
+@property (nonatomic, readonly) NSMutableDictionary<NSString *, id> *localData;
 
 - (instancetype)initWithJSON:(NSString *)json;
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;

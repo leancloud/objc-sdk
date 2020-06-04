@@ -7,7 +7,6 @@
 //
 
 #import "AVIMMessage.h"
-#import "AVMPMessagePack.h"
 #import "AVIMMessageObject.h"
 #import "AVIMMessage_Internal.h"
 #import "AVIMConversation_Internal.h"
