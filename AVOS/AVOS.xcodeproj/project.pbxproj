@@ -2097,8 +2097,6 @@
 			children = (
 				9AD392481BFD7BE600D28074 /* MessagesProtoOrig.pbobjc.h */,
 				9AD392491BFD7BE600D28074 /* MessagesProtoOrig.pbobjc.m */,
-				9AD392401BFC395200D28074 /* AVIMConversationOutCommand.h */,
-				9AD392411BFC395200D28074 /* AVIMConversationOutCommand.m */,
 				9AD392441BFC411300D28074 /* AVIMGenericCommand+AVIMMessagesAdditions.h */,
 				9AD392451BFC411300D28074 /* AVIMGenericCommand+AVIMMessagesAdditions.m */,
 				9A7C67D51C3FDD1D00B08D4F /* AVIMDirectCommand+DirectCommandAdditions.h */,
@@ -2106,8 +2104,6 @@
 				9ACE83DA1BD6420E00CE2103 /* AVIMCommandFormatter.h */,
 				9ACE83DB1BD6420E00CE2103 /* AVIMCommandFormatter.m */,
 				9AD143771BD8C6CE0022652C /* AVIMCommandCommon.h */,
-				9AD651D31BD9470900C55F85 /* AVIMDynamicObject.h */,
-				9AD651D41BD9470900C55F85 /* AVIMDynamicObject.m */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -2178,6 +2174,10 @@
 		8CA1571C1A5E8556003C2532 /* InternalObjects */ = {
 			isa = PBXGroup;
 			children = (
+				9AD651D31BD9470900C55F85 /* AVIMDynamicObject.h */,
+				9AD651D41BD9470900C55F85 /* AVIMDynamicObject.m */,
+				9AD392401BFC395200D28074 /* AVIMConversationOutCommand.h */,
+				9AD392411BFC395200D28074 /* AVIMConversationOutCommand.m */,
 				8CA1571D1A5E8556003C2532 /* AVIMTypedMessageObject.h */,
 				8CA1571E1A5E8556003C2532 /* AVIMTypedMessageObject.m */,
 				8C2FED521A67C2DA0056F945 /* AVIMGeneralObject.h */,
