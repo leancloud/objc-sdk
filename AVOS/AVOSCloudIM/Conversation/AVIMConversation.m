@@ -1375,9 +1375,10 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     switch (typedMessage.mediaType) {
         case kAVIMMessageMediaTypeImage:
         {
-            id image = nil;
+            double width;
+            double height;
 #if TARGET_OS_IOS || TARGET_OS_TV || TARGET_OS_WATCH
-            image = ({
+            UIImage *image = ({
                 UIImage *image = nil;
                 NSString *cachedPath = file.persistentCachePath;
                 if ([[NSFileManager defaultManager] fileExistsAtPath:cachedPath]) {
@@ -1386,8 +1387,10 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                 }
                 image;
             });
-#else
-            image = ({
+            width = image.size.width * image.scale;
+            height = image.size.height * image.scale;
+#elif TARGET_OS_OSX
+            NSImage *image = ({
                 NSImage *image = nil;
                 NSString *cachedPath = file.persistentCachePath;
                 if ([[NSFileManager defaultManager] fileExistsAtPath:cachedPath]) {
@@ -1396,16 +1399,8 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                 }
                 image;
             });
-#endif
-            if (!image) { break; }
-            CGFloat width;
-            CGFloat height;
-#if TARGET_OS_IOS || TARGET_OS_TV || TARGET_OS_WATCH
-            width = [(UIImage *)image size].width;
-            height = [(UIImage *)image size].height;
-#else
-            width = [(NSImage *)image size].width;
-            height = [(NSImage *)image size].height;
+            width = image.size.width;
+            height = image.size.height;
 #endif
             AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] init];
             metaData.height = height;
@@ -1418,7 +1413,8 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         }
             break;
         case kAVIMMessageMediaTypeAudio:
-        case kAVIMMessageMediaTypeVideo: {
+        case kAVIMMessageMediaTypeVideo:
+        {
             NSString *path = file.persistentCachePath;
             /* If audio file not found, no meta data */
             if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
@@ -1438,7 +1434,8 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         }
             break;
         case kAVIMMessageMediaTypeFile:
-        default: {
+        default:
+        {
             /* 文件消息或扩展的文件消息 */
             object.name = file.name;
             /* Compatibility with IM protocol */
