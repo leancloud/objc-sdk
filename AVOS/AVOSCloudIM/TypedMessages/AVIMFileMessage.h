@@ -11,9 +11,18 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- *  文件消息类
+ *  File Message.
  */
 @interface AVIMFileMessage : AVIMTypedMessage <AVIMTypedMessageSubclassing>
+
+/// File size in bytes.
+@property (nonatomic, readonly) double size;
+
+/// File URL string.
+@property (nonatomic, readonly, nullable) NSString *url;
+
+/// Audio format, mp3, aac, etc. Simply get it by the file extension.
+@property (nonatomic, readonly, nullable) NSString *format;
 
 @end
 

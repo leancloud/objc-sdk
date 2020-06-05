@@ -80,7 +80,7 @@
 
 - (BOOL)hasKey:(NSString *)key
 {
-    return ([self objectForKey:key]);
+    return [self objectForKey:key] ? true : false;
 }
 
 - (id)objectForKey:(NSString *)key

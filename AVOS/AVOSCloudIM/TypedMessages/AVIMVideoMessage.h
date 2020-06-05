@@ -16,13 +16,16 @@ NS_ASSUME_NONNULL_BEGIN
 @interface AVIMVideoMessage : AVIMTypedMessage <AVIMTypedMessageSubclassing>
 
 /// File size in bytes.
-@property(nonatomic, assign, readonly) uint64_t size;
+@property (nonatomic, readonly) double size;
 
 /// Duration of the video in seconds.
-@property(nonatomic, assign, readonly) float duration;
+@property (nonatomic, readonly) double duration;
+
+/// File URL string.
+@property (nonatomic, readonly, nullable) NSString *url;
 
 /// Video format, mp4, m4v, etc. Simply get it from the file extension.
-@property(nonatomic, copy, readonly, nullable) NSString *format;
+@property (nonatomic, readonly, nullable) NSString *format;
 
 @end
 

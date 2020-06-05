@@ -6,14 +6,9 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import <AVOSCloud/AVOSCloud.h>
-
-#import "AVIMTypedMessage.h"
 #import "AVIMTypedMessage_Internal.h"
-#import "AVIMGeneralObject.h"
 #import "AVIMMessage_Internal.h"
-#import "AVFile_Internal.h"
-#import "AVGeoPoint_Internal.h"
+#import "AVUtils.h"
 
 NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
 
@@ -102,26 +97,6 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
     return message;
 }
 
-- (id)copyWithZone:(NSZone *)zone
-{
-    AVIMTypedMessage *message = [super copyWithZone:zone];
-    if (message) {
-        message.messageObject = self.messageObject;
-        message.file = self.file;
-        message.location = self.location;
-    }
-    return message;
-}
-
-- (void)encodeWithCoder:(NSCoder *)coder
-{
-    [super encodeWithCoder:coder];
-    NSData *data = [self.messageObject messagePack];
-    if (data) {
-        [coder encodeObject:data forKey:@"typedMessage"];
-    }
-}
-
 - (instancetype)init
 {
     if (![self conformsToProtocol:@protocol(AVIMTypedMessageSubclassing)]) {
@@ -135,21 +110,39 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)coder {
-    if ((self = [super initWithCoder:coder])) {
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [super encodeWithCoder:coder];
+    NSData *data = [self.messageObject messagePack];
+    if (data) {
+        [coder encodeObject:data forKey:@"typedMessage"];
+    }
+}
+
+- (id)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
         NSData *data = [coder decodeObjectForKey:@"typedMessage"];
-        AVIMTypedMessageObject *object = [[AVIMTypedMessageObject alloc] initWithMessagePack:data];
-        self.messageObject = object;
-        id lcfile = object._lcfile;
-        if ([lcfile isKindOfClass:[NSDictionary class]]) {
-            self.file = [[self class] fileFromDictionary:lcfile];
-        }
-        id lcloc = object._lcloc;
-        if ([lcloc isKindOfClass:[NSDictionary class]]) {
-            self.location = [[self class] locationFromDictionary:lcloc];
+        if (data) {
+            AVIMTypedMessageObject *object = [[AVIMTypedMessageObject alloc] initWithMessagePack:data];
+            self.messageObject = object;
+            [self setFileIvar:[[self class] fileFromDictionary:object._lcfile]];
+            [self setLocationIvar:[[self class] locationFromDictionary:object._lcloc]];
         }
     }
     return self;
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    AVIMTypedMessage *message = [super copyWithZone:zone];
+    if (message) {
+        message.messageObject = self.messageObject;
+        message.file = self.file;
+        message.location = self.location;
+    }
+    return message;
 }
 
 - (AVIMTypedMessageObject *)messageObject
@@ -239,6 +232,57 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
 - (void)setFileIvar:(AVFile *)file
 {
     _file = file;
+}
+
+- (NSString *)decodingUrl
+{
+    return ([NSString _lc_decoding:self.messageObject._lcfile
+                               key:@"url"] ?:
+            _file.url);
+}
+
+- (NSDictionary *)decodingMetaData
+{
+    return ([NSDictionary _lc_decoding:self.messageObject._lcfile
+                                   key:@"metaData"] ?:
+            _file.metaData);
+}
+
+- (NSString *)decodingName
+{
+    return ([NSString _lc_decoding:[self decodingMetaData]
+                               key:@"name"] ?:
+            _file.name);
+}
+
+- (NSString *)decodingFormat
+{
+    return [NSString _lc_decoding:[self decodingMetaData]
+                              key:@"format"];
+}
+
+- (double)decodingSize
+{
+    return [NSNumber _lc_decoding:[self decodingMetaData]
+                              key:@"size"].doubleValue;
+}
+
+- (double)decodingWidth
+{
+    return [NSNumber _lc_decoding:[self decodingMetaData]
+                              key:@"width"].doubleValue;
+}
+
+- (double)decodingHeight
+{
+    return [NSNumber _lc_decoding:[self decodingMetaData]
+                              key:@"height"].doubleValue;
+}
+
+- (double)decodingDuration
+{
+    return [NSNumber _lc_decoding:[self decodingMetaData]
+                              key:@"duration"].doubleValue;
 }
 
 - (AVGeoPoint *)location

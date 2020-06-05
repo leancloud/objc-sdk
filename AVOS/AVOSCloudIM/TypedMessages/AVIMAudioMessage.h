@@ -16,13 +16,16 @@ NS_ASSUME_NONNULL_BEGIN
 @interface AVIMAudioMessage : AVIMTypedMessage <AVIMTypedMessageSubclassing>
 
 /// File size in bytes.
-@property(nonatomic, assign, readonly) uint64_t size;
+@property (nonatomic, readonly) double size;
 
 /// Audio's duration in seconds.
-@property(nonatomic, assign, readonly) float duration;
+@property (nonatomic, readonly) double duration;
+
+/// File URL string.
+@property (nonatomic, readonly, nullable) NSString *url;
 
 /// Audio format, mp3, aac, etc. Simply get it by the file extension.
-@property(nonatomic, copy, readonly, nullable) NSString *format;
+@property (nonatomic, readonly, nullable) NSString *format;
 
 @end
 

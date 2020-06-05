@@ -14,23 +14,32 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol AVIMTypedMessageSubclassing <NSObject>
+
 @required
-/*!
- 子类实现此方法用于返回该类对应的消息类型
- @return 消息类型
- */
+
+/// The type of the typed message,
+/// The zero and negative number is reserved for default typed message,
+/// Any other typed message should use positive number.
 + (AVIMMessageMediaType)classMediaType;
+
 @end
 
 /**
- *  Base class for rich media message.
+ * Base class for rich media message.
  */
 @interface AVIMTypedMessage : AVIMMessage
 
-@property (nonatomic, nullable)           NSString             *text;       // 消息文本
-@property (nonatomic, nullable)           NSDictionary         *attributes; // 自定义属性
-@property (nonatomic, readonly, nullable) AVFile               *file;       // 附件
-@property (nonatomic, readonly, nullable) AVGeoPoint           *location;   // 位置
+/// The string text.
+@property (nonatomic, nullable) NSString *text;
+
+/// The custom attributes.
+@property (nonatomic, nullable) NSDictionary *attributes;
+
+/// The file.
+@property (nonatomic, nullable) AVFile *file;
+
+/// The location.
+@property (nonatomic, nullable) AVGeoPoint *location;
 
 /**
  * Add custom property for message.
@@ -38,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param object The property value.
  * @param key    The property name.
  */
-- (void)setObject:(nullable id)object forKey:(NSString *)key;
+- (void)setObject:(id _Nullable)object forKey:(NSString *)key;
 
 /**
  Get a user-defiend property for a key.
@@ -46,22 +55,18 @@ NS_ASSUME_NONNULL_BEGIN
  @param key The key of property that you want to get.
  @return The value for key.
  */
-- (nullable id)objectForKey:(NSString *)key;
+- (id _Nullable)objectForKey:(NSString *)key;
 
-/**
- *  子类调用此方法进行注册，一般可在子类的 [+(void)load] 方法里面调用
- */
+/// Any custom typed message should be registered at first.
 + (void)registerSubclass;
 
-/*!
- 使用本地文件，创建消息。
- @param text － 消息文本。
- @param attachedFilePath － 本地文件路径。
- @param attributes － 用户附加属性。
- */
-+ (instancetype)messageWithText:(nullable NSString *)text
+/// Create a message with file from local path.
+/// @param text The string text.
+/// @param attachedFilePath The local path of the file.
+/// @param attributes The custom attributes.
++ (instancetype)messageWithText:(NSString * _Nullable)text
                attachedFilePath:(NSString *)attachedFilePath
-                     attributes:(nullable NSDictionary *)attributes;
+                     attributes:(NSDictionary * _Nullable)attributes;
 
 /*!
  使用 AVFile，创建消息。
@@ -69,9 +74,9 @@ NS_ASSUME_NONNULL_BEGIN
  @param file － AVFile 对象。
  @param attributes － 用户附加属性。
  */
-+ (instancetype)messageWithText:(nullable NSString *)text
++ (instancetype)messageWithText:(NSString * _Nullable)text
                            file:(AVFile *)file
-                     attributes:(nullable NSDictionary *)attributes;
+                     attributes:(NSDictionary * _Nullable)attributes;
 
 @end
 

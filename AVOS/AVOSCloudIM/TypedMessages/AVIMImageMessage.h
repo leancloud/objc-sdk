@@ -16,16 +16,19 @@ NS_ASSUME_NONNULL_BEGIN
 @interface AVIMImageMessage : AVIMTypedMessage <AVIMTypedMessageSubclassing>
 
 /// Width of the image in pixels.
-@property(nonatomic, assign, readonly) uint width;
+@property (nonatomic, readonly) double width;
 
 /// Height of the image in pixels.
-@property(nonatomic, assign, readonly) uint height;
+@property (nonatomic, readonly) double height;
 
 /// File size in bytes.
-@property(nonatomic, assign, readonly) uint64_t size;
+@property (nonatomic, readonly) double size;
+
+/// File URL string.
+@property (nonatomic, readonly, nullable) NSString *url;
 
 /// Image format, png, jpg, etc. Simply get it from the file extension.
-@property(nonatomic, copy, readonly, nullable) NSString *format;
+@property (nonatomic, readonly, nullable) NSString *format;
 
 @end
 
