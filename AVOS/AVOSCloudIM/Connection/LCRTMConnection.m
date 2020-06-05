@@ -21,6 +21,7 @@ LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
 
 static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
 
+#if TARGET_OS_IOS || TARGET_OS_TV
 static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState state) {
     switch (state) {
         case LCRTMConnectionAppStateBackground:
@@ -31,6 +32,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             return @"";
     }
 }
+#endif
 
 @implementation LCRTMServiceConsumer
 
