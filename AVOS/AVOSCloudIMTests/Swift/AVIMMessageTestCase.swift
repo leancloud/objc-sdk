@@ -282,8 +282,8 @@ class AVIMMessageTestCase: LCIMTestBase {
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let text: String = "test"
-                let latitude: CGFloat = 22
-                let longitude: CGFloat = 33
+                let latitude = 22.0
+                let longitude = 33.0
                 let locationMessage: AVIMLocationMessage = AVIMLocationMessage.init(text: text, latitude: latitude, longitude: longitude, attributes: nil)
                 
                 semaphore.increment(2)
@@ -415,7 +415,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(message.readTimestamp == 0)
                     XCTAssertFalse(message.transient)
                     XCTAssertNil(message.updatedAt)
-                    XCTAssertEqual((message as? AVIMImageMessage)?.size ?? 0, UInt64(dataTuple.data.count))
+                    XCTAssertEqual((message as? AVIMImageMessage)?.size ?? 0, Double(dataTuple.data.count))
                     XCTAssertTrue(((message as? AVIMImageMessage)?.height ?? 0) > 0)
                     XCTAssertTrue(((message as? AVIMImageMessage)?.width ?? 0) > 0)
                     XCTAssertEqual((message as? AVIMImageMessage)?.format, (dataTuple.name as NSString).pathExtension)
@@ -447,7 +447,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(imageMessage.readTimestamp == 0)
                     XCTAssertFalse(imageMessage.transient)
                     XCTAssertNil(imageMessage.updatedAt)
-                    XCTAssertEqual(imageMessage.size, UInt64(dataTuple.data.count))
+                    XCTAssertEqual(imageMessage.size, Double(dataTuple.data.count))
                     XCTAssertTrue(imageMessage.height > 0)
                     XCTAssertTrue(imageMessage.width > 0)
                     XCTAssertEqual(imageMessage.format, (dataTuple.name as NSString).pathExtension)
@@ -542,7 +542,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(message.readTimestamp == 0)
                     XCTAssertFalse(message.transient)
                     XCTAssertNil(message.updatedAt)
-                    XCTAssertEqual((message as? AVIMAudioMessage)?.size ?? 0, UInt64(dataTuple.data.count))
+                    XCTAssertEqual((message as? AVIMAudioMessage)?.size ?? 0, Double(dataTuple.data.count))
                     XCTAssertTrue(((message as? AVIMAudioMessage)?.duration ?? 0) > 0)
                     XCTAssertEqual((message as? AVIMAudioMessage)?.format, (dataTuple.name as NSString).pathExtension)
                     let file: AVFile? = message.file
@@ -573,7 +573,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(audioMessage.readTimestamp == 0)
                     XCTAssertFalse(audioMessage.transient)
                     XCTAssertNil(audioMessage.updatedAt)
-                    XCTAssertEqual(audioMessage.size, UInt64(dataTuple.data.count))
+                    XCTAssertEqual(audioMessage.size, Double(dataTuple.data.count))
                     XCTAssertTrue(audioMessage.duration > 0)
                     XCTAssertEqual(audioMessage.format, (dataTuple.name as NSString).pathExtension)
                 })
@@ -667,7 +667,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(message.readTimestamp == 0)
                     XCTAssertFalse(message.transient)
                     XCTAssertNil(message.updatedAt)
-                    XCTAssertEqual((message as? AVIMVideoMessage)?.size ?? 0, UInt64(dataTuple.data.count))
+                    XCTAssertEqual((message as? AVIMVideoMessage)?.size ?? 0, Double(dataTuple.data.count))
                     XCTAssertTrue(((message as? AVIMVideoMessage)?.duration ?? 0) > 0)
                     XCTAssertEqual((message as? AVIMVideoMessage)?.format, (dataTuple.name as NSString).pathExtension)
                     let file: AVFile? = message.file
@@ -698,7 +698,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(videoMessage.readTimestamp == 0)
                     XCTAssertFalse(videoMessage.transient)
                     XCTAssertNil(videoMessage.updatedAt)
-                    XCTAssertEqual(videoMessage.size, UInt64(dataTuple.data.count))
+                    XCTAssertEqual(videoMessage.size, Double(dataTuple.data.count))
                     XCTAssertTrue(videoMessage.duration > 0)
                     XCTAssertEqual(videoMessage.format, (dataTuple.name as NSString).pathExtension)
                 })
