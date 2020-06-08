@@ -31,8 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param longitude The longitude of GeoPoint.
 /// @param attributes The custom attributes.
 + (instancetype)messageWithText:(NSString * _Nullable)text
-                       latitude:(CGFloat)latitude
-                      longitude:(CGFloat)longitude
+                       latitude:(double)latitude
+                      longitude:(double)longitude
                      attributes:(NSDictionary * _Nullable)attributes;
 
 @end

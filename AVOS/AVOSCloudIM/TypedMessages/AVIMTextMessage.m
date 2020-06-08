@@ -26,7 +26,9 @@
 {
     AVIMTextMessage *message = [[self alloc] init];
     message.text = text;
-    message.attributes = attributes;
+    if (attributes) {
+        message.attributes = attributes;
+    }
     return message;
 }
 

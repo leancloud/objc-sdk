@@ -68,12 +68,10 @@ NS_ASSUME_NONNULL_BEGIN
                attachedFilePath:(NSString *)attachedFilePath
                      attributes:(NSDictionary * _Nullable)attributes;
 
-/*!
- 使用 AVFile，创建消息。
- @param text － 消息文本。
- @param file － AVFile 对象。
- @param attributes － 用户附加属性。
- */
+/// Create a message with text, file and attributes.
+/// @param text The string text.
+/// @param file The file object.
+/// @param attributes The custom attributes.
 + (instancetype)messageWithText:(NSString * _Nullable)text
                            file:(AVFile *)file
                      attributes:(NSDictionary * _Nullable)attributes;

@@ -23,13 +23,17 @@
 }
 
 + (instancetype)messageWithText:(NSString *)text
-                       latitude:(CGFloat)latitude
-                      longitude:(CGFloat)longitude
+                       latitude:(double)latitude
+                      longitude:(double)longitude
                      attributes:(NSDictionary *)attributes
 {
     AVIMLocationMessage *message = [[self alloc] init];
-    message.text = text;
-    message.attributes = attributes;
+    if (text) {
+        message.text = text;
+    }
+    if (attributes) {
+        message.attributes = attributes;
+    }
     AVGeoPoint *location = [AVGeoPoint geoPointWithLatitude:latitude
                                                   longitude:longitude];
     message.location = location;

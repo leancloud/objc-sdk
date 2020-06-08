@@ -70,8 +70,12 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
                      attributes:(NSDictionary *)attributes
 {
     AVIMTypedMessage *message = [[self alloc] init];
-    message.text = text;
-    message.attributes = attributes;
+    if (text) {
+        message.text = text;
+    }
+    if (attributes) {
+        message.attributes = attributes;
+    }
     message.file = file;
     return message;
 }
@@ -91,7 +95,7 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
     AVIMMessageMediaType mediaType = messageObject._lctype;
     Class class = [self classForMediaType:mediaType];
     AVIMTypedMessage *message = [[class alloc] init];
-    message.messageObject = messageObject;
+    [message setMessageObject:messageObject];
     [message setFileIvar:[self fileFromDictionary:messageObject._lcfile]];
     [message setLocationIvar:[self locationFromDictionary:messageObject._lcloc]];
     return message;
@@ -126,7 +130,7 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
         NSData *data = [coder decodeObjectForKey:@"typedMessage"];
         if (data) {
             AVIMTypedMessageObject *object = [[AVIMTypedMessageObject alloc] initWithMessagePack:data];
-            self.messageObject = object;
+            [self setMessageObject:object];
             [self setFileIvar:[[self class] fileFromDictionary:object._lcfile]];
             [self setLocationIvar:[[self class] locationFromDictionary:object._lcloc]];
         }
@@ -138,9 +142,9 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
 {
     AVIMTypedMessage *message = [super copyWithZone:zone];
     if (message) {
-        message.messageObject = self.messageObject;
-        message.file = self.file;
-        message.location = self.location;
+        [message setMessageObject:self.messageObject];
+        [message setFileIvar:self.file];
+        [message setLocationIvar:self.location];
     }
     return message;
 }
@@ -189,7 +193,8 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
         return _file;
     }
     NSDictionary *dictionary = self.messageObject._lcfile;
-    if (dictionary) {
+    if (dictionary &&
+        dictionary.count > 0) {
         _file = [[AVFile alloc] initWithRawJSONData:dictionary.mutableCopy];
     }
     return _file;
@@ -291,7 +296,8 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
         return _location;
     }
     NSDictionary *dictionary = self.messageObject._lcloc;
-    if (dictionary) {
+    if (dictionary &&
+        dictionary.count > 0) {
         _location = [AVGeoPoint geoPointFromDictionary:dictionary];
     }
     return _location;

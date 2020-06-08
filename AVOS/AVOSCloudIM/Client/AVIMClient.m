@@ -1562,7 +1562,7 @@ static BOOL clientHasInstantiated = false;
         if (message && delegate) {
             SEL selType = @selector(conversation:didReceiveTypedMessage:);
             SEL selCommon = @selector(conversation:didReceiveCommonMessage:);
-            if ([message isKindOfClass:AVIMTypedMessage.class] && [delegate respondsToSelector:selType]) {
+            if ([message isKindOfClass:[AVIMTypedMessage class]] && [delegate respondsToSelector:selType]) {
                 [self invokeInUserInteractQueue:^{
                     [delegate conversation:conversation didReceiveTypedMessage:(AVIMTypedMessage *)message];
                 }];
