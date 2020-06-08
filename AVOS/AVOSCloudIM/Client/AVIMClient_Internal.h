@@ -8,7 +8,9 @@
 
 #import "AVIMCommon_Internal.h"
 #import "AVIMClient.h"
-#import "AVIMWebSocketWrapper.h"
+#import "LCRTMConnection.h"
+
+#import "AVApplication_Internal.h"
 
 @class LCIMConversationCache;
 @class AVIMClientInternalConversationManager;
@@ -24,15 +26,29 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 #define AssertNotRunInQueue(queue)
 #endif
 
-@interface AVIMClient () <AVIMWebSocketWrapperDelegate>
+@interface LCIMProtobufCommandWrapper : NSObject
 
-@property (nonatomic, strong, readonly) dispatch_queue_t internalSerialQueue;
-@property (nonatomic, strong, readonly) dispatch_queue_t signatureQueue;
-@property (nonatomic, strong, readonly) dispatch_queue_t userInteractQueue;
-@property (nonatomic, strong, readonly) AVIMWebSocketWrapper *socketWrapper;
-@property (nonatomic, strong, readonly) AVIMClientInternalConversationManager *conversationManager;
-@property (nonatomic, strong, readonly) AVIMClientPushManager *pushManager;
-@property (nonatomic, strong, readonly) LCIMConversationCache *conversationCache;
+@property (nonatomic) AVIMGenericCommand *outCommand;
+@property (nonatomic) AVIMGenericCommand *inCommand;
+@property (nonatomic) NSError *error;
+
+- (void)setCallback:(void (^)(LCIMProtobufCommandWrapper *commandWrapper))callback;
+- (BOOL)hasCallback;
+- (void)executeCallbackAndSetItToNil;
+
+@end
+
+@interface AVIMClient () <LCRTMConnectionDelegate>
+
+@property (nonatomic, readonly) dispatch_queue_t internalSerialQueue;
+@property (nonatomic, readonly) dispatch_queue_t signatureQueue;
+@property (nonatomic, readonly) dispatch_queue_t userInteractQueue;
+@property (nonatomic, readonly) LCRTMConnection *connection;
+@property (nonatomic, readonly) LCRTMServiceConsumer *serviceConsumer;
+@property (nonatomic, readonly) LCRTMConnectionDelegator *connectionDelegator;
+@property (nonatomic, readonly) AVIMClientInternalConversationManager *conversationManager;
+@property (nonatomic, readonly) AVIMClientPushManager *pushManager;
+@property (nonatomic, readonly) LCIMConversationCache *conversationCache;
 
 + (NSMutableDictionary *)sessionProtocolOptions;
 

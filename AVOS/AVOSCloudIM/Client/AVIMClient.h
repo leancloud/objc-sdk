@@ -30,10 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (void)setUnreadNotificationEnabled:(BOOL)enabled;
 
-/*!
- * 设置实时通信的超时时间，默认 30 秒。
- * @param seconds 超时时间，单位是秒。
- */
+/// Set up connecting timeout, default is `60` seconds.
+/// @param seconds The interval of timeout.
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds;
 
 /**

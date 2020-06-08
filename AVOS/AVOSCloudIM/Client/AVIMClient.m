@@ -26,6 +26,8 @@
 #import "AVPaasClient.h"
 #import "AVErrorUtils.h"
 
+static BOOL gClientHasInstantiated = false;
+
 #if DEBUG
 void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 {
@@ -58,8 +60,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     BOOL _isInSessionOpenHandshaking;
 }
 
-static BOOL clientHasInstantiated = false;
-
 + (instancetype)alloc
 {
 #if DEBUG
@@ -78,45 +78,55 @@ static BOOL clientHasInstantiated = false;
     assert([kAVIMUserOptionUseUnread isEqualToString:AVIMUserOptionUseUnread]);
 #pragma clang diagnostic pop
 #endif
-    clientHasInstantiated = YES;
+    gClientHasInstantiated = true;
     return [super alloc];
 }
 
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds
 {
-    [AVIMWebSocketWrapper setTimeoutIntervalInSeconds:seconds];
+    [LCRTMConnection setConnectingTimeoutInterval:seconds];
 }
 
 + (instancetype)new
 {
-    [NSException raise:NSInternalInconsistencyException format:@"not allow."];
+    [NSException raise:NSInternalInconsistencyException
+                format:@"no support"];
     return nil;
 }
 
 - (instancetype)init
 {
-    [NSException raise:NSInternalInconsistencyException format:@"not allow."];
+    [NSException raise:NSInternalInconsistencyException
+                format:@"no support"];
     return nil;
 }
 
-// MARK: - Init
+// MARK: Initialization
 
 - (instancetype)initWithClientId:(NSString *)clientId
 {
-    return [self initWithClientId:clientId tag:nil];
+    return [self initWithClientId:clientId
+                              tag:nil];
 }
 
-- (instancetype)initWithClientId:(NSString *)clientId tag:(NSString *)tag
+- (instancetype)initWithClientId:(NSString *)clientId
+                             tag:(NSString *)tag
 {
-    return [self initWithClientId:clientId tag:tag installation:AVInstallation.defaultInstallation];
+    return [self initWithClientId:clientId
+                              tag:tag
+                     installation:[AVInstallation defaultInstallation]];
 }
 
-- (instancetype)initWithClientId:(NSString *)clientId tag:(NSString *)tag installation:(AVInstallation *)installation
+- (instancetype)initWithClientId:(NSString *)clientId
+                             tag:(NSString *)tag
+                    installation:(AVInstallation *)installation
 {
     self = [super init];
     if (self) {
         self->_user = nil;
-        [self doInitializationWithClientId:clientId tag:tag installation:installation];
+        [self doInitializationWithClientId:clientId
+                                       tag:tag
+                              installation:installation];
     }
     return self;
 }
@@ -126,17 +136,24 @@ static BOOL clientHasInstantiated = false;
     return [self initWithUser:user tag:nil];
 }
 
-- (instancetype)initWithUser:(AVUser *)user tag:(NSString *)tag
+- (instancetype)initWithUser:(AVUser *)user
+                         tag:(NSString *)tag
 {
-    return [self initWithUser:user tag:tag installation:AVInstallation.defaultInstallation];
+    return [self initWithUser:user
+                          tag:tag
+                 installation:[AVInstallation defaultInstallation]];
 }
 
-- (instancetype)initWithUser:(AVUser *)user tag:(NSString *)tag installation:(AVInstallation *)installation
+- (instancetype)initWithUser:(AVUser *)user
+                         tag:(NSString *)tag
+                installation:(AVInstallation *)installation
 {
     self = [super init];
     if (self) {
         self->_user = user;
-        [self doInitializationWithClientId:user.objectId tag:tag installation:installation];
+        [self doInitializationWithClientId:user.objectId
+                                       tag:tag
+                              installation:installation];
     }
     return self;
 }
@@ -179,8 +196,8 @@ static BOOL clientHasInstantiated = false;
     
     self->_internalSerialQueue = ({
         NSString *className = NSStringFromClass(self.class);
-        NSString *ivarName = ivarName(self, _internalSerialQueue);
-        NSString *label = [NSString stringWithFormat:@"%@.%@", className, ivarName];
+        NSString *propertyName = keyPath(self, internalSerialQueue);
+        NSString *label = [NSString stringWithFormat:@"LC.Objc.%@.%@", className, propertyName];
         dispatch_queue_t queue = dispatch_queue_create(label.UTF8String, DISPATCH_QUEUE_SERIAL);
 #if DEBUG
         void *key = (__bridge void *)queue;
@@ -190,8 +207,8 @@ static BOOL clientHasInstantiated = false;
     });
     self->_signatureQueue = ({
         NSString *className = NSStringFromClass(self.class);
-        NSString *ivarName = ivarName(self, _signatureQueue);
-        NSString *label = [NSString stringWithFormat:@"%@.%@", className, ivarName];
+        NSString *propertyName = keyPath(self, signatureQueue);
+        NSString *label = [NSString stringWithFormat:@"LC.Objc.%@.%@", className, propertyName];
         dispatch_queue_t queue = dispatch_queue_create(label.UTF8String, DISPATCH_QUEUE_CONCURRENT);
 #if DEBUG
         void *key = (__bridge void *)queue;
@@ -201,7 +218,19 @@ static BOOL clientHasInstantiated = false;
     });
     self->_userInteractQueue = dispatch_get_main_queue();
     
-    self->_socketWrapper = [[AVIMWebSocketWrapper alloc] initWithDelegate:self];
+    NSError *error;
+    _serviceConsumer = [[LCRTMServiceConsumer alloc] initWithApplication:[AVApplication defaultApplication]
+                                                                 service:LCRTMServiceInstantMessaging
+                                                                protocol:[AVIMClient IMProtocol]
+                                                                  peerID:_clientId];
+    _connection = [[LCRTMConnectionManager sharedManager] registerWithServiceConsumer:_serviceConsumer
+                                                                                error:&error];
+    if (error) {
+        AVLoggerError(AVLoggerDomainIM, @"%@", error);
+    }
+    _connectionDelegator = [[LCRTMConnectionDelegator alloc] initWithPeerID:_clientId
+                                                                   delegate:self
+                                                                      queue:_internalSerialQueue];
     
     self->_conversationManager = [[AVIMClientInternalConversationManager alloc] initWithClient:self];
     
@@ -219,8 +248,8 @@ static BOOL clientHasInstantiated = false;
 
 - (void)dealloc
 {
-    [self->_socketWrapper setActivatingReconnectionEnabled:false];
-    [self->_socketWrapper close];
+    [self.connection removeDelegatorWithServiceConsumer:self.serviceConsumer];
+    [[LCRTMConnectionManager sharedManager] unregisterWithServiceConsumer:self.serviceConsumer];
 }
 
 // MARK: - Queue
@@ -327,106 +356,106 @@ static BOOL clientHasInstantiated = false;
         
         self->_status = AVIMClientStatusOpening;
         
-        [self->_socketWrapper openWithCallback:^(BOOL succeeded, NSError *error) {
-            [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-                
-                if (error) {
-                    if (client->_status == AVIMClientStatusOpening) {
-                        client->_status = AVIMClientStatusClosed;
-                        [client clearSessionTokenAndTTL];
-                    }
-                    [client invokeInUserInteractQueue:^{
-                        callback(false, error);
-                    }];
-                    return;
-                }
-                
-                LCIMProtobufCommandWrapper *commandWrapper = ({
-                    
-                    AVIMGenericCommand *outCommand = [AVIMGenericCommand new];
-                    AVIMSessionCommand *sessionCommand = [AVIMSessionCommand new];
-                    
-                    outCommand.cmd = AVIMCommandType_Session;
-                    outCommand.op = AVIMOpType_Open;
-                    outCommand.appId = [AVOSCloud getApplicationId];
-                    outCommand.peerId = client->_clientId;
-                    outCommand.sessionMessage = sessionCommand;
-                    
-                    if (client->_sessionConfigBitmap) {
-                        sessionCommand.configBitmap = client->_sessionConfigBitmap;
-                    }
-                    if (client->_lastPatchTimestamp) {
-                        sessionCommand.lastPatchTime = client->_lastPatchTimestamp;
-                    }
-                    if (client->_lastUnreadTimestamp) {
-                        sessionCommand.lastUnreadNotifTime = client->_lastUnreadTimestamp;
-                    }
-                    if (openOption == AVIMClientOpenOptionReopen) {
-                        sessionCommand.r = true;
-                    }
-                    if (client->_tag) {
-                        sessionCommand.tag = client->_tag;
-                    }
-                    if (signature && signature.signature && signature.timestamp && signature.nonce) {
-                        sessionCommand.s = signature.signature;
-                        sessionCommand.t = signature.timestamp;
-                        sessionCommand.n = signature.nonce;
-                    }
-                    sessionCommand.deviceToken = client->_pushManager.deviceToken ?: AVUtils.deviceUUID;
-                    sessionCommand.ua = USER_AGENT;
-                    
-                    LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
-                    commandWrapper.outCommand = outCommand;
-                    commandWrapper;
-                });
-                
-                [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
-                    
-                    client->_isInSessionOpenHandshaking = false;
-                    
-                    if (commandWrapper.error) {
-                        if (client->_status == AVIMClientStatusOpening) {
-                            client->_status = AVIMClientStatusClosed;
-                            [client clearSessionTokenAndTTL];
-                        }
-                        [client invokeInUserInteractQueue:^{
-                            callback(false, commandWrapper.error);
-                        }];
-                        return;
-                    }
-                    
-                    AVIMGenericCommand *inCommand = commandWrapper.inCommand;
-                    AVIMSessionCommand *sessionCommand = (inCommand.hasSessionMessage ? inCommand.sessionMessage : nil);
-                    NSString *sessionToken = (sessionCommand.hasSt ? sessionCommand.st : nil);
-                    if (!sessionToken) {
-                        if (client->_status == AVIMClientStatusOpening) {
-                            client->_status = AVIMClientStatusClosed;
-                            [client clearSessionTokenAndTTL];
-                        }
-                        [client invokeInUserInteractQueue:^{
-                            callback(false, ({
-                                AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
-                                LCError(code, AVIMErrorMessage(code), nil);
-                            }));
-                        }];
-                        return;
-                    }
-                    
-                    client->_status = AVIMClientStatusOpened;
-                    [client setSessionToken:sessionToken ttl:(sessionCommand.hasStTtl ? sessionCommand.stTtl : 0)];
-                    [client->_pushManager uploadingDeviceToken];
-                    [client->_pushManager addingClientIdToChannels];
-                    [client->_socketWrapper setActivatingReconnectionEnabled:true];
-                    
-                    [client invokeInUserInteractQueue:^{
-                        callback(true, nil);
-                    }];
-                }];
-                
-                client->_isInSessionOpenHandshaking = true;
-                [client->_socketWrapper sendCommandWrapper:commandWrapper];
-            }];
-        }];
+//        [self->_connection openWithCallback:^(BOOL succeeded, NSError *error) {
+//            [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+//
+//                if (error) {
+//                    if (client->_status == AVIMClientStatusOpening) {
+//                        client->_status = AVIMClientStatusClosed;
+//                        [client clearSessionTokenAndTTL];
+//                    }
+//                    [client invokeInUserInteractQueue:^{
+//                        callback(false, error);
+//                    }];
+//                    return;
+//                }
+//
+//                LCIMProtobufCommandWrapper *commandWrapper = ({
+//
+//                    AVIMGenericCommand *outCommand = [AVIMGenericCommand new];
+//                    AVIMSessionCommand *sessionCommand = [AVIMSessionCommand new];
+//
+//                    outCommand.cmd = AVIMCommandType_Session;
+//                    outCommand.op = AVIMOpType_Open;
+//                    outCommand.appId = [AVOSCloud getApplicationId];
+//                    outCommand.peerId = client->_clientId;
+//                    outCommand.sessionMessage = sessionCommand;
+//
+//                    if (client->_sessionConfigBitmap) {
+//                        sessionCommand.configBitmap = client->_sessionConfigBitmap;
+//                    }
+//                    if (client->_lastPatchTimestamp) {
+//                        sessionCommand.lastPatchTime = client->_lastPatchTimestamp;
+//                    }
+//                    if (client->_lastUnreadTimestamp) {
+//                        sessionCommand.lastUnreadNotifTime = client->_lastUnreadTimestamp;
+//                    }
+//                    if (openOption == AVIMClientOpenOptionReopen) {
+//                        sessionCommand.r = true;
+//                    }
+//                    if (client->_tag) {
+//                        sessionCommand.tag = client->_tag;
+//                    }
+//                    if (signature && signature.signature && signature.timestamp && signature.nonce) {
+//                        sessionCommand.s = signature.signature;
+//                        sessionCommand.t = signature.timestamp;
+//                        sessionCommand.n = signature.nonce;
+//                    }
+//                    sessionCommand.deviceToken = client->_pushManager.deviceToken ?: AVUtils.deviceUUID;
+//                    sessionCommand.ua = USER_AGENT;
+//
+//                    LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+//                    commandWrapper.outCommand = outCommand;
+//                    commandWrapper;
+//                });
+//
+//                [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+//
+//                    client->_isInSessionOpenHandshaking = false;
+//
+//                    if (commandWrapper.error) {
+//                        if (client->_status == AVIMClientStatusOpening) {
+//                            client->_status = AVIMClientStatusClosed;
+//                            [client clearSessionTokenAndTTL];
+//                        }
+//                        [client invokeInUserInteractQueue:^{
+//                            callback(false, commandWrapper.error);
+//                        }];
+//                        return;
+//                    }
+//
+//                    AVIMGenericCommand *inCommand = commandWrapper.inCommand;
+//                    AVIMSessionCommand *sessionCommand = (inCommand.hasSessionMessage ? inCommand.sessionMessage : nil);
+//                    NSString *sessionToken = (sessionCommand.hasSt ? sessionCommand.st : nil);
+//                    if (!sessionToken) {
+//                        if (client->_status == AVIMClientStatusOpening) {
+//                            client->_status = AVIMClientStatusClosed;
+//                            [client clearSessionTokenAndTTL];
+//                        }
+//                        [client invokeInUserInteractQueue:^{
+//                            callback(false, ({
+//                                AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
+//                                LCError(code, AVIMErrorMessage(code), nil);
+//                            }));
+//                        }];
+//                        return;
+//                    }
+//
+//                    client->_status = AVIMClientStatusOpened;
+//                    [client setSessionToken:sessionToken ttl:(sessionCommand.hasStTtl ? sessionCommand.stTtl : 0)];
+//                    [client->_pushManager uploadingDeviceToken];
+//                    [client->_pushManager addingClientIdToChannels];
+//                    [client->_connection setActivatingReconnectionEnabled:true];
+//
+//                    [client invokeInUserInteractQueue:^{
+//                        callback(true, nil);
+//                    }];
+//                }];
+//
+//                client->_isInSessionOpenHandshaking = true;
+//                [client->_connection sendCommandWrapper:commandWrapper];
+//            }];
+//        }];
     }];
 }
 
@@ -512,7 +541,7 @@ static BOOL clientHasInstantiated = false;
                                 handleInCommandBlock(commandWrapper2);
                             }
                         }];
-                        [self->_socketWrapper sendCommandWrapper:commandWrapper2];
+//                        [self->_connection sendCommandWrapper:commandWrapper2];
                     }
                 }];
             } else {
@@ -522,7 +551,7 @@ static BOOL clientHasInstantiated = false;
             handleInCommandBlock(commandWrapper1);
         }
     }];
-    [self->_socketWrapper sendCommandWrapper:commandWrapper1];
+//    [self->_connection sendCommandWrapper:commandWrapper1];
 }
 
 // MARK: - Client Close
@@ -580,15 +609,15 @@ static BOOL clientHasInstantiated = false;
             client->_status = AVIMClientStatusClosed;
             [client clearSessionTokenAndTTL];
             [client->_pushManager removingClientIdFromChannels];
-            [client->_socketWrapper setActivatingReconnectionEnabled:false];
-            [client->_socketWrapper close];
+//            [client->_connection setActivatingReconnectionEnabled:false];
+//            [client->_connection close];
             
             [client invokeInUserInteractQueue:^{
                 callback(true, nil);
             }];
         }];
         
-        [client->_socketWrapper sendCommandWrapper:commandWrapper];
+//        [client->_connection sendCommandWrapper:commandWrapper];
     }];
 }
 
@@ -780,225 +809,221 @@ static BOOL clientHasInstantiated = false;
             }
             return;
         }
-        [client->_socketWrapper sendCommandWrapper:commandWrapper];
+//        [client->_connection sendCommandWrapper:commandWrapper];
     }];
 }
 
-// MARK: - WebSocket Delegate
+// MARK: LCRTMConnection Delegate
 
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didReceiveCommandCallback:(LCIMProtobufCommandWrapper *)commandWrapper
+- (void)LCRTMConnection:(LCRTMConnection *)connection didReceiveCommandCallback:(LCIMProtobufCommandWrapper *)commandWrapper
 {
-    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-        
-        if (commandWrapper.hasCallback) {
-            [commandWrapper executeCallbackAndSetItToNil];
-        }
-        
-        if (commandWrapper.error && commandWrapper.error.code == AVIMErrorCodeSessionConflict) {
-            client->_status = AVIMClientStatusClosed;
-            [client clearSessionTokenAndTTL];
-            [client->_pushManager removingClientIdFromChannels];
-            [client->_socketWrapper setActivatingReconnectionEnabled:false];
-            [client->_socketWrapper close];
-            id <AVIMClientDelegate> delegate = client->_delegate;
-            SEL sel = @selector(client:didOfflineWithError:);
-            if (delegate && [delegate respondsToSelector:sel]) {
-                [client invokeInUserInteractQueue:^{
-                    [delegate client:client didOfflineWithError:commandWrapper.error];
-                }];
-            }
-        }
-    }];
+//    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+//
+//        if (commandWrapper.hasCallback) {
+//            [commandWrapper executeCallbackAndSetItToNil];
+//        }
+//
+//        if (commandWrapper.error && commandWrapper.error.code == AVIMErrorCodeSessionConflict) {
+//            client->_status = AVIMClientStatusClosed;
+//            [client clearSessionTokenAndTTL];
+//            [client->_pushManager removingClientIdFromChannels];
+//            [client->_connection setActivatingReconnectionEnabled:false];
+//            [client->_connection close];
+//            id <AVIMClientDelegate> delegate = client->_delegate;
+//            SEL sel = @selector(client:didOfflineWithError:);
+//            if (delegate && [delegate respondsToSelector:sel]) {
+//                [client invokeInUserInteractQueue:^{
+//                    [delegate client:client didOfflineWithError:commandWrapper.error];
+//                }];
+//            }
+//        }
+//    }];
 }
 
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didReceiveCommand:(LCIMProtobufCommandWrapper *)commandWrapper
+- (void)LCRTMConnection:(LCRTMConnection *)connection didReceiveCommand:(AVIMGenericCommand *)inCommand
 {
-    if (!commandWrapper.inCommand) { return; }
-    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-        AVIMGenericCommand *inCommand = commandWrapper.inCommand;
-        AVIMCommandType commandType = (inCommand.hasCmd ? inCommand.cmd : -1);
-        AVIMOpType opType = (inCommand.hasOp ? inCommand.op : -1);
-        switch (commandType)
-        {
-            case AVIMCommandType_Session:
-            {
-                switch (opType)
-                {
-                    case AVIMOpType_Closed:
-                    {
-                        [client process_session_closed:inCommand];
-                    } break;
-                    default: break;
-                }
-            } break;
-            case AVIMCommandType_Conv:
-            {
-                switch (opType)
-                {
-                    case AVIMOpType_Joined:
-                    {
-                        [client process_conv_joined:inCommand];
-                    } break;
-                    case AVIMOpType_MembersJoined:
-                    {
-                        [client process_conv_members_joined:inCommand];
-                    } break;
-                    case AVIMOpType_Left:
-                    {
-                        [client process_conv_left:inCommand];
-                    } break;
-                    case AVIMOpType_MembersLeft:
-                    {
-                        [client process_conv_members_left:inCommand];
-                    } break;
-                    case AVIMOpType_Updated:
-                    {
-                        [client process_conv_updated:inCommand];
-                    } break;
-                    case AVIMOpType_MemberInfoChanged:
-                    {
-                        [client process_conv_member_info_changed:inCommand];
-                    } break;
-                    case AVIMOpType_Blocked:
-                    {
-                        [client process_conv_blocked:inCommand];
-                    } break;
-                    case AVIMOpType_MembersBlocked:
-                    {
-                        [client process_conv_members_blocked:inCommand];
-                    } break;
-                    case AVIMOpType_Unblocked:
-                    {
-                        [client process_conv_unblocked:inCommand];
-                    } break;
-                    case AVIMOpType_MembersUnblocked:
-                    {
-                        [client process_conv_members_unblocked:inCommand];
-                    } break;
-                    case AVIMOpType_Shutuped:
-                    {
-                        [client process_conv_shutuped:inCommand];
-                    } break;
-                    case AVIMOpType_MembersShutuped:
-                    {
-                        [client process_conv_members_shutuped:inCommand];
-                    } break;
-                    case AVIMOpType_Unshutuped:
-                    {
-                        [client process_conv_unshutuped:inCommand];
-                    } break;
-                    case AVIMOpType_MembersUnshutuped:
-                    {
-                        [client process_conv_members_unshutuped:inCommand];
-                    } break;
-                    default: break;
-                }
-            } break;
-            case AVIMCommandType_Direct:
-            {
-                [client process_direct:inCommand];
-            } break;
-            case AVIMCommandType_Rcp:
-            {
-                [client process_rcp:inCommand];
-            } break;
-            case AVIMCommandType_Unread:
-            {
-                [client process_unread:inCommand];
-            } break;
-            case AVIMCommandType_Patch:
-            {
-                switch (opType)
-                {
-                    case AVIMOpType_Modify:
-                    {
-                        [client process_patch_modify:inCommand];
-                    } break;
-                    default: break;
-                }
-            } break;
-            default: break;
-        }
-    }];
+//    if (!commandWrapper.inCommand) { return; }
+//    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+//        AVIMGenericCommand *inCommand = commandWrapper.inCommand;
+//        AVIMCommandType commandType = (inCommand.hasCmd ? inCommand.cmd : -1);
+//        AVIMOpType opType = (inCommand.hasOp ? inCommand.op : -1);
+//        switch (commandType)
+//        {
+//            case AVIMCommandType_Session:
+//            {
+//                switch (opType)
+//                {
+//                    case AVIMOpType_Closed:
+//                    {
+//                        [client process_session_closed:inCommand];
+//                    } break;
+//                    default: break;
+//                }
+//            } break;
+//            case AVIMCommandType_Conv:
+//            {
+//                switch (opType)
+//                {
+//                    case AVIMOpType_Joined:
+//                    {
+//                        [client process_conv_joined:inCommand];
+//                    } break;
+//                    case AVIMOpType_MembersJoined:
+//                    {
+//                        [client process_conv_members_joined:inCommand];
+//                    } break;
+//                    case AVIMOpType_Left:
+//                    {
+//                        [client process_conv_left:inCommand];
+//                    } break;
+//                    case AVIMOpType_MembersLeft:
+//                    {
+//                        [client process_conv_members_left:inCommand];
+//                    } break;
+//                    case AVIMOpType_Updated:
+//                    {
+//                        [client process_conv_updated:inCommand];
+//                    } break;
+//                    case AVIMOpType_MemberInfoChanged:
+//                    {
+//                        [client process_conv_member_info_changed:inCommand];
+//                    } break;
+//                    case AVIMOpType_Blocked:
+//                    {
+//                        [client process_conv_blocked:inCommand];
+//                    } break;
+//                    case AVIMOpType_MembersBlocked:
+//                    {
+//                        [client process_conv_members_blocked:inCommand];
+//                    } break;
+//                    case AVIMOpType_Unblocked:
+//                    {
+//                        [client process_conv_unblocked:inCommand];
+//                    } break;
+//                    case AVIMOpType_MembersUnblocked:
+//                    {
+//                        [client process_conv_members_unblocked:inCommand];
+//                    } break;
+//                    case AVIMOpType_Shutuped:
+//                    {
+//                        [client process_conv_shutuped:inCommand];
+//                    } break;
+//                    case AVIMOpType_MembersShutuped:
+//                    {
+//                        [client process_conv_members_shutuped:inCommand];
+//                    } break;
+//                    case AVIMOpType_Unshutuped:
+//                    {
+//                        [client process_conv_unshutuped:inCommand];
+//                    } break;
+//                    case AVIMOpType_MembersUnshutuped:
+//                    {
+//                        [client process_conv_members_unshutuped:inCommand];
+//                    } break;
+//                    default: break;
+//                }
+//            } break;
+//            case AVIMCommandType_Direct:
+//            {
+//                [client process_direct:inCommand];
+//            } break;
+//            case AVIMCommandType_Rcp:
+//            {
+//                [client process_rcp:inCommand];
+//            } break;
+//            case AVIMCommandType_Unread:
+//            {
+//                [client process_unread:inCommand];
+//            } break;
+//            case AVIMCommandType_Patch:
+//            {
+//                switch (opType)
+//                {
+//                    case AVIMOpType_Modify:
+//                    {
+//                        [client process_patch_modify:inCommand];
+//                    } break;
+//                    default: break;
+//                }
+//            } break;
+//            default: break;
+//        }
+//    }];
 }
 
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didCommandEncounterError:(LCIMProtobufCommandWrapper *)commandWrapper
+- (void)LCRTMConnection:(LCRTMConnection *)connection didCommandEncounterError:(LCIMProtobufCommandWrapper *)commandWrapper
 {
-    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-        if (commandWrapper.hasCallback && commandWrapper.error) {
-            [commandWrapper executeCallbackAndSetItToNil];
-        }
-    }];
+//    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+//        if (commandWrapper.hasCallback && commandWrapper.error) {
+//            [commandWrapper executeCallbackAndSetItToNil];
+//        }
+//    }];
 }
 
-- (void)webSocketWrapperDidReopen:(AVIMWebSocketWrapper *)socketWrapper
+- (void)LCRTMConnectionDidConnect:(LCRTMConnection *)connection
 {
-    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-        NSString *sessionToken = client->_sessionToken;
-        if (!sessionToken) { return; }
-        if (client->_isInSessionOpenHandshaking) { return; }
-        [client resumeWithSessionToken:sessionToken callback:^(BOOL succeeded, NSError *error) {
-            id<AVIMClientDelegate> delegate = client->_delegate;
-            [client invokeInUserInteractQueue:^{
-                if (error) {
-                    AVLoggerError(AVLoggerDomainIM, @"session resuming failed with error: %@", error);
-                    if ([error.domain isEqualToString:kLeanCloudErrorDomain] &&
-                        error.code == AVIMErrorCodeCommandTimeout) {
-                        [client webSocketWrapperDidReopen:socketWrapper];
-                    }
-                } else {
-                    [delegate imClientResumed:client];
-                }
-            }];
-        }];
-    }];
+//    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+//        NSString *sessionToken = client->_sessionToken;
+//        if (!sessionToken) { return; }
+//        if (client->_isInSessionOpenHandshaking) { return; }
+//        [client resumeWithSessionToken:sessionToken callback:^(BOOL succeeded, NSError *error) {
+//            id<AVIMClientDelegate> delegate = client->_delegate;
+//            [client invokeInUserInteractQueue:^{
+//                if (error) {
+//                    AVLoggerError(AVLoggerDomainIM, @"session resuming failed with error: %@", error);
+//                    if ([error.domain isEqualToString:kLeanCloudErrorDomain] &&
+//                        error.code == AVIMErrorCodeCommandTimeout) {
+//                        [client webSocketWrapperDidReopen:socketWrapper];
+//                    }
+//                } else {
+//                    [delegate imClientResumed:client];
+//                }
+//            }];
+//        }];
+//    }];
 }
 
-- (void)webSocketWrapperInReconnecting:(AVIMWebSocketWrapper *)socketWrapper
+- (void)LCRTMConnectionInConnecting:(LCRTMConnection *)connection
 {
-    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-        if (!client->_sessionToken || client->_status == AVIMClientStatusResuming) {
-            return;
-        }
-        client->_status = AVIMClientStatusResuming;
-        [client invokeInUserInteractQueue:^{
-            [client->_delegate imClientResuming:client];
-        }];
-    }];
+//    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+//        if (!client->_sessionToken || client->_status == AVIMClientStatusResuming) {
+//            return;
+//        }
+//        client->_status = AVIMClientStatusResuming;
+//        [client invokeInUserInteractQueue:^{
+//            [client->_delegate imClientResuming:client];
+//        }];
+//    }];
 }
 
-- (void)webSocketWrapperDidPause:(AVIMWebSocketWrapper *)socketWrapper
+- (void)LCRTMConnection:(LCRTMConnection *)connection didDisconnectWithError:(NSError *)error
 {
-    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-        if (!client->_sessionToken || client->_status == AVIMClientStatusPaused) {
-            return;
-        }
-        client->_status = AVIMClientStatusPaused;
-        [client invokeInUserInteractQueue:^{
-            [client->_delegate imClientPaused:client];
-        }];
-    }];
-}
-
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didCloseWithError:(NSError *)error
-{
-    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-        if (!client->_sessionToken) { return; }
-        client->_status = AVIMClientStatusClosed;
-        [client clearSessionTokenAndTTL];
-        [client->_socketWrapper setActivatingReconnectionEnabled:false];
-        [client->_socketWrapper close];
-        id<AVIMClientDelegate> delegate = client->_delegate;
-        [client invokeInUserInteractQueue:^{
-            [delegate imClientClosed:client error:error];
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-            if ([delegate respondsToSelector:@selector(imClientPaused:error:)]) {
-                [delegate imClientPaused:client error:error];
-            }
-#pragma clang diagnostic pop
-        }];
-    }];
+//    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+//        if (!client->_sessionToken || client->_status == AVIMClientStatusPaused) {
+//            return;
+//        }
+//        client->_status = AVIMClientStatusPaused;
+//        [client invokeInUserInteractQueue:^{
+//            [client->_delegate imClientPaused:client];
+//        }];
+//    }];
+//    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+//        if (!client->_sessionToken) { return; }
+//        client->_status = AVIMClientStatusClosed;
+//        [client clearSessionTokenAndTTL];
+//        [client->_connection setActivatingReconnectionEnabled:false];
+//        [client->_connection close];
+//        id<AVIMClientDelegate> delegate = client->_delegate;
+//        [client invokeInUserInteractQueue:^{
+//            [delegate imClientClosed:client error:error];
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+//            if ([delegate respondsToSelector:@selector(imClientPaused:error:)]) {
+//                [delegate imClientPaused:client error:error];
+//            }
+//#pragma clang diagnostic pop
+//        }];
+//    }];
 }
 
 // MARK: - Command Process
@@ -1016,8 +1041,8 @@ static BOOL clientHasInstantiated = false;
     [self clearSessionTokenAndTTL];
     
     [self->_pushManager removingClientIdFromChannels];
-    [self->_socketWrapper setActivatingReconnectionEnabled:false];
-    [self->_socketWrapper close];
+//    [self->_connection setActivatingReconnectionEnabled:false];
+//    [self->_connection close];
     id <AVIMClientDelegate> delegate = self->_delegate;
     SEL sel = @selector(client:didOfflineWithError:);
     if (delegate && [delegate respondsToSelector:sel]) {
@@ -2056,6 +2081,17 @@ static BOOL clientHasInstantiated = false;
 
 // MARK: - IM Protocol Options
 
++ (LCIMProtocol)IMProtocol
+{
+    NSNumber *useUnreadProtocol = [NSNumber _lc_decoding:AVIMClient.sessionProtocolOptions
+                                                     key:kAVIMUserOptionUseUnread];
+    if ([useUnreadProtocol boolValue]) {
+        return LCIMProtocol3;
+    } else {
+        return LCIMProtocol1;
+    }
+}
+
 + (NSMutableDictionary *)sessionProtocolOptions
 {
     static dispatch_once_t onceToken;
@@ -2068,7 +2104,7 @@ static BOOL clientHasInstantiated = false;
 
 + (void)setUnreadNotificationEnabled:(BOOL)enabled
 {
-    if (clientHasInstantiated) {
+    if (gClientHasInstantiated) {
         [NSException raise:NSInternalInconsistencyException
                     format:@"this method should be invoked before instantiation of AVIMClient."];
         return;
@@ -2082,7 +2118,7 @@ static BOOL clientHasInstantiated = false;
 #pragma clang diagnostic ignored "-Wdeprecated-implementations"
 + (void)setUserOptions:(NSDictionary *)userOptions
 {
-    if (clientHasInstantiated) {
+    if (gClientHasInstantiated) {
         [NSException raise:NSInternalInconsistencyException
                     format:@"this method should be invoked before instantiation of AVIMClient."];
         return;
@@ -2093,5 +2129,98 @@ static BOOL clientHasInstantiated = false;
     [AVIMClient.sessionProtocolOptions addEntriesFromDictionary:userOptions];
 }
 #pragma clang diagnostic pop
+
+@end
+
+@interface LCIMProtobufCommandWrapper () {
+    NSError *_error;
+    BOOL _hasDecodedError;
+}
+
+@property (nonatomic) void (^callback)(LCIMProtobufCommandWrapper *commandWrapper);
+@property (nonatomic) uint16_t index;
+@property (nonatomic) NSTimeInterval deadlineTimestamp;
+
+@end
+
+@implementation LCIMProtobufCommandWrapper
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self->_hasDecodedError = false;
+    }
+    return self;
+}
+
+- (BOOL)hasCallback
+{
+    return self->_callback ? true : false;
+}
+
+- (void)executeCallbackAndSetItToNil
+{
+    if (self->_callback) {
+        self->_callback(self);
+        // set to nil to avoid cycle retain
+        self->_callback = nil;
+    }
+}
+
+- (void)setError:(NSError *)error
+{
+    self->_error = error;
+}
+
+- (NSError *)error
+{
+    if (self->_error) {
+        return self->_error;
+    }
+    else if (self->_inCommand && !self->_hasDecodedError) {
+        self->_hasDecodedError = true;
+        self->_error = [self decodingError:self->_inCommand];
+        return self->_error;
+    }
+    return nil;
+}
+
+- (NSError *)decodingError:(AVIMGenericCommand *)command
+{
+    NSInteger code = 0;
+    BOOL hasCode = false;
+    NSString *reason;
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    AVIMErrorCommand *errorCommand = (command.hasErrorMessage ? command.errorMessage : nil);
+    AVIMSessionCommand *sessionCommand = (command.hasSessionMessage ? command.sessionMessage : nil);
+    AVIMAckCommand *ackCommand = (command.hasAckMessage ? command.ackMessage : nil);
+    if (errorCommand && errorCommand.hasCode) {
+        hasCode = true;
+        code = errorCommand.code;
+        reason = (errorCommand.hasReason ? errorCommand.reason : nil);
+        if (errorCommand.hasAppCode) {
+            userInfo[kAVIMAppCodeKey] = @(errorCommand.appCode);
+        }
+        if (errorCommand.hasDetail) {
+            userInfo[kAVIMDetailKey] = errorCommand.detail;
+        }
+    } else if (sessionCommand && sessionCommand.hasCode) {
+        hasCode = true;
+        code = sessionCommand.code;
+        reason = (sessionCommand.hasReason ? sessionCommand.reason : nil);
+        if (sessionCommand.hasDetail) {
+            userInfo[kAVIMDetailKey] = sessionCommand.detail;
+        }
+    } else if (ackCommand && ackCommand.hasCode) {
+        hasCode = true;
+        code = ackCommand.code;
+        reason = (ackCommand.hasReason ? ackCommand.reason : nil);
+        if (ackCommand.hasAppCode) {
+            userInfo[kAVIMAppCodeKey] = @(ackCommand.appCode);
+        }
+    }
+    return hasCode ? LCError(code, reason, userInfo) : nil;
+}
 
 @end
