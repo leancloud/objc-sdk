@@ -245,21 +245,16 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
                       from:(NSString *)peerID
                      queue:(dispatch_queue_t)queue
 {
-    if (![self.peerID isEqualToString:peerID] ||
-        self.callingQueue != queue ||
-        outCommand.cmd == AVIMCommandType_Direct ||
-        (outCommand.cmd == AVIMCommandType_Conv &&
-         (outCommand.op == AVIMOpType_Start ||
-          outCommand.op == AVIMOpType_Update ||
-          outCommand.op == AVIMOpType_Members))) {
+    if (outCommand.cmd != self.command.cmd ||
+        outCommand.op != self.command.op ||
+        ![peerID isEqualToString:self.peerID] ||
+        queue != self.callingQueue) {
         return false;
     }
     if (self.command.hasI) {
         outCommand.i = self.command.i;
     }
-    return (outCommand.cmd == self.command.cmd &&
-            outCommand.op == self.command.op &&
-            [outCommand isEqual:self.command]);
+    return [outCommand isEqual:self.command];
 }
 
 @end
@@ -396,6 +391,13 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
              callback:(LCRTMConnectionOutCommandCallback)callback
 {
     NSParameterAssert([self assertSpecificQueue]);
+    if (outCommand.cmd == AVIMCommandType_Direct ||
+        (outCommand.cmd == AVIMCommandType_Conv &&
+         (outCommand.op == AVIMOpType_Start ||
+          outCommand.op == AVIMOpType_Update ||
+          outCommand.op == AVIMOpType_Members))) {
+        return false;
+    }
     for (NSNumber *i in self.outCommandIndexSequence) {
         LCRTMConnectionOutCommand *command = self.outCommandCollection[i];
         if ([command microIdempotentFor:outCommand
