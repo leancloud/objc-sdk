@@ -17,15 +17,15 @@ static NSUInteger const kClientIdLengthLimit = 64;
 static NSString * const kClientTagDefault = @"default";
 static NSString * const kTemporaryConversationIdPrefix = @"_tmp:";
 
-/// @see https://github.com/leancloud/avoscloud-push/blob/develop/push-server/doc/protocol.md
+/// ref: https://github.com/leancloud/avoscloud-push
 typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
-    LCIMSessionConfigOptions_Patch                  = 1 << 0,
-    LCIMSessionConfigOptions_TempConv               = 1 << 1,
-    LCIMSessionConfigOptions_AutoBindInstallation   = 1 << 2,
-    LCIMSessionConfigOptions_TransientACK           = 1 << 3,
-    LCIMSessionConfigOptions_ReliableNotification   = 1 << 4,
-    LCIMSessionConfigOptions_CallbackResultSlice    = 1 << 5,
-    LCIMSessionConfigOptions_GroupChatReadReceipt   = 1 << 6,
+    LCIMSessionConfigOptionsPatchMessage                        = 1 << 0,
+    LCIMSessionConfigOptionsTemporaryConversationMessage        = 1 << 1,
+    LCIMSessionConfigOptionsAutoBindDeviceidAndInstallation     = 1 << 2,
+    LCIMSessionConfigOptionsTransientMessageACK                 = 1 << 3,
+    LCIMSessionConfigOptionsNotification                        = 1 << 4,
+    LCIMSessionConfigOptionsPartialFailedMessage                = 1 << 5,
+    LCIMSessionConfigOptionsGroupChatRCP                        = 1 << 6,
 };
 
 /// conversation property key
