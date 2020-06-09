@@ -8,7 +8,7 @@
 
 #import "AVIMCommon_Internal.h"
 
-// MARK: - Error
+// MARK: Error
 
 NSString * const kAVIMCodeKey       = @"code";
 NSString * const kAVIMAppCodeKey    = @"appCode";
@@ -16,25 +16,25 @@ NSString * const kAVIMAppMsgKey     = @"appMsg";
 NSString * const kAVIMReasonKey     = @"reason";
 NSString * const kAVIMDetailKey     = @"detail";
 
-// MARK: - Conversation
+// MARK: Conversation
 
-AVIMConversationUpdatedKey AVIMConversationUpdatedKeyLastMessage = @"lastMessage";
-AVIMConversationUpdatedKey AVIMConversationUpdatedKeyLastMessageAt = @"lastMessageAt";
-AVIMConversationUpdatedKey AVIMConversationUpdatedKeyLastReadAt = @"lastReadAt";
-AVIMConversationUpdatedKey AVIMConversationUpdatedKeyLastDeliveredAt = @"lastDeliveredAt";
-AVIMConversationUpdatedKey AVIMConversationUpdatedKeyUnreadMessagesCount = @"unreadMessagesCount";
-AVIMConversationUpdatedKey AVIMConversationUpdatedKeyUnreadMessagesMentioned = @"unreadMessagesMentioned";
+AVIMConversationUpdatedKey const AVIMConversationUpdatedKeyLastMessage              = @"lastMessage";
+AVIMConversationUpdatedKey const AVIMConversationUpdatedKeyLastMessageAt            = @"lastMessageAt";
+AVIMConversationUpdatedKey const AVIMConversationUpdatedKeyLastReadAt               = @"lastReadAt";
+AVIMConversationUpdatedKey const AVIMConversationUpdatedKeyLastDeliveredAt          = @"lastDeliveredAt";
+AVIMConversationUpdatedKey const AVIMConversationUpdatedKeyUnreadMessagesCount      = @"unreadMessagesCount";
+AVIMConversationUpdatedKey const AVIMConversationUpdatedKeyUnreadMessagesMentioned  = @"unreadMessagesMentioned";
 
-// MARK: - Signature
+// MARK: Signature
 
-AVIMSignatureAction AVIMSignatureActionOpen = @"open";
-AVIMSignatureAction AVIMSignatureActionStart = @"start";
-AVIMSignatureAction AVIMSignatureActionAdd = @"invite";
-AVIMSignatureAction AVIMSignatureActionRemove = @"kick";
-AVIMSignatureAction AVIMSignatureActionBlock = @"block";
-AVIMSignatureAction AVIMSignatureActionUnblock = @"unblock";
+AVIMSignatureAction const AVIMSignatureActionOpen = @"open";
+AVIMSignatureAction const AVIMSignatureActionStart = @"start";
+AVIMSignatureAction const AVIMSignatureActionAdd = @"invite";
+AVIMSignatureAction const AVIMSignatureActionRemove = @"kick";
+AVIMSignatureAction const AVIMSignatureActionBlock = @"block";
+AVIMSignatureAction const AVIMSignatureActionUnblock = @"unblock";
 
-// MARK: - Deprecated
+// MARK: Deprecated
 
 NSString * const AVIMUserOptionUseUnread = @"AVIMUserOptionUseUnread";
 NSString * const AVIMUserOptionCustomProtocols = @"AVIMUserOptionCustomProtocols";
