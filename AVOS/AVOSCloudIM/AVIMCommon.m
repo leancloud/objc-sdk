@@ -27,12 +27,12 @@ AVIMConversationUpdatedKey const AVIMConversationUpdatedKeyUnreadMessagesMention
 
 // MARK: Signature
 
-AVIMSignatureAction const AVIMSignatureActionOpen = @"open";
-AVIMSignatureAction const AVIMSignatureActionStart = @"start";
-AVIMSignatureAction const AVIMSignatureActionAdd = @"invite";
-AVIMSignatureAction const AVIMSignatureActionRemove = @"kick";
-AVIMSignatureAction const AVIMSignatureActionBlock = @"block";
-AVIMSignatureAction const AVIMSignatureActionUnblock = @"unblock";
+AVIMSignatureAction const AVIMSignatureActionOpen       = @"open";
+AVIMSignatureAction const AVIMSignatureActionStart      = @"start";
+AVIMSignatureAction const AVIMSignatureActionAdd        = @"invite";
+AVIMSignatureAction const AVIMSignatureActionRemove     = @"kick";
+AVIMSignatureAction const AVIMSignatureActionBlock      = @"block";
+AVIMSignatureAction const AVIMSignatureActionUnblock    = @"unblock";
 
 // MARK: Deprecated
 
