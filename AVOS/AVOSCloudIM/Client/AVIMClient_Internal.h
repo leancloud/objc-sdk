@@ -40,6 +40,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 
 @interface AVIMClient () <LCRTMConnectionDelegate>
 
+@property (nonatomic, readonly) NSLock *lock;
 @property (nonatomic, readonly) dispatch_queue_t internalSerialQueue;
 @property (nonatomic, readonly) dispatch_queue_t signatureQueue;
 @property (nonatomic, readonly) dispatch_queue_t userInteractQueue;

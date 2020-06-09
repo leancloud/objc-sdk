@@ -62,22 +62,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 + (instancetype)alloc
 {
-#if DEBUG
-    assert([kAVIMCodeKey isEqualToString:keyPath(AVIMErrorCommand.alloc, code)]);
-    assert([kAVIMAppCodeKey isEqualToString:keyPath(AVIMErrorCommand.alloc, appCode)]);
-    assert([kAVIMDetailKey isEqualToString:keyPath(AVIMErrorCommand.alloc, detail)]);
-    assert([kAVIMReasonKey isEqualToString:keyPath(AVIMErrorCommand.alloc, reason)]);
-    assert([AVIMConversationUpdatedKeyLastMessage isEqualToString:keyPath(AVIMConversation.alloc, lastMessage)]);
-    assert([AVIMConversationUpdatedKeyLastMessageAt isEqualToString:keyPath(AVIMConversation.alloc, lastMessageAt)]);
-    assert([AVIMConversationUpdatedKeyLastReadAt isEqualToString:keyPath(AVIMConversation.alloc, lastReadAt)]);
-    assert([AVIMConversationUpdatedKeyLastDeliveredAt isEqualToString:keyPath(AVIMConversation.alloc, lastDeliveredAt)]);
-    assert([AVIMConversationUpdatedKeyUnreadMessagesCount isEqualToString:keyPath(AVIMConversation.alloc, unreadMessagesCount)]);
-    assert([AVIMConversationUpdatedKeyUnreadMessagesMentioned isEqualToString:keyPath(AVIMConversation.alloc, unreadMessagesMentioned)]);
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    assert([kAVIMUserOptionUseUnread isEqualToString:AVIMUserOptionUseUnread]);
-#pragma clang diagnostic pop
-#endif
     gClientHasInstantiated = true;
     return [super alloc];
 }
@@ -178,7 +162,8 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         (tag ? tag.copy : nil);
     });
     
-    self->_status = AVIMClientStatusNone;
+    _status = AVIMClientStatusNone;
+    _lock = [NSLock new];
     
     self->_sessionConfigBitmap = ({
         (LCIMSessionConfigOptions_Patch |
@@ -308,7 +293,18 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 - (AVIMClientStatus)status
 {
-    return self->_status;
+    AVIMClientStatus value;
+    [self.lock lock];
+    value = _status;
+    [self.lock unlock];
+    return value;
+}
+
+- (void)setStatus:(AVIMClientStatus)status
+{
+    [self.lock lock];
+    _status = status;
+    [self.lock unlock];
 }
 
 - (BOOL)messageQueryCacheEnabled
@@ -341,20 +337,20 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             }];
             return;
         }
-        if (self->_status == AVIMClientStatusOpened) {
+        if ([self status] == AVIMClientStatusOpened) {
             [self invokeInUserInteractQueue:^{
                 callback(true, nil);
             }];
             return;
         }
-        if (self->_status == AVIMClientStatusOpening) {
+        if ([self status] == AVIMClientStatusOpening) {
             [self invokeInUserInteractQueue:^{
                 callback(false, LCErrorInternal(@"in opening, do not open repeatedly."));
             }];
             return;
         }
         
-        self->_status = AVIMClientStatusOpening;
+        [self setStatus:AVIMClientStatusOpening];
         
 //        [self->_connection openWithCallback:^(BOOL succeeded, NSError *error) {
 //            [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
@@ -462,7 +458,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 - (void)resumeWithSessionToken:(NSString *)sessionToken callback:(void (^)(BOOL succeeded, NSError *error))callback
 {
     AssertRunInQueue(self->_internalSerialQueue);
-    if (self->_status == AVIMClientStatusOpened) {
+    if ([self status] == AVIMClientStatusOpened) {
         callback(true, nil);
         return;
     }
@@ -517,7 +513,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         if (sessionToken && ttl) {
             [self setSessionToken:sessionToken ttl:ttl];
         }
-        self->_status = AVIMClientStatusOpened;
+        [self setStatus:AVIMClientStatusOpened];
         [self->_pushManager uploadingDeviceToken];
         [self->_pushManager addingClientIdToChannels];
         callback(true, nil);
@@ -560,7 +556,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 {
     [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
         
-        if (client->_status == AVIMClientStatusClosed) {
+        if ([client status] == AVIMClientStatusClosed) {
             [client clearSessionTokenAndTTL];
             [client invokeInUserInteractQueue:^{
                 callback(true, nil);
@@ -568,7 +564,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             return;
         }
         
-        if (client->_status != AVIMClientStatusOpened) {
+        if ([client status] != AVIMClientStatusOpened) {
             [client invokeInUserInteractQueue:^{
                 callback(false, ({
                     AVIMErrorCode code = AVIMErrorCodeClientNotOpen;
@@ -578,7 +574,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             return;
         }
         
-        client->_status = AVIMClientStatusClosing;
+        [client setStatus:AVIMClientStatusClosing];
         
         LCIMProtobufCommandWrapper *commandWrapper = ({
             
@@ -597,8 +593,8 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
             
             if (commandWrapper.error) {
-                if (client->_status == AVIMClientStatusClosing) {
-                    client->_status = AVIMClientStatusOpened;
+                if ([client status] == AVIMClientStatusClosing) {
+                    [client setStatus:AVIMClientStatusOpened];
                 }
                 [client invokeInUserInteractQueue:^{
                     callback(false, commandWrapper.error);
@@ -606,7 +602,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                 return;
             }
             
-            client->_status = AVIMClientStatusClosed;
+            [client setStatus:AVIMClientStatusClosed];
             [client clearSessionTokenAndTTL];
             [client->_pushManager removingClientIdFromChannels];
 //            [client->_connection setActivatingReconnectionEnabled:false];
@@ -645,7 +641,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         
         NSString *oldSessionToken = client->_sessionToken;
         
-        if (!oldSessionToken || self->_status != AVIMClientStatusOpened) {
+        if (!oldSessionToken || [self status] != AVIMClientStatusOpened) {
             callback(nil, ({
                 AVIMErrorCode code = AVIMErrorCodeClientNotOpen;
                 LCError(code, AVIMErrorMessage(code), nil);
@@ -799,7 +795,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 - (void)sendCommandWrapper:(LCIMProtobufCommandWrapper *)commandWrapper
 {
     [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-        if (self->_status != AVIMClientStatusOpened) {
+        if ([self status] != AVIMClientStatusOpened) {
             if (commandWrapper.hasCallback) {
                 commandWrapper.error = ({
                     AVIMErrorCode code = AVIMErrorCodeClientNotOpen;
@@ -1037,7 +1033,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         return;
     }
     
-    self->_status = AVIMClientStatusClosed;
+    [self setStatus:AVIMClientStatusClosed];
     [self clearSessionTokenAndTTL];
     
     [self->_pushManager removingClientIdFromChannels];
