@@ -15,72 +15,43 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// this protocol defines methods to handle the events about client, conversation, message and so on.
+/// This protocol defines methods to handle the events about client, conversation, message and so on.
 @protocol AVIMClientDelegate <NSObject>
 
-// MARK: - Required
+// MARK: Required
 
-/**
- 
- Client Paused.
- 
- Common Scenario:
- 
- 1. Network Unreachable
- 
- 2. iOS App in Background
- 
- 3. ... ...
- 
- Client will Auto Resuming if environment become Normal.
- 
- @param imClient imClient
- */
-- (void)imClientPaused:(AVIMClient *)imClient;
+/// Client paused, means the connection lost.
+///
+/// Common Scenario:
+///     * Network unreachable or interface changed.
+///     * App enter background
+///     * ...
+///
+/// @param imClient The client.
+/// @param error The reason for pause.
+- (void)imClientPaused:(AVIMClient *)imClient error:(NSError * _Nullable)error;
 
-/**
- 
- Client is Resuming.
- 
- Common Scenario:
- 
- 1. Network from Unreachable to Reachable
- 
- 2. iOS App from Background to Foreground
- 
- 3. ... ...
- 
- Client is Resuming the Session.
- 
- @param imClient imClient
- */
+/// Client in resuming, invoked when the client try recover connection automatically.
+/// @param imClient The client.
 - (void)imClientResuming:(AVIMClient *)imClient;
 
-/**
- Client is Resumed from Paused Status and now its Status is Opened.
- 
- @param imClient imClient
- */
+/// Client resumed, means the client recover connection successfully.
+/// @param imClient The client.
 - (void)imClientResumed:(AVIMClient *)imClient;
 
-/**
- Client Closed with an Error and will not resume.
- 
- @param imClient imClient
- @param error Something Wrong
- */
+/// Client closed and will not try recover connection automatically.
+///
+/// Common Scenario:
+///     * code: `4111`, reason: `SESSION_CONFLICT`
+///     * code: `4115`, reason: `KICKED_BY_APP`
+///
+/// @param imClient The client.
+/// @param error The reason for close.
 - (void)imClientClosed:(AVIMClient *)imClient error:(NSError * _Nullable)error;
 
-// MARK: - Optional
+// MARK: Optional
 
 @optional
-
-/*!
- 客户端下线通知。
- @param client 已下线的 client。
- @param error 错误信息。
- */
-- (void)client:(AVIMClient *)client didOfflineWithError:(NSError * _Nullable)error;
 
 /*!
  接收到新的普通消息。
@@ -239,20 +210,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)conversation:(AVIMConversation *)conversation didMembersUnmuteBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
 
-/**
- *  当前聊天状态被暂停，常见于网络断开时触发。
- *  注意：该回调会覆盖 imClientPaused: 方法。
- *  @param imClient 相应的 imClient
- *  @param error    具体错误信息
- */
-- (void)imClientPaused:(AVIMClient *)imClient error:(NSError *)error __deprecated_msg("deprecated. use -[imClientClosed:error:] instead.");
+// MARK: Deprecated
 
-/*!
- 收到未读通知。在该终端上线的时候，服务器会将对话的未读数发送过来。未读数可通过 -[AVIMConversation markAsReadInBackground] 清零，服务端不会自动清零。
- @param conversation 所属会话。
- @param unread 未读消息数量。
- */
-- (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread __deprecated_msg("deprecated. use -[conversation:didUpdateForKey:] instead.");
+- (void)imClientPaused:(AVIMClient *)imClient
+__deprecated_msg("Deprecated, use `-[AVIMClientDelegate imClientPaused:error:]` instead.");
+
+- (void)client:(AVIMClient *)client didOfflineWithError:(NSError * _Nullable)error
+__deprecated_msg("Deprecated, use `-[AVIMClientDelegate imClientClosed:error:]` instead.");
+
+- (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread
+__deprecated_msg("deprecated. use `-[AVIMClientDelegate conversation:didUpdateForKey:]` instead.");
 
 @end
 

@@ -19,7 +19,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/// IM Client.
 @interface AVIMClient : NSObject
+
++ (instancetype)new NS_UNAVAILABLE;
+- (instancetype)init NS_UNAVAILABLE;
 
 /*!
  Set what server will issues for offline messages when client did login.
@@ -34,38 +38,23 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param seconds The interval of timeout.
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds;
 
-/**
- No thread-safe for getter & setter. recommend setting after instantiation.
- */
-@property (nonatomic, weak, nullable) id <AVIMClientDelegate> delegate;
+/// The delegate for `AVIMClientDelegate`.
+@property (nonatomic, weak, nullable) id<AVIMClientDelegate> delegate;
 
-/*
- No thread-safe for getter & setter. recommend setting after instantiation.
- */
-@property (nonatomic, weak, nullable) id <AVIMSignatureDataSource> signatureDataSource;
+/// The delegate for `AVIMSignatureDataSource`.
+@property (nonatomic, weak, nullable) id<AVIMSignatureDataSource> signatureDataSource;
 
-/**
- The ID of this Client.
- */
-@property (nonatomic, strong, readonly, nonnull) NSString *clientId;
+/// The ID of this client.
+@property (nonatomic, readonly) NSString *clientId;
 
-/**
- The `AVUser` of this Client.
- */
-@property (nonatomic, strong, readonly, nullable) AVUser *user;
+/// The `AVUser` of this client.
+@property (nonatomic, readonly, nullable) AVUser *user;
 
-/**
- The Tag of this Client.
- */
-@property (nonatomic, strong, readonly, nullable) NSString *tag;
+/// The tag of this client.
+@property (nonatomic, readonly, nullable) NSString *tag;
 
-/**
- 控制是否打开历史消息查询本地缓存的功能, 默认开启
- */
-@property (nonatomic, assign) BOOL messageQueryCacheEnabled;
-
-+ (instancetype)new NS_UNAVAILABLE;
-- (instancetype)init NS_UNAVAILABLE;
+/// The control switch for message query cache, default is `true`.
+@property (nonatomic) BOOL messageQueryCacheEnabled;
 
 /**
  Initialization method.

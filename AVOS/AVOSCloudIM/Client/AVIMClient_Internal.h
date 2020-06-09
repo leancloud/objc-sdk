@@ -40,6 +40,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 
 @interface AVIMClient () <LCRTMConnectionDelegate>
 
+@property (nonatomic, readonly) int64_t sessionConfigBitmap;
 @property (nonatomic, readonly) NSLock *lock;
 @property (nonatomic, readonly) dispatch_queue_t internalSerialQueue;
 @property (nonatomic, readonly) dispatch_queue_t signatureQueue;
@@ -50,6 +51,13 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 @property (nonatomic, readonly) AVIMClientInternalConversationManager *conversationManager;
 @property (nonatomic, readonly) AVIMClientPushManager *pushManager;
 @property (nonatomic, readonly) LCIMConversationCache *conversationCache;
+
+@property (nonatomic) void (^openingCompletion)(BOOL, NSError *);
+@property (nonatomic) AVIMClientOpenOption openingOption;
+@property (nonatomic) NSString *sessionToken;
+@property (nonatomic) NSDate *sessionTokenExpiration;
+@property (nonatomic) int64_t lastUnreadNotifTime;
+@property (nonatomic) int64_t lastPatchTime;
 
 + (NSMutableDictionary *)sessionProtocolOptions;
 
