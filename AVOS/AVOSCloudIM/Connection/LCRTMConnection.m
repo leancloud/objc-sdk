@@ -398,7 +398,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
           outCommand.op == AVIMOpType_Members))) {
         return false;
     }
-    for (NSNumber *i in self.outCommandIndexSequence) {
+    for (NSNumber *i in [self.outCommandIndexSequence reverseObjectEnumerator]) {
         LCRTMConnectionOutCommand *command = self.outCommandCollection[i];
         if ([command microIdempotentFor:outCommand
                                    from:peerID
@@ -892,9 +892,11 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
            callback:(LCRTMConnectionOutCommandCallback)callback
 {
     dispatch_async(self.serialQueue, ^{
-        if (!self.socket ||
-            !self.timer) {
-            if (queue && callback) {
+        LCRTMWebSocket *socket = self.socket;
+        LCRTMConnectionTimer *timer = self.timer;
+        BOOL needCallback = (queue && callback);
+        if (!socket || !timer) {
+            if (needCallback) {
                 dispatch_async(queue, ^{
                     callback(nil, LCError(AVIMErrorCodeConnectionLost,
                                           @"Connection lost.", nil));
@@ -905,18 +907,18 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
         if (service == LCRTMServiceInstantMessaging) {
             [self tryPadPeerID:peerID forCommand:command];
         }
-        if (queue && callback) {
-            if ([self.timer tryThrottling:command
-                                     from:peerID
-                                    queue:queue
-                                 callback:callback]) {
+        if (needCallback) {
+            if ([timer tryThrottling:command
+                                from:peerID
+                               queue:queue
+                            callback:callback]) {
                 return;
             }
-            command.i = [self.timer nextIndex];
+            command.i = [timer nextIndex];
         }
         NSData *data = [command data];
         if (!data) {
-            if (queue && callback) {
+            if (needCallback) {
                 dispatch_async(queue, ^{
                     callback(nil, LCError(AVIMErrorCodeInvalidCommand,
                                           @"Serializing out command failed.", nil));
@@ -924,7 +926,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             }
             return;
         } else if (data.length > (1024 * 5)) {
-            if (queue && callback) {
+            if (needCallback) {
                 dispatch_async(queue, ^{
                     callback(nil, LCError(AVIMErrorCodeCommandDataLengthTooLong,
                                           @"The size of the out command should less than 5KB.", nil));
@@ -932,18 +934,17 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             }
             return;
         }
-        if (queue && callback) {
-            [self.timer appendOutCommand:[[LCRTMConnectionOutCommand alloc]
-                                          initWithPeerID:peerID
-                                          command:command
-                                          callingQueue:queue
-                                          callback:callback]
-                                   index:@(command.i)];
+        if (needCallback) {
+            [timer appendOutCommand:[[LCRTMConnectionOutCommand alloc]
+                                     initWithPeerID:peerID
+                                     command:command
+                                     callingQueue:queue
+                                     callback:callback]
+                              index:@(command.i)];
         }
 #if DEBUG
         void *specificKey = (__bridge void *)(self.serialQueue);
 #endif
-        LCRTMWebSocket *socket = self.socket;
         [socket sendMessage:[LCRTMWebSocketMessage messageWithData:data] completion:^{
 #if DEBUG
             assert(dispatch_get_specific(specificKey) == specificKey);
