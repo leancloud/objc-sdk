@@ -17,4 +17,5 @@ typedef NS_ENUM(NSInteger, AVErrorInternalErrorCode) {
 };
 
 FOUNDATION_EXPORT NSError *LCError(NSInteger code, NSString *failureReason, NSDictionary *userInfo);
+FOUNDATION_EXPORT NSError *LCErrorFromUnderlyingError(NSError *underlyingError);
 FOUNDATION_EXPORT NSError *LCErrorInternal(NSString *failureReason);

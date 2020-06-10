@@ -15,6 +15,7 @@
 #import "AVErrorUtils.h"
 #import "AVOSCloudIM.h"
 #import "AVIMCommon_Internal.h"
+#import "AVIMErrorUtil.h"
 
 LCIMProtocol const LCIMProtocol3 = @"lc.protobuf2.3";
 LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
@@ -422,11 +423,14 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 {
     NSParameterAssert([self assertSpecificQueue]);
     NSNumber *i = @(inCommand.i);
+    NSError *error = LCErrorFromErrorCommand((inCommand.hasErrorMessage
+                                              ? inCommand.errorMessage
+                                              : nil));
     LCRTMConnectionOutCommand *command = self.outCommandCollection[i];
     if (command) {
         for (LCRTMConnectionOutCommandCallback callback in command.callbacks) {
             dispatch_async(command.callingQueue, ^{
-                callback(inCommand, nil);
+                callback((error ? nil : inCommand), error);
             });
         }
         [self.outCommandIndexSequence removeObject:i];
@@ -797,7 +801,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             }
             if (error) {
                 dispatch_async(ss.serialQueue, ^{
-                    completion(ss, nil, error);
+                    completion(ss, nil, LCErrorFromUnderlyingError(error));
                 });
             } else {
                 NSString *primaryServer = [NSString _lc_decoding:dictionary
@@ -1007,7 +1011,9 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
     NSParameterAssert(self.socket == socket);
-    if (!error) {
+    if (error) {
+        error = LCErrorFromUnderlyingError(error);
+    } else {
         error = LCError(AVIMErrorCodeConnectionLost,
                         @"Connection did close by remote peer.", nil);
     }

@@ -136,6 +136,21 @@ NSError *LCError(NSInteger code, NSString *failureReason, NSDictionary *userInfo
                            userInfo:mutableDictionary];
 }
 
+NSError *LCErrorFromUnderlyingError(NSError *underlyingError)
+{
+    if ([underlyingError.domain isEqualToString:kLeanCloudErrorDomain]) {
+        return underlyingError;
+    } else {
+        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+        if (underlyingError) {
+            userInfo[NSUnderlyingErrorKey] = underlyingError;
+        }
+        return LCError(AVErrorInternalErrorCodeUnderlyingError,
+                       @"Underlying error.",
+                       userInfo);
+    }
+}
+
 NSError *LCErrorInternal(NSString *failureReason)
 {
     return LCError(kAVErrorInternalServer, failureReason, nil);
