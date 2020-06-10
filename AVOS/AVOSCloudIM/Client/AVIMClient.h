@@ -97,35 +97,22 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (instancetype)initWithUser:(AVUser *)user tag:(NSString * _Nullable)tag LC_WARN_UNUSED_RESULT;
 
-/**
- The Status of this Client.
- */
+/// The current status of this client, see `AVIMClientStatus`.
 - (AVIMClientStatus)status LC_WARN_UNUSED_RESULT;
 
-/**
- Start a Session with Server.
- It is similar to Login.
- 
- @param callback Result Callback.
- */
+/// Open this client before using instant messaging service,
+/// this action use `AVIMClientOpenOptionForceOpen` as default open option.
+/// @param callback The result callback.
 - (void)openWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
-/**
- Start a Session with Server.
- It is similar to Login.
- 
- @param openOption See more: `AVIMClientOpenOption`.
- @param callback Result Callback.
- */
+/// Open this client before using instant messaging service
+/// @param openOption See `AVIMClientOpenOption`.
+/// @param callback The result callback.
 - (void)openWithOption:(AVIMClientOpenOption)openOption
               callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
-/**
- End a Session with Server.
- It is similar to Logout.
- 
- @param callback Result Callback.
- */
+/// Close this client.
+/// @param callback The result callback.
 - (void)closeWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
@@ -257,14 +244,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface AVIMClient (deprecated)
+// MARK: Deprecated
 
-/*!
- * 设置用户选项。
- * 该接口用于控制 AVIMClient 的一些细节行为。
- * @param userOptions 用户选项。
- */
-+ (void)setUserOptions:(NSDictionary *)userOptions __deprecated_msg("deprecated. Do not use it any more.");
+@interface AVIMClient (Deprecated)
+
++ (void)setUserOptions:(NSDictionary *)userOptions
+__deprecated_msg("Deprecated, DO NOT use it any more.");
 
 @end
 

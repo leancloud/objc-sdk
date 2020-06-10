@@ -31,10 +31,8 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 @property (nonatomic) AVIMGenericCommand *outCommand;
 @property (nonatomic) AVIMGenericCommand *inCommand;
 @property (nonatomic) NSError *error;
-
-- (void)setCallback:(void (^)(LCIMProtobufCommandWrapper *commandWrapper))callback;
-- (BOOL)hasCallback;
-- (void)executeCallbackAndSetItToNil;
+// TODO: client context
+@property (nonatomic) void (^callback)(LCIMProtobufCommandWrapper *commandWrapper);
 
 @end
 
