@@ -61,7 +61,7 @@ NSError *LCErrorFromErrorCommand(AVIMErrorCommand *command)
 NSError *LCErrorFromSessionCommand(AVIMSessionCommand *command)
 {
     NSError *error;
-    if (command) {
+    if (command.hasCode) {
         NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
         if (command.hasDetail) {
             userInfo[kAVIMDetailKey] = command.detail;
@@ -76,7 +76,8 @@ NSError *LCErrorFromSessionCommand(AVIMSessionCommand *command)
 NSError *LCErrorFromAckCommand(AVIMAckCommand *command)
 {
     NSError *error;
-    if (command) {
+    if (command.hasCode ||
+        command.hasAppCode) {
         NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
         if (command.hasAppCode) {
             userInfo[kAVIMAppCodeKey] = @(command.appCode);

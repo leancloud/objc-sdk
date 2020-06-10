@@ -522,10 +522,14 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
         __weak typeof(self) ws = self;
 #if TARGET_OS_IOS || TARGET_OS_TV
         if (NSThread.isMainThread) {
-            _previousAppState = UIApplication.sharedApplication.applicationState;
+            _previousAppState = (UIApplication.sharedApplication.applicationState == UIApplicationStateBackground
+                                 ? LCRTMConnectionAppStateBackground
+                                 : LCRTMConnectionAppStateForeground);
         } else {
             dispatch_sync(dispatch_get_main_queue(), ^{
-                _previousAppState = UIApplication.sharedApplication.applicationState;
+                _previousAppState = (UIApplication.sharedApplication.applicationState == UIApplicationStateBackground
+                                     ? LCRTMConnectionAppStateBackground
+                                     : LCRTMConnectionAppStateForeground);
             });
         }
         NSOperationQueue *appStateQueue = [[NSOperationQueue alloc] init];
