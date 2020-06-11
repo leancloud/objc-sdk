@@ -1381,6 +1381,10 @@ class AVIMMessageTestCase: LCIMTestBase {
             return
         }
         
+        LCRTMConnectionManager.shared().liveQueryRegistry.removeAllObjects()
+        LCRTMConnectionManager.shared().imProtobuf1Registry.removeAllObjects()
+        LCRTMConnectionManager.shared().imProtobuf3Registry.removeAllObjects()
+        
         let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         let installation_2: AVInstallation = AVInstallation()
         installation_2.setDeviceTokenHexString(UUID().uuidString, teamId: "LeanCloud")

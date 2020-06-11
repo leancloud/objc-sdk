@@ -325,6 +325,10 @@ class AVIMConversationTestCase: LCIMTestBase {
             return
         }
         
+        LCRTMConnectionManager.shared().liveQueryRegistry.removeAllObjects()
+        LCRTMConnectionManager.shared().imProtobuf1Registry.removeAllObjects()
+        LCRTMConnectionManager.shared().imProtobuf3Registry.removeAllObjects()
+        
         let delegate2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         guard let _: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId2, delegate: delegate2) else {
             XCTFail()
