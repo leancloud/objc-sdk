@@ -1055,19 +1055,21 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             [self.timer handleCallbackCommand:inCommand];
         } else {
             LCRTMConnectionDelegator *delegator;
-            if (inCommand.service == LCRTMServiceInstantMessaging) {
-                NSString *peerID = (inCommand.hasPeerId
-                                    ? inCommand.peerId
-                                    : self.defaultInstantMessagingPeerID);
-                if (peerID) {
-                    delegator = self.instantMessagingDelegatorMap[peerID];
-                }
-            } else if (inCommand.service == LCRTMServiceLiveQuery) {
-                NSString *installationID = (inCommand.hasInstallationId
-                                            ? inCommand.installationId
-                                            : nil);
-                if (installationID) {
-                    delegator = self.liveQueryDelegatorMap[installationID];
+            if (inCommand.hasService) {
+                if (inCommand.service == LCRTMServiceInstantMessaging) {
+                    NSString *peerID = (inCommand.hasPeerId
+                                        ? inCommand.peerId
+                                        : self.defaultInstantMessagingPeerID);
+                    if (peerID) {
+                        delegator = self.instantMessagingDelegatorMap[peerID];
+                    }
+                } else if (inCommand.service == LCRTMServiceLiveQuery) {
+                    NSString *installationID = (inCommand.hasInstallationId
+                                                ? inCommand.installationId
+                                                : nil);
+                    if (installationID) {
+                        delegator = self.liveQueryDelegatorMap[installationID];
+                    }
                 }
             }
             if (delegator) {
