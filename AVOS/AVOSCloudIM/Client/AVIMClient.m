@@ -43,12 +43,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 @implementation AVIMClient {
     AVIMClientStatus _status;
-    
-    // session
-    NSTimeInterval _sessionTokenExpireTimestamp;
-    int64_t _lastPatchTimestamp;
-    int64_t _lastUnreadTimestamp;
-    BOOL _isInSessionOpenHandshaking;
 }
 
 + (instancetype)alloc
@@ -98,7 +92,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 {
     self = [super init];
     if (self) {
-        _user = nil;
         [self doInitializationWithClientId:clientId
                                        tag:tag
                               installation:installation];
@@ -162,12 +155,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     _lock = [NSLock new];
     _lastUnreadNotifTime = 0;
     _lastPatchTime = 0;
-    
-    self->_sessionTokenExpireTimestamp = 0;
-    self->_lastPatchTimestamp = 0;
-    self->_lastUnreadTimestamp = 0;
-    self->_isInSessionOpenHandshaking = false;
-    
     _internalSerialQueue = ({
         NSString *className = NSStringFromClass(self.class);
         NSString *propertyName = keyPath(self, internalSerialQueue);
@@ -191,7 +178,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         queue;
     });
     _userInteractQueue = dispatch_get_main_queue();
-    
     NSError *error;
     _serviceConsumer = [[LCRTMServiceConsumer alloc] initWithApplication:[AVApplication defaultApplication]
                                                                  service:LCRTMServiceInstantMessaging
@@ -205,12 +191,9 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     _connectionDelegator = [[LCRTMConnectionDelegator alloc] initWithPeerID:_clientId
                                                                    delegate:self
                                                                       queue:_internalSerialQueue];
-    
-    self->_conversationManager = [[AVIMClientInternalConversationManager alloc] initWithClient:self];
-    
-    self->_pushManager = [[AVIMClientPushManager alloc] initWithInstallation:installation client:self];
-    
-    self->_conversationCache = ({
+    _conversationManager = [[AVIMClientInternalConversationManager alloc] initWithClient:self];
+    _pushManager = [[AVIMClientPushManager alloc] initWithInstallation:installation client:self];
+    _conversationCache = ({
         LCIMConversationCache *cache = [[LCIMConversationCache alloc] initWithClientId:self->_clientId];
         cache.client = self;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -616,84 +599,47 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-- (void)setSessionToken:(NSString *)sessionToken ttl:(int32_t)ttl
-{
-    AssertRunInQueue(self->_internalSerialQueue);
-    NSParameterAssert(sessionToken);
-    self->_sessionToken = sessionToken;
-    self->_sessionTokenExpireTimestamp = NSDate.date.timeIntervalSince1970 + (NSTimeInterval)ttl;
-}
-
-- (void)clearSessionTokenAndTTL
-{
-    AssertRunInQueue(self->_internalSerialQueue);
-    self->_sessionToken = nil;
-    self->_sessionTokenExpireTimestamp = 0;
-}
-
 - (void)getSessionTokenWithForcingRefresh:(BOOL)forcingRefresh
                                  callback:(void (^)(NSString *, NSError *))callback
 {
     [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
-        
-        NSString *oldSessionToken = client->_sessionToken;
-        
-        if (!oldSessionToken || [self status] != AVIMClientStatusOpened) {
-            callback(nil, ({
-                AVIMErrorCode code = AVIMErrorCodeClientNotOpen;
-                LCError(code, AVIMErrorMessage(code), nil);
-            }));
+        NSString *oldSessionToken = client.sessionToken;
+        if (!oldSessionToken ||
+            [client status] != AVIMClientStatusOpened) {
+            callback(nil, LCError(AVIMErrorCodeClientNotOpen,
+                                  @"Client not open", nil));
             return;
         }
-        
-        if (forcingRefresh || (NSDate.date.timeIntervalSince1970 > client->_sessionTokenExpireTimestamp)) {
-            
-            LCIMProtobufCommandWrapper *commandWrapper = ({
-                
-                AVIMGenericCommand *outCommand = [AVIMGenericCommand new];
-                AVIMSessionCommand *sessionCommand = [AVIMSessionCommand new];
-                
-                outCommand.cmd = AVIMCommandType_Session;
-                outCommand.op = AVIMOpType_Refresh;
-                outCommand.sessionMessage = sessionCommand;
-                
-                sessionCommand.st = oldSessionToken; /* let server to clear old session token */
-                
-                LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
-                commandWrapper.outCommand = outCommand;
-                commandWrapper;
-            });
-            
+        if (forcingRefresh ||
+            !client.sessionTokenExpiration ||
+            [client.sessionTokenExpiration compare:[NSDate date]] == NSOrderedAscending) {
+            LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+            commandWrapper.outCommand = [client newSessionCommandWithOp:AVIMOpType_Refresh
+                                                                  token:oldSessionToken
+                                                              signature:nil
+                                                               isReopen:false];
             [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
-                
                 if (commandWrapper.error) {
                     callback(nil, commandWrapper.error);
                     return;
                 }
-                
-                if (!client->_sessionToken) {
-                    callback(nil, LCErrorInternal(@"session has not opened or did close."));
+                if (!client.sessionToken) {
+                    callback(nil, LCError(AVIMErrorCodeClientNotOpen,
+                                          @"Client not open", nil));
                     return;
                 }
-                
                 AVIMGenericCommand *inCommand = commandWrapper.inCommand;
                 AVIMSessionCommand *sessionCommand = (inCommand.hasSessionMessage ? inCommand.sessionMessage : nil);
-                NSString *sessionToken = (sessionCommand.hasSt ? sessionCommand.st : nil);
-                if (!sessionToken) {
-                    callback(nil, ({
-                        AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
-                        LCError(code, AVIMErrorMessage(code), nil);
-                    }));
+                if (sessionCommand.hasSt) {
+                    client.sessionToken = sessionCommand.st;
                 }
-                
-                [client setSessionToken:sessionToken ttl:(sessionCommand.hasStTtl ? sessionCommand.stTtl : 0)];
-                callback(sessionToken, nil);
+                if (sessionCommand.hasStTtl) {
+                    client.sessionTokenExpiration = [NSDate dateWithTimeIntervalSinceNow:sessionCommand.stTtl];
+                }
+                callback(client.sessionToken, nil);
             }];
-            
             [client sendCommandWrapper:commandWrapper];
-            
         } else {
-            
             callback(oldSessionToken, nil);
         }
     }];
@@ -1359,8 +1305,8 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     NSMutableArray<NSString *> *conversationIds = [NSMutableArray array];
     ({
         for (AVIMPatchItem *patchItem in patchCommand.patchesArray) {
-            if (patchItem.hasPatchTimestamp && patchItem.patchTimestamp > self->_lastPatchTimestamp) {
-                self->_lastPatchTimestamp = patchItem.patchTimestamp;
+            if (patchItem.hasPatchTimestamp && patchItem.patchTimestamp > self.lastPatchTime) {
+                self.lastPatchTime = patchItem.patchTimestamp;
             }
             NSString *conversationId = (patchItem.hasCid ? patchItem.cid : nil);
             if (conversationId) {
@@ -1390,7 +1336,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             outCommand.cmd = AVIMCommandType_Patch;
             outCommand.op = AVIMOpType_Modified;
             outCommand.patchMessage = patchMessage;
-            patchMessage.lastPatchTime = self->_lastPatchTimestamp;
+            patchMessage.lastPatchTime = self.lastPatchTime;
             LCIMProtobufCommandWrapper *commandWrapper = [[LCIMProtobufCommandWrapper alloc] init];
             commandWrapper.outCommand = outCommand;
             commandWrapper;
@@ -1435,8 +1381,8 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }
     
     int64_t notifTime = (unreadCommand.hasNotifTime ? unreadCommand.notifTime : 0);
-    if (notifTime > self->_lastUnreadTimestamp) {
-        self->_lastUnreadTimestamp = notifTime;
+    if (notifTime > self.lastUnreadNotifTime) {
+        self.lastUnreadNotifTime = notifTime;
     }
     
     NSMutableDictionary<NSString *, AVIMUnreadTuple *> *unreadTupleMap = [NSMutableDictionary dictionary];
