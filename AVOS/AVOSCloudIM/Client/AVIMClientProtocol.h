@@ -219,7 +219,7 @@ __deprecated_msg("Deprecated, use `-[AVIMClientDelegate imClientPaused:error:]` 
 __deprecated_msg("Deprecated, use `-[AVIMClientDelegate imClientClosed:error:]` instead.");
 
 - (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread
-__deprecated_msg("deprecated. use `-[AVIMClientDelegate conversation:didUpdateForKey:]` instead.");
+__deprecated_msg("Deprecated, use `-[AVIMClientDelegate conversation:didUpdateForKey:]` instead.");
 
 @end
 
