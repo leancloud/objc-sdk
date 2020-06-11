@@ -7,17 +7,12 @@
 //
 
 #import "AVIMClient_Internal.h"
-#import "AVIMClientInternalConversationManager_Internal.h"
-#import "AVIMClientPushManager.h"
 #import "AVIMConversation_Internal.h"
 #import "AVIMKeyedConversation_internal.h"
 #import "AVIMConversationMemberInfo_Internal.h"
 #import "AVIMConversationQuery_Internal.h"
 #import "AVIMTypedMessage_Internal.h"
-#import "AVIMSignature.h"
-#import "AVIMGenericCommand+AVIMMessagesAdditions.h"
 
-#import "LCIMConversationCache.h"
 #import "AVIMErrorUtil.h"
 
 #import "UserAgent.h"
@@ -192,7 +187,13 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                                                                    delegate:self
                                                                       queue:_internalSerialQueue];
     _conversationManager = [[AVIMClientInternalConversationManager alloc] initWithClient:self];
-    _pushManager = [[AVIMClientPushManager alloc] initWithInstallation:installation client:self];
+    _installation = installation;
+    [installation addObserver:self
+                   forKeyPath:keyPath(installation, deviceToken)
+                      options:(NSKeyValueObservingOptionNew |
+                               NSKeyValueObservingOptionOld |
+                               NSKeyValueObservingOptionInitial)
+                      context:(__bridge void *)(self)];
     _conversationCache = ({
         LCIMConversationCache *cache = [[LCIMConversationCache alloc] initWithClientId:self->_clientId];
         cache.client = self;
@@ -205,6 +206,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 - (void)dealloc
 {
+    AVInstallation *installation = self.installation;
+    [installation removeObserver:self
+                      forKeyPath:keyPath(installation, deviceToken)
+                         context:(__bridge void *)(self)];
     [self.connection removeDelegatorWithServiceConsumer:self.serviceConsumer];
     [[LCRTMConnectionManager sharedManager] unregisterWithServiceConsumer:self.serviceConsumer];
 }
@@ -396,7 +401,8 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     AVIMSessionCommand *sessionCommand = [AVIMSessionCommand new];
     if (op == AVIMOpType_Open) {
         sessionCommand.configBitmap = self.sessionConfigBitmap;
-        // TODO: deviceToken
+        sessionCommand.deviceToken = (self.currentDeviceToken
+                                      ?: AVUtils.deviceUUID);
         sessionCommand.ua = USER_AGENT;
         if (self.tag) {
             sessionCommand.tag = self.tag;
@@ -500,7 +506,8 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         }
         [self setStatus:AVIMClientStatusOpened];
         if (openCommand) {
-            // TODO: reportDeviceToken
+            [self reportDeviceToken:self.currentDeviceToken
+                        openCommand:openCommand];
         }
         if (openingCompletion) {
             [self invokeInUserInteractQueue:^{
@@ -1462,7 +1469,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-// MARK: - Conversation Create
+// MARK: Conversation Create
 
 - (void)createConversationWithName:(NSString * _Nullable)name
                          clientIds:(NSArray<NSString *> *)clientIds
@@ -1683,7 +1690,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-// MARK: - Conversations Instance
+// MARK: Conversations Instance
 
 - (AVIMConversation *)conversationForId:(NSString *)conversationId
 {
@@ -1748,7 +1755,61 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-// MARK: - Misc
+// MARK: Device Token
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == (__bridge void *)(self)) {
+        if ([keyPath isEqualToString:keyPath(self.installation, deviceToken)] &&
+            object == self.installation) {
+            NSString *oldToken = [NSString _lc_decoding:change key:NSKeyValueChangeOldKey];
+            NSString *newToken = [NSString _lc_decoding:change key:NSKeyValueChangeNewKey];
+            if (newToken &&
+                ![newToken isEqualToString:oldToken]) {
+                [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+                    if (![client.currentDeviceToken isEqualToString:newToken]) {
+                        client.currentDeviceToken = newToken;
+                        [client reportDeviceToken:newToken
+                                      openCommand:nil];
+                    }
+                }];
+            }
+        }
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+- (void)reportDeviceToken:(NSString *)token
+              openCommand:(AVIMGenericCommand *)openCommand
+{
+    AssertRunInQueue(self.internalSerialQueue);
+    if (!token ||
+        (openCommand.hasSessionMessage &&
+         openCommand.sessionMessage.hasDeviceToken &&
+         [openCommand.sessionMessage.deviceToken isEqualToString:token]) ||
+        [self status] != AVIMClientStatusOpened) {
+        return;
+    }
+    AVIMGenericCommand *command = [AVIMGenericCommand new];
+    command.cmd = AVIMCommandType_Report;
+    command.op = AVIMOpType_Upload;
+    AVIMReportCommand *reportCommand = [AVIMReportCommand new];
+    reportCommand.initiative = true;
+    reportCommand.type = @"token";
+    reportCommand.data_p = token;
+    command.reportMessage = reportCommand;
+    LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+    commandWrapper.outCommand = command;
+    [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+        if (commandWrapper.error) {
+            AVLoggerError(AVLoggerDomainIM, @"%@", commandWrapper.error);
+        }
+    }];
+    [self sendCommandWrapper:commandWrapper];
+}
+
+// MARK: Misc
 
 - (void)queryOnlineClientsInClients:(NSArray<NSString *> *)clients
                            callback:(void (^)(NSArray<NSString *> *, NSError * _Nullable))callback
@@ -1941,7 +2002,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }
 }
 
-// MARK: - IM Protocol Options
+// MARK: IM Protocol Options
 
 + (LCIMProtocol)IMProtocol
 {

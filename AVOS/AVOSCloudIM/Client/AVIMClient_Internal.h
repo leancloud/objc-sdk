@@ -6,16 +6,14 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMCommon_Internal.h"
 #import "AVIMClient.h"
+#import "AVIMCommon_Internal.h"
 #import "LCRTMConnection.h"
+#import "AVIMClientInternalConversationManager_Internal.h"
+#import "AVIMSignature.h"
+#import "LCIMConversationCache.h"
 
 #import "AVApplication_Internal.h"
-
-@class LCIMConversationCache;
-@class AVIMClientInternalConversationManager;
-@class AVIMClientPushManager;
-@class AVIMSignature;
 
 #if DEBUG
 void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
@@ -46,8 +44,8 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 @property (nonatomic, readonly) LCRTMConnection *connection;
 @property (nonatomic, readonly) LCRTMServiceConsumer *serviceConsumer;
 @property (nonatomic, readonly) LCRTMConnectionDelegator *connectionDelegator;
+@property (nonatomic, readonly) AVInstallation *installation;
 @property (nonatomic, readonly) AVIMClientInternalConversationManager *conversationManager;
-@property (nonatomic, readonly) AVIMClientPushManager *pushManager;
 @property (nonatomic, readonly) LCIMConversationCache *conversationCache;
 
 @property (nonatomic) void (^openingCompletion)(BOOL, NSError *);
@@ -56,6 +54,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 @property (nonatomic) NSDate *sessionTokenExpiration;
 @property (nonatomic) int64_t lastUnreadNotifTime;
 @property (nonatomic) int64_t lastPatchTime;
+@property (nonatomic) NSString *currentDeviceToken;
 
 + (NSMutableDictionary *)sessionProtocolOptions;
 
