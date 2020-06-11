@@ -6,7 +6,6 @@
 //  Copyright © 2017 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVLiveQuery.h"
 #import "AVLiveQuery_Internal.h"
 #import "AVSubscriber.h"
 
