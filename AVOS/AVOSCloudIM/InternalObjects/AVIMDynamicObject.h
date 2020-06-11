@@ -61,10 +61,14 @@
     [getter_name copy])
 
 @interface AVIMDynamicObject : NSObject
-- (instancetype)initWithDictionary:(NSDictionary *)dictionary;
-- (instancetype)initWithMutableDictionary:(NSMutableDictionary *)dictionary;
+
+@property (nonatomic, readonly) NSMutableDictionary<NSString *, id> *localData;
+
 - (instancetype)initWithJSON:(NSString *)json;
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary;
+- (instancetype)initWithMutableDictionary:(NSMutableDictionary *)mutableDictionary;
 - (instancetype)initWithMessagePack:(NSData *)data;
+
 - (NSString *)JSONString;
 - (NSDictionary *)dictionary;
 - (NSData *)messagePack;
@@ -75,4 +79,5 @@
 - (void)setObject:(id)object forKey:(NSString *)key;
 - (void)setObject:(id)object forKeyedSubscript:(NSString *)key;
 - (void)removeObjectForKey:(NSString *)key;
+
 @end

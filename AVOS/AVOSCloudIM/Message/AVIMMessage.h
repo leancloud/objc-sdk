@@ -8,7 +8,7 @@
 
 #import "AVIMCommon.h"
 
-typedef NS_ENUM(int8_t, AVIMMessageMediaType) {
+typedef NS_ENUM(int32_t, AVIMMessageMediaType) {
     kAVIMMessageMediaTypeNone = 0,
     kAVIMMessageMediaTypeText = -1,
     kAVIMMessageMediaTypeImage = -2,

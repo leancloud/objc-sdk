@@ -12,5 +12,5 @@
 #import "AVIMMessage_Internal.h"
 #import "AVIMClientInternalConversationManager_Internal.h"
 #import "AVPaasClient.h"
-#import "AVIMClientPushManager.h"
+#import "LCRTMConnection_Internal.h"
 #import "LCRouter_Internal.h"

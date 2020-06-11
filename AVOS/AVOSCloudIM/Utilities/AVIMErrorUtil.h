@@ -8,5 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "AVIMCommon.h"
+#import "MessagesProtoOrig.pbobjc.h"
 
-NSString *AVIMErrorMessage(AVIMErrorCode code);
+FOUNDATION_EXPORT NSString *AVIMErrorMessage(AVIMErrorCode code);
+
+FOUNDATION_EXPORT NSError *LCErrorFromErrorCommand(AVIMErrorCommand *command);
+FOUNDATION_EXPORT NSError *LCErrorFromSessionCommand(AVIMSessionCommand *command);
+FOUNDATION_EXPORT NSError *LCErrorFromAckCommand(AVIMAckCommand *command);

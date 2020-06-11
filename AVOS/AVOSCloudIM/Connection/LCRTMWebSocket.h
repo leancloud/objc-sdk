@@ -1,6 +1,6 @@
 //
 //  LCRTMWebSocket.h
-//  AVOS
+//  AVOSCloudIM
 //
 //  Created by zapcannon87 on 2020/4/23.
 //  Copyright © 2020 LeanCloud Inc. All rights reserved.
@@ -80,6 +80,6 @@ typedef NS_ENUM(NSInteger, LCRTMWebSocketMessageType) {
 - (void)sendPing:(NSData *)data completion:(void (^)(void))completion;
 - (void)sendPong:(NSData *)data completion:(void (^)(void))completion;
 
-- (void)safeClean;
+- (void)clean;
 
 @end

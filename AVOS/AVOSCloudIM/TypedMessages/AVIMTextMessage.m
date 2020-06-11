@@ -11,19 +11,24 @@
 
 @implementation AVIMTextMessage
 
-+ (void)load {
++ (void)load
+{
     [self registerSubclass];
 }
 
-+ (AVIMMessageMediaType)classMediaType {
++ (AVIMMessageMediaType)classMediaType
+{
     return kAVIMMessageMediaTypeText;
 }
 
 + (instancetype)messageWithText:(NSString *)text
-                     attributes:(NSDictionary *)attributes {
+                     attributes:(NSDictionary *)attributes
+{
     AVIMTextMessage *message = [[self alloc] init];
     message.text = text;
-    message.attributes = attributes;
+    if (attributes) {
+        message.attributes = attributes;
+    }
     return message;
 }
 

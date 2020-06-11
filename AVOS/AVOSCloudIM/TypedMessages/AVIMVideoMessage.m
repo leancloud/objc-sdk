@@ -6,49 +6,35 @@
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import <AVOSCloud/AVOSCloud.h>
-
 #import "AVIMVideoMessage.h"
-#import "AVIMGeneralObject.h"
 #import "AVIMTypedMessage_Internal.h"
 
 @implementation AVIMVideoMessage
 
-+ (void)load {
++ (void)load
+{
     [self registerSubclass];
 }
 
-+ (AVIMMessageMediaType)classMediaType {
++ (AVIMMessageMediaType)classMediaType
+{
     return kAVIMMessageMediaTypeVideo;
 }
 
-- (void)setSize:(uint64_t)size {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
-    metaData.size = size;
+- (double)size {
+    return [self decodingSize];
 }
 
-- (uint64_t)size {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
-    return metaData.size;
+- (double)duration {
+    return [self decodingDuration];
 }
 
-- (void)setFormat:(NSString *)format {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
-    metaData.format = format;
+- (NSString *)url {
+    return [self decodingUrl];
 }
 
 - (NSString *)format {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
-    return metaData.format;
+    return [self decodingFormat];
 }
 
-- (void)setDuration:(float)duration {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
-    metaData.duration = duration;
-}
-
-- (float)duration {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
-    return metaData.duration;
-}
 @end

@@ -10,15 +10,16 @@
 
 @implementation AVIMRecalledMessage
 
-+ (void)load {
++ (void)load
+{
     static dispatch_once_t onceToken;
-
     dispatch_once(&onceToken, ^{
         [self registerSubclass];
     });
 }
 
-+ (AVIMMessageMediaType)classMediaType {
++ (AVIMMessageMediaType)classMediaType
+{
     return kAVIMMessageMediaTypeRecalled;
 }
 

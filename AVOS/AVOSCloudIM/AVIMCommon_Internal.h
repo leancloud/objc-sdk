@@ -17,58 +17,58 @@ static NSUInteger const kClientIdLengthLimit = 64;
 static NSString * const kClientTagDefault = @"default";
 static NSString * const kTemporaryConversationIdPrefix = @"_tmp:";
 
-/// @see https://github.com/leancloud/avoscloud-push/blob/develop/push-server/doc/protocol.md
+/// ref: https://github.com/leancloud/avoscloud-push
 typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
-    LCIMSessionConfigOptions_Patch = 1 << 0,
-    LCIMSessionConfigOptions_TempConv = 1 << 1,
-    LCIMSessionConfigOptions_AutoBindInstallation = 1 << 2,
-    LCIMSessionConfigOptions_TransientACK = 1 << 3,
-    LCIMSessionConfigOptions_ReliableNotification = 1 << 4,
-    LCIMSessionConfigOptions_CallbackResultSlice = 1 << 5,
-    LCIMSessionConfigOptions_GroupChatReadReceipt = 1 << 6,
+    LCIMSessionConfigOptionsPatchMessage                        = 1 << 0,
+    LCIMSessionConfigOptionsTemporaryConversationMessage        = 1 << 1,
+    LCIMSessionConfigOptionsAutoBindDeviceidAndInstallation     = 1 << 2,
+    LCIMSessionConfigOptionsTransientMessageACK                 = 1 << 3,
+    LCIMSessionConfigOptionsNotification                        = 1 << 4,
+    LCIMSessionConfigOptionsPartialFailedMessage                = 1 << 5,
+    LCIMSessionConfigOptionsGroupChatRCP                        = 1 << 6,
 };
 
 /// conversation property key
-typedef NSString * const AVIMConversationKey NS_TYPED_EXTENSIBLE_ENUM;
-static AVIMConversationKey AVIMConversationKeyObjectId = @"objectId";
-static AVIMConversationKey AVIMConversationKeyUniqueId = @"uniqueId";
-static AVIMConversationKey AVIMConversationKeyName = @"name";
-static AVIMConversationKey AVIMConversationKeyCreator = @"c";
-static AVIMConversationKey AVIMConversationKeyCreatedAt = @"createdAt";
-static AVIMConversationKey AVIMConversationKeyUpdatedAt = @"updatedAt";
-static AVIMConversationKey AVIMConversationKeyLastMessageAt = @"lm";
-static AVIMConversationKey AVIMConversationKeyAttributes = @"attr";
-static AVIMConversationKey AVIMConversationKeyMembers = @"m";
-static AVIMConversationKey AVIMConversationKeyMutedMembers = @"mu";
-static AVIMConversationKey AVIMConversationKeyUnique = @"unique";
-static AVIMConversationKey AVIMConversationKeyTransient = @"tr";
-static AVIMConversationKey AVIMConversationKeySystem = @"sys";
-static AVIMConversationKey AVIMConversationKeyTemporary = @"temp";
-static AVIMConversationKey AVIMConversationKeyTemporaryTTL = @"ttl";
-static AVIMConversationKey AVIMConversationKeyConvType = @"conv_type";
-static AVIMConversationKey AVIMConversationKeyLastMessageContent = @"msg";
-static AVIMConversationKey AVIMConversationKeyLastMessageId = @"msg_mid";
-static AVIMConversationKey AVIMConversationKeyLastMessageFrom = @"msg_from";
-static AVIMConversationKey AVIMConversationKeyLastMessageTimestamp = @"msg_timestamp";
-static AVIMConversationKey AVIMConversationKeyLastMessagePatchTimestamp = @"patch_timestamp";
-static AVIMConversationKey AVIMConversationKeyLastMessageBinary = @"bin";
-static AVIMConversationKey AVIMConversationKeyLastMessageMentionAll = @"mention_all";
-static AVIMConversationKey AVIMConversationKeyLastMessageMentionPids = @"mention_pids";
+typedef NSString * AVIMConversationKey NS_STRING_ENUM;
+static AVIMConversationKey const AVIMConversationKeyObjectId                    = @"objectId";
+static AVIMConversationKey const AVIMConversationKeyUniqueId                    = @"uniqueId";
+static AVIMConversationKey const AVIMConversationKeyName                        = @"name";
+static AVIMConversationKey const AVIMConversationKeyCreator                     = @"c";
+static AVIMConversationKey const AVIMConversationKeyCreatedAt                   = @"createdAt";
+static AVIMConversationKey const AVIMConversationKeyUpdatedAt                   = @"updatedAt";
+static AVIMConversationKey const AVIMConversationKeyLastMessageAt               = @"lm";
+static AVIMConversationKey const AVIMConversationKeyAttributes                  = @"attr";
+static AVIMConversationKey const AVIMConversationKeyMembers                     = @"m";
+static AVIMConversationKey const AVIMConversationKeyMutedMembers                = @"mu";
+static AVIMConversationKey const AVIMConversationKeyUnique                      = @"unique";
+static AVIMConversationKey const AVIMConversationKeyTransient                   = @"tr";
+static AVIMConversationKey const AVIMConversationKeySystem                      = @"sys";
+static AVIMConversationKey const AVIMConversationKeyTemporary                   = @"temp";
+static AVIMConversationKey const AVIMConversationKeyTemporaryTTL                = @"ttl";
+static AVIMConversationKey const AVIMConversationKeyConvType                    = @"conv_type";
+static AVIMConversationKey const AVIMConversationKeyLastMessageContent          = @"msg";
+static AVIMConversationKey const AVIMConversationKeyLastMessageId               = @"msg_mid";
+static AVIMConversationKey const AVIMConversationKeyLastMessageFrom             = @"msg_from";
+static AVIMConversationKey const AVIMConversationKeyLastMessageTimestamp        = @"msg_timestamp";
+static AVIMConversationKey const AVIMConversationKeyLastMessagePatchTimestamp   = @"patch_timestamp";
+static AVIMConversationKey const AVIMConversationKeyLastMessageBinary           = @"bin";
+static AVIMConversationKey const AVIMConversationKeyLastMessageMentionAll       = @"mention_all";
+static AVIMConversationKey const AVIMConversationKeyLastMessageMentionPids      = @"mention_pids";
 
 /// Use this enum to match command's value(`convType`)
 typedef NS_ENUM(NSUInteger, LCIMConvType) {
-    LCIMConvTypeNormal = 1,
-    LCIMConvTypeTransient = 2,
-    LCIMConvTypeSystem = 3,
-    LCIMConvTypeTemporary = 4,
+    LCIMConvTypeNormal      = 1,
+    LCIMConvTypeTransient   = 2,
+    LCIMConvTypeSystem      = 3,
+    LCIMConvTypeTemporary   = 4,
 };
 
-typedef NSString * const AVIMConversationMemberInfoKey NS_TYPED_EXTENSIBLE_ENUM;
-static AVIMConversationMemberInfoKey AVIMConversationMemberInfoKeyConversationId = @"cid";
-static AVIMConversationMemberInfoKey AVIMConversationMemberInfoKeyMemberId = @"clientId";
-static AVIMConversationMemberInfoKey AVIMConversationMemberInfoKeyRole = @"role";
+typedef NSString * AVIMConversationMemberInfoKey NS_STRING_ENUM;
+static AVIMConversationMemberInfoKey const AVIMConversationMemberInfoKeyConversationId  = @"cid";
+static AVIMConversationMemberInfoKey const AVIMConversationMemberInfoKeyMemberId        = @"clientId";
+static AVIMConversationMemberInfoKey const AVIMConversationMemberInfoKeyRole            = @"role";
 
-typedef NSString * const AVIMConversationMemberRoleKey NS_TYPED_EXTENSIBLE_ENUM;
-static AVIMConversationMemberRoleKey AVIMConversationMemberRoleKeyMember = @"Member";
-static AVIMConversationMemberRoleKey AVIMConversationMemberRoleKeyManager = @"Manager";
-static AVIMConversationMemberRoleKey AVIMConversationMemberRoleKeyOwner = @"Owner";
+typedef NSString * AVIMConversationMemberRoleKey NS_STRING_ENUM;
+static AVIMConversationMemberRoleKey const AVIMConversationMemberRoleKeyMember      = @"Member";
+static AVIMConversationMemberRoleKey const AVIMConversationMemberRoleKeyManager     = @"Manager";
+static AVIMConversationMemberRoleKey const AVIMConversationMemberRoleKeyOwner       = @"Owner";

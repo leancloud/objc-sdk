@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMCommon_Internal.h"
 #import "AVIMClient.h"
-#import "AVIMWebSocketWrapper.h"
+#import "AVIMCommon_Internal.h"
+#import "LCRTMConnection.h"
+#import "AVIMClientInternalConversationManager_Internal.h"
+#import "AVIMSignature.h"
+#import "LCIMConversationCache.h"
 
-@class LCIMConversationCache;
-@class AVIMClientInternalConversationManager;
-@class AVIMClientPushManager;
-@class AVIMSignature;
+#import "AVApplication_Internal.h"
 
 #if DEBUG
 void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
@@ -24,15 +24,37 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 #define AssertNotRunInQueue(queue)
 #endif
 
-@interface AVIMClient () <AVIMWebSocketWrapperDelegate>
+@interface LCIMProtobufCommandWrapper : NSObject
 
-@property (nonatomic, strong, readonly) dispatch_queue_t internalSerialQueue;
-@property (nonatomic, strong, readonly) dispatch_queue_t signatureQueue;
-@property (nonatomic, strong, readonly) dispatch_queue_t userInteractQueue;
-@property (nonatomic, strong, readonly) AVIMWebSocketWrapper *socketWrapper;
-@property (nonatomic, strong, readonly) AVIMClientInternalConversationManager *conversationManager;
-@property (nonatomic, strong, readonly) AVIMClientPushManager *pushManager;
-@property (nonatomic, strong, readonly) LCIMConversationCache *conversationCache;
+@property (nonatomic) AVIMGenericCommand *outCommand;
+@property (nonatomic) AVIMGenericCommand *inCommand;
+@property (nonatomic) NSError *error;
+// TODO: client context
+@property (nonatomic) void (^callback)(LCIMProtobufCommandWrapper *commandWrapper);
+
+@end
+
+@interface AVIMClient () <LCRTMConnectionDelegate>
+
+@property (nonatomic, readonly) int64_t sessionConfigBitmap;
+@property (nonatomic, readonly) NSLock *lock;
+@property (nonatomic, readonly) dispatch_queue_t internalSerialQueue;
+@property (nonatomic, readonly) dispatch_queue_t signatureQueue;
+@property (nonatomic, readonly) dispatch_queue_t userInteractQueue;
+@property (nonatomic, readonly) LCRTMConnection *connection;
+@property (nonatomic, readonly) LCRTMServiceConsumer *serviceConsumer;
+@property (nonatomic, readonly) LCRTMConnectionDelegator *connectionDelegator;
+@property (nonatomic, readonly) AVInstallation *installation;
+@property (nonatomic, readonly) AVIMClientInternalConversationManager *conversationManager;
+@property (nonatomic, readonly) LCIMConversationCache *conversationCache;
+
+@property (nonatomic) void (^openingCompletion)(BOOL, NSError *);
+@property (nonatomic) AVIMClientOpenOption openingOption;
+@property (nonatomic) NSString *sessionToken;
+@property (nonatomic) NSDate *sessionTokenExpiration;
+@property (nonatomic) int64_t lastUnreadNotifTime;
+@property (nonatomic) int64_t lastPatchTime;
+@property (nonatomic) NSString *currentDeviceToken;
 
 + (NSMutableDictionary *)sessionProtocolOptions;
 

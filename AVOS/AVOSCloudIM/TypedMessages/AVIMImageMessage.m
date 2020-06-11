@@ -6,59 +6,39 @@
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import <AVOSCloud/AVOSCloud.h>
-
 #import "AVIMImageMessage.h"
-#import "AVIMGeneralObject.h"
 #import "AVIMTypedMessage_Internal.h"
 
 @implementation AVIMImageMessage
 
-+ (void)load {
++ (void)load
+{
     [self registerSubclass];
 }
 
-+ (AVIMMessageMediaType)classMediaType {
++ (AVIMMessageMediaType)classMediaType
+{
     return kAVIMMessageMediaTypeImage;
 }
 
-- (void)setWidth:(uint)width {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
-    metaData.width = width;
+- (double)width {
+    return [self decodingWidth];
 }
 
-- (uint)width {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
-    return metaData.width;
+- (double)height {
+    return [self decodingHeight];
 }
 
-- (void)setHeight:(uint)height {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
-    metaData.height = height;
+- (double)size {
+    return [self decodingSize];
 }
 
-- (uint)height {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
-    return metaData.height;
-}
-
-- (void)setSize:(uint64_t)size {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
-    metaData.size = size;
-}
-
-- (uint64_t)size {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
-    return metaData.size;
-}
-
-- (void)setFormat:(NSString *)format {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
-    metaData.format = format;
+- (NSString *)url {
+    return [self decodingUrl];
 }
 
 - (NSString *)format {
-    AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] initWithMutableDictionary:self.file.metaData.mutableCopy];
-    return metaData.format;
+    return [self decodingFormat];
 }
+
 @end

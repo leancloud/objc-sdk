@@ -7,41 +7,29 @@
 //
 
 #import "AVSubscriber.h"
-#import "AVExponentialTimer.h"
-#import "AVLiveQuery.h"
 #import "AVLiveQuery_Internal.h"
 
-/* AVOSCloud headers */
+#import "AVApplication_Internal.h"
 #import "AVUtils.h"
 #import "AVObjectUtils.h"
 
-/* AVOSCloudIM headers */
-#import "AVIMWebSocketWrapper.h"
+#import "LCRTMConnection.h"
 #import "MessagesProtoOrig.pbobjc.h"
+#import "AVIMErrorUtil.h"
 
-typedef NS_ENUM(NSInteger, AVServiceType) {
-    AVServiceTypeLiveQuery = 1
-};
+static NSString * const AVIdentifierPrefix = @"livequery";
+NSString * const AVLiveQueryEventKey = @"AVLiveQueryEventKey";
+NSNotificationName const AVLiveQueryEventNotification = @"AVLiveQueryEventNotification";
 
-static NSString *const AVIdentifierPrefix = @"livequery";
+@interface AVSubscriber () <LCRTMConnectionDelegate>
 
-static const NSTimeInterval AVBackoffInitialTime = 0.618;
-static const NSTimeInterval AVBackoffMaximumTime = 60;
-
-NSString *const AVLiveQueryEventKey = @"AVLiveQueryEventKey";
-NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification";
-
-@interface AVSubscriber () <AVIMWebSocketWrapperDelegate> {
-    
-    NSHashTable<AVLiveQuery *> *_weakLiveQueryObjectTable;
-    NSMutableArray<void (^)(BOOL, NSError *)> *_loginCallbackArray;
-    dispatch_queue_t _internalSerialQueue;
-    BOOL _isLoginCommandInHandshaking;
-}
-
-@property (nonatomic, assign) BOOL alive;
-@property (nonatomic, strong) AVIMWebSocketWrapper *webSocket;
-@property (nonatomic, strong) AVExponentialTimer   *backoffTimer;
+@property (nonatomic) dispatch_queue_t internalSerialQueue;
+@property (nonatomic) BOOL alive;
+@property (nonatomic) LCRTMConnection *connection;
+@property (nonatomic) LCRTMServiceConsumer *serviceConsumer;
+@property (nonatomic) LCRTMConnectionDelegator *connectionDelegator;
+@property (nonatomic) NSHashTable<AVLiveQuery *> *weakLiveQueryObjectTable;
+@property (nonatomic) NSMutableArray<void (^)(BOOL, NSError *)> *loginCallbackArray;
 
 @end
 
@@ -51,277 +39,216 @@ NSNotificationName AVLiveQueryEventNotification = @"AVLiveQueryEventNotification
 {
     static AVSubscriber *instance;
     static dispatch_once_t onceToken;
-
     dispatch_once(&onceToken, ^{
         instance = [[AVSubscriber alloc] init];
     });
-
     return instance;
 }
 
 - (instancetype)init
 {
     self = [super init];
-
     if (self) {
-        
         NSString *deviceUUID = [AVUtils deviceUUID];
-        self->_internalSerialQueue = dispatch_queue_create("AVSubscriber._internalSerialQueue", NULL);
-        self->_weakLiveQueryObjectTable = [NSHashTable weakObjectsHashTable];
-        self->_loginCallbackArray = nil;
-        self->_alive = false;
-        
-        self->_webSocket = [[AVIMWebSocketWrapper alloc] initWithDelegate:self];
-        self->_identifier = [NSString stringWithFormat:@"%@-%@", AVIdentifierPrefix, deviceUUID];
-        self->_backoffTimer = [AVExponentialTimer exponentialTimerWithInitialTime:AVBackoffInitialTime
-                                                                    maxTime:AVBackoffMaximumTime];
-        self->_isLoginCommandInHandshaking = false;
+        _identifier = [NSString stringWithFormat:@"%@-%@", AVIdentifierPrefix, deviceUUID];
+        _internalSerialQueue = dispatch_queue_create([NSString stringWithFormat:
+                                                      @"LC.Objc.%@.%@",
+                                                      NSStringFromClass(self.class),
+                                                      keyPath(self, internalSerialQueue)]
+                                                     .UTF8String, NULL);
+        _weakLiveQueryObjectTable = [NSHashTable weakObjectsHashTable];
+        _loginCallbackArray = nil;
+        _alive = false;
+        _serviceConsumer = [[LCRTMServiceConsumer alloc] initWithApplication:[AVApplication defaultApplication]
+                                                                     service:LCRTMServiceLiveQuery
+                                                                    protocol:LCIMProtocol3
+                                                                      peerID:_identifier];
+        _connectionDelegator = [[LCRTMConnectionDelegator alloc] initWithPeerID:_identifier
+                                                                       delegate:self
+                                                                          queue:_internalSerialQueue];
+        NSError *error;
+        _connection = [[LCRTMConnectionManager sharedManager] registerWithServiceConsumer:_serviceConsumer
+                                                                                    error:&error];
+        if (error) {
+            AVLoggerError(AVLoggerDomainStorage, @"%@", error);
+        }
     }
-
     return self;
 }
 
 - (void)dealloc
 {
-    [self.webSocket close];
+    [self.connection removeDelegatorWithServiceConsumer:self.serviceConsumer];
+    [[LCRTMConnectionManager sharedManager] unregisterWithServiceConsumer:self.serviceConsumer];
 }
 
-// MARK: - Queue
+// MARK: Queue
 
 - (void)addOperationToInternalSerialQueue:(void (^)(AVSubscriber *subscriber))block
 {
-    dispatch_async(_internalSerialQueue, ^{
-        
+    dispatch_async(self.internalSerialQueue, ^{
         block(self);
     });
 }
 
-- (void)invokeCallback:(dispatch_block_t)block
+// MARK: LCRTMConnection Delegate
+
+- (void)LCRTMConnectionDidConnect:(LCRTMConnection *)connection
 {
-    dispatch_queue_t queue = self.callbackQueue;
-    
-    if (queue) {
-        
-        dispatch_async(queue, block);
-        
-    } else {
-        
-        block();
+    [self sendLoginCommand];
+}
+
+- (void)LCRTMConnectionInConnecting:(LCRTMConnection *)connection {}
+
+- (void)LCRTMConnection:(LCRTMConnection *)connection didReceiveCommand:(AVIMGenericCommand *)inCommand
+{
+    if (inCommand.hasCmd &&
+        inCommand.cmd == AVIMCommandType_Data &&
+        inCommand.hasDataMessage) {
+        [self handleDataCommand:inCommand.dataMessage];
     }
 }
 
-// MARK: - Websocket Delegate
-
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didCommandEncounterError:(LCIMProtobufCommandWrapper *)commandWrapper
+- (void)LCRTMConnection:(LCRTMConnection *)connection didDisconnectWithError:(NSError *)error
 {
-    [self addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
-        if (commandWrapper.hasCallback && commandWrapper.error) {
-            [commandWrapper executeCallbackAndSetItToNil];
+    self.alive = false;
+    [self invokeAllLoginCallbackWithSucceeded:false
+                                        error:error];
+    BOOL liveQueryExist = false;
+    for (AVLiveQuery *item in self.weakLiveQueryObjectTable) {
+        if (item) {
+            liveQueryExist = true;
+            break;
         }
-    }];
+    }
+    if (!liveQueryExist) {
+        [self.weakLiveQueryObjectTable removeAllObjects];
+        self.connectionDelegator.delegate = nil;
+        [self.connection removeDelegatorWithServiceConsumer:self.serviceConsumer];
+    }
 }
 
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didReceiveCommand:(LCIMProtobufCommandWrapper *)commandWrapper
+- (void)handleDataCommand:(AVIMDataCommand *)command
 {
-    [self addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
-        AVIMGenericCommand *command = commandWrapper.inCommand;
-        /* Filter out non-live-query commands. */
-        if (command.service != AVServiceTypeLiveQuery)
-            return;
-        switch (command.cmd) {
-            case AVIMCommandType_Data:
-                [subscriber handleDataCommand:command];
-                break;
-            default:
-                break;
-        }
-    }];
-}
-
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didReceiveCommandCallback:(LCIMProtobufCommandWrapper *)commandWrapper
-{
-    [self addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
-        if (commandWrapper.hasCallback) {
-            [commandWrapper executeCallbackAndSetItToNil];
-        }
-    }];
-}
-
-- (void)webSocketWrapperDidReopen:(AVIMWebSocketWrapper *)socketWrapper
-{
-    [self addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
-        [subscriber resentLoginCommand];
-    }];
-}
-
-- (void)webSocketWrapperDidPause:(AVIMWebSocketWrapper *)socketWrapper
-{
-    [self addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
-        subscriber.alive = false;
-    }];
-}
-
-- (void)webSocketWrapper:(AVIMWebSocketWrapper *)socketWrapper didCloseWithError:(NSError *)error
-{
-    [self addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
-        subscriber.alive = false;
-    }];
-}
-
-- (void)handleDataCommand:(AVIMGenericCommand *)command {
-    NSArray<AVIMJsonObjectMessage*> *messages = command.dataMessage.msgArray;
-
-    for (AVIMJsonObjectMessage *message in messages)
+    for (AVIMJsonObjectMessage *message in command.msgArray) {
         [self handleDataMessage:message];
+    }
 }
 
-- (void)handleDataMessage:(AVIMJsonObjectMessage *)message {
-    NSString *JSONString = message.data_p;
-
-    if (!JSONString)
+- (void)handleDataMessage:(AVIMJsonObjectMessage *)message
+{
+    NSString *JSONString = (message.hasData_p ? message.data_p : nil);
+    if (!JSONString) {
         return;
-
-    NSError *error = nil;
+    }
+    NSError *error;
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding]
                                                                options:0
                                                                  error:&error];
-
-    if (error || !dictionary)
+    if (error || !dictionary) {
         return;
-
-    NSDictionary *event = (NSDictionary *)[AVObjectUtils objectFromDictionary:dictionary recursive:YES];
-    NSDictionary *userInfo = @{ AVLiveQueryEventKey: event };
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:AVLiveQueryEventNotification
-                                                        object:self
-                                                      userInfo:userInfo];
+    }
+    NSDictionary *event = (NSDictionary *)[AVObjectUtils objectFromDictionary:dictionary
+                                                                    recursive:YES];
+    if ([event isKindOfClass:[NSDictionary class]]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:AVLiveQueryEventNotification
+                                                            object:self
+                                                          userInfo:@{ AVLiveQueryEventKey: event }];
+    }
 }
 
-// MARK: - Login
+// MARK: Login
 
 - (AVIMGenericCommand *)makeLoginCommand
 {
-    AVIMGenericCommand *command = [[AVIMGenericCommand alloc] init];
-
-    command.cmd             = AVIMCommandType_Login;
-    command.appId           = [AVOSCloud getApplicationId];
-    command.installationId  = self.identifier;
-    command.service         = AVServiceTypeLiveQuery;
-
+    AVIMGenericCommand *command = [AVIMGenericCommand new];
+    command.cmd = AVIMCommandType_Login;
+    command.appId = [self.serviceConsumer.application identifierThrowException];
+    command.installationId = self.identifier;
+    command.service = LCRTMServiceLiveQuery;
     return command;
 }
 
-- (void)invokeAllLoginCallbackWithSucceeded:(BOOL)succeeded error:(NSError *)error
+- (void)invokeAllLoginCallbackWithSucceeded:(BOOL)succeeded
+                                      error:(NSError *)error
 {
-    NSArray<void (^)(BOOL, NSError *)> *callbacks = self->_loginCallbackArray;
-    if (!callbacks) { return; }
-    self->_loginCallbackArray = nil;
-    [self invokeCallback:^{
-        for (void (^callback)(BOOL, NSError *) in callbacks) {
-            callback(succeeded, error);
-        }
-    }];
+    NSArray<void (^)(BOOL, NSError *)> *callbacks = self.loginCallbackArray;
+    if (!callbacks) {
+        return;
+    }
+    self.loginCallbackArray = nil;
+    for (void (^callback)(BOOL, NSError *) in callbacks) {
+        callback(succeeded, error);
+    }
 }
 
 - (void)loginWithCallback:(void (^)(BOOL succeeded, NSError *error))callback
 {
     [self addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
-        
-        if (subscriber.alive) {
-            [subscriber invokeCallback:^{
-                callback(true, nil);
-            }];
-            return;
-        }
-        
-        if (subscriber->_loginCallbackArray) {
-            [subscriber->_loginCallbackArray addObject:callback];
+        if (subscriber.loginCallbackArray) {
+            [subscriber.loginCallbackArray addObject:callback];
         } else {
-            subscriber->_loginCallbackArray = [NSMutableArray arrayWithObject:callback];
-            LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
-            commandWrapper.outCommand = [subscriber makeLoginCommand];
-            [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
-                subscriber->_isLoginCommandInHandshaking = false;
-                NSError *error = commandWrapper.error;
-                AVIMGenericCommand *inCommand = commandWrapper.inCommand;
-                subscriber.alive = (!error && inCommand && inCommand.cmd == AVIMCommandType_Loggedin);
-                if (subscriber.alive) {
-                    [subscriber.backoffTimer reset];
-                    [subscriber invokeAllLoginCallbackWithSucceeded:true error:nil];
-                    [subscriber.webSocket setActivatingReconnectionEnabled:true];
-                } else {
-                    [subscriber resentLoginCommand];
-                }
-            }];
-            
-            [subscriber.webSocket openWithCallback:^(BOOL succeeded, NSError *error) {
-                [subscriber addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
-                    if (error) {
-                        [subscriber invokeAllLoginCallbackWithSucceeded:false error:error];
-                    } else {
-                        subscriber->_isLoginCommandInHandshaking = true;
-                        [subscriber.webSocket sendCommandWrapper:commandWrapper];
-                    }
-                }];
-            }];
+            subscriber.loginCallbackArray = [NSMutableArray arrayWithObject:callback];
+            subscriber.connectionDelegator.delegate = subscriber;
+            [subscriber.connection connectWithServiceConsumer:subscriber.serviceConsumer
+                                                    delegator:subscriber.connectionDelegator];
         }
     }];
 }
 
-- (void)resentLoginCommand
+- (void)sendLoginCommand
 {
-    if (self->_isLoginCommandInHandshaking) {
+    if (!self.loginCallbackArray &&
+        self.weakLiveQueryObjectTable.count == 0) {
         return;
     }
     if (self.alive) {
-        [self invokeAllLoginCallbackWithSucceeded:true error:nil];
+        [self invokeAllLoginCallbackWithSucceeded:true
+                                            error:nil];
         return;
     }
-    
-    LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
-    commandWrapper.outCommand = [self makeLoginCommand];
-    [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
-        NSError *error = commandWrapper.error;
-        AVIMGenericCommand *inCommand = commandWrapper.inCommand;
-        self.alive = (!error && inCommand && inCommand.cmd == AVIMCommandType_Loggedin);
-        if (self.alive) {
-            [self.backoffTimer reset];
-            [self invokeAllLoginCallbackWithSucceeded:true error:nil];
-            NSArray<AVLiveQuery *> *livingObjects = [self->_weakLiveQueryObjectTable allObjects];
-            BOOL liveQueryExist = false;
-            for (AVLiveQuery *item in livingObjects) {
-                if (item) {
-                    liveQueryExist = true;
-                    [item resubscribe];
-                }
+    __weak typeof(self) ws = self;
+    [self.connection sendCommand:[self makeLoginCommand]
+                         service:LCRTMServiceLiveQuery
+                          peerID:self.identifier
+                         onQueue:self.internalSerialQueue
+                        callback:^(AVIMGenericCommand * _Nullable inCommand, NSError * _Nullable error) {
+        AVSubscriber *ss = ws;
+        if (!ss) {
+            return;
+        }
+        ss.alive = (!error &&
+                    inCommand &&
+                    inCommand.hasCmd &&
+                    inCommand.cmd == AVIMCommandType_Loggedin);
+        if (ss.alive) {
+            [ss invokeAllLoginCallbackWithSucceeded:true
+                                              error:nil];
+            for (AVLiveQuery *item in ss.weakLiveQueryObjectTable) {
+                [item resubscribe];
             }
-            [self.webSocket setActivatingReconnectionEnabled:liveQueryExist];
-        } else {
-            NSTimeInterval after = [self.backoffTimer timeIntervalAndCalculateNext];
-            dispatch_time_t when = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(after * NSEC_PER_SEC));
-            dispatch_after(when, self->_internalSerialQueue, ^{
-                [self resentLoginCommand];
-            });
+        } else if (error) {
+            if ([error.domain isEqualToString:kLeanCloudErrorDomain] &&
+                error.code == AVIMErrorCodeCommandTimeout) {
+                [ws sendLoginCommand];
+            }
         }
     }];
-    [self.webSocket sendCommandWrapper:commandWrapper];
 }
 
-// MARK: - Weak Retainer
+// MARK: Weak Retainer
 
 - (void)addLiveQueryObjectToWeakTable:(AVLiveQuery *)liveQueryObject
 {
     [self addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
-        
-        [subscriber->_weakLiveQueryObjectTable addObject:liveQueryObject];
+        [subscriber.weakLiveQueryObjectTable addObject:liveQueryObject];
     }];
 }
 
 - (void)removeLiveQueryObjectFromWeakTable:(AVLiveQuery *)liveQueryObject
 {
     [self addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
-        
-        [subscriber->_weakLiveQueryObjectTable removeObject:liveQueryObject];
+        [subscriber.weakLiveQueryObjectTable removeObject:liveQueryObject];
     }];
 }
 

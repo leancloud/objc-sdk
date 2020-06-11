@@ -98,6 +98,10 @@ extension LCIMTestBase {
 
 class AVIMClientDelegateWrapper: NSObject, AVIMClientDelegate {
     
+    func imClientPaused(_ imClient: AVIMClient, error: Error?) {
+        
+    }
+    
     var pausedClosure: ((AVIMClient) -> Void)?
     func imClientPaused(_ imClient: AVIMClient) {
         self.pausedClosure?(imClient)

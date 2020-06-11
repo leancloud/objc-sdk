@@ -18,24 +18,22 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Latitude. Should be 0~90.
  */
-@property(nonatomic, assign, readonly) CGFloat latitude;
+@property (nonatomic, readonly) double latitude;
 
 /**
  *  Longitude, Should be 0~360.
  */
-@property(nonatomic, assign, readonly) CGFloat longitude;
+@property (nonatomic, readonly) double longitude;
 
-/*!
- 创建位置消息。
- @param text － 消息文本.
- @param latitude － 纬度
- @param longitude － 经度
- @param attributes － 用户附加属性
- */
-+ (instancetype)messageWithText:(nullable NSString *)text
-                       latitude:(CGFloat)latitude
-                      longitude:(CGFloat)longitude
-                     attributes:(nullable NSDictionary *)attributes;
+/// Create a location message.
+/// @param text The string text.
+/// @param latitude The latitude of GeoPoint.
+/// @param longitude The longitude of GeoPoint.
+/// @param attributes The custom attributes.
++ (instancetype)messageWithText:(NSString * _Nullable)text
+                       latitude:(double)latitude
+                      longitude:(double)longitude
+                     attributes:(NSDictionary * _Nullable)attributes;
 
 @end
 

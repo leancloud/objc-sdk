@@ -13,39 +13,27 @@
 
 #if !TARGET_OS_WATCH
 #import "AVAnalytics_Internal.h"
+#import "AVAnalyticsUtils.h"
 #endif
 
 #import "AVUtils.h"
 #include "AVOSCloud_Art.inc"
-#import "AVAnalyticsUtils.h"
 #import "LCNetworkStatistics.h"
 #import "AVObjectUtils.h"
 
 #import "LCRouter_Internal.h"
+#import "AVApplication_Internal.h"
 
-@implementation AVOSCloud {
-    NSString *_applicationId;
-    NSString *_applicationKey;
-    AVVerbosePolicy _verbosePolicy;
-}
+@implementation AVOSCloud
 
-+ (instancetype)sharedInstance
-{
-    static AVOSCloud *instance;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        instance = [[AVOSCloud alloc] init];
-        instance->_verbosePolicy = kAVVerboseAuto;
-    });
-    return instance;
-}
+static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
 
 + (void)setAllLogsEnabled:(BOOL)enabled {
     [AVLogger setAllLogsEnabled:enabled];
 }
 
 + (void)setVerbosePolicy:(AVVerbosePolicy)verbosePolicy {
-    [AVOSCloud sharedInstance]->_verbosePolicy = verbosePolicy;
+    gVerbosePolicy = verbosePolicy;
 }
 
 + (void)logApplicationInfo
@@ -53,11 +41,13 @@
     const char *s = (const char *)AVOSCloud_Art_inc;
     printf("%s\n", s);
     printf("appid: %s\n", [[self getApplicationId] UTF8String]);
+#if !TARGET_OS_WATCH
     NSDictionary *dict = [AVAnalyticsUtils deviceInfo];
     for (NSString *key in dict) {
         id value = [dict objectForKey:key];
         printf("%s: %s\n", [key UTF8String], [[NSString stringWithFormat:@"%@", value] UTF8String]);
     }
+#endif
     printf("----------------------------------------------------------\n");
 }
 
@@ -88,26 +78,26 @@
         [appDomain isEqualToString:AppDomainCE]) {
         if (![LCRouter serverURLString]) {
             [NSException raise:NSInternalInconsistencyException
-                        format:@"Server URL not set."] ;
+                        format:@"Server URL not found."] ;
         }
     }
     
-    [AVOSCloud sharedInstance]->_applicationId = applicationId;
-    [AVOSCloud sharedInstance]->_applicationKey = clientKey;
+    [[AVApplication defaultApplication] setWithIdentifier:applicationId
+                                                      key:clientKey];
     
     [self initializePaasClient];
     
-    if ([AVOSCloud sharedInstance]->_verbosePolicy == kAVVerboseShow) {
+    if (gVerbosePolicy == kAVVerboseShow) {
         [self logApplicationInfo];
     }
 }
 
 + (NSString *)getApplicationId {
-    return [AVOSCloud sharedInstance]->_applicationId;
+    return [[AVApplication defaultApplication] identifierThrowException];
 }
 
 + (NSString *)getClientKey {
-    return [AVOSCloud sharedInstance]->_applicationKey;
+    return [[AVApplication defaultApplication] keyThrowException];
 }
 
 + (void)setLastModifyEnabled:(BOOL)enabled {

@@ -6,39 +6,45 @@
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import <AVOSCloud/AVOSCloud.h>
-
 #import "AVIMLocationMessage.h"
-#import "AVIMGeneralObject.h"
+#import "AVGeoPoint_Internal.h"
 #import "AVIMTypedMessage_Internal.h"
 
 @implementation AVIMLocationMessage
 
-+ (void)load {
++ (void)load
+{
     [self registerSubclass];
 }
 
-+ (AVIMMessageMediaType)classMediaType {
++ (AVIMMessageMediaType)classMediaType
+{
     return kAVIMMessageMediaTypeLocation;
 }
 
 + (instancetype)messageWithText:(NSString *)text
-                       latitude:(CGFloat)latitude
-                      longitude:(CGFloat)longitude
-                     attributes:(NSDictionary *)attributes {
+                       latitude:(double)latitude
+                      longitude:(double)longitude
+                     attributes:(NSDictionary *)attributes
+{
     AVIMLocationMessage *message = [[self alloc] init];
-    message.text = text;
-    message.attributes = attributes;
-    AVGeoPoint *location = [AVGeoPoint geoPointWithLatitude:latitude longitude:longitude];
+    if (text) {
+        message.text = text;
+    }
+    if (attributes) {
+        message.attributes = attributes;
+    }
+    AVGeoPoint *location = [AVGeoPoint geoPointWithLatitude:latitude
+                                                  longitude:longitude];
     message.location = location;
     return message;
 }
 
-- (CGFloat)longitude {
+- (double)longitude {
     return self.location.longitude;
 }
 
-- (CGFloat)latitude {
+- (double)latitude {
     return self.location.latitude;
 }
 

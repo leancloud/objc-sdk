@@ -120,26 +120,38 @@ NSInteger const kAVErrorFileNotFound = 400;
 /*! File Data not available */
 NSInteger const kAVErrorFileDataNotAvailable = 401;
 
-NSError * LCErrorInternal(NSString *failureReason)
+NSError *LCError(NSInteger code, NSString *failureReason, NSDictionary *userInfo)
 {
-    return LCError(kAVErrorInternalServer, failureReason, nil);
+    NSMutableDictionary *mutableDictionary;
+    if (userInfo) {
+        mutableDictionary = [NSMutableDictionary dictionaryWithDictionary:userInfo];
+    } else {
+        mutableDictionary = [NSMutableDictionary dictionary];
+    }
+    if (failureReason) {
+        mutableDictionary[NSLocalizedFailureReasonErrorKey] = failureReason;
+    }
+    return [NSError errorWithDomain:kLeanCloudErrorDomain
+                               code:code
+                           userInfo:mutableDictionary];
 }
 
-NSError * LCError(NSInteger code, NSString *failureReason, NSDictionary *userInfo)
+NSError *LCErrorFromUnderlyingError(NSError *underlyingError)
 {
-    NSError *error = ({
-        NSMutableDictionary *mutableDictionary = nil;
-        if (userInfo) {
-            mutableDictionary = [NSMutableDictionary dictionaryWithDictionary:userInfo];
-        } else {
-            mutableDictionary = [NSMutableDictionary dictionary];
+    if ([underlyingError.domain isEqualToString:kLeanCloudErrorDomain]) {
+        return underlyingError;
+    } else {
+        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+        if (underlyingError) {
+            userInfo[NSUnderlyingErrorKey] = underlyingError;
         }
-        if (failureReason) {
-            mutableDictionary[NSLocalizedFailureReasonErrorKey] = failureReason;
-        }
-        [NSError errorWithDomain:kLeanCloudErrorDomain
-                            code:code
-                        userInfo:mutableDictionary];
-    });
-    return error;
+        return LCError(AVErrorInternalErrorCodeUnderlyingError,
+                       @"Underlying error.",
+                       userInfo);
+    }
+}
+
+NSError *LCErrorInternal(NSString *failureReason)
+{
+    return LCError(kAVErrorInternalServer, failureReason, nil);
 }

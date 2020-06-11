@@ -20,7 +20,6 @@
 #import "LCIMConversationCache.h"
 
 #import "AVIMBlockHelper.h"
-#import "AVIMGeneralObject.h"
 #import "AVIMErrorUtil.h"
 
 #import "AVFile_Internal.h"
@@ -507,7 +506,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     int64_t msgTimestamp = [NSNumber _lc_decoding:rawJSONData key:AVIMConversationKeyLastMessageTimestamp].longLongValue;
     if (msgContent && msgId && msgFrom && msgTimestamp) {
         AVIMTypedMessageObject *typedMessageObject = [[AVIMTypedMessageObject alloc] initWithJSON:msgContent];
-        if (typedMessageObject.isValidTypedMessageObject) {
+        if ([typedMessageObject isValidTypedMessageObject]) {
             lastMessage = [AVIMTypedMessage messageWithMessageObject:typedMessageObject];
         } else {
             lastMessage = [[AVIMMessage alloc] init];
@@ -1350,15 +1349,15 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                     }];
                     return;
                 }
-                /* If uploading is success, bind file to message */
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    [self fillTypedMessage:typedMessage withFile:file];
-                    [self fillTypedMessageForLocationIfNeeded:typedMessage];
-                    [self sendRealMessage:message option:option callback:callback];
-                });
+                AVIMClient *client = self.imClient;
+                if (client) {
+                    dispatch_async(client.internalSerialQueue, ^{
+                        [self fillTypedMessage:typedMessage withFile:file];
+                        [self sendRealMessage:message option:option callback:callback];
+                    });
+                }
             }];
         } else {
-            [self fillTypedMessageForLocationIfNeeded:typedMessage];
             [self sendRealMessage:message option:option callback:callback];
         }
     } else {
@@ -1368,100 +1367,85 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 - (void)fillTypedMessage:(AVIMTypedMessage *)typedMessage withFile:(AVFile *)file
 {
-    typedMessage.file = file;
-    AVIMGeneralObject *object = [[AVIMGeneralObject alloc] init];
-    object.url = file.url;
-    object.objId = file.objectId;
+    NSMutableDictionary *metaData = (file.metaData.mutableCopy
+                                     ?: [NSMutableDictionary dictionary]);
     switch (typedMessage.mediaType) {
         case kAVIMMessageMediaTypeImage:
         {
-            id image = nil;
+            double width = [metaData[@"width"] doubleValue];
+            double height = [metaData[@"height"] doubleValue];
+            if (!(width > 0 && height > 0)) {
 #if TARGET_OS_IOS || TARGET_OS_TV || TARGET_OS_WATCH
-            image = ({
-                UIImage *image = nil;
-                NSString *cachedPath = file.persistentCachePath;
-                if ([[NSFileManager defaultManager] fileExistsAtPath:cachedPath]) {
-                    NSData *data = [NSData dataWithContentsOfFile:cachedPath];
-                    image = [UIImage imageWithData:data];
-                }
-                image;
-            });
-#else
-            image = ({
-                NSImage *image = nil;
-                NSString *cachedPath = file.persistentCachePath;
-                if ([[NSFileManager defaultManager] fileExistsAtPath:cachedPath]) {
-                    NSData *data = [NSData dataWithContentsOfFile:cachedPath];
-                    image = [[NSImage alloc] initWithData:data];
-                }
-                image;
-            });
+                UIImage *image = ({
+                    UIImage *image;
+                    NSString *cachedPath = file.persistentCachePath;
+                    if ([[NSFileManager defaultManager] fileExistsAtPath:cachedPath]) {
+                        NSData *data = [NSData dataWithContentsOfFile:cachedPath];
+                        image = [UIImage imageWithData:data];
+                    }
+                    image;
+                });
+                width = image.size.width * image.scale;
+                height = image.size.height * image.scale;
+#elif TARGET_OS_OSX
+                NSImage *image = ({
+                    NSImage *image;
+                    NSString *cachedPath = file.persistentCachePath;
+                    if ([[NSFileManager defaultManager] fileExistsAtPath:cachedPath]) {
+                        NSData *data = [NSData dataWithContentsOfFile:cachedPath];
+                        image = [[NSImage alloc] initWithData:data];
+                    }
+                    image;
+                });
+                width = image.size.width;
+                height = image.size.height;
 #endif
-            if (!image) { break; }
-            CGFloat width;
-            CGFloat height;
-#if TARGET_OS_IOS || TARGET_OS_TV || TARGET_OS_WATCH
-            width = [(UIImage *)image size].width;
-            height = [(UIImage *)image size].height;
-#else
-            width = [(NSImage *)image size].width;
-            height = [(NSImage *)image size].height;
-#endif
-            AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] init];
-            metaData.height = height;
-            metaData.width = width;
-            metaData.size = file.size;
-            metaData.format = [file.name pathExtension];
-            [file setMetaData:[metaData dictionary].copy];
-            object.metaData = metaData;
-            typedMessage.messageObject._lcfile = [object dictionary];
+                if (width > 0) {
+                    metaData[@"width"] = @(width);
+                }
+                if (height > 0) {
+                    metaData[@"height"] = @(height);
+                }
+            }
         }
             break;
         case kAVIMMessageMediaTypeAudio:
-        case kAVIMMessageMediaTypeVideo: {
-            NSString *path = file.persistentCachePath;
-            /* If audio file not found, no meta data */
-            if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
-                break;
+        case kAVIMMessageMediaTypeVideo:
+        {
+            double seconds = [metaData[@"duration"] doubleValue];
+            if (!(seconds > 0)) {
+                NSString *path = file.persistentCachePath;
+                if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+                    NSURL *fileURL = [NSURL fileURLWithPath:path];
+                    if (fileURL) {
+                        AVURLAsset* audioAsset = [AVURLAsset URLAssetWithURL:fileURL
+                                                                     options:nil];
+                        seconds = CMTimeGetSeconds(audioAsset.duration);
+                        if (seconds > 0) {
+                            metaData[@"duration"] = @(seconds);
+                        }
+                    }
+                }
             }
-            NSURL *fileURL = [NSURL fileURLWithPath:path];
-            AVURLAsset* audioAsset = [AVURLAsset URLAssetWithURL:fileURL options:nil];
-            CMTime audioDuration = audioAsset.duration;
-            float audioDurationSeconds = CMTimeGetSeconds(audioDuration);
-            AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] init];
-            metaData.duration = audioDurationSeconds;
-            metaData.size = file.size;
-            metaData.format = [file.name pathExtension];
-            file.metaData = [[metaData dictionary] mutableCopy];
-            object.metaData = metaData;
-            typedMessage.messageObject._lcfile = [object dictionary];
         }
             break;
         case kAVIMMessageMediaTypeFile:
-        default: {
-            /* 文件消息或扩展的文件消息 */
-            object.name = file.name;
-            /* Compatibility with IM protocol */
-            object.size = file.size;
-            /* Compatibility with AVFile implementation, see [AVFile size] method */
-            AVIMGeneralObject *metaData = [[AVIMGeneralObject alloc] init];
-            metaData.size = file.size;
-            object.metaData = metaData;
-            typedMessage.messageObject._lcfile = [object dictionary];
-        }
+        default:
             break;
     }
-}
-
-- (void)fillTypedMessageForLocationIfNeeded:(AVIMTypedMessage *)typedMessage
-{
-    AVGeoPoint *location = typedMessage.location;
-    if (location) {
-        AVIMGeneralObject *object = [[AVIMGeneralObject alloc] init];
-        object.latitude = location.latitude;
-        object.longitude = location.longitude;
-        typedMessage.messageObject._lcloc = [object dictionary];
+    NSString *fileName = file.name;
+    if (fileName) {
+        metaData[@"name"] = fileName;
     }
+    NSString *format = (fileName.pathExtension
+                        ?: file.url.pathExtension);
+    if (format) {
+        metaData[@"format"] = format;
+    }
+    if (metaData.count > 0) {
+        file.metaData = metaData;
+    }
+    typedMessage.file = file;
 }
 
 - (void)sendRealMessage:(AVIMMessage *)message
@@ -2960,7 +2944,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     AVIMMessage *message = ({
         AVIMMessage *message = nil;
         AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:content];
-        if (messageObject.isValidTypedMessageObject) {
+        if ([messageObject isValidTypedMessageObject]) {
             message = [AVIMTypedMessage messageWithMessageObject:messageObject];
         } else {
             message = [[AVIMMessage alloc] init];
@@ -3023,7 +3007,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             NSString *fromId = (unreadTuple.hasFrom ? unreadTuple.from : nil);
             if (content && messageId && timestamp && fromId) {
                 AVIMTypedMessageObject *typedMessageObject = [[AVIMTypedMessageObject alloc] initWithJSON:content];
-                if (typedMessageObject.isValidTypedMessageObject) {
+                if ([typedMessageObject isValidTypedMessageObject]) {
                     lastMessage = [AVIMTypedMessage messageWithMessageObject:typedMessageObject];
                 } else {
                     lastMessage = [[AVIMMessage alloc] init];

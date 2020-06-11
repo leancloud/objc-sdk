@@ -10,6 +10,16 @@ import XCTest
 
 class LCTestBase: XCTestCase {
     
+    static let timeout: TimeInterval = 60
+    
+    var uuid: String {
+        return UUID().uuidString.replacingOccurrences(of: "-", with: "")
+    }
+    
+    static var uuid: String {
+        return UUID().uuidString.replacingOccurrences(of: "-", with: "")
+    }
+    
     override class func setUp() {
         super.setUp()
         
@@ -52,6 +62,53 @@ class LCTestBase: XCTestCase {
     override class func tearDown() {
         AVFile.clearAllPersistentCache()
         super.tearDown()
+    }
+}
+
+extension LCTestBase {
+    
+    func expecting(
+        description: String? = nil,
+        count expectedFulfillmentCount: Int = 1,
+        testcase: (XCTestExpectation) -> Void)
+    {
+        let exp = self.expectation(description: description ?? "default expectation")
+        exp.expectedFulfillmentCount = expectedFulfillmentCount
+        self.expecting(
+            timeout: LCTestBase.timeout,
+            expectation: { exp },
+            testcase: testcase)
+    }
+    
+    func expecting(
+        expectation: @escaping () -> XCTestExpectation,
+        testcase: (XCTestExpectation) -> Void)
+    {
+        self.expecting(
+            timeout: LCTestBase.timeout,
+            expectation: expectation,
+            testcase: testcase)
+    }
+    
+    func expecting(
+        timeout: TimeInterval,
+        expectation: () -> XCTestExpectation,
+        testcase: (XCTestExpectation) -> Void)
+    {
+        self.multiExpecting(
+            timeout: timeout,
+            expectations: { [expectation()] },
+            testcase: { testcase($0[0]) })
+    }
+    
+    func multiExpecting(
+        timeout: TimeInterval = LCTestBase.timeout,
+        expectations: (() -> [XCTestExpectation]),
+        testcase: ([XCTestExpectation]) -> Void)
+    {
+        let exps = expectations()
+        testcase(exps)
+        wait(for: exps, timeout: timeout)
     }
 }
 

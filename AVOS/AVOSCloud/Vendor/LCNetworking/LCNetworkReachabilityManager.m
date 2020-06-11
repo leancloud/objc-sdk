@@ -163,8 +163,8 @@ static void LCNetworkReachabilityReleaseCallback(const void *info) {
     }
 
     _networkReachability = CFRetain(reachability);
-    self.networkReachabilityStatus = LCNetworkReachabilityStatusUnknown;
-    self.reachabilityQueue = dispatch_queue_create("com.leancloud.reachability", DISPATCH_QUEUE_SERIAL);
+    _networkReachabilityStatus = LCNetworkReachabilityStatusUnknown;
+    _reachabilityQueue = dispatch_get_main_queue();
 
     return self;
 }
@@ -201,6 +201,17 @@ static void LCNetworkReachabilityReleaseCallback(const void *info) {
 
 #pragma mark -
 
+- (LCNetworkReachabilityStatus)currentNetworkReachabilityStatus {
+    SCNetworkReachabilityFlags flags;
+    if (self.networkReachability &&
+        SCNetworkReachabilityGetFlags(self.networkReachability, &flags)) {
+        self.networkReachabilityStatus = LCNetworkReachabilityStatusForFlags(flags);
+    } else {
+        self.networkReachabilityStatus = LCNetworkReachabilityStatusUnknown;
+    }
+    return self.networkReachabilityStatus;
+}
+
 - (void)startMonitoring {
     [self stopMonitoring];
 
@@ -221,8 +232,8 @@ static void LCNetworkReachabilityReleaseCallback(const void *info) {
 
     SCNetworkReachabilityContext context = {0, (__bridge void *)callback, LCNetworkReachabilityRetainCallback, LCNetworkReachabilityReleaseCallback, NULL};
     SCNetworkReachabilitySetCallback(self.networkReachability, LCNetworkReachabilityCallback, &context);
-    NSParameterAssert(self.reachabilityQueue);
     SCNetworkReachabilitySetDispatchQueue(self.networkReachability, self.reachabilityQueue);
+    
     dispatch_async(self.reachabilityQueue,^{
         SCNetworkReachabilityFlags flags;
         if (SCNetworkReachabilityGetFlags(self.networkReachability, &flags)) {

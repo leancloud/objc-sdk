@@ -8,13 +8,8 @@
 
 #import "AVLiveQuery.h"
 
-#ifndef AVLiveQuery_Internal_h
-#define AVLiveQuery_Internal_h
-
 @interface AVLiveQuery ()
 
 - (void)resubscribe;
 
 @end
-
-#endif /* AVLiveQuery_Internal_h */

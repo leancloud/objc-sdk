@@ -15,13 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface AVIMTextMessage : AVIMTypedMessage <AVIMTypedMessageSubclassing>
 
-/*!
- 创建文本消息。
- @param text － 消息文本.
- @param attributes － 用户附加属性
- */
+/// Create a text message.
+/// @param text The string text.
+/// @param attributes The custom attributes.
 + (instancetype)messageWithText:(NSString *)text
-                     attributes:(nullable NSDictionary *)attributes;
+                     attributes:(NSDictionary * _Nullable)attributes;
 
 @end
 

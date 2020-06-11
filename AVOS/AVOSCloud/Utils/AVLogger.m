@@ -89,27 +89,31 @@ static NSArray *loggerDomains = nil;
 + (void)logFunc:(const char *)func line:(int)line domain:(NSString *)domain level:(AVLoggerLevel)level message:(NSString *)fmt, ... {
     if (!domain || [loggerDomain containsObject:domain]) {
         if (level & loggerLevelMask) {
+            NSString *symbol = nil;
             NSString *levelString = nil;
             switch (level) {
                 case AVLoggerLevelInfo:
-                    levelString = @"💙INFO";
+                    symbol = @"💙";
+                    levelString = @"Info";
                     break;
                 case AVLoggerLevelDebug:
-                    levelString = @"💚DEBUG";
+                    symbol = @"💚";
+                    levelString = @"Debug";
                     break;
                 case AVLoggerLevelError:
-                    levelString = @"❤️ERROR";
+                    symbol = @"❤️";
+                    levelString = @"Error";
                     break;
-                    
                 default:
-                    levelString = @"🧡UNKNOW";
+                    symbol = @"🧡";
+                    levelString = @"Unknown";
                     break;
             }
             va_list args;
             va_start(args, fmt);
             NSString *message = [[NSString alloc] initWithFormat:fmt arguments:args];
             va_end(args);
-            NSLog(@"[%@] %s [Line %d] %@", levelString, func, line, message);
+            NSLog(@"[%@][%@] %s [Line %d]: %@", symbol, levelString, func, line, message);
         }
     }
 }

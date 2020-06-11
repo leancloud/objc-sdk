@@ -7,6 +7,7 @@
 //
 
 #import "AVIMErrorUtil.h"
+#import "AVErrorUtils.h"
 
 NSString *AVIMErrorMessage(AVIMErrorCode code)
 {
@@ -34,4 +35,59 @@ NSString *AVIMErrorMessage(AVIMErrorCode code)
         default:
             return nil;
     }
+}
+
+NSError *LCErrorFromErrorCommand(AVIMErrorCommand *command)
+{
+    NSError *error;
+    if (command) {
+        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+        if (command.hasAppCode) {
+            userInfo[kAVIMAppCodeKey] = @(command.appCode);
+        }
+        if (command.hasAppMsg) {
+            userInfo[kAVIMAppMsgKey] = command.appMsg;
+        }
+        if (command.hasDetail) {
+            userInfo[kAVIMDetailKey] = command.detail;
+        }
+        error = LCError(command.code,
+                        command.hasReason ? command.reason : nil,
+                        userInfo);
+    }
+    return error;
+}
+
+NSError *LCErrorFromSessionCommand(AVIMSessionCommand *command)
+{
+    NSError *error;
+    if (command.hasCode) {
+        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+        if (command.hasDetail) {
+            userInfo[kAVIMDetailKey] = command.detail;
+        }
+        error = LCError(command.code,
+                        command.hasReason ? command.reason : nil,
+                        userInfo);
+    }
+    return error;
+}
+
+NSError *LCErrorFromAckCommand(AVIMAckCommand *command)
+{
+    NSError *error;
+    if (command.hasCode ||
+        command.hasAppCode) {
+        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+        if (command.hasAppCode) {
+            userInfo[kAVIMAppCodeKey] = @(command.appCode);
+        }
+        if (command.hasAppMsg) {
+            userInfo[kAVIMAppMsgKey] = command.appMsg;
+        }
+        error = LCError(command.code,
+                        command.hasReason ? command.reason : nil,
+                        userInfo);
+    }
+    return error;
 }
