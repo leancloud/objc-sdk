@@ -785,7 +785,10 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
                     [delegator.delegate LCRTMConnection:connection didDisconnectWithError:error];
                 });
             }
-            [connection tryConnecting];
+            if (![error.domain isEqualToString:kLeanCloudErrorDomain] ||
+                error.code != 404) {
+                [connection tryConnecting];
+            }
         }
     }];
 }
