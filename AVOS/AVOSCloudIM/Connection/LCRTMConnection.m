@@ -999,9 +999,12 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     NSParameterAssert(self.socket == socket && !self.timer);
     AVLoggerDebug(AVLoggerDomainIM,
                   @"\n%@: %p"
-                  @"\n\tdid open with request: %@",
+                  @"\n\tdid open with"
+                  @"\n\t\trequest: %@"
+                  @"\n\t\theaders: %@",
                   NSStringFromClass([socket class]), socket,
-                  socket.request);
+                  socket.request,
+                  socket.request.allHTTPHeaderFields);
     self.defaultInstantMessagingPeerID = nil;
     self.needPeerIDForEveryCommandOfInstantMessaging = false;
     [self resetConnectingDelayInterval];
