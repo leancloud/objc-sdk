@@ -160,10 +160,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak, readonly, nullable) AVIMClient *imClient;
 
 @property (nonatomic, strong, readonly, nullable) NSDate *createAt
-__deprecated_msg("Deprecated, use `createdAt` instead.");
+__deprecated_msg("Deprecated, use `AVIMConversation.createdAt` instead.");
 
 @property (nonatomic, strong, readonly, nullable) NSDate *updateAt
-__deprecated_msg("Deprecated, use `updatedAt` instead.");
+__deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
 
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;

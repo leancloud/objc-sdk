@@ -35,56 +35,56 @@
 
 + (instancetype)orQueryWithSubqueries:(NSArray<AVIMConversationQuery *> *)queries {
     AVIMConversationQuery *result = nil;
-
+    
     if (queries.count > 0) {
         AVIMClient *client = [[queries firstObject] client];
         NSMutableArray *wheres = [[NSMutableArray alloc] initWithCapacity:queries.count];
-
+        
         for (AVIMConversationQuery *query in queries) {
             NSString *eachClientId = query.client.clientId;
-
+            
             if (!eachClientId || ![eachClientId isEqualToString:client.clientId]) {
                 AVLoggerError(AVLoggerDomainIM, @"Invalid conversation query client id: %@.", eachClientId);
                 return nil;
             }
-
+            
             [wheres addObject:[query where]];
         }
-
+        
         result = [client conversationQuery];
         result.where[@"$or"] = wheres;
     }
-
+    
     return result;
 }
 
 + (instancetype)andQueryWithSubqueries:(NSArray<AVIMConversationQuery *> *)queries {
     AVIMConversationQuery *result = nil;
-
+    
     if (queries.count > 0) {
         AVIMClient *client = [[queries firstObject] client];
         NSMutableArray *wheres = [[NSMutableArray alloc] initWithCapacity:queries.count];
-
+        
         for (AVIMConversationQuery *query in queries) {
             NSString *eachClientId = query.client.clientId;
-
+            
             if (!eachClientId || ![eachClientId isEqualToString:client.clientId]) {
                 AVLoggerError(AVLoggerDomainIM, @"Invalid conversation query client id: %@.", eachClientId);
                 return nil;
             }
-
+            
             [wheres addObject:[query where]];
         }
-
+        
         result = [client conversationQuery];
-
+        
         if (wheres.count > 1) {
             result.where[@"$and"] = wheres;
         } else {
             [result.where addEntriesFromDictionary:[wheres firstObject]];
         }
     }
-
+    
     return result;
 }
 
@@ -148,7 +148,7 @@
 
 - (void)whereKey:(NSString *)key equalTo:(id)object
 {
-        [self addWhereItem:@{@"$eq":object} forKey:key];
+    [self addWhereItem:@{@"$eq":object} forKey:key];
 }
 
 - (void)whereKey:(NSString *)key sizeEqualTo:(NSUInteger)count
@@ -328,16 +328,6 @@ static NSString * quote(NSString *string)
     }
 }
 
-- (void)invokeInUserInteractQueue:(void (^)(void))block
-{
-    dispatch_queue_t queue = self->_client.userInteractQueue;
-    if (queue) {
-        dispatch_async(queue, ^{
-            block();
-        });
-    }
-}
-
 - (void)getConversationById:(NSString *)conversationId
                    callback:(void (^)(AVIMConversation * _Nullable, NSError * _Nullable))callback
 {
@@ -362,9 +352,6 @@ static NSString * quote(NSString *string)
 {
     AVIMClient *client = self.client;
     if (!client) {
-        [self invokeInUserInteractQueue:^{
-            callback(nil, LCErrorInternal(@"client invalid."));
-        }];
         return;
     }
     
@@ -403,17 +390,17 @@ static NSString * quote(NSString *string)
         commandWrapper;
     });
     
-    [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
             if (self.cachePolicy == kAVIMCachePolicyNetworkElseCache) {
                 [self fetchCachedResultsForOutCommand:commandWrapper.outCommand client:client callback:^(NSArray *conversations) {
-                    [self invokeInUserInteractQueue:^{
+                    [client invokeInUserInteractQueue:^{
                         callback(conversations, nil);
                     }];
                 }];
             } else {
-                [self invokeInUserInteractQueue:^{
+                [client invokeInUserInteractQueue:^{
                     callback(nil, commandWrapper.error);
                 }];
             }
@@ -428,7 +415,7 @@ static NSString * quote(NSString *string)
         NSMutableArray<NSMutableDictionary *> *results = ({
             NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
             if (!data) {
-                [self invokeInUserInteractQueue:^{
+                [client invokeInUserInteractQueue:^{
                     callback(nil, ({
                         AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
                         LCError(code, AVIMErrorMessage(code), nil);
@@ -439,7 +426,7 @@ static NSString * quote(NSString *string)
             NSError *error = nil;
             NSMutableArray<NSMutableDictionary *> *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
             if (error || ![NSMutableArray _lc_is_type_of:results]) {
-                [self invokeInUserInteractQueue:^{
+                [client invokeInUserInteractQueue:^{
                     callback(nil, error ?: ({
                         AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
                         LCError(code, AVIMErrorMessage(code), nil);
@@ -479,7 +466,7 @@ static NSString * quote(NSString *string)
             [client.conversationCache cacheConversations:conversations maxAge:self.cacheMaxAge forCommand:commandWrapper.outCommand.avim_conversationForCache];
         }
         
-        [self invokeInUserInteractQueue:^{
+        [client invokeInUserInteractQueue:^{
             callback(conversations, nil);
         }];
     }];
@@ -495,7 +482,7 @@ static NSString * quote(NSString *string)
         case kAVIMCachePolicyCacheOnly:
         {
             [self fetchCachedResultsForOutCommand:commandWrapper.outCommand client:client callback:^(NSArray *conversations) {
-                [self invokeInUserInteractQueue:^{
+                [client invokeInUserInteractQueue:^{
                     callback(conversations, nil);
                 }];
             }];
@@ -504,7 +491,7 @@ static NSString * quote(NSString *string)
         {
             [self fetchCachedResultsForOutCommand:commandWrapper.outCommand client:client callback:^(NSArray *conversations) {
                 if (conversations.count > 0) {
-                    [self invokeInUserInteractQueue:^{
+                    [client invokeInUserInteractQueue:^{
                         callback(conversations, nil);
                     }];
                 } else {
@@ -515,7 +502,7 @@ static NSString * quote(NSString *string)
         case kAVIMCachePolicyCacheThenNetwork:
         {   // issue
             [self fetchCachedResultsForOutCommand:commandWrapper.outCommand client:client callback:^(NSArray *conversations) {
-                [self invokeInUserInteractQueue:^{
+                [client invokeInUserInteractQueue:^{
                     callback(conversations, nil);
                 }];
                 [client sendCommandWrapper:commandWrapper];
@@ -530,14 +517,11 @@ static NSString * quote(NSString *string)
 {
     AVIMClient *client = self.client;
     if (!client) {
-        [self invokeInUserInteractQueue:^{
-            callback(nil, LCErrorInternal(@"client invalid."));
-        }];
         return;
     }
     
     if (tempConvIds.count == 0) {
-        [self invokeInUserInteractQueue:^{
+        [client invokeInUserInteractQueue:^{
             callback(@[], nil);
         }];
         return;
@@ -568,10 +552,10 @@ static NSString * quote(NSString *string)
         commandWrapper;
     });
     
-    [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
-            [self invokeInUserInteractQueue:^{
+            [client invokeInUserInteractQueue:^{
                 callback(nil, commandWrapper.error);
             }];
             return;
@@ -585,7 +569,7 @@ static NSString * quote(NSString *string)
         NSMutableArray<NSMutableDictionary *> *results = ({
             NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
             if (!data) {
-                [self invokeInUserInteractQueue:^{
+                [client invokeInUserInteractQueue:^{
                     callback(nil, ({
                         AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
                         LCError(code, AVIMErrorMessage(code), nil);
@@ -596,7 +580,7 @@ static NSString * quote(NSString *string)
             NSError *error = nil;
             NSMutableArray<NSMutableDictionary *> *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
             if (error || ![NSMutableArray _lc_is_type_of:results]) {
-                [self invokeInUserInteractQueue:^{
+                [client invokeInUserInteractQueue:^{
                     callback(nil, error ?: ({
                         AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
                         LCError(code, AVIMErrorMessage(code), nil);
@@ -632,7 +616,7 @@ static NSString * quote(NSString *string)
             conversations;
         });
         
-        [self invokeInUserInteractQueue:^{
+        [client invokeInUserInteractQueue:^{
             callback(conversations, nil);
         }];
     }];

@@ -29,8 +29,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 @property (nonatomic) AVIMGenericCommand *outCommand;
 @property (nonatomic) AVIMGenericCommand *inCommand;
 @property (nonatomic) NSError *error;
-// TODO: client context
-@property (nonatomic) void (^callback)(LCIMProtobufCommandWrapper *commandWrapper);
+@property (nonatomic) void (^callback)(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper);
 
 @end
 
@@ -67,6 +66,8 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
                 installation:(AVInstallation *)installation LC_WARN_UNUSED_RESULT;
 
 - (void)addOperationToInternalSerialQueue:(void (^)(AVIMClient *client))block;
+- (void)invokeInUserInteractQueue:(void (^)(void))block;
+- (void)invokeDelegateInUserInteractQueue:(void (^)(id<AVIMClientDelegate> delegate))block;
 
 - (void)sendCommandWrapper:(LCIMProtobufCommandWrapper *)commandWrapper;
 
