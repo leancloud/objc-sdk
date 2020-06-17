@@ -514,8 +514,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                 openingCompletion(true, nil);
             }];
         } else {
-            [self invokeInUserInteractQueue:^{
-                [self.delegate imClientResumed:self];
+            [self invokeDelegateInUserInteractQueue:^(id<AVIMClientDelegate> delegate) {
+                if ([delegate respondsToSelector:@selector(imClientResumed:)]) {
+                    [delegate imClientResumed:self];
+                }
             }];
         }
     } else if (inCommand.cmd == AVIMCommandType_Session &&
@@ -559,7 +561,9 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         }];
     } else {
         [self invokeDelegateInUserInteractQueue:^(id<AVIMClientDelegate> delegate) {
-            [delegate imClientClosed:self error:error];
+            if ([delegate respondsToSelector:@selector(imClientClosed:error:)]) {
+                [delegate imClientClosed:self error:error];
+            }
         }];
     }
 }
@@ -878,8 +882,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         return;
     }
     [self setStatus:AVIMClientStatusResuming];
-    [self invokeInUserInteractQueue:^{
-        [self.delegate imClientResuming:self];
+    [self invokeDelegateInUserInteractQueue:^(id<AVIMClientDelegate> delegate) {
+        if ([delegate respondsToSelector:@selector(imClientResuming:)]) {
+            [delegate imClientResuming:self];
+        }
     }];
 }
 
@@ -893,9 +899,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     } else if (self.sessionToken ||
                [self status] != AVIMClientStatusPaused) {
         [self setStatus:AVIMClientStatusPaused];
-        [self invokeInUserInteractQueue:^{
-            id<AVIMClientDelegate> delegate = self.delegate;
-            [delegate imClientPaused:self error:error];
+        [self invokeDelegateInUserInteractQueue:^(id<AVIMClientDelegate> delegate) {
+            if ([delegate respondsToSelector:@selector(imClientPaused:error:)]) {
+                [delegate imClientPaused:self error:error];
+            }
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
             if ([delegate respondsToSelector:@selector(imClientPaused:)]) {

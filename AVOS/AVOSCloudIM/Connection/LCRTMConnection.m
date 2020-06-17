@@ -279,8 +279,9 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
         _index = 0;
         dispatch_source_set_event_handler(_source, ^{
             /*
-             For performance, not use weak-self,
-             so need to call `-cleanInCurrentQueue:` to break retain-cycle before release it.
+             For performance, not use weak-self.
+             so need to call `-[LCRTMConnectionTimer cleanInCurrentQueue:]`,
+             to break retain-cycle before release it.
              */
             NSDate *currentDate = [NSDate date];
             [self checkCommandTimeout:currentDate];
