@@ -39,6 +39,7 @@ class AVIMClientTestCase: LCIMTestBase {
                 })
             }, failure: { XCTFail("timeout") })
         }
+        LCRouter.sharedInstance().cleanCache(withKey: .RTM, error: nil)
     }
     
     func tests_session_conflict() {
