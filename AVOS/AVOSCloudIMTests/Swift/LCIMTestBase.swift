@@ -57,7 +57,7 @@ extension LCIMTestBase {
         openOption: AVIMClientOpenOption = .forceOpen
         ) -> AVIMClient?
     {
-        var client: AVIMClient! = AVIMClient(clientId: clientId, tag: tag, installation: installation)
+        var client: AVIMClient! = try! AVIMClient(clientId: clientId, tag: tag, installation: installation)
         if let delegate: AVIMClientDelegate = delegate {
             client.delegate = delegate
         }

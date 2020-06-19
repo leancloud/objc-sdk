@@ -49,7 +49,7 @@ class AVIMClientTestCase: LCIMTestBase {
         
         let delegate1 = AVIMClientDelegateWrapper()
         var client1: AVIMClient! = {
-            let client: AVIMClient  = AVIMClient(clientId: clientId, tag: tag, installation: AVInstallation())
+            let client: AVIMClient = try! AVIMClient(clientId: clientId, tag: tag, installation: AVInstallation())
             client.installation.setDeviceTokenHexString(UUID().uuidString, teamId: "LeanCloud")
             client.delegate = delegate1
             return client
@@ -72,7 +72,7 @@ class AVIMClientTestCase: LCIMTestBase {
             LCRTMConnectionManager.shared().imProtobuf3Registry.removeAllObjects()
             
             var client2: AVIMClient! = {
-                let client: AVIMClient  = AVIMClient(clientId: clientId, tag: tag, installation: AVInstallation())
+                let client: AVIMClient = try! AVIMClient(clientId: clientId, tag: tag, installation: AVInstallation())
                 client.installation.setDeviceTokenHexString(UUID().uuidString, teamId: "LeanCloud")
                 return client
             }()
