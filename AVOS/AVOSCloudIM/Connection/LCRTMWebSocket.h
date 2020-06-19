@@ -71,7 +71,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithURL:(NSURL *)url protocols:(NSArray<NSString *> *)protocols;
 - (instancetype)initWithRequest:(NSURLRequest *)request;
 
-@property (nonatomic, nullable, weak) id <LCRTMWebSocketDelegate> delegate;
+@property (nonatomic, nullable, weak) id<LCRTMWebSocketDelegate> delegate;
 @property (nonatomic) dispatch_queue_t delegateQueue;
 @property (nonatomic) NSMutableURLRequest *request;
 @property (nonatomic, nullable) id sslSettings;
