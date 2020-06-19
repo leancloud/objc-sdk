@@ -27,13 +27,13 @@ typedef void(^LCRTMConnectionOutCommandCallback)(AVIMGenericCommand * _Nullable 
 
 @interface LCRTMServiceConsumer : NSObject
 
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
+
 @property (nonatomic, readonly) AVApplication *application;
 @property (nonatomic, readonly) LCRTMService service;
 @property (nonatomic, readonly) LCIMProtocol protocol;
 @property (nonatomic, readonly) NSString *peerID;
-
-- (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)new NS_UNAVAILABLE;
 
 - (instancetype)initWithApplication:(AVApplication *)application
                             service:(LCRTMService)service
@@ -44,10 +44,10 @@ typedef void(^LCRTMConnectionOutCommandCallback)(AVIMGenericCommand * _Nullable 
 
 @interface LCRTMConnectionManager : NSObject
 
-+ (instancetype)sharedManager;
-
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;
+
++ (instancetype)sharedManager;
 
 - (LCRTMConnection *)registerWithServiceConsumer:(LCRTMServiceConsumer *)serviceConsumer
                                            error:(NSError * __autoreleasing *)error;
@@ -70,12 +70,12 @@ typedef void(^LCRTMConnectionOutCommandCallback)(AVIMGenericCommand * _Nullable 
 
 @interface LCRTMConnectionDelegator : NSObject
 
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
+
 @property (nonatomic, readonly) NSString *peerID;
 @property (nonatomic, readonly) dispatch_queue_t queue;
 @property (nonatomic, weak) id<LCRTMConnectionDelegate> delegate;
-
-- (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)new NS_UNAVAILABLE;
 
 - (instancetype)initWithPeerID:(NSString *)peerID
                       delegate:(id<LCRTMConnectionDelegate>)delegate
@@ -85,13 +85,13 @@ typedef void(^LCRTMConnectionOutCommandCallback)(AVIMGenericCommand * _Nullable 
 
 @interface LCRTMConnection : NSObject
 
-+ (void)setConnectingTimeoutInterval:(NSTimeInterval)timeoutInterval;
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
 @property (nonatomic, readonly) AVApplication *application;
 @property (nonatomic, readonly) LCIMProtocol protocol;
 
-- (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)new NS_UNAVAILABLE;
++ (void)setConnectingTimeoutInterval:(NSTimeInterval)timeoutInterval;
 
 - (void)connectWithServiceConsumer:(LCRTMServiceConsumer *)serviceConsumer
                          delegator:(LCRTMConnectionDelegator *)delegator;
