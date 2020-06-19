@@ -323,26 +323,24 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
 {
     NSParameterAssert(appID);
     NSParameterAssert(RTMRouterURL);
-    NSMutableDictionary *parameters = ({
-        NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-        parameters[@"appId"] = appID;
-        parameters[@"secure"] = @"1";
-        /* Back door for user to connect to puppet environment. */
-        if (getenv("LC_IM_PUPPET_ENABLED") && getenv("SIMULATOR_UDID")) {
-            parameters[@"debug"] = @"true";
-        }
-        parameters;
-    });
-    [[AVPaasClient sharedInstance] getObject:RTMRouterURL withParameters:parameters block:^(id _Nullable object, NSError * _Nullable error) {
-        if (error) {
-            callback(nil, error);
+    AVPaasClient *paasClient = [AVPaasClient sharedInstance];
+    NSURLRequest *request = [paasClient requestWithPath:RTMRouterURL
+                                                 method:@"GET"
+                                                headers:nil
+                                             parameters:@{
+                                                 @"appId": appID,
+                                                 @"secure": @"1",
+                                             }];
+    [paasClient performRequest:request success:^(NSHTTPURLResponse *response, id responseObject) {
+        if ([NSDictionary _lc_is_type_of:responseObject]) {
+            callback(responseObject, nil);
         } else {
-            if ([NSDictionary _lc_is_type_of:object]) {
-                callback(object, nil);
-            } else {
-                callback(nil, LCErrorInternal(@"response data invalid."));
-            }
+            callback(nil, LCError(AVErrorInternalErrorCodeMalformedData,
+                                  @"Response data is malformed.",
+                                  @{ @"data": (responseObject ?: @"nil") }));
         }
+    } failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error) {
+        callback(nil, error);
     }];
 }
 
