@@ -59,11 +59,13 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 
 - (instancetype)initWithClientId:(NSString *)clientId
                              tag:(NSString *)tag
-                    installation:(AVInstallation *)installation LC_WARN_UNUSED_RESULT;
+                    installation:(AVInstallation *)installation
+                           error:(NSError * __autoreleasing *)error LC_WARN_UNUSED_RESULT;
 
 - (instancetype)initWithUser:(AVUser *)user
                          tag:(NSString *)tag
-                installation:(AVInstallation *)installation LC_WARN_UNUSED_RESULT;
+                installation:(AVInstallation *)installation
+                       error:(NSError * __autoreleasing *)error LC_WARN_UNUSED_RESULT;
 
 - (void)addOperationToInternalSerialQueue:(void (^)(AVIMClient *client))block;
 - (void)invokeInUserInteractQueue:(void (^)(void))block;

@@ -70,7 +70,16 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 - (instancetype)initWithClientId:(NSString *)clientId
 {
     return [self initWithClientId:clientId
-                              tag:nil];
+                              tag:nil
+                            error:nil];
+}
+
+- (instancetype)initWithClientId:(NSString *)clientId
+                           error:(NSError *__autoreleasing  _Nullable *)error
+{
+    return [self initWithClientId:clientId
+                              tag:nil
+                            error:error];
 }
 
 - (instancetype)initWithClientId:(NSString *)clientId
@@ -78,25 +87,32 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 {
     return [self initWithClientId:clientId
                               tag:tag
-                     installation:[AVInstallation defaultInstallation]];
+                            error:nil];
 }
 
 - (instancetype)initWithClientId:(NSString *)clientId
                              tag:(NSString *)tag
-                    installation:(AVInstallation *)installation
+                           error:(NSError *__autoreleasing  _Nullable *)error
 {
-    self = [super init];
-    if (self) {
-        [self doInitializationWithClientId:clientId
-                                       tag:tag
-                              installation:installation];
-    }
-    return self;
+    return [self initWithClientId:clientId
+                              tag:tag
+                     installation:[AVInstallation defaultInstallation]
+                            error:error];
 }
 
 - (instancetype)initWithUser:(AVUser *)user
 {
-    return [self initWithUser:user tag:nil];
+    return [self initWithUser:user
+                          tag:nil
+                        error:nil];
+}
+
+- (instancetype)initWithUser:(AVUser *)user
+                       error:(NSError *__autoreleasing  _Nullable *)error
+{
+    return [self initWithUser:user
+                          tag:nil
+                        error:error];
 }
 
 - (instancetype)initWithUser:(AVUser *)user
@@ -104,43 +120,76 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 {
     return [self initWithUser:user
                           tag:tag
-                 installation:[AVInstallation defaultInstallation]];
+                        error:nil];
+}
+
+- (instancetype)initWithUser:(AVUser *)user
+                         tag:(NSString *)tag
+                       error:(NSError *__autoreleasing  _Nullable *)error
+{
+    return [self initWithUser:user
+                          tag:tag
+                 installation:[AVInstallation defaultInstallation]
+                        error:error];
+}
+
+- (instancetype)initWithClientId:(NSString *)clientId
+                             tag:(NSString *)tag
+                    installation:(AVInstallation *)installation
+                           error:(NSError *__autoreleasing  _Nullable *)error
+{
+    self = [super init];
+    if (self) {
+        NSError *err = [self doInitializationWithClientId:clientId
+                                                      tag:tag
+                                             installation:installation];
+        if (err) {
+            if (error) {
+                *error = err;
+            }
+            return nil;
+        }
+    }
+    return self;
 }
 
 - (instancetype)initWithUser:(AVUser *)user
                          tag:(NSString *)tag
                 installation:(AVInstallation *)installation
+                       error:(NSError *__autoreleasing  _Nullable *)error
 {
     self = [super init];
     if (self) {
         _user = user;
-        [self doInitializationWithClientId:user.objectId
-                                       tag:tag
-                              installation:installation];
+        NSError *err = [self doInitializationWithClientId:user.objectId
+                                                      tag:tag
+                                             installation:installation];
+        if (err) {
+            if (error) {
+                *error = err;
+            }
+            return nil;
+        }
     }
     return self;
 }
 
-- (void)doInitializationWithClientId:(NSString *)clientId
-                                 tag:(NSString *)tag
-                        installation:(AVInstallation *)installation
+- (NSError *)doInitializationWithClientId:(NSString *)clientId
+                                      tag:(NSString *)tag
+                             installation:(AVInstallation *)installation
 {
-    _clientId = ({
-        if (!clientId ||
-            clientId.length > kClientIdLengthLimit ||
-            clientId.length == 0) {
-            [NSException raise:NSInvalidArgumentException
-                        format:@"Length of `clientId` should in range [1 %@].", @(kClientIdLengthLimit)];
-        }
-        clientId.copy;
-    });
-    _tag = ({
-        if ([tag isEqualToString:kClientTagDefault]) {
-            [NSException raise:NSInvalidArgumentException
-                        format:@"`%@` is reserved.", kClientTagDefault];
-        }
-        (tag ? tag.copy : nil);
-    });
+    if (!clientId ||
+        clientId.length > kClientIdLengthLimit ||
+        clientId.length == 0) {
+        return LCError(AVErrorInternalErrorCodeInconsistency,
+                       @"The length of `clientId` should in range `[1 64]`.", nil);
+    }
+    _clientId = clientId.copy;
+    if ([tag isEqualToString:kClientTagDefault]) {
+        return LCError(AVErrorInternalErrorCodeInconsistency,
+                       @"The tag `%@` is reserved.", nil);
+    }
+    _tag = (tag ? tag.copy : nil);
     _messageQueryCacheEnabled = true;
     _sessionConfigBitmap = (LCIMSessionConfigOptionsPatchMessage |
                             LCIMSessionConfigOptionsTemporaryConversationMessage |
@@ -173,15 +222,16 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         queue;
     });
     _userInteractQueue = dispatch_get_main_queue();
-    NSError *error;
     _serviceConsumer = [[LCRTMServiceConsumer alloc] initWithApplication:[AVApplication defaultApplication]
                                                                  service:LCRTMServiceInstantMessaging
                                                                 protocol:[AVIMClient IMProtocol]
                                                                   peerID:_clientId];
+    NSError *error;
     _connection = [[LCRTMConnectionManager sharedManager] registerWithServiceConsumer:_serviceConsumer
                                                                                 error:&error];
     if (error) {
         AVLoggerError(AVLoggerDomainIM, @"%@", error);
+        return error;
     }
     _connectionDelegator = [[LCRTMConnectionDelegator alloc] initWithPeerID:_clientId
                                                                    delegate:self
@@ -195,13 +245,14 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                                NSKeyValueObservingOptionInitial)
                       context:(__bridge void *)(self)];
     _conversationCache = ({
-        LCIMConversationCache *cache = [[LCIMConversationCache alloc] initWithClientId:self->_clientId];
+        LCIMConversationCache *cache = [[LCIMConversationCache alloc] initWithClientId:_clientId];
         cache.client = self;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [cache cleanAllExpiredConversations];
         });
         cache;
     });
+    return nil;
 }
 
 - (void)dealloc
