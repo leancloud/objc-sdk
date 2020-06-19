@@ -18,7 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// This protocol defines methods to handle the events about client, conversation, message and so on.
 @protocol AVIMClientDelegate <NSObject>
 
-// MARK: Required
+@optional
+
+// MARK: Client
 
 /// Client paused, means the connection lost.
 ///
@@ -49,9 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param error The reason for close.
 - (void)imClientClosed:(AVIMClient *)imClient error:(NSError * _Nullable)error;
 
-// MARK: Optional
-
-@optional
+// MARK: Conversation
 
 /*!
  接收到新的普通消息。
@@ -219,7 +219,7 @@ __deprecated_msg("Deprecated, use `-[AVIMClientDelegate imClientPaused:error:]` 
 __deprecated_msg("Deprecated, use `-[AVIMClientDelegate imClientClosed:error:]` instead.");
 
 - (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread
-__deprecated_msg("deprecated. use `-[AVIMClientDelegate conversation:didUpdateForKey:]` instead.");
+__deprecated_msg("Deprecated, use `-[AVIMClientDelegate conversation:didUpdateForKey:]` instead.");
 
 @end
 

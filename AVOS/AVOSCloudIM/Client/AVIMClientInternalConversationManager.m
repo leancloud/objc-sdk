@@ -103,7 +103,7 @@ static NSUInteger batchQueryLimit = 20;
             commandWrapper;
         });
         
-        [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+        [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
             
             if (commandWrapper.error) {
                 AVLoggerError(AVLoggerDomainIM, @"Error: %@ for querying ids: %@", commandWrapper.error, batchIds);

@@ -42,14 +42,14 @@ typedef NSMutableDictionary<NSString *, LCRTMConnection *> * LCRTMLiveQueryRegis
 
 @interface LCRTMConnectionOutCommand : NSObject
 
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
+
 @property (nonatomic, readonly) NSString *peerID;
 @property (nonatomic, readonly) AVIMGenericCommand *command;
 @property (nonatomic, readonly) dispatch_queue_t callingQueue;
 @property (nonatomic, readonly) NSMutableArray<LCRTMConnectionOutCommandCallback> *callbacks;
 @property (nonatomic, readonly) NSDate *expiration;
-
-- (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)new NS_UNAVAILABLE;
 
 - (instancetype)initWithPeerID:(NSString *)peerID
                        command:(AVIMGenericCommand *)command
@@ -64,6 +64,9 @@ typedef NSMutableDictionary<NSString *, LCRTMConnection *> * LCRTMLiveQueryRegis
 
 @interface LCRTMConnectionTimer : NSObject
 
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
+
 @property (nonatomic, readonly) dispatch_queue_t queue;
 @property (nonatomic, readonly) NSTimeInterval pingpongInterval;
 @property (nonatomic, readonly) NSTimeInterval pingTimeout;
@@ -74,9 +77,6 @@ typedef NSMutableDictionary<NSString *, LCRTMConnection *> * LCRTMLiveQueryRegis
 @property (nonatomic) NSMutableArray<NSNumber *> *outCommandIndexSequence;
 @property (nonatomic) NSMutableDictionary<NSNumber *, LCRTMConnectionOutCommand *> *outCommandCollection;
 @property (nonatomic) int32_t index;
-
-- (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)new NS_UNAVAILABLE;
 
 - (instancetype)initWithQueue:(dispatch_queue_t)queue
                        socket:(LCRTMWebSocket *)socket NS_DESIGNATED_INITIALIZER;

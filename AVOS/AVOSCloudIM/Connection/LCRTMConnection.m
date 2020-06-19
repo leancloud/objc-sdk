@@ -20,7 +20,7 @@
 LCIMProtocol const LCIMProtocol3 = @"lc.protobuf2.3";
 LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
 
-static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 0;
+static NSTimeInterval gLCRTMConnectionConnectingTimeoutInterval = 60.0;
 
 #if TARGET_OS_IOS || TARGET_OS_TV
 static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState state) {
@@ -279,8 +279,9 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
         _index = 0;
         dispatch_source_set_event_handler(_source, ^{
             /*
-             For performance, not use weak-self,
-             so need to call `-cleanInCurrentQueue:` to break retain-cycle before release it.
+             For performance, not use weak-self.
+             so need to call `-[LCRTMConnectionTimer cleanInCurrentQueue:]`,
+             to break retain-cycle before release it.
              */
             NSDate *currentDate = [NSDate date];
             [self checkCommandTimeout:currentDate];
@@ -300,14 +301,14 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 {
     AVLoggerInfo(AVLoggerDomainIM,
                  @"\n%@: %p"
-                 @"\n\tdealloc.",
+                 @"\n\t- dealloc",
                  NSStringFromClass([self class]), self);
 }
 
 - (BOOL)assertSpecificQueue
 {
 #if DEBUG
-    void *specificKey = (__bridge void *)_queue;
+    void *specificKey = (__bridge void *)(self.queue);
     return dispatch_get_specific(specificKey) == specificKey;
 #else
     return true;
@@ -319,7 +320,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     NSParameterAssert([self assertSpecificQueue]);
     AVLoggerDebug(AVLoggerDomainIM,
                   @"\n%@: %p"
-                  @"\n\tpong received.",
+                  @"\n\t- pong received",
                   NSStringFromClass([self class]), self);
     self.lastPongReceivedTimestamp = [NSDate date].timeIntervalSince1970;
 }
@@ -331,7 +332,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
         NSParameterAssert([self assertSpecificQueue]);
         AVLoggerDebug(AVLoggerDomainIM,
                       @"\n%@: %p"
-                      @"\n\tpong sent.",
+                      @"\n\t- pong sent",
                       NSStringFromClass([self class]), self);
     }];
 }
@@ -379,7 +380,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             NSParameterAssert([self assertSpecificQueue]);
             AVLoggerDebug(AVLoggerDomainIM,
                           @"\n%@: %p"
-                          @"\n\tping sent.",
+                          @"\n\t- ping sent",
                           NSStringFromClass([self class]), self);
             self.lastPingSentTimestamp = currentTimestamp;
         }];
@@ -519,7 +520,9 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
                                     (__bridge void *)_serialQueue,
                                     NULL);
 #endif
+#if TARGET_OS_IOS || TARGET_OS_TV || !TARGET_OS_WATCH
         __weak typeof(self) ws = self;
+#endif
 #if TARGET_OS_IOS || TARGET_OS_TV
         if (NSThread.isMainThread) {
             _previousAppState = (UIApplication.sharedApplication.applicationState == UIApplicationStateBackground
@@ -566,7 +569,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 {
     AVLoggerInfo(AVLoggerDomainIM,
                  @"\n%@: %p"
-                 @"\n\tdealloc.",
+                 @"\n\t- dealloc",
                  NSStringFromClass([self class]), self);
 #if TARGET_OS_IOS || TARGET_OS_TV
     if (self.enterBackgroundObserver) {
@@ -599,7 +602,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     NSParameterAssert([self assertSpecificSerialQueue]);
     AVLoggerInfo(AVLoggerDomainIM,
                  @"\n%@: %p"
-                 @"\n\tapplication state: %@.",
+                 @"\n\t- application state: %@",
                  NSStringFromClass([self class]), self,
                  LCRTMStringFromConnectionAppState(newState));
     LCRTMConnectionAppState oldState = self.previousAppState;
@@ -623,7 +626,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     NSParameterAssert([self assertSpecificSerialQueue]);
     AVLoggerInfo(AVLoggerDomainIM,
                  @"\n%@: %p"
-                 @"\n\tnetwork reachability status: %@.",
+                 @"\n\t- network reachability status: %@",
                  NSStringFromClass([self class]), self,
                  LCStringFromNetworkReachabilityStatus(newStatus));
     LCNetworkReachabilityStatus oldStatus = self.previousReachabilityStatus;
@@ -656,7 +659,8 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
     return [self.instantMessagingDelegatorMap.allValues
-            arrayByAddingObjectsFromArray:self.liveQueryDelegatorMap.allValues];
+            arrayByAddingObjectsFromArray:
+            self.liveQueryDelegatorMap.allValues];
 }
 
 - (NSError *)checkEnvironment
@@ -706,11 +710,13 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
         } else if (serviceConsumer.service == LCRTMServiceLiveQuery) {
             self.liveQueryDelegatorMap[delegator.peerID] = delegator;
         }
-        if (self.socket && self.timer) {
+        if (self.socket &&
+            self.timer) {
             dispatch_async(delegator.queue, ^{
                 [delegator.delegate LCRTMConnectionDidConnect:self];
             });
-        } else if (!self.socket && !self.timer) {
+        } else if (!self.socket &&
+                   !self.timer) {
             NSError *error = [self checkEnvironment];
             if (error) {
                 dispatch_async(delegator.queue, ^{
@@ -769,23 +775,27 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             return;
         }
         if (serverURL) {
-            connection.socket = [[LCRTMWebSocket alloc] initWithURL:serverURL
-                                                          protocols:@[connection.protocol]];
-            [connection.socket.request setValue:nil
-                             forHTTPHeaderField:@"Origin"];
+            LCRTMWebSocket *socket = [[LCRTMWebSocket alloc] initWithURL:serverURL
+                                                               protocols:@[connection.protocol]];
+            [socket.request setValue:nil
+                  forHTTPHeaderField:@"Origin"];
             if (gLCRTMConnectionConnectingTimeoutInterval > 0) {
-                connection.socket.request.timeoutInterval = gLCRTMConnectionConnectingTimeoutInterval;
+                socket.request.timeoutInterval = gLCRTMConnectionConnectingTimeoutInterval;
             }
-            connection.socket.delegateQueue = connection.serialQueue;
-            connection.socket.delegate = connection;
-            [connection.socket open];
+            socket.delegateQueue = connection.serialQueue;
+            socket.delegate = connection;
+            connection.socket = socket;
+            [socket open];
         } else {
             for (LCRTMConnectionDelegator *delegator in [connection allDelegators]) {
                 dispatch_async(delegator.queue, ^{
                     [delegator.delegate LCRTMConnection:connection didDisconnectWithError:error];
                 });
             }
-            [connection tryConnecting];
+            if (error.code != 404 ||
+                ![error.domain isEqualToString:kLeanCloudErrorDomain]) {
+                [connection tryConnecting];
+            }
         }
     }];
 }
@@ -903,7 +913,8 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
         LCRTMWebSocket *socket = self.socket;
         LCRTMConnectionTimer *timer = self.timer;
         BOOL needCallback = (queue && callback);
-        if (!socket || !timer) {
+        if (!socket ||
+            !timer) {
             if (needCallback) {
                 dispatch_async(queue, ^{
                     callback(nil, LCError(AVIMErrorCodeConnectionLost,
@@ -996,9 +1007,14 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     NSParameterAssert(self.socket == socket && !self.timer);
     AVLoggerDebug(AVLoggerDomainIM,
                   @"\n%@: %p"
-                  @"\n\tdid open with request: %@",
+                  @"\n\t- did open with"
+                  @"\n\t\tprotocol: %@"
+                  @"\n\t\trequest: %@"
+                  @"\n\t\theaders: %@",
                   NSStringFromClass([socket class]), socket,
-                  socket.request);
+                  protocol,
+                  socket.request,
+                  socket.request.allHTTPHeaderFields);
     self.defaultInstantMessagingPeerID = nil;
     self.needPeerIDForEveryCommandOfInstantMessaging = false;
     [self resetConnectingDelayInterval];
@@ -1023,7 +1039,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     }
     AVLoggerError(AVLoggerDomainIM,
                   @"\n%@: %p"
-                  @"\n\tdid close with error: %@",
+                  @"\n\t- did close with error: %@",
                   NSStringFromClass([socket class]), socket,
                   error);
     [self tryCleanConnectionWithError:error];

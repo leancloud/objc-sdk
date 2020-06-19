@@ -56,49 +56,56 @@ NS_ASSUME_NONNULL_BEGIN
 /// The control switch for message query cache, default is `true`.
 @property (nonatomic) BOOL messageQueryCacheEnabled;
 
-/**
- Initialization method.
- 
- @note `clientId`'s length should in range [1, 64], and all characters must be letters, digits, or the underscore.
- 
- @param clientId Identifie of this Client.
- @return Instance.
- */
-- (instancetype)initWithClientId:(NSString *)clientId LC_WARN_UNUSED_RESULT;
+/// Initializing with an ID.
+/// @param clientId The length of the ID should in range `[1, 64]`.
+- (nullable instancetype)initWithClientId:(NSString *)clientId LC_WARN_UNUSED_RESULT;
 
-/**
- Initialization method.
- 
- @note `clientId`'s length should in range [1, 64], and all characters must be letters, digits, or the underscore.
- @note `tag` should not use @"default".
+/// Initializing with an ID.
+/// @param clientId The length of the ID should in range `[1, 64]`.
+/// @param error Throws exception when error occurred.
+- (nullable instancetype)initWithClientId:(NSString *)clientId
+                                    error:(NSError * __autoreleasing *)error LC_WARN_UNUSED_RESULT;
 
- @param clientId Identifie of this Client.
- @param tag Set it to implement only one client online.
- @return Instance.
- */
-- (instancetype)initWithClientId:(NSString *)clientId tag:(NSString * _Nullable)tag LC_WARN_UNUSED_RESULT;
+/// Initializing with an ID and a tag.
+/// @param clientId The length of the ID should in range `[1, 64]`.
+/// @param tag Using a tag to specify the context, `@"default"` is reserved.
+- (nullable instancetype)initWithClientId:(NSString *)clientId
+                                      tag:(NSString * _Nullable)tag LC_WARN_UNUSED_RESULT;
 
-/**
- Initialization method.
+/// Initializing with an ID and a tag.
+/// @param clientId The length of the ID should in range `[1, 64]`.
+/// @param tag Using a tag to specify the context, `@"default"` is reserved.
+/// @param error Throws exception when error occurred.
+- (nullable instancetype)initWithClientId:(NSString *)clientId
+                                      tag:(NSString * _Nullable)tag
+                                    error:(NSError * __autoreleasing *)error LC_WARN_UNUSED_RESULT;
 
- @param user The `AVUser` of this Client.
- @return Instance.
- */
-- (instancetype)initWithUser:(AVUser *)user LC_WARN_UNUSED_RESULT;
+/// Initializing with an `AVUser`.
+/// @param user The user should have logged in.
+- (nullable instancetype)initWithUser:(AVUser *)user LC_WARN_UNUSED_RESULT;
 
-/**
- Initialization method.
- 
- @note `tag` should not use @"default".
+/// Initializing with an `AVUser`.
+/// @param user The user should have logged in.
+/// @param error Throws exception when error occurred.
+- (nullable instancetype)initWithUser:(AVUser *)user
+                                error:(NSError * __autoreleasing *)error LC_WARN_UNUSED_RESULT;
 
- @param user The `AVUser` of this Client.
- @param tag Set it to implement only one client online.
- @return Instance.
- */
-- (instancetype)initWithUser:(AVUser *)user tag:(NSString * _Nullable)tag LC_WARN_UNUSED_RESULT;
+/// Initializing with an `AVUser` and a tag.
+/// @param user The user should have logged in.
+/// @param tag Using a tag to specify the context, `@"default"` is reserved.
+- (nullable instancetype)initWithUser:(AVUser *)user
+                                  tag:(NSString * _Nullable)tag LC_WARN_UNUSED_RESULT;
+
+/// Initializing with an `AVUser` and a tag.
+/// @param user The user should have logged in.
+/// @param tag Using a tag to specify the context, `@"default"` is reserved.
+/// @param error Throws exception when error occurred.
+- (nullable instancetype)initWithUser:(AVUser *)user
+                                  tag:(NSString * _Nullable)tag
+                                error:(NSError * __autoreleasing *)error LC_WARN_UNUSED_RESULT;
 
 /// The current status of this client, see `AVIMClientStatus`.
-- (AVIMClientStatus)status LC_WARN_UNUSED_RESULT;
+- (AVIMClientStatus)status;
 
 /// Open this client before using instant messaging service,
 /// this action use `AVIMClientOpenOptionForceOpen` as default open option.

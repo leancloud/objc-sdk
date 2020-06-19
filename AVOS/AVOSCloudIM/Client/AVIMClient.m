@@ -70,7 +70,16 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 - (instancetype)initWithClientId:(NSString *)clientId
 {
     return [self initWithClientId:clientId
-                              tag:nil];
+                              tag:nil
+                            error:nil];
+}
+
+- (instancetype)initWithClientId:(NSString *)clientId
+                           error:(NSError *__autoreleasing  _Nullable *)error
+{
+    return [self initWithClientId:clientId
+                              tag:nil
+                            error:error];
 }
 
 - (instancetype)initWithClientId:(NSString *)clientId
@@ -78,25 +87,32 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 {
     return [self initWithClientId:clientId
                               tag:tag
-                     installation:[AVInstallation defaultInstallation]];
+                            error:nil];
 }
 
 - (instancetype)initWithClientId:(NSString *)clientId
                              tag:(NSString *)tag
-                    installation:(AVInstallation *)installation
+                           error:(NSError *__autoreleasing  _Nullable *)error
 {
-    self = [super init];
-    if (self) {
-        [self doInitializationWithClientId:clientId
-                                       tag:tag
-                              installation:installation];
-    }
-    return self;
+    return [self initWithClientId:clientId
+                              tag:tag
+                     installation:[AVInstallation defaultInstallation]
+                            error:error];
 }
 
 - (instancetype)initWithUser:(AVUser *)user
 {
-    return [self initWithUser:user tag:nil];
+    return [self initWithUser:user
+                          tag:nil
+                        error:nil];
+}
+
+- (instancetype)initWithUser:(AVUser *)user
+                       error:(NSError *__autoreleasing  _Nullable *)error
+{
+    return [self initWithUser:user
+                          tag:nil
+                        error:error];
 }
 
 - (instancetype)initWithUser:(AVUser *)user
@@ -104,43 +120,76 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 {
     return [self initWithUser:user
                           tag:tag
-                 installation:[AVInstallation defaultInstallation]];
+                        error:nil];
+}
+
+- (instancetype)initWithUser:(AVUser *)user
+                         tag:(NSString *)tag
+                       error:(NSError *__autoreleasing  _Nullable *)error
+{
+    return [self initWithUser:user
+                          tag:tag
+                 installation:[AVInstallation defaultInstallation]
+                        error:error];
+}
+
+- (instancetype)initWithClientId:(NSString *)clientId
+                             tag:(NSString *)tag
+                    installation:(AVInstallation *)installation
+                           error:(NSError *__autoreleasing  _Nullable *)error
+{
+    self = [super init];
+    if (self) {
+        NSError *err = [self doInitializationWithClientId:clientId
+                                                      tag:tag
+                                             installation:installation];
+        if (err) {
+            if (error) {
+                *error = err;
+            }
+            return nil;
+        }
+    }
+    return self;
 }
 
 - (instancetype)initWithUser:(AVUser *)user
                          tag:(NSString *)tag
                 installation:(AVInstallation *)installation
+                       error:(NSError *__autoreleasing  _Nullable *)error
 {
     self = [super init];
     if (self) {
         _user = user;
-        [self doInitializationWithClientId:user.objectId
-                                       tag:tag
-                              installation:installation];
+        NSError *err = [self doInitializationWithClientId:user.objectId
+                                                      tag:tag
+                                             installation:installation];
+        if (err) {
+            if (error) {
+                *error = err;
+            }
+            return nil;
+        }
     }
     return self;
 }
 
-- (void)doInitializationWithClientId:(NSString *)clientId
-                                 tag:(NSString *)tag
-                        installation:(AVInstallation *)installation
+- (NSError *)doInitializationWithClientId:(NSString *)clientId
+                                      tag:(NSString *)tag
+                             installation:(AVInstallation *)installation
 {
-    _clientId = ({
-        if (!clientId ||
-            clientId.length > kClientIdLengthLimit ||
-            clientId.length == 0) {
-            [NSException raise:NSInvalidArgumentException
-                        format:@"Length of `clientId` should in range [1 %@].", @(kClientIdLengthLimit)];
-        }
-        clientId.copy;
-    });
-    _tag = ({
-        if ([tag isEqualToString:kClientTagDefault]) {
-            [NSException raise:NSInvalidArgumentException
-                        format:@"`%@` is reserved.", kClientTagDefault];
-        }
-        (tag ? tag.copy : nil);
-    });
+    if (!clientId ||
+        clientId.length > kClientIdLengthLimit ||
+        clientId.length == 0) {
+        return LCError(AVErrorInternalErrorCodeInconsistency,
+                       @"The length of `clientId` should in range `[1 64]`.", nil);
+    }
+    _clientId = clientId.copy;
+    if ([tag isEqualToString:kClientTagDefault]) {
+        return LCError(AVErrorInternalErrorCodeInconsistency,
+                       @"The tag `%@` is reserved.", nil);
+    }
+    _tag = (tag ? tag.copy : nil);
     _messageQueryCacheEnabled = true;
     _sessionConfigBitmap = (LCIMSessionConfigOptionsPatchMessage |
                             LCIMSessionConfigOptionsTemporaryConversationMessage |
@@ -173,15 +222,16 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         queue;
     });
     _userInteractQueue = dispatch_get_main_queue();
-    NSError *error;
     _serviceConsumer = [[LCRTMServiceConsumer alloc] initWithApplication:[AVApplication defaultApplication]
                                                                  service:LCRTMServiceInstantMessaging
                                                                 protocol:[AVIMClient IMProtocol]
                                                                   peerID:_clientId];
+    NSError *error;
     _connection = [[LCRTMConnectionManager sharedManager] registerWithServiceConsumer:_serviceConsumer
                                                                                 error:&error];
     if (error) {
         AVLoggerError(AVLoggerDomainIM, @"%@", error);
+        return error;
     }
     _connectionDelegator = [[LCRTMConnectionDelegator alloc] initWithPeerID:_clientId
                                                                    delegate:self
@@ -195,13 +245,14 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                                NSKeyValueObservingOptionInitial)
                       context:(__bridge void *)(self)];
     _conversationCache = ({
-        LCIMConversationCache *cache = [[LCIMConversationCache alloc] initWithClientId:self->_clientId];
+        LCIMConversationCache *cache = [[LCIMConversationCache alloc] initWithClientId:_clientId];
         cache.client = self;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [cache cleanAllExpiredConversations];
         });
         cache;
     });
+    return nil;
 }
 
 - (void)dealloc
@@ -304,8 +355,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         commandWrapper.outCommand = outCommand;
         commandWrapper;
     });
-    [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
-        AVIMClient *client = self;
+    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         if (commandWrapper.error) {
             [client invokeInUserInteractQueue:^{
                 callback(false, commandWrapper.error);
@@ -514,8 +564,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                 openingCompletion(true, nil);
             }];
         } else {
-            [self invokeInUserInteractQueue:^{
-                [self.delegate imClientResumed:self];
+            [self invokeDelegateInUserInteractQueue:^(id<AVIMClientDelegate> delegate) {
+                if ([delegate respondsToSelector:@selector(imClientResumed:)]) {
+                    [delegate imClientResumed:self];
+                }
             }];
         }
     } else if (inCommand.cmd == AVIMCommandType_Session &&
@@ -559,7 +611,9 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         }];
     } else {
         [self invokeDelegateInUserInteractQueue:^(id<AVIMClientDelegate> delegate) {
-            [delegate imClientClosed:self error:error];
+            if ([delegate respondsToSelector:@selector(imClientClosed:error:)]) {
+                [delegate imClientClosed:self error:error];
+            }
         }];
     }
 }
@@ -625,7 +679,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                                                                   token:oldSessionToken
                                                               signature:nil
                                                                isReopen:false];
-            [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+            [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
                 if (commandWrapper.error) {
                     callback(nil, commandWrapper.error);
                     return;
@@ -683,7 +737,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             if (commandWrapper.callback) {
                 commandWrapper.error = LCError(AVIMErrorCodeClientNotOpen,
                                                @"Client not open.", nil);
-                commandWrapper.callback(commandWrapper);
+                commandWrapper.callback(client, commandWrapper);
                 commandWrapper.callback = nil;
             }
             return;
@@ -702,7 +756,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                 AssertRunInQueue(sClient.internalSerialQueue);
                 commandWrapper.inCommand = inCommand;
                 commandWrapper.error = error;
-                commandWrapper.callback(commandWrapper);
+                commandWrapper.callback(sClient, commandWrapper);
                 commandWrapper.callback = nil;
             }];
         } else {
@@ -878,8 +932,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         return;
     }
     [self setStatus:AVIMClientStatusResuming];
-    [self invokeInUserInteractQueue:^{
-        [self.delegate imClientResuming:self];
+    [self invokeDelegateInUserInteractQueue:^(id<AVIMClientDelegate> delegate) {
+        if ([delegate respondsToSelector:@selector(imClientResuming:)]) {
+            [delegate imClientResuming:self];
+        }
     }];
 }
 
@@ -893,9 +949,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     } else if (self.sessionToken ||
                [self status] != AVIMClientStatusPaused) {
         [self setStatus:AVIMClientStatusPaused];
-        [self invokeInUserInteractQueue:^{
-            id<AVIMClientDelegate> delegate = self.delegate;
-            [delegate imClientPaused:self error:error];
+        [self invokeDelegateInUserInteractQueue:^(id<AVIMClientDelegate> delegate) {
+            if ([delegate respondsToSelector:@selector(imClientPaused:error:)]) {
+                [delegate imClientPaused:self error:error];
+            }
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
             if ([delegate respondsToSelector:@selector(imClientPaused:)]) {
@@ -1613,10 +1670,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             commandWrapper;
         });
         
-        [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+        [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
             
             if (commandWrapper.error) {
-                [self invokeInUserInteractQueue:^{
+                [client invokeInUserInteractQueue:^{
                     callback(nil, commandWrapper.error);
                 }];
                 return;
@@ -1626,7 +1683,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             AVIMConvCommand *convCommand = (inCommand.hasConvMessage ? inCommand.convMessage : nil);
             NSString *conversationId = (convCommand.hasCid ? convCommand.cid : nil);
             if (!conversationId) {
-                [self invokeInUserInteractQueue:^{
+                [client invokeInUserInteractQueue:^{
                     callback(nil, ({
                         AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
                         LCError(code, AVIMErrorMessage(code), nil);
@@ -1636,7 +1693,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             }
             
             AVIMConversation *conversation = ({
-                AVIMConversation *conversation = [self->_conversationManager conversationForId:conversationId];
+                AVIMConversation *conversation = [client.conversationManager conversationForId:conversationId];
                 if (conversation) {
                     NSMutableDictionary *mutableDic = [NSMutableDictionary dictionary];
                     if (name) {
@@ -1668,20 +1725,20 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                         mutableDic[AVIMConversationKeyTransient] = @(transient);
                         mutableDic[AVIMConversationKeySystem] = @(false);
                         mutableDic[AVIMConversationKeyTemporary] = @(temporary);
-                        mutableDic[AVIMConversationKeyCreator] = self->_clientId;
+                        mutableDic[AVIMConversationKeyCreator] = client.clientId;
                         mutableDic[AVIMConversationKeyMembers] = members;
                         mutableDic[AVIMConversationKeyObjectId] = conversationId;
                         mutableDic;
                     });
-                    conversation = [AVIMConversation conversationWithRawJSONData:mutableDic client:self];
+                    conversation = [AVIMConversation conversationWithRawJSONData:mutableDic client:client];
                     if (conversation) {
-                        [self->_conversationManager insertConversation:conversation];
+                        [client.conversationManager insertConversation:conversation];
                     }
                 }
                 conversation;
             });
             
-            [self invokeInUserInteractQueue:^{
+            [client invokeInUserInteractQueue:^{
                 callback(conversation, nil);
             }];
         }];
@@ -1801,7 +1858,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     command.reportMessage = reportCommand;
     LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
     commandWrapper.outCommand = command;
-    [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         if (commandWrapper.error) {
             AVLoggerError(AVLoggerDomainIM, @"%@", commandWrapper.error);
         }
@@ -1845,10 +1902,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         commandWrapper;
     });
     
-    [commandWrapper setCallback:^(LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
-            [self invokeInUserInteractQueue:^{
+            [client invokeInUserInteractQueue:^{
                 callback(nil, commandWrapper.error);
             }];
             return;
@@ -1857,7 +1914,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         AVIMGenericCommand *inCommand = commandWrapper.inCommand;
         AVIMSessionCommand *sessionCommand = (inCommand.hasSessionMessage ? inCommand.sessionMessage : nil);
         if (!sessionCommand) {
-            [self invokeInUserInteractQueue:^{
+            [client invokeInUserInteractQueue:^{
                 callback(nil, ({
                     AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
                     LCError(code, AVIMErrorMessage(code), nil);
@@ -1866,7 +1923,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             return;
         }
         
-        [self invokeInUserInteractQueue:^{
+        [client invokeInUserInteractQueue:^{
             callback(sessionCommand.onlineSessionPeerIdsArray, nil);
         }];
     }];

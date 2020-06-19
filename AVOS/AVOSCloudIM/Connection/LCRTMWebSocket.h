@@ -30,6 +30,8 @@ typedef NS_ENUM(NSInteger, LCRTMWebSocketMessageType) {
     LCRTMWebSocketMessageTypeString = 1,
 };
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface LCRTMWebSocketMessage : NSObject
 
 + (instancetype)messageWithData:(NSData *)data;
@@ -39,8 +41,8 @@ typedef NS_ENUM(NSInteger, LCRTMWebSocketMessageType) {
 - (instancetype)initWithString:(NSString *)string NS_DESIGNATED_INITIALIZER;
 
 @property (nonatomic, readonly) LCRTMWebSocketMessageType type;
-@property (nonatomic, readonly) NSData *data;
-@property (nonatomic, readonly) NSString *string;
+@property (nonatomic, nullable, readonly) NSData *data;
+@property (nonatomic, nullable, readonly) NSString *string;
 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;
@@ -51,35 +53,41 @@ typedef NS_ENUM(NSInteger, LCRTMWebSocketMessageType) {
 
 @protocol LCRTMWebSocketDelegate <NSObject>
 
-- (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didOpenWithProtocol:(NSString *)protocol;
+- (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didOpenWithProtocol:(NSString * _Nullable)protocol;
 
 - (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didCloseWithError:(NSError *)error;
 
 - (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didReceiveMessage:(LCRTMWebSocketMessage *)message;
 
-- (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didReceivePing:(NSData *)data;
+- (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didReceivePing:(NSData * _Nullable)data;
 
-- (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didReceivePong:(NSData *)data;
+- (void)LCRTMWebSocket:(LCRTMWebSocket *)socket didReceivePong:(NSData * _Nullable)data;
 
 @end
 
 @interface LCRTMWebSocket : NSObject
 
-@property (nonatomic, weak) id <LCRTMWebSocketDelegate> delegate;
-@property (nonatomic) dispatch_queue_t delegateQueue;
-@property (nonatomic) NSMutableURLRequest *request;
-
 - (instancetype)initWithURL:(NSURL *)url;
 - (instancetype)initWithURL:(NSURL *)url protocols:(NSArray<NSString *> *)protocols;
 - (instancetype)initWithRequest:(NSURLRequest *)request;
 
-- (void)open;
-- (void)closeWithCloseCode:(LCRTMWebSocketCloseCode)closeCode reason:(NSData *)reason;
+@property (nonatomic, nullable, weak) id<LCRTMWebSocketDelegate> delegate;
+@property (nonatomic) dispatch_queue_t delegateQueue;
+@property (nonatomic) NSMutableURLRequest *request;
+@property (nonatomic, nullable) id sslSettings;
 
-- (void)sendMessage:(LCRTMWebSocketMessage *)message completion:(void (^)(void))completion;
-- (void)sendPing:(NSData *)data completion:(void (^)(void))completion;
-- (void)sendPong:(NSData *)data completion:(void (^)(void))completion;
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
+
+- (void)open;
+- (void)closeWithCloseCode:(LCRTMWebSocketCloseCode)closeCode reason:(NSData * _Nullable)reason;
+
+- (void)sendMessage:(LCRTMWebSocketMessage *)message completion:(void (^ _Nullable)(void))completion;
+- (void)sendPing:(NSData * _Nullable)data completion:(void (^ _Nullable)(void))completion;
+- (void)sendPong:(NSData * _Nullable)data completion:(void (^ _Nullable)(void))completion;
 
 - (void)clean;
 
 @end
+
+NS_ASSUME_NONNULL_END

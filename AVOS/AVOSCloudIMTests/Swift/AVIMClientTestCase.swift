@@ -39,6 +39,7 @@ class AVIMClientTestCase: LCIMTestBase {
                 })
             }, failure: { XCTFail("timeout") })
         }
+        LCRouter.sharedInstance().cleanCache(withKey: .RTM, error: nil)
     }
     
     func tests_session_conflict() {
@@ -48,7 +49,7 @@ class AVIMClientTestCase: LCIMTestBase {
         
         let delegate1 = AVIMClientDelegateWrapper()
         var client1: AVIMClient! = {
-            let client: AVIMClient  = AVIMClient(clientId: clientId, tag: tag, installation: AVInstallation())
+            let client: AVIMClient = try! AVIMClient(clientId: clientId, tag: tag, installation: AVInstallation())
             client.installation.setDeviceTokenHexString(UUID().uuidString, teamId: "LeanCloud")
             client.delegate = delegate1
             return client
@@ -71,7 +72,7 @@ class AVIMClientTestCase: LCIMTestBase {
             LCRTMConnectionManager.shared().imProtobuf3Registry.removeAllObjects()
             
             var client2: AVIMClient! = {
-                let client: AVIMClient  = AVIMClient(clientId: clientId, tag: tag, installation: AVInstallation())
+                let client: AVIMClient = try! AVIMClient(clientId: clientId, tag: tag, installation: AVInstallation())
                 client.installation.setDeviceTokenHexString(UUID().uuidString, teamId: "LeanCloud")
                 return client
             }()
@@ -338,6 +339,9 @@ class AVIMClientTestCase: LCIMTestBase {
     
     func test_goaway() {
         AVOSCloudIM.defaultOptions().rtmServer = "wss://cn-n1-core-k8s-cell-12.leancloud.cn";
+        defer {
+            AVOSCloudIM.defaultOptions().rtmServer = nil;
+        }
         
         guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: String(#function[..<#function.firstIndex(of: "(")!])) else {
             XCTFail()

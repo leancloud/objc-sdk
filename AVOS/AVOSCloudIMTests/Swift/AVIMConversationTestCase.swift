@@ -43,7 +43,7 @@ class AVIMConversationTestCase: LCIMTestBase {
             }, failure: { XCTFail("timeout") })
         }
         
-        let client2: AVIMClient = AVIMClient(clientId: clientId2)
+        let client2: AVIMClient = try! AVIMClient(clientId: clientId2, error: ())
         let delegate2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         client2.delegate = delegate2
         

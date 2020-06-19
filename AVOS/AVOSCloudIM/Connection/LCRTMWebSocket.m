@@ -25,9 +25,10 @@
 {
     NSDictionary *userInfo = self.userInfo;
     if (self.reason) {
-        NSMutableDictionary *dic = [userInfo mutableCopy] ?: [NSMutableDictionary dictionary];
-        dic[NSLocalizedFailureReasonErrorKey] = self.reason;
-        userInfo = dic;
+        NSMutableDictionary *mutableDictionary = ([userInfo mutableCopy]
+                                                  ?: [NSMutableDictionary dictionary]);
+        mutableDictionary[NSLocalizedFailureReasonErrorKey] = self.reason;
+        userInfo = mutableDictionary;
     }
     return [NSError errorWithDomain:@"LCRTMWebSocketErrorDomain"
                                code:self.closeCode
@@ -83,9 +84,12 @@ typedef NS_ENUM(UInt8, LCRTMWebSocketOpcode) {
 
 @property (nonatomic) BOOL isFIN;
 @property (nonatomic) LCRTMWebSocketOpcode opcode;
+/// Only for input data frame, means the size of the WebSocket data frame.
 @property (nonatomic) NSUInteger totalSize;
+/// If the frame is output data, it means all data of the WebSocket data frame;
+/// If the frame is input data, it means the payload of the WebSocket data frame;
 @property (nonatomic) NSData *payload;
-
+/// The following two only for output data frame.
 @property (nonatomic) NSUInteger offset;
 @property (nonatomic) void(^completion)(void);
 
@@ -98,6 +102,13 @@ static const UInt8 LCRTMWebSocketFrameBitMaskRSV = 0x70;
 static const UInt8 LCRTMWebSocketFrameBitMaskOpcode = 0x0F;
 static const UInt8 LCRTMWebSocketFrameBitMaskMask = 0x80;
 static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
+
+#if DEBUG
+- (void)dealloc
+{
+    NSLog(@"[DEBUG] %@ - dealloc", NSStringFromClass([self class]));
+}
+#endif
 
 + (LCRTMWebSocketFrame *)frameFrom:(UInt8 *)buffer
                             length:(NSUInteger)bufferLength
@@ -181,15 +192,15 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
     UInt16 payloadLen16 = 0;
     UInt64 payloadLen64 = 0;
     if (data.length < 126) {
-        payloadLen = (UInt8)data.length;
-    } else if (data.length < UINT16_MAX) {
+        payloadLen = (UInt8)(data.length);
+    } else if (data.length <= UINT16_MAX) {
         payloadLen = 126;
         bufferLength += 2;
-        payloadLen16 = (UInt16)data.length;
+        payloadLen16 = (UInt16)(data.length);
     } else {
         payloadLen = 127;
         bufferLength += 8;
-        payloadLen64 = (UInt64)data.length;
+        payloadLen64 = (UInt64)(data.length);
     }
     UInt8 buffer[bufferLength];
     buffer[0] = LCRTMWebSocketFrameBitMaskFIN | opcode;
@@ -210,7 +221,8 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
     }
     LCRTMWebSocketFrame *frame = [LCRTMWebSocketFrame new];
     frame.opcode = opcode;
-    frame.payload = [NSData dataWithBytes:buffer length:bufferLength];
+    frame.payload = [NSData dataWithBytes:buffer
+                                   length:bufferLength];
     frame.offset = 0;
     return frame;
 }
@@ -226,7 +238,8 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
         data = [message.string dataUsingEncoding:NSUTF8StringEncoding];
         opcode = LCRTMWebSocketOpcodeText;
     }
-    return [self frameFrom:data opcode:opcode];
+    return [self frameFrom:data
+                    opcode:opcode];
 }
 
 + (UInt16)readUInt16:(UInt8 *)buffer offset:(NSUInteger)offset
@@ -236,9 +249,9 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
 
 + (UInt64)readUInt64:(UInt8 *)buffer offset:(NSUInteger)offset
 {
-    UInt64 value = 0 | (UInt64)(buffer[offset]);
+    UInt64 value = (0 | (UInt64)(buffer[offset]));
     for (int i = 1; i < 8; i++) {
-        value = (value << 8) | (UInt64)(buffer[offset + i]);
+        value = ((value << 8) | (UInt64)(buffer[offset + i]));
     }
     return value;
 }
@@ -289,8 +302,16 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
         _delegateQueue = dispatch_get_main_queue();
         _isOpened = false;
         _isWritable = false;
-        _readQueue = dispatch_queue_create("LCRTMWebSocket.readQueue", NULL);
-        _writeQueue = dispatch_queue_create("LCRTMWebSocket.writeQueue", NULL);
+        _readQueue = dispatch_queue_create([NSString stringWithFormat:
+                                            @"%@.readQueue",
+                                            NSStringFromClass([self class])
+                                            ].UTF8String,
+                                           NULL);
+        _writeQueue = dispatch_queue_create([NSString stringWithFormat:
+                                             @"%@.writeQueue",
+                                             NSStringFromClass([self class])
+                                             ].UTF8String,
+                                            NULL);
 #if DEBUG
         dispatch_queue_set_specific(_readQueue,
                                     (__bridge void *)_readQueue,
@@ -318,7 +339,9 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
         NSURL *hostURL = [NSURL URLWithString:@"/" relativeToURL:url];
         if (hostURL) {
             origin = hostURL.absoluteString;
-            origin = [origin substringToIndex:origin.length - 1];
+            if (origin.length > 0) {
+                origin = [origin substringToIndex:origin.length - 1];
+            }
         }
         [_request setValue:origin forHTTPHeaderField:@"Origin"];
         [_request setValue:@"13" forHTTPHeaderField:@"Sec-WebSocket-Version"];
@@ -348,10 +371,17 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
     return self;
 }
 
+#if DEBUG
+- (void)dealloc
+{
+    NSLog(@"[DEBUG] %@ - dealloc", NSStringFromClass([self class]));
+}
+#endif
+
 - (BOOL)assertSpecificReadQueue
 {
 #if DEBUG
-    void *specificKey = (__bridge void *)self.readQueue;
+    void *specificKey = (__bridge void *)(self.readQueue);
     return dispatch_get_specific(specificKey) == specificKey;
 #else
     return true;
@@ -361,7 +391,7 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
 - (BOOL)assertSpecificWriteQueue
 {
 #if DEBUG
-    void *specificKey = (__bridge void *)self.writeQueue;
+    void *specificKey = (__bridge void *)(self.writeQueue);
     return dispatch_get_specific(specificKey) == specificKey;
 #else
     return true;
@@ -370,7 +400,9 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
 
 - (void)open
 {
-    NSAssert(self.inputStream == nil && self.outputStream == nil, @"should NOT reopen");
+    NSAssert(self.inputStream == nil &&
+             self.outputStream == nil,
+             @"should NOT reopen");
     NSURL *url = self.request.URL;
     if (!url.host) {
         LCRTMWebSocketConnectionClosure *closure = [LCRTMWebSocketConnectionClosure new];
@@ -403,7 +435,8 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
                                        &writeStreamRef);
     self.inputStream = (__bridge_transfer NSInputStream *)readStreamRef;
     self.outputStream = (__bridge_transfer NSOutputStream *)writeStreamRef;
-    if (!self.inputStream || !self.outputStream) {
+    if (!self.inputStream ||
+        !self.outputStream) {
         LCRTMWebSocketConnectionClosure *closure = [LCRTMWebSocketConnectionClosure new];
         closure.closeCode = LCRTMWebSocketCloseCodeInvalid;
         closure.reason = @"Creating sockets failed";
@@ -413,9 +446,9 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
         [self notifyCloseWithError:[closure error]];
         return;
     }
-    CFReadStreamSetDispatchQueue((__bridge CFReadStreamRef)self.inputStream,
+    CFReadStreamSetDispatchQueue((__bridge CFReadStreamRef)(self.inputStream),
                                  self.readQueue);
-    CFWriteStreamSetDispatchQueue((__bridge CFWriteStreamRef)self.outputStream,
+    CFWriteStreamSetDispatchQueue((__bridge CFWriteStreamRef)(self.outputStream),
                                   self.writeQueue);
     self.inputStream.delegate = self;
     self.outputStream.delegate = self;
@@ -424,6 +457,14 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
                                forKey:NSStreamSocketSecurityLevelKey];
         [self.outputStream setProperty:NSStreamSocketSecurityLevelNegotiatedSSL
                                 forKey:NSStreamSocketSecurityLevelKey];
+        if (self.sslSettings) {
+            CFReadStreamSetProperty((__bridge CFReadStreamRef)(self.inputStream),
+                                    kCFStreamPropertySSLSettings,
+                                    (__bridge CFTypeRef)(self.sslSettings));
+            CFWriteStreamSetProperty((__bridge CFWriteStreamRef)(self.outputStream),
+                                     kCFStreamPropertySSLSettings,
+                                     (__bridge CFTypeRef)(self.sslSettings));
+        }
     }
     [self.inputStream open];
     [self.outputStream open];
@@ -432,7 +473,9 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
                                  NSEC_PER_SEC * (self.request.timeoutInterval ?: 60.0)),
                    self.readQueue, ^{
         LCRTMWebSocket *ss = ws;
-        if (!ss) { return; }
+        if (!ss) {
+            return;
+        }
         if (!ss.isOpened) {
             LCRTMWebSocketConnectionClosure *closure = [LCRTMWebSocketConnectionClosure new];
             closure.closeCode = LCRTMWebSocketCloseCodeInvalid;
@@ -468,14 +511,16 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
     NSUInteger bufferLength = 2;
     UInt8 buffer[bufferLength];
     [LCRTMWebSocketFrame writeUInt16:(UInt16)closeCode
-                              buffer:buffer offset:0];
+                              buffer:buffer
+                              offset:0];
     NSMutableData *data = [NSMutableData dataWithBytes:buffer
                                                 length:bufferLength];
     if (reason) {
         [data appendData:reason];
     }
     [self sendControlFrames:LCRTMWebSocketOpcodeConnectionClose
-                       data:data completion:nil];
+                       data:data
+                 completion:nil];
 }
 
 - (void)sendPing:(NSData *)data
@@ -505,7 +550,7 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
         if (opcode == LCRTMWebSocketOpcodeConnectionClose) {
             self.isWritable = false;
         }
-        LCRTMWebSocketFrame *frame = [LCRTMWebSocketFrame frameFrom:data ?: [NSData data]
+        LCRTMWebSocketFrame *frame = [LCRTMWebSocketFrame frameFrom:(data ?: [NSData data])
                                                              opcode:opcode];
         frame.completion = completion;
         NSUInteger index = (self.outputFrameQueue.firstObject.offset > 0) ? 1 : 0;
@@ -570,7 +615,7 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
     if (self.inputSegmentBuffer) {
         [self.inputSegmentBuffer appendBytes:buffer
                                       length:bufferLength];
-        buffer = (UInt8 *)self.inputSegmentBuffer.bytes;
+        buffer = (UInt8 *)(self.inputSegmentBuffer.bytes);
         bufferLength = self.inputSegmentBuffer.length;
     }
     NSUInteger restBufferLength;
@@ -583,7 +628,9 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
     }
     if (restBufferLength == 0) {
         self.inputSegmentBuffer = nil;
-    } else if (restBufferLength != self.inputSegmentBuffer.length) {
+    } else if (restBufferLength != (self.inputSegmentBuffer
+                                    ? self.inputSegmentBuffer.length
+                                    : 0)) {
         self.inputSegmentBuffer = [NSMutableData dataWithBytes:buffer + bufferLength - restBufferLength
                                                         length:restBufferLength];;
     }
@@ -606,13 +653,8 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
             NSUnderlyingErrorKey: error,
         };
     }
-    if (aStream == self.inputStream) {
-        [self purgeInputResourceInCurrentQueue:true];
-        [self purgeOutputResourceInCurrentQueue:false];
-    } else {
-        [self purgeInputResourceInCurrentQueue:false];
-        [self purgeOutputResourceInCurrentQueue:true];
-    }
+    [self purgeInputResourceInCurrentQueue:(aStream == self.inputStream)];
+    [self purgeOutputResourceInCurrentQueue:(aStream == self.outputStream)];
     LCRTMWebSocketConnectionClosure *closure = [LCRTMWebSocketConnectionClosure new];
     closure.closeCode = LCRTMWebSocketCloseCodeAbnormalClosure;
     closure.reason = @"Error Occurred";
@@ -622,19 +664,19 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
 
 - (void)handleStreamEventEndEncountered:(NSStream *)aStream
 {
-    if (aStream == self.inputStream) {
-        [self purgeInputResourceInCurrentQueue:true];
+    BOOL isInputStream = (aStream == self.inputStream);
+    [self purgeInputResourceInCurrentQueue:isInputStream];
+    if (isInputStream) {
         [self closeWithCloseCode:LCRTMWebSocketCloseCodeNormalClosure
                           reason:nil];
     } else {
-        [self purgeInputResourceInCurrentQueue:false];
         [self purgeOutputResourceInCurrentQueue:true];
     }
     LCRTMWebSocketConnectionClosure *closure = [LCRTMWebSocketConnectionClosure new];
     closure.closeCode = LCRTMWebSocketCloseCodeInternalServerError;
     closure.reason = @"End Encountered";
     closure.userInfo = @{
-        @"stream": (aStream == self.inputStream) ? @"input" : @"output",
+        @"stream": (isInputStream ? @"input" : @"output"),
     };
     [self notifyCloseWithError:[closure error]];
 }
@@ -665,22 +707,18 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
     CFHTTPMessageRef messageRef = CFHTTPMessageCreateEmpty(NULL, FALSE);
     CFHTTPMessageAppendBytes(messageRef, buffer, httpResponseSize);
     CFIndex statusCode = CFHTTPMessageGetResponseStatusCode(messageRef);
-    NSString *upgrade = ({
-        (__bridge_transfer NSString *)
+    NSString *upgrade = (__bridge_transfer NSString *)({
         CFHTTPMessageCopyHeaderFieldValue(messageRef, CFSTR("Upgrade"));
     });
-    NSString *connection = ({
-        (__bridge_transfer NSString *)
+    NSString *connection = (__bridge_transfer NSString *)({
         CFHTTPMessageCopyHeaderFieldValue(messageRef, CFSTR("Connection"));
     });
-    NSString *secWebSocketAccept = [({
-        (__bridge_transfer NSString *)
+    NSString *secWebSocketAccept = [(__bridge_transfer NSString *)({
         CFHTTPMessageCopyHeaderFieldValue(messageRef, CFSTR("Sec-WebSocket-Accept"));
     }) stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *secWebSocketKey = self.request.allHTTPHeaderFields[@"Sec-WebSocket-Key"];
     NSString *requestSecWebSocketProtocol = self.request.allHTTPHeaderFields[@"Sec-WebSocket-Protocol"];
-    NSString *responseSecWebSocketProtocol = ({
-        (__bridge_transfer NSString *)
+    NSString *responseSecWebSocketProtocol = (__bridge_transfer NSString *)({
         CFHTTPMessageCopyHeaderFieldValue(messageRef, CFSTR("Sec-WebSocket-Protocol"));
     });
     CFRelease(messageRef);
@@ -690,6 +728,9 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
         LCRTMWebSocketConnectionClosure *closure = [LCRTMWebSocketConnectionClosure new];
         closure.closeCode = statusCode;
         closure.reason = @"Upgrade failed, status code is not `101`.";
+        closure.userInfo = @{
+            @"statusCode": @(statusCode),
+        };
         [self notifyCloseWithError:[closure error]];
         return 0;
     }
@@ -705,12 +746,12 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
         closure.closeCode = LCRTMWebSocketCloseCodeInvalid;
         closure.reason = @"Upgrade failed, response headers invalid.";
         closure.userInfo = @{
-            @"Upgrade": upgrade ?: @"nil",
-            @"Connection": connection ?: @"nil",
-            @"Sec-WebSocket-Accept": secWebSocketAccept ?: @"nil",
-            @"Sec-WebSocket-Key": secWebSocketKey ?: @"nil",
-            @"Request-Sec-WebSocket-Protocol": requestSecWebSocketProtocol ?: @"nil",
-            @"Response-Sec-WebSocket-Protocol": responseSecWebSocketProtocol ?: @"nil",
+            @"Upgrade": (upgrade ?: @"nil"),
+            @"Connection": (connection ?: @"nil"),
+            @"Sec-WebSocket-Accept": (secWebSocketAccept ?: @"nil"),
+            @"Sec-WebSocket-Key": (secWebSocketKey ?: @"nil"),
+            @"Request-Sec-WebSocket-Protocol": (requestSecWebSocketProtocol ?: @"nil"),
+            @"Response-Sec-WebSocket-Protocol": (responseSecWebSocketProtocol ?: @"nil"),
         };
         [self notifyCloseWithError:[closure error]];
         return 0;
@@ -754,9 +795,9 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
     }
     NSUInteger offset = frame.totalSize;
     if (frame.isFIN) {
-        if (frame.opcode == LCRTMWebSocketOpcodeBinary
-            || frame.opcode == LCRTMWebSocketOpcodeText
-            || frame.opcode == LCRTMWebSocketOpcodeContinuation) {
+        if (frame.opcode == LCRTMWebSocketOpcodeBinary ||
+            frame.opcode == LCRTMWebSocketOpcodeText ||
+            frame.opcode == LCRTMWebSocketOpcodeContinuation) {
             if (frame.opcode == LCRTMWebSocketOpcodeContinuation) {
                 if (self.inputFrameStack.count > 0) {
                     [self.inputFrameStack addObject:frame];
@@ -804,11 +845,11 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
             });
         }
     } else {
-        if ((self.inputFrameStack.count > 0
-             && frame.opcode == LCRTMWebSocketOpcodeContinuation)
-            || (self.inputFrameStack.count == 0
-                && (frame.opcode == LCRTMWebSocketOpcodeBinary
-                    || frame.opcode == LCRTMWebSocketOpcodeText))) {
+        if ((self.inputFrameStack.count > 0 &&
+             frame.opcode == LCRTMWebSocketOpcodeContinuation) ||
+            (self.inputFrameStack.count == 0 &&
+             (frame.opcode == LCRTMWebSocketOpcodeBinary ||
+              frame.opcode == LCRTMWebSocketOpcodeText))) {
             [self.inputFrameStack addObject:frame];
         } else {
             closure = [LCRTMWebSocketConnectionClosure new];
@@ -841,6 +882,7 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
         if (frame.completion) {
             dispatch_async(self.delegateQueue, ^{
                 frame.completion();
+                frame.completion = nil;
             });
         }
         if (frame.opcode == LCRTMWebSocketOpcodeConnectionClose) {
@@ -856,7 +898,8 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
 + (BOOL)isTLS:(NSURL *)url
 {
     NSString *scheme = url.scheme;
-    return scheme.length > 0 && [@[@"wss", @"https"] containsObject:scheme.lowercaseString];
+    return ((scheme.length > 0) &&
+            [@[@"wss", @"https"] containsObject:scheme.lowercaseString]);
 }
 
 + (NSString *)generateSecWebSocketKey
@@ -878,14 +921,16 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
 + (BOOL)validateSecWebSocketAccept:(NSString *)value
                    secWebSocketKey:(NSString *)key
 {
-    if (!value.length || !key.length) {
+    if (!value.length ||
+        !key.length) {
         return false;
     }
     NSData *data = [[key stringByAppendingString:@"258EAFA5-E914-47DA-95CA-C5AB0DC85B11"]
                     dataUsingEncoding:NSUTF8StringEncoding];
     UInt8 digest[CC_SHA1_DIGEST_LENGTH];
     CC_SHA1(data.bytes, (CC_LONG)data.length, digest);
-    return [[[NSData dataWithBytes:digest length:CC_SHA1_DIGEST_LENGTH]
+    return [[[NSData dataWithBytes:digest
+                            length:CC_SHA1_DIGEST_LENGTH]
              base64EncodedStringWithOptions:0]
             isEqualToString:value];
 }
@@ -919,7 +964,7 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
 {
     CFHTTPMessageRef messageRef = CFHTTPMessageCreateRequest(NULL,
                                                              CFSTR("GET"),
-                                                             (__bridge CFURLRef)request.URL,
+                                                             (__bridge CFURLRef)(request.URL),
                                                              kCFHTTPVersion1_1);
     for (NSString *key in request.allHTTPHeaderFields) {
         NSString *value = request.allHTTPHeaderFields[key];
@@ -929,7 +974,7 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
     }
     if (request.HTTPBody) {
         CFHTTPMessageSetBody(messageRef,
-                             (__bridge CFDataRef)request.HTTPBody);
+                             (__bridge CFDataRef)(request.HTTPBody));
     }
     NSData *data = (__bridge_transfer NSData *)CFHTTPMessageCopySerializedMessage(messageRef);
     CFRelease(messageRef);
@@ -957,7 +1002,8 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
         self.isOpened = false;
         if (self.inputStream.delegate) {
             self.inputStream.delegate = nil;
-            CFReadStreamSetDispatchQueue((__bridge CFReadStreamRef)self.inputStream, NULL);
+            CFReadStreamSetDispatchQueue((__bridge CFReadStreamRef)(self.inputStream),
+                                         NULL);
             [self.inputStream close];
         }
         self.inputSegmentBuffer = nil;
@@ -979,7 +1025,8 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
         self.isWritable = false;
         if (self.outputStream.delegate) {
             self.outputStream.delegate = nil;
-            CFWriteStreamSetDispatchQueue((__bridge CFWriteStreamRef)self.outputStream, NULL);
+            CFWriteStreamSetDispatchQueue((__bridge CFWriteStreamRef)(self.outputStream),
+                                          NULL);
             [self.outputStream close];
         }
         [self.outputFrameQueue removeAllObjects];
