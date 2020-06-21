@@ -66,7 +66,7 @@ static NSMutableDictionary<NSString *, NSString *> *customAppServerTable;
                 if ([data length]) {
                     NSError *error = nil;
                     NSMutableDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-                    if (error || ![NSMutableDictionary _lc_is_type_of:dictionary]) {
+                    if (error || ![NSMutableDictionary _lc_isTypeOf:dictionary]) {
                         if (!error) { error = LCErrorInternal([NSString stringWithFormat:@"file: %@ is invalid.", filePath]); }
                         AVLoggerError(AVLoggerDomainDefault, @"%@", error);
                     } else {
@@ -198,7 +198,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
             callback(nil, error);
         } else {
             NSDictionary *dictionary = (NSDictionary *)object;
-            if ([NSDictionary _lc_is_type_of:dictionary]) {
+            if ([NSDictionary _lc_isTypeOf:dictionary]) {
                 callback(dictionary, nil);
             } else {
                 callback(nil, LCErrorInternal(@"response data invalid."));
@@ -332,7 +332,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
                                                  @"secure": @"1",
                                              }];
     [paasClient performRequest:request success:^(NSHTTPURLResponse *response, id responseObject) {
-        if ([NSDictionary _lc_is_type_of:responseObject]) {
+        if ([NSDictionary _lc_isTypeOf:responseObject]) {
             callback(responseObject, nil);
         } else {
             callback(nil, LCError(AVErrorInternalErrorCodeMalformedData,

@@ -61,9 +61,9 @@
 }
 
 + (NSDate *)dateFromValue:(id)value {
-    if ([NSString _lc_is_type_of:value]) {
+    if ([NSString _lc_isTypeOf:value]) {
         return [self dateFromString:value];
-    } else if ([NSDictionary _lc_is_type_of:value]) {
+    } else if ([NSDictionary _lc_isTypeOf:value]) {
         return [self dateFromDictionary:value];
     } else {
         return nil;
@@ -221,16 +221,16 @@
 + (NSObject *)objectFromDictionary:(NSDictionary *)dict recursive:(BOOL)recursive {
     if (recursive) {
         NSMutableDictionary *mutableDict = [dict mutableCopy];
-
+        
         for (NSString *key in [dict allKeys]) {
             id object = dict[key];
-
+            
             if ([object isKindOfClass:[NSDictionary class]]) {
                 object = [self objectFromDictionary:object recursive:YES];
                 mutableDict[key] = object;
             }
         }
-
+        
         return [self objectFromDictionary:mutableDict];
     } else {
         return [self objectFromDictionary:dict];
@@ -296,7 +296,7 @@
     if ([key hasPrefix:@"_"]) {
         // NSLog(@"Ingore key %@", key);
         return;
-    }        
+    }
     
     if (![parent isKindOfClass:[AVObject class]]) {
         return;
@@ -418,12 +418,12 @@
 }
 
 /*
-{
-    "cid" : "67c35bc8-4183-4db0-8f5a-0ee2b0baa4d4",
-    "className" : "ddd",
-    "key" : "myddd"
-}
-*/
+ {
+ "cid" : "67c35bc8-4183-4db0-8f5a-0ee2b0baa4d4",
+ "className" : "ddd",
+ "key" : "myddd"
+ }
+ */
 +(NSDictionary *)childDictionaryFromAVObject:(AVObject *)object
                                      withKey:(NSString *)key
 {
@@ -437,9 +437,9 @@
 
 + (NSSet *)allAVObjectProperties:(Class)objectClass {
     NSMutableSet *properties = [NSMutableSet set];
-
+    
     [self allAVObjectProperties:objectClass properties:properties];
-
+    
     return [properties copy];
 }
 
@@ -450,18 +450,18 @@
     for (NSUInteger i = 0; i < numberOfProperties; i++)
     {
         objc_property_t property = propertyArray[i];
-
+        
         char *readonly = property_copyAttributeValue(property, "R");
-
+        
         if (readonly) {
             free(readonly);
             continue;
         }
-
+        
         NSString *key = [[NSString alloc] initWithUTF8String:property_getName(property)];
         [properties addObject:key];
     }
-
+    
     if ([objectClass isSubclassOfClass:[AVObject class]] && objectClass != [AVObject class])
     {
         [AVObjectUtils allAVObjectProperties:[objectClass superclass] properties:properties];
@@ -496,11 +496,11 @@
     NSArray * objects = @[localDataCopy, object._estimatedData];
     NSMutableDictionary * result = [NSMutableDictionary dictionary];
     [result setObject:@"Object" forKey:kAVTypeTag];
-
+    
     for (NSDictionary *object in objects) {
         NSDictionary *dictionary = [object copy];
         NSArray *keys = [dictionary allKeys];
-
+        
         for(NSString * key in keys) {
             id valueObject = [self snapshotDictionary:dictionary[key] recursive:recursive];
             if (valueObject != nil) {
@@ -508,9 +508,9 @@
             }
         }
     }
-
+    
     NSArray * keys = [object._relationData allKeys];
-
+    
     for(NSString * key in keys) {
         NSString * childClassName = [object childClassNameForRelation:key];
         id valueObject = [self dictionaryForRelation:childClassName];
@@ -535,10 +535,10 @@
                          @"fetchWhenSave",
                          @"isNew", // from AVUser
                          nil];
-
+    
     NSMutableSet * properties = [NSMutableSet set];
     [self allAVObjectProperties:[object class] properties:properties];
-
+    
     for (NSString * key in properties) {
         if ([ignoreKeys containsObject:key]) {
             continue;
@@ -548,7 +548,7 @@
             [result setObject:valueObjet forKey:key];
         }
     }
-
+    
     return result;
 }
 
@@ -706,7 +706,7 @@
 }
 
 +(NSString *)classEndPoint:(NSString *)className
-                   objectId:(NSString *)objectId
+                  objectId:(NSString *)objectId
 {
     if (objectId == nil)
     {
@@ -744,7 +744,7 @@
 }
 
 +(NSString *)objectPath:(NSString *)className
-                   objectId:(NSString *)objectId
+               objectId:(NSString *)objectId
 {
     //FIXME: 而且等于nil也没问题 只不过不应该再发请求
     //NSAssert(objectClass!=nil, @"className should not be nil!");

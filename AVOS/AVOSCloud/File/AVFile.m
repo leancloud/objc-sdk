@@ -378,7 +378,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
         dic = self->_uploadingHeaders;
     }];
-
+    
     return dic;
 }
 
@@ -417,19 +417,19 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 - (NSString *)url
 {
     __block NSString *url = nil;
-
+    
     [self internalSyncLock:^{
         
         url = [NSString _lc_decoding:self->_rawJSONData key:kLCFile_url];
     }];
-
+    
     return url;
 }
 
 - (NSDictionary *)metaData
 {
     __block NSDictionary *metaData = nil;
-
+    
     [self internalSyncLock:^{
         
         metaData = [AVFile decodingMetaDataFromDic:self->_rawJSONData];
@@ -875,7 +875,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
             return;
         }
         
-        if (![NSDictionary _lc_is_type_of:object]) {
+        if (![NSDictionary _lc_isTypeOf:object]) {
             
             completionHandler(false, ({
                 NSString *reason = @"response invalid.";
@@ -906,7 +906,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
         NSDictionary *dic = (NSDictionary *)object;
         
-        if (![NSDictionary _lc_is_type_of:dic]) {
+        if (![NSDictionary _lc_isTypeOf:dic]) {
             callback(nil, ({
                 NSString *reason = @"fileTokens response invalid.";
                 LCErrorInternal(reason);
@@ -1277,7 +1277,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
             return;
         }
         
-        if (![NSDictionary _lc_is_type_of:object]) {
+        if (![NSDictionary _lc_isTypeOf:object]) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
@@ -1313,29 +1313,29 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 {
     if (!self.url)
         return nil;
-
+    
     if (width < 0) {
         [NSException raise:NSInvalidArgumentException format:@"Invalid thumbnail width."];
     }
-
+    
     if (height < 0) {
         [NSException raise:NSInvalidArgumentException format:@"Invalid thumbnail height."];
     }
-
+    
     if (quality < 1 || quality > 100) {
         [NSException raise:NSInvalidArgumentException format:@"Invalid quality, valid range is 1 - 100."];
     }
-
+    
     int mode = scaleToFit ? 2 : 1;
-
+    
     NSString *url = [NSString stringWithFormat:@"%@?imageView/%d/w/%d/h/%d/q/%d", self.url, mode, width, height, quality];
-
+    
     format = [format stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-
+    
     if ([format length]) {
         url = [NSString stringWithFormat:@"%@/format/%@", url, format];
     }
-
+    
     return url;
 }
 
@@ -1347,9 +1347,9 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 }
 
 - (void)getThumbnail:(BOOL)scaleToFit
-              width:(int)width
-             height:(int)height
-          withBlock:(AVImageResultBlock)block
+               width:(int)width
+              height:(int)height
+           withBlock:(AVImageResultBlock)block
 {
     NSString *url = [self getThumbnailURLWithScaleToFit:scaleToFit width:width height:height];
     

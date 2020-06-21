@@ -398,7 +398,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         if (!ss) {
             return;
         }
-        if ([NSDictionary _lc_is_type_of:result]) {
+        if ([NSDictionary _lc_isTypeOf:result]) {
             NSString *sign = [NSString _lc_decoding:result
                                                 key:@"signature"];
             int64_t timestamp = [[NSNumber _lc_decoding:result
@@ -1100,7 +1100,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         }
         NSError *error = nil;
         NSDictionary *attr = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-        if (error || ![NSDictionary _lc_is_type_of:attr]) {
+        if (error || ![NSDictionary _lc_isTypeOf:attr]) {
             return;
         }
         attr;
@@ -1115,7 +1115,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         }
         NSError *error = nil;
         NSDictionary *attrModified = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-        if (error || ![NSDictionary _lc_is_type_of:attrModified]) {
+        if (error || ![NSDictionary _lc_isTypeOf:attrModified]) {
             return;
         }
         attrModified;
