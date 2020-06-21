@@ -156,11 +156,9 @@ do {                                       \
 
 @interface NSObject (LeanCloudObjcSDK)
 
-+ (BOOL)_lc_is_type_of:(id)instance
-__attribute__((warn_unused_result));
++ (BOOL)_lc_isTypeOf:(id)instance LC_WARN_UNUSED_RESULT;
 
 + (instancetype)_lc_decoding:(NSDictionary *)dictionary
-                         key:(NSString *)key
-__attribute__((warn_unused_result));
+                         key:(NSString *)key LC_WARN_UNUSED_RESULT;
 
 @end

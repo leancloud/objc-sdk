@@ -265,7 +265,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     [self internalSyncLock:^{
         value = self->_rawJSONData[AVIMConversationKeyCreatedAt];
     }];
-    if ([NSDate _lc_is_type_of:value]) {
+    if ([NSDate _lc_isTypeOf:value]) {
         return value;
     } else {
         return [AVDate dateFromValue:value];
@@ -281,7 +281,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     [self internalSyncLock:^{
         value = self->_rawJSONData[AVIMConversationKeyUpdatedAt];
     }];
-    if ([NSDate _lc_is_type_of:value]) {
+    if ([NSDate _lc_isTypeOf:value]) {
         return value;
     } else {
         return [AVDate dateFromValue:value];
@@ -352,9 +352,9 @@ static dispatch_queue_t messageCacheOperationQueue;
             value = [NSNumber _lc_decoding:self->_rawJSONData key:AVIMConversationKeyMutedMembers];
         }
     }];
-    if ([NSArray _lc_is_type_of:value]) {
+    if ([NSArray _lc_isTypeOf:value]) {
         return [value containsObject:self->_clientId];
-    } else if ([NSNumber _lc_is_type_of:value]) {
+    } else if ([NSNumber _lc_isTypeOf:value]) {
         return [(NSNumber *)value boolValue];
     } else {
         return false;
@@ -1028,7 +1028,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             }
             NSError *error = nil;
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-            if (error || ![NSDictionary _lc_is_type_of:dic]) {
+            if (error || ![NSDictionary _lc_isTypeOf:dic]) {
                 callback(false, error ?: ({
                     AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
                     LCError(code, AVIMErrorMessage(code), nil);
@@ -1066,7 +1066,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                     modifiedValue = subModifiedAttr[subKey];
                 } else {
                     NSDictionary *dic = subModifiedAttr[subKey];
-                    if ([NSDictionary _lc_is_type_of:dic]) {
+                    if ([NSDictionary _lc_isTypeOf:dic]) {
                         subModifiedAttr = dic;
                     } else {
                         break;
@@ -1088,7 +1088,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             } else {
                 // for safe, use deep copy.
                 NSMutableDictionary *mutableDic = subOriginAttr[subKey];
-                if ([NSDictionary _lc_is_type_of:mutableDic]) {
+                if ([NSDictionary _lc_isTypeOf:mutableDic]) {
                     mutableDic = mutableDic.mutableCopy;
                 } else {
                     if (modifiedValue) {
@@ -2407,7 +2407,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                              parameters:@{ @"client_id": self->_clientId, @"where": whereString }];
         });
         [paasClient performRequest:request success:^(NSHTTPURLResponse *response, id responseObject) {
-            if (![NSDictionary _lc_is_type_of:responseObject]) {
+            if (![NSDictionary _lc_isTypeOf:responseObject]) {
                 [self.imClient invokeInUserInteractQueue:^{
                     callback(nil, LCErrorInternal(@"response invalid."));
                 }];
@@ -2417,7 +2417,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                 NSMutableDictionary<NSString *, AVIMConversationMemberInfo *> *memberInfoTable = [NSMutableDictionary dictionary];
                 NSArray *memberInfoDatas = [NSArray _lc_decoding:responseObject key:@"results"];
                 for (NSDictionary *dic in memberInfoDatas) {
-                    if ([NSDictionary _lc_is_type_of:dic]) {
+                    if ([NSDictionary _lc_isTypeOf:dic]) {
                         AVIMConversationMemberInfo *memberInfo = [[AVIMConversationMemberInfo alloc] initWithRawJSONData:dic.mutableCopy conversation:self];
                         NSString *memberId = memberInfo.memberId;
                         if (memberId) {
@@ -2446,7 +2446,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                 callback(memberInfos, nil);
             }];
         } failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error) {
-            if ([NSDictionary _lc_is_type_of:responseObject] &&
+            if ([NSDictionary _lc_isTypeOf:responseObject] &&
                 [responseObject[@"code"] integerValue] == AVIMErrorCodeSessionTokenExpired &&
                 recursionCount < 2) {
                 [self getAllMemberInfoWithIgnoringCache:ignoringCache

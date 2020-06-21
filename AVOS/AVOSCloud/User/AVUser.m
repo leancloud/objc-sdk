@@ -185,9 +185,9 @@ static BOOL enableAutomatic = NO;
     NSString *password = self.password;
     NSString *email = self.email;
     NSString *mobilePhoneNumber = self.mobilePhoneNumber;
-
+    
     NSMutableDictionary * parameters = [[NSMutableDictionary alloc] init];
-
+    
     if (username) {
         [parameters setObject:username forKey:usernameTag];
     }
@@ -200,7 +200,7 @@ static BOOL enableAutomatic = NO;
     if (mobilePhoneNumber) {
         [parameters setObject:mobilePhoneNumber forKey:mobilePhoneNumberTag];
     }
-
+    
     return parameters;
 }
 
@@ -213,11 +213,11 @@ static BOOL enableAutomatic = NO;
 -(NSMutableDictionary *)initialBodyData {
     NSMutableDictionary *body = [NSMutableDictionary dictionary];
     NSMutableDictionary *dict = [[self._requestManager jsonForCloud] firstObject];
-
+    
     if (dict) {
         [body addEntriesFromDictionary:dict];
     }
-
+    
     return body;
 }
 
@@ -239,10 +239,10 @@ static BOOL enableAutomatic = NO;
 {
     NSParameterAssert(phoneNumber);
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-
+    
     parameters[@"mobilePhoneNumber"] = phoneNumber;
     parameters[@"validate_token"] = options.validationToken;
-
+    
     [[AVPaasClient sharedInstance] postObject:@"requestMobilePhoneVerify" withParameters:parameters block:^(id object, NSError *error) {
         [AVUtils callBooleanResultBlock:callback error:error];
     }];
@@ -297,35 +297,35 @@ static BOOL enableAutomatic = NO;
 
 - (void)refreshSessionTokenWithBlock:(AVBooleanResultBlock)block {
     NSString *objectId = self.objectId;
-
+    
     if (!objectId) {
         NSError *error = LCError(kAVErrorUserNotFound, @"User ID not found.", nil);
         [AVUtils callBooleanResultBlock:block error:error];
         return;
     }
-
+    
     NSString *sessionToken = self.sessionToken;
-
+    
     if (!sessionToken) {
         NSError *error = LCError(kAVErrorUserCannotBeAlteredWithoutSession, @"User session token not found.", nil);
         [AVUtils callBooleanResultBlock:block error:error];
         return;
     }
-
+    
     AVPaasClient *HTTPClient = [AVPaasClient sharedInstance];
-
+    
     NSDictionary *headers = @{
         LCHeaderFieldNameSession: sessionToken
     };
     NSString *path = [[[[NSURL URLWithString:@"users"]
                         URLByAppendingPathComponent:objectId]
-                        URLByAppendingPathComponent:@"refreshSessionToken"]
-                        relativePath];
+                       URLByAppendingPathComponent:@"refreshSessionToken"]
+                      relativePath];
     NSMutableURLRequest *request = [HTTPClient requestWithPath:path
                                                         method:@"PUT"
                                                        headers:headers
                                                     parameters:nil];
-
+    
     [HTTPClient performRequest:request
                        success:^(NSHTTPURLResponse *response, id result) {
         self.sessionToken = result[@"sessionToken"];
@@ -343,8 +343,8 @@ static BOOL enableAutomatic = NO;
 // MARK: - login with username & password
 
 + (instancetype)logInWithUsername:(NSString *)username
-                     password:(NSString *)password
-                        error:(NSError **)error
+                         password:(NSString *)password
+                            error:(NSError **)error
 {
     __block AVUser * resultUser = nil;
     [[self class] logInWithUsername:username email:nil password:password block:^(AVUser *user, NSError *error) {
@@ -360,10 +360,10 @@ static BOOL enableAutomatic = NO;
     [[self class] logInWithUsername:username email:nil password:password block:^(AVUser *user, NSError * error) {
         [AVUtils callUserResultBlock:block user:user error:error];
     }
-    waitUntilDone:NO error:nil];
+                      waitUntilDone:NO error:nil];
     
 }
-    
+
 + (void)loginWithEmail:(NSString *)email password:(NSString *)password block:(AVUserResultBlock)block {
     [[self class] logInWithUsername:nil email:email password:password block:^(AVUser * _Nullable user, NSError * _Nullable error) {
         [AVUtils callUserResultBlock:block user:user error:error];
@@ -404,7 +404,7 @@ static BOOL enableAutomatic = NO;
         }
         [AVUtils callUserResultBlock:block user:user error:error];
     }];
-
+    
     // wait until called back if necessary
     if (wait) {
         [AVUtils warnMainThreadIfNecessary];
@@ -418,8 +418,8 @@ static BOOL enableAutomatic = NO;
 // MARK: - login with mobile
 
 + (instancetype)logInWithMobilePhoneNumber:(NSString *)phoneNumber
-                         password:(NSString *)password
-                            error:(NSError **)error
+                                  password:(NSString *)password
+                                     error:(NSError **)error
 {
     __block AVUser * resultUser = nil;
     [self logInWithMobilePhoneNumber:phoneNumber password:password block:^(AVUser *user, NSError *error) {
@@ -429,20 +429,20 @@ static BOOL enableAutomatic = NO;
 }
 
 + (void)logInWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
-                             password:(NSString *)password
-                                block:(AVUserResultBlock)block
+                                      password:(NSString *)password
+                                         block:(AVUserResultBlock)block
 {
     [self logInWithMobilePhoneNumber:phoneNumber password:password block:^(AVUser *user, NSError * error) {
         [AVUtils callUserResultBlock:block user:user error:error];
     }
-                      waitUntilDone:NO error:nil];
+                       waitUntilDone:NO error:nil];
     
 }
 + (BOOL)logInWithMobilePhoneNumber:(NSString *)phoneNumber
-                 password:(NSString *)password
-                    block:(AVUserResultBlock)block
-            waitUntilDone:(BOOL)wait
-                    error:(NSError **)theError {
+                          password:(NSString *)password
+                             block:(AVUserResultBlock)block
+                     waitUntilDone:(BOOL)wait
+                             error:(NSError **)theError {
     
     BOOL __block theResult = NO;
     BOOL __block hasCalledBack = NO;
@@ -531,10 +531,10 @@ static BOOL enableAutomatic = NO;
 {
     NSParameterAssert(phoneNumber);
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-
+    
     parameters[@"mobilePhoneNumber"] = phoneNumber;
     parameters[@"validate_token"] = options.validationToken;
-
+    
     [[AVPaasClient sharedInstance] postObject:@"requestLoginSmsCode" withParameters:parameters block:^(id object, NSError *error) {
         [AVUtils callBooleanResultBlock:callback error:error];
     }];
@@ -543,7 +543,7 @@ static BOOL enableAutomatic = NO;
 // MARK: - login with mobile
 
 + (instancetype)logInWithMobilePhoneNumber:(NSString *)phoneNumber
-                                  smsCode:(NSString *)code
+                                   smsCode:(NSString *)code
                                      error:(NSError **)error
 {
     __block AVUser * resultUser = nil;
@@ -554,7 +554,7 @@ static BOOL enableAutomatic = NO;
 }
 
 + (void)logInWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
-                                      smsCode:(NSString *)code
+                                       smsCode:(NSString *)code
                                          block:(AVUserResultBlock)block
 {
     [self logInWithMobilePhoneNumber:phoneNumber smsCode:code block:^(AVUser *user, NSError * error) {
@@ -564,7 +564,7 @@ static BOOL enableAutomatic = NO;
     
 }
 + (BOOL)logInWithMobilePhoneNumber:(NSString *)phoneNumber
-                          smsCode:(NSString *)smsCode
+                           smsCode:(NSString *)smsCode
                              block:(AVUserResultBlock)block
                      waitUntilDone:(BOOL)wait
                              error:(NSError **)theError {
@@ -580,7 +580,7 @@ static BOOL enableAutomatic = NO;
         {
             user = [self userOrSubclassUser];
             user.mobilePhoneVerified = YES;
-
+            
             [self configAndChangeCurrentUserWithUser:user
                                               object:object];
         }
@@ -703,7 +703,7 @@ static BOOL enableAutomatic = NO;
     BOOL __block theResult = NO;
     BOOL __block hasCalledBack = NO;
     NSError * __block  theError = nil;
-
+    
     [self internalRequestPasswordResetForEmailInBackground:email block:^(BOOL succeeded, NSError *callBackError) {
         if (wait) {
             hasCalledBack = YES;
@@ -715,23 +715,23 @@ static BOOL enableAutomatic = NO;
     // wait until called back if necessary
     if (wait) {
         [AVUtils warnMainThreadIfNecessary];
-        AV_WAIT_TIL_TRUE(hasCalledBack, 0.1);        
+        AV_WAIT_TIL_TRUE(hasCalledBack, 0.1);
     };
     
     if (resultError != NULL) *resultError = theError;
     return theResult;
-
+    
 }
 
 + (void)requestPasswordResetForEmailInBackground:(NSString *)email
-                                            block:(AVBooleanResultBlock)block {
+                                           block:(AVBooleanResultBlock)block {
     [self internalRequestPasswordResetForEmailInBackground:email block:^(BOOL succeeded, NSError *error) {
         [AVUtils callBooleanResultBlock:block error:error];
     }];
 }
 
 + (void)internalRequestPasswordResetForEmailInBackground:(NSString *)email
-                                           block:(AVBooleanResultBlock)block
+                                                   block:(AVBooleanResultBlock)block
 {
     NSDictionary * parameters = @{emailTag: email};
     [[AVPaasClient sharedInstance] postObject:@"requestPasswordReset" withParameters:parameters block:^(id object, NSError *error) {
@@ -751,10 +751,10 @@ static BOOL enableAutomatic = NO;
 {
     NSParameterAssert(phoneNumber);
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-
+    
     parameters[@"mobilePhoneNumber"] = phoneNumber;
     parameters[@"validate_token"] = options.validationToken;
-
+    
     [[AVPaasClient sharedInstance] postObject:@"requestPasswordResetBySmsCode" withParameters:parameters block:^(id object, NSError *error) {
         [AVUtils callBooleanResultBlock:callback error:error];
     }];
@@ -833,7 +833,7 @@ static BOOL enableAutomatic = NO;
         
         NSDictionary *dic = (NSDictionary *)object;
         
-        if (![NSDictionary _lc_is_type_of:dic]) {
+        if (![NSDictionary _lc_isTypeOf:dic]) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
@@ -899,12 +899,12 @@ static BOOL enableAutomatic = NO;
         });
         
         parameters =  @{ authDataTag :
-                            @{ platformId : mutableAuthData } };
+                             @{ platformId : mutableAuthData } };
         
     } else {
         
         parameters =  @{ authDataTag :
-                            @{ platformId : authData } };
+                             @{ platformId : authData } };
     }
     
     NSString *path = [NSString stringWithFormat:@"users/%@", objectId];
@@ -924,7 +924,7 @@ static BOOL enableAutomatic = NO;
         
         NSDictionary *dic = (NSDictionary *)object;
         
-        if (![NSDictionary _lc_is_type_of:dic]) {
+        if (![NSDictionary _lc_isTypeOf:dic]) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
@@ -942,7 +942,7 @@ static BOOL enableAutomatic = NO;
         NSDictionary *oldAuthData = [self objectForKey:authDataTag];
         NSDictionary *newAuthData = parameters[authDataTag];
         
-        if ([NSDictionary _lc_is_type_of:oldAuthData]) {
+        if ([NSDictionary _lc_isTypeOf:oldAuthData]) {
             
             NSMutableDictionary *mutableCopy = oldAuthData.mutableCopy;
             [mutableCopy addEntriesFromDictionary:newAuthData];
@@ -963,7 +963,7 @@ static BOOL enableAutomatic = NO;
 }
 
 - (void)disassociateWithPlatformId:(NSString *)platformId
-                    callback:(void (^)(BOOL, NSError * _Nullable))callback
+                          callback:(void (^)(BOOL, NSError * _Nullable))callback
 {
     NSString *objectId = self.objectId;
     
@@ -1002,7 +1002,7 @@ static BOOL enableAutomatic = NO;
         
         NSDictionary *dic = (NSDictionary *)object;
         
-        if (![NSDictionary _lc_is_type_of:dic]) {
+        if (![NSDictionary _lc_isTypeOf:dic]) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
@@ -1019,7 +1019,7 @@ static BOOL enableAutomatic = NO;
         
         NSDictionary *oldAuthData = [self objectForKey:authDataTag];
         
-        if ([NSDictionary _lc_is_type_of:oldAuthData]) {
+        if ([NSDictionary _lc_isTypeOf:oldAuthData]) {
             
             NSMutableDictionary *mutableCopy = oldAuthData.mutableCopy;
             [mutableCopy removeObjectForKey:platformId];
@@ -1079,9 +1079,9 @@ static BOOL enableAutomatic = NO;
     [self internalSyncLock:^{
         sessionToken = self._localData[@"sessionToken"];
     }];
-
+    
     [super removeLocalData];
-
+    
     if (sessionToken) {
         [self internalSyncLock:^{
             self._localData[@"sessionToken"] = sessionToken;

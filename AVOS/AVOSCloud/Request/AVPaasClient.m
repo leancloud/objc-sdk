@@ -35,17 +35,17 @@ NSString *const LCHeaderFieldNameSession = @"X-LC-Session";
 NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 #define LC_REST_REQUEST_LOG_FORMAT \
-    @"\n------ BEGIN LeanCloud REST Request -------\n" \
-    @"path: %@\n" \
-    @"curl: %@\n" \
-    @"------ END --------------------------------"
+@"\n------ BEGIN LeanCloud REST Request -------\n" \
+@"path: %@\n" \
+@"curl: %@\n" \
+@"------ END --------------------------------"
 
 #define LC_REST_RESPONSE_LOG_FORMAT \
-    @"\n------ BEGIN LeanCloud REST Response ------\n" \
-    @"path: %@\n" \
-    @"cost: %.3fms\n" \
-    @"response: %@\n" \
-    @"------ END --------------------------------"
+@"\n------ BEGIN LeanCloud REST Response ------\n" \
+@"path: %@\n" \
+@"cost: %.3fms\n" \
+@"response: %@\n" \
+@"------ END --------------------------------"
 
 @implementation NSMutableString (URLRequestFormatter)
 
@@ -74,13 +74,13 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             [command appendCommandLineArgument:[NSString stringWithFormat:@"--cookie \"%@=%@\" \\\n", [cookie name], [cookie value]]];
         }
     }
-
+    
     NSMutableDictionary<NSString *, NSString *> *headers = [[self allHTTPHeaderFields] mutableCopy];
     
     for (NSString * field in headers) {
         [command appendCommandLineArgument:[NSString stringWithFormat:@"-H %@ \\\n", [NSString stringWithFormat:@"'%@: %@'", field, [[self valueForHTTPHeaderField:field] stringByReplacingOccurrencesOfString:@"\'" withString:@"\\\'"]]]];
     }
-
+    
     if ([self URL].query.length > 0) {
         NSString *query = [self URL].query;
         NSArray *components = [query componentsSeparatedByString:@"&"];
@@ -88,7 +88,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             [command appendCommandLineArgument:[NSString stringWithFormat:@"--data-urlencode \'%@\' \\\n", component.stringByRemovingPercentEncoding]];
         }
     }
-
+    
     NSString *basicUrl;
     NSString *absoluteString = [[self URL] absoluteString];
     NSRange range = [absoluteString rangeOfString:@"?"];
@@ -146,7 +146,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 - (instancetype)init {
     self = [super init];
-
+    
     if (self) {
         _requestTable = [NSMapTable strongToWeakObjectsMapTable];
         _completionQueue = dispatch_queue_create("avos.paas.completionQueue", DISPATCH_QUEUE_CONCURRENT);
@@ -154,16 +154,16 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
             LCURLSessionManager *manager = [[LCURLSessionManager alloc] initWithSessionConfiguration:configuration];
             manager.completionQueue = _completionQueue;
-
+            
             /* Remove all null value of result. */
             LCJSONResponseSerializer *responseSerializer = (LCJSONResponseSerializer *)manager.responseSerializer;
             responseSerializer.removesKeysWithNullValues = YES;
-
+            
             manager;
         });
         _lock = [[NSLock alloc] init];
     }
-
+    
     return self;
 }
 
@@ -200,7 +200,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     NSString *timestamp=[NSString stringWithFormat:@"%.0f",1000*[[NSDate date] timeIntervalSince1970]];
     NSString *sign=[[[NSString stringWithFormat:@"%@%@",timestamp,self.clientKey] AVMD5String] lowercaseString];
     NSString *headerValue=[NSString stringWithFormat:@"%@,%@",sign,timestamp];
-
+    
     return headerValue;
 }
 
@@ -211,16 +211,16 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 {
     NSMutableDictionary * result = [[NSMutableDictionary alloc] init];
     NSString *batchPath = [[LCRouter sharedInstance] batchPathForPath:path];
-
+    
     [result setObject:method forKey:@"method"];
     [result setObject:batchPath forKey:@"path"];
     if (body) {
-         [result setObject:body forKey:@"body"];
+        [result setObject:body forKey:@"body"];
     }
     if (parameters) {
         [result setObject:parameters forKey:@"params"];
     }
-
+    
     return result;
 }
 
@@ -229,7 +229,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
                     dict:(NSMutableDictionary *)dict
 {
     NSString * myPath = [NSString stringWithFormat:@"/%@/%@", [AVPaasClient sharedInstance].apiVersion, path];
-
+    
     [dict setObject:method forKey:@"method"];
     [dict setObject:myPath forKey:@"path"];
 }
@@ -240,14 +240,14 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
                               parameters:(NSDictionary *)parameters
 {
     NSURL *URL = [NSURL URLWithString:path];
-
+    
     if (!URL.scheme.length) {
         NSString *URLString = [[LCRouter sharedInstance] appURLForPath:path appID:[AVOSCloud getApplicationId]];
         URL = [NSURL URLWithString:URLString];
     }
-
+    
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
-
+    
     [request setHTTPMethod:method];
     [request setTimeoutInterval:self.timeoutInterval];
     [request setValue:self.applicationId forHTTPHeaderField:LCHeaderFieldNameId];
@@ -257,23 +257,23 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     [request setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-
+    
     NSString *sessionToken = self.currentUser.sessionToken;
-
+    
     if (sessionToken) {
         [request setValue:sessionToken forHTTPHeaderField:LCHeaderFieldNameSession];
     }
-
+    
     NSError *error = nil;
     LCJSONRequestSerializer *serializer = [[LCJSONRequestSerializer alloc] init];
     request = [[serializer requestBySerializingRequest:request withParameters:parameters error:&error] mutableCopy];
-
+    
     if (headers) {
         for (NSString *key in headers) {
             [request setValue:headers[key] forHTTPHeaderField:key];
         }
     }
-
+    
     return request;
 }
 
@@ -289,9 +289,9 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
                               block:(AVIdResultBlock)block
 {
     NSURLRequest *request = [self requestWithPath:path method:@"GET" headers:nil parameters:parameters];
-
+    
     /* If GET request too heavy,
-       wrap it into a POST request and ignore cache policy. */
+     wrap it into a POST request and ignore cache policy. */
     if (parameters && request.URL.absoluteString.length > 4096) {
         NSDictionary *request = [AVPaasClient batchMethod:@"GET" path:path body:nil parameters:parameters];
         [self postBatchObject:@[request] block:^(NSArray * _Nullable objects, NSError * _Nullable error) {
@@ -323,7 +323,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         }
             break;
         case kAVCachePolicyNetworkOnly:
-        {            
+        {
             [self getObjectFromNetworkWithPath:path withParameters:parameters policy:policy block:^(id object, NSError *error) {
                 block(object, error);
             }];
@@ -370,10 +370,10 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 - (NSString *)JSONStringFromDictionary:(NSDictionary *)dictionary {
     if (!dictionary)
         return nil;
-
+    
     NSError *error = nil;
     NSData *data = [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:&error];
-
+    
     if (!error && data) {
         return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     } else {
@@ -387,11 +387,11 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
            block:(AVIdResultBlock)block
 {
     NSMutableURLRequest *request = [self requestWithPath:path method:@"PUT" headers:nil parameters:parameters];
-
+    
     if (sessionToken) {
         [request setValue:sessionToken forHTTPHeaderField:LCHeaderFieldNameSession];
     }
-
+    
     [self performRequest:request saveResult:NO block:block];
 }
 
@@ -403,7 +403,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     NSString *path = [AVObjectUtils batchPath];
     NSDictionary *parameters = @{@"requests": requests ?: @[]};
     NSMutableURLRequest *request = [self requestWithPath:path method:@"POST" headers:headerMap parameters:parameters];
-
+    
     AVIdResultBlock handleResultBlock = ^(NSArray *objects, NSError *error) {
         // 区分某个删除失败还是网络请求失败，两种情况 error 都不为空
         if (objects.count != requests.count) {
@@ -439,7 +439,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             block(results, nil);
         }
     };
-
+    
     if (isEventually) {
         NSString *filePath = [self archiveRequest:request];
         [self handleArchivedRequestAtPath:filePath block:handleResultBlock];
@@ -452,7 +452,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     NSString *path = [AVObjectUtils batchSavePath];
     NSDictionary *parameters = @{@"requests": requests};
     NSMutableURLRequest *request = [self requestWithPath:path method:@"POST" headers:headerMap parameters:parameters];
-
+    
     if (isEventually) {
         NSString *filePath = [self archiveRequest:request];
         [self handleArchivedRequestAtPath:filePath block:block];
@@ -470,7 +470,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 -(void)postObject:(NSString *)path withParameters:(NSDictionary *)parameters eventually:(BOOL)isEventually block:(AVIdResultBlock)block {
     NSMutableURLRequest *request = [self requestWithPath:path method:@"POST" headers:nil parameters:parameters];
-
+    
     if (isEventually) {
         NSString *filePath = [self archiveRequest:request];
         [self handleArchivedRequestAtPath:filePath block:block];
@@ -488,7 +488,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 - (void)deleteObject:(NSString *)path withParameters:(NSDictionary *)parameters eventually:(BOOL)isEventually block:(AVIdResultBlock)block {
     NSMutableURLRequest *request = [self requestWithPath:path method:@"DELETE" headers:nil parameters:parameters];
-
+    
     if (isEventually) {
         NSString *filePath = [self archiveRequest:request];
         [self handleArchivedRequestAtPath:filePath block:block];
@@ -507,26 +507,26 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     NSURL *URL = request.URL;
     NSString *URLString = URL.absoluteString;
     NSMutableURLRequest *mutableRequest = [request mutableCopy];
-
+    
     if (self.isLastModifyEnabled && [request.HTTPMethod isEqualToString:@"GET"]) {
         NSString *modifiedSince = self.lastModify[[URLString AVMD5String]];
         if (modifiedSince && [[AVCacheManager sharedInstance] hasCacheForKey:URLString]) {
             [mutableRequest setValue:modifiedSince forHTTPHeaderField:@"If-Modified-Since"];
         }
     }
-
+    
     [self performRequest:mutableRequest
                  success:^(NSHTTPURLResponse *response, id responseObject)
-    {
+     {
         if (block) {
             
             block(responseObject, nil);
         }
-
+        
         if (self.isLastModifyEnabled && [request.HTTPMethod isEqualToString:@"GET"]) {
             NSString *URLMD5 = [URLString AVMD5String];
             NSString *lastModified = [response.allHeaderFields objectForKey:@"Last-Modified"];
-
+            
             if (lastModified && ![self.lastModify[URLMD5] isEqualToString:lastModified]) {
                 [[AVCacheManager sharedInstance] saveJSON:responseObject forKey:URLString];
                 [self.lastModify setObject:lastModified forKey:URLMD5];
@@ -535,10 +535,10 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             [[AVCacheManager sharedInstance] saveJSON:responseObject forKey:URLString];
         }
     }
-              failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error)
-    {
+                 failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error)
+     {
         NSInteger statusCode = response.statusCode;
-
+        
         if (statusCode == 304) {
             // 304 is not error
             [[AVCacheManager sharedInstance] getWithKey:URLString maxCacheAge:3600 * 24 * 30 block:^(id object, NSError *error) {
@@ -583,9 +583,9 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     dispatch_semaphore_t semaphore;
     NSString *path = request.URL.path;
     AVLoggerDebug(AVLoggerDomainNetwork, LC_REST_REQUEST_LOG_FORMAT, path, [request cURLCommand]);
-
+    
     NSDate *operationEnqueueDate = [NSDate date];
-
+    
     if (wait)
         semaphore = dispatch_semaphore_create(0);
     NSURLSessionDataTask *dataTask = [self.sessionManager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
@@ -594,11 +594,11 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
          > the NSURLResponse object you get back is actually an instance of the NSHTTPURLResponse class.
          */
         NSHTTPURLResponse *HTTPResponse = (NSHTTPURLResponse *)response;
-
+        
         if (error) {
             
             NSError *callbackError = nil;
-            if ([NSDictionary _lc_is_type_of:responseObject]) {
+            if ([NSDictionary _lc_isTypeOf:responseObject]) {
                 
                 NSMutableDictionary *userInfo = ((NSDictionary *)responseObject).mutableCopy;
                 
@@ -633,18 +633,18 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             if (failureBlock) {
                 failureBlock(HTTPResponse, responseObject, callbackError);
             }
-
+            
             // Doing network statistics
             NSInteger statusCode = HTTPResponse.statusCode;
             if ([self shouldStatisticsForPath:path statusCode:statusCode]) {
                 LCNetworkStatistics *statistician = [LCNetworkStatistics sharedInstance];
-
+                
                 if (error.code == NSURLErrorTimedOut) {
                     [statistician addIncrementalAttribute:1 forKey:@"timeout"];
                 } else {
                     [statistician addIncrementalAttribute:1 forKey:[NSString stringWithFormat:@"%ld", (long)statusCode]];
                 }
-
+                
                 [statistician addIncrementalAttribute:1 forKey:@"total"];
             }
         } else {
@@ -660,26 +660,26 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             NSInteger statusCode = HTTPResponse.statusCode;
             if ([self shouldStatisticsForPath:path statusCode:statusCode]) {
                 LCNetworkStatistics *statistician = [LCNetworkStatistics sharedInstance];
-
+                
                 if ((NSInteger)(statusCode / 100) == 2) {
                     [statistician addAverageAttribute:costTime forKey:@"avg"];
                 }
-
+                
                 [statistician addIncrementalAttribute:1 forKey:[NSString stringWithFormat:@"%ld", (long)statusCode]];
                 [statistician addIncrementalAttribute:1 forKey:@"total"];
             }
         }
-
+        
         if (wait)
             dispatch_semaphore_signal(semaphore);
     }];
-
+    
     [self.lock lock];
     [self.requestTable setObject:dataTask forKey:request.URL.absoluteString];
     [self.lock unlock];
-
+    
     [dataTask resume];
-
+    
     if (wait)
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 }
@@ -700,13 +700,13 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         @"stats/collect",
         @"sendPolicy"
     ];
-
+    
     for (NSString *api in exclusiveApis) {
         if ([url hasSuffix:api]) {
             return NO;
         }
     }
-
+    
     return YES;
 }
 
@@ -731,12 +731,12 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 - (void)handleArchivedRequestAtPath:(NSString *)path block:(AVIdResultBlock)block {
     NSURLRequest *request = nil;
     NSFileManager *fileManager = [NSFileManager defaultManager];
-
+    
     if (![fileManager fileExistsAtPath:path]) {
         if (block) block(nil, nil);
         return;
     }
-
+    
     @try {
         request = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
     } @catch (NSException *exception) {
@@ -744,37 +744,37 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         if (block) block(nil, nil);
         return;
     }
-
+    
     if (![request isKindOfClass:[NSURLRequest class]]) {
         [fileManager removeItemAtPath:path error:NULL];
         if (block) block(nil, nil);
         return;
     }
-
+    
     @synchronized (self.runningArchivedRequests) {
         if ([self.runningArchivedRequests containsObject:path])
             return;
-
+        
         [self.runningArchivedRequests addObject:path];
     }
-
+    
     [self performRequest:request saveResult:NO block:^(id object, NSError *error) {
         if (!error) {
             [fileManager removeItemAtPath:path error:NULL];
         } else {
             NSInteger errorCode = error.code;
             BOOL isServerError = errorCode >= 500 && errorCode < 600;
-
+            
             /* If error is a server error, we need retain the cached request. */
             if (!isServerError && [self isErrorFromServer:error]) {
                 [fileManager removeItemAtPath:path error:NULL];
             }
         }
-
+        
         @synchronized (self.runningArchivedRequests) {
             [self.runningArchivedRequests removeObject:path];
         }
-
+        
         if (block) block(object, error);
     }];
 }
@@ -784,7 +784,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     
     NSString *documentsDirectory = [AVPersistenceUtils eventuallyPath];
     NSArray *directoryContents = [fileMgr contentsOfDirectoryAtPath:documentsDirectory error:NULL];
-  
+    
     for (NSString *path in directoryContents) {
         NSString *fullPath = [documentsDirectory stringByAppendingPathComponent:path];
         [self handleArchivedRequestAtPath:fullPath];
@@ -805,10 +805,10 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     }
     
     if (parseClassName == nil) return NO;
-
+    
     if ([self.subclassTable objectForKey:parseClassName]) {
         AVLoggerI(@"Warnning: Register duplicate with %@, %@ will be replaced by %@",
-               parseClassName, [self.subclassTable objectForKey:parseClassName], object);
+                  parseClassName, [self.subclassTable objectForKey:parseClassName], object);
     }
     
     [self.subclassTable setObject:object forKey:parseClassName];

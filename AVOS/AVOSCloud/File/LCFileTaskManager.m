@@ -377,7 +377,7 @@ static NSString * const kLCFileTokensProvider_s3 = @"s3";
                 return;
             }
             
-            if (![NSDictionary _lc_is_type_of:dic] ||
+            if (![NSDictionary _lc_isTypeOf:dic] ||
                 [dic[@"code"] integerValue] != 0) {
                 
                 NSError *aError = ({

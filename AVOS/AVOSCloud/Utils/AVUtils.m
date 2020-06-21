@@ -914,14 +914,17 @@ static Byte ivBuff[]   = {0xA,1,0xB,5,4,0xF,7,9,0x17,3,1,6,8,0xC,0xD,91};
 
 @implementation NSObject (LeanCloudObjcSDK)
 
-+ (BOOL)_lc_is_type_of:(id)instance {
-    return instance && [instance isKindOfClass:self];
++ (BOOL)_lc_isTypeOf:(id)instance
+{
+    return [instance isKindOfClass:self];
 }
 
 + (instancetype)_lc_decoding:(NSDictionary *)dictionary
                          key:(NSString *)key
 {
-    if (!key) { return nil; }
+    if (!key) {
+        return nil;
+    }
     id value = dictionary[key];
     return [value isKindOfClass:self] ? value : nil;
 }
