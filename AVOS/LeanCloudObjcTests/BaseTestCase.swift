@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import LeanCloudObjc
+@testable import LeanCloudObjc
 
 class BaseTestCase: XCTestCase {
     
@@ -64,28 +64,19 @@ extension BaseTestCase {
     func expecting(
         description: String? = nil,
         count expectedFulfillmentCount: Int = 1,
+        timeout: TimeInterval = BaseTestCase.timeout,
         testcase: (XCTestExpectation) -> Void)
     {
         let exp = self.expectation(description: description ?? "default expectation")
         exp.expectedFulfillmentCount = expectedFulfillmentCount
         self.expecting(
-            timeout: BaseTestCase.timeout,
+            timeout: timeout,
             expectation: { exp },
             testcase: testcase)
     }
     
     func expecting(
-        expectation: @escaping () -> XCTestExpectation,
-        testcase: (XCTestExpectation) -> Void)
-    {
-        self.expecting(
-            timeout: BaseTestCase.timeout,
-            expectation: expectation,
-            testcase: testcase)
-    }
-    
-    func expecting(
-        timeout: TimeInterval,
+        timeout: TimeInterval = BaseTestCase.timeout,
         expectation: () -> XCTestExpectation,
         testcase: (XCTestExpectation) -> Void)
     {
