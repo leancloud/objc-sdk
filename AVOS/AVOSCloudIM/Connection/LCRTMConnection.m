@@ -147,6 +147,10 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             LCRTMInstantMessagingRegistry registry = [self registryFromProtocol:serviceConsumer.protocol];
             NSMutableDictionary<NSString *, LCRTMConnection *> *connectionMap = registry[appID];
             [connectionMap removeObjectForKey:serviceConsumer.peerID];
+            if (connectionMap &&
+                connectionMap.count == 0) {
+                [registry removeObjectForKey:appID];
+            }
         } else if (serviceConsumer.service == LCRTMServiceLiveQuery) {
             [self.liveQueryRegistry removeObjectForKey:appID];
         } else {
