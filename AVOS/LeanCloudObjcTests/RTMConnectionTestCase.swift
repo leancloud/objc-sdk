@@ -9,7 +9,7 @@
 import XCTest
 @testable import LeanCloudObjc
 
-class RTMConnectionTestCase: BaseTestCase {
+class RTMConnectionTestCase: RTMBaseTestCase {
     
     func testDuplicatedRegisterAndDealloc() {
         weak var wConnection: LCRTMConnection?
@@ -48,6 +48,68 @@ class RTMConnectionTestCase: BaseTestCase {
         }
         delay()
         XCTAssertNil(wConnection)
+    }
+    
+    func testConnectingDelay() {
+        AVOSCloudIM.defaultOptions().rtmServer = RTMBaseTestCase.testableRTMServer + "n"
+        defer {
+            AVOSCloudIM.defaultOptions().rtmServer = nil
+        }
+        let peerID = uuid
+        let consumer = LCRTMServiceConsumer(
+            application: .default(),
+            service: .instantMessaging,
+            protocol: .protocol3,
+            peerID: peerID)
+        let connection = try! LCRTMConnectionManager.shared().register(with: consumer)
+        let delegator = RTMConnectionDelegator()
+        var connectingCount = 0
+        let maxCount = 10
+        var timeout: TimeInterval = 0.0
+        for i in 0..<maxCount {
+            if i > 1 {
+                if i > 6 {
+                    timeout += 30
+                } else {
+                    timeout += pow(Double(2), Double(i - 2))
+                }
+            }
+        }
+        let start = Date()
+        expecting(
+            description: "Connecting Delay",
+            count: maxCount * 2,
+            timeout: timeout + 5)
+        { (exp) in
+            let rtmDelegator = LCRTMConnectionDelegator(
+                peerID: peerID,
+                delegate: delegator,
+                queue: .main)
+            delegator.inConnecting = { connection in
+                connectingCount += 1
+                exp.fulfill()
+            }
+            delegator.didDisconnect = { connection, error in
+                if let error = error as NSError? {
+                    XCTAssertEqual(error.domain, kLeanCloudErrorDomain)
+                    XCTAssertEqual(error.code, AVErrorInternalErrorCode.underlyingError.rawValue)
+                } else {
+                    XCTFail()
+                }
+                if connectingCount == maxCount {
+                    delegator.reset()
+                }
+                exp.fulfill()
+            }
+            connection.connect(
+                with: consumer,
+                delegator: rtmDelegator)
+        }
+        let duration = Date().timeIntervalSince1970 - start.timeIntervalSince1970
+        XCTAssertTrue(duration > timeout)
+        XCTAssertTrue(duration < timeout + 10)
+        connection.removeDelegator(with: consumer)
+        LCRTMConnectionManager.shared().unregister(with: consumer)
     }
     
     func testLoginTimeout() {
