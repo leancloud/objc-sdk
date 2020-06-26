@@ -129,7 +129,7 @@ class RTMConnectionTestCase: RTMBaseTestCase {
         LCRTMConnectionManager.shared().unregister(with: consumer)
     }
     
-    func testLoginTimeout() {
+    func testLoginAndCommandTimeout() {
         let peerID = uuid
         let consumer = LCRTMServiceConsumer(
             application: .default(),
@@ -138,10 +138,9 @@ class RTMConnectionTestCase: RTMBaseTestCase {
             peerID: peerID)
         let connection = try! LCRTMConnectionManager.shared().register(with: consumer)
         let delegator = RTMConnectionDelegator()
-        
         expecting(
-            description: "Login Timeout",
-            count: 3,
+            description: "Login and Command Timeout",
+            count: 4,
             timeout: 90)
         { (exp) in
             delegator.inConnecting = { connection in
@@ -150,6 +149,20 @@ class RTMConnectionTestCase: RTMBaseTestCase {
             }
             delegator.didConnect = { connection in
                 XCTAssertTrue(Thread.isMainThread)
+                XCTAssertNotNil(connection.timer)
+                connection.serialQueue.async {
+                    connection.timer.append(
+                        .init(
+                            peerID: self.uuid,
+                            command: AVIMGenericCommand(),
+                            calling: .main,
+                            callback: { (_, error) in
+                                XCTAssertTrue(Thread.isMainThread)
+                                XCTAssertEqual((error as NSError?)?.code, AVIMErrorCode.commandTimeout.rawValue)
+                                exp.fulfill()
+                            }),
+                        index: NSNumber(1))
+                }
                 exp.fulfill()
             }
             delegator.didDisconnect = { connection, error in
@@ -170,7 +183,6 @@ class RTMConnectionTestCase: RTMBaseTestCase {
                     delegate: delegator,
                     queue: .main))
         }
-        
         connection.removeDelegator(with: consumer)
         LCRTMConnectionManager.shared().unregister(with: consumer)
     }
