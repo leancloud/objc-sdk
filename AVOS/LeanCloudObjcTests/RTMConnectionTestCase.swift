@@ -11,6 +11,33 @@ import XCTest
 
 class RTMConnectionTestCase: BaseTestCase {
     
+    func testDuplicatedRegister() {
+        let peerID = uuid
+        let consumer = LCRTMServiceConsumer(
+            application: .default(),
+            service: .instantMessaging,
+            protocol: .protocol3,
+            peerID: peerID)
+        do {
+            let _ = try LCRTMConnectionManager.shared().register(with: consumer)
+            XCTAssertEqual(LCRTMConnectionManager.shared().imProtobuf3Registry.count, 1)
+            XCTAssertEqual(LCRTMConnectionManager.shared().imProtobuf1Registry.count, 0)
+            XCTAssertEqual(LCRTMConnectionManager.shared().liveQueryRegistry.count, 0)
+        } catch {
+            XCTFail()
+        }
+        do {
+            let _ = try LCRTMConnectionManager.shared().register(with: consumer)
+            XCTFail()
+        } catch {
+            XCTAssertEqual((error as NSError).domain, kLeanCloudErrorDomain)
+        }
+        LCRTMConnectionManager.shared().unregister(with: consumer)
+        XCTAssertEqual(LCRTMConnectionManager.shared().imProtobuf3Registry.count, 0)
+        XCTAssertEqual(LCRTMConnectionManager.shared().imProtobuf1Registry.count, 0)
+        XCTAssertEqual(LCRTMConnectionManager.shared().liveQueryRegistry.count, 0)
+    }
+    
     func testLoginTimeout() {
         let peerID = uuid
         let consumer = LCRTMServiceConsumer(
