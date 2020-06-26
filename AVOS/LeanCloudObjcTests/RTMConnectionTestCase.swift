@@ -11,31 +11,43 @@ import XCTest
 
 class RTMConnectionTestCase: BaseTestCase {
     
-    func testDuplicatedRegister() {
-        let peerID = uuid
-        let consumer = LCRTMServiceConsumer(
-            application: .default(),
-            service: .instantMessaging,
-            protocol: .protocol3,
-            peerID: peerID)
-        do {
-            let _ = try LCRTMConnectionManager.shared().register(with: consumer)
-            XCTAssertEqual(LCRTMConnectionManager.shared().imProtobuf3Registry.count, 1)
-            XCTAssertEqual(LCRTMConnectionManager.shared().imProtobuf1Registry.count, 0)
-            XCTAssertEqual(LCRTMConnectionManager.shared().liveQueryRegistry.count, 0)
-        } catch {
-            XCTFail()
+    func testDuplicatedRegisterAndDealloc() {
+        weak var wConnection: LCRTMConnection?
+        expecting { (exp) in
+            let peerID = uuid
+            let consumer = LCRTMServiceConsumer(
+                application: .default(),
+                service: .instantMessaging,
+                protocol: .protocol3,
+                peerID: peerID)
+            DispatchQueue.global().async {
+                var sConnection: LCRTMConnection?
+                do {
+                    sConnection = try LCRTMConnectionManager.shared().register(with: consumer)
+                    wConnection = sConnection
+                    XCTAssertNotNil(wConnection)
+                    XCTAssertEqual(LCRTMConnectionManager.shared().imProtobuf3Registry.count, 1)
+                    XCTAssertEqual(LCRTMConnectionManager.shared().imProtobuf1Registry.count, 0)
+                    XCTAssertEqual(LCRTMConnectionManager.shared().liveQueryRegistry.count, 0)
+                } catch {
+                    XCTFail()
+                }
+                do {
+                    try LCRTMConnectionManager.shared().register(with: consumer)
+                    XCTFail()
+                } catch {
+                    XCTAssertEqual((error as NSError).domain, kLeanCloudErrorDomain)
+                }
+                LCRTMConnectionManager.shared().unregister(with: consumer)
+                XCTAssertEqual(LCRTMConnectionManager.shared().imProtobuf3Registry.count, 0)
+                XCTAssertEqual(LCRTMConnectionManager.shared().imProtobuf1Registry.count, 0)
+                XCTAssertEqual(LCRTMConnectionManager.shared().liveQueryRegistry.count, 0)
+                sConnection = nil
+                exp.fulfill()
+            }
         }
-        do {
-            let _ = try LCRTMConnectionManager.shared().register(with: consumer)
-            XCTFail()
-        } catch {
-            XCTAssertEqual((error as NSError).domain, kLeanCloudErrorDomain)
-        }
-        LCRTMConnectionManager.shared().unregister(with: consumer)
-        XCTAssertEqual(LCRTMConnectionManager.shared().imProtobuf3Registry.count, 0)
-        XCTAssertEqual(LCRTMConnectionManager.shared().imProtobuf1Registry.count, 0)
-        XCTAssertEqual(LCRTMConnectionManager.shared().liveQueryRegistry.count, 0)
+        delay()
+        XCTAssertNil(wConnection)
     }
     
     func testLoginTimeout() {
