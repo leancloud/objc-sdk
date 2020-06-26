@@ -80,7 +80,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 }
 
 - (LCRTMConnection *)registerWithServiceConsumer:(LCRTMServiceConsumer *)serviceConsumer
-                                           error:(NSError * __autoreleasing *)error
+                                           error:(NSError *__autoreleasing  _Nullable *)error
 {
     return (LCRTMConnection *)[self synchronize:^id{
         NSString *appID = [serviceConsumer.application identifierThrowException];

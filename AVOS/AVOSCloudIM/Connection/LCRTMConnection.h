@@ -49,8 +49,8 @@ typedef void(^LCRTMConnectionOutCommandCallback)(AVIMGenericCommand * _Nullable 
 
 + (instancetype)sharedManager;
 
-- (LCRTMConnection *)registerWithServiceConsumer:(LCRTMServiceConsumer *)serviceConsumer
-                                           error:(NSError * __autoreleasing *)error;
+- (nullable LCRTMConnection *)registerWithServiceConsumer:(LCRTMServiceConsumer *)serviceConsumer
+                                                    error:(NSError **)error;
 
 - (void)unregisterWithServiceConsumer:(LCRTMServiceConsumer *)serviceConsumer;
 
