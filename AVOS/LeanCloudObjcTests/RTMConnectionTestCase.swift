@@ -39,9 +39,11 @@ class RTMConnectionTestCase: BaseTestCase {
                 if let error = error as NSError? {
                     XCTAssertEqual(error.domain, kLeanCloudErrorDomain)
                     XCTAssertEqual(error.code, 4108)
-                    exp.fulfill()
-                    delegator.reset()
+                } else {
+                    XCTFail()
                 }
+                delegator.reset()
+                exp.fulfill()
             }
             connection.connect(
                 with: consumer,
