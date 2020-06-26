@@ -1032,7 +1032,12 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     NSParameterAssert([self assertSpecificSerialQueue]);
     NSParameterAssert(self.socket == socket);
     if (error) {
-        error = LCErrorFromUnderlyingError(error);
+        if (error.code >= 4000 &&
+            error.code < 5000) {
+            error = LCError(error.code, error.localizedFailureReason, error.userInfo);
+        } else {
+            error = LCErrorFromUnderlyingError(error);
+        }
     } else {
         error = LCError(AVIMErrorCodeConnectionLost,
                         @"Connection did close by remote peer.", nil);
