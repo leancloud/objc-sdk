@@ -50,7 +50,7 @@ class RTMConnectionTestCase: RTMBaseTestCase {
         XCTAssertNil(wConnection)
     }
     
-    func testConnectingDelay() {
+    func testConnectingDelayAndStop() {
         AVOSCloudIM.defaultOptions().rtmServer = RTMBaseTestCase.testableRTMServer + "n"
         defer {
             AVOSCloudIM.defaultOptions().rtmServer = nil
@@ -109,6 +109,23 @@ class RTMConnectionTestCase: RTMBaseTestCase {
         XCTAssertTrue(duration > timeout)
         XCTAssertTrue(duration < timeout + 10)
         connection.removeDelegator(with: consumer)
+        delay()
+        expecting(
+            timeout: 30)
+        { () -> XCTestExpectation in
+            let exp = self.expectation(description: "NOT Connecting")
+            exp.isInverted = true
+            return exp
+        } testcase: { (exp) in
+            delegator.inConnecting = { connection in
+                exp.fulfill()
+            }
+            delegator.didConnect = { connection in
+                exp.fulfill()
+            }
+        }
+        XCTAssertNil(connection.socket)
+        XCTAssertNil(connection.timer)
         LCRTMConnectionManager.shared().unregister(with: consumer)
     }
     
