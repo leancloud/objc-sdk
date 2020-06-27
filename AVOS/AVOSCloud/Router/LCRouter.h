@@ -10,26 +10,29 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NSString * const RouterCacheKey NS_TYPED_EXTENSIBLE_ENUM;
-FOUNDATION_EXPORT RouterCacheKey RouterCacheKeyApp;
-FOUNDATION_EXPORT RouterCacheKey RouterCacheKeyRTM;
+typedef NSString * RouterCacheKey NS_STRING_ENUM;
+FOUNDATION_EXPORT RouterCacheKey const RouterCacheKeyApp;
+FOUNDATION_EXPORT RouterCacheKey const RouterCacheKeyRTM;
 
 @interface LCRouter : NSObject
 
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
+
 + (instancetype)sharedInstance;
 
-/**
- Clean disk cache.
+/// Clean disk cache.
+/// @param key See `RouterCacheKey`.
+/// @param error The pointer to `NSErrorPointer`.
+- (void)cleanCacheWithKey:(RouterCacheKey)key
+                    error:(NSError **)error;
 
- @param key Cache type.
- @param error Error.
- */
-- (void)cleanCacheWithKey:(RouterCacheKey)key error:(NSError * __autoreleasing *)error;
+@end
 
-// MARK: - Deprecated
+@interface LCRouter (Deprecated)
 
-/// for compatibility
-- (NSString *)URLStringForPath:(NSString *)path __deprecated;
+- (NSString *)URLStringForPath:(NSString *)path
+__deprecated_msg("Deprecated, keep it for compatibility.");
 
 @end
 

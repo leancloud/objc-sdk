@@ -13,8 +13,8 @@
 #import "AVPaasClient.h"
 #import "AVPersistenceUtils.h"
 
-RouterCacheKey RouterCacheKeyApp = @"RouterCacheDataApp";
-RouterCacheKey RouterCacheKeyRTM = @"RouterCacheDataRTM";
+RouterCacheKey const RouterCacheKeyApp = @"RouterCacheDataApp";
+RouterCacheKey const RouterCacheKeyRTM = @"RouterCacheDataRTM";
 static RouterCacheKey RouterCacheKeyData = @"data";
 static RouterCacheKey RouterCacheKeyTimestamp = @"timestamp";
 
@@ -22,17 +22,7 @@ static NSString *serverURLString;
 /// { 'module key' : 'URL' }
 static NSMutableDictionary<NSString *, NSString *> *customAppServerTable;
 
-@implementation LCRouter {
-    /// { 'app ID' : 'app router data tuple' }
-    NSMutableDictionary<NSString *, NSDictionary *> *_appRouterMap;
-    /// { 'app ID' : 'RTM router data tuple' }
-    NSMutableDictionary<NSString *, NSDictionary *> *_RTMRouterMap;
-    
-    NSLock *_lock;
-    NSDictionary<NSString *, NSString *> *_keyToModule;
-    /// { 'app ID' : 'callback array' }
-    NSMutableDictionary<NSString *, NSMutableArray<void (^)(NSDictionary *, NSError *)> *> *_RTMRouterCallbacksMap;
-}
+@implementation LCRouter
 
 + (NSString *)serverURLString {
     return serverURLString;
@@ -305,11 +295,13 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
             [LCRouter appDomainForAppID:appID]];
 }
 
-/// for compatibility, keep it.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
 - (NSString *)URLStringForPath:(NSString *)path
 {
     return [self appURLForPath:path appID:[AVOSCloud getApplicationId]];
 }
+#pragma clang diagnostic pop
 
 // MARK: - RTM Router
 
