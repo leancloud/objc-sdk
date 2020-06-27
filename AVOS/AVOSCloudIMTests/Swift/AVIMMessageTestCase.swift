@@ -76,7 +76,7 @@ class AVIMMessageTestCase: LCIMTestBase {
             XCTFail()
             return
         }
-        
+        XCTAssertTrue(client_1.connection === client_2.connection)
         var normalConv: AVIMConversation! = nil
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
