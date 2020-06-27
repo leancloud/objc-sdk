@@ -186,6 +186,115 @@ class RTMConnectionTestCase: RTMBaseTestCase {
         connection.removeDelegator(with: consumer)
         LCRTMConnectionManager.shared().unregister(with: consumer)
     }
+    
+    func testThrottlingOutCommand() {
+        let peerID = uuid
+        let consumer = LCRTMServiceConsumer(
+            application: .default(),
+            service: .instantMessaging,
+            protocol: .protocol3,
+            peerID: peerID)
+        let connection = try! LCRTMConnectionManager.shared().register(with: consumer)
+        let delegator = RTMConnectionDelegator()
+        expecting { (exp) in
+            delegator.didConnect = { connection in
+                exp.fulfill()
+            }
+            connection.connect(
+                with: consumer,
+                delegator: .init(
+                    peerID: peerID,
+                    delegate: delegator,
+                    queue: .main))
+        }
+        expecting(
+            description: "Throttling Out Command",
+            count: 3)
+        { (exp) in
+            var uniqueCommand: AVIMGenericCommand!
+            for _ in 0...2 {
+                let outCommand = AVIMGenericCommand()
+                outCommand.cmd = .session
+                outCommand.op = .open
+                outCommand.appId = AVApplication.default().identifier
+                outCommand.peerId = peerID
+                let sessionCommand = AVIMSessionCommand()
+                sessionCommand.ua = USER_AGENT
+                outCommand.sessionMessage = sessionCommand
+                connection.send(
+                    outCommand,
+                    service: .instantMessaging,
+                    peerID: peerID,
+                    on: .main)
+                { (inCommand, error) in
+                    XCTAssertTrue(Thread.isMainThread)
+                    if uniqueCommand == nil {
+                        uniqueCommand = inCommand
+                    }
+                    XCTAssertNotNil(inCommand)
+                    XCTAssertNil(error)
+                    XCTAssertTrue(uniqueCommand === inCommand)
+                    exp.fulfill()
+                }
+            }
+        }
+        var conversationID: String!
+        expecting { (exp) in
+            let outCommand = AVIMGenericCommand()
+            outCommand.cmd = .conv
+            outCommand.op = .start
+            let convCommand = AVIMConvCommand()
+            convCommand.mArray = [peerID]
+            outCommand.convMessage = convCommand
+            connection.send(
+                outCommand,
+                service: .instantMessaging,
+                peerID: peerID,
+                on: .main)
+            { (inCommand, error) in
+                XCTAssertNotNil(inCommand)
+                XCTAssertNil(error)
+                conversationID = inCommand?.convMessage.cid
+                exp.fulfill()
+            }
+        }
+        if let conversationID = conversationID,
+           !conversationID.isEmpty {
+            var inCommandIndexSet = Set<Int32>()
+            let count = 3
+            expecting(
+                description: "NOT Throttling Direct Command",
+                count: count)
+            { (exp) in
+                for _ in 0..<count {
+                    let outCommand = AVIMGenericCommand()
+                    outCommand.cmd = .direct
+                    let directCommand = AVIMDirectCommand()
+                    directCommand.cid = conversationID
+                    directCommand.msg = peerID
+                    outCommand.directMessage = directCommand
+                    connection.send(
+                        outCommand,
+                        service: .instantMessaging,
+                        peerID: peerID,
+                        on: .main)
+                    { (inCommand, error) in
+                        if let inCommand = inCommand {
+                            inCommandIndexSet.insert(inCommand.i)
+                        }
+                        XCTAssertNotNil(inCommand)
+                        XCTAssertNil(error)
+                        exp.fulfill()
+                    }
+                }
+            }
+            XCTAssertEqual(inCommandIndexSet.count, count)
+        } else {
+            XCTFail()
+        }
+        connection.removeDelegator(with: consumer)
+        LCRTMConnectionManager.shared().unregister(with: consumer)
+    }
 }
 
 class RTMConnectionDelegator: NSObject, LCRTMConnectionDelegate {
