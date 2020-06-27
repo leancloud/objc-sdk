@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "AVConstants.h"
 #import "AVACL.h"
-#import "AVOSCloud.h"
 #import "UserAgent.h"
 
 static NSString *const USER_AGENT = @"LeanCloud-Objc-SDK/" SDK_VERSION;

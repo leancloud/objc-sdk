@@ -6,6 +6,7 @@
 //  Copyright © 2016 LeanCloud Inc. All rights reserved.
 //
 
+#import "AVPaasClient.h"
 
 @interface AVPaasClient()
 
