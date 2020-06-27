@@ -364,6 +364,54 @@ class RTMConnectionTestCase: RTMBaseTestCase {
         connection.removeDelegator(with: consumer)
         LCRTMConnectionManager.shared().unregister(with: consumer)
     }
+    
+    func testCommandDataLengthTooLong() {
+        let peerID = uuid
+        let consumer = LCRTMServiceConsumer(
+            application: .default(),
+            service: .instantMessaging,
+            protocol: .protocol3,
+            peerID: peerID)
+        let connection = try! LCRTMConnectionManager.shared().register(with: consumer)
+        let delegator = RTMConnectionDelegator()
+        expecting { (exp) in
+            delegator.didConnect = { connection in
+                exp.fulfill()
+            }
+            connection.connect(
+                with: consumer,
+                delegator: .init(
+                    peerID: peerID,
+                    delegate: delegator,
+                    queue: .main))
+        }
+        expecting { (exp) in
+            let outCommand = AVIMGenericCommand()
+            outCommand.cmd = .session
+            outCommand.op = .open
+            outCommand.appId = AVApplication.default().identifier
+            outCommand.peerId = peerID
+            let sessionCommand = AVIMSessionCommand()
+            sessionCommand.ua = USER_AGENT
+            sessionCommand.deviceToken = String(
+                repeating: peerID,
+                count: 6000 / peerID.count)
+            outCommand.sessionMessage = sessionCommand
+            connection.send(
+                outCommand,
+                service: .instantMessaging,
+                peerID: peerID,
+                on: .main)
+            { (inCommand, error) in
+                XCTAssertNil(inCommand)
+                XCTAssertNotNil(error)
+                XCTAssertEqual((error as NSError?)?.code, AVIMErrorCode.commandDataLengthTooLong.rawValue)
+                exp.fulfill()
+            }
+        }
+        connection.removeDelegator(with: consumer)
+        LCRTMConnectionManager.shared().unregister(with: consumer)
+    }
 }
 
 class RTMConnectionDelegator: NSObject, LCRTMConnectionDelegate {
