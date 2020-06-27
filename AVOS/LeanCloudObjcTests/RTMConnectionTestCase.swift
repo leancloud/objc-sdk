@@ -295,6 +295,75 @@ class RTMConnectionTestCase: RTMBaseTestCase {
         connection.removeDelegator(with: consumer)
         LCRTMConnectionManager.shared().unregister(with: consumer)
     }
+    
+    func testGoaway() {
+        var error: NSError?
+        LCRouter.sharedInstance()
+            .cleanCache(
+                with: .default(),
+                key: .RTM,
+                error: &error)
+        if let error = error {
+            XCTFail("\(error)")
+            return
+        }
+        let peerID = uuid
+        let consumer = LCRTMServiceConsumer(
+            application: .default(),
+            service: .instantMessaging,
+            protocol: .protocol3,
+            peerID: peerID)
+        let connection = try! LCRTMConnectionManager.shared().register(with: consumer)
+        let delegator = RTMConnectionDelegator()
+        expecting { (exp) in
+            delegator.didConnect = { connection in
+                exp.fulfill()
+            }
+            connection.connect(
+                with: consumer,
+                delegator: .init(
+                    peerID: peerID,
+                    delegate: delegator,
+                    queue: .main))
+        }
+        delegator.reset()
+        let getRTMRouterDataTimestamp = { () -> TimeInterval? in
+            let appID = AVApplication.default().identifier
+            let RTMRouterData = LCRouter.sharedInstance().rtmRouterMap[appID] as? [String: Any]
+            return RTMRouterData?["timestamp"] as? TimeInterval
+        }
+        if let RTMRouterDataTimestamp = getRTMRouterDataTimestamp(),
+           RTMRouterDataTimestamp > 0 {
+            expecting(
+                description: "Goaway",
+                count: 3)
+            { (exp) in
+                delegator.inConnecting = { connection in
+                    exp.fulfill()
+                }
+                delegator.didConnect = { connection in
+                    exp.fulfill()
+                }
+                delegator.didDisconnect = { connection, error in
+                    exp.fulfill()
+                }
+                connection.socket.delegateQueue.async {
+                    let inCommand = AVIMGenericCommand()
+                    inCommand.cmd = .goaway
+                    let message = LCRTMWebSocketMessage(
+                        data: inCommand.data()!)
+                    connection.socket.delegate?.lcrtmWebSocket(
+                        connection.socket,
+                        didReceive: message)
+                }
+            }
+            XCTAssertGreaterThan(getRTMRouterDataTimestamp() ?? 0, RTMRouterDataTimestamp)
+        } else {
+            XCTFail()
+        }
+        connection.removeDelegator(with: consumer)
+        LCRTMConnectionManager.shared().unregister(with: consumer)
+    }
 }
 
 class RTMConnectionDelegator: NSObject, LCRTMConnectionDelegate {
