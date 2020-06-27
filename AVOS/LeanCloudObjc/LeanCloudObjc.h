@@ -7,10 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVOSCloud.h"
-#import "AVOSCloudIM.h"
-#import "AVOSCloudLiveQuery.h"
-
 
 //! Project version number for LeanCloudObjc.
 FOUNDATION_EXPORT double LeanCloudObjcVersionNumber;
@@ -20,4 +16,6 @@ FOUNDATION_EXPORT const unsigned char LeanCloudObjcVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <LeanCloudObjc/PublicHeader.h>
 
-
+#import <LeanCloudObjc/AVOSCloud.h>
+#import <LeanCloudObjc/AVOSCloudIM.h>
+#import <LeanCloudObjc/AVOSCloudLiveQuery.h>
