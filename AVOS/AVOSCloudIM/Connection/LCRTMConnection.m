@@ -352,7 +352,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
                 break;
             } else {
                 NSError *error = LCError(AVIMErrorCodeCommandTimeout,
-                                         @"Command timeout.", nil);
+                                         @"Command Timeout", nil);
                 for (LCRTMConnectionOutCommandCallback callback in command.callbacks) {
                     dispatch_async(command.callingQueue, ^{
                         callback(nil, error);
@@ -464,7 +464,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
         self.socket = nil;
         if (self.outCommandIndexSequence.count > 0) {
             NSError *error = LCError(AVIMErrorCodeConnectionLost,
-                                     @"Connection lost.", nil);
+                                     @"Connection Lost", nil);
             for (NSNumber *i in self.outCommandIndexSequence) {
                 LCRTMConnectionOutCommand *command = self.outCommandCollection[i];
                 if (command) {
@@ -922,7 +922,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             if (needCallback) {
                 dispatch_async(queue, ^{
                     callback(nil, LCError(AVIMErrorCodeConnectionLost,
-                                          @"Connection lost.", nil));
+                                          @"Connection Lost", nil));
                 });
             }
             return;
