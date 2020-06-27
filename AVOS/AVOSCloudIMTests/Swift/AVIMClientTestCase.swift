@@ -13,7 +13,7 @@ class AVIMClientTestCase: LCIMTestBase {
     // MARK: - Server Testing
     
     func tests_session_open_close() {
-        
+        LCRouter.sharedInstance().cleanCache(with: .default(), key: .RTM, error: nil)
         var client: AVIMClient! = AVIMClient(clientId: String(#function[..<#function.firstIndex(of: "(")!]))
         let delegate: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
         client.delegate = delegate
@@ -39,7 +39,6 @@ class AVIMClientTestCase: LCIMTestBase {
                 })
             }, failure: { XCTFail("timeout") })
         }
-        LCRouter.sharedInstance().cleanCache(withKey: .RTM, error: nil)
     }
     
     func tests_session_conflict() {
