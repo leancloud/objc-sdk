@@ -7,8 +7,20 @@
 //
 
 import XCTest
+@testable import LeanCloudObjc
 
 class RTMBaseTestCase: BaseTestCase {
     
     static let testableRTMServer = "wss://cn-n1-core-k8s-cell-12.leancloud.cn"
+    
+    override class func setUp() {
+        super.setUp()
+        AVIMClient.setUnreadNotificationEnabled(true)
+    }
+    
+    func purgeConnectionRegistry() {
+        LCRTMConnectionManager.shared().liveQueryRegistry.removeAllObjects()
+        LCRTMConnectionManager.shared().imProtobuf1Registry.removeAllObjects()
+        LCRTMConnectionManager.shared().imProtobuf3Registry.removeAllObjects()
+    }
 }

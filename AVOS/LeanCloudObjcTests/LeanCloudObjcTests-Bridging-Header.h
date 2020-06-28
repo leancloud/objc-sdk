@@ -7,4 +7,5 @@
 #import "AVApplication_Internal.h"
 #import "LCRouter_Internal.h"
 #import "AVPaasClient_internal.h"
+#import "AVIMClient_Internal.h"
 #import "LCRTMConnection_Internal.h"
