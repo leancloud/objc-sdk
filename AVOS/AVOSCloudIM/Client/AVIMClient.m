@@ -230,7 +230,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     _connection = [[LCRTMConnectionManager sharedManager] registerWithServiceConsumer:_serviceConsumer
                                                                                 error:&error];
     if (error) {
-        AVLoggerError(AVLoggerDomainIM, @"%@", error);
         return error;
     }
     _connectionDelegator = [[LCRTMConnectionDelegator alloc] initWithPeerID:_clientId
@@ -258,6 +257,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 - (void)dealloc
 {
+    AVLoggerInfo(AVLoggerDomainIM,
+                 @"\n%@: %p"
+                 @"\n\t- dealloc",
+                 NSStringFromClass([self class]), self);
     AVInstallation *installation = self.installation;
     [installation removeObserver:self
                       forKeyPath:keyPath(installation, deviceToken)
