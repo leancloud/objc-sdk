@@ -107,6 +107,36 @@ class IMClientTestCase: RTMBaseTestCase {
         }
     }
     
+    func testSessionTokenExpired() {
+        let client = try! AVIMClient(clientId: uuid, error: ())
+        let delegator = AVIMClientDelegator()
+        client.delegate = delegator
+        expecting { (exp) in
+            client.open { (success, error) in
+                XCTAssertTrue(success)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+        XCTAssertNotNil(client.sessionToken)
+        client.sessionToken = uuid
+        expecting { (exp) in
+            delegator.resumed = { client in
+                XCTAssertTrue(Thread.isMainThread)
+                exp.fulfill()
+            }
+            client.connection.serialQueue.async {
+                let inCommand = AVIMGenericCommand()
+                inCommand.cmd = .goaway
+                let message = LCRTMWebSocketMessage(
+                    data: inCommand.data()!)
+                client.connection.socket.delegate?.lcrtmWebSocket(
+                    client.connection.socket,
+                    didReceive: message)
+            }
+        }
+    }
+    
     func testReportDeviceToken() {
         let installation = AVInstallation.default()
         let client = try! AVIMClient(clientId: uuid, error: ())
