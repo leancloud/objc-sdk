@@ -1859,11 +1859,18 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     command.reportMessage = reportCommand;
     LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
     commandWrapper.outCommand = command;
+#if DEBUG
     [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         if (commandWrapper.error) {
             AVLoggerError(AVLoggerDomainIM, @"%@", commandWrapper.error);
         }
+        [NSNotificationCenter.defaultCenter postNotificationName:@"Test.AVIMClient.reportDeviceToken"
+                                                          object:nil
+                                                        userInfo:(commandWrapper.error
+                                                                  ? @{ @"error": commandWrapper.error }
+                                                                  : nil)];
     }];
+#endif
     [self sendCommandWrapper:commandWrapper];
 }
 

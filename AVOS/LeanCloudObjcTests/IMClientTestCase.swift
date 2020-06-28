@@ -92,6 +92,34 @@ class IMClientTestCase: RTMBaseTestCase {
             }
         }
     }
+    
+    func testReportDeviceToken() {
+        let installation = AVInstallation.default()
+        let client = try! AVIMClient(clientId: uuid, error: ())
+        XCTAssertTrue(installation === client.installation)
+        expecting { (exp) in
+            client.open { (success, error) in
+                XCTAssertTrue(success)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+        let deviceToken = uuid
+        var observer: NSObjectProtocol?
+        expecting { (exp) in
+            observer = NotificationCenter.default.addObserver(
+                forName: NSNotification.Name(rawValue: "Test.AVIMClient.reportDeviceToken"),
+                object: nil,
+                queue: .main)
+            { (notification) in
+                XCTAssertNil(notification.userInfo?["error"])
+                exp.fulfill()
+            }
+            installation.setDeviceTokenHexString(deviceToken, teamId: "LeanCloud")
+        }
+        XCTAssertEqual(client.currentDeviceToken, deviceToken)
+        XCTAssertNotNil(observer)
+    }
 }
 
 class AVIMClientDelegator: NSObject, AVIMClientDelegate {
