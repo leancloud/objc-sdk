@@ -790,6 +790,11 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             socket.delegate = connection;
             connection.socket = socket;
             [socket open];
+            AVLoggerDebug(AVLoggerDomainIM,
+                          @"\n%@: %p"
+                          @"\n\t- open with server: %@",
+                          NSStringFromClass([socket class]), socket,
+                          serverURL);
         } else {
             for (LCRTMConnectionDelegator *delegator in [connection allDelegators]) {
                 dispatch_async(delegator.queue, ^{
