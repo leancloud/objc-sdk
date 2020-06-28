@@ -736,10 +736,6 @@ static NSString * quote(NSString *string)
     }];
 }
 
-/*!
- Finds objects asynchronously and calls the given block with the results.
- @param block The block to execute. The block should have the following argument signature:(NSArray *objects, NSError *error)
- */
 - (void)findObjectsInBackgroundWithBlock:(AVArrayResultBlock)resultBlock
 {
     [self findObjectsWithBlock:resultBlock waitUntilDone:NO error:NULL];
@@ -835,13 +831,6 @@ static NSString * quote(NSString *string)
     return [self getFirstObject:error];
 }
 
-/*!
- Gets an object asynchronously and calls the given block with the result.
-
- This mutates the AVQuery.
-
- @param block The block to execute. The block should have the following argument signature:(AVObject *object, NSError *error) result will be nil if error is set OR no object was found matching the query. error will be nil if result is set OR if the query succeeded, but found no results.
- */
 - (void)getFirstObjectInBackgroundWithBlock:(AVObjectResultBlock)resultBlock
 {
     [self getFirstObjectWithBlock:resultBlock waitUntilDone:NO error:NULL];

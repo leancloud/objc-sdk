@@ -103,7 +103,7 @@ static const UInt8 LCRTMWebSocketFrameBitMaskOpcode = 0x0F;
 static const UInt8 LCRTMWebSocketFrameBitMaskMask = 0x80;
 static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
 
-#if DEBUG
+#if LCRTM_WEBSOCKET_DEBUG
 - (void)dealloc
 {
     NSLog(@"[DEBUG] %@ - dealloc", NSStringFromClass([self class]));
@@ -312,7 +312,7 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
                                              NSStringFromClass([self class])
                                              ].UTF8String,
                                             NULL);
-#if DEBUG
+#if LCRTM_WEBSOCKET_DEBUG
         dispatch_queue_set_specific(_readQueue,
                                     (__bridge void *)_readQueue,
                                     (__bridge void *)_readQueue,
@@ -371,7 +371,7 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
     return self;
 }
 
-#if DEBUG
+#if LCRTM_WEBSOCKET_DEBUG
 - (void)dealloc
 {
     NSLog(@"[DEBUG] %@ - dealloc", NSStringFromClass([self class]));
@@ -380,7 +380,7 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
 
 - (BOOL)assertSpecificReadQueue
 {
-#if DEBUG
+#if LCRTM_WEBSOCKET_DEBUG
     void *specificKey = (__bridge void *)(self.readQueue);
     return dispatch_get_specific(specificKey) == specificKey;
 #else
@@ -390,7 +390,7 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
 
 - (BOOL)assertSpecificWriteQueue
 {
-#if DEBUG
+#if LCRTM_WEBSOCKET_DEBUG
     void *specificKey = (__bridge void *)(self.writeQueue);
     return dispatch_get_specific(specificKey) == specificKey;
 #else

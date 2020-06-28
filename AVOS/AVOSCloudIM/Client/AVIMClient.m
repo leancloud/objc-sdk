@@ -230,7 +230,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     _connection = [[LCRTMConnectionManager sharedManager] registerWithServiceConsumer:_serviceConsumer
                                                                                 error:&error];
     if (error) {
-        AVLoggerError(AVLoggerDomainIM, @"%@", error);
         return error;
     }
     _connectionDelegator = [[LCRTMConnectionDelegator alloc] initWithPeerID:_clientId
@@ -238,6 +237,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                                                                       queue:_internalSerialQueue];
     _conversationManager = [[AVIMClientInternalConversationManager alloc] initWithClient:self];
     _installation = installation;
+    _currentDeviceToken = installation.deviceToken;
     [installation addObserver:self
                    forKeyPath:keyPath(installation, deviceToken)
                       options:(NSKeyValueObservingOptionNew |
@@ -257,6 +257,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 - (void)dealloc
 {
+    AVLoggerInfo(AVLoggerDomainIM,
+                 @"\n%@: %p"
+                 @"\n\t- dealloc",
+                 NSStringFromClass([self class]), self);
     AVInstallation *installation = self.installation;
     [installation removeObserver:self
                       forKeyPath:keyPath(installation, deviceToken)
@@ -1858,11 +1862,18 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     command.reportMessage = reportCommand;
     LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
     commandWrapper.outCommand = command;
+#if DEBUG
     [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         if (commandWrapper.error) {
             AVLoggerError(AVLoggerDomainIM, @"%@", commandWrapper.error);
         }
+        [NSNotificationCenter.defaultCenter postNotificationName:@"Test.AVIMClient.reportDeviceToken"
+                                                          object:nil
+                                                        userInfo:(commandWrapper.error
+                                                                  ? @{ @"error": commandWrapper.error }
+                                                                  : nil)];
     }];
+#endif
     [self sendCommandWrapper:commandWrapper];
 }
 

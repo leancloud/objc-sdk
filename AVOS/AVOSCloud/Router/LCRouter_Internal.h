@@ -43,7 +43,15 @@ static RouterKey RouterKeyRTMServer = @"server";
 
 @interface LCRouter ()
 
-@property (atomic, assign) BOOL isUpdatingAppRouter;
+@property (atomic) BOOL isUpdatingAppRouter;
+@property (nonatomic) NSLock *lock;
+@property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *keyToModule;
+/// { 'app ID' : 'app router data tuple' }
+@property (nonatomic, readonly) NSMutableDictionary<NSString *, NSDictionary *> *appRouterMap;
+/// { 'app ID' : 'RTM router data tuple' }
+@property (nonatomic, readonly) NSMutableDictionary<NSString *, NSDictionary *> *RTMRouterMap;
+/// { 'app ID' : 'callback array' }
+@property (nonatomic, readonly) NSMutableDictionary<NSString *, NSMutableArray<void (^)(NSDictionary *, NSError *)> *> *RTMRouterCallbacksMap;
 
 /// internal
 

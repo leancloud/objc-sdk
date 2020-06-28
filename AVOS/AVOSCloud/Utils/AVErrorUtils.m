@@ -146,7 +146,7 @@ NSError *LCErrorFromUnderlyingError(NSError *underlyingError)
             userInfo[NSUnderlyingErrorKey] = underlyingError;
         }
         return LCError(AVErrorInternalErrorCodeUnderlyingError,
-                       @"Underlying error.",
+                       @"Underlying Error",
                        userInfo);
     }
 }

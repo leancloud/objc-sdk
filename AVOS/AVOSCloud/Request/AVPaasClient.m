@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 AVOS. All rights reserved.
 //
 
-#import "AVPaasClient.h"
 #import "AVPaasClient_internal.h"
 #import "LCNetworking.h"
 #import "AVUtils.h"

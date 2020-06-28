@@ -12,7 +12,9 @@
 #import "AVErrorUtils.h"
 #import "LCRouter_Internal.h"
 
-@implementation AVInstallation
+@implementation AVInstallation {
+    NSString *_deviceToken;
+}
 
 + (NSString *)className
 {
@@ -189,9 +191,22 @@
     [self addSetRequest:keyPath(self, channels) object:channels];
 }
 
-- (void)setDeviceToken:(NSString *)deviceToken {
-    _deviceToken = [deviceToken copy];
-    [self addSetRequest:keyPath(self, deviceToken) object:_deviceToken];
+- (NSString *)deviceToken
+{
+    __block NSString *token;
+    [self internalSyncLock:^{
+        token = self->_deviceToken;
+    }];
+    return token;
+}
+
+- (void)setDeviceToken:(NSString *)deviceToken
+{
+    NSString *token = [deviceToken copy];
+    [self internalSyncLock:^{
+        self->_deviceToken = token;
+    }];
+    [self addSetRequest:keyPath(self, deviceToken) object:token];
 }
 
 - (void)setDeviceProfile:(NSString *)deviceProfile {

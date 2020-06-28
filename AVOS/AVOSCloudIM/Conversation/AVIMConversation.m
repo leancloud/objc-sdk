@@ -919,7 +919,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     }
     
     AVIMConversationQuery *query = [client conversationQuery];
-    query.cachePolicy = kAVCachePolicyNetworkOnly;
+    query.cachePolicy = kAVIMCachePolicyNetworkOnly;
     [query getConversationById:self->_conversationId callback:^(AVIMConversation *conversation, NSError *error) {
 #if DEBUG
         if (conversation) {
