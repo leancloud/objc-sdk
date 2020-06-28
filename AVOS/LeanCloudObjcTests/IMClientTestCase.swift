@@ -11,6 +11,20 @@ import XCTest
 
 class IMClientTestCase: RTMBaseTestCase {
     
+    func testInitAndDealloc() {
+        let peerID = uuid
+        var client: AVIMClient? = try! AVIMClient(clientId: peerID, error: ())
+        do {
+            _ = try AVIMClient(clientId: peerID, error: ())
+            XCTFail()
+        } catch {
+            XCTAssertEqual((error as NSError).domain, kLeanCloudErrorDomain)
+        }
+        client = nil
+        client = try! AVIMClient(clientId: peerID, error: ())
+        XCTAssertNotNil(client)
+    }
+    
     func testSessionConflict() {
         let peerID = uuid
         let tag = "SessionConflict"
