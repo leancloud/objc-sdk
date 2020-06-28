@@ -238,6 +238,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                                                                       queue:_internalSerialQueue];
     _conversationManager = [[AVIMClientInternalConversationManager alloc] initWithClient:self];
     _installation = installation;
+    _currentDeviceToken = installation.deviceToken;
     [installation addObserver:self
                    forKeyPath:keyPath(installation, deviceToken)
                       options:(NSKeyValueObservingOptionNew |
