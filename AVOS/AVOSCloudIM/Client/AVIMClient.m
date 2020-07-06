@@ -450,10 +450,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     AVIMGenericCommand *command = [AVIMGenericCommand new];
     command.cmd = AVIMCommandType_Session;
     command.op = op;
-    command.appId = [self.serviceConsumer.application identifierThrowException];
-    command.peerId = self.clientId;
     AVIMSessionCommand *sessionCommand = [AVIMSessionCommand new];
     if (op == AVIMOpType_Open) {
+        command.appId = [self.serviceConsumer.application identifierThrowException];
+        command.peerId = self.clientId;
         sessionCommand.configBitmap = self.sessionConfigBitmap;
         sessionCommand.deviceToken = (self.currentDeviceToken
                                       ?: AVUtils.deviceUUID);
