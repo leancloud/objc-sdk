@@ -475,9 +475,9 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
                     }
                 }
             }
-            [self.outCommandIndexSequence removeAllObjects];
-            [self.outCommandCollection removeAllObjects];
         }
+        [self.outCommandIndexSequence removeAllObjects];
+        [self.outCommandCollection removeAllObjects];
     };
     if (inCurrentQueue) {
         clean();
