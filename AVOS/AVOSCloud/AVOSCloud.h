@@ -255,22 +255,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param block Result callback.
 + (void)getServerDateWithBlock:(void (^)(NSDate *_Nullable date, NSError *_Nullable error))block;
 
-// MARK: Push
-
-/// Convenient method for setting the device token of APNs and the team ID of Apple Developer Account.
-/// @param deviceToken The device token of APNs.
-/// @param teamId The team ID of Apple Developer Account.
-+ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-                                          teamId:(NSString *)teamId;
-
-/// Convenient method for setting the device token of APNs and the team ID of Apple Developer Account.
-/// @param deviceToken The device token of APNs.
-/// @param teamId The team ID of Apple Developer Account.
-/// @param block The constructing block before saving.
-+ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-                                          teamId:(NSString *)teamId
-               constructingInstallationWithBlock:(nullable void (^)(AVInstallation *))block;
-
 @end
 
 // MARK: Deprecated
@@ -302,57 +286,36 @@ __deprecated_msg("No need any more, now it is NOP.");
 + (void)setTimeZoneForSecondsFromGMT:(NSInteger)seconds
 __deprecated_msg("No need any more, now it is NOP.");
 
-/*!
- *  请求短信验证码，需要开启手机短信验证 API 选项。
- *  发送短信到指定的手机上，发送短信到指定的手机上，获取6位数字验证码。
- *  @param phoneNumber 11位电话号码
- *  @param callback 回调结果
- */
-+(void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
-                            callback:(AVBooleanResultBlock)callback
-__deprecated_msg("deprecated, use +[AVSMS requestShortMessageForPhoneNumber:options:callback:] instead.");
++ (void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
+                             callback:(AVBooleanResultBlock)callback
+__deprecated_msg("Deprecated, `use +[AVSMS requestShortMessageForPhoneNumber:options:callback:]` instead.");
 
-/*!
- *  请求短信验证码，需要开启手机短信验证 API 选项。
- *  发送短信到指定的手机上，获取6位数字验证码。
- *  @param phoneNumber 11位电话号码
- *  @param appName 应用名称，传nil为默认值您的应用名称
- *  @param operation 操作名称，传nil为默认值"短信认证"
- *  @param ttl 短信过期时间，单位分钟，传0为默认值10分钟
- *  @param callback 回调结果
- */
-+(void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
-                             appName:(nullable NSString *)appName
-                           operation:(nullable NSString *)operation
-                          timeToLive:(NSUInteger)ttl
-                            callback:(AVBooleanResultBlock)callback
-__deprecated_msg("deprecated, use +[AVSMS requestShortMessageForPhoneNumber:options:callback:] instead.");
++ (void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
+                              appName:(nullable NSString *)appName
+                            operation:(nullable NSString *)operation
+                           timeToLive:(NSUInteger)ttl
+                             callback:(AVBooleanResultBlock)callback
+__deprecated_msg("Deprecated, use `+[AVSMS requestShortMessageForPhoneNumber:options:callback:]` instead.");
 
-/*!
- *  请求短信验证码，需要开启手机短信验证 API 选项。
- *  发送短信到指定的手机上，获取6位数字验证码。
- *  @param phoneNumber 11位电话号码
- *  @param templateName 模板名称，传nil为默认模板
- *  @param variables 模板中使用的变量
- *  @param callback 回调结果
- */
-+(void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
-                        templateName:(nullable NSString *)templateName
-                           variables:(nullable NSDictionary *)variables
-                            callback:(AVBooleanResultBlock)callback
-__deprecated_msg("deprecated, use +[AVSMS requestShortMessageForPhoneNumber:options:callback:] instead.");
++ (void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
+                         templateName:(nullable NSString *)templateName
+                            variables:(nullable NSDictionary *)variables
+                             callback:(AVBooleanResultBlock)callback
+__deprecated_msg("Deprecated, use `+[AVSMS requestShortMessageForPhoneNumber:options:callback:]` instead.");
 
-/*!
- * 请求语音短信验证码，需要开启手机短信验证 API 选项
- * 发送语音短信到指定手机上
- * @param phoneNumber 11 位电话号码
- * @param IDD 号码的所在地国家代码，如果传 nil，默认为 "+86"
- * @param callback 回调结果
- */
-+(void)requestVoiceCodeWithPhoneNumber:(NSString *)phoneNumber
-                                   IDD:(nullable NSString *)IDD
-                              callback:(AVBooleanResultBlock)callback
-__deprecated_msg("deprecated, use +[AVSMS requestShortMessageForPhoneNumber:options:callback:] instead.");
++ (void)requestVoiceCodeWithPhoneNumber:(NSString *)phoneNumber
+                                    IDD:(nullable NSString *)IDD
+                               callback:(AVBooleanResultBlock)callback
+__deprecated_msg("Deprecated, use `+[AVSMS requestShortMessageForPhoneNumber:options:callback:]` instead.");
+
++ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+                                          teamId:(NSString *)teamId
+__deprecated_msg("Deprecated, use `AVInstallation` instead.");
+
++ (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+                                          teamId:(NSString *)teamId
+               constructingInstallationWithBlock:(nullable void (^)(AVInstallation *))block
+__deprecated_msg("Deprecated, use `AVInstallation` instead.");
 
 @end
 
