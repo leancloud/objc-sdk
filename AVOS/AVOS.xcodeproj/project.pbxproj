@@ -1176,6 +1176,7 @@
 		D39724C424A5CD3C0099A518 /* RTMBaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39724C324A5CD3C0099A518 /* RTMBaseTestCase.swift */; };
 		D39724C624A852400099A518 /* IMClientTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39724C524A852400099A518 /* IMClientTestCase.swift */; };
 		D3A397F124A5A4670087D6F8 /* RTMConnectionTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A397F024A5A4670087D6F8 /* RTMConnectionTestCase.swift */; };
+		D3AD74AB24BC216200D1BBEE /* LCUserTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AD74AA24BC216200D1BBEE /* LCUserTestCase.swift */; };
 		D3C53FCC2106D84A00D48686 /* AVIMClientProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C53FCB2106D84A00D48686 /* AVIMClientProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D3C53FCD2106D84A00D48686 /* AVIMClientProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C53FCB2106D84A00D48686 /* AVIMClientProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D3CC5D282252242A00B3C778 /* AVQueryTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CC5D272252242A00B3C778 /* AVQueryTestCase.swift */; };
@@ -1736,6 +1737,7 @@
 		D39724C324A5CD3C0099A518 /* RTMBaseTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTMBaseTestCase.swift; sourceTree = "<group>"; };
 		D39724C524A852400099A518 /* IMClientTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMClientTestCase.swift; sourceTree = "<group>"; };
 		D3A397F024A5A4670087D6F8 /* RTMConnectionTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTMConnectionTestCase.swift; sourceTree = "<group>"; };
+		D3AD74AA24BC216200D1BBEE /* LCUserTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCUserTestCase.swift; sourceTree = "<group>"; };
 		D3C53FCB2106D84A00D48686 /* AVIMClientProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVIMClientProtocol.h; sourceTree = "<group>"; };
 		D3CC5D272252242A00B3C778 /* AVQueryTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVQueryTestCase.swift; sourceTree = "<group>"; };
 		D3CC90CA2069E5BB0082EFD4 /* AVObjectTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVObjectTestCase.swift; sourceTree = "<group>"; };
@@ -2618,6 +2620,7 @@
 			children = (
 				D30B6B6024A0A932006ABE09 /* LeanCloudObjcTests-Bridging-Header.h */,
 				D30B6B6124A0A933006ABE09 /* BaseTestCase.swift */,
+				D3AD74AA24BC216200D1BBEE /* LCUserTestCase.swift */,
 				D39724C324A5CD3C0099A518 /* RTMBaseTestCase.swift */,
 				D3A397F024A5A4670087D6F8 /* RTMConnectionTestCase.swift */,
 				D39724C524A852400099A518 /* IMClientTestCase.swift */,
@@ -4698,6 +4701,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D30B6B6224A0A933006ABE09 /* BaseTestCase.swift in Sources */,
+				D3AD74AB24BC216200D1BBEE /* LCUserTestCase.swift in Sources */,
 				D3A397F124A5A4670087D6F8 /* RTMConnectionTestCase.swift in Sources */,
 				D39724C624A852400099A518 /* IMClientTestCase.swift in Sources */,
 				D39724C424A5CD3C0099A518 /* RTMBaseTestCase.swift in Sources */,
