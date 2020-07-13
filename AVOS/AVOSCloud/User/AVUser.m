@@ -2,14 +2,11 @@
 // Copyright 2013 AVOS, Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
-#import "AVConstants.h"
-#import "AVObject.h"
+#import "AVUser_Internal.h"
 #import "AVObject_Internal.h"
-#import "AVUser.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"
 #import "AVQuery.h"
-#import "AVUser_Internal.h"
 #import "AVPersistenceUtils.h"
 #import "AVObjectUtils.h"
 #import "AVPaasClient.h"
@@ -17,19 +14,21 @@
 #import "AVFriendQuery.h"
 #import "AVUtils.h"
 
-LeanCloudSocialPlatform LeanCloudSocialPlatformWeiBo  = @"weibo";
-LeanCloudSocialPlatform LeanCloudSocialPlatformQQ     = @"qq";
-LeanCloudSocialPlatform LeanCloudSocialPlatformWeiXin = @"weixin";
+LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiBo  = @"weibo";
+LeanCloudSocialPlatform const LeanCloudSocialPlatformQQ     = @"qq";
+LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin = @"weixin";
 
-static BOOL enableAutomatic = NO;
+@implementation AVUserShortMessageRequestOptions
 
-@class AVQuery;
+@end
 
 @implementation AVUserAuthDataLoginOption
 
 @end
 
 @implementation  AVUser
+
+static BOOL enableAutomatic = NO;
 
 @dynamic sessionToken;
 @dynamic isNew;
@@ -227,42 +226,6 @@ static BOOL enableAutomatic = NO;
     [[AVPaasClient sharedInstance] postObject:@"requestEmailVerify" withParameters:@{@"email":email} block:^(id object, NSError *error) {
         [AVUtils callBooleanResultBlock:block error:error];
     }];
-}
-
-+ (void)requestMobilePhoneVerify:(NSString *)phoneNumber withBlock:(AVBooleanResultBlock)block {
-    [self requestVerificationCodeForPhoneNumber:phoneNumber options:nil callback:block];
-}
-
-+ (void)requestVerificationCodeForPhoneNumber:(NSString *)phoneNumber
-                                      options:(AVUserShortMessageRequestOptions *)options
-                                     callback:(AVBooleanResultBlock)callback
-{
-    NSParameterAssert(phoneNumber);
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    
-    parameters[@"mobilePhoneNumber"] = phoneNumber;
-    parameters[@"validate_token"] = options.validationToken;
-    
-    [[AVPaasClient sharedInstance] postObject:@"requestMobilePhoneVerify" withParameters:parameters block:^(id object, NSError *error) {
-        [AVUtils callBooleanResultBlock:callback error:error];
-    }];
-}
-
-+(void)verifyMobilePhone:(NSString *)code withBlock:(AVBooleanResultBlock)block {
-    NSParameterAssert(code);
-    
-    NSString *path=[NSString stringWithFormat:@"verifyMobilePhone/%@",code];
-    
-    [[AVPaasClient sharedInstance] getObject:path withParameters:nil block:^(id object, NSError *error) {
-        if (!error) {
-            [[AVUser currentUser] setMobilePhoneVerified:YES];
-        } else {
-            [[AVUser currentUser] setMobilePhoneVerified:NO];
-        }
-        [self changeCurrentUser:[AVUser currentUser] save:YES];
-        [AVUtils callBooleanResultBlock:block error:error];
-    }];
-    
 }
 
 - (void)updatePassword:(NSString *)oldPassword newPassword:(NSString *)newPassword block:(AVIdResultBlock)block {
@@ -518,8 +481,6 @@ static BOOL enableAutomatic = NO;
     AV_WAIT_TIL_TRUE(hasCallback, 0.1);
     return user;
 }
-
-// MARK: - SMS code
 
 + (void)requestLoginSmsCode:(NSString *)phoneNumber withBlock:(AVBooleanResultBlock)block {
     [self requestLoginCodeForPhoneNumber:phoneNumber options:nil callback:block];
@@ -779,7 +740,163 @@ static BOOL enableAutomatic = NO;
     return query;
 }
 
-// MARK: - Auth Data
+// MARK: SMS
+
++ (void)requestMobilePhoneVerify:(NSString *)phoneNumber
+                       withBlock:(void (^)(BOOL, NSError * _Nullable))block
+{
+    [self requestVerificationCodeForPhoneNumber:phoneNumber
+                                        options:nil
+                                       callback:block];
+}
+
++ (void)requestVerificationCodeForPhoneNumber:(NSString *)phoneNumber
+                                      options:(AVUserShortMessageRequestOptions *)options
+                                     callback:(void (^)(BOOL, NSError * _Nullable))callback
+{
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    parameters[@"mobilePhoneNumber"] = phoneNumber;
+    if (options.validationToken) {
+        parameters[@"validate_token"] = options.validationToken;
+    }
+    [[AVPaasClient sharedInstance] postObject:@"requestMobilePhoneVerify"
+                               withParameters:parameters
+                                        block:^(id  _Nullable object, NSError * _Nullable error) {
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                callback(false, error);
+            });
+            return;
+        }
+        if ([NSDictionary _lc_isTypeOf:object]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                callback(true, nil);
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                callback(false, LCError(AVErrorInternalErrorCodeMalformedData,
+                                        @"Response data is malformed.",
+                                        @{ @"data": (object ?: @"nil") }));
+            });
+        }
+    }];
+}
+
++ (void)verifyCodeForPhoneNumber:(NSString *)phoneNumber
+                            code:(NSString *)code
+                           block:(void (^)(BOOL, NSError * _Nullable))block
+{
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    if (phoneNumber) {
+        parameters[@"mobilePhoneNumber"] = phoneNumber;
+    }
+    [[AVPaasClient sharedInstance] postObject:[NSString stringWithFormat:@"verifyMobilePhone/%@", code]
+                               withParameters:parameters
+                                        block:^(id  _Nullable object, NSError * _Nullable error) {
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                block(false, error);
+            });
+            return;
+        }
+        if ([NSDictionary _lc_isTypeOf:object]) {
+            AVUser *currentUser = [AVPaasClient sharedInstance].currentUser;
+            NSString *objectId = [NSString _lc_decoding:object
+                                                    key:@"objectId"];
+            if (currentUser && objectId &&
+                [currentUser.objectId isEqualToString:objectId]) {
+                [AVObjectUtils copyDictionary:object toObject:currentUser];
+                currentUser.mobilePhoneNumber = phoneNumber;
+                currentUser.mobilePhoneVerified = true;
+                [self changeCurrentUser:currentUser save:true];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                block(true, nil);
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                block(false, LCError(AVErrorInternalErrorCodeMalformedData,
+                                     @"Response data is malformed.",
+                                     @{ @"data": (object ?: @"nil") }));
+            });
+        }
+    }];
+}
+
++ (void)requestVerificationCodeForUpdatingPhoneNumber:(NSString *)phoneNumber
+                                              options:(AVUserShortMessageRequestOptions *)options
+                                                block:(void (^)(BOOL, NSError * _Nullable))block
+{
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    parameters[@"mobilePhoneNumber"] = phoneNumber;
+    if (options.validationToken) {
+        parameters[@"validate_token"] = options.validationToken;
+    }
+    if (options.timeToLive) {
+        parameters[@"ttl"] = options.timeToLive;
+    }
+    [[AVPaasClient sharedInstance] postObject:@"requestChangePhoneNumber"
+                               withParameters:parameters
+                                        block:^(id  _Nullable object, NSError * _Nullable error) {
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                block(false, error);
+            });
+            return;
+        }
+        if ([NSDictionary _lc_isTypeOf:object]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                block(true, nil);
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                block(false, LCError(AVErrorInternalErrorCodeMalformedData,
+                                     @"Response data is malformed.",
+                                     @{ @"data": (object ?: @"nil") }));
+            });
+        }
+    }];
+}
+
++ (void)verifyCodeToUpdatePhoneNumber:(NSString *)phoneNumber
+                                 code:(NSString *)code
+                                block:(void (^)(BOOL, NSError * _Nullable))block
+{
+    [[AVPaasClient sharedInstance] postObject:@"changePhoneNumber"
+                               withParameters:@{ @"mobilePhoneNumber": phoneNumber,
+                                                 @"code": code }
+                                        block:^(id  _Nullable object, NSError * _Nullable error) {
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                block(false, error);
+            });
+            return;
+        }
+        if ([NSDictionary _lc_isTypeOf:object]) {
+            AVUser *currentUser = [AVPaasClient sharedInstance].currentUser;
+            NSString *objectId = [NSString _lc_decoding:object
+                                                    key:@"objectId"];
+            if (currentUser && objectId &&
+                [currentUser.objectId isEqualToString:objectId]) {
+                [AVObjectUtils copyDictionary:object toObject:currentUser];
+                currentUser.mobilePhoneNumber = phoneNumber;
+                currentUser.mobilePhoneVerified = true;
+                [self changeCurrentUser:currentUser save:true];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                block(true, nil);
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                block(false, LCError(AVErrorInternalErrorCodeMalformedData,
+                                     @"Response data is malformed.",
+                                     @{ @"data": (object ?: @"nil") }));
+            });
+        }
+    }];
+}
+
+// MARK: Auth Data
 
 - (void)loginWithAuthData:(NSDictionary *)authData
                platformId:(NSString *)platformId
@@ -1035,7 +1152,7 @@ static BOOL enableAutomatic = NO;
     }];
 }
 
-// MARK: - Anonymous
+// MARK: Anonymous
 
 + (void)loginAnonymouslyWithCallback:(void (^)(AVUser * _Nullable user, NSError * _Nullable error))callback
 {
@@ -1263,6 +1380,13 @@ static BOOL enableAutomatic = NO;
         }
     }];
 }
+
++ (void)verifyMobilePhone:(NSString *)code
+                withBlock:(void (^)(BOOL, NSError * _Nullable))block
+{
+    NSString *phoneNumber;
+    [self verifyCodeForPhoneNumber:phoneNumber code:code block:block];
+}
 #pragma clang diagnostic pop
 
 @end
@@ -1380,12 +1504,5 @@ static BOOL enableAutomatic = NO;
         }
     }];
 }
-
-@end
-
-
-@implementation AVUserShortMessageRequestOptions
-
-@dynamic validationToken;
 
 @end

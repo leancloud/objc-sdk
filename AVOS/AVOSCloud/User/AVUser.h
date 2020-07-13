@@ -5,57 +5,57 @@
 #import "AVConstants.h"
 #import "AVObject.h"
 #import "AVSubclassing.h"
-#import "AVDynamicObject.h"
 
 @class AVRole;
 @class AVQuery;
-@class AVUserShortMessageRequestOptions;
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NSString * const LeanCloudSocialPlatform NS_TYPED_EXTENSIBLE_ENUM;
-extern LeanCloudSocialPlatform LeanCloudSocialPlatformWeiBo;
-extern LeanCloudSocialPlatform LeanCloudSocialPlatformQQ;
-extern LeanCloudSocialPlatform LeanCloudSocialPlatformWeiXin;
+typedef NSString * LeanCloudSocialPlatform NS_STRING_ENUM;
+FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiBo;
+FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformQQ;
+FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
+
+/// The options for the request of the short message.
+@interface AVUserShortMessageRequestOptions : NSObject
+
+/// The token for validation.
+@property (nonatomic, nullable) NSString *validationToken;
+
+/// The time-to-live of the code.
+@property (nonatomic, nullable) NSNumber *timeToLive;
+
+@end
 
 @interface AVUserAuthDataLoginOption : NSObject
 
 /**
  Third platform.
  */
-@property (nonatomic, strong, nullable) LeanCloudSocialPlatform platform;
+@property (nonatomic, nullable) LeanCloudSocialPlatform platform;
 
 /**
  UnionId from the third platform.
  */
-@property (nonatomic, strong, nullable) NSString *unionId;
+@property (nonatomic, nullable) NSString *unionId;
 
 /**
  Set true to generate a platform-unionId signature.
  if a AVUser instance has a platform-unionId signature, then the platform and the unionId will be the highest priority in auth data matching.
  @Note must cooperate with platform & unionId.
  */
-@property (nonatomic, assign) BOOL isMainAccount;
+@property (nonatomic) BOOL isMainAccount;
 
 /**
  Set true to check whether already exists a AVUser instance with the auth data.
  if not exists, return an error.
  */
-@property (nonatomic, assign) BOOL failOnNotExist;
+@property (nonatomic) BOOL failOnNotExist;
 
 @end
 
-/*!
-A LeanCloud Framework User Object that is a local representation of a user persisted to the LeanCloud. This class
- is a subclass of a AVObject, and retains the same functionality of a AVObject, but also extends it with various
- user specific methods, like authentication, signing up, and validation uniqueness.
- 
- Many APIs responsible for linking a AVUser with Facebook or Twitter have been deprecated in favor of dedicated
- utilities for each social network. See AVFacebookUtils and AVTwitterUtils for more information.
- */
-
-
-@interface AVUser : AVObject<AVSubclassing>
+/// User
+@interface AVUser : AVObject <AVSubclassing>
 
 /** @name Accessing the Current User */
 
@@ -63,7 +63,7 @@ A LeanCloud Framework User Object that is a local representation of a user persi
  Gets the currently logged in user from disk and returns an instance of it.
  @return a AVUser that is the currently logged in user. If there is none, returns nil.
  */
-+ (instancetype _Nullable)currentUser;
++ (nullable instancetype)currentUser;
 
 /*!
  * change the current login user manually.
@@ -135,36 +135,6 @@ A LeanCloud Framework User Object that is a local representation of a user persi
  *  @param block 回调结果
  */
 +(void)requestEmailVerify:(NSString*)email withBlock:(AVBooleanResultBlock)block;
-
-/*!
- *  请求手机号码验证
- *  发送短信到指定的手机上，内容有6位数字验证码。验证码10分钟内有效。
- *  
- *  @warning 对同一个手机号码，每天有 5 条数量的限制，并且发送间隔需要控制在一分钟。
- *
- *  @param phoneNumber 11位电话号码
- *  @param block 回调结果
- */
-+(void)requestMobilePhoneVerify:(NSString *)phoneNumber withBlock:(AVBooleanResultBlock)block;
-
-/**
- Request a verification code for a phone number.
-
- @param phoneNumber The phone number that will be verified later.
- @param options     The short message request options.
- @param callback    The callback of request.
- */
-+ (void)requestVerificationCodeForPhoneNumber:(NSString *)phoneNumber
-                                      options:(nullable AVUserShortMessageRequestOptions *)options
-                                     callback:(AVBooleanResultBlock)callback;
-
-/*!
- *  验证手机验证码
- *  发送验证码给服务器进行验证。
- *  @param code 6位手机验证码
- *  @param block 回调结果
- */
-+(void)verifyMobilePhone:(NSString *)code withBlock:(AVBooleanResultBlock)block;
 
 /*!
  Get roles which current user belongs to.
@@ -436,11 +406,51 @@ A LeanCloud Framework User Object that is a local representation of a user persi
  */
 + (AVQuery *)query;
 
-// MARK: - Auth Data
+// MARK: SMS
+
+/// Request a SMS code to verify phone number.
+/// @param phoneNumber The phone number to receive SMS code.
+/// @param block The result callback.
++ (void)requestMobilePhoneVerify:(NSString *)phoneNumber
+                       withBlock:(void (^)(BOOL succeeded, NSError * _Nullable error))block;
+
+/// Request a SMS code to verify phone number.
+/// @param phoneNumber The phone number to receive SMS code.
+/// @param options See `AVUserShortMessageRequestOptions`.
+/// @param callback The result callback.
++ (void)requestVerificationCodeForPhoneNumber:(NSString *)phoneNumber
+                                      options:(AVUserShortMessageRequestOptions * _Nullable)options
+                                     callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
+
+/// Verify a phone number with the SMS code.
+/// @param phoneNumber The phone number to be verified.
+/// @param code The verification code.
+/// @param block The result callback.
++ (void)verifyCodeForPhoneNumber:(NSString *)phoneNumber
+                            code:(NSString *)code
+                           block:(void (^)(BOOL succeeded, NSError * _Nullable error))block;
+
+/// Request a SMS code to bind or update phone number.
+/// @param phoneNumber The phone number to receive SMS code.
+/// @param options See `AVUserShortMessageRequestOptions`.
+/// @param block The result callback.
++ (void)requestVerificationCodeForUpdatingPhoneNumber:(NSString *)phoneNumber
+                                              options:(AVUserShortMessageRequestOptions * _Nullable)options
+                                                block:(void (^)(BOOL succeeded, NSError * _Nullable error))block;
+
+/// Verify a phone number with the SMS code to bind or update phone number.
+/// @param phoneNumber The phone number to be bound or updated.
+/// @param code The verification code.
+/// @param block The result callback.
++ (void)verifyCodeToUpdatePhoneNumber:(NSString *)phoneNumber
+                                 code:(NSString *)code
+                                block:(void (^)(BOOL succeeded, NSError * _Nullable error))block;
+
+// MARK: Auth Data
 
 /**
  Login use auth data.
-
+ 
  @param authData Get from third platform, data format e.g. { "id" : "id_string", "access_token" : "access_token_string", ... ... }.
  @param platformId The key for the auth data, to identify auth data.
  @param options See AVUserAuthDataLoginOption.
@@ -466,166 +476,89 @@ A LeanCloud Framework User Object that is a local representation of a user persi
 
 /**
  Disassociate auth data from the AVUser instance.
-
+ 
  @param platformId The key for the auth data, to identify auth data.
  @param callback Result callback.
  */
 - (void)disassociateWithPlatformId:(NSString *)platformId
                           callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
-// MARK: - Anonymous
+// MARK: Anonymous
 
 /**
  Login anonymously.
-
+ 
  @param callback Result callback.
  */
 + (void)loginAnonymouslyWithCallback:(void (^)(AVUser * _Nullable user, NSError * _Nullable error))callback;
 
 /**
  Check whether the instance of AVUser is anonymous.
-
+ 
  @return Result.
  */
 - (BOOL)isAnonymous;
 
 @end
 
-@interface AVUserShortMessageRequestOptions : AVDynamicObject
-
-@property (nonatomic, copy, nullable) NSString *validationToken;
-
-@end
-
 @interface AVUser (Deprecated)
 
-/**
- Use a SNS's auth data to login or signup.
- if the auth data already bind to a valid AVUser, then the instance of the AVUser will return in result block.
- if the auth data not bind to a exist AVUser, then a new instance of AVUser will be created and return in result block.
- 
- @param authData a Dictionary with specific format.
- e.g.
- {
- "authData" : {
- 'platform' : {
- 'uid' : someChars,
- 'access_token' : someChars,
- ... ... (other attribute)
- }
- }
- }
- @param platform if the auth data belongs to Weibo, QQ or Weixin(Wechat),
- please use `LeanCloudSocialPlatformXXX` to assign platform.
- if not above platform, use a custom string.
- @param block result callback.
- */
 + (void)loginOrSignUpWithAuthData:(NSDictionary *)authData
                          platform:(NSString *)platform
                             block:(AVUserResultBlock)block
-__deprecated_msg("deprecated, use -[loginWithAuthData:platformId:options:callback:] instead.");
+__deprecated_msg("Deprecated, use `-[AVUser loginWithAuthData:platformId:options:callback:]` instead.");
 
-/**
- Associate a SNS's auth data to a instance of AVUser.
- after associated, user can login by auth data.
- 
- @param authData a Dictionary with specific format.
- e.g.
- {
- "authData" : {
- 'platform' : {
- 'uid' : someChars,
- 'access_token' : someChars,
- ... ... (other attribute)
- }
- }
- }
- @param platform if the auth data belongs to Weibo, QQ or Weixin(Wechat),
- please use `LeanCloudSocialPlatformXXX` to assign platform.
- if not above platform, use a custom string.
- @param block result callback.
- */
 - (void)associateWithAuthData:(NSDictionary *)authData
                      platform:(NSString *)platform
                         block:(AVUserResultBlock)block
-__deprecated_msg("deprecated, use -[associateWithAuthData:platformId:options:callback:] instead.");
+__deprecated_msg("Deprecated, use `-[AVUser associateWithAuthData:platformId:options:callback:]` instead.");
 
-/**
- Disassociate the specified platform's auth data from a instance of AVUser.
- 
- @param platform if the auth data belongs to Weibo, QQ or Weixin(Wechat),
- please use `LeanCloudSocialPlatformXXX` to assign platform.
- if not above platform, use a custom string.
- @param block result callback.
- */
 - (void)disassociateWithPlatform:(NSString *)platform
                            block:(AVUserResultBlock)block
-__deprecated_msg("deprecated, use -[disassociateWithPlatformId:callback:] instead.");
+__deprecated_msg("Deprecated, use `-[AVUser disassociateWithPlatformId:callback:]` instead.");
 
-/*!
- Signs up the user. Make sure that password and username are set. This will also enforce that the username isn't already taken.
- @return true if the sign up was successful.
- */
-- (BOOL)signUp AV_DEPRECATED("2.6.10");
+- (BOOL)signUp
+__deprecated_msg("Deprecated, use `-[AVUser signUp:]` instead.");
 
-/*!
- Signs up the user asynchronously. Make sure that password and username are set. This will also enforce that the username isn't already taken.
- */
-- (void)signUpInBackground AV_DEPRECATED("2.6.10");
+- (void)signUpInBackground
+__deprecated_msg("Deprecated, use `-[AVUser signUpInBackgroundWithBlock:]` instead.");
 
-/*!
- Makes a request to login a user with specified credentials. Returns an instance
- of the successfully logged in AVUser. This will also cache the user locally so
- that calls to userFromCurrentUser will use the latest logged in user.
- @param username The username of the user.
- @param password The password of the user.
- @return an instance of the AVUser on success. If login failed for either wrong password or wrong username, returns nil.
- */
 + (nullable instancetype)logInWithUsername:(NSString *)username
-                                  password:(NSString *)password  AV_DEPRECATED("2.6.10");
+                                  password:(NSString *)password
+__deprecated_msg("Deprecated, use `+[AVUser logInWithUsername:password:error:]` instead.");
 
-/*!
- Makes an asynchronous request to login a user with specified credentials.
- Returns an instance of the successfully logged in AVUser. This will also cache
- the user locally so that calls to userFromCurrentUser will use the latest logged in user.
- @param username The username of the user.
- @param password The password of the user.
- */
 + (void)logInWithUsernameInBackground:(NSString *)username
-                             password:(NSString *)password AV_DEPRECATED("2.6.10");
+                             password:(NSString *)password
+__deprecated_msg("Deprecated, use `+[AVUser logInWithUsernameInBackground:password:block:]` instead.");
 
 + (nullable instancetype)logInWithMobilePhoneNumber:(NSString *)phoneNumber
-                                           password:(NSString *)password AV_DEPRECATED("2.6.10");
+                                           password:(NSString *)password
+__deprecated_msg("Deprecated, use `+[AVUser logInWithMobilePhoneNumber:password:error:]` instead.");
+
 + (void)logInWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
-                                      password:(NSString *)password AV_DEPRECATED("2.6.10");
+                                      password:(NSString *)password
+__deprecated_msg("Deprecated, use `+[AVUser logInWithMobilePhoneNumberInBackground:password:block:]` instead.");
 
 + (nullable instancetype)logInWithMobilePhoneNumber:(NSString *)phoneNumber
-                                            smsCode:(NSString *)code AV_DEPRECATED("2.6.10");
+                                            smsCode:(NSString *)code
+__deprecated_msg("Deprecated, use `+[AVUser logInWithMobilePhoneNumber:smsCode:error:]` instead.");
+
 + (void)logInWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
-                                       smsCode:(NSString *)code AV_DEPRECATED("2.6.10");
+                                       smsCode:(NSString *)code
+__deprecated_msg("Deprecated, use `+[AVUser logInWithMobilePhoneNumberInBackground:smsCode:block:]` instead.");
 
-/*!
- Send a password reset request for a specified email. If a user account exists with that email,
- an email will be sent to that address with instructions on how to reset their password.
- @param email Email of the account to send a reset password request.
- @return true if the reset email request is successful. False if no account was found for the email address.
- */
-+ (BOOL)requestPasswordResetForEmail:(NSString *)email AV_DEPRECATED("2.6.10");
++ (BOOL)requestPasswordResetForEmail:(NSString *)email
+__deprecated_msg("Deprecated, use `+[AVUser requestPasswordResetForEmail:error:]` instead.");
 
-/*!
- Send a password reset request asynchronously for a specified email and sets an
- error object. If a user account exists with that email, an email will be sent to
- that address with instructions on how to reset their password.
- @param email Email of the account to send a reset password request.
- */
-+ (void)requestPasswordResetForEmailInBackground:(NSString *)email AV_DEPRECATED("2.6.10");
++ (void)requestPasswordResetForEmailInBackground:(NSString *)email
+__deprecated_msg("Deprecated, use `+[AVUser requestPasswordResetForEmailInBackground:block:]` instead.");
 
-/*!
- Whether the user is an authenticated object for the device. An authenticated AVUser is one that is obtained via
- a signUp or logIn method. An authenticated object is required in order to save (with altered values) or delete it.
- @return whether the user is authenticated.
- */
-- (BOOL)isAuthenticated AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.7.0. Use -[AVUser isAuthenticatedWithSessionToken:callback:] instead.");
+- (BOOL)isAuthenticated
+__deprecated_msg("Deprecated, use `-[AVUser isAuthenticatedWithSessionToken:callback:]` instead.");
+
++ (void)verifyMobilePhone:(NSString *)code
+                withBlock:(void (^)(BOOL succeeded, NSError * _Nullable error))block
+__deprecated_msg("Deprecated, use `+[AVUser verifyCodeForPhoneNumber:code:block:]` instead.");
 
 @end
 

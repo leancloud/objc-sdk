@@ -239,8 +239,10 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
     });
 }
 
-#pragma mark - Push Notification
+// MARK: Deprecated
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
 + (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
                                           teamId:(NSString *)teamId
 {
@@ -268,10 +270,6 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
     }];
 }
 
-// MARK: Deprecated
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-implementations"
 + (void)startNetworkStatistics {
     [[LCNetworkStatistics sharedInstance] start];
 }
