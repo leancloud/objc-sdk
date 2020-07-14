@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 // constant
 #import "AVIMCommon.h"
 // client
@@ -31,7 +33,6 @@
 #import "AVIMRecalledMessage.h"
 // signature
 #import "AVIMSignature.h"
-
 
 NS_ASSUME_NONNULL_BEGIN
 

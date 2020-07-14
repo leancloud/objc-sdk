@@ -8,7 +8,9 @@
 
 #import "LCRTMConnection_Internal.h"
 
+#import "AVApplication.h"
 #import "AVApplication_Internal.h"
+#import "LCRouter.h"
 #import "LCRouter_Internal.h"
 #import "AVLogger.h"
 #import "AVUtils.h"
