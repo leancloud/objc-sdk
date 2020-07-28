@@ -200,124 +200,124 @@ __deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
 - (id _Nullable)objectForKeyedSubscript:(NSString *)key;
 
 /*!
- 创建一个 AVIMKeyedConversation 对象。用于序列化，方便保存在本地。
- @return AVIMKeyedConversation 对象。
+ Creates an AVIMKeyedConversation object for serialization.
+ @return AVIMKeyedConversation object.
  */
 - (AVIMKeyedConversation * _Nullable)keyedConversation;
 
 // MARK: - RCP Timestamps & Read
 
 /*!
- 拉取对话最近的回执时间。
+ Fetches last receipt timestamps of the message.
  */
 - (void)fetchReceiptTimestampsInBackground;
 
 /*!
- 将对话标记为已读。
- 该方法将本地对话中其他成员发出的最新消息标记为已读，该消息的发送者会收到已读通知。
+ Marks the latest message sent by other members as read.
+ The message sender will receives a read notification.
  */
 - (void)readInBackground;
 
 // MARK: - Conversation Update
 
 /*!
- 拉取服务器最新数据。
- @param callback － 结果回调
+ Fetches latest data from the cloud.
+ @param callback - A callback on results.
  */
 - (void)fetchWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
- 发送更新。
- @param callback － 结果回调
+ Sends updates to the cloud.
+ @param callback - A callback on results.
  */
 - (void)updateWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 // MARK: - Conversation Mute
 
 /*!
- 静音，不再接收此对话的离线推送。
- @param callback － 结果回调
+ Turns off the offline notifications of this conversation.
+ @param callback - A callback on results.
  */
 - (void)muteWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
- 取消静音，开始接收此对话的离线推送。
- @param callback － 结果回调
+ Turns on the offline notifications of this conversation. 
+ @param callback - A callback on results.
  */
 - (void)unmuteWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 // MARK: - Members
 
 /*!
- 加入对话。
- @param callback － 结果回调
+ Joins this conversation.
+ @param callback － A callback on results. 
  */
 - (void)joinWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
- 离开对话。
- @param callback － 结果回调
+ Quits from this conversation.
+ @param callback － A callback on results.
  */
 - (void)quitWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
- 邀请新成员加入对话。
- @param clientIds － 成员列表
- @param callback － 结果回调
+ Adds members to this conversation.
+ @param clientIds － Member list.
+ @param callback － A callback on results.
  */
 - (void)addMembersWithClientIds:(NSArray<NSString *> *)clientIds
                        callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
- 从对话踢出部分成员。
- @param clientIds － 成员列表
- @param callback － 结果回调
+ Removes members from this conversation.
+ @param clientIds - Member list.
+ @param callback - A callback on results. 
  */
 - (void)removeMembersWithClientIds:(NSArray<NSString *> *)clientIds
                           callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
- 查询成员人数（开放群组即为在线人数）。
- @param callback － 结果回调
+ Counts the members of this conversation.
+ @param callback － A callback on results.
  */
 - (void)countMembersWithCallback:(void (^)(NSInteger count, NSError * _Nullable error))callback;
 
 // MARK: - Message Send
 
 /*!
- 往对话中发送消息。
- @param message － 消息对象
- @param callback － 结果回调
+ Sends a message to this conversation.
+ @param message － The message to send.
+ @param callback － A callback on results.
  */
 - (void)sendMessage:(AVIMMessage *)message
            callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
- 往对话中发送消息。
- @param message － 消息对象
- @param option － 消息发送选项
- @param callback － 结果回调
+ Sends a message to this conversation. 
+ @param message － The message to send.
+ @param option － Message sending options.
+ @param callback － A callback on results.
  */
 - (void)sendMessage:(AVIMMessage *)message
              option:(AVIMMessageOption * _Nullable)option
            callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
- 往对话中发送消息。
- @param message － 消息对象
- @param progressBlock - 发送进度回调。仅对文件上传有效，发送文本消息时不进行回调。
- @param callback － 结果回调
+ Sends a message to this conversation.
+ @param message － The message to send. 
+ @param progressBlock - A callback on uploading progress. This is only applicable to uploading files. This callback will not be invoked when sending a text message.
+ @param callback － A callback on results.
  */
 - (void)sendMessage:(AVIMMessage *)message
       progressBlock:(void (^ _Nullable)(NSInteger progress))progressBlock
            callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
- 往对话中发送消息。
- @param message － 消息对象
- @param option － 消息发送选项
- @param progressBlock - 发送进度回调。仅对文件上传有效，发送文本消息时不进行回调。
- @param callback － 结果回调
+ Sends a message to this conversation. 
+ @param message － The message to send. 
+ @param option － Message sending options. 
+ @param progressBlock - A callback on uploading progress. This is only applicable to uploading files. This callback will not be invoked when sending a text message. 
+ @param callback － A callback on results. 
  */
 - (void)sendMessage:(AVIMMessage *)message
              option:(nullable AVIMMessageOption *)option
@@ -365,36 +365,36 @@ __deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
 // MARK: - Message Query
 
 /*!
- 从服务端拉取该会话的最近 limit 条消息。
- @param limit 返回结果的数量，默认 20 条，最多 1000 条。
- @param callback 查询结果回调。
+ Queries recent messages from the cloud.
+ @param limit The default is 20. The maximum is 1000.
+ @param callback A callback on returned results.
  */
 - (void)queryMessagesFromServerWithLimit:(NSUInteger)limit
                                 callback:(void (^)(NSArray<AVIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;
 
 /*!
- 从缓存中查询该会话的最近 limit 条消息。
- @param limit 返回结果的数量，默认 20 条，最多 1000 条。
- @return 消息数组。
+ Queries recent messages from the cache. 
+ @param limit The default is 20. The maximum is 1000.
+ @return An array of messages.
  */
 - (NSArray *)queryMessagesFromCacheWithLimit:(NSUInteger)limit;
 
 /*!
- 获取该会话的最近 limit 条消息。
- @param limit 返回结果的数量，默认 20 条，最多 1000 条。
- @param callback 查询结果回调。
+ Queries recent messages.
+ @param limit The default is 20. The maximum is 1000.
+ @param callback A callback on returned results.
  */
 - (void)queryMessagesWithLimit:(NSUInteger)limit
                       callback:(void (^)(NSArray<AVIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;
 
 /*!
- 查询历史消息，获取某条消息之前的 limit 条消息。
+ Queries historical messages.
  @warning `timestamp` must equal to the timestamp of the message that messageId equal to `messageId`, if the `timestamp` and `messageId` not match, continuity of querying message can't guarantee.
  
- @param messageId 此消息以前的消息。
- @param timestamp 此时间以前的消息。
- @param limit 返回结果的数量，默认 20 条，最多 1000 条。
- @param callback 查询结果回调。
+ @param messageId Messages before this message.
+ @param timestamp Messages before this timestamp.
+ @param limit The default is 20. The maximum is 1000. 
+ @param callback A callback on returned results.
  */
 - (void)queryMessagesBeforeId:(NSString *)messageId
                     timestamp:(int64_t)timestamp
