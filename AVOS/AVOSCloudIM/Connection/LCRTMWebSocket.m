@@ -603,7 +603,7 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
         return;
     }
     NSParameterAssert([self assertSpecificReadQueue]);
-    NSUInteger bufferMax = 1024 * 32;
+    NSUInteger bufferMax = (1024 * 32) + 1;
     UInt8 bufferArray[bufferMax];
     NSInteger readBytes = [self.inputStream read:bufferArray
                                        maxLength:bufferMax];
