@@ -11,7 +11,7 @@ import XCTest
 
 class RTMBaseTestCase: BaseTestCase {
     
-    static let testableRTMServer = "wss://cn-n1-core-k8s-cell-12.leancloud.cn"
+    static let testableRTMServer = "wss://cn-n1-prod-k8s-cell-12.leancloud.cn"
     
     override class func setUp() {
         super.setUp()

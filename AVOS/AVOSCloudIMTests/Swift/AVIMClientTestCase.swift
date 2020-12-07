@@ -337,7 +337,7 @@ class AVIMClientTestCase: LCIMTestBase {
     }
     
     func test_goaway() {
-        AVOSCloudIM.defaultOptions().rtmServer = "wss://cn-n1-core-k8s-cell-12.leancloud.cn";
+        AVOSCloudIM.defaultOptions().rtmServer = "wss://cn-n1-prod-k8s-cell-12.leancloud.cn";
         defer {
             AVOSCloudIM.defaultOptions().rtmServer = nil;
         }
