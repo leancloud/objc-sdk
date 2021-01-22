@@ -8,7 +8,9 @@
 
 #import "LCRTMConnection_Internal.h"
 
+#import "AVApplication.h"
 #import "AVApplication_Internal.h"
+#import "LCRouter.h"
 #import "LCRouter_Internal.h"
 #import "AVLogger.h"
 #import "AVUtils.h"
@@ -896,7 +898,8 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 - (void)handleGoaway:(AVIMGenericCommand *)inCommand
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
-    if (inCommand.cmd == AVIMCommandType_Goaway) {
+    if (![AVOSCloudIM defaultOptions].RTMServer &&
+        inCommand.cmd == AVIMCommandType_Goaway) {
         NSError *error;
         [[LCRouter sharedInstance] cleanCacheWithApplication:self.application
                                                          key:RouterCacheKeyRTM

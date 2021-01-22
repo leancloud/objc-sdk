@@ -1,10 +1,12 @@
-//
-//  AVOSCloudIM.h
-//  AVOSCloudIM
-//
-//  Created by Qihe Bian on 12/4/14.
-//  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
-//
+/*
+ WARNING!!!
+ WARNING!!!
+ WARNING!!!
+ 
+ DO NOT remove or delete this file unless you are quite sure,
+ Keep it for generating API docs,
+ If you want more details, see https://github.com/realm/jazzy
+ */
 
 #import <Foundation/Foundation.h>
 
@@ -33,19 +35,3 @@
 #import "AVIMRecalledMessage.h"
 // signature
 #import "AVIMSignature.h"
-
-NS_ASSUME_NONNULL_BEGIN
-
-@interface AVIMOptions : NSObject
-
-@property (nonatomic, copy, nullable) NSString *RTMServer;
-
-@end
-
-@interface AVOSCloudIM : NSObject
-
-+ (AVIMOptions *)defaultOptions;
-
-@end
-
-NS_ASSUME_NONNULL_END

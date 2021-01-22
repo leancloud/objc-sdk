@@ -413,72 +413,18 @@ class VersionUpdater {
     }
 }
 
-class AppledocTask: Task {
-    static let publicHeaders = [
-        "./AVOS/AVOSCloud/Captcha/AVCaptcha.h",
-        "./AVOS/AVOSCloud/Utils/AVDynamicObject.h",
-        "./AVOS/AVOSCloud/SMS/AVSMS.h",
-        "./AVOS/AVOSCloud/ACL/AVACL.h",
-        "./AVOS/AVOSCloud/ACL/AVRole.h",
-        "./AVOS/AVOSCloud/Object/AVSaveOption.h",
-        "./AVOS/AVOSCloud/Analytics/AVAnalytics.h",
-        "./AVOS/AVOSCloud/AVConstants.h",
-        "./AVOS/AVOSCloud/AVOSCloud.h",
-        "./AVOS/AVOSCloud/CloudCode/AVCloud.h",
-        "./AVOS/AVOSCloud/File/AVFile.h",
-        "./AVOS/AVOSCloud/Geo/AVGeoPoint.h",
-        "./AVOS/AVOSCloud/Object/AVObject+Subclass.h",
-        "./AVOS/AVOSCloud/Object/AVObject.h",
-        "./AVOS/AVOSCloud/Object/AVRelation.h",
-        "./AVOS/AVOSCloud/Object/AVSubclassing.h",
-        "./AVOS/AVOSCloud/Push/AVInstallation.h",
-        "./AVOS/AVOSCloud/File/AVFileQuery.h",
-        "./AVOS/AVOSCloud/Push/AVPush.h",
-        "./AVOS/AVOSCloud/Query/AVCloudQueryResult.h",
-        "./AVOS/AVOSCloud/Query/AVQuery.h",
-        "./AVOS/AVOSCloud/Search/AVSearchQuery.h",
-        "./AVOS/AVOSCloud/Search/AVSearchSortBuilder.h",
-        "./AVOS/AVOSCloud/Status/AVStatus.h",
-        "./AVOS/AVOSCloud/User/AVAnonymousUtils.h",
-        "./AVOS/AVOSCloud/User/AVUser.h",
-        "./AVOS/AVOSCloud/Utils/AVLogger.h",
-        "./AVOS/AVOSCloud/Router/LCRouter.h",
-        "./AVOS/AVOSCloud/AVAvailability.h",
-        "./AVOS/AVOSCloudIM/Message/AVIMMessageOption.h",
-        "./AVOS/AVOSCloudIM/Conversation/AVIMKeyedConversation.h",
-        "./AVOS/AVOSCloudIM/Conversation/AVIMConversationQuery.h",
-        "./AVOS/AVOSCloudIM/TypedMessages/AVIMTextMessage.h",
-        "./AVOS/AVOSCloudIM/TypedMessages/AVIMRecalledMessage.h",
-        "./AVOS/AVOSCloudIM/TypedMessages/AVIMLocationMessage.h",
-        "./AVOS/AVOSCloudIM/TypedMessages/AVIMAudioMessage.h",
-        "./AVOS/AVOSCloudIM/TypedMessages/AVIMVideoMessage.h",
-        "./AVOS/AVOSCloudIM/TypedMessages/AVIMFileMessage.h",
-        "./AVOS/AVOSCloudIM/TypedMessages/AVIMTypedMessage.h",
-        "./AVOS/AVOSCloudIM/TypedMessages/AVIMImageMessage.h",
-        "./AVOS/AVOSCloudIM/Client/AVIMClient.h",
-        "./AVOS/AVOSCloudIM/AVIMCommon.h",
-        "./AVOS/AVOSCloudIM/Conversation/AVIMConversation.h",
-        "./AVOS/AVOSCloudIM/Message/AVIMMessage.h",
-        "./AVOS/AVOSCloudIM/Signature/AVIMSignature.h",
-        "./AVOS/AVOSCloudIM/Client/AVIMClientProtocol.h",
-        "./AVOS/AVOSCloudIM/Conversation/AVIMConversationMemberInfo.h",
-        "./AVOS/AVOSCloudIM/Client/AVIMClientInternalConversationManager.h",
-        "./AVOS/AVOSCloudIM/AVOSCloudIM.h",
-        "./AVOS/AVOSCloudLiveQuery/AVLiveQuery.h",
-        "./AVOS/AVOSCloudLiveQuery/AVOSCloudLiveQuery.h"
-    ]
+class JazzyTask: Task {
     static let APIDocsRepoObjcDirectory = "../api-docs/api/iOS"
     static let APIDocsTempDirectory = "./api-docs"
-    static let APIDocsTempHTMLDirectory = "./api-docs/html"
     
     convenience init(arguments: [String] = []) {
         self.init(
             launchPath: "/usr/bin/env",
-            arguments: ["appledoc"] + arguments)
+            arguments: ["jazzy"] + arguments)
     }
     
     static func version() throws {
-        guard AppledocTask(arguments: ["--version"]).excute() else {
+        guard JazzyTask(arguments: ["--version"]).excute() else {
             throw TaskError()
         }
     }
@@ -491,36 +437,38 @@ class AppledocTask: Task {
         }
     }
     
-    static func checkAPIDocsTempHTMLDirectory() throws {
+    static func checkAPIDocsTempDirectory() throws {
         var isDirectory: ObjCBool = false
-        guard FileManager.default.fileExists(atPath: APIDocsTempHTMLDirectory, isDirectory: &isDirectory),
+        guard FileManager.default.fileExists(atPath: APIDocsTempDirectory, isDirectory: &isDirectory),
             isDirectory.boolValue else {
                 throw TaskError()
         }
     }
     
     static func generateDocumentation(currentVersion: VersionUpdater.Version) throws {
-        _ = AppledocTask(arguments: [
-            "--create-html",
+        _ = JazzyTask(arguments: [
+            "--objc",
             "--output", APIDocsTempDirectory,
-            "--project-name", "LeanCloud Objective-C SDK",
-            "--project-version", currentVersion.versionString,
-            "--project-company", "LeanCloud",
-            "--company-id", "LeanCloud",
-            "--keep-undocumented-objects", "--keep-undocumented-members",
-            "--no-create-docset", "--no-install-docset", "--no-publish-docset"]
-            + (FileManager.default.fileExists(atPath: APIDocsTempDirectory) ? ["--clean-output"] : [])
-            + publicHeaders)
-            .excute()
-        try checkAPIDocsTempHTMLDirectory()
+            "--author", "LeanCloud",
+            "--author_url", "https://leancloud.cn",
+            "--module", "LeanCloudObjc",
+            "--module-version", currentVersion.versionString,
+            "--github_url", "https://github.com/leancloud/objc-sdk",
+            "--github-file-prefix", "https://github.com/leancloud/objc-sdk/tree/\(currentVersion.versionString)",
+            "--root-url", "https://leancloud.cn/api-docs/iOS/",
+            "--umbrella-header", "./AVOS/LeanCloudObjc/LeanCloudObjc.h",
+            "--framework-root", "./AVOS",
+            "--sdk", "iphonesimulator",
+        ] + (FileManager.default.fileExists(atPath: APIDocsTempDirectory) ? ["--clean"] : [])
+        ).excute()
+        try checkAPIDocsTempDirectory()
     }
     
     static func moveGeneratedDocumentationToRepo() throws {
         try FileManager.default.removeItem(atPath: APIDocsRepoObjcDirectory)
         try FileManager.default.moveItem(
-            atPath: APIDocsTempHTMLDirectory,
+            atPath: APIDocsTempDirectory,
             toPath: APIDocsRepoObjcDirectory)
-        try FileManager.default.removeItem(atPath: APIDocsTempDirectory)
     }
     
     static func commitPull() throws {
@@ -614,7 +562,7 @@ class CLI {
     }
     
     static func apiDocsUpdate() throws {
-        try AppledocTask.update(
+        try JazzyTask.update(
             currentVersion: try VersionUpdater.currentVersion())
     }
     
