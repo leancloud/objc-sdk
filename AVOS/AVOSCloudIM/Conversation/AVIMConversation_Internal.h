@@ -12,6 +12,8 @@
 
 @interface AVIMConversation ()
 
+@property (nonatomic, readonly) LCIMConvType convType;
+
 + (instancetype)conversationWithRawJSONData:(NSMutableDictionary *)rawJSONData
                                      client:(AVIMClient *)client;
 

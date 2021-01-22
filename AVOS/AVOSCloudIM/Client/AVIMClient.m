@@ -858,7 +858,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         } break;
         case AVIMCommandType_Direct:
         {
-            [self process_direct:inCommand];
+            [self processDirect:inCommand];
         } break;
         case AVIMCommandType_Rcp:
         {
@@ -1482,46 +1482,51 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-- (void)process_direct:(AVIMGenericCommand *)inCommand
+- (void)processDirect:(AVIMGenericCommand *)inCommand
 {
-    AssertRunInQueue(self->_internalSerialQueue);
-    
+    AssertRunInQueue(self.internalSerialQueue);
     AVIMDirectCommand *directCommand = (inCommand.hasDirectMessage ? inCommand.directMessage : nil);
-    
-    NSString *conversationId = (directCommand.hasCid ? directCommand.cid : nil);
-    NSString *messageId = (directCommand.hasId_p ? directCommand.id_p : nil);
-    if (!conversationId || !messageId) {
+    NSString *conversationID = (directCommand.hasCid ? directCommand.cid : nil);
+    NSString *messageID = (directCommand.hasId_p ? directCommand.id_p : nil);
+    if (!conversationID ||
+        !messageID) {
         return;
     }
-    BOOL isTransientMsg = (directCommand.hasTransient ? directCommand.transient : false);
-    
-    if (!isTransientMsg) {
-        LCIMProtobufCommandWrapper *ackCommandWrapper = ({
-            AVIMGenericCommand *outCommand = [AVIMGenericCommand new];
-            AVIMAckCommand *ackCommand = [AVIMAckCommand new];
-            outCommand.cmd = AVIMCommandType_Ack;
-            outCommand.ackMessage = ackCommand;
-            ackCommand.cid = conversationId;
-            ackCommand.mid = messageId;
-            LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
-            commandWrapper.outCommand = outCommand;
-            commandWrapper;
-        });
-        [self sendCommandWrapper:ackCommandWrapper];
-    }
-    
-    [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
-        if (error) { return; }
-        AVIMMessage *message = [conversation process_direct:directCommand messageId:messageId isTransientMsg:isTransientMsg];
-        id <AVIMClientDelegate> delegate = self->_delegate;
+    [self.conversationManager queryConversationWithId:conversationID callback:^(AVIMConversation *conversation, NSError *error) {
+        if (error) {
+            AVLoggerError(AVLoggerDomainIM, @"%@", error);
+            return;
+        }
+        BOOL isTransientMsg = (directCommand.hasTransient ? directCommand.transient : false);
+        if ((conversation.convType != LCIMConvTypeTransient) &&
+            !isTransientMsg) {
+            LCIMProtobufCommandWrapper *ackCommandWrapper = ({
+                AVIMGenericCommand *outCommand = [AVIMGenericCommand new];
+                AVIMAckCommand *ackCommand = [AVIMAckCommand new];
+                outCommand.cmd = AVIMCommandType_Ack;
+                outCommand.ackMessage = ackCommand;
+                ackCommand.cid = conversationID;
+                ackCommand.mid = messageID;
+                LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
+                commandWrapper.outCommand = outCommand;
+                commandWrapper;
+            });
+            [self sendCommandWrapper:ackCommandWrapper];
+        }
+        AVIMMessage *message = [conversation process_direct:directCommand
+                                                  messageId:messageID
+                                             isTransientMsg:isTransientMsg];
+        id <AVIMClientDelegate> delegate = self.delegate;
         if (message && delegate) {
             SEL selType = @selector(conversation:didReceiveTypedMessage:);
             SEL selCommon = @selector(conversation:didReceiveCommonMessage:);
-            if ([message isKindOfClass:[AVIMTypedMessage class]] && [delegate respondsToSelector:selType]) {
+            if ([message isKindOfClass:[AVIMTypedMessage class]] &&
+                [delegate respondsToSelector:selType]) {
                 [self invokeInUserInteractQueue:^{
                     [delegate conversation:conversation didReceiveTypedMessage:(AVIMTypedMessage *)message];
                 }];
-            } else if ([message isKindOfClass:AVIMMessage.class] && [delegate respondsToSelector:selCommon]) {
+            } else if ([message isKindOfClass:[AVIMMessage class]] &&
+                       [delegate respondsToSelector:selCommon]) {
                 [self invokeInUserInteractQueue:^{
                     [delegate conversation:conversation didReceiveCommonMessage:message];
                 }];

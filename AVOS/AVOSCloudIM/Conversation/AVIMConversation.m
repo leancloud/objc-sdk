@@ -71,7 +71,6 @@
     // public immutable
     NSString *_clientId;
     NSString *_conversationId;
-    LCIMConvType _convType;
     
     // public mutable
     AVIMMessage *_lastMessage;
@@ -1424,7 +1423,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         return;
     }
     
-    BOOL transientConv = (self->_convType == LCIMConvTypeTransient);
+    BOOL transientConv = (self.convType == LCIMConvTypeTransient);
     BOOL transientMsg = option.transient;
     BOOL receipt = option.receipt;
     BOOL will = option.will;
