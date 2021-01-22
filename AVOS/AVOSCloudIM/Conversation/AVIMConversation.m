@@ -652,7 +652,9 @@ static dispatch_queue_t messageCacheOperationQueue;
 - (void)fetchReceiptTimestampsInBackground
 {
     AVIMClient *client = self.imClient;
-    if (!client) {
+    if (!client ||
+        (self.convType == LCIMConvTypeTransient) ||
+        (self.convType == LCIMConvTypeSystem)) {
         return;
     }
     
@@ -1204,7 +1206,8 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 - (void)readInBackground
 {
     AVIMClient *client = self.imClient;
-    if (!client) {
+    if (!client ||
+        (self.convType == LCIMConvTypeTransient)) {
         return;
     }
     
