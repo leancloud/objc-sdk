@@ -999,16 +999,36 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     NSParameterAssert([self assertSpecificSerialQueue]);
     if (command.cmd == AVIMCommandType_Session &&
         command.op == AVIMOpType_Open) {
-        if (self.defaultInstantMessagingPeerID) {
-            if (![self.defaultInstantMessagingPeerID isEqualToString:peerID]) {
-                self.needPeerIDForEveryCommandOfInstantMessaging = true;
+        return;
+    }
+    if (self.needPeerIDForEveryCommandOfInstantMessaging) {
+        command.peerId = peerID;
+    }
+}
+
+- (void)checkSessionOpenedPeerID:(AVIMGenericCommand *)command
+{
+    NSParameterAssert([self assertSpecificSerialQueue]);
+    NSString *peerID = (command.hasPeerId ? command.peerId : nil);
+    if ((command.cmd == AVIMCommandType_Session) &&
+        (command.op == AVIMOpType_Opened) &&
+        peerID) {
+        NSString *defaultPeerID = self.defaultInstantMessagingPeerID;
+        if (defaultPeerID) {
+            if (!self.needPeerIDForEveryCommandOfInstantMessaging) {
+                self.needPeerIDForEveryCommandOfInstantMessaging = ![defaultPeerID isEqualToString:peerID];
             }
         } else {
             self.defaultInstantMessagingPeerID = peerID;
         }
-    } else if (self.needPeerIDForEveryCommandOfInstantMessaging) {
-        command.peerId = peerID;
     }
+}
+
+- (void)resetDefaultInstantMessagingPeerID
+{
+    NSParameterAssert([self assertSpecificSerialQueue]);
+    self.defaultInstantMessagingPeerID = nil;
+    self.needPeerIDForEveryCommandOfInstantMessaging = false;
 }
 
 // MARK: LCRTMWebSocket Delegate
@@ -1027,8 +1047,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
                   protocol,
                   socket.request,
                   socket.request.allHTTPHeaderFields);
-    self.defaultInstantMessagingPeerID = nil;
-    self.needPeerIDForEveryCommandOfInstantMessaging = false;
+    [self resetDefaultInstantMessagingPeerID];
     [self resetConnectingDelayInterval];
     self.timer = [[LCRTMConnectionTimer alloc] initWithQueue:self.serialQueue
                                                       socket:socket];
@@ -1084,6 +1103,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
                       @"\n------ END",
                       NSStringFromClass([socket class]), socket,
                       inCommand);
+        [self checkSessionOpenedPeerID:inCommand];
         if (inCommand.hasI) {
             [self.timer handleCallbackCommand:inCommand];
         } else {

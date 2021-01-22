@@ -191,10 +191,11 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }
     _tag = (tag ? tag.copy : nil);
     _messageQueryCacheEnabled = true;
-    _sessionConfigBitmap = (LCIMSessionConfigOptionsPatchMessage |
-                            LCIMSessionConfigOptionsTemporaryConversationMessage |
-                            LCIMSessionConfigOptionsTransientMessageACK |
-                            LCIMSessionConfigOptionsPartialFailedMessage);
+    _sessionConfigBitmap = (LCIMSessionConfigOptionsPatchMessage
+                            | LCIMSessionConfigOptionsTemporaryConversationMessage
+                            | LCIMSessionConfigOptionsTransientMessageACK
+                            | LCIMSessionConfigOptionsPartialFailedMessage
+                            | LCIMSessionConfigOptionsOmitPeerID);
     _status = AVIMClientStatusNone;
     _lock = [NSLock new];
     _lastUnreadNotifTime = 0;
