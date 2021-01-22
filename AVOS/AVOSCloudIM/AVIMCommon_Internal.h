@@ -57,6 +57,7 @@ static AVIMConversationKey const AVIMConversationKeyLastMessageMentionPids      
 
 /// Use this enum to match command's value(`convType`)
 typedef NS_ENUM(NSUInteger, LCIMConvType) {
+    LCIMConvTypeUnknown     = 0,
     LCIMConvTypeNormal      = 1,
     LCIMConvTypeTransient   = 2,
     LCIMConvTypeSystem      = 3,
