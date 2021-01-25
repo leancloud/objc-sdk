@@ -26,6 +26,7 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     LCIMSessionConfigOptionsNotification                        = 1 << 4,
     LCIMSessionConfigOptionsPartialFailedMessage                = 1 << 5,
     LCIMSessionConfigOptionsGroupChatRCP                        = 1 << 6,
+    LCIMSessionConfigOptionsOmitPeerID                          = 1 << 7,
 };
 
 /// conversation property key

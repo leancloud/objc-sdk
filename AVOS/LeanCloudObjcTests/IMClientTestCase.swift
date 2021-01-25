@@ -174,6 +174,7 @@ class AVIMClientDelegator: NSObject, AVIMClientDelegate {
         paused = nil
         closed = nil
         offline = nil
+        didReceiveTypedMessage = nil
     }
     
     var resuming: ((AVIMClient) -> Void)?
@@ -199,5 +200,10 @@ class AVIMClientDelegator: NSObject, AVIMClientDelegate {
     var offline: ((AVIMClient, Error?) -> Void)?
     func client(_ client: AVIMClient, didOfflineWithError error: Error?) {
         offline?(client, error)
+    }
+    
+    var didReceiveTypedMessage: ((AVIMConversation, AVIMTypedMessage) -> Void)?
+    func conversation(_ conversation: AVIMConversation, didReceive message: AVIMTypedMessage) {
+        didReceiveTypedMessage?(conversation, message)
     }
 }
