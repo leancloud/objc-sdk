@@ -1101,6 +1101,7 @@
 		D3596DAE2480EEED002D2D22 /* AVApplication_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3596DAC2480EEED002D2D22 /* AVApplication_Internal.h */; };
 		D3596DAF2480EEED002D2D22 /* AVApplication_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3596DAC2480EEED002D2D22 /* AVApplication_Internal.h */; };
 		D3596DB02480EEED002D2D22 /* AVApplication_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3596DAC2480EEED002D2D22 /* AVApplication_Internal.h */; };
+		D36A095A25BEA75000A4F312 /* IMMessageTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36A095925BEA75000A4F312 /* IMMessageTestCase.swift */; };
 		D3700B742475244E00678B2B /* LCRTMConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B722475244E00678B2B /* LCRTMConnection.h */; };
 		D3700B752475244E00678B2B /* LCRTMConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B722475244E00678B2B /* LCRTMConnection.h */; };
 		D3700B762475244E00678B2B /* LCRTMConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D3700B732475244E00678B2B /* LCRTMConnection.m */; };
@@ -1713,6 +1714,7 @@
 		D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCRouter_Internal.h; sourceTree = "<group>"; };
 		D34FD72B2068CFE900B7C11B /* AVLiveQuery_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVLiveQuery_Internal.h; sourceTree = "<group>"; };
 		D3596DAC2480EEED002D2D22 /* AVApplication_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVApplication_Internal.h; sourceTree = "<group>"; };
+		D36A095925BEA75000A4F312 /* IMMessageTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMMessageTestCase.swift; sourceTree = "<group>"; };
 		D3700B722475244E00678B2B /* LCRTMConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCRTMConnection.h; sourceTree = "<group>"; };
 		D3700B732475244E00678B2B /* LCRTMConnection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCRTMConnection.m; sourceTree = "<group>"; };
 		D3700B782475345C00678B2B /* AVApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVApplication.h; sourceTree = "<group>"; };
@@ -2624,6 +2626,7 @@
 				D39724C324A5CD3C0099A518 /* RTMBaseTestCase.swift */,
 				D3A397F024A5A4670087D6F8 /* RTMConnectionTestCase.swift */,
 				D39724C524A852400099A518 /* IMClientTestCase.swift */,
+				D36A095925BEA75000A4F312 /* IMMessageTestCase.swift */,
 				D30B6A1A24A09978006ABE09 /* Info.plist */,
 			);
 			path = LeanCloudObjcTests;
@@ -4701,6 +4704,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D30B6B6224A0A933006ABE09 /* BaseTestCase.swift in Sources */,
+				D36A095A25BEA75000A4F312 /* IMMessageTestCase.swift in Sources */,
 				D3AD74AB24BC216200D1BBEE /* LCUserTestCase.swift in Sources */,
 				D3A397F124A5A4670087D6F8 /* RTMConnectionTestCase.swift in Sources */,
 				D39724C624A852400099A518 /* IMClientTestCase.swift in Sources */,
