@@ -305,8 +305,9 @@ class PodTask: Task {
         }
         if PodTask(arguments: ["trunk", "push", path, "--allow-warnings"]).excute() {
             if wait {
-                print("wait for 10 minutes ...")
-                sleep(60 * 10)
+                let minutes: UInt32 = 31
+                print("wait for \(minutes) minutes ...")
+                sleep(60 * minutes)
             }
         } else {
             print("[?] try pod trunk push \(path) again? [yes/no]")
