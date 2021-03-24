@@ -511,17 +511,49 @@ class JazzyTask: Task {
     }
 }
 
+class ThirdPartyLibraryUpgrader {
+    static let protobufObjcDirectoryPath = "../protobuf/objectivec/"
+    static let lcProtobufObjcDirectoryPath = "./AVOS/AVOSCloudIM/Protobuf"
+    
+    static func checkDirectoryExists(path: String) throws {
+        var isDirectory: ObjCBool = false
+        guard FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory),
+              isDirectory.boolValue else {
+            throw TaskError(description: "\(path) not found.")
+        }
+    }
+    
+    static func replacingFiles(fromDirectory: String, toDirectory: String, oldNamespace: String, newNamespace: String) throws {
+        let fromDirectoryURL = URL(fileURLWithPath: fromDirectory, isDirectory: true)
+        let toDirectoryURL = URL(fileURLWithPath: toDirectory, isDirectory: true)
+        let enumerator = FileManager.default.enumerator(
+            at: fromDirectoryURL,
+            includingPropertiesForKeys: nil,
+            options: [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants])
+        while let url = enumerator?.nextObject() as? URL {
+            if url.lastPathComponent.hasPrefix(oldNamespace) {
+                let newFileName = url.lastPathComponent.replacingOccurrences(of: oldNamespace, with: newNamespace, options: [.anchored])
+                let toFileURL = toDirectoryURL.appendingPathComponent(newFileName)
+                try FileManager.default.copyItem(at: url, to: toFileURL)
+            }
+        }
+    }
+}
+
 class CLI {
     
     static func help() {
         print("""
-            Actions:\n
-            b, build                Building all schemes
-            vu, version-update      Updating SDK version
-            pr, pull-request        New pull request from current head to base master
-            pt, pod-trunk           Publish all podspecs
-            adu, api-docs-update    Update API Docs
-            h, help                 Show help info
+            Actions Docs:
+
+            b, build                            Building all schemes
+            vu, version-update                  Updating SDK version
+            pr, pull-request                    New pull request from current head to base master
+            pt, pod-trunk                       Publish all podspecs
+            adu, api-docs-update                Update API Docs
+            h, help                             Show help info
+            tplu, third-party-library-upgrade   Upgrade third party library
+            
             """)
     }
     
@@ -567,6 +599,20 @@ class CLI {
             currentVersion: try VersionUpdater.currentVersion())
     }
     
+    static func thirdPartyLibraryUpgrade(with directory: String) throws {
+        let url = URL(fileURLWithPath: ThirdPartyLibraryUpgrader.protobufObjcDirectoryPath, isDirectory: true)
+        print(url.path)
+        let enumerator = FileManager.default.enumerator(
+            at: url,
+            includingPropertiesForKeys: nil,
+            options: [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants])
+        while let path = enumerator?.nextObject() as? URL {
+            if path.lastPathComponent.hasPrefix("GPB") {
+                print(path.lastPathComponent)
+            }
+        }
+    }
+    
     static func read() -> [String] {
         var args = CommandLine.arguments
         args.removeFirst()
@@ -585,8 +631,29 @@ class CLI {
             try podTrunk()
         case "adu", "api-docs-update":
             try apiDocsUpdate()
+        case "tplu", "third-party-library-upgrade":
+            print("[!] This Action need one parameter\n")
+            help()
         case "h", "help":
             help()
+        default:
+            print("[!] Unknown Action: `\(action)`\n")
+            help()
+        }
+    }
+    
+    static func process(action: String, parameter: String) throws {
+        switch action {
+        case "tplu", "third-party-library-upgrade":
+            switch parameter {
+            case "h", "help":
+                print("""
+                    Action `third-party-library-upgrade` Docs:
+
+                    """)
+            default:
+                try thirdPartyLibraryUpgrade(with: parameter)
+            }
         default:
             print("[!] Unknown Action: `\(action)`\n")
             help()
@@ -598,6 +665,8 @@ class CLI {
         switch args.count {
         case 1:
             try process(action: args[0])
+        case 2:
+            try process(action: args[0], parameter: args[1])
         default:
             print("[!] Unknown Command: `\(args.joined(separator: " "))`\n")
             help()
