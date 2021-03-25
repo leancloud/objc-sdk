@@ -523,7 +523,13 @@ class ThirdPartyLibraryUpgrader {
         }
     }
     
-    static func replacingFiles(srcDirectory: String, dstDirectory: String, originNamespace: String, lcNamespace: String) throws {
+    static func replacingFiles(
+        srcDirectory: String,
+        dstDirectory: String,
+        originNamespace: String,
+        lcNamespace: String,
+        excludeFiles: [String] = []) throws
+    {
         let srcDirectoryURL = URL(fileURLWithPath: srcDirectory, isDirectory: true)
         let dstDirectoryURL = URL(fileURLWithPath: dstDirectory, isDirectory: true)
         let enumerator = FileManager.default.enumerator(
@@ -531,8 +537,10 @@ class ThirdPartyLibraryUpgrader {
             includingPropertiesForKeys: nil,
             options: [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants])
         while let srcUrl = enumerator?.nextObject() as? URL {
-            if srcUrl.lastPathComponent.hasPrefix(originNamespace) {
-                let dstFileName = srcUrl.lastPathComponent.replacingOccurrences(of: originNamespace, with: lcNamespace, options: [.anchored])
+            let srcFileName = srcUrl.lastPathComponent
+            if !excludeFiles.contains(srcFileName),
+               srcFileName.hasPrefix(originNamespace) {
+                let dstFileName = srcFileName.replacingOccurrences(of: originNamespace, with: lcNamespace, options: [.anchored])
                 let dstFileURL = dstDirectoryURL.appendingPathComponent(dstFileName)
                 if FileManager.default.fileExists(atPath: dstFileURL.path) {
                     try FileManager.default.removeItem(at: dstFileURL)
@@ -554,7 +562,9 @@ class ThirdPartyLibraryUpgrader {
             srcDirectory: protobufObjcDirectoryPath,
             dstDirectory: lcProtobufObjcDirectoryPath,
             originNamespace: "GPB",
-            lcNamespace: "LCGPB")
+            lcNamespace: "LCGPB",
+            // reason: https://github.com/protocolbuffers/protobuf/blob/v3.15.6/Protobuf.podspec#L31
+            excludeFiles: ["GPBProtocolBuffers.m"])
     }
 }
 
