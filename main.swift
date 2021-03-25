@@ -513,7 +513,7 @@ class JazzyTask: Task {
 
 class ThirdPartyLibraryUpgrader {
     static let protobufObjcDirectoryPath = "../protobuf/objectivec/"
-    static let lcProtobufObjcDirectoryPath = "./AVOS/AVOSCloudIM/Protobuf"
+    static let lcProtobufObjcDirectoryPath = "./AVOS/AVOSCloudIM/Protobuf/"
     
     static func checkDirectoryExists(path: String) throws {
         var isDirectory: ObjCBool = false
@@ -523,20 +523,38 @@ class ThirdPartyLibraryUpgrader {
         }
     }
     
-    static func replacingFiles(fromDirectory: String, toDirectory: String, oldNamespace: String, newNamespace: String) throws {
-        let fromDirectoryURL = URL(fileURLWithPath: fromDirectory, isDirectory: true)
-        let toDirectoryURL = URL(fileURLWithPath: toDirectory, isDirectory: true)
+    static func replacingFiles(srcDirectory: String, dstDirectory: String, originNamespace: String, lcNamespace: String) throws {
+        let srcDirectoryURL = URL(fileURLWithPath: srcDirectory, isDirectory: true)
+        let dstDirectoryURL = URL(fileURLWithPath: dstDirectory, isDirectory: true)
         let enumerator = FileManager.default.enumerator(
-            at: fromDirectoryURL,
+            at: srcDirectoryURL,
             includingPropertiesForKeys: nil,
             options: [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants])
-        while let url = enumerator?.nextObject() as? URL {
-            if url.lastPathComponent.hasPrefix(oldNamespace) {
-                let newFileName = url.lastPathComponent.replacingOccurrences(of: oldNamespace, with: newNamespace, options: [.anchored])
-                let toFileURL = toDirectoryURL.appendingPathComponent(newFileName)
-                try FileManager.default.copyItem(at: url, to: toFileURL)
+        while let srcUrl = enumerator?.nextObject() as? URL {
+            if srcUrl.lastPathComponent.hasPrefix(originNamespace) {
+                let dstFileName = srcUrl.lastPathComponent.replacingOccurrences(of: originNamespace, with: lcNamespace, options: [.anchored])
+                let dstFileURL = dstDirectoryURL.appendingPathComponent(dstFileName)
+                if FileManager.default.fileExists(atPath: dstFileURL.path) {
+                    try FileManager.default.removeItem(at: dstFileURL)
+                } else {
+                    print("[!] New File: `\(dstFileURL.path)`\n")
+                }
+                try FileManager.default.copyItem(at: srcUrl, to: dstFileURL)
+                try (try String(contentsOfFile: dstFileURL.path))
+                    .replacingOccurrences(of: originNamespace, with: lcNamespace)
+                    .write(toFile: dstFileURL.path, atomically: true, encoding: .utf8)
             }
         }
+    }
+    
+    static func updateProtobuf() throws {
+        try checkDirectoryExists(path: protobufObjcDirectoryPath)
+        try checkDirectoryExists(path: lcProtobufObjcDirectoryPath)
+        try replacingFiles(
+            srcDirectory: protobufObjcDirectoryPath,
+            dstDirectory: lcProtobufObjcDirectoryPath,
+            originNamespace: "GPB",
+            lcNamespace: "LCGPB")
     }
 }
 
@@ -546,14 +564,32 @@ class CLI {
         print("""
             Actions Docs:
 
-            b, build                            Building all schemes
-            vu, version-update                  Updating SDK version
-            pr, pull-request                    New pull request from current head to base master
-            pt, pod-trunk                       Publish all podspecs
-            adu, api-docs-update                Update API Docs
-            h, help                             Show help info
-            tplu, third-party-library-upgrade   Upgrade third party library
+            b, build
+                Building all schemes
+            vu, version-update
+                Updating SDK version
+            pr, pull-request
+                New pull request from current head to base master
+            pt, pod-trunk
+                Publish all podspecs
+            adu, api-docs-update
+                Update API Docs
+            tplu, third-party-library-upgrade
+                Upgrade third party library
+            h, help
+                Show help info
             
+            """)
+    }
+    
+    static func tpluHelp() {
+        print("""
+            Action `third-party-library-upgrade` Docs:
+
+            PARAMETERS
+                protobuf
+                    Upgrade `protobuf` library
+
             """)
     }
     
@@ -599,17 +635,13 @@ class CLI {
             currentVersion: try VersionUpdater.currentVersion())
     }
     
-    static func thirdPartyLibraryUpgrade(with directory: String) throws {
-        let url = URL(fileURLWithPath: ThirdPartyLibraryUpgrader.protobufObjcDirectoryPath, isDirectory: true)
-        print(url.path)
-        let enumerator = FileManager.default.enumerator(
-            at: url,
-            includingPropertiesForKeys: nil,
-            options: [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants])
-        while let path = enumerator?.nextObject() as? URL {
-            if path.lastPathComponent.hasPrefix("GPB") {
-                print(path.lastPathComponent)
-            }
+    static func thirdPartyLibraryUpgrade(with library: String) throws {
+        switch library {
+        case "protobuf":
+            try ThirdPartyLibraryUpgrader.updateProtobuf()
+        default:
+            print("[!] Unknown Library: `\(library)`\n")
+            tpluHelp()
         }
     }
     
@@ -633,7 +665,7 @@ class CLI {
             try apiDocsUpdate()
         case "tplu", "third-party-library-upgrade":
             print("[!] This Action need one parameter\n")
-            help()
+            tpluHelp()
         case "h", "help":
             help()
         default:
@@ -647,10 +679,7 @@ class CLI {
         case "tplu", "third-party-library-upgrade":
             switch parameter {
             case "h", "help":
-                print("""
-                    Action `third-party-library-upgrade` Docs:
-
-                    """)
+                tpluHelp()
             default:
                 try thirdPartyLibraryUpgrade(with: parameter)
             }
