@@ -8,7 +8,7 @@
 #endif
 
 #if LCGPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <protobuf/LCGPBProtocolBuffers_RuntimeSupport.h>
+ #import <Protobuf/LCGPBProtocolBuffers_RuntimeSupport.h>
 #else
  #import "LCGPBProtocolBuffers_RuntimeSupport.h"
 #endif
@@ -16,7 +16,7 @@
 #import <stdatomic.h>
 
 #if LCGPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <protobuf/Struct.pbobjc.h>
+ #import <Protobuf/LCGPBStruct.pbobjc.h>
 #else
  #import "LCGPBStruct.pbobjc.h"
 #endif
@@ -25,6 +25,15 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #pragma clang diagnostic ignored "-Wdirect-ivar-access"
+#pragma clang diagnostic ignored "-Wdollar-in-identifier-extension"
+
+#pragma mark - Objective C Class declarations
+// Forward declarations of Objective C classes that we can use as
+// static values in struct initializers.
+// We don't use [Foo class] because it is not a static value.
+LCGPBObjCClassDeclaration(LCGPBListValue);
+LCGPBObjCClassDeclaration(LCGPBStruct);
+LCGPBObjCClassDeclaration(LCGPBValue);
 
 #pragma mark - LCGPBStructRoot
 
@@ -102,7 +111,7 @@ typedef struct LCGPBStruct__storage_ {
     static LCGPBMessageFieldDescription fields[] = {
       {
         .name = "fields",
-        .dataTypeSpecific.className = LCGPBStringifySymbol(LCGPBValue),
+        .dataTypeSpecific.clazz = LCGPBObjCClass(LCGPBValue),
         .number = LCGPBStruct_FieldNumber_Fields,
         .hasIndex = LCGPBNoHasBit,
         .offset = (uint32_t)offsetof(LCGPBStruct__storage_, fields),
@@ -117,7 +126,7 @@ typedef struct LCGPBStruct__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(LCGPBMessageFieldDescription))
                                    storageSize:sizeof(LCGPBStruct__storage_)
-                                         flags:LCGPBDescriptorInitializationFlag_None];
+                                         flags:(LCGPBDescriptorInitializationFlags)(LCGPBDescriptorInitializationFlag_UsesClassRefs | LCGPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
     #endif  // DEBUG
@@ -166,7 +175,7 @@ typedef struct LCGPBValue__storage_ {
       },
       {
         .name = "numberValue",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBValue_FieldNumber_NumberValue,
         .hasIndex = -1,
         .offset = (uint32_t)offsetof(LCGPBValue__storage_, numberValue),
@@ -175,7 +184,7 @@ typedef struct LCGPBValue__storage_ {
       },
       {
         .name = "stringValue",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBValue_FieldNumber_StringValue,
         .hasIndex = -1,
         .offset = (uint32_t)offsetof(LCGPBValue__storage_, stringValue),
@@ -184,7 +193,7 @@ typedef struct LCGPBValue__storage_ {
       },
       {
         .name = "boolValue",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBValue_FieldNumber_BoolValue,
         .hasIndex = -1,
         .offset = 0,  // Stored in _has_storage_ to save space.
@@ -193,7 +202,7 @@ typedef struct LCGPBValue__storage_ {
       },
       {
         .name = "structValue",
-        .dataTypeSpecific.className = LCGPBStringifySymbol(LCGPBStruct),
+        .dataTypeSpecific.clazz = LCGPBObjCClass(LCGPBStruct),
         .number = LCGPBValue_FieldNumber_StructValue,
         .hasIndex = -1,
         .offset = (uint32_t)offsetof(LCGPBValue__storage_, structValue),
@@ -202,7 +211,7 @@ typedef struct LCGPBValue__storage_ {
       },
       {
         .name = "listValue",
-        .dataTypeSpecific.className = LCGPBStringifySymbol(LCGPBListValue),
+        .dataTypeSpecific.clazz = LCGPBObjCClass(LCGPBListValue),
         .number = LCGPBValue_FieldNumber_ListValue,
         .hasIndex = -1,
         .offset = (uint32_t)offsetof(LCGPBValue__storage_, listValue),
@@ -217,7 +226,7 @@ typedef struct LCGPBValue__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(LCGPBMessageFieldDescription))
                                    storageSize:sizeof(LCGPBValue__storage_)
-                                         flags:LCGPBDescriptorInitializationFlag_None];
+                                         flags:(LCGPBDescriptorInitializationFlags)(LCGPBDescriptorInitializationFlag_UsesClassRefs | LCGPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     static const char *oneofs[] = {
       "kind",
     };
@@ -237,19 +246,19 @@ typedef struct LCGPBValue__storage_ {
 int32_t LCGPBValue_NullValue_RawValue(LCGPBValue *message) {
   LCGPBDescriptor *descriptor = [LCGPBValue descriptor];
   LCGPBFieldDescriptor *field = [descriptor fieldWithNumber:LCGPBValue_FieldNumber_NullValue];
-  return LCGPBGetMessageInt32Field(message, field);
+  return LCGPBGetMessageRawEnumField(message, field);
 }
 
 void SetLCGPBValue_NullValue_RawValue(LCGPBValue *message, int32_t value) {
   LCGPBDescriptor *descriptor = [LCGPBValue descriptor];
   LCGPBFieldDescriptor *field = [descriptor fieldWithNumber:LCGPBValue_FieldNumber_NullValue];
-  LCGPBSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
+  LCGPBSetMessageRawEnumField(message, field, value);
 }
 
 void LCGPBValue_ClearKindOneOfCase(LCGPBValue *message) {
-  LCGPBDescriptor *descriptor = [message descriptor];
+  LCGPBDescriptor *descriptor = [LCGPBValue descriptor];
   LCGPBOneofDescriptor *oneof = [descriptor.oneofs objectAtIndex:0];
-  LCGPBMaybeClearOneof(message, oneof, -1, 0);
+  LCGPBClearOneof(message, oneof);
 }
 #pragma mark - LCGPBListValue
 
@@ -270,7 +279,7 @@ typedef struct LCGPBListValue__storage_ {
     static LCGPBMessageFieldDescription fields[] = {
       {
         .name = "valuesArray",
-        .dataTypeSpecific.className = LCGPBStringifySymbol(LCGPBValue),
+        .dataTypeSpecific.clazz = LCGPBObjCClass(LCGPBValue),
         .number = LCGPBListValue_FieldNumber_ValuesArray,
         .hasIndex = LCGPBNoHasBit,
         .offset = (uint32_t)offsetof(LCGPBListValue__storage_, valuesArray),
@@ -285,7 +294,7 @@ typedef struct LCGPBListValue__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(LCGPBMessageFieldDescription))
                                    storageSize:sizeof(LCGPBListValue__storage_)
-                                         flags:LCGPBDescriptorInitializationFlag_None];
+                                         flags:(LCGPBDescriptorInitializationFlags)(LCGPBDescriptorInitializationFlag_UsesClassRefs | LCGPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
     #endif  // DEBUG

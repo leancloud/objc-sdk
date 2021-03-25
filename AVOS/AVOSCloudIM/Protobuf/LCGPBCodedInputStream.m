@@ -203,7 +203,7 @@ int64_t LCGPBCodedInputStreamReadSInt64(LCGPBCodedInputStreamState *state) {
 }
 
 BOOL LCGPBCodedInputStreamReadBool(LCGPBCodedInputStreamState *state) {
-  return ReadRawVarint32(state) != 0;
+  return ReadRawVarint64(state) != 0;
 }
 
 int32_t LCGPBCodedInputStreamReadTag(LCGPBCodedInputStreamState *state) {

@@ -8,13 +8,13 @@
 #endif
 
 #if LCGPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <protobuf/LCGPBProtocolBuffers_RuntimeSupport.h>
+ #import <Protobuf/LCGPBProtocolBuffers_RuntimeSupport.h>
 #else
  #import "LCGPBProtocolBuffers_RuntimeSupport.h"
 #endif
 
 #if LCGPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <protobuf/Any.pbobjc.h>
+ #import <Protobuf/LCGPBAny.pbobjc.h>
 #else
  #import "LCGPBAny.pbobjc.h"
 #endif
@@ -68,20 +68,20 @@ typedef struct LCGPBAny__storage_ {
     static LCGPBMessageFieldDescription fields[] = {
       {
         .name = "typeURL",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBAny_FieldNumber_TypeURL,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCGPBAny__storage_, typeURL),
-        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldTextFormatNameCustom),
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldTextFormatNameCustom | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeString,
       },
       {
         .name = "value",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBAny_FieldNumber_Value,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(LCGPBAny__storage_, value),
-        .flags = LCGPBFieldOptional,
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeBytes,
       },
     };
@@ -92,7 +92,7 @@ typedef struct LCGPBAny__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(LCGPBMessageFieldDescription))
                                    storageSize:sizeof(LCGPBAny__storage_)
-                                         flags:LCGPBDescriptorInitializationFlag_None];
+                                         flags:(LCGPBDescriptorInitializationFlags)(LCGPBDescriptorInitializationFlag_UsesClassRefs | LCGPBDescriptorInitializationFlag_Proto3OptionalKnown)];
 #if !LCGPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
         "\001\001\004\241!!\000";

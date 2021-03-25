@@ -361,8 +361,8 @@ static id NewSingleValueFromInputStream(LCGPBExtensionDescriptor *extension,
       if (existingValue) {
         message = [existingValue retain];
       } else {
-        LCGPBDescriptor *decriptor = [extension.msgClass descriptor];
-        message = [[decriptor.messageClass alloc] init];
+        LCGPBDescriptor *descriptor = [extension.msgClass descriptor];
+        message = [[descriptor.messageClass alloc] init];
       }
 
       if (description->dataType == LCGPBDataTypeGroup) {

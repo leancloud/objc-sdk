@@ -45,6 +45,10 @@ typedef NS_OPTIONS(uint16_t, LCGPBFieldFlags) {
   LCGPBFieldOptional        = 1 << 3,
   LCGPBFieldHasDefaultValue = 1 << 4,
 
+  // Indicate that the field should "clear" when set to zero value. This is the
+  // proto3 non optional behavior for singular data (ints, data, string, enum)
+  // fields.
+  LCGPBFieldClearHasIvarOnZero = 1 << 5,
   // Indicates the field needs custom handling for the TextFormat name, if not
   // set, the name can be derived from the ObjC name.
   LCGPBFieldTextFormatNameCustom = 1 << 6,
@@ -80,7 +84,11 @@ typedef struct LCGPBMessageFieldDescription {
   // Name of ivar.
   const char *name;
   union {
-    const char *className;  // Name for message class.
+    // className is deprecated and will be removed in favor of clazz.
+    // kept around right now for backwards compatibility.
+    // clazz is used iff LCGPBDescriptorInitializationFlag_UsesClassRefs is set.
+    char *className;  // Name of the class of the message.
+    Class clazz;  // Class of the message.
     // For enums only: If EnumDescriptors are compiled in, it will be that,
     // otherwise it will be the verifier.
     LCGPBEnumDescriptorFunc enumDescFunc;
@@ -123,8 +131,29 @@ typedef NS_OPTIONS(uint8_t, LCGPBExtensionOptions) {
 typedef struct LCGPBExtensionDescription {
   LCGPBGenericValue defaultValue;
   const char *singletonName;
-  const char *extendedClass;
-  const char *messageOrGroupClassName;
+  // Before 3.12, `extendedClass` was just a `const char *`. Thanks to nested
+  // initialization (https://en.cppreference.com/w/c/language/struct_initialization#Nested_initialization)
+  // old generated code with `.extendedClass = LCGPBStringifySymbol(Something)`
+  // still works; and the current generator can use `extendedClass.clazz`, to
+  // pass a Class reference.
+  union {
+    const char *name;
+    Class clazz;
+  } extendedClass;
+  // Before 3.12, this was `const char *messageOrGroupClassName`. In the
+  // initial 3.12 release, we moved the `union messageOrGroupClass`, and failed
+  // to realize that would break existing source code for extensions. So to
+  // keep existing source code working, we added an unnamed union (C11) to
+  // provide both the old field name and the new union. This keeps both older
+  // and newer code working.
+  // Background: https://github.com/protocolbuffers/protobuf/issues/7555
+  union {
+    const char *messageOrGroupClassName;
+    union {
+     const char *name;
+     Class clazz;
+   } messageOrGroupClass;
+  };
   LCGPBEnumDescriptorFunc enumDescriptorFunc;
   int32_t fieldNumber;
   LCGPBDataType dataType;
@@ -135,6 +164,17 @@ typedef NS_OPTIONS(uint32_t, LCGPBDescriptorInitializationFlags) {
   LCGPBDescriptorInitializationFlag_None              = 0,
   LCGPBDescriptorInitializationFlag_FieldsWithDefault = 1 << 0,
   LCGPBDescriptorInitializationFlag_WireFormat        = 1 << 1,
+
+  // This is used as a stopgap as we move from using class names to class
+  // references. The runtime needs to support both until we allow a
+  // breaking change in the runtime.
+  LCGPBDescriptorInitializationFlag_UsesClassRefs     = 1 << 2,
+
+  // This flag is used to indicate that the generated sources already contain
+  // the `LCGPBFieldClearHasIvarOnZero` flag and it doesn't have to be computed
+  // at startup. This allows older generated code to still work with the
+  // current runtime library.
+  LCGPBDescriptorInitializationFlag_Proto3OptionalKnown = 1 << 3,
 };
 
 @interface LCGPBDescriptor () {
@@ -168,8 +208,11 @@ typedef NS_OPTIONS(uint32_t, LCGPBDescriptorInitializationFlags) {
       firstHasIndex:(int32_t)firstHasIndex;
 - (void)setupExtraTextInfo:(const char *)extraTextFormatInfo;
 - (void)setupExtensionRanges:(const LCGPBExtensionRange *)ranges count:(int32_t)count;
-- (void)setupContainingMessageClassName:(const char *)msgClassName;
+- (void)setupContainingMessageClass:(Class)msgClass;
 - (void)setupMessageClassNameSuffix:(NSString *)suffix;
+
+// Deprecated. Use setupContainingMessageClass instead.
+- (void)setupContainingMessageClassName:(const char *)msgClassName;
 
 @end
 
@@ -206,7 +249,10 @@ typedef NS_OPTIONS(uint32_t, LCGPBDescriptorInitializationFlags) {
 // description has to be long lived, it is held as a raw pointer.
 - (instancetype)initWithFieldDescription:(void *)description
                          includesDefault:(BOOL)includesDefault
+                           usesClassRefs:(BOOL)usesClassRefs
+                     proto3OptionalKnown:(BOOL)proto3OptionalKnown
                                   syntax:(LCGPBFileSyntax)syntax;
+
 @end
 
 @interface LCGPBEnumDescriptor ()
@@ -246,8 +292,11 @@ typedef NS_OPTIONS(uint32_t, LCGPBDescriptorInitializationFlags) {
 @property(nonatomic, readonly) LCGPBWireFormat alternateWireType;
 
 // description has to be long lived, it is held as a raw pointer.
-- (instancetype)initWithExtensionDescription:
-    (LCGPBExtensionDescription *)description;
+- (instancetype)initWithExtensionDescription:(LCGPBExtensionDescription *)desc
+                               usesClassRefs:(BOOL)usesClassRefs;
+// Deprecated. Calls above with `usesClassRefs = NO`
+- (instancetype)initWithExtensionDescription:(LCGPBExtensionDescription *)desc;
+
 - (NSComparisonResult)compareByFieldNumber:(LCGPBExtensionDescriptor *)other;
 @end
 

@@ -305,8 +305,9 @@ class PodTask: Task {
         }
         if PodTask(arguments: ["trunk", "push", path, "--allow-warnings"]).excute() {
             if wait {
-                print("wait for 10 minutes ...")
-                sleep(60 * 10)
+                let minutes: UInt32 = 31
+                print("wait for \(minutes) minutes ...")
+                sleep(60 * minutes)
             }
         } else {
             print("[?] try pod trunk push \(path) again? [yes/no]")
@@ -510,17 +511,85 @@ class JazzyTask: Task {
     }
 }
 
+class ThirdPartyLibraryUpgrader {
+    static let protobufObjcDirectoryPath = "../protobuf/objectivec/"
+    static let lcProtobufObjcDirectoryPath = "./AVOS/AVOSCloudIM/Protobuf/"
+    
+    static func checkDirectoryExists(path: String) throws {
+        var isDirectory: ObjCBool = false
+        guard FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory),
+              isDirectory.boolValue else {
+            throw TaskError(description: "\(path) not found.")
+        }
+    }
+    
+    static func replacingFiles(srcDirectory: String, dstDirectory: String, originNamespace: String, lcNamespace: String) throws {
+        let srcDirectoryURL = URL(fileURLWithPath: srcDirectory, isDirectory: true)
+        let dstDirectoryURL = URL(fileURLWithPath: dstDirectory, isDirectory: true)
+        let enumerator = FileManager.default.enumerator(
+            at: srcDirectoryURL,
+            includingPropertiesForKeys: nil,
+            options: [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants])
+        while let srcUrl = enumerator?.nextObject() as? URL {
+            if srcUrl.lastPathComponent.hasPrefix(originNamespace) {
+                let dstFileName = srcUrl.lastPathComponent.replacingOccurrences(of: originNamespace, with: lcNamespace, options: [.anchored])
+                let dstFileURL = dstDirectoryURL.appendingPathComponent(dstFileName)
+                if FileManager.default.fileExists(atPath: dstFileURL.path) {
+                    try FileManager.default.removeItem(at: dstFileURL)
+                } else {
+                    print("[!] New File: `\(dstFileURL.path)`\n")
+                }
+                try FileManager.default.copyItem(at: srcUrl, to: dstFileURL)
+                try (try String(contentsOfFile: dstFileURL.path))
+                    .replacingOccurrences(of: originNamespace, with: lcNamespace)
+                    .write(toFile: dstFileURL.path, atomically: true, encoding: .utf8)
+            }
+        }
+    }
+    
+    static func updateProtobuf() throws {
+        try checkDirectoryExists(path: protobufObjcDirectoryPath)
+        try checkDirectoryExists(path: lcProtobufObjcDirectoryPath)
+        try replacingFiles(
+            srcDirectory: protobufObjcDirectoryPath,
+            dstDirectory: lcProtobufObjcDirectoryPath,
+            originNamespace: "GPB",
+            lcNamespace: "LCGPB")
+    }
+}
+
 class CLI {
     
     static func help() {
         print("""
-            Actions:\n
-            b, build                Building all schemes
-            vu, version-update      Updating SDK version
-            pr, pull-request        New pull request from current head to base master
-            pt, pod-trunk           Publish all podspecs
-            adu, api-docs-update    Update API Docs
-            h, help                 Show help info
+            Actions Docs:
+
+            b, build
+                Building all schemes
+            vu, version-update
+                Updating SDK version
+            pr, pull-request
+                New pull request from current head to base master
+            pt, pod-trunk
+                Publish all podspecs
+            adu, api-docs-update
+                Update API Docs
+            tplu, third-party-library-upgrade
+                Upgrade third party library
+            h, help
+                Show help info
+            
+            """)
+    }
+    
+    static func tpluHelp() {
+        print("""
+            Action `third-party-library-upgrade` Docs:
+
+            PARAMETERS
+                protobuf
+                    Upgrade `protobuf` library
+
             """)
     }
     
@@ -566,6 +635,16 @@ class CLI {
             currentVersion: try VersionUpdater.currentVersion())
     }
     
+    static func thirdPartyLibraryUpgrade(with library: String) throws {
+        switch library {
+        case "protobuf":
+            try ThirdPartyLibraryUpgrader.updateProtobuf()
+        default:
+            print("[!] Unknown Library: `\(library)`\n")
+            tpluHelp()
+        }
+    }
+    
     static func read() -> [String] {
         var args = CommandLine.arguments
         args.removeFirst()
@@ -584,8 +663,26 @@ class CLI {
             try podTrunk()
         case "adu", "api-docs-update":
             try apiDocsUpdate()
+        case "tplu", "third-party-library-upgrade":
+            print("[!] This Action need one parameter\n")
+            tpluHelp()
         case "h", "help":
             help()
+        default:
+            print("[!] Unknown Action: `\(action)`\n")
+            help()
+        }
+    }
+    
+    static func process(action: String, parameter: String) throws {
+        switch action {
+        case "tplu", "third-party-library-upgrade":
+            switch parameter {
+            case "h", "help":
+                tpluHelp()
+            default:
+                try thirdPartyLibraryUpgrade(with: parameter)
+            }
         default:
             print("[!] Unknown Action: `\(action)`\n")
             help()
@@ -597,6 +694,8 @@ class CLI {
         switch args.count {
         case 1:
             try process(action: args[0])
+        case 2:
+            try process(action: args[0], parameter: args[1])
         default:
             print("[!] Unknown Command: `\(args.joined(separator: " "))`\n")
             help()

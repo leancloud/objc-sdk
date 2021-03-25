@@ -8,15 +8,15 @@
 #endif
 
 #if LCGPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <protobuf/LCGPBProtocolBuffers_RuntimeSupport.h>
+ #import <Protobuf/LCGPBProtocolBuffers_RuntimeSupport.h>
 #else
  #import "LCGPBProtocolBuffers_RuntimeSupport.h"
 #endif
 
 #if LCGPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <protobuf/Api.pbobjc.h>
- #import <protobuf/SourceContext.pbobjc.h>
- #import <protobuf/Type.pbobjc.h>
+ #import <Protobuf/LCGPBApi.pbobjc.h>
+ #import <Protobuf/LCGPBSourceContext.pbobjc.h>
+ #import <Protobuf/LCGPBType.pbobjc.h>
 #else
  #import "LCGPBApi.pbobjc.h"
  #import "LCGPBSourceContext.pbobjc.h"
@@ -26,6 +26,16 @@
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#pragma clang diagnostic ignored "-Wdollar-in-identifier-extension"
+
+#pragma mark - Objective C Class declarations
+// Forward declarations of Objective C classes that we can use as
+// static values in struct initializers.
+// We don't use [Foo class] because it is not a static value.
+LCGPBObjCClassDeclaration(LCGPBMethod);
+LCGPBObjCClassDeclaration(LCGPBMixin);
+LCGPBObjCClassDeclaration(LCGPBOption);
+LCGPBObjCClassDeclaration(LCGPBSourceContext);
 
 #pragma mark - LCGPBApiRoot
 
@@ -82,16 +92,16 @@ typedef struct LCGPBApi__storage_ {
     static LCGPBMessageFieldDescription fields[] = {
       {
         .name = "name",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBApi_FieldNumber_Name,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCGPBApi__storage_, name),
-        .flags = LCGPBFieldOptional,
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeString,
       },
       {
         .name = "methodsArray",
-        .dataTypeSpecific.className = LCGPBStringifySymbol(LCGPBMethod),
+        .dataTypeSpecific.clazz = LCGPBObjCClass(LCGPBMethod),
         .number = LCGPBApi_FieldNumber_MethodsArray,
         .hasIndex = LCGPBNoHasBit,
         .offset = (uint32_t)offsetof(LCGPBApi__storage_, methodsArray),
@@ -100,7 +110,7 @@ typedef struct LCGPBApi__storage_ {
       },
       {
         .name = "optionsArray",
-        .dataTypeSpecific.className = LCGPBStringifySymbol(LCGPBOption),
+        .dataTypeSpecific.clazz = LCGPBObjCClass(LCGPBOption),
         .number = LCGPBApi_FieldNumber_OptionsArray,
         .hasIndex = LCGPBNoHasBit,
         .offset = (uint32_t)offsetof(LCGPBApi__storage_, optionsArray),
@@ -109,16 +119,16 @@ typedef struct LCGPBApi__storage_ {
       },
       {
         .name = "version",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBApi_FieldNumber_Version,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(LCGPBApi__storage_, version),
-        .flags = LCGPBFieldOptional,
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeString,
       },
       {
         .name = "sourceContext",
-        .dataTypeSpecific.className = LCGPBStringifySymbol(LCGPBSourceContext),
+        .dataTypeSpecific.clazz = LCGPBObjCClass(LCGPBSourceContext),
         .number = LCGPBApi_FieldNumber_SourceContext,
         .hasIndex = 2,
         .offset = (uint32_t)offsetof(LCGPBApi__storage_, sourceContext),
@@ -127,7 +137,7 @@ typedef struct LCGPBApi__storage_ {
       },
       {
         .name = "mixinsArray",
-        .dataTypeSpecific.className = LCGPBStringifySymbol(LCGPBMixin),
+        .dataTypeSpecific.clazz = LCGPBObjCClass(LCGPBMixin),
         .number = LCGPBApi_FieldNumber_MixinsArray,
         .hasIndex = LCGPBNoHasBit,
         .offset = (uint32_t)offsetof(LCGPBApi__storage_, mixinsArray),
@@ -140,7 +150,7 @@ typedef struct LCGPBApi__storage_ {
         .number = LCGPBApi_FieldNumber_Syntax,
         .hasIndex = 3,
         .offset = (uint32_t)offsetof(LCGPBApi__storage_, syntax),
-        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldHasEnumDescriptor),
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldHasEnumDescriptor | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeEnum,
       },
     };
@@ -151,7 +161,7 @@ typedef struct LCGPBApi__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(LCGPBMessageFieldDescription))
                                    storageSize:sizeof(LCGPBApi__storage_)
-                                         flags:LCGPBDescriptorInitializationFlag_None];
+                                         flags:(LCGPBDescriptorInitializationFlags)(LCGPBDescriptorInitializationFlag_UsesClassRefs | LCGPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
     #endif  // DEBUG
@@ -165,13 +175,13 @@ typedef struct LCGPBApi__storage_ {
 int32_t LCGPBApi_Syntax_RawValue(LCGPBApi *message) {
   LCGPBDescriptor *descriptor = [LCGPBApi descriptor];
   LCGPBFieldDescriptor *field = [descriptor fieldWithNumber:LCGPBApi_FieldNumber_Syntax];
-  return LCGPBGetMessageInt32Field(message, field);
+  return LCGPBGetMessageRawEnumField(message, field);
 }
 
 void SetLCGPBApi_Syntax_RawValue(LCGPBApi *message, int32_t value) {
   LCGPBDescriptor *descriptor = [LCGPBApi descriptor];
   LCGPBFieldDescriptor *field = [descriptor fieldWithNumber:LCGPBApi_FieldNumber_Syntax];
-  LCGPBSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
+  LCGPBSetMessageRawEnumField(message, field, value);
 }
 
 #pragma mark - LCGPBMethod
@@ -203,52 +213,52 @@ typedef struct LCGPBMethod__storage_ {
     static LCGPBMessageFieldDescription fields[] = {
       {
         .name = "name",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBMethod_FieldNumber_Name,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCGPBMethod__storage_, name),
-        .flags = LCGPBFieldOptional,
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeString,
       },
       {
         .name = "requestTypeURL",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBMethod_FieldNumber_RequestTypeURL,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(LCGPBMethod__storage_, requestTypeURL),
-        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldTextFormatNameCustom),
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldTextFormatNameCustom | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeString,
       },
       {
         .name = "requestStreaming",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBMethod_FieldNumber_RequestStreaming,
         .hasIndex = 2,
         .offset = 3,  // Stored in _has_storage_ to save space.
-        .flags = LCGPBFieldOptional,
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeBool,
       },
       {
         .name = "responseTypeURL",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBMethod_FieldNumber_ResponseTypeURL,
         .hasIndex = 4,
         .offset = (uint32_t)offsetof(LCGPBMethod__storage_, responseTypeURL),
-        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldTextFormatNameCustom),
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldTextFormatNameCustom | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeString,
       },
       {
         .name = "responseStreaming",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBMethod_FieldNumber_ResponseStreaming,
         .hasIndex = 5,
         .offset = 6,  // Stored in _has_storage_ to save space.
-        .flags = LCGPBFieldOptional,
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeBool,
       },
       {
         .name = "optionsArray",
-        .dataTypeSpecific.className = LCGPBStringifySymbol(LCGPBOption),
+        .dataTypeSpecific.clazz = LCGPBObjCClass(LCGPBOption),
         .number = LCGPBMethod_FieldNumber_OptionsArray,
         .hasIndex = LCGPBNoHasBit,
         .offset = (uint32_t)offsetof(LCGPBMethod__storage_, optionsArray),
@@ -261,7 +271,7 @@ typedef struct LCGPBMethod__storage_ {
         .number = LCGPBMethod_FieldNumber_Syntax,
         .hasIndex = 7,
         .offset = (uint32_t)offsetof(LCGPBMethod__storage_, syntax),
-        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldHasEnumDescriptor),
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldHasEnumDescriptor | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeEnum,
       },
     };
@@ -272,7 +282,7 @@ typedef struct LCGPBMethod__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(LCGPBMessageFieldDescription))
                                    storageSize:sizeof(LCGPBMethod__storage_)
-                                         flags:LCGPBDescriptorInitializationFlag_None];
+                                         flags:(LCGPBDescriptorInitializationFlags)(LCGPBDescriptorInitializationFlag_UsesClassRefs | LCGPBDescriptorInitializationFlag_Proto3OptionalKnown)];
 #if !LCGPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
         "\002\002\007\244\241!!\000\004\010\244\241!!\000";
@@ -291,13 +301,13 @@ typedef struct LCGPBMethod__storage_ {
 int32_t LCGPBMethod_Syntax_RawValue(LCGPBMethod *message) {
   LCGPBDescriptor *descriptor = [LCGPBMethod descriptor];
   LCGPBFieldDescriptor *field = [descriptor fieldWithNumber:LCGPBMethod_FieldNumber_Syntax];
-  return LCGPBGetMessageInt32Field(message, field);
+  return LCGPBGetMessageRawEnumField(message, field);
 }
 
 void SetLCGPBMethod_Syntax_RawValue(LCGPBMethod *message, int32_t value) {
   LCGPBDescriptor *descriptor = [LCGPBMethod descriptor];
   LCGPBFieldDescriptor *field = [descriptor fieldWithNumber:LCGPBMethod_FieldNumber_Syntax];
-  LCGPBSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
+  LCGPBSetMessageRawEnumField(message, field, value);
 }
 
 #pragma mark - LCGPBMixin
@@ -321,20 +331,20 @@ typedef struct LCGPBMixin__storage_ {
     static LCGPBMessageFieldDescription fields[] = {
       {
         .name = "name",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBMixin_FieldNumber_Name,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCGPBMixin__storage_, name),
-        .flags = LCGPBFieldOptional,
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeString,
       },
       {
         .name = "root",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBMixin_FieldNumber_Root,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(LCGPBMixin__storage_, root),
-        .flags = LCGPBFieldOptional,
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeString,
       },
     };
@@ -345,7 +355,7 @@ typedef struct LCGPBMixin__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(LCGPBMessageFieldDescription))
                                    storageSize:sizeof(LCGPBMixin__storage_)
-                                         flags:LCGPBDescriptorInitializationFlag_None];
+                                         flags:(LCGPBDescriptorInitializationFlags)(LCGPBDescriptorInitializationFlag_UsesClassRefs | LCGPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
     #endif  // DEBUG

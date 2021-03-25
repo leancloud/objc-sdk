@@ -28,49 +28,39 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "LCGPBBootstrap.h"
+// If you want to build protocol buffers in your own project without adding the
+// project dependency, you can just add this file.
 
-#import "LCGPBArray.h"
-#import "LCGPBCodedInputStream.h"
-#import "LCGPBCodedOutputStream.h"
-#import "LCGPBDescriptor.h"
-#import "LCGPBDictionary.h"
-#import "LCGPBExtensionRegistry.h"
-#import "LCGPBMessage.h"
-#import "LCGPBRootObject.h"
-#import "LCGPBUnknownField.h"
-#import "LCGPBUnknownFieldSet.h"
-#import "LCGPBUtilities.h"
-#import "LCGPBWellKnownTypes.h"
-#import "LCGPBWireFormat.h"
 
-// This CPP symbol can be defined to use imports that match up to the framework
-// imports needed when using CocoaPods.
-#if !defined(LCGPB_USE_PROTOBUF_FRAMEWORK_IMPORTS)
- #define LCGPB_USE_PROTOBUF_FRAMEWORK_IMPORTS 0
-#endif
+// This warning seems to treat code differently when it is #imported than when
+// it is inline in the file.  LCGPBDictionary.m compiles cleanly in other targets,
+// but when #imported here it triggers a bunch of warnings that don't make
+// much sense, and don't trigger when compiled directly.  So we shut off the
+// warnings here.
+#pragma clang diagnostic ignored "-Wnullability-completeness"
 
-// Well-known proto types
-#if LCGPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <Protobuf/LCGPBAny.pbobjc.h>
- #import <Protobuf/LCGPBApi.pbobjc.h>
- #import <Protobuf/LCGPBDuration.pbobjc.h>
- #import <Protobuf/LCGPBEmpty.pbobjc.h>
- #import <Protobuf/LCGPBFieldMask.pbobjc.h>
- #import <Protobuf/LCGPBSourceContext.pbobjc.h>
- #import <Protobuf/LCGPBStruct.pbobjc.h>
- #import <Protobuf/LCGPBTimestamp.pbobjc.h>
- #import <Protobuf/LCGPBType.pbobjc.h>
- #import <Protobuf/LCGPBWrappers.pbobjc.h>
-#else
- #import "LCGPBAny.pbobjc.h"
- #import "LCGPBApi.pbobjc.h"
- #import "LCGPBDuration.pbobjc.h"
- #import "LCGPBEmpty.pbobjc.h"
- #import "LCGPBFieldMask.pbobjc.h"
- #import "LCGPBSourceContext.pbobjc.h"
- #import "LCGPBStruct.pbobjc.h"
- #import "LCGPBTimestamp.pbobjc.h"
- #import "LCGPBType.pbobjc.h"
- #import "LCGPBWrappers.pbobjc.h"
-#endif
+#import "LCGPBArray.m"
+#import "LCGPBCodedInputStream.m"
+#import "LCGPBCodedOutputStream.m"
+#import "LCGPBDescriptor.m"
+#import "LCGPBDictionary.m"
+#import "LCGPBExtensionInternals.m"
+#import "LCGPBExtensionRegistry.m"
+#import "LCGPBMessage.m"
+#import "LCGPBRootObject.m"
+#import "LCGPBUnknownField.m"
+#import "LCGPBUnknownFieldSet.m"
+#import "LCGPBUtilities.m"
+#import "LCGPBWellKnownTypes.m"
+#import "LCGPBWireFormat.m"
+
+#import "LCGPBAny.pbobjc.m"
+#import "LCGPBApi.pbobjc.m"
+#import "LCGPBDuration.pbobjc.m"
+#import "LCGPBEmpty.pbobjc.m"
+#import "LCGPBFieldMask.pbobjc.m"
+#import "LCGPBSourceContext.pbobjc.m"
+#import "LCGPBStruct.pbobjc.m"
+#import "LCGPBTimestamp.pbobjc.m"
+#import "LCGPBType.pbobjc.m"
+#import "LCGPBWrappers.pbobjc.m"

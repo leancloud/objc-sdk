@@ -62,6 +62,12 @@ static LCGPBDataType BaseDataType(LCGPBDataType type) __attribute__ ((unused));
 // Marked unused because currently only called from asserts/debug.
 static NSString *TypeToString(LCGPBDataType dataType) __attribute__ ((unused));
 
+// Helper for clearing oneofs.
+static void LCGPBMaybeClearOneofPrivate(LCGPBMessage *self,
+                                      LCGPBOneofDescriptor *oneof,
+                                      int32_t oneofHasIndex,
+                                      uint32_t fieldNumberNotToClear);
+
 NSData *LCGPBEmptyNSData(void) {
   static dispatch_once_t onceToken;
   static NSData *defaultNSData = nil;
@@ -213,7 +219,7 @@ void LCGPBCheckRuntimeVersionSupport(int32_t objcRuntimeVersion) {
     // Library is too old for headers.
     [NSException raise:NSInternalInconsistencyException
                 format:@"Linked to ProtocolBuffer runtime version %d,"
-                       @" but code compiled needing atleast %d!",
+                       @" but code compiled needing at least %d!",
                        GOOGLE_PROTOBUF_OBJC_VERSION, objcRuntimeVersion];
   }
   if (objcRuntimeVersion < GOOGLE_PROTOBUF_OBJC_MIN_SUPPORTED_VERSION) {
@@ -267,17 +273,28 @@ void LCGPBClearMessageField(LCGPBMessage *self, LCGPBFieldDescriptor *field) {
     return;
   }
 
+  LCGPBMessageFieldDescription *fieldDesc = field->description_;
   if (LCGPBFieldStoresObject(field)) {
     // Object types are handled slightly differently, they need to be released.
     uint8_t *storage = (uint8_t *)self->messageStorage_;
-    id *typePtr = (id *)&storage[field->description_->offset];
+    id *typePtr = (id *)&storage[fieldDesc->offset];
     [*typePtr release];
     *typePtr = nil;
   } else {
     // POD types just need to clear the has bit as the Get* method will
     // fetch the default when needed.
   }
-  LCGPBSetHasIvarField(self, field, NO);
+  LCGPBSetHasIvar(self, fieldDesc->hasIndex, fieldDesc->number, NO);
+}
+
+void LCGPBClearOneof(LCGPBMessage *self, LCGPBOneofDescriptor *oneof) {
+  #if defined(DEBUG) && DEBUG
+    NSCAssert([[self descriptor] oneofWithName:oneof.name] == oneof,
+              @"OneofDescriptor %@ doesn't appear to be for %@ messages.",
+              oneof.name, [self class]);
+  #endif
+  LCGPBFieldDescriptor *firstField = oneof->fields_[0];
+  LCGPBMaybeClearOneofPrivate(self, oneof, firstField->description_->hasIndex, 0);
 }
 
 BOOL LCGPBGetHasIvar(LCGPBMessage *self, int32_t idx, uint32_t fieldNumber) {
@@ -324,8 +341,10 @@ void LCGPBSetHasIvar(LCGPBMessage *self, int32_t idx, uint32_t fieldNumber,
   }
 }
 
-void LCGPBMaybeClearOneof(LCGPBMessage *self, LCGPBOneofDescriptor *oneof,
-                        int32_t oneofHasIndex, uint32_t fieldNumberNotToClear) {
+static void LCGPBMaybeClearOneofPrivate(LCGPBMessage *self,
+                                      LCGPBOneofDescriptor *oneof,
+                                      int32_t oneofHasIndex,
+                                      uint32_t fieldNumberNotToClear) {
   uint32_t fieldNumberSet = LCGPBGetHasOneof(self, oneofHasIndex);
   if ((fieldNumberSet == fieldNumberNotToClear) || (fieldNumberSet == 0)) {
     // Do nothing/nothing set in the oneof.
@@ -356,6 +375,9 @@ void LCGPBMaybeClearOneof(LCGPBMessage *self, LCGPBOneofDescriptor *oneof,
 //%TYPE LCGPBGetMessage##NAME##Field(LCGPBMessage *self,
 //% TYPE$S            NAME$S       LCGPBFieldDescriptor *field) {
 //%#if defined(DEBUG) && DEBUG
+//%  NSCAssert([[self descriptor] fieldWithNumber:field.number] == field,
+//%            @"FieldDescriptor %@ doesn't appear to be for %@ messages.",
+//%            field.name, [self class]);
 //%  NSCAssert(DataTypesEquivalent(LCGPBGetFieldDataType(field),
 //%                                LCGPBDataType##NAME),
 //%            @"Attempting to get value of TYPE from field %@ "
@@ -377,15 +399,10 @@ void LCGPBMaybeClearOneof(LCGPBMessage *self, LCGPBOneofDescriptor *oneof,
 //%                   NAME$S     LCGPBFieldDescriptor *field,
 //%                   NAME$S     TYPE value) {
 //%  if (self == nil || field == nil) return;
-//%  LCGPBFileSyntax syntax = [self descriptor].file.syntax;
-//%  LCGPBSet##NAME##IvarWithFieldInternal(self, field, value, syntax);
-//%}
-//%
-//%void LCGPBSet##NAME##IvarWithFieldInternal(LCGPBMessage *self,
-//%            NAME$S                     LCGPBFieldDescriptor *field,
-//%            NAME$S                     TYPE value,
-//%            NAME$S                     LCGPBFileSyntax syntax) {
 //%#if defined(DEBUG) && DEBUG
+//%  NSCAssert([[self descriptor] fieldWithNumber:field.number] == field,
+//%            @"FieldDescriptor %@ doesn't appear to be for %@ messages.",
+//%            field.name, [self class]);
 //%  NSCAssert(DataTypesEquivalent(LCGPBGetFieldDataType(field),
 //%                                LCGPBDataType##NAME),
 //%            @"Attempting to set field %@ of %@ which is of type %@ with "
@@ -393,10 +410,16 @@ void LCGPBMaybeClearOneof(LCGPBMessage *self, LCGPBOneofDescriptor *oneof,
 //%            [self class], field.name,
 //%            TypeToString(LCGPBGetFieldDataType(field)));
 //%#endif
+//%  LCGPBSet##NAME##IvarWithFieldPrivate(self, field, value);
+//%}
+//%
+//%void LCGPBSet##NAME##IvarWithFieldPrivate(LCGPBMessage *self,
+//%            NAME$S                    LCGPBFieldDescriptor *field,
+//%            NAME$S                    TYPE value) {
 //%  LCGPBOneofDescriptor *oneof = field->containingOneof_;
+//%  LCGPBMessageFieldDescription *fieldDesc = field->description_;
 //%  if (oneof) {
-//%    LCGPBMessageFieldDescription *fieldDesc = field->description_;
-//%    LCGPBMaybeClearOneof(self, oneof, fieldDesc->hasIndex, fieldDesc->number);
+//%    LCGPBMaybeClearOneofPrivate(self, oneof, fieldDesc->hasIndex, fieldDesc->number);
 //%  }
 //%#if defined(DEBUG) && DEBUG
 //%  NSCAssert(self->messageStorage_ != NULL,
@@ -407,14 +430,13 @@ void LCGPBMaybeClearOneof(LCGPBMessage *self, LCGPBOneofDescriptor *oneof,
 //%  if (self->messageStorage_ == NULL) return;
 //%#endif
 //%  uint8_t *storage = (uint8_t *)self->messageStorage_;
-//%  TYPE *typePtr = (TYPE *)&storage[field->description_->offset];
+//%  TYPE *typePtr = (TYPE *)&storage[fieldDesc->offset];
 //%  *typePtr = value;
-//%  // proto2: any value counts as having been set; proto3, it
-//%  // has to be a non zero value or be in a oneof.
-//%  BOOL hasValue = ((syntax == LCGPBFileSyntaxProto2)
-//%                   || (value != (TYPE)0)
-//%                   || (field->containingOneof_ != NULL));
-//%  LCGPBSetHasIvarField(self, field, hasValue);
+//%  // If the value is zero, then we only count the field as "set" if the field
+//%  // shouldn't auto clear on zero.
+//%  BOOL hasValue = ((value != (TYPE)0)
+//%                   || ((fieldDesc->flags & LCGPBFieldClearHasIvarOnZero) == 0));
+//%  LCGPBSetHasIvar(self, fieldDesc->hasIndex, fieldDesc->number, hasValue);
 //%  LCGPBBecomeVisibleToAutocreator(self);
 //%}
 //%
@@ -482,15 +504,6 @@ void LCGPBMaybeClearOneof(LCGPBMessage *self, LCGPBOneofDescriptor *oneof,
 // Object types are handled slightly differently, they need to be released
 // and retained.
 
-void LCGPBSetAutocreatedRetainedObjectIvarWithField(
-    LCGPBMessage *self, LCGPBFieldDescriptor *field,
-    id __attribute__((ns_consumed)) value) {
-  uint8_t *storage = (uint8_t *)self->messageStorage_;
-  id *typePtr = (id *)&storage[field->description_->offset];
-  NSCAssert(*typePtr == NULL, @"Can't set autocreated object more than once.");
-  *typePtr = value;
-}
-
 void LCGPBClearAutocreatedMessageIvarWithField(LCGPBMessage *self,
                                              LCGPBFieldDescriptor *field) {
   if (LCGPBGetHasIvarField(self, field)) {
@@ -504,43 +517,37 @@ void LCGPBClearAutocreatedMessageIvarWithField(LCGPBMessage *self,
   [oldValue release];
 }
 
-// This exists only for briging some aliased types, nothing else should use it.
+// This exists only for bridging some aliased types, nothing else should use it.
 static void LCGPBSetObjectIvarWithField(LCGPBMessage *self,
                                       LCGPBFieldDescriptor *field, id value) {
   if (self == nil || field == nil) return;
-  LCGPBFileSyntax syntax = [self descriptor].file.syntax;
-  LCGPBSetRetainedObjectIvarWithFieldInternal(self, field, [value retain],
-                                            syntax);
+  LCGPBSetRetainedObjectIvarWithFieldPrivate(self, field, [value retain]);
 }
 
 static void LCGPBSetCopyObjectIvarWithField(LCGPBMessage *self,
                                           LCGPBFieldDescriptor *field, id value);
 
 // LCGPBSetCopyObjectIvarWithField is blocked from the analyzer because it flags
-// a leak for the -copy even though LCGPBSetRetainedObjectIvarWithFieldInternal
+// a leak for the -copy even though LCGPBSetRetainedObjectIvarWithFieldPrivate
 // is marked as consuming the value. Note: For some reason this doesn't happen
 // with the -retain in LCGPBSetObjectIvarWithField.
 #if !defined(__clang_analyzer__)
-// This exists only for briging some aliased types, nothing else should use it.
+// This exists only for bridging some aliased types, nothing else should use it.
 static void LCGPBSetCopyObjectIvarWithField(LCGPBMessage *self,
                                           LCGPBFieldDescriptor *field, id value) {
   if (self == nil || field == nil) return;
-  LCGPBFileSyntax syntax = [self descriptor].file.syntax;
-  LCGPBSetRetainedObjectIvarWithFieldInternal(self, field, [value copy],
-                                            syntax);
+  LCGPBSetRetainedObjectIvarWithFieldPrivate(self, field, [value copy]);
 }
 #endif  // !defined(__clang_analyzer__)
 
-void LCGPBSetObjectIvarWithFieldInternal(LCGPBMessage *self,
-                                       LCGPBFieldDescriptor *field, id value,
-                                       LCGPBFileSyntax syntax) {
-  LCGPBSetRetainedObjectIvarWithFieldInternal(self, field, [value retain],
-                                            syntax);
+void LCGPBSetObjectIvarWithFieldPrivate(LCGPBMessage *self,
+                                      LCGPBFieldDescriptor *field, id value) {
+  LCGPBSetRetainedObjectIvarWithFieldPrivate(self, field, [value retain]);
 }
 
-void LCGPBSetRetainedObjectIvarWithFieldInternal(LCGPBMessage *self,
-                                               LCGPBFieldDescriptor *field,
-                                               id value, LCGPBFileSyntax syntax) {
+void LCGPBSetRetainedObjectIvarWithFieldPrivate(LCGPBMessage *self,
+                                              LCGPBFieldDescriptor *field,
+                                              id value) {
   NSCAssert(self->messageStorage_ != NULL,
             @"%@: All messages should have storage (from init)",
             [self class]);
@@ -579,39 +586,30 @@ void LCGPBSetRetainedObjectIvarWithFieldInternal(LCGPBMessage *self,
     // valueData/valueMessage.
   }
 #endif  // DEBUG
+  LCGPBMessageFieldDescription *fieldDesc = field->description_;
   if (!isMapOrArray) {
     // Non repeated/map can be in an oneof, clear any existing value from the
     // oneof.
     LCGPBOneofDescriptor *oneof = field->containingOneof_;
     if (oneof) {
-      LCGPBMessageFieldDescription *fieldDesc = field->description_;
-      LCGPBMaybeClearOneof(self, oneof, fieldDesc->hasIndex, fieldDesc->number);
+      LCGPBMaybeClearOneofPrivate(self, oneof, fieldDesc->hasIndex, fieldDesc->number);
     }
     // Clear "has" if they are being set to nil.
     BOOL setHasValue = (value != nil);
-    // Under proto3, Bytes & String fields get cleared by resetting them to
-    // their default (empty) values, so if they are set to something of length
-    // zero, they are being cleared.
-    if ((syntax == LCGPBFileSyntaxProto3) && !fieldIsMessage &&
+    // If the field should clear on a "zero" value, then check if the string/data
+    // was zero length, and clear instead.
+    if (((fieldDesc->flags & LCGPBFieldClearHasIvarOnZero) != 0) &&
         ([value length] == 0)) {
-      // Except, if the field was in a oneof, then it still gets recorded as
-      // having been set so the state of the oneof can be serialized back out.
-      if (!oneof) {
-        setHasValue = NO;
-      }
-      if (setHasValue) {
-        NSCAssert(value != nil, @"Should never be setting has for nil");
-      } else {
-        // The value passed in was retained, it must be released since we
-        // aren't saving anything in the field.
-        [value release];
-        value = nil;
-      }
+      setHasValue = NO;
+      // The value passed in was retained, it must be released since we
+      // aren't saving anything in the field.
+      [value release];
+      value = nil;
     }
-    LCGPBSetHasIvarField(self, field, setHasValue);
+    LCGPBSetHasIvar(self, fieldDesc->hasIndex, fieldDesc->number, setHasValue);
   }
   uint8_t *storage = (uint8_t *)self->messageStorage_;
-  id *typePtr = (id *)&storage[field->description_->offset];
+  id *typePtr = (id *)&storage[fieldDesc->offset];
 
   id oldValue = *typePtr;
 
@@ -678,23 +676,22 @@ id LCGPBGetObjectIvarWithFieldNoAutocreate(LCGPBMessage *self,
 
 // Only exists for public api, no core code should use this.
 int32_t LCGPBGetMessageEnumField(LCGPBMessage *self, LCGPBFieldDescriptor *field) {
-  LCGPBFileSyntax syntax = [self descriptor].file.syntax;
-  return LCGPBGetEnumIvarWithFieldInternal(self, field, syntax);
-}
+  #if defined(DEBUG) && DEBUG
+    NSCAssert([[self descriptor] fieldWithNumber:field.number] == field,
+              @"FieldDescriptor %@ doesn't appear to be for %@ messages.",
+              field.name, [self class]);
+    NSCAssert(LCGPBGetFieldDataType(field) == LCGPBDataTypeEnum,
+              @"Attempting to get value of type Enum from field %@ "
+              @"of %@ which is of type %@.",
+              [self class], field.name,
+              TypeToString(LCGPBGetFieldDataType(field)));
+  #endif
 
-int32_t LCGPBGetEnumIvarWithFieldInternal(LCGPBMessage *self,
-                                        LCGPBFieldDescriptor *field,
-                                        LCGPBFileSyntax syntax) {
-#if defined(DEBUG) && DEBUG
-  NSCAssert(LCGPBGetFieldDataType(field) == LCGPBDataTypeEnum,
-            @"Attempting to get value of type Enum from field %@ "
-            @"of %@ which is of type %@.",
-            [self class], field.name,
-            TypeToString(LCGPBGetFieldDataType(field)));
-#endif
   int32_t result = LCGPBGetMessageInt32Field(self, field);
   // If this is presevering unknown enums, make sure the value is valid before
   // returning it.
+
+  LCGPBFileSyntax syntax = [self descriptor].file.syntax;
   if (LCGPBHasPreservingUnknownEnumSemantics(syntax) &&
       ![field isValidEnumValue:result]) {
     result = kLCGPBUnrecognizedEnumeratorValue;
@@ -705,27 +702,28 @@ int32_t LCGPBGetEnumIvarWithFieldInternal(LCGPBMessage *self,
 // Only exists for public api, no core code should use this.
 void LCGPBSetMessageEnumField(LCGPBMessage *self, LCGPBFieldDescriptor *field,
                             int32_t value) {
-  LCGPBFileSyntax syntax = [self descriptor].file.syntax;
-  LCGPBSetInt32IvarWithFieldInternal(self, field, value, syntax);
+  #if defined(DEBUG) && DEBUG
+    NSCAssert([[self descriptor] fieldWithNumber:field.number] == field,
+              @"FieldDescriptor %@ doesn't appear to be for %@ messages.",
+              field.name, [self class]);
+    NSCAssert(LCGPBGetFieldDataType(field) == LCGPBDataTypeEnum,
+              @"Attempting to set field %@ of %@ which is of type %@ with "
+              @"value of type Enum.",
+              [self class], field.name,
+              TypeToString(LCGPBGetFieldDataType(field)));
+  #endif
+  LCGPBSetEnumIvarWithFieldPrivate(self, field, value);
 }
 
-void LCGPBSetEnumIvarWithFieldInternal(LCGPBMessage *self,
-                                     LCGPBFieldDescriptor *field, int32_t value,
-                                     LCGPBFileSyntax syntax) {
-#if defined(DEBUG) && DEBUG
-  NSCAssert(LCGPBGetFieldDataType(field) == LCGPBDataTypeEnum,
-            @"Attempting to set field %@ of %@ which is of type %@ with "
-            @"value of type Enum.",
-            [self class], field.name,
-            TypeToString(LCGPBGetFieldDataType(field)));
-#endif
+void LCGPBSetEnumIvarWithFieldPrivate(LCGPBMessage *self,
+                                    LCGPBFieldDescriptor *field, int32_t value) {
   // Don't allow in unknown values.  Proto3 can use the Raw method.
   if (![field isValidEnumValue:value]) {
     [NSException raise:NSInvalidArgumentException
                 format:@"%@.%@: Attempt to set an unknown enum value (%d)",
                        [self class], field.name, value];
   }
-  LCGPBSetInt32IvarWithFieldInternal(self, field, value, syntax);
+  LCGPBSetInt32IvarWithFieldPrivate(self, field, value);
 }
 
 // Only exists for public api, no core code should use this.
@@ -738,13 +736,15 @@ int32_t LCGPBGetMessageRawEnumField(LCGPBMessage *self,
 // Only exists for public api, no core code should use this.
 void LCGPBSetMessageRawEnumField(LCGPBMessage *self, LCGPBFieldDescriptor *field,
                                int32_t value) {
-  LCGPBFileSyntax syntax = [self descriptor].file.syntax;
-  LCGPBSetInt32IvarWithFieldInternal(self, field, value, syntax);
+  LCGPBSetInt32IvarWithFieldPrivate(self, field, value);
 }
 
 BOOL LCGPBGetMessageBoolField(LCGPBMessage *self,
                             LCGPBFieldDescriptor *field) {
 #if defined(DEBUG) && DEBUG
+  NSCAssert([[self descriptor] fieldWithNumber:field.number] == field,
+            @"FieldDescriptor %@ doesn't appear to be for %@ messages.",
+            field.name, [self class]);
   NSCAssert(DataTypesEquivalent(LCGPBGetFieldDataType(field), LCGPBDataTypeBool),
             @"Attempting to get value of type bool from field %@ "
             @"of %@ which is of type %@.",
@@ -768,25 +768,26 @@ void LCGPBSetMessageBoolField(LCGPBMessage *self,
                             LCGPBFieldDescriptor *field,
                             BOOL value) {
   if (self == nil || field == nil) return;
-  LCGPBFileSyntax syntax = [self descriptor].file.syntax;
-  LCGPBSetBoolIvarWithFieldInternal(self, field, value, syntax);
+  #if defined(DEBUG) && DEBUG
+    NSCAssert([[self descriptor] fieldWithNumber:field.number] == field,
+              @"FieldDescriptor %@ doesn't appear to be for %@ messages.",
+              field.name, [self class]);
+    NSCAssert(DataTypesEquivalent(LCGPBGetFieldDataType(field), LCGPBDataTypeBool),
+              @"Attempting to set field %@ of %@ which is of type %@ with "
+              @"value of type bool.",
+              [self class], field.name,
+              TypeToString(LCGPBGetFieldDataType(field)));
+  #endif
+  LCGPBSetBoolIvarWithFieldPrivate(self, field, value);
 }
 
-void LCGPBSetBoolIvarWithFieldInternal(LCGPBMessage *self,
-                                     LCGPBFieldDescriptor *field,
-                                     BOOL value,
-                                     LCGPBFileSyntax syntax) {
-#if defined(DEBUG) && DEBUG
-  NSCAssert(DataTypesEquivalent(LCGPBGetFieldDataType(field), LCGPBDataTypeBool),
-            @"Attempting to set field %@ of %@ which is of type %@ with "
-            @"value of type bool.",
-            [self class], field.name,
-            TypeToString(LCGPBGetFieldDataType(field)));
-#endif
+void LCGPBSetBoolIvarWithFieldPrivate(LCGPBMessage *self,
+                                    LCGPBFieldDescriptor *field,
+                                    BOOL value) {
   LCGPBMessageFieldDescription *fieldDesc = field->description_;
   LCGPBOneofDescriptor *oneof = field->containingOneof_;
   if (oneof) {
-    LCGPBMaybeClearOneof(self, oneof, fieldDesc->hasIndex, fieldDesc->number);
+    LCGPBMaybeClearOneofPrivate(self, oneof, fieldDesc->hasIndex, fieldDesc->number);
   }
 
   // Bools are stored in the has bits to avoid needing explicit space in the
@@ -795,21 +796,24 @@ void LCGPBSetBoolIvarWithFieldInternal(LCGPBMessage *self,
   // the offset is never negative)
   LCGPBSetHasIvar(self, (int32_t)(fieldDesc->offset), fieldDesc->number, value);
 
-  // proto2: any value counts as having been set; proto3, it
-  // has to be a non zero value or be in a oneof.
-  BOOL hasValue = ((syntax == LCGPBFileSyntaxProto2)
-                   || (value != (BOOL)0)
-                   || (field->containingOneof_ != NULL));
-  LCGPBSetHasIvarField(self, field, hasValue);
+  // If the value is zero, then we only count the field as "set" if the field
+  // shouldn't auto clear on zero.
+  BOOL hasValue = ((value != (BOOL)0)
+                   || ((fieldDesc->flags & LCGPBFieldClearHasIvarOnZero) == 0));
+  LCGPBSetHasIvar(self, fieldDesc->hasIndex, fieldDesc->number, hasValue);
   LCGPBBecomeVisibleToAutocreator(self);
 }
 
 //%PDDM-EXPAND IVAR_POD_ACCESSORS_DEFN(Int32, int32_t)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
 int32_t LCGPBGetMessageInt32Field(LCGPBMessage *self,
                                 LCGPBFieldDescriptor *field) {
 #if defined(DEBUG) && DEBUG
+  NSCAssert([[self descriptor] fieldWithNumber:field.number] == field,
+            @"FieldDescriptor %@ doesn't appear to be for %@ messages.",
+            field.name, [self class]);
   NSCAssert(DataTypesEquivalent(LCGPBGetFieldDataType(field),
                                 LCGPBDataTypeInt32),
             @"Attempting to get value of int32_t from field %@ "
@@ -831,15 +835,10 @@ void LCGPBSetMessageInt32Field(LCGPBMessage *self,
                              LCGPBFieldDescriptor *field,
                              int32_t value) {
   if (self == nil || field == nil) return;
-  LCGPBFileSyntax syntax = [self descriptor].file.syntax;
-  LCGPBSetInt32IvarWithFieldInternal(self, field, value, syntax);
-}
-
-void LCGPBSetInt32IvarWithFieldInternal(LCGPBMessage *self,
-                                      LCGPBFieldDescriptor *field,
-                                      int32_t value,
-                                      LCGPBFileSyntax syntax) {
 #if defined(DEBUG) && DEBUG
+  NSCAssert([[self descriptor] fieldWithNumber:field.number] == field,
+            @"FieldDescriptor %@ doesn't appear to be for %@ messages.",
+            field.name, [self class]);
   NSCAssert(DataTypesEquivalent(LCGPBGetFieldDataType(field),
                                 LCGPBDataTypeInt32),
             @"Attempting to set field %@ of %@ which is of type %@ with "
@@ -847,10 +846,16 @@ void LCGPBSetInt32IvarWithFieldInternal(LCGPBMessage *self,
             [self class], field.name,
             TypeToString(LCGPBGetFieldDataType(field)));
 #endif
+  LCGPBSetInt32IvarWithFieldPrivate(self, field, value);
+}
+
+void LCGPBSetInt32IvarWithFieldPrivate(LCGPBMessage *self,
+                                     LCGPBFieldDescriptor *field,
+                                     int32_t value) {
   LCGPBOneofDescriptor *oneof = field->containingOneof_;
+  LCGPBMessageFieldDescription *fieldDesc = field->description_;
   if (oneof) {
-    LCGPBMessageFieldDescription *fieldDesc = field->description_;
-    LCGPBMaybeClearOneof(self, oneof, fieldDesc->hasIndex, fieldDesc->number);
+    LCGPBMaybeClearOneofPrivate(self, oneof, fieldDesc->hasIndex, fieldDesc->number);
   }
 #if defined(DEBUG) && DEBUG
   NSCAssert(self->messageStorage_ != NULL,
@@ -861,23 +866,27 @@ void LCGPBSetInt32IvarWithFieldInternal(LCGPBMessage *self,
   if (self->messageStorage_ == NULL) return;
 #endif
   uint8_t *storage = (uint8_t *)self->messageStorage_;
-  int32_t *typePtr = (int32_t *)&storage[field->description_->offset];
+  int32_t *typePtr = (int32_t *)&storage[fieldDesc->offset];
   *typePtr = value;
-  // proto2: any value counts as having been set; proto3, it
-  // has to be a non zero value or be in a oneof.
-  BOOL hasValue = ((syntax == LCGPBFileSyntaxProto2)
-                   || (value != (int32_t)0)
-                   || (field->containingOneof_ != NULL));
-  LCGPBSetHasIvarField(self, field, hasValue);
+  // If the value is zero, then we only count the field as "set" if the field
+  // shouldn't auto clear on zero.
+  BOOL hasValue = ((value != (int32_t)0)
+                   || ((fieldDesc->flags & LCGPBFieldClearHasIvarOnZero) == 0));
+  LCGPBSetHasIvar(self, fieldDesc->hasIndex, fieldDesc->number, hasValue);
   LCGPBBecomeVisibleToAutocreator(self);
 }
 
+// clang-format on
 //%PDDM-EXPAND IVAR_POD_ACCESSORS_DEFN(UInt32, uint32_t)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
 uint32_t LCGPBGetMessageUInt32Field(LCGPBMessage *self,
                                   LCGPBFieldDescriptor *field) {
 #if defined(DEBUG) && DEBUG
+  NSCAssert([[self descriptor] fieldWithNumber:field.number] == field,
+            @"FieldDescriptor %@ doesn't appear to be for %@ messages.",
+            field.name, [self class]);
   NSCAssert(DataTypesEquivalent(LCGPBGetFieldDataType(field),
                                 LCGPBDataTypeUInt32),
             @"Attempting to get value of uint32_t from field %@ "
@@ -899,15 +908,10 @@ void LCGPBSetMessageUInt32Field(LCGPBMessage *self,
                               LCGPBFieldDescriptor *field,
                               uint32_t value) {
   if (self == nil || field == nil) return;
-  LCGPBFileSyntax syntax = [self descriptor].file.syntax;
-  LCGPBSetUInt32IvarWithFieldInternal(self, field, value, syntax);
-}
-
-void LCGPBSetUInt32IvarWithFieldInternal(LCGPBMessage *self,
-                                       LCGPBFieldDescriptor *field,
-                                       uint32_t value,
-                                       LCGPBFileSyntax syntax) {
 #if defined(DEBUG) && DEBUG
+  NSCAssert([[self descriptor] fieldWithNumber:field.number] == field,
+            @"FieldDescriptor %@ doesn't appear to be for %@ messages.",
+            field.name, [self class]);
   NSCAssert(DataTypesEquivalent(LCGPBGetFieldDataType(field),
                                 LCGPBDataTypeUInt32),
             @"Attempting to set field %@ of %@ which is of type %@ with "
@@ -915,10 +919,16 @@ void LCGPBSetUInt32IvarWithFieldInternal(LCGPBMessage *self,
             [self class], field.name,
             TypeToString(LCGPBGetFieldDataType(field)));
 #endif
+  LCGPBSetUInt32IvarWithFieldPrivate(self, field, value);
+}
+
+void LCGPBSetUInt32IvarWithFieldPrivate(LCGPBMessage *self,
+                                      LCGPBFieldDescriptor *field,
+                                      uint32_t value) {
   LCGPBOneofDescriptor *oneof = field->containingOneof_;
+  LCGPBMessageFieldDescription *fieldDesc = field->description_;
   if (oneof) {
-    LCGPBMessageFieldDescription *fieldDesc = field->description_;
-    LCGPBMaybeClearOneof(self, oneof, fieldDesc->hasIndex, fieldDesc->number);
+    LCGPBMaybeClearOneofPrivate(self, oneof, fieldDesc->hasIndex, fieldDesc->number);
   }
 #if defined(DEBUG) && DEBUG
   NSCAssert(self->messageStorage_ != NULL,
@@ -929,23 +939,27 @@ void LCGPBSetUInt32IvarWithFieldInternal(LCGPBMessage *self,
   if (self->messageStorage_ == NULL) return;
 #endif
   uint8_t *storage = (uint8_t *)self->messageStorage_;
-  uint32_t *typePtr = (uint32_t *)&storage[field->description_->offset];
+  uint32_t *typePtr = (uint32_t *)&storage[fieldDesc->offset];
   *typePtr = value;
-  // proto2: any value counts as having been set; proto3, it
-  // has to be a non zero value or be in a oneof.
-  BOOL hasValue = ((syntax == LCGPBFileSyntaxProto2)
-                   || (value != (uint32_t)0)
-                   || (field->containingOneof_ != NULL));
-  LCGPBSetHasIvarField(self, field, hasValue);
+  // If the value is zero, then we only count the field as "set" if the field
+  // shouldn't auto clear on zero.
+  BOOL hasValue = ((value != (uint32_t)0)
+                   || ((fieldDesc->flags & LCGPBFieldClearHasIvarOnZero) == 0));
+  LCGPBSetHasIvar(self, fieldDesc->hasIndex, fieldDesc->number, hasValue);
   LCGPBBecomeVisibleToAutocreator(self);
 }
 
+// clang-format on
 //%PDDM-EXPAND IVAR_POD_ACCESSORS_DEFN(Int64, int64_t)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
 int64_t LCGPBGetMessageInt64Field(LCGPBMessage *self,
                                 LCGPBFieldDescriptor *field) {
 #if defined(DEBUG) && DEBUG
+  NSCAssert([[self descriptor] fieldWithNumber:field.number] == field,
+            @"FieldDescriptor %@ doesn't appear to be for %@ messages.",
+            field.name, [self class]);
   NSCAssert(DataTypesEquivalent(LCGPBGetFieldDataType(field),
                                 LCGPBDataTypeInt64),
             @"Attempting to get value of int64_t from field %@ "
@@ -967,15 +981,10 @@ void LCGPBSetMessageInt64Field(LCGPBMessage *self,
                              LCGPBFieldDescriptor *field,
                              int64_t value) {
   if (self == nil || field == nil) return;
-  LCGPBFileSyntax syntax = [self descriptor].file.syntax;
-  LCGPBSetInt64IvarWithFieldInternal(self, field, value, syntax);
-}
-
-void LCGPBSetInt64IvarWithFieldInternal(LCGPBMessage *self,
-                                      LCGPBFieldDescriptor *field,
-                                      int64_t value,
-                                      LCGPBFileSyntax syntax) {
 #if defined(DEBUG) && DEBUG
+  NSCAssert([[self descriptor] fieldWithNumber:field.number] == field,
+            @"FieldDescriptor %@ doesn't appear to be for %@ messages.",
+            field.name, [self class]);
   NSCAssert(DataTypesEquivalent(LCGPBGetFieldDataType(field),
                                 LCGPBDataTypeInt64),
             @"Attempting to set field %@ of %@ which is of type %@ with "
@@ -983,10 +992,16 @@ void LCGPBSetInt64IvarWithFieldInternal(LCGPBMessage *self,
             [self class], field.name,
             TypeToString(LCGPBGetFieldDataType(field)));
 #endif
+  LCGPBSetInt64IvarWithFieldPrivate(self, field, value);
+}
+
+void LCGPBSetInt64IvarWithFieldPrivate(LCGPBMessage *self,
+                                     LCGPBFieldDescriptor *field,
+                                     int64_t value) {
   LCGPBOneofDescriptor *oneof = field->containingOneof_;
+  LCGPBMessageFieldDescription *fieldDesc = field->description_;
   if (oneof) {
-    LCGPBMessageFieldDescription *fieldDesc = field->description_;
-    LCGPBMaybeClearOneof(self, oneof, fieldDesc->hasIndex, fieldDesc->number);
+    LCGPBMaybeClearOneofPrivate(self, oneof, fieldDesc->hasIndex, fieldDesc->number);
   }
 #if defined(DEBUG) && DEBUG
   NSCAssert(self->messageStorage_ != NULL,
@@ -997,23 +1012,27 @@ void LCGPBSetInt64IvarWithFieldInternal(LCGPBMessage *self,
   if (self->messageStorage_ == NULL) return;
 #endif
   uint8_t *storage = (uint8_t *)self->messageStorage_;
-  int64_t *typePtr = (int64_t *)&storage[field->description_->offset];
+  int64_t *typePtr = (int64_t *)&storage[fieldDesc->offset];
   *typePtr = value;
-  // proto2: any value counts as having been set; proto3, it
-  // has to be a non zero value or be in a oneof.
-  BOOL hasValue = ((syntax == LCGPBFileSyntaxProto2)
-                   || (value != (int64_t)0)
-                   || (field->containingOneof_ != NULL));
-  LCGPBSetHasIvarField(self, field, hasValue);
+  // If the value is zero, then we only count the field as "set" if the field
+  // shouldn't auto clear on zero.
+  BOOL hasValue = ((value != (int64_t)0)
+                   || ((fieldDesc->flags & LCGPBFieldClearHasIvarOnZero) == 0));
+  LCGPBSetHasIvar(self, fieldDesc->hasIndex, fieldDesc->number, hasValue);
   LCGPBBecomeVisibleToAutocreator(self);
 }
 
+// clang-format on
 //%PDDM-EXPAND IVAR_POD_ACCESSORS_DEFN(UInt64, uint64_t)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
 uint64_t LCGPBGetMessageUInt64Field(LCGPBMessage *self,
                                   LCGPBFieldDescriptor *field) {
 #if defined(DEBUG) && DEBUG
+  NSCAssert([[self descriptor] fieldWithNumber:field.number] == field,
+            @"FieldDescriptor %@ doesn't appear to be for %@ messages.",
+            field.name, [self class]);
   NSCAssert(DataTypesEquivalent(LCGPBGetFieldDataType(field),
                                 LCGPBDataTypeUInt64),
             @"Attempting to get value of uint64_t from field %@ "
@@ -1035,15 +1054,10 @@ void LCGPBSetMessageUInt64Field(LCGPBMessage *self,
                               LCGPBFieldDescriptor *field,
                               uint64_t value) {
   if (self == nil || field == nil) return;
-  LCGPBFileSyntax syntax = [self descriptor].file.syntax;
-  LCGPBSetUInt64IvarWithFieldInternal(self, field, value, syntax);
-}
-
-void LCGPBSetUInt64IvarWithFieldInternal(LCGPBMessage *self,
-                                       LCGPBFieldDescriptor *field,
-                                       uint64_t value,
-                                       LCGPBFileSyntax syntax) {
 #if defined(DEBUG) && DEBUG
+  NSCAssert([[self descriptor] fieldWithNumber:field.number] == field,
+            @"FieldDescriptor %@ doesn't appear to be for %@ messages.",
+            field.name, [self class]);
   NSCAssert(DataTypesEquivalent(LCGPBGetFieldDataType(field),
                                 LCGPBDataTypeUInt64),
             @"Attempting to set field %@ of %@ which is of type %@ with "
@@ -1051,10 +1065,16 @@ void LCGPBSetUInt64IvarWithFieldInternal(LCGPBMessage *self,
             [self class], field.name,
             TypeToString(LCGPBGetFieldDataType(field)));
 #endif
+  LCGPBSetUInt64IvarWithFieldPrivate(self, field, value);
+}
+
+void LCGPBSetUInt64IvarWithFieldPrivate(LCGPBMessage *self,
+                                      LCGPBFieldDescriptor *field,
+                                      uint64_t value) {
   LCGPBOneofDescriptor *oneof = field->containingOneof_;
+  LCGPBMessageFieldDescription *fieldDesc = field->description_;
   if (oneof) {
-    LCGPBMessageFieldDescription *fieldDesc = field->description_;
-    LCGPBMaybeClearOneof(self, oneof, fieldDesc->hasIndex, fieldDesc->number);
+    LCGPBMaybeClearOneofPrivate(self, oneof, fieldDesc->hasIndex, fieldDesc->number);
   }
 #if defined(DEBUG) && DEBUG
   NSCAssert(self->messageStorage_ != NULL,
@@ -1065,23 +1085,27 @@ void LCGPBSetUInt64IvarWithFieldInternal(LCGPBMessage *self,
   if (self->messageStorage_ == NULL) return;
 #endif
   uint8_t *storage = (uint8_t *)self->messageStorage_;
-  uint64_t *typePtr = (uint64_t *)&storage[field->description_->offset];
+  uint64_t *typePtr = (uint64_t *)&storage[fieldDesc->offset];
   *typePtr = value;
-  // proto2: any value counts as having been set; proto3, it
-  // has to be a non zero value or be in a oneof.
-  BOOL hasValue = ((syntax == LCGPBFileSyntaxProto2)
-                   || (value != (uint64_t)0)
-                   || (field->containingOneof_ != NULL));
-  LCGPBSetHasIvarField(self, field, hasValue);
+  // If the value is zero, then we only count the field as "set" if the field
+  // shouldn't auto clear on zero.
+  BOOL hasValue = ((value != (uint64_t)0)
+                   || ((fieldDesc->flags & LCGPBFieldClearHasIvarOnZero) == 0));
+  LCGPBSetHasIvar(self, fieldDesc->hasIndex, fieldDesc->number, hasValue);
   LCGPBBecomeVisibleToAutocreator(self);
 }
 
+// clang-format on
 //%PDDM-EXPAND IVAR_POD_ACCESSORS_DEFN(Float, float)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
 float LCGPBGetMessageFloatField(LCGPBMessage *self,
                               LCGPBFieldDescriptor *field) {
 #if defined(DEBUG) && DEBUG
+  NSCAssert([[self descriptor] fieldWithNumber:field.number] == field,
+            @"FieldDescriptor %@ doesn't appear to be for %@ messages.",
+            field.name, [self class]);
   NSCAssert(DataTypesEquivalent(LCGPBGetFieldDataType(field),
                                 LCGPBDataTypeFloat),
             @"Attempting to get value of float from field %@ "
@@ -1103,15 +1127,10 @@ void LCGPBSetMessageFloatField(LCGPBMessage *self,
                              LCGPBFieldDescriptor *field,
                              float value) {
   if (self == nil || field == nil) return;
-  LCGPBFileSyntax syntax = [self descriptor].file.syntax;
-  LCGPBSetFloatIvarWithFieldInternal(self, field, value, syntax);
-}
-
-void LCGPBSetFloatIvarWithFieldInternal(LCGPBMessage *self,
-                                      LCGPBFieldDescriptor *field,
-                                      float value,
-                                      LCGPBFileSyntax syntax) {
 #if defined(DEBUG) && DEBUG
+  NSCAssert([[self descriptor] fieldWithNumber:field.number] == field,
+            @"FieldDescriptor %@ doesn't appear to be for %@ messages.",
+            field.name, [self class]);
   NSCAssert(DataTypesEquivalent(LCGPBGetFieldDataType(field),
                                 LCGPBDataTypeFloat),
             @"Attempting to set field %@ of %@ which is of type %@ with "
@@ -1119,10 +1138,16 @@ void LCGPBSetFloatIvarWithFieldInternal(LCGPBMessage *self,
             [self class], field.name,
             TypeToString(LCGPBGetFieldDataType(field)));
 #endif
+  LCGPBSetFloatIvarWithFieldPrivate(self, field, value);
+}
+
+void LCGPBSetFloatIvarWithFieldPrivate(LCGPBMessage *self,
+                                     LCGPBFieldDescriptor *field,
+                                     float value) {
   LCGPBOneofDescriptor *oneof = field->containingOneof_;
+  LCGPBMessageFieldDescription *fieldDesc = field->description_;
   if (oneof) {
-    LCGPBMessageFieldDescription *fieldDesc = field->description_;
-    LCGPBMaybeClearOneof(self, oneof, fieldDesc->hasIndex, fieldDesc->number);
+    LCGPBMaybeClearOneofPrivate(self, oneof, fieldDesc->hasIndex, fieldDesc->number);
   }
 #if defined(DEBUG) && DEBUG
   NSCAssert(self->messageStorage_ != NULL,
@@ -1133,23 +1158,27 @@ void LCGPBSetFloatIvarWithFieldInternal(LCGPBMessage *self,
   if (self->messageStorage_ == NULL) return;
 #endif
   uint8_t *storage = (uint8_t *)self->messageStorage_;
-  float *typePtr = (float *)&storage[field->description_->offset];
+  float *typePtr = (float *)&storage[fieldDesc->offset];
   *typePtr = value;
-  // proto2: any value counts as having been set; proto3, it
-  // has to be a non zero value or be in a oneof.
-  BOOL hasValue = ((syntax == LCGPBFileSyntaxProto2)
-                   || (value != (float)0)
-                   || (field->containingOneof_ != NULL));
-  LCGPBSetHasIvarField(self, field, hasValue);
+  // If the value is zero, then we only count the field as "set" if the field
+  // shouldn't auto clear on zero.
+  BOOL hasValue = ((value != (float)0)
+                   || ((fieldDesc->flags & LCGPBFieldClearHasIvarOnZero) == 0));
+  LCGPBSetHasIvar(self, fieldDesc->hasIndex, fieldDesc->number, hasValue);
   LCGPBBecomeVisibleToAutocreator(self);
 }
 
+// clang-format on
 //%PDDM-EXPAND IVAR_POD_ACCESSORS_DEFN(Double, double)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
 double LCGPBGetMessageDoubleField(LCGPBMessage *self,
                                 LCGPBFieldDescriptor *field) {
 #if defined(DEBUG) && DEBUG
+  NSCAssert([[self descriptor] fieldWithNumber:field.number] == field,
+            @"FieldDescriptor %@ doesn't appear to be for %@ messages.",
+            field.name, [self class]);
   NSCAssert(DataTypesEquivalent(LCGPBGetFieldDataType(field),
                                 LCGPBDataTypeDouble),
             @"Attempting to get value of double from field %@ "
@@ -1171,15 +1200,10 @@ void LCGPBSetMessageDoubleField(LCGPBMessage *self,
                               LCGPBFieldDescriptor *field,
                               double value) {
   if (self == nil || field == nil) return;
-  LCGPBFileSyntax syntax = [self descriptor].file.syntax;
-  LCGPBSetDoubleIvarWithFieldInternal(self, field, value, syntax);
-}
-
-void LCGPBSetDoubleIvarWithFieldInternal(LCGPBMessage *self,
-                                       LCGPBFieldDescriptor *field,
-                                       double value,
-                                       LCGPBFileSyntax syntax) {
 #if defined(DEBUG) && DEBUG
+  NSCAssert([[self descriptor] fieldWithNumber:field.number] == field,
+            @"FieldDescriptor %@ doesn't appear to be for %@ messages.",
+            field.name, [self class]);
   NSCAssert(DataTypesEquivalent(LCGPBGetFieldDataType(field),
                                 LCGPBDataTypeDouble),
             @"Attempting to set field %@ of %@ which is of type %@ with "
@@ -1187,10 +1211,16 @@ void LCGPBSetDoubleIvarWithFieldInternal(LCGPBMessage *self,
             [self class], field.name,
             TypeToString(LCGPBGetFieldDataType(field)));
 #endif
+  LCGPBSetDoubleIvarWithFieldPrivate(self, field, value);
+}
+
+void LCGPBSetDoubleIvarWithFieldPrivate(LCGPBMessage *self,
+                                      LCGPBFieldDescriptor *field,
+                                      double value) {
   LCGPBOneofDescriptor *oneof = field->containingOneof_;
+  LCGPBMessageFieldDescription *fieldDesc = field->description_;
   if (oneof) {
-    LCGPBMessageFieldDescription *fieldDesc = field->description_;
-    LCGPBMaybeClearOneof(self, oneof, fieldDesc->hasIndex, fieldDesc->number);
+    LCGPBMaybeClearOneofPrivate(self, oneof, fieldDesc->hasIndex, fieldDesc->number);
   }
 #if defined(DEBUG) && DEBUG
   NSCAssert(self->messageStorage_ != NULL,
@@ -1201,23 +1231,24 @@ void LCGPBSetDoubleIvarWithFieldInternal(LCGPBMessage *self,
   if (self->messageStorage_ == NULL) return;
 #endif
   uint8_t *storage = (uint8_t *)self->messageStorage_;
-  double *typePtr = (double *)&storage[field->description_->offset];
+  double *typePtr = (double *)&storage[fieldDesc->offset];
   *typePtr = value;
-  // proto2: any value counts as having been set; proto3, it
-  // has to be a non zero value or be in a oneof.
-  BOOL hasValue = ((syntax == LCGPBFileSyntaxProto2)
-                   || (value != (double)0)
-                   || (field->containingOneof_ != NULL));
-  LCGPBSetHasIvarField(self, field, hasValue);
+  // If the value is zero, then we only count the field as "set" if the field
+  // shouldn't auto clear on zero.
+  BOOL hasValue = ((value != (double)0)
+                   || ((fieldDesc->flags & LCGPBFieldClearHasIvarOnZero) == 0));
+  LCGPBSetHasIvar(self, fieldDesc->hasIndex, fieldDesc->number, hasValue);
   LCGPBBecomeVisibleToAutocreator(self);
 }
 
+// clang-format on
 //%PDDM-EXPAND-END (6 expansions)
 
 // Aliases are function calls that are virtually the same.
 
 //%PDDM-EXPAND IVAR_ALIAS_DEFN_COPY_OBJECT(String, NSString)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
 // Only exists for public api, no core code should use this.
 NSString *LCGPBGetMessageStringField(LCGPBMessage *self,
@@ -1248,8 +1279,10 @@ void LCGPBSetMessageStringField(LCGPBMessage *self,
   LCGPBSetCopyObjectIvarWithField(self, field, (id)value);
 }
 
+// clang-format on
 //%PDDM-EXPAND IVAR_ALIAS_DEFN_COPY_OBJECT(Bytes, NSData)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
 // Only exists for public api, no core code should use this.
 NSData *LCGPBGetMessageBytesField(LCGPBMessage *self,
@@ -1280,8 +1313,10 @@ void LCGPBSetMessageBytesField(LCGPBMessage *self,
   LCGPBSetCopyObjectIvarWithField(self, field, (id)value);
 }
 
+// clang-format on
 //%PDDM-EXPAND IVAR_ALIAS_DEFN_OBJECT(Message, LCGPBMessage)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
 // Only exists for public api, no core code should use this.
 LCGPBMessage *LCGPBGetMessageMessageField(LCGPBMessage *self,
@@ -1312,8 +1347,10 @@ void LCGPBSetMessageMessageField(LCGPBMessage *self,
   LCGPBSetObjectIvarWithField(self, field, (id)value);
 }
 
+// clang-format on
 //%PDDM-EXPAND IVAR_ALIAS_DEFN_OBJECT(Group, LCGPBMessage)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
 // Only exists for public api, no core code should use this.
 LCGPBMessage *LCGPBGetMessageGroupField(LCGPBMessage *self,
@@ -1344,6 +1381,7 @@ void LCGPBSetMessageGroupField(LCGPBMessage *self,
   LCGPBSetObjectIvarWithField(self, field, (id)value);
 }
 
+// clang-format on
 //%PDDM-EXPAND-END (4 expansions)
 
 // LCGPBGetMessageRepeatedField is defined in LCGPBMessage.m
@@ -2192,7 +2230,35 @@ NSString *LCGPBDecodeTextFormatName(const uint8_t *decodeData, int32_t key,
   return result;
 }
 
+#pragma mark Legacy methods old generated code calls
+
+// Shim from the older generated code into the runtime.
+void LCGPBSetInt32IvarWithFieldInternal(LCGPBMessage *self,
+                                      LCGPBFieldDescriptor *field,
+                                      int32_t value,
+                                      LCGPBFileSyntax syntax) {
+#pragma unused(syntax)
+  LCGPBSetMessageInt32Field(self, field, value);
+}
+
+void LCGPBMaybeClearOneof(LCGPBMessage *self, LCGPBOneofDescriptor *oneof,
+                        int32_t oneofHasIndex, uint32_t fieldNumberNotToClear) {
+#pragma unused(fieldNumberNotToClear)
+  #if defined(DEBUG) && DEBUG
+    NSCAssert([[self descriptor] oneofWithName:oneof.name] == oneof,
+              @"OneofDescriptor %@ doesn't appear to be for %@ messages.",
+              oneof.name, [self class]);
+    LCGPBFieldDescriptor *firstField = oneof->fields_[0];
+    NSCAssert(firstField->description_->hasIndex == oneofHasIndex,
+              @"Internal error, oneofHasIndex (%d) doesn't match (%d).",
+              firstField->description_->hasIndex, oneofHasIndex);
+  #endif
+  LCGPBMaybeClearOneofPrivate(self, oneof, oneofHasIndex, 0);
+}
+
 #pragma clang diagnostic pop
+
+#pragma mark Misc Helpers
 
 BOOL LCGPBClassHasSel(Class aClass, SEL sel) {
   // NOTE: We have to use class_copyMethodList, all other runtime method

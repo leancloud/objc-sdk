@@ -34,6 +34,8 @@
 #import "LCGPBMessage.h"
 #import "LCGPBRuntimeTypes.h"
 
+@class LCGPBOneofDescriptor;
+
 CF_EXTERN_C_BEGIN
 
 NS_ASSUME_NONNULL_BEGIN
@@ -92,8 +94,17 @@ BOOL LCGPBMessageHasFieldSet(LCGPBMessage *self, LCGPBFieldDescriptor *field);
  **/
 void LCGPBClearMessageField(LCGPBMessage *self, LCGPBFieldDescriptor *field);
 
+/**
+ * Clears the given oneof field for the given message.
+ *
+ * @param self  The message for which to clear the field.
+ * @param oneof The oneof to clear.
+ **/
+void LCGPBClearOneof(LCGPBMessage *self, LCGPBOneofDescriptor *oneof);
+
 //%PDDM-EXPAND LCGPB_ACCESSORS()
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
 
 //
@@ -384,6 +395,7 @@ void LCGPBSetMessageMapField(LCGPBMessage *self,
                            LCGPBFieldDescriptor *field,
                            id dictionary);
 
+// clang-format on
 //%PDDM-EXPAND-END LCGPB_ACCESSORS()
 
 /**

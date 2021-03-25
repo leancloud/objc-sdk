@@ -8,13 +8,13 @@
 #endif
 
 #if LCGPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <protobuf/LCGPBProtocolBuffers_RuntimeSupport.h>
+ #import <Protobuf/LCGPBProtocolBuffers_RuntimeSupport.h>
 #else
  #import "LCGPBProtocolBuffers_RuntimeSupport.h"
 #endif
 
 #if LCGPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <protobuf/FieldMask.pbobjc.h>
+ #import <Protobuf/LCGPBFieldMask.pbobjc.h>
 #else
  #import "LCGPBFieldMask.pbobjc.h"
 #endif
@@ -66,7 +66,7 @@ typedef struct LCGPBFieldMask__storage_ {
     static LCGPBMessageFieldDescription fields[] = {
       {
         .name = "pathsArray",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBFieldMask_FieldNumber_PathsArray,
         .hasIndex = LCGPBNoHasBit,
         .offset = (uint32_t)offsetof(LCGPBFieldMask__storage_, pathsArray),
@@ -81,7 +81,7 @@ typedef struct LCGPBFieldMask__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(LCGPBMessageFieldDescription))
                                    storageSize:sizeof(LCGPBFieldMask__storage_)
-                                         flags:LCGPBDescriptorInitializationFlag_None];
+                                         flags:(LCGPBDescriptorInitializationFlags)(LCGPBDescriptorInitializationFlag_UsesClassRefs | LCGPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
     #endif  // DEBUG

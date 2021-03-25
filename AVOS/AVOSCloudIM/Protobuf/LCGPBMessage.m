@@ -71,6 +71,8 @@ static NSString *const kLCGPBDataCoderKey = @"LCGPBData";
  @package
   LCGPBUnknownFieldSet *unknownFields_;
   NSMutableDictionary *extensionMap_;
+  // Readonly access to autocreatedExtensionMap_ is protected via
+  // readOnlySemaphore_.
   NSMutableDictionary *autocreatedExtensionMap_;
 
   // If the object was autocreated, we remember the creator so that if we get
@@ -79,10 +81,10 @@ static NSString *const kLCGPBDataCoderKey = @"LCGPBData";
   LCGPBFieldDescriptor *autocreatorField_;
   LCGPBExtensionDescriptor *autocreatorExtension_;
 
-  // A lock to provide mutual exclusion from internal data that can be modified
-  // by *read* operations such as getters (autocreation of message fields and
-  // message extensions, not setting of values). Used to guarantee thread safety
-  // for concurrent reads on the message.
+  // Message can only be mutated from one thread. But some *readonly* operations
+  // modify internal state because they autocreate things. The
+  // autocreatedExtensionMap_ is one such structure. Access during readonly
+  // operations is protected via this semaphore.
   // NOTE: OSSpinLock may seem like a good fit here but Apple engineers have
   // pointed out that they are vulnerable to live locking on iOS in cases of
   // priority inversion:
@@ -99,15 +101,13 @@ static id CreateArrayForField(LCGPBFieldDescriptor *field,
                               LCGPBMessage *autocreator)
     __attribute__((ns_returns_retained));
 static id GetOrCreateArrayIvarWithField(LCGPBMessage *self,
-                                        LCGPBFieldDescriptor *field,
-                                        LCGPBFileSyntax syntax);
+                                        LCGPBFieldDescriptor *field);
 static id GetArrayIvarWithField(LCGPBMessage *self, LCGPBFieldDescriptor *field);
 static id CreateMapForField(LCGPBFieldDescriptor *field,
                             LCGPBMessage *autocreator)
     __attribute__((ns_returns_retained));
 static id GetOrCreateMapIvarWithField(LCGPBMessage *self,
-                                      LCGPBFieldDescriptor *field,
-                                      LCGPBFileSyntax syntax);
+                                      LCGPBFieldDescriptor *field);
 static id GetMapIvarWithField(LCGPBMessage *self, LCGPBFieldDescriptor *field);
 static NSMutableDictionary *CloneExtensionMap(NSDictionary *extensionMap,
                                               NSZone *zone)
@@ -560,25 +560,24 @@ static id CreateMapForField(LCGPBFieldDescriptor *field,
 
 #if !defined(__clang_analyzer__)
 // These functions are blocked from the analyzer because the analyzer sees the
-// LCGPBSetRetainedObjectIvarWithFieldInternal() call as consuming the array/map,
+// LCGPBSetRetainedObjectIvarWithFieldPrivate() call as consuming the array/map,
 // so use of the array/map after the call returns is flagged as a use after
 // free.
-// But LCGPBSetRetainedObjectIvarWithFieldInternal() is "consuming" the retain
-// count be holding onto the object (it is transfering it), the object is
+// But LCGPBSetRetainedObjectIvarWithFieldPrivate() is "consuming" the retain
+// count be holding onto the object (it is transferring it), the object is
 // still valid after returning from the call.  The other way to avoid this
 // would be to add a -retain/-autorelease, but that would force every
 // repeated/map field parsed into the autorelease pool which is both a memory
 // and performance hit.
 
 static id GetOrCreateArrayIvarWithField(LCGPBMessage *self,
-                                        LCGPBFieldDescriptor *field,
-                                        LCGPBFileSyntax syntax) {
+                                        LCGPBFieldDescriptor *field) {
   id array = LCGPBGetObjectIvarWithFieldNoAutocreate(self, field);
   if (!array) {
     // No lock needed, this is called from places expecting to mutate
     // so no threading protection is needed.
     array = CreateArrayForField(field, nil);
-    LCGPBSetRetainedObjectIvarWithFieldInternal(self, field, array, syntax);
+    LCGPBSetRetainedObjectIvarWithFieldPrivate(self, field, array);
   }
   return array;
 }
@@ -586,30 +585,40 @@ static id GetOrCreateArrayIvarWithField(LCGPBMessage *self,
 // This is like LCGPBGetObjectIvarWithField(), but for arrays, it should
 // only be used to wire the method into the class.
 static id GetArrayIvarWithField(LCGPBMessage *self, LCGPBFieldDescriptor *field) {
-  id array = LCGPBGetObjectIvarWithFieldNoAutocreate(self, field);
-  if (!array) {
-    // Check again after getting the lock.
-    LCGPBPrepareReadOnlySemaphore(self);
-    dispatch_semaphore_wait(self->readOnlySemaphore_, DISPATCH_TIME_FOREVER);
-    array = LCGPBGetObjectIvarWithFieldNoAutocreate(self, field);
-    if (!array) {
-      array = CreateArrayForField(field, self);
-      LCGPBSetAutocreatedRetainedObjectIvarWithField(self, field, array);
-    }
-    dispatch_semaphore_signal(self->readOnlySemaphore_);
+  uint8_t *storage = (uint8_t *)self->messageStorage_;
+  _Atomic(id) *typePtr = (_Atomic(id) *)&storage[field->description_->offset];
+  id array = atomic_load(typePtr);
+  if (array) {
+    return array;
   }
-  return array;
+
+  id expected = nil;
+  id autocreated = CreateArrayForField(field, self);
+  if (atomic_compare_exchange_strong(typePtr, &expected, autocreated)) {
+    // Value was set, return it.
+    return autocreated;
+  }
+
+  // Some other thread set it, release the one created and return what got set.
+  if (LCGPBFieldDataTypeIsObject(field)) {
+    LCGPBAutocreatedArray *autoArray = autocreated;
+    autoArray->_autocreator = nil;
+  } else {
+    LCGPBInt32Array *gpbArray = autocreated;
+    gpbArray->_autocreator = nil;
+  }
+  [autocreated release];
+  return expected;
 }
 
 static id GetOrCreateMapIvarWithField(LCGPBMessage *self,
-                                      LCGPBFieldDescriptor *field,
-                                      LCGPBFileSyntax syntax) {
+                                      LCGPBFieldDescriptor *field) {
   id dict = LCGPBGetObjectIvarWithFieldNoAutocreate(self, field);
   if (!dict) {
     // No lock needed, this is called from places expecting to mutate
     // so no threading protection is needed.
     dict = CreateMapForField(field, nil);
-    LCGPBSetRetainedObjectIvarWithFieldInternal(self, field, dict, syntax);
+    LCGPBSetRetainedObjectIvarWithFieldPrivate(self, field, dict);
   }
   return dict;
 }
@@ -617,19 +626,31 @@ static id GetOrCreateMapIvarWithField(LCGPBMessage *self,
 // This is like LCGPBGetObjectIvarWithField(), but for maps, it should
 // only be used to wire the method into the class.
 static id GetMapIvarWithField(LCGPBMessage *self, LCGPBFieldDescriptor *field) {
-  id dict = LCGPBGetObjectIvarWithFieldNoAutocreate(self, field);
-  if (!dict) {
-    // Check again after getting the lock.
-    LCGPBPrepareReadOnlySemaphore(self);
-    dispatch_semaphore_wait(self->readOnlySemaphore_, DISPATCH_TIME_FOREVER);
-    dict = LCGPBGetObjectIvarWithFieldNoAutocreate(self, field);
-    if (!dict) {
-      dict = CreateMapForField(field, self);
-      LCGPBSetAutocreatedRetainedObjectIvarWithField(self, field, dict);
-    }
-    dispatch_semaphore_signal(self->readOnlySemaphore_);
+  uint8_t *storage = (uint8_t *)self->messageStorage_;
+  _Atomic(id) *typePtr = (_Atomic(id) *)&storage[field->description_->offset];
+  id dict = atomic_load(typePtr);
+  if (dict) {
+    return dict;
   }
-  return dict;
+
+  id expected = nil;
+  id autocreated = CreateMapForField(field, self);
+  if (atomic_compare_exchange_strong(typePtr, &expected, autocreated)) {
+    // Value was set, return it.
+    return autocreated;
+  }
+
+  // Some other thread set it, release the one created and return what got set.
+  if ((field.mapKeyDataType == LCGPBDataTypeString) &&
+      LCGPBFieldDataTypeIsObject(field)) {
+    LCGPBAutocreatedDictionary *autoDict = autocreated;
+    autoDict->_autocreator = nil;
+  } else {
+    LCGPBInt32Int32Dictionary *gpbDict = autocreated;
+    gpbDict->_autocreator = nil;
+  }
+  [autocreated release];
+  return expected;
 }
 
 #endif  // !defined(__clang_analyzer__)
@@ -668,9 +689,8 @@ void LCGPBBecomeVisibleToAutocreator(LCGPBMessage *self) {
     // This will recursively make all parent messages visible until it reaches a
     // super-creator that's visible.
     if (self->autocreatorField_) {
-      LCGPBFileSyntax syntax = [self->autocreator_ descriptor].file.syntax;
-      LCGPBSetObjectIvarWithFieldInternal(self->autocreator_,
-                                        self->autocreatorField_, self, syntax);
+      LCGPBSetObjectIvarWithFieldPrivate(self->autocreator_,
+                                        self->autocreatorField_, self);
     } else {
       [self->autocreator_ setExtension:self->autocreatorExtension_ value:self];
     }
@@ -936,8 +956,6 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
   // Copy all the storage...
   memcpy(message->messageStorage_, messageStorage_, descriptor->storageSize_);
 
-  LCGPBFileSyntax syntax = descriptor.file.syntax;
-
   // Loop over the fields doing fixup...
   for (LCGPBFieldDescriptor *field in descriptor->fields_) {
     if (LCGPBFieldIsMapOrArray(field)) {
@@ -1005,8 +1023,7 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
         // We retain here because the memcpy picked up the pointer value and
         // the next call to SetRetainedObject... will release the current value.
         [value retain];
-        LCGPBSetRetainedObjectIvarWithFieldInternal(message, field, newValue,
-                                                  syntax);
+        LCGPBSetRetainedObjectIvarWithFieldPrivate(message, field, newValue);
       }
     } else if (LCGPBFieldDataTypeIsMessage(field)) {
       // For object types, if we have a value, copy it.  If we don't,
@@ -1018,8 +1035,7 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
         // We retain here because the memcpy picked up the pointer value and
         // the next call to SetRetainedObject... will release the current value.
         [value retain];
-        LCGPBSetRetainedObjectIvarWithFieldInternal(message, field, newValue,
-                                                  syntax);
+        LCGPBSetRetainedObjectIvarWithFieldPrivate(message, field, newValue);
       } else {
         uint8_t *storage = (uint8_t *)message->messageStorage_;
         id *typePtr = (id *)&storage[field->description_->offset];
@@ -1033,8 +1049,7 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
       // We retain here because the memcpy picked up the pointer value and
       // the next call to SetRetainedObject... will release the current value.
       [value retain];
-      LCGPBSetRetainedObjectIvarWithFieldInternal(message, field, newValue,
-                                                syntax);
+      LCGPBSetRetainedObjectIvarWithFieldPrivate(message, field, newValue);
     } else {
       // memcpy took care of the rest of the primitive fields if they were set.
     }
@@ -1376,6 +1391,7 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
 
 //%PDDM-EXPAND FIELD_CASE(Bool, Bool)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
     case LCGPBDataTypeBool:
       if (fieldType == LCGPBFieldTypeRepeated) {
@@ -1394,8 +1410,10 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
       }
       break;
 
+// clang-format on
 //%PDDM-EXPAND FIELD_CASE(Fixed32, UInt32)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
     case LCGPBDataTypeFixed32:
       if (fieldType == LCGPBFieldTypeRepeated) {
@@ -1414,8 +1432,10 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
       }
       break;
 
+// clang-format on
 //%PDDM-EXPAND FIELD_CASE(SFixed32, Int32)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
     case LCGPBDataTypeSFixed32:
       if (fieldType == LCGPBFieldTypeRepeated) {
@@ -1434,8 +1454,10 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
       }
       break;
 
+// clang-format on
 //%PDDM-EXPAND FIELD_CASE(Float, Float)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
     case LCGPBDataTypeFloat:
       if (fieldType == LCGPBFieldTypeRepeated) {
@@ -1454,8 +1476,10 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
       }
       break;
 
+// clang-format on
 //%PDDM-EXPAND FIELD_CASE(Fixed64, UInt64)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
     case LCGPBDataTypeFixed64:
       if (fieldType == LCGPBFieldTypeRepeated) {
@@ -1474,8 +1498,10 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
       }
       break;
 
+// clang-format on
 //%PDDM-EXPAND FIELD_CASE(SFixed64, Int64)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
     case LCGPBDataTypeSFixed64:
       if (fieldType == LCGPBFieldTypeRepeated) {
@@ -1494,8 +1520,10 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
       }
       break;
 
+// clang-format on
 //%PDDM-EXPAND FIELD_CASE(Double, Double)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
     case LCGPBDataTypeDouble:
       if (fieldType == LCGPBFieldTypeRepeated) {
@@ -1514,8 +1542,10 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
       }
       break;
 
+// clang-format on
 //%PDDM-EXPAND FIELD_CASE(Int32, Int32)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
     case LCGPBDataTypeInt32:
       if (fieldType == LCGPBFieldTypeRepeated) {
@@ -1534,8 +1564,10 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
       }
       break;
 
+// clang-format on
 //%PDDM-EXPAND FIELD_CASE(Int64, Int64)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
     case LCGPBDataTypeInt64:
       if (fieldType == LCGPBFieldTypeRepeated) {
@@ -1554,8 +1586,10 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
       }
       break;
 
+// clang-format on
 //%PDDM-EXPAND FIELD_CASE(SInt32, Int32)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
     case LCGPBDataTypeSInt32:
       if (fieldType == LCGPBFieldTypeRepeated) {
@@ -1574,8 +1608,10 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
       }
       break;
 
+// clang-format on
 //%PDDM-EXPAND FIELD_CASE(SInt64, Int64)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
     case LCGPBDataTypeSInt64:
       if (fieldType == LCGPBFieldTypeRepeated) {
@@ -1594,8 +1630,10 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
       }
       break;
 
+// clang-format on
 //%PDDM-EXPAND FIELD_CASE(UInt32, UInt32)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
     case LCGPBDataTypeUInt32:
       if (fieldType == LCGPBFieldTypeRepeated) {
@@ -1614,8 +1652,10 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
       }
       break;
 
+// clang-format on
 //%PDDM-EXPAND FIELD_CASE(UInt64, UInt64)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
     case LCGPBDataTypeUInt64:
       if (fieldType == LCGPBFieldTypeRepeated) {
@@ -1634,8 +1674,10 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
       }
       break;
 
+// clang-format on
 //%PDDM-EXPAND FIELD_CASE_FULL(Enum, Int32, Enum)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
     case LCGPBDataTypeEnum:
       if (fieldType == LCGPBFieldTypeRepeated) {
@@ -1654,8 +1696,10 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
       }
       break;
 
+// clang-format on
 //%PDDM-EXPAND FIELD_CASE2(Bytes)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
     case LCGPBDataTypeBytes:
       if (fieldType == LCGPBFieldTypeRepeated) {
@@ -1678,8 +1722,10 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
       }
       break;
 
+// clang-format on
 //%PDDM-EXPAND FIELD_CASE2(String)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
     case LCGPBDataTypeString:
       if (fieldType == LCGPBFieldTypeRepeated) {
@@ -1702,8 +1748,10 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
       }
       break;
 
+// clang-format on
 //%PDDM-EXPAND FIELD_CASE2(Message)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
     case LCGPBDataTypeMessage:
       if (fieldType == LCGPBFieldTypeRepeated) {
@@ -1726,8 +1774,10 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
       }
       break;
 
+// clang-format on
 //%PDDM-EXPAND FIELD_CASE2(Group)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
     case LCGPBDataTypeGroup:
       if (fieldType == LCGPBFieldTypeRepeated) {
@@ -1750,6 +1800,7 @@ static LCGPBUnknownFieldSet *GetOrMakeUnknownFields(LCGPBMessage *self) {
       }
       break;
 
+// clang-format on
 //%PDDM-EXPAND-END (18 expansions)
   }
 }
@@ -2125,13 +2176,13 @@ static void MergeSingleFieldFromCodedInputStream(
 #define CASE_SINGLE_POD(NAME, TYPE, FUNC_TYPE)                             \
     case LCGPBDataType##NAME: {                                              \
       TYPE val = LCGPBCodedInputStreamRead##NAME(&input->state_);            \
-      LCGPBSet##FUNC_TYPE##IvarWithFieldInternal(self, field, val, syntax);  \
+      LCGPBSet##FUNC_TYPE##IvarWithFieldPrivate(self, field, val);           \
       break;                                                               \
             }
 #define CASE_SINGLE_OBJECT(NAME)                                           \
     case LCGPBDataType##NAME: {                                              \
       id val = LCGPBCodedInputStreamReadRetained##NAME(&input->state_);      \
-      LCGPBSetRetainedObjectIvarWithFieldInternal(self, field, val, syntax); \
+      LCGPBSetRetainedObjectIvarWithFieldPrivate(self, field, val);          \
       break;                                                               \
     }
       CASE_SINGLE_POD(Bool, BOOL, Bool)
@@ -2162,7 +2213,7 @@ static void MergeSingleFieldFromCodedInputStream(
       } else {
         LCGPBMessage *message = [[field.msgClass alloc] init];
         [input readMessage:message extensionRegistry:extensionRegistry];
-        LCGPBSetRetainedObjectIvarWithFieldInternal(self, field, message, syntax);
+        LCGPBSetRetainedObjectIvarWithFieldPrivate(self, field, message);
       }
       break;
     }
@@ -2181,7 +2232,7 @@ static void MergeSingleFieldFromCodedInputStream(
         [input readGroup:LCGPBFieldNumber(field)
                       message:message
             extensionRegistry:extensionRegistry];
-        LCGPBSetRetainedObjectIvarWithFieldInternal(self, field, message, syntax);
+        LCGPBSetRetainedObjectIvarWithFieldPrivate(self, field, message);
       }
       break;
     }
@@ -2190,7 +2241,7 @@ static void MergeSingleFieldFromCodedInputStream(
       int32_t val = LCGPBCodedInputStreamReadEnum(&input->state_);
       if (LCGPBHasPreservingUnknownEnumSemantics(syntax) ||
           [field isValidEnumValue:val]) {
-        LCGPBSetInt32IvarWithFieldInternal(self, field, val, syntax);
+        LCGPBSetInt32IvarWithFieldPrivate(self, field, val);
       } else {
         LCGPBUnknownFieldSet *unknownFields = GetOrMakeUnknownFields(self);
         [unknownFields mergeVarintField:LCGPBFieldNumber(field) value:val];
@@ -2204,7 +2255,7 @@ static void MergeRepeatedPackedFieldFromCodedInputStream(
     LCGPBCodedInputStream *input) {
   LCGPBDataType fieldDataType = LCGPBGetFieldDataType(field);
   LCGPBCodedInputStreamState *state = &input->state_;
-  id genericArray = GetOrCreateArrayIvarWithField(self, field, syntax);
+  id genericArray = GetOrCreateArrayIvarWithField(self, field);
   int32_t length = LCGPBCodedInputStreamReadInt32(state);
   size_t limit = LCGPBCodedInputStreamPushLimit(state, length);
   while (LCGPBCodedInputStreamBytesUntilLimit(state) > 0) {
@@ -2257,7 +2308,7 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
     LCGPBMessage *self, LCGPBFieldDescriptor *field, LCGPBFileSyntax syntax,
     LCGPBCodedInputStream *input, LCGPBExtensionRegistry *extensionRegistry) {
   LCGPBCodedInputStreamState *state = &input->state_;
-  id genericArray = GetOrCreateArrayIvarWithField(self, field, syntax);
+  id genericArray = GetOrCreateArrayIvarWithField(self, field);
   switch (LCGPBGetFieldDataType(field)) {
 #define CASE_REPEATED_NOT_PACKED_POD(NAME, TYPE, ARRAY_TYPE) \
    case LCGPBDataType##NAME: {                                 \
@@ -2359,7 +2410,7 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
         } else {  // fieldType == LCGPBFieldTypeMap
           // LCGPB*Dictionary or NSDictionary, exact type doesn't matter at this
           // point.
-          id map = GetOrCreateMapIvarWithField(self, fieldDescriptor, syntax);
+          id map = GetOrCreateMapIvarWithField(self, fieldDescriptor);
           [input readMapEntry:map
             extensionRegistry:extensionRegistry
                         field:fieldDescriptor
@@ -2433,7 +2484,6 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
   LCGPBBecomeVisibleToAutocreator(self);
 
   LCGPBDescriptor *descriptor = [[self class] descriptor];
-  LCGPBFileSyntax syntax = descriptor.file.syntax;
 
   for (LCGPBFieldDescriptor *field in descriptor->fields_) {
     LCGPBFieldType fieldType = field.fieldType;
@@ -2447,44 +2497,44 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
       LCGPBDataType fieldDataType = LCGPBGetFieldDataType(field);
       switch (fieldDataType) {
         case LCGPBDataTypeBool:
-          LCGPBSetBoolIvarWithFieldInternal(
-              self, field, LCGPBGetMessageBoolField(other, field), syntax);
+          LCGPBSetBoolIvarWithFieldPrivate(
+              self, field, LCGPBGetMessageBoolField(other, field));
           break;
         case LCGPBDataTypeSFixed32:
         case LCGPBDataTypeEnum:
         case LCGPBDataTypeInt32:
         case LCGPBDataTypeSInt32:
-          LCGPBSetInt32IvarWithFieldInternal(
-              self, field, LCGPBGetMessageInt32Field(other, field), syntax);
+          LCGPBSetInt32IvarWithFieldPrivate(
+              self, field, LCGPBGetMessageInt32Field(other, field));
           break;
         case LCGPBDataTypeFixed32:
         case LCGPBDataTypeUInt32:
-          LCGPBSetUInt32IvarWithFieldInternal(
-              self, field, LCGPBGetMessageUInt32Field(other, field), syntax);
+          LCGPBSetUInt32IvarWithFieldPrivate(
+              self, field, LCGPBGetMessageUInt32Field(other, field));
           break;
         case LCGPBDataTypeSFixed64:
         case LCGPBDataTypeInt64:
         case LCGPBDataTypeSInt64:
-          LCGPBSetInt64IvarWithFieldInternal(
-              self, field, LCGPBGetMessageInt64Field(other, field), syntax);
+          LCGPBSetInt64IvarWithFieldPrivate(
+              self, field, LCGPBGetMessageInt64Field(other, field));
           break;
         case LCGPBDataTypeFixed64:
         case LCGPBDataTypeUInt64:
-          LCGPBSetUInt64IvarWithFieldInternal(
-              self, field, LCGPBGetMessageUInt64Field(other, field), syntax);
+          LCGPBSetUInt64IvarWithFieldPrivate(
+              self, field, LCGPBGetMessageUInt64Field(other, field));
           break;
         case LCGPBDataTypeFloat:
-          LCGPBSetFloatIvarWithFieldInternal(
-              self, field, LCGPBGetMessageFloatField(other, field), syntax);
+          LCGPBSetFloatIvarWithFieldPrivate(
+              self, field, LCGPBGetMessageFloatField(other, field));
           break;
         case LCGPBDataTypeDouble:
-          LCGPBSetDoubleIvarWithFieldInternal(
-              self, field, LCGPBGetMessageDoubleField(other, field), syntax);
+          LCGPBSetDoubleIvarWithFieldPrivate(
+              self, field, LCGPBGetMessageDoubleField(other, field));
           break;
         case LCGPBDataTypeBytes:
         case LCGPBDataTypeString: {
           id otherVal = LCGPBGetObjectIvarWithFieldNoAutocreate(other, field);
-          LCGPBSetObjectIvarWithFieldInternal(self, field, otherVal, syntax);
+          LCGPBSetObjectIvarWithFieldPrivate(self, field, otherVal);
           break;
         }
         case LCGPBDataTypeMessage:
@@ -2496,8 +2546,7 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
             [message mergeFrom:otherVal];
           } else {
             LCGPBMessage *message = [otherVal copy];
-            LCGPBSetRetainedObjectIvarWithFieldInternal(self, field, message,
-                                                      syntax);
+            LCGPBSetRetainedObjectIvarWithFieldPrivate(self, field, message);
           }
           break;
         }
@@ -2511,17 +2560,17 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
         LCGPBDataType fieldDataType = field->description_->dataType;
         if (LCGPBDataTypeIsObject(fieldDataType)) {
           NSMutableArray *resultArray =
-              GetOrCreateArrayIvarWithField(self, field, syntax);
+              GetOrCreateArrayIvarWithField(self, field);
           [resultArray addObjectsFromArray:otherArray];
         } else if (fieldDataType == LCGPBDataTypeEnum) {
           LCGPBEnumArray *resultArray =
-              GetOrCreateArrayIvarWithField(self, field, syntax);
+              GetOrCreateArrayIvarWithField(self, field);
           [resultArray addRawValuesFromArray:otherArray];
         } else {
-          // The array type doesn't matter, that all implment
+          // The array type doesn't matter, that all implement
           // -addValuesFromArray:.
           LCGPBInt32Array *resultArray =
-              GetOrCreateArrayIvarWithField(self, field, syntax);
+              GetOrCreateArrayIvarWithField(self, field);
           [resultArray addValuesFromArray:otherArray];
         }
       }
@@ -2535,19 +2584,19 @@ static void MergeRepeatedNotPackedFieldFromCodedInputStream(
         if (LCGPBDataTypeIsObject(keyDataType) &&
             LCGPBDataTypeIsObject(valueDataType)) {
           NSMutableDictionary *resultDict =
-              GetOrCreateMapIvarWithField(self, field, syntax);
+              GetOrCreateMapIvarWithField(self, field);
           [resultDict addEntriesFromDictionary:otherDict];
         } else if (valueDataType == LCGPBDataTypeEnum) {
           // The exact type doesn't matter, just need to know it is a
           // LCGPB*EnumDictionary.
           LCGPBInt32EnumDictionary *resultDict =
-              GetOrCreateMapIvarWithField(self, field, syntax);
+              GetOrCreateMapIvarWithField(self, field);
           [resultDict addRawEntriesFromDictionary:otherDict];
         } else {
           // The exact type doesn't matter, they all implement
           // -addEntriesFromDictionary:.
           LCGPBInt32Int32Dictionary *resultDict =
-              GetOrCreateMapIvarWithField(self, field, syntax);
+              GetOrCreateMapIvarWithField(self, field);
           [resultDict addEntriesFromDictionary:otherDict];
         }
       }
@@ -3079,14 +3128,13 @@ static void ResolveIvarGet(__unsafe_unretained LCGPBFieldDescriptor *field,
 
 // See comment about __unsafe_unretained on ResolveIvarGet.
 static void ResolveIvarSet(__unsafe_unretained LCGPBFieldDescriptor *field,
-                           LCGPBFileSyntax syntax,
                            ResolveIvarAccessorMethodResult *result) {
   LCGPBDataType fieldDataType = LCGPBGetFieldDataType(field);
   switch (fieldDataType) {
 #define CASE_SET(NAME, TYPE, TRUE_NAME)                                       \
     case LCGPBDataType##NAME: {                                                 \
       result->impToAdd = imp_implementationWithBlock(^(id obj, TYPE value) {  \
-        return LCGPBSet##TRUE_NAME##IvarWithFieldInternal(obj, field, value, syntax); \
+        return LCGPBSet##TRUE_NAME##IvarWithFieldPrivate(obj, field, value);    \
       });                                                                     \
       result->encodingSelector = @selector(set##NAME:);                       \
       break;                                                                  \
@@ -3094,7 +3142,7 @@ static void ResolveIvarSet(__unsafe_unretained LCGPBFieldDescriptor *field,
 #define CASE_SET_COPY(NAME)                                                   \
     case LCGPBDataType##NAME: {                                                 \
       result->impToAdd = imp_implementationWithBlock(^(id obj, id value) {    \
-        return LCGPBSetRetainedObjectIvarWithFieldInternal(obj, field, [value copy], syntax); \
+        return LCGPBSetRetainedObjectIvarWithFieldPrivate(obj, field, [value copy]); \
       });                                                                     \
       result->encodingSelector = @selector(set##NAME:);                       \
       break;                                                                  \
@@ -3141,7 +3189,7 @@ static void ResolveIvarSet(__unsafe_unretained LCGPBFieldDescriptor *field,
         ResolveIvarGet(field, &result);
         break;
       } else if (sel == field->setSel_) {
-        ResolveIvarSet(field, descriptor.file.syntax, &result);
+        ResolveIvarSet(field, &result);
         break;
       } else if (sel == field->hasOrCountSel_) {
         int32_t index = LCGPBFieldHasIndex(field);
@@ -3191,9 +3239,8 @@ static void ResolveIvarSet(__unsafe_unretained LCGPBFieldDescriptor *field,
       } else if (sel == field->setSel_) {
         // Local for syntax so the block can directly capture it and not the
         // full lookup.
-        const LCGPBFileSyntax syntax = descriptor.file.syntax;
         result.impToAdd = imp_implementationWithBlock(^(id obj, id value) {
-          LCGPBSetObjectIvarWithFieldInternal(obj, field, value, syntax);
+          LCGPBSetObjectIvarWithFieldPrivate(obj, field, value);
         });
         result.encodingSelector = @selector(setArray:);
         break;
@@ -3231,7 +3278,7 @@ static void ResolveIvarSet(__unsafe_unretained LCGPBFieldDescriptor *field,
 
 + (BOOL)resolveClassMethod:(SEL)sel {
   // Extensions scoped to a Message and looked up via class methods.
-  if (LCGPBResolveExtensionClassMethod([self descriptor].messageClass, sel)) {
+  if (LCGPBResolveExtensionClassMethod(self, sel)) {
     return YES;
   }
   return [super resolveClassMethod:sel];
@@ -3264,7 +3311,7 @@ static void ResolveIvarSet(__unsafe_unretained LCGPBFieldDescriptor *field,
     // if a sub message in a field has extensions, the issue still exists. A
     // recursive check could be done here (like the work in
     // LCGPBMessageDropUnknownFieldsRecursively()), but that has the potential to
-    // be expensive and could slow down serialization in DEBUG enought to cause
+    // be expensive and could slow down serialization in DEBUG enough to cause
     // developers other problems.
     NSLog(@"Warning: writing out a LCGPBMessage (%@) via NSCoding and it"
           @" has %ld extensions; when read back in, those fields will be"
@@ -3298,9 +3345,7 @@ id LCGPBGetMessageRepeatedField(LCGPBMessage *self, LCGPBFieldDescriptor *field)
      [self class], field.name];
   }
 #endif
-  LCGPBDescriptor *descriptor = [[self class] descriptor];
-  LCGPBFileSyntax syntax = descriptor.file.syntax;
-  return GetOrCreateArrayIvarWithField(self, field, syntax);
+  return GetOrCreateArrayIvarWithField(self, field);
 }
 
 // Only exists for public api, no core code should use this.
@@ -3312,37 +3357,39 @@ id LCGPBGetMessageMapField(LCGPBMessage *self, LCGPBFieldDescriptor *field) {
      [self class], field.name];
   }
 #endif
-  LCGPBDescriptor *descriptor = [[self class] descriptor];
-  LCGPBFileSyntax syntax = descriptor.file.syntax;
-  return GetOrCreateMapIvarWithField(self, field, syntax);
+  return GetOrCreateMapIvarWithField(self, field);
 }
 
 id LCGPBGetObjectIvarWithField(LCGPBMessage *self, LCGPBFieldDescriptor *field) {
   NSCAssert(!LCGPBFieldIsMapOrArray(field), @"Shouldn't get here");
-  if (LCGPBGetHasIvarField(self, field)) {
-    uint8_t *storage = (uint8_t *)self->messageStorage_;
-    id *typePtr = (id *)&storage[field->description_->offset];
-    return *typePtr;
-  }
-  // Not set...
-
-  // Non messages (string/data), get their default.
   if (!LCGPBFieldDataTypeIsMessage(field)) {
+    if (LCGPBGetHasIvarField(self, field)) {
+      uint8_t *storage = (uint8_t *)self->messageStorage_;
+      id *typePtr = (id *)&storage[field->description_->offset];
+      return *typePtr;
+    }
+    // Not set...non messages (string/data), get their default.
     return field.defaultValue.valueMessage;
   }
 
-  LCGPBPrepareReadOnlySemaphore(self);
-  dispatch_semaphore_wait(self->readOnlySemaphore_, DISPATCH_TIME_FOREVER);
-  LCGPBMessage *result = LCGPBGetObjectIvarWithFieldNoAutocreate(self, field);
-  if (!result) {
-    // For non repeated messages, create the object, set it and return it.
-    // This object will not initially be visible via LCGPBGetHasIvar, so
-    // we save its creator so it can become visible if it's mutated later.
-    result = LCGPBCreateMessageWithAutocreator(field.msgClass, self, field);
-    LCGPBSetAutocreatedRetainedObjectIvarWithField(self, field, result);
+  uint8_t *storage = (uint8_t *)self->messageStorage_;
+  _Atomic(id) *typePtr = (_Atomic(id) *)&storage[field->description_->offset];
+  id msg = atomic_load(typePtr);
+  if (msg) {
+    return msg;
   }
-  dispatch_semaphore_signal(self->readOnlySemaphore_);
-  return result;
+
+  id expected = nil;
+  id autocreated = LCGPBCreateMessageWithAutocreator(field.msgClass, self, field);
+  if (atomic_compare_exchange_strong(typePtr, &expected, autocreated)) {
+    // Value was set, return it.
+    return autocreated;
+  }
+
+  // Some other thread set it, release the one created and return what got set.
+  LCGPBClearMessageAutocreator(autocreated);
+  [autocreated release];
+  return expected;
 }
 
 #pragma clang diagnostic pop
