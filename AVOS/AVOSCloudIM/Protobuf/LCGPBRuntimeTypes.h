@@ -142,3 +142,10 @@ typedef struct LCGPBExtensionRange {
   /** Exclusive. */
   uint32_t end;
 } LCGPBExtensionRange;
+
+/**
+ A type to represent an Objective C class.
+ This is actually an `objc_class` but the runtime headers will not allow us to
+ reference `objc_class`, so we have defined our own.
+*/
+typedef struct LCGPBObjcClass_t LCGPBObjcClass_t;

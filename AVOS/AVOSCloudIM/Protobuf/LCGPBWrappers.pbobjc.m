@@ -8,13 +8,13 @@
 #endif
 
 #if LCGPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <protobuf/LCGPBProtocolBuffers_RuntimeSupport.h>
+ #import <Protobuf/LCGPBProtocolBuffers_RuntimeSupport.h>
 #else
  #import "LCGPBProtocolBuffers_RuntimeSupport.h"
 #endif
 
 #if LCGPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <protobuf/Wrappers.pbobjc.h>
+ #import <Protobuf/LCGPBWrappers.pbobjc.h>
 #else
  #import "LCGPBWrappers.pbobjc.h"
 #endif
@@ -66,11 +66,11 @@ typedef struct LCGPBDoubleValue__storage_ {
     static LCGPBMessageFieldDescription fields[] = {
       {
         .name = "value",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBDoubleValue_FieldNumber_Value,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCGPBDoubleValue__storage_, value),
-        .flags = LCGPBFieldOptional,
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeDouble,
       },
     };
@@ -81,7 +81,7 @@ typedef struct LCGPBDoubleValue__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(LCGPBMessageFieldDescription))
                                    storageSize:sizeof(LCGPBDoubleValue__storage_)
-                                         flags:LCGPBDescriptorInitializationFlag_None];
+                                         flags:(LCGPBDescriptorInitializationFlags)(LCGPBDescriptorInitializationFlag_UsesClassRefs | LCGPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
     #endif  // DEBUG
@@ -111,11 +111,11 @@ typedef struct LCGPBFloatValue__storage_ {
     static LCGPBMessageFieldDescription fields[] = {
       {
         .name = "value",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBFloatValue_FieldNumber_Value,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCGPBFloatValue__storage_, value),
-        .flags = LCGPBFieldOptional,
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeFloat,
       },
     };
@@ -126,7 +126,7 @@ typedef struct LCGPBFloatValue__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(LCGPBMessageFieldDescription))
                                    storageSize:sizeof(LCGPBFloatValue__storage_)
-                                         flags:LCGPBDescriptorInitializationFlag_None];
+                                         flags:(LCGPBDescriptorInitializationFlags)(LCGPBDescriptorInitializationFlag_UsesClassRefs | LCGPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
     #endif  // DEBUG
@@ -156,11 +156,11 @@ typedef struct LCGPBInt64Value__storage_ {
     static LCGPBMessageFieldDescription fields[] = {
       {
         .name = "value",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBInt64Value_FieldNumber_Value,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCGPBInt64Value__storage_, value),
-        .flags = LCGPBFieldOptional,
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeInt64,
       },
     };
@@ -171,7 +171,7 @@ typedef struct LCGPBInt64Value__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(LCGPBMessageFieldDescription))
                                    storageSize:sizeof(LCGPBInt64Value__storage_)
-                                         flags:LCGPBDescriptorInitializationFlag_None];
+                                         flags:(LCGPBDescriptorInitializationFlags)(LCGPBDescriptorInitializationFlag_UsesClassRefs | LCGPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
     #endif  // DEBUG
@@ -201,11 +201,11 @@ typedef struct LCGPBUInt64Value__storage_ {
     static LCGPBMessageFieldDescription fields[] = {
       {
         .name = "value",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBUInt64Value_FieldNumber_Value,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCGPBUInt64Value__storage_, value),
-        .flags = LCGPBFieldOptional,
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeUInt64,
       },
     };
@@ -216,7 +216,7 @@ typedef struct LCGPBUInt64Value__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(LCGPBMessageFieldDescription))
                                    storageSize:sizeof(LCGPBUInt64Value__storage_)
-                                         flags:LCGPBDescriptorInitializationFlag_None];
+                                         flags:(LCGPBDescriptorInitializationFlags)(LCGPBDescriptorInitializationFlag_UsesClassRefs | LCGPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
     #endif  // DEBUG
@@ -246,11 +246,11 @@ typedef struct LCGPBInt32Value__storage_ {
     static LCGPBMessageFieldDescription fields[] = {
       {
         .name = "value",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBInt32Value_FieldNumber_Value,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCGPBInt32Value__storage_, value),
-        .flags = LCGPBFieldOptional,
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeInt32,
       },
     };
@@ -261,7 +261,7 @@ typedef struct LCGPBInt32Value__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(LCGPBMessageFieldDescription))
                                    storageSize:sizeof(LCGPBInt32Value__storage_)
-                                         flags:LCGPBDescriptorInitializationFlag_None];
+                                         flags:(LCGPBDescriptorInitializationFlags)(LCGPBDescriptorInitializationFlag_UsesClassRefs | LCGPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
     #endif  // DEBUG
@@ -291,11 +291,11 @@ typedef struct LCGPBUInt32Value__storage_ {
     static LCGPBMessageFieldDescription fields[] = {
       {
         .name = "value",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBUInt32Value_FieldNumber_Value,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCGPBUInt32Value__storage_, value),
-        .flags = LCGPBFieldOptional,
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeUInt32,
       },
     };
@@ -306,7 +306,7 @@ typedef struct LCGPBUInt32Value__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(LCGPBMessageFieldDescription))
                                    storageSize:sizeof(LCGPBUInt32Value__storage_)
-                                         flags:LCGPBDescriptorInitializationFlag_None];
+                                         flags:(LCGPBDescriptorInitializationFlags)(LCGPBDescriptorInitializationFlag_UsesClassRefs | LCGPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
     #endif  // DEBUG
@@ -335,11 +335,11 @@ typedef struct LCGPBBoolValue__storage_ {
     static LCGPBMessageFieldDescription fields[] = {
       {
         .name = "value",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBBoolValue_FieldNumber_Value,
         .hasIndex = 0,
         .offset = 1,  // Stored in _has_storage_ to save space.
-        .flags = LCGPBFieldOptional,
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeBool,
       },
     };
@@ -350,7 +350,7 @@ typedef struct LCGPBBoolValue__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(LCGPBMessageFieldDescription))
                                    storageSize:sizeof(LCGPBBoolValue__storage_)
-                                         flags:LCGPBDescriptorInitializationFlag_None];
+                                         flags:(LCGPBDescriptorInitializationFlags)(LCGPBDescriptorInitializationFlag_UsesClassRefs | LCGPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
     #endif  // DEBUG
@@ -380,11 +380,11 @@ typedef struct LCGPBStringValue__storage_ {
     static LCGPBMessageFieldDescription fields[] = {
       {
         .name = "value",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBStringValue_FieldNumber_Value,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCGPBStringValue__storage_, value),
-        .flags = LCGPBFieldOptional,
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeString,
       },
     };
@@ -395,7 +395,7 @@ typedef struct LCGPBStringValue__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(LCGPBMessageFieldDescription))
                                    storageSize:sizeof(LCGPBStringValue__storage_)
-                                         flags:LCGPBDescriptorInitializationFlag_None];
+                                         flags:(LCGPBDescriptorInitializationFlags)(LCGPBDescriptorInitializationFlag_UsesClassRefs | LCGPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
     #endif  // DEBUG
@@ -425,11 +425,11 @@ typedef struct LCGPBBytesValue__storage_ {
     static LCGPBMessageFieldDescription fields[] = {
       {
         .name = "value",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBBytesValue_FieldNumber_Value,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCGPBBytesValue__storage_, value),
-        .flags = LCGPBFieldOptional,
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeBytes,
       },
     };
@@ -440,7 +440,7 @@ typedef struct LCGPBBytesValue__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(LCGPBMessageFieldDescription))
                                    storageSize:sizeof(LCGPBBytesValue__storage_)
-                                         flags:LCGPBDescriptorInitializationFlag_None];
+                                         flags:(LCGPBDescriptorInitializationFlags)(LCGPBDescriptorInitializationFlag_UsesClassRefs | LCGPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
     #endif  // DEBUG

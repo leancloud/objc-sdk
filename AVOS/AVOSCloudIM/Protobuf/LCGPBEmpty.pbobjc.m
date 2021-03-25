@@ -8,13 +8,13 @@
 #endif
 
 #if LCGPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <protobuf/LCGPBProtocolBuffers_RuntimeSupport.h>
+ #import <Protobuf/LCGPBProtocolBuffers_RuntimeSupport.h>
 #else
  #import "LCGPBProtocolBuffers_RuntimeSupport.h"
 #endif
 
 #if LCGPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <protobuf/Empty.pbobjc.h>
+ #import <Protobuf/LCGPBEmpty.pbobjc.h>
 #else
  #import "LCGPBEmpty.pbobjc.h"
 #endif
@@ -68,7 +68,7 @@ typedef struct LCGPBEmpty__storage_ {
                                         fields:NULL
                                     fieldCount:0
                                    storageSize:sizeof(LCGPBEmpty__storage_)
-                                         flags:LCGPBDescriptorInitializationFlag_None];
+                                         flags:(LCGPBDescriptorInitializationFlags)(LCGPBDescriptorInitializationFlag_UsesClassRefs | LCGPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
     #endif  // DEBUG

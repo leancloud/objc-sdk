@@ -82,6 +82,7 @@
 
 //%PDDM-EXPAND DICTIONARY_PRIV_INTERFACES_FOR_POD_KEY(UInt32)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
 @interface LCGPBUInt32UInt32Dictionary () <LCGPBDictionaryInternalsProtocol> {
  @package
@@ -143,8 +144,10 @@
     __attribute__((ns_returns_retained));
 @end
 
+// clang-format on
 //%PDDM-EXPAND DICTIONARY_PRIV_INTERFACES_FOR_POD_KEY(Int32)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
 @interface LCGPBInt32UInt32Dictionary () <LCGPBDictionaryInternalsProtocol> {
  @package
@@ -206,8 +209,10 @@
     __attribute__((ns_returns_retained));
 @end
 
+// clang-format on
 //%PDDM-EXPAND DICTIONARY_PRIV_INTERFACES_FOR_POD_KEY(UInt64)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
 @interface LCGPBUInt64UInt32Dictionary () <LCGPBDictionaryInternalsProtocol> {
  @package
@@ -269,8 +274,10 @@
     __attribute__((ns_returns_retained));
 @end
 
+// clang-format on
 //%PDDM-EXPAND DICTIONARY_PRIV_INTERFACES_FOR_POD_KEY(Int64)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
 @interface LCGPBInt64UInt32Dictionary () <LCGPBDictionaryInternalsProtocol> {
  @package
@@ -332,8 +339,10 @@
     __attribute__((ns_returns_retained));
 @end
 
+// clang-format on
 //%PDDM-EXPAND DICTIONARY_PRIV_INTERFACES_FOR_POD_KEY(Bool)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
 @interface LCGPBBoolUInt32Dictionary () <LCGPBDictionaryInternalsProtocol> {
  @package
@@ -395,8 +404,10 @@
     __attribute__((ns_returns_retained));
 @end
 
+// clang-format on
 //%PDDM-EXPAND DICTIONARY_POD_PRIV_INTERFACES_FOR_KEY(String)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
 @interface LCGPBStringUInt32Dictionary () <LCGPBDictionaryInternalsProtocol> {
  @package
@@ -449,6 +460,7 @@
                               keyDataType:(LCGPBDataType)keyDataType;
 @end
 
+// clang-format on
 //%PDDM-EXPAND-END (6 expansions)
 
 #pragma mark - NSDictionary Subclass

@@ -35,13 +35,22 @@
 #import "LCGPBDescriptor_PackagePrivate.h"
 
 // Macros for stringifying library symbols. These are used in the generated
-// PB descriptor classes wherever a library symbol name is represented as a
-// string. See README.google for more information.
+// LCGPB descriptor classes wherever a library symbol name is represented as a
+// string.
 #define LCGPBStringify(S) #S
 #define LCGPBStringifySymbol(S) LCGPBStringify(S)
 
 #define LCGPBNSStringify(S) @#S
 #define LCGPBNSStringifySymbol(S) LCGPBNSStringify(S)
+
+// Macros for generating a Class from a class name. These are used in
+// the generated LCGPB descriptor classes wherever an Objective C class
+// reference is needed for a generated class.
+#define LCGPBObjCClassSymbol(name) OBJC_CLASS_$_##name
+#define LCGPBObjCClass(name) \
+    ((__bridge Class)&(LCGPBObjCClassSymbol(name)))
+#define LCGPBObjCClassDeclaration(name) \
+    extern const LCGPBObjcClass_t LCGPBObjCClassSymbol(name)
 
 // Constant to internally mark when there is no has bit.
 #define LCGPBNoHasBit INT32_MAX
@@ -197,103 +206,88 @@ LCGPBGetHasIvarField(LCGPBMessage *self, LCGPBFieldDescriptor *field) {
   LCGPBMessageFieldDescription *fieldDesc = field->description_;
   return LCGPBGetHasIvar(self, fieldDesc->hasIndex, fieldDesc->number);
 }
-LCGPB_INLINE void LCGPBSetHasIvarField(LCGPBMessage *self, LCGPBFieldDescriptor *field,
-                                   BOOL value) {
-  LCGPBMessageFieldDescription *fieldDesc = field->description_;
-  LCGPBSetHasIvar(self, fieldDesc->hasIndex, fieldDesc->number, value);
-}
-
-void LCGPBMaybeClearOneof(LCGPBMessage *self, LCGPBOneofDescriptor *oneof,
-                        int32_t oneofHasIndex, uint32_t fieldNumberNotToClear);
 
 #pragma clang diagnostic pop
 
 //%PDDM-DEFINE LCGPB_IVAR_SET_DECL(NAME, TYPE)
-//%void LCGPBSet##NAME##IvarWithFieldInternal(LCGPBMessage *self,
-//%            NAME$S                     LCGPBFieldDescriptor *field,
-//%            NAME$S                     TYPE value,
-//%            NAME$S                     LCGPBFileSyntax syntax);
+//%void LCGPBSet##NAME##IvarWithFieldPrivate(LCGPBMessage *self,
+//%            NAME$S                    LCGPBFieldDescriptor *field,
+//%            NAME$S                    TYPE value);
 //%PDDM-EXPAND LCGPB_IVAR_SET_DECL(Bool, BOOL)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
-void LCGPBSetBoolIvarWithFieldInternal(LCGPBMessage *self,
-                                     LCGPBFieldDescriptor *field,
-                                     BOOL value,
-                                     LCGPBFileSyntax syntax);
+void LCGPBSetBoolIvarWithFieldPrivate(LCGPBMessage *self,
+                                    LCGPBFieldDescriptor *field,
+                                    BOOL value);
+// clang-format on
 //%PDDM-EXPAND LCGPB_IVAR_SET_DECL(Int32, int32_t)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
-void LCGPBSetInt32IvarWithFieldInternal(LCGPBMessage *self,
-                                      LCGPBFieldDescriptor *field,
-                                      int32_t value,
-                                      LCGPBFileSyntax syntax);
+void LCGPBSetInt32IvarWithFieldPrivate(LCGPBMessage *self,
+                                     LCGPBFieldDescriptor *field,
+                                     int32_t value);
+// clang-format on
 //%PDDM-EXPAND LCGPB_IVAR_SET_DECL(UInt32, uint32_t)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
-void LCGPBSetUInt32IvarWithFieldInternal(LCGPBMessage *self,
-                                       LCGPBFieldDescriptor *field,
-                                       uint32_t value,
-                                       LCGPBFileSyntax syntax);
+void LCGPBSetUInt32IvarWithFieldPrivate(LCGPBMessage *self,
+                                      LCGPBFieldDescriptor *field,
+                                      uint32_t value);
+// clang-format on
 //%PDDM-EXPAND LCGPB_IVAR_SET_DECL(Int64, int64_t)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
-void LCGPBSetInt64IvarWithFieldInternal(LCGPBMessage *self,
-                                      LCGPBFieldDescriptor *field,
-                                      int64_t value,
-                                      LCGPBFileSyntax syntax);
+void LCGPBSetInt64IvarWithFieldPrivate(LCGPBMessage *self,
+                                     LCGPBFieldDescriptor *field,
+                                     int64_t value);
+// clang-format on
 //%PDDM-EXPAND LCGPB_IVAR_SET_DECL(UInt64, uint64_t)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
-void LCGPBSetUInt64IvarWithFieldInternal(LCGPBMessage *self,
-                                       LCGPBFieldDescriptor *field,
-                                       uint64_t value,
-                                       LCGPBFileSyntax syntax);
+void LCGPBSetUInt64IvarWithFieldPrivate(LCGPBMessage *self,
+                                      LCGPBFieldDescriptor *field,
+                                      uint64_t value);
+// clang-format on
 //%PDDM-EXPAND LCGPB_IVAR_SET_DECL(Float, float)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
-void LCGPBSetFloatIvarWithFieldInternal(LCGPBMessage *self,
-                                      LCGPBFieldDescriptor *field,
-                                      float value,
-                                      LCGPBFileSyntax syntax);
+void LCGPBSetFloatIvarWithFieldPrivate(LCGPBMessage *self,
+                                     LCGPBFieldDescriptor *field,
+                                     float value);
+// clang-format on
 //%PDDM-EXPAND LCGPB_IVAR_SET_DECL(Double, double)
 // This block of code is generated, do not edit it directly.
+// clang-format off
 
-void LCGPBSetDoubleIvarWithFieldInternal(LCGPBMessage *self,
-                                       LCGPBFieldDescriptor *field,
-                                       double value,
-                                       LCGPBFileSyntax syntax);
-//%PDDM-EXPAND LCGPB_IVAR_SET_DECL(Enum, int32_t)
-// This block of code is generated, do not edit it directly.
+void LCGPBSetDoubleIvarWithFieldPrivate(LCGPBMessage *self,
+                                      LCGPBFieldDescriptor *field,
+                                      double value);
+// clang-format on
+//%PDDM-EXPAND-END (7 expansions)
 
-void LCGPBSetEnumIvarWithFieldInternal(LCGPBMessage *self,
-                                     LCGPBFieldDescriptor *field,
-                                     int32_t value,
-                                     LCGPBFileSyntax syntax);
-//%PDDM-EXPAND-END (8 expansions)
-
-int32_t LCGPBGetEnumIvarWithFieldInternal(LCGPBMessage *self,
-                                        LCGPBFieldDescriptor *field,
-                                        LCGPBFileSyntax syntax);
+void LCGPBSetEnumIvarWithFieldPrivate(LCGPBMessage *self,
+                                    LCGPBFieldDescriptor *field,
+                                    int32_t value);
 
 id LCGPBGetObjectIvarWithField(LCGPBMessage *self, LCGPBFieldDescriptor *field);
 
-void LCGPBSetObjectIvarWithFieldInternal(LCGPBMessage *self,
-                                       LCGPBFieldDescriptor *field, id value,
-                                       LCGPBFileSyntax syntax);
-void LCGPBSetRetainedObjectIvarWithFieldInternal(LCGPBMessage *self,
-                                               LCGPBFieldDescriptor *field,
-                                               id __attribute__((ns_consumed))
-                                               value,
-                                               LCGPBFileSyntax syntax);
+void LCGPBSetObjectIvarWithFieldPrivate(LCGPBMessage *self,
+                                      LCGPBFieldDescriptor *field, id value);
+void LCGPBSetRetainedObjectIvarWithFieldPrivate(LCGPBMessage *self,
+                                              LCGPBFieldDescriptor *field,
+                                              id __attribute__((ns_consumed))
+                                              value);
 
 // LCGPBGetObjectIvarWithField will automatically create the field (message) if
 // it doesn't exist. LCGPBGetObjectIvarWithFieldNoAutocreate will return nil.
 id LCGPBGetObjectIvarWithFieldNoAutocreate(LCGPBMessage *self,
                                          LCGPBFieldDescriptor *field);
-
-void LCGPBSetAutocreatedRetainedObjectIvarWithField(
-    LCGPBMessage *self, LCGPBFieldDescriptor *field,
-    id __attribute__((ns_consumed)) value);
 
 // Clears and releases the autocreated message ivar, if it's autocreated. If
 // it's not set as autocreated, this method does nothing.
@@ -306,10 +300,19 @@ void LCGPBClearAutocreatedMessageIvarWithField(LCGPBMessage *self,
 const char *LCGPBMessageEncodingForSelector(SEL selector, BOOL instanceSel);
 
 // Helper for text format name encoding.
-// decodeData is the data describing the sepecial decodes.
+// decodeData is the data describing the special decodes.
 // key and inputString are the input that needs decoding.
 NSString *LCGPBDecodeTextFormatName(const uint8_t *decodeData, int32_t key,
                                   NSString *inputString);
+
+
+// Shims from the older generated code into the runtime.
+void LCGPBSetInt32IvarWithFieldInternal(LCGPBMessage *self,
+                                      LCGPBFieldDescriptor *field,
+                                      int32_t value,
+                                      LCGPBFileSyntax syntax);
+void LCGPBMaybeClearOneof(LCGPBMessage *self, LCGPBOneofDescriptor *oneof,
+                        int32_t oneofHasIndex, uint32_t fieldNumberNotToClear);
 
 // A series of selectors that are used solely to get @encoding values
 // for them by the dynamic protobuf runtime code. See

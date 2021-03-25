@@ -37,9 +37,9 @@
 #endif
 
 #if LCGPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <protobuf/Any.pbobjc.h>
- #import <protobuf/Duration.pbobjc.h>
- #import <protobuf/Timestamp.pbobjc.h>
+ #import <Protobuf/LCGPBAny.pbobjc.h>
+ #import <Protobuf/LCGPBDuration.pbobjc.h>
+ #import <Protobuf/LCGPBTimestamp.pbobjc.h>
 #else
  #import "LCGPBAny.pbobjc.h"
  #import "LCGPBDuration.pbobjc.h"

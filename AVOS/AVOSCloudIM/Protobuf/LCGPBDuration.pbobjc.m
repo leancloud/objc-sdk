@@ -8,13 +8,13 @@
 #endif
 
 #if LCGPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <protobuf/LCGPBProtocolBuffers_RuntimeSupport.h>
+ #import <Protobuf/LCGPBProtocolBuffers_RuntimeSupport.h>
 #else
  #import "LCGPBProtocolBuffers_RuntimeSupport.h"
 #endif
 
 #if LCGPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <protobuf/Duration.pbobjc.h>
+ #import <Protobuf/LCGPBDuration.pbobjc.h>
 #else
  #import "LCGPBDuration.pbobjc.h"
 #endif
@@ -68,20 +68,20 @@ typedef struct LCGPBDuration__storage_ {
     static LCGPBMessageFieldDescription fields[] = {
       {
         .name = "seconds",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBDuration_FieldNumber_Seconds,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(LCGPBDuration__storage_, seconds),
-        .flags = LCGPBFieldOptional,
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeInt64,
       },
       {
         .name = "nanos",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.clazz = Nil,
         .number = LCGPBDuration_FieldNumber_Nanos,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(LCGPBDuration__storage_, nanos),
-        .flags = LCGPBFieldOptional,
+        .flags = (LCGPBFieldFlags)(LCGPBFieldOptional | LCGPBFieldClearHasIvarOnZero),
         .dataType = LCGPBDataTypeInt32,
       },
     };
@@ -92,7 +92,7 @@ typedef struct LCGPBDuration__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(LCGPBMessageFieldDescription))
                                    storageSize:sizeof(LCGPBDuration__storage_)
-                                         flags:LCGPBDescriptorInitializationFlag_None];
+                                         flags:(LCGPBDescriptorInitializationFlags)(LCGPBDescriptorInitializationFlag_UsesClassRefs | LCGPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
     #endif  // DEBUG
