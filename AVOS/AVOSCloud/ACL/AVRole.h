@@ -4,7 +4,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVObject.h"
+#import "LCObject.h"
 
 @class AVQuery;
 
@@ -13,14 +13,14 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  Represents a Role on the LeanCloud server. AVRoles represent groupings
  of AVUsers for the purposes of granting permissions (e.g. specifying a
- AVACL for a AVObject). Roles are specified by their sets of child users
+ AVACL for a LCObject). Roles are specified by their sets of child users
  and child roles, all of which are granted any permissions that the
  parent role has.<br />
  <br />
  Roles must have a name (which cannot be changed after creation of the role),
  and must specify an ACL.
  */
-@interface AVRole : AVObject
+@interface AVRole : LCObject
 
 #pragma mark Creating a New Role
 

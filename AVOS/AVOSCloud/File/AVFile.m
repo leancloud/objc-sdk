@@ -9,7 +9,7 @@
 #import "LCNetworking.h"
 #import "AVErrorUtils.h"
 #import "AVPersistenceUtils.h"
-#import "AVObjectUtils.h"
+#import "LCObjectUtils.h"
 #import "AVACL_Internal.h"
 #import <CommonCrypto/CommonCrypto.h>
 
@@ -81,9 +81,9 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     return [[AVFile alloc] initWithRemoteURL:remoteURL];
 }
 
-+ (instancetype)fileWithAVObject:(AVObject *)avObject
++ (instancetype)fileWithObject:(LCObject *)object
 {
-    return [[AVFile alloc] initWithRawJSONData:[avObject dictionaryForObject]];
+    return [[AVFile alloc] initWithRawJSONData:[object dictionaryForObject]];
 }
 
 + (instancetype)fileWithObjectId:(NSString *)objectId url:(NSString *)url
@@ -147,7 +147,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
             
             AVACL *acl = AVPaasClient.sharedInstance.updatedDefaultACL;
             if (acl) {
-                _rawJSONData[ACLTag] = [AVObjectUtils dictionaryFromACL:acl];
+                _rawJSONData[ACLTag] = [LCObjectUtils dictionaryFromACL:acl];
             }
             acl;
         });
@@ -209,7 +209,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
             
             AVACL *acl = [AVPaasClient sharedInstance].updatedDefaultACL;
             if (acl) {
-                _rawJSONData[ACLTag] = [AVObjectUtils dictionaryFromACL:acl];
+                _rawJSONData[ACLTag] = [LCObjectUtils dictionaryFromACL:acl];
             }
             acl;
         });
@@ -251,7 +251,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
             
             AVACL *acl = [AVPaasClient sharedInstance].updatedDefaultACL;
             if (acl) {
-                _rawJSONData[ACLTag] = [AVObjectUtils dictionaryFromACL:acl];
+                _rawJSONData[ACLTag] = [LCObjectUtils dictionaryFromACL:acl];
             }
             acl;
         });
@@ -345,7 +345,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 
 - (void)setACL:(AVACL *)ACL
 {
-    NSDictionary *ACLDic = [AVObjectUtils dictionaryFromACL:ACL];
+    NSDictionary *ACLDic = [LCObjectUtils dictionaryFromACL:ACL];
     
     [self internalSyncLock:^{
         

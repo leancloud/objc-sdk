@@ -21,7 +21,7 @@
     #import <CoreServices/CoreServices.h>
 #endif
 
-@class AVObject;
+@class LCObject;
 
 @interface AVUtils : NSObject
 
@@ -67,8 +67,8 @@
                        array:(NSArray *)array
                        error:(NSError *)error;
 
-+ (void)callObjectResultBlock:(AVObjectResultBlock)block
-                       object:(AVObject *)object
++ (void)callObjectResultBlock:(LCObjectResultBlock)block
+                       object:(LCObject *)object
                         error:(NSError *)error;
 
 + (void)callUserResultBlock:(AVUserResultBlock)block

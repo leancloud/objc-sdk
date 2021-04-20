@@ -7,9 +7,9 @@
 //
 
 #import "AVRequestManager.h"
-#import "AVObject.h"
-#import "AVObjectUtils.h"
-#import "AVObject_Internal.h"
+#import "LCObject.h"
+#import "LCObjectUtils.h"
+#import "LCObject_Internal.h"
 #import "AVACL_Internal.h"
 
 typedef enum {
@@ -70,8 +70,8 @@ typedef enum {
 
 + (NSDictionary *)commonOpForKey:(NSString *)key objects:(NSArray *)objects op:(NSString *)op {
     NSMutableArray * array = [NSMutableArray array];
-    for(AVObject * obj in objects) {
-        NSDictionary * dict = [AVObjectUtils dictionaryFromObject:obj];
+    for(LCObject * obj in objects) {
+        NSDictionary * dict = [LCObjectUtils dictionaryFromObject:obj];
         [array addObject:dict];
     }
     NSDictionary *dict = @{key: @{@"__op": op, @"objects": array}};
@@ -250,7 +250,7 @@ typedef enum {
 
 #pragma mark - Server json
 
--(NSDictionary *)jsonForSetWithIgnoreAVObject:(BOOL)ignoreAVObject {
+-(NSDictionary *)jsonForSetWithIgnoreObject:(BOOL)ignoreObject {
     NSDictionary *setDict = [[self setDict] copy];
     NSMutableDictionary * dict = [NSMutableDictionary dictionary];
     for(NSString * key in setDict) {
@@ -258,13 +258,13 @@ typedef enum {
         
         // object without object id will be stored in
         // batch request, so just ignore them here.
-        if (ignoreAVObject &&
-            [object isKindOfClass:[AVObject class]] &&
+        if (ignoreObject &&
+            [object isKindOfClass:[LCObject class]] &&
             ![object hasValidObjectId]) {
             continue;
         }
 
-        NSDictionary * jsonDict = [AVObjectUtils dictionaryFromObject:object];
+        NSDictionary * jsonDict = [LCObjectUtils dictionaryFromObject:object];
         dict[key] = jsonDict;
     }
 
@@ -273,7 +273,7 @@ typedef enum {
 
 - (NSDictionary *)jsonForOp:(AVOp)op {
     if (op == SET) {
-        return [self jsonForSetWithIgnoreAVObject:YES];
+        return [self jsonForSetWithIgnoreObject:YES];
     } else {
         NSDictionary *requestDict = [self requestDictForOp:op];
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
@@ -313,7 +313,7 @@ typedef enum {
     NSMutableDictionary * result = [NSMutableDictionary dictionary];
 
     [self synchronize:^{
-        NSDictionary * dict = [self jsonForSetWithIgnoreAVObject:YES];
+        NSDictionary * dict = [self jsonForSetWithIgnoreObject:YES];
         [self addDictionary:dict to:result update:[self setDict]];
     }];
 
@@ -325,7 +325,7 @@ typedef enum {
     NSMutableDictionary * result = [NSMutableDictionary dictionary];
 
     [self synchronize:^{
-        NSDictionary * dict = [self jsonForSetWithIgnoreAVObject:YES];
+        NSDictionary * dict = [self jsonForSetWithIgnoreObject:YES];
         [self addDictionary:dict to:result update:[self setDict]];
 
         dict = [self jsonForOp:ADD_RELATION];

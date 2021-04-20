@@ -11,7 +11,7 @@
 @interface AVRelation ()
 
 @property (nonatomic, readwrite, copy) NSString * key;
-@property (nonatomic, readwrite, weak) AVObject * parent;
+@property (nonatomic, readwrite, weak) LCObject * parent;
 
 +(AVRelation *)relationFromDictionary:(NSDictionary *)dict;
 

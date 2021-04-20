@@ -1,5 +1,5 @@
 //
-//  AVObjectUtils.h
+//  LCObjectUtils.h
 //  AVOSCloud
 //
 //  Created by Zhu Zeng on 7/4/13.
@@ -10,7 +10,7 @@
 #import "AVGlobal.h"
 #import "AVGeoPoint.h"
 #import "AVACL.h"
-#import "AVObject.h"
+#import "LCObject.h"
 
 @interface AVDate : NSObject
 
@@ -24,7 +24,7 @@
 
 @end
 
-@interface AVObjectUtils : NSObject
+@interface LCObjectUtils : NSObject
 
 
 #pragma mark - Simple objecitive-c object from cloud side dictionary
@@ -37,19 +37,19 @@
 
 #pragma mark - Update Objecitive-c object from server side dictionary
 +(void)copyDictionary:(NSDictionary *)src
-             toObject:(AVObject *)target;
+             toObject:(LCObject *)target;
 
 #pragma mark - Cloud side dictionary representation of objective-c object.
 +(NSMutableDictionary *)dictionaryFromDictionary:(NSDictionary *)dic;
 +(NSMutableArray *)dictionaryFromArray:(NSArray *)array;
-+(NSDictionary *)dictionaryFromAVObjectPointer:(AVObject *)object;
++(NSDictionary *)dictionaryFromObjectPointer:(LCObject *)object;
 +(NSDictionary *)dictionaryFromGeoPoint:(AVGeoPoint *)point;
 +(NSDictionary *)dictionaryFromData:(NSData *)data;
 +(NSDictionary *)dictionaryFromFile:(AVFile *)file;
 +(NSDictionary *)dictionaryFromACL:(AVACL *)acl;
 + (id)dictionaryFromObject:(id)obj;
 + (id)dictionaryFromObject:(id)obj topObject:(BOOL)topObject;
-+(NSDictionary *)childDictionaryFromAVObject:(AVObject *)object
++(NSDictionary *)childDictionaryFromObject:(LCObject *)object
                                      withKey:(NSString *)key;
 
 #pragma mark - Object snapshot, usually for local cache.
@@ -57,17 +57,17 @@
 + (id)snapshotDictionary:(id)object;
 + (id)snapshotDictionary:(id)object recursive:(BOOL)recursive;
 
-+ (NSMutableDictionary *)objectSnapshot:(AVObject *)object;
-+ (NSMutableDictionary *)objectSnapshot:(AVObject *)object recursive:(BOOL)recursive;
++ (NSMutableDictionary *)objectSnapshot:(LCObject *)object;
++ (NSMutableDictionary *)objectSnapshot:(LCObject *)object recursive:(BOOL)recursive;
 
-+(AVObject *)avobjectFromDictionary:(NSDictionary *)dict;
-+(AVObject *)avObjectForClass:(NSString *)className;
-+(AVObject *)targetObjectFromRelationDictionary:(NSDictionary *)dict;
++(LCObject *)lcObjectFromDictionary:(NSDictionary *)dict;
++(LCObject *)lcObjectForClass:(NSString *)className;
++(LCObject *)targetObjectFromRelationDictionary:(NSDictionary *)dict;
 
-+(NSSet *)allAVObjectProperties:(Class)objectClass;
++(NSSet *)allObjectProperties:(Class)objectClass;
 
 #pragma mark - Rebuild Relation
-+(void)setupRelation:(AVObject *)parent
++(void)setupRelation:(LCObject *)parent
       withDictionary:(NSDictionary *)relationMap;
 
 

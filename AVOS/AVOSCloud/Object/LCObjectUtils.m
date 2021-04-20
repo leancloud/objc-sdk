@@ -1,5 +1,5 @@
 //
-//  AVObjectUtils.m
+//  LCObjectUtils.m
 //  AVOSCloud
 //
 //  Created by Zhu Zeng on 7/4/13.
@@ -7,11 +7,11 @@
 //
 
 #import <objc/runtime.h>
-#import "AVObjectUtils.h"
-#import "AVObject_Internal.h"
+#import "LCObjectUtils.h"
+#import "LCObject_Internal.h"
 #import "AVFile.h"
 #import "AVFile_Internal.h"
-#import "AVObjectUtils.h"
+#import "LCObjectUtils.h"
 #import "AVUser_Internal.h"
 #import "AVACL_Internal.h"
 #import "AVRelation.h"
@@ -72,7 +72,7 @@
 
 @end
 
-@implementation AVObjectUtils
+@implementation LCObjectUtils
 
 #pragma mark - Check type
 
@@ -81,8 +81,8 @@
     return [type isEqualToString:@"Relation"];
 }
 
-/// The remote AVObject can be a pointer object or a normal object without pointer property
-/// When adding AVObject, we have to check if it's a pointer or not.
+/// The remote LCObject can be a pointer object or a normal object without pointer property
+/// When adding LCObject, we have to check if it's a pointer or not.
 +(BOOL)isRelationDictionary:(NSDictionary *)dict
 {
     NSString * type = [dict objectForKey:@"__type"];
@@ -135,7 +135,7 @@
     return ([[dict objectForKey:classNameTag] isEqualToString:@"_File"]);
 }
 
-+(BOOL)isAVObject:(NSDictionary *)dict
++(BOOL)isLCObject:(NSDictionary *)dict
 {
     // Should check for __type is Object ?
     return ([dict objectForKey:classNameTag] != nil);
@@ -170,9 +170,9 @@
     NSMutableArray *newArray = [NSMutableArray arrayWithCapacity:array.count];
     for (id obj in [array copy]) {
         if ([obj isKindOfClass:[NSDictionary class]]) {
-            [newArray addObject:[AVObjectUtils objectFromDictionary:obj]];
+            [newArray addObject:[LCObjectUtils objectFromDictionary:obj]];
         } else if ([obj isKindOfClass:[NSArray class]]) {
-            NSArray * sub = [AVObjectUtils arrayFromArray:obj];
+            NSArray * sub = [LCObjectUtils arrayFromArray:obj];
             [newArray addObject:sub];
         } else {
             [newArray addObject:obj];
@@ -184,35 +184,35 @@
 +(NSObject *)objectFromDictionary:(NSDictionary *)dict
 {
     NSString * type = [dict valueForKey:@"__type"];
-    if ([AVObjectUtils isRelation:type])
+    if ([LCObjectUtils isRelation:type])
     {
-        return [AVObjectUtils targetObjectFromRelationDictionary:dict];
+        return [LCObjectUtils targetObjectFromRelationDictionary:dict];
     }
-    else if ([AVObjectUtils isPointer:type] ||
-             [AVObjectUtils isAVObject:dict] )
+    else if ([LCObjectUtils isPointer:type] ||
+             [LCObjectUtils isLCObject:dict] )
     {
         /*
-         the backend stores AVFile as AVObject, but in sdk AVFile is not subclass of AVObject, have to process the situation here.
+         the backend stores AVFile as LCObject, but in sdk AVFile is not subclass of LCObject, have to process the situation here.
          */
-        if ([AVObjectUtils isFilePointer:dict]) {
+        if ([LCObjectUtils isFilePointer:dict]) {
             return [[AVFile alloc] initWithRawJSONData:[dict mutableCopy]];
         }
-        return [AVObjectUtils avobjectFromDictionary:dict];
+        return [LCObjectUtils lcObjectFromDictionary:dict];
     }
-    else if ([AVObjectUtils isFile:type]) {
+    else if ([LCObjectUtils isFile:type]) {
         return [[AVFile alloc] initWithRawJSONData:[dict mutableCopy]];
     }
-    else if ([AVObjectUtils isGeoPoint:type])
+    else if ([LCObjectUtils isGeoPoint:type])
     {
-        AVGeoPoint * point = [AVObjectUtils geoPointFromDictionary:dict];
+        AVGeoPoint * point = [LCObjectUtils geoPointFromDictionary:dict];
         return point;
     }
-    else if ([AVObjectUtils isDate:type]) {
+    else if ([LCObjectUtils isDate:type]) {
         return [AVDate dateFromDictionary:dict];;
     }
-    else if ([AVObjectUtils isData:type])
+    else if ([LCObjectUtils isData:type])
     {
-        NSData * data = [AVObjectUtils dataFromDictionary:dict];
+        NSData * data = [LCObjectUtils dataFromDictionary:dict];
         return data;
     }
     return dict;
@@ -238,45 +238,45 @@
 }
 
 +(void)copyDictionary:(NSDictionary *)dict
-             toTarget:(AVObject *)target
+             toTarget:(LCObject *)target
                   key:(NSString *)key
 {
     NSString * type = [dict valueForKey:@"__type"];
-    if ([AVObjectUtils isRelation:type])
+    if ([LCObjectUtils isRelation:type])
     {
         // 解析 {"__type":"Relation","className":"_User"}，添加第一个来判断类型
-        AVObject * object = [AVObjectUtils targetObjectFromRelationDictionary:dict];
+        LCObject * object = [LCObjectUtils targetObjectFromRelationDictionary:dict];
         [target addRelation:object forKey:key submit:NO];
     }
-    else if ([AVObjectUtils isPointer:type])
+    else if ([LCObjectUtils isPointer:type])
     {
-        [target setObject:[AVObjectUtils objectFromDictionary:dict] forKey:key submit:NO];
+        [target setObject:[LCObjectUtils objectFromDictionary:dict] forKey:key submit:NO];
     }
-    else if ([AVObjectUtils isAVObject:dict]) {
-        [target setObject:[AVObjectUtils objectFromDictionary:dict] forKey:key submit:NO];
+    else if ([LCObjectUtils isLCObject:dict]) {
+        [target setObject:[LCObjectUtils objectFromDictionary:dict] forKey:key submit:NO];
     }
-    else if ([AVObjectUtils isFile:type]) {
+    else if ([LCObjectUtils isFile:type]) {
         AVFile *file = [[AVFile alloc] initWithRawJSONData:[dict mutableCopy]];
         [target setObject:file forKey:key submit:false];
     }
-    else if ([AVObjectUtils isGeoPoint:type])
+    else if ([LCObjectUtils isGeoPoint:type])
     {
         AVGeoPoint * point = [AVGeoPoint geoPointFromDictionary:dict];
         [target setObject:point forKey:key submit:NO];
     }
-    else if ([AVObjectUtils isACL:type] ||
-             [AVObjectUtils isACL:key])
+    else if ([LCObjectUtils isACL:type] ||
+             [LCObjectUtils isACL:key])
     {
-        [target setObject:[AVObjectUtils aclFromDictionary:dict] forKey:ACLTag submit:NO];
+        [target setObject:[LCObjectUtils aclFromDictionary:dict] forKey:ACLTag submit:NO];
     }
-    else if ([AVObjectUtils isDate:type]) {
+    else if ([LCObjectUtils isDate:type]) {
         [target setObject:[AVDate dateFromDictionary:dict]
                    forKey:key
                    submit:NO];
     }
-    else if ([AVObjectUtils isData:type])
+    else if ([LCObjectUtils isData:type])
     {
-        NSData * data = [AVObjectUtils dataFromDictionary:dict];
+        NSData * data = [LCObjectUtils dataFromDictionary:dict];
         [target setObject:data forKey:key submit:NO];
     }
     else
@@ -287,7 +287,7 @@
 }
 
 
-/// Add object to avobject container.
+/// Add object to lcobject container.
 +(void)addObject:(NSObject *)object
               to:(NSObject *)parent
              key:(NSString *)key
@@ -298,18 +298,18 @@
         return;
     }
     
-    if (![parent isKindOfClass:[AVObject class]]) {
+    if (![parent isKindOfClass:[LCObject class]]) {
         return;
     }
-    AVObject * avParent = (AVObject *)parent;
-    if ([object isKindOfClass:[AVObject class]]) {
+    LCObject * avParent = (LCObject *)parent;
+    if ([object isKindOfClass:[LCObject class]]) {
         if (isRelation) {
-            [avParent addRelation:(AVObject *)object forKey:key submit:NO];
+            [avParent addRelation:(LCObject *)object forKey:key submit:NO];
         } else {
             [avParent setObject:object forKey:key submit:NO];
         }
     } else if ([object isKindOfClass:[NSArray class]]) {
-        for(AVObject * item in [object copy]) {
+        for(LCObject * item in [object copy]) {
             [avParent addObject:item forKey:key];
         }
     } else {
@@ -317,7 +317,7 @@
     }
 }
 
-+(void)updateObjectProperty:(AVObject *)target
++(void)updateObjectProperty:(LCObject *)target
                         key:(NSString *)key
                       value:(NSObject *)value
 {
@@ -326,14 +326,14 @@
     } else if ([key isEqualToString:@"updatedAt"]) {
         target.updatedAt = [AVDate dateFromValue:value];
     } else if ([key isEqualToString:ACLTag]) {
-        AVACL * acl = [AVObjectUtils aclFromDictionary:(NSDictionary *)value];
+        AVACL * acl = [LCObjectUtils aclFromDictionary:(NSDictionary *)value];
         [target setObject:acl forKey:key submit:NO];
     } else {
         if ([value isKindOfClass:[NSDictionary class]]) {
             NSDictionary * valueDict = (NSDictionary *)value;
-            [AVObjectUtils copyDictionary:valueDict toTarget:target key:key];
+            [LCObjectUtils copyDictionary:valueDict toTarget:target key:key];
         } else if ([value isKindOfClass:[NSArray class]]) {
-            NSArray * array = [AVObjectUtils arrayFromArray:(NSArray *)value];
+            NSArray * array = [LCObjectUtils arrayFromArray:(NSArray *)value];
             [target setObject:array forKey:key submit:NO];
         } else if ([value isEqual:[NSNull null]]) {
             [target removeObjectForKey:key];
@@ -343,18 +343,18 @@
     }
 }
 
-+(void)updateSubObjects:(AVObject *)target
++(void)updateSubObjects:(LCObject *)target
                     key:(NSString *)key
                   value:(NSObject *)obj
 {
     // additional properties, use setObject
     if ([obj isKindOfClass:[NSDictionary class]])
     {
-        [AVObjectUtils copyDictionary:(NSDictionary *)obj toTarget:target key:key];
+        [LCObjectUtils copyDictionary:(NSDictionary *)obj toTarget:target key:key];
     }
     else if ([obj isKindOfClass:[NSArray class]])
     {
-        NSArray * array = [AVObjectUtils arrayFromArray:(NSArray *)obj];
+        NSArray * array = [LCObjectUtils arrayFromArray:(NSArray *)obj];
         [target setObject:array forKey:key submit:NO];
     }
     else
@@ -366,13 +366,13 @@
 
 #pragma mark - Update Objecitive-c object from server side dictionary
 +(void)copyDictionary:(NSDictionary *)src
-             toObject:(AVObject *)target
+             toObject:(LCObject *)target
 {
     [src enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if ([target respondsToSelector:NSSelectorFromString(key)]) {
-            [AVObjectUtils updateObjectProperty:target key:key value:obj];
+            [LCObjectUtils updateObjectProperty:target key:key value:obj];
         } else {
-            [AVObjectUtils updateSubObjects:target key:key value:obj];
+            [LCObjectUtils updateSubObjects:target key:key value:obj];
         }
     }];
 }
@@ -387,7 +387,7 @@
     NSMutableDictionary *newDic = [NSMutableDictionary dictionaryWithCapacity:dic.count];
     for (NSString *key in [dic allKeys]) {
         id obj = [dic objectForKey:key];
-        [newDic setObject:[AVObjectUtils dictionaryFromObject:obj topObject:topObject] forKey:key];
+        [newDic setObject:[LCObjectUtils dictionaryFromObject:obj topObject:topObject] forKey:key];
     }
     return newDic;
 }
@@ -400,12 +400,12 @@
 {
     NSMutableArray *newArray = [NSMutableArray arrayWithCapacity:array.count];
     for (id obj in [array copy]) {
-        [newArray addObject:[AVObjectUtils dictionaryFromObject:obj topObject:topObject]];
+        [newArray addObject:[LCObjectUtils dictionaryFromObject:obj topObject:topObject]];
     }
     return newArray;
 }
 
-+(NSDictionary *)dictionaryFromAVObjectPointer:(AVObject *)object
++(NSDictionary *)dictionaryFromObjectPointer:(LCObject *)object
 {
     NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
     [dict setObject:@"Pointer" forKey:@"__type"];
@@ -424,7 +424,7 @@
  "key" : "myddd"
  }
  */
-+(NSDictionary *)childDictionaryFromAVObject:(AVObject *)object
++(NSDictionary *)childDictionaryFromObject:(LCObject *)object
                                      withKey:(NSString *)key
 {
     NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
@@ -435,15 +435,15 @@
     return dict;
 }
 
-+ (NSSet *)allAVObjectProperties:(Class)objectClass {
++ (NSSet *)allObjectProperties:(Class)objectClass {
     NSMutableSet *properties = [NSMutableSet set];
     
-    [self allAVObjectProperties:objectClass properties:properties];
+    [self allObjectProperties:objectClass properties:properties];
     
     return [properties copy];
 }
 
-+(void)allAVObjectProperties:(Class)objectClass
++(void)allObjectProperties:(Class)objectClass
                   properties:(NSMutableSet *)properties {
     unsigned int numberOfProperties = 0;
     objc_property_t *propertyArray = class_copyPropertyList(objectClass, &numberOfProperties);
@@ -462,33 +462,33 @@
         [properties addObject:key];
     }
     
-    if ([objectClass isSubclassOfClass:[AVObject class]] && objectClass != [AVObject class])
+    if ([objectClass isSubclassOfClass:[LCObject class]] && objectClass != [LCObject class])
     {
-        [AVObjectUtils allAVObjectProperties:[objectClass superclass] properties:properties];
+        [LCObjectUtils allObjectProperties:[objectClass superclass] properties:properties];
     }
     free(propertyArray);
 }
 
-// generate object json dictionary. For AVObject, we generate the full
+// generate object json dictionary. For LCObject, we generate the full
 // json dictionary instead of pointer only. This function is different
-// from dictionaryFromObject which generates pointer json only for AVObject.
+// from dictionaryFromObject which generates pointer json only for LCObject.
 + (id)snapshotDictionary:(id)object {
     return [self snapshotDictionary:object recursive:YES];
 }
 
 + (id)snapshotDictionary:(id)object recursive:(BOOL)recursive {
-    if (recursive && [object isKindOfClass:[AVObject class]]) {
-        return [AVObjectUtils objectSnapshot:object recursive:recursive];
+    if (recursive && [object isKindOfClass:[LCObject class]]) {
+        return [LCObjectUtils objectSnapshot:object recursive:recursive];
     } else {
-        return [AVObjectUtils dictionaryFromObject:object];
+        return [LCObjectUtils dictionaryFromObject:object];
     }
 }
 
-+ (NSMutableDictionary *)objectSnapshot:(AVObject *)object {
++ (NSMutableDictionary *)objectSnapshot:(LCObject *)object {
     return [self objectSnapshot:object recursive:YES];
 }
 
-+ (NSMutableDictionary *)objectSnapshot:(AVObject *)object recursive:(BOOL)recursive {
++ (NSMutableDictionary *)objectSnapshot:(LCObject *)object recursive:(BOOL)recursive {
     __block NSDictionary *localDataCopy = nil;
     [object internalSyncLock:^{
         localDataCopy = object._localData.copy;
@@ -537,7 +537,7 @@
                          nil];
     
     NSMutableSet * properties = [NSMutableSet set];
-    [self allAVObjectProperties:[object class] properties:properties];
+    [self allObjectProperties:[object class] properties:properties];
     
     for (NSString * key in properties) {
         if ([ignoreKeys containsObject:key]) {
@@ -552,53 +552,53 @@
     return result;
 }
 
-+(AVObject *)avObjectForClass:(NSString *)className {
++(LCObject *)lcObjectForClass:(NSString *)className {
     if (className == nil) {
         return nil;
     }
-    AVObject *object = nil;
+    LCObject *object = nil;
     Class classObject = [[AVPaasClient sharedInstance] classFor:className];
-    if (classObject != nil && [classObject isSubclassOfClass:[AVObject class]]) {
+    if (classObject != nil && [classObject isSubclassOfClass:[LCObject class]]) {
         if ([classObject respondsToSelector:@selector(object)]) {
             object = [classObject performSelector:@selector(object)];
         }
     } else {
-        if ([AVObjectUtils isUserClass:className]) {
+        if ([LCObjectUtils isUserClass:className]) {
             object = [AVUser user];
-        } else if ([AVObjectUtils isInstallationClass:className]) {
+        } else if ([LCObjectUtils isInstallationClass:className]) {
             object = [AVInstallation installation];
-        } else if ([AVObjectUtils isRoleClass:className]) {
+        } else if ([LCObjectUtils isRoleClass:className]) {
             // TODO
             object = [AVRole role];
         } else {
-            object = [AVObject objectWithClassName:className];
+            object = [LCObject objectWithClassName:className];
         }
     }
     return object;
 }
 
-+(AVObject *)avObjectFromDictionary:(NSDictionary *)src
++(LCObject *)lcObjectFromDictionary:(NSDictionary *)src
                           className:(NSString *)className {
     if (src == nil || className == nil || src.count == 0) {
         return nil;
     }
-    AVObject *object = [AVObjectUtils avObjectForClass:className];
-    [AVObjectUtils copyDictionary:src toObject:object];
-    if ([AVObjectUtils isPointerDictionary:src]) {
+    LCObject *object = [LCObjectUtils lcObjectForClass:className];
+    [LCObjectUtils copyDictionary:src toObject:object];
+    if ([LCObjectUtils isPointerDictionary:src]) {
         object._isPointer = YES;
     }
     return object;
 }
 
-+(AVObject *)avobjectFromDictionary:(NSDictionary *)dict {
++(LCObject *)lcObjectFromDictionary:(NSDictionary *)dict {
     NSString * className = [dict objectForKey:classNameTag];
-    return [AVObjectUtils avObjectFromDictionary:dict className:className];
+    return [LCObjectUtils lcObjectFromDictionary:dict className:className];
 }
 
 // create relation target object instead of relation object.
-+(AVObject *)targetObjectFromRelationDictionary:(NSDictionary *)dict
++(LCObject *)targetObjectFromRelationDictionary:(NSDictionary *)dict
 {
-    AVObject * object = [AVObjectUtils avObjectForClass:[dict valueForKey:classNameTag]];
+    LCObject * object = [LCObjectUtils lcObjectForClass:[dict valueForKey:classNameTag]];
     return object;
 }
 
@@ -626,7 +626,7 @@
 
 +(NSDictionary *)dictionaryFromRelation:(AVRelation *)relation {
     if (relation.targetClass) {
-        return [AVObjectUtils dictionaryForRelation:relation.targetClass];
+        return [LCObjectUtils dictionaryForRelation:relation.targetClass];
     }
     return nil;
 }
@@ -640,45 +640,45 @@
     return [self dictionaryFromObject:obj topObject:NO];
 }
 
-/// topObject means get the top level AVObject with Pointer child if any AVObject. Used for cloud rpc.
+/// topObject means get the top level LCObject with Pointer child if any LCObject. Used for cloud rpc.
 + (id)dictionaryFromObject:(id)obj topObject:(BOOL)topObject
 {
     if ([obj isKindOfClass:[NSDictionary class]]) {
-        return [AVObjectUtils dictionaryFromDictionary:obj topObject:topObject];
+        return [LCObjectUtils dictionaryFromDictionary:obj topObject:topObject];
     } else if ([obj isKindOfClass:[NSArray class]]) {
-        return [AVObjectUtils dictionaryFromArray:obj topObject:topObject];
-    } else if ([obj isKindOfClass:[AVObject class]]) {
+        return [LCObjectUtils dictionaryFromArray:obj topObject:topObject];
+    } else if ([obj isKindOfClass:[LCObject class]]) {
         if (topObject) {
-            return [AVObjectUtils objectSnapshot:obj recursive:NO];
+            return [LCObjectUtils objectSnapshot:obj recursive:NO];
         } else {
-            return [AVObjectUtils dictionaryFromAVObjectPointer:obj];
+            return [LCObjectUtils dictionaryFromObjectPointer:obj];
         }
     } else if ([obj isKindOfClass:[AVGeoPoint class]]) {
-        return [AVObjectUtils dictionaryFromGeoPoint:obj];
+        return [LCObjectUtils dictionaryFromGeoPoint:obj];
     } else if ([obj isKindOfClass:[NSDate class]]) {
         return [AVDate dictionaryFromDate:obj];
     } else if ([obj isKindOfClass:[NSData class]]) {
-        return [AVObjectUtils dictionaryFromData:obj];
+        return [LCObjectUtils dictionaryFromData:obj];
     } else if ([obj isKindOfClass:[AVFile class]]) {
-        return [AVObjectUtils dictionaryFromFile:obj];
+        return [LCObjectUtils dictionaryFromFile:obj];
     } else if ([obj isKindOfClass:[AVACL class]]) {
-        return [AVObjectUtils dictionaryFromACL:obj];
+        return [LCObjectUtils dictionaryFromACL:obj];
     } else if ([obj isKindOfClass:[AVRelation class]]) {
-        return [AVObjectUtils dictionaryFromRelation:obj];
+        return [LCObjectUtils dictionaryFromRelation:obj];
     }
     // string or other?
     return obj;
 }
 
-+(void)setupRelation:(AVObject *)parent
++(void)setupRelation:(LCObject *)parent
       withDictionary:(NSDictionary *)relationMap
 {
     for(NSString * key in [relationMap allKeys]) {
         NSArray * array = [relationMap objectForKey:key];
         for(NSDictionary * item in [array copy]) {
-            NSObject * object = [AVObjectUtils objectFromDictionary:item];
-            if ([object isKindOfClass:[AVObject class]]) {
-                [parent addRelation:(AVObject *)object forKey:key submit:NO];
+            NSObject * object = [LCObjectUtils objectFromDictionary:item];
+            if ([object isKindOfClass:[LCObject class]]) {
+                [parent addRelation:(LCObject *)object forKey:key submit:NO];
             }
         }
     }
@@ -748,19 +748,19 @@
 {
     //FIXME: 而且等于nil也没问题 只不过不应该再发请求
     //NSAssert(objectClass!=nil, @"className should not be nil!");
-    if ([AVObjectUtils isUserClass:className])
+    if ([LCObjectUtils isUserClass:className])
     {
-        return [AVObjectUtils userObjectPath:objectId];
+        return [LCObjectUtils userObjectPath:objectId];
     }
-    else if ([AVObjectUtils isRoleClass:className])
+    else if ([LCObjectUtils isRoleClass:className])
     {
-        return [AVObjectUtils roleObjectPath:objectId];
+        return [LCObjectUtils roleObjectPath:objectId];
     }
-    else if ([AVObjectUtils isInstallationClass:className])
+    else if ([LCObjectUtils isInstallationClass:className])
     {
-        return [AVObjectUtils installationObjectPath:objectId];
+        return [LCObjectUtils installationObjectPath:objectId];
     }
-    return [AVObjectUtils classEndPoint:className objectId:objectId];
+    return [LCObjectUtils classEndPoint:className objectId:objectId];
 }
 
 +(NSString *)batchPath {

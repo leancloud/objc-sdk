@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy, readonly) NSString *className;
 
 /**
- *  查询的结果 AVObject 对象列表
+ *  查询的结果 LCObject 对象列表
  */
 @property(nonatomic, strong, readonly) NSArray *results;
 

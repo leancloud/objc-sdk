@@ -20,15 +20,15 @@
 -(void)queryWithBlock:(NSString *)path
            parameters:(NSDictionary *)parameters
                 block:(AVArrayResultBlock)resultBlock;
-- (AVObject *)getFirstObjectWithBlock:(AVObjectResultBlock)resultBlock
+- (LCObject *)getFirstObjectWithBlock:(LCObjectResultBlock)resultBlock
                         waitUntilDone:(BOOL)wait
                                 error:(NSError **)theError;
 
 /**
- *  Convert server response json to AVObjects. Indend to be overridden.
+ *  Convert server response json to LCObjects. Indend to be overridden.
  *  @param results "results" value of the server response.
  *  @param className The class name for parsing. If nil, the query's className will be used.
- *  @return AVObject array.
+ *  @return LCObject array.
  */
 - (NSMutableArray *)processResults:(NSArray *)results className:(NSString *)className;
 

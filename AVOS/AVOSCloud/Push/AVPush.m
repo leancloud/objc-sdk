@@ -10,7 +10,7 @@
 #import "AVUtils.h"
 #import "AVQuery_Internal.h"
 #import "AVInstallation_Internal.h"
-#import "AVObjectUtils.h"
+#import "LCObjectUtils.h"
 #import "LCRouter_Internal.h"
 
 /*!

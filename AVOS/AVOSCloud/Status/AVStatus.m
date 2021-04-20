@@ -9,8 +9,8 @@
 #import "AVStatus.h"
 #import "AVPaasClient.h"
 #import "AVErrorUtils.h"
-#import "AVObjectUtils.h"
-#import "AVObject_Internal.h"
+#import "LCObjectUtils.h"
+#import "LCObject_Internal.h"
 #import "AVQuery_Internal.h"
 #import "AVUtils.h"
 #import "AVUser_Internal.h"
@@ -42,7 +42,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     
     //`where` here is a string, but the server ask for dictionary
     [dict removeObjectForKey:@"where"];
-    [dict setObject:[AVObjectUtils dictionaryFromDictionary:self.where] forKey:@"where"];
+    [dict setObject:[LCObjectUtils dictionaryFromDictionary:self.where] forKey:@"where"];
     return dict;
 }
 @end
@@ -90,7 +90,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     }
     
     if (self.owner) {
-        [self.parameters setObject:[AVObjectUtils dictionaryFromAVObjectPointer:self.owner] forKey:@"owner"];
+        [self.parameters setObject:[LCObjectUtils dictionaryFromObjectPointer:self.owner] forKey:@"owner"];
     }
     
     if (handleInboxType) {
@@ -107,7 +107,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     [super queryWithBlock:path parameters:parameters block:resultBlock];
 }
 
-- (AVObject *)getFirstObjectWithBlock:(AVObjectResultBlock)resultBlock
+- (LCObject *)getFirstObjectWithBlock:(LCObjectResultBlock)resultBlock
                         waitUntilDone:(BOOL)wait
                                 error:(NSError **)theError {
     _end = NO;
@@ -152,7 +152,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
         status.type=data[@"inboxType"];
         status.createdAt = [AVDate dateFromValue:data[@"createdAt"]];
         status.messageId=[data[@"messageId"] integerValue];
-        status.source=[AVObjectUtils avobjectFromDictionary:data[@"source"]];
+        status.source=[LCObjectUtils lcObjectFromDictionary:data[@"source"]];
         
         NSMutableDictionary *newData=[data mutableCopy];
         [newData removeObjectsForKeys:@[@"inboxType",@"objectId",@"createdAt",@"updatedAt",@"messageId",@"source"]];
@@ -235,7 +235,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     AVQuery *q=[AVStatus statusQuery];
     q.limit=limit;
     q.skip=skip;
-    [q whereKey:@"source" equalTo:[AVObject objectWithoutDataWithClassName:@"_User" objectId:userId]];
+    [q whereKey:@"source" equalTo:[LCObject objectWithoutDataWithClassName:@"_User" objectId:userId]];
     [q findObjectsInBackgroundWithBlock:callback];
 }
 
@@ -287,7 +287,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
 
     NSDictionary *parameters = @{
         @"messageId" : [NSString stringWithFormat:@"%lu", (unsigned long)messageId],
-        @"owner"     : [AVObjectUtils dictionaryFromAVObjectPointer:[AVUser objectWithoutDataWithObjectId:receiver]],
+        @"owner"     : [LCObjectUtils dictionaryFromObjectPointer:[AVUser objectWithoutDataWithObjectId:receiver]],
         @"inboxType" : inboxType
     };
 
@@ -417,7 +417,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     NSMutableDictionary *data=[self.data mutableCopy];
     [data setObject:self.source forKey:@"source"];
     
-    [body setObject:[AVObjectUtils dictionaryFromDictionary:data] forKey:@"data"];
+    [body setObject:[LCObjectUtils dictionaryFromDictionary:data] forKey:@"data"];
     
     
     NSDictionary *queryInfo=[self.targetQuery dictionaryForStatusRequest];

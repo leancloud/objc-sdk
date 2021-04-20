@@ -9,8 +9,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /*!
- Object which may be used to embed a latitude / longitude point as the value for a key in a AVObject.
- AVObjects with a AVGeoPoint field may be queried in a geospatial manner using AVQuery's whereKey:nearGeoPoint:.
+ Object which may be used to embed a latitude / longitude point as the value for a key in a LCObject.
+ LCObjects with a AVGeoPoint field may be queried in a geospatial manner using AVQuery's whereKey:nearGeoPoint:.
  
  This is also used as a point specifier for whereKey:nearGeoPoint: queries.
  

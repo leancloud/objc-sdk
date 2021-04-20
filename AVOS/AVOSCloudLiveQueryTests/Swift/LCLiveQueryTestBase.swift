@@ -53,12 +53,12 @@ class LCLiveQueryTestBase: LCTestBase {
         }, failure: { XCTFail("timeout") })
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
-            let todo: AVObject = AVObject(className: "Todo")
+            let todo: LCObject = LCObject(className: "Todo")
             semaphore.increment(2)
             liveQueryDelegate.objectDidCreateClosure = { (liveQuery: AVLiveQuery, object: Any) in
                 XCTAssertTrue(Thread.isMainThread)
                 semaphore.decrement()
-                XCTAssertEqual(todo.objectId, (object as? AVObject)?.objectId)
+                XCTAssertEqual(todo.objectId, (object as? LCObject)?.objectId)
             }
             todo.saveInBackground({ (succeeded: Bool, error: Error?) in
                 XCTAssertTrue(Thread.isMainThread)

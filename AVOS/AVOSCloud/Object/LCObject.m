@@ -1,20 +1,20 @@
-// AVObject.h
+// LCObject.h
 // Copyright 2011 AVOS Inc. All rights reserved.
 
-#import "AVObject_Internal.h"
+#import "LCObject_Internal.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"
 #import "AVRelation.h"
-#import "AVObject_Internal.h"
+#import "LCObject_Internal.h"
 #import "AVRelation_Internal.h"
 #import "AVACL.h"
 #import "AVACL_Internal.h"
 #import "AVGeoPoint_Internal.h"
-#import "AVObjectUtils.h"
+#import "LCObjectUtils.h"
 #import "AVErrorUtils.h"
 #import "AVQuery_Internal.h"
 
-#import "AVObject+Subclass.h"
+#import "LCObject+Subclass.h"
 #import "AVSubclassing.h"
 #import "AVSaveOption.h"
 #import "AVSaveOption_internal.h"
@@ -38,7 +38,7 @@ NSString *const internalIdTag = @"__internalId";
 
 static BOOL convertingNullToNil = YES;
 
-@interface AVObject ()
+@interface LCObject ()
 
 + (NSArray *)invalidKeys;
 + (NSString *)parseClassName;
@@ -56,7 +56,7 @@ void iterate_object_with_accessed(id object, void(^block)(id object), NSMutableS
 
     [accessed addObject:object];
 
-    if ([object isKindOfClass:[AVObject class]]) {
+    if ([object isKindOfClass:[LCObject class]]) {
         [object iteratePropertiesWithBlock:block withAccessed:accessed];
     } else if ([object respondsToSelector:@selector(objectEnumerator)]) {
         for (id value in [[object copy] objectEnumerator]) {
@@ -87,7 +87,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 #pragma clang diagnostic pop
 
-@implementation AVObject {
+@implementation LCObject {
     NSLock *__lock;
     NSRecursiveLock *__requestLock;
 }
@@ -111,7 +111,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 }
 
 - (NSDictionary *)snapshot {
-    return [AVObjectUtils objectSnapshot:self recursive:NO];
+    return [LCObjectUtils objectSnapshot:self recursive:NO];
 }
 
 - (NSString *)description {
@@ -135,26 +135,26 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 #pragma mark - API
 
 + (instancetype)objectWithObjectId:(NSString *)objectId {
-    AVObject *object = [[[self class] alloc] init];
+    LCObject *object = [[[self class] alloc] init];
     object.objectId = objectId;
     return object;
 }
 
 + (instancetype)objectWithClassName:(NSString *)className
 {
-    AVObject *object = [[self alloc] initWithClassName:className];
+    LCObject *object = [[self alloc] initWithClassName:className];
     return object;
 }
 
 + (instancetype)objectWithClassName:(NSString *)className objectId:(NSString *)objectId {
-    AVObject *object = [self objectWithClassName:className];
+    LCObject *object = [self objectWithClassName:className];
     object.objectId = objectId;
     return object;
 }
 
 + (instancetype)objectWithClassName:(NSString *)className dictionary:(NSDictionary *)dictionary
 {
-    AVObject * object = [self objectWithClassName:className];
+    LCObject * object = [self objectWithClassName:className];
     for (NSString *key in [dictionary allKeys]) {
         id value = [dictionary objectForKey:key];
         [object setObject:value forKey:key];
@@ -351,7 +351,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         return;
     }
 
-    if ([[AVObject invalidKeys] containsObject:key]) {
+    if ([[LCObject invalidKeys] containsObject:key]) {
         [NSException raise:NSInvalidArgumentException format:@"The key '%@' is reserved.", key];
     }
     
@@ -392,7 +392,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     return [self setObject:object forKey:key];
 }
 
--(void)addRelation:(AVObject *)object
+-(void)addRelation:(LCObject *)object
             forKey:(NSString *)key
             submit:(BOOL)submit
 {
@@ -407,7 +407,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }
 }
 
--(void)removeRelation:(AVObject *)object
+-(void)removeRelation:(LCObject *)object
                forKey:(NSString *)key
 {
     NSMutableArray * array = [self findArrayForKey:key  inDictionary:self._relationData create:NO];
@@ -425,7 +425,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 - (AVRelation *)relationForKey:(NSString *)key {
     NSArray * array = [self._relationData objectForKey:key];
-    AVObject *target = nil;
+    LCObject *target = nil;
     if (array.count > 0)
     {
         target = [array objectAtIndex:0];
@@ -439,7 +439,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 - (NSString *)childClassNameForRelation:(NSString *)key {
     NSArray * array = [self._relationData objectForKey:key];
-    AVObject *target = nil;
+    LCObject *target = nil;
     if (array.count > 0)
     {
         target = [array objectAtIndex:0];
@@ -852,7 +852,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
     // Reset all descendant objects' requests.
     [self iterateDescendantObjectsWithBlock:^(id object) {
-        if ([object isKindOfClass:[AVObject class]]) {
+        if ([object isKindOfClass:[LCObject class]]) {
             [[object _requestManager] clear];
         }
     }];
@@ -871,7 +871,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     [visitedObjects addObject:self];
     __block BOOL change = NO;
     [self iterateLocalDataWithBlock:^(NSString *key, id object) {
-        if ([object isKindOfClass:[AVObject class]]) {
+        if ([object isKindOfClass:[LCObject class]]) {
             if (![visitedObjects containsObject:object]) {
                 [object refreshHasDataForInitial:visitedObjects];
                 if ([object _hasDataForInitial]) {
@@ -900,7 +900,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         return;
     }
     [self iterateLocalDataWithBlock:^(NSString *key, id object) {
-        if ([object isKindOfClass:[AVObject class]]) {
+        if ([object isKindOfClass:[LCObject class]]) {
             if (![visitedObjects containsObject:object]) {
                 [object addInitialSaveRequest:initialSaveArray visitedObjects:visitedObjects];
             }
@@ -954,7 +954,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     
     for (AVFile *file in files) {
         if (![file objectId]) {
-            [AVObject saveFile:file];
+            [LCObject saveFile:file];
             
             if (error) {
                 return error;
@@ -1003,11 +1003,11 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     return nil;
 }
 
--(AVObject *)searchObjectByInternalId:(NSString *)internalId {
+-(LCObject *)searchObjectByInternalId:(NSString *)internalId {
     return [self searchObjectByInternalId:internalId visitedObjects:[NSMutableSet set]];
 }
 
--(AVObject *)searchObjectByInternalId:(NSString *)internalId visitedObjects:(NSMutableSet *)visitedObjects {
+-(LCObject *)searchObjectByInternalId:(NSString *)internalId visitedObjects:(NSMutableSet *)visitedObjects {
     [visitedObjects addObject:self];
     if ([internalId isEqualToString:self._uuid]) {
         return self;
@@ -1018,11 +1018,11 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }];
     for (id key in localDataCopy) {
         id object = localDataCopy[key];
-        if ([object isKindOfClass:[AVObject class]]) {
+        if ([object isKindOfClass:[LCObject class]]) {
             if ([visitedObjects containsObject:object]) {
                 continue;
             } else {
-                AVObject * result = [object searchObjectByInternalId:internalId visitedObjects:visitedObjects];
+                LCObject * result = [object searchObjectByInternalId:internalId visitedObjects:visitedObjects];
                 if (result) {
                     return result;
                 }
@@ -1042,7 +1042,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     for(NSMutableDictionary * dict in batchRequest) {
         NSDictionary * body = [dict objectForKey:@"body"];
         NSString * internalId = [body objectForKey:internalIdTag];
-        AVObject * object = [self searchObjectByInternalId:internalId];
+        LCObject * object = [self searchObjectByInternalId:internalId];
         if ([object hasValidObjectId]) {
             [AVPaasClient updateBatchMethod:@"PUT" path:[object myObjectPath] dict:dict];
         }
@@ -1076,7 +1076,6 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }
 }
 
-// TODO, move to avobjectutils
 - (void)copyByUUIDFromDictionary:(NSDictionary *)dic {
     [self copyByUUIDFromDictionary:dic visitedObjects:[NSMutableSet set]];
 }
@@ -1099,18 +1098,18 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     // copy the item to self
     id item = dic[self._uuid];
     if (item && [item isKindOfClass:[NSDictionary class]]) {
-        [AVObjectUtils copyDictionary:item toObject:self];
+        [LCObjectUtils copyDictionary:item toObject:self];
     }
     
     // when put, it may contain value from server side,
     // so update local estimated values too.
     item = dic[self.objectId];
     if (item && [item isKindOfClass:[NSDictionary class]]) {
-        [AVObjectUtils copyDictionary:item toObject:self];
+        [LCObjectUtils copyDictionary:item toObject:self];
     }
 
     [self iterateLocalDataWithBlock:^(NSString *key, id object) {
-        if ([object isKindOfClass:[AVObject class]]) {
+        if ([object isKindOfClass:[LCObject class]]) {
             if (![visitedObjects containsObject:object]) {
                 [object copyByUUIDFromDictionary:dic visitedObjects:visitedObjects];
             }
@@ -1144,7 +1143,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 }
 
 - (void)iteratePropertiesWithBlock:(void(^)(id object))block withAccessed:(NSMutableSet *)accessed {
-    NSSet *propertyNames = [AVObjectUtils allAVObjectProperties:[self class]];
+    NSSet *propertyNames = [LCObjectUtils allObjectProperties:[self class]];
 
     for (NSString *key in propertyNames) {
         iterate_object_with_accessed([self valueForKey:key], block, accessed);
@@ -1170,7 +1169,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 + (NSArray *)descendantFilesOfObjects:(NSArray *)objects {
     NSMutableSet *files = [NSMutableSet set];
     
-    for (AVObject *object in [objects copy]) {
+    for (LCObject *object in [objects copy]) {
         [files addObjectsFromArray:[object descendantFiles]];
     }
     
@@ -1203,7 +1202,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
                                                  block:^(id result, NSError *anError)
     {
         if (!anError) {
-            for (AVObject *object in [objects copy]) {
+            for (LCObject *object in [objects copy]) {
                 [object copyByUUIDFromDictionary:result];
             }
         }
@@ -1231,7 +1230,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         for (AVFile *file in subFiles) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 
-                NSError *anError = [AVObject saveFile:file];
+                NSError *anError = [LCObject saveFile:file];
                 if (anError) {
                     blockError = anError;
                     saveOK = NO;
@@ -1253,7 +1252,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 + (BOOL)saveDescendantRequestsOfObjects:(NSArray *)objects error:(NSError **)error {
     NSMutableArray *requestsArray = [NSMutableArray array];
     NSMutableArray *dirtyObjects = [NSMutableArray array];
-    for (AVObject *object in [objects copy]) {
+    for (LCObject *object in [objects copy]) {
         NSMutableArray *requests = [object buildSaveRequests];
         if (requests.count > 0) {
             [dirtyObjects addObject:object];
@@ -1360,16 +1359,16 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     return [self refresh:error];
 }
 
-- (void)refreshInBackgroundWithBlock:(AVObjectResultBlock)block {
+- (void)refreshInBackgroundWithBlock:(LCObjectResultBlock)block {
     [self refreshWithBlock:block keys:nil waitUntilDone:NO error:NULL];
 }
 
 - (void)refreshInBackgroundWithKeys:(NSArray *)keys
-                              block:(AVObjectResultBlock)block {
+                              block:(LCObjectResultBlock)block {
     [self refreshWithBlock:block keys:keys waitUntilDone:NO error:NULL];
 }
 
-- (BOOL)refreshWithBlock:(AVObjectResultBlock)block
+- (BOOL)refreshWithBlock:(LCObjectResultBlock)block
                     keys:(NSArray *)keys
            waitUntilDone:(BOOL)wait
                    error:(NSError **)theError {
@@ -1387,7 +1386,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         if (error == nil)
         {
             [self removeLocalData];
-            [AVObjectUtils copyDictionary:object toObject:self];
+            [LCObjectUtils copyDictionary:object toObject:self];
         }
         else
         {
@@ -1442,7 +1441,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
                 error:(NSError **)error {
     __block NSError *blockError;
     __block BOOL hasCallback = NO;
-    [self internalFetchInBackgroundWithKeys:keys block:^(AVObject *object, NSError *error) {
+    [self internalFetchInBackgroundWithKeys:keys block:^(LCObject *object, NSError *error) {
         blockError = error;
         hasCallback = YES;
     }];
@@ -1453,25 +1452,25 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     return blockError == nil;
 }
 
-- (AVObject *)fetchIfNeeded
+- (LCObject *)fetchIfNeeded
 {
     return [self fetchIfNeededWithKeys:nil];
 }
 
-- (AVObject *)fetchIfNeeded:(NSError **)error
+- (LCObject *)fetchIfNeeded:(NSError **)error
 {
     return [self fetchIfNeededWithKeys:nil error:error];
 }
 
-- (AVObject *)fetchIfNeededAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
+- (LCObject *)fetchIfNeededAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
     return [self fetchIfNeeded:error];
 }
 
-- (AVObject *)fetchIfNeededWithKeys:(NSArray *)keys {
+- (LCObject *)fetchIfNeededWithKeys:(NSArray *)keys {
     return [self fetchIfNeededWithKeys:keys error:nil];
 }
 
-- (AVObject *)fetchIfNeededWithKeys:(NSArray *)keys
+- (LCObject *)fetchIfNeededWithKeys:(NSArray *)keys
                               error:(NSError **)error {
     if (![self isDataAvailable]) {
         [self fetchWithKeys:keys error:error];
@@ -1479,14 +1478,14 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     return self;
 }
 
-- (void)fetchInBackgroundWithBlock:(AVObjectResultBlock)resultBlock
+- (void)fetchInBackgroundWithBlock:(LCObjectResultBlock)resultBlock
 {
     [self fetchInBackgroundWithKeys:nil block:resultBlock];
 }
 
 - (void)fetchInBackgroundWithKeys:(NSArray *)keys
-                            block:(AVObjectResultBlock)block {
-    [self internalFetchInBackgroundWithKeys:keys block:^(AVObject *object, NSError *error) {
+                            block:(LCObjectResultBlock)block {
+    [self internalFetchInBackgroundWithKeys:keys block:^(LCObject *object, NSError *error) {
         [AVUtils callObjectResultBlock:block object:object error:error];
     }];
 }
@@ -1499,7 +1498,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         }
     } else {
         [self removeLocalData];
-        [AVObjectUtils copyDictionary:object toObject:self];
+        [LCObjectUtils copyDictionary:object toObject:self];
         if (self == [AVUser currentUser]) {
             [[self class] changeCurrentUser:(AVUser *)self save:YES];
         }
@@ -1507,7 +1506,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 }
 
 - (void)internalFetchInBackgroundWithKeys:(NSArray *)keys
-                                    block:(AVObjectResultBlock)resultBlock
+                                    block:(LCObjectResultBlock)resultBlock
 {
     
     if (![self hasValidObjectId]) {
@@ -1533,10 +1532,10 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }];
 }
 
-- (void)fetchIfNeededInBackgroundWithBlock:(AVObjectResultBlock)block
+- (void)fetchIfNeededInBackgroundWithBlock:(LCObjectResultBlock)block
 {
     if (![self isDataAvailable]) {
-        [self fetchInBackgroundWithBlock:^(AVObject *object, NSError *error) {
+        [self fetchInBackgroundWithBlock:^(LCObject *object, NSError *error) {
             if (block) block(object, error);
         }];
     } else {
@@ -1573,8 +1572,8 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     NSMutableArray *fetches = [NSMutableArray array];
     NSMutableArray *fetchObjects = [NSMutableArray array];
     // Add a task to the group
-    for (AVObject *obj in objects) {
-        if ([obj isKindOfClass:[AVObject class]]) {
+    for (LCObject *obj in objects) {
+        if ([obj isKindOfClass:[LCObject class]]) {
             if (!check || ![obj isDataAvailable]) {
                 NSDictionary* fetch = [AVPaasClient batchMethod:@"GET" path:[obj myObjectPath] body:nil parameters:nil];
                 [fetches addObject:fetch];
@@ -1590,7 +1589,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
             } else {
                 if (results.count == fetches.count) {
                     for (NSInteger i = 0; i < fetches.count; i++) {
-                        AVObject *object = fetchObjects[i];
+                        LCObject *object = fetchObjects[i];
                         id result = results[i];
                         if ([result isKindOfClass:[NSDictionary class]]) {
                             NSError *theError;
@@ -1713,7 +1712,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 // check className & objectId
 + (BOOL)isValidObjects:(NSArray *)objects error:(NSError **)error {
-    for(AVObject * object in [objects copy]) {
+    for(LCObject * object in [objects copy]) {
         if (object.className.length <= 0 || ![object hasValidObjectId]) {
             if (error != NULL)
                 *error = LCError(kAVErrorMissingObjectId, @"Invaid className or objectId", nil);
@@ -1761,7 +1760,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         return;
     }
     NSMutableArray *deletes = [NSMutableArray array];
-    for (AVObject *object in objects) {
+    for (LCObject *object in objects) {
         NSMutableDictionary *delete = [AVPaasClient batchMethod:@"DELETE" path:[object myObjectPath] body:nil parameters:nil];
         [deletes addObject:delete];
     }
@@ -1771,7 +1770,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
                 if ([result isKindOfClass:[NSDictionary class]]) {
                     // succeed
                     NSInteger index = [results indexOfObject:result];
-                    AVObject *object = objects[index];
+                    LCObject *object = objects[index];
                     [object postDelete];
                 }
             }
@@ -1793,7 +1792,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 -(NSMutableDictionary *)postData
 {
-    return [AVObjectUtils objectSnapshot:self];
+    return [LCObjectUtils objectSnapshot:self];
 }
 
 -(void)addChildrenIfExist:(NSMutableDictionary *)dict {
@@ -1801,9 +1800,9 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     
     // visit all children
     [self iterateLocalDataWithBlock:^(NSString *key, id object) {
-        if ([object isKindOfClass:[AVObject class]]) {
+        if ([object isKindOfClass:[LCObject class]]) {
             if ([object _hasDataForCloud]) {
-                NSDictionary * child = [AVObjectUtils childDictionaryFromAVObject:object withKey:key];
+                NSDictionary * child = [LCObjectUtils childDictionaryFromObject:object withKey:key];
                 [children addObject:child];
             }
         }
@@ -1854,7 +1853,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     [visitedObjects addObject:self];
     __block BOOL change = NO;
     [self iterateLocalDataWithBlock:^(NSString *key, id object) {
-        if ([object isKindOfClass:[AVObject class]]) {
+        if ([object isKindOfClass:[LCObject class]]) {
             if (![visitedObjects containsObject:object]) {
                 [object refreshHasDataForCloud:visitedObjects];
                 if ([object _hasDataForCloud]) {
@@ -1870,7 +1869,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }
 }
 // Basic steps
-// 1. generate json request from request manager, it generates request from all dirty(changed) fields. In this step, we ignore AVObject set request
+// 1. generate json request from request manager, it generates request from all dirty(changed) fields. In this step, we ignore LCObject set request
 // as they will be added later in step3.
 // 2. add acl
 // 3. add children list(changed) only
@@ -1910,8 +1909,8 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     
     // for each child call dataForCloud and insert them to the begin of array.
     [self iterateLocalDataWithBlock:^(NSString *key, id object) {
-        if ([object isKindOfClass:[AVObject class]]) {
-            if (((AVObject *)object)._hasDataForCloud && ![visitedObjects containsObject:object]) {
+        if ([object isKindOfClass:[LCObject class]]) {
+            if (((LCObject *)object)._hasDataForCloud && ![visitedObjects containsObject:object]) {
                 NSMutableArray * list = [object dataForCloudWithVisitedObjects:visitedObjects];
                 if (list) {
                     NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, list.count)];
@@ -1937,7 +1936,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 -(NSString *)myObjectPath
 {
-    return [AVObjectUtils objectPath:self.className objectId:self.objectId];
+    return [LCObjectUtils objectPath:self.className objectId:self.objectId];
 }
 
 #pragma mark - Private Methods
@@ -1964,7 +1963,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     if (!other || ![other isKindOfClass:[self class]]) {
         return NO;
     }
-    AVObject * otherObject = (AVObject *)other;
+    LCObject * otherObject = (LCObject *)other;
     return ([self.objectId isEqualToString:otherObject.objectId] &&
             [self.className isEqualToString:otherObject.className]);
 }
@@ -1990,15 +1989,15 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 #pragma mark - Serialization, Deserialization
 
 -(NSMutableDictionary *)dictionaryForObject {
-    return [AVObjectUtils objectSnapshot:self];
+    return [LCObjectUtils objectSnapshot:self];
 }
 
-+ (AVObject *)objectWithDictionary:(NSDictionary *)dictionary {
-    return [AVObjectUtils avobjectFromDictionary:dictionary];
++ (LCObject *)objectWithDictionary:(NSDictionary *)dictionary {
+    return [LCObjectUtils lcObjectFromDictionary:dictionary];
 }
 
 -(void)objectFromDictionary:(NSDictionary *)dict {
-    [AVObjectUtils copyDictionary:dict toObject:self];
+    [LCObjectUtils copyDictionary:dict toObject:self];
 }
 
 #pragma mark -
@@ -2032,7 +2031,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 @end
 
 
-@implementation AVObject (Subclass)
+@implementation LCObject (Subclass)
 
 + (instancetype)object {
     id obj = [[[self class] alloc] init];
@@ -2322,7 +2321,7 @@ static void setter_f(id self, SEL _cmd, float value)
     @try {
         [super setValue:value forKey:key];
     } @catch (NSException *exception) {
-        NSString *link = @"https://leancloud.cn/docs/ios_os_x_guide.html#AVObject";
+        NSString *link = @"https://leancloud.cn/docs/ios_os_x_guide.html#LCObject";
         AVLoggerError(nil, @"Class %@ may contain a reserved property: %@, see %@ for more infomation.", NSStringFromClass([self class]), key, link);
 
         [exception raise];

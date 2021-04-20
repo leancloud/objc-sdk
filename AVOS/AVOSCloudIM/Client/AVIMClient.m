@@ -16,7 +16,7 @@
 #import "AVIMErrorUtil.h"
 
 #import "UserAgent.h"
-#import "AVObjectUtils.h"
+#import "LCObjectUtils.h"
 #import "AVUtils.h"
 #import "AVPaasClient.h"
 #import "AVErrorUtils.h"

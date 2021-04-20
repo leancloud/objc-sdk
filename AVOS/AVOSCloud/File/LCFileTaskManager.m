@@ -11,7 +11,7 @@
 #import "AVUtils.h"
 #import "AVFile_Internal.h"
 #import "AVPaasClient.h"
-#import "AVObjectUtils.h"
+#import "LCObjectUtils.h"
 #import "LCNetworking.h"
 
 static NSString * const kLCFileTokensProvider_qiniu = @"qiniu";

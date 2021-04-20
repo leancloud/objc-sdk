@@ -2,10 +2,10 @@
 #import "AVRelation.h"
 #import "AVQuery.h"
 #import "AVUtils.h"
-#import "AVObject_Internal.h"
+#import "LCObject_Internal.h"
 #import "AVQuery_Internal.h"
 #import "AVRelation_Internal.h"
-#import "AVObjectUtils.h"
+#import "LCObjectUtils.h"
 
 @implementation AVRelation
 
@@ -18,7 +18,7 @@
         targetClass = self.targetClass;
     }
     AVQuery * query = [AVQuery queryWithClassName:targetClass];
-    NSMutableDictionary * dict = [@{@"$relatedTo": @{@"object": [AVObjectUtils dictionaryFromAVObjectPointer:self.parent], @"key":self.key}} mutableCopy];
+    NSMutableDictionary * dict = [@{@"$relatedTo": @{@"object": [LCObjectUtils dictionaryFromObjectPointer:self.parent], @"key":self.key}} mutableCopy];
     [query setValue:[NSMutableDictionary dictionaryWithDictionary:dict] forKey:@"where"];
     if (!self.targetClass) {
         query.extraParameters = [@{@"redirectClassNameForKey":self.key} mutableCopy];
@@ -26,7 +26,7 @@
     return query;
 }
 
-- (void)addObject:(AVObject *)object
+- (void)addObject:(LCObject *)object
 {
     // check object id
     if (![object hasValidObjectId]) {
@@ -39,16 +39,16 @@
     [self.parent addRelation:object forKey:self.key submit:YES];
 }
 
-- (void)removeObject:(AVObject *)object
+- (void)removeObject:(LCObject *)object
 {
     [self.parent removeRelation:object forKey:self.key];
 }
 
 +(AVQuery *)reverseQuery:(NSString *)parentClassName
              relationKey:(NSString *)relationKey
-             childObject:(AVObject *)child
+             childObject:(LCObject *)child
 {
-    NSDictionary * dict = @{relationKey: [AVObjectUtils dictionaryFromAVObjectPointer:child]};
+    NSDictionary * dict = @{relationKey: [LCObjectUtils dictionaryFromObjectPointer:child]};
     AVQuery * query = [AVQuery queryWithClassName:parentClassName];
     [query setValue:[NSMutableDictionary dictionaryWithDictionary:dict] forKey:@"where"];
     return query;

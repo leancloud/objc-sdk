@@ -74,12 +74,12 @@ typedef NS_OPTIONS(NSUInteger, AVFileDownloadOption) {
 + (instancetype)fileWithRemoteURL:(NSURL *)remoteURL;
 
 /**
- Create file from AVObject
+ Create file from LCObject
  
- @param avObject AVObject
+ @param object LCObject
  @return Instance
  */
-+ (instancetype)fileWithAVObject:(AVObject *)avObject;
++ (instancetype)fileWithObject:(LCObject *)object;
 
 /// Create file from `objectId` and `url`
 /// @param objectId The ID of the File.

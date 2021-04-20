@@ -5,7 +5,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVObject.h"
+#import "LCObject.h"
 #import "AVQuery.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -32,15 +32,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  Adds a relation to the passed in object.
- @param object AVObject to add relation to.
+ @param object LCObject to add relation to.
  */
-- (void)addObject:(AVObject *)object;
+- (void)addObject:(LCObject *)object;
 
 /*!
  Removes a relation to the passed in object.
- @param object AVObject to add relation to.
+ @param object LCObject to add relation to.
  */
-- (void)removeObject:(AVObject *)object;
+- (void)removeObject:(LCObject *)object;
 
 /*!
  @return A AVQuery that can be used to get parent objects in this relation.
@@ -57,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 +(AVQuery *)reverseQuery:(NSString *)parentClassName
              relationKey:(NSString *)relationKey
-             childObject:(AVObject *)child;
+             childObject:(LCObject *)child;
 
 @end
 

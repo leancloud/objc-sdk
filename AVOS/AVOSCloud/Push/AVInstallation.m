@@ -4,10 +4,10 @@
 
 #import <Foundation/Foundation.h>
 #import "AVInstallation_Internal.h"
-#import "AVObject_Internal.h"
+#import "LCObject_Internal.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"
-#import "AVObjectUtils.h"
+#import "LCObjectUtils.h"
 #import "AVPersistenceUtils.h"
 #import "AVErrorUtils.h"
 #import "LCRouter_Internal.h"
@@ -47,7 +47,7 @@
             NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:
                                                [AVPersistenceUtils getJSONFromPath:path]];
             if (dictionary) {
-                [AVObjectUtils copyDictionary:dictionary
+                [LCObjectUtils copyDictionary:dictionary
                                      toObject:instance];
             }
         }

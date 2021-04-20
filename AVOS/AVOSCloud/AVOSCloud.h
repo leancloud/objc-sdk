@@ -15,8 +15,8 @@
 #import "AVLogger.h"
 
 // Object
-#import "AVObject.h"
-#import "AVObject+Subclass.h"
+#import "LCObject.h"
+#import "LCObject+Subclass.h"
 #import "AVSubclassing.h"
 #import "AVRelation.h"
 

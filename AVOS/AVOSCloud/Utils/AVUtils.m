@@ -8,17 +8,17 @@
 
 #import <objc/runtime.h>
 #import "AVUtils.h"
-#import "AVObject.h"
-#import "AVObject_Internal.h"
+#import "LCObject.h"
+#import "LCObject_Internal.h"
 #import "AVGeoPoint_Internal.h"
 #import "AVUser.h"
 #import "AVUser_Internal.h"
-#import "AVObject.h"
+#import "LCObject.h"
 #import "AVRole_Internal.h"
 #import "AVFile.h"
 #import "AVFile_Internal.h"
 
-#import "AVObjectUtils.h"
+#import "LCObjectUtils.h"
 #import "AVPaasClient.h"
 #import "AVCloudQueryResult.h"
 #import "AVKeychain.h"
@@ -230,8 +230,8 @@ static const char *getPropertyType(objc_property_t property)
     }
     free(properties);
     // isSubclassOfClass : a subclass of, or identical to, a given class.
-    // 如果是 AVObject 类或者是其子类，则遍历。不遍历 NSObject。
-    if (containSuper && [[objectClass superclass] isSubclassOfClass:[AVObject class]])
+    // 如果是 LCObject 类或者是其子类，则遍历。不遍历 NSObject。
+    if (containSuper && [[objectClass superclass] isSubclassOfClass:[LCObject class]])
     {
         return [AVUtils containsProperty:name inClass:[objectClass superclass] containSuper:containSuper filterDynamic:filterDynamic];
     }
@@ -268,7 +268,7 @@ static const char *getPropertyType(objc_property_t property)
         }
     }
     free(properties);
-    if (containSuper && [objectClass isSubclassOfClass:[AVObject class]])
+    if (containSuper && [objectClass isSubclassOfClass:[LCObject class]])
     {
         return [AVUtils isDynamicProperty:name inClass:[objectClass superclass] withType:targetClass containSuper:containSuper];
     }
@@ -379,8 +379,8 @@ if (block) { \
     safeBlock(array);
 }
 
-+ (void)callObjectResultBlock:(AVObjectResultBlock)block
-                       object:(AVObject *)object
++ (void)callObjectResultBlock:(LCObjectResultBlock)block
+                       object:(LCObject *)object
                         error:(NSError *)error {
     safeBlock(object);
 }

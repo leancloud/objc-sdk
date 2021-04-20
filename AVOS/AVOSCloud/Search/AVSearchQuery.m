@@ -9,8 +9,8 @@
 #import "AVSearchQuery.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"
-#import "AVObject_Internal.h"
-#import "AVObjectUtils.h"
+#import "LCObject_Internal.h"
+#import "LCObjectUtils.h"
 #import "AVSearchSortBuilder.h"
 
 @interface AVSearchQuery() {
@@ -253,13 +253,13 @@
 
     for(NSDictionary * dict in results)
     {
-        AVObject *object;
+        LCObject *object;
         if (className) {
-            object = [AVObjectUtils avObjectForClass:className];
+            object = [LCObjectUtils lcObjectForClass:className];
         } else {
-            object = [AVObject objectWithClassName:@"SearchQuery"];
+            object = [LCObject objectWithClassName:@"SearchQuery"];
         }
-        [AVObjectUtils copyDictionary:dict toObject:object];
+        [LCObjectUtils copyDictionary:dict toObject:object];
         [array addObject:object];
     }
     return array;

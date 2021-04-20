@@ -49,9 +49,9 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
 @property (nonatomic, strong, nullable) NSDictionary *data;
 
 /**
- *  状态的发出"人",可以是AVUser 也可以是任意的AVObject,也可能是nil
+ *  状态的发出"人",可以是AVUser 也可以是任意的LCObject,也可能是nil
  */
-@property (nonatomic, strong, nullable) AVObject *source;
+@property (nonatomic, strong, nullable) LCObject *source;
 
 /**
  *  状态类型,默认是kAVStatusTypeTimeline, 可以是任意自定义字符串
@@ -300,7 +300,7 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
 /**
  *  设置查询的Inbox的所有者, 即查询这个"人"的收件箱
  */
-@property(nonatomic, strong, nullable) AVObject *owner;
+@property(nonatomic, strong, nullable) LCObject *owner;
 
 /**
  *  设置查询的Inbox的类型

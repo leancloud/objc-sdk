@@ -15,7 +15,7 @@
 #import "AVIMErrorUtil.h"
 
 #import "AVUtils.h"
-#import "AVObjectUtils.h"
+#import "LCObjectUtils.h"
 #import "AVErrorUtils.h"
 
 #import "AVIMGenericCommand+AVIMMessagesAdditions.h"
@@ -98,7 +98,7 @@
 }
 
 - (NSString *)whereString {
-    NSDictionary *dic = [AVObjectUtils dictionaryFromDictionary:self.where];
+    NSDictionary *dic = [LCObjectUtils dictionaryFromDictionary:self.where];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:0 error:NULL];
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 }

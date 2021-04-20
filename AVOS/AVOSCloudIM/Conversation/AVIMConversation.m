@@ -24,7 +24,7 @@
 
 #import "AVFile_Internal.h"
 #import "AVPaasClient.h"
-#import "AVObjectUtils.h"
+#import "LCObjectUtils.h"
 #import "AVUtils.h"
 #import "AVErrorUtils.h"
 

@@ -9,7 +9,7 @@
 #import "AVConstants.h"
 #import "AVAnonymousUtils.h"
 #import "AVUtils.h"
-#import "AVObjectUtils.h"
+#import "LCObjectUtils.h"
 #import "AVPaasClient.h"
 #import "AVUser.h"
 #import "AVUser_Internal.h"
@@ -42,7 +42,7 @@
                 [object addEntriesFromDictionary:parameters];
             }
             user = [AVUser userOrSubclassUser];
-            [AVObjectUtils copyDictionary:object toObject:user];
+            [LCObjectUtils copyDictionary:object toObject:user];
             [AVUser changeCurrentUser:user save:YES];
         }
         [AVUtils callUserResultBlock:block user:user error:error];

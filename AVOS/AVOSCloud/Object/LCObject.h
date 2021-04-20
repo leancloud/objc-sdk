@@ -1,4 +1,4 @@
-// AVObject.h
+// LCObject.h
 // Copyright 2013 AVOS Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
@@ -15,12 +15,12 @@ NS_ASSUME_NONNULL_BEGIN
  main class that is used to interact with objects in your app.
 */
 
-@interface AVObject : NSObject <NSCoding>
+@interface LCObject : NSObject <NSCoding>
 
 #pragma mark Constructors
 
 /*!
- Creates a reference to an existing AVObject with an object ID.
+ Creates a reference to an existing LCObject with an object ID.
 
  Calling isDataAvailable on this object will return NO until fetchIfNeeded or refresh has been called.
 
@@ -29,17 +29,17 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)objectWithObjectId:(NSString *)objectId;
 
-/*! @name Creating a AVObject */
+/*! @name Creating a LCObject */
 
 /*!
- Creates a new AVObject with a class name.
+ Creates a new LCObject with a class name.
  @param className A class name can be any alphanumeric string that begins with a letter. It represents an object in your app, like a User of a Document.
  @return the object that is instantiated with the given class name.
  */
 + (instancetype)objectWithClassName:(NSString *)className;
 
 /*!
- Creates a reference to an existing AVObject for use in creating associations between AVObjects.
+ Creates a reference to an existing LCObject for use in creating associations between LCObjects.
 
  Calling isDataAvailable on this object will return NO until fetchIfNeeded or refresh has been called.
 
@@ -50,15 +50,15 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)objectWithClassName:(NSString *)className objectId:(NSString *)objectId;
 
 /*!
- Creates a new AVObject with a class name, initialized with data constructed from the specified set of objects and keys.
+ Creates a new LCObject with a class name, initialized with data constructed from the specified set of objects and keys.
  @param className The object's class.
- @param dictionary An NSDictionary of keys and objects to set on the new AVObject.
- @return A AVObject with the given class name and set with the given data.
+ @param dictionary An NSDictionary of keys and objects to set on the new LCObject.
+ @return A LCObject with the given class name and set with the given data.
  */
 + (instancetype)objectWithClassName:(NSString *)className dictionary:(NSDictionary *)dictionary;
 
 /*!
- Initializes a new AVObject with a class name.
+ Initializes a new LCObject with a class name.
  @param newClassName A class name can be any alphanumeric string that begins with a letter. It represents an object in your app, like a User or a Document.
  @return the object that is instantiated with the given class name.
  */
@@ -133,7 +133,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeObjectForKey:(NSString *)key;
 
 /*!
- * In LLVM 4.0 (XCode 4.5) or higher allows myAVObject[key].
+ * In LLVM 4.0 (XCode 4.5) or higher allows myLCObject[key].
  @param key The key.
  */
 - (nullable id)objectForKeyedSubscript:(NSString *)key;
@@ -224,26 +224,26 @@ NS_ASSUME_NONNULL_BEGIN
 /*! @name Saving an Object to LeanCloud */
 
 /*!
- Saves the AVObject.
+ Saves the LCObject.
  @return whether the save succeeded.
  */
 - (BOOL)save;
 
 /*!
- Saves the AVObject and sets an error if it occurs.
+ Saves the LCObject and sets an error if it occurs.
  @param error Pointer to an NSError that will be set if necessary.
  @return whether the save succeeded.
  */
 - (BOOL)save:(NSError **)error;
 
 /*!
- An alias of `-[AVObject save:]` methods that supports Swift exception.
- @seealso `-[AVObject save:]`
+ An alias of `-[LCObject save:]` methods that supports Swift exception.
+ @seealso `-[LCObject save:]`
  */
 - (BOOL)saveAndThrowsWithError:(NSError **)error;
 
 /*!
- * Saves the AVObject with option and sets an error if it occurs.
+ * Saves the LCObject with option and sets an error if it occurs.
  * @param option Option for current save.
  * @param error  A pointer to an NSError that will be set if necessary.
  * @return Whether the save succeeded.
@@ -251,7 +251,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)saveWithOption:(nullable AVSaveOption *)option error:(NSError **)error;
 
 /*!
- * Saves the AVObject with option and sets an error if it occurs.
+ * Saves the LCObject with option and sets an error if it occurs.
  * @param option     Option for current save.
  * @param eventually Whether save in eventually or not.
  * @param error      A pointer to an NSError that will be set if necessary.
@@ -261,25 +261,25 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)saveWithOption:(nullable AVSaveOption *)option eventually:(BOOL)eventually error:(NSError **)error;
 
 /*!
- Saves the AVObject asynchronously.
+ Saves the LCObject asynchronously.
  */
 - (void)saveInBackground;
 
 /*!
- Saves the AVObject asynchronously and executes the given callback block.
+ Saves the LCObject asynchronously and executes the given callback block.
  @param block The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
  */
 - (void)saveInBackgroundWithBlock:(AVBooleanResultBlock)block;
 
 /*!
- * Saves the AVObject with option asynchronously and executes the given callback block.
+ * Saves the LCObject with option asynchronously and executes the given callback block.
  * @param option Option for current save.
  * @param block  The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
  */
 - (void)saveInBackgroundWithOption:(nullable AVSaveOption *)option block:(AVBooleanResultBlock)block;
 
 /*!
- * Saves the AVObject with option asynchronously and executes the given callback block.
+ * Saves the LCObject with option asynchronously and executes the given callback block.
  * @param option Option for current save.
  * @param eventually Whether save in eventually or not.
  * @param block  The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
@@ -348,8 +348,8 @@ NS_ASSUME_NONNULL_BEGIN
 /*! @name Getting an Object from LeanCloud */
 
 /*!
- Gets whether the AVObject has been fetched.
- @return YES if the AVObject is new or has been fetched or refreshed.  NO otherwise.
+ Gets whether the LCObject has been fetched.
+ @return YES if the LCObject is new or has been fetched or refreshed.  NO otherwise.
  */
 - (BOOL)isDataAvailable;
 
@@ -357,72 +357,72 @@ NS_ASSUME_NONNULL_BEGIN
 // Deprecated and intentionally not available on the new OS X SDK
 
 /*!
- Refreshes the AVObject with the current data from the server.
+ Refreshes the LCObject with the current data from the server.
  */
 - (void)refresh;
 
 /*!
- Refreshes the AVObject with the current data from the server.
+ Refreshes the LCObject with the current data from the server.
  @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
  */
 - (void)refreshWithKeys:(NSArray *)keys;
 
 /*!
- Refreshes the AVObject with the current data from the server and sets an error if it occurs.
+ Refreshes the LCObject with the current data from the server and sets an error if it occurs.
  @param error Pointer to an NSError that will be set if necessary.
  @return success or not
  */
 - (BOOL)refresh:(NSError **)error;
 
 /*!
- An alias of `-[AVObject refresh:]` methods that supports Swift exception.
- @seealso `-[AVObject refresh:]`
+ An alias of `-[LCObject refresh:]` methods that supports Swift exception.
+ @seealso `-[LCObject refresh:]`
  */
 - (BOOL)refreshAndThrowsWithError:(NSError **)error;
 
 /*!
- Refreshes the AVObject asynchronously and executes the given callback block.
- @param block The block to execute. The block should have the following argument signature: (AVObject *object, NSError *error)
+ Refreshes the LCObject asynchronously and executes the given callback block.
+ @param block The block to execute. The block should have the following argument signature: (LCObject *object, NSError *error)
  */
-- (void)refreshInBackgroundWithBlock:(AVObjectResultBlock)block;
+- (void)refreshInBackgroundWithBlock:(LCObjectResultBlock)block;
 
 /*!
- Refreshes the AVObject with the current data from the server.
+ Refreshes the LCObject with the current data from the server.
  @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
- @param block The block to execute. The block should have the following argument signature: (AVObject *object, NSError *error)
+ @param block The block to execute. The block should have the following argument signature: (LCObject *object, NSError *error)
  */
 - (void)refreshInBackgroundWithKeys:(NSArray *)keys
-                              block:(AVObjectResultBlock)block;
+                              block:(LCObjectResultBlock)block;
 
 #endif
 
 #pragma mark - Fetch
 
 /*!
- Fetches the AVObject with the current data from the server.
+ Fetches the LCObject with the current data from the server.
  */
 - (BOOL)fetch;
 /*!
- Fetches the AVObject with the current data from the server and sets an error if it occurs.
+ Fetches the LCObject with the current data from the server and sets an error if it occurs.
  @param error Pointer to an NSError that will be set if necessary.
  @return success or not
  */
 - (BOOL)fetch:(NSError **)error;
 
 /*!
- An alias of `-[AVObject fetch:]` methods that supports Swift exception.
- @seealso `-[AVObject fetch:]`
+ An alias of `-[LCObject fetch:]` methods that supports Swift exception.
+ @seealso `-[LCObject fetch:]`
  */
 - (BOOL)fetchAndThrowsWithError:(NSError **)error;
 
 /*!
- Fetches the AVObject with the current data and specified keys from the server and sets an error if it occurs.
+ Fetches the LCObject with the current data and specified keys from the server and sets an error if it occurs.
  @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
  */
 - (void)fetchWithKeys:(nullable NSArray *)keys;
 
 /*!
- Fetches the AVObject with the current data and specified keys from the server and sets an error if it occurs.
+ Fetches the LCObject with the current data and specified keys from the server and sets an error if it occurs.
  @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
  @param error Pointer to an NSError that will be set if necessary.
  @return success or not
@@ -431,66 +431,66 @@ NS_ASSUME_NONNULL_BEGIN
                 error:(NSError **)error;
 
 /*!
- Fetches the AVObject's data from the server if isDataAvailable is false.
+ Fetches the LCObject's data from the server if isDataAvailable is false.
  */
-- (AVObject *)fetchIfNeeded;
+- (LCObject *)fetchIfNeeded;
 
 /*!
- Fetches the AVObject's data from the server if isDataAvailable is false.
+ Fetches the LCObject's data from the server if isDataAvailable is false.
  @param error Pointer to an NSError that will be set if necessary.
  */
-- (AVObject *)fetchIfNeeded:(NSError **)error;
+- (LCObject *)fetchIfNeeded:(NSError **)error;
 
 /*!
- An alias of `-[AVObject fetchIfNeeded:]` methods that supports Swift exception.
- @seealso `-[AVObject fetchIfNeeded:]`
+ An alias of `-[LCObject fetchIfNeeded:]` methods that supports Swift exception.
+ @seealso `-[LCObject fetchIfNeeded:]`
  */
-- (AVObject *)fetchIfNeededAndThrowsWithError:(NSError **)error;
+- (LCObject *)fetchIfNeededAndThrowsWithError:(NSError **)error;
 
 /*!
- Fetches the AVObject's data from the server if isDataAvailable is false.
+ Fetches the LCObject's data from the server if isDataAvailable is false.
  @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
  */
-- (AVObject *)fetchIfNeededWithKeys:(nullable NSArray *)keys;
+- (LCObject *)fetchIfNeededWithKeys:(nullable NSArray *)keys;
 
 /*!
- Fetches the AVObject's data from the server if isDataAvailable is false.
+ Fetches the LCObject's data from the server if isDataAvailable is false.
  @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
  @param error Pointer to an NSError that will be set if necessary.
  */
-- (AVObject *)fetchIfNeededWithKeys:(nullable NSArray *)keys
+- (LCObject *)fetchIfNeededWithKeys:(nullable NSArray *)keys
                               error:(NSError **)error;
 
 /*!
- Fetches the AVObject asynchronously and executes the given callback block.
- @param block The block to execute. The block should have the following argument signature: (AVObject *object, NSError *error)
+ Fetches the LCObject asynchronously and executes the given callback block.
+ @param block The block to execute. The block should have the following argument signature: (LCObject *object, NSError *error)
  */
-- (void)fetchInBackgroundWithBlock:(AVObjectResultBlock)block;
+- (void)fetchInBackgroundWithBlock:(LCObjectResultBlock)block;
 
 /*!
- Fetches the AVObject asynchronously and executes the given callback block.
+ Fetches the LCObject asynchronously and executes the given callback block.
  @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
- @param block The block to execute. The block should have the following argument signature: (AVObject *object, NSError *error)
+ @param block The block to execute. The block should have the following argument signature: (LCObject *object, NSError *error)
  */
 - (void)fetchInBackgroundWithKeys:(nullable NSArray *)keys
-                            block:(AVObjectResultBlock)block;
+                            block:(LCObjectResultBlock)block;
 
 /*!
- Fetches the AVObject's data asynchronously if isDataAvailable is false, then calls the callback block.
- @param block The block to execute.  The block should have the following argument signature: (AVObject *object, NSError *error)
+ Fetches the LCObject's data asynchronously if isDataAvailable is false, then calls the callback block.
+ @param block The block to execute.  The block should have the following argument signature: (LCObject *object, NSError *error)
  */
-- (void)fetchIfNeededInBackgroundWithBlock:(AVObjectResultBlock)block;
+- (void)fetchIfNeededInBackgroundWithBlock:(LCObjectResultBlock)block;
 
 /*! @name Getting Many Objects from LeanCloud */
 
 /*!
- Fetches all of the AVObjects with the current data from the server
+ Fetches all of the LCObjects with the current data from the server
  @param objects The list of objects to fetch.
  */
 + (void)fetchAll:(NSArray *)objects;
 
 /*!
- Fetches all of the AVObjects with the current data from the server and sets an error if it occurs.
+ Fetches all of the LCObjects with the current data from the server and sets an error if it occurs.
  @param objects The list of objects to fetch.
  @param error Pointer to an NSError that will be set  if necessary
  @return success or not
@@ -498,13 +498,13 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL)fetchAll:(NSArray *)objects error:(NSError **)error;
 
 /*!
- Fetches all of the AVObjects with the current data from the server
+ Fetches all of the LCObjects with the current data from the server
  @param objects The list of objects to fetch.
  */
 + (void)fetchAllIfNeeded:(NSArray *)objects;
 
 /*!
- Fetches all of the AVObjects with the current data from the server and sets an error if it occurs.
+ Fetches all of the LCObjects with the current data from the server and sets an error if it occurs.
  @param objects The list of objects to fetch.
  @param error Pointer to an NSError that will be set  if necessary
   @return success or not
@@ -512,7 +512,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL)fetchAllIfNeeded:(NSArray *)objects error:(NSError **)error;
 
 /*!
- Fetches all of the AVObjects with the current data from the server asynchronously and calls the given block.
+ Fetches all of the LCObjects with the current data from the server asynchronously and calls the given block.
  @param objects The list of objects to fetch.
  @param block The block to execute. The block should have the following argument signature: (NSArray *objects, NSError *error)
  */
@@ -520,7 +520,7 @@ NS_ASSUME_NONNULL_BEGIN
                        block:(AVArrayResultBlock)block;
 
 /*!
- Fetches all of the AVObjects with the current data from the server asynchronously and calls the given block.
+ Fetches all of the LCObjects with the current data from the server asynchronously and calls the given block.
  @param objects The list of objects to fetch.
  @param block The block to execute. The block should have the following argument signature: (NSArray *objects, NSError *error)
  */
@@ -532,31 +532,31 @@ NS_ASSUME_NONNULL_BEGIN
 /*! @name Removing an Object from LeanCloud */
 
 /*!
- Deletes the AVObject.
+ Deletes the LCObject.
  @return whether the delete succeeded.
  */
 - (BOOL)delete;
 
 /*!
- Deletes the AVObject and sets an error if it occurs.
+ Deletes the LCObject and sets an error if it occurs.
  @param error Pointer to an NSError that will be set if necessary.
  @return whether the delete succeeded.
  */
 - (BOOL)delete:(NSError **)error;
 
 /*!
- An alias of `-[AVObject delete:]` methods that supports Swift exception.
- @seealso `-[AVObject delete:]`
+ An alias of `-[LCObject delete:]` methods that supports Swift exception.
+ @seealso `-[LCObject delete:]`
  */
 - (BOOL)deleteAndThrowsWithError:(NSError **)error;
 
 /*!
- Deletes the AVObject asynchronously.
+ Deletes the LCObject asynchronously.
  */
 - (void)deleteInBackground;
 
 /*!
- Deletes the AVObject asynchronously and executes the given callback block.
+ Deletes the LCObject asynchronously and executes the given callback block.
  @param block The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
  */
 - (void)deleteInBackgroundWithBlock:(AVBooleanResultBlock)block;
@@ -599,7 +599,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL)deleteAll:(NSArray *)objects error:(NSError **)error;
 
 /**
- *  Deletes all objects specified in object array. The element of objects array is AVObject or its subclass.
+ *  Deletes all objects specified in object array. The element of objects array is LCObject or its subclass.
  *
  *  @param objects object array
  *  @param block   The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
@@ -611,15 +611,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readwrite) BOOL fetchWhenSave;
 
 /*!
- Generate JSON dictionary from AVObject or its subclass object.
+ Generate JSON dictionary from LCObject or its subclass object.
  */
 -(NSMutableDictionary *)dictionaryForObject;
 
 /*!
- * Construct an AVObject or its subclass object with dictionary.
- * @param dictionary A dictionary to construct an AVObject. The dictionary should have className key which helps to create proper class.
+ * Construct an LCObject or its subclass object with dictionary.
+ * @param dictionary A dictionary to construct an LCObject. The dictionary should have className key which helps to create proper class.
  */
-+ (nullable AVObject *)objectWithDictionary:(NSDictionary *)dictionary;
++ (nullable LCObject *)objectWithDictionary:(NSDictionary *)dictionary;
 
 /**
  *  Load object properties from JSON dictionary.
@@ -632,13 +632,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Deprecated API
 
-@interface AVObject (AVDeprecated)
+@interface LCObject (AVDeprecated)
 
-+ (instancetype)objectWithoutDataWithObjectId:(NSString *)objectId AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.9. Use +[AVObject objectWithObjectId:] instead.");
++ (instancetype)objectWithoutDataWithObjectId:(NSString *)objectId AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.9. Use +[LCObject objectWithObjectId:] instead.");
 
-+ (instancetype)objectWithoutDataWithClassName:(NSString *)className objectId:(NSString *)objectId AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.9. Use +[AVObject objectWithClassName:objectId:] instead.");
++ (instancetype)objectWithoutDataWithClassName:(NSString *)className objectId:(NSString *)objectId AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.9. Use +[LCObject objectWithClassName:objectId:] instead.");
 
-- (AVRelation *)relationforKey:(NSString *)key AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.3. Use -[AVObject relationForKey:] instead.");
+- (AVRelation *)relationforKey:(NSString *)key AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.3. Use -[LCObject relationForKey:] instead.");
 
 @end
 

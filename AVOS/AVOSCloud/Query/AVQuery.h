@@ -3,13 +3,13 @@
 
 #import <Foundation/Foundation.h>
 #import "AVGeoPoint.h"
-#import "AVObject.h"
+#import "LCObject.h"
 #import "AVCloudQueryResult.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 /*!
- A class that defines a query that is used to query for AVObjects.
+ A class that defines a query that is used to query for LCObjects.
  */
 @interface AVQuery : NSObject
 
@@ -86,15 +86,15 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 /** @name Adding Basic Constraints */
 
 /*!
- Make the query include AVObjects that have a reference stored at the provided key.
+ Make the query include LCObjects that have a reference stored at the provided key.
  This has an effect similar to a join.  You can use dot notation to specify which fields in
  the included object are also fetch.
- @param key The key to load child AVObjects for.
+ @param key The key to load child LCObjects for.
  */
 - (void)includeKey:(NSString *)key;
 
 /*!
- Make the query restrict the fields of the returned AVObjects to include only the provided keys.
+ Make the query restrict the fields of the returned LCObjects to include only the provided keys.
  If this is called multiple times, then all of the keys specified in each of the calls will be included.
  @param keys The keys to include in the result.
  */
@@ -338,7 +338,7 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 
 /*!
  Add a constraint that requires that a key's value matches a AVQuery constraint.
- This only works where the key's values are AVObjects or arrays of AVObjects.
+ This only works where the key's values are LCObjects or arrays of LCObjects.
  @param key The key that the value is stored in
  @param query The query the value should match
  */
@@ -346,7 +346,7 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 
 /*!
  Add a constraint that requires that a key's value to not match a AVQuery constraint.
- This only works where the key's values are AVObjects or arrays of AVObjects.
+ This only works where the key's values are LCObjects or arrays of LCObjects.
  @param key The key that the value is stored in
  @param query The query the value should not match
  */
@@ -408,55 +408,55 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 /** @name Getting Objects by ID */
 
 /*!
- Returns a AVObject with a given class and id.
+ Returns a LCObject with a given class and id.
  @param objectClass The class name for the object that is being requested.
  @param objectId The id of the object that is being requested.
- @return The AVObject if found. Returns nil if the object isn't found, or if there was an error.
+ @return The LCObject if found. Returns nil if the object isn't found, or if there was an error.
  */
-+ (nullable AVObject *)getObjectOfClass:(NSString *)objectClass
++ (nullable LCObject *)getObjectOfClass:(NSString *)objectClass
                                objectId:(NSString *)objectId;
 
 /*!
- Returns a AVObject with a given class and id and sets an error if necessary.
+ Returns a LCObject with a given class and id and sets an error if necessary.
  @param objectClass The class name for the object that is being requested.
  @param objectId The id of the object that is being requested.
  @param error Pointer to an NSError that will be set if necessary.
- @return The AVObject if found. Returns nil if the object isn't found, or if there was an error.
+ @return The LCObject if found. Returns nil if the object isn't found, or if there was an error.
  */
-+ (nullable AVObject *)getObjectOfClass:(NSString *)objectClass
++ (nullable LCObject *)getObjectOfClass:(NSString *)objectClass
                                objectId:(NSString *)objectId
                                   error:(NSError **)error;
 
 /*!
- Returns a AVObject with the given id.
+ Returns a LCObject with the given id.
  
  This mutates the AVQuery.
  
  @param objectId The id of the object that is being requested.
- @return The AVObject if found. Returns nil if the object isn't found, or if there was an error.
+ @return The LCObject if found. Returns nil if the object isn't found, or if there was an error.
  */
-- (nullable AVObject *)getObjectWithId:(NSString *)objectId;
+- (nullable LCObject *)getObjectWithId:(NSString *)objectId;
 
 /*!
- Returns a AVObject with the given id and sets an error if necessary.
+ Returns a LCObject with the given id and sets an error if necessary.
  
  This mutates the AVQuery
  
  @param objectId The id of the object that is being requested.
  @param error Pointer to an NSError that will be set if necessary.
- @return The AVObject if found. Returns nil if the object isn't found, or if there was an error.
+ @return The LCObject if found. Returns nil if the object isn't found, or if there was an error.
  */
-- (nullable AVObject *)getObjectWithId:(NSString *)objectId error:(NSError **)error;
+- (nullable LCObject *)getObjectWithId:(NSString *)objectId error:(NSError **)error;
 
 /*!
- Gets a AVObject asynchronously and calls the given block with the result. 
+ Gets a LCObject asynchronously and calls the given block with the result. 
  
  This mutates the AVQuery
  @param objectId The id of the object being requested.
  @param block The block to execute. The block should have the following argument signature: (NSArray *object, NSError *error)
  */
 - (void)getObjectInBackgroundWithId:(NSString *)objectId
-                              block:(AVObjectResultBlock)block;
+                              block:(LCObjectResultBlock)block;
 
 #pragma mark -
 #pragma mark Getting Users
@@ -492,14 +492,14 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 
 /*!
  Finds objects based on the constructed query.
- @return an array of AVObjects that were found.
+ @return an array of LCObjects that were found.
  */
 - (nullable NSArray *)findObjects;
 
 /*!
  Finds objects based on the constructed query and sets an error if there was one.
  @param error Pointer to an NSError that will be set if necessary.
- @return an array of AVObjects that were found.
+ @return an array of LCObjects that were found.
  */
 - (nullable NSArray *)findObjects:(NSError **)error;
 
@@ -529,9 +529,9 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
  
  This mutates the AVQuery.
  
- @return a AVObject, or nil if none was found.
+ @return a LCObject, or nil if none was found.
  */
-- (nullable AVObject *)getFirstObject;
+- (nullable LCObject *)getFirstObject;
 
 /*!
  Gets an object based on the constructed query and sets an error if any occurred.
@@ -539,24 +539,24 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
  This mutates the AVQuery.
  
  @param error Pointer to an NSError that will be set if necessary.
- @return a AVObject, or nil if none was found.
+ @return a LCObject, or nil if none was found.
  */
-- (nullable AVObject *)getFirstObject:(NSError **)error;
+- (nullable LCObject *)getFirstObject:(NSError **)error;
 
 /*!
  An alias of `-[AVQuery getFirstObject:]` methods that supports Swift exception.
  @seealso `-[AVQuery getFirstObject:]`
  */
-- (nullable AVObject *)getFirstObjectAndThrowsWithError:(NSError **)error;
+- (nullable LCObject *)getFirstObjectAndThrowsWithError:(NSError **)error;
 
 /*!
  Gets an object asynchronously and calls the given block with the result.
  
  This mutates the AVQuery.
  
- @param block The block to execute. The block should have the following argument signature:(AVObject *object, NSError *error) result will be nil if error is set OR no object was found matching the query. error will be nil if result is set OR if the query succeeded, but found no results.
+ @param block The block to execute. The block should have the following argument signature:(LCObject *object, NSError *error) result will be nil if error is set OR no object was found matching the query. error will be nil if result is set OR if the query succeeded, but found no results.
  */
-- (void)getFirstObjectInBackgroundWithBlock:(AVObjectResultBlock)block;
+- (void)getFirstObjectInBackgroundWithBlock:(LCObjectResultBlock)block;
 
 #pragma mark -
 #pragma mark Count methods
@@ -565,14 +565,14 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 
 /*!
   Counts objects based on the constructed query.
- @return the number of AVObjects that match the query, or -1 if there is an error.
+ @return the number of LCObjects that match the query, or -1 if there is an error.
  */
 - (NSInteger)countObjects;
 
 /*!
   Counts objects based on the constructed query and sets an error if there was one.
  @param error Pointer to an NSError that will be set if necessary.
- @return the number of AVObjects that match the query, or -1 if there is an error.
+ @return the number of LCObjects that match the query, or -1 if there is an error.
  */
 - (NSInteger)countObjects:(NSError **)error;
 

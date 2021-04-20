@@ -3,7 +3,7 @@
 
 #import <Foundation/Foundation.h>
 #import "AVGeoPoint.h"
-#import "AVObject_Internal.h"
+#import "LCObject_Internal.h"
 #import "AVQuery.h"
 #import "AVUtils.h"
 #import "AVPaasClient.h"
@@ -12,7 +12,7 @@
 #import "AVGeoPoint_Internal.h"
 #import "AVCacheManager.h"
 #import "AVErrorUtils.h"
-#import "AVObjectUtils.h"
+#import "LCObjectUtils.h"
 #import "AVQuery_Internal.h"
 #import "AVCloudQueryResult_Internal.h"
 
@@ -102,7 +102,7 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
     NSString *path = @"cloudQuery";
     NSDictionary *parameters = nil;
     if (pvalues.count > 0) {
-        NSArray *parsedPvalues = [AVObjectUtils dictionaryFromObject:pvalues];
+        NSArray *parsedPvalues = [LCObjectUtils dictionaryFromObject:pvalues];
         NSString *jsonString = [AVUtils jsonStringFromArray:parsedPvalues];
         parameters = @{@"cql":cql, @"pvalues":jsonString};
     } else {
@@ -110,15 +110,15 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
     }
     
     [[AVPaasClient sharedInstance] getObject:path withParameters:parameters block:^(id dict, NSError *error) {
-        if (error == nil && [AVObjectUtils hasAnyKeys:dict]) {
+        if (error == nil && [LCObjectUtils hasAnyKeys:dict]) {
             NSString *className = [dict objectForKey:@"className"];
             NSArray *resultArray = [dict objectForKey:@"results"];
             NSNumber *count = [dict objectForKey:@"count"];
             NSMutableArray *results = [[NSMutableArray alloc] init];
             if (resultArray.count > 0 && className) {
                 for (NSDictionary *objectDict in resultArray) {
-                    AVObject *object = [AVObjectUtils avObjectForClass:className];
-                    [AVObjectUtils copyDictionary:objectDict toObject:object];
+                    LCObject *object = [LCObjectUtils lcObjectForClass:className];
+                    [LCObjectUtils copyDictionary:objectDict toObject:object];
                     [results addObject:object];
                 }
             }
@@ -230,13 +230,13 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
 - (id)valueForEqualityTesting:(id)object {
     if (!object) {
         return [NSNull null];
-    } else if ([object isKindOfClass:[AVObject class]]) {
+    } else if ([object isKindOfClass:[LCObject class]]) {
         NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
         [dict setObject:@"Pointer" forKey:@"__type"];
         [dict setObject:[object internalClassName] forKey:classNameTag];
         if ([object hasValidObjectId])
         {
-            [dict setObject:((AVObject *)object).objectId forKey:@"objectId"];
+            [dict setObject:((LCObject *)object).objectId forKey:@"objectId"];
             return dict;
         } else {
             return NSNull.null;
@@ -580,32 +580,32 @@ static NSString * quote(NSString *string)
     }
 }
 
-+ (AVObject *)getObjectOfClass:(NSString *)objectClass
++ (LCObject *)getObjectOfClass:(NSString *)objectClass
                       objectId:(NSString *)objectId
 {
     return [[self class] getObjectOfClass:objectClass objectId:objectId error:NULL];
 }
 
-+ (AVObject *)getObjectOfClass:(NSString *)objectClass
++ (LCObject *)getObjectOfClass:(NSString *)objectClass
                       objectId:(NSString *)objectId
                          error:(NSError **)error
 {
     return [[AVQuery queryWithClassName:objectClass] getObjectWithId:objectId error:error];
 }
 
-- (AVObject *)getObjectWithId:(NSString *)objectId
+- (LCObject *)getObjectWithId:(NSString *)objectId
 {
     return [self getObjectWithId:objectId error:NULL];
 }
 
-- (AVObject *)getObjectWithId:(NSString *)objectId error:(NSError **)error
+- (LCObject *)getObjectWithId:(NSString *)objectId error:(NSError **)error
 {
     [self raiseSyncExceptionIfNeed];
     
-    AVObject __block *theResultObject = nil;
+    LCObject __block *theResultObject = nil;
     BOOL __block hasCalledBack = NO;
     NSError __block *blockError = nil;
-    [self internalGetObjectInBackgroundWithId:objectId block:^(AVObject *object, NSError *error) {
+    [self internalGetObjectInBackgroundWithId:objectId block:^(LCObject *object, NSError *error) {
         theResultObject = object;
         blockError = error;
         hasCalledBack = YES;
@@ -621,22 +621,22 @@ static NSString * quote(NSString *string)
 }
 
 - (void)getObjectInBackgroundWithId:(NSString *)objectId
-                              block:(AVObjectResultBlock)block {
-    [self internalGetObjectInBackgroundWithId:objectId block:^(AVObject *object, NSError *error) {
+                              block:(LCObjectResultBlock)block {
+    [self internalGetObjectInBackgroundWithId:objectId block:^(LCObject *object, NSError *error) {
         [AVUtils callObjectResultBlock:block object:object error:error];
     }];
 }
 
 - (void)internalGetObjectInBackgroundWithId:(NSString *)objectId
-                              block:(AVObjectResultBlock)block
+                              block:(LCObjectResultBlock)block
 {
-    NSString *path = [AVObjectUtils objectPath:self.className objectId:objectId];
+    NSString *path = [LCObjectUtils objectPath:self.className objectId:objectId];
     [self assembleParameters];
     [[AVPaasClient sharedInstance] getObject:path withParameters:self.parameters policy:self.cachePolicy maxCacheAge:self.maxCacheAge block:^(id dict, NSError *error) {
-        AVObject *object = nil;
-        if (error == nil && [AVObjectUtils hasAnyKeys:dict]) {
-            object = [AVObjectUtils avObjectForClass:self.className];
-            [AVObjectUtils copyDictionary:dict toObject:object];
+        LCObject *object = nil;
+        if (error == nil && [LCObjectUtils hasAnyKeys:dict]) {
+            object = [LCObjectUtils lcObjectForClass:self.className];
+            [LCObjectUtils copyDictionary:dict toObject:object];
         }
         
         if (error == nil && [dict allKeys].count == 0) {
@@ -694,7 +694,7 @@ static NSString * quote(NSString *string)
 
 /*!
  Finds objects based on the constructed query.
- @result Returns an array of AVObjects that were found.
+ @result Returns an array of LCObjects that were found.
  */
 - (NSArray *)findObjects
 {
@@ -704,7 +704,7 @@ static NSString * quote(NSString *string)
 /*!
  Finds objects based on the constructed query and sets an error if there was one.
  @param error Pointer to an NSError that will be set if necessary.
- @result Returns an array of AVObjects that were found.
+ @result Returns an array of LCObjects that were found.
  */
 - (NSArray *)findObjects:(NSError **)error
 {
@@ -779,8 +779,8 @@ static NSString * quote(NSString *string)
     NSMutableArray * array = [[NSMutableArray alloc] init];
     for(NSDictionary * dict in results)
     {
-        AVObject * object = [AVObjectUtils avObjectForClass:className ?: self.className];
-        [AVObjectUtils copyDictionary:dict toObject:object];
+        LCObject * object = [LCObjectUtils lcObjectForClass:className ?: self.className];
+        [LCObjectUtils copyDictionary:dict toObject:object];
         [array addObject:object];
     }
     return array;
@@ -795,7 +795,7 @@ static NSString * quote(NSString *string)
         if (error) {
             block(NO, error);
         } else {
-            [AVObject deleteAllInBackground:objects block:block];
+            [LCObject deleteAllInBackground:objects block:block];
         }
     }];
 }
@@ -807,9 +807,9 @@ static NSString * quote(NSString *string)
 
  This mutates the AVQuery.
 
- @result Returns a AVObject, or nil if none was found.
+ @result Returns a LCObject, or nil if none was found.
  */
-- (AVObject *)getFirstObject
+- (LCObject *)getFirstObject
 {
     return [self getFirstObject:NULL];
 }
@@ -820,28 +820,28 @@ static NSString * quote(NSString *string)
  This mutates the AVQuery.
 
  @param error Pointer to an NSError that will be set if necessary.
- @result Returns a AVObject, or nil if none was found.
+ @result Returns a LCObject, or nil if none was found.
  */
-- (AVObject *)getFirstObject:(NSError **)error
+- (LCObject *)getFirstObject:(NSError **)error
 {
     return [self getFirstObjectWithBlock:NULL waitUntilDone:YES error:error];
 }
 
-- (AVObject *)getFirstObjectAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
+- (LCObject *)getFirstObjectAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
     return [self getFirstObject:error];
 }
 
-- (void)getFirstObjectInBackgroundWithBlock:(AVObjectResultBlock)resultBlock
+- (void)getFirstObjectInBackgroundWithBlock:(LCObjectResultBlock)resultBlock
 {
     [self getFirstObjectWithBlock:resultBlock waitUntilDone:NO error:NULL];
 }
 
-- (AVObject *)getFirstObjectWithBlock:(AVObjectResultBlock)resultBlock
+- (LCObject *)getFirstObjectWithBlock:(LCObjectResultBlock)resultBlock
                         waitUntilDone:(BOOL)wait
                                 error:(NSError **)theError {
     if (wait) [self raiseSyncExceptionIfNeed];
 
-    AVObject __block *theResultObject = nil;
+    LCObject __block *theResultObject = nil;
     BOOL __block hasCalledBack = NO;
     NSError __block *blockError = nil;
 
@@ -863,7 +863,7 @@ static NSString * quote(NSString *string)
         } else {
             NSMutableArray * array = [self processResults:results className:className];
             [self processEnd:end];
-            AVObject *resultObject = [array objectAtIndex:0];
+            LCObject *resultObject = [array objectAtIndex:0];
             [AVUtils callObjectResultBlock:resultBlock object:resultObject error:error];
 
             theResultObject = resultObject;
@@ -891,7 +891,7 @@ static NSString * quote(NSString *string)
 
 /*!
   Counts objects based on the constructed query.
- @result Returns the number of AVObjects that match the query, or -1 if there is an error.
+ @result Returns the number of LCObjects that match the query, or -1 if there is an error.
  */
 - (NSInteger)countObjects
 {
@@ -901,7 +901,7 @@ static NSString * quote(NSString *string)
 /*!
   Counts objects based on the constructed query and sets an error if there was one.
  @param error Pointer to an NSError that will be set if necessary.
- @result Returns the number of AVObjects that match the query, or -1 if there is an error.
+ @result Returns the number of LCObjects that match the query, or -1 if there is an error.
  */
 - (NSInteger)countObjects:(NSError **)error
 {
@@ -1011,7 +1011,7 @@ static NSString * quote(NSString *string)
 
 #pragma mark - Handle the data for communication with server
 - (NSString *)queryPath {
-    return [AVObjectUtils objectPath:self.className objectId:nil];
+    return [LCObjectUtils objectPath:self.className objectId:nil];
 }
 
 + (NSDictionary *)dictionaryFromIncludeKeys:(NSArray *)array {
@@ -1059,7 +1059,7 @@ static NSString * quote(NSString *string)
 }
 
 - (NSString *)whereString {
-    NSDictionary *dic = [AVObjectUtils dictionaryFromDictionary:self.where];
+    NSDictionary *dic = [LCObjectUtils dictionaryFromDictionary:self.where];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:0 error:NULL];
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 }

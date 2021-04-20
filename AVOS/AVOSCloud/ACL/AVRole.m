@@ -1,7 +1,7 @@
 
 #import <Foundation/Foundation.h>
-#import "AVObject.h"
-#import "AVObject_Internal.h"
+#import "LCObject.h"
+#import "LCObject_Internal.h"
 #import "AVRole.h"
 #import "AVRole_Internal.h"
 #import "AVQuery.h"

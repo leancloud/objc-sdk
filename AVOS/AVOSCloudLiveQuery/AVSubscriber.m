@@ -11,7 +11,7 @@
 
 #import "AVApplication_Internal.h"
 #import "AVUtils.h"
-#import "AVObjectUtils.h"
+#import "LCObjectUtils.h"
 
 #import "LCRTMConnection.h"
 #import "MessagesProtoOrig.pbobjc.h"
@@ -148,7 +148,7 @@ NSNotificationName const AVLiveQueryEventNotification = @"AVLiveQueryEventNotifi
     if (error || !dictionary) {
         return;
     }
-    NSDictionary *event = (NSDictionary *)[AVObjectUtils objectFromDictionary:dictionary
+    NSDictionary *event = (NSDictionary *)[LCObjectUtils objectFromDictionary:dictionary
                                                                     recursive:YES];
     if ([event isKindOfClass:[NSDictionary class]]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:AVLiveQueryEventNotification

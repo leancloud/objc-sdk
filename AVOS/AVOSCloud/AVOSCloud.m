@@ -19,7 +19,7 @@
 #import "AVUtils.h"
 #include "AVOSCloud_Art.inc"
 #import "LCNetworkStatistics.h"
-#import "AVObjectUtils.h"
+#import "LCObjectUtils.h"
 
 #import "LCRouter_Internal.h"
 #import "AVApplication_Internal.h"

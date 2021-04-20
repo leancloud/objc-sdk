@@ -10,7 +10,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  A AVACL is used to control which users can access or modify a particular
- object. Each AVObject can have its own AVACL. You can grant
+ object. Each LCObject can have its own AVACL. You can grant
  read and write permissions separately to specific users, to groups of users
  that belong to roles, or you can grant permissions to "the public" so that,
  for example, any user could read a particular object but only a particular
@@ -204,11 +204,11 @@ NS_ASSUME_NONNULL_BEGIN
 /** @name Setting Access Defaults */
 
 /*!
- Sets a default ACL that will be applied to all AVObjects when they are created.
- @param acl The ACL to use as a template for all AVObjects created after setDefaultACL has been called.
+ Sets a default ACL that will be applied to all LCObjects when they are created.
+ @param acl The ACL to use as a template for all LCObjects created after setDefaultACL has been called.
  This value will be copied and used as a template for the creation of new ACLs, so changes to the
- instance after setDefaultACL has been called will not be reflected in new AVObjects.
- @param currentUserAccess If true, the AVACL that is applied to newly-created AVObjects will
+ instance after setDefaultACL has been called will not be reflected in new LCObjects.
+ @param currentUserAccess If true, the AVACL that is applied to newly-created LCObjects will
  provide read and write access to the currentUser at the time of creation. If false,
  the provided ACL will be used without modification. If acl is nil, this value is ignored.
  */

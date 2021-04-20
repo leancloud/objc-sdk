@@ -4,7 +4,7 @@
 #import <Foundation/Foundation.h>
 #import "AVAvailability.h"
 
-@class AVObject;
+@class LCObject;
 @class AVUser;
 @class AVFile;
 
@@ -159,7 +159,7 @@ extern NSInteger const kAVErrorInvalidLinkedSession;
 typedef void (^AVBooleanResultBlock)(BOOL succeeded,  NSError * _Nullable error);
 typedef void (^AVIntegerResultBlock)(NSInteger number, NSError * _Nullable error);
 typedef void (^AVArrayResultBlock)(NSArray * _Nullable objects, NSError * _Nullable error);
-typedef void (^AVObjectResultBlock)(AVObject * _Nullable object, NSError * _Nullable error);
+typedef void (^LCObjectResultBlock)(LCObject * _Nullable object, NSError * _Nullable error);
 typedef void (^AVSetResultBlock)(NSSet * _Nullable channels, NSError * _Nullable error);
 typedef void (^AVUserResultBlock)(AVUser * _Nullable user, NSError * _Nullable error);
 typedef void (^AVDataResultBlock)(NSData * _Nullable data, NSError * _Nullable error);

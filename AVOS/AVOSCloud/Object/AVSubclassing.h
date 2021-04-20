@@ -13,9 +13,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /*!
- If a subclass of AVObject conforms to AVSubclassing and calls registerSubclass, LeanCloud will be able to use that class as the native class for a LeanCloud object.
+ If a subclass of LCObject conforms to AVSubclassing and calls registerSubclass, LeanCloud will be able to use that class as the native class for a LeanCloud object.
 
- Classes conforming to this protocol should subclass AVObject and include AVObject+Subclass.h in their implementation file. This ensures the methods in the Subclass category of AVObject are exposed in its subclasses only.
+ Classes conforming to this protocol should subclass LCObject and include LCObject+Subclass.h in their implementation file. This ensures the methods in the Subclass category of LCObject are exposed in its subclasses only.
  */
 @protocol AVSubclassing
 
@@ -25,17 +25,17 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)parseClassName;
 
 /*!
- Creates a reference to an existing AVObject for use in creating associations between AVObjects.  Calling isDataAvailable on this
+ Creates a reference to an existing LCObject for use in creating associations between LCObjects.  Calling isDataAvailable on this
  object will return NO until fetchIfNeeded or refresh has been called.  No network request will be made.
- A default implementation is provided by AVObject which should always be sufficient.
+ A default implementation is provided by LCObject which should always be sufficient.
  @param objectId The object id for the referenced object.
- @return A AVObject without data.
+ @return A LCObject without data.
  */
 + (instancetype)objectWithoutDataWithObjectId:(NSString *)objectId;
 
 /*!
  Create a query which returns objects of this type.
- A default implementation is provided by AVObject which should always be sufficient.
+ A default implementation is provided by LCObject which should always be sufficient.
  */
 + (AVQuery *)query;
 

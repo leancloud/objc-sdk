@@ -1,12 +1,12 @@
 //
-//  AVObject_Internal.h
+//  LCObject_Internal.h
 //  paas
 //
 //  Created by Zhu Zeng on 3/6/13.
 //  Copyright (c) 2013 AVOS. All rights reserved.
 //
 
-#import "AVObject.h"
+#import "LCObject.h"
 #import "AVRequestOperation.h"
 #import "AVRequestManager.h"
 
@@ -32,7 +32,7 @@ NSString *request_object_id(NSDictionary *request) {
     return request[@"body"][@"objectId"];
 }
 
-@interface AVObject ()
+@interface LCObject ()
 
 @property (nonatomic,   copy) NSString *objectId;
 @property (nonatomic,   copy) NSString *className;
@@ -60,10 +60,10 @@ NSString *request_object_id(NSDictionary *request) {
                 inDictionary:(NSMutableDictionary *)dict
                       create:(BOOL)create;
 
--(void)addRelation:(AVObject *)object
+-(void)addRelation:(LCObject *)object
             forKey:(NSString *)key
             submit:(BOOL)submit;
--(void)removeRelation:(AVObject *)object
+-(void)removeRelation:(LCObject *)object
                forKey:(NSString *)key;
 
 -(NSError *)preSave;

@@ -10,14 +10,14 @@
 #import "LCNetworking.h"
 #import "AVUtils.h"
 #import "AVUser_Internal.h"
-#import "AVObject_Internal.h"
+#import "LCObject_Internal.h"
 #import "AVRole_Internal.h"
 #import "AVACL_Internal.h"
 #import "AVCacheManager.h"
 #import "AVErrorUtils.h"
 #import "AVPersistenceUtils.h"
 #import "AVScheduler.h"
-#import "AVObjectUtils.h"
+#import "LCObjectUtils.h"
 #import "LCNetworkStatistics.h"
 #import "LCRouter_Internal.h"
 #import "AVConstants.h"
@@ -399,7 +399,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 }
 
 -(void)postBatchObject:(NSArray *)requests headerMap:(NSDictionary *)headerMap eventually:(BOOL)isEventually block:(AVArrayResultBlock)block {
-    NSString *path = [AVObjectUtils batchPath];
+    NSString *path = [LCObjectUtils batchPath];
     NSDictionary *parameters = @{@"requests": requests ?: @[]};
     NSMutableURLRequest *request = [self requestWithPath:path method:@"POST" headers:headerMap parameters:parameters];
     
@@ -448,7 +448,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 }
 
 -(void)postBatchSaveObject:(NSArray *)requests headerMap:(NSDictionary *)headerMap eventually:(BOOL)isEventually block:(AVIdResultBlock)block {
-    NSString *path = [AVObjectUtils batchSavePath];
+    NSString *path = [LCObjectUtils batchSavePath];
     NSDictionary *parameters = @{@"requests": requests};
     NSMutableURLRequest *request = [self requestWithPath:path method:@"POST" headers:headerMap parameters:parameters];
     

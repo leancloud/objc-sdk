@@ -79,11 +79,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readwrite, assign) NSTimeInterval maxCacheAge;
 
 /*!
- Make the query include AVObjects that have a reference stored at the provided key.
+ Make the query include LCObjects that have a reference stored at the provided key.
  This has an effect similar to a join.  You can use dot notation to specify which fields in
  the included object are also fetch.
 
- @param key The key to load child AVObjects for.
+ @param key The key to load child LCObjects for.
  */
 - (void)includeKey:(NSString *)key;
 
@@ -91,14 +91,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  *  根据查询条件获取结果对象
- *  @return AVObjects 数组
+ *  @return LCObjects 数组
  */
 - (nullable NSArray *)findObjects;
 
 /*!
  *  根据查询条件获取结果对象，如果有 error，则设置一个 error
  *  @param error 指针
- *  @return AVObjects 数组
+ *  @return LCObjects 数组
  */
 - (nullable NSArray *)findObjects:(NSError **)error;
 

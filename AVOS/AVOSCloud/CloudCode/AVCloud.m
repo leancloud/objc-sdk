@@ -10,10 +10,10 @@
 #import "AVPaasClient.h"
 #import "AVErrorUtils.h"
 #import "AVUtils.h"
-#import "AVObject_Internal.h"
+#import "LCObject_Internal.h"
 #import "AVFile_Internal.h"
 #import "AVGeoPoint_Internal.h"
-#import "AVObjectUtils.h"
+#import "LCObjectUtils.h"
 #import "AVLogger.h"
 #import "AVUtils.h"
 
@@ -41,7 +41,7 @@
     NSDictionary *serializedParameters = nil;
 
     if (parameters) {
-        serializedParameters = [AVObjectUtils dictionaryFromDictionary:parameters];
+        serializedParameters = [LCObjectUtils dictionaryFromDictionary:parameters];
     }
 
     NSString *path = [NSString stringWithFormat:@"functions/%@", function];
@@ -114,7 +114,7 @@
     NSDictionary *serializedParameters = nil;
 
     if (parameters) {
-        serializedParameters = [AVObjectUtils dictionaryFromObject:parameters topObject:YES];
+        serializedParameters = [LCObjectUtils dictionaryFromObject:parameters topObject:YES];
     }
 
     NSString *path = [NSString stringWithFormat:@"call/%@", function];
@@ -223,7 +223,7 @@
         return [newDic copy];
     } else {
         // 有 __type，则像解析 AVQuery 的结果一样
-        return [AVObjectUtils objectFromDictionary:dic];
+        return [LCObjectUtils objectFromDictionary:dic];
     }
     return dic;
 }

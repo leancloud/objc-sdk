@@ -105,7 +105,7 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
 }
 
 - (void)handleEventCreate:(NSDictionary *)event {
-    AVObject *object = event[@"object"];
+    LCObject *object = event[@"object"];
 
     [self callDelegateMethod:@selector(liveQuery:objectDidCreate:)
                       object:object
@@ -113,7 +113,7 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
 }
 
 - (void)handleEventUpdate:(NSDictionary *)event {
-    AVObject *object = event[@"object"];
+    LCObject *object = event[@"object"];
     NSArray *updatedKeys = event[@"updatedKeys"] ?: @[];
 
     [self callDelegateMethod:@selector(liveQuery:objectDidUpdate:updatedKeys:)
@@ -122,7 +122,7 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
 }
 
 - (void)handleEventDelete:(NSDictionary *)event {
-    AVObject *object = event[@"object"];
+    LCObject *object = event[@"object"];
 
     [self callDelegateMethod:@selector(liveQuery:objectDidDelete:)
                       object:object
@@ -130,7 +130,7 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
 }
 
 - (void)handleEventEnter:(NSDictionary *)event {
-    AVObject *object = event[@"object"];
+    LCObject *object = event[@"object"];
     NSArray *updatedKeys = event[@"updatedKeys"] ?: @[];
 
     [self callDelegateMethod:@selector(liveQuery:objectDidEnter:updatedKeys:)
@@ -139,7 +139,7 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
 }
 
 - (void)handleEventLeave:(NSDictionary *)event {
-    AVObject *object = event[@"object"];
+    LCObject *object = event[@"object"];
     NSArray *updatedKeys = event[@"updatedKeys"] ?: @[];
 
     [self callDelegateMethod:@selector(liveQuery:objectDidLeave:updatedKeys:)

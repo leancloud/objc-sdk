@@ -21,8 +21,8 @@
         return nil;
     }
     NSMutableArray *files = [NSMutableArray arrayWithCapacity:objects.count];
-    for (AVObject *object in [objects copy]) {
-        AVFile *file = [AVFile fileWithAVObject:object];
+    for (LCObject *object in [objects copy]) {
+        AVFile *file = [AVFile fileWithObject:object];
         [files addObject:file];
     }
     return files;
@@ -30,20 +30,20 @@
 
 - (void)getFileInBackgroundWithId:(NSString *)objectId
                             block:(AVFileResultBlock)block {
-    [self getObjectInBackgroundWithId:objectId block:^(AVObject *object, NSError *error) {
+    [self getObjectInBackgroundWithId:objectId block:^(LCObject *object, NSError *error) {
         AVFile *file = nil;
         if (!error) {
-            file = [AVFile fileWithAVObject:object];
+            file = [AVFile fileWithObject:object];
         }
         [AVUtils callFileResultBlock:block AVFile:file error:error];
     }];
 }
 
 - (AVFile *)getFileWithId:(NSString *)objectId error:(NSError **)error {
-    AVObject *object = [self getObjectWithId:objectId error:error];
+    LCObject *object = [self getObjectWithId:objectId error:error];
     AVFile *file = nil;
     if (object != nil) {
-        file = [AVFile fileWithAVObject:object];
+        file = [AVFile fileWithObject:object];
     }
     return file;
 }

@@ -3,12 +3,12 @@
 
 #import <Foundation/Foundation.h>
 #import "AVUser_Internal.h"
-#import "AVObject_Internal.h"
+#import "LCObject_Internal.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"
 #import "AVQuery.h"
 #import "AVPersistenceUtils.h"
-#import "AVObjectUtils.h"
+#import "LCObjectUtils.h"
 #import "AVPaasClient.h"
 #import "AVErrorUtils.h"
 #import "AVFriendQuery.h"
@@ -77,7 +77,7 @@ static BOOL enableAutomatic = NO;
                 user = [self userOrSubclassUser];
             }
             
-            [AVObjectUtils copyDictionary:userDict toObject:user];
+            [LCObjectUtils copyDictionary:userDict toObject:user];
             [AVPaasClient sharedInstance].currentUser = user;
             return user;
         }
@@ -238,7 +238,7 @@ static BOOL enableAutomatic = NO;
                 // {"sessionToken":"kns1w56ch9b3mn308i13bkln6",
                 //  "updatedAt":"2015-10-20T03:12:38.203Z",
                 //  "objectId":"5625b11b60b2fc79c2fb8c40"}
-                [AVObjectUtils copyDictionary:object toObject:self];
+                [LCObjectUtils copyDictionary:object toObject:self];
                 if (self == [AVUser currentUser]) {
                     [AVUser changeCurrentUser:self save:YES];
                 }
@@ -805,7 +805,7 @@ static BOOL enableAutomatic = NO;
                                                     key:@"objectId"];
             if (currentUser && objectId &&
                 [currentUser.objectId isEqualToString:objectId]) {
-                [AVObjectUtils copyDictionary:object toObject:currentUser];
+                [LCObjectUtils copyDictionary:object toObject:currentUser];
                 currentUser.mobilePhoneNumber = phoneNumber;
                 currentUser.mobilePhoneVerified = true;
                 [self changeCurrentUser:currentUser save:true];
@@ -878,7 +878,7 @@ static BOOL enableAutomatic = NO;
                                                     key:@"objectId"];
             if (currentUser && objectId &&
                 [currentUser.objectId isEqualToString:objectId]) {
-                [AVObjectUtils copyDictionary:object toObject:currentUser];
+                [LCObjectUtils copyDictionary:object toObject:currentUser];
                 currentUser.mobilePhoneNumber = phoneNumber;
                 currentUser.mobilePhoneVerified = true;
                 [self changeCurrentUser:currentUser save:true];
@@ -964,7 +964,7 @@ static BOOL enableAutomatic = NO;
         }
         
         [self setNewFlag:true];
-        [AVObjectUtils copyDictionary:dic toObject:self];
+        [LCObjectUtils copyDictionary:dic toObject:self];
         [self._requestManager clear];
         [AVUser changeCurrentUser:self save:YES];
         
@@ -1054,7 +1054,7 @@ static BOOL enableAutomatic = NO;
             return;
         }
         
-        [AVObjectUtils copyDictionary:dic toObject:self];
+        [LCObjectUtils copyDictionary:dic toObject:self];
         
         NSDictionary *oldAuthData = [self objectForKey:authDataTag];
         NSDictionary *newAuthData = parameters[authDataTag];
@@ -1132,7 +1132,7 @@ static BOOL enableAutomatic = NO;
             return;
         }
         
-        [AVObjectUtils copyDictionary:dic toObject:self];
+        [LCObjectUtils copyDictionary:dic toObject:self];
         
         NSDictionary *oldAuthData = [self objectForKey:authDataTag];
         
@@ -1173,7 +1173,7 @@ static BOOL enableAutomatic = NO;
             return;
         }
         AVUser *user = [AVUser userOrSubclassUser];
-        [AVObjectUtils copyDictionary:object toObject:user];
+        [LCObjectUtils copyDictionary:object toObject:user];
         [AVUser changeCurrentUser:user save:YES];
         dispatch_async(dispatch_get_main_queue(), ^{
             callback(user, nil);
@@ -1186,7 +1186,7 @@ static BOOL enableAutomatic = NO;
     return [[self linkedServiceNames] containsObject:anonymousTag];
 }
 
-#pragma mark - Override from AVObject
+#pragma mark - Override from LCObject
 
 /**
  Avoid session token to be removed after fetching or refreshing.
@@ -1233,7 +1233,7 @@ static BOOL enableAutomatic = NO;
 }
 
 + (AVUser *)userOrSubclassUser {
-    return (AVUser *)[AVObjectUtils avObjectForClass:[AVUser userTag]];
+    return (AVUser *)[LCObjectUtils lcObjectForClass:[AVUser userTag]];
 }
 
 + (void)configAndChangeCurrentUserWithUser:(AVUser *)user
@@ -1245,7 +1245,7 @@ static BOOL enableAutomatic = NO;
     
     NSDictionary *dic = (NSDictionary *)object;
     
-    [AVObjectUtils copyDictionary:dic toObject:user];
+    [LCObjectUtils copyDictionary:dic toObject:user];
     
     [user._requestManager clear];
     
@@ -1438,7 +1438,7 @@ static BOOL enableAutomatic = NO;
         callback(NO, LCError(kAVErrorUserCannotBeAlteredWithoutSession, nil, nil));
         return;
     }
-    NSDictionary *dict = [AVObjectUtils dictionaryFromObject:dictionary];
+    NSDictionary *dict = [LCObjectUtils dictionaryFromObject:dictionary];
     NSString *path=[NSString stringWithFormat:@"users/self/friendship/%@",userId];
     
     [[AVPaasClient sharedInstance] postObject:path withParameters:dict block:^(NSDictionary *object, NSError *error) {
@@ -1485,11 +1485,11 @@ static BOOL enableAutomatic = NO;
                 NSArray *result=nil;
                 
                 orig=[object[@"followees"] valueForKeyPath:@"followee"];
-                result=[AVObjectUtils arrayFromArray:orig];
+                result=[LCObjectUtils arrayFromArray:orig];
                 [dict setObject:result forKey:@"followees"];
                 
                 orig=[object[@"followers"] valueForKeyPath:@"follower"];
-                result=[AVObjectUtils arrayFromArray:orig];
+                result=[LCObjectUtils arrayFromArray:orig];
                 [dict setObject:result forKey:@"followers"];
                 
             }
