@@ -8,7 +8,7 @@
 #import "AVPaasClient.h"
 #import "AVUtils.h"
 #import "LCObjectUtils.h"
-#import "AVPersistenceUtils.h"
+#import "LCPersistenceUtils.h"
 #import "AVErrorUtils.h"
 #import "LCRouter_Internal.h"
 
@@ -42,10 +42,10 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         instance = [AVInstallation installation];
-        NSString *path = [AVPersistenceUtils currentInstallationArchivePath];
+        NSString *path = [LCPersistenceUtils currentInstallationArchivePath];
         if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
             NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:
-                                               [AVPersistenceUtils getJSONFromPath:path]];
+                                               [LCPersistenceUtils getJSONFromPath:path]];
             if (dictionary) {
                 [LCObjectUtils copyDictionary:dictionary
                                      toObject:instance];
@@ -177,7 +177,7 @@
         if (self.apnsTeamId) {
             data[keyPath(self, apnsTeamId)] = self.apnsTeamId;
         }
-        [AVPersistenceUtils saveJSON:data toPath:[AVPersistenceUtils currentInstallationArchivePath]];
+        [LCPersistenceUtils saveJSON:data toPath:[LCPersistenceUtils currentInstallationArchivePath]];
     }
 }
 

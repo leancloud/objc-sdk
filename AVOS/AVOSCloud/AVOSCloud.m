@@ -8,8 +8,8 @@
 
 #import "AVOSCloud.h"
 #import "AVPaasClient.h"
-#import "AVScheduler.h"
-#import "AVPersistenceUtils.h"
+#import "LCScheduler.h"
+#import "LCPersistenceUtils.h"
 
 #if !TARGET_OS_WATCH
 #import "AVAnalytics_Internal.h"
@@ -173,19 +173,19 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
 #pragma mark Schedule work
 
 + (NSInteger)queryCacheExpiredDays {
-    return [AVScheduler sharedInstance].queryCacheExpiredDays;
+    return [LCScheduler sharedInstance].queryCacheExpiredDays;
 }
 
 + (void)setQueryCacheExpiredDays:(NSInteger)days {
-    [AVScheduler sharedInstance].queryCacheExpiredDays = days;
+    [LCScheduler sharedInstance].queryCacheExpiredDays = days;
 }
 
 + (NSInteger)fileCacheExpiredDays {
-    return [AVScheduler sharedInstance].fileCacheExpiredDays;
+    return [LCScheduler sharedInstance].fileCacheExpiredDays;
 }
 
 + (void)setFileCacheExpiredDays:(NSInteger)days {
-    [AVScheduler sharedInstance].fileCacheExpiredDays = days;
+    [LCScheduler sharedInstance].fileCacheExpiredDays = days;
 }
 
 + (void)verifySmsCode:(NSString *)code

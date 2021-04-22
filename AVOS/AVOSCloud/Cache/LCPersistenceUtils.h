@@ -1,5 +1,5 @@
 //
-//  AVPersistenceUtils.h
+//  LCPersistenceUtils.h
 //  paas
 //
 //  Created by Summer on 13-3-25.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>   
 
-@interface AVPersistenceUtils : NSObject
+@interface LCPersistenceUtils : NSObject
 
 + (NSString *)homeDirectoryLibraryCachesLeanCloudCachesFiles;
 + (NSString *)homeDirectoryLibraryCachesLeanCloudCachesRouter;

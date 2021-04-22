@@ -10,7 +10,7 @@
 #import "AVPaasClient_internal.h"
 #import "AVUser_Internal.h"
 #import "AVGeoPoint_Internal.h"
-#import "AVCacheManager.h"
+#import "LCCacheManager.h"
 #import "AVErrorUtils.h"
 #import "LCObjectUtils.h"
 #import "AVQuery_Internal.h"
@@ -988,7 +988,7 @@ static NSString * quote(NSString *string)
 {
     [self assembleParameters];
     NSString *key = [[AVPaasClient sharedInstance] absoluteStringFromPath:[self queryPath] parameters:self.parameters];
-    return [[AVCacheManager sharedInstance] hasCacheForKey:key];
+    return [[LCCacheManager sharedInstance] hasCacheForKey:key];
 }
 
 /*!
@@ -998,7 +998,7 @@ static NSString * quote(NSString *string)
 {
     [self assembleParameters];
     NSString *key = [[AVPaasClient sharedInstance] absoluteStringFromPath:[self queryPath] parameters:self.parameters];
-    [[AVCacheManager sharedInstance] clearCacheForKey:key];
+    [[LCCacheManager sharedInstance] clearCacheForKey:key];
 }
 
 /*!
@@ -1006,7 +1006,7 @@ static NSString * quote(NSString *string)
  */
 + (void)clearAllCachedResults
 {
-    [AVCacheManager clearAllCache];
+    [LCCacheManager clearAllCache];
 }
 
 #pragma mark - Handle the data for communication with server

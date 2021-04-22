@@ -1,5 +1,5 @@
 //
-//  AVCacheManager.h
+//  LCCacheManager.h
 //  LeanCloud
 //
 //  Created by Summer on 13-3-19.
@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "AVConstants.h"
 
-@interface AVCacheManager : NSObject
+@interface LCCacheManager : NSObject
 
-+ (AVCacheManager *)sharedInstance;
++ (LCCacheManager *)sharedInstance;
 
 // cache
 - (void)getWithKey:(NSString *)key maxCacheAge:(NSTimeInterval)maxCacheAge block:(AVIdResultBlock)block;

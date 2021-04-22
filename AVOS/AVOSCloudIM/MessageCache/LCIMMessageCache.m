@@ -8,7 +8,7 @@
 
 #import <AVOSCloud/AVOSCloud.h>
 
-#import "AVPersistenceUtils.h"
+#import "LCPersistenceUtils.h"
 #import "LCIMMessageCache.h"
 #import "LCIMMessageCacheStore.h"
 #import "AVIMMessage.h"
@@ -50,7 +50,7 @@
 }
 
 - (NSString *)dbPath {
-    return [AVPersistenceUtils messageCacheDatabasePathWithName:self.clientId];
+    return [LCPersistenceUtils messageCacheDatabasePathWithName:self.clientId];
 }
 
 - (NSArray *)messagesOrderedByTimestampDescending:(NSArray *)messages {

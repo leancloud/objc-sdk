@@ -8,7 +8,7 @@
 #import "AVUtils.h"
 #import "LCNetworking.h"
 #import "AVErrorUtils.h"
-#import "AVPersistenceUtils.h"
+#import "LCPersistenceUtils.h"
 #import "LCObjectUtils.h"
 #import "LCACL_Internal.h"
 #import <CommonCrypto/CommonCrypto.h>
@@ -17,7 +17,7 @@ static NSString * AVFile_CustomPersistentCacheDirectory = nil;
 
 static NSString * AVFile_PersistentCacheDirectory()
 {
-    return AVFile_CustomPersistentCacheDirectory ?: [AVPersistenceUtils homeDirectoryLibraryCachesLeanCloudCachesFiles];
+    return AVFile_CustomPersistentCacheDirectory ?: [LCPersistenceUtils homeDirectoryLibraryCachesLeanCloudCachesFiles];
 }
 
 static NSString * AVFile_CompactUUID()

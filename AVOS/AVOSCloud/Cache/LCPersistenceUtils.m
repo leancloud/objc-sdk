@@ -1,19 +1,19 @@
 //
-//  AVPersistenceUtils.m
+//  LCPersistenceUtils.m
 //  paas
 //
 //  Created by Summer on 13-3-25.
 //  Copyright (c) 2013年 AVOS. All rights reserved.
 //
 
-#import "AVPersistenceUtils.h"
+#import "LCPersistenceUtils.h"
 #import <TargetConditionals.h>
 #import "AVUtils.h"
 
 #define LCRootDirName @"LeanCloud"
 #define LCMessageCacheDirName @"MessageCache"
 
-@implementation AVPersistenceUtils
+@implementation LCPersistenceUtils
 
 // MARK: - Home Directory: ~/
 + (NSString *)homeDirectory
@@ -100,9 +100,9 @@
     return path;
 }
 
-// ~/Library/Caches/AVPaasCache, for AVCacheManager
+// ~/Library/Caches/AVPaasCache, for LCCacheManager
 + (NSString *)avCacheDirectory {
-    NSString *ret = [[AVPersistenceUtils homeDirectoryLibraryCaches] stringByAppendingPathComponent:@"AVPaasCache"];
+    NSString *ret = [[LCPersistenceUtils homeDirectoryLibraryCaches] stringByAppendingPathComponent:@"AVPaasCache"];
     [self createDirectoryIfNeeded:ret];
     return ret;
 }
@@ -141,7 +141,7 @@
 
 // ~/Library/Private Documents/AVPaas
 + (NSString *)privateDocumentsDirectory {
-    NSString *ret = [[AVPersistenceUtils libraryDirectory] stringByAppendingPathComponent:@"Private Documents/AVPaas"];
+    NSString *ret = [[LCPersistenceUtils libraryDirectory] stringByAppendingPathComponent:@"Private Documents/AVPaas"];
     [self createDirectoryIfNeeded:ret];
     return ret;
 }
@@ -149,22 +149,22 @@
 #pragma mark -  Private Documents Concrete Path
 
 + (NSString *)currentUserArchivePath {
-    NSString * path = [[AVPersistenceUtils privateDocumentsDirectory] stringByAppendingString:@"/currentUser"];
+    NSString * path = [[LCPersistenceUtils privateDocumentsDirectory] stringByAppendingString:@"/currentUser"];
     return path;
 }
 
 + (NSString *)currentUserClassArchivePath {
-    NSString *path = [[AVPersistenceUtils privateDocumentsDirectory] stringByAppendingString:@"/currentUserClass"];
+    NSString *path = [[LCPersistenceUtils privateDocumentsDirectory] stringByAppendingString:@"/currentUserClass"];
     return path;
 }
 
 + (NSString *)currentInstallationArchivePath {
-    NSString *path = [[AVPersistenceUtils privateDocumentsDirectory] stringByAppendingString:@"/currentInstallation"];
+    NSString *path = [[LCPersistenceUtils privateDocumentsDirectory] stringByAppendingString:@"/currentInstallation"];
     return path;
 }
 
 + (NSString *)eventuallyPath {
-    NSString *ret = [[AVPersistenceUtils privateDocumentsDirectory] stringByAppendingPathComponent:@"OfflineRequests"];
+    NSString *ret = [[LCPersistenceUtils privateDocumentsDirectory] stringByAppendingPathComponent:@"OfflineRequests"];
     [self createDirectoryIfNeeded:ret];
     return ret;
 }
@@ -239,7 +239,7 @@
     if (error == nil) {
         for (NSString *path in directoryContents) {
             NSString *fullPath = [dirPath stringByAppendingPathComponent:path];
-            NSDate *lastModified = [AVPersistenceUtils lastModified:fullPath];
+            NSDate *lastModified = [LCPersistenceUtils lastModified:fullPath];
             if ([nowDate timeIntervalSinceDate:lastModified] < numberOfDays * 24 * 3600)
                 continue;
             

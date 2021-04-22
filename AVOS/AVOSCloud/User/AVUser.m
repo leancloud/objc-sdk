@@ -7,7 +7,7 @@
 #import "AVPaasClient.h"
 #import "AVUtils.h"
 #import "AVQuery.h"
-#import "AVPersistenceUtils.h"
+#import "LCPersistenceUtils.h"
 #import "LCObjectUtils.h"
 #import "AVPaasClient.h"
 #import "AVErrorUtils.h"
@@ -52,12 +52,12 @@ static BOOL enableAutomatic = NO;
     if (newUser && save) {
         NSMutableDictionary * json = [newUser userDictionaryForCache];
         [json removeObjectForKey:passwordTag];
-        [AVPersistenceUtils saveJSON:json toPath:[AVPersistenceUtils currentUserArchivePath]];
-        [AVPersistenceUtils saveJSON:@{@"class": NSStringFromClass([newUser class])}
-                              toPath:[AVPersistenceUtils currentUserClassArchivePath]];
+        [LCPersistenceUtils saveJSON:json toPath:[LCPersistenceUtils currentUserArchivePath]];
+        [LCPersistenceUtils saveJSON:@{@"class": NSStringFromClass([newUser class])}
+                              toPath:[LCPersistenceUtils currentUserClassArchivePath]];
     } else if (save) {
-        [AVPersistenceUtils removeFile:[AVPersistenceUtils currentUserArchivePath]];
-        [AVPersistenceUtils removeFile:[AVPersistenceUtils currentUserClassArchivePath]];
+        [LCPersistenceUtils removeFile:[LCPersistenceUtils currentUserArchivePath]];
+        [LCPersistenceUtils removeFile:[LCPersistenceUtils currentUserClassArchivePath]];
     }
     [AVPaasClient sharedInstance].currentUser = newUser;
 }
@@ -67,11 +67,11 @@ static BOOL enableAutomatic = NO;
     AVUser *user = [AVPaasClient sharedInstance].currentUser;
     if (user) {
         return user;
-    } else if ([AVPersistenceUtils fileExist:[AVPersistenceUtils currentUserArchivePath]]) {
-        NSMutableDictionary *userDict = [NSMutableDictionary dictionaryWithDictionary:[AVPersistenceUtils getJSONFromPath:[AVPersistenceUtils currentUserArchivePath]]];
+    } else if ([LCPersistenceUtils fileExist:[LCPersistenceUtils currentUserArchivePath]]) {
+        NSMutableDictionary *userDict = [NSMutableDictionary dictionaryWithDictionary:[LCPersistenceUtils getJSONFromPath:[LCPersistenceUtils currentUserArchivePath]]];
         if (userDict) {
-            if ([AVPersistenceUtils fileExist:[AVPersistenceUtils currentUserClassArchivePath]]) {
-                NSDictionary *classDict = [AVPersistenceUtils getJSONFromPath:[AVPersistenceUtils currentUserClassArchivePath]];
+            if ([LCPersistenceUtils fileExist:[LCPersistenceUtils currentUserClassArchivePath]]) {
+                NSDictionary *classDict = [LCPersistenceUtils getJSONFromPath:[LCPersistenceUtils currentUserClassArchivePath]];
                 user = [NSClassFromString(classDict[@"class"]) user];
             } else {
                 user = [self userOrSubclassUser];

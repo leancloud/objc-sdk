@@ -1,27 +1,27 @@
 //
-//  AVScheduler.m
+//  LCScheduler.m
 //  paas
 //
 //  Created by Summer on 13-8-22.
 //  Copyright (c) 2013年 AVOS. All rights reserved.
 //
 
-#import "AVScheduler.h"
+#import "LCScheduler.h"
 #import "AVFile.h"
 #import "AVFile_Internal.h"
-#import "AVCacheManager.h"
+#import "LCCacheManager.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"
 
 static NSUInteger const ExpiredDays = 30;
 
-@implementation AVScheduler
+@implementation LCScheduler
 
-+ (AVScheduler *)sharedInstance {
++ (LCScheduler *)sharedInstance {
     static dispatch_once_t once;
-    static AVScheduler *_sharedInstance;
+    static LCScheduler *_sharedInstance;
     dispatch_once(&once, ^{
-        _sharedInstance = [[AVScheduler alloc] init];
+        _sharedInstance = [[LCScheduler alloc] init];
         [_sharedInstance setup];
     });
     return _sharedInstance;
@@ -84,7 +84,7 @@ static NSUInteger const ExpiredDays = 30;
 }
 
 - (void)clearCache {
-    [AVCacheManager clearCacheMoreThanDays:self.queryCacheExpiredDays];
+    [LCCacheManager clearCacheMoreThanDays:self.queryCacheExpiredDays];
 }
 
 @end

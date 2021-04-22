@@ -7,7 +7,7 @@
 //
 
 #import "LCIMCacheStore.h"
-#import "AVPersistenceUtils.h"
+#import "LCPersistenceUtils.h"
 #import "LCIMMessageCacheStoreSQL.h"
 #import "LCIMConversationCacheStoreSQL.h"
 #import "LCDatabaseMigrator.h"
@@ -23,7 +23,7 @@
 }
 
 + (NSString *)databasePathWithName:(NSString *)name {
-    return [AVPersistenceUtils messageCacheDatabasePathWithName:name];
+    return [LCPersistenceUtils messageCacheDatabasePathWithName:name];
 }
 
 - (instancetype)initWithClientId:(NSString *)clientId {

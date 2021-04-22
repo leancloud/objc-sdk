@@ -13,10 +13,10 @@
 #import "LCObject_Internal.h"
 #import "LCRole_Internal.h"
 #import "LCACL_Internal.h"
-#import "AVCacheManager.h"
+#import "LCCacheManager.h"
 #import "AVErrorUtils.h"
-#import "AVPersistenceUtils.h"
-#import "AVScheduler.h"
+#import "LCPersistenceUtils.h"
+#import "LCScheduler.h"
 #import "LCObjectUtils.h"
 #import "LCNetworkStatistics.h"
 #import "LCRouter_Internal.h"
@@ -138,7 +138,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         
         sharedInstance.runningArchivedRequests=[[NSMutableSet alloc] init];
         
-        [AVScheduler sharedInstance];
+        [LCScheduler sharedInstance];
     });
     return sharedInstance;
 }
@@ -188,7 +188,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 -(void)clearLastModifyCache {
     if (self.lastModify.count) {
         for (NSString *key in self.lastModify) {
-            [[AVCacheManager sharedInstance] clearCacheForMD5Key:key];
+            [[LCCacheManager sharedInstance] clearCacheForMD5Key:key];
         }
         
         [self.lastModify removeAllObjects];
@@ -318,7 +318,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             break;
         case kAVCachePolicyCacheOnly:
         {
-            [[AVCacheManager sharedInstance] getWithKey:key maxCacheAge:maxCacheAge block:block];
+            [[LCCacheManager sharedInstance] getWithKey:key maxCacheAge:maxCacheAge block:block];
         }
             break;
         case kAVCachePolicyNetworkOnly:
@@ -330,7 +330,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             break;
         case kAVCachePolicyCacheElseNetwork:
         {
-            [[AVCacheManager sharedInstance] getWithKey:key maxCacheAge:maxCacheAge block:^(id object, NSError *error) {
+            [[LCCacheManager sharedInstance] getWithKey:key maxCacheAge:maxCacheAge block:^(id object, NSError *error) {
                 if (error) {
                     [self getObjectFromNetworkWithPath:path withParameters:parameters policy:policy block:block];
                 } else {
@@ -343,7 +343,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         {
             [self getObjectFromNetworkWithPath:path withParameters:parameters policy:policy block:^(id object, NSError *error) {
                 if (error) {
-                    [[AVCacheManager sharedInstance] getWithKey:key maxCacheAge:maxCacheAge block:block];
+                    [[LCCacheManager sharedInstance] getWithKey:key maxCacheAge:maxCacheAge block:block];
                 } else {
                     block(object, error);
                 }
@@ -352,7 +352,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             break;
         case kAVCachePolicyCacheThenNetwork:
         {
-            [[AVCacheManager sharedInstance] getWithKey:key maxCacheAge:maxCacheAge block:^(id object, NSError *error) {
+            [[LCCacheManager sharedInstance] getWithKey:key maxCacheAge:maxCacheAge block:^(id object, NSError *error) {
                 block(object, error);
                 [self getObjectFromNetworkWithPath:path withParameters:parameters policy:policy block:block];
             }];
@@ -509,7 +509,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     
     if (self.isLastModifyEnabled && [request.HTTPMethod isEqualToString:@"GET"]) {
         NSString *modifiedSince = self.lastModify[[URLString AVMD5String]];
-        if (modifiedSince && [[AVCacheManager sharedInstance] hasCacheForKey:URLString]) {
+        if (modifiedSince && [[LCCacheManager sharedInstance] hasCacheForKey:URLString]) {
             [mutableRequest setValue:modifiedSince forHTTPHeaderField:@"If-Modified-Since"];
         }
     }
@@ -527,11 +527,11 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             NSString *lastModified = [response.allHeaderFields objectForKey:@"Last-Modified"];
             
             if (lastModified && ![self.lastModify[URLMD5] isEqualToString:lastModified]) {
-                [[AVCacheManager sharedInstance] saveJSON:responseObject forKey:URLString];
+                [[LCCacheManager sharedInstance] saveJSON:responseObject forKey:URLString];
                 [self.lastModify setObject:lastModified forKey:URLMD5];
             }
         } else if (saveResult) {
-            [[AVCacheManager sharedInstance] saveJSON:responseObject forKey:URLString];
+            [[LCCacheManager sharedInstance] saveJSON:responseObject forKey:URLString];
         }
     }
                  failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error)
@@ -540,11 +540,11 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         
         if (statusCode == 304) {
             // 304 is not error
-            [[AVCacheManager sharedInstance] getWithKey:URLString maxCacheAge:3600 * 24 * 30 block:^(id object, NSError *error) {
+            [[LCCacheManager sharedInstance] getWithKey:URLString maxCacheAge:3600 * 24 * 30 block:^(id object, NSError *error) {
                 if (error) {
                     if (retryTimes < 3) {
                         [self.lastModify removeObjectForKey:[URLString AVMD5String]];
-                        [[AVCacheManager sharedInstance] clearCacheForKey:URLString];
+                        [[LCCacheManager sharedInstance] clearCacheForKey:URLString];
                         [mutableRequest setValue:@"" forHTTPHeaderField:@"If-Modified-Since"];
                         [self performRequest:mutableRequest saveResult:saveResult block:block retryTimes:retryTimes + 1];
                     } else {
@@ -713,7 +713,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 - (NSString *)archiveRequest:(NSURLRequest *)request {
     NSString *fileName = [NSString stringWithFormat:@"%f", [NSDate timeIntervalSinceReferenceDate]];
-    NSString *fullPath = [[AVPersistenceUtils eventuallyPath] stringByAppendingPathComponent:fileName];
+    NSString *fullPath = [[LCPersistenceUtils eventuallyPath] stringByAppendingPathComponent:fileName];
     [NSKeyedArchiver archiveRootObject:request toFile:fullPath];
     return fullPath;
 }
@@ -781,7 +781,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 - (void)handleAllArchivedRequests {
     NSFileManager *fileMgr = [[NSFileManager alloc] init];
     
-    NSString *documentsDirectory = [AVPersistenceUtils eventuallyPath];
+    NSString *documentsDirectory = [LCPersistenceUtils eventuallyPath];
     NSArray *directoryContents = [fileMgr contentsOfDirectoryAtPath:documentsDirectory error:NULL];
     
     for (NSString *path in directoryContents) {

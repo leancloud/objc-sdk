@@ -1,5 +1,5 @@
 //
-//  AVScheduler.h
+//  LCScheduler.h
 //  paas
 //
 //  Created by Summer on 13-8-22.
@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface AVScheduler : NSObject
+@interface LCScheduler : NSObject
 
 @property (nonatomic, assign) NSInteger queryCacheExpiredDays;
 @property (nonatomic, assign) NSInteger fileCacheExpiredDays;
 
-+ (AVScheduler *)sharedInstance;
++ (LCScheduler *)sharedInstance;
 
 @end

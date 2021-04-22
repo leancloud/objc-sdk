@@ -11,7 +11,7 @@
 #import "AVUtils.h"
 #import "AVErrorUtils.h"
 #import "AVPaasClient.h"
-#import "AVPersistenceUtils.h"
+#import "LCPersistenceUtils.h"
 
 RouterCacheKey const RouterCacheKeyApp = @"RouterCacheDataApp";
 RouterCacheKey const RouterCacheKeyRTM = @"RouterCacheDataRTM";
@@ -113,7 +113,7 @@ static NSString * pathWithVersion(NSString *path)
 
 + (NSString *)routerCacheDirectoryPath
 {
-    return [AVPersistenceUtils homeDirectoryLibraryCachesLeanCloudCachesRouter];
+    return [LCPersistenceUtils homeDirectoryLibraryCachesLeanCloudCachesRouter];
 }
 
 static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)

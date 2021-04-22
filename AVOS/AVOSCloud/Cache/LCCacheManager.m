@@ -1,18 +1,18 @@
 //
-//  AVCacheManager.m
+//  LCCacheManager.m
 //  LeanCloud
 //
 //  Created by Summer on 13-3-19.
 //  Copyright (c) 2013年 AVOS. All rights reserved.
 //
 
-#import "AVCacheManager.h"
+#import "LCCacheManager.h"
 #import "AVErrorUtils.h"
 #import "AVUtils.h"
-#import "AVPersistenceUtils.h"
+#import "LCPersistenceUtils.h"
 
 
-@interface AVCacheManager ()
+@interface LCCacheManager ()
 @property (nonatomic, copy) NSString *diskCachePath;
 
 // This is singleton, so the queue doesn't need release
@@ -24,12 +24,12 @@
 
 @end
 
-@implementation AVCacheManager
-+ (AVCacheManager *)sharedInstance {
+@implementation LCCacheManager
++ (LCCacheManager *)sharedInstance {
     static dispatch_once_t once;
-    static AVCacheManager *_sharedInstance;
+    static LCCacheManager *_sharedInstance;
     dispatch_once(&once, ^{
-        _sharedInstance = [[AVCacheManager alloc] init];
+        _sharedInstance = [[LCCacheManager alloc] init];
     });
     return _sharedInstance;
 }
@@ -38,14 +38,14 @@
     self = [super init];
     if (self) {
         _cacheQueue = dispatch_queue_create("avos.paas.cacheQueue", DISPATCH_QUEUE_SERIAL);
-        _diskCachePath = [AVCacheManager path];
+        _diskCachePath = [LCCacheManager path];
     }
     return self;
 }
 
 #pragma mark - Accessors
 + (NSString *)path {
-    return [AVPersistenceUtils avCacheDirectory];
+    return [LCPersistenceUtils avCacheDirectory];
 }
 
 - (NSString *)pathForKey:(NSString *)key {
@@ -67,9 +67,9 @@
         if (maxCacheAge<=0) {
             isTooOld=YES;
         } else {
-             diskResult=[AVPersistenceUtils getJSONFromPath:[self pathForKey:[key AVMD5String]]];
+             diskResult=[LCPersistenceUtils getJSONFromPath:[self pathForKey:[key AVMD5String]]];
             if (diskResult && maxCacheAge > 0) {
-                NSDate *lastModified = [AVPersistenceUtils lastModified:[self pathForKey:[key AVMD5String]]];
+                NSDate *lastModified = [LCPersistenceUtils lastModified:[self pathForKey:[key AVMD5String]]];
                 if ([[NSDate date] timeIntervalSinceDate:lastModified] > maxCacheAge) {
                     isTooOld = YES;
                 }
@@ -88,15 +88,15 @@
 
 - (void)saveJSON:(id)JSON forKey:(NSString *)key {
     dispatch_async(self.cacheQueue, ^{
-        [AVPersistenceUtils saveJSON:JSON toPath:[self pathForKey:[key AVMD5String]]];
+        [LCPersistenceUtils saveJSON:JSON toPath:[self pathForKey:[key AVMD5String]]];
     });
 }
 
 #pragma mark - Clear Cache
 + (BOOL)clearAllCache {
     BOOL __block success;
-    dispatch_sync([AVCacheManager sharedInstance].cacheQueue, ^{
-        NSString *path = [AVCacheManager path];
+    dispatch_sync([LCCacheManager sharedInstance].cacheQueue, ^{
+        NSString *path = [LCCacheManager path];
         success = [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];
         // ignore create diectory error
         [[NSFileManager defaultManager] createDirectoryAtPath:path
@@ -109,15 +109,15 @@
 }
 
 + (BOOL)clearCacheMoreThanOneDay {
-    return [AVCacheManager clearCacheMoreThanDays:1];
+    return [LCCacheManager clearCacheMoreThanDays:1];
 }
 
 + (BOOL)clearCacheMoreThanDays:(NSInteger)numberOfDays {
     BOOL __block success = NO;
     
     // 为了避免冲突把读写cache的操作都放在cacheQueue里面, 这里是同步的block删除
-    dispatch_sync([AVCacheManager sharedInstance].cacheQueue, ^{
-        [AVPersistenceUtils deleteFilesInDirectory:[AVCacheManager path] moreThanDays:numberOfDays];
+    dispatch_sync([LCCacheManager sharedInstance].cacheQueue, ^{
+        [LCPersistenceUtils deleteFilesInDirectory:[LCCacheManager path] moreThanDays:numberOfDays];
     });
     
     return success;
