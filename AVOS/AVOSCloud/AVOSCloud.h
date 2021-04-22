@@ -17,11 +17,11 @@
 // Object
 #import "LCObject.h"
 #import "LCObject+Subclass.h"
-#import "AVSubclassing.h"
-#import "AVRelation.h"
+#import "LCSubclassing.h"
+#import "LCRelation.h"
 
 // Option
-#import "AVSaveOption.h"
+#import "LCSaveOption.h"
 
 // Query
 #import "AVQuery.h"

@@ -1,5 +1,5 @@
 //
-//  AVSaveOption.h
+//  LCSaveOption.h
 //  AVOS
 //
 //  Created by Tang Tianyong on 1/12/16.
@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AVSaveOption : NSObject
+@interface LCSaveOption : NSObject
 
 @property (nonatomic, assign) BOOL fetchWhenSave;
 @property (nonatomic, strong, nullable) AVQuery *query;

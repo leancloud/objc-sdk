@@ -8,7 +8,7 @@
 
 #import "LCObject.h"
 #import "AVRequestOperation.h"
-#import "AVRequestManager.h"
+#import "LCRequestManager.h"
 
 FOUNDATION_EXPORT NSString *const internalIdTag;
 
@@ -47,7 +47,7 @@ NSString *request_object_id(NSDictionary *request) {
 @property (nonatomic, assign) BOOL _isPointer;
 @property (nonatomic, assign) BOOL _running;
 @property (nonatomic, strong) AVRequestOperationQueue *_operationQueue;
-@property (nonatomic, strong) AVRequestManager *_requestManager;
+@property (nonatomic, strong) LCRequestManager *_requestManager;
 
 @property (nonatomic, assign) BOOL _submit;
 @property (nonatomic, assign) BOOL _inSetter;
@@ -96,7 +96,7 @@ NSString *request_object_id(NSDictionary *request) {
 -(void)addSetRequest:(NSString *)key
               object:(NSObject *)object;
 
-- (BOOL)saveWithOption:(AVSaveOption *)option
+- (BOOL)saveWithOption:(LCSaveOption *)option
             eventually:(BOOL)eventually
           verifyBefore:(BOOL)verifyBefore
                  error:(NSError **)error;

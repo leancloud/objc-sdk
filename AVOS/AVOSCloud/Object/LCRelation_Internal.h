@@ -1,18 +1,18 @@
 //
-//  AVRelation_Internal.h
+//  LCRelation_Internal.h
 //  paas
 //
 //  Created by Zhu Zeng on 3/8/13.
 //  Copyright (c) 2013 AVOS. All rights reserved.
 //
 
-#import "AVRelation.h"
+#import "LCRelation.h"
 
-@interface AVRelation ()
+@interface LCRelation ()
 
 @property (nonatomic, readwrite, copy) NSString * key;
 @property (nonatomic, readwrite, weak) LCObject * parent;
 
-+(AVRelation *)relationFromDictionary:(NSDictionary *)dict;
++(LCRelation *)relationFromDictionary:(NSDictionary *)dict;
 
 @end

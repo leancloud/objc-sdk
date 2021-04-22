@@ -73,24 +73,24 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *name;
 
 /*!
- Gets the AVRelation for the AVUsers that are direct children of this role.
+ Gets the LCRelation for the AVUsers that are direct children of this role.
  These users are granted any privileges that this role has been granted
  (e.g. read or write access through ACLs). You can add or remove users from
  the role through this relation.
  
  @return the relation for the users belonging to this role.
  */
-- (AVRelation *)users;
+- (LCRelation *)users;
 
 /*!
- Gets the AVRelation for the AVRoles that are direct children of this role.
+ Gets the LCRelation for the AVRoles that are direct children of this role.
  These roles' users are granted any privileges that this role has been granted
  (e.g. read or write access through ACLs). You can add or remove child roles
  from this role through this relation.
  
  @return the relation for the roles belonging to this role.
  */
-- (AVRelation *)roles;
+- (LCRelation *)roles;
 
 #pragma mark -
 #pragma mark Querying for Roles

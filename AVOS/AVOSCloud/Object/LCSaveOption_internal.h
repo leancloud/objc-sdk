@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface AVSaveOption ()
+@interface LCSaveOption ()
 
 - (NSDictionary *)dictionary;
 

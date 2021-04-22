@@ -1,13 +1,13 @@
 
-#import "AVRelation.h"
+#import "LCRelation.h"
 #import "AVQuery.h"
 #import "AVUtils.h"
 #import "LCObject_Internal.h"
 #import "AVQuery_Internal.h"
-#import "AVRelation_Internal.h"
+#import "LCRelation_Internal.h"
 #import "LCObjectUtils.h"
 
-@implementation AVRelation
+@implementation LCRelation
 
 - (AVQuery *)query
 {
@@ -54,8 +54,8 @@
     return query;
 }
 
-+(AVRelation *)relationFromDictionary:(NSDictionary *)dict {
-    AVRelation * relation = [[AVRelation alloc] init];
++(LCRelation *)relationFromDictionary:(NSDictionary *)dict {
+    LCRelation * relation = [[LCRelation alloc] init];
     relation.targetClass = [dict objectForKey:classNameTag];
     return relation;
 }

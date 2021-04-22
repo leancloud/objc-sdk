@@ -4,9 +4,9 @@
 #import <Foundation/Foundation.h>
 #import "AVConstants.h"
 
-@class AVRelation;
+@class LCRelation;
 @class AVACL;
-@class AVSaveOption;
+@class LCSaveOption;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -149,7 +149,7 @@ NS_ASSUME_NONNULL_BEGIN
  Returns the relation object associated with the given key
  @param key The key that the relation is associated with.
  */
-- (AVRelation *)relationForKey:(NSString *)key;
+- (LCRelation *)relationForKey:(NSString *)key;
 
 #pragma mark -
 #pragma mark Array add and remove
@@ -248,7 +248,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param error  A pointer to an NSError that will be set if necessary.
  * @return Whether the save succeeded.
  */
-- (BOOL)saveWithOption:(nullable AVSaveOption *)option error:(NSError **)error;
+- (BOOL)saveWithOption:(nullable LCSaveOption *)option error:(NSError **)error;
 
 /*!
  * Saves the LCObject with option and sets an error if it occurs.
@@ -258,7 +258,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @return Whether the save succeeded.
  * @note If eventually is specified to YES, request will be stored locally in an on-disk cache until it can be delivered to server.
  */
-- (BOOL)saveWithOption:(nullable AVSaveOption *)option eventually:(BOOL)eventually error:(NSError **)error;
+- (BOOL)saveWithOption:(nullable LCSaveOption *)option eventually:(BOOL)eventually error:(NSError **)error;
 
 /*!
  Saves the LCObject asynchronously.
@@ -276,7 +276,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param option Option for current save.
  * @param block  The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
  */
-- (void)saveInBackgroundWithOption:(nullable AVSaveOption *)option block:(AVBooleanResultBlock)block;
+- (void)saveInBackgroundWithOption:(nullable LCSaveOption *)option block:(AVBooleanResultBlock)block;
 
 /*!
  * Saves the LCObject with option asynchronously and executes the given callback block.
@@ -284,7 +284,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param eventually Whether save in eventually or not.
  * @param block  The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
  */
-- (void)saveInBackgroundWithOption:(nullable AVSaveOption *)option eventually:(BOOL)eventually block:(AVBooleanResultBlock)block;
+- (void)saveInBackgroundWithOption:(nullable LCSaveOption *)option eventually:(BOOL)eventually block:(AVBooleanResultBlock)block;
 
 /*!
   @see saveEventually:
@@ -638,7 +638,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)objectWithoutDataWithClassName:(NSString *)className objectId:(NSString *)objectId AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.9. Use +[LCObject objectWithClassName:objectId:] instead.");
 
-- (AVRelation *)relationforKey:(NSString *)key AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.3. Use -[LCObject relationForKey:] instead.");
+- (LCRelation *)relationforKey:(NSString *)key AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.3. Use -[LCObject relationForKey:] instead.");
 
 @end
 

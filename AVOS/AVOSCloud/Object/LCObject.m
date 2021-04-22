@@ -4,9 +4,9 @@
 #import "LCObject_Internal.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"
-#import "AVRelation.h"
+#import "LCRelation.h"
 #import "LCObject_Internal.h"
-#import "AVRelation_Internal.h"
+#import "LCRelation_Internal.h"
 #import "AVACL.h"
 #import "AVACL_Internal.h"
 #import "AVGeoPoint_Internal.h"
@@ -15,9 +15,9 @@
 #import "AVQuery_Internal.h"
 
 #import "LCObject+Subclass.h"
-#import "AVSubclassing.h"
-#import "AVSaveOption.h"
-#import "AVSaveOption_internal.h"
+#import "LCSubclassing.h"
+#import "LCSaveOption.h"
+#import "LCSaveOption_internal.h"
 
 #import <objc/runtime.h>
 #import <objc/message.h>
@@ -195,7 +195,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         __estimatedData = [[NSMutableDictionary alloc] init];
         __relationData = [[NSMutableDictionary alloc] init];
         __operationQueue = [[AVRequestOperationQueue alloc] init];
-        __requestManager = [[AVRequestManager alloc] init];
+        __requestManager = [[LCRequestManager alloc] init];
         __submit = YES;
     }
     return self;
@@ -269,7 +269,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }
     
     // check if it's dynamic relation
-    if ([AVUtils isDynamicProperty:key inClass:[self class] withType:[AVRelation class] containSuper:YES]) {
+    if ([AVUtils isDynamicProperty:key inClass:[self class] withType:[LCRelation class] containSuper:YES]) {
         // need to create relation for the key
         return [self relationForKey:key];
     }
@@ -423,14 +423,14 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     return self.className;
 }
 
-- (AVRelation *)relationForKey:(NSString *)key {
+- (LCRelation *)relationForKey:(NSString *)key {
     NSArray * array = [self._relationData objectForKey:key];
     LCObject *target = nil;
     if (array.count > 0)
     {
         target = [array objectAtIndex:0];
     }
-    AVRelation *relation = [[AVRelation alloc] init];
+    LCRelation *relation = [[LCRelation alloc] init];
     relation.parent = self;
     relation.key = key;
     relation.targetClass = target.className;
@@ -695,20 +695,20 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     return [self save:error];
 }
 
-- (BOOL)saveWithOption:(AVSaveOption *)option
+- (BOOL)saveWithOption:(LCSaveOption *)option
                  error:(NSError *__autoreleasing *)error
 {
     return [self saveWithOption:option eventually:NO error:error];
 }
 
-- (BOOL)saveWithOption:(AVSaveOption *)option
+- (BOOL)saveWithOption:(LCSaveOption *)option
             eventually:(BOOL)eventually
                  error:(NSError *__autoreleasing *)error
 {
     return [self saveWithOption:option eventually:eventually verifyBefore:YES error:error];
 }
 
-- (BOOL)saveWithOption:(AVSaveOption *)option
+- (BOOL)saveWithOption:(LCSaveOption *)option
             eventually:(BOOL)eventually
           verifyBefore:(BOOL)verifyBefore
                  error:(NSError *__autoreleasing *)error
@@ -726,7 +726,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
     /* Synthesize request options. */
     if (!option) {
-        option = [[AVSaveOption alloc] init];
+        option = [[LCSaveOption alloc] init];
     }
 
     NSError *optionError = [self validateSaveOption:option];
@@ -779,7 +779,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     return !requestError;
 }
 
-- (NSError *)validateSaveOption:(AVSaveOption *)option {
+- (NSError *)validateSaveOption:(LCSaveOption *)option {
     NSError *error = nil;
 
     AVQuery *query = option.query;
@@ -792,7 +792,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     return error;
 }
 
-- (void)applySaveOption:(AVSaveOption *)option toRequests:(NSMutableArray *)requests {
+- (void)applySaveOption:(LCSaveOption *)option toRequests:(NSMutableArray *)requests {
     NSDictionary *params = [option dictionary];
 
     if (!params.count)
@@ -829,11 +829,11 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     [self saveInBackgroundWithOption:nil block:block];
 }
 
-- (void)saveInBackgroundWithOption:(AVSaveOption *)option block:(AVBooleanResultBlock)block {
+- (void)saveInBackgroundWithOption:(LCSaveOption *)option block:(AVBooleanResultBlock)block {
     [self saveInBackgroundWithOption:option eventually:NO block:block];
 }
 
-- (void)saveInBackgroundWithOption:(AVSaveOption *)option eventually:(BOOL)eventually block:(AVBooleanResultBlock)block {
+- (void)saveInBackgroundWithOption:(LCSaveOption *)option eventually:(BOOL)eventually block:(AVBooleanResultBlock)block {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSError *error;
         [self saveWithOption:option eventually:eventually error:&error];
@@ -2023,7 +2023,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     return [self objectWithClassName:className objectId:objectId];
 }
 
-- (AVRelation *)relationforKey:(NSString *)key {
+- (LCRelation *)relationforKey:(NSString *)key {
     return [self relationForKey:key];
 }
 #pragma clang diagnostic pop

@@ -1,5 +1,5 @@
 //
-//  AVRelation.h
+//  LCRelation.h
 //  LeanCloud
 //
 //
@@ -12,9 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  A class that is used to access all of the children of a many-to-many relationship.  Each instance
- of AVRelation is associated with a particular parent object and key.
+ of LCRelation is associated with a particular parent object and key.
  */
-@interface AVRelation : NSObject {
+@interface LCRelation : NSObject {
     
 }
 

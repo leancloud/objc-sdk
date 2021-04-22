@@ -1,5 +1,5 @@
 //
-//  AVRequestManager.h
+//  LCRequestManager.h
 //  paas
 //
 //  Created by Zhu Zeng on 9/10/13.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface AVRequestManager : NSObject
+@interface LCRequestManager : NSObject
 
 @property (nonatomic, readwrite, strong) NSMutableArray * dictArray;
 

@@ -5,8 +5,8 @@
 #import "AVRole.h"
 #import "AVRole_Internal.h"
 #import "AVQuery.h"
-#import "AVRelation.h"
-#import "AVRelation_Internal.h"
+#import "LCRelation.h"
+#import "LCRelation_Internal.h"
 #import "AVACL.h"
 #import "AVPaasClient.h"
 #import "AVGlobal.h"
@@ -66,12 +66,12 @@
     return role;
 }
 
-- (AVRelation *)users
+- (LCRelation *)users
 {
     return [self relationForKey:@"users"];
 }
 
-- (AVRelation *)roles
+- (LCRelation *)roles
 {
     return [self relationForKey:@"roles"];
 }

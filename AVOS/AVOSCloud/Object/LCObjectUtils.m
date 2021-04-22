@@ -14,12 +14,12 @@
 #import "LCObjectUtils.h"
 #import "AVUser_Internal.h"
 #import "AVACL_Internal.h"
-#import "AVRelation.h"
+#import "LCRelation.h"
 #import "AVRole_Internal.h"
 #import "AVInstallation_Internal.h"
 #import "AVPaasClient.h"
 #import "AVGeoPoint_Internal.h"
-#import "AVRelation_Internal.h"
+#import "LCRelation_Internal.h"
 #import "AVUtils.h"
 
 @implementation AVDate
@@ -624,7 +624,7 @@
     return [acl.permissionsById copy];
 }
 
-+(NSDictionary *)dictionaryFromRelation:(AVRelation *)relation {
++(NSDictionary *)dictionaryFromRelation:(LCRelation *)relation {
     if (relation.targetClass) {
         return [LCObjectUtils dictionaryForRelation:relation.targetClass];
     }
@@ -663,7 +663,7 @@
         return [LCObjectUtils dictionaryFromFile:obj];
     } else if ([obj isKindOfClass:[AVACL class]]) {
         return [LCObjectUtils dictionaryFromACL:obj];
-    } else if ([obj isKindOfClass:[AVRelation class]]) {
+    } else if ([obj isKindOfClass:[LCRelation class]]) {
         return [LCObjectUtils dictionaryFromRelation:obj];
     }
     // string or other?

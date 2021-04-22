@@ -4,7 +4,7 @@
 #import <Foundation/Foundation.h>
 #import "AVConstants.h"
 #import "LCObject.h"
-#import "AVSubclassing.h"
+#import "LCSubclassing.h"
 
 @class AVRole;
 @class AVQuery;
@@ -55,7 +55,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 @end
 
 /// User
-@interface AVUser : LCObject <AVSubclassing>
+@interface AVUser : LCObject <LCSubclassing>
 
 /** @name Accessing the Current User */
 

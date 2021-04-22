@@ -1,17 +1,17 @@
 //
-//  AVSaveOption.m
+//  LCSaveOption.m
 //  AVOS
 //
 //  Created by Tang Tianyong on 1/12/16.
 //  Copyright © 2016 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVSaveOption.h"
-#import "AVSaveOption_internal.h"
+#import "LCSaveOption.h"
+#import "LCSaveOption_internal.h"
 #import "AVQuery.h"
 #import "AVQuery_Internal.h"
 
-@implementation AVSaveOption
+@implementation LCSaveOption
 
 - (NSDictionary *)dictionary {
     NSMutableDictionary *result = [NSMutableDictionary dictionary];

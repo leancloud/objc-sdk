@@ -1,5 +1,5 @@
 //
-//  AVSubclassing.h
+//  LCSubclassing.h
 //  paas
 //
 //  Created by Summer on 13-4-2.
@@ -13,11 +13,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /*!
- If a subclass of LCObject conforms to AVSubclassing and calls registerSubclass, LeanCloud will be able to use that class as the native class for a LeanCloud object.
+ If a subclass of LCObject conforms to LCSubclassing and calls registerSubclass, LeanCloud will be able to use that class as the native class for a LeanCloud object.
 
  Classes conforming to this protocol should subclass LCObject and include LCObject+Subclass.h in their implementation file. This ensures the methods in the Subclass category of LCObject are exposed in its subclasses only.
  */
-@protocol AVSubclassing
+@protocol LCSubclassing
 
 @optional
 

@@ -103,7 +103,7 @@ static BOOL enableAutomatic = NO;
 }
 
 - (NSArray<AVRole *> *)getRoles:(NSError * _Nullable __autoreleasing *)error {
-    AVQuery *query = [AVRelation reverseQuery:@"_Role" relationKey:@"users" childObject:self];
+    AVQuery *query = [LCRelation reverseQuery:@"_Role" relationKey:@"users" childObject:self];
     return [query findObjects:error];
 }
 

@@ -1,12 +1,12 @@
 //
-//  AVRequestManager.m
+//  LCRequestManager.m
 //  paas
 //
 //  Created by Zhu Zeng on 9/10/13.
 //  Copyright (c) 2013 AVOS. All rights reserved.
 //
 
-#import "AVRequestManager.h"
+#import "LCRequestManager.h"
 #import "LCObject.h"
 #import "LCObjectUtils.h"
 #import "LCObject_Internal.h"
@@ -31,7 +31,7 @@ typedef enum {
 #define kAVOpAdd @"Add"
 #define kAVOpRemove @"Remove"
 
-@implementation AVRequestManager {
+@implementation LCRequestManager {
     NSRecursiveLock *_lock;
 }
 
@@ -281,9 +281,9 @@ typedef enum {
             NSDictionary *jsonDict;
             if (op == INC) {
                 double value = [object doubleValue];
-                jsonDict = [AVRequestManager incOpForKey:key value:value];
+                jsonDict = [LCRequestManager incOpForKey:key value:value];
             } else if (op == UNSET) {
-                jsonDict = [AVRequestManager unsetOpForKey:key];
+                jsonDict = [LCRequestManager unsetOpForKey:key];
             } else {
                 NSString *serverOp = [[self class] serverOpForOp:op];
                 NSArray *objects = (NSArray *)object;
