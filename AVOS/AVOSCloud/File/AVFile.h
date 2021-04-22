@@ -5,7 +5,7 @@
 
 #import <Foundation/Foundation.h>
 #import "AVConstants.h"
-#import "AVACL.h"
+#import "LCACL.h"
 
 @class AVFileQuery;
 
@@ -137,7 +137,7 @@ typedef NS_OPTIONS(NSUInteger, AVFileDownloadOption) {
 /*!
  *  The access control list for this file.
  */
-@property (nonatomic, strong, nullable) AVACL *ACL;
+@property (nonatomic, strong, nullable) LCACL *ACL;
 
 /// Created date.
 @property (nonatomic, strong, readonly, nullable) NSDate *createdAt;

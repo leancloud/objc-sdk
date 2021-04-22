@@ -1,22 +1,22 @@
-//  AVACL.h
+//  LCACL.h
 //  Copyright 2013 AVOS Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
 
 @class AVUser;
-@class AVRole;
+@class LCRole;
 
 NS_ASSUME_NONNULL_BEGIN
 
 /*!
- A AVACL is used to control which users can access or modify a particular
- object. Each LCObject can have its own AVACL. You can grant
+ A LCACL is used to control which users can access or modify a particular
+ object. Each LCObject can have its own LCACL. You can grant
  read and write permissions separately to specific users, to groups of users
  that belong to roles, or you can grant permissions to "the public" so that,
  for example, any user could read a particular object but only a particular
  set of users could write to that object.
  */
-@interface AVACL : NSObject <NSCopying> 
+@interface LCACL : NSObject <NSCopying> 
 
 /** @name Creating an ACL */
 
@@ -168,7 +168,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param role the given role
  @return YES if the role has read access. NO otherwise.
  */
-- (BOOL)getReadAccessForRole:(AVRole *)role;
+- (BOOL)getReadAccessForRole:(LCRole *)role;
 
 /*!
  Set whether users belonging to the given role are allowed to read this
@@ -178,7 +178,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param role The role to assign access.
  @param allowed Whether the given role can read this object.
  */
-- (void)setReadAccess:(BOOL)allowed forRole:(AVRole *)role;
+- (void)setReadAccess:(BOOL)allowed forRole:(LCRole *)role;
 
 /*!
  Get whether users belonging to the given role are allowed to write this
@@ -189,7 +189,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param role the given role
  @return YES if the role has write access. NO otherwise.
  */
-- (BOOL)getWriteAccessForRole:(AVRole *)role;
+- (BOOL)getWriteAccessForRole:(LCRole *)role;
 
 /*!
  Set whether users belonging to the given role are allowed to write this
@@ -199,7 +199,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param role The role to assign access.
  @param allowed Whether the given role can write this object.
  */
-- (void)setWriteAccess:(BOOL)allowed forRole:(AVRole *)role;
+- (void)setWriteAccess:(BOOL)allowed forRole:(LCRole *)role;
 
 /** @name Setting Access Defaults */
 
@@ -208,11 +208,11 @@ NS_ASSUME_NONNULL_BEGIN
  @param acl The ACL to use as a template for all LCObjects created after setDefaultACL has been called.
  This value will be copied and used as a template for the creation of new ACLs, so changes to the
  instance after setDefaultACL has been called will not be reflected in new LCObjects.
- @param currentUserAccess If true, the AVACL that is applied to newly-created LCObjects will
+ @param currentUserAccess If true, the LCACL that is applied to newly-created LCObjects will
  provide read and write access to the currentUser at the time of creation. If false,
  the provided ACL will be used without modification. If acl is nil, this value is ignored.
  */
-+ (void)setDefaultACL:(AVACL *)acl withAccessForCurrentUser:(BOOL)currentUserAccess;
++ (void)setDefaultACL:(LCACL *)acl withAccessForCurrentUser:(BOOL)currentUserAccess;
 
 @end
 

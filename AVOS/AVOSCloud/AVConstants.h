@@ -81,7 +81,7 @@ extern NSInteger const kAVErrorCacheMiss;
 extern NSInteger const kAVErrorInvalidNestedKey;
 /*! @abstract 122: Invalid file name. A file name contains only a-zA-Z0-9_. characters and is between 1 and 36 characters. */
 extern NSInteger const kAVErrorInvalidFileName;
-/*! @abstract 123: Invalid ACL. An ACL with an invalid format was saved. This should not happen if you use AVACL. */
+/*! @abstract 123: Invalid ACL. An ACL with an invalid format was saved. This should not happen if you use LCACL. */
 extern NSInteger const kAVErrorInvalidACL;
 /*! @abstract 124: The request timed out on the server. Typically this indicates the request is too expensive. */
 extern NSInteger const kAVErrorTimeout;

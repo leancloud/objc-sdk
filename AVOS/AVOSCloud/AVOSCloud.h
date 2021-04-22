@@ -53,8 +53,8 @@
 #import "AVSearchSortBuilder.h"
 
 // ACL
-#import "AVACL.h"
-#import "AVRole.h"
+#import "LCACL.h"
+#import "LCRole.h"
 
 #import "AVCaptcha.h"
 #import "AVSMS.h"

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "AVGlobal.h"
 #import "AVGeoPoint.h"
-#import "AVACL.h"
+#import "LCACL.h"
 #import "LCObject.h"
 
 @interface AVDate : NSObject
@@ -30,7 +30,7 @@
 #pragma mark - Simple objecitive-c object from cloud side dictionary
 +(NSData *)dataFromDictionary:(NSDictionary *)dict;
 +(AVGeoPoint *)geoPointFromDictionary:(NSDictionary *)dict;
-+(AVACL *)aclFromDictionary:(NSDictionary *)dict;
++(LCACL *)aclFromDictionary:(NSDictionary *)dict;
 +(NSObject *)objectFromDictionary:(NSDictionary *)dict;
 + (NSObject *)objectFromDictionary:(NSDictionary *)dict recursive:(BOOL)recursive;
 +(NSArray *)arrayFromArray:(NSArray *)array;
@@ -46,7 +46,7 @@
 +(NSDictionary *)dictionaryFromGeoPoint:(AVGeoPoint *)point;
 +(NSDictionary *)dictionaryFromData:(NSData *)data;
 +(NSDictionary *)dictionaryFromFile:(AVFile *)file;
-+(NSDictionary *)dictionaryFromACL:(AVACL *)acl;
++(NSDictionary *)dictionaryFromACL:(LCACL *)acl;
 + (id)dictionaryFromObject:(id)obj;
 + (id)dictionaryFromObject:(id)obj topObject:(BOOL)topObject;
 +(NSDictionary *)childDictionaryFromObject:(LCObject *)object

@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
     'AVOS/AVOSCloud/Captcha/AVCaptcha.h',
     'AVOS/AVOSCloud/Utils/AVDynamicObject.h',
     'AVOS/AVOSCloud/SMS/AVSMS.h',
-    'AVOS/AVOSCloud/ACL/AVACL.h',
+    'AVOS/AVOSCloud/ACL/LCACL.h',
     'AVOS/AVOSCloud/ACL/AVRole.h',
     'AVOS/AVOSCloud/Object/LCSaveOption.h',
     'AVOS/AVOSCloud/Analytics/AVAnalytics.h',

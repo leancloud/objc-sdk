@@ -10,7 +10,7 @@
 #import "LCObject.h"
 #import "LCObjectUtils.h"
 #import "LCObject_Internal.h"
-#import "AVACL_Internal.h"
+#import "LCACL_Internal.h"
 
 typedef enum {
     SET,

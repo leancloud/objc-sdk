@@ -10,7 +10,7 @@
 #import "AVErrorUtils.h"
 #import "AVPersistenceUtils.h"
 #import "LCObjectUtils.h"
-#import "AVACL_Internal.h"
+#import "LCACL_Internal.h"
 #import <CommonCrypto/CommonCrypto.h>
 
 static NSString * AVFile_CustomPersistentCacheDirectory = nil;
@@ -42,7 +42,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     
     NSString *_pathExtension;
     
-    AVACL *_ACL;
+    LCACL *_ACL;
     
     NSDictionary<NSString *, NSString *> *_uploadingHeaders;
     
@@ -145,7 +145,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
         _ACL = ({
             
-            AVACL *acl = AVPaasClient.sharedInstance.updatedDefaultACL;
+            LCACL *acl = AVPaasClient.sharedInstance.updatedDefaultACL;
             if (acl) {
                 _rawJSONData[ACLTag] = [LCObjectUtils dictionaryFromACL:acl];
             }
@@ -207,7 +207,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
         _ACL = ({
             
-            AVACL *acl = [AVPaasClient sharedInstance].updatedDefaultACL;
+            LCACL *acl = [AVPaasClient sharedInstance].updatedDefaultACL;
             if (acl) {
                 _rawJSONData[ACLTag] = [LCObjectUtils dictionaryFromACL:acl];
             }
@@ -249,7 +249,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
         _ACL = ({
             
-            AVACL *acl = [AVPaasClient sharedInstance].updatedDefaultACL;
+            LCACL *acl = [AVPaasClient sharedInstance].updatedDefaultACL;
             if (acl) {
                 _rawJSONData[ACLTag] = [LCObjectUtils dictionaryFromACL:acl];
             }
@@ -331,9 +331,9 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 
 // MARK: - Property
 
-- (AVACL *)ACL
+- (LCACL *)ACL
 {
-    __block AVACL *ACL = nil;
+    __block LCACL *ACL = nil;
     
     [self internalSyncLock:^{
         
@@ -343,7 +343,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     return ACL;
 }
 
-- (void)setACL:(AVACL *)ACL
+- (void)setACL:(LCACL *)ACL
 {
     NSDictionary *ACLDic = [LCObjectUtils dictionaryFromACL:ACL];
     

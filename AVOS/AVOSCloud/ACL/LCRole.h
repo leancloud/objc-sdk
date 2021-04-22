@@ -13,14 +13,14 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  Represents a Role on the LeanCloud server. AVRoles represent groupings
  of AVUsers for the purposes of granting permissions (e.g. specifying a
- AVACL for a LCObject). Roles are specified by their sets of child users
+ LCACL for a LCObject). Roles are specified by their sets of child users
  and child roles, all of which are granted any permissions that the
  parent role has.<br />
  <br />
  Roles must have a name (which cannot be changed after creation of the role),
  and must specify an ACL.
  */
-@interface AVRole : LCObject
+@interface LCRole : LCObject
 
 #pragma mark Creating a New Role
 
@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param name The name of the Role to create.
  @param acl The ACL for this role. Roles must have an ACL.
  */
-- (instancetype)initWithName:(NSString *)name acl:(nullable AVACL *)acl;
+- (instancetype)initWithName:(NSString *)name acl:(nullable LCACL *)acl;
 
 /*!
  Constructs a new AVRole with the given name. If no default ACL has been
@@ -56,7 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param name The name of the Role to create.
  @param acl The ACL for this role. Roles must have an ACL.
  */
-+ (instancetype)roleWithName:(NSString *)name acl:(nullable AVACL *)acl;
++ (instancetype)roleWithName:(NSString *)name acl:(nullable LCACL *)acl;
 
 #pragma mark -
 #pragma mark Role-specific Properties

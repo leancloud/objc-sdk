@@ -11,8 +11,8 @@
 #import "AVUtils.h"
 #import "AVUser_Internal.h"
 #import "LCObject_Internal.h"
-#import "AVRole_Internal.h"
-#import "AVACL_Internal.h"
+#import "LCRole_Internal.h"
+#import "LCACL_Internal.h"
 #import "AVCacheManager.h"
 #import "AVErrorUtils.h"
 #import "AVPersistenceUtils.h"
@@ -819,9 +819,9 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     return [self.subclassTable objectForKey:parseClassName];
 }
 
-- (AVACL *)updatedDefaultACL {
+- (LCACL *)updatedDefaultACL {
     if (self.defaultACL != nil) {
-        AVACL *acl = [self.defaultACL copy];
+        LCACL *acl = [self.defaultACL copy];
         if (self.currentUserAccessForDefaultACL && self.currentUser) {
             [acl setReadAccess:YES forUser:self.currentUser];
             [acl setWriteAccess:YES forUser:self.currentUser];

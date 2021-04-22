@@ -2,17 +2,17 @@
 #import <Foundation/Foundation.h>
 #import "LCObject.h"
 #import "LCObject_Internal.h"
-#import "AVRole.h"
-#import "AVRole_Internal.h"
+#import "LCRole.h"
+#import "LCRole_Internal.h"
 #import "AVQuery.h"
 #import "LCRelation.h"
 #import "LCRelation_Internal.h"
-#import "AVACL.h"
+#import "LCACL.h"
 #import "AVPaasClient.h"
 #import "AVGlobal.h"
 #import "AVUtils.h"
 
-@implementation AVRole
+@implementation LCRole
 
 @synthesize name = _name;
 @synthesize acl = _acl;
@@ -30,7 +30,7 @@
 
 - (instancetype)initWithName:(NSString *)name
 {
-    self = [super initWithClassName:[AVRole className]];
+    self = [super initWithClassName:[LCRole className]];
     if (self)
     {
         self.name = name;
@@ -40,11 +40,11 @@
 }
 
 +(instancetype)role {
-    AVRole * r = [[AVRole alloc] initWithName:@""];
+    LCRole * r = [[LCRole alloc] initWithName:@""];
     return r;
 }
 
-- (instancetype)initWithName:(NSString *)name acl:(AVACL *)acl
+- (instancetype)initWithName:(NSString *)name acl:(LCACL *)acl
 {
     self = [self initWithName:name];
     if (self)
@@ -56,13 +56,13 @@
 
 + (instancetype)roleWithName:(NSString *)name
 {
-    AVRole * role = [[AVRole alloc] initWithName:name];
+    LCRole * role = [[LCRole alloc] initWithName:name];
     return role;
 }
 
-+ (instancetype)roleWithName:(NSString *)name acl:(AVACL *)acl
++ (instancetype)roleWithName:(NSString *)name acl:(LCACL *)acl
 {
-    AVRole * role = [[AVRole alloc] initWithName:name acl:acl];
+    LCRole * role = [[LCRole alloc] initWithName:name acl:acl];
     return role;
 }
 
@@ -78,7 +78,7 @@
 
 + (AVQuery *)query
 {
-    AVQuery *query = [[AVQuery alloc] initWithClassName:[AVRole className]];
+    AVQuery *query = [[AVQuery alloc] initWithClassName:[LCRole className]];
     return query;
 }
 
@@ -91,7 +91,7 @@
     [self addSetRequest:@"name" object:name];
 }
 
--(void)setAcl:(AVACL *)acl {
+-(void)setAcl:(LCACL *)acl {
     _acl = acl;
     [self addSetRequest:ACLTag object:acl];
 }

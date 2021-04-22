@@ -14,7 +14,7 @@
 #import "AVUser.h"
 #import "AVUser_Internal.h"
 #import "LCObject.h"
-#import "AVRole_Internal.h"
+#import "LCRole_Internal.h"
 #import "AVFile.h"
 #import "AVFile_Internal.h"
 

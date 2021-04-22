@@ -1,18 +1,18 @@
 //
-//  AVRole_Internal.h
+//  LCRole_Internal.h
 //  paas
 //
 //  Created by Zhu Zeng on 3/13/13.
 //  Copyright (c) 2013 AVOS. All rights reserved.
 //
 
-#import "AVRole.h"
+#import "LCRole.h"
 
-@class AVACL;
+@class LCACL;
 
-@interface AVRole ()
+@interface LCRole ()
 
-@property (nonatomic, readwrite, strong) AVACL * acl;
+@property (nonatomic, readwrite, strong) LCACL * acl;
 @property (nonatomic, readwrite, strong) NSMutableDictionary * relationData;
 
 +(instancetype)role;

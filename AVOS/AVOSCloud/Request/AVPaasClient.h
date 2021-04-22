@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "AVConstants.h"
-#import "AVACL.h"
+#import "LCACL.h"
 #import "UserAgent.h"
 
 static NSString *const USER_AGENT = @"LeanCloud-Objc-SDK/" SDK_VERSION;
@@ -30,7 +30,7 @@ FOUNDATION_EXPORT NSString *const LCHeaderFieldNameProduction;
 @property (nonatomic, readwrite, copy) NSString * applicationKeyField;
 @property (nonatomic, readwrite, copy) NSString * sessionTokenField;
 @property (nonatomic, readwrite, strong) AVUser * currentUser;
-@property (nonatomic, readwrite, strong) AVACL * defaultACL;
+@property (nonatomic, readwrite, strong) LCACL * defaultACL;
 @property (nonatomic, readwrite) BOOL currentUserAccessForDefaultACL;
 
 @property (nonatomic, readwrite, assign) NSTimeInterval timeoutInterval;
@@ -46,7 +46,7 @@ FOUNDATION_EXPORT NSString *const LCHeaderFieldNameProduction;
 
 -(void)clearLastModifyCache;
 
-- (AVACL *)updatedDefaultACL;
+- (LCACL *)updatedDefaultACL;
 
 +(NSMutableDictionary *)batchMethod:(NSString *)method
                                path:(NSString *)path

@@ -102,19 +102,19 @@ static BOOL enableAutomatic = NO;
     }];
 }
 
-- (NSArray<AVRole *> *)getRoles:(NSError * _Nullable __autoreleasing *)error {
+- (NSArray<LCRole *> *)getRoles:(NSError * _Nullable __autoreleasing *)error {
     AVQuery *query = [LCRelation reverseQuery:@"_Role" relationKey:@"users" childObject:self];
     return [query findObjects:error];
 }
 
-- (NSArray<AVRole *> *)getRolesAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
+- (NSArray<LCRole *> *)getRolesAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
     return [self getRoles:error];
 }
 
-- (void)getRolesInBackgroundWithBlock:(void (^)(NSArray<AVRole *> * _Nullable, NSError * _Nullable))block {
+- (void)getRolesInBackgroundWithBlock:(void (^)(NSArray<LCRole *> * _Nullable, NSError * _Nullable))block {
     [AVUtils asynchronizeTask:^{
         NSError *error = nil;
-        NSArray<AVRole *> *result = [self getRoles:&error];
+        NSArray<LCRole *> *result = [self getRoles:&error];
         [AVUtils callArrayResultBlock:block array:result error:error];
     }];
 }

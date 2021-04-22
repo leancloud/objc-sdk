@@ -13,9 +13,9 @@
 #import "AVFile_Internal.h"
 #import "LCObjectUtils.h"
 #import "AVUser_Internal.h"
-#import "AVACL_Internal.h"
+#import "LCACL_Internal.h"
 #import "LCRelation.h"
-#import "AVRole_Internal.h"
+#import "LCRole_Internal.h"
 #import "AVInstallation_Internal.h"
 #import "AVPaasClient.h"
 #import "AVGeoPoint_Internal.h"
@@ -158,9 +158,9 @@
     return point;
 }
 
-+(AVACL *)aclFromDictionary:(NSDictionary *)dict
++(LCACL *)aclFromDictionary:(NSDictionary *)dict
 {
-    AVACL * acl = [AVACL ACL];
+    LCACL * acl = [LCACL ACL];
     acl.permissionsById = [dict mutableCopy];
     return acl;
 }
@@ -326,7 +326,7 @@
     } else if ([key isEqualToString:@"updatedAt"]) {
         target.updatedAt = [AVDate dateFromValue:value];
     } else if ([key isEqualToString:ACLTag]) {
-        AVACL * acl = [LCObjectUtils aclFromDictionary:(NSDictionary *)value];
+        LCACL * acl = [LCObjectUtils aclFromDictionary:(NSDictionary *)value];
         [target setObject:acl forKey:key submit:NO];
     } else {
         if ([value isKindOfClass:[NSDictionary class]]) {
@@ -569,7 +569,7 @@
             object = [AVInstallation installation];
         } else if ([LCObjectUtils isRoleClass:className]) {
             // TODO
-            object = [AVRole role];
+            object = [LCRole role];
         } else {
             object = [LCObject objectWithClassName:className];
         }
@@ -620,7 +620,7 @@
     return dic;
 }
 
-+(NSDictionary *)dictionaryFromACL:(AVACL *)acl {
++(NSDictionary *)dictionaryFromACL:(LCACL *)acl {
     return [acl.permissionsById copy];
 }
 
@@ -661,7 +661,7 @@
         return [LCObjectUtils dictionaryFromData:obj];
     } else if ([obj isKindOfClass:[AVFile class]]) {
         return [LCObjectUtils dictionaryFromFile:obj];
-    } else if ([obj isKindOfClass:[AVACL class]]) {
+    } else if ([obj isKindOfClass:[LCACL class]]) {
         return [LCObjectUtils dictionaryFromACL:obj];
     } else if ([obj isKindOfClass:[LCRelation class]]) {
         return [LCObjectUtils dictionaryFromRelation:obj];
@@ -692,7 +692,7 @@
 
 +(BOOL)isRoleClass:(NSString *)className
 {
-    return [className isEqualToString:[AVRole className]];
+    return [className isEqualToString:[LCRole className]];
 }
 
 +(BOOL)isFileClass:(NSString *)className
@@ -729,9 +729,9 @@
 {
     if (objectId == nil)
     {
-        return [AVRole endPoint];
+        return [LCRole endPoint];
     }
-    return [NSString stringWithFormat:@"%@/%@", [AVRole endPoint], objectId];
+    return [NSString stringWithFormat:@"%@/%@", [LCRole endPoint], objectId];
 }
 
 +(NSString *)installationObjectPath:(NSString *)objectId

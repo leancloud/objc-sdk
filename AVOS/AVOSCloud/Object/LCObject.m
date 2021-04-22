@@ -7,8 +7,8 @@
 #import "LCRelation.h"
 #import "LCObject_Internal.h"
 #import "LCRelation_Internal.h"
-#import "AVACL.h"
-#import "AVACL_Internal.h"
+#import "LCACL.h"
+#import "LCACL_Internal.h"
 #import "AVGeoPoint_Internal.h"
 #import "LCObjectUtils.h"
 #import "AVErrorUtils.h"
@@ -662,9 +662,9 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }
 }
 
--(void)setACL:(AVACL *)ACL {
-    if (ACL && ![ACL isKindOfClass:[AVACL class]]) {
-        [NSException raise:NSInvalidArgumentException format:@"An instance of AVACL is required for property 'ACL'."];
+-(void)setACL:(LCACL *)ACL {
+    if (ACL && ![ACL isKindOfClass:[LCACL class]]) {
+        [NSException raise:NSInvalidArgumentException format:@"An instance of LCACL is required for property 'ACL'."];
     }
 
     _ACL = ACL;
@@ -1820,8 +1820,6 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 -(void)addDefaultACL:(NSMutableDictionary *)dict {
     if (self.ACL == nil) {
         if ([AVPaasClient sharedInstance].updatedDefaultACL) {
-            
-            // set ACL for this object, see -[AVACLTest testSetDefaultACL_withAccessForCurrentUser]
             self.ACL = [AVPaasClient sharedInstance].updatedDefaultACL;
             [dict setObject:[AVPaasClient sharedInstance].updatedDefaultACL.permissionsById forKey:ACLTag];
         }

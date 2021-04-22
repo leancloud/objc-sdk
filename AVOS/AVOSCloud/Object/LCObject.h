@@ -5,7 +5,7 @@
 #import "AVConstants.h"
 
 @class LCRelation;
-@class AVACL;
+@class LCACL;
 @class LCSaveOption;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -100,7 +100,7 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  The ACL for this object.
  */
-@property (nonatomic, strong, nullable) AVACL *ACL;
+@property (nonatomic, strong, nullable) LCACL *ACL;
 
 /*!
  Returns an array of the keys contained in this object. This does not include

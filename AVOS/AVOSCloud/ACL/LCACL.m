@@ -1,42 +1,42 @@
 //
-//  AVACL.m
+//  LCACL.m
 //  AVOSCloud
 //
 //  Created by Zhu Zeng on 3/13/13.
 //  Copyright (c) 2013 AVOS. All rights reserved.
 //
 
-#import "AVACL.h"
-#import "AVACL_Internal.h"
+#import "LCACL.h"
+#import "LCACL_Internal.h"
 #import "AVUser.h"
-#import "AVRole.h"
+#import "LCRole.h"
 #import "AVPaasClient.h"
 
 static NSString * readTag = @"read";
 static NSString * writeTag = @"write";
 
-@implementation AVACL
+@implementation LCACL
 
 @synthesize permissionsById = _permissionsById;
 
 -(id)copyWithZone:(NSZone *)zone
 {
-    AVACL *newObject = [[[self class] allocWithZone:zone] init];
+    LCACL *newObject = [[[self class] allocWithZone:zone] init];
     if(newObject) {
         newObject.permissionsById = [self.permissionsById mutableCopy];
     }
     return newObject;
 }
 
-+ (AVACL *)ACL
++ (LCACL *)ACL
 {
-    AVACL * result = [[AVACL alloc] init];
+    LCACL * result = [[LCACL alloc] init];
     return result;
 }
 
-+ (AVACL *)ACLWithUser:(AVUser *)user
++ (LCACL *)ACLWithUser:(AVUser *)user
 {
-    AVACL * result = [[AVACL alloc] init];
+    LCACL * result = [[LCACL alloc] init];
     [result setReadAccess:YES forUser:user];
     [result setWriteAccess:YES forUser:user];
     return result;
@@ -209,27 +209,27 @@ static NSString * writeTag = @"write";
     return [self allowWrite:allowed key:[self roleName:name]];
 }
 
-- (BOOL)getReadAccessForRole:(AVRole *)role
+- (BOOL)getReadAccessForRole:(LCRole *)role
 {
     return [self isReadAllowed:[self roleName:role.name]];
 }
 
-- (void)setReadAccess:(BOOL)allowed forRole:(AVRole *)role
+- (void)setReadAccess:(BOOL)allowed forRole:(LCRole *)role
 {
     [self allowRead:allowed key:[self roleName:role.name]];
 }
 
-- (BOOL)getWriteAccessForRole:(AVRole *)role
+- (BOOL)getWriteAccessForRole:(LCRole *)role
 {
     return [self isWriteAllowed:[self roleName:role.name]];
 }
 
-- (void)setWriteAccess:(BOOL)allowed forRole:(AVRole *)role
+- (void)setWriteAccess:(BOOL)allowed forRole:(LCRole *)role
 {
     [self allowWrite:allowed key:[self roleName:role.name]];
 }
 
-+ (void)setDefaultACL:(AVACL *)acl withAccessForCurrentUser:(BOOL)currentUserAccess
++ (void)setDefaultACL:(LCACL *)acl withAccessForCurrentUser:(BOOL)currentUserAccess
 {
     [AVPaasClient sharedInstance].defaultACL = acl;
     [AVPaasClient sharedInstance].currentUserAccessForDefaultACL = currentUserAccess;

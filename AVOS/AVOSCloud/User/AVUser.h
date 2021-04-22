@@ -6,7 +6,7 @@
 #import "LCObject.h"
 #import "LCSubclassing.h"
 
-@class AVRole;
+@class LCRole;
 @class AVQuery;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -143,20 +143,20 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 
  @return An array of roles, or nil if some error occured.
  */
-- (nullable NSArray<AVRole *> *)getRoles:(NSError **)error;
+- (nullable NSArray<LCRole *> *)getRoles:(NSError **)error;
 
 /*!
  An alias of `-[AVUser getRolesAndThrowsWithError:]` methods that supports Swift exception.
  @seealso `-[AVUser getRolesAndThrowsWithError:]`
  */
-- (nullable NSArray<AVRole *> *)getRolesAndThrowsWithError:(NSError **)error;
+- (nullable NSArray<LCRole *> *)getRolesAndThrowsWithError:(NSError **)error;
 
 /*!
  Asynchronously get roles which current user belongs to.
 
  @param block The callback for request.
  */
-- (void)getRolesInBackgroundWithBlock:(void (^)(NSArray<AVRole *> * _Nullable objects, NSError * _Nullable error))block;
+- (void)getRolesInBackgroundWithBlock:(void (^)(NSArray<LCRole *> * _Nullable objects, NSError * _Nullable error))block;
 
 /*!
  Signs up the user. Make sure that password and username are set. This will also enforce that the username isn't already taken.
