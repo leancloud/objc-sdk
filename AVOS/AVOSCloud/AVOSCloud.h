@@ -34,7 +34,7 @@
 #import "LCGeoPoint.h"
 
 // Status
-#import "AVStatus.h"
+#import "LCStatus.h"
 
 // Push
 #import "LCInstallation.h"

@@ -1,5 +1,5 @@
 //
-//  AVStatus.h
+//  LCStatus.h
 //  paas
 //
 //  Created by Travis on 13-12-23.
@@ -11,7 +11,7 @@
 #import "AVUser.h"
 #import "LCQuery.h"
 
-typedef NSString AVStatusType;
+typedef NSString LCStatusType;
 
 @class LCStatus, LCStatusQuery;
 
@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 extern NSString * const kLCStatusTypeTimeline;
 extern NSString * const kLCStatusTypePrivateMessage;
 
-typedef void (^AVStatusResultBlock)(LCStatus * _Nullable status, NSError * _Nullable error);
+typedef void (^LCStatusResultBlock)(LCStatus * _Nullable status, NSError * _Nullable error);
 
 /**
  *  发送和获取状态更新和消息
@@ -54,9 +54,9 @@ typedef void (^AVStatusResultBlock)(LCStatus * _Nullable status, NSError * _Null
 @property (nonatomic, strong, nullable) LCObject *source;
 
 /**
- *  状态类型,默认是kAVStatusTypeTimeline, 可以是任意自定义字符串
+ *  状态类型,默认是kLCStatusTypeTimeline, 可以是任意自定义字符串
  */
-@property (nonatomic, copy) AVStatusType *type;
+@property (nonatomic, copy) LCStatusType *type;
 
 
 
@@ -68,7 +68,7 @@ typedef void (^AVStatusResultBlock)(LCStatus * _Nullable status, NSError * _Null
  *  @param objectId 状态的objectId
  *  @param callback 回调结果
  */
-+(void)getStatusWithID:(NSString *)objectId andCallback:(AVStatusResultBlock)callback;
++(void)getStatusWithID:(NSString *)objectId andCallback:(LCStatusResultBlock)callback;
 
 /**
  *  删除当前用户发布的某条状态
@@ -111,14 +111,14 @@ typedef void (^AVStatusResultBlock)(LCStatus * _Nullable status, NSError * _Null
  *  获取当前用户收件箱里的状态
  *
  *  @param inboxType 收件箱类型
- *  @return 用于查询的AVStatusQuery
+ *  @return 用于查询的LCStatusQuery
  */
-+(LCStatusQuery*)inboxQuery:(AVStatusType *)inboxType;
++(LCStatusQuery*)inboxQuery:(LCStatusType *)inboxType;
 
 /**
  *  获取当前用户发出的状态
  *
- *  @return 用于查询的AVStatusQuery
+ *  @return 用于查询的LCStatusQuery
  */
 +(LCStatusQuery*)statusQuery;
 
@@ -128,33 +128,33 @@ typedef void (^AVStatusResultBlock)(LCStatus * _Nullable status, NSError * _Null
  *  @param type 收件箱类型
  *  @param callback 回调结果
  */
-+(void)getUnreadStatusesCountWithType:(AVStatusType*)type andCallback:(AVIntegerResultBlock)callback;
++(void)getUnreadStatusesCountWithType:(LCStatusType*)type andCallback:(AVIntegerResultBlock)callback;
 
 /**
  *  Reset unread count of specific status type (inbox).
  *  @param type     Status type.
  *  @param callback Callback of reset request.
  */
-+(void)resetUnreadStatusesCountWithType:(AVStatusType*)type andCallback:(AVBooleanResultBlock)callback;
++(void)resetUnreadStatusesCountWithType:(LCStatusType*)type andCallback:(AVBooleanResultBlock)callback;
 
 /**
  *  获取当前用户接收到的状态
- *  @param type     状态类型,默认是kAVStatusTypeTimeline, 可以是任意自定义字符串
+ *  @param type     状态类型,默认是kLCStatusTypeTimeline, 可以是任意自定义字符串
  *  @param skip     跳过条数
  *  @param limit    需要返回的条数 默认`100`，最大`100`
  *  @param callback 回调结果
  */
-+(void)getStatusesWithType:(AVStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(AVArrayResultBlock)callback AV_DEPRECATED("2.3.2以后不再需要，请使用inboxQuery类方法");
++(void)getStatusesWithType:(LCStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(AVArrayResultBlock)callback AV_DEPRECATED("2.3.2以后不再需要，请使用inboxQuery类方法");
 
 /**
  *  获取当前用户发布的状态
  *
- *  @param type     状态类型,默认是kAVStatusTypeTimeline, 可以是任意自定义字符串
+ *  @param type     状态类型,默认是kLCStatusTypeTimeline, 可以是任意自定义字符串
  *  @param skip     跳过条数
  *  @param limit    需要返回的条数 默认`100`，最大`100`
  *  @param callback 回调结果
  */
-+(void) getStatusesFromCurrentUserWithType:(AVStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(AVArrayResultBlock)callback AV_DEPRECATED("2.3.2以后不再需要，请使用statusQuery类方法");
++(void) getStatusesFromCurrentUserWithType:(LCStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(AVArrayResultBlock)callback AV_DEPRECATED("2.3.2以后不再需要，请使用statusQuery类方法");
 
 /**
  *  通过用户ID获取其发布的公开的状态列表
@@ -234,7 +234,7 @@ typedef void (^AVStatusResultBlock)(LCStatus * _Nullable status, NSError * _Null
 
 /**
  *  通过ID来关注其他用户
- *  @warning 如果需要被关注者收到消息 需要手动给他发送一条AVStatus.
+ *  @warning 如果需要被关注者收到消息 需要手动给他发送一条LCStatus.
  *  @param userId 要关注的用户objectId
  *  @param callback 回调结果
  */
@@ -242,7 +242,7 @@ typedef void (^AVStatusResultBlock)(LCStatus * _Nullable status, NSError * _Null
 
 /**
  *  通过ID来关注其他用户
- *  @warning 如果需要被关注者收到消息 需要手动给他发送一条AVStatus.
+ *  @warning 如果需要被关注者收到消息 需要手动给他发送一条LCStatus.
  *  @param userId 要关注的用户objectId
  *  @param dictionary 添加的自定义属性
  *  @param callback 回调结果
@@ -284,7 +284,7 @@ typedef void (^AVStatusResultBlock)(LCStatus * _Nullable status, NSError * _Null
 @end
 
 /**
- *  查询AVStatus
+ *  查询LCStatus
  */
 @interface LCStatusQuery : LCQuery
 /**
@@ -305,7 +305,7 @@ typedef void (^AVStatusResultBlock)(LCStatus * _Nullable status, NSError * _Null
 /**
  *  设置查询的Inbox的类型
  */
-@property(nonatomic, copy, nullable) AVStatusType *inboxType;
+@property(nonatomic, copy, nullable) LCStatusType *inboxType;
 
 /**
  *  查询结果是否已经到结尾

@@ -1,12 +1,12 @@
 //
-//  AVStatus.m
+//  LCStatus.m
 //  paas
 //
 //  Created by Travis on 13-12-23.
 //  Copyright (c) 2013年 AVOS. All rights reserved.
 //
 
-#import "AVStatus.h"
+#import "LCStatus.h"
 #import "LCPaasClient.h"
 #import "AVErrorUtils.h"
 #import "LCObjectUtils.h"
@@ -15,10 +15,10 @@
 #import "AVUtils.h"
 #import "AVUser_Internal.h"
 
-NSString * const kAVStatusTypeTimeline=@"default";
-NSString * const kAVStatusTypePrivateMessage=@"private";
+NSString * const kLCStatusTypeTimeline=@"default";
+NSString * const kLCStatusTypePrivateMessage=@"private";
 
-@interface AVStatus () {
+@interface LCStatus () {
     
 }
 @property (nonatomic,   copy) NSString *objectId;
@@ -30,7 +30,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
 
 +(NSString*)parseClassName;
 
-+(AVStatus*)statusFromCloudData:(NSDictionary*)data;
++(LCStatus*)statusFromCloudData:(NSDictionary*)data;
 
 @end
 
@@ -48,15 +48,15 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
 @end
 
 
-@interface AVStatusQuery ()
+@interface LCStatusQuery ()
 @property(nonatomic,copy) NSString *externalQueryPath;
 @end
 
-@implementation AVStatusQuery
+@implementation LCStatusQuery
 
 - (id)init
 {
-    self = [super initWithClassName:[AVStatus parseClassName]];
+    self = [super initWithClassName:[LCStatus parseClassName]];
     if (self) {
         
     }
@@ -121,7 +121,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     NSMutableArray *statuses=[NSMutableArray arrayWithCapacity:[results count]];
     
     for (NSDictionary *info in results) {
-        [statuses addObject:[AVStatus statusFromCloudData:info]];
+        [statuses addObject:[LCStatus statusFromCloudData:info]];
     }
     [statuses sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"messageId" ascending:NO]]];
     return statuses;
@@ -134,7 +134,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
 
 
 
-@implementation AVStatus
+@implementation LCStatus
 
 +(NSString*)parseClassName{
     return @"_Status";
@@ -144,9 +144,9 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     return @"subscribe/statuses/inbox";
 }
 
-+(AVStatus*)statusFromCloudData:(NSDictionary*)data{
++(LCStatus*)statusFromCloudData:(NSDictionary*)data{
     if ([data isKindOfClass:[NSDictionary class]] && data[@"objectId"]) {
-        AVStatus *status=[[AVStatus alloc] init];
+        LCStatus *status=[[LCStatus alloc] init];
         
         status.objectId=data[@"objectId"];
         status.type=data[@"inboxType"];
@@ -184,8 +184,8 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
 #pragma mark - 查询
 
 
-+(AVStatusQuery*)inboxQuery:(AVStatusType *)inboxType{
-    AVStatusQuery *query=[[AVStatusQuery alloc] init];
++(LCStatusQuery*)inboxQuery:(LCStatusType *)inboxType{
+    LCStatusQuery *query=[[LCStatusQuery alloc] init];
     query.owner=[AVUser currentUser];
     query.inboxType=inboxType;
     query.externalQueryPath= @"subscribe/statuses";
@@ -193,13 +193,13 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
 }
 
 
-+(AVStatusQuery*)statusQuery{
-    AVStatusQuery *q=[[AVStatusQuery alloc] init];
++(LCStatusQuery*)statusQuery{
+    LCStatusQuery *q=[[LCStatusQuery alloc] init];
     [q whereKey:@"source" equalTo:[AVUser currentUser]];
     return q;
 }
 
-+(void)getStatusesWithType:(AVStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(AVArrayResultBlock)callback{
++(void)getStatusesWithType:(LCStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(AVArrayResultBlock)callback{
     NSParameterAssert(type);
     
     NSError *error=[self permissionCheck];
@@ -212,13 +212,13 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
         limit=100;
     }
     
-    AVStatusQuery *q=[AVStatus inboxQuery:type];
+    LCStatusQuery *q=[LCStatus inboxQuery:type];
     q.limit=limit;
     q.skip=skip;
     [q findObjectsInBackgroundWithBlock:callback];
     
 }
-+(void) getStatusesFromCurrentUserWithType:(AVStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(AVArrayResultBlock)callback{
++(void) getStatusesFromCurrentUserWithType:(LCStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(AVArrayResultBlock)callback{
     
     NSError *error=[self permissionCheck];
     if (error) {
@@ -232,7 +232,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
 +(void)getStatusesFromUser:(NSString *)userId skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(AVArrayResultBlock)callback{
     NSParameterAssert(userId);
     
-    LCQuery *q=[AVStatus statusQuery];
+    LCQuery *q=[LCStatus statusQuery];
     q.limit=limit;
     q.skip=skip;
     [q whereKey:@"source" equalTo:[LCObject objectWithoutDataWithClassName:@"_User" objectId:userId]];
@@ -241,14 +241,14 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
 
 
 
-+(void)getStatusWithID:(NSString *)objectId andCallback:(AVStatusResultBlock)callback{
++(void)getStatusWithID:(NSString *)objectId andCallback:(LCStatusResultBlock)callback{
     NSError *error=[self permissionCheck];
     if (error) {
         callback(nil,error);
         return;
     }
     
-    NSString *owner=[AVStatus stringOfStatusOwner:[AVUser currentUser].objectId];
+    NSString *owner=[LCStatus stringOfStatusOwner:[AVUser currentUser].objectId];
     [[LCPaasClient sharedInstance] getObject:[NSString stringWithFormat:@"statuses/%@",objectId] withParameters:@{@"owner":owner,@"include":@"source"} block:^(id object, NSError *error) {
         
         if (!error) {
@@ -267,7 +267,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
         return;
     }
     
-    NSString *owner=[AVStatus stringOfStatusOwner:[AVUser currentUser].objectId];
+    NSString *owner=[LCStatus stringOfStatusOwner:[AVUser currentUser].objectId];
     [[LCPaasClient sharedInstance] deleteObject:[NSString stringWithFormat:@"statuses/%@",objectId] withParameters:@{@"owner":owner} block:^(id object, NSError *error) {
         
         [AVUtils callBooleanResultBlock:callback error:error];
@@ -316,7 +316,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     });
 }
 
-+(void)getUnreadStatusesCountWithType:(AVStatusType*)type andCallback:(AVIntegerResultBlock)callback{
++(void)getUnreadStatusesCountWithType:(LCStatusType*)type andCallback:(AVIntegerResultBlock)callback{
     NSError *error=[self permissionCheck];
 
     if (error) {
@@ -324,7 +324,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
         return;
     }
     
-    NSString *owner=[AVStatus stringOfStatusOwner:[AVUser currentUser].objectId];
+    NSString *owner=[LCStatus stringOfStatusOwner:[AVUser currentUser].objectId];
     
     [[LCPaasClient sharedInstance] getObject:@"subscribe/statuses/count" withParameters:@{@"owner":owner,@"inboxType":type} block:^(id object, NSError *error) {
         NSUInteger count=[object[@"unread"] integerValue];
@@ -332,7 +332,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     }];
 }
 
-+ (void)resetUnreadStatusesCountWithType:(AVStatusType *)type andCallback:(AVBooleanResultBlock)callback {
++ (void)resetUnreadStatusesCountWithType:(LCStatusType *)type andCallback:(AVBooleanResultBlock)callback {
     NSError *error = [self permissionCheck];
 
     if (error) {
@@ -340,14 +340,14 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
         return;
     }
 
-    NSString *owner = [AVStatus stringOfStatusOwner:[AVUser currentUser].objectId];
+    NSString *owner = [LCStatus stringOfStatusOwner:[AVUser currentUser].objectId];
 
     [[LCPaasClient sharedInstance] postObject:@"subscribe/statuses/resetUnreadCount" withParameters:@{@"owner": owner, @"inboxType": type} block:^(id object, NSError *error) {
         [AVUtils callBooleanResultBlock:callback error:error];
     }];
 }
 
-+(void)sendStatusToFollowers:(AVStatus*)status andCallback:(AVBooleanResultBlock)callback{
++(void)sendStatusToFollowers:(LCStatus*)status andCallback:(AVBooleanResultBlock)callback{
     NSError *error=[self permissionCheck];
     if (error) {
         callback(NO,error);
@@ -358,14 +358,14 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     [status sendInBackgroundWithBlock:callback];
 }
 
-+(void)sendPrivateStatus:(AVStatus *)status toUserWithID:(NSString *)userId andCallback:(AVBooleanResultBlock)callback{
++(void)sendPrivateStatus:(LCStatus *)status toUserWithID:(NSString *)userId andCallback:(AVBooleanResultBlock)callback{
     NSError *error=[self permissionCheck];
     if (error) {
         callback(NO,error);
         return;
     }
     status.source=[AVUser currentUser];
-    [status setType:kAVStatusTypePrivateMessage];
+    [status setType:kLCStatusTypePrivateMessage];
     
     LCQuery *q=[AVUser query];
     [q whereKey:@"objectId" equalTo:userId];
@@ -399,7 +399,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     }
     
     if (self.type==nil) {
-        [self setType:kAVStatusTypeTimeline];
+        [self setType:kLCStatusTypeTimeline];
     }
 
     return nil;

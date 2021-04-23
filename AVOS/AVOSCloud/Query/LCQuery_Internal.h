@@ -33,7 +33,7 @@
 - (NSMutableArray *)processResults:(NSArray *)results className:(NSString *)className;
 
 /**
- *  Process end value of server response. Used in AVStatusQuery.
+ *  Process end value of server response. Used in LCStatusQuery.
  *  @param end end value
  */
 - (void)processEnd:(BOOL)end;
