@@ -2,7 +2,7 @@
 // Copyright 2013 AVOS Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
-#import "AVGeoPoint.h"
+#import "LCGeoPoint.h"
 #import "LCObject.h"
 #import "AVCloudQueryResult.h"
 
@@ -178,86 +178,86 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 /** @name Adding Location Constraints */
 
 /*!
- Add a constraint to the query that requires a particular key's coordinates (specified via AVGeoPoint) be near
+ Add a constraint to the query that requires a particular key's coordinates (specified via LCGeoPoint) be near
  a reference point.  Distance is calculated based on angular distance on a sphere.  Results will be sorted by distance
  from reference point.
  @param key The key to be constrained.
- @param geoPoint The reference point.  A AVGeoPoint.
+ @param geoPoint The reference point.  A LCGeoPoint.
  */
-- (void)whereKey:(NSString *)key nearGeoPoint:(AVGeoPoint *)geoPoint;
+- (void)whereKey:(NSString *)key nearGeoPoint:(LCGeoPoint *)geoPoint;
 
 /*!
- Add a constraint to the query that requires a particular key's coordinates (specified via AVGeoPoint) be near
+ Add a constraint to the query that requires a particular key's coordinates (specified via LCGeoPoint) be near
  a reference point and within the maximum distance specified (in miles).  Distance is calculated based on
  a spherical coordinate system.  Results will be sorted by distance (nearest to farthest) from the reference point.
  @param key The key to be constrained.
- @param geoPoint The reference point.  A AVGeoPoint.
+ @param geoPoint The reference point.  A LCGeoPoint.
  @param maxDistance Maximum distance in miles.
  */
-- (void)whereKey:(NSString *)key nearGeoPoint:(AVGeoPoint *)geoPoint withinMiles:(double)maxDistance;
+- (void)whereKey:(NSString *)key nearGeoPoint:(LCGeoPoint *)geoPoint withinMiles:(double)maxDistance;
 
 /*!
- Add a constraint to the query that requires a particular key's coordinates (specified via AVGeoPoint) be near
+ Add a constraint to the query that requires a particular key's coordinates (specified via LCGeoPoint) be near
  a reference point and within the maximum distance specified (in kilometers).  Distance is calculated based on
  a spherical coordinate system.  Results will be sorted by distance (nearest to farthest) from the reference point.
  @param key The key to be constrained.
- @param geoPoint The reference point.  A AVGeoPoint.
+ @param geoPoint The reference point.  A LCGeoPoint.
  @param maxDistance Maximum distance in kilometers.
  */
-- (void)whereKey:(NSString *)key nearGeoPoint:(AVGeoPoint *)geoPoint withinKilometers:(double)maxDistance;
+- (void)whereKey:(NSString *)key nearGeoPoint:(LCGeoPoint *)geoPoint withinKilometers:(double)maxDistance;
 
 /*!
- Add a constraint to the query that requires a particular key's coordinates (specified via AVGeoPoint) be near
+ Add a constraint to the query that requires a particular key's coordinates (specified via LCGeoPoint) be near
  a reference point and within the maximum distance specified (in radians).  Distance is calculated based on
  angular distance on a sphere.  Results will be sorted by distance (nearest to farthest) from the reference point.
  @param key The key to be constrained.
- @param geoPoint The reference point.  A AVGeoPoint.
+ @param geoPoint The reference point.  A LCGeoPoint.
  @param maxDistance Maximum distance in radians.
  */
-- (void)whereKey:(NSString *)key nearGeoPoint:(AVGeoPoint *)geoPoint withinRadians:(double)maxDistance;
+- (void)whereKey:(NSString *)key nearGeoPoint:(LCGeoPoint *)geoPoint withinRadians:(double)maxDistance;
 
 /*!
- * Add a constraint to the query that requires a particular key's coordinates (specified via AVGeoPoint) be near
+ * Add a constraint to the query that requires a particular key's coordinates (specified via LCGeoPoint) be near
  * a reference point and within the maximum and minimum distance. Distance is calculated based on
  * angular distance on a sphere. Results will be sorted by distance (nearest to farthest) from the reference point.
  *
  * @param key              The key to be constrained.
- * @param geoPoint         The reference point, a AVGeoPoint.
+ * @param geoPoint         The reference point, a LCGeoPoint.
  * @param maxDistance      Maximum distance value. If negative (like -1), the maximum constraint will be ignored.
  * @param maxDistanceUnit  Maximum distance unit.
  * @param minDistance      Minimum distance value. If negative (like -1), the minimum constraint will be ignored.
  * @param minDistanceUnit  Minimum distance unit.
  */
 - (void)whereKey:(NSString *)key
-    nearGeoPoint:(AVGeoPoint *)geoPoint
+    nearGeoPoint:(LCGeoPoint *)geoPoint
      maxDistance:(double)maxDistance
  maxDistanceUnit:(AVQueryDistanceUnit)maxDistanceUnit
      minDistance:(double)minDistance
  minDistanceUnit:(AVQueryDistanceUnit)minDistanceUnit;
 
 /*!
- * Add a constraint to the query that requires a particular key's coordinates (specified via AVGeoPoint) be near
+ * Add a constraint to the query that requires a particular key's coordinates (specified via LCGeoPoint) be near
  * a reference point and within the minimum distance. Distance is calculated based on
  * angular distance on a sphere. Results will be sorted by distance (nearest to farthest) from the reference point.
  *
  * @param key              The key to be constrained.
- * @param geoPoint         The reference point, a AVGeoPoint.
+ * @param geoPoint         The reference point, a LCGeoPoint.
  * @param minDistance      Minimum distance value. If negative (like -1), the minimum constraint will be ignored.
  * @param minDistanceUnit  Minimum distance unit.
  */
 - (void)whereKey:(NSString *)key
-    nearGeoPoint:(AVGeoPoint *)geoPoint
+    nearGeoPoint:(LCGeoPoint *)geoPoint
      minDistance:(double)minDistance
  minDistanceUnit:(AVQueryDistanceUnit)minDistanceUnit;
 
 /*!
- Add a constraint to the query that requires a particular key's coordinates (specified via AVGeoPoint) be
+ Add a constraint to the query that requires a particular key's coordinates (specified via LCGeoPoint) be
  contained within a given rectangular geographic bounding box.
  @param key The key to be constrained.
  @param southwest The lower-left inclusive corner of the box.
  @param northeast The upper-right inclusive corner of the box.
  */
-- (void)whereKey:(NSString *)key withinGeoBoxFromSouthwest:(AVGeoPoint *)southwest toNortheast:(AVGeoPoint *)northeast;
+- (void)whereKey:(NSString *)key withinGeoBoxFromSouthwest:(LCGeoPoint *)southwest toNortheast:(LCGeoPoint *)northeast;
 
 /** @name Adding String Constraints */
 

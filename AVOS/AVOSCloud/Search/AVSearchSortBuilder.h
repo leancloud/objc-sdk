@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class AVGeoPoint;
+@class LCGeoPoint;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -71,17 +71,17 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param mode 数组或者多值字段的排序模式，min表示取最小值，max取最大值，avg取平均值，默认值是avg。
  *  @param unit 距离单位，"m"表示米，"cm"表示厘米，"mm"表示毫米，"km"表示公里，"mi"表示英里，"in"表示英寸，"yd"表示英亩，默认"km"。
  */
-- (void)whereNear:(NSString *)key point:(AVGeoPoint *)point inOrder:(NSString *)order withMode:(NSString *)mode andUnit:(NSString *)unit;
+- (void)whereNear:(NSString *)key point:(LCGeoPoint *)point inOrder:(NSString *)order withMode:(NSString *)mode andUnit:(NSString *)unit;
 
 /*!
  *  @see whereNear:point:inOrder:withMode:andUnit
  */
-- (void)whereNear:(NSString *)key point:(AVGeoPoint *)point inOrder:(NSString *)order;
+- (void)whereNear:(NSString *)key point:(LCGeoPoint *)point inOrder:(NSString *)order;
 
 /*!
  *  @see whereNear:point:inOrder:withMode:andUnit
  */
-- (void)whereNear:(NSString *)key point:(AVGeoPoint *)point;
+- (void)whereNear:(NSString *)key point:(LCGeoPoint *)point;
 
 @end
 

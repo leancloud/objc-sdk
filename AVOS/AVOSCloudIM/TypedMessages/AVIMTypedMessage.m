@@ -85,9 +85,9 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
     return dictionary ? [[LCFile alloc] initWithRawJSONData:dictionary.mutableCopy] : nil;
 }
 
-+ (AVGeoPoint *)locationFromDictionary:(NSDictionary *)dictionary
++ (LCGeoPoint *)locationFromDictionary:(NSDictionary *)dictionary
 {
-    return dictionary ? [AVGeoPoint geoPointFromDictionary:dictionary] : nil;
+    return dictionary ? [LCGeoPoint geoPointFromDictionary:dictionary] : nil;
 }
 
 + (instancetype)messageWithMessageObject:(AVIMTypedMessageObject *)messageObject
@@ -290,7 +290,7 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
                               key:@"duration"].doubleValue;
 }
 
-- (AVGeoPoint *)location
+- (LCGeoPoint *)location
 {
     if (_location) {
         return _location;
@@ -298,12 +298,12 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
     NSDictionary *dictionary = self.messageObject._lcloc;
     if (dictionary &&
         dictionary.count > 0) {
-        _location = [AVGeoPoint geoPointFromDictionary:dictionary];
+        _location = [LCGeoPoint geoPointFromDictionary:dictionary];
     }
     return _location;
 }
 
-- (void)setLocation:(AVGeoPoint *)location
+- (void)setLocation:(LCGeoPoint *)location
 {
     _location = location;
     if (location) {
@@ -316,7 +316,7 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
     }
 }
 
-- (void)setLocationIvar:(AVGeoPoint *)location
+- (void)setLocationIvar:(LCGeoPoint *)location
 {
     _location = location;
 }

@@ -10,7 +10,7 @@
 #import "AVUtils.h"
 #import "LCObject.h"
 #import "LCObject_Internal.h"
-#import "AVGeoPoint_Internal.h"
+#import "LCGeoPoint_Internal.h"
 #import "AVUser.h"
 #import "AVUser_Internal.h"
 #import "LCObject.h"

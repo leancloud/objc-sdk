@@ -117,32 +117,32 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  Near a geopoint. Returned results will be sorted in distances to the geopoint.
  */
-- (void)whereKey:(NSString *)key nearGeoPoint:(AVGeoPoint *)geopoint;
+- (void)whereKey:(NSString *)key nearGeoPoint:(LCGeoPoint *)geopoint;
 
 /*!
  Near a geopoint. Returned results will be sorted in distances to the geopoint.
  @param maxDistance in miles
  */
-- (void)whereKey:(NSString *)key nearGeoPoint:(AVGeoPoint *)geopoint withinMiles:(double)maxDistance;
+- (void)whereKey:(NSString *)key nearGeoPoint:(LCGeoPoint *)geopoint withinMiles:(double)maxDistance;
 
 /*!
  Near a geopoint. Returned results will be sorted in distances to the geopoint.
  @param maxDistance in kilometers
  */
-- (void)whereKey:(NSString *)key nearGeoPoint:(AVGeoPoint *)geopoint withinKilometers:(double)maxDistance;
+- (void)whereKey:(NSString *)key nearGeoPoint:(LCGeoPoint *)geopoint withinKilometers:(double)maxDistance;
 
 /*!
  Near a geopoint. Returned results will be sorted in distances to the geopoint.
  @param maxDistance in radians
  */
-- (void)whereKey:(NSString *)key nearGeoPoint:(AVGeoPoint *)geopoint withinRadians:(double)maxDistance;
+- (void)whereKey:(NSString *)key nearGeoPoint:(LCGeoPoint *)geopoint withinRadians:(double)maxDistance;
 
 /*!
  Within a rectangle.
  @param southwest the lower left corner of the rectangle
  @param northeast the upper right corner of the rectangle
  */
-- (void)whereKey:(NSString *)key withinGeoBoxFromSouthwest:(AVGeoPoint *)southwest toNortheast:(AVGeoPoint *)northeast;
+- (void)whereKey:(NSString *)key withinGeoBoxFromSouthwest:(LCGeoPoint *)southwest toNortheast:(LCGeoPoint *)northeast;
 
 /*!
  Matches a regex. This query may have a significant performance impact.

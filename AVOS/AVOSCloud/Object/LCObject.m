@@ -9,7 +9,7 @@
 #import "LCRelation_Internal.h"
 #import "LCACL.h"
 #import "LCACL_Internal.h"
-#import "AVGeoPoint_Internal.h"
+#import "LCGeoPoint_Internal.h"
 #import "LCObjectUtils.h"
 #import "AVErrorUtils.h"
 #import "AVQuery_Internal.h"

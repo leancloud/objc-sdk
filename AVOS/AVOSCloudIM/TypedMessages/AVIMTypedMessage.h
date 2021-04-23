@@ -9,7 +9,7 @@
 #import "AVIMMessage.h"
 
 @class LCFile;
-@class AVGeoPoint;
+@class LCGeoPoint;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, nullable) LCFile *file;
 
 /// The location.
-@property (nonatomic, nullable) AVGeoPoint *location;
+@property (nonatomic, nullable) LCGeoPoint *location;
 
 /**
  * Add custom property for message.

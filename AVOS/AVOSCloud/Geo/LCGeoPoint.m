@@ -1,12 +1,12 @@
 //
-//  AVGeoPoint.h
+//  LCGeoPoint.h
 //  LeanCloud
 //
 
 
-#import "AVGeoPoint.h"
+#import "LCGeoPoint.h"
 
-@implementation  AVGeoPoint
+@implementation  LCGeoPoint
 
 @synthesize latitude = _latitude;
 @synthesize longitude = _longitude;
@@ -29,34 +29,34 @@
 
 - (id)copyWithZone:(NSZone *)zone
 {
-    AVGeoPoint *point = [[[self class] allocWithZone:zone] init];
+    LCGeoPoint *point = [[[self class] allocWithZone:zone] init];
     point.longitude = self.longitude;
     point.latitude = self.latitude;
     return point;
 }
 
-+ (AVGeoPoint *)geoPoint
++ (LCGeoPoint *)geoPoint
 {
-    AVGeoPoint * result = [[AVGeoPoint alloc] init];
+    LCGeoPoint * result = [[LCGeoPoint alloc] init];
     return result;
 }
 
-+ (AVGeoPoint *)geoPointWithLatitude:(double)latitude longitude:(double)longitude
++ (LCGeoPoint *)geoPointWithLatitude:(double)latitude longitude:(double)longitude
 {
-    AVGeoPoint * point = [AVGeoPoint geoPoint];
+    LCGeoPoint * point = [LCGeoPoint geoPoint];
     point.latitude = latitude;
     point.longitude = longitude;
     return point;
 }
 
-+(NSDictionary *)dictionaryFromGeoPoint:(AVGeoPoint *)point
++(NSDictionary *)dictionaryFromGeoPoint:(LCGeoPoint *)point
 {
     return @{ @"__type": @"GeoPoint", @"latitude": @(point.latitude), @"longitude": @(point.longitude) };
 }
 
-+(AVGeoPoint *)geoPointFromDictionary:(NSDictionary *)dict
++(LCGeoPoint *)geoPointFromDictionary:(NSDictionary *)dict
 {
-    AVGeoPoint * point = [[AVGeoPoint alloc]init];
+    LCGeoPoint * point = [[LCGeoPoint alloc]init];
     point.latitude = [[dict objectForKey:@"latitude"] doubleValue];
     point.longitude = [[dict objectForKey:@"longitude"] doubleValue];
     return point;

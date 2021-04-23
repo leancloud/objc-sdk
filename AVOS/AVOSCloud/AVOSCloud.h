@@ -31,7 +31,7 @@
 #import "LCFileQuery.h"
 
 // Geo
-#import "AVGeoPoint.h"
+#import "LCGeoPoint.h"
 
 // Status
 #import "AVStatus.h"

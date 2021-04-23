@@ -22,12 +22,12 @@
 
 @implementation AVIMConversationQuery
 
-+(NSDictionary *)dictionaryFromGeoPoint:(AVGeoPoint *)point {
++(NSDictionary *)dictionaryFromGeoPoint:(LCGeoPoint *)point {
     return @{ @"__type": @"GeoPoint", @"latitude": @(point.latitude), @"longitude": @(point.longitude) };
 }
 
-+(AVGeoPoint *)geoPointFromDictionary:(NSDictionary *)dict {
-    AVGeoPoint * point = [[AVGeoPoint alloc]init];
++(LCGeoPoint *)geoPointFromDictionary:(NSDictionary *)dict {
+    LCGeoPoint * point = [[LCGeoPoint alloc]init];
     point.latitude = [[dict objectForKey:@"latitude"] doubleValue];
     point.longitude = [[dict objectForKey:@"longitude"] doubleValue];
     return point;
@@ -205,31 +205,31 @@
     [self addWhereItem:dict forKey:key];
 }
 
-- (void)whereKey:(NSString *)key nearGeoPoint:(AVGeoPoint *)geopoint
+- (void)whereKey:(NSString *)key nearGeoPoint:(LCGeoPoint *)geopoint
 {
     NSDictionary * dict = @{@"$nearSphere" : [[self class] dictionaryFromGeoPoint:geopoint]};
     [self addWhereItem:dict forKey:key];
 }
 
-- (void)whereKey:(NSString *)key nearGeoPoint:(AVGeoPoint *)geopoint withinMiles:(double)maxDistance
+- (void)whereKey:(NSString *)key nearGeoPoint:(LCGeoPoint *)geopoint withinMiles:(double)maxDistance
 {
     NSDictionary * dict = @{@"$nearSphere" : [[self class] dictionaryFromGeoPoint:geopoint], @"$maxDistanceInMiles":@(maxDistance)};
     [self addWhereItem:dict forKey:key];
 }
 
-- (void)whereKey:(NSString *)key nearGeoPoint:(AVGeoPoint *)geopoint withinKilometers:(double)maxDistance
+- (void)whereKey:(NSString *)key nearGeoPoint:(LCGeoPoint *)geopoint withinKilometers:(double)maxDistance
 {
     NSDictionary * dict = @{@"$nearSphere" : [[self class] dictionaryFromGeoPoint:geopoint], @"$maxDistanceInKilometers":@(maxDistance)};
     [self addWhereItem:dict forKey:key];
 }
 
-- (void)whereKey:(NSString *)key nearGeoPoint:(AVGeoPoint *)geopoint withinRadians:(double)maxDistance
+- (void)whereKey:(NSString *)key nearGeoPoint:(LCGeoPoint *)geopoint withinRadians:(double)maxDistance
 {
     NSDictionary * dict = @{@"$nearSphere" : [[self class] dictionaryFromGeoPoint:geopoint], @"$maxDistanceInRadians":@(maxDistance)};
     [self addWhereItem:dict forKey:key];
 }
 
-- (void)whereKey:(NSString *)key withinGeoBoxFromSouthwest:(AVGeoPoint *)southwest toNortheast:(AVGeoPoint *)northeast
+- (void)whereKey:(NSString *)key withinGeoBoxFromSouthwest:(LCGeoPoint *)southwest toNortheast:(LCGeoPoint *)northeast
 {
     NSDictionary * dict = @{@"$within": @{@"$box" : @[[[self class] dictionaryFromGeoPoint:southwest], [[self class] dictionaryFromGeoPoint:northeast]]}};
     [self addWhereItem:dict forKey:key];

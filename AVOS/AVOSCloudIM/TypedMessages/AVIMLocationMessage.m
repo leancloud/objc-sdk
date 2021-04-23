@@ -7,7 +7,7 @@
 //
 
 #import "AVIMLocationMessage.h"
-#import "AVGeoPoint_Internal.h"
+#import "LCGeoPoint_Internal.h"
 #import "AVIMTypedMessage_Internal.h"
 
 @implementation AVIMLocationMessage
@@ -34,7 +34,7 @@
     if (attributes) {
         message.attributes = attributes;
     }
-    AVGeoPoint *location = [AVGeoPoint geoPointWithLatitude:latitude
+    LCGeoPoint *location = [LCGeoPoint geoPointWithLatitude:latitude
                                                   longitude:longitude];
     message.location = location;
     return message;

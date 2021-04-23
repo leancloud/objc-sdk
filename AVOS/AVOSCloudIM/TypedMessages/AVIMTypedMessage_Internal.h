@@ -10,7 +10,7 @@
 #import "AVIMTypedMessageObject.h"
 #import "AVIMMessage_Internal.h"
 #import "LCFile_Internal.h"
-#import "AVGeoPoint_Internal.h"
+#import "LCGeoPoint_Internal.h"
 
 extern NSMutableDictionary<NSNumber *, Class> const *_typeDict;
 

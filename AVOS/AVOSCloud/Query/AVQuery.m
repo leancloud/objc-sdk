@@ -2,14 +2,14 @@
 // Copyright 2013 AVOS, Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
-#import "AVGeoPoint.h"
+#import "LCGeoPoint.h"
 #import "LCObject_Internal.h"
 #import "AVQuery.h"
 #import "AVUtils.h"
 #import "AVPaasClient.h"
 #import "AVPaasClient_internal.h"
 #import "AVUser_Internal.h"
-#import "AVGeoPoint_Internal.h"
+#import "LCGeoPoint_Internal.h"
 #import "LCCacheManager.h"
 #import "AVErrorUtils.h"
 #import "LCObjectUtils.h"
@@ -306,32 +306,32 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
     [self addWhereItem:dict forKey:key];
 }
 
-- (void)whereKey:(NSString *)key nearGeoPoint:(AVGeoPoint *)geoPoint
+- (void)whereKey:(NSString *)key nearGeoPoint:(LCGeoPoint *)geoPoint
 {
-    NSDictionary * dict = @{@"$nearSphere" : [AVGeoPoint dictionaryFromGeoPoint:geoPoint]};
+    NSDictionary * dict = @{@"$nearSphere" : [LCGeoPoint dictionaryFromGeoPoint:geoPoint]};
     [self addWhereItem:dict forKey:key];
 }
 
-- (void)whereKey:(NSString *)key nearGeoPoint:(AVGeoPoint *)geoPoint withinMiles:(double)maxDistance
+- (void)whereKey:(NSString *)key nearGeoPoint:(LCGeoPoint *)geoPoint withinMiles:(double)maxDistance
 {
-    NSDictionary * dict = @{@"$nearSphere" : [AVGeoPoint dictionaryFromGeoPoint:geoPoint], @"$maxDistanceInMiles":@(maxDistance)};
+    NSDictionary * dict = @{@"$nearSphere" : [LCGeoPoint dictionaryFromGeoPoint:geoPoint], @"$maxDistanceInMiles":@(maxDistance)};
     [self addWhereItem:dict forKey:key];
 }
 
-- (void)whereKey:(NSString *)key nearGeoPoint:(AVGeoPoint *)geoPoint withinKilometers:(double)maxDistance
+- (void)whereKey:(NSString *)key nearGeoPoint:(LCGeoPoint *)geoPoint withinKilometers:(double)maxDistance
 {
-    NSDictionary * dict = @{@"$nearSphere" : [AVGeoPoint dictionaryFromGeoPoint:geoPoint], @"$maxDistanceInKilometers":@(maxDistance)};
+    NSDictionary * dict = @{@"$nearSphere" : [LCGeoPoint dictionaryFromGeoPoint:geoPoint], @"$maxDistanceInKilometers":@(maxDistance)};
     [self addWhereItem:dict forKey:key];
 }
 
-- (void)whereKey:(NSString *)key nearGeoPoint:(AVGeoPoint *)geoPoint withinRadians:(double)maxDistance
+- (void)whereKey:(NSString *)key nearGeoPoint:(LCGeoPoint *)geoPoint withinRadians:(double)maxDistance
 {
-    NSDictionary * dict = @{@"$nearSphere" : [AVGeoPoint dictionaryFromGeoPoint:geoPoint], @"$maxDistanceInRadians":@(maxDistance)};
+    NSDictionary * dict = @{@"$nearSphere" : [LCGeoPoint dictionaryFromGeoPoint:geoPoint], @"$maxDistanceInRadians":@(maxDistance)};
     [self addWhereItem:dict forKey:key];
 }
 
 - (void)whereKey:(NSString *)key
-    nearGeoPoint:(AVGeoPoint *)geoPoint
+    nearGeoPoint:(LCGeoPoint *)geoPoint
      maxDistance:(double)maxDistance
  maxDistanceUnit:(AVQueryDistanceUnit)maxDistanceUnit
      minDistance:(double)minDistance
@@ -339,7 +339,7 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
 {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
 
-    dict[@"$nearSphere"] = [AVGeoPoint dictionaryFromGeoPoint:geoPoint];
+    dict[@"$nearSphere"] = [LCGeoPoint dictionaryFromGeoPoint:geoPoint];
 
     NSString *unitString = nil;
 
@@ -357,16 +357,16 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
 }
 
 - (void)whereKey:(NSString *)key
-    nearGeoPoint:(AVGeoPoint *)geoPoint
+    nearGeoPoint:(LCGeoPoint *)geoPoint
      minDistance:(double)minDistance
  minDistanceUnit:(AVQueryDistanceUnit)minDistanceUnit
 {
     [self whereKey:key nearGeoPoint:geoPoint maxDistance:-1 maxDistanceUnit:(AVQueryDistanceUnit)0 minDistance:minDistance minDistanceUnit:minDistanceUnit];
 }
 
-- (void)whereKey:(NSString *)key withinGeoBoxFromSouthwest:(AVGeoPoint *)southwest toNortheast:(AVGeoPoint *)northeast
+- (void)whereKey:(NSString *)key withinGeoBoxFromSouthwest:(LCGeoPoint *)southwest toNortheast:(LCGeoPoint *)northeast
 {
-    NSDictionary * dict = @{@"$within": @{@"$box" : @[[AVGeoPoint dictionaryFromGeoPoint:southwest], [AVGeoPoint dictionaryFromGeoPoint:northeast]]}};
+    NSDictionary * dict = @{@"$within": @{@"$box" : @[[LCGeoPoint dictionaryFromGeoPoint:southwest], [LCGeoPoint dictionaryFromGeoPoint:northeast]]}};
     [self addWhereItem:dict forKey:key];
 }
 

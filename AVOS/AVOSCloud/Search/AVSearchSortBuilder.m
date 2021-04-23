@@ -7,7 +7,7 @@
 //
 
 #import "AVSearchSortBuilder.h"
-#import "AVGeoPoint.h"
+#import "LCGeoPoint.h"
 
 @implementation AVSearchSortBuilder
 
@@ -48,15 +48,15 @@
 
 }
 
-- (void)whereNear:(NSString *)key point:(AVGeoPoint *)point {
+- (void)whereNear:(NSString *)key point:(LCGeoPoint *)point {
     [self whereNear:key point:point inOrder:@"asc"];
 }
 
-- (void)whereNear:(NSString *)key point:(AVGeoPoint *)point inOrder:(NSString *)order {
+- (void)whereNear:(NSString *)key point:(LCGeoPoint *)point inOrder:(NSString *)order {
     [self whereNear:key point:point inOrder:order withMode:@"avg" andUnit:@"km"];
 }
 
-- (void)whereNear:(NSString *)key point:(AVGeoPoint *)point inOrder:(NSString *)order withMode:(NSString *)mode andUnit:(NSString *)unit {
+- (void)whereNear:(NSString *)key point:(LCGeoPoint *)point inOrder:(NSString *)order withMode:(NSString *)mode andUnit:(NSString *)unit {
     NSDictionary *geoDict = @{@"lat": @(point.latitude),
                                      @"lon": @(point.longitude)};
     

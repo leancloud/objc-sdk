@@ -18,7 +18,7 @@
 #import "LCRole_Internal.h"
 #import "AVInstallation_Internal.h"
 #import "AVPaasClient.h"
-#import "AVGeoPoint_Internal.h"
+#import "LCGeoPoint_Internal.h"
 #import "LCRelation_Internal.h"
 #import "AVUtils.h"
 
@@ -150,9 +150,9 @@
     return data;
 }
 
-+(AVGeoPoint *)geoPointFromDictionary:(NSDictionary *)dict
++(LCGeoPoint *)geoPointFromDictionary:(NSDictionary *)dict
 {
-    AVGeoPoint * point = [[AVGeoPoint alloc]init];
+    LCGeoPoint * point = [[LCGeoPoint alloc]init];
     point.latitude = [[dict objectForKey:@"latitude"] doubleValue];
     point.longitude = [[dict objectForKey:@"longitude"] doubleValue];
     return point;
@@ -204,7 +204,7 @@
     }
     else if ([LCObjectUtils isGeoPoint:type])
     {
-        AVGeoPoint * point = [LCObjectUtils geoPointFromDictionary:dict];
+        LCGeoPoint * point = [LCObjectUtils geoPointFromDictionary:dict];
         return point;
     }
     else if ([LCObjectUtils isDate:type]) {
@@ -261,7 +261,7 @@
     }
     else if ([LCObjectUtils isGeoPoint:type])
     {
-        AVGeoPoint * point = [AVGeoPoint geoPointFromDictionary:dict];
+        LCGeoPoint * point = [LCGeoPoint geoPointFromDictionary:dict];
         [target setObject:point forKey:key submit:NO];
     }
     else if ([LCObjectUtils isACL:type] ||
@@ -602,9 +602,9 @@
     return object;
 }
 
-+(NSDictionary *)dictionaryFromGeoPoint:(AVGeoPoint *)point
++(NSDictionary *)dictionaryFromGeoPoint:(LCGeoPoint *)point
 {
-    return [AVGeoPoint dictionaryFromGeoPoint:point];
+    return [LCGeoPoint dictionaryFromGeoPoint:point];
 }
 
 +(NSDictionary *)dictionaryFromData:(NSData *)data
@@ -653,7 +653,7 @@
         } else {
             return [LCObjectUtils dictionaryFromObjectPointer:obj];
         }
-    } else if ([obj isKindOfClass:[AVGeoPoint class]]) {
+    } else if ([obj isKindOfClass:[LCGeoPoint class]]) {
         return [LCObjectUtils dictionaryFromGeoPoint:obj];
     } else if ([obj isKindOfClass:[NSDate class]]) {
         return [AVDate dictionaryFromDate:obj];
