@@ -1,5 +1,5 @@
 //
-//  AVCloud.h
+//  LCCloud.h
 //  LeanCloud
 //
 //  Created by Zhu Zeng on 2/25/13.
@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Call the cloud code from client
  */
-@interface AVCloud : NSObject
+@interface LCCloud : NSObject
 
 
 /*!

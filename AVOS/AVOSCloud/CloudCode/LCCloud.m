@@ -1,12 +1,12 @@
 //
-//  AVCloud.m
+//  LCCloud.m
 //  LeanCloud
 //
 //  Created by Zhu Zeng on 2/25/13.
 //  Copyright (c) 2013 AVOS. All rights reserved.
 //
 
-#import "AVCloud.h"
+#import "LCCloud.h"
 #import "AVPaasClient.h"
 #import "AVErrorUtils.h"
 #import "AVUtils.h"
@@ -17,7 +17,7 @@
 #import "AVLogger.h"
 #import "AVUtils.h"
 
-@implementation AVCloud
+@implementation LCCloud
 
 + (void)setProductionMode:(BOOL)isProduction {
     [[AVPaasClient sharedInstance] setProductionMode:isProduction];

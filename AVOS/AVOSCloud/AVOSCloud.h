@@ -45,7 +45,7 @@
 #import "AVAnonymousUtils.h"
 
 // CloudCode
-#import "AVCloud.h"
+#import "LCCloud.h"
 #import "AVCloudQueryResult.h"
 
 // Search
