@@ -1,18 +1,18 @@
 //
-//  AVSearchSortBuilder.m
+//  LCSearchSortBuilder.m
 //  paas
 //
 //  Created by yang chaozhong on 6/13/14.
 //  Copyright (c) 2014 AVOS. All rights reserved.
 //
 
-#import "AVSearchSortBuilder.h"
+#import "LCSearchSortBuilder.h"
 #import "LCGeoPoint.h"
 
-@implementation AVSearchSortBuilder
+@implementation LCSearchSortBuilder
 
 + (instancetype)newBuilder {
-    AVSearchSortBuilder *sortBuilder = [[[self class] alloc] init];
+    LCSearchSortBuilder *sortBuilder = [[[self class] alloc] init];
     return sortBuilder;
 }
 

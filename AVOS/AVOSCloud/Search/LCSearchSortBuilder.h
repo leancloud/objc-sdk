@@ -1,5 +1,5 @@
 //
-//  AVSearchSortBuilder.h
+//  LCSearchSortBuilder.h
 //  paas
 //
 //  Created by yang chaozhong on 6/13/14.
@@ -15,13 +15,13 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  *  应用搜索的排序对象产生器
  */
-@interface AVSearchSortBuilder : NSObject
+@interface LCSearchSortBuilder : NSObject
 
 @property (nonatomic, strong, readonly) NSMutableArray *sortFields;
 
 /*!
- *  新建 AVSearchSortBuilder 实例
- *  @return AVSearchSortBuilder 实例
+ *  新建 LCSearchSortBuilder 实例
+ *  @return LCSearchSortBuilder 实例
  */
 + (instancetype)newBuilder;
 

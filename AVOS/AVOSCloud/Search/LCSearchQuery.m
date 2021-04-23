@@ -1,19 +1,19 @@
 //
-//  AVSearchQuery.m
+//  LCSearchQuery.m
 //  paas
 //
 //  Created by yang chaozhong on 5/30/14.
 //  Copyright (c) 2014 AVOS. All rights reserved.
 //
 
-#import "AVSearchQuery.h"
+#import "LCSearchQuery.h"
 #import "LCPaasClient.h"
 #import "AVUtils.h"
 #import "LCObject_Internal.h"
 #import "LCObjectUtils.h"
-#import "AVSearchSortBuilder.h"
+#import "LCSearchSortBuilder.h"
 
-@interface AVSearchQuery() {
+@interface LCSearchQuery() {
     NSString *_searchPath;
 }
 
@@ -23,7 +23,7 @@
 
 @end
 
-@implementation AVSearchQuery
+@implementation LCSearchQuery
 
 - (NSMutableDictionary *)parameters {
     if (!_parameters) {
@@ -33,7 +33,7 @@
 }
 
 + (instancetype)searchWithQueryString:(NSString *)queryString {
-    AVSearchQuery *searchQuery = [[[self class] alloc] initWithQueryString:queryString];
+    LCSearchQuery *searchQuery = [[[self class] alloc] initWithQueryString:queryString];
     
     return searchQuery;
 }

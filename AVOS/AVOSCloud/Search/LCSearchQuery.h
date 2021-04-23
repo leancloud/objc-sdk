@@ -1,5 +1,5 @@
 //
-//  AVSearchQuery.h
+//  LCSearchQuery.h
 //  paas
 //
 //  Created by yang chaozhong on 5/30/14.
@@ -8,15 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import "AVConstants.h"
-@class AVSearchSortBuilder;
+@class LCSearchSortBuilder;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AVSearchQuery : NSObject
+@interface LCSearchQuery : NSObject
 
 /*!
- *  使用 queryString 构造一个 AVSearchQuery 对象
- *  @return AVSearchQuery 实例
+ *  使用 queryString 构造一个 LCSearchQuery 对象
+ *  @return LCSearchQuery 实例
  */
 + (instancetype)searchWithQueryString:(NSString *)queryString;
 
@@ -41,9 +41,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) NSString *queryString;
 
 /*!
- *  查询的AVSearchSortBuilder，使用更丰富的排序选项
+ *  查询的LCSearchSortBuilder，使用更丰富的排序选项
  */
-@property (nonatomic, strong, nullable) AVSearchSortBuilder *sortBuilder;
+@property (nonatomic, strong, nullable) LCSearchSortBuilder *sortBuilder;
 
 /*!
  *  符合查询条件的记录条数
@@ -103,8 +103,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSArray *)findObjects:(NSError **)error;
 
 /*!
- An alias of `-[AVSearchQuery findObjects:]` methods that supports Swift exception.
- @seealso `-[AVSearchQuery findObjects:]`
+ An alias of `-[LCSearchQuery findObjects:]` methods that supports Swift exception.
+ @seealso `-[LCSearchQuery findObjects:]`
  */
 - (nullable NSArray *)findObjectsAndThrowsWithError:(NSError **)error;
 

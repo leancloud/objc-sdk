@@ -49,8 +49,8 @@
 #import "LCCloudQueryResult.h"
 
 // Search
-#import "AVSearchQuery.h"
-#import "AVSearchSortBuilder.h"
+#import "LCSearchQuery.h"
+#import "LCSearchSortBuilder.h"
 
 // ACL
 #import "LCACL.h"
