@@ -1,9 +1,9 @@
 //
-//  AVInstallation.m
+//  LCInstallation.m
 //  LeanCloud
 
 #import <Foundation/Foundation.h>
-#import "AVInstallation_Internal.h"
+#import "LCInstallation_Internal.h"
 #import "LCObject_Internal.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"
@@ -12,7 +12,7 @@
 #import "AVErrorUtils.h"
 #import "LCRouter_Internal.h"
 
-@implementation AVInstallation {
+@implementation LCInstallation {
     NSString *_deviceToken;
 }
 
@@ -28,20 +28,20 @@
 
 + (instancetype)installation
 {
-    return [[AVInstallation alloc] init];
+    return [[LCInstallation alloc] init];
 }
 
 + (AVQuery *)query
 {
-    return [[AVQuery alloc] initWithClassName:[AVInstallation className]];
+    return [[AVQuery alloc] initWithClassName:[LCInstallation className]];
 }
 
 + (instancetype)defaultInstallation
 {
-    static AVInstallation *instance;
+    static LCInstallation *instance;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        instance = [AVInstallation installation];
+        instance = [LCInstallation installation];
         NSString *path = [LCPersistenceUtils currentInstallationArchivePath];
         if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
             NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:
@@ -57,7 +57,7 @@
 
 + (instancetype)currentInstallation
 {
-    return [AVInstallation defaultInstallation];
+    return [LCInstallation defaultInstallation];
 }
 
 + (NSString *)deviceType
@@ -79,8 +79,8 @@
 {
     self = [super init];
     if (self) {
-        self.className = [AVInstallation className];
-        _deviceType = [AVInstallation deviceType];
+        self.className = [LCInstallation className];
+        _deviceType = [LCInstallation deviceType];
         _timeZone = [[NSTimeZone systemTimeZone] name];
         _apnsTopic = [NSBundle mainBundle].bundleIdentifier;
     }
@@ -121,7 +121,7 @@
 
 - (void)postProcessBatchRequests:(NSMutableArray *)requests
 {
-    NSString *batchPath = [[LCRouter sharedInstance] batchPathForPath:[AVInstallation endPoint]];
+    NSString *batchPath = [[LCRouter sharedInstance] batchPathForPath:[LCInstallation endPoint]];
     for (NSMutableDictionary *request in [requests copy]) {
         if ([request_path(request) hasPrefix:batchPath] &&
             ([request_method(request) isEqualToString:@"PUT"] ||
@@ -169,7 +169,7 @@
 - (void)postSave
 {
     [super postSave];
-    if (self == [AVInstallation defaultInstallation]) {
+    if (self == [LCInstallation defaultInstallation]) {
         NSMutableDictionary *data = [self postData];
         if (self.deviceToken) {
             data[keyPath(self, deviceToken)] = self.deviceToken;

@@ -291,7 +291,7 @@ static NSString * identifierForVendorTag = @"identifierForVendor";
         [dic addEntriesFromDictionary:currentUserDic];
     }
     
-    AVInstallation *currentInstallation = [AVInstallation defaultInstallation];
+    LCInstallation *currentInstallation = [LCInstallation defaultInstallation];
     
     if (currentInstallation && currentInstallation.objectId) {
         

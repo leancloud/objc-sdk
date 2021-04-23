@@ -16,7 +16,7 @@
 #import "LCACL_Internal.h"
 #import "LCRelation.h"
 #import "LCRole_Internal.h"
-#import "AVInstallation_Internal.h"
+#import "LCInstallation_Internal.h"
 #import "AVPaasClient.h"
 #import "LCGeoPoint_Internal.h"
 #import "LCRelation_Internal.h"
@@ -566,7 +566,7 @@
         if ([LCObjectUtils isUserClass:className]) {
             object = [AVUser user];
         } else if ([LCObjectUtils isInstallationClass:className]) {
-            object = [AVInstallation installation];
+            object = [LCInstallation installation];
         } else if ([LCObjectUtils isRoleClass:className]) {
             // TODO
             object = [LCRole role];
@@ -702,7 +702,7 @@
 
 +(BOOL)isInstallationClass:(NSString *)className
 {
-    return [className isEqualToString:[AVInstallation className]];
+    return [className isEqualToString:[LCInstallation className]];
 }
 
 +(NSString *)classEndPoint:(NSString *)className
@@ -738,9 +738,9 @@
 {
     if (objectId == nil)
     {
-        return [AVInstallation endPoint];
+        return [LCInstallation endPoint];
     }
-    return [NSString stringWithFormat:@"%@/%@", [AVInstallation endPoint], objectId];
+    return [NSString stringWithFormat:@"%@/%@", [LCInstallation endPoint], objectId];
 }
 
 +(NSString *)objectPath:(NSString *)className

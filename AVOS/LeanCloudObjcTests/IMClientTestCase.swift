@@ -138,7 +138,7 @@ class IMClientTestCase: RTMBaseTestCase {
     }
     
     func testReportDeviceToken() {
-        let installation = AVInstallation.default()
+        let installation = LCInstallation.default()
         let client = try! AVIMClient(clientId: uuid, error: ())
         XCTAssertTrue(installation === client.installation)
         expecting { (exp) in

@@ -37,8 +37,8 @@
 #import "AVStatus.h"
 
 // Push
-#import "AVInstallation.h"
-#import "AVPush.h"
+#import "LCInstallation.h"
+#import "LCPush.h"
 
 // User
 #import "AVUser.h"
@@ -310,12 +310,12 @@ __deprecated_msg("Deprecated, use `+[AVSMS requestShortMessageForPhoneNumber:opt
 
 + (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
                                           teamId:(NSString *)teamId
-__deprecated_msg("Deprecated, use `AVInstallation` instead.");
+__deprecated_msg("Deprecated, use `LCInstallation` instead.");
 
 + (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
                                           teamId:(NSString *)teamId
-               constructingInstallationWithBlock:(nullable void (^)(AVInstallation *))block
-__deprecated_msg("Deprecated, use `AVInstallation` instead.");
+               constructingInstallationWithBlock:(nullable void (^)(LCInstallation *))block
+__deprecated_msg("Deprecated, use `LCInstallation` instead.");
 
 @end
 

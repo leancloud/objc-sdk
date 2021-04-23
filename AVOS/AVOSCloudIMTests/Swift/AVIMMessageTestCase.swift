@@ -1374,7 +1374,7 @@ class AVIMMessageTestCase: LCIMTestBase {
         let clientId: String = "\(#function[..<#function.firstIndex(of: "(")!])"
         
         let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        let installation_1: AVInstallation = AVInstallation()
+        let installation_1: LCInstallation = LCInstallation()
         installation_1.setDeviceTokenHexString(UUID().uuidString, teamId: "LeanCloud")
         guard let client_1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId, delegate: delegate_1, installation: installation_1) else {
             XCTFail()
@@ -1386,7 +1386,7 @@ class AVIMMessageTestCase: LCIMTestBase {
         LCRTMConnectionManager.shared().imProtobuf3Registry.removeAllObjects()
         
         let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        let installation_2: AVInstallation = AVInstallation()
+        let installation_2: LCInstallation = LCInstallation()
         installation_2.setDeviceTokenHexString(UUID().uuidString, teamId: "LeanCloud")
         guard let _: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId, delegate: delegate_2, installation: installation_2) else {
             XCTFail()

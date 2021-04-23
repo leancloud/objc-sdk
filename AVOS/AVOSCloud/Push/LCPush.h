@@ -1,5 +1,5 @@
 //
-//  AVPush.h
+//  LCPush.h
 //  LeanCloud
 //
 
@@ -9,29 +9,29 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString *const kAVPushTargetPlatformIOS;
-extern NSString *const kAVPushTargetPlatformAndroid;
-extern NSString *const kAVPushTargetPlatformWindowsPhone;
+extern NSString *const kLCPushTargetPlatformIOS;
+extern NSString *const kLCPushTargetPlatformAndroid;
+extern NSString *const kLCPushTargetPlatformWindowsPhone;
 
 /*!
  A class which defines a push notification that can be sent from
  a client device.
 
  The preferred way of modifying or retrieving channel subscriptions is to use
- the AVInstallation class, instead of the class methods in AVPush.
+ the LCInstallation class, instead of the class methods in LCPush.
 
  This class is currently for iOS only. LeanCloud does not handle Push Notifications
  to LeanCloud applications running on OS X. Push Notifications can be sent from OS X
  applications via Cloud Code or the REST API to push-enabled devices (e.g. iOS
  or Android).
  */
-@interface AVPush : NSObject
+@interface LCPush : NSObject
 
 /*! @name Creating a Push Notification */
 
 /**
- *  创建一个 AVPush 对象
- *  @return AVPush 对象
+ *  创建一个 LCPush 对象
+ *  @return LCPush 对象
  */
 + (instancetype)push;
 /**
@@ -42,7 +42,7 @@ extern NSString *const kAVPushTargetPlatformWindowsPhone;
 + (void)setProductionMode:(BOOL)isProduction;
 
 /**
- Default is false, if set true, AVPush will remove 'prod' Key-Value.
+ Default is false, if set true, LCPush will remove 'prod' Key-Value.
 
  @param isIgnoreProd trigger.
  */
@@ -67,7 +67,7 @@ extern NSString *const kAVPushTargetPlatformWindowsPhone;
 
 /*!
  Sets an installation query to which this push notification will be sent. The
- query should be created via [AVInstallation query] and should not specify a
+ query should be created via [LCInstallation query] and should not specify a
  skip, limit, or order.
  @param query The installation query to set for this push.
  */
@@ -92,7 +92,7 @@ extern NSString *const kAVPushTargetPlatformWindowsPhone;
  *  Sets push target platforms.
  *
  *  @param platforms Target platforms.
- *         Value maybe in kAVPushTargetPlatformIOS,kAVPushTargetPlatformAndroid,kAVPushTargetPlatformWindowsPhone
+ *         Value maybe in kLCPushTargetPlatformIOS,kLCPushTargetPlatformAndroid,kLCPushTargetPlatformWindowsPhone
  */
 - (void)setPushToTargetPlatforms:(NSArray *)platforms;
 
@@ -188,8 +188,8 @@ extern NSString *const kAVPushTargetPlatformWindowsPhone;
 
 /*!
  Send a push message to a query.
- @param query The query to send to. The query must be a AVInstallation query
- created with [AVInstallation query].
+ @param query The query to send to. The query must be a LCInstallation query
+ created with [LCInstallation query].
  @param message The message to send.
  @param error Pointer to an NSError that will be set if necessary.
  @return whether the send succeeded.
@@ -200,8 +200,8 @@ extern NSString *const kAVPushTargetPlatformWindowsPhone;
 
 /*!
  Asynchronously send a push message to a query.
- @param query The query to send to. The query must be a AVInstallation query
- created with [AVInstallation query].
+ @param query The query to send to. The query must be a LCInstallation query
+ created with [LCInstallation query].
  @param message The message to send.
  */
 + (void)sendPushMessageToQueryInBackground:(AVQuery *)query
@@ -209,8 +209,8 @@ extern NSString *const kAVPushTargetPlatformWindowsPhone;
 
 /*!
  Asynchronously sends a push message to a query and calls the given block.
- @param query The query to send to. The query must be a AVInstallation query
- created with [AVInstallation query].
+ @param query The query to send to. The query must be a LCInstallation query
+ created with [LCInstallation query].
  @param message The message to send.
  @param block The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
  */
@@ -226,8 +226,8 @@ extern NSString *const kAVPushTargetPlatformWindowsPhone;
 - (BOOL)sendPush:(NSError **)error;
 
 /*!
- An alias of `-[AVPush sendPush:]` methods that supports Swift exception.
- @seealso `-[AVPush sendPush:]`
+ An alias of `-[LCPush sendPush:]` methods that supports Swift exception.
+ @seealso `-[LCPush sendPush:]`
  */
 - (BOOL)sendPushAndThrowsWithError:(NSError **)error;
 
@@ -276,8 +276,8 @@ extern NSString *const kAVPushTargetPlatformWindowsPhone;
 
 /*!
  Send a push message with arbitrary data to a query. See the guide for information about the dictionary structure.
- @param query The query to send to. The query must be a AVInstallation query
- created with [AVInstallation query].
+ @param query The query to send to. The query must be a LCInstallation query
+ created with [LCInstallation query].
  @param data The data to send.
  @param error Pointer to an NSError that will be set if necessary.
  @return whether the send succeeded.
@@ -288,8 +288,8 @@ extern NSString *const kAVPushTargetPlatformWindowsPhone;
 
 /*!
  Asynchronously send a push message with arbitrary data to a query. See the guide for information about the dictionary structure.
- @param query The query to send to. The query must be a AVInstallation query
- created with [AVInstallation query].
+ @param query The query to send to. The query must be a LCInstallation query
+ created with [LCInstallation query].
  @param data The data to send.
  */
 + (void)sendPushDataToQueryInBackground:(AVQuery *)query
@@ -297,8 +297,8 @@ extern NSString *const kAVPushTargetPlatformWindowsPhone;
 
 /*!
  Asynchronously sends a push message with arbitrary data to a query and calls the given block. See the guide for information about the dictionary structure.
- @param query The query to send to. The query must be a AVInstallation query
- created with [AVInstallation query].
+ @param query The query to send to. The query must be a LCInstallation query
+ created with [LCInstallation query].
  @param data The data to send.
  @param block The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
  */
@@ -316,8 +316,8 @@ extern NSString *const kAVPushTargetPlatformWindowsPhone;
 + (nullable NSSet *)getSubscribedChannels:(NSError **)error;
 
 /*!
- An alias of `-[AVPush getSubscribedChannels:]` methods that supports Swift exception.
- @seealso `-[AVPush getSubscribedChannels:]`
+ An alias of `-[LCPush getSubscribedChannels:]` methods that supports Swift exception.
+ @seealso `-[LCPush getSubscribedChannels:]`
  */
 + (nullable NSSet *)getSubscribedChannelsAndThrowsWithError:(NSError **)error;
 

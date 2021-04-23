@@ -1,5 +1,5 @@
 //
-//  AVInstallationTestCase.swift
+//  LCInstallationTestCase.swift
 //  AVOSCloud-iOSTests
 //
 //  Created by zapcannon87 on 2019/9/27.
@@ -8,19 +8,19 @@
 
 import XCTest
 
-class AVInstallation_TestCase: LCTestBase {
+class LCInstallation_TestCase: LCTestBase {
     
     let teamId: String = "LeanCloud"
     
     func testDefault() {
-        AVInstallation.default().setDeviceTokenHexString(
+        LCInstallation.default().setDeviceTokenHexString(
             UUID().uuidString,
             teamId: teamId)
-        XCTAssertTrue(AVInstallation.default().save())
+        XCTAssertTrue(LCInstallation.default().save())
     }
     
     func testSave() {
-        let installation = AVInstallation()
+        let installation = LCInstallation()
         installation.setDeviceTokenHexString(
             "",
             teamId: teamId)
@@ -48,7 +48,7 @@ class AVInstallation_TestCase: LCTestBase {
     }
     
     func testSaveWithBadge() {
-        let installation = AVInstallation()
+        let installation = LCInstallation()
         installation.setDeviceTokenHexString(
             UUID().uuidString,
             teamId: teamId)
@@ -65,7 +65,7 @@ class AVInstallation_TestCase: LCTestBase {
     }
     
     func testSaveWithChannels() {
-        let installation = AVInstallation()
+        let installation = LCInstallation()
         installation.setDeviceTokenHexString(
             UUID().uuidString,
             teamId: teamId)
@@ -90,7 +90,7 @@ class AVInstallation_TestCase: LCTestBase {
     }
     
     func testSaveWithDeviceProfile() {
-        let installation = AVInstallation()
+        let installation = LCInstallation()
         installation.setDeviceTokenHexString(
             UUID().uuidString,
             teamId: teamId)
@@ -100,7 +100,7 @@ class AVInstallation_TestCase: LCTestBase {
     }
     
     func testCustomField() {
-        let installation = AVInstallation()
+        let installation = LCInstallation()
         installation.setDeviceTokenHexString(
             UUID().uuidString,
             teamId: teamId)

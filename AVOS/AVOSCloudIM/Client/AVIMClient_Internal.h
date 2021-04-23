@@ -43,7 +43,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 @property (nonatomic, readonly) LCRTMConnection *connection;
 @property (nonatomic, readonly) LCRTMServiceConsumer *serviceConsumer;
 @property (nonatomic, readonly) LCRTMConnectionDelegator *connectionDelegator;
-@property (nonatomic, readonly) AVInstallation *installation;
+@property (nonatomic, readonly) LCInstallation *installation;
 @property (nonatomic, readonly) AVIMClientInternalConversationManager *conversationManager;
 @property (nonatomic, readonly) LCIMConversationCache *conversationCache;
 
@@ -59,12 +59,12 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 
 - (instancetype)initWithClientId:(NSString *)clientId
                              tag:(NSString *)tag
-                    installation:(AVInstallation *)installation
+                    installation:(LCInstallation *)installation
                            error:(NSError * __autoreleasing *)error LC_WARN_UNUSED_RESULT;
 
 - (instancetype)initWithUser:(AVUser *)user
                          tag:(NSString *)tag
-                installation:(AVInstallation *)installation
+                installation:(LCInstallation *)installation
                        error:(NSError * __autoreleasing *)error LC_WARN_UNUSED_RESULT;
 
 - (void)addOperationToInternalSerialQueue:(void (^)(AVIMClient *client))block;

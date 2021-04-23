@@ -1,15 +1,15 @@
 //
-//  AVPush.h
+//  LCPush.h
 //  AVOS Inc
 //
 
 #import <Foundation/Foundation.h>
-#import "AVPush.h"
-#import "AVPush_Internal.h"
+#import "LCPush.h"
+#import "LCPush_Internal.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"
 #import "AVQuery_Internal.h"
-#import "AVInstallation_Internal.h"
+#import "LCInstallation_Internal.h"
 #import "LCObjectUtils.h"
 #import "LCRouter_Internal.h"
 
@@ -18,7 +18,7 @@
  a client device.
 
  The preferred way of modifying or retrieving channel subscriptions is to use
- the AVInstallation class, instead of the class methods in AVPush.
+ the LCInstallation class, instead of the class methods in LCPush.
 
  This class is currently for iOS only. LeanCloud does not handle Push Notifications
  to LeanCloud applications running on OS X. Push Notifications can be sent from OS X
@@ -29,11 +29,11 @@
 static BOOL _isProduction = YES;
 static BOOL _isIgnoreProd = false;
 
-NSString *const kAVPushTargetPlatformIOS = @"ios";
-NSString *const kAVPushTargetPlatformAndroid = @"android";
-NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
+NSString *const kLCPushTargetPlatformIOS = @"ios";
+NSString *const kLCPushTargetPlatformAndroid = @"android";
+NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
 
-@implementation AVPush
+@implementation LCPush
 
 @synthesize pushQuery = _pushQuery;
 @synthesize pushChannels = _pushChannels;
@@ -59,7 +59,7 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
 
 + (instancetype)push
 {
-    AVPush * push = [[AVPush alloc] init];
+    LCPush * push = [[LCPush alloc] init];
     return push;
 }
 
@@ -109,25 +109,25 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
 
 - (void)setPushToAndroid:(BOOL)pushToAndroid {
     if (pushToAndroid) {
-        [self.pushTarget addObject:kAVPushTargetPlatformAndroid];
+        [self.pushTarget addObject:kLCPushTargetPlatformAndroid];
     } else {
-        [self.pushTarget removeObject:kAVPushTargetPlatformAndroid];
+        [self.pushTarget removeObject:kLCPushTargetPlatformAndroid];
     }
 }
 
 - (void)setPushToIOS:(BOOL)pushToIOS {
     if (pushToIOS) {
-        [self.pushTarget addObject:kAVPushTargetPlatformIOS];
+        [self.pushTarget addObject:kLCPushTargetPlatformIOS];
     } else {
-        [self.pushTarget removeObject:kAVPushTargetPlatformIOS];
+        [self.pushTarget removeObject:kLCPushTargetPlatformIOS];
     }
 }
 
 - (void)setPushToWP:(BOOL)pushToWP {
     if (pushToWP) {
-        [self.pushTarget addObject:kAVPushTargetPlatformWindowsPhone];
+        [self.pushTarget addObject:kLCPushTargetPlatformWindowsPhone];
     } else {
-        [self.pushTarget removeObject:kAVPushTargetPlatformWindowsPhone];
+        [self.pushTarget removeObject:kLCPushTargetPlatformWindowsPhone];
     }
 }
 
@@ -159,7 +159,7 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
     _isIgnoreProd = isIgnoreProd;
 }
 
-+ (BOOL)sendPushMessage:(AVPush *)push
++ (BOOL)sendPushMessage:(LCPush *)push
                    wait:(BOOL)wait
                   block:(AVBooleanResultBlock)block
                   error:(NSError **)theError
@@ -193,63 +193,63 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
                      withMessage:(NSString *)message
                            error:(NSError **)error
 {
-    AVPush * push = [AVPush push];
+    LCPush * push = [LCPush push];
     [push setChannel:channel];
     [push setMessage:message];
-    return [AVPush sendPushMessage:push wait:YES block:^(BOOL succeeded, NSError *error) {} error:error];
+    return [LCPush sendPushMessage:push wait:YES block:^(BOOL succeeded, NSError *error) {} error:error];
 }
 
 + (void)sendPushMessageToChannelInBackground:(NSString *)channel
                                  withMessage:(NSString *)message
 {
-    AVPush * push = [AVPush push];
+    LCPush * push = [LCPush push];
     [push setChannel:channel];
     [push setMessage:message];
-    [AVPush sendPushMessage:push wait:YES block:^(BOOL succeeded, NSError *error) {} error:nil];
+    [LCPush sendPushMessage:push wait:YES block:^(BOOL succeeded, NSError *error) {} error:nil];
 }
 
 + (void)sendPushMessageToChannelInBackground:(NSString *)channel
                                  withMessage:(NSString *)message
                                        block:(AVBooleanResultBlock)block
 {
-    AVPush * push = [AVPush push];
+    LCPush * push = [LCPush push];
     [push setChannel:channel];
     [push setMessage:message];
-    [AVPush sendPushMessage:push wait:YES block:block error:nil];
+    [LCPush sendPushMessage:push wait:YES block:block error:nil];
 }
 
 + (BOOL)sendPushMessageToQuery:(AVQuery *)query
                    withMessage:(NSString *)message
                          error:(NSError **)theError
 {
-    AVPush * push = [AVPush push];
+    LCPush * push = [LCPush push];
     [push setQuery:query];
     [push setMessage:message];
-    return [AVPush sendPushMessage:push wait:YES block:^(BOOL succeeded, NSError *error) {} error:theError];
+    return [LCPush sendPushMessage:push wait:YES block:^(BOOL succeeded, NSError *error) {} error:theError];
 }
 
 + (void)sendPushMessageToQueryInBackground:(AVQuery *)query
                                withMessage:(NSString *)message
 {
-    AVPush * push = [AVPush push];
+    LCPush * push = [LCPush push];
     [push setQuery:query];
     [push setMessage:message];
-    [AVPush sendPushMessage:push wait:NO block:^(BOOL succeeded, NSError *error) {} error:nil];
+    [LCPush sendPushMessage:push wait:NO block:^(BOOL succeeded, NSError *error) {} error:nil];
 }
 
 + (void)sendPushMessageToQueryInBackground:(AVQuery *)query
                                withMessage:(NSString *)message
                                      block:(AVBooleanResultBlock)block
 {
-    AVPush * push = [AVPush push];
+    LCPush * push = [LCPush push];
     [push setQuery:query];
     [push setMessage:message];
-    [AVPush sendPushMessage:push wait:NO block:block error:nil];
+    [LCPush sendPushMessage:push wait:NO block:block error:nil];
 }
 
 - (BOOL)sendPush:(NSError **)error
 {
-    return [AVPush sendPushMessage:self wait:YES block:^(BOOL succeeded, NSError *error) {} error:error];
+    return [LCPush sendPushMessage:self wait:YES block:^(BOOL succeeded, NSError *error) {} error:error];
 }
 
 - (BOOL)sendPushAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
@@ -258,7 +258,7 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
 
 - (void)sendPushInBackground
 {
-    [AVPush sendPushMessage:self wait:NO block:^(BOOL succeeded, NSError *error) {} error:nil];
+    [LCPush sendPushMessage:self wait:NO block:^(BOOL succeeded, NSError *error) {} error:nil];
 }
 
 -(NSDictionary *)queryData
@@ -322,7 +322,7 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
 
 - (void)sendPushInBackgroundWithBlock:(AVBooleanResultBlock)block
 {
-    NSString *path = [AVPush myObjectPath];
+    NSString *path = [LCPush myObjectPath];
     [[AVPaasClient sharedInstance] postObject:path
                                withParameters:[self postData]
                                    eventually:false
@@ -335,63 +335,63 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
                      withData:(NSDictionary *)data
                         error:(NSError **)error
 {
-    AVPush * push = [AVPush push];
+    LCPush * push = [LCPush push];
     [push setChannel:channel];
     [push setData:data];
-    return [AVPush sendPushMessage:push wait:YES block:nil error:error];
+    return [LCPush sendPushMessage:push wait:YES block:nil error:error];
 }
 
 + (void)sendPushDataToChannelInBackground:(NSString *)channel
                                  withData:(NSDictionary *)data
 {
-    AVPush * push = [AVPush push];
+    LCPush * push = [LCPush push];
     [push setChannel:channel];
     [push setData:data];
-    [AVPush sendPushMessage:push wait:YES block:nil error:nil];
+    [LCPush sendPushMessage:push wait:YES block:nil error:nil];
 }
 
 + (void)sendPushDataToChannelInBackground:(NSString *)channel
                                  withData:(NSDictionary *)data
                                     block:(AVBooleanResultBlock)block
 {
-    AVPush * push = [AVPush push];
+    LCPush * push = [LCPush push];
     [push setChannel:channel];
     [push setData:data];
-    [AVPush sendPushMessage:push wait:NO block:block error:nil];
+    [LCPush sendPushMessage:push wait:NO block:block error:nil];
 }
 
 + (BOOL)sendPushDataToQuery:(AVQuery *)query
                    withData:(NSDictionary *)data
                       error:(NSError **)error
 {
-    AVPush * push = [AVPush push];
+    LCPush * push = [LCPush push];
     [push setQuery:query];
     [push setData:data];
-    return [AVPush sendPushMessage:push wait:YES block:nil error:error];
+    return [LCPush sendPushMessage:push wait:YES block:nil error:error];
 }
 
 + (void)sendPushDataToQueryInBackground:(AVQuery *)query
                                withData:(NSDictionary *)data
 {
-    AVPush * push = [AVPush push];
+    LCPush * push = [LCPush push];
     [push setQuery:query];
     [push setData:data];
-    [AVPush sendPushMessage:push wait:NO block:nil error:nil];
+    [LCPush sendPushMessage:push wait:NO block:nil error:nil];
 }
 
 + (void)sendPushDataToQueryInBackground:(AVQuery *)query
                                withData:(NSDictionary *)data
                                   block:(AVBooleanResultBlock)block
 {
-    AVPush * push = [AVPush push];
+    LCPush * push = [LCPush push];
     [push setQuery:query];
     [push setData:data];
-    [AVPush sendPushMessage:push wait:NO block:block error:nil];
+    [LCPush sendPushMessage:push wait:NO block:block error:nil];
 }
 
 + (NSSet *)getSubscribedChannels:(NSError **)error
 {
-    return [AVPush getSubscribedChannelsWithBlock:^(NSSet *channels, NSError *error) {
+    return [LCPush getSubscribedChannelsWithBlock:^(NSSet *channels, NSError *error) {
     } wait:YES error:error];
 }
 
@@ -401,7 +401,7 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
 
 + (void)getSubscribedChannelsInBackgroundWithBlock:(AVSetResultBlock)block
 {
-    [AVPush getSubscribedChannelsWithBlock:^(NSSet *channels, NSError *error) {
+    [LCPush getSubscribedChannelsWithBlock:^(NSSet *channels, NSError *error) {
         [AVUtils callSetResultBlock:block set:channels error:error];
     } wait:NO error:nil];
 }
@@ -415,12 +415,12 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
     NSError __block *blockError = nil;
     __block  NSSet * resultSet = nil;
 
-    AVQuery * query = [AVInstallation query];
-    [query whereKey:deviceTokenTag equalTo:[AVInstallation defaultInstallation].deviceToken];
+    AVQuery * query = [LCInstallation query];
+    [query whereKey:deviceTokenTag equalTo:[LCInstallation defaultInstallation].deviceToken];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (objects.count > 0)
         {
-            AVInstallation * installation = [objects objectAtIndex:0];
+            LCInstallation * installation = [objects objectAtIndex:0];
             resultSet = [NSSet setWithArray:installation.channels];
         }
         [AVUtils callSetResultBlock:block set:resultSet error:error];
@@ -446,14 +446,14 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
 
 + (BOOL)subscribeToChannel:(NSString *)channel error:(NSError **)error
 {
-    AVInstallation * installation = [AVInstallation defaultInstallation];
+    LCInstallation * installation = [LCInstallation defaultInstallation];
     [installation addUniqueObject:channel forKey:channelsTag];
     return [installation save:error];
 }
 
 + (void)subscribeToChannelInBackground:(NSString *)channel
 {
-    AVInstallation * installation = [AVInstallation defaultInstallation];
+    LCInstallation * installation = [LCInstallation defaultInstallation];
     [installation addUniqueObject:channel forKey:channelsTag];
     [installation saveInBackground];
 }
@@ -461,21 +461,21 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
 + (void)subscribeToChannelInBackground:(NSString *)channel
                                  block:(AVBooleanResultBlock)block
 {
-    AVInstallation * installation = [AVInstallation defaultInstallation];
+    LCInstallation * installation = [LCInstallation defaultInstallation];
     [installation addUniqueObject:channel forKey:channelsTag];
     [installation saveInBackgroundWithBlock:block];
 }
 
 + (BOOL)unsubscribeFromChannel:(NSString *)channel error:(NSError **)error
 {
-    AVInstallation * installation = [AVInstallation defaultInstallation];
+    LCInstallation * installation = [LCInstallation defaultInstallation];
     [installation removeObject:channel forKey:channelsTag];
     return [installation save:error];
 }
 
 + (void)unsubscribeFromChannelInBackground:(NSString *)channel
 {
-    AVInstallation * installation = [AVInstallation defaultInstallation];
+    LCInstallation * installation = [LCInstallation defaultInstallation];
     [installation removeObject:channel forKey:channelsTag];
     [installation saveInBackground];
 }
@@ -484,7 +484,7 @@ NSString *const kAVPushTargetPlatformWindowsPhone = @"wp";
 + (void)unsubscribeFromChannelInBackground:(NSString *)channel
                                      block:(AVBooleanResultBlock)block
 {
-    AVInstallation * installation = [AVInstallation defaultInstallation];
+    LCInstallation * installation = [LCInstallation defaultInstallation];
     [installation removeObject:channel forKey:channelsTag];
     [installation saveInBackgroundWithBlock:block];
 }

@@ -1,5 +1,5 @@
 //
-//  AVInstallation.h
+//  LCInstallation.h
 //  LeanCloud
 //
 
@@ -7,7 +7,7 @@
 #import "AVQuery.h"
 
 /// LeanCloud installation type.
-@interface AVInstallation : LCObject
+@interface LCInstallation : LCObject
 
 /// The badge for the installation.
 @property (nonatomic, assign) NSInteger badge;

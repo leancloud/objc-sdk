@@ -96,7 +96,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 {
     return [self initWithClientId:clientId
                               tag:tag
-                     installation:[AVInstallation defaultInstallation]
+                     installation:[LCInstallation defaultInstallation]
                             error:error];
 }
 
@@ -129,13 +129,13 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 {
     return [self initWithUser:user
                           tag:tag
-                 installation:[AVInstallation defaultInstallation]
+                 installation:[LCInstallation defaultInstallation]
                         error:error];
 }
 
 - (instancetype)initWithClientId:(NSString *)clientId
                              tag:(NSString *)tag
-                    installation:(AVInstallation *)installation
+                    installation:(LCInstallation *)installation
                            error:(NSError *__autoreleasing  _Nullable *)error
 {
     self = [super init];
@@ -155,7 +155,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 - (instancetype)initWithUser:(AVUser *)user
                          tag:(NSString *)tag
-                installation:(AVInstallation *)installation
+                installation:(LCInstallation *)installation
                        error:(NSError *__autoreleasing  _Nullable *)error
 {
     self = [super init];
@@ -176,7 +176,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 - (NSError *)doInitializationWithClientId:(NSString *)clientId
                                       tag:(NSString *)tag
-                             installation:(AVInstallation *)installation
+                             installation:(LCInstallation *)installation
 {
     if (!clientId ||
         clientId.length > kClientIdLengthLimit ||
@@ -262,7 +262,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                  @"\n%@: %p"
                  @"\n\t- dealloc",
                  NSStringFromClass([self class]), self);
-    AVInstallation *installation = self.installation;
+    LCInstallation *installation = self.installation;
     [installation removeObserver:self
                       forKeyPath:keyPath(installation, deviceToken)
                          context:(__bridge void *)(self)];

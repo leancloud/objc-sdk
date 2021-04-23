@@ -51,7 +51,7 @@ extension LCIMTestBase {
         clientId: String,
         tag: String? = nil,
         delegate: AVIMClientDelegate? = nil,
-        installation: AVInstallation = AVInstallation.default(),
+        installation: LCInstallation = LCInstallation.default(),
         openOption: AVIMClientOpenOption = .forceOpen
         ) -> AVIMClient?
     {

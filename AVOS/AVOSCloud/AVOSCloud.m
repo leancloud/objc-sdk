@@ -253,9 +253,9 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
 
 + (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
                                           teamId:(NSString *)teamId
-               constructingInstallationWithBlock:(void (^)(AVInstallation *))block
+               constructingInstallationWithBlock:(void (^)(LCInstallation *))block
 {
-    AVInstallation *installation = [AVInstallation defaultInstallation];
+    LCInstallation *installation = [LCInstallation defaultInstallation];
     [installation setDeviceTokenFromData:deviceToken
                                   teamId:teamId];
     if (block) {

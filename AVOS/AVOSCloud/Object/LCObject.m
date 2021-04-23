@@ -24,7 +24,7 @@
 #import <libkern/OSAtomic.h>
 
 #import "AVUser_Internal.h"
-#import "AVInstallation_Internal.h"
+#import "LCInstallation_Internal.h"
 
 #define AV_BATCH_SAVE_SIZE 100
 #define AV_BATCH_CONCURRENT_SIZE 20
@@ -301,10 +301,10 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
             return;
         if ([AVUtils containsProperty:key inClass:[self class] containSuper:YES filterDynamic:YES]) {
             self._inSetter = YES;
-            if ([self isKindOfClass:[AVInstallation class]] &&
+            if ([self isKindOfClass:[LCInstallation class]] &&
                 [key isEqualToString:@"channels"]) {
                 if ([value isKindOfClass:[NSArray class]]) {
-                    [((AVInstallation *)self) updateChannels:(NSArray *)value];
+                    [((LCInstallation *)self) updateChannels:(NSArray *)value];
                 }
             } else {
                 [self setValue:value forKey:key];
@@ -504,9 +504,9 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
             } else {
                 [array addObject:object];
                 self._inSetter = YES;
-                if ([self isKindOfClass:[AVInstallation class]] &&
+                if ([self isKindOfClass:[LCInstallation class]] &&
                     [key isEqualToString:@"channels"]) {
-                    [((AVInstallation *)self) updateChannels:array];
+                    [((LCInstallation *)self) updateChannels:array];
                 } else {
                     [self setValue:array forKey:key];
                 }
@@ -581,18 +581,18 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
             if (array) {
                 if (![array isKindOfClass:[NSMutableArray class]]) {
                     array = [array mutableCopy];
-                    if ([self isKindOfClass:[AVInstallation class]] &&
+                    if ([self isKindOfClass:[LCInstallation class]] &&
                         [key isEqualToString:@"channels"]) {
-                        [((AVInstallation *)self) updateChannels:array];
+                        [((LCInstallation *)self) updateChannels:array];
                     } else {
                         [self setValue:array forKey:key];
                     }
                 }
             } else {
                 array = [[NSMutableArray alloc] init];
-                if ([self isKindOfClass:[AVInstallation class]] &&
+                if ([self isKindOfClass:[LCInstallation class]] &&
                     [key isEqualToString:@"channels"]) {
-                    [((AVInstallation *)self) updateChannels:array];
+                    [((LCInstallation *)self) updateChannels:array];
                 } else {
                     [self setValue:array forKey:key];
                 }

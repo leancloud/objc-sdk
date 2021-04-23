@@ -1,14 +1,14 @@
 //
-//  AVInstallation_Internal.h
+//  LCInstallation_Internal.h
 //  LeanCloud
 //
 //  Created by Zhu Zeng on 3/27/13.
 //  Copyright (c) 2013 AVOS. All rights reserved.
 //
 
-#import "AVInstallation.h"
+#import "LCInstallation.h"
 
-@interface AVInstallation ()
+@interface LCInstallation ()
 
 + (NSString *)className;
 + (NSString *)endPoint;
