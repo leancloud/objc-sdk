@@ -8,7 +8,7 @@
 
 #import "LCACL.h"
 #import "LCACL_Internal.h"
-#import "AVUser.h"
+#import "LCUser.h"
 #import "LCRole.h"
 #import "LCPaasClient.h"
 
@@ -34,7 +34,7 @@ static NSString * writeTag = @"write";
     return result;
 }
 
-+ (LCACL *)ACLWithUser:(AVUser *)user
++ (LCACL *)ACLWithUser:(LCUser *)user
 {
     LCACL * result = [[LCACL alloc] init];
     [result setReadAccess:YES forUser:user];
@@ -164,22 +164,22 @@ static NSString * writeTag = @"write";
     return [self isWriteAllowed:userId];
 }
 
-- (void)setReadAccess:(BOOL)allowed forUser:(AVUser *)user
+- (void)setReadAccess:(BOOL)allowed forUser:(LCUser *)user
 {
     [self allowRead:allowed key:user.objectId];
 }
 
-- (BOOL)getReadAccessForUser:(AVUser *)user
+- (BOOL)getReadAccessForUser:(LCUser *)user
 {
     return [self getReadAccessForUserId:user.objectId];
 }
 
-- (void)setWriteAccess:(BOOL)allowed forUser:(AVUser *)user
+- (void)setWriteAccess:(BOOL)allowed forUser:(LCUser *)user
 {
     [self setWriteAccess:allowed forUserId:user.objectId];
 }
 
-- (BOOL)getWriteAccessForUser:(AVUser *)user
+- (BOOL)getWriteAccessForUser:(LCUser *)user
 {
     return [self getWriteAccessForUserId:user.objectId];
 }

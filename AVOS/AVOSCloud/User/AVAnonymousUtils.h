@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVUser.h"
+#import "LCUser.h"
 #import "AVConstants.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
      </ul>
  </ul>
  */
-__deprecated_msg("Deprecated. use AVUser instead.")
+__deprecated_msg("Deprecated. use LCUser instead.")
 @interface AVAnonymousUtils : NSObject
 
 /*! @name Creating an Anonymous User */
@@ -37,18 +37,18 @@ __deprecated_msg("Deprecated. use AVUser instead.")
 /*!
  Creates an anonymous user.
  @param block The block to execute when anonymous user creation is complete. The block should have the following argument signature:
- (AVUser *user, NSError *error)
+ (LCUser *user, NSError *error)
  */
-+ (void)logInWithBlock:(AVUserResultBlock)block __deprecated_msg("Deprecated. use +[AVUser loginAnonymouslyWithCallback:] instead.");
++ (void)logInWithBlock:(LCUserResultBlock)block __deprecated_msg("Deprecated. use +[LCUser loginAnonymouslyWithCallback:] instead.");
 
-/*! @name Determining Whether a AVUser is Anonymous */
+/*! @name Determining Whether a LCUser is Anonymous */
 
 /*!
  Whether the user is logged in anonymously.
  @param user User to check for anonymity. The user must be logged in on this device.
  @return True if the user is anonymous.  False if the user is not the current user or is not anonymous.
  */
-+ (BOOL)isLinkedWithUser:(AVUser *)user __deprecated_msg("Deprecated. use -[AVUser isAnonymous:] instead.");
++ (BOOL)isLinkedWithUser:(LCUser *)user __deprecated_msg("Deprecated. use -[LCUser isAnonymous:] instead.");
 
 @end
 

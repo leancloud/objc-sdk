@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class AVUser;
+@class LCUser;
 @class LCQuery;
 @class AVLiveQuery;
 
@@ -68,7 +68,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param liveQuery The live query object.
  @param user      The user who did login.
  */
-- (void)liveQuery:(AVLiveQuery *)liveQuery userDidLogin:(AVUser *)user;
+- (void)liveQuery:(AVLiveQuery *)liveQuery userDidLogin:(LCUser *)user;
 
 @end
 

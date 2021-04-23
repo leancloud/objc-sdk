@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "AVUser.h"
+#import "LCUser.h"
 #import "LCQuery.h"
 
 typedef NSString LCStatusType;
@@ -49,7 +49,7 @@ typedef void (^LCStatusResultBlock)(LCStatus * _Nullable status, NSError * _Null
 @property (nonatomic, strong, nullable) NSDictionary *data;
 
 /**
- *  状态的发出"人",可以是AVUser 也可以是任意的LCObject,也可能是nil
+ *  状态的发出"人",可以是LCUser 也可以是任意的LCObject,也可能是nil
  */
 @property (nonatomic, strong, nullable) LCObject *source;
 
@@ -196,7 +196,7 @@ typedef void (^LCStatusResultBlock)(LCStatus * _Nullable status, NSError * _Null
 /**
  *  用户好友关系
  */
-@interface AVUser(Friendship)
+@interface LCUser(Friendship)
 
 /* @name 好友关系 */
 

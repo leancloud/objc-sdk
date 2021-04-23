@@ -1,4 +1,4 @@
-// AVUser.h
+// LCUser.h
 // Copyright 2013 AVOS, Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
@@ -17,7 +17,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformQQ;
 FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 
 /// The options for the request of the short message.
-@interface AVUserShortMessageRequestOptions : NSObject
+@interface LCUserShortMessageRequestOptions : NSObject
 
 /// The token for validation.
 @property (nonatomic, nullable) NSString *validationToken;
@@ -27,7 +27,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 
 @end
 
-@interface AVUserAuthDataLoginOption : NSObject
+@interface LCUserAuthDataLoginOption : NSObject
 
 /**
  Third platform.
@@ -41,13 +41,13 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 
 /**
  Set true to generate a platform-unionId signature.
- if a AVUser instance has a platform-unionId signature, then the platform and the unionId will be the highest priority in auth data matching.
+ if a LCUser instance has a platform-unionId signature, then the platform and the unionId will be the highest priority in auth data matching.
  @Note must cooperate with platform & unionId.
  */
 @property (nonatomic) BOOL isMainAccount;
 
 /**
- Set true to check whether already exists a AVUser instance with the auth data.
+ Set true to check whether already exists a LCUser instance with the auth data.
  if not exists, return an error.
  */
 @property (nonatomic) BOOL failOnNotExist;
@@ -55,28 +55,28 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 @end
 
 /// User
-@interface AVUser : LCObject <LCSubclassing>
+@interface LCUser : LCObject <LCSubclassing>
 
 /** @name Accessing the Current User */
 
 /*!
  Gets the currently logged in user from disk and returns an instance of it.
- @return a AVUser that is the currently logged in user. If there is none, returns nil.
+ @return a LCUser that is the currently logged in user. If there is none, returns nil.
  */
 + (nullable instancetype)currentUser;
 
 /*!
  * change the current login user manually.
- *  @param newUser 新的 AVUser 实例
+ *  @param newUser 新的 LCUser 实例
  *  @param save 是否需要把 newUser 保存到本地缓存。如果 newUser==nil && save==YES，则会清除本地缓存
  * Note: 请注意不要随意调用这个函数！
  */
-+ (void)changeCurrentUser:(AVUser * _Nullable)newUser save:(BOOL)save;
++ (void)changeCurrentUser:(LCUser * _Nullable)newUser save:(BOOL)save;
 
-/// The session token for the AVUser. This is set by the server upon successful authentication.
+/// The session token for the LCUser. This is set by the server upon successful authentication.
 @property (nonatomic, copy, nullable) NSString *sessionToken;
 
-/// Whether the AVUser was just created from a request. This is only set after a Facebook or Twitter login.
+/// Whether the LCUser was just created from a request. This is only set after a Facebook or Twitter login.
 @property (nonatomic, assign, readonly) BOOL isNew;
 
 /*!
@@ -87,13 +87,13 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 /** @name Creating a New User */
 
 /*!
- Creates a new AVUser object.
- @return a new AVUser object.
+ Creates a new LCUser object.
+ @return a new LCUser object.
  */
 + (instancetype)user;
 
 /*!
- Enables automatic creation of anonymous users.  After calling this method, [AVUser currentUser] will always have a value.
+ Enables automatic creation of anonymous users.  After calling this method, [LCUser currentUser] will always have a value.
  The user will only be created on the server once the user has been saved, or once an object with a relation to that user or
  an ACL that refers to the user has been saved.
  
@@ -101,11 +101,11 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  */
 + (void)enableAutomaticUser;
 
-/// The username for the AVUser.
+/// The username for the LCUser.
 @property (nonatomic, copy, nullable) NSString *username;
 
 /** 
- The password for the AVUser. This will not be filled in from the server with
+ The password for the LCUser. This will not be filled in from the server with
  the password. It is only meant to be set.
  */
 @property (nonatomic, copy, nullable) NSString *password;
@@ -146,8 +146,8 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 - (nullable NSArray<LCRole *> *)getRoles:(NSError **)error;
 
 /*!
- An alias of `-[AVUser getRolesAndThrowsWithError:]` methods that supports Swift exception.
- @seealso `-[AVUser getRolesAndThrowsWithError:]`
+ An alias of `-[LCUser getRolesAndThrowsWithError:]` methods that supports Swift exception.
+ @seealso `-[LCUser getRolesAndThrowsWithError:]`
  */
 - (nullable NSArray<LCRole *> *)getRolesAndThrowsWithError:(NSError **)error;
 
@@ -166,8 +166,8 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 - (BOOL)signUp:(NSError **)error;
 
 /*!
- An alias of `-[AVUser signUp:]` methods that supports Swift exception.
- @seealso `-[AVUser signUp:]`
+ An alias of `-[LCUser signUp:]` methods that supports Swift exception.
+ @seealso `-[LCUser signUp:]`
  */
 - (BOOL)signUpAndThrowsWithError:(NSError **)error;
 
@@ -195,12 +195,12 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 
 /*!
  Makes a request to login a user with specified credentials. Returns an
- instance of the successfully logged in AVUser. This will also cache the user 
+ instance of the successfully logged in LCUser. This will also cache the user 
  locally so that calls to userFromCurrentUser will use the latest logged in user.
  @param username The username of the user.
  @param password The password of the user.
  @param error The error object to set on error.
- @return an instance of the AVUser on success. If login failed for either wrong password or wrong username, returns nil.
+ @return an instance of the LCUser on success. If login failed for either wrong password or wrong username, returns nil.
  */
 + (nullable instancetype)logInWithUsername:(NSString *)username
                                   password:(NSString *)password
@@ -208,15 +208,15 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 
 /*!
  Makes an asynchronous request to log in a user with specified credentials.
- Returns an instance of the successfully logged in AVUser. This will also cache 
+ Returns an instance of the successfully logged in LCUser. This will also cache 
  the user locally so that calls to userFromCurrentUser will use the latest logged in user. 
  @param username The username of the user.
  @param password The password of the user.
- @param block The block to execute. The block should have the following argument signature: (AVUser *user, NSError *error) 
+ @param block The block to execute. The block should have the following argument signature: (LCUser *user, NSError *error) 
  */
 + (void)logInWithUsernameInBackground:(NSString *)username
                              password:(NSString *)password
-                                block:(AVUserResultBlock)block;
+                                block:(LCUserResultBlock)block;
 
 /**
  Login by email and password.
@@ -225,7 +225,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  @param password The password string.
  @param block callback.
  */
-+ (void)loginWithEmail:(NSString *)email password:(NSString *)password block:(AVUserResultBlock)block;
++ (void)loginWithEmail:(NSString *)email password:(NSString *)password block:(LCUserResultBlock)block;
 
 //phoneNumber + password
 /*!
@@ -245,7 +245,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  */
 + (void)logInWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
                                       password:(NSString *)password
-                                         block:(AVUserResultBlock)block;
+                                         block:(LCUserResultBlock)block;
 //phoneNumber + smsCode
 
 /*!
@@ -264,7 +264,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  @param callback    The callback of request.
  */
 + (void)requestLoginCodeForPhoneNumber:(NSString *)phoneNumber
-                               options:(nullable AVUserShortMessageRequestOptions *)options
+                               options:(nullable LCUserShortMessageRequestOptions *)options
                               callback:(AVBooleanResultBlock)callback;
 
 /*!
@@ -285,7 +285,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  */
 + (void)logInWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
                                        smsCode:(NSString *)code
-                                         block:(AVUserResultBlock)block;
+                                         block:(LCUserResultBlock)block;
 
 
 /*!
@@ -308,7 +308,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  */
 + (void)signUpOrLoginWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
                                                smsCode:(NSString *)code
-                                                 block:(AVUserResultBlock)block;
+                                                 block:(LCUserResultBlock)block;
 
 /**
  Use mobile phone number & SMS code & password to sign up or login.
@@ -321,7 +321,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 + (void)signUpOrLoginWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
                                                smsCode:(NSString *)smsCode
                                               password:(NSString *)password
-                                                 block:(AVUserResultBlock)block;
+                                                 block:(LCUserResultBlock)block;
 
 
 /** @name Logging Out */
@@ -372,7 +372,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  @param callback    The callback of request.
  */
 + (void)requestPasswordResetCodeForPhoneNumber:(NSString *)phoneNumber
-                                       options:(nullable AVUserShortMessageRequestOptions *)options
+                                       options:(nullable LCUserShortMessageRequestOptions *)options
                                       callback:(AVBooleanResultBlock)callback;
 
 /*!
@@ -390,7 +390,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  *  @param sessionToken sessionToken
  *  @param block        回调结果
  */
-+ (void)becomeWithSessionTokenInBackground:(NSString *)sessionToken block:(AVUserResultBlock)block;
++ (void)becomeWithSessionTokenInBackground:(NSString *)sessionToken block:(LCUserResultBlock)block;
 /*!
  *  用 sessionToken 来登录用户
  *  @param sessionToken sessionToken
@@ -402,7 +402,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 /** @name Querying for Users */
 
 /*!
- Creates a query for AVUser objects.
+ Creates a query for LCUser objects.
  */
 + (LCQuery *)query;
 
@@ -416,10 +416,10 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 
 /// Request a SMS code to verify phone number.
 /// @param phoneNumber The phone number to receive SMS code.
-/// @param options See `AVUserShortMessageRequestOptions`.
+/// @param options See `LCUserShortMessageRequestOptions`.
 /// @param callback The result callback.
 + (void)requestVerificationCodeForPhoneNumber:(NSString *)phoneNumber
-                                      options:(AVUserShortMessageRequestOptions * _Nullable)options
+                                      options:(LCUserShortMessageRequestOptions * _Nullable)options
                                      callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /// Verify a phone number with the SMS code.
@@ -432,10 +432,10 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 
 /// Request a SMS code to bind or update phone number.
 /// @param phoneNumber The phone number to receive SMS code.
-/// @param options See `AVUserShortMessageRequestOptions`.
+/// @param options See `LCUserShortMessageRequestOptions`.
 /// @param block The result callback.
 + (void)requestVerificationCodeForUpdatingPhoneNumber:(NSString *)phoneNumber
-                                              options:(AVUserShortMessageRequestOptions * _Nullable)options
+                                              options:(LCUserShortMessageRequestOptions * _Nullable)options
                                                 block:(void (^)(BOOL succeeded, NSError * _Nullable error))block;
 
 /// Verify a phone number with the SMS code to bind or update phone number.
@@ -453,29 +453,29 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  
  @param authData Get from third platform, data format e.g. { "id" : "id_string", "access_token" : "access_token_string", ... ... }.
  @param platformId The key for the auth data, to identify auth data.
- @param options See AVUserAuthDataLoginOption.
+ @param options See LCUserAuthDataLoginOption.
  @param callback Result callback.
  */
 - (void)loginWithAuthData:(NSDictionary *)authData
                platformId:(NSString *)platformId
-                  options:(AVUserAuthDataLoginOption * _Nullable)options
+                  options:(LCUserAuthDataLoginOption * _Nullable)options
                  callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /**
- Associate auth data to the AVUser instance.
+ Associate auth data to the LCUser instance.
  
  @param authData Get from third platform, data format e.g. { "id" : "id_string", "access_token" : "access_token_string", ... ... }.
  @param platformId The key for the auth data, to identify auth data.
- @param options See AVUserAuthDataLoginOption.
+ @param options See LCUserAuthDataLoginOption.
  @param callback Result callback.
  */
 - (void)associateWithAuthData:(NSDictionary *)authData
                    platformId:(NSString *)platformId
-                      options:(AVUserAuthDataLoginOption * _Nullable)options
+                      options:(LCUserAuthDataLoginOption * _Nullable)options
                      callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /**
- Disassociate auth data from the AVUser instance.
+ Disassociate auth data from the LCUser instance.
  
  @param platformId The key for the auth data, to identify auth data.
  @param callback Result callback.
@@ -490,10 +490,10 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  
  @param callback Result callback.
  */
-+ (void)loginAnonymouslyWithCallback:(void (^)(AVUser * _Nullable user, NSError * _Nullable error))callback;
++ (void)loginAnonymouslyWithCallback:(void (^)(LCUser * _Nullable user, NSError * _Nullable error))callback;
 
 /**
- Check whether the instance of AVUser is anonymous.
+ Check whether the instance of LCUser is anonymous.
  
  @return Result.
  */
@@ -501,64 +501,64 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 
 @end
 
-@interface AVUser (Deprecated)
+@interface LCUser (Deprecated)
 
 + (void)loginOrSignUpWithAuthData:(NSDictionary *)authData
                          platform:(NSString *)platform
-                            block:(AVUserResultBlock)block
-__deprecated_msg("Deprecated, use `-[AVUser loginWithAuthData:platformId:options:callback:]` instead.");
+                            block:(LCUserResultBlock)block
+__deprecated_msg("Deprecated, use `-[LCUser loginWithAuthData:platformId:options:callback:]` instead.");
 
 - (void)associateWithAuthData:(NSDictionary *)authData
                      platform:(NSString *)platform
-                        block:(AVUserResultBlock)block
-__deprecated_msg("Deprecated, use `-[AVUser associateWithAuthData:platformId:options:callback:]` instead.");
+                        block:(LCUserResultBlock)block
+__deprecated_msg("Deprecated, use `-[LCUser associateWithAuthData:platformId:options:callback:]` instead.");
 
 - (void)disassociateWithPlatform:(NSString *)platform
-                           block:(AVUserResultBlock)block
-__deprecated_msg("Deprecated, use `-[AVUser disassociateWithPlatformId:callback:]` instead.");
+                           block:(LCUserResultBlock)block
+__deprecated_msg("Deprecated, use `-[LCUser disassociateWithPlatformId:callback:]` instead.");
 
 - (BOOL)signUp
-__deprecated_msg("Deprecated, use `-[AVUser signUp:]` instead.");
+__deprecated_msg("Deprecated, use `-[LCUser signUp:]` instead.");
 
 - (void)signUpInBackground
-__deprecated_msg("Deprecated, use `-[AVUser signUpInBackgroundWithBlock:]` instead.");
+__deprecated_msg("Deprecated, use `-[LCUser signUpInBackgroundWithBlock:]` instead.");
 
 + (nullable instancetype)logInWithUsername:(NSString *)username
                                   password:(NSString *)password
-__deprecated_msg("Deprecated, use `+[AVUser logInWithUsername:password:error:]` instead.");
+__deprecated_msg("Deprecated, use `+[LCUser logInWithUsername:password:error:]` instead.");
 
 + (void)logInWithUsernameInBackground:(NSString *)username
                              password:(NSString *)password
-__deprecated_msg("Deprecated, use `+[AVUser logInWithUsernameInBackground:password:block:]` instead.");
+__deprecated_msg("Deprecated, use `+[LCUser logInWithUsernameInBackground:password:block:]` instead.");
 
 + (nullable instancetype)logInWithMobilePhoneNumber:(NSString *)phoneNumber
                                            password:(NSString *)password
-__deprecated_msg("Deprecated, use `+[AVUser logInWithMobilePhoneNumber:password:error:]` instead.");
+__deprecated_msg("Deprecated, use `+[LCUser logInWithMobilePhoneNumber:password:error:]` instead.");
 
 + (void)logInWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
                                       password:(NSString *)password
-__deprecated_msg("Deprecated, use `+[AVUser logInWithMobilePhoneNumberInBackground:password:block:]` instead.");
+__deprecated_msg("Deprecated, use `+[LCUser logInWithMobilePhoneNumberInBackground:password:block:]` instead.");
 
 + (nullable instancetype)logInWithMobilePhoneNumber:(NSString *)phoneNumber
                                             smsCode:(NSString *)code
-__deprecated_msg("Deprecated, use `+[AVUser logInWithMobilePhoneNumber:smsCode:error:]` instead.");
+__deprecated_msg("Deprecated, use `+[LCUser logInWithMobilePhoneNumber:smsCode:error:]` instead.");
 
 + (void)logInWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
                                        smsCode:(NSString *)code
-__deprecated_msg("Deprecated, use `+[AVUser logInWithMobilePhoneNumberInBackground:smsCode:block:]` instead.");
+__deprecated_msg("Deprecated, use `+[LCUser logInWithMobilePhoneNumberInBackground:smsCode:block:]` instead.");
 
 + (BOOL)requestPasswordResetForEmail:(NSString *)email
-__deprecated_msg("Deprecated, use `+[AVUser requestPasswordResetForEmail:error:]` instead.");
+__deprecated_msg("Deprecated, use `+[LCUser requestPasswordResetForEmail:error:]` instead.");
 
 + (void)requestPasswordResetForEmailInBackground:(NSString *)email
-__deprecated_msg("Deprecated, use `+[AVUser requestPasswordResetForEmailInBackground:block:]` instead.");
+__deprecated_msg("Deprecated, use `+[LCUser requestPasswordResetForEmailInBackground:block:]` instead.");
 
 - (BOOL)isAuthenticated
-__deprecated_msg("Deprecated, use `-[AVUser isAuthenticatedWithSessionToken:callback:]` instead.");
+__deprecated_msg("Deprecated, use `-[LCUser isAuthenticatedWithSessionToken:callback:]` instead.");
 
 + (void)verifyMobilePhone:(NSString *)code
                 withBlock:(void (^)(BOOL succeeded, NSError * _Nullable error))block
-__deprecated_msg("Deprecated, use `+[AVUser verifyCodeForPhoneNumber:code:block:]` instead.");
+__deprecated_msg("Deprecated, use `+[LCUser verifyCodeForPhoneNumber:code:block:]` instead.");
 
 @end
 

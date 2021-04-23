@@ -13,7 +13,7 @@
 #import "LCObject_Internal.h"
 #import "LCQuery_Internal.h"
 #import "AVUtils.h"
-#import "AVUser_Internal.h"
+#import "LCUser_Internal.h"
 
 NSString * const kLCStatusTypeTimeline=@"default";
 NSString * const kLCStatusTypePrivateMessage=@"private";
@@ -165,7 +165,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
 }
 
 +(NSError*)permissionCheck{
-    if (![[AVUser currentUser] isAuthDataExistInMemory]) {
+    if (![[LCUser currentUser] isAuthDataExistInMemory]) {
         return LCError(kAVErrorUserCannotBeAlteredWithoutSession, nil, nil);
     }
     
@@ -186,7 +186,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
 
 +(LCStatusQuery*)inboxQuery:(LCStatusType *)inboxType{
     LCStatusQuery *query=[[LCStatusQuery alloc] init];
-    query.owner=[AVUser currentUser];
+    query.owner=[LCUser currentUser];
     query.inboxType=inboxType;
     query.externalQueryPath= @"subscribe/statuses";
     return query;
@@ -195,7 +195,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
 
 +(LCStatusQuery*)statusQuery{
     LCStatusQuery *q=[[LCStatusQuery alloc] init];
-    [q whereKey:@"source" equalTo:[AVUser currentUser]];
+    [q whereKey:@"source" equalTo:[LCUser currentUser]];
     return q;
 }
 
@@ -226,7 +226,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
         return;
     }
     
-    [self getStatusesFromUser:[AVUser currentUser].objectId skip:skip limit:limit andCallback:callback];
+    [self getStatusesFromUser:[LCUser currentUser].objectId skip:skip limit:limit andCallback:callback];
     
 }
 +(void)getStatusesFromUser:(NSString *)userId skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(AVArrayResultBlock)callback{
@@ -248,7 +248,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
         return;
     }
     
-    NSString *owner=[LCStatus stringOfStatusOwner:[AVUser currentUser].objectId];
+    NSString *owner=[LCStatus stringOfStatusOwner:[LCUser currentUser].objectId];
     [[LCPaasClient sharedInstance] getObject:[NSString stringWithFormat:@"statuses/%@",objectId] withParameters:@{@"owner":owner,@"include":@"source"} block:^(id object, NSError *error) {
         
         if (!error) {
@@ -267,7 +267,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
         return;
     }
     
-    NSString *owner=[LCStatus stringOfStatusOwner:[AVUser currentUser].objectId];
+    NSString *owner=[LCStatus stringOfStatusOwner:[LCUser currentUser].objectId];
     [[LCPaasClient sharedInstance] deleteObject:[NSString stringWithFormat:@"statuses/%@",objectId] withParameters:@{@"owner":owner} block:^(id object, NSError *error) {
         
         [AVUtils callBooleanResultBlock:callback error:error];
@@ -287,7 +287,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
 
     NSDictionary *parameters = @{
         @"messageId" : [NSString stringWithFormat:@"%lu", (unsigned long)messageId],
-        @"owner"     : [LCObjectUtils dictionaryFromObjectPointer:[AVUser objectWithoutDataWithObjectId:receiver]],
+        @"owner"     : [LCObjectUtils dictionaryFromObjectPointer:[LCUser objectWithoutDataWithObjectId:receiver]],
         @"inboxType" : inboxType
     };
 
@@ -324,7 +324,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
         return;
     }
     
-    NSString *owner=[LCStatus stringOfStatusOwner:[AVUser currentUser].objectId];
+    NSString *owner=[LCStatus stringOfStatusOwner:[LCUser currentUser].objectId];
     
     [[LCPaasClient sharedInstance] getObject:@"subscribe/statuses/count" withParameters:@{@"owner":owner,@"inboxType":type} block:^(id object, NSError *error) {
         NSUInteger count=[object[@"unread"] integerValue];
@@ -340,7 +340,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
         return;
     }
 
-    NSString *owner = [LCStatus stringOfStatusOwner:[AVUser currentUser].objectId];
+    NSString *owner = [LCStatus stringOfStatusOwner:[LCUser currentUser].objectId];
 
     [[LCPaasClient sharedInstance] postObject:@"subscribe/statuses/resetUnreadCount" withParameters:@{@"owner": owner, @"inboxType": type} block:^(id object, NSError *error) {
         [AVUtils callBooleanResultBlock:callback error:error];
@@ -353,8 +353,8 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
         callback(NO,error);
         return;
     }
-    status.source=[AVUser currentUser];
-    status.targetQuery=[AVUser followerQuery:[AVUser currentUser].objectId];
+    status.source=[LCUser currentUser];
+    status.targetQuery=[LCUser followerQuery:[LCUser currentUser].objectId];
     [status sendInBackgroundWithBlock:callback];
 }
 
@@ -364,10 +364,10 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
         callback(NO,error);
         return;
     }
-    status.source=[AVUser currentUser];
+    status.source=[LCUser currentUser];
     [status setType:kLCStatusTypePrivateMessage];
     
-    LCQuery *q=[AVUser query];
+    LCQuery *q=[LCUser query];
     [q whereKey:@"objectId" equalTo:userId];
     
     status.targetQuery=q;
@@ -386,16 +386,16 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
         return LCError(kAVErrorOperationForbidden, @"status can't be update", nil);
     }
     
-    if ([AVUser currentUser]==nil) {
+    if ([LCUser currentUser]==nil) {
         return LCError(kAVErrorOperationForbidden, @"do NOT have an current user, please login first", nil);
     }
     
     if (self.source==nil) {
-        self.source=[AVUser currentUser];
+        self.source=[LCUser currentUser];
     }
     
     if (self.targetQuery==nil) {
-        self.targetQuery=[AVUser followerQuery:[AVUser currentUser].objectId];
+        self.targetQuery=[LCUser followerQuery:[LCUser currentUser].objectId];
     }
     
     if (self.type==nil) {

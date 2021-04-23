@@ -12,7 +12,7 @@
 #import "LCFile.h"
 #import "LCFile_Internal.h"
 #import "LCObjectUtils.h"
-#import "AVUser_Internal.h"
+#import "LCUser_Internal.h"
 #import "LCACL_Internal.h"
 #import "LCRelation.h"
 #import "LCRole_Internal.h"
@@ -533,7 +533,7 @@
                          @"_hasDataForInitial",
                          @"_hasDataForCloud",
                          @"fetchWhenSave",
-                         @"isNew", // from AVUser
+                         @"isNew", // from LCUser
                          nil];
     
     NSMutableSet * properties = [NSMutableSet set];
@@ -564,7 +564,7 @@
         }
     } else {
         if ([LCObjectUtils isUserClass:className]) {
-            object = [AVUser user];
+            object = [LCUser user];
         } else if ([LCObjectUtils isInstallationClass:className]) {
             object = [LCInstallation installation];
         } else if ([LCObjectUtils isRoleClass:className]) {
@@ -687,7 +687,7 @@
 #pragma mark - batch request from operation list
 +(BOOL)isUserClass:(NSString *)className
 {
-    return [className isEqualToString:[AVUser userTag]];
+    return [className isEqualToString:[LCUser userTag]];
 }
 
 +(BOOL)isRoleClass:(NSString *)className
@@ -719,9 +719,9 @@
 {
     if (objectId == nil)
     {
-        return [AVUser endPoint];
+        return [LCUser endPoint];
     }
-    return [NSString stringWithFormat:@"%@/%@", [AVUser endPoint], objectId];
+    return [NSString stringWithFormat:@"%@/%@", [LCUser endPoint], objectId];
 }
 
 

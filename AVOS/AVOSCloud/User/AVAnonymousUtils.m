@@ -5,14 +5,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVUser.h"
+#import "LCUser.h"
 #import "AVConstants.h"
 #import "AVAnonymousUtils.h"
 #import "AVUtils.h"
 #import "LCObjectUtils.h"
 #import "LCPaasClient.h"
-#import "AVUser.h"
-#import "AVUser_Internal.h"
+#import "LCUser.h"
+#import "LCUser_Internal.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-implementations"
@@ -30,26 +30,26 @@
     return data;
 }
 
-+ (void)logInWithBlock:(AVUserResultBlock)block
++ (void)logInWithBlock:(LCUserResultBlock)block
 {
     NSDictionary * parameters = [AVAnonymousUtils anonymousAuthData];
     [[LCPaasClient sharedInstance] postObject:@"users" withParameters:parameters block:^(id object, NSError *error) {
-        AVUser * user = nil;
+        LCUser * user = nil;
         if (error == nil)
         {
             if (![object objectForKey:@"authData"]) {
                 object = [NSMutableDictionary dictionaryWithDictionary:object];
                 [object addEntriesFromDictionary:parameters];
             }
-            user = [AVUser userOrSubclassUser];
+            user = [LCUser userOrSubclassUser];
             [LCObjectUtils copyDictionary:object toObject:user];
-            [AVUser changeCurrentUser:user save:YES];
+            [LCUser changeCurrentUser:user save:YES];
         }
         [AVUtils callUserResultBlock:block user:user error:error];
     }];
 }
 
-+ (BOOL)isLinkedWithUser:(AVUser *)user
++ (BOOL)isLinkedWithUser:(LCUser *)user
 {
     if ([[user linkedServiceNames] containsObject:@"anonymous"])
     {

@@ -3,7 +3,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class AVUser;
+@class LCUser;
 @class LCRole;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -27,9 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  Creates an ACL where only the provided user has access.
- @param user the AVUser
+ @param user the LCUser
  */
-+ (instancetype)ACLWithUser:(AVUser *)user;
++ (instancetype)ACLWithUser:(LCUser *)user;
 
 /** @name Controlling Public Access */
 
@@ -61,7 +61,7 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  Set whether the given user id is allowed to read this object.
  @param allowed allowed or not
- @param userId the AVUser's objectId
+ @param userId the LCUser's objectId
  */
 - (void)setReadAccess:(BOOL)allowed forUserId:(NSString *)userId;
 
@@ -69,14 +69,14 @@ NS_ASSUME_NONNULL_BEGIN
  Gets whether the given user id is *explicitly* allowed to read this object.
  Even if this returns NO, the user may still be able to access it if getPublicReadAccess returns YES
  or if the user belongs to a role that has access.
- @param userId the AVUser's objectId
+ @param userId the LCUser's objectId
  */
 - (BOOL)getReadAccessForUserId:(NSString *)userId;
 
 /*!
  Set whether the given user id is allowed to write this object.
  @param allowed allowed or not
- @param userId the AVUser's objectId
+ @param userId the LCUser's objectId
  */
 - (void)setWriteAccess:(BOOL)allowed forUserId:(NSString *)userId;
 
@@ -85,39 +85,39 @@ NS_ASSUME_NONNULL_BEGIN
  Even if this returns NO, the user may still be able to write it if getPublicWriteAccess returns YES
  or if the user belongs to a role that has access.
  
- @param userId the AVUser's objectId
+ @param userId the LCUser's objectId
  */
 - (BOOL)getWriteAccessForUserId:(NSString *)userId;
 
 /*!
  Set whether the given user is allowed to read this object.
  @param allowed allowed or not
- @param user the AVUser
+ @param user the LCUser
  */
-- (void)setReadAccess:(BOOL)allowed forUser:(AVUser *)user;
+- (void)setReadAccess:(BOOL)allowed forUser:(LCUser *)user;
 
 /*!
  Gets whether the given user is *explicitly* allowed to read this object.
  Even if this returns NO, the user may still be able to access it if getPublicReadAccess returns YES
  or if the user belongs to a role that has access.
- @param user the AVUser
+ @param user the LCUser
  */
-- (BOOL)getReadAccessForUser:(AVUser *)user;
+- (BOOL)getReadAccessForUser:(LCUser *)user;
 
 /*!
  Set whether the given user is allowed to write this object.
  @param allowed allowed or not
- @param user the AVUser
+ @param user the LCUser
  */
-- (void)setWriteAccess:(BOOL)allowed forUser:(AVUser *)user;
+- (void)setWriteAccess:(BOOL)allowed forUser:(LCUser *)user;
 
 /*!
  Gets whether the given user is *explicitly* allowed to write this object.
  Even if this returns NO, the user may still be able to write it if getPublicWriteAccess returns YES
  or if the user belongs to a role that has access.
- @param user the AVUser
+ @param user the LCUser
  */
-- (BOOL)getWriteAccessForUser:(AVUser *)user;
+- (BOOL)getWriteAccessForUser:(LCUser *)user;
 
 /** @name Controlling Access Per-Role */
 

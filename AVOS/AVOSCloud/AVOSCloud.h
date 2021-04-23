@@ -41,7 +41,7 @@
 #import "LCPush.h"
 
 // User
-#import "AVUser.h"
+#import "LCUser.h"
 #import "AVAnonymousUtils.h"
 
 // CloudCode

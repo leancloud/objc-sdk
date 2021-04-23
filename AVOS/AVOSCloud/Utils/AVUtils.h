@@ -71,8 +71,8 @@
                        object:(LCObject *)object
                         error:(NSError *)error;
 
-+ (void)callUserResultBlock:(AVUserResultBlock)block
-                       user:(AVUser *)user
++ (void)callUserResultBlock:(LCUserResultBlock)block
+                       user:(LCUser *)user
                       error:(NSError *)error;
 
 + (void)callIdResultBlock:(AVIdResultBlock)block

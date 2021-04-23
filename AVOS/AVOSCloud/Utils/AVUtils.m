@@ -11,8 +11,8 @@
 #import "LCObject.h"
 #import "LCObject_Internal.h"
 #import "LCGeoPoint_Internal.h"
-#import "AVUser.h"
-#import "AVUser_Internal.h"
+#import "LCUser.h"
+#import "LCUser_Internal.h"
 #import "LCObject.h"
 #import "LCRole_Internal.h"
 #import "LCFile.h"
@@ -385,8 +385,8 @@ if (block) { \
     safeBlock(object);
 }
 
-+ (void)callUserResultBlock:(AVUserResultBlock)block
-                       user:(AVUser *)user
++ (void)callUserResultBlock:(LCUserResultBlock)block
+                       user:(LCUser *)user
                       error:(NSError *)error {
     safeBlock(user);
 }

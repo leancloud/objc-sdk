@@ -62,7 +62,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
                     installation:(LCInstallation *)installation
                            error:(NSError * __autoreleasing *)error LC_WARN_UNUSED_RESULT;
 
-- (instancetype)initWithUser:(AVUser *)user
+- (instancetype)initWithUser:(LCUser *)user
                          tag:(NSString *)tag
                 installation:(LCInstallation *)installation
                        error:(NSError * __autoreleasing *)error LC_WARN_UNUSED_RESULT;

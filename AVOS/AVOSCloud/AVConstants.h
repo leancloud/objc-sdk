@@ -5,7 +5,7 @@
 #import "AVAvailability.h"
 
 @class LCObject;
-@class AVUser;
+@class LCUser;
 @class LCFile;
 
 #if AV_IOS_ONLY
@@ -161,7 +161,7 @@ typedef void (^AVIntegerResultBlock)(NSInteger number, NSError * _Nullable error
 typedef void (^AVArrayResultBlock)(NSArray * _Nullable objects, NSError * _Nullable error);
 typedef void (^LCObjectResultBlock)(LCObject * _Nullable object, NSError * _Nullable error);
 typedef void (^AVSetResultBlock)(NSSet * _Nullable channels, NSError * _Nullable error);
-typedef void (^AVUserResultBlock)(AVUser * _Nullable user, NSError * _Nullable error);
+typedef void (^LCUserResultBlock)(LCUser * _Nullable user, NSError * _Nullable error);
 typedef void (^AVDataResultBlock)(NSData * _Nullable data, NSError * _Nullable error);
 #if AV_TARGET_OS_OSX
 typedef void (^AVImageResultBlock)(NSImage * _Nullable image, NSError * _Nullable error);

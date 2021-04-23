@@ -464,26 +464,26 @@ typedef NS_ENUM(NSInteger, LCQueryDistanceUnit) {
 /*! @name Getting User Objects */
 
 /*!
- Returns a AVUser with a given id.
+ Returns a LCUser with a given id.
  @param objectId The id of the object that is being requested.
- @return The AVUser if found. Returns nil if the object isn't found, or if there was an error.
+ @return The LCUser if found. Returns nil if the object isn't found, or if there was an error.
  */
-+ (nullable AVUser *)getUserObjectWithId:(NSString *)objectId;
++ (nullable LCUser *)getUserObjectWithId:(NSString *)objectId;
 
 /*!
- Returns a AVUser with a given class and id and sets an error if necessary.
+ Returns a LCUser with a given class and id and sets an error if necessary.
  
  @param objectId The id of the object that is being requested.
  @param error Pointer to an NSError that will be set if necessary.
- @return The AVUser if found. Returns nil if the object isn't found, or if there was an error.
+ @return The LCUser if found. Returns nil if the object isn't found, or if there was an error.
  */
-+ (nullable AVUser *)getUserObjectWithId:(NSString *)objectId
++ (nullable LCUser *)getUserObjectWithId:(NSString *)objectId
                                    error:(NSError **)error;
 
 /*!
- Deprecated.  Please use [AVUser query] instead.
+ Deprecated.  Please use [LCUser query] instead.
  */
-+ (instancetype)queryForUser AV_DEPRECATED("Use +[AVUser query] instead.");
++ (instancetype)queryForUser AV_DEPRECATED("Use +[LCUser query] instead.");
 
 #pragma mark -
 #pragma mark Find methods

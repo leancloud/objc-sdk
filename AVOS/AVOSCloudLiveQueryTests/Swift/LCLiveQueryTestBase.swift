@@ -73,8 +73,8 @@ class LCLiveQueryTestBase: LCTestBase {
 
 class AVLiveQueryDelegateWrapper: NSObject, AVLiveQueryDelegate {
     
-    var userDidLoginClosure: ((AVLiveQuery, AVUser) -> Void)?
-    func liveQuery(_ liveQuery: AVLiveQuery, userDidLogin user: AVUser) {
+    var userDidLoginClosure: ((AVLiveQuery, LCUser) -> Void)?
+    func liveQuery(_ liveQuery: AVLiveQuery, userDidLogin user: LCUser) {
         self.userDidLoginClosure?(liveQuery, user)
     }
     

@@ -48,7 +48,7 @@ Pod::Spec.new do |s|
     'AVOS/AVOSCloud/Search/LCSearchSortBuilder.h',
     'AVOS/AVOSCloud/Status/LCStatus.h',
     'AVOS/AVOSCloud/User/AVAnonymousUtils.h',
-    'AVOS/AVOSCloud/User/AVUser.h',
+    'AVOS/AVOSCloud/User/LCUser.h',
     'AVOS/AVOSCloud/Utils/AVLogger.h',
     'AVOS/AVOSCloud/Router/LCRouter.h',
     'AVOS/AVOSCloud/AVAvailability.h'

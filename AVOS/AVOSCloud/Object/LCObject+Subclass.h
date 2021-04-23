@@ -34,8 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  Creates an instance of the registered subclass with this class's parseClassName.
- This helps a subclass ensure that it can be subclassed itself. For example, [AVUser object] will
- return a MyUser object if MyUser is a registered subclass of AVUser. For this reason, [MyClass object] is
+ This helps a subclass ensure that it can be subclassed itself. For example, [LCUser object] will
+ return a MyUser object if MyUser is a registered subclass of LCUser. For this reason, [MyClass object] is
  preferred to [[MyClass alloc] init].
  This method can only be called on subclasses which conform to LCSubclassing.
  A default implementation is provided by LCObject which should always be sufficient.

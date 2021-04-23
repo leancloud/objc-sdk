@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  Represents a Role on the LeanCloud server. AVRoles represent groupings
- of AVUsers for the purposes of granting permissions (e.g. specifying a
+ of LCUsers for the purposes of granting permissions (e.g. specifying a
  LCACL for a LCObject). Roles are specified by their sets of child users
  and child roles, all of which are granted any permissions that the
  parent role has.<br />
@@ -73,7 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *name;
 
 /*!
- Gets the LCRelation for the AVUsers that are direct children of this role.
+ Gets the LCRelation for the LCUsers that are direct children of this role.
  These users are granted any privileges that this role has been granted
  (e.g. read or write access through ACLs). You can add or remove users from
  the role through this relation.

@@ -1,8 +1,8 @@
-// AVUser.h
+// LCUser.h
 // Copyright 2013 AVOS, Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
-#import "AVUser_Internal.h"
+#import "LCUser_Internal.h"
 #import "LCObject_Internal.h"
 #import "LCPaasClient.h"
 #import "AVUtils.h"
@@ -18,15 +18,15 @@ LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiBo  = @"weibo";
 LeanCloudSocialPlatform const LeanCloudSocialPlatformQQ     = @"qq";
 LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin = @"weixin";
 
-@implementation AVUserShortMessageRequestOptions
+@implementation LCUserShortMessageRequestOptions
 
 @end
 
-@implementation AVUserAuthDataLoginOption
+@implementation LCUserAuthDataLoginOption
 
 @end
 
-@implementation  AVUser
+@implementation  LCUser
 
 static BOOL enableAutomatic = NO;
 
@@ -44,10 +44,10 @@ static BOOL enableAutomatic = NO;
 
 + (NSString *)parseClassName
 {
-    return [AVUser userTag];
+    return [LCUser userTag];
 }
 
-+ (void)changeCurrentUser:(AVUser *)newUser save:(BOOL)save
++ (void)changeCurrentUser:(LCUser *)newUser save:(BOOL)save
 {
     if (newUser && save) {
         NSMutableDictionary * json = [newUser userDictionaryForCache];
@@ -64,7 +64,7 @@ static BOOL enableAutomatic = NO;
 
 + (instancetype)currentUser
 {
-    AVUser *user = [LCPaasClient sharedInstance].currentUser;
+    LCUser *user = [LCPaasClient sharedInstance].currentUser;
     if (user) {
         return user;
     } else if ([LCPersistenceUtils fileExist:[LCPersistenceUtils currentUserArchivePath]]) {
@@ -86,7 +86,7 @@ static BOOL enableAutomatic = NO;
         return user;
     }
     
-    AVUser *newUser = [self userOrSubclassUser];
+    LCUser *newUser = [self userOrSubclassUser];
     [[self class] changeCurrentUser:newUser save:NO];
     return newUser;
 }
@@ -121,7 +121,7 @@ static BOOL enableAutomatic = NO;
 
 + (instancetype)user
 {
-    AVUser *u = [[[self class] alloc] initWithClassName:[[self class] userTag]];
+    LCUser *u = [[[self class] alloc] initWithClassName:[[self class] userTag]];
     return u;
 }
 
@@ -147,8 +147,8 @@ static BOOL enableAutomatic = NO;
 
 - (void)postDelete {
     [super postDelete];
-    if (self == [AVUser currentUser]) {
-        [AVUser logOut];
+    if (self == [LCUser currentUser]) {
+        [LCUser logOut];
     }
 }
 
@@ -239,8 +239,8 @@ static BOOL enableAutomatic = NO;
                 //  "updatedAt":"2015-10-20T03:12:38.203Z",
                 //  "objectId":"5625b11b60b2fc79c2fb8c40"}
                 [LCObjectUtils copyDictionary:object toObject:self];
-                if (self == [AVUser currentUser]) {
-                    [AVUser changeCurrentUser:self save:YES];
+                if (self == [LCUser currentUser]) {
+                    [LCUser changeCurrentUser:self save:YES];
                 }
             }
             [AVUtils callIdResultBlock:block object:self error:error];
@@ -293,8 +293,8 @@ static BOOL enableAutomatic = NO;
                        success:^(NSHTTPURLResponse *response, id result) {
         self.sessionToken = result[@"sessionToken"];
         self.updatedAt = [AVDate dateFromValue:result[@"updatedAt"]];
-        if ([self isEqual:[AVUser currentUser]]) {
-            [AVUser changeCurrentUser:self save:YES];
+        if ([self isEqual:[LCUser currentUser]]) {
+            [LCUser changeCurrentUser:self save:YES];
         }
         [AVUtils callBooleanResultBlock:block error:nil];
     }
@@ -309,8 +309,8 @@ static BOOL enableAutomatic = NO;
                          password:(NSString *)password
                             error:(NSError **)error
 {
-    __block AVUser * resultUser = nil;
-    [[self class] logInWithUsername:username email:nil password:password block:^(AVUser *user, NSError *error) {
+    __block LCUser * resultUser = nil;
+    [[self class] logInWithUsername:username email:nil password:password block:^(LCUser *user, NSError *error) {
         resultUser = user;
     } waitUntilDone:YES error:error];
     return resultUser;
@@ -318,17 +318,17 @@ static BOOL enableAutomatic = NO;
 
 + (void)logInWithUsernameInBackground:(NSString *)username
                              password:(NSString *)password
-                                block:(AVUserResultBlock)block
+                                block:(LCUserResultBlock)block
 {
-    [[self class] logInWithUsername:username email:nil password:password block:^(AVUser *user, NSError * error) {
+    [[self class] logInWithUsername:username email:nil password:password block:^(LCUser *user, NSError * error) {
         [AVUtils callUserResultBlock:block user:user error:error];
     }
                       waitUntilDone:NO error:nil];
     
 }
 
-+ (void)loginWithEmail:(NSString *)email password:(NSString *)password block:(AVUserResultBlock)block {
-    [[self class] logInWithUsername:nil email:email password:password block:^(AVUser * _Nullable user, NSError * _Nullable error) {
++ (void)loginWithEmail:(NSString *)email password:(NSString *)password block:(LCUserResultBlock)block {
+    [[self class] logInWithUsername:nil email:email password:password block:^(LCUser * _Nullable user, NSError * _Nullable error) {
         [AVUtils callUserResultBlock:block user:user error:error];
     } waitUntilDone:false error:nil];
 }
@@ -336,7 +336,7 @@ static BOOL enableAutomatic = NO;
 + (BOOL)logInWithUsername:(NSString *)username
                     email:(NSString *)email
                  password:(NSString *)password
-                    block:(AVUserResultBlock)block
+                    block:(LCUserResultBlock)block
             waitUntilDone:(BOOL)wait
                     error:(NSError **)theError {
     
@@ -349,7 +349,7 @@ static BOOL enableAutomatic = NO;
     if (email) { parameters[emailTag] = email; }
     if (password) { parameters[passwordTag] = password; }
     [[LCPaasClient sharedInstance] postObject:@"login" withParameters:parameters block:^(id object, NSError *error) {
-        AVUser * user = nil;
+        LCUser * user = nil;
         if (error == nil)
         {
             user = [self userOrSubclassUser];
@@ -384,8 +384,8 @@ static BOOL enableAutomatic = NO;
                                   password:(NSString *)password
                                      error:(NSError **)error
 {
-    __block AVUser * resultUser = nil;
-    [self logInWithMobilePhoneNumber:phoneNumber password:password block:^(AVUser *user, NSError *error) {
+    __block LCUser * resultUser = nil;
+    [self logInWithMobilePhoneNumber:phoneNumber password:password block:^(LCUser *user, NSError *error) {
         resultUser = user;
     } waitUntilDone:YES error:error];
     return resultUser;
@@ -393,9 +393,9 @@ static BOOL enableAutomatic = NO;
 
 + (void)logInWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
                                       password:(NSString *)password
-                                         block:(AVUserResultBlock)block
+                                         block:(LCUserResultBlock)block
 {
-    [self logInWithMobilePhoneNumber:phoneNumber password:password block:^(AVUser *user, NSError * error) {
+    [self logInWithMobilePhoneNumber:phoneNumber password:password block:^(LCUser *user, NSError * error) {
         [AVUtils callUserResultBlock:block user:user error:error];
     }
                        waitUntilDone:NO error:nil];
@@ -403,7 +403,7 @@ static BOOL enableAutomatic = NO;
 }
 + (BOOL)logInWithMobilePhoneNumber:(NSString *)phoneNumber
                           password:(NSString *)password
-                             block:(AVUserResultBlock)block
+                             block:(LCUserResultBlock)block
                      waitUntilDone:(BOOL)wait
                              error:(NSError **)theError {
     
@@ -413,7 +413,7 @@ static BOOL enableAutomatic = NO;
     
     NSDictionary * parameters = @{mobilePhoneNumberTag: phoneNumber, passwordTag:password};
     [[LCPaasClient sharedInstance] postObject:@"login" withParameters:parameters block:^(id object, NSError *error) {
-        AVUser * user = nil;
+        LCUser * user = nil;
         if (error == nil)
         {
             user = [self userOrSubclassUser];
@@ -442,13 +442,13 @@ static BOOL enableAutomatic = NO;
 
 // MARK: - login with token
 
-+ (void)becomeWithSessionTokenInBackground:(NSString *)sessionToken block:(AVUserResultBlock)block {
-    [self internalBecomeWithSessionTokenInBackground:sessionToken block:^(AVUser *user, NSError *error) {
++ (void)becomeWithSessionTokenInBackground:(NSString *)sessionToken block:(LCUserResultBlock)block {
+    [self internalBecomeWithSessionTokenInBackground:sessionToken block:^(LCUser *user, NSError *error) {
         [AVUtils callUserResultBlock:block user:user error:error];
     }];
 }
 
-+ (void)internalBecomeWithSessionTokenInBackground:(NSString *)sessionToken block:(AVUserResultBlock)block {
++ (void)internalBecomeWithSessionTokenInBackground:(NSString *)sessionToken block:(LCUserResultBlock)block {
     if (sessionToken == nil) {
         if (block) {
             block(nil, LCErrorInternal(@"sessionToken is nil"));
@@ -456,7 +456,7 @@ static BOOL enableAutomatic = NO;
         return;
     }
     [[LCPaasClient sharedInstance] getObject:[NSString stringWithFormat:@"%@/%@", [self endPoint], @"me"] withParameters:@{@"session_token": sessionToken} block:^(id object, NSError *error) {
-        AVUser *user;
+        LCUser *user;
         if (!error) {
             user = [self userOrSubclassUser];
             [user objectFromDictionary:object];
@@ -470,8 +470,8 @@ static BOOL enableAutomatic = NO;
 
 + (instancetype)becomeWithSessionToken:(NSString *)sessionToken error:(NSError * __autoreleasing *)error {
     __block Boolean hasCallback = NO;
-    __block AVUser *user;
-    [self internalBecomeWithSessionTokenInBackground:sessionToken block:^(AVUser *theUser, NSError *theError) {
+    __block LCUser *user;
+    [self internalBecomeWithSessionTokenInBackground:sessionToken block:^(LCUser *theUser, NSError *theError) {
         user = theUser;
         if (error) {
             *error = theError;
@@ -487,7 +487,7 @@ static BOOL enableAutomatic = NO;
 }
 
 + (void)requestLoginCodeForPhoneNumber:(NSString *)phoneNumber
-                               options:(AVUserShortMessageRequestOptions *)options
+                               options:(LCUserShortMessageRequestOptions *)options
                               callback:(AVBooleanResultBlock)callback
 {
     NSParameterAssert(phoneNumber);
@@ -507,8 +507,8 @@ static BOOL enableAutomatic = NO;
                                    smsCode:(NSString *)code
                                      error:(NSError **)error
 {
-    __block AVUser * resultUser = nil;
-    [self logInWithMobilePhoneNumber:phoneNumber smsCode:code block:^(AVUser *user, NSError *error) {
+    __block LCUser * resultUser = nil;
+    [self logInWithMobilePhoneNumber:phoneNumber smsCode:code block:^(LCUser *user, NSError *error) {
         resultUser = user;
     } waitUntilDone:YES error:error];
     return resultUser;
@@ -516,9 +516,9 @@ static BOOL enableAutomatic = NO;
 
 + (void)logInWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
                                        smsCode:(NSString *)code
-                                         block:(AVUserResultBlock)block
+                                         block:(LCUserResultBlock)block
 {
-    [self logInWithMobilePhoneNumber:phoneNumber smsCode:code block:^(AVUser *user, NSError * error) {
+    [self logInWithMobilePhoneNumber:phoneNumber smsCode:code block:^(LCUser *user, NSError * error) {
         [AVUtils callUserResultBlock:block user:user error:error];
     }
                        waitUntilDone:NO error:nil];
@@ -526,7 +526,7 @@ static BOOL enableAutomatic = NO;
 }
 + (BOOL)logInWithMobilePhoneNumber:(NSString *)phoneNumber
                            smsCode:(NSString *)smsCode
-                             block:(AVUserResultBlock)block
+                             block:(LCUserResultBlock)block
                      waitUntilDone:(BOOL)wait
                              error:(NSError **)theError {
     
@@ -536,7 +536,7 @@ static BOOL enableAutomatic = NO;
     
     NSDictionary * parameters = @{mobilePhoneNumberTag: phoneNumber, smsCodeTag:smsCode};
     [[LCPaasClient sharedInstance] postObject:@"login" withParameters:parameters block:^(id object, NSError *error) {
-        AVUser * user = nil;
+        LCUser * user = nil;
         if (error == nil)
         {
             user = [self userOrSubclassUser];
@@ -572,8 +572,8 @@ static BOOL enableAutomatic = NO;
 + (instancetype)signUpOrLoginWithMobilePhoneNumber:(NSString *)phoneNumber
                                            smsCode:(NSString *)code
                                              error:(NSError **)error {
-    __block AVUser * resultUser = nil;
-    [self signUpOrLoginWithMobilePhoneNumber:phoneNumber smsCode:code block:^(AVUser *user, NSError *error) {
+    __block LCUser * resultUser = nil;
+    [self signUpOrLoginWithMobilePhoneNumber:phoneNumber smsCode:code block:^(LCUser *user, NSError *error) {
         resultUser = user;
     } waitUntilDone:YES error:error];
     return resultUser;
@@ -586,15 +586,15 @@ static BOOL enableAutomatic = NO;
 
 + (void)signUpOrLoginWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
                                                smsCode:(NSString *)code
-                                                 block:(AVUserResultBlock)block {
-    [self signUpOrLoginWithMobilePhoneNumber:phoneNumber smsCode:code block:^(AVUser *user, NSError *error) {
+                                                 block:(LCUserResultBlock)block {
+    [self signUpOrLoginWithMobilePhoneNumber:phoneNumber smsCode:code block:^(LCUser *user, NSError *error) {
         [AVUtils callUserResultBlock:block user:user error:error];
     } waitUntilDone:NO error:NULL];
 }
 
 + (BOOL)signUpOrLoginWithMobilePhoneNumber:(NSString *)phoneNumber
                                    smsCode:(NSString *)smsCode
-                                     block:(AVUserResultBlock)block
+                                     block:(LCUserResultBlock)block
                              waitUntilDone:(BOOL)wait
                                      error:(NSError **)theError {
     
@@ -604,7 +604,7 @@ static BOOL enableAutomatic = NO;
     
     NSDictionary * parameters = @{mobilePhoneNumberTag: phoneNumber, smsCodeTag:smsCode};
     [[LCPaasClient sharedInstance] postObject:@"usersByMobilePhone" withParameters:parameters block:^(id object, NSError *error) {
-        AVUser * user = nil;
+        LCUser * user = nil;
         if (error == nil)
         {
             user = [self userOrSubclassUser];
@@ -634,7 +634,7 @@ static BOOL enableAutomatic = NO;
 + (void)signUpOrLoginWithMobilePhoneNumberInBackground:(NSString *)phoneNumber
                                                smsCode:(NSString *)smsCode
                                               password:(NSString *)password
-                                                 block:(AVUserResultBlock)block
+                                                 block:(LCUserResultBlock)block
 {    
     NSDictionary *parameters = @{ mobilePhoneNumberTag: phoneNumber, smsCodeTag: smsCode, passwordTag: password };
     [[LCPaasClient sharedInstance] postObject:@"usersByMobilePhone" withParameters:parameters block:^(id object, NSError *error) {
@@ -642,7 +642,7 @@ static BOOL enableAutomatic = NO;
             [AVUtils callUserResultBlock:block user:nil error:error];
             return;
         }
-        AVUser *user = [self userOrSubclassUser];
+        LCUser *user = [self userOrSubclassUser];
         [self configAndChangeCurrentUserWithUser:user object:object];
         [AVUtils callUserResultBlock:block user:user error:nil];
     }];
@@ -707,7 +707,7 @@ static BOOL enableAutomatic = NO;
 }
 
 + (void)requestPasswordResetCodeForPhoneNumber:(NSString *)phoneNumber
-                                       options:(AVUserShortMessageRequestOptions *)options
+                                       options:(LCUserShortMessageRequestOptions *)options
                                       callback:(AVBooleanResultBlock)callback
 {
     NSParameterAssert(phoneNumber);
@@ -751,7 +751,7 @@ static BOOL enableAutomatic = NO;
 }
 
 + (void)requestVerificationCodeForPhoneNumber:(NSString *)phoneNumber
-                                      options:(AVUserShortMessageRequestOptions *)options
+                                      options:(LCUserShortMessageRequestOptions *)options
                                      callback:(void (^)(BOOL, NSError * _Nullable))callback
 {
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
@@ -800,7 +800,7 @@ static BOOL enableAutomatic = NO;
             return;
         }
         if ([NSDictionary _lc_isTypeOf:object]) {
-            AVUser *currentUser = [LCPaasClient sharedInstance].currentUser;
+            LCUser *currentUser = [LCPaasClient sharedInstance].currentUser;
             NSString *objectId = [NSString _lc_decoding:object
                                                     key:@"objectId"];
             if (currentUser && objectId &&
@@ -824,7 +824,7 @@ static BOOL enableAutomatic = NO;
 }
 
 + (void)requestVerificationCodeForUpdatingPhoneNumber:(NSString *)phoneNumber
-                                              options:(AVUserShortMessageRequestOptions *)options
+                                              options:(LCUserShortMessageRequestOptions *)options
                                                 block:(void (^)(BOOL, NSError * _Nullable))block
 {
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
@@ -873,7 +873,7 @@ static BOOL enableAutomatic = NO;
             return;
         }
         if ([NSDictionary _lc_isTypeOf:object]) {
-            AVUser *currentUser = [LCPaasClient sharedInstance].currentUser;
+            LCUser *currentUser = [LCPaasClient sharedInstance].currentUser;
             NSString *objectId = [NSString _lc_decoding:object
                                                     key:@"objectId"];
             if (currentUser && objectId &&
@@ -900,7 +900,7 @@ static BOOL enableAutomatic = NO;
 
 - (void)loginWithAuthData:(NSDictionary *)authData
                platformId:(NSString *)platformId
-                  options:(AVUserAuthDataLoginOption * _Nullable)options
+                  options:(LCUserAuthDataLoginOption * _Nullable)options
                  callback:(void (^)(BOOL, NSError * _Nullable))callback
 {
     NSMutableDictionary *parameters = [self initialBodyData];
@@ -966,7 +966,7 @@ static BOOL enableAutomatic = NO;
         [self setNewFlag:true];
         [LCObjectUtils copyDictionary:dic toObject:self];
         [self._requestManager clear];
-        [AVUser changeCurrentUser:self save:YES];
+        [LCUser changeCurrentUser:self save:YES];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -977,7 +977,7 @@ static BOOL enableAutomatic = NO;
 
 - (void)associateWithAuthData:(NSDictionary *)authData
                    platformId:(NSString *)platformId
-                      options:(AVUserAuthDataLoginOption * _Nullable)options
+                      options:(LCUserAuthDataLoginOption * _Nullable)options
                      callback:(void (^)(BOOL, NSError * _Nullable))callback
 {
     NSString *objectId = self.objectId;
@@ -1070,7 +1070,7 @@ static BOOL enableAutomatic = NO;
             [self setObject:newAuthData forKey:authDataTag];
         }
         
-        [AVUser changeCurrentUser:self save:YES];
+        [LCUser changeCurrentUser:self save:YES];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -1143,7 +1143,7 @@ static BOOL enableAutomatic = NO;
             [self setObject:mutableCopy forKey:authDataTag];
         }
         
-        [AVUser changeCurrentUser:self save:YES];
+        [LCUser changeCurrentUser:self save:YES];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -1154,7 +1154,7 @@ static BOOL enableAutomatic = NO;
 
 // MARK: Anonymous
 
-+ (void)loginAnonymouslyWithCallback:(void (^)(AVUser * _Nullable user, NSError * _Nullable error))callback
++ (void)loginAnonymouslyWithCallback:(void (^)(LCUser * _Nullable user, NSError * _Nullable error))callback
 {
     NSDictionary *parameters = ({
         NSString *anonymousId = [[NSUserDefaults standardUserDefaults] objectForKey:AnonymousIdKey];
@@ -1172,9 +1172,9 @@ static BOOL enableAutomatic = NO;
             });
             return;
         }
-        AVUser *user = [AVUser userOrSubclassUser];
+        LCUser *user = [LCUser userOrSubclassUser];
         [LCObjectUtils copyDictionary:object toObject:user];
-        [AVUser changeCurrentUser:user save:YES];
+        [LCUser changeCurrentUser:user save:YES];
         dispatch_async(dispatch_get_main_queue(), ^{
             callback(user, nil);
         });
@@ -1232,11 +1232,11 @@ static BOOL enableAutomatic = NO;
     return @"users";
 }
 
-+ (AVUser *)userOrSubclassUser {
-    return (AVUser *)[LCObjectUtils lcObjectForClass:[AVUser userTag]];
++ (LCUser *)userOrSubclassUser {
+    return (LCUser *)[LCObjectUtils lcObjectForClass:[LCUser userTag]];
 }
 
-+ (void)configAndChangeCurrentUserWithUser:(AVUser *)user
++ (void)configAndChangeCurrentUserWithUser:(LCUser *)user
                                     object:(id)object
 {
     if (!object || [object isKindOfClass:[NSDictionary class]] == false) {
@@ -1344,9 +1344,9 @@ static BOOL enableAutomatic = NO;
 
 + (void)loginOrSignUpWithAuthData:(NSDictionary *)authData
                          platform:(NSString *)platform
-                            block:(AVUserResultBlock)block
+                            block:(LCUserResultBlock)block
 {
-    AVUser *user = [self user];
+    LCUser *user = [self user];
     [user loginWithAuthData:authData[authDataTag][platform] platformId:platform options:nil callback:^(BOOL succeeded, NSError * _Nullable error) {
         if (error) {
             block(nil, error);
@@ -1358,7 +1358,7 @@ static BOOL enableAutomatic = NO;
 
 - (void)associateWithAuthData:(NSDictionary *)authData
                      platform:(NSString *)platform
-                        block:(AVUserResultBlock)block
+                        block:(LCUserResultBlock)block
 {
     [self associateWithAuthData:authData[authDataTag][platform] platformId:platform options:nil callback:^(BOOL succeeded, NSError * _Nullable error) {
         if (error) {
@@ -1370,7 +1370,7 @@ static BOOL enableAutomatic = NO;
 }
 
 - (void)disassociateWithPlatform:(NSString *)platform
-                           block:(AVUserResultBlock)block
+                           block:(LCUserResultBlock)block
 {
     [self disassociateWithPlatformId:platform callback:^(BOOL succeeded, NSError * _Nullable error) {
         if (error) {
@@ -1391,13 +1391,13 @@ static BOOL enableAutomatic = NO;
 
 @end
 
-@implementation AVUser (Friendship)
+@implementation LCUser (Friendship)
 
 +(LCQuery*)followerQuery:(NSString*)userObjectId{
     LCFriendQuery *query=[LCFriendQuery queryWithClassName:@"_Follower"];
     query.targetFeild=@"follower";
     
-    AVUser *user=[self user];
+    LCUser *user=[self user];
     user.objectId=userObjectId;
     [query whereKey:@"user" equalTo:user];
     
@@ -1411,7 +1411,7 @@ static BOOL enableAutomatic = NO;
     LCFriendQuery *query=[LCFriendQuery queryWithClassName:@"_Followee"];
     query.targetFeild=@"followee";
     
-    AVUser *user=[self user];
+    LCUser *user=[self user];
     user.objectId=userObjectId;
     [query whereKey:@"user" equalTo:user];
     
@@ -1422,11 +1422,11 @@ static BOOL enableAutomatic = NO;
 }
 
 -(LCQuery*)followeeQuery{
-    return [AVUser followeeQuery:self.objectId];
+    return [LCUser followeeQuery:self.objectId];
 }
 
 -(LCQuery*)followerQuery{
-    return [AVUser followerQuery:self.objectId];
+    return [LCUser followerQuery:self.objectId];
 }
 
 -(void)follow:(NSString*)userId andCallback:(AVBooleanResultBlock)callback{
@@ -1461,14 +1461,14 @@ static BOOL enableAutomatic = NO;
 
 -(void)getFollowers:(AVArrayResultBlock)callback{
     
-    LCQuery *query= [AVUser followerQuery:self.objectId];
+    LCQuery *query= [LCUser followerQuery:self.objectId];
     [query findObjectsInBackgroundWithBlock:callback];
     
 }
 
 -(void)getFollowees:(AVArrayResultBlock)callback{
     
-    LCQuery *query= [AVUser followeeQuery:self.objectId];
+    LCQuery *query= [LCUser followeeQuery:self.objectId];
     
     [query findObjectsInBackgroundWithBlock:callback];
     

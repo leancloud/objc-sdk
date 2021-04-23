@@ -9,7 +9,7 @@
 #import "AVLiveQuery_Internal.h"
 #import "AVSubscriber.h"
 
-#import "AVUser.h"
+#import "LCUser.h"
 #import "LCQuery.h"
 #import "LCQuery_Internal.h"
 #import "LCPaasClient.h"
@@ -148,7 +148,7 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
 }
 
 - (void)handleEventLogin:(NSDictionary *)event {
-    AVUser *user = event[@"object"];
+    LCUser *user = event[@"object"];
 
     [self callDelegateMethod:@selector(liveQuery:userDidLogin:)
                       object:user
@@ -167,7 +167,7 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
         query[@"returnACL"] = @(YES);
 
     parameters[@"query"] = query;
-    parameters[@"sessionToken"] = [AVUser currentUser].sessionToken;
+    parameters[@"sessionToken"] = [LCUser currentUser].sessionToken;
     parameters[@"id"] = self.subscriber.identifier;
 
     return parameters;

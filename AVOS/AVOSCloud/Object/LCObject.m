@@ -23,7 +23,7 @@
 #import <objc/message.h>
 #import <libkern/OSAtomic.h>
 
-#import "AVUser_Internal.h"
+#import "LCUser_Internal.h"
 #import "LCInstallation_Internal.h"
 
 #define AV_BATCH_SAVE_SIZE 100
@@ -1392,8 +1392,8 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         {
             
         }
-        if (self == [AVUser currentUser]) {
-            [[self class] changeCurrentUser:(AVUser *)self save:YES];
+        if (self == [LCUser currentUser]) {
+            [[self class] changeCurrentUser:(LCUser *)self save:YES];
         }
         [AVUtils callObjectResultBlock:block object:self error:error];
         
@@ -1499,8 +1499,8 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     } else {
         [self removeLocalData];
         [LCObjectUtils copyDictionary:object toObject:self];
-        if (self == [AVUser currentUser]) {
-            [[self class] changeCurrentUser:(AVUser *)self save:YES];
+        if (self == [LCUser currentUser]) {
+            [[self class] changeCurrentUser:(LCUser *)self save:YES];
         }
     }
 }
@@ -2066,9 +2066,9 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     
     // + (NSString *)parseClassName must be @"_User"
     
-    if ([objectClass isSubclassOfClass:[AVUser class]] && ![parseClassName isEqualToString:[AVUser userTag]]) {
+    if ([objectClass isSubclassOfClass:[LCUser class]] && ![parseClassName isEqualToString:[LCUser userTag]]) {
         [NSException raise:NSInvalidArgumentException
-                    format:@"Cannot initialize a AVUser with a custom class name."];
+                    format:@"Cannot initialize a LCUser with a custom class name."];
     }
     
     [[LCPaasClient sharedInstance] addSubclassMapEntry:parseClassName classObject:objectClass];

@@ -8,7 +8,7 @@
 #import "AVUtils.h"
 #import "LCPaasClient.h"
 #import "LCPaasClient_internal.h"
-#import "AVUser_Internal.h"
+#import "LCUser_Internal.h"
 #import "LCGeoPoint_Internal.h"
 #import "LCCacheManager.h"
 #import "AVErrorUtils.h"
@@ -654,25 +654,25 @@ static NSString * quote(NSString *string)
 /*! @name Getting User Objects */
 
 /*!
- Returns a AVUser with a given id.
+ Returns a LCUser with a given id.
  @param objectId The id of the object that is being requested.
- @result The AVUser if found. Returns nil if the object isn't found, or if there was an error.
+ @result The LCUser if found. Returns nil if the object isn't found, or if there was an error.
  */
-+ (AVUser *)getUserObjectWithId:(NSString *)objectId
++ (LCUser *)getUserObjectWithId:(NSString *)objectId
 {
     return [[self class] getUserObjectWithId:objectId error:NULL];
 }
 
 /*!
- Returns a AVUser with a given class and id and sets an error if necessary.
+ Returns a LCUser with a given class and id and sets an error if necessary.
  @param error Pointer to an NSError that will be set if necessary.
- @result The AVUser if found. Returns nil if the object isn't found, or if there was an error.
+ @result The LCUser if found. Returns nil if the object isn't found, or if there was an error.
  */
-+ (AVUser *)getUserObjectWithId:(NSString *)objectId
++ (LCUser *)getUserObjectWithId:(NSString *)objectId
                           error:(NSError **)error
 {
-    id user = [[AVUser query] getObjectWithId:objectId error:error];
-    if ([user isKindOfClass:[AVUser class]]) {
+    id user = [[LCUser query] getObjectWithId:objectId error:error];
+    if ([user isKindOfClass:[LCUser class]]) {
         return user;
     }
 
@@ -680,11 +680,11 @@ static NSString * quote(NSString *string)
 }
 
 /*!
- Deprecated.  Please use [AVUser query] instead.
+ Deprecated.  Please use [LCUser query] instead.
  */
 + (LCQuery *)queryForUser __attribute__ ((deprecated))
 {
-    return [AVUser query];
+    return [LCUser query];
 }
 
 #pragma mark -

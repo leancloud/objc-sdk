@@ -100,14 +100,14 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                             error:error];
 }
 
-- (instancetype)initWithUser:(AVUser *)user
+- (instancetype)initWithUser:(LCUser *)user
 {
     return [self initWithUser:user
                           tag:nil
                         error:nil];
 }
 
-- (instancetype)initWithUser:(AVUser *)user
+- (instancetype)initWithUser:(LCUser *)user
                        error:(NSError *__autoreleasing  _Nullable *)error
 {
     return [self initWithUser:user
@@ -115,7 +115,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                         error:error];
 }
 
-- (instancetype)initWithUser:(AVUser *)user
+- (instancetype)initWithUser:(LCUser *)user
                          tag:(NSString *)tag
 {
     return [self initWithUser:user
@@ -123,7 +123,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                         error:nil];
 }
 
-- (instancetype)initWithUser:(AVUser *)user
+- (instancetype)initWithUser:(LCUser *)user
                          tag:(NSString *)tag
                        error:(NSError *__autoreleasing  _Nullable *)error
 {
@@ -153,7 +153,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     return self;
 }
 
-- (instancetype)initWithUser:(AVUser *)user
+- (instancetype)initWithUser:(LCUser *)user
                          tag:(NSString *)tag
                 installation:(LCInstallation *)installation
                        error:(NSError *__autoreleasing  _Nullable *)error

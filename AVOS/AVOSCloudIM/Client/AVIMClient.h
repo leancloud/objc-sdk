@@ -47,8 +47,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// The ID of this client.
 @property (nonatomic, readonly) NSString *clientId;
 
-/// The `AVUser` of this client.
-@property (nonatomic, readonly, nullable) AVUser *user;
+/// The `LCUser` of this client.
+@property (nonatomic, readonly, nullable) LCUser *user;
 
 /// The tag of this client.
 @property (nonatomic, readonly, nullable) NSString *tag;
@@ -80,27 +80,27 @@ NS_ASSUME_NONNULL_BEGIN
                                       tag:(NSString * _Nullable)tag
                                     error:(NSError * __autoreleasing *)error LC_WARN_UNUSED_RESULT;
 
-/// Initializing with an `AVUser`.
+/// Initializing with an `LCUser`.
 /// @param user The user should have logged in.
-- (nullable instancetype)initWithUser:(AVUser *)user LC_WARN_UNUSED_RESULT;
+- (nullable instancetype)initWithUser:(LCUser *)user LC_WARN_UNUSED_RESULT;
 
-/// Initializing with an `AVUser`.
+/// Initializing with an `LCUser`.
 /// @param user The user should have logged in.
 /// @param error Throws exception when error occurred.
-- (nullable instancetype)initWithUser:(AVUser *)user
+- (nullable instancetype)initWithUser:(LCUser *)user
                                 error:(NSError * __autoreleasing *)error LC_WARN_UNUSED_RESULT;
 
-/// Initializing with an `AVUser` and a tag.
+/// Initializing with an `LCUser` and a tag.
 /// @param user The user should have logged in.
 /// @param tag Using a tag to specify the context, `@"default"` is reserved.
-- (nullable instancetype)initWithUser:(AVUser *)user
+- (nullable instancetype)initWithUser:(LCUser *)user
                                   tag:(NSString * _Nullable)tag LC_WARN_UNUSED_RESULT;
 
-/// Initializing with an `AVUser` and a tag.
+/// Initializing with an `LCUser` and a tag.
 /// @param user The user should have logged in.
 /// @param tag Using a tag to specify the context, `@"default"` is reserved.
 /// @param error Throws exception when error occurred.
-- (nullable instancetype)initWithUser:(AVUser *)user
+- (nullable instancetype)initWithUser:(LCUser *)user
                                   tag:(NSString * _Nullable)tag
                                 error:(NSError * __autoreleasing *)error LC_WARN_UNUSED_RESULT;
 

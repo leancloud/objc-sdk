@@ -9,7 +9,7 @@
 #import "LCPaasClient_internal.h"
 #import "LCNetworking.h"
 #import "AVUtils.h"
-#import "AVUser_Internal.h"
+#import "LCUser_Internal.h"
 #import "LCObject_Internal.h"
 #import "LCRole_Internal.h"
 #import "LCACL_Internal.h"

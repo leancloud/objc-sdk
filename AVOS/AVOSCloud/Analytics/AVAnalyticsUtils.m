@@ -34,7 +34,7 @@
 #import "UserAgent.h"
 #import "LCNetworkReachabilityManager.h"
 #import "AVUtils.h"
-#import "AVUser.h"
+#import "LCUser.h"
 
 static NSString * identifierForVendorTag = @"identifierForVendor";
 
@@ -282,7 +282,7 @@ static NSString * identifierForVendorTag = @"identifierForVendor";
     
     [dic addEntriesFromDictionary:dynamicDic];
     
-    AVUser *currentUser = [AVUser currentUser];
+    LCUser *currentUser = [LCUser currentUser];
     
     if (currentUser && currentUser.objectId) {
         

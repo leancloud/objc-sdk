@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "AVUser.h"
+#import "LCUser.h"
 #import "LCQuery.h"
 
 typedef NSString AVStatusType;
@@ -196,7 +196,7 @@ typedef void (^AVStatusResultBlock)(LCStatus * _Nullable status, NSError * _Null
 /**
  *  用户好友关系
  */
-@interface AVUser(Friendship)
+@interface LCUser(Friendship)
 
 /* @name 好友关系 */
 

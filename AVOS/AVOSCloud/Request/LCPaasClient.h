@@ -29,7 +29,7 @@ FOUNDATION_EXPORT NSString *const LCHeaderFieldNameProduction;
 @property (nonatomic, readwrite, copy) NSString * applicationIdField;
 @property (nonatomic, readwrite, copy) NSString * applicationKeyField;
 @property (nonatomic, readwrite, copy) NSString * sessionTokenField;
-@property (nonatomic, readwrite, strong) AVUser * currentUser;
+@property (nonatomic, readwrite, strong) LCUser * currentUser;
 @property (nonatomic, readwrite, strong) LCACL * defaultACL;
 @property (nonatomic, readwrite) BOOL currentUserAccessForDefaultACL;
 

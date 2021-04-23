@@ -1,5 +1,5 @@
 //
-//  AVUser_TestCase.swift
+//  LCUser_TestCase.swift
 //  AVOS
 //
 //  Created by ZapCannon87 on 11/12/2017.
@@ -8,7 +8,7 @@
 
 import XCTest
 
-class AVUser_TestCase: LCTestBase {
+class LCUser_TestCase: LCTestBase {
     
     func testc_mobile_signup_password() {
         
@@ -19,11 +19,11 @@ class AVUser_TestCase: LCTestBase {
         let smsCode: String = "375586"
         let password: String = "12345678"
         
-        var aUser: AVUser! = nil
+        var aUser: LCUser! = nil
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            AVUser.signUpOrLoginWithMobilePhoneNumber(inBackground: mobileNumber, smsCode: smsCode, password: password, block: { (user: AVUser?, error:Error?) in
+            LCUser.signUpOrLoginWithMobilePhoneNumber(inBackground: mobileNumber, smsCode: smsCode, password: password, block: { (user: LCUser?, error:Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(user)
@@ -37,7 +37,7 @@ class AVUser_TestCase: LCTestBase {
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 semaphore.increment()
-                AVUser.logInWithMobilePhoneNumber(inBackground: mobileNumber, password: password) { (user: AVUser?, error: Error?) in
+                LCUser.logInWithMobilePhoneNumber(inBackground: mobileNumber, password: password) { (user: LCUser?, error: Error?) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertNotNil(user)
@@ -64,7 +64,7 @@ class AVUser_TestCase: LCTestBase {
         
         if self.isServerTesting { return }
         
-        var user: AVUser! = AVUser.init()
+        var user: LCUser! = LCUser.init()
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
@@ -76,7 +76,7 @@ class AVUser_TestCase: LCTestBase {
             ]
             let platformId: String = LeanCloudSocialPlatform.weiXin.rawValue + testTag
             
-            let options: AVUserAuthDataLoginOption = AVUserAuthDataLoginOption()
+            let options: LCUserAuthDataLoginOption = LCUserAuthDataLoginOption()
             options.platform = LeanCloudSocialPlatform.weiXin
             
             semaphore.increment()
@@ -114,7 +114,7 @@ class AVUser_TestCase: LCTestBase {
                 "openid" : "\(#function[..<#function.firstIndex(of: "(")!])" + testTag
             ]
             
-            let options: AVUserAuthDataLoginOption = AVUserAuthDataLoginOption()
+            let options: LCUserAuthDataLoginOption = LCUserAuthDataLoginOption()
             options.platform = LeanCloudSocialPlatform.weiXin
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
@@ -176,7 +176,7 @@ class AVUser_TestCase: LCTestBase {
         if self.isServerTesting { return }
         
         let unionId: String = "\(#function[..<#function.firstIndex(of: "(")!])"
-        var user_1: AVUser! = AVUser()
+        var user_1: LCUser! = LCUser()
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
@@ -188,7 +188,7 @@ class AVUser_TestCase: LCTestBase {
                 "openid" : "\(#function[..<#function.firstIndex(of: "(")!])" + testTag
             ]
             
-            let options: AVUserAuthDataLoginOption = AVUserAuthDataLoginOption()
+            let options: LCUserAuthDataLoginOption = LCUserAuthDataLoginOption()
             options.platform = LeanCloudSocialPlatform.weiXin
             options.unionId = unionId
             options.isMainAccount = true
@@ -220,7 +220,7 @@ class AVUser_TestCase: LCTestBase {
         
         if let _ = user_1 {
             
-            var user_2: AVUser! = AVUser()
+            var user_2: LCUser! = LCUser()
             let testTag: String = "_2"
             let platformId: String = LeanCloudSocialPlatform.weiXin.rawValue + testTag
             
@@ -231,7 +231,7 @@ class AVUser_TestCase: LCTestBase {
                     "openid" : "\(#function[..<#function.firstIndex(of: "(")!])" + testTag
                 ]
                 
-                let options: AVUserAuthDataLoginOption = AVUserAuthDataLoginOption()
+                let options: LCUserAuthDataLoginOption = LCUserAuthDataLoginOption()
                 options.platform = LeanCloudSocialPlatform.weiXin
                 options.unionId = unionId
                 options.isMainAccount = true
@@ -288,16 +288,16 @@ class AVUser_TestCase: LCTestBase {
         
         if self.isServerTesting { return }
         
-        var deletingUser: AVUser?
+        var deletingUser: LCUser?
         
-        var user: AVUser! = AVUser()
+        var user: LCUser! = LCUser()
         let authData: [String : Any] = [
             "access_token" : "access_token_test",
             "openid" : "\(#function[..<#function.firstIndex(of: "(")!])"
         ]
         let platformId: String = LeanCloudSocialPlatform.weiXin.rawValue
         
-        let options: AVUserAuthDataLoginOption = AVUserAuthDataLoginOption()
+        let options: LCUserAuthDataLoginOption = LCUserAuthDataLoginOption()
         options.platform = LeanCloudSocialPlatform.weiXin
         options.failOnNotExist = true
         
@@ -370,7 +370,7 @@ class AVUser_TestCase: LCTestBase {
             })
         }
         
-        if let _deletingUser: AVUser = deletingUser {
+        if let _deletingUser: LCUser = deletingUser {
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
@@ -400,7 +400,7 @@ class AVUser_TestCase: LCTestBase {
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            AVUser.loginAnonymously(callback: { (user: AVUser?, error: Error?) in
+            LCUser.loginAnonymously(callback: { (user: LCUser?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(user)
@@ -420,7 +420,7 @@ class AVUser_TestCase: LCTestBase {
             
             let username: String = "\(#function[..<#function.firstIndex(of: "(")!])"
             let password: String = "123"
-            let user: AVUser = AVUser()
+            let user: LCUser = LCUser()
             user.username = username
             user.password = password
                 
@@ -433,7 +433,7 @@ class AVUser_TestCase: LCTestBase {
                 
                 if succeeded {
                     
-                    let newUser: AVUser = AVUser()
+                    let newUser: LCUser = LCUser()
                     newUser.username = username
                     newUser.password = password
                     
@@ -472,7 +472,7 @@ class AVUser_TestCase: LCTestBase {
     }
     
     func testLoginByEmail() {
-        let user = AVUser()
+        let user = LCUser()
         let username = UUID().uuidString.replacingOccurrences(of: "-", with: "")
         user.username = username
         let password = UUID().uuidString.replacingOccurrences(of: "-", with: "")
@@ -487,7 +487,7 @@ class AVUser_TestCase: LCTestBase {
         }
         
         let exp1 = expectation(description: "login by email")
-        AVUser.login(withEmail: email, password: password) { (sameUser, error) in
+        LCUser.login(withEmail: email, password: password) { (sameUser, error) in
             XCTAssertNotNil(sameUser)
             XCTAssertFalse(user === sameUser)
             XCTAssertEqual(user.objectId, sameUser?.objectId)
@@ -499,7 +499,7 @@ class AVUser_TestCase: LCTestBase {
         wait(for: [exp1], timeout: 30)
         
         let exp2 = expectation(description: "login by username")
-        AVUser.logInWithUsername(inBackground: username, password: password) { (sameUser, error) in
+        LCUser.logInWithUsername(inBackground: username, password: password) { (sameUser, error) in
             XCTAssertNotNil(sameUser)
             XCTAssertFalse(user === sameUser)
             XCTAssertEqual(user.objectId, sameUser?.objectId)

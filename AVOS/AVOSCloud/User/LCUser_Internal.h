@@ -1,23 +1,23 @@
 //
-//  AVUser_Internal.h
+//  LCUser_Internal.h
 //  paas
 //
 //  Created by Zhu Zeng on 3/14/13.
 //  Copyright (c) 2013 AVOS. All rights reserved.
 //
 
-#import "AVUser.h"
+#import "LCUser.h"
 
 #define AnonymousIdKey @"LeanCloud.AnonymousId"
 
-@interface AVUser ()
+@interface LCUser ()
 
 @property (nonatomic, readwrite) BOOL isNew;
 @property (nonatomic, readwrite) BOOL mobilePhoneVerified;
 
 - (BOOL)isAuthDataExistInMemory;
 
-+ (AVUser *)userOrSubclassUser;
++ (LCUser *)userOrSubclassUser;
 
 + (NSString *)userTag;
 
@@ -27,7 +27,7 @@
 
 - (NSArray *)linkedServiceNames;
 
-+ (void)configAndChangeCurrentUserWithUser:(AVUser *)user
++ (void)configAndChangeCurrentUserWithUser:(LCUser *)user
                                     object:(id)object;
 
 @end
