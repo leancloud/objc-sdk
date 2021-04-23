@@ -4,7 +4,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVQuery.h"
+#import "LCQuery.h"
 
 /// LeanCloud installation type.
 @interface LCInstallation : LCObject
@@ -39,7 +39,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /// Query for installation
-+ (AVQuery *)query;
++ (LCQuery *)query;
 
 /// Default installation instance.
 + (instancetype)defaultInstallation;

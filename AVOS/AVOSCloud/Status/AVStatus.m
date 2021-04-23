@@ -11,7 +11,7 @@
 #import "AVErrorUtils.h"
 #import "LCObjectUtils.h"
 #import "LCObject_Internal.h"
-#import "AVQuery_Internal.h"
+#import "LCQuery_Internal.h"
 #import "AVUtils.h"
 #import "AVUser_Internal.h"
 
@@ -26,7 +26,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
 @property (nonatomic, assign) NSUInteger messageId;
 
 /* 用Query来设定受众群 */
-@property(nonatomic,strong) AVQuery *targetQuery;
+@property(nonatomic,strong) LCQuery *targetQuery;
 
 +(NSString*)parseClassName;
 
@@ -34,7 +34,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
 
 @end
 
-@implementation AVQuery (Status)
+@implementation LCQuery (Status)
 
 -(NSDictionary*)dictionaryForStatusRequest{
     NSMutableDictionary *dict=[[self assembleParameters] mutableCopy];
@@ -232,7 +232,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
 +(void)getStatusesFromUser:(NSString *)userId skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(AVArrayResultBlock)callback{
     NSParameterAssert(userId);
     
-    AVQuery *q=[AVStatus statusQuery];
+    LCQuery *q=[AVStatus statusQuery];
     q.limit=limit;
     q.skip=skip;
     [q whereKey:@"source" equalTo:[LCObject objectWithoutDataWithClassName:@"_User" objectId:userId]];
@@ -367,14 +367,14 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     status.source=[AVUser currentUser];
     [status setType:kAVStatusTypePrivateMessage];
     
-    AVQuery *q=[AVUser query];
+    LCQuery *q=[AVUser query];
     [q whereKey:@"objectId" equalTo:userId];
     
     status.targetQuery=q;
     [status sendInBackgroundWithBlock:callback];
 }
 
--(void)setQuery:(AVQuery*)query{
+-(void)setQuery:(LCQuery*)query{
     self.targetQuery=query;
 }
 

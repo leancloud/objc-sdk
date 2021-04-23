@@ -1,5 +1,5 @@
 //
-//  AVCloudQueryResult.h
+//  LCCloudQueryResult.h
 //  AVOS
 //
 //  Created by Qihe Bian on 9/22/14.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AVCloudQueryResult : NSObject
+@interface LCCloudQueryResult : NSObject
 /**
  *  查询结果的 className
  */
@@ -28,6 +28,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-typedef void(^AVCloudQueryCallback)(AVCloudQueryResult * _Nullable result, NSError * _Nullable error);
+typedef void(^AVCloudQueryCallback)(LCCloudQueryResult * _Nullable result, NSError * _Nullable error);
 
 NS_ASSUME_NONNULL_END

@@ -8,14 +8,14 @@
 
 #import "LCObject.h"
 
-@class AVQuery;
+@class LCQuery;
 
 NS_ASSUME_NONNULL_BEGIN
 
 /*!
  <h3>Subclassing Notes</h3>
  
- Developers can subclass LCObject for a more native object-oriented class structure. Strongly-typed subclasses of LCObject must conform to the LCSubclassing protocol and must call registerSubclass to be returned by AVQuery and other LCObject factories. All methods in LCSubclassing except for [LCSubclassing parseClassName] are already implemented in the LCObject(Subclass) category. Inculding LCObject+Subclass.h in your implementation file provides these implementations automatically.
+ Developers can subclass LCObject for a more native object-oriented class structure. Strongly-typed subclasses of LCObject must conform to the LCSubclassing protocol and must call registerSubclass to be returned by LCQuery and other LCObject factories. All methods in LCSubclassing except for [LCSubclassing parseClassName] are already implemented in the LCObject(Subclass) category. Inculding LCObject+Subclass.h in your implementation file provides these implementations automatically.
  
  Subclasses support simpler initializers, query syntax, and dynamic synthesizers.
  
@@ -56,7 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
  This method can only be called on subclasses which conform to LCSubclassing.
  A default implementation is provided by LCObject which should always be sufficient.
  */
-+ (AVQuery *)query;
++ (LCQuery *)query;
 
 @end
 

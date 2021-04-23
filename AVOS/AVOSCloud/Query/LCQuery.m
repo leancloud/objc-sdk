@@ -1,10 +1,10 @@
-// AVQuery.m
+// LCQuery.m
 // Copyright 2013 AVOS, Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
 #import "LCGeoPoint.h"
 #import "LCObject_Internal.h"
-#import "AVQuery.h"
+#import "LCQuery.h"
 #import "AVUtils.h"
 #import "AVPaasClient.h"
 #import "AVPaasClient_internal.h"
@@ -13,21 +13,21 @@
 #import "LCCacheManager.h"
 #import "AVErrorUtils.h"
 #import "LCObjectUtils.h"
-#import "AVQuery_Internal.h"
-#import "AVCloudQueryResult_Internal.h"
+#import "LCQuery_Internal.h"
+#import "LCCloudQueryResult_Internal.h"
 
 NS_INLINE
-NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
+NSString *LCStringFromDistanceUnit(LCQueryDistanceUnit unit) {
     NSString *unitString = nil;
 
     switch (unit) {
-    case AVQueryDistanceUnitMile:
+    case LCQueryDistanceUnitMile:
         unitString = @"miles";
         break;
-    case AVQueryDistanceUnitKilometer:
+    case LCQueryDistanceUnitKilometer:
         unitString = @"kilometers";
         break;
-    case AVQueryDistanceUnitRadian:
+    case LCQueryDistanceUnitRadian:
         unitString = @"radians";
         break;
     default:
@@ -37,14 +37,14 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
     return unitString;
 }
 
-@interface   AVQuery()
+@interface   LCQuery()
 
 @property (nonatomic, readwrite, strong) NSMutableSet *include;
 @property (nonatomic, readwrite, strong) NSString *order;
 
 @end
 
-@implementation  AVQuery
+@implementation  LCQuery
 
 @synthesize className = _className;
 @synthesize where = _where;
@@ -61,18 +61,18 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
 
 + (instancetype)queryWithClassName:(NSString *)className
 {
-    AVQuery * query = [[[self class] alloc] initWithClassName:className];
+    LCQuery * query = [[[self class] alloc] initWithClassName:className];
     return query;
 }
 
-+ (AVCloudQueryResult *)doCloudQueryWithCQL:(NSString *)cql {
++ (LCCloudQueryResult *)doCloudQueryWithCQL:(NSString *)cql {
     return [self doCloudQueryWithCQL:cql error:NULL];
 }
 
-+ (AVCloudQueryResult *)doCloudQueryWithCQL:(NSString *)cql error:(NSError **)error {
++ (LCCloudQueryResult *)doCloudQueryWithCQL:(NSString *)cql error:(NSError **)error {
     return [self doCloudQueryWithCQL:cql pvalues:nil error:error];
 }
-+ (AVCloudQueryResult *)doCloudQueryWithCQL:(NSString *)cql pvalues:(NSArray *)pvalues error:(NSError **)error {
++ (LCCloudQueryResult *)doCloudQueryWithCQL:(NSString *)cql pvalues:(NSArray *)pvalues error:(NSError **)error {
     return [self cloudQueryWithCQL:cql pvalues:pvalues callback:nil waitUntilDone:YES error:error];
 }
 
@@ -84,7 +84,7 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
     [self cloudQueryWithCQL:cql pvalues:pvalues callback:callback waitUntilDone:NO error:NULL];
 }
 
-+ (AVCloudQueryResult *)cloudQueryWithCQL:(NSString *)cql pvalues:(NSArray *)pvalues callback:(AVCloudQueryCallback)callback waitUntilDone:(BOOL)wait error:(NSError **)error{
++ (LCCloudQueryResult *)cloudQueryWithCQL:(NSString *)cql pvalues:(NSArray *)pvalues callback:(AVCloudQueryCallback)callback waitUntilDone:(BOOL)wait error:(NSError **)error{
     if (!cql) {
         NSError *err = LCError(kAVErrorInvalidQuery, @"cql can not be nil", nil);
         if (error) {
@@ -95,7 +95,7 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
         }
         return nil;
     }
-    AVCloudQueryResult __block *theResultObject = [[AVCloudQueryResult alloc] init];
+    LCCloudQueryResult __block *theResultObject = [[LCCloudQueryResult alloc] init];
     BOOL __block hasCalledBack = NO;
     NSError __block *blockError = nil;
     
@@ -333,9 +333,9 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
 - (void)whereKey:(NSString *)key
     nearGeoPoint:(LCGeoPoint *)geoPoint
      maxDistance:(double)maxDistance
- maxDistanceUnit:(AVQueryDistanceUnit)maxDistanceUnit
+ maxDistanceUnit:(LCQueryDistanceUnit)maxDistanceUnit
      minDistance:(double)minDistance
- minDistanceUnit:(AVQueryDistanceUnit)minDistanceUnit
+ minDistanceUnit:(LCQueryDistanceUnit)minDistanceUnit
 {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
 
@@ -359,9 +359,9 @@ NSString *LCStringFromDistanceUnit(AVQueryDistanceUnit unit) {
 - (void)whereKey:(NSString *)key
     nearGeoPoint:(LCGeoPoint *)geoPoint
      minDistance:(double)minDistance
- minDistanceUnit:(AVQueryDistanceUnit)minDistanceUnit
+ minDistanceUnit:(LCQueryDistanceUnit)minDistanceUnit
 {
-    [self whereKey:key nearGeoPoint:geoPoint maxDistance:-1 maxDistanceUnit:(AVQueryDistanceUnit)0 minDistance:minDistance minDistanceUnit:minDistanceUnit];
+    [self whereKey:key nearGeoPoint:geoPoint maxDistance:-1 maxDistanceUnit:(LCQueryDistanceUnit)0 minDistance:minDistance minDistanceUnit:minDistanceUnit];
 }
 
 - (void)whereKey:(NSString *)key withinGeoBoxFromSouthwest:(LCGeoPoint *)southwest toNortheast:(LCGeoPoint *)northeast
@@ -411,11 +411,11 @@ static NSString * quote(NSString *string)
     [self whereKey:key matchesRegex:[NSString stringWithFormat:@".*%@$", quote(suffix)]];
 }
 
-+ (AVQuery *)orQueryWithSubqueries:(NSArray *)queries
++ (LCQuery *)orQueryWithSubqueries:(NSArray *)queries
 {
     NSString * className = nil;
     NSMutableArray * input = [[NSMutableArray alloc] initWithCapacity:queries.count];
-    for(AVQuery * query in queries)
+    for(LCQuery * query in queries)
     {
         [input addObject:query.where];
 
@@ -426,12 +426,12 @@ static NSString * quote(NSString *string)
 
         className = query.className;
     }
-    AVQuery * result = [AVQuery queryWithClassName:className];
+    LCQuery * result = [LCQuery queryWithClassName:className];
     [result.where setValue:input forKey:@"$or"];
     return result;
 }
 
-+ (AVQuery *)andQueryWithSubqueries:(NSArray *)queries
++ (LCQuery *)andQueryWithSubqueries:(NSArray *)queries
 {
     if (queries.count <= 0) {
         return nil;
@@ -439,7 +439,7 @@ static NSString * quote(NSString *string)
 
     NSString * className = nil;
     NSMutableArray * input = [[NSMutableArray alloc] initWithCapacity:queries.count];
-    for(AVQuery * query in queries)
+    for(LCQuery * query in queries)
     {
         [input addObject:query.where];
 
@@ -450,7 +450,7 @@ static NSString * quote(NSString *string)
 
         className = query.className;
     }
-    AVQuery * result = [AVQuery queryWithClassName:className];
+    LCQuery * result = [LCQuery queryWithClassName:className];
     if (input.count > 1) {
         [result.where setValue:input forKey:@"$and"];
     } else {
@@ -460,7 +460,7 @@ static NSString * quote(NSString *string)
 }
 
 // 'where={"belongTo":{"$select":{"query":{"className":"Person","where":{"gender":"Male"}},"key":"name"}}}'
-- (void)whereKey:(NSString *)key matchesKey:(NSString *)otherKey inQuery:(AVQuery *)query
+- (void)whereKey:(NSString *)key matchesKey:(NSString *)otherKey inQuery:(LCQuery *)query
 {
     NSMutableDictionary *queryDict = [[NSMutableDictionary alloc] initWithDictionary:@{@"className":query.className,
                                                                                        @"where":query.where}];
@@ -484,7 +484,7 @@ static NSString * quote(NSString *string)
     [self.where setValue:dict forKey:key];
 }
 
-- (void)whereKey:(NSString *)key doesNotMatchKey:(NSString *)otherKey inQuery:(AVQuery *)query
+- (void)whereKey:(NSString *)key doesNotMatchKey:(NSString *)otherKey inQuery:(LCQuery *)query
 {
     NSDictionary *dict = @{@"$dontSelect":
                                @{@"query":
@@ -498,7 +498,7 @@ static NSString * quote(NSString *string)
 }
 
 // 'where={"post":{"$inQuery":{"where":{"image":{"$exists":true}},"className":"Post"}}}'
-- (void)whereKey:(NSString *)key matchesQuery:(AVQuery *)query
+- (void)whereKey:(NSString *)key matchesQuery:(LCQuery *)query
 {
     NSMutableDictionary *queryDict = [[NSMutableDictionary alloc] initWithDictionary:@{@"className":query.className,
                                                                                        @"where":query.where}];
@@ -518,7 +518,7 @@ static NSString * quote(NSString *string)
     [self.where setValue:dic forKey:key];
 }
 
-- (void)whereKey:(NSString *)key doesNotMatchQuery:(AVQuery *)query
+- (void)whereKey:(NSString *)key doesNotMatchQuery:(LCQuery *)query
 {
     NSDictionary *dic = @{@"$notInQuery":
                               @{@"where":query.where,
@@ -590,7 +590,7 @@ static NSString * quote(NSString *string)
                       objectId:(NSString *)objectId
                          error:(NSError **)error
 {
-    return [[AVQuery queryWithClassName:objectClass] getObjectWithId:objectId error:error];
+    return [[LCQuery queryWithClassName:objectClass] getObjectWithId:objectId error:error];
 }
 
 - (LCObject *)getObjectWithId:(NSString *)objectId
@@ -682,7 +682,7 @@ static NSString * quote(NSString *string)
 /*!
  Deprecated.  Please use [AVUser query] instead.
  */
-+ (AVQuery *)queryForUser __attribute__ ((deprecated))
++ (LCQuery *)queryForUser __attribute__ ((deprecated))
 {
     return [AVUser query];
 }
@@ -805,7 +805,7 @@ static NSString * quote(NSString *string)
 /*!
  Gets an object based on the constructed query.
 
- This mutates the AVQuery.
+ This mutates the LCQuery.
 
  @result Returns a LCObject, or nil if none was found.
  */
@@ -817,7 +817,7 @@ static NSString * quote(NSString *string)
 /*!
  Gets an object based on the constructed query and sets an error if any occurred.
 
- This mutates the AVQuery.
+ This mutates the LCQuery.
 
  @param error Pointer to an NSError that will be set if necessary.
  @result Returns a LCObject, or nil if none was found.

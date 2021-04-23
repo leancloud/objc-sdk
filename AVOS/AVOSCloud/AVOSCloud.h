@@ -24,7 +24,7 @@
 #import "LCSaveOption.h"
 
 // Query
-#import "AVQuery.h"
+#import "LCQuery.h"
 
 // File
 #import "LCFile.h"
@@ -46,7 +46,7 @@
 
 // CloudCode
 #import "LCCloud.h"
-#import "AVCloudQueryResult.h"
+#import "LCCloudQueryResult.h"
 
 // Search
 #import "AVSearchQuery.h"
@@ -147,7 +147,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  开启LastModify支持, 减少流量消耗。默认关闭。
  *  @param enabled 开启
- *  @attention 该方法并不会修改任何AVQuery的缓存策略，缓存策略以当前AVQuery的设置为准。该方法仅在进行网络请求时生效。如果想发挥该函数的最大作用，建议在查询时，将缓存策略选择为kAVCachePolicyNetworkOnly
+ *  @attention 该方法并不会修改任何LCQuery的缓存策略，缓存策略以当前LCQuery的设置为准。该方法仅在进行网络请求时生效。如果想发挥该函数的最大作用，建议在查询时，将缓存策略选择为kAVCachePolicyNetworkOnly
  */
 + (void)setLastModifyEnabled:(BOOL)enabled;
 

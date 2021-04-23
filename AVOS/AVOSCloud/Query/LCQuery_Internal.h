@@ -1,5 +1,5 @@
 //
-//  AVQuery_Internal.h
+//  LCQuery_Internal.h
 //  Paas
 //
 //  Created by Zhu Zeng on 3/28/13.
@@ -8,7 +8,7 @@
 
 #import <CoreFoundation/CoreFoundation.h>
 
-@interface AVQuery ()
+@interface LCQuery ()
 @property (nonatomic, readwrite, strong) NSMutableDictionary *parameters;
 @property (nonatomic, readwrite, strong) NSMutableDictionary *where;
 @property (nonatomic, readwrite, strong) NSMutableSet * selectedKeys;

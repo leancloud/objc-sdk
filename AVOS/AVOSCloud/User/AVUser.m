@@ -6,12 +6,12 @@
 #import "LCObject_Internal.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"
-#import "AVQuery.h"
+#import "LCQuery.h"
 #import "LCPersistenceUtils.h"
 #import "LCObjectUtils.h"
 #import "AVPaasClient.h"
 #import "AVErrorUtils.h"
-#import "AVFriendQuery.h"
+#import "LCFriendQuery.h"
 #import "AVUtils.h"
 
 LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiBo  = @"weibo";
@@ -103,7 +103,7 @@ static BOOL enableAutomatic = NO;
 }
 
 - (NSArray<LCRole *> *)getRoles:(NSError * _Nullable __autoreleasing *)error {
-    AVQuery *query = [LCRelation reverseQuery:@"_Role" relationKey:@"users" childObject:self];
+    LCQuery *query = [LCRelation reverseQuery:@"_Role" relationKey:@"users" childObject:self];
     return [query findObjects:error];
 }
 
@@ -734,9 +734,9 @@ static BOOL enableAutomatic = NO;
 
 // MARK: - query
 
-+ (AVQuery *)query
++ (LCQuery *)query
 {
-    AVQuery *query = [[AVQuery alloc] initWithClassName:[[self class] userTag]];
+    LCQuery *query = [[LCQuery alloc] initWithClassName:[[self class] userTag]];
     return query;
 }
 
@@ -1393,8 +1393,8 @@ static BOOL enableAutomatic = NO;
 
 @implementation AVUser (Friendship)
 
-+(AVQuery*)followerQuery:(NSString*)userObjectId{
-    AVFriendQuery *query=[AVFriendQuery queryWithClassName:@"_Follower"];
++(LCQuery*)followerQuery:(NSString*)userObjectId{
+    LCFriendQuery *query=[LCFriendQuery queryWithClassName:@"_Follower"];
     query.targetFeild=@"follower";
     
     AVUser *user=[self user];
@@ -1407,8 +1407,8 @@ static BOOL enableAutomatic = NO;
     return query;
 }
 
-+(AVQuery*)followeeQuery:(NSString*)userObjectId{
-    AVFriendQuery *query=[AVFriendQuery queryWithClassName:@"_Followee"];
++(LCQuery*)followeeQuery:(NSString*)userObjectId{
+    LCFriendQuery *query=[LCFriendQuery queryWithClassName:@"_Followee"];
     query.targetFeild=@"followee";
     
     AVUser *user=[self user];
@@ -1421,11 +1421,11 @@ static BOOL enableAutomatic = NO;
     return query;
 }
 
--(AVQuery*)followeeQuery{
+-(LCQuery*)followeeQuery{
     return [AVUser followeeQuery:self.objectId];
 }
 
--(AVQuery*)followerQuery{
+-(LCQuery*)followerQuery{
     return [AVUser followerQuery:self.objectId];
 }
 
@@ -1461,14 +1461,14 @@ static BOOL enableAutomatic = NO;
 
 -(void)getFollowers:(AVArrayResultBlock)callback{
     
-    AVQuery *query= [AVUser followerQuery:self.objectId];
+    LCQuery *query= [AVUser followerQuery:self.objectId];
     [query findObjectsInBackgroundWithBlock:callback];
     
 }
 
 -(void)getFollowees:(AVArrayResultBlock)callback{
     
-    AVQuery *query= [AVUser followeeQuery:self.objectId];
+    LCQuery *query= [AVUser followeeQuery:self.objectId];
     
     [query findObjectsInBackgroundWithBlock:callback];
     

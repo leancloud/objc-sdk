@@ -1,15 +1,15 @@
 //
-//  AVCloudQueryResult.m
+//  LCCloudQueryResult.m
 //  AVOS
 //
 //  Created by Qihe Bian on 9/22/14.
 //
 //
 
-#import "AVCloudQueryResult.h"
-#import "AVCloudQueryResult_Internal.h"
+#import "LCCloudQueryResult.h"
+#import "LCCloudQueryResult_Internal.h"
 
-@implementation AVCloudQueryResult
+@implementation LCCloudQueryResult
 
 - (void)setClassName:(NSString *)className {
     _className = className;

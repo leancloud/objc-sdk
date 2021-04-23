@@ -20,7 +20,7 @@
 
 #import "LCObjectUtils.h"
 #import "AVPaasClient.h"
-#import "AVCloudQueryResult.h"
+#import "LCCloudQueryResult.h"
 #import "AVKeychain.h"
 #import "LCURLConnection.h"
 
@@ -440,7 +440,7 @@ if (block) { \
 }
 
 +(void)callCloudQueryResultBlock:(AVCloudQueryCallback)block
-                          result:(AVCloudQueryResult *)result
+                          result:(LCCloudQueryResult *)result
                            error:error {
     safeBlock(result);
 }

@@ -1,15 +1,15 @@
 
 #import "LCRelation.h"
-#import "AVQuery.h"
+#import "LCQuery.h"
 #import "AVUtils.h"
 #import "LCObject_Internal.h"
-#import "AVQuery_Internal.h"
+#import "LCQuery_Internal.h"
 #import "LCRelation_Internal.h"
 #import "LCObjectUtils.h"
 
 @implementation LCRelation
 
-- (AVQuery *)query
+- (LCQuery *)query
 {
     NSString *targetClass;
     if (!self.targetClass) {
@@ -17,7 +17,7 @@
     } else {
         targetClass = self.targetClass;
     }
-    AVQuery * query = [AVQuery queryWithClassName:targetClass];
+    LCQuery * query = [LCQuery queryWithClassName:targetClass];
     NSMutableDictionary * dict = [@{@"$relatedTo": @{@"object": [LCObjectUtils dictionaryFromObjectPointer:self.parent], @"key":self.key}} mutableCopy];
     [query setValue:[NSMutableDictionary dictionaryWithDictionary:dict] forKey:@"where"];
     if (!self.targetClass) {
@@ -44,12 +44,12 @@
     [self.parent removeRelation:object forKey:self.key];
 }
 
-+(AVQuery *)reverseQuery:(NSString *)parentClassName
++(LCQuery *)reverseQuery:(NSString *)parentClassName
              relationKey:(NSString *)relationKey
              childObject:(LCObject *)child
 {
     NSDictionary * dict = @{relationKey: [LCObjectUtils dictionaryFromObjectPointer:child]};
-    AVQuery * query = [AVQuery queryWithClassName:parentClassName];
+    LCQuery * query = [LCQuery queryWithClassName:parentClassName];
     [query setValue:[NSMutableDictionary dictionaryWithDictionary:dict] forKey:@"where"];
     return query;
 }

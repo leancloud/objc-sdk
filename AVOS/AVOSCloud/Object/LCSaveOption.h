@@ -8,14 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
-@class AVQuery;
+@class LCQuery;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface LCSaveOption : NSObject
 
 @property (nonatomic, assign) BOOL fetchWhenSave;
-@property (nonatomic, strong, nullable) AVQuery *query;
+@property (nonatomic, strong, nullable) LCQuery *query;
 
 @end
 

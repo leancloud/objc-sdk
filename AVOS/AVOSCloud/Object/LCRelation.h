@@ -6,7 +6,7 @@
 
 #import <Foundation/Foundation.h>
 #import "LCObject.h"
-#import "AVQuery.h"
+#import "LCQuery.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,9 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark Accessing objects
 /*!
- @return A AVQuery that can be used to get objects in this relation.
+ @return A LCQuery that can be used to get objects in this relation.
  */
-- (AVQuery *)query;
+- (LCQuery *)query;
 
 
 #pragma mark Modifying relations
@@ -43,11 +43,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeObject:(LCObject *)object;
 
 /*!
- @return A AVQuery that can be used to get parent objects in this relation.
+ @return A LCQuery that can be used to get parent objects in this relation.
  */
 
 /**
- *  A AVQuery that can be used to get parent objects in this relation.
+ *  A LCQuery that can be used to get parent objects in this relation.
  *
  *  @param parentClassName parent Class Name
  *  @param relationKey     relation Key
@@ -55,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return the Query
  */
-+(AVQuery *)reverseQuery:(NSString *)parentClassName
++(LCQuery *)reverseQuery:(NSString *)parentClassName
              relationKey:(NSString *)relationKey
              childObject:(LCObject *)child;
 

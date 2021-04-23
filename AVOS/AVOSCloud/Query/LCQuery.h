@@ -1,25 +1,25 @@
-// AVQuery.m
+// LCQuery.m
 // Copyright 2013 AVOS Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
 #import "LCGeoPoint.h"
 #import "LCObject.h"
-#import "AVCloudQueryResult.h"
+#import "LCCloudQueryResult.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 /*!
  A class that defines a query that is used to query for LCObjects.
  */
-@interface AVQuery : NSObject
+@interface LCQuery : NSObject
 
 /*!
  * Distance unit for query.
  */
-typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
-    AVQueryDistanceUnitMile = 1,
-    AVQueryDistanceUnitKilometer,
-    AVQueryDistanceUnitRadian
+typedef NS_ENUM(NSInteger, LCQueryDistanceUnit) {
+    LCQueryDistanceUnitMile = 1,
+    LCQueryDistanceUnitKilometer,
+    LCQueryDistanceUnitRadian
 };
 
 #pragma mark Query options
@@ -27,9 +27,9 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 /** @name Creating a Query for a Class */
 
 /*!
- Returns a AVQuery for a given class.
+ Returns a LCQuery for a given class.
  @param className The class to query on.
- @return A AVQuery object.
+ @return A LCQuery object.
  */
 + (instancetype)queryWithClassName:(NSString *)className;
 
@@ -38,7 +38,7 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
  *  @param cql CQL 字符串
  *  @return 查询结果
  */
-+ (nullable AVCloudQueryResult *)doCloudQueryWithCQL:(NSString *)cql;
++ (nullable LCCloudQueryResult *)doCloudQueryWithCQL:(NSString *)cql;
 
 /*!
  *  使用 CQL 查询
@@ -46,7 +46,7 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
  *  @param error 用于返回错误结果
  *  @return 查询结果
  */
-+ (nullable AVCloudQueryResult *)doCloudQueryWithCQL:(NSString *)cql error:(NSError **)error;
++ (nullable LCCloudQueryResult *)doCloudQueryWithCQL:(NSString *)cql error:(NSError **)error;
 
 /*!
  *  使用 CQL 查询
@@ -55,7 +55,7 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
  *  @param error 用于返回错误结果
  *  @return 查询结果
  */
-+ (nullable AVCloudQueryResult *)doCloudQueryWithCQL:(NSString *)cql pvalues:(nullable NSArray *)pvalues error:(NSError **)error;
++ (nullable LCCloudQueryResult *)doCloudQueryWithCQL:(NSString *)cql pvalues:(nullable NSArray *)pvalues error:(NSError **)error;
 
 /*!
  *  使用 CQL 异步查询
@@ -231,9 +231,9 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 - (void)whereKey:(NSString *)key
     nearGeoPoint:(LCGeoPoint *)geoPoint
      maxDistance:(double)maxDistance
- maxDistanceUnit:(AVQueryDistanceUnit)maxDistanceUnit
+ maxDistanceUnit:(LCQueryDistanceUnit)maxDistanceUnit
      minDistance:(double)minDistance
- minDistanceUnit:(AVQueryDistanceUnit)minDistanceUnit;
+ minDistanceUnit:(LCQueryDistanceUnit)minDistanceUnit;
 
 /*!
  * Add a constraint to the query that requires a particular key's coordinates (specified via LCGeoPoint) be near
@@ -248,7 +248,7 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 - (void)whereKey:(NSString *)key
     nearGeoPoint:(LCGeoPoint *)geoPoint
      minDistance:(double)minDistance
- minDistanceUnit:(AVQueryDistanceUnit)minDistanceUnit;
+ minDistanceUnit:(LCQueryDistanceUnit)minDistanceUnit;
 
 /*!
  Add a constraint to the query that requires a particular key's coordinates (specified via LCGeoPoint) be
@@ -305,18 +305,18 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 /** @name Adding Subqueries */
 
 /*!
- Returns a AVQuery that is the or of the passed in AVQuerys.
+ Returns a LCQuery that is the or of the passed in LCQuerys.
  @param queries The list of queries to or together.
- @return a AVQuery that is the or of the passed in AVQuerys.
+ @return a LCQuery that is the or of the passed in LCQuerys.
  */
-+ (AVQuery *)orQueryWithSubqueries:(NSArray *)queries;
++ (LCQuery *)orQueryWithSubqueries:(NSArray *)queries;
 
 /*!
- Returns a AVQuery that is the AND of the passed in AVQuerys.
+ Returns a LCQuery that is the AND of the passed in LCQuerys.
  @param queries The list of queries to AND together.
- @return a AVQuery that is the AND of the passed in AVQuerys.
+ @return a LCQuery that is the AND of the passed in LCQuerys.
  */
-+ (AVQuery *)andQueryWithSubqueries:(NSArray *)queries;
++ (LCQuery *)andQueryWithSubqueries:(NSArray *)queries;
 
 /*!
  Adds a constraint that requires that a key's value matches a value in another key
@@ -325,7 +325,7 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
  @param otherKey The key in objects in the returned by the sub query whose value should match
  @param query The query to run.
  */
-- (void)whereKey:(NSString *)key matchesKey:(NSString *)otherKey inQuery:(AVQuery *)query;
+- (void)whereKey:(NSString *)key matchesKey:(NSString *)otherKey inQuery:(LCQuery *)query;
 
 /*!
  Adds a constraint that requires that a key's value NOT match a value in another key
@@ -334,23 +334,23 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
  @param otherKey The key in objects in the returned by the sub query whose value should match
  @param query The query to run.
  */
-- (void)whereKey:(NSString *)key doesNotMatchKey:(NSString *)otherKey inQuery:(AVQuery *)query;
+- (void)whereKey:(NSString *)key doesNotMatchKey:(NSString *)otherKey inQuery:(LCQuery *)query;
 
 /*!
- Add a constraint that requires that a key's value matches a AVQuery constraint.
+ Add a constraint that requires that a key's value matches a LCQuery constraint.
  This only works where the key's values are LCObjects or arrays of LCObjects.
  @param key The key that the value is stored in
  @param query The query the value should match
  */
-- (void)whereKey:(NSString *)key matchesQuery:(AVQuery *)query;
+- (void)whereKey:(NSString *)key matchesQuery:(LCQuery *)query;
 
 /*!
- Add a constraint that requires that a key's value to not match a AVQuery constraint.
+ Add a constraint that requires that a key's value to not match a LCQuery constraint.
  This only works where the key's values are LCObjects or arrays of LCObjects.
  @param key The key that the value is stored in
  @param query The query the value should not match
  */
-- (void)whereKey:(NSString *)key doesNotMatchQuery:(AVQuery *)query;
+- (void)whereKey:(NSString *)key doesNotMatchQuery:(LCQuery *)query;
 
 
 /*!
@@ -430,7 +430,7 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 /*!
  Returns a LCObject with the given id.
  
- This mutates the AVQuery.
+ This mutates the LCQuery.
  
  @param objectId The id of the object that is being requested.
  @return The LCObject if found. Returns nil if the object isn't found, or if there was an error.
@@ -440,7 +440,7 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 /*!
  Returns a LCObject with the given id and sets an error if necessary.
  
- This mutates the AVQuery
+ This mutates the LCQuery
  
  @param objectId The id of the object that is being requested.
  @param error Pointer to an NSError that will be set if necessary.
@@ -451,7 +451,7 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 /*!
  Gets a LCObject asynchronously and calls the given block with the result. 
  
- This mutates the AVQuery
+ This mutates the LCQuery
  @param objectId The id of the object being requested.
  @param block The block to execute. The block should have the following argument signature: (NSArray *object, NSError *error)
  */
@@ -504,8 +504,8 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 - (nullable NSArray *)findObjects:(NSError **)error;
 
 /*!
- An alias of `-[AVQuery findObjects:]` methods that supports Swift exception.
- @seealso `-[AVQuery findObjects:]`
+ An alias of `-[LCQuery findObjects:]` methods that supports Swift exception.
+ @seealso `-[LCQuery findObjects:]`
  */
 - (nullable NSArray *)findObjectsAndThrowsWithError:(NSError **)error;
 
@@ -527,7 +527,7 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 /*!
  Gets an object based on the constructed query.
  
- This mutates the AVQuery.
+ This mutates the LCQuery.
  
  @return a LCObject, or nil if none was found.
  */
@@ -536,7 +536,7 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 /*!
  Gets an object based on the constructed query and sets an error if any occurred.
 
- This mutates the AVQuery.
+ This mutates the LCQuery.
  
  @param error Pointer to an NSError that will be set if necessary.
  @return a LCObject, or nil if none was found.
@@ -544,15 +544,15 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 - (nullable LCObject *)getFirstObject:(NSError **)error;
 
 /*!
- An alias of `-[AVQuery getFirstObject:]` methods that supports Swift exception.
- @seealso `-[AVQuery getFirstObject:]`
+ An alias of `-[LCQuery getFirstObject:]` methods that supports Swift exception.
+ @seealso `-[LCQuery getFirstObject:]`
  */
 - (nullable LCObject *)getFirstObjectAndThrowsWithError:(NSError **)error;
 
 /*!
  Gets an object asynchronously and calls the given block with the result.
  
- This mutates the AVQuery.
+ This mutates the LCQuery.
  
  @param block The block to execute. The block should have the following argument signature:(LCObject *object, NSError *error) result will be nil if error is set OR no object was found matching the query. error will be nil if result is set OR if the query succeeded, but found no results.
  */
@@ -577,8 +577,8 @@ typedef NS_ENUM(NSInteger, AVQueryDistanceUnit) {
 - (NSInteger)countObjects:(NSError **)error;
 
 /*!
- An alias of `-[AVQuery countObjects:]` methods that supports Swift exception.
- @seealso `-[AVQuery countObjects:]`
+ An alias of `-[LCQuery countObjects:]` methods that supports Swift exception.
+ @seealso `-[LCQuery countObjects:]`
  */
 - (NSInteger)countObjectsAndThrowsWithError:(NSError **)error;
 

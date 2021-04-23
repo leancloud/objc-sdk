@@ -5,7 +5,7 @@
 
 #import <Foundation/Foundation.h>
 #import "AVConstants.h"
-#import "AVQuery.h"
+#import "LCQuery.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -71,7 +71,7 @@ extern NSString *const kLCPushTargetPlatformWindowsPhone;
  skip, limit, or order.
  @param query The installation query to set for this push.
  */
-- (void)setQuery:(AVQuery *)query;
+- (void)setQuery:(LCQuery *)query;
 
 /*!
  Sets an alert message for this push notification. This will overwrite
@@ -194,7 +194,7 @@ extern NSString *const kLCPushTargetPlatformWindowsPhone;
  @param error Pointer to an NSError that will be set if necessary.
  @return whether the send succeeded.
  */
-+ (BOOL)sendPushMessageToQuery:(AVQuery *)query
++ (BOOL)sendPushMessageToQuery:(LCQuery *)query
                    withMessage:(NSString *)message
                          error:(NSError **)error;
 
@@ -204,7 +204,7 @@ extern NSString *const kLCPushTargetPlatformWindowsPhone;
  created with [LCInstallation query].
  @param message The message to send.
  */
-+ (void)sendPushMessageToQueryInBackground:(AVQuery *)query
++ (void)sendPushMessageToQueryInBackground:(LCQuery *)query
                                withMessage:(NSString *)message;
 
 /*!
@@ -214,7 +214,7 @@ extern NSString *const kLCPushTargetPlatformWindowsPhone;
  @param message The message to send.
  @param block The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
  */
-+ (void)sendPushMessageToQueryInBackground:(AVQuery *)query
++ (void)sendPushMessageToQueryInBackground:(LCQuery *)query
                                withMessage:(NSString *)message
                                      block:(AVBooleanResultBlock)block;
 
@@ -282,7 +282,7 @@ extern NSString *const kLCPushTargetPlatformWindowsPhone;
  @param error Pointer to an NSError that will be set if necessary.
  @return whether the send succeeded.
  */
-+ (BOOL)sendPushDataToQuery:(AVQuery *)query
++ (BOOL)sendPushDataToQuery:(LCQuery *)query
                    withData:(NSDictionary *)data
                       error:(NSError **)error;
 
@@ -292,7 +292,7 @@ extern NSString *const kLCPushTargetPlatformWindowsPhone;
  created with [LCInstallation query].
  @param data The data to send.
  */
-+ (void)sendPushDataToQueryInBackground:(AVQuery *)query
++ (void)sendPushDataToQueryInBackground:(LCQuery *)query
                                withData:(NSDictionary *)data;
 
 /*!
@@ -302,7 +302,7 @@ extern NSString *const kLCPushTargetPlatformWindowsPhone;
  @param data The data to send.
  @param block The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
  */
-+ (void)sendPushDataToQueryInBackground:(AVQuery *)query
++ (void)sendPushDataToQueryInBackground:(LCQuery *)query
                                withData:(NSDictionary *)data
                                   block:(AVBooleanResultBlock)block;
 

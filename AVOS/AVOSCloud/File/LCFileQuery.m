@@ -8,7 +8,7 @@
 
 #import "LCFileQuery.h"
 #import "LCFile.h"
-#import "AVQuery_Internal.h"
+#import "LCQuery_Internal.h"
 #import "AVUtils.h"
 
 @implementation LCFileQuery

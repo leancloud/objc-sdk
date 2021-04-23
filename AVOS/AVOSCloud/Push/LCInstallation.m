@@ -31,9 +31,9 @@
     return [[LCInstallation alloc] init];
 }
 
-+ (AVQuery *)query
++ (LCQuery *)query
 {
-    return [[AVQuery alloc] initWithClassName:[LCInstallation className]];
+    return [[LCQuery alloc] initWithClassName:[LCInstallation className]];
 }
 
 + (instancetype)defaultInstallation

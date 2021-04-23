@@ -10,12 +10,12 @@
 #import "AVSubscriber.h"
 
 #import "AVUser.h"
-#import "AVQuery.h"
-#import "AVQuery_Internal.h"
+#import "LCQuery.h"
+#import "LCQuery_Internal.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"
 
-static NSString *const AVQueryIdKey = @"query_id";
+static NSString *const LCQueryIdKey = @"query_id";
 
 static NSString *const AVSubscriptionEndpoint = @"LiveQuery/subscribe";
 static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
@@ -29,7 +29,7 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
 
 @implementation AVLiveQuery
 
-- (instancetype)initWithQuery:(AVQuery *)query {
+- (instancetype)initWithQuery:(LCQuery *)query {
     self = [super init];
 
     if (self) {
@@ -58,7 +58,7 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
     NSDictionary *event = userInfo[AVLiveQueryEventKey];
 
     /* Filter out other live query events. */
-    if (![event[AVQueryIdKey] isEqualToString:self.queryId])
+    if (![event[LCQueryIdKey] isEqualToString:self.queryId])
         return;
 
     NSString *operation = event[@"op"];
@@ -212,7 +212,7 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
                 return;
             }
             
-            strongSelf.queryId = object[AVQueryIdKey];
+            strongSelf.queryId = object[LCQueryIdKey];
             
             [strongSelf.subscriber addLiveQueryObjectToWeakTable:strongSelf];
             
@@ -232,7 +232,7 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
 
     parameters[@"id"] = self.subscriber.identifier;
-    parameters[AVQueryIdKey] = self.queryId;
+    parameters[LCQueryIdKey] = self.queryId;
 
     return parameters;
 }

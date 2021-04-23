@@ -7,11 +7,11 @@
 //
 
 #import "LCPush.h"
-#import "AVQuery.h"
+#import "LCQuery.h"
 
 @interface LCPush ()
 
-@property (nonatomic, readwrite, strong) AVQuery * pushQuery;
+@property (nonatomic, readwrite, strong) LCQuery * pushQuery;
 @property (nonatomic, readwrite, strong) NSMutableArray * pushChannels;
 @property (nonatomic, readwrite, strong) NSMutableDictionary * pushData;
 @property (nonatomic, readwrite, strong) NSDate * expirationDate;

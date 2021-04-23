@@ -8,8 +8,8 @@
 
 #import "LCSaveOption.h"
 #import "LCSaveOption_internal.h"
-#import "AVQuery.h"
-#import "AVQuery_Internal.h"
+#import "LCQuery.h"
+#import "LCQuery_Internal.h"
 
 @implementation LCSaveOption
 

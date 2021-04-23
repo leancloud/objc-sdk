@@ -35,7 +35,7 @@ class LCLiveQueryTestBase: LCTestBase {
             return
         }
         
-        let query: AVQuery = AVQuery(className: "Todo")
+        let query: LCQuery = LCQuery(className: "Todo")
         query.whereKeyExists("objectId")
         
         let liveQuery: AVLiveQuery = AVLiveQuery(query: query)

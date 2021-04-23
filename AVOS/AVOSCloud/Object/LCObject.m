@@ -12,7 +12,7 @@
 #import "LCGeoPoint_Internal.h"
 #import "LCObjectUtils.h"
 #import "AVErrorUtils.h"
-#import "AVQuery_Internal.h"
+#import "LCQuery_Internal.h"
 
 #import "LCObject+Subclass.h"
 #import "LCSubclassing.h"
@@ -782,7 +782,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 - (NSError *)validateSaveOption:(LCSaveOption *)option {
     NSError *error = nil;
 
-    AVQuery *query = option.query;
+    LCQuery *query = option.query;
     NSString *queryClassName = query.className;
 
     if (queryClassName && ![queryClassName isEqualToString:self.className]) {
@@ -1379,7 +1379,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     NSString *path = [self myObjectPath];
     NSDictionary * parameters = nil;
     if (keys) {
-        parameters = [AVQuery dictionaryFromIncludeKeys:keys];
+        parameters = [LCQuery dictionaryFromIncludeKeys:keys];
     }
     [[AVPaasClient sharedInstance] getObject:path withParameters:parameters block:^(id object, NSError *error) {
         
@@ -1518,7 +1518,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     NSString *path = [self myObjectPath];
     NSDictionary * parameters = nil;
     if (keys) {
-        parameters = [AVQuery dictionaryFromIncludeKeys:keys];
+        parameters = [LCQuery dictionaryFromIncludeKeys:keys];
     }
     [[AVPaasClient sharedInstance] getObject:path withParameters:parameters block:^(id object, NSError *error) {
         if (!error) {
@@ -2074,8 +2074,8 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     [[AVPaasClient sharedInstance] addSubclassMapEntry:parseClassName classObject:objectClass];
 }
 
-+ (AVQuery *)query {
-    return [AVQuery queryWithClassName:[[self class] parseClassName]];
++ (LCQuery *)query {
+    return [LCQuery queryWithClassName:[[self class] parseClassName]];
 }
 
 #pragma mark - Util

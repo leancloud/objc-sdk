@@ -222,7 +222,7 @@
         
         return [newDic copy];
     } else {
-        // 有 __type，则像解析 AVQuery 的结果一样
+        // 有 __type，则像解析 LCQuery 的结果一样
         return [LCObjectUtils objectFromDictionary:dic];
     }
     return dic;

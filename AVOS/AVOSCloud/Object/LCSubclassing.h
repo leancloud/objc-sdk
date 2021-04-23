@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class AVQuery;
+@class LCQuery;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
  Create a query which returns objects of this type.
  A default implementation is provided by LCObject which should always be sufficient.
  */
-+ (AVQuery *)query;
++ (LCQuery *)query;
 
 /*!
  Lets LeanCloud know this class should be used to instantiate all objects with class type parseClassName.

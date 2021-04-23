@@ -6,14 +6,14 @@
 //  Copyright © 2015年 tang3w. All rights reserved.
 //
 
-#import "AVQuery.h"
+#import "LCQuery.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  LCFile 查询类
  */
-@interface LCFileQuery : AVQuery
+@interface LCFileQuery : LCQuery
 
 + (instancetype)query;
 

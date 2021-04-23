@@ -7,7 +7,7 @@
 #import "LCSubclassing.h"
 
 @class LCRole;
-@class AVQuery;
+@class LCQuery;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -404,7 +404,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 /*!
  Creates a query for AVUser objects.
  */
-+ (AVQuery *)query;
++ (LCQuery *)query;
 
 // MARK: SMS
 

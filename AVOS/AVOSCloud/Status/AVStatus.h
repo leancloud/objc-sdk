@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "AVUser.h"
-#import "AVQuery.h"
+#import "LCQuery.h"
 
 typedef NSString AVStatusType;
 
@@ -102,7 +102,7 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
  *
  *  @param query 限定条件
  */
--(void)setQuery:(AVQuery*)query;
+-(void)setQuery:(LCQuery*)query;
 
 
 /** @name 获取状态 */
@@ -201,36 +201,36 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
 /* @name 好友关系 */
 
 /**
- *  获取用户粉丝AVQuery
+ *  获取用户粉丝LCQuery
  *
  *  @param userObjectId 用户ID
  *
- *  @return 用于查询的AVQuery
+ *  @return 用于查询的LCQuery
  */
-+(AVQuery*)followerQuery:(NSString*)userObjectId;
++(LCQuery*)followerQuery:(NSString*)userObjectId;
 
 /**
- *  获取本用户粉丝AVQuery
+ *  获取本用户粉丝LCQuery
  *
- *  @return 用于查询的AVQuery
+ *  @return 用于查询的LCQuery
  */
--(AVQuery*)followerQuery;
+-(LCQuery*)followerQuery;
 
 /**
- *  获取用户关注AVQuery
+ *  获取用户关注LCQuery
  *
  *  @param userObjectId 用户ID
  *
- *  @return 用于查询的AVQuery
+ *  @return 用于查询的LCQuery
  */
-+(AVQuery*)followeeQuery:(NSString*)userObjectId;
++(LCQuery*)followeeQuery:(NSString*)userObjectId;
 
 /**
- *  获取本用户关注AVQuery
+ *  获取本用户关注LCQuery
  *
- *  @return 用于查询的AVQuery
+ *  @return 用于查询的LCQuery
  */
--(AVQuery*)followeeQuery;
+-(LCQuery*)followeeQuery;
 
 /**
  *  通过ID来关注其他用户
@@ -286,7 +286,7 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
 /**
  *  查询AVStatus
  */
-@interface AVStatusQuery : AVQuery
+@interface AVStatusQuery : LCQuery
 /**
  *  设置起始messageId, 仅用于Inbox中的查询
  */

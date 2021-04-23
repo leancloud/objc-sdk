@@ -6,7 +6,7 @@
 #import <Foundation/Foundation.h>
 #import "LCObject.h"
 
-@class AVQuery;
+@class LCQuery;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -96,7 +96,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark Querying for Roles
 
 /** @name Querying for Roles */
-+ (AVQuery *)query;
++ (LCQuery *)query;
 
 @end
 

@@ -8,7 +8,7 @@
 #import "LCPush_Internal.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"
-#import "AVQuery_Internal.h"
+#import "LCQuery_Internal.h"
 #import "LCInstallation_Internal.h"
 #import "LCObjectUtils.h"
 #import "LCRouter_Internal.h"
@@ -82,7 +82,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
     [self.pushChannels addObjectsFromArray:channels];
 }
 
-- (void)setQuery:(AVQuery *)query
+- (void)setQuery:(LCQuery *)query
 {
     self.pushQuery = query;
 }
@@ -218,7 +218,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
     [LCPush sendPushMessage:push wait:YES block:block error:nil];
 }
 
-+ (BOOL)sendPushMessageToQuery:(AVQuery *)query
++ (BOOL)sendPushMessageToQuery:(LCQuery *)query
                    withMessage:(NSString *)message
                          error:(NSError **)theError
 {
@@ -228,7 +228,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
     return [LCPush sendPushMessage:push wait:YES block:^(BOOL succeeded, NSError *error) {} error:theError];
 }
 
-+ (void)sendPushMessageToQueryInBackground:(AVQuery *)query
++ (void)sendPushMessageToQueryInBackground:(LCQuery *)query
                                withMessage:(NSString *)message
 {
     LCPush * push = [LCPush push];
@@ -237,7 +237,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
     [LCPush sendPushMessage:push wait:NO block:^(BOOL succeeded, NSError *error) {} error:nil];
 }
 
-+ (void)sendPushMessageToQueryInBackground:(AVQuery *)query
++ (void)sendPushMessageToQueryInBackground:(LCQuery *)query
                                withMessage:(NSString *)message
                                      block:(AVBooleanResultBlock)block
 {
@@ -360,7 +360,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
     [LCPush sendPushMessage:push wait:NO block:block error:nil];
 }
 
-+ (BOOL)sendPushDataToQuery:(AVQuery *)query
++ (BOOL)sendPushDataToQuery:(LCQuery *)query
                    withData:(NSDictionary *)data
                       error:(NSError **)error
 {
@@ -370,7 +370,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
     return [LCPush sendPushMessage:push wait:YES block:nil error:error];
 }
 
-+ (void)sendPushDataToQueryInBackground:(AVQuery *)query
++ (void)sendPushDataToQueryInBackground:(LCQuery *)query
                                withData:(NSDictionary *)data
 {
     LCPush * push = [LCPush push];
@@ -379,7 +379,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
     [LCPush sendPushMessage:push wait:NO block:nil error:nil];
 }
 
-+ (void)sendPushDataToQueryInBackground:(AVQuery *)query
++ (void)sendPushDataToQueryInBackground:(LCQuery *)query
                                withData:(NSDictionary *)data
                                   block:(AVBooleanResultBlock)block
 {
@@ -415,7 +415,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
     NSError __block *blockError = nil;
     __block  NSSet * resultSet = nil;
 
-    AVQuery * query = [LCInstallation query];
+    LCQuery * query = [LCInstallation query];
     [query whereKey:deviceTokenTag equalTo:[LCInstallation defaultInstallation].deviceToken];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (objects.count > 0)

@@ -1,18 +1,18 @@
 //
-//  AVFriendQuery.m
+//  LCFriendQuery.m
 //  paas
 //
 //  Created by Travis on 14-1-26.
 //  Copyright (c) 2014年 AVOS. All rights reserved.
 //
 
-#import "AVFriendQuery.h"
-#import "AVQuery_Internal.h"
+#import "LCFriendQuery.h"
+#import "LCQuery_Internal.h"
 #import "LCObjectUtils.h"
 #import "AVErrorUtils.h"
-#import "AVQuery_Internal.h"
+#import "LCQuery_Internal.h"
 
-@implementation AVFriendQuery
+@implementation LCFriendQuery
 
 // only called in findobjects, these object's data is ready
 - (NSMutableArray *)processResults:(NSArray *)results className:(NSString *)className

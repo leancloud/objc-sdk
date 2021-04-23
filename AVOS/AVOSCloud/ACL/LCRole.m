@@ -4,7 +4,7 @@
 #import "LCObject_Internal.h"
 #import "LCRole.h"
 #import "LCRole_Internal.h"
-#import "AVQuery.h"
+#import "LCQuery.h"
 #import "LCRelation.h"
 #import "LCRelation_Internal.h"
 #import "LCACL.h"
@@ -76,9 +76,9 @@
     return [self relationForKey:@"roles"];
 }
 
-+ (AVQuery *)query
++ (LCQuery *)query
 {
-    AVQuery *query = [[AVQuery alloc] initWithClassName:[LCRole className]];
+    LCQuery *query = [[LCQuery alloc] initWithClassName:[LCRole className]];
     return query;
 }
 

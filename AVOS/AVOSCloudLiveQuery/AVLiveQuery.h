@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class AVUser;
-@class AVQuery;
+@class LCQuery;
 @class AVLiveQuery;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -86,14 +86,14 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  The query which matches objects that you want to observe.
  */
-@property (nonatomic, strong, readonly) AVQuery *query;
+@property (nonatomic, strong, readonly) LCQuery *query;
 
 /**
- Initialize live query with a AVQuery object.
+ Initialize live query with a LCQuery object.
 
  @param query The query which matches objects that you want to observe.
  */
-- (instancetype)initWithQuery:(AVQuery *)query;
+- (instancetype)initWithQuery:(LCQuery *)query;
 
 /**
  Subscribe change notifications for query.

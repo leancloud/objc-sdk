@@ -1364,7 +1364,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
 
 // MARK: - Query
 
-+ (AVQuery *)query
++ (LCQuery *)query
 {
     return [LCFileQuery query];
 }

@@ -1,13 +1,13 @@
 //
-//  AVFriendQuery.h
+//  LCFriendQuery.h
 //  paas
 //
 //  Created by Travis on 14-1-26.
 //  Copyright (c) 2014年 AVOS. All rights reserved.
 //
 
-#import "AVQuery.h"
+#import "LCQuery.h"
 
-@interface AVFriendQuery : AVQuery
+@interface LCFriendQuery : LCQuery
 @property(nonatomic, copy) NSString *targetFeild;
 @end

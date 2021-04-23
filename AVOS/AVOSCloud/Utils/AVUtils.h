@@ -96,7 +96,7 @@
                      error:(NSError *)error;
 
 + (void)callCloudQueryResultBlock:(AVCloudQueryCallback)block
-                           result:(AVCloudQueryResult *)result
+                           result:(LCCloudQueryResult *)result
                             error:error;
 
 /*!
