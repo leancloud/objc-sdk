@@ -10,7 +10,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface AVKeychain : NSObject
+@interface LCKeychain : NSObject
 
 /**
   @abstract Saves a given value to the Keychain

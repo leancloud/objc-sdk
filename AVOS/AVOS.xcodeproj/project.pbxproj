@@ -84,8 +84,8 @@
 		708F554D1B86121A0071CA48 /* TestDescriptionKey.json in Resources */ = {isa = PBXBuildFile; fileRef = 708F554C1B86121A0071CA48 /* TestDescriptionKey.json */; };
 		70AACA931B4A74A5007C5FFD /* AVOSCloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8419861A5A791300C5C6C4 /* AVOSCloud.framework */; };
 		70B05B3A1B909BD3009F6696 /* TestSaveAll.json in Resources */ = {isa = PBXBuildFile; fileRef = 70B05B391B909BD3009F6696 /* TestSaveAll.json */; };
-		70BA7A691BE2041200C3EB70 /* AVKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 836705DD1BA1C1710050E968 /* AVKeychain.m */; };
-		70BA7A6A1BE2041D00C3EB70 /* AVKeychain.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705DC1BA1C1710050E968 /* AVKeychain.h */; };
+		70BA7A691BE2041200C3EB70 /* LCKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 836705DD1BA1C1710050E968 /* LCKeychain.m */; };
+		70BA7A6A1BE2041D00C3EB70 /* LCKeychain.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705DC1BA1C1710050E968 /* LCKeychain.h */; };
 		70C288B11BB55E0300A4773C /* TestInstallationSave.json in Resources */ = {isa = PBXBuildFile; fileRef = 70C288B01BB55E0300A4773C /* TestInstallationSave.json */; };
 		70CA7F721BDE3721000A3B21 /* LCACL.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419DE1A5A79FF00C5C6C4 /* LCACL.m */; };
 		70CA7F731BDE3721000A3B21 /* LCRole.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419E11A5A79FF00C5C6C4 /* LCRole.m */; };
@@ -247,7 +247,7 @@
 		8320F88A1C1918C60024B45E /* LCSearchQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A741A5A79FF00C5C6C4 /* LCSearchQuery.m */; };
 		8320F88D1C1918C60024B45E /* LCDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DF02A61AF86032000E289C /* LCDatabase.m */; };
 		8320F88E1C1918C60024B45E /* NSDictionary+LCHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 837CC71D1B568431001333AD /* NSDictionary+LCHash.m */; };
-		8320F88F1C1918C60024B45E /* AVKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 836705DD1BA1C1710050E968 /* AVKeychain.m */; };
+		8320F88F1C1918C60024B45E /* LCKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 836705DD1BA1C1710050E968 /* LCKeychain.m */; };
 		8320F8901C1918C60024B45E /* LCQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A681A5A79FF00C5C6C4 /* LCQuery.m */; };
 		8320F8961C1918C60024B45E /* LCPersistenceUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419FD1A5A79FF00C5C6C4 /* LCPersistenceUtils.m */; };
 		8320F8981C1918C60024B45E /* AVAnonymousUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A9D1A5A7A0000C5C6C4 /* AVAnonymousUtils.m */; };
@@ -288,7 +288,7 @@
 		8320F8E01C1918C60024B45E /* LCDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DF02A51AF86032000E289C /* LCDatabase.h */; };
 		8320F8E11C1918C60024B45E /* NSDictionary+LCHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 837CC71C1B568431001333AD /* NSDictionary+LCHash.h */; };
 		8320F8E21C1918C60024B45E /* LCKeyValueStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 838DD79E1B3D3FB600C95897 /* LCKeyValueStore.h */; };
-		8320F8E31C1918C60024B45E /* AVKeychain.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705DC1BA1C1710050E968 /* AVKeychain.h */; };
+		8320F8E31C1918C60024B45E /* LCKeychain.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705DC1BA1C1710050E968 /* LCKeychain.h */; };
 		8320F8E41C1918C60024B45E /* LCFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A131A5A79FF00C5C6C4 /* LCFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8320F8E61C1918C60024B45E /* LCGeoPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A1D1A5A79FF00C5C6C4 /* LCGeoPoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8320F8E91C1918C60024B45E /* LCDatabaseAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DF02A71AF86032000E289C /* LCDatabaseAdditions.h */; };
@@ -388,8 +388,8 @@
 		835092191EB1ECB7000DA884 /* AVDynamicObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 835092111EB1ECB7000DA884 /* AVDynamicObject.m */; };
 		835C5F711D25929600EF0EBB /* LCFriendQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A651A5A79FF00C5C6C4 /* LCFriendQuery.h */; };
 		835C5F721D2594EA00EF0EBB /* AVAnalyticsActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419E71A5A79FF00C5C6C4 /* AVAnalyticsActivity.h */; };
-		836705DF1BA1C1710050E968 /* AVKeychain.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705DC1BA1C1710050E968 /* AVKeychain.h */; };
-		836705E01BA1C1710050E968 /* AVKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 836705DD1BA1C1710050E968 /* AVKeychain.m */; };
+		836705DF1BA1C1710050E968 /* LCKeychain.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705DC1BA1C1710050E968 /* LCKeychain.h */; };
+		836705E01BA1C1710050E968 /* LCKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 836705DD1BA1C1710050E968 /* LCKeychain.m */; };
 		837CC71E1B568431001333AD /* NSDictionary+LCHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 837CC71C1B568431001333AD /* NSDictionary+LCHash.h */; };
 		837CC71F1B568431001333AD /* NSDictionary+LCHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 837CC71D1B568431001333AD /* NSDictionary+LCHash.m */; };
 		838AF12A1AFE58F600B8965E /* LCIMMessageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 838AF1221AFE58F600B8965E /* LCIMMessageCache.h */; };
@@ -424,7 +424,7 @@
 		83D8CE831C17DAF50094279D /* LCSearchQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A741A5A79FF00C5C6C4 /* LCSearchQuery.m */; };
 		83D8CE861C17DAF50094279D /* LCDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DF02A61AF86032000E289C /* LCDatabase.m */; };
 		83D8CE871C17DAF50094279D /* NSDictionary+LCHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 837CC71D1B568431001333AD /* NSDictionary+LCHash.m */; };
-		83D8CE881C17DAF50094279D /* AVKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 836705DD1BA1C1710050E968 /* AVKeychain.m */; };
+		83D8CE881C17DAF50094279D /* LCKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 836705DD1BA1C1710050E968 /* LCKeychain.m */; };
 		83D8CE891C17DAF50094279D /* LCQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A681A5A79FF00C5C6C4 /* LCQuery.m */; };
 		83D8CE8B1C17DAF50094279D /* AVAnalyticsSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419EC1A5A79FF00C5C6C4 /* AVAnalyticsSession.m */; };
 		83D8CE8C1C17DAF50094279D /* AVAnalyticsImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419EA1A5A79FF00C5C6C4 /* AVAnalyticsImpl.m */; };
@@ -470,7 +470,7 @@
 		83D8CED91C17DAF50094279D /* LCDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DF02A51AF86032000E289C /* LCDatabase.h */; };
 		83D8CEDA1C17DAF50094279D /* NSDictionary+LCHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 837CC71C1B568431001333AD /* NSDictionary+LCHash.h */; };
 		83D8CEDB1C17DAF50094279D /* LCKeyValueStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 838DD79E1B3D3FB600C95897 /* LCKeyValueStore.h */; };
-		83D8CEDC1C17DAF50094279D /* AVKeychain.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705DC1BA1C1710050E968 /* AVKeychain.h */; };
+		83D8CEDC1C17DAF50094279D /* LCKeychain.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705DC1BA1C1710050E968 /* LCKeychain.h */; };
 		83D8CEDD1C17DAF50094279D /* LCFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A131A5A79FF00C5C6C4 /* LCFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83D8CEDF1C17DAF50094279D /* LCGeoPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A1D1A5A79FF00C5C6C4 /* LCGeoPoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83D8CEE21C17DAF50094279D /* LCDatabaseAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DF02A71AF86032000E289C /* LCDatabaseAdditions.h */; };
@@ -844,8 +844,8 @@
 		D30B6A8924A09DCA006ABE09 /* LCURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = D37EE4A723ACF39700AACE99 /* LCURLResponseSerialization.m */; };
 		D30B6A8A24A09DCA006ABE09 /* LCURLSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4A823ACF39700AACE99 /* LCURLSessionManager.h */; };
 		D30B6A8B24A09DCA006ABE09 /* LCURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D37EE4AB23ACF39700AACE99 /* LCURLSessionManager.m */; };
-		D30B6A8C24A09DD8006ABE09 /* AVKeychain.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705DC1BA1C1710050E968 /* AVKeychain.h */; };
-		D30B6A8D24A09DD8006ABE09 /* AVKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 836705DD1BA1C1710050E968 /* AVKeychain.m */; };
+		D30B6A8C24A09DD8006ABE09 /* LCKeychain.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705DC1BA1C1710050E968 /* LCKeychain.h */; };
+		D30B6A8D24A09DD8006ABE09 /* LCKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 836705DD1BA1C1710050E968 /* LCKeychain.m */; };
 		D30B6A8E24A09DDF006ABE09 /* LCDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DF02A51AF86032000E289C /* LCDatabase.h */; };
 		D30B6A8F24A09DDF006ABE09 /* LCDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DF02A61AF86032000E289C /* LCDatabase.m */; };
 		D30B6A9024A09DDF006ABE09 /* LCDatabaseAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DF02A71AF86032000E289C /* LCDatabaseAdditions.h */; };
@@ -1466,8 +1466,8 @@
 		835091FC1EB1BDD0000DA884 /* AVSMS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVSMS.m; sourceTree = "<group>"; };
 		835092101EB1ECB7000DA884 /* AVDynamicObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVDynamicObject.h; sourceTree = "<group>"; };
 		835092111EB1ECB7000DA884 /* AVDynamicObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVDynamicObject.m; sourceTree = "<group>"; };
-		836705DC1BA1C1710050E968 /* AVKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVKeychain.h; sourceTree = "<group>"; };
-		836705DD1BA1C1710050E968 /* AVKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVKeychain.m; sourceTree = "<group>"; };
+		836705DC1BA1C1710050E968 /* LCKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCKeychain.h; sourceTree = "<group>"; };
+		836705DD1BA1C1710050E968 /* LCKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCKeychain.m; sourceTree = "<group>"; };
 		837CC71C1B568431001333AD /* NSDictionary+LCHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+LCHash.h"; sourceTree = "<group>"; };
 		837CC71D1B568431001333AD /* NSDictionary+LCHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+LCHash.m"; sourceTree = "<group>"; };
 		838AF1221AFE58F600B8965E /* LCIMMessageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageCache.h; sourceTree = "<group>"; };
@@ -1971,8 +1971,8 @@
 		836705DA1BA1C1710050E968 /* JNKeychain */ = {
 			isa = PBXGroup;
 			children = (
-				836705DC1BA1C1710050E968 /* AVKeychain.h */,
-				836705DD1BA1C1710050E968 /* AVKeychain.m */,
+				836705DC1BA1C1710050E968 /* LCKeychain.h */,
+				836705DD1BA1C1710050E968 /* LCKeychain.m */,
 			);
 			path = JNKeychain;
 			sourceTree = "<group>";
@@ -2951,7 +2951,7 @@
 				830EBA011C44F3D600BA917F /* LCSaveOption_internal.h in Headers */,
 				70CA7FDE1BDE42F5000A3B21 /* LCRole_Internal.h in Headers */,
 				70CA7FE01BDE42F5000A3B21 /* AVAnalytics_Internal.h in Headers */,
-				70BA7A6A1BE2041D00C3EB70 /* AVKeychain.h in Headers */,
+				70BA7A6A1BE2041D00C3EB70 /* LCKeychain.h in Headers */,
 				70CA7FE21BDE42F5000A3B21 /* AVAnalyticsImpl.h in Headers */,
 				70CA7FE31BDE42F5000A3B21 /* AVAnalyticsSession.h in Headers */,
 				70CA7FE41BDE42F5000A3B21 /* AVAnalyticsUtils.h in Headers */,
@@ -2993,7 +2993,7 @@
 				8320F8E01C1918C60024B45E /* LCDatabase.h in Headers */,
 				8320F8E11C1918C60024B45E /* NSDictionary+LCHash.h in Headers */,
 				8320F8E21C1918C60024B45E /* LCKeyValueStore.h in Headers */,
-				8320F8E31C1918C60024B45E /* AVKeychain.h in Headers */,
+				8320F8E31C1918C60024B45E /* LCKeychain.h in Headers */,
 				8320F8E41C1918C60024B45E /* LCFile.h in Headers */,
 				8320F8E61C1918C60024B45E /* LCGeoPoint.h in Headers */,
 				8320F8E91C1918C60024B45E /* LCDatabaseAdditions.h in Headers */,
@@ -3097,7 +3097,7 @@
 				83D8CED91C17DAF50094279D /* LCDatabase.h in Headers */,
 				83D8CEDA1C17DAF50094279D /* NSDictionary+LCHash.h in Headers */,
 				83D8CEDB1C17DAF50094279D /* LCKeyValueStore.h in Headers */,
-				83D8CEDC1C17DAF50094279D /* AVKeychain.h in Headers */,
+				83D8CEDC1C17DAF50094279D /* LCKeychain.h in Headers */,
 				83D8CEDD1C17DAF50094279D /* LCFile.h in Headers */,
 				83D8CEDF1C17DAF50094279D /* LCGeoPoint.h in Headers */,
 				83D8CEE21C17DAF50094279D /* LCDatabaseAdditions.h in Headers */,
@@ -3194,7 +3194,7 @@
 				83DF02B01AF86032000E289C /* LCDatabase.h in Headers */,
 				837CC71E1B568431001333AD /* NSDictionary+LCHash.h in Headers */,
 				838DD7A01B3D3FB600C95897 /* LCKeyValueStore.h in Headers */,
-				836705DF1BA1C1710050E968 /* AVKeychain.h in Headers */,
+				836705DF1BA1C1710050E968 /* LCKeychain.h in Headers */,
 				8C841ADE1A5A7A0000C5C6C4 /* LCFile.h in Headers */,
 				8C841AE71A5A7A0000C5C6C4 /* LCGeoPoint.h in Headers */,
 				83DF02B21AF86032000E289C /* LCDatabaseAdditions.h in Headers */,
@@ -3438,7 +3438,7 @@
 				D30B6B5E24A0A03E006ABE09 /* AVSubscriber.h in Headers */,
 				D30B6A6D24A09D62006ABE09 /* LCQuery_Internal.h in Headers */,
 				D30B6A2424A09B1F006ABE09 /* AVGlobal.h in Headers */,
-				D30B6A8C24A09DD8006ABE09 /* AVKeychain.h in Headers */,
+				D30B6A8C24A09DD8006ABE09 /* LCKeychain.h in Headers */,
 				D30B6A5124A09D23006ABE09 /* LCObject+Subclass.h in Headers */,
 				D30B6B5324A09FAD006ABE09 /* AVIMErrorUtil.h in Headers */,
 				D30B6B4124A09F84006ABE09 /* AVIMTypedMessage_Internal.h in Headers */,
@@ -4195,7 +4195,7 @@
 				70CA7F8A1BDE3721000A3B21 /* LCRequestManager.m in Sources */,
 				70CA7F8B1BDE3721000A3B21 /* LCInstallation.m in Sources */,
 				70CA7F8C1BDE3721000A3B21 /* LCPush.m in Sources */,
-				70BA7A691BE2041200C3EB70 /* AVKeychain.m in Sources */,
+				70BA7A691BE2041200C3EB70 /* LCKeychain.m in Sources */,
 				8302AEDC1C192A0700E13F8A /* LCURLConnection.m in Sources */,
 				D37EE4B223ACF39700AACE99 /* LCSecurityPolicy.m in Sources */,
 				70CA7F8D1BDE3721000A3B21 /* LCCloudQueryResult.m in Sources */,
@@ -4231,7 +4231,7 @@
 				8320F88E1C1918C60024B45E /* NSDictionary+LCHash.m in Sources */,
 				835092041EB1BDD0000DA884 /* AVSMS.m in Sources */,
 				D37EE4C423ACF39700AACE99 /* LCURLResponseSerialization.m in Sources */,
-				8320F88F1C1918C60024B45E /* AVKeychain.m in Sources */,
+				8320F88F1C1918C60024B45E /* LCKeychain.m in Sources */,
 				8320F8901C1918C60024B45E /* LCQuery.m in Sources */,
 				8320F8961C1918C60024B45E /* LCPersistenceUtils.m in Sources */,
 				D3700B812475345C00678B2B /* AVApplication.m in Sources */,
@@ -4315,7 +4315,7 @@
 				83331D4B1EB9A25F00CADC9C /* AVCaptcha.m in Sources */,
 				83D8CE861C17DAF50094279D /* LCDatabase.m in Sources */,
 				83D8CE871C17DAF50094279D /* NSDictionary+LCHash.m in Sources */,
-				83D8CE881C17DAF50094279D /* AVKeychain.m in Sources */,
+				83D8CE881C17DAF50094279D /* LCKeychain.m in Sources */,
 				83D8CE891C17DAF50094279D /* LCQuery.m in Sources */,
 				83D8CE8B1C17DAF50094279D /* AVAnalyticsSession.m in Sources */,
 				83D8CE8C1C17DAF50094279D /* AVAnalyticsImpl.m in Sources */,
@@ -4383,7 +4383,7 @@
 				83331D491EB9A25F00CADC9C /* AVCaptcha.m in Sources */,
 				83DF02B11AF86032000E289C /* LCDatabase.m in Sources */,
 				837CC71F1B568431001333AD /* NSDictionary+LCHash.m in Sources */,
-				836705E01BA1C1710050E968 /* AVKeychain.m in Sources */,
+				836705E01BA1C1710050E968 /* LCKeychain.m in Sources */,
 				8C841B2D1A5A7A0000C5C6C4 /* LCQuery.m in Sources */,
 				8C841ABB1A5A7A0000C5C6C4 /* AVAnalyticsSession.m in Sources */,
 				8C841AB91A5A7A0000C5C6C4 /* AVAnalyticsImpl.m in Sources */,
@@ -4659,7 +4659,7 @@
 				D30B6B1624A09F1F006ABE09 /* LCGPBWrappers.pbobjc.m in Sources */,
 				D30B6A3724A09C8E006ABE09 /* AVAnalyticsImpl.m in Sources */,
 				D30B6B2624A09F59006ABE09 /* AVIMDirectCommand+DirectCommandAdditions.m in Sources */,
-				D30B6A8D24A09DD8006ABE09 /* AVKeychain.m in Sources */,
+				D30B6A8D24A09DD8006ABE09 /* LCKeychain.m in Sources */,
 				D30B6AC224A09EBC006ABE09 /* AVIMClient.m in Sources */,
 				D30B6B4824A09F84006ABE09 /* AVIMAudioMessage.m in Sources */,
 				D30B6AAE24A09E35006ABE09 /* NSDictionary+LCHash.m in Sources */,

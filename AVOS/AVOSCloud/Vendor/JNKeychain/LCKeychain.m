@@ -8,16 +8,16 @@
 
 #define CHECK_OSSTATUS_ERROR(x) (x == noErr) ? YES : NO
 
-#import "AVKeychain.h"
+#import "LCKeychain.h"
 #import "AVLogger.h"
 
-@interface AVKeychain ()
+@interface LCKeychain ()
 
 + (NSMutableDictionary *)getKeychainQuery:(NSString *)key;
 
 @end
 
-@implementation AVKeychain
+@implementation LCKeychain
 
 #pragma mark - Private
 + (NSMutableDictionary *)getKeychainQuery:(NSString *)key
