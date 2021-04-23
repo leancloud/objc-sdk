@@ -4,12 +4,12 @@
 #import <Foundation/Foundation.h>
 #import "AVUser_Internal.h"
 #import "LCObject_Internal.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVUtils.h"
 #import "LCQuery.h"
 #import "LCPersistenceUtils.h"
 #import "LCObjectUtils.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVErrorUtils.h"
 #import "LCFriendQuery.h"
 #import "AVUtils.h"
@@ -59,12 +59,12 @@ static BOOL enableAutomatic = NO;
         [LCPersistenceUtils removeFile:[LCPersistenceUtils currentUserArchivePath]];
         [LCPersistenceUtils removeFile:[LCPersistenceUtils currentUserClassArchivePath]];
     }
-    [AVPaasClient sharedInstance].currentUser = newUser;
+    [LCPaasClient sharedInstance].currentUser = newUser;
 }
 
 + (instancetype)currentUser
 {
-    AVUser *user = [AVPaasClient sharedInstance].currentUser;
+    AVUser *user = [LCPaasClient sharedInstance].currentUser;
     if (user) {
         return user;
     } else if ([LCPersistenceUtils fileExist:[LCPersistenceUtils currentUserArchivePath]]) {
@@ -78,7 +78,7 @@ static BOOL enableAutomatic = NO;
             }
             
             [LCObjectUtils copyDictionary:userDict toObject:user];
-            [AVPaasClient sharedInstance].currentUser = user;
+            [LCPaasClient sharedInstance].currentUser = user;
             return user;
         }
     }
@@ -97,7 +97,7 @@ static BOOL enableAutomatic = NO;
         return;
     }
     
-    [[AVPaasClient sharedInstance] getObject:[NSString stringWithFormat:@"%@/%@", [[self class] endPoint], @"me"] withParameters:@{@"session_token": sessionToken} block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] getObject:[NSString stringWithFormat:@"%@/%@", [[self class] endPoint], @"me"] withParameters:@{@"session_token": sessionToken} block:^(id object, NSError *error) {
         [AVUtils callBooleanResultBlock:callback error:error];
     }];
 }
@@ -223,7 +223,7 @@ static BOOL enableAutomatic = NO;
 +(void)requestEmailVerify:(NSString*)email withBlock:(AVBooleanResultBlock)block{
     NSParameterAssert(email);
     
-    [[AVPaasClient sharedInstance] postObject:@"requestEmailVerify" withParameters:@{@"email":email} block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] postObject:@"requestEmailVerify" withParameters:@{@"email":email} block:^(id object, NSError *error) {
         [AVUtils callBooleanResultBlock:block error:error];
     }];
 }
@@ -233,7 +233,7 @@ static BOOL enableAutomatic = NO;
         NSString *path = [NSString stringWithFormat:@"users/%@/updatePassword", self.objectId];
         NSDictionary *params = @{@"old_password":oldPassword,
                                  @"new_password":newPassword};
-        [[AVPaasClient sharedInstance] putObject:path withParameters:params sessionToken:self.sessionToken block:^(id object, NSError *error) {
+        [[LCPaasClient sharedInstance] putObject:path withParameters:params sessionToken:self.sessionToken block:^(id object, NSError *error) {
             if (!error) {
                 // {"sessionToken":"kns1w56ch9b3mn308i13bkln6",
                 //  "updatedAt":"2015-10-20T03:12:38.203Z",
@@ -275,7 +275,7 @@ static BOOL enableAutomatic = NO;
         return;
     }
     
-    AVPaasClient *HTTPClient = [AVPaasClient sharedInstance];
+    LCPaasClient *HTTPClient = [LCPaasClient sharedInstance];
     
     NSDictionary *headers = @{
         LCHeaderFieldNameSession: sessionToken
@@ -348,7 +348,7 @@ static BOOL enableAutomatic = NO;
     if (username) { parameters[usernameTag] = username; }
     if (email) { parameters[emailTag] = email; }
     if (password) { parameters[passwordTag] = password; }
-    [[AVPaasClient sharedInstance] postObject:@"login" withParameters:parameters block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] postObject:@"login" withParameters:parameters block:^(id object, NSError *error) {
         AVUser * user = nil;
         if (error == nil)
         {
@@ -412,7 +412,7 @@ static BOOL enableAutomatic = NO;
     NSError __block *blockError = nil;
     
     NSDictionary * parameters = @{mobilePhoneNumberTag: phoneNumber, passwordTag:password};
-    [[AVPaasClient sharedInstance] postObject:@"login" withParameters:parameters block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] postObject:@"login" withParameters:parameters block:^(id object, NSError *error) {
         AVUser * user = nil;
         if (error == nil)
         {
@@ -455,7 +455,7 @@ static BOOL enableAutomatic = NO;
         }
         return;
     }
-    [[AVPaasClient sharedInstance] getObject:[NSString stringWithFormat:@"%@/%@", [self endPoint], @"me"] withParameters:@{@"session_token": sessionToken} block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] getObject:[NSString stringWithFormat:@"%@/%@", [self endPoint], @"me"] withParameters:@{@"session_token": sessionToken} block:^(id object, NSError *error) {
         AVUser *user;
         if (!error) {
             user = [self userOrSubclassUser];
@@ -496,7 +496,7 @@ static BOOL enableAutomatic = NO;
     parameters[@"mobilePhoneNumber"] = phoneNumber;
     parameters[@"validate_token"] = options.validationToken;
     
-    [[AVPaasClient sharedInstance] postObject:@"requestLoginSmsCode" withParameters:parameters block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] postObject:@"requestLoginSmsCode" withParameters:parameters block:^(id object, NSError *error) {
         [AVUtils callBooleanResultBlock:callback error:error];
     }];
 }
@@ -535,7 +535,7 @@ static BOOL enableAutomatic = NO;
     NSError __block *blockError = nil;
     
     NSDictionary * parameters = @{mobilePhoneNumberTag: phoneNumber, smsCodeTag:smsCode};
-    [[AVPaasClient sharedInstance] postObject:@"login" withParameters:parameters block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] postObject:@"login" withParameters:parameters block:^(id object, NSError *error) {
         AVUser * user = nil;
         if (error == nil)
         {
@@ -603,7 +603,7 @@ static BOOL enableAutomatic = NO;
     NSError __block *blockError = nil;
     
     NSDictionary * parameters = @{mobilePhoneNumberTag: phoneNumber, smsCodeTag:smsCode};
-    [[AVPaasClient sharedInstance] postObject:@"usersByMobilePhone" withParameters:parameters block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] postObject:@"usersByMobilePhone" withParameters:parameters block:^(id object, NSError *error) {
         AVUser * user = nil;
         if (error == nil)
         {
@@ -637,7 +637,7 @@ static BOOL enableAutomatic = NO;
                                                  block:(AVUserResultBlock)block
 {    
     NSDictionary *parameters = @{ mobilePhoneNumberTag: phoneNumber, smsCodeTag: smsCode, passwordTag: password };
-    [[AVPaasClient sharedInstance] postObject:@"usersByMobilePhone" withParameters:parameters block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] postObject:@"usersByMobilePhone" withParameters:parameters block:^(id object, NSError *error) {
         if (error) {
             [AVUtils callUserResultBlock:block user:nil error:error];
             return;
@@ -695,7 +695,7 @@ static BOOL enableAutomatic = NO;
                                                    block:(AVBooleanResultBlock)block
 {
     NSDictionary * parameters = @{emailTag: email};
-    [[AVPaasClient sharedInstance] postObject:@"requestPasswordReset" withParameters:parameters block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] postObject:@"requestPasswordReset" withParameters:parameters block:^(id object, NSError *error) {
         if (block) {
             block(error == nil, error);
         }
@@ -716,7 +716,7 @@ static BOOL enableAutomatic = NO;
     parameters[@"mobilePhoneNumber"] = phoneNumber;
     parameters[@"validate_token"] = options.validationToken;
     
-    [[AVPaasClient sharedInstance] postObject:@"requestPasswordResetBySmsCode" withParameters:parameters block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] postObject:@"requestPasswordResetBySmsCode" withParameters:parameters block:^(id object, NSError *error) {
         [AVUtils callBooleanResultBlock:callback error:error];
     }];
 }
@@ -727,7 +727,7 @@ static BOOL enableAutomatic = NO;
     NSParameterAssert(code);
     
     NSString *path=[NSString stringWithFormat:@"resetPasswordBySmsCode/%@",code];
-    [[AVPaasClient sharedInstance] putObject:path withParameters:@{ @"password" : password } sessionToken:nil block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] putObject:path withParameters:@{ @"password" : password } sessionToken:nil block:^(id object, NSError *error) {
         [AVUtils callBooleanResultBlock:block error:error];
     }];
 }
@@ -759,7 +759,7 @@ static BOOL enableAutomatic = NO;
     if (options.validationToken) {
         parameters[@"validate_token"] = options.validationToken;
     }
-    [[AVPaasClient sharedInstance] postObject:@"requestMobilePhoneVerify"
+    [[LCPaasClient sharedInstance] postObject:@"requestMobilePhoneVerify"
                                withParameters:parameters
                                         block:^(id  _Nullable object, NSError * _Nullable error) {
         if (error) {
@@ -790,7 +790,7 @@ static BOOL enableAutomatic = NO;
     if (phoneNumber) {
         parameters[@"mobilePhoneNumber"] = phoneNumber;
     }
-    [[AVPaasClient sharedInstance] postObject:[NSString stringWithFormat:@"verifyMobilePhone/%@", code]
+    [[LCPaasClient sharedInstance] postObject:[NSString stringWithFormat:@"verifyMobilePhone/%@", code]
                                withParameters:parameters
                                         block:^(id  _Nullable object, NSError * _Nullable error) {
         if (error) {
@@ -800,7 +800,7 @@ static BOOL enableAutomatic = NO;
             return;
         }
         if ([NSDictionary _lc_isTypeOf:object]) {
-            AVUser *currentUser = [AVPaasClient sharedInstance].currentUser;
+            AVUser *currentUser = [LCPaasClient sharedInstance].currentUser;
             NSString *objectId = [NSString _lc_decoding:object
                                                     key:@"objectId"];
             if (currentUser && objectId &&
@@ -835,7 +835,7 @@ static BOOL enableAutomatic = NO;
     if (options.timeToLive) {
         parameters[@"ttl"] = options.timeToLive;
     }
-    [[AVPaasClient sharedInstance] postObject:@"requestChangePhoneNumber"
+    [[LCPaasClient sharedInstance] postObject:@"requestChangePhoneNumber"
                                withParameters:parameters
                                         block:^(id  _Nullable object, NSError * _Nullable error) {
         if (error) {
@@ -862,7 +862,7 @@ static BOOL enableAutomatic = NO;
                                  code:(NSString *)code
                                 block:(void (^)(BOOL, NSError * _Nullable))block
 {
-    [[AVPaasClient sharedInstance] postObject:@"changePhoneNumber"
+    [[LCPaasClient sharedInstance] postObject:@"changePhoneNumber"
                                withParameters:@{ @"mobilePhoneNumber": phoneNumber,
                                                  @"code": code }
                                         block:^(id  _Nullable object, NSError * _Nullable error) {
@@ -873,7 +873,7 @@ static BOOL enableAutomatic = NO;
             return;
         }
         if ([NSDictionary _lc_isTypeOf:object]) {
-            AVUser *currentUser = [AVPaasClient sharedInstance].currentUser;
+            AVUser *currentUser = [LCPaasClient sharedInstance].currentUser;
             NSString *objectId = [NSString _lc_decoding:object
                                                     key:@"objectId"];
             if (currentUser && objectId &&
@@ -936,7 +936,7 @@ static BOOL enableAutomatic = NO;
         path;
     });
     
-    [AVPaasClient.sharedInstance postObject:path withParameters:parameters block:^(id object, NSError *error) {
+    [LCPaasClient.sharedInstance postObject:path withParameters:parameters block:^(id object, NSError *error) {
         
         if (error) {
             
@@ -1027,7 +1027,7 @@ static BOOL enableAutomatic = NO;
     NSString *path = [NSString stringWithFormat:@"users/%@", objectId];
     NSString *sessionToken = self.sessionToken;
     
-    [AVPaasClient.sharedInstance putObject:path withParameters:parameters sessionToken:sessionToken block:^(id object, NSError *error) {
+    [LCPaasClient.sharedInstance putObject:path withParameters:parameters sessionToken:sessionToken block:^(id object, NSError *error) {
         
         if (error) {
             
@@ -1105,7 +1105,7 @@ static BOOL enableAutomatic = NO;
     NSString *path = [NSString stringWithFormat:@"users/%@", self.objectId];
     NSString *sessionToken = self.sessionToken;
     
-    [AVPaasClient.sharedInstance putObject:path withParameters:parameters sessionToken:sessionToken block:^(id object, NSError *error) {
+    [LCPaasClient.sharedInstance putObject:path withParameters:parameters sessionToken:sessionToken block:^(id object, NSError *error) {
         
         if (error) {
             
@@ -1165,7 +1165,7 @@ static BOOL enableAutomatic = NO;
         }
         @{ authDataTag: @{ anonymousTag: @{ @"id": anonymousId } } };
     });
-    [AVPaasClient.sharedInstance postObject:@"users" withParameters:parameters block:^(id object, NSError *error) {
+    [LCPaasClient.sharedInstance postObject:@"users" withParameters:parameters block:^(id object, NSError *error) {
         if (error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 callback(nil, error);
@@ -1441,7 +1441,7 @@ static BOOL enableAutomatic = NO;
     NSDictionary *dict = [LCObjectUtils dictionaryFromObject:dictionary];
     NSString *path=[NSString stringWithFormat:@"users/self/friendship/%@",userId];
     
-    [[AVPaasClient sharedInstance] postObject:path withParameters:dict block:^(NSDictionary *object, NSError *error) {
+    [[LCPaasClient sharedInstance] postObject:path withParameters:dict block:^(NSDictionary *object, NSError *error) {
         [AVUtils callBooleanResultBlock:callback error:error];
     }];
 }
@@ -1454,7 +1454,7 @@ static BOOL enableAutomatic = NO;
     
     NSString *path=[NSString stringWithFormat:@"users/self/friendship/%@",userId];
     
-    [[AVPaasClient sharedInstance] deleteObject:path withParameters:nil block:^(NSDictionary *object, NSError *error) {
+    [[LCPaasClient sharedInstance] deleteObject:path withParameters:nil block:^(NSDictionary *object, NSError *error) {
         [AVUtils callBooleanResultBlock:callback error:error];
     }];
 }
@@ -1477,7 +1477,7 @@ static BOOL enableAutomatic = NO;
 -(void)getFollowersAndFollowees:(AVDictionaryResultBlock)callback{
     NSString *path=[NSString stringWithFormat:@"users/%@/followersAndFollowees?include=follower,followee",self.objectId];
     
-    [[AVPaasClient sharedInstance] getObject:path withParameters:nil block:^(NSDictionary *object, NSError *error) {
+    [[LCPaasClient sharedInstance] getObject:path withParameters:nil block:^(NSDictionary *object, NSError *error) {
         if (error==nil) {
             NSMutableDictionary *dict=[NSMutableDictionary dictionaryWithCapacity:2];
             @try {

@@ -10,7 +10,7 @@
 #import "LCFile.h"
 #import "LCFile_Internal.h"
 #import "LCCacheManager.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVUtils.h"
 
 static NSUInteger const ExpiredDays = 30;
@@ -80,7 +80,7 @@ static NSUInteger const ExpiredDays = 30;
 #endif
 
 - (void)handleArchivedRequests {
-    [[AVPaasClient sharedInstance] handleAllArchivedRequests];
+    [[LCPaasClient sharedInstance] handleAllArchivedRequests];
 }
 
 - (void)clearCache {

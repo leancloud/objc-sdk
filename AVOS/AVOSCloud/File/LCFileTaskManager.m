@@ -10,7 +10,7 @@
 #import "AVErrorUtils.h"
 #import "AVUtils.h"
 #import "LCFile_Internal.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "LCObjectUtils.h"
 #import "LCNetworking.h"
 

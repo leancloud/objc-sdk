@@ -2,7 +2,7 @@
 // Copyright 2011 AVOS Inc. All rights reserved.
 
 #import "LCObject_Internal.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVUtils.h"
 #import "LCRelation.h"
 #import "LCObject_Internal.h"
@@ -194,7 +194,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         __localData = [[NSMutableDictionary alloc] init];
         __estimatedData = [[NSMutableDictionary alloc] init];
         __relationData = [[NSMutableDictionary alloc] init];
-        __operationQueue = [[AVRequestOperationQueue alloc] init];
+        __operationQueue = [[LCRequestOperationQueue alloc] init];
         __requestManager = [[LCRequestManager alloc] init];
         __submit = YES;
     }
@@ -924,7 +924,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     [self addInternalId:body];
     // should use addACLIfExists ?
     [self addDefaultACL:body];
-    NSMutableDictionary * item = [AVPaasClient batchMethod:method path:[self initialRequestPath] body:body parameters:[self myParams]];
+    NSMutableDictionary * item = [LCPaasClient batchMethod:method path:[self initialRequestPath] body:body parameters:[self myParams]];
     [initialSaveArray addObject:item];
 }
 
@@ -1044,12 +1044,12 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         NSString * internalId = [body objectForKey:internalIdTag];
         LCObject * object = [self searchObjectByInternalId:internalId];
         if ([object hasValidObjectId]) {
-            [AVPaasClient updateBatchMethod:@"PUT" path:[object myObjectPath] dict:dict];
+            [LCPaasClient updateBatchMethod:@"PUT" path:[object myObjectPath] dict:dict];
         }
     }
     __block BOOL hasCallback = NO;
     __block NSError *blockError;
-    [[AVPaasClient sharedInstance] postBatchSaveObject:batchRequest headerMap:[self headerMap] eventually:isEventually block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] postBatchSaveObject:batchRequest headerMap:[self headerMap] eventually:isEventually block:^(id object, NSError *error) {
         [self copyByUUIDFromDictionary:object];
         if(![error.domain isEqualToString:kLeanCloudErrorDomain]) {
             [self postSave];
@@ -1196,7 +1196,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     __block BOOL finished = NO;
     __block NSError *blockError;
     
-    [[AVPaasClient sharedInstance] postBatchSaveObject:requests
+    [[LCPaasClient sharedInstance] postBatchSaveObject:requests
                                              headerMap:nil
                                             eventually:NO
                                                  block:^(id result, NSError *anError)
@@ -1381,7 +1381,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     if (keys) {
         parameters = [LCQuery dictionaryFromIncludeKeys:keys];
     }
-    [[AVPaasClient sharedInstance] getObject:path withParameters:parameters block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] getObject:path withParameters:parameters block:^(id object, NSError *error) {
         
         if (error == nil)
         {
@@ -1520,7 +1520,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     if (keys) {
         parameters = [LCQuery dictionaryFromIncludeKeys:keys];
     }
-    [[AVPaasClient sharedInstance] getObject:path withParameters:parameters block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] getObject:path withParameters:parameters block:^(id object, NSError *error) {
         if (!error) {
             NSError *theError;
             [self handleFetchResult:object error:&theError];
@@ -1575,7 +1575,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     for (LCObject *obj in objects) {
         if ([obj isKindOfClass:[LCObject class]]) {
             if (!check || ![obj isDataAvailable]) {
-                NSDictionary* fetch = [AVPaasClient batchMethod:@"GET" path:[obj myObjectPath] body:nil parameters:nil];
+                NSDictionary* fetch = [LCPaasClient batchMethod:@"GET" path:[obj myObjectPath] body:nil parameters:nil];
                 [fetches addObject:fetch];
                 [fetchObjects addObject:obj];
             }
@@ -1583,7 +1583,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }
     if (fetches.count > 0) {
         __block BOOL hasCalledBlcok = NO;
-        [[AVPaasClient sharedInstance] postBatchObject:fetches block:^(NSArray *results, NSError *error) {
+        [[LCPaasClient sharedInstance] postBatchObject:fetches block:^(NSArray *results, NSError *error) {
             if (error) {
                 retError = error;
             } else {
@@ -1688,7 +1688,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }
     [self._requestManager clear];
     NSString *path = [self myObjectPath];
-    [[AVPaasClient sharedInstance] deleteObject:path withParameters:nil eventually:eventually block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] deleteObject:path withParameters:nil eventually:eventually block:^(id object, NSError *error) {
         if (!error) {
             [self postDelete];
         }
@@ -1761,10 +1761,10 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }
     NSMutableArray *deletes = [NSMutableArray array];
     for (LCObject *object in objects) {
-        NSMutableDictionary *delete = [AVPaasClient batchMethod:@"DELETE" path:[object myObjectPath] body:nil parameters:nil];
+        NSMutableDictionary *delete = [LCPaasClient batchMethod:@"DELETE" path:[object myObjectPath] body:nil parameters:nil];
         [deletes addObject:delete];
     }
-    [[AVPaasClient sharedInstance] postBatchObject:deletes block:^(NSArray *results, NSError *error) {
+    [[LCPaasClient sharedInstance] postBatchObject:deletes block:^(NSArray *results, NSError *error) {
         if (!error) {
             for (id result in results) {
                 if ([result isKindOfClass:[NSDictionary class]]) {
@@ -1819,9 +1819,9 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 -(void)addDefaultACL:(NSMutableDictionary *)dict {
     if (self.ACL == nil) {
-        if ([AVPaasClient sharedInstance].updatedDefaultACL) {
-            self.ACL = [AVPaasClient sharedInstance].updatedDefaultACL;
-            [dict setObject:[AVPaasClient sharedInstance].updatedDefaultACL.permissionsById forKey:ACLTag];
+        if ([LCPaasClient sharedInstance].updatedDefaultACL) {
+            self.ACL = [LCPaasClient sharedInstance].updatedDefaultACL;
+            [dict setObject:[LCPaasClient sharedInstance].updatedDefaultACL.permissionsById forKey:ACLTag];
         }
     }
 }
@@ -1835,7 +1835,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         body = [NSMutableDictionary dictionary];
     }
     [self addInternalId:body];
-    NSMutableDictionary * item = [AVPaasClient batchMethod:method path:[self myObjectPath] body:body parameters:[self myParams]];
+    NSMutableDictionary * item = [LCPaasClient batchMethod:method path:[self myObjectPath] body:body parameters:[self myParams]];
     if (new) {
         [item setObject:[NSNumber numberWithBool:new] forKey:@"new"];
     }
@@ -2071,7 +2071,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
                     format:@"Cannot initialize a AVUser with a custom class name."];
     }
     
-    [[AVPaasClient sharedInstance] addSubclassMapEntry:parseClassName classObject:objectClass];
+    [[LCPaasClient sharedInstance] addSubclassMapEntry:parseClassName classObject:objectClass];
 }
 
 + (LCQuery *)query {

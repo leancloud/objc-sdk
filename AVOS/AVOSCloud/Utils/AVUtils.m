@@ -19,7 +19,7 @@
 #import "LCFile_Internal.h"
 
 #import "LCObjectUtils.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "LCCloudQueryResult.h"
 #import "AVKeychain.h"
 #import "LCURLConnection.h"

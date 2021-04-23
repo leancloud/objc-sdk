@@ -1,14 +1,14 @@
 //
-//  AVRequestOperation.m
+//  LCRequestOperation.m
 //  AVOSCloud
 //
 //  Created by Zhu Zeng on 7/9/13.
 //  Copyright (c) 2013 AVOS. All rights reserved.
 //
 
-#import "AVRequestOperation.h"
+#import "LCRequestOperation.h"
 
-@implementation AVRequestOperation
+@implementation LCRequestOperation
 
 -(id)init
 {
@@ -17,16 +17,16 @@
     return self;
 }
 
-+(AVRequestOperation *)operation:(NSArray *)request
++(LCRequestOperation *)operation:(NSArray *)request
 {
-    AVRequestOperation * operation = [[AVRequestOperation alloc] init];
+    LCRequestOperation * operation = [[LCRequestOperation alloc] init];
     [operation.batchRequest addObjectsFromArray:request];
     return operation;
 }
 
 @end
 
-@implementation AVRequestOperationQueue
+@implementation LCRequestOperationQueue
 
 @synthesize queue = _queue;
 
@@ -42,10 +42,10 @@
     self.currentSequence += 2;
 }
 
--(AVRequestOperation *)addOperation:(NSArray *)request
+-(LCRequestOperation *)addOperation:(NSArray *)request
                    withBlock:(AVBooleanResultBlock)block
 {
-    AVRequestOperation * operation = [AVRequestOperation operation:[request mutableCopy]];
+    LCRequestOperation * operation = [LCRequestOperation operation:[request mutableCopy]];
     operation.sequence = self.currentSequence;
     operation.block = block;
     [self.queue addObject:operation];
@@ -53,10 +53,10 @@
     return operation;
 }
 
--(AVRequestOperation *)popHead
+-(LCRequestOperation *)popHead
 {
     if (self.queue.count > 0) {
-        AVRequestOperation * operation = [self.queue objectAtIndex:0];
+        LCRequestOperation * operation = [self.queue objectAtIndex:0];
         [self.queue removeObjectAtIndex:0];
         return operation;
     }
@@ -71,7 +71,7 @@
 -(void)clearOperationWithSequence:(int)seq
 {
     NSMutableArray *discardedItems = [NSMutableArray array];
-    for (AVRequestOperation * operation in self.queue) {
+    for (LCRequestOperation * operation in self.queue) {
         if (operation.sequence == seq)
             [discardedItems addObject:operation];
     }

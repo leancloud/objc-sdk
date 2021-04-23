@@ -1,12 +1,12 @@
 //
-//  AVPaasClient.m
+//  LCPaasClient.m
 //  paas
 //
 //  Created by Zhu Zeng on 2/25/13.
 //  Copyright (c) 2013 AVOS. All rights reserved.
 //
 
-#import "AVPaasClient_internal.h"
+#import "LCPaasClient_internal.h"
 #import "LCNetworking.h"
 #import "AVUtils.h"
 #import "AVUser_Internal.h"
@@ -109,7 +109,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 }
 @end
 
-@interface AVPaasClient()
+@interface LCPaasClient()
 
 @property (nonatomic, strong) LCURLSessionManager *sessionManager;
 
@@ -121,12 +121,12 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 @end
 
-@implementation AVPaasClient
+@implementation LCPaasClient
 
-+(AVPaasClient *)sharedInstance
++(LCPaasClient *)sharedInstance
 {
     static dispatch_once_t once;
-    static AVPaasClient * sharedInstance;
+    static LCPaasClient * sharedInstance;
     dispatch_once(&once, ^{
         sharedInstance = [[self alloc] init];
         sharedInstance.productionMode = YES;
@@ -227,7 +227,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
                     path:(NSString *)path
                     dict:(NSMutableDictionary *)dict
 {
-    NSString * myPath = [NSString stringWithFormat:@"/%@/%@", [AVPaasClient sharedInstance].apiVersion, path];
+    NSString * myPath = [NSString stringWithFormat:@"/%@/%@", [LCPaasClient sharedInstance].apiVersion, path];
     
     [dict setObject:method forKey:@"method"];
     [dict setObject:myPath forKey:@"path"];
@@ -292,7 +292,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     /* If GET request too heavy,
      wrap it into a POST request and ignore cache policy. */
     if (parameters && request.URL.absoluteString.length > 4096) {
-        NSDictionary *request = [AVPaasClient batchMethod:@"GET" path:path body:nil parameters:parameters];
+        NSDictionary *request = [LCPaasClient batchMethod:@"GET" path:path body:nil parameters:parameters];
         [self postBatchObject:@[request] block:^(NSArray * _Nullable objects, NSError * _Nullable error) {
             if (!error) {
                 [AVUtils callIdResultBlock:block object:objects.firstObject error:nil];

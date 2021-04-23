@@ -12,7 +12,7 @@
 #import "AVUser.h"
 #import "LCQuery.h"
 #import "LCQuery_Internal.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVUtils.h"
 
 static NSString *const LCQueryIdKey = @"query_id";
@@ -222,7 +222,7 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
             });
         };
         
-        [[AVPaasClient sharedInstance] postObject:AVSubscriptionEndpoint
+        [[LCPaasClient sharedInstance] postObject:AVSubscriptionEndpoint
                                    withParameters:parameters
                                             block:block];
     }];
@@ -253,7 +253,7 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
         [AVUtils callBooleanResultBlock:callback error:nil];
     };
 
-    [[AVPaasClient sharedInstance] postObject:AVUnsubscriptionEndpoint
+    [[LCPaasClient sharedInstance] postObject:AVUnsubscriptionEndpoint
                                withParameters:parameters
                                         block:block];
 }
@@ -264,7 +264,7 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
         
         NSDictionary *parameters = [self subscriptionParameters];
         
-        [[AVPaasClient sharedInstance] postObject:AVSubscriptionEndpoint withParameters:parameters block:^(id  _Nullable object, NSError * _Nullable error) {
+        [[LCPaasClient sharedInstance] postObject:AVSubscriptionEndpoint withParameters:parameters block:^(id  _Nullable object, NSError * _Nullable error) {
             // do nothing.
         }];
     }

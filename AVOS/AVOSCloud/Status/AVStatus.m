@@ -7,7 +7,7 @@
 //
 
 #import "AVStatus.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVErrorUtils.h"
 #import "LCObjectUtils.h"
 #import "LCObject_Internal.h"
@@ -249,7 +249,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     }
     
     NSString *owner=[AVStatus stringOfStatusOwner:[AVUser currentUser].objectId];
-    [[AVPaasClient sharedInstance] getObject:[NSString stringWithFormat:@"statuses/%@",objectId] withParameters:@{@"owner":owner,@"include":@"source"} block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] getObject:[NSString stringWithFormat:@"statuses/%@",objectId] withParameters:@{@"owner":owner,@"include":@"source"} block:^(id object, NSError *error) {
         
         if (!error) {
             
@@ -268,7 +268,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     }
     
     NSString *owner=[AVStatus stringOfStatusOwner:[AVUser currentUser].objectId];
-    [[AVPaasClient sharedInstance] deleteObject:[NSString stringWithFormat:@"statuses/%@",objectId] withParameters:@{@"owner":owner} block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] deleteObject:[NSString stringWithFormat:@"statuses/%@",objectId] withParameters:@{@"owner":owner} block:^(id object, NSError *error) {
         
         [AVUtils callBooleanResultBlock:callback error:error];
     }];
@@ -294,7 +294,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     __block NSError *responseError = nil;
     dispatch_semaphore_t sema = dispatch_semaphore_create(0);
 
-    [[AVPaasClient sharedInstance] deleteObject:[self statusInboxPath] withParameters:parameters block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] deleteObject:[self statusInboxPath] withParameters:parameters block:^(id object, NSError *error) {
         responseError = error;
         dispatch_semaphore_signal(sema);
     }];
@@ -326,7 +326,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     
     NSString *owner=[AVStatus stringOfStatusOwner:[AVUser currentUser].objectId];
     
-    [[AVPaasClient sharedInstance] getObject:@"subscribe/statuses/count" withParameters:@{@"owner":owner,@"inboxType":type} block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] getObject:@"subscribe/statuses/count" withParameters:@{@"owner":owner,@"inboxType":type} block:^(id object, NSError *error) {
         NSUInteger count=[object[@"unread"] integerValue];
         [AVUtils callIntegerResultBlock:callback number:count error:error];
     }];
@@ -342,7 +342,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
 
     NSString *owner = [AVStatus stringOfStatusOwner:[AVUser currentUser].objectId];
 
-    [[AVPaasClient sharedInstance] postObject:@"subscribe/statuses/resetUnreadCount" withParameters:@{@"owner": owner, @"inboxType": type} block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] postObject:@"subscribe/statuses/resetUnreadCount" withParameters:@{@"owner": owner, @"inboxType": type} block:^(id object, NSError *error) {
         [AVUtils callBooleanResultBlock:callback error:error];
     }];
 }
@@ -425,7 +425,7 @@ NSString * const kAVStatusTypePrivateMessage=@"private";
     [body setObject:queryInfo forKey:@"query"];
     [body setObject:self.type forKey:@"inboxType"];
 
-    AVPaasClient *client = [AVPaasClient sharedInstance];
+    LCPaasClient *client = [LCPaasClient sharedInstance];
     NSURLRequest *request = [client requestWithPath:@"statuses" method:@"POST" headers:nil parameters:body];
 
     [client

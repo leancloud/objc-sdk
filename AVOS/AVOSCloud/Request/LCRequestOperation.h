@@ -1,5 +1,5 @@
 //
-//  AVRequestOperation.h
+//  LCRequestOperation.h
 //  AVOSCloud
 //
 //  Created by Zhu Zeng on 7/9/13.
@@ -9,26 +9,26 @@
 #import <Foundation/Foundation.h>
 #import "AVConstants.h"
 
-@interface AVRequestOperation : NSObject
+@interface LCRequestOperation : NSObject
 
 @property (nonatomic, readwrite, strong) NSMutableArray * batchRequest;
 @property (nonatomic, readwrite, copy) AVBooleanResultBlock block;
 @property (nonatomic, readwrite) int sequence;
 
-+(AVRequestOperation *)operation:(NSArray *)request;
++(LCRequestOperation *)operation:(NSArray *)request;
 
 @end
 
 
-@interface AVRequestOperationQueue : NSObject
+@interface LCRequestOperationQueue : NSObject
 
 @property (nonatomic, readwrite) NSMutableArray * queue;
 @property (nonatomic, readwrite) int currentSequence;
 
 -(void)increaseSequence;
--(AVRequestOperation *)addOperation:(NSArray *)request
+-(LCRequestOperation *)addOperation:(NSArray *)request
                    withBlock:(AVBooleanResultBlock)block;
--(AVRequestOperation *)popHead;
+-(LCRequestOperation *)popHead;
 -(BOOL)noPendingRequest;
 -(void)clearOperationWithSequence:(int)seq;
 

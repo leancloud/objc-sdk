@@ -7,7 +7,7 @@
 //
 
 #import "AVSMS.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVUtils.h"
 #import "AVDynamicObject_Internal.h"
 
@@ -67,7 +67,7 @@
     parameters[@"name"]              = options.applicationName;
     parameters[@"op"]                = options.operation;
 
-    [[AVPaasClient sharedInstance] postObject:@"requestSmsCode" withParameters:parameters block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] postObject:@"requestSmsCode" withParameters:parameters block:^(id object, NSError *error) {
         [AVUtils callBooleanResultBlock:callback error:error];
     }];
 }

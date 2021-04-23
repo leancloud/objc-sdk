@@ -10,7 +10,7 @@
 #import "AVAnonymousUtils.h"
 #import "AVUtils.h"
 #import "LCObjectUtils.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVUser.h"
 #import "AVUser_Internal.h"
 
@@ -33,7 +33,7 @@
 + (void)logInWithBlock:(AVUserResultBlock)block
 {
     NSDictionary * parameters = [AVAnonymousUtils anonymousAuthData];
-    [[AVPaasClient sharedInstance] postObject:@"users" withParameters:parameters block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] postObject:@"users" withParameters:parameters block:^(id object, NSError *error) {
         AVUser * user = nil;
         if (error == nil)
         {

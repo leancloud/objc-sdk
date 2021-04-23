@@ -1,14 +1,14 @@
 //
-//  AVPaasClient_internal.h
+//  LCPaasClient_internal.h
 //  AVOS
 //
 //  Created by Tang Tianyong on 5/23/16.
 //  Copyright © 2016 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 
-@interface AVPaasClient()
+@interface LCPaasClient()
 
 /**
  A table of requests indexed by URL.

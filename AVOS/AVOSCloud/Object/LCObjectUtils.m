@@ -17,7 +17,7 @@
 #import "LCRelation.h"
 #import "LCRole_Internal.h"
 #import "LCInstallation_Internal.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "LCGeoPoint_Internal.h"
 #import "LCRelation_Internal.h"
 #import "AVUtils.h"
@@ -557,7 +557,7 @@
         return nil;
     }
     LCObject *object = nil;
-    Class classObject = [[AVPaasClient sharedInstance] classFor:className];
+    Class classObject = [[LCPaasClient sharedInstance] classFor:className];
     if (classObject != nil && [classObject isSubclassOfClass:[LCObject class]]) {
         if ([classObject respondsToSelector:@selector(object)]) {
             object = [classObject performSelector:@selector(object)];

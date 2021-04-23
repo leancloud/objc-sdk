@@ -11,7 +11,7 @@
 #if !TARGET_OS_WATCH
 #import "AVAnalyticsUtils.h"
 #endif
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVUtils.h"
 #import <libkern/OSAtomic.h>
 
@@ -137,7 +137,7 @@ static NSInteger LCNetworkStatisticsCacheSize     = 20;
     payloadDic[@"client"] = clientDic;
 #endif
 #endif
-    AVPaasClient *client = [AVPaasClient sharedInstance];
+    LCPaasClient *client = [LCPaasClient sharedInstance];
     NSURLRequest *request = [client requestWithPath:@"always_collect" method:@"POST" headers:nil parameters:payloadDic];
     [client
      performRequest:request

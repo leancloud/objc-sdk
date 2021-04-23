@@ -6,8 +6,8 @@
 #import "LCObject_Internal.h"
 #import "LCQuery.h"
 #import "AVUtils.h"
-#import "AVPaasClient.h"
-#import "AVPaasClient_internal.h"
+#import "LCPaasClient.h"
+#import "LCPaasClient_internal.h"
 #import "AVUser_Internal.h"
 #import "LCGeoPoint_Internal.h"
 #import "LCCacheManager.h"
@@ -109,7 +109,7 @@ NSString *LCStringFromDistanceUnit(LCQueryDistanceUnit unit) {
         parameters = @{@"cql":cql};
     }
     
-    [[AVPaasClient sharedInstance] getObject:path withParameters:parameters block:^(id dict, NSError *error) {
+    [[LCPaasClient sharedInstance] getObject:path withParameters:parameters block:^(id dict, NSError *error) {
         if (error == nil && [LCObjectUtils hasAnyKeys:dict]) {
             NSString *className = [dict objectForKey:@"className"];
             NSArray *resultArray = [dict objectForKey:@"results"];
@@ -632,7 +632,7 @@ static NSString * quote(NSString *string)
 {
     NSString *path = [LCObjectUtils objectPath:self.className objectId:objectId];
     [self assembleParameters];
-    [[AVPaasClient sharedInstance] getObject:path withParameters:self.parameters policy:self.cachePolicy maxCacheAge:self.maxCacheAge block:^(id dict, NSError *error) {
+    [[LCPaasClient sharedInstance] getObject:path withParameters:self.parameters policy:self.cachePolicy maxCacheAge:self.maxCacheAge block:^(id dict, NSError *error) {
         LCObject *object = nil;
         if (error == nil && [LCObjectUtils hasAnyKeys:dict]) {
             object = [LCObjectUtils lcObjectForClass:self.className];
@@ -720,7 +720,7 @@ static NSString * quote(NSString *string)
                 block:(AVArrayResultBlock)resultBlock
 {
 
-    [[AVPaasClient sharedInstance] getObject:path withParameters:parameters policy:self.cachePolicy maxCacheAge:self.maxCacheAge block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] getObject:path withParameters:parameters policy:self.cachePolicy maxCacheAge:self.maxCacheAge block:^(id object, NSError *error) {
         NSMutableArray * array;
         if (error == nil)
         {
@@ -849,7 +849,7 @@ static NSString * quote(NSString *string)
     [self assembleParameters];
     [self.parameters setObject:@(1) forKey:@"limit"];
 
-    [[AVPaasClient sharedInstance] getObject:path withParameters:self.parameters policy:self.cachePolicy maxCacheAge:self.maxCacheAge block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] getObject:path withParameters:self.parameters policy:self.cachePolicy maxCacheAge:self.maxCacheAge block:^(id object, NSError *error) {
         NSString *className = object[@"className"];
         NSArray *results = [object objectForKey:@"results"];
         BOOL end = [[object objectForKey:@"end"] boolValue];
@@ -936,7 +936,7 @@ static NSString * quote(NSString *string)
     [self.parameters setObject:@1 forKey:@"count"];
     [self.parameters setObject:@0 forKey:@"limit"];
 
-    [[AVPaasClient sharedInstance] getObject:path withParameters:self.parameters policy:self.cachePolicy maxCacheAge:self.maxCacheAge block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] getObject:path withParameters:self.parameters policy:self.cachePolicy maxCacheAge:self.maxCacheAge block:^(id object, NSError *error) {
         NSInteger count = [[object objectForKey:@"count"] integerValue];
         [AVUtils callIntegerResultBlock:block number:count error:error];
 
@@ -971,10 +971,10 @@ static NSString * quote(NSString *string)
        Detail discussion: https://github.com/leancloud/paas/issues/828
        We should deprecate this method in future.
      */
-    [[AVPaasClient sharedInstance].lock lock];
-    NSMapTable *table = [[AVPaasClient sharedInstance].requestTable copy];
-    [[AVPaasClient sharedInstance].lock unlock];
-    NSString *URLString = [[AVPaasClient sharedInstance] absoluteStringFromPath:[self queryPath] parameters:self.parameters];
+    [[LCPaasClient sharedInstance].lock lock];
+    NSMapTable *table = [[LCPaasClient sharedInstance].requestTable copy];
+    [[LCPaasClient sharedInstance].lock unlock];
+    NSString *URLString = [[LCPaasClient sharedInstance] absoluteStringFromPath:[self queryPath] parameters:self.parameters];
 
     for (NSString *key in table) {
         if ([URLString isEqualToString:key]) {
@@ -987,7 +987,7 @@ static NSString * quote(NSString *string)
 - (BOOL)hasCachedResult
 {
     [self assembleParameters];
-    NSString *key = [[AVPaasClient sharedInstance] absoluteStringFromPath:[self queryPath] parameters:self.parameters];
+    NSString *key = [[LCPaasClient sharedInstance] absoluteStringFromPath:[self queryPath] parameters:self.parameters];
     return [[LCCacheManager sharedInstance] hasCacheForKey:key];
 }
 
@@ -997,7 +997,7 @@ static NSString * quote(NSString *string)
 - (void)clearCachedResult
 {
     [self assembleParameters];
-    NSString *key = [[AVPaasClient sharedInstance] absoluteStringFromPath:[self queryPath] parameters:self.parameters];
+    NSString *key = [[LCPaasClient sharedInstance] absoluteStringFromPath:[self queryPath] parameters:self.parameters];
     [[LCCacheManager sharedInstance] clearCacheForKey:key];
 }
 

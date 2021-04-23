@@ -10,7 +10,7 @@
 #import "AVApplication_Internal.h"
 #import "AVUtils.h"
 #import "AVErrorUtils.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "LCPersistenceUtils.h"
 
 RouterCacheKey const RouterCacheKeyApp = @"RouterCacheDataApp";
@@ -183,7 +183,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
 - (void)getAppRouterDataWithAppID:(NSString *)appID callback:(void (^)(NSDictionary *dataDictionary, NSError *error))callback
 {
     NSParameterAssert(appID);
-    [[AVPaasClient sharedInstance] getObject:AppRouterURLString withParameters:@{@"appId":appID} block:^(id _Nullable object, NSError * _Nullable error) {
+    [[LCPaasClient sharedInstance] getObject:AppRouterURLString withParameters:@{@"appId":appID} block:^(id _Nullable object, NSError * _Nullable error) {
         if (error) {
             callback(nil, error);
         } else {
@@ -315,7 +315,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
 {
     NSParameterAssert(appID);
     NSParameterAssert(RTMRouterURL);
-    AVPaasClient *paasClient = [AVPaasClient sharedInstance];
+    LCPaasClient *paasClient = [LCPaasClient sharedInstance];
     NSURLRequest *request = [paasClient requestWithPath:RTMRouterURL
                                                  method:@"GET"
                                                 headers:nil

@@ -4,7 +4,7 @@
 #import "LCFile.h"
 #import "LCFile_Internal.h"
 #import "LCFileTaskManager.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVUtils.h"
 #import "LCNetworking.h"
 #import "AVErrorUtils.h"
@@ -136,7 +136,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
             
             NSMutableDictionary *metaData = [NSMutableDictionary dictionary];
             metaData[kLCFile_size] = @(data.length);
-            NSString *objectId = AVPaasClient.sharedInstance.currentUser.objectId;
+            NSString *objectId = LCPaasClient.sharedInstance.currentUser.objectId;
             if (objectId && objectId.length > 0) {
                 metaData[kLCFile_owner] = objectId;
             }
@@ -145,7 +145,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         
         _ACL = ({
             
-            LCACL *acl = AVPaasClient.sharedInstance.updatedDefaultACL;
+            LCACL *acl = LCPaasClient.sharedInstance.updatedDefaultACL;
             if (acl) {
                 _rawJSONData[ACLTag] = [LCObjectUtils dictionaryFromACL:acl];
             }
@@ -198,7 +198,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
             
             NSMutableDictionary *metaData = [NSMutableDictionary dictionary];
             metaData[kLCFile_size] = fileAttributes[NSFileSize];
-            NSString *objectId = [AVPaasClient sharedInstance].currentUser.objectId;
+            NSString *objectId = [LCPaasClient sharedInstance].currentUser.objectId;
             if (objectId && objectId.length > 0) {
                 metaData[kLCFile_owner] = objectId;
             }
@@ -207,7 +207,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         
         _ACL = ({
             
-            LCACL *acl = [AVPaasClient sharedInstance].updatedDefaultACL;
+            LCACL *acl = [LCPaasClient sharedInstance].updatedDefaultACL;
             if (acl) {
                 _rawJSONData[ACLTag] = [LCObjectUtils dictionaryFromACL:acl];
             }
@@ -249,7 +249,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         
         _ACL = ({
             
-            LCACL *acl = [AVPaasClient sharedInstance].updatedDefaultACL;
+            LCACL *acl = [LCPaasClient sharedInstance].updatedDefaultACL;
             if (acl) {
                 _rawJSONData[ACLTag] = [LCObjectUtils dictionaryFromACL:acl];
             }
@@ -277,7 +277,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
             pathExtension;
         });
         
-        _ACL = AVPaasClient.sharedInstance.updatedDefaultACL;
+        _ACL = LCPaasClient.sharedInstance.updatedDefaultACL;
     }
     
     return self;
@@ -306,7 +306,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
                 pathExtension;
             });
             
-            _ACL = AVPaasClient.sharedInstance.updatedDefaultACL;
+            _ACL = LCPaasClient.sharedInstance.updatedDefaultACL;
         }
     }
     
@@ -806,7 +806,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
                 void(^fileCallback_block)(BOOL succeeded) = ^(BOOL succeeded) {
                     
                     if (fileTokens && fileTokens.token) {
-                        [AVPaasClient.sharedInstance postObject:@"fileCallback"
+                        [LCPaasClient.sharedInstance postObject:@"fileCallback"
                                                  withParameters:@{ @"token" : fileTokens.token, @"result" : @(succeeded) }
                                                           block:nil];
                     }
@@ -868,7 +868,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         mutableDic;
     });
     
-    [AVPaasClient.sharedInstance postObject:@"files" withParameters:mutableParameters.copy block:^(id object, NSError *error) {
+    [LCPaasClient.sharedInstance postObject:@"files" withParameters:mutableParameters.copy block:^(id object, NSError *error) {
         
         if (error) {
             completionHandler(false, error);
@@ -897,7 +897,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
 - (void)getFileTokensWithParameters:(NSDictionary *)parameters
                            callback:(void (^)(LCFileTokens *fileTokens, NSError *error))callback
 {
-    [AVPaasClient.sharedInstance postObject:@"fileTokens" withParameters:parameters block:^(id _Nullable object, NSError * _Nullable error) {
+    [LCPaasClient.sharedInstance postObject:@"fileTokens" withParameters:parameters block:^(id _Nullable object, NSError * _Nullable error) {
         
         if (error) {
             callback(nil, error);
@@ -1187,7 +1187,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         return;
     }
     
-    [[AVPaasClient sharedInstance] deleteObject:objectPath withParameters:nil block:^(id _Nullable object, NSError * _Nullable error) {
+    [[LCPaasClient sharedInstance] deleteObject:objectPath withParameters:nil block:^(id _Nullable object, NSError * _Nullable error) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -1224,7 +1224,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         
         NSString *objectPath = [@"files" stringByAppendingPathComponent:objectId];
         
-        NSMutableDictionary *request = [AVPaasClient batchMethod:@"DELETE"
+        NSMutableDictionary *request = [LCPaasClient batchMethod:@"DELETE"
                                                             path:objectPath
                                                             body:nil
                                                       parameters:nil];
@@ -1232,7 +1232,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         [requests addObject:request];
     }
     
-    [[AVPaasClient sharedInstance] postBatchObject:requests block:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+    [[LCPaasClient sharedInstance] postBatchObject:requests block:^(NSArray * _Nullable objects, NSError * _Nullable error) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -1265,7 +1265,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         return;
     }
     
-    [[AVPaasClient sharedInstance] getObject:objectPath withParameters:nil block:^(id object, NSError* error) {
+    [[LCPaasClient sharedInstance] getObject:objectPath withParameters:nil block:^(id object, NSError* error) {
         
         if (error) {
             

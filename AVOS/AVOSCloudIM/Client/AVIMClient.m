@@ -18,7 +18,7 @@
 #import "UserAgent.h"
 #import "LCObjectUtils.h"
 #import "AVUtils.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVErrorUtils.h"
 
 static BOOL gClientHasInstantiated = false;
@@ -390,7 +390,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 {
     NSParameterAssert(token);
     NSString *path = @"/rtm/sign";
-    AVPaasClient *paasClient = [AVPaasClient sharedInstance];
+    LCPaasClient *paasClient = [LCPaasClient sharedInstance];
     NSURLRequest *request = [paasClient requestWithPath:path
                                                  method:@"POST"
                                                 headers:nil

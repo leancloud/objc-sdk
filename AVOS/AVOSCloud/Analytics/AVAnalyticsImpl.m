@@ -8,7 +8,7 @@
 
 #import "AVAnalyticsImpl.h"
 #import "AVAnalyticsSession.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVAnalyticsUtils.h"
 #import "AVGlobal.h"
 #import "AVUtils.h"
@@ -323,7 +323,7 @@ static NSString *const kAVOnlineConfig = @"AVOS_ONLINE_CONFIG";
 }
 
 - (void)sendOneSession:(NSDictionary *)session {
-    [[AVPaasClient sharedInstance] postObject:[[[self class] myObjectPath] stringByAppendingString:@"/collect"]
+    [[LCPaasClient sharedInstance] postObject:[[[self class] myObjectPath] stringByAppendingString:@"/collect"]
                                withParameters:[session copy]
                                    eventually:YES
                                         block:^(id object, NSError *error)

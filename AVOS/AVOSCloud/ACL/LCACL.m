@@ -10,7 +10,7 @@
 #import "LCACL_Internal.h"
 #import "AVUser.h"
 #import "LCRole.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 
 static NSString * readTag = @"read";
 static NSString * writeTag = @"write";
@@ -231,8 +231,8 @@ static NSString * writeTag = @"write";
 
 + (void)setDefaultACL:(LCACL *)acl withAccessForCurrentUser:(BOOL)currentUserAccess
 {
-    [AVPaasClient sharedInstance].defaultACL = acl;
-    [AVPaasClient sharedInstance].currentUserAccessForDefaultACL = currentUserAccess;
+    [LCPaasClient sharedInstance].defaultACL = acl;
+    [LCPaasClient sharedInstance].currentUserAccessForDefaultACL = currentUserAccess;
 }
 
 

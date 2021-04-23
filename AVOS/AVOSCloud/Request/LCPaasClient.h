@@ -1,5 +1,5 @@
 //
-//  AVPaasClient.h
+//  LCPaasClient.h
 //  paas
 //
 //  Created by Zhu Zeng on 2/25/13.
@@ -19,9 +19,9 @@ FOUNDATION_EXPORT NSString *const LCHeaderFieldNameSign;
 FOUNDATION_EXPORT NSString *const LCHeaderFieldNameSession;
 FOUNDATION_EXPORT NSString *const LCHeaderFieldNameProduction;
 
-@interface AVPaasClient : NSObject
+@interface LCPaasClient : NSObject
 
-+(AVPaasClient *)sharedInstance;
++(LCPaasClient *)sharedInstance;
 
 @property (nonatomic, readwrite, copy) NSString * applicationId;
 @property (nonatomic, readwrite, copy) NSString * clientKey;

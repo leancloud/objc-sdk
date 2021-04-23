@@ -7,7 +7,7 @@
 //
 
 #import "AVSearchQuery.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVUtils.h"
 #import "LCObject_Internal.h"
 #import "LCObjectUtils.h"
@@ -120,7 +120,7 @@
            parameters:(NSDictionary *)parameters
                 block:(AVArrayResultBlock)resultBlock {
     
-    [[AVPaasClient sharedInstance] getObject:path withParameters:parameters policy:self.cachePolicy maxCacheAge:self.maxCacheAge block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] getObject:path withParameters:parameters policy:self.cachePolicy maxCacheAge:self.maxCacheAge block:^(id object, NSError *error) {
         if (error == nil)
         {
             NSString *className = object[@"className"];

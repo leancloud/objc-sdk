@@ -8,7 +8,7 @@
 #import "LCRelation.h"
 #import "LCRelation_Internal.h"
 #import "LCACL.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVGlobal.h"
 #import "AVUtils.h"
 

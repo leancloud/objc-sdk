@@ -8,7 +8,7 @@
 
 #import "AVAnalytics.h"
 #import "AVAnalyticsImpl.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVAnalyticsUtils.h"
 #import "AVUtils.h"
 
@@ -181,7 +181,7 @@ static NSString * currentSessionId;
 + (void)updateOnlineConfigWithBlock:(AVDictionaryResultBlock)block {
     NSString *path = [NSString stringWithFormat:@"statistics/apps/%@/sendPolicy", [AVOSCloud getApplicationId]];
     
-    [[AVPaasClient sharedInstance] getObject:path withParameters:nil block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] getObject:path withParameters:nil block:^(id object, NSError *error) {
         if (error == nil) {
             // make sure we call the onlineConfigChanged in main thread
             // otherwise timer may not work correctly.

@@ -23,7 +23,7 @@
 #import "AVIMErrorUtil.h"
 
 #import "LCFile_Internal.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "LCObjectUtils.h"
 #import "AVUtils.h"
 #import "AVErrorUtils.h"
@@ -2390,7 +2390,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             return;
         }
         
-        AVPaasClient *paasClient = AVPaasClient.sharedInstance;
+        LCPaasClient *paasClient = LCPaasClient.sharedInstance;
         NSURLRequest *request = ({
             NSString *whereString = ({
                 NSError *error = nil;

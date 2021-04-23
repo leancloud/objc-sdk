@@ -9,7 +9,7 @@
 #import "AVCaptcha.h"
 #import "AVDynamicObject_Internal.h"
 #import "NSDictionary+LeanCloud.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVUtils.h"
 
 @implementation AVCaptchaDigest
@@ -36,7 +36,7 @@
     parameters[@"width"]  = options[@"width"];
     parameters[@"height"] = options[@"height"];
 
-    [[AVPaasClient sharedInstance] getObject:@"requestCaptcha" withParameters:parameters block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] getObject:@"requestCaptcha" withParameters:parameters block:^(id object, NSError *error) {
         if (error) {
             [AVUtils callIdResultBlock:callback object:nil error:error];
             return;
@@ -65,7 +65,7 @@
     parameters[@"captcha_code"]  = captchaCode;
     parameters[@"captcha_token"] = captchaDigest.nonce;
 
-    [[AVPaasClient sharedInstance] postObject:@"verifyCaptcha" withParameters:parameters block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] postObject:@"verifyCaptcha" withParameters:parameters block:^(id object, NSError *error) {
         if (error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 callback(nil, error);

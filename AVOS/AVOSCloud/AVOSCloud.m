@@ -7,7 +7,7 @@
 //
 
 #import "AVOSCloud.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "LCScheduler.h"
 #import "LCPersistenceUtils.h"
 
@@ -53,7 +53,7 @@ static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
 
 + (void)initializePaasClient
 {
-    AVPaasClient *paasClient = [AVPaasClient sharedInstance];
+    LCPaasClient *paasClient = [LCPaasClient sharedInstance];
     
     paasClient.applicationId = [self getApplicationId];
     paasClient.clientKey     = [self getClientKey];
@@ -101,18 +101,18 @@ static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
 }
 
 + (void)setLastModifyEnabled:(BOOL)enabled {
-    [AVPaasClient sharedInstance].isLastModifyEnabled=enabled;
+    [LCPaasClient sharedInstance].isLastModifyEnabled=enabled;
 }
 
 /**
  *  获取是否开启LastModify支持
  */
 + (BOOL)getLastModifyEnabled {
-    return [AVPaasClient sharedInstance].isLastModifyEnabled;
+    return [LCPaasClient sharedInstance].isLastModifyEnabled;
 }
 
 + (void)clearLastModifyCache {
-    [[AVPaasClient sharedInstance] clearLastModifyCache];
+    [[LCPaasClient sharedInstance] clearLastModifyCache];
 }
 
 + (void)setServerURLString:(NSString *)URLString
@@ -145,12 +145,12 @@ static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
 
 + (NSTimeInterval)networkTimeoutInterval
 {
-    return [[AVPaasClient sharedInstance] timeoutInterval];
+    return [[LCPaasClient sharedInstance] timeoutInterval];
 }
 
 + (void)setNetworkTimeoutInterval:(NSTimeInterval)time
 {
-    [[AVPaasClient sharedInstance] setTimeoutInterval:time];
+    [[LCPaasClient sharedInstance] setTimeoutInterval:time];
 }
 
 #pragma mark - Log
@@ -197,7 +197,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
     
     NSString *path=[NSString stringWithFormat:@"verifySmsCode/%@",code];
     NSDictionary *params = @{ @"mobilePhoneNumber": phoneNumber };
-    [[AVPaasClient sharedInstance] postObject:path withParameters:params block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] postObject:path withParameters:params block:^(id object, NSError *error) {
         [AVUtils callBooleanResultBlock:callback error:error];
     }];
 }
@@ -208,7 +208,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
     __block NSDate *date;
     __block NSError *err;
     __block BOOL finished = false;
-    [[AVPaasClient sharedInstance] getObject:@"date"
+    [[LCPaasClient sharedInstance] getObject:@"date"
                               withParameters:nil
                                        block:^(id object, NSError *error) {
         if (error) {
@@ -314,7 +314,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
         [dict setObject:templateName forKey:@"template"];
     }
     [dict addEntriesFromDictionary:variables];
-    [[AVPaasClient sharedInstance] postObject:@"requestSmsCode" withParameters:dict block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] postObject:@"requestSmsCode" withParameters:dict block:^(id object, NSError *error) {
         [AVUtils callBooleanResultBlock:callback error:error];
     }];
 }
@@ -333,7 +333,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
         params[@"IDD"] = IDD;
     }
     
-    [[AVPaasClient sharedInstance] postObject:@"requestSmsCode" withParameters:params block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] postObject:@"requestSmsCode" withParameters:params block:^(id object, NSError *error) {
         [AVUtils callBooleanResultBlock:callback error:error];
     }];
 }

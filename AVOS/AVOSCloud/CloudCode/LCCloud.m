@@ -7,7 +7,7 @@
 //
 
 #import "LCCloud.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVErrorUtils.h"
 #import "AVUtils.h"
 #import "LCObject_Internal.h"
@@ -20,7 +20,7 @@
 @implementation LCCloud
 
 + (void)setProductionMode:(BOOL)isProduction {
-    [[AVPaasClient sharedInstance] setProductionMode:isProduction];
+    [[LCPaasClient sharedInstance] setProductionMode:isProduction];
 }
 
 /**
@@ -45,13 +45,13 @@
     }
 
     NSString *path = [NSString stringWithFormat:@"functions/%@", function];
-    NSURLRequest *request = [[AVPaasClient sharedInstance] requestWithPath:path method:@"POST" headers:nil parameters:serializedParameters];
+    NSURLRequest *request = [[LCPaasClient sharedInstance] requestWithPath:path method:@"POST" headers:nil parameters:serializedParameters];
 
     __block id error = nil;
     __block id result = nil;
     __block BOOL finished = NO;
 
-    [[AVPaasClient sharedInstance]
+    [[LCPaasClient sharedInstance]
      performRequest:request
      success:^(NSHTTPURLResponse *response, id responseObject) {
          result = [self processedFunctionResultFromObject:responseObject[@"result"]];
@@ -118,9 +118,9 @@
     }
 
     NSString *path = [NSString stringWithFormat:@"call/%@", function];
-    NSURLRequest *request = [[AVPaasClient sharedInstance] requestWithPath:path method:@"POST" headers:nil parameters:serializedParameters];
+    NSURLRequest *request = [[LCPaasClient sharedInstance] requestWithPath:path method:@"POST" headers:nil parameters:serializedParameters];
 
-    [[AVPaasClient sharedInstance]
+    [[LCPaasClient sharedInstance]
      performRequest:request
      success:^(NSHTTPURLResponse *response, id responseObject) {
          id result = [self processedFunctionResultFromObject:responseObject[@"result"]];

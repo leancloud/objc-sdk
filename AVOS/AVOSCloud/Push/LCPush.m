@@ -6,7 +6,7 @@
 #import <Foundation/Foundation.h>
 #import "LCPush.h"
 #import "LCPush_Internal.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVUtils.h"
 #import "LCQuery_Internal.h"
 #import "LCInstallation_Internal.h"
@@ -323,7 +323,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
 - (void)sendPushInBackgroundWithBlock:(AVBooleanResultBlock)block
 {
     NSString *path = [LCPush myObjectPath];
-    [[AVPaasClient sharedInstance] postObject:path
+    [[LCPaasClient sharedInstance] postObject:path
                                withParameters:[self postData]
                                    eventually:false
                                         block:^(id object, NSError *error) {
