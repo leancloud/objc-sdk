@@ -24,7 +24,7 @@ class LCObject_TestCase: LCTestBase {
             
             let data: Data = try! Data.init(contentsOf: url)
             
-            let file: AVFile = AVFile(data: data)
+            let file: LCFile = LCFile(data: data)
             
             let lcObjectt: LCObject = LCObject(className: "Todo")
             

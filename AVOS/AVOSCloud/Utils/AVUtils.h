@@ -87,8 +87,8 @@
                        image:(UIImage *)image
                        error:(NSError *)error;
 
-+ (void)callFileResultBlock:(AVFileResultBlock)block
-                     AVFile:(AVFile *)file
++ (void)callFileResultBlock:(LCFileResultBlock)block
+                     file:(LCFile *)file
                       error:(NSError *)error;
 
 + (void)callSetResultBlock:(AVSetResultBlock)block

@@ -9,8 +9,8 @@
 #import <objc/runtime.h>
 #import "LCObjectUtils.h"
 #import "LCObject_Internal.h"
-#import "AVFile.h"
-#import "AVFile_Internal.h"
+#import "LCFile.h"
+#import "LCFile_Internal.h"
 #import "LCObjectUtils.h"
 #import "AVUser_Internal.h"
 #import "LCACL_Internal.h"
@@ -192,15 +192,15 @@
              [LCObjectUtils isLCObject:dict] )
     {
         /*
-         the backend stores AVFile as LCObject, but in sdk AVFile is not subclass of LCObject, have to process the situation here.
+         the backend stores LCFile as LCObject, but in sdk LCFile is not subclass of LCObject, have to process the situation here.
          */
         if ([LCObjectUtils isFilePointer:dict]) {
-            return [[AVFile alloc] initWithRawJSONData:[dict mutableCopy]];
+            return [[LCFile alloc] initWithRawJSONData:[dict mutableCopy]];
         }
         return [LCObjectUtils lcObjectFromDictionary:dict];
     }
     else if ([LCObjectUtils isFile:type]) {
-        return [[AVFile alloc] initWithRawJSONData:[dict mutableCopy]];
+        return [[LCFile alloc] initWithRawJSONData:[dict mutableCopy]];
     }
     else if ([LCObjectUtils isGeoPoint:type])
     {
@@ -256,7 +256,7 @@
         [target setObject:[LCObjectUtils objectFromDictionary:dict] forKey:key submit:NO];
     }
     else if ([LCObjectUtils isFile:type]) {
-        AVFile *file = [[AVFile alloc] initWithRawJSONData:[dict mutableCopy]];
+        LCFile *file = [[LCFile alloc] initWithRawJSONData:[dict mutableCopy]];
         [target setObject:file forKey:key submit:false];
     }
     else if ([LCObjectUtils isGeoPoint:type])
@@ -613,7 +613,7 @@
     return @{@"__type": @"Bytes", @"base64":base64};
 }
 
-+(NSDictionary *)dictionaryFromFile:(AVFile *)file
++(NSDictionary *)dictionaryFromFile:(LCFile *)file
 {
     NSMutableDictionary *dic = [file rawJSONDataMutableCopy];
     [dic setObject:@"File" forKey:@"__type"];
@@ -659,7 +659,7 @@
         return [AVDate dictionaryFromDate:obj];
     } else if ([obj isKindOfClass:[NSData class]]) {
         return [LCObjectUtils dictionaryFromData:obj];
-    } else if ([obj isKindOfClass:[AVFile class]]) {
+    } else if ([obj isKindOfClass:[LCFile class]]) {
         return [LCObjectUtils dictionaryFromFile:obj];
     } else if ([obj isKindOfClass:[LCACL class]]) {
         return [LCObjectUtils dictionaryFromACL:obj];
@@ -697,7 +697,7 @@
 
 +(BOOL)isFileClass:(NSString *)className
 {
-    return [className isEqualToString:[AVFile className]];
+    return [className isEqualToString:[LCFile className]];
 }
 
 +(BOOL)isInstallationClass:(NSString *)className

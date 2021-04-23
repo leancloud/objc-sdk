@@ -11,7 +11,7 @@
 #import "AVErrorUtils.h"
 #import "AVUtils.h"
 #import "LCObject_Internal.h"
-#import "AVFile_Internal.h"
+#import "LCFile_Internal.h"
 #import "AVGeoPoint_Internal.h"
 #import "LCObjectUtils.h"
 #import "AVLogger.h"

@@ -9,7 +9,7 @@
 #import "LCFileTaskManager.h"
 #import "AVErrorUtils.h"
 #import "AVUtils.h"
-#import "AVFile_Internal.h"
+#import "LCFile_Internal.h"
 #import "AVPaasClient.h"
 #import "LCObjectUtils.h"
 #import "LCNetworking.h"

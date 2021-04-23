@@ -54,7 +54,7 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
                      attributes:(NSDictionary *)attributes
 {
     NSError *error;
-    AVFile *file = [AVFile fileWithLocalPath:attachedFilePath
+    LCFile *file = [LCFile fileWithLocalPath:attachedFilePath
                                        error:&error];
     if (error) {
         AVLoggerError(AVLoggerDomainIM, @"%@", error);
@@ -66,7 +66,7 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
 }
 
 + (instancetype)messageWithText:(NSString *)text
-                           file:(AVFile *)file
+                           file:(LCFile *)file
                      attributes:(NSDictionary *)attributes
 {
     AVIMTypedMessage *message = [[self alloc] init];
@@ -80,9 +80,9 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
     return message;
 }
 
-+ (AVFile *)fileFromDictionary:(NSDictionary *)dictionary
++ (LCFile *)fileFromDictionary:(NSDictionary *)dictionary
 {
-    return dictionary ? [[AVFile alloc] initWithRawJSONData:dictionary.mutableCopy] : nil;
+    return dictionary ? [[LCFile alloc] initWithRawJSONData:dictionary.mutableCopy] : nil;
 }
 
 + (AVGeoPoint *)locationFromDictionary:(NSDictionary *)dictionary
@@ -187,7 +187,7 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
     self.messageObject._lcattrs = attributes;
 }
 
-- (AVFile *)file
+- (LCFile *)file
 {
     if (_file) {
         return _file;
@@ -195,12 +195,12 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
     NSDictionary *dictionary = self.messageObject._lcfile;
     if (dictionary &&
         dictionary.count > 0) {
-        _file = [[AVFile alloc] initWithRawJSONData:dictionary.mutableCopy];
+        _file = [[LCFile alloc] initWithRawJSONData:dictionary.mutableCopy];
     }
     return _file;
 }
 
-- (void)setFile:(AVFile *)file
+- (void)setFile:(LCFile *)file
 {
     _file = file;
     if (file) {
@@ -234,7 +234,7 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
     }
 }
 
-- (void)setFileIvar:(AVFile *)file
+- (void)setFileIvar:(LCFile *)file
 {
     _file = file;
 }

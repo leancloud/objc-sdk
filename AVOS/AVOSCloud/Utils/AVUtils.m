@@ -15,8 +15,8 @@
 #import "AVUser_Internal.h"
 #import "LCObject.h"
 #import "LCRole_Internal.h"
-#import "AVFile.h"
-#import "AVFile_Internal.h"
+#import "LCFile.h"
+#import "LCFile_Internal.h"
 
 #import "LCObjectUtils.h"
 #import "AVPaasClient.h"
@@ -404,8 +404,8 @@ if (block) { \
     safeBlock(image);
 }
 
-+ (void)callFileResultBlock:(AVFileResultBlock)block
-                     AVFile:(AVFile *)file
++ (void)callFileResultBlock:(LCFileResultBlock)block
+                     file:(LCFile *)file
                       error:(NSError *)error
 {
     safeBlock(file);

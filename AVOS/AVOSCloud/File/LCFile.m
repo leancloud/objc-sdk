@@ -1,8 +1,8 @@
 
 #import <Foundation/Foundation.h>
 #import "AVConstants.h"
-#import "AVFile.h"
-#import "AVFile_Internal.h"
+#import "LCFile.h"
+#import "LCFile_Internal.h"
 #import "LCFileTaskManager.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"
@@ -13,24 +13,24 @@
 #import "LCACL_Internal.h"
 #import <CommonCrypto/CommonCrypto.h>
 
-static NSString * AVFile_CustomPersistentCacheDirectory = nil;
+static NSString * LCFile_CustomPersistentCacheDirectory = nil;
 
-static NSString * AVFile_PersistentCacheDirectory()
+static NSString * LCFile_PersistentCacheDirectory()
 {
-    return AVFile_CustomPersistentCacheDirectory ?: [LCPersistenceUtils homeDirectoryLibraryCachesLeanCloudCachesFiles];
+    return LCFile_CustomPersistentCacheDirectory ?: [LCPersistenceUtils homeDirectoryLibraryCachesLeanCloudCachesFiles];
 }
 
-static NSString * AVFile_CompactUUID()
+static NSString * LCFile_CompactUUID()
 {
     return [AVUtils generateCompactUUID];
 }
 
-static NSString * AVFile_ObjectPath(NSString *objectId)
+static NSString * LCFile_ObjectPath(NSString *objectId)
 {
     return (objectId && objectId.length > 0) ? [@"classes/_file" stringByAppendingPathComponent:objectId] : nil;
 }
 
-@implementation AVFile {
+@implementation LCFile {
     
     NSLock *_lock;
     
@@ -62,33 +62,33 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 
 + (instancetype)fileWithData:(NSData *)data
 {
-    return [[AVFile alloc] initWithData:data name:nil];
+    return [[LCFile alloc] initWithData:data name:nil];
 }
 
 + (instancetype)fileWithData:(NSData *)data name:(NSString *)name
 {
-    return [[AVFile alloc] initWithData:data name:name];
+    return [[LCFile alloc] initWithData:data name:name];
 }
 
 + (instancetype)fileWithLocalPath:(NSString *)localPath
                             error:(NSError * __autoreleasing *)error
 {
-    return [[AVFile alloc] initWithLocalPath:localPath error:error];
+    return [[LCFile alloc] initWithLocalPath:localPath error:error];
 }
 
 + (instancetype)fileWithRemoteURL:(NSURL *)remoteURL
 {
-    return [[AVFile alloc] initWithRemoteURL:remoteURL];
+    return [[LCFile alloc] initWithRemoteURL:remoteURL];
 }
 
 + (instancetype)fileWithObject:(LCObject *)object
 {
-    return [[AVFile alloc] initWithRawJSONData:[object dictionaryForObject]];
+    return [[LCFile alloc] initWithRawJSONData:[object dictionaryForObject]];
 }
 
 + (instancetype)fileWithObjectId:(NSString *)objectId url:(NSString *)url
 {
-    return [[AVFile alloc] initWithRawJSONData:@{kLCFile_objectId: objectId, kLCFile_url: url}.mutableCopy];
+    return [[LCFile alloc] initWithRawJSONData:@{kLCFile_objectId: objectId, kLCFile_url: url}.mutableCopy];
 }
 
 // MARK: - Initialization
@@ -118,7 +118,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
         _pathExtension = name.pathExtension;
         
-        _rawJSONData[kLCFile_name] = (name && name.length > 0) ? name : AVFile_CompactUUID();
+        _rawJSONData[kLCFile_name] = (name && name.length > 0) ? name : LCFile_CompactUUID();
         
         _rawJSONData[kLCFile_mime_type] = ({
             
@@ -177,7 +177,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         NSString *name = ({
             
             NSString *lastPathComponent = localPath.lastPathComponent;
-            (lastPathComponent && lastPathComponent.length > 0) ? lastPathComponent : AVFile_CompactUUID();
+            (lastPathComponent && lastPathComponent.length > 0) ? lastPathComponent : LCFile_CompactUUID();
         });
         
         _rawJSONData[kLCFile_name] = name;
@@ -233,7 +233,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         _rawJSONData[kLCFile_name] = ({
             
             NSString *lastPathComponent = remoteURL.lastPathComponent;
-            (lastPathComponent && lastPathComponent.length > 0) ? lastPathComponent : AVFile_CompactUUID();
+            (lastPathComponent && lastPathComponent.length > 0) ? lastPathComponent : LCFile_CompactUUID();
         });
         
         _rawJSONData[kLCFile_mime_type] = ({
@@ -408,7 +408,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     
     [self internalSyncLock:^{
         
-        objectId = [AVFile decodingObjectIdFromDic:self->_rawJSONData];
+        objectId = [LCFile decodingObjectIdFromDic:self->_rawJSONData];
     }];
     
     return objectId;
@@ -432,7 +432,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     
     [self internalSyncLock:^{
         
-        metaData = [AVFile decodingMetaDataFromDic:self->_rawJSONData];
+        metaData = [LCFile decodingMetaDataFromDic:self->_rawJSONData];
     }];
     
     return metaData;
@@ -457,7 +457,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 {
     [self internalSyncLock:^{
         
-        NSMutableDictionary *metaData = [[AVFile decodingMetaDataFromDic:self->_rawJSONData] mutableCopy];
+        NSMutableDictionary *metaData = [[LCFile decodingMetaDataFromDic:self->_rawJSONData] mutableCopy];
         
         if (metaData) {
             
@@ -490,7 +490,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 {
     [self internalSyncLock:^{
         
-        NSMutableDictionary *metaData = [[AVFile decodingMetaDataFromDic:self->_rawJSONData] mutableCopy];
+        NSMutableDictionary *metaData = [[LCFile decodingMetaDataFromDic:self->_rawJSONData] mutableCopy];
         
         if (metaData) {
             
@@ -583,7 +583,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 
 - (void)uploadWithCompletionHandler:(void (^)(BOOL, NSError * _Nullable))completionHandler
 {
-    [self uploadWithOption:AVFileUploadOptionCachingData
+    [self uploadWithOption:LCFileUploadOptionCachingData
                   progress:nil
          completionHandler:completionHandler];
 }
@@ -591,12 +591,12 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 - (void)uploadWithProgress:(void (^)(NSInteger))uploadProgressBlock
          completionHandler:(void (^)(BOOL, NSError * _Nullable))completionHandler
 {
-    [self uploadWithOption:AVFileUploadOptionCachingData
+    [self uploadWithOption:LCFileUploadOptionCachingData
                   progress:uploadProgressBlock
          completionHandler:completionHandler];
 }
 
-- (void)uploadWithOption:(AVFileUploadOption)uploadOption
+- (void)uploadWithOption:(LCFileUploadOption)uploadOption
                 progress:(void (^)(NSInteger))uploadProgressBlock
        completionHandler:(void (^)(BOOL, NSError * _Nullable))completionHandler
 {
@@ -653,9 +653,9 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
         [self uploadLocalDataWithData:data localPath:localPath progress:progress completionHandler:^(BOOL succeeded, NSError *error) {
             
-            AVFileUploadOption uploadOption = ({
+            LCFileUploadOption uploadOption = ({
                 
-                __block AVFileUploadOption uploadOption = 0;
+                __block LCFileUploadOption uploadOption = 0;
                 [self internalSyncLock:^{
                     uploadOption = [self->_uploadOption unsignedIntegerValue];
                     self->_uploadOption = nil;
@@ -663,7 +663,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
                 uploadOption;
             });
             
-            if (succeeded && !(uploadOption & AVFileUploadOptionIgnoringCachingData)) {
+            if (succeeded && !(uploadOption & LCFileUploadOptionIgnoringCachingData)) {
                 
                 NSString *persistenceCachePath = ({
                     
@@ -766,7 +766,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
             mutableDic = self->_rawJSONData.mutableCopy;
         }];
         mutableDic[kLCFile_key] = ({
-            NSString *key = AVFile_CompactUUID();
+            NSString *key = LCFile_CompactUUID();
             if (_pathExtension) {
                 key = [key stringByAppendingPathExtension:_pathExtension];
             }
@@ -924,7 +924,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 
 - (void)downloadWithCompletionHandler:(void (^)(NSURL * _Nullable, NSError * _Nullable))completionHandler
 {
-    [self downloadWithOption:AVFileDownloadOptionCachedData
+    [self downloadWithOption:LCFileDownloadOptionCachedData
                     progress:nil
            completionHandler:completionHandler];
 }
@@ -932,12 +932,12 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 - (void)downloadWithProgress:(void (^)(NSInteger))downloadProgressBlock
            completionHandler:(void (^)(NSURL * _Nullable, NSError * _Nullable))completionHandler
 {
-    [self downloadWithOption:AVFileDownloadOptionCachedData
+    [self downloadWithOption:LCFileDownloadOptionCachedData
                     progress:downloadProgressBlock
            completionHandler:completionHandler];
 }
 
-- (void)downloadWithOption:(AVFileDownloadOption)downloadOption
+- (void)downloadWithOption:(LCFileDownloadOption)downloadOption
                   progress:(void (^)(NSInteger))downloadProgressBlock
          completionHandler:(void (^)(NSURL * _Nullable, NSError * _Nullable))completionHandler
 {
@@ -987,7 +987,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         return;
     }
     
-    if (!(downloadOption & AVFileDownloadOptionIgnoringCachedData)) {
+    if (!(downloadOption & LCFileDownloadOptionIgnoringCachedData)) {
         
         if ([NSFileManager.defaultManager fileExistsAtPath:permanentLocationPath]) {
             
@@ -1081,7 +1081,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 
 + (void)setCustomPersistentCacheDirectory:(NSString *)directory
 {
-    AVFile_CustomPersistentCacheDirectory = directory;
+    LCFile_CustomPersistentCacheDirectory = directory;
 }
 
 - (void)clearPersistentCache
@@ -1102,7 +1102,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 
 + (void)clearAllPersistentCache
 {
-    NSString *directoryPath = AVFile_PersistentCacheDirectory();
+    NSString *directoryPath = LCFile_PersistentCacheDirectory();
     if (!directoryPath) {
         return;
     }
@@ -1140,7 +1140,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         return nil;
     }
     
-    NSString *directory = AVFile_PersistentCacheDirectory();
+    NSString *directory = LCFile_PersistentCacheDirectory();
     
     NSError *createFailError = nil;
     [NSFileManager.defaultManager createDirectoryAtPath:directory
@@ -1170,7 +1170,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 
 - (void)deleteWithCompletionHandler:(void (^)(BOOL, NSError * _Nullable))completionHandler
 {
-    NSString *objectPath = AVFile_ObjectPath([self objectId]);
+    NSString *objectPath = LCFile_ObjectPath([self objectId]);
     
     if (!objectPath) {
         
@@ -1198,7 +1198,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     }];
 }
 
-+ (void)deleteWithFiles:(NSArray<AVFile *> *)files
++ (void)deleteWithFiles:(NSArray<LCFile *> *)files
       completionHandler:(void (^)(BOOL, NSError * _Nullable))completionHandler
 {
     if (!files || files.count == 0) {
@@ -1213,7 +1213,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
     
     NSMutableArray *requests = [NSMutableArray array];
     
-    for (AVFile *file in files) {
+    for (LCFile *file in files) {
         
         NSString *objectId = [file objectId];
         
@@ -1246,9 +1246,9 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 // MARK: - Get
 
 + (void)getFileWithObjectId:(NSString *)objectId
-          completionHandler:(void (^)(AVFile *file, NSError *error))completionHandler
+          completionHandler:(void (^)(LCFile *file, NSError *error))completionHandler
 {
-    NSString *objectPath = AVFile_ObjectPath(objectId);
+    NSString *objectPath = LCFile_ObjectPath(objectId);
     
     if (!objectPath) {
         
@@ -1294,7 +1294,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
         
         NSDictionary *dic = (NSDictionary *)object;
         
-        AVFile *file = [[AVFile alloc] initWithRawJSONData:dic.mutableCopy];
+        LCFile *file = [[LCFile alloc] initWithRawJSONData:dic.mutableCopy];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -1366,7 +1366,7 @@ static NSString * AVFile_ObjectPath(NSString *objectId)
 
 + (AVQuery *)query
 {
-    return [AVFileQuery query];
+    return [LCFileQuery query];
 }
 
 // MARK: - Code for Compatibility

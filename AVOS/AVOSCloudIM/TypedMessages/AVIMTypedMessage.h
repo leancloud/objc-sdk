@@ -8,7 +8,7 @@
 
 #import "AVIMMessage.h"
 
-@class AVFile;
+@class LCFile;
 @class AVGeoPoint;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, nullable) NSDictionary *attributes;
 
 /// The file.
-@property (nonatomic, nullable) AVFile *file;
+@property (nonatomic, nullable) LCFile *file;
 
 /// The location.
 @property (nonatomic, nullable) AVGeoPoint *location;
@@ -73,7 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param file The file object.
 /// @param attributes The custom attributes.
 + (instancetype)messageWithText:(NSString * _Nullable)text
-                           file:(AVFile *)file
+                           file:(LCFile *)file
                      attributes:(NSDictionary * _Nullable)attributes;
 
 @end

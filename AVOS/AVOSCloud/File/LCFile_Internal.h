@@ -1,12 +1,12 @@
 //
-//  AVFile_Internal.h
+//  LCFile_Internal.h
 //  LeanCloud
 //
 //  Created by Zhu Zeng on 3/20/13.
 //  Copyright (c) 2013 AVOS. All rights reserved.
 //
 
-#import "AVFile.h"
+#import "LCFile.h"
 
 //# _File : {} #//
 static NSString * const kLCFile_mime_type = @"mime_type";
@@ -39,7 +39,7 @@ static NSString * const kLCFile_id = @"id";
 //### Object ID of File Object ###//
 //# _File : {} #//
 
-@interface AVFile ()
+@interface LCFile ()
 
 + (NSString *)className;
 

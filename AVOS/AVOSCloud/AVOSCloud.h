@@ -27,8 +27,8 @@
 #import "AVQuery.h"
 
 // File
-#import "AVFile.h"
-#import "AVFileQuery.h"
+#import "LCFile.h"
+#import "LCFileQuery.h"
 
 // Geo
 #import "AVGeoPoint.h"

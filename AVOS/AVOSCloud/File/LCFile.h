@@ -1,5 +1,5 @@
 //
-//  AVFile.h
+//  LCFile.h
 //  LeanCloud
 //
 
@@ -7,34 +7,34 @@
 #import "AVConstants.h"
 #import "LCACL.h"
 
-@class AVFileQuery;
+@class LCFileQuery;
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_OPTIONS(NSUInteger, AVFileUploadOption) {
+typedef NS_OPTIONS(NSUInteger, LCFileUploadOption) {
     
     /// default option. Data or File will be persistent cached after successfully uploading.
     /// Note: Remote URL not be cached after successfully uploading.
-    AVFileUploadOptionCachingData = 0,
+    LCFileUploadOptionCachingData = 0,
     
     /// Data or File will not be persistent cached after successfully uploading.
-    AVFileUploadOptionIgnoringCachingData = 1 << 0
+    LCFileUploadOptionIgnoringCachingData = 1 << 0
 };
 
-typedef NS_OPTIONS(NSUInteger, AVFileDownloadOption) {
+typedef NS_OPTIONS(NSUInteger, LCFileDownloadOption) {
     
     /// default option. When start downloading, if cached file exist, then return the cached file directly; else downloading from URL.
-    AVFileDownloadOptionCachedData = 0,
+    LCFileDownloadOptionCachedData = 0,
     
     /// Always downloading from URL.
-    AVFileDownloadOptionIgnoringCachedData = 1 << 0
+    LCFileDownloadOptionIgnoringCachedData = 1 << 0
 };
 
 /*!
  A file of binary data stored on the LeanCloud servers. This can be a image, video, or anything else
  that an application needs to reference in a non-relational way.
  */
-@interface AVFile : NSObject <NSCoding>
+@interface LCFile : NSObject <NSCoding>
 
 // MARK: - Create
 
@@ -165,14 +165,14 @@ typedef NS_OPTIONS(NSUInteger, AVFileDownloadOption) {
 // MARK: - Upload
 
 /**
- Upload Method. Use default option `AVFileUploadOptionCachingData`.
+ Upload Method. Use default option `LCFileUploadOptionCachingData`.
  
  @param completionHandler Completion Handler.
  */
 - (void)uploadWithCompletionHandler:(void (^)(BOOL succeeded, NSError * _Nullable error))completionHandler;
 
 /**
- Upload Method. Use default option `AVFileUploadOptionCachingData`.
+ Upload Method. Use default option `LCFileUploadOptionCachingData`.
 
  @param uploadProgressBlock Upload Progress Block.
  @param completionHandler Completion Handler.
@@ -183,25 +183,25 @@ typedef NS_OPTIONS(NSUInteger, AVFileDownloadOption) {
 /**
  Upload Method.
 
- @param uploadOption See `AVFileUploadOption`
+ @param uploadOption See `LCFileUploadOption`
  @param uploadProgressBlock Upload Progress Block.
  @param completionHandler Completion Handler.
  */
-- (void)uploadWithOption:(AVFileUploadOption)uploadOption
+- (void)uploadWithOption:(LCFileUploadOption)uploadOption
                 progress:(void (^ _Nullable)(NSInteger number))uploadProgressBlock
        completionHandler:(void (^)(BOOL succeeded, NSError * _Nullable error))completionHandler;
 
 // MARK: - Download
 
 /**
- Download Method. Use default option `AVFileDownloadOptionCachedData`.
+ Download Method. Use default option `LCFileDownloadOptionCachedData`.
 
  @param completionHandler Completion Handler.
  */
 - (void)downloadWithCompletionHandler:(void (^)(NSURL * _Nullable filePath, NSError * _Nullable error))completionHandler;
 
 /**
- Download Method. Use default option `AVFileDownloadOptionCachedData`.
+ Download Method. Use default option `LCFileDownloadOptionCachedData`.
 
  @param downloadProgressBlock Download Progress Block.
  @param completionHandler Completion Handler.
@@ -212,11 +212,11 @@ typedef NS_OPTIONS(NSUInteger, AVFileDownloadOption) {
 /**
  Download Method.
 
- @param downloadOption See `AVFileDownloadOption`.
+ @param downloadOption See `LCFileDownloadOption`.
  @param downloadProgressBlock Download Progress Block.
  @param completionHandler Completion Handler.
  */
-- (void)downloadWithOption:(AVFileDownloadOption)downloadOption
+- (void)downloadWithOption:(LCFileDownloadOption)downloadOption
                   progress:(void (^ _Nullable)(NSInteger number))downloadProgressBlock
          completionHandler:(void (^)(NSURL * _Nullable filePath, NSError * _Nullable error))completionHandler;
 
@@ -236,7 +236,7 @@ typedef NS_OPTIONS(NSUInteger, AVFileDownloadOption) {
 
 /**
  Set a Custom Persistent Cache Directory for files.
- if not set, AVFile will use a default Persistent Cache Directory.
+ if not set, LCFile will use a default Persistent Cache Directory.
  
  @param directory Custom Persistent Cache Directory.
  */
@@ -274,7 +274,7 @@ typedef NS_OPTIONS(NSUInteger, AVFileDownloadOption) {
  @param files File Object List
  @param completionHandler Completion Handler.
  */
-+ (void)deleteWithFiles:(NSArray<AVFile *> *)files
++ (void)deleteWithFiles:(NSArray<LCFile *> *)files
       completionHandler:(void (^)(BOOL succeeded, NSError * _Nullable error))completionHandler;
 
 // MARK: - Get
@@ -286,7 +286,7 @@ typedef NS_OPTIONS(NSUInteger, AVFileDownloadOption) {
  @param completionHandler Completion Handler.
  */
 + (void)getFileWithObjectId:(NSString *)objectId
-          completionHandler:(void (^)(AVFile * _Nullable file, NSError * _Nullable error))completionHandler;
+          completionHandler:(void (^)(LCFile * _Nullable file, NSError * _Nullable error))completionHandler;
 
 // MARK: - Thumbnail
 
@@ -333,9 +333,9 @@ typedef NS_OPTIONS(NSUInteger, AVFileDownloadOption) {
 // MARK: - Query
 
 /*!
- Create an AVFileQuery which returns files.
+ Create an LCFileQuery which returns files.
  */
-+ (AVFileQuery *)query;
++ (LCFileQuery *)query;
 
 // MARK: - Deprecated
 

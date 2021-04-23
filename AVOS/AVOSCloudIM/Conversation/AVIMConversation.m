@@ -22,7 +22,7 @@
 #import "AVIMBlockHelper.h"
 #import "AVIMErrorUtil.h"
 
-#import "AVFile_Internal.h"
+#import "LCFile_Internal.h"
 #import "AVPaasClient.h"
 #import "LCObjectUtils.h"
 #import "AVUtils.h"
@@ -1307,7 +1307,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     
     if ([message isKindOfClass:[AVIMTypedMessage class]]) {
         AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)message;
-        AVFile *file = typedMessage.file;
+        LCFile *file = typedMessage.file;
         if (file) {
             [file uploadWithProgress:progressBlock completionHandler:^(BOOL succeeded, NSError * _Nullable error) {
                 AVIMClient *client = self.imClient;
@@ -1334,7 +1334,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     }
 }
 
-- (void)fillTypedMessage:(AVIMTypedMessage *)typedMessage withFile:(AVFile *)file
+- (void)fillTypedMessage:(AVIMTypedMessage *)typedMessage withFile:(LCFile *)file
 {
     NSMutableDictionary *metaData = (file.metaData.mutableCopy
                                      ?: [NSMutableDictionary dictionary]);

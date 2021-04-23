@@ -940,7 +940,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     NSMutableSet *files = [NSMutableSet set];
     
     [self iterateDescendantObjectsWithBlock:^(id object) {
-        if ([object isKindOfClass:[AVFile class]] && ![(AVFile *)object objectId]) {
+        if ([object isKindOfClass:[LCFile class]] && ![(LCFile *)object objectId]) {
             [files addObject:object];
         }
     }];
@@ -952,7 +952,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     NSError *error = nil;
     NSSet   *files = [self allAttachedDirtyFiles];
     
-    for (AVFile *file in files) {
+    for (LCFile *file in files) {
         if (![file objectId]) {
             [LCObject saveFile:file];
             
@@ -1158,7 +1158,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     NSMutableSet *files = [NSMutableSet set];
     
     [self iterateDescendantObjectsWithBlock:^(id object) {
-        if ([object isKindOfClass:[AVFile class]] && ![(AVFile *)object objectId]) {
+        if ([object isKindOfClass:[LCFile class]] && ![(LCFile *)object objectId]) {
             [files addObject:object];
         }
     }];
@@ -1227,7 +1227,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         __block int32_t uploadCount = 0;
         NSArray *subFiles = [self reduceObjectsFromArray:files count:AV_BATCH_CONCURRENT_SIZE];
         
-        for (AVFile *file in subFiles) {
+        for (LCFile *file in subFiles) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 
                 NSError *anError = [LCObject saveFile:file];
@@ -1966,7 +1966,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
             [self.className isEqualToString:otherObject.className]);
 }
 
-+ (NSError *)saveFile:(AVFile *)file
++ (NSError *)saveFile:(LCFile *)file
 {
     __block NSError *aError = nil;
     __block BOOL waiting = true;

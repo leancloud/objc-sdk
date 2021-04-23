@@ -1,17 +1,17 @@
 //
-//  AVFileQuery.m
+//  LCFileQuery.m
 //  AVOS-DynamicFramework
 //
 //  Created by lzw on 15/10/8.
 //  Copyright © 2015年 tang3w. All rights reserved.
 //
 
-#import "AVFileQuery.h"
-#import "AVFile.h"
+#import "LCFileQuery.h"
+#import "LCFile.h"
 #import "AVQuery_Internal.h"
 #import "AVUtils.h"
 
-@implementation AVFileQuery
+@implementation LCFileQuery
 
 + (instancetype)query {
     return [self queryWithClassName:@"_File"];
@@ -22,28 +22,28 @@
     }
     NSMutableArray *files = [NSMutableArray arrayWithCapacity:objects.count];
     for (LCObject *object in [objects copy]) {
-        AVFile *file = [AVFile fileWithObject:object];
+        LCFile *file = [LCFile fileWithObject:object];
         [files addObject:file];
     }
     return files;
 }
 
 - (void)getFileInBackgroundWithId:(NSString *)objectId
-                            block:(AVFileResultBlock)block {
+                            block:(LCFileResultBlock)block {
     [self getObjectInBackgroundWithId:objectId block:^(LCObject *object, NSError *error) {
-        AVFile *file = nil;
+        LCFile *file = nil;
         if (!error) {
-            file = [AVFile fileWithObject:object];
+            file = [LCFile fileWithObject:object];
         }
-        [AVUtils callFileResultBlock:block AVFile:file error:error];
+        [AVUtils callFileResultBlock:block file:file error:error];
     }];
 }
 
-- (AVFile *)getFileWithId:(NSString *)objectId error:(NSError **)error {
+- (LCFile *)getFileWithId:(NSString *)objectId error:(NSError **)error {
     LCObject *object = [self getObjectWithId:objectId error:error];
-    AVFile *file = nil;
+    LCFile *file = nil;
     if (object != nil) {
-        file = [AVFile fileWithObject:object];
+        file = [LCFile fileWithObject:object];
     }
     return file;
 }

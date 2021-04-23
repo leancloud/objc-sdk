@@ -7,8 +7,8 @@
 //
 
 #import "LCScheduler.h"
-#import "AVFile.h"
-#import "AVFile_Internal.h"
+#import "LCFile.h"
+#import "LCFile_Internal.h"
 #import "LCCacheManager.h"
 #import "AVPaasClient.h"
 #import "AVUtils.h"

@@ -378,7 +378,7 @@ class AVIMMessageTestCase: LCIMTestBase {
         
         if let normalConv: AVIMConversation = normalConv {
             
-            var receiveFile: AVFile! = nil
+            var receiveFile: LCFile! = nil
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
@@ -389,7 +389,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     let data: Data = try! Data.init(contentsOf: url)
                     return (data, "image.png")
                 }()
-                let imageFile: AVFile = AVFile.init(data: dataTuple.data, name: dataTuple.name)
+                let imageFile: LCFile = LCFile.init(data: dataTuple.data, name: dataTuple.name)
                 let imageMessage: AVIMImageMessage = AVIMImageMessage.init(text: text, file: imageFile, attributes: nil)
                 
                 semaphore.increment(2)
@@ -419,9 +419,9 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(((message as? AVIMImageMessage)?.height ?? 0) > 0)
                     XCTAssertTrue(((message as? AVIMImageMessage)?.width ?? 0) > 0)
                     XCTAssertEqual((message as? AVIMImageMessage)?.format, (dataTuple.name as NSString).pathExtension)
-                    let file: AVFile? = message.file
+                    let file: LCFile? = message.file
                     XCTAssertNotNil(file)
-                    if let file: AVFile = file {
+                    if let file: LCFile = file {
                         receiveFile = file
                     }
                 }
@@ -454,7 +454,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                 })
             }, failure: { XCTFail("timeout") })
             
-            if let receiveFile: AVFile = receiveFile {
+            if let receiveFile: LCFile = receiveFile {
                 RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     semaphore.increment()
                     receiveFile.download(completionHandler: { (url: URL?, error: Error?) in
@@ -505,7 +505,7 @@ class AVIMMessageTestCase: LCIMTestBase {
         
         if let normalConv: AVIMConversation = normalConv {
             
-            var receiveFile: AVFile! = nil
+            var receiveFile: LCFile! = nil
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
@@ -516,7 +516,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     let data: Data = try! Data.init(contentsOf: url)
                     return (data, "audio.mp3")
                 }()
-                let audioFile: AVFile = AVFile.init(data: dataTuple.data, name: dataTuple.name)
+                let audioFile: LCFile = LCFile.init(data: dataTuple.data, name: dataTuple.name)
                 let audioMessage: AVIMAudioMessage = AVIMAudioMessage.init(text: text, file: audioFile, attributes: nil)
                 
                 semaphore.increment(2)
@@ -545,9 +545,9 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertEqual((message as? AVIMAudioMessage)?.size ?? 0, Double(dataTuple.data.count))
                     XCTAssertTrue(((message as? AVIMAudioMessage)?.duration ?? 0) > 0)
                     XCTAssertEqual((message as? AVIMAudioMessage)?.format, (dataTuple.name as NSString).pathExtension)
-                    let file: AVFile? = message.file
+                    let file: LCFile? = message.file
                     XCTAssertNotNil(file)
-                    if let file: AVFile = file {
+                    if let file: LCFile = file {
                         receiveFile = file
                     }
                 }
@@ -579,7 +579,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                 })
             }, failure: { XCTFail("timeout") })
             
-            if let receiveFile: AVFile = receiveFile {
+            if let receiveFile: LCFile = receiveFile {
                 RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     semaphore.increment()
                     receiveFile.download(completionHandler: { (url: URL?, error: Error?) in
@@ -630,7 +630,7 @@ class AVIMMessageTestCase: LCIMTestBase {
         
         if let normalConv: AVIMConversation = normalConv {
             
-            var receiveFile: AVFile! = nil
+            var receiveFile: LCFile! = nil
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
@@ -641,7 +641,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     let data: Data = try! Data.init(contentsOf: url)
                     return (data, "video.mp4")
                 }()
-                let videoFile: AVFile = AVFile.init(data: dataTuple.data, name: dataTuple.name)
+                let videoFile: LCFile = LCFile.init(data: dataTuple.data, name: dataTuple.name)
                 let videoMessage: AVIMVideoMessage = AVIMVideoMessage.init(text: text, file: videoFile, attributes: nil)
                 
                 semaphore.increment(2)
@@ -670,9 +670,9 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertEqual((message as? AVIMVideoMessage)?.size ?? 0, Double(dataTuple.data.count))
                     XCTAssertTrue(((message as? AVIMVideoMessage)?.duration ?? 0) > 0)
                     XCTAssertEqual((message as? AVIMVideoMessage)?.format, (dataTuple.name as NSString).pathExtension)
-                    let file: AVFile? = message.file
+                    let file: LCFile? = message.file
                     XCTAssertNotNil(file)
-                    if let file: AVFile = file {
+                    if let file: LCFile = file {
                         receiveFile = file
                     }
                 }
@@ -704,7 +704,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                 })
             }, failure: { XCTFail("timeout") })
             
-            if let receiveFile: AVFile = receiveFile {
+            if let receiveFile: LCFile = receiveFile {
                 RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     semaphore.increment()
                     receiveFile.download(completionHandler: { (url: URL?, error: Error?) in
@@ -755,7 +755,7 @@ class AVIMMessageTestCase: LCIMTestBase {
         
         if let normalConv: AVIMConversation = normalConv {
             
-            var receiveFile: AVFile! = nil
+            var receiveFile: LCFile! = nil
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
@@ -766,7 +766,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     let data: Data = try! Data.init(contentsOf: url)
                     return (data, "file.md")
                 }()
-                let file: AVFile = AVFile.init(data: dataTuple.data, name: dataTuple.name)
+                let file: LCFile = LCFile.init(data: dataTuple.data, name: dataTuple.name)
                 let fileMessage: AVIMFileMessage = AVIMFileMessage.init(text: text, file: file, attributes: nil)
                 
                 semaphore.increment(2)
@@ -792,9 +792,9 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(message.readTimestamp == 0)
                     XCTAssertFalse(message.transient)
                     XCTAssertNil(message.updatedAt)
-                    let file: AVFile? = message.file
+                    let file: LCFile? = message.file
                     XCTAssertNotNil(file)
-                    if let file: AVFile = file {
+                    if let file: LCFile = file {
                         receiveFile = file
                     }
                 }
@@ -823,7 +823,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                 })
             }, failure: { XCTFail("timeout") })
             
-            if let receiveFile: AVFile = receiveFile {
+            if let receiveFile: LCFile = receiveFile {
                 RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     semaphore.increment()
                     receiveFile.download(completionHandler: { (url: URL?, error: Error?) in

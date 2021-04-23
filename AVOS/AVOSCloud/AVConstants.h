@@ -6,7 +6,7 @@
 
 @class LCObject;
 @class AVUser;
-@class AVFile;
+@class LCFile;
 
 #if AV_IOS_ONLY
 #import <UIKit/UIKit.h>
@@ -172,7 +172,7 @@ typedef void (^AVDataStreamResultBlock)(NSInputStream * _Nullable stream, NSErro
 typedef void (^AVStringResultBlock)(NSString * _Nullable string, NSError * _Nullable error);
 typedef void (^AVIdResultBlock)(id _Nullable object, NSError * _Nullable error);
 typedef void (^AVProgressBlock)(NSInteger percentDone);
-typedef void (^AVFileResultBlock)(AVFile * _Nullable file, NSError * _Nullable error);
+typedef void (^LCFileResultBlock)(LCFile * _Nullable file, NSError * _Nullable error);
 typedef void (^AVDictionaryResultBlock)(NSDictionary * _Nullable dict, NSError * _Nullable error);
 
 #define AV_DEPRECATED(explain) __attribute__((deprecated(explain)))
