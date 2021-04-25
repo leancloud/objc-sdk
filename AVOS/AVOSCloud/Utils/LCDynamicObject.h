@@ -1,5 +1,5 @@
 //
-//  AVDynamicObject.h
+//  LCDynamicObject.h
 //  AVOS
 //
 //  Created by Tang Tianyong on 27/04/2017.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AVDynamicObject : NSObject
+@interface LCDynamicObject : NSObject
 
 - (nullable id)objectForKeyedSubscript:(NSString *)key;
 

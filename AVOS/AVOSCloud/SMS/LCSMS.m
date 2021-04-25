@@ -9,7 +9,7 @@
 #import "LCSMS.h"
 #import "LCPaasClient.h"
 #import "LCUtils.h"
-#import "AVDynamicObject_Internal.h"
+#import "LCDynamicObject_Internal.h"
 
 @interface LCShortMessageRequestOptions ()
 

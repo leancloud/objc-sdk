@@ -7,7 +7,7 @@
 //
 
 #import "LCCaptcha.h"
-#import "AVDynamicObject_Internal.h"
+#import "LCDynamicObject_Internal.h"
 #import "NSDictionary+LeanCloud.h"
 #import "LCPaasClient.h"
 #import "LCUtils.h"

@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#ifndef AVOS_LCKeyValueSQL_h
-#define AVOS_LCKeyValueSQL_h
+#ifndef LC_LCKeyValueSQL_h
+#define LC_LCKeyValueSQL_h
 
 #define LC_TABLE_KEY_VALUE @"key_value_table"
 #define LC_FIELD_KEY       @"key"

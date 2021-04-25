@@ -1,14 +1,14 @@
 //
-//  AVDynamicObject_Internal.h
+//  LCDynamicObject_Internal.h
 //  AVOS
 //
 //  Created by Tang Tianyong on 03/05/2017.
 //  Copyright © 2017 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVDynamicObject.h"
+#import "LCDynamicObject.h"
 
-@interface AVDynamicObject ()
+@interface LCDynamicObject ()
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 

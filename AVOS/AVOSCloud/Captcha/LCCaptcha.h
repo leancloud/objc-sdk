@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVDynamicObject.h"
+#import "LCDynamicObject.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface LCCaptchaDigest : AVDynamicObject
+@interface LCCaptchaDigest : LCDynamicObject
 
 /**
  A nonce used to verify captcha.
@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface LCCaptchaRequestOptions : AVDynamicObject
+@interface LCCaptchaRequestOptions : LCDynamicObject
 
 /**
  Width of captcha image, in pixels.

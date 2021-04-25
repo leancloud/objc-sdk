@@ -1,16 +1,16 @@
 //
-//  AVDynamicObject.m
+//  LCDynamicObject.m
 //  AVOS
 //
 //  Created by Tang Tianyong on 27/04/2017.
 //  Copyright © 2017 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVDynamicObject.h"
-#import "AVDynamicObject_Internal.h"
+#import "LCDynamicObject.h"
+#import "LCDynamicObject_Internal.h"
 #import <objc/runtime.h>
 
-@interface AVDynamicObject ()
+@interface LCDynamicObject ()
 
 - (id)objectForSelector:(SEL)selector;
 
@@ -347,7 +347,7 @@ void prepareEachDynamicClass(Class aClass) {
 NS_INLINE
 void prepareDynamicClass(Class aClass) {
     Class eachClass = aClass;
-    Class rootClass = [AVDynamicObject class];
+    Class rootClass = [LCDynamicObject class];
 
     do {
         prepareEachDynamicClass(eachClass);
@@ -356,10 +356,10 @@ void prepareDynamicClass(Class aClass) {
     } while((eachClass = class_getSuperclass(eachClass)));
 }
 
-@implementation AVDynamicObject
+@implementation LCDynamicObject
 
 + (void)initialize {
-    id lockAround = [AVDynamicObject class];
+    id lockAround = [LCDynamicObject class];
 
     @synchronized (lockAround) {
         prepareDynamicClass(self);
