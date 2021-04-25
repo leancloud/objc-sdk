@@ -288,25 +288,25 @@ __deprecated_msg("No need any more, now it is NOP.");
 
 + (void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
                              callback:(AVBooleanResultBlock)callback
-__deprecated_msg("Deprecated, `use +[AVSMS requestShortMessageForPhoneNumber:options:callback:]` instead.");
+__deprecated_msg("Deprecated, `use +[LCSMS requestShortMessageForPhoneNumber:options:callback:]` instead.");
 
 + (void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
                               appName:(nullable NSString *)appName
                             operation:(nullable NSString *)operation
                            timeToLive:(NSUInteger)ttl
                              callback:(AVBooleanResultBlock)callback
-__deprecated_msg("Deprecated, use `+[AVSMS requestShortMessageForPhoneNumber:options:callback:]` instead.");
+__deprecated_msg("Deprecated, use `+[LCSMS requestShortMessageForPhoneNumber:options:callback:]` instead.");
 
 + (void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
                          templateName:(nullable NSString *)templateName
                             variables:(nullable NSDictionary *)variables
                              callback:(AVBooleanResultBlock)callback
-__deprecated_msg("Deprecated, use `+[AVSMS requestShortMessageForPhoneNumber:options:callback:]` instead.");
+__deprecated_msg("Deprecated, use `+[LCSMS requestShortMessageForPhoneNumber:options:callback:]` instead.");
 
 + (void)requestVoiceCodeWithPhoneNumber:(NSString *)phoneNumber
                                     IDD:(nullable NSString *)IDD
                                callback:(AVBooleanResultBlock)callback
-__deprecated_msg("Deprecated, use `+[AVSMS requestShortMessageForPhoneNumber:options:callback:]` instead.");
+__deprecated_msg("Deprecated, use `+[LCSMS requestShortMessageForPhoneNumber:options:callback:]` instead.");
 
 + (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
                                           teamId:(NSString *)teamId

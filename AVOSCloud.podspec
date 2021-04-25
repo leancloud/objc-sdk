@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   s.public_header_files =
     'AVOS/AVOSCloud/Captcha/LCCaptcha.h',
     'AVOS/AVOSCloud/Utils/AVDynamicObject.h',
-    'AVOS/AVOSCloud/SMS/AVSMS.h',
+    'AVOS/AVOSCloud/SMS/LCSMS.h',
     'AVOS/AVOSCloud/ACL/LCACL.h',
     'AVOS/AVOSCloud/ACL/AVRole.h',
     'AVOS/AVOSCloud/Object/LCSaveOption.h',
