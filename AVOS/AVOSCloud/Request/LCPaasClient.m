@@ -14,7 +14,7 @@
 #import "LCRole_Internal.h"
 #import "LCACL_Internal.h"
 #import "LCCacheManager.h"
-#import "AVErrorUtils.h"
+#import "LCErrorUtils.h"
 #import "LCPersistenceUtils.h"
 #import "LCScheduler.h"
 #import "LCObjectUtils.h"

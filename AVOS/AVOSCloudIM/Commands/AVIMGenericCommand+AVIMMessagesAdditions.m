@@ -12,7 +12,7 @@
 #import "AVIMConversationOutCommand.h"
 #import <objc/runtime.h>
 #import "AVIMMessage.h"
-#import "AVErrorUtils.h"
+#import "LCErrorUtils.h"
 
 NSString *const kAVIMConversationOperationQuery = @"query";
 

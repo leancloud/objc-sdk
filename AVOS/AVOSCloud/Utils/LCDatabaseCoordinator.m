@@ -10,7 +10,7 @@
 #import "LCDatabase.h"
 #import "LCDatabaseQueue.h"
 #import "AVLogger.h"
-#import "AVErrorUtils.h"
+#import "LCErrorUtils.h"
 
 #import <libkern/OSAtomic.h>
 

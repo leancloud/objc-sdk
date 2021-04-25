@@ -7,7 +7,7 @@
 //
 
 #import "AVIMErrorUtil.h"
-#import "AVErrorUtils.h"
+#import "LCErrorUtils.h"
 
 NSString *AVIMErrorMessage(AVIMErrorCode code)
 {

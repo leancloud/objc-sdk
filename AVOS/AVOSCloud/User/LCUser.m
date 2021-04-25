@@ -10,7 +10,7 @@
 #import "LCPersistenceUtils.h"
 #import "LCObjectUtils.h"
 #import "LCPaasClient.h"
-#import "AVErrorUtils.h"
+#import "LCErrorUtils.h"
 #import "LCFriendQuery.h"
 #import "AVUtils.h"
 
@@ -136,7 +136,7 @@ static BOOL enableAutomatic = NO;
     {
         return nil;
     }
-    return LCError(kAVErrorUserCannotBeAlteredWithoutSession, nil, nil);
+    return LCError(kLCErrorUserCannotBeAlteredWithoutSession, nil, nil);
 }
 
 -(void)postSave
@@ -248,11 +248,11 @@ static BOOL enableAutomatic = NO;
     } else {
         NSError *error = nil;
         if (!self.isAuthDataExistInMemory) {
-            error = LCError(kAVErrorUserCannotBeAlteredWithoutSession, nil, nil);
+            error = LCError(kLCErrorUserCannotBeAlteredWithoutSession, nil, nil);
         }
         
         if (!(oldPassword && newPassword)) {
-            error = LCError(kAVErrorUserPasswordMissing, nil, nil);
+            error = LCError(kLCErrorUserPasswordMissing, nil, nil);
         }
         [AVUtils callIdResultBlock:block object:nil error:error];
     }
@@ -262,7 +262,7 @@ static BOOL enableAutomatic = NO;
     NSString *objectId = self.objectId;
     
     if (!objectId) {
-        NSError *error = LCError(kAVErrorUserNotFound, @"User ID not found.", nil);
+        NSError *error = LCError(kLCErrorUserNotFound, @"User ID not found.", nil);
         [AVUtils callBooleanResultBlock:block error:error];
         return;
     }
@@ -270,7 +270,7 @@ static BOOL enableAutomatic = NO;
     NSString *sessionToken = self.sessionToken;
     
     if (!sessionToken) {
-        NSError *error = LCError(kAVErrorUserCannotBeAlteredWithoutSession, @"User session token not found.", nil);
+        NSError *error = LCError(kLCErrorUserCannotBeAlteredWithoutSession, @"User session token not found.", nil);
         [AVUtils callBooleanResultBlock:block error:error];
         return;
     }
@@ -774,7 +774,7 @@ static BOOL enableAutomatic = NO;
             });
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                callback(false, LCError(AVErrorInternalErrorCodeMalformedData,
+                callback(false, LCError(LCErrorInternalErrorCodeMalformedData,
                                         @"Response data is malformed.",
                                         @{ @"data": (object ?: @"nil") }));
             });
@@ -815,7 +815,7 @@ static BOOL enableAutomatic = NO;
             });
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                block(false, LCError(AVErrorInternalErrorCodeMalformedData,
+                block(false, LCError(LCErrorInternalErrorCodeMalformedData,
                                      @"Response data is malformed.",
                                      @{ @"data": (object ?: @"nil") }));
             });
@@ -850,7 +850,7 @@ static BOOL enableAutomatic = NO;
             });
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                block(false, LCError(AVErrorInternalErrorCodeMalformedData,
+                block(false, LCError(LCErrorInternalErrorCodeMalformedData,
                                      @"Response data is malformed.",
                                      @{ @"data": (object ?: @"nil") }));
             });
@@ -888,7 +888,7 @@ static BOOL enableAutomatic = NO;
             });
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                block(false, LCError(AVErrorInternalErrorCodeMalformedData,
+                block(false, LCError(LCErrorInternalErrorCodeMalformedData,
                                      @"Response data is malformed.",
                                      @{ @"data": (object ?: @"nil") }));
             });
@@ -1435,7 +1435,7 @@ static BOOL enableAutomatic = NO;
 
 -(void)follow:(NSString*)userId userDictionary:(NSDictionary *)dictionary andCallback:(AVBooleanResultBlock)callback{
     if (![self isAuthDataExistInMemory]) {
-        callback(NO, LCError(kAVErrorUserCannotBeAlteredWithoutSession, nil, nil));
+        callback(NO, LCError(kLCErrorUserCannotBeAlteredWithoutSession, nil, nil));
         return;
     }
     NSDictionary *dict = [LCObjectUtils dictionaryFromObject:dictionary];
@@ -1448,7 +1448,7 @@ static BOOL enableAutomatic = NO;
 
 -(void)unfollow:(NSString *)userId andCallback:(AVBooleanResultBlock)callback{
     if (![self isAuthDataExistInMemory]) {
-        callback(NO, LCError(kAVErrorUserCannotBeAlteredWithoutSession, nil, nil));
+        callback(NO, LCError(kLCErrorUserCannotBeAlteredWithoutSession, nil, nil));
         return;
     }
     

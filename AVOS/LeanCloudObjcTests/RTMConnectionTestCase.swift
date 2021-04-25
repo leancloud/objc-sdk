@@ -92,7 +92,7 @@ class RTMConnectionTestCase: RTMBaseTestCase {
             delegator.didDisconnect = { connection, error in
                 if let error = error as NSError? {
                     XCTAssertEqual(error.domain, kLeanCloudErrorDomain)
-                    XCTAssertEqual(error.code, AVErrorInternalErrorCode.underlyingError.rawValue)
+                    XCTAssertEqual(error.code, LCErrorInternalErrorCode.underlyingError.rawValue)
                 } else {
                     XCTFail()
                 }

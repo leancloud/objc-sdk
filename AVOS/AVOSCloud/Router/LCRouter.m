@@ -9,7 +9,7 @@
 #import "LCRouter_Internal.h"
 #import "AVApplication_Internal.h"
 #import "AVUtils.h"
-#import "AVErrorUtils.h"
+#import "LCErrorUtils.h"
 #import "LCPaasClient.h"
 #import "LCPersistenceUtils.h"
 
@@ -327,7 +327,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
         if ([NSDictionary _lc_isTypeOf:responseObject]) {
             callback(responseObject, nil);
         } else {
-            callback(nil, LCError(AVErrorInternalErrorCodeMalformedData,
+            callback(nil, LCError(LCErrorInternalErrorCodeMalformedData,
                                   @"Response data is malformed.",
                                   @{ @"data": (responseObject ?: @"nil") }));
         }

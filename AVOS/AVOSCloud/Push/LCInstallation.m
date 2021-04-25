@@ -9,7 +9,7 @@
 #import "AVUtils.h"
 #import "LCObjectUtils.h"
 #import "LCPersistenceUtils.h"
-#import "AVErrorUtils.h"
+#import "LCErrorUtils.h"
 #import "LCRouter_Internal.h"
 
 @implementation LCInstallation {

@@ -9,7 +9,7 @@
 #import "LCFriendQuery.h"
 #import "LCQuery_Internal.h"
 #import "LCObjectUtils.h"
-#import "AVErrorUtils.h"
+#import "LCErrorUtils.h"
 #import "LCQuery_Internal.h"
 
 @implementation LCFriendQuery

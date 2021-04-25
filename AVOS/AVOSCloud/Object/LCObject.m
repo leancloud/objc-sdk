@@ -11,7 +11,7 @@
 #import "LCACL_Internal.h"
 #import "LCGeoPoint_Internal.h"
 #import "LCObjectUtils.h"
-#import "AVErrorUtils.h"
+#import "LCErrorUtils.h"
 #import "LCQuery_Internal.h"
 
 #import "LCObject+Subclass.h"
@@ -786,7 +786,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     NSString *queryClassName = query.className;
 
     if (queryClassName && ![queryClassName isEqualToString:self.className]) {
-        error = LCError(kAVErrorInvalidClassName, @"Invalid query class name.", nil);
+        error = LCError(kLCErrorInvalidClassName, @"Invalid query class name.", nil);
     }
 
     return error;
@@ -1494,7 +1494,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     if ([object allKeys].count <= 0) {
         // 返回 {}
         if (error != NULL) {
-            *error = LCError(kAVErrorObjectNotFound, @"not found the object to fetch", nil);
+            *error = LCError(kLCErrorObjectNotFound, @"not found the object to fetch", nil);
         }
     } else {
         [self removeLocalData];
@@ -1510,7 +1510,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 {
     
     if (![self hasValidObjectId]) {
-        NSError *error = LCError(kAVErrorMissingObjectId, @"Missing ObjectId", nil);
+        NSError *error = LCError(kLCErrorMissingObjectId, @"Missing ObjectId", nil);
         [AVUtils callObjectResultBlock:resultBlock object:nil error:error];
         return;
     }
@@ -1715,7 +1715,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     for(LCObject * object in [objects copy]) {
         if (object.className.length <= 0 || ![object hasValidObjectId]) {
             if (error != NULL)
-                *error = LCError(kAVErrorMissingObjectId, @"Invaid className or objectId", nil);
+                *error = LCError(kLCErrorMissingObjectId, @"Invaid className or objectId", nil);
             return NO;
         }
     }

@@ -19,7 +19,7 @@
 #import "LCObjectUtils.h"
 #import "AVUtils.h"
 #import "LCPaasClient.h"
-#import "AVErrorUtils.h"
+#import "LCErrorUtils.h"
 
 static BOOL gClientHasInstantiated = false;
 
@@ -181,12 +181,12 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     if (!clientId ||
         clientId.length > kClientIdLengthLimit ||
         clientId.length == 0) {
-        return LCError(AVErrorInternalErrorCodeInconsistency,
+        return LCError(LCErrorInternalErrorCodeInconsistency,
                        @"The length of `clientId` should in range `[1 64]`.", nil);
     }
     _clientId = clientId.copy;
     if ([tag isEqualToString:kClientTagDefault]) {
-        return LCError(AVErrorInternalErrorCodeInconsistency,
+        return LCError(LCErrorInternalErrorCodeInconsistency,
                        @"The tag `%@` is reserved.", nil);
     }
     _tag = (tag ? tag.copy : nil);
@@ -327,13 +327,13 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             if (self.openingCompletion) {
                 [self invokeInUserInteractQueue:^{
                     callback(false,
-                             LCError(AVErrorInternalErrorCodeInconsistency,
+                             LCError(LCErrorInternalErrorCodeInconsistency,
                                      @"In opening, cannot do repetitive operation.", nil));
                 }];
             } else {
                 [self invokeInUserInteractQueue:^{
                     callback(false,
-                             LCError(AVErrorInternalErrorCodeInconsistency,
+                             LCError(LCErrorInternalErrorCodeInconsistency,
                                      @"Did opened, cannot do repetitive operation.", nil));
                 }];
             }
@@ -422,7 +422,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                 return;
             }
         }
-        signature.error = LCError(AVErrorInternalErrorCodeMalformedData,
+        signature.error = LCError(LCErrorInternalErrorCodeMalformedData,
                                   [NSString stringWithFormat:
                                    @"Malformed response data, path: %@, data: %@",
                                    path, result ?: @"nil"],

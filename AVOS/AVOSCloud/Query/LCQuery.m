@@ -11,7 +11,7 @@
 #import "LCUser_Internal.h"
 #import "LCGeoPoint_Internal.h"
 #import "LCCacheManager.h"
-#import "AVErrorUtils.h"
+#import "LCErrorUtils.h"
 #import "LCObjectUtils.h"
 #import "LCQuery_Internal.h"
 #import "LCCloudQueryResult_Internal.h"
@@ -86,7 +86,7 @@ NSString *LCStringFromDistanceUnit(LCQueryDistanceUnit unit) {
 
 + (LCCloudQueryResult *)cloudQueryWithCQL:(NSString *)cql pvalues:(NSArray *)pvalues callback:(AVCloudQueryCallback)callback waitUntilDone:(BOOL)wait error:(NSError **)error{
     if (!cql) {
-        NSError *err = LCError(kAVErrorInvalidQuery, @"cql can not be nil", nil);
+        NSError *err = LCError(kLCErrorInvalidQuery, @"cql can not be nil", nil);
         if (error) {
             *error = err;
         }
@@ -640,7 +640,7 @@ static NSString * quote(NSString *string)
         }
         
         if (error == nil && [dict allKeys].count == 0) {
-            error = LCError(kAVErrorObjectNotFound, [NSString stringWithFormat:@"No object with that objectId %@ was found.", objectId], nil);
+            error = LCError(kLCErrorObjectNotFound, [NSString stringWithFormat:@"No object with that objectId %@ was found.", objectId], nil);
         }
         if (block) {
             block(object, error);
@@ -858,7 +858,7 @@ static NSString * quote(NSString *string)
         if (error) {
             [AVUtils callObjectResultBlock:resultBlock object:nil error:error];
         } else if (results.count == 0) {
-            wrappedError = LCError(kAVErrorObjectNotFound, @"no results matched the query", nil);
+            wrappedError = LCError(kLCErrorObjectNotFound, @"no results matched the query", nil);
             [AVUtils callObjectResultBlock:resultBlock object:nil error:wrappedError];
         } else {
             NSMutableArray * array = [self processResults:results className:className];

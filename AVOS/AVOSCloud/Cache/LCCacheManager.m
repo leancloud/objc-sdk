@@ -7,7 +7,7 @@
 //
 
 #import "LCCacheManager.h"
-#import "AVErrorUtils.h"
+#import "LCErrorUtils.h"
 #import "AVUtils.h"
 #import "LCPersistenceUtils.h"
 
@@ -80,7 +80,7 @@
             if (diskResult && !isTooOld) {
                 if (block) block(diskResult, nil);
             } else {
-                if (block) block(nil, LCError(kAVErrorCacheMiss, nil, nil));
+                if (block) block(nil, LCError(kLCErrorCacheMiss, nil, nil));
             }
         });
     });

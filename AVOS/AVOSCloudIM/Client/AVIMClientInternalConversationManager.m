@@ -10,7 +10,7 @@
 #import "AVIMClient_Internal.h"
 #import "AVIMConversation_Internal.h"
 #import "AVIMErrorUtil.h"
-#import "AVErrorUtils.h"
+#import "LCErrorUtils.h"
 #import "AVUtils.h"
 #import "LCIMConversationCache.h"
 #import "AVIMGenericCommand+AVIMMessagesAdditions.h"

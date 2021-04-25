@@ -8,7 +8,7 @@
 
 #import "LCStatus.h"
 #import "LCPaasClient.h"
-#import "AVErrorUtils.h"
+#import "LCErrorUtils.h"
 #import "LCObjectUtils.h"
 #import "LCObject_Internal.h"
 #import "LCQuery_Internal.h"
@@ -166,7 +166,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
 
 +(NSError*)permissionCheck{
     if (![[LCUser currentUser] isAuthDataExistInMemory]) {
-        return LCError(kAVErrorUserCannotBeAlteredWithoutSession, nil, nil);
+        return LCError(kLCErrorUserCannotBeAlteredWithoutSession, nil, nil);
     }
     
     return nil;
@@ -383,11 +383,11 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
     NSParameterAssert(self.data);
     
     if ([self objectId]) {
-        return LCError(kAVErrorOperationForbidden, @"status can't be update", nil);
+        return LCError(kLCErrorOperationForbidden, @"status can't be update", nil);
     }
     
     if ([LCUser currentUser]==nil) {
-        return LCError(kAVErrorOperationForbidden, @"do NOT have an current user, please login first", nil);
+        return LCError(kLCErrorOperationForbidden, @"do NOT have an current user, please login first", nil);
     }
     
     if (self.source==nil) {
@@ -442,7 +442,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
              }
          }
 
-         [AVUtils callBooleanResultBlock:block error:LCError(kAVErrorInvalidJSON, @"unexpected result return", nil)];
+         [AVUtils callBooleanResultBlock:block error:LCError(kLCErrorInvalidJSON, @"unexpected result return", nil)];
      }
      failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error) {
          [AVUtils callBooleanResultBlock:block error:error];

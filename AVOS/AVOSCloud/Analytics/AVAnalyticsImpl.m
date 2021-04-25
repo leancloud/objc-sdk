@@ -12,7 +12,7 @@
 #import "AVAnalyticsUtils.h"
 #import "AVGlobal.h"
 #import "AVUtils.h"
-#import "AVErrorUtils.h"
+#import "LCErrorUtils.h"
 #import "LCRouter_Internal.h"
 
 static NSString *const kAVOnlineConfig = @"AVOS_ONLINE_CONFIG";

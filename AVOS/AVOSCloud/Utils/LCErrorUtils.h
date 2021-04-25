@@ -1,5 +1,5 @@
 //
-//  AVErrorUtils.h
+//  LCErrorUtils.h
 //  LeanCloud
 //
 //  Created by Zhu Zeng on 3/23/13.
@@ -8,12 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSInteger, AVErrorInternalErrorCode) {
-    AVErrorInternalErrorCodeNotFound        = 9973,
-    AVErrorInternalErrorCodeInvalidType     = 9974,
-    AVErrorInternalErrorCodeMalformedData   = 9975,
-    AVErrorInternalErrorCodeInconsistency   = 9976,
-    AVErrorInternalErrorCodeUnderlyingError = 9977,
+typedef NS_ENUM(NSInteger, LCErrorInternalErrorCode) {
+    LCErrorInternalErrorCodeNotFound        = 9973,
+    LCErrorInternalErrorCodeInvalidType     = 9974,
+    LCErrorInternalErrorCodeMalformedData   = 9975,
+    LCErrorInternalErrorCodeInconsistency   = 9976,
+    LCErrorInternalErrorCodeUnderlyingError = 9977,
 };
 
 FOUNDATION_EXPORT NSError *LCError(NSInteger code, NSString *failureReason, NSDictionary *userInfo);

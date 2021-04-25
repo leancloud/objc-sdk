@@ -16,7 +16,7 @@
 
 #import "AVUtils.h"
 #import "LCObjectUtils.h"
-#import "AVErrorUtils.h"
+#import "LCErrorUtils.h"
 
 #import "AVIMGenericCommand+AVIMMessagesAdditions.h"
 

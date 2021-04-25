@@ -14,7 +14,7 @@
 #import "LCRouter_Internal.h"
 #import "AVLogger.h"
 #import "AVUtils.h"
-#import "AVErrorUtils.h"
+#import "LCErrorUtils.h"
 #import "AVOSCloudIM.h"
 #import "AVIMCommon_Internal.h"
 #import "AVIMErrorUtil.h"
@@ -94,7 +94,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             if (sharedConnection) {
                 if (connectionMap[serviceConsumer.peerID]) {
                     if (error) {
-                        *error = LCError(AVErrorInternalErrorCodeInconsistency,
+                        *error = LCError(LCErrorInternalErrorCodeInconsistency,
                                          @"Duplicate registration for connection.", nil);
                     }
                     return nil;
@@ -844,7 +844,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
                     }
                     NSError *error;
                     if (!serverURL) {
-                        error = LCError(AVErrorInternalErrorCodeNotFound,
+                        error = LCError(LCErrorInternalErrorCodeNotFound,
                                         @"RTM server URL not found.", nil);
                     }
                     completion(ss, serverURL, error);
