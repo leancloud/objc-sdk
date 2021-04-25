@@ -1,5 +1,5 @@
 //
-//  AVCaptcha.h
+//  LCCaptcha.h
 //  AVOS
 //
 //  Created by Tang Tianyong on 03/05/2017.
@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AVCaptchaDigest : AVDynamicObject
+@interface LCCaptchaDigest : AVDynamicObject
 
 /**
  A nonce used to verify captcha.
@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface AVCaptchaRequestOptions : AVDynamicObject
+@interface LCCaptchaRequestOptions : AVDynamicObject
 
 /**
  Width of captcha image, in pixels.
@@ -43,10 +43,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-typedef void(^AVCaptchaRequestCallback)(AVCaptchaDigest * _Nullable captchaDigest, NSError * _Nullable error);
-typedef void(^AVCaptchaVerificationCallback)(NSString * _Nullable validationToken, NSError * _Nullable error);
+typedef void(^LCCaptchaRequestCallback)(LCCaptchaDigest * _Nullable captchaDigest, NSError * _Nullable error);
+typedef void(^LCCaptchaVerificationCallback)(NSString * _Nullable validationToken, NSError * _Nullable error);
 
-@interface AVCaptcha : NSObject
+@interface LCCaptcha : NSObject
 
 /**
  Request a captcha.
@@ -57,8 +57,8 @@ typedef void(^AVCaptchaVerificationCallback)(NSString * _Nullable validationToke
  @param options  The options that configure the captcha.
  @param callback The callback of request.
  */
-+ (void)requestCaptchaWithOptions:(nullable AVCaptchaRequestOptions *)options
-                         callback:(AVCaptchaRequestCallback)callback;
++ (void)requestCaptchaWithOptions:(nullable LCCaptchaRequestOptions *)options
+                         callback:(LCCaptchaRequestCallback)callback;
 
 /**
  Verify a captcha code for captcha digest that you've requested before.
@@ -68,8 +68,8 @@ typedef void(^AVCaptchaVerificationCallback)(NSString * _Nullable validationToke
  @param callback      The callback of request.
  */
 + (void)verifyCaptchaCode:(NSString *)captchaCode
-         forCaptchaDigest:(AVCaptchaDigest *)captchaDigest
-                 callback:(AVCaptchaVerificationCallback)callback;
+         forCaptchaDigest:(LCCaptchaDigest *)captchaDigest
+                 callback:(LCCaptchaVerificationCallback)callback;
 
 @end
 

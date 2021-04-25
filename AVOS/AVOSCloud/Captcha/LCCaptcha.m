@@ -1,35 +1,35 @@
 //
-//  AVCaptcha.m
+//  LCCaptcha.m
 //  AVOS
 //
 //  Created by Tang Tianyong on 03/05/2017.
 //  Copyright © 2017 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVCaptcha.h"
+#import "LCCaptcha.h"
 #import "AVDynamicObject_Internal.h"
 #import "NSDictionary+LeanCloud.h"
 #import "LCPaasClient.h"
 #import "AVUtils.h"
 
-@implementation AVCaptchaDigest
+@implementation LCCaptchaDigest
 
 @dynamic nonce;
 @dynamic URLString;
 
 @end
 
-@implementation AVCaptchaRequestOptions
+@implementation LCCaptchaRequestOptions
 
 @dynamic width;
 @dynamic height;
 
 @end
 
-@implementation AVCaptcha
+@implementation LCCaptcha
 
-+ (void)requestCaptchaWithOptions:(AVCaptchaRequestOptions *)options
-                         callback:(AVCaptchaRequestCallback)callback
++ (void)requestCaptchaWithOptions:(LCCaptchaRequestOptions *)options
+                         callback:(LCCaptchaRequestCallback)callback
 {
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
 
@@ -47,15 +47,15 @@
             @"captcha_url"   : @"URLString"
         }];
 
-        AVCaptchaDigest *captchaDigest = [[AVCaptchaDigest alloc] initWithDictionary:dictionary];
+        LCCaptchaDigest *captchaDigest = [[LCCaptchaDigest alloc] initWithDictionary:dictionary];
 
         [AVUtils callIdResultBlock:callback object:captchaDigest error:nil];
     }];
 }
 
 + (void)verifyCaptchaCode:(NSString *)captchaCode
-         forCaptchaDigest:(AVCaptchaDigest *)captchaDigest
-                 callback:(AVCaptchaVerificationCallback)callback
+         forCaptchaDigest:(LCCaptchaDigest *)captchaDigest
+                 callback:(LCCaptchaVerificationCallback)callback
 {
     NSParameterAssert(captchaCode);
     NSParameterAssert(captchaDigest);
