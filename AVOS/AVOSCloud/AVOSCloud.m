@@ -29,7 +29,7 @@
 static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
 
 + (void)setAllLogsEnabled:(BOOL)enabled {
-    [AVLogger setAllLogsEnabled:enabled];
+    [LCLogger setAllLogsEnabled:enabled];
 }
 
 + (void)setVerbosePolicy:(AVVerbosePolicy)verbosePolicy {
@@ -263,9 +263,9 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
     }
     [installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (error) {
-            AVLoggerError(AVLoggerDomainDefault, @"default installation save failed: %@", error);
+            LCLoggerError(LCLoggerDomainDefault, @"default installation save failed: %@", error);
         } else {
-            AVLoggerInfo(AVLoggerDomainDefault, @"default installation save success");
+            LCLoggerInfo(LCLoggerDomainDefault, @"default installation save success");
         }
     }];
 }

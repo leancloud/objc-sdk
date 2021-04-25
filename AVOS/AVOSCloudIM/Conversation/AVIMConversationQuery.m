@@ -44,7 +44,7 @@
             NSString *eachClientId = query.client.clientId;
             
             if (!eachClientId || ![eachClientId isEqualToString:client.clientId]) {
-                AVLoggerError(AVLoggerDomainIM, @"Invalid conversation query client id: %@.", eachClientId);
+                LCLoggerError(LCLoggerDomainIM, @"Invalid conversation query client id: %@.", eachClientId);
                 return nil;
             }
             
@@ -69,7 +69,7 @@
             NSString *eachClientId = query.client.clientId;
             
             if (!eachClientId || ![eachClientId isEqualToString:client.clientId]) {
-                AVLoggerError(AVLoggerDomainIM, @"Invalid conversation query client id: %@.", eachClientId);
+                LCLoggerError(LCLoggerDomainIM, @"Invalid conversation query client id: %@.", eachClientId);
                 return nil;
             }
             

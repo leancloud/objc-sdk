@@ -670,7 +670,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
                     NSError *error = nil;
                     NSString *path = [self persistentCachePathThrowError:&error];
                     if (error) {
-                        AVLoggerError(AVLoggerDomainStorage, @"%@", error);
+                        LCLoggerError(LCLoggerDomainStorage, @"%@", error);
                     }
                     path;
                 });
@@ -683,7 +683,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
                         if ([NSFileManager.defaultManager fileExistsAtPath:persistenceCachePath]) {
                             [NSFileManager.defaultManager removeItemAtPath:persistenceCachePath error:&error];
                             if (error) {
-                                AVLoggerError(AVLoggerDomainStorage, @"%@", error);
+                                LCLoggerError(LCLoggerDomainStorage, @"%@", error);
                             }
                         }
                         error ? false : true;
@@ -708,7 +708,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
                         
                         if (cachingError) {
                             
-                            AVLoggerError(AVLoggerDomainStorage, @"%@", cachingError);
+                            LCLoggerError(LCLoggerDomainStorage, @"%@", cachingError);
                         }
                     }
                 }
@@ -1025,7 +1025,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
                     [NSFileManager.defaultManager removeItemAtPath:permanentLocationPath
                                                              error:&error];
                     if (error) {
-                        AVLoggerError(AVLoggerDomainStorage, @"%@", error);
+                        LCLoggerError(LCLoggerDomainStorage, @"%@", error);
                         isPathCleared = false;
                     }
                 }
@@ -1095,7 +1095,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         [[NSFileManager defaultManager] removeItemAtPath:cachePath
                                                    error:&error];
         if (error) {
-            AVLoggerError(AVLoggerDomainStorage, @"Error: %@", error);
+            LCLoggerError(LCLoggerDomainStorage, @"Error: %@", error);
         }
     }
 }
@@ -1111,7 +1111,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         [[NSFileManager defaultManager] removeItemAtPath:directoryPath
                                                    error:&error];
         if (error) {
-            AVLoggerError(AVLoggerDomainStorage, @"Error: %@", error);
+            LCLoggerError(LCLoggerDomainStorage, @"Error: %@", error);
         }
     }
 }
@@ -1121,7 +1121,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
     NSError *error = nil;
     NSString *persistentCachePath = [self persistentCachePathThrowError:&error];
     if (error) {
-        AVLoggerError(AVLoggerDomainStorage, @"%@", error);
+        LCLoggerError(LCLoggerDomainStorage, @"%@", error);
     }
     return persistentCachePath;
 }

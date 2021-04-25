@@ -187,7 +187,6 @@
 
 - (void)cleanCacheForConversationId:(NSString *)conversationId {
     if (!conversationId) {
-        AVLoggerError(AVLoggerDomainIM, @"Conversation id can not be empty.");
         return;
     }
 

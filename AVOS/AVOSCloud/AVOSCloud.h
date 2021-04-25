@@ -12,7 +12,7 @@
 
 #import "AVAvailability.h"
 #import "AVConstants.h"
-#import "AVLogger.h"
+#import "LCLogger.h"
 
 // Object
 #import "LCObject.h"

@@ -258,7 +258,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 - (void)dealloc
 {
-    AVLoggerInfo(AVLoggerDomainIM,
+    LCLoggerInfo(LCLoggerDomainIM,
                  @"\n%@: %p"
                  @"\n\t- dealloc",
                  NSStringFromClass([self class]), self);
@@ -642,7 +642,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                 if (error.code == AVIMErrorCodeCommandTimeout) {
                     [client sendSessionReopenCommand:command];
                 } else if (error.code == AVIMErrorCodeConnectionLost) {
-                    AVLoggerError(AVLoggerDomainIM, @"%@", error);
+                    LCLoggerError(LCLoggerDomainIM, @"%@", error);
                 } else if (error.code == AVIMErrorCodeSessionTokenExpired) {
                     [client getSessionOpenCommandWithToken:nil
                                                   isReopen:true
@@ -655,7 +655,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                                           completion:nil];
                 }
             } else {
-                AVLoggerError(AVLoggerDomainIM, @"%@", error);
+                LCLoggerError(LCLoggerDomainIM, @"%@", error);
             }
         } else {
             [client handleSessionOpenCallbackWithInCommand:inCommand
@@ -1495,7 +1495,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }
     [self.conversationManager queryConversationWithId:conversationID callback:^(AVIMConversation *conversation, NSError *error) {
         if (error) {
-            AVLoggerError(AVLoggerDomainIM, @"%@", error);
+            LCLoggerError(LCLoggerDomainIM, @"%@", error);
             return;
         }
         BOOL isTransientMsg = (directCommand.hasTransient ? directCommand.transient : false);
@@ -1871,7 +1871,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 #if DEBUG
     [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         if (commandWrapper.error) {
-            AVLoggerError(AVLoggerDomainIM, @"%@", commandWrapper.error);
+            LCLoggerError(LCLoggerDomainIM, @"%@", commandWrapper.error);
         }
         [NSNotificationCenter.defaultCenter postNotificationName:@"Test.AVIMClient.reportDeviceToken"
                                                           object:nil

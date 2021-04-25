@@ -14,7 +14,7 @@
 #import "LCFile_Internal.h"
 #import "LCGeoPoint_Internal.h"
 #import "LCObjectUtils.h"
-#import "AVLogger.h"
+#import "LCLogger.h"
 #import "AVUtils.h"
 
 @implementation LCCloud

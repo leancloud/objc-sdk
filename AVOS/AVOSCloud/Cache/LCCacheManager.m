@@ -53,7 +53,7 @@
 }
 
 - (BOOL)hasCacheForKey:(NSString *)key {
-    return [[NSFileManager defaultManager] fileExistsAtPath:[self pathForKey:[key AVMD5String]]];
+    return [[NSFileManager defaultManager] fileExistsAtPath:[self pathForKey:[key LCMD5String]]];
 }
 - (BOOL)hasCacheForMD5Key:(NSString *)key {
     return [[NSFileManager defaultManager] fileExistsAtPath:[self pathForKey:key]];
@@ -67,9 +67,9 @@
         if (maxCacheAge<=0) {
             isTooOld=YES;
         } else {
-             diskResult=[LCPersistenceUtils getJSONFromPath:[self pathForKey:[key AVMD5String]]];
+             diskResult=[LCPersistenceUtils getJSONFromPath:[self pathForKey:[key LCMD5String]]];
             if (diskResult && maxCacheAge > 0) {
-                NSDate *lastModified = [LCPersistenceUtils lastModified:[self pathForKey:[key AVMD5String]]];
+                NSDate *lastModified = [LCPersistenceUtils lastModified:[self pathForKey:[key LCMD5String]]];
                 if ([[NSDate date] timeIntervalSinceDate:lastModified] > maxCacheAge) {
                     isTooOld = YES;
                 }
@@ -88,7 +88,7 @@
 
 - (void)saveJSON:(id)JSON forKey:(NSString *)key {
     dispatch_async(self.cacheQueue, ^{
-        [LCPersistenceUtils saveJSON:JSON toPath:[self pathForKey:[key AVMD5String]]];
+        [LCPersistenceUtils saveJSON:JSON toPath:[self pathForKey:[key LCMD5String]]];
     });
 }
 
@@ -125,7 +125,7 @@
 
 - (void)clearCacheForKey:(NSString *)key {
     dispatch_sync(self.cacheQueue, ^{
-        [[NSFileManager defaultManager] removeItemAtPath:[self pathForKey:[key AVMD5String]] error:NULL];
+        [[NSFileManager defaultManager] removeItemAtPath:[self pathForKey:[key LCMD5String]] error:NULL];
     });
 }
 

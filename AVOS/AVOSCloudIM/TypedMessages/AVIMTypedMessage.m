@@ -57,7 +57,7 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
     LCFile *file = [LCFile fileWithLocalPath:attachedFilePath
                                        error:&error];
     if (error) {
-        AVLoggerError(AVLoggerDomainIM, @"%@", error);
+        LCLoggerError(LCLoggerDomainIM, @"%@", error);
         return nil;
     }
     return [self messageWithText:text

@@ -245,12 +245,12 @@
             
             BOOL removeSuccess = [fileMgr removeItemAtPath:fullPath error:&error];
             if (!removeSuccess) {
-                AVLoggerE(@"remove error happened");
+                LCLoggerE(@"remove error happened");
                 success = NO;
             }
         }
     } else {
-        AVLoggerE(@"remove error happened");
+        LCLoggerE(@"remove error happened");
         success = NO;
     }
     

@@ -92,9 +92,9 @@ const NSInteger LCIMErrorCodeSessionTokenExpired = 4112;
             jsonObjectMesssage = [[AVIMJsonObjectMessage alloc] init];
             jsonObjectMesssage.data_p = jsonString;
         } else if (error) {
-            AVLoggerError(AVLoggerDomainIM, @"Can not stringify dictionary: %@.", error.localizedDescription);
+//            LCLoggerError(LCLoggerDomainIM, @"Can not stringify dictionary: %@.", error.localizedDescription);
         } else {
-            AVLoggerError(AVLoggerDomainIM, @"Empty data for dictionary.");
+//            LCLoggerError(LCLoggerDomainIM, @"Empty data for dictionary.");
         }
     }
 

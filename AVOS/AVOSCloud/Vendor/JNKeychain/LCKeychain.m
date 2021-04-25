@@ -9,7 +9,7 @@
 #define CHECK_OSSTATUS_ERROR(x) (x == noErr) ? YES : NO
 
 #import "LCKeychain.h"
-#import "AVLogger.h"
+#import "LCLogger.h"
 
 @interface LCKeychain ()
 
@@ -64,7 +64,7 @@
         @try {
             value = [NSKeyedUnarchiver unarchiveObjectWithData:(__bridge NSData *)keyData];
         } @catch (NSException *e) {
-            AVLoggerInfo(nil, @"Unarchive of %@ from keychain failed: %@", key, e);
+            LCLoggerInfo(nil, @"Unarchive of %@ from keychain failed: %@", key, e);
             value = nil;
         }
     }

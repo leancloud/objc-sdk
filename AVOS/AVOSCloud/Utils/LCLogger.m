@@ -1,35 +1,35 @@
 //
-//  AVLogger.m
+//  LCLogger.m
 //  AVOS
 //
 //  Created by Qihe Bian on 9/9/14.
 //
 //
 
-#import "AVLogger.h"
+#import "LCLogger.h"
 
-NSString *const AVLoggerDomainCURL = @"LOG_CURL";
-NSString *const AVLoggerDomainNetwork = @"LOG_NETWORK";
-NSString *const AVLoggerDomainStorage = @"LOG_STORAGE";
-NSString *const AVLoggerDomainIM = @"LOG_IM";
-NSString *const AVLoggerDomainDefault = @"LOG_DEFAULT";
+NSString *const LCLoggerDomainCURL = @"LOG_CURL";
+NSString *const LCLoggerDomainNetwork = @"LOG_NETWORK";
+NSString *const LCLoggerDomainStorage = @"LOG_STORAGE";
+NSString *const LCLoggerDomainIM = @"LOG_IM";
+NSString *const LCLoggerDomainDefault = @"LOG_DEFAULT";
 
 static NSMutableSet *loggerDomain = nil;
-static NSUInteger loggerLevelMask = AVLoggerLevelNone;
+static NSUInteger loggerLevelMask = LCLoggerLevelNone;
 static NSArray *loggerDomains = nil;
 
-@implementation AVLogger
+@implementation LCLogger
 
 + (void)load {
     static dispatch_once_t onceToken;
     
     dispatch_once(&onceToken, ^{
         loggerDomains = @[
-                          AVLoggerDomainCURL,
-                          AVLoggerDomainNetwork,
-                          AVLoggerDomainIM,
-                          AVLoggerDomainStorage,
-                          AVLoggerDomainDefault
+                          LCLoggerDomainCURL,
+                          LCLoggerDomainNetwork,
+                          LCLoggerDomainIM,
+                          LCLoggerDomainStorage,
+                          LCLoggerDomainDefault
                           ];
     });
 #ifdef DEBUG
@@ -42,14 +42,14 @@ static NSArray *loggerDomains = nil;
 + (void)setAllLogsEnabled:(BOOL)enabled {
     if (enabled) {
         for (NSString *loggerDomain in loggerDomains) {
-            [AVLogger addLoggerDomain:loggerDomain];
+            [LCLogger addLoggerDomain:loggerDomain];
         }
-        [AVLogger setLoggerLevelMask:AVLoggerLevelAll];
+        [LCLogger setLoggerLevelMask:LCLoggerLevelAll];
     } else {
         for (NSString *loggerDomain in loggerDomains) {
-            [AVLogger removeLoggerDomain:loggerDomain];
+            [LCLogger removeLoggerDomain:loggerDomain];
         }
-        [AVLogger setLoggerLevelMask:AVLoggerLevelNone];
+        [LCLogger setLoggerLevelMask:LCLoggerLevelNone];
     }
 
     [self setCertificateInspectionEnabled:enabled];
@@ -78,7 +78,7 @@ static NSArray *loggerDomains = nil;
     [loggerDomain removeObject:domain];
 }
 
-+ (BOOL)levelEnabled:(AVLoggerLevel)level {
++ (BOOL)levelEnabled:(LCLoggerLevel)level {
     return loggerLevelMask & level;
 }
 
@@ -86,21 +86,21 @@ static NSArray *loggerDomains = nil;
     return [loggerDomain containsObject:domain];
 }
 
-+ (void)logFunc:(const char *)func line:(int)line domain:(NSString *)domain level:(AVLoggerLevel)level message:(NSString *)fmt, ... {
++ (void)logFunc:(const char *)func line:(int)line domain:(NSString *)domain level:(LCLoggerLevel)level message:(NSString *)fmt, ... {
     if (!domain || [loggerDomain containsObject:domain]) {
         if (level & loggerLevelMask) {
             NSString *symbol = nil;
             NSString *levelString = nil;
             switch (level) {
-                case AVLoggerLevelInfo:
+                case LCLoggerLevelInfo:
                     symbol = @"💙";
                     levelString = @"Info";
                     break;
-                case AVLoggerLevelDebug:
+                case LCLoggerLevelDebug:
                     symbol = @"💚";
                     levelString = @"Debug";
                     break;
-                case AVLoggerLevelError:
+                case LCLoggerLevelError:
                     symbol = @"❤️";
                     levelString = @"Error";
                     break;

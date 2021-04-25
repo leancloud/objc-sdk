@@ -96,7 +96,7 @@ static NSUInteger batchQueryLimit = 20;
             NSError *error = nil;
             LCIMProtobufCommandWrapper *commandWrapper = [self newQueryCommandWrapperWithIds:batchIds isTemporary:isTemporary error:&error];
             if (error) {
-                AVLoggerError(AVLoggerDomainIM, @"Error: %@ for querying ids: %@", error, batchIds);
+                LCLoggerError(LCLoggerDomainIM, @"Error: %@ for querying ids: %@", error, batchIds);
                 callback(nil, error);
                 return;
             }
@@ -106,7 +106,7 @@ static NSUInteger batchQueryLimit = 20;
         [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
             
             if (commandWrapper.error) {
-                AVLoggerError(AVLoggerDomainIM, @"Error: %@ for querying ids: %@", commandWrapper.error, batchIds);
+                LCLoggerError(LCLoggerDomainIM, @"Error: %@ for querying ids: %@", commandWrapper.error, batchIds);
                 for (NSString *convId in batchIds) {
                     [self invokeCallbacksWithId:convId conversation:nil error:commandWrapper.error];
                 }
@@ -117,7 +117,7 @@ static NSUInteger batchQueryLimit = 20;
                 NSError *error = nil;
                 NSMutableArray<NSMutableDictionary *> *queryResults = [self queryResultsFrom:commandWrapper.inCommand error:&error];
                 if (error) {
-                    AVLoggerError(AVLoggerDomainIM, @"%@", error);
+                    LCLoggerError(LCLoggerDomainIM, @"%@", error);
                     for (NSString *convId in batchIds) {
                         [self invokeCallbacksWithId:convId conversation:nil error:error];
                     }
@@ -148,7 +148,7 @@ static NSUInteger batchQueryLimit = 20;
                             AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
                             LCError(code, AVIMErrorMessage(code), nil);
                         });
-                        AVLoggerError(AVLoggerDomainIM, @"%@", error);
+                        LCLoggerError(LCLoggerDomainIM, @"%@", error);
                         [self invokeCallbacksWithId:conversationId conversation:nil error:error];
                         continue;
                     }

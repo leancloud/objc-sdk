@@ -58,7 +58,7 @@ static NSMutableDictionary<NSString *, NSString *> *customAppServerTable;
                     NSMutableDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
                     if (error || ![NSMutableDictionary _lc_isTypeOf:dictionary]) {
                         if (!error) { error = LCErrorInternal([NSString stringWithFormat:@"file: %@ is invalid.", filePath]); }
-                        AVLoggerError(AVLoggerDomainDefault, @"%@", error);
+                        LCLoggerError(LCLoggerDomainDefault, @"%@", error);
                     } else {
                         return dictionary;
                     }
@@ -127,7 +127,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
         NSData *data = [NSJSONSerialization dataWithJSONObject:routerDataMap options:0 error:&error];
         if (error || ![data length]) {
             if (!error) { error = LCErrorInternal(@"data invalid."); }
-            AVLoggerError(AVLoggerDomainDefault, @"%@", error);
+            LCLoggerError(LCLoggerDomainDefault, @"%@", error);
             return;
         }
         data;
@@ -140,11 +140,11 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
             NSError *error = nil;
             [[NSFileManager defaultManager] createDirectoryAtPath:routerCacheDirectoryPath withIntermediateDirectories:true attributes:nil error:&error];
             if (error) {
-                AVLoggerError(AVLoggerDomainDefault, @"%@", error);
+                LCLoggerError(LCLoggerDomainDefault, @"%@", error);
                 return;
             }
         } else if (isExists && !isDirectory) {
-            AVLoggerError(AVLoggerDomainDefault, @"%@", LCErrorInternal(@"can't create directory for router."));
+            LCLoggerError(LCLoggerDomainDefault, @"%@", LCErrorInternal(@"can't create directory for router."));
             return;
         }
         [routerCacheDirectoryPath stringByAppendingPathComponent:key];
@@ -205,7 +205,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
     }
     self.isUpdatingAppRouter = true;
     [self getAppRouterDataWithAppID:appID callback:^(NSDictionary *dataDictionary, NSError *error) {
-        if (error) { AVLoggerError(AVLoggerDomainDefault, @"%@", error); }
+        if (error) { LCLoggerError(LCLoggerDomainDefault, @"%@", error); }
         if (dataDictionary) {
             NSDictionary *routerDataTuple = ({
                 @{ RouterCacheKeyData : dataDictionary,

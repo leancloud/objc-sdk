@@ -745,7 +745,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     do {
         /* If object is clean, ignore save request. */
         if (![self isDirty]) {
-            AVLoggerInfo(AVLoggerDomainStorage, @"Object not changed, ignore save request.");
+            LCLoggerInfo(LCLoggerDomainStorage, @"Object not changed, ignore save request.");
             break;
         }
         
@@ -2320,7 +2320,7 @@ static void setter_f(id self, SEL _cmd, float value)
         [super setValue:value forKey:key];
     } @catch (NSException *exception) {
         NSString *link = @"https://leancloud.cn/docs/ios_os_x_guide.html#LCObject";
-        AVLoggerError(nil, @"Class %@ may contain a reserved property: %@, see %@ for more infomation.", NSStringFromClass([self class]), key, link);
+        LCLoggerError(nil, @"Class %@ may contain a reserved property: %@, see %@ for more infomation.", NSStringFromClass([self class]), key, link);
 
         [exception raise];
     }

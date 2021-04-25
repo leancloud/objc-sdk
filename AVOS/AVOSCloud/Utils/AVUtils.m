@@ -144,7 +144,7 @@ static int b62_encode(char* out, const void *data, int length)
     if (getenv("GHUNIT_CLI")) return;
     
     if ([NSThread isMainThread]) {
-        AVLoggerI(@"Warning: A long-running Paas operation is being executed on the main thread.");
+        LCLoggerI(@"Warning: A long-running Paas operation is being executed on the main thread.");
     }
 }
 
@@ -760,7 +760,7 @@ char *avNewBase64Encode(
 //
 // returns the autoreleased NSData representation of the base64 string
 //
-+ (NSData *)AVdataFromBase64String:(NSString *)aString
++ (NSData *)LCdataFromBase64String:(NSString *)aString
 {
 	NSData *data = [aString dataUsingEncoding:NSASCIIStringEncoding];
 	size_t outputLength;
@@ -779,7 +779,7 @@ char *avNewBase64Encode(
 // returns an autoreleased NSString being the base 64 representation of the
 //	receiver.
 //
-- (NSString *)AVbase64EncodedString
+- (NSString *)LCbase64EncodedString
 {
 	size_t outputLength=0;
 	char *outputBuffer =
@@ -799,7 +799,7 @@ char *avNewBase64Encode(
 
 @implementation NSString (MD5)
 
-- (NSString *)AVMD5String {
+- (NSString *)LCMD5String {
     const char *cstr = [self UTF8String];
     unsigned char result[16];
     CC_MD5(cstr, (CC_LONG)strlen(cstr), result);
@@ -875,7 +875,7 @@ static Byte ivBuff[]   = {0xA,1,0xB,5,4,0xF,7,9,0x17,3,1,6,8,0xC,0xD,91};
 										  &numBytesEncrypted);
 	if (cryptStatus == kCCSuccess) {
         NSData *encryptData = [NSData dataWithBytesNoCopy:buffer length:numBytesEncrypted];
-		return [encryptData AVbase64EncodedString];
+		return [encryptData LCbase64EncodedString];
 	}
 	
 	free(buffer); //free the buffer;
@@ -883,7 +883,7 @@ static Byte ivBuff[]   = {0xA,1,0xB,5,4,0xF,7,9,0x17,3,1,6,8,0xC,0xD,91};
 }
 
 - (NSString *)AVAES256Decrypt{
-    NSData *cipherData = [NSData AVdataFromBase64String:self];
+    NSData *cipherData = [NSData LCdataFromBase64String:self];
 	// 'key' should be 32 bytes for AES256, will be null-padded otherwise
 	char keyPtr[kCCKeySizeAES256+1]; // room for terminator (unused)
 	bzero(keyPtr, sizeof(keyPtr)); // fill with zeroes (for padding)

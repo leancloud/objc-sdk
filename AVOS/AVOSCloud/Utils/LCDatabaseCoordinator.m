@@ -9,7 +9,7 @@
 #import "LCDatabaseCoordinator.h"
 #import "LCDatabase.h"
 #import "LCDatabaseQueue.h"
-#import "AVLogger.h"
+#import "LCLogger.h"
 #import "LCErrorUtils.h"
 
 #import <libkern/OSAtomic.h>
@@ -75,7 +75,7 @@
 
 - (LCDatabaseQueue *)dbQueue {
     if (!_databasePath) {
-        AVLoggerError(AVLoggerDomainDefault, @"%@: Database path not found.", [[self class] description]);
+        LCLoggerError(LCLoggerDomainDefault, @"%@: Database path not found.", [[self class] description]);
         return nil;
     }
 

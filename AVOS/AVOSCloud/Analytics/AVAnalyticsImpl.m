@@ -344,7 +344,7 @@ static NSString *const kAVOnlineConfig = @"AVOS_ONLINE_CONFIG";
     [self debugDump];
     
     if (!self.enableReport) {
-        AVLoggerI(@"Report is disabled by caller");
+        LCLoggerI(@"Report is disabled by caller");
         return;
     }
     
@@ -451,10 +451,10 @@ static NSString *const kAVOnlineConfig = @"AVOS_ONLINE_CONFIG";
     if (!self.enableDebugLog) {
         return;
     }
-    AVLoggerI(@"Report policy is %d", self.reportPolicy);
+    LCLoggerI(@"Report policy is %d", self.reportPolicy);
     NSArray * array = [self allSessionData];
     for(NSDictionary * dict in array) {
-        AVLoggerI(@"session data %@", dict);
+        LCLoggerI(@"session data %@", dict);
     }
 }
 

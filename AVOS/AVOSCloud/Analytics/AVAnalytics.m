@@ -189,7 +189,7 @@ static NSString * currentSessionId;
                 [[AVAnalyticsImpl sharedInstance] onlineConfigChanged:object];
             });
         } else {
-            AVLoggerE(@"Update online config failed %@", error);
+            LCLoggerE(@"Update online config failed %@", error);
         }
 
         [AVUtils callIdResultBlock:block object:object error:error];

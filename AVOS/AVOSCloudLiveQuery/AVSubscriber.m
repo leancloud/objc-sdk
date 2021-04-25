@@ -70,7 +70,7 @@ NSNotificationName const AVLiveQueryEventNotification = @"AVLiveQueryEventNotifi
         _connection = [[LCRTMConnectionManager sharedManager] registerWithServiceConsumer:_serviceConsumer
                                                                                     error:&error];
         if (error) {
-            AVLoggerError(AVLoggerDomainStorage, @"%@", error);
+            LCLoggerError(LCLoggerDomainStorage, @"%@", error);
         }
     }
     return self;

@@ -1818,7 +1818,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             AVIMMessage *message = nil;
             id data = [logsItem data_p];
             if (![data isKindOfClass:[NSString class]]) {
-                AVLoggerError(AVLoggerDomainIM, @"Received an invalid message.");
+                LCLoggerError(LCLoggerDomainIM, @"Received an invalid message.");
                 continue;
             }
             AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:data];
@@ -2175,7 +2175,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                                              callback:^(NSArray *messages, NSError *error)
                  {
                     if (error) {
-                        AVLoggerError(AVLoggerDomainIM, @"Error: %@", error);
+                        LCLoggerError(LCLoggerDomainIM, @"Error: %@", error);
                     }
                     
                     NSMutableArray *fetchedMessages;
@@ -2302,7 +2302,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             AVIMMessage *message = nil;
             id data = [logsItem data_p];
             if (![data isKindOfClass:[NSString class]]) {
-                AVLoggerError(AVLoggerDomainIM, @"Received an invalid message.");
+                LCLoggerError(LCLoggerDomainIM, @"Received an invalid message.");
                 continue;
             }
             AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:data];

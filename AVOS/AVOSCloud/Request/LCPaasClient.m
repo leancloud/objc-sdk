@@ -197,7 +197,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 - (NSString *)signatureHeaderFieldValue {
     NSString *timestamp=[NSString stringWithFormat:@"%.0f",1000*[[NSDate date] timeIntervalSince1970]];
-    NSString *sign=[[[NSString stringWithFormat:@"%@%@",timestamp,self.clientKey] AVMD5String] lowercaseString];
+    NSString *sign=[[[NSString stringWithFormat:@"%@%@",timestamp,self.clientKey] LCMD5String] lowercaseString];
     NSString *headerValue=[NSString stringWithFormat:@"%@,%@",sign,timestamp];
     
     return headerValue;
@@ -508,7 +508,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     NSMutableURLRequest *mutableRequest = [request mutableCopy];
     
     if (self.isLastModifyEnabled && [request.HTTPMethod isEqualToString:@"GET"]) {
-        NSString *modifiedSince = self.lastModify[[URLString AVMD5String]];
+        NSString *modifiedSince = self.lastModify[[URLString LCMD5String]];
         if (modifiedSince && [[LCCacheManager sharedInstance] hasCacheForKey:URLString]) {
             [mutableRequest setValue:modifiedSince forHTTPHeaderField:@"If-Modified-Since"];
         }
@@ -523,7 +523,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         }
         
         if (self.isLastModifyEnabled && [request.HTTPMethod isEqualToString:@"GET"]) {
-            NSString *URLMD5 = [URLString AVMD5String];
+            NSString *URLMD5 = [URLString LCMD5String];
             NSString *lastModified = [response.allHeaderFields objectForKey:@"Last-Modified"];
             
             if (lastModified && ![self.lastModify[URLMD5] isEqualToString:lastModified]) {
@@ -543,7 +543,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             [[LCCacheManager sharedInstance] getWithKey:URLString maxCacheAge:3600 * 24 * 30 block:^(id object, NSError *error) {
                 if (error) {
                     if (retryTimes < 3) {
-                        [self.lastModify removeObjectForKey:[URLString AVMD5String]];
+                        [self.lastModify removeObjectForKey:[URLString LCMD5String]];
                         [[LCCacheManager sharedInstance] clearCacheForKey:URLString];
                         [mutableRequest setValue:@"" forHTTPHeaderField:@"If-Modified-Since"];
                         [self performRequest:mutableRequest saveResult:saveResult block:block retryTimes:retryTimes + 1];
@@ -581,7 +581,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 {
     dispatch_semaphore_t semaphore;
     NSString *path = request.URL.path;
-    AVLoggerDebug(AVLoggerDomainNetwork, LC_REST_REQUEST_LOG_FORMAT, path, [request cURLCommand]);
+    LCLoggerDebug(LCLoggerDomainNetwork, LC_REST_REQUEST_LOG_FORMAT, path, [request cURLCommand]);
     
     NSDate *operationEnqueueDate = [NSDate date];
     
@@ -627,7 +627,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             }
             
             NSTimeInterval costTime = -([operationEnqueueDate timeIntervalSinceNow] * 1000);
-            AVLoggerDebug(AVLoggerDomainNetwork, LC_REST_RESPONSE_LOG_FORMAT, path, costTime, callbackError);
+            LCLoggerDebug(LCLoggerDomainNetwork, LC_REST_RESPONSE_LOG_FORMAT, path, costTime, callbackError);
             
             if (failureBlock) {
                 failureBlock(HTTPResponse, responseObject, callbackError);
@@ -649,7 +649,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         } else {
             
             NSTimeInterval costTime = -([operationEnqueueDate timeIntervalSinceNow] * 1000);
-            AVLoggerDebug(AVLoggerDomainNetwork, LC_REST_RESPONSE_LOG_FORMAT, path, costTime, responseObject);
+            LCLoggerDebug(LCLoggerDomainNetwork, LC_REST_RESPONSE_LOG_FORMAT, path, costTime, responseObject);
             
             if (successBlock) {
                 successBlock(HTTPResponse, responseObject);
@@ -806,7 +806,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     if (parseClassName == nil) return NO;
     
     if ([self.subclassTable objectForKey:parseClassName]) {
-        AVLoggerI(@"Warnning: Register duplicate with %@, %@ will be replaced by %@",
+        LCLoggerI(@"Warnning: Register duplicate with %@, %@ will be replaced by %@",
                   parseClassName, [self.subclassTable objectForKey:parseClassName], object);
     }
     
