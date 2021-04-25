@@ -8,7 +8,7 @@
 
 #import "AVIMTypedMessage_Internal.h"
 #import "AVIMMessage_Internal.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 
 NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
 

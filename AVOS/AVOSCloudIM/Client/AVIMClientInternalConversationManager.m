@@ -11,7 +11,7 @@
 #import "AVIMConversation_Internal.h"
 #import "AVIMErrorUtil.h"
 #import "LCErrorUtils.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 #import "LCIMConversationCache.h"
 #import "AVIMGenericCommand+AVIMMessagesAdditions.h"
 

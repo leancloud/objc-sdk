@@ -11,7 +11,7 @@
 #import "LCFile_Internal.h"
 #import "LCCacheManager.h"
 #import "LCPaasClient.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 
 static NSUInteger const ExpiredDays = 30;
 

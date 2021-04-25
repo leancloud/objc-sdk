@@ -8,7 +8,7 @@
 
 #import "AVIMConversationMemberInfo_Internal.h"
 #import "AVIMConversation_Internal.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 
 AVIMConversationMemberRoleKey AVIMConversationMemberInfo_role_to_key(AVIMConversationMemberRole role)
 {

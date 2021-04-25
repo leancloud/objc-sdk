@@ -3,7 +3,7 @@
 
 #import "LCObject_Internal.h"
 #import "LCPaasClient.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 #import "LCRelation.h"
 #import "LCObject_Internal.h"
 #import "LCRelation_Internal.h"
@@ -127,7 +127,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 #pragma mark - Accessor
 - (NSString *)_uuid {
     if (__uuid == nil) {
-        __uuid = [AVUtils generateCompactUUID];
+        __uuid = [LCUtils generateCompactUUID];
     }
     return __uuid;
 }
@@ -269,7 +269,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }
     
     // check if it's dynamic relation
-    if ([AVUtils isDynamicProperty:key inClass:[self class] withType:[LCRelation class] containSuper:YES]) {
+    if ([LCUtils isDynamicProperty:key inClass:[self class] withType:[LCRelation class] containSuper:YES]) {
         // need to create relation for the key
         return [self relationForKey:key];
     }
@@ -283,7 +283,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         return nil;
     }
     id value;
-    if ([AVUtils containsProperty:key inClass:[self class] containSuper:YES filterDynamic:YES]) {
+    if ([LCUtils containsProperty:key inClass:[self class] containSuper:YES filterDynamic:YES]) {
         value = [self valueForKey:key];
     } else {
         value = [self valueForUndefinedKey:key];
@@ -299,7 +299,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     @synchronized (self) {
         if (!key)
             return;
-        if ([AVUtils containsProperty:key inClass:[self class] containSuper:YES filterDynamic:YES]) {
+        if ([LCUtils containsProperty:key inClass:[self class] containSuper:YES filterDynamic:YES]) {
             self._inSetter = YES;
             if ([self isKindOfClass:[LCInstallation class]] &&
                 [key isEqualToString:@"channels"]) {
@@ -372,7 +372,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
             [dic removeObjectForKey:key];
         }
     }];
-    if ([AVUtils containsProperty:key inClass:[self class] containSuper:YES filterDynamic:YES]) {
+    if ([LCUtils containsProperty:key inClass:[self class] containSuper:YES filterDynamic:YES]) {
         /* Create a clean object to produce an empty value. */
         [self setValue:[[[self class] alloc] valueForKey:key] forKey:key];
         hasKey = YES;
@@ -492,7 +492,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
            forKey:(NSString *)key
            unique:(BOOL)unique
 {
-    if ([AVUtils containsProperty:key inClass:[self class] containSuper:YES filterDynamic:YES]) {
+    if ([LCUtils containsProperty:key inClass:[self class] containSuper:YES filterDynamic:YES]) {
         id v = [self valueForKey:key];
         if (!v) {
             v = [[NSArray alloc] init];
@@ -576,7 +576,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         array = [self findArrayForKey:key inDictionary:self._localData create:NO];
     }];
     if (!array) {
-        if ([AVUtils containsProperty:key inClass:[self class] containSuper:YES filterDynamic:YES]) {
+        if ([LCUtils containsProperty:key inClass:[self class] containSuper:YES filterDynamic:YES]) {
             array = [self valueForKey:key];
             if (array) {
                 if (![array isKindOfClass:[NSMutableArray class]]) {
@@ -837,7 +837,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSError *error;
         [self saveWithOption:option eventually:eventually error:&error];
-        [AVUtils callBooleanResultBlock:block error:error];
+        [LCUtils callBooleanResultBlock:block error:error];
     });
 }
 
@@ -1059,7 +1059,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         }
         hasCallback = YES;
     }];
-    AV_WAIT_TIL_TRUE(hasCallback, 0.1);
+    LC_WAIT_TIL_TRUE(hasCallback, 0.1);
     if (theError != NULL) {
         *theError = blockError;
     }
@@ -1210,7 +1210,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         finished = YES;
     }];
     
-    AV_WAIT_TIL_TRUE(finished, 0.1);
+    LC_WAIT_TIL_TRUE(finished, 0.1);
     if (blockError && error != NULL) {
         *error = blockError;
     }
@@ -1240,7 +1240,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
             });
         }
         
-        AV_WAIT_TIL_TRUE(uploadCount == [subFiles count], 0.1);
+        LC_WAIT_TIL_TRUE(uploadCount == [subFiles count], 0.1);
     }
     if (blockError && error != NULL) {
         *error = blockError;
@@ -1330,7 +1330,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSError *error;
         [[self class] saveAll:objects error:&error];
-        [AVUtils callBooleanResultBlock:block error:error];
+        [LCUtils callBooleanResultBlock:block error:error];
     });
 }
 
@@ -1395,7 +1395,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         if (self == [LCUser currentUser]) {
             [[self class] changeCurrentUser:(LCUser *)self save:YES];
         }
-        [AVUtils callObjectResultBlock:block object:self error:error];
+        [LCUtils callObjectResultBlock:block object:self error:error];
         
         if (wait) {
             blockError = error;
@@ -1405,9 +1405,9 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     
     // wait until called back if necessary
     if (wait) {
-        [AVUtils warnMainThreadIfNecessary];
+        [LCUtils warnMainThreadIfNecessary];
         
-        AV_WAIT_TIL_TRUE(hasCalledBack, 0.1);
+        LC_WAIT_TIL_TRUE(hasCalledBack, 0.1);
     };
     
     if (theError != NULL && blockError) {
@@ -1445,7 +1445,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         blockError = error;
         hasCallback = YES;
     }];
-    AV_WAIT_TIL_TRUE(hasCallback, 0.1);
+    LC_WAIT_TIL_TRUE(hasCallback, 0.1);
     if (blockError && error != NULL) {
         *error = blockError;
     }
@@ -1486,7 +1486,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 - (void)fetchInBackgroundWithKeys:(NSArray *)keys
                             block:(LCObjectResultBlock)block {
     [self internalFetchInBackgroundWithKeys:keys block:^(LCObject *object, NSError *error) {
-        [AVUtils callObjectResultBlock:block object:object error:error];
+        [LCUtils callObjectResultBlock:block object:object error:error];
     }];
 }
 
@@ -1511,7 +1511,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     
     if (![self hasValidObjectId]) {
         NSError *error = LCError(kLCErrorMissingObjectId, @"Missing ObjectId", nil);
-        [AVUtils callObjectResultBlock:resultBlock object:nil error:error];
+        [LCUtils callObjectResultBlock:resultBlock object:nil error:error];
         return;
     }
     
@@ -1608,7 +1608,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
             }
             hasCalledBlcok = YES;
         }];
-        AV_WAIT_TIL_TRUE(hasCalledBlcok, 0.1);
+        LC_WAIT_TIL_TRUE(hasCalledBlcok, 0.1);
     }
     if (retError && error) {
         *error=retError;
@@ -1623,7 +1623,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSError *error;
         [[self class] fetchAll:objects error:&error];
-        [AVUtils callArrayResultBlock:block array:objects error:error];
+        [LCUtils callArrayResultBlock:block array:objects error:error];
     });
 }
 
@@ -1633,7 +1633,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSError *error;
         [[self class] fetchAllIfNeeded:objects error:&error];
-        [AVUtils callArrayResultBlock:block array:objects error:error];
+        [LCUtils callArrayResultBlock:block array:objects error:error];
     });
 }
 
@@ -1656,7 +1656,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         blockError = error;
         hasCallback = YES;
     }];
-    AV_WAIT_TIL_TRUE(hasCallback, 0.1);
+    LC_WAIT_TIL_TRUE(hasCallback, 0.1);
     if (blockError && error) {
         *error = blockError;
     }
@@ -1676,14 +1676,14 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 - (void)deleteInBackgroundWithBlock:(AVBooleanResultBlock)block {
     [self internalDeleteWithEventually:NO block:^(BOOL succeeded, NSError *error) {
-        [AVUtils callBooleanResultBlock:block error:error];
+        [LCUtils callBooleanResultBlock:block error:error];
     }];
 }
 
 - (void)internalDeleteWithEventually:(BOOL)eventually block:(AVBooleanResultBlock)block {
     NSError *error;
     if (![[self class] isValidObjects:@[self] error:&error]) {
-        [AVUtils callBooleanResultBlock:block error:error];
+        [LCUtils callBooleanResultBlock:block error:error];
         return;
     }
     [self._requestManager clear];
@@ -1706,7 +1706,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 
 - (void)deleteEventuallyWithBlock:(AVIdResultBlock)block {
     [self internalDeleteWithEventually:YES block:^(BOOL succeeded, NSError *error) {
-        [AVUtils callIdResultBlock:block object:self error:error];
+        [LCUtils callIdResultBlock:block object:self error:error];
     }];
 }
 
@@ -1733,7 +1733,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         blockError = theError;
         hasCalledBlock = YES;
     }];
-    AV_WAIT_TIL_TRUE(hasCalledBlock, 0.1);
+    LC_WAIT_TIL_TRUE(hasCalledBlock, 0.1);
     if (blockError && error) {
         *error = blockError;
     }
@@ -1743,7 +1743,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 + (void)deleteAllInBackground:(NSArray *)objects
                         block:(AVBooleanResultBlock)block {
     [self internalDeleteAllInBackground:objects block:^(BOOL succeeded, NSError *error) {
-        [AVUtils callBooleanResultBlock:block error:error];
+        [LCUtils callBooleanResultBlock:block error:error];
     }];
 }
 
@@ -1751,12 +1751,12 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
                                 block:(AVBooleanResultBlock)block {
     objects = [objects copy];
     if (objects.count == 0) {
-        [AVUtils callBooleanResultBlock:block error:nil];
+        [LCUtils callBooleanResultBlock:block error:nil];
         return;
     }
     NSError *error;
     if (![self isValidObjects:objects error:&error]) {
-        [AVUtils callBooleanResultBlock:block error:error];
+        [LCUtils callBooleanResultBlock:block error:error];
         return;
     }
     NSMutableArray *deletes = [NSMutableArray array];

@@ -14,7 +14,7 @@
 #import "LCIMConversationCache.h"
 #import "AVIMErrorUtil.h"
 
-#import "AVUtils.h"
+#import "LCUtils.h"
 #import "LCObjectUtils.h"
 #import "LCErrorUtils.h"
 

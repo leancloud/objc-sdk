@@ -8,7 +8,7 @@
 #import "LCUser.h"
 #import "AVConstants.h"
 #import "AVAnonymousUtils.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 #import "LCObjectUtils.h"
 #import "LCPaasClient.h"
 #import "LCUser.h"
@@ -22,7 +22,7 @@
 {
     NSString *anonymousId = [[NSUserDefaults standardUserDefaults] objectForKey:AnonymousIdKey];
     if (!anonymousId) {
-        anonymousId = [AVUtils generateCompactUUID];
+        anonymousId = [LCUtils generateCompactUUID];
         [[NSUserDefaults standardUserDefaults] setObject:anonymousId forKey:AnonymousIdKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
@@ -45,7 +45,7 @@
             [LCObjectUtils copyDictionary:object toObject:user];
             [LCUser changeCurrentUser:user save:YES];
         }
-        [AVUtils callUserResultBlock:block user:user error:error];
+        [LCUtils callUserResultBlock:block user:user error:error];
     }];
 }
 

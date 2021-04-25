@@ -10,7 +10,7 @@
 #import "AVAnalyticsImpl.h"
 #import "LCPaasClient.h"
 #import "AVAnalyticsUtils.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 
 static NSString * endPoint = @"statistics";
 
@@ -192,7 +192,7 @@ static NSString * currentSessionId;
             LCLoggerE(@"Update online config failed %@", error);
         }
 
-        [AVUtils callIdResultBlock:block object:object error:error];
+        [LCUtils callIdResultBlock:block object:object error:error];
     }];
 }
 

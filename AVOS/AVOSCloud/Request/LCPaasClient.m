@@ -8,7 +8,7 @@
 
 #import "LCPaasClient_internal.h"
 #import "LCNetworking.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 #import "LCUser_Internal.h"
 #import "LCObject_Internal.h"
 #import "LCRole_Internal.h"
@@ -295,9 +295,9 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
         NSDictionary *request = [LCPaasClient batchMethod:@"GET" path:path body:nil parameters:parameters];
         [self postBatchObject:@[request] block:^(NSArray * _Nullable objects, NSError * _Nullable error) {
             if (!error) {
-                [AVUtils callIdResultBlock:block object:objects.firstObject error:nil];
+                [LCUtils callIdResultBlock:block object:objects.firstObject error:nil];
             } else {
-                [AVUtils callIdResultBlock:block object:nil error:error];
+                [LCUtils callIdResultBlock:block object:nil error:error];
             }
         }];
     } else {

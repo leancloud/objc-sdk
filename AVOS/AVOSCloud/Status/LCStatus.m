@@ -12,7 +12,7 @@
 #import "LCObjectUtils.h"
 #import "LCObject_Internal.h"
 #import "LCQuery_Internal.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 #import "LCUser_Internal.h"
 
 NSString * const kLCStatusTypeTimeline=@"default";
@@ -256,7 +256,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
             object = [self statusFromCloudData:object];
         }
         
-        [AVUtils callIdResultBlock:callback object:object error:error];
+        [LCUtils callIdResultBlock:callback object:object error:error];
     }];
 }
 
@@ -270,7 +270,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
     NSString *owner=[LCStatus stringOfStatusOwner:[LCUser currentUser].objectId];
     [[LCPaasClient sharedInstance] deleteObject:[NSString stringWithFormat:@"statuses/%@",objectId] withParameters:@{@"owner":owner} block:^(id object, NSError *error) {
         
-        [AVUtils callBooleanResultBlock:callback error:error];
+        [LCUtils callBooleanResultBlock:callback error:error];
     }];
 }
 
@@ -312,7 +312,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSError *error = nil;
         [self deleteInboxStatusForMessageId:messageId inboxType:inboxType receiver:receiver error:&error];
-        [AVUtils callBooleanResultBlock:block error:error];
+        [LCUtils callBooleanResultBlock:block error:error];
     });
 }
 
@@ -320,7 +320,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
     NSError *error=[self permissionCheck];
 
     if (error) {
-        [AVUtils callIntegerResultBlock:callback number:0 error:error];
+        [LCUtils callIntegerResultBlock:callback number:0 error:error];
         return;
     }
     
@@ -328,7 +328,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
     
     [[LCPaasClient sharedInstance] getObject:@"subscribe/statuses/count" withParameters:@{@"owner":owner,@"inboxType":type} block:^(id object, NSError *error) {
         NSUInteger count=[object[@"unread"] integerValue];
-        [AVUtils callIntegerResultBlock:callback number:count error:error];
+        [LCUtils callIntegerResultBlock:callback number:count error:error];
     }];
 }
 
@@ -336,14 +336,14 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
     NSError *error = [self permissionCheck];
 
     if (error) {
-        [AVUtils callBooleanResultBlock:callback error:error];
+        [LCUtils callBooleanResultBlock:callback error:error];
         return;
     }
 
     NSString *owner = [LCStatus stringOfStatusOwner:[LCUser currentUser].objectId];
 
     [[LCPaasClient sharedInstance] postObject:@"subscribe/statuses/resetUnreadCount" withParameters:@{@"owner": owner, @"inboxType": type} block:^(id object, NSError *error) {
-        [AVUtils callBooleanResultBlock:callback error:error];
+        [LCUtils callBooleanResultBlock:callback error:error];
     }];
 }
 
@@ -437,15 +437,15 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
              if (objectId) {
                  self.objectId = objectId;
                  self.createdAt = [AVDate dateFromValue:responseObject[@"createdAt"]];
-                 [AVUtils callBooleanResultBlock:block error:nil];
+                 [LCUtils callBooleanResultBlock:block error:nil];
                  return;
              }
          }
 
-         [AVUtils callBooleanResultBlock:block error:LCError(kLCErrorInvalidJSON, @"unexpected result return", nil)];
+         [LCUtils callBooleanResultBlock:block error:LCError(kLCErrorInvalidJSON, @"unexpected result return", nil)];
      }
      failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error) {
-         [AVUtils callBooleanResultBlock:block error:error];
+         [LCUtils callBooleanResultBlock:block error:error];
      }];
 }
 

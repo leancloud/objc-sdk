@@ -1,5 +1,5 @@
 //
-//  AVUtils.m
+//  LCUtils.m
 //  paas
 //
 //  Created by Zhu Zeng on 2/27/13.
@@ -7,7 +7,7 @@
 //
 
 #import <objc/runtime.h>
-#import "AVUtils.h"
+#import "LCUtils.h"
 #import "LCObject.h"
 #import "LCObject_Internal.h"
 #import "LCGeoPoint_Internal.h"
@@ -32,7 +32,7 @@
 #include<netdb.h>
 #include<arpa/inet.h>
 
-static dispatch_queue_t AVUtilsDefaultSerialQueue = NULL;
+static dispatch_queue_t LCUtilsDefaultSerialQueue = NULL;
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-function"
@@ -130,13 +130,13 @@ static int b62_encode(char* out, const void *data, int length)
     return (int)(out-start);
 }
 
-@implementation AVUtils
+@implementation LCUtils
 
 + (void)initialize {
     static dispatch_once_t onceToken;
 
     dispatch_once(&onceToken, ^{
-        AVUtilsDefaultSerialQueue = dispatch_queue_create("cn.leancloud.utils", DISPATCH_QUEUE_SERIAL);
+        LCUtilsDefaultSerialQueue = dispatch_queue_create("cn.leancloud.utils", DISPATCH_QUEUE_SERIAL);
     });
 }
 
@@ -191,7 +191,7 @@ static const char *getPropertyType(objc_property_t property)
     for(NSString * key in keys)
     {
         NSObject * valueObject = [src valueForKey:key];
-        if ([AVUtils containsProperty:[target class] property:key])
+        if ([LCUtils containsProperty:[target class] property:key])
         {
             [target setValue:valueObject forKey:key];
         }
@@ -200,7 +200,7 @@ static const char *getPropertyType(objc_property_t property)
 
 +(BOOL)containsProperty:(Class)objectClass property:(NSString *)name
 {
-    return [AVUtils containsProperty:name inClass:objectClass containSuper:YES filterDynamic:NO];
+    return [LCUtils containsProperty:name inClass:objectClass containSuper:YES filterDynamic:NO];
 }
 
 + (BOOL)containsProperty:(NSString *)name inClass:(Class)objectClass containSuper:(BOOL)containSuper filterDynamic:(BOOL)filterDynamic {
@@ -233,7 +233,7 @@ static const char *getPropertyType(objc_property_t property)
     // 如果是 LCObject 类或者是其子类，则遍历。不遍历 NSObject。
     if (containSuper && [[objectClass superclass] isSubclassOfClass:[LCObject class]])
     {
-        return [AVUtils containsProperty:name inClass:[objectClass superclass] containSuper:containSuper filterDynamic:filterDynamic];
+        return [LCUtils containsProperty:name inClass:[objectClass superclass] containSuper:containSuper filterDynamic:filterDynamic];
     }
     return NO;
 }
@@ -270,7 +270,7 @@ static const char *getPropertyType(objc_property_t property)
     free(properties);
     if (containSuper && [objectClass isSubclassOfClass:[LCObject class]])
     {
-        return [AVUtils isDynamicProperty:name inClass:[objectClass superclass] withType:targetClass containSuper:containSuper];
+        return [LCUtils isDynamicProperty:name inClass:[objectClass superclass] withType:targetClass containSuper:containSuper];
     }
     return NO;
 }
@@ -327,7 +327,7 @@ static const char *getPropertyType(objc_property_t property)
     static NSString *UUID = nil;
 
     if (!UUID) {
-        dispatch_sync(AVUtilsDefaultSerialQueue, ^{
+        dispatch_sync(LCUtilsDefaultSerialQueue, ^{
             NSString *key = [self deviceUUIDKey];
 
             NSString *savedUUID = [LCKeychain loadValueForKey:key];
@@ -822,18 +822,18 @@ char *avNewBase64Encode(
 
 #define PASSWORD @"QxciDjdHjuAIf8VCsqhmGK3OZV7pBQTZ"
 
-const NSUInteger kAVAlgorithmKeySize = kCCKeySizeAES256;
-const NSUInteger kAVPBKDFRounds = 10000;  // ~80ms on an iPhone 4
+const NSUInteger kLCAlgorithmKeySize = kCCKeySizeAES256;
+const NSUInteger kLCPBKDFRounds = 10000;  // ~80ms on an iPhone 4
 
 static Byte saltBuff[] = {0,1,2,3,4,5,6,7,8,9,0xA,0xB,0xC,0xD,0xE,0xF};
 
 static Byte ivBuff[]   = {0xA,1,0xB,5,4,0xF,7,9,0x17,3,1,6,8,0xC,0xD,91};
 
-@implementation NSString (AVAES256)
+@implementation NSString (LCAES256)
 
-+ (NSData *)AVAESKeyForPassword:(NSString *)password{                  //Derive a key from a text password/passphrase
++ (NSData *)LCAESKeyForPassword:(NSString *)password{                  //Derive a key from a text password/passphrase
     
-    NSMutableData *derivedKey = [NSMutableData dataWithLength:kAVAlgorithmKeySize];
+    NSMutableData *derivedKey = [NSMutableData dataWithLength:kLCAlgorithmKeySize];
     
     NSData *salt = [NSData dataWithBytes:saltBuff length:kCCKeySizeAES128];
     
@@ -843,7 +843,7 @@ static Byte ivBuff[]   = {0xA,1,0xB,5,4,0xF,7,9,0x17,3,1,6,8,0xC,0xD,91};
                                                salt.bytes,           // salt内容
                                                salt.length,          // saltLen长度
                                                kCCPRFHmacAlgSHA1,    // PRF
-                                               kAVPBKDFRounds,         // rounds循环次数
+                                               kLCPBKDFRounds,         // rounds循环次数
                                                derivedKey.mutableBytes, // derivedKey
                                                derivedKey.length);   // derivedKeyLen derive:出自
     
@@ -853,7 +853,7 @@ static Byte ivBuff[]   = {0xA,1,0xB,5,4,0xF,7,9,0x17,3,1,6,8,0xC,0xD,91};
 }
 
 /*加密方法*/
-- (NSString *)AVAES256Encrypt {
+- (NSString *)LCAES256Encrypt {
     NSData *plainText = [self dataUsingEncoding:NSUTF8StringEncoding];
 	// 'key' should be 32 bytes for AES256, will be null-padded otherwise
 	char keyPtr[kCCKeySizeAES256+1]; // room for terminator (unused)
@@ -868,7 +868,7 @@ static Byte ivBuff[]   = {0xA,1,0xB,5,4,0xF,7,9,0x17,3,1,6,8,0xC,0xD,91};
 	size_t numBytesEncrypted = 0;
     
 	CCCryptorStatus cryptStatus = CCCrypt(kCCEncrypt, kCCAlgorithmAES128,kCCOptionPKCS7Padding,
-                                          [[[self class] AVAESKeyForPassword:PASSWORD] bytes], kCCKeySizeAES256,
+                                          [[[self class] LCAESKeyForPassword:PASSWORD] bytes], kCCKeySizeAES256,
 										  ivBuff /* initialization vector (optional) */,
 										  [plainText bytes], dataLength, /* input */
 										  buffer, bufferSize, /* output */
@@ -882,7 +882,7 @@ static Byte ivBuff[]   = {0xA,1,0xB,5,4,0xF,7,9,0x17,3,1,6,8,0xC,0xD,91};
 	return nil;
 }
 
-- (NSString *)AVAES256Decrypt{
+- (NSString *)LCAES256Decrypt{
     NSData *cipherData = [NSData LCdataFromBase64String:self];
 	// 'key' should be 32 bytes for AES256, will be null-padded otherwise
 	char keyPtr[kCCKeySizeAES256+1]; // room for terminator (unused)
@@ -895,7 +895,7 @@ static Byte ivBuff[]   = {0xA,1,0xB,5,4,0xF,7,9,0x17,3,1,6,8,0xC,0xD,91};
     
 	size_t numBytesDecrypted = 0;
 	CCCryptorStatus cryptStatus = CCCrypt(kCCDecrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
-										  [[[self class] AVAESKeyForPassword:PASSWORD] bytes], kCCKeySizeAES256,
+										  [[[self class] LCAESKeyForPassword:PASSWORD] bytes], kCCKeySizeAES256,
 										  ivBuff ,/* initialization vector (optional) */
 										  [cipherData bytes], dataLength, /* input */
 										  buffer, bufferSize, /* output */

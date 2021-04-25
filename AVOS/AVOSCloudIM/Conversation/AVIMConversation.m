@@ -25,7 +25,7 @@
 #import "LCFile_Internal.h"
 #import "LCPaasClient.h"
 #import "LCObjectUtils.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 #import "LCErrorUtils.h"
 
 #import "AVIMGenericCommand+AVIMMessagesAdditions.h"

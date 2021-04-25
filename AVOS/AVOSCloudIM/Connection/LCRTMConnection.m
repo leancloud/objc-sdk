@@ -13,7 +13,7 @@
 #import "LCRouter.h"
 #import "LCRouter_Internal.h"
 #import "LCLogger.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 #import "LCErrorUtils.h"
 #import "AVOSCloudIM.h"
 #import "AVIMCommon_Internal.h"

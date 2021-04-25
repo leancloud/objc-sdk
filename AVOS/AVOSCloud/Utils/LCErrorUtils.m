@@ -7,7 +7,7 @@
 //
 
 #import "LCErrorUtils.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 
 NSString * const kLeanCloudErrorDomain = @"com.LeanCloud.ErrorDomain";
 NSString * const kLeanCloudRESTAPIResponseError = @"com.leancloud.restapi.response.error";

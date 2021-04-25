@@ -6,7 +6,7 @@
 #import "LCInstallation_Internal.h"
 #import "LCObject_Internal.h"
 #import "LCPaasClient.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 #import "LCObjectUtils.h"
 #import "LCPersistenceUtils.h"
 #import "LCErrorUtils.h"

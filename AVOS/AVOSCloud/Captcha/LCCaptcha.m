@@ -10,7 +10,7 @@
 #import "AVDynamicObject_Internal.h"
 #import "NSDictionary+LeanCloud.h"
 #import "LCPaasClient.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 
 @implementation LCCaptchaDigest
 
@@ -38,7 +38,7 @@
 
     [[LCPaasClient sharedInstance] getObject:@"requestCaptcha" withParameters:parameters block:^(id object, NSError *error) {
         if (error) {
-            [AVUtils callIdResultBlock:callback object:nil error:error];
+            [LCUtils callIdResultBlock:callback object:nil error:error];
             return;
         }
 
@@ -49,7 +49,7 @@
 
         LCCaptchaDigest *captchaDigest = [[LCCaptchaDigest alloc] initWithDictionary:dictionary];
 
-        [AVUtils callIdResultBlock:callback object:captchaDigest error:nil];
+        [LCUtils callIdResultBlock:callback object:captchaDigest error:nil];
     }];
 }
 

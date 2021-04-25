@@ -8,7 +8,7 @@
 
 #import "AVIMTypedMessageObject.h"
 #import "AVIMTypedMessage_Internal.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 
 @implementation AVIMTypedMessageObject
 

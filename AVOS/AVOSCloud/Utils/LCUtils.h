@@ -1,5 +1,5 @@
 //
-//  AVUtils.h
+//  LCUtils.h
 //  paas
 //
 //  Created by Zhu Zeng on 2/27/13.
@@ -23,7 +23,7 @@
 
 @class LCObject;
 
-@interface AVUtils : NSObject
+@interface LCUtils : NSObject
 
 + (void)warnMainThreadIfNecessary;
 
@@ -112,21 +112,9 @@
 + (NSString *)MIMETypeFromPath:(NSString *)fullPath;
 + (NSString *)contentTypeForImageData:(NSData *)data;
 
-#pragma mark - Something about log
-
-// the level is only for NSLogger
-typedef enum LoggerLevel : NSUInteger {
-    LoggerLevelError = 0,
-    LoggerLevelWarning,
-    LoggerLevelInfo,
-    LoggerLevelVerbose,
-    LoggerLevelInternal,
-    LoggerLevelNum
-} LoggerLevel;
-
 @end
 
-#define AV_WAIT_TIL_TRUE(signal, interval) \
+#define LC_WAIT_TIL_TRUE(signal, interval) \
 do {                                       \
     while(!(signal)) {                     \
         @autoreleasepool {                 \
@@ -137,7 +125,7 @@ do {                                       \
     }                                      \
 } while (0)
 
-#define AV_WAIT_WITH_ROUTINE_TIL_TRUE(signal, interval, routine) \
+#define LC_WAIT_WITH_ROUTINE_TIL_TRUE(signal, interval, routine) \
 do {                                       \
     while(!(signal)) {                     \
         @autoreleasepool {                 \
@@ -149,9 +137,9 @@ do {                                       \
     }                                      \
 } while (0)
 
-@interface NSString (AVAES256)
-- (NSString *)AVAES256Encrypt;
-- (NSString *)AVAES256Decrypt;
+@interface NSString (LCAES256)
+- (NSString *)LCAES256Encrypt;
+- (NSString *)LCAES256Decrypt;
 @end
 
 @interface NSObject (LeanCloudObjcSDK)

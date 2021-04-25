@@ -7,7 +7,7 @@
 #import "LCPush.h"
 #import "LCPush_Internal.h"
 #import "LCPaasClient.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 #import "LCQuery_Internal.h"
 #import "LCInstallation_Internal.h"
 #import "LCObjectUtils.h"
@@ -169,7 +169,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
     NSError __block *blockError = nil;
     
     [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        [AVUtils callBooleanResultBlock:block error:error];
+        [LCUtils callBooleanResultBlock:block error:error];
         blockError = error;
         
         if (wait) {
@@ -180,8 +180,8 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
     
     // wait until called back if necessary
     if (wait) {
-        [AVUtils warnMainThreadIfNecessary];
-        AV_WAIT_TIL_TRUE(hasCalledBack, 0.1);
+        [LCUtils warnMainThreadIfNecessary];
+        LC_WAIT_TIL_TRUE(hasCalledBack, 0.1);
     };
     
     if (theError != NULL) *theError = blockError;
@@ -327,7 +327,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
                                withParameters:[self postData]
                                    eventually:false
                                         block:^(id object, NSError *error) {
-                                                [AVUtils callBooleanResultBlock:block error:error];
+                                                [LCUtils callBooleanResultBlock:block error:error];
     }];
 }
 
@@ -402,7 +402,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
 + (void)getSubscribedChannelsInBackgroundWithBlock:(AVSetResultBlock)block
 {
     [LCPush getSubscribedChannelsWithBlock:^(NSSet *channels, NSError *error) {
-        [AVUtils callSetResultBlock:block set:channels error:error];
+        [LCUtils callSetResultBlock:block set:channels error:error];
     } wait:NO error:nil];
 }
 
@@ -423,7 +423,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
             LCInstallation * installation = [objects objectAtIndex:0];
             resultSet = [NSSet setWithArray:installation.channels];
         }
-        [AVUtils callSetResultBlock:block set:resultSet error:error];
+        [LCUtils callSetResultBlock:block set:resultSet error:error];
         
         blockError = error;
         
@@ -435,8 +435,8 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
     
     // wait until called back if necessary
     if (wait) {
-        [AVUtils warnMainThreadIfNecessary];
-        AV_WAIT_TIL_TRUE(hasCalledBack, 0.1);
+        [LCUtils warnMainThreadIfNecessary];
+        LC_WAIT_TIL_TRUE(hasCalledBack, 0.1);
     };
     
     if (theError != NULL) *theError = blockError;

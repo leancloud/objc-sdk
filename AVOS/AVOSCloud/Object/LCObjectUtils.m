@@ -20,7 +20,7 @@
 #import "LCPaasClient.h"
 #import "LCGeoPoint_Internal.h"
 #import "LCRelation_Internal.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 
 @implementation AVDate
 

@@ -9,13 +9,12 @@
 #import "LCCloud.h"
 #import "LCPaasClient.h"
 #import "LCErrorUtils.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 #import "LCObject_Internal.h"
 #import "LCFile_Internal.h"
 #import "LCGeoPoint_Internal.h"
 #import "LCObjectUtils.h"
 #import "LCLogger.h"
-#import "AVUtils.h"
 
 @implementation LCCloud
 
@@ -67,7 +66,7 @@
          finished = YES;
      }];
 
-    AV_WAIT_TIL_TRUE(finished, 0.1);
+    LC_WAIT_TIL_TRUE(finished, 0.1);
 
     if (outError) {
         *outError = error;
@@ -81,7 +80,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSError *error;
         id result = [[self class] callFunction:function withParameters:parameters error:&error];
-        [AVUtils callIdResultBlock:block object:result error:error];
+        [LCUtils callIdResultBlock:block object:result error:error];
     });
 }
 
@@ -124,11 +123,11 @@
      performRequest:request
      success:^(NSHTTPURLResponse *response, id responseObject) {
          id result = [self processedFunctionResultFromObject:responseObject[@"result"]];
-         [AVUtils callIdResultBlock:block object:result error:nil];
+         [LCUtils callIdResultBlock:block object:result error:nil];
      }
      failure:^(NSHTTPURLResponse *response, id responseObject, NSError *inError) {
          
-         [AVUtils callIdResultBlock:block object:nil error:inError];
+         [LCUtils callIdResultBlock:block object:nil error:inError];
      }];
 }
 

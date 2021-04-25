@@ -5,7 +5,7 @@
 #import "LCFile_Internal.h"
 #import "LCFileTaskManager.h"
 #import "LCPaasClient.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 #import "LCNetworking.h"
 #import "LCErrorUtils.h"
 #import "LCPersistenceUtils.h"
@@ -22,7 +22,7 @@ static NSString * LCFile_PersistentCacheDirectory()
 
 static NSString * LCFile_CompactUUID()
 {
-    return [AVUtils generateCompactUUID];
+    return [LCUtils generateCompactUUID];
 }
 
 static NSString * LCFile_ObjectPath(NSString *objectId)
@@ -124,10 +124,10 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
             
             NSString *mimeType = nil;
             if (name && name.length > 0) {
-                mimeType = [AVUtils MIMEType:name];
+                mimeType = [LCUtils MIMEType:name];
             }
             if (!mimeType && data.length > 0) {
-                mimeType = [AVUtils contentTypeForImageData:data];
+                mimeType = [LCUtils contentTypeForImageData:data];
             }
             mimeType ?: @"application/octet-stream";
         });
@@ -186,10 +186,10 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
             
             NSString *mimeType = nil;
             if (name && name.length > 0) {
-                mimeType = [AVUtils MIMEType:name];
+                mimeType = [LCUtils MIMEType:name];
             }
             if (!mimeType && localPath.length > 0) {
-                mimeType = [AVUtils MIMETypeFromPath:localPath];
+                mimeType = [LCUtils MIMETypeFromPath:localPath];
             }
             mimeType ?: @"application/octet-stream";
         });
@@ -240,7 +240,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
             
             NSString *mimeType = nil;
             if (absoluteString && absoluteString.length > 0) {
-                mimeType = [AVUtils MIMEType:absoluteString];
+                mimeType = [LCUtils MIMEType:absoluteString];
             }
             mimeType ?: @"application/octet-stream";
         });

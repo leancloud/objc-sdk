@@ -16,7 +16,7 @@
 #import "AVAnalyticsUtils.h"
 #endif
 
-#import "AVUtils.h"
+#import "LCUtils.h"
 #include "AVOSCloud_Art.inc"
 #import "LCNetworkStatistics.h"
 #import "LCObjectUtils.h"
@@ -198,7 +198,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
     NSString *path=[NSString stringWithFormat:@"verifySmsCode/%@",code];
     NSDictionary *params = @{ @"mobilePhoneNumber": phoneNumber };
     [[LCPaasClient sharedInstance] postObject:path withParameters:params block:^(id object, NSError *error) {
-        [AVUtils callBooleanResultBlock:callback error:error];
+        [LCUtils callBooleanResultBlock:callback error:error];
     }];
 }
 
@@ -218,7 +218,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
         }
         finished = true;
     }];
-    AV_WAIT_TIL_TRUE(finished, 0.1);
+    LC_WAIT_TIL_TRUE(finished, 0.1);
     if (errorPtr) {
         *errorPtr = err;
     }
@@ -315,7 +315,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
     }
     [dict addEntriesFromDictionary:variables];
     [[LCPaasClient sharedInstance] postObject:@"requestSmsCode" withParameters:dict block:^(id object, NSError *error) {
-        [AVUtils callBooleanResultBlock:callback error:error];
+        [LCUtils callBooleanResultBlock:callback error:error];
     }];
 }
 
@@ -334,7 +334,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
     }
     
     [[LCPaasClient sharedInstance] postObject:@"requestSmsCode" withParameters:params block:^(id object, NSError *error) {
-        [AVUtils callBooleanResultBlock:callback error:error];
+        [LCUtils callBooleanResultBlock:callback error:error];
     }];
 }
 #pragma clang diagnostic pop

@@ -10,7 +10,7 @@
 #import "AVLiveQuery_Internal.h"
 
 #import "AVApplication_Internal.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 #import "LCObjectUtils.h"
 
 #import "LCRTMConnection.h"
@@ -49,7 +49,7 @@ NSNotificationName const AVLiveQueryEventNotification = @"AVLiveQueryEventNotifi
 {
     self = [super init];
     if (self) {
-        NSString *deviceUUID = [AVUtils deviceUUID];
+        NSString *deviceUUID = [LCUtils deviceUUID];
         _identifier = [NSString stringWithFormat:@"%@-%@", AVIdentifierPrefix, deviceUUID];
         _internalSerialQueue = dispatch_queue_create([NSString stringWithFormat:
                                                       @"LC.Objc.%@.%@",

@@ -8,7 +8,7 @@
 
 #import "LCSMS.h"
 #import "LCPaasClient.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 #import "AVDynamicObject_Internal.h"
 
 @interface LCShortMessageRequestOptions ()
@@ -68,7 +68,7 @@
     parameters[@"op"]                = options.operation;
 
     [[LCPaasClient sharedInstance] postObject:@"requestSmsCode" withParameters:parameters block:^(id object, NSError *error) {
-        [AVUtils callBooleanResultBlock:callback error:error];
+        [LCUtils callBooleanResultBlock:callback error:error];
     }];
 }
 

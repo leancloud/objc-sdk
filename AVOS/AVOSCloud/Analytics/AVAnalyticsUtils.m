@@ -33,7 +33,7 @@
 #import "AVAnalyticsUtils.h"
 #import "UserAgent.h"
 #import "LCNetworkReachabilityManager.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 #import "LCUser.h"
 
 static NSString * identifierForVendorTag = @"identifierForVendor";

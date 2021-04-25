@@ -5,7 +5,7 @@
 #import "LCGeoPoint.h"
 #import "LCObject_Internal.h"
 #import "LCQuery.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 #import "LCPaasClient.h"
 #import "LCPaasClient_internal.h"
 #import "LCUser_Internal.h"
@@ -91,7 +91,7 @@ NSString *LCStringFromDistanceUnit(LCQueryDistanceUnit unit) {
             *error = err;
         }
         if (callback) {
-            [AVUtils callCloudQueryResultBlock:callback result:nil error:err];
+            [LCUtils callCloudQueryResultBlock:callback result:nil error:err];
         }
         return nil;
     }
@@ -103,7 +103,7 @@ NSString *LCStringFromDistanceUnit(LCQueryDistanceUnit unit) {
     NSDictionary *parameters = nil;
     if (pvalues.count > 0) {
         NSArray *parsedPvalues = [LCObjectUtils dictionaryFromObject:pvalues];
-        NSString *jsonString = [AVUtils jsonStringFromArray:parsedPvalues];
+        NSString *jsonString = [LCUtils jsonStringFromArray:parsedPvalues];
         parameters = @{@"cql":cql, @"pvalues":jsonString};
     } else {
         parameters = @{@"cql":cql};
@@ -126,7 +126,7 @@ NSString *LCStringFromDistanceUnit(LCQueryDistanceUnit unit) {
             [theResultObject setCount:[count intValue]];
             [theResultObject setClassName:className];
         }
-        [AVUtils callCloudQueryResultBlock:callback result:theResultObject error:error];
+        [LCUtils callCloudQueryResultBlock:callback result:theResultObject error:error];
         if (wait) {
             blockError = error;
             hasCalledBack = YES;
@@ -134,8 +134,8 @@ NSString *LCStringFromDistanceUnit(LCQueryDistanceUnit unit) {
         
     }];
     if (wait) {
-        [AVUtils warnMainThreadIfNecessary];
-        AV_WAIT_TIL_TRUE(hasCalledBack, 0.1);
+        [LCUtils warnMainThreadIfNecessary];
+        LC_WAIT_TIL_TRUE(hasCalledBack, 0.1);
     };
     
     if (error != NULL) *error = blockError;
@@ -611,8 +611,8 @@ static NSString * quote(NSString *string)
         hasCalledBack = YES;
     }];
     
-    [AVUtils warnMainThreadIfNecessary];
-    AV_WAIT_TIL_TRUE(hasCalledBack, 0.1);
+    [LCUtils warnMainThreadIfNecessary];
+    LC_WAIT_TIL_TRUE(hasCalledBack, 0.1);
     
     if (error != NULL) {
         *error = blockError;
@@ -623,7 +623,7 @@ static NSString * quote(NSString *string)
 - (void)getObjectInBackgroundWithId:(NSString *)objectId
                               block:(LCObjectResultBlock)block {
     [self internalGetObjectInBackgroundWithId:objectId block:^(LCObject *object, NSError *error) {
-        [AVUtils callObjectResultBlock:block object:object error:error];
+        [LCUtils callObjectResultBlock:block object:object error:error];
     }];
 }
 
@@ -756,7 +756,7 @@ static NSString * quote(NSString *string)
     [self assembleParameters];
 
     [self queryWithBlock:path parameters:self.parameters block:^(NSArray *objects, NSError *error) {
-        [AVUtils callArrayResultBlock:resultBlock array:objects error:error];
+        [LCUtils callArrayResultBlock:resultBlock array:objects error:error];
 
         if (wait) {
             blockError = error;
@@ -766,8 +766,8 @@ static NSString * quote(NSString *string)
     }];
 
     if (wait) {
-        [AVUtils warnMainThreadIfNecessary];
-        AV_WAIT_TIL_TRUE(hasCalledBack, 0.1);
+        [LCUtils warnMainThreadIfNecessary];
+        LC_WAIT_TIL_TRUE(hasCalledBack, 0.1);
     };
 
      if (theError != NULL) *theError = blockError;
@@ -856,15 +856,15 @@ static NSString * quote(NSString *string)
         NSError *wrappedError = error;
 
         if (error) {
-            [AVUtils callObjectResultBlock:resultBlock object:nil error:error];
+            [LCUtils callObjectResultBlock:resultBlock object:nil error:error];
         } else if (results.count == 0) {
             wrappedError = LCError(kLCErrorObjectNotFound, @"no results matched the query", nil);
-            [AVUtils callObjectResultBlock:resultBlock object:nil error:wrappedError];
+            [LCUtils callObjectResultBlock:resultBlock object:nil error:wrappedError];
         } else {
             NSMutableArray * array = [self processResults:results className:className];
             [self processEnd:end];
             LCObject *resultObject = [array objectAtIndex:0];
-            [AVUtils callObjectResultBlock:resultBlock object:resultObject error:error];
+            [LCUtils callObjectResultBlock:resultBlock object:resultObject error:error];
 
             theResultObject = resultObject;
         }
@@ -876,8 +876,8 @@ static NSString * quote(NSString *string)
     }];
 
     if (wait) {
-        [AVUtils warnMainThreadIfNecessary];
-        AV_WAIT_TIL_TRUE(hasCalledBack, 0.1);
+        [LCUtils warnMainThreadIfNecessary];
+        LC_WAIT_TIL_TRUE(hasCalledBack, 0.1);
     };
 
     if (theError != NULL) *theError = blockError;
@@ -938,7 +938,7 @@ static NSString * quote(NSString *string)
 
     [[LCPaasClient sharedInstance] getObject:path withParameters:self.parameters policy:self.cachePolicy maxCacheAge:self.maxCacheAge block:^(id object, NSError *error) {
         NSInteger count = [[object objectForKey:@"count"] integerValue];
-        [AVUtils callIntegerResultBlock:block number:count error:error];
+        [LCUtils callIntegerResultBlock:block number:count error:error];
 
         if (wait) {
             blockError = error;
@@ -948,8 +948,8 @@ static NSString * quote(NSString *string)
     }];
 
     if (wait) {
-        [AVUtils warnMainThreadIfNecessary];
-        AV_WAIT_TIL_TRUE(hasCalledBack, 0.1);
+        [LCUtils warnMainThreadIfNecessary];
+        LC_WAIT_TIL_TRUE(hasCalledBack, 0.1);
     };
 
     if (theError != NULL) *theError = blockError;

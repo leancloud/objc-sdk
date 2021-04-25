@@ -9,7 +9,7 @@
 #import "LCFileQuery.h"
 #import "LCFile.h"
 #import "LCQuery_Internal.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 
 @implementation LCFileQuery
 
@@ -35,7 +35,7 @@
         if (!error) {
             file = [LCFile fileWithObject:object];
         }
-        [AVUtils callFileResultBlock:block file:file error:error];
+        [LCUtils callFileResultBlock:block file:file error:error];
     }];
 }
 
@@ -56,7 +56,7 @@
 - (void)findFilesInBackgroundWithBlock:(AVArrayResultBlock)resultBlock {
     [self findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         NSArray *files = [self filesWithObjects:objects];
-        [AVUtils callArrayResultBlock:resultBlock array:files error:error];
+        [LCUtils callArrayResultBlock:resultBlock array:files error:error];
     }];
 }
 

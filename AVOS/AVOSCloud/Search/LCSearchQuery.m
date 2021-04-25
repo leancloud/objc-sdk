@@ -8,7 +8,7 @@
 
 #import "LCSearchQuery.h"
 #import "LCPaasClient.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 #import "LCObject_Internal.h"
 #import "LCObjectUtils.h"
 #import "LCSearchSortBuilder.h"
@@ -107,8 +107,8 @@
     }];
     
     if (wait) {
-        [AVUtils warnMainThreadIfNecessary];
-        AV_WAIT_TIL_TRUE(hasCalledBack, 0.1);
+        [LCUtils warnMainThreadIfNecessary];
+        LC_WAIT_TIL_TRUE(hasCalledBack, 0.1);
     };
     
     if (theError != NULL) *theError = blockError;
@@ -126,7 +126,7 @@
             NSString *className = object[@"className"];
             NSArray *results = [object objectForKey:@"results"];
             NSMutableArray * array = [self processResults:results className:className];
-            [AVUtils callArrayResultBlock:resultBlock array:array error:nil];
+            [LCUtils callArrayResultBlock:resultBlock array:array error:nil];
             
             self.sid = [object objectForKey:@"sid"];
 
@@ -135,7 +135,7 @@
         }
         else
         {
-            [AVUtils callArrayResultBlock:resultBlock array:nil error:error];
+            [LCUtils callArrayResultBlock:resultBlock array:nil error:error];
         }
     }];
 }

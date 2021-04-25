@@ -17,7 +17,7 @@
 
 #import "UserAgent.h"
 #import "LCObjectUtils.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 #import "LCPaasClient.h"
 #import "LCErrorUtils.h"
 
@@ -457,7 +457,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         command.peerId = self.clientId;
         sessionCommand.configBitmap = self.sessionConfigBitmap;
         sessionCommand.deviceToken = (self.currentDeviceToken
-                                      ?: AVUtils.deviceUUID);
+                                      ?: LCUtils.deviceUUID);
         sessionCommand.ua = USER_AGENT;
         if (self.tag) {
             sessionCommand.tag = self.tag;

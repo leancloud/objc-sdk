@@ -13,7 +13,7 @@
 #import "LCQuery.h"
 #import "LCQuery_Internal.h"
 #import "LCPaasClient.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 
 static NSString *const LCQueryIdKey = @"query_id";
 
@@ -244,13 +244,13 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
 
     AVIdResultBlock block = ^(id object, NSError *error) {
         if (error) {
-            [AVUtils callBooleanResultBlock:callback error:error];
+            [LCUtils callBooleanResultBlock:callback error:error];
             return;
         }
         
         [self.subscriber removeLiveQueryObjectFromWeakTable:self];
 
-        [AVUtils callBooleanResultBlock:callback error:nil];
+        [LCUtils callBooleanResultBlock:callback error:nil];
     };
 
     [[LCPaasClient sharedInstance] postObject:AVUnsubscriptionEndpoint
