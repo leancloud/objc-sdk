@@ -15,12 +15,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Enumeration of short message types.
  */
-typedef NS_ENUM(NSInteger, AVShortMessageType) {
-    AVShortMessageTypeText = 0,
-    AVShortMessageTypeVoice
+typedef NS_ENUM(NSInteger, LCShortMessageType) {
+    LCShortMessageTypeText = 0,
+    LCShortMessageTypeVoice
 };
 
-@interface AVShortMessageRequestOptions : AVDynamicObject
+@interface LCShortMessageRequestOptions : AVDynamicObject
 
 /**
  Time to live of validation information, in minutes. Defaults to 10 minutes.
@@ -30,7 +30,7 @@ typedef NS_ENUM(NSInteger, AVShortMessageType) {
 /**
  The representation or form of short message.
  */
-@property (nonatomic, assign) AVShortMessageType type;
+@property (nonatomic, assign) LCShortMessageType type;
 
 /**
  Token used to validate short message request.
@@ -77,7 +77,7 @@ typedef NS_ENUM(NSInteger, AVShortMessageType) {
 @end
 
 
-@interface AVSMS : NSObject
+@interface LCSMS : NSObject
 
 /**
  Request a short message for a phone number.
@@ -87,7 +87,7 @@ typedef NS_ENUM(NSInteger, AVShortMessageType) {
  @param callback    The callback of request.
  */
 + (void)requestShortMessageForPhoneNumber:(NSString *)phoneNumber
-                                  options:(nullable AVShortMessageRequestOptions *)options
+                                  options:(nullable LCShortMessageRequestOptions *)options
                                  callback:(AVBooleanResultBlock)callback;
 
 @end

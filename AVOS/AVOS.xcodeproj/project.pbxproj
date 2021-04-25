@@ -370,14 +370,14 @@
 		834B4A8F1B93ED3F00A7ADBC /* LCIMConversationCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 834B4A8D1B93ED3F00A7ADBC /* LCIMConversationCache.m */; };
 		834B4A9C1B94080500A7ADBC /* LCIMConversationQueryCacheStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 834B4A9A1B94080500A7ADBC /* LCIMConversationQueryCacheStore.h */; };
 		834B4A9D1B94080500A7ADBC /* LCIMConversationQueryCacheStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 834B4A9B1B94080500A7ADBC /* LCIMConversationQueryCacheStore.m */; };
-		835091FD1EB1BDD0000DA884 /* AVSMS.h in Headers */ = {isa = PBXBuildFile; fileRef = 835091FB1EB1BDD0000DA884 /* AVSMS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		835091FE1EB1BDD0000DA884 /* AVSMS.h in Headers */ = {isa = PBXBuildFile; fileRef = 835091FB1EB1BDD0000DA884 /* AVSMS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		835091FF1EB1BDD0000DA884 /* AVSMS.h in Headers */ = {isa = PBXBuildFile; fileRef = 835091FB1EB1BDD0000DA884 /* AVSMS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		835092001EB1BDD0000DA884 /* AVSMS.h in Headers */ = {isa = PBXBuildFile; fileRef = 835091FB1EB1BDD0000DA884 /* AVSMS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		835092011EB1BDD0000DA884 /* AVSMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 835091FC1EB1BDD0000DA884 /* AVSMS.m */; };
-		835092021EB1BDD0000DA884 /* AVSMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 835091FC1EB1BDD0000DA884 /* AVSMS.m */; };
-		835092031EB1BDD0000DA884 /* AVSMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 835091FC1EB1BDD0000DA884 /* AVSMS.m */; };
-		835092041EB1BDD0000DA884 /* AVSMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 835091FC1EB1BDD0000DA884 /* AVSMS.m */; };
+		835091FD1EB1BDD0000DA884 /* LCSMS.h in Headers */ = {isa = PBXBuildFile; fileRef = 835091FB1EB1BDD0000DA884 /* LCSMS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		835091FE1EB1BDD0000DA884 /* LCSMS.h in Headers */ = {isa = PBXBuildFile; fileRef = 835091FB1EB1BDD0000DA884 /* LCSMS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		835091FF1EB1BDD0000DA884 /* LCSMS.h in Headers */ = {isa = PBXBuildFile; fileRef = 835091FB1EB1BDD0000DA884 /* LCSMS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		835092001EB1BDD0000DA884 /* LCSMS.h in Headers */ = {isa = PBXBuildFile; fileRef = 835091FB1EB1BDD0000DA884 /* LCSMS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		835092011EB1BDD0000DA884 /* LCSMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 835091FC1EB1BDD0000DA884 /* LCSMS.m */; };
+		835092021EB1BDD0000DA884 /* LCSMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 835091FC1EB1BDD0000DA884 /* LCSMS.m */; };
+		835092031EB1BDD0000DA884 /* LCSMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 835091FC1EB1BDD0000DA884 /* LCSMS.m */; };
+		835092041EB1BDD0000DA884 /* LCSMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 835091FC1EB1BDD0000DA884 /* LCSMS.m */; };
 		835092121EB1ECB7000DA884 /* AVDynamicObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 835092101EB1ECB7000DA884 /* AVDynamicObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		835092131EB1ECB7000DA884 /* AVDynamicObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 835092101EB1ECB7000DA884 /* AVDynamicObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		835092141EB1ECB7000DA884 /* AVDynamicObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 835092101EB1ECB7000DA884 /* AVDynamicObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -888,8 +888,8 @@
 		D30B6AB524A09E35006ABE09 /* AVDynamicObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 835092111EB1ECB7000DA884 /* AVDynamicObject.m */; };
 		D30B6AB624A09E67006ABE09 /* LCCaptcha.h in Headers */ = {isa = PBXBuildFile; fileRef = 83331D431EB9A25F00CADC9C /* LCCaptcha.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6AB724A09E67006ABE09 /* LCCaptcha.m in Sources */ = {isa = PBXBuildFile; fileRef = 83331D441EB9A25F00CADC9C /* LCCaptcha.m */; };
-		D30B6AB824A09E6F006ABE09 /* AVSMS.h in Headers */ = {isa = PBXBuildFile; fileRef = 835091FB1EB1BDD0000DA884 /* AVSMS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D30B6AB924A09E6F006ABE09 /* AVSMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 835091FC1EB1BDD0000DA884 /* AVSMS.m */; };
+		D30B6AB824A09E6F006ABE09 /* LCSMS.h in Headers */ = {isa = PBXBuildFile; fileRef = 835091FB1EB1BDD0000DA884 /* LCSMS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D30B6AB924A09E6F006ABE09 /* LCSMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 835091FC1EB1BDD0000DA884 /* LCSMS.m */; };
 		D30B6ABA24A09EAE006ABE09 /* AVOSCloudIM.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419C71A5A796000C5C6C4 /* AVOSCloudIM.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6ABB24A09EAE006ABE09 /* AVOSCloudIM.m in Sources */ = {isa = PBXBuildFile; fileRef = 83AB6DF71C3CFEA70064BE17 /* AVOSCloudIM.m */; };
 		D30B6ABC24A09EAE006ABE09 /* AVIMCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841BCE1A5A84C600C5C6C4 /* AVIMCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1462,8 +1462,8 @@
 		834B4A8D1B93ED3F00A7ADBC /* LCIMConversationCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMConversationCache.m; sourceTree = "<group>"; };
 		834B4A9A1B94080500A7ADBC /* LCIMConversationQueryCacheStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMConversationQueryCacheStore.h; sourceTree = "<group>"; };
 		834B4A9B1B94080500A7ADBC /* LCIMConversationQueryCacheStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMConversationQueryCacheStore.m; sourceTree = "<group>"; };
-		835091FB1EB1BDD0000DA884 /* AVSMS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVSMS.h; sourceTree = "<group>"; };
-		835091FC1EB1BDD0000DA884 /* AVSMS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVSMS.m; sourceTree = "<group>"; };
+		835091FB1EB1BDD0000DA884 /* LCSMS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCSMS.h; sourceTree = "<group>"; };
+		835091FC1EB1BDD0000DA884 /* LCSMS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCSMS.m; sourceTree = "<group>"; };
 		835092101EB1ECB7000DA884 /* AVDynamicObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVDynamicObject.h; sourceTree = "<group>"; };
 		835092111EB1ECB7000DA884 /* AVDynamicObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVDynamicObject.m; sourceTree = "<group>"; };
 		836705DC1BA1C1710050E968 /* LCKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCKeychain.h; sourceTree = "<group>"; };
@@ -1962,8 +1962,8 @@
 		835091FA1EB1BD90000DA884 /* SMS */ = {
 			isa = PBXGroup;
 			children = (
-				835091FB1EB1BDD0000DA884 /* AVSMS.h */,
-				835091FC1EB1BDD0000DA884 /* AVSMS.m */,
+				835091FB1EB1BDD0000DA884 /* LCSMS.h */,
+				835091FC1EB1BDD0000DA884 /* LCSMS.m */,
 			);
 			path = SMS;
 			sourceTree = "<group>";
@@ -2883,7 +2883,7 @@
 				83331D461EB9A25F00CADC9C /* LCCaptcha.h in Headers */,
 				D37EE4BA23ACF39700AACE99 /* LCURLResponseSerialization.h in Headers */,
 				835092131EB1ECB7000DA884 /* AVDynamicObject.h in Headers */,
-				835091FE1EB1BDD0000DA884 /* AVSMS.h in Headers */,
+				835091FE1EB1BDD0000DA884 /* LCSMS.h in Headers */,
 				70CA800D1BDE4314000A3B21 /* LCSearchQuery.h in Headers */,
 				70CA800E1BDE4314000A3B21 /* LCSearchSortBuilder.h in Headers */,
 				70CA7FE71BDE42F6000A3B21 /* AVConstants.h in Headers */,
@@ -2979,7 +2979,7 @@
 			files = (
 				83331D481EB9A25F00CADC9C /* LCCaptcha.h in Headers */,
 				835092151EB1ECB7000DA884 /* AVDynamicObject.h in Headers */,
-				835092001EB1BDD0000DA884 /* AVSMS.h in Headers */,
+				835092001EB1BDD0000DA884 /* LCSMS.h in Headers */,
 				8320F8D91C1918C60024B45E /* LCACL.h in Headers */,
 				D37EE4DC23ACF39700AACE99 /* LCHTTPSessionManager.h in Headers */,
 				8320F8DA1C1918C60024B45E /* LCDB.h in Headers */,
@@ -3083,7 +3083,7 @@
 				83331D471EB9A25F00CADC9C /* LCCaptcha.h in Headers */,
 				D37EE4BB23ACF39700AACE99 /* LCURLResponseSerialization.h in Headers */,
 				835092141EB1ECB7000DA884 /* AVDynamicObject.h in Headers */,
-				835091FF1EB1BDD0000DA884 /* AVSMS.h in Headers */,
+				835091FF1EB1BDD0000DA884 /* LCSMS.h in Headers */,
 				83D8CED21C17DAF50094279D /* LCACL.h in Headers */,
 				83D8CED31C17DAF50094279D /* LCDB.h in Headers */,
 				83D8CED41C17DAF50094279D /* LCRole.h in Headers */,
@@ -3180,7 +3180,7 @@
 				83331D451EB9A25F00CADC9C /* LCCaptcha.h in Headers */,
 				D37EE4B923ACF39700AACE99 /* LCURLResponseSerialization.h in Headers */,
 				835092121EB1ECB7000DA884 /* AVDynamicObject.h in Headers */,
-				835091FD1EB1BDD0000DA884 /* AVSMS.h in Headers */,
+				835091FD1EB1BDD0000DA884 /* LCSMS.h in Headers */,
 				8C841AAD1A5A7A0000C5C6C4 /* LCACL.h in Headers */,
 				83DF02B81AF86032000E289C /* LCDB.h in Headers */,
 				8C841AB01A5A7A0000C5C6C4 /* LCRole.h in Headers */,
@@ -3533,7 +3533,7 @@
 				D30B6AFA24A09F1F006ABE09 /* LCGPBProtocolBuffers_RuntimeSupport.h in Headers */,
 				D30B6A6224A09D52006ABE09 /* LCInstallation_Internal.h in Headers */,
 				D30B6A6024A09D52006ABE09 /* LCInstallation.h in Headers */,
-				D30B6AB824A09E6F006ABE09 /* AVSMS.h in Headers */,
+				D30B6AB824A09E6F006ABE09 /* LCSMS.h in Headers */,
 				D30B6B2E24A09F66006ABE09 /* AVIMTypedMessageObject.h in Headers */,
 				D30B6A4E24A09D15006ABE09 /* LCGeoPoint.h in Headers */,
 				D30B6AD724A09F13006ABE09 /* AVIMSignature.h in Headers */,
@@ -4209,7 +4209,7 @@
 				70CA7F931BDE3721000A3B21 /* LCSearchSortBuilder.m in Sources */,
 				70CA7F941BDE3721000A3B21 /* LCNetworkStatistics.m in Sources */,
 				70CA7F951BDE3721000A3B21 /* LCStatus.m in Sources */,
-				835092021EB1BDD0000DA884 /* AVSMS.m in Sources */,
+				835092021EB1BDD0000DA884 /* LCSMS.m in Sources */,
 				D3700B7F2475345C00678B2B /* AVApplication.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4229,7 +4229,7 @@
 				8320F88A1C1918C60024B45E /* LCSearchQuery.m in Sources */,
 				8320F88D1C1918C60024B45E /* LCDatabase.m in Sources */,
 				8320F88E1C1918C60024B45E /* NSDictionary+LCHash.m in Sources */,
-				835092041EB1BDD0000DA884 /* AVSMS.m in Sources */,
+				835092041EB1BDD0000DA884 /* LCSMS.m in Sources */,
 				D37EE4C423ACF39700AACE99 /* LCURLResponseSerialization.m in Sources */,
 				8320F88F1C1918C60024B45E /* LCKeychain.m in Sources */,
 				8320F8901C1918C60024B45E /* LCQuery.m in Sources */,
@@ -4337,7 +4337,7 @@
 				83D8CEA81C17DAF50094279D /* LCRole.m in Sources */,
 				D37EE4D323ACF39700AACE99 /* LCURLSessionManager.m in Sources */,
 				D37EE4E323ACF39700AACE99 /* LCNetworkReachabilityManager.m in Sources */,
-				835092031EB1BDD0000DA884 /* AVSMS.m in Sources */,
+				835092031EB1BDD0000DA884 /* LCSMS.m in Sources */,
 				83D8CEA91C17DAF50094279D /* LCPaasClient.m in Sources */,
 				8302AEDD1C192A0700E13F8A /* LCURLConnection.m in Sources */,
 				83D8CEAB1C17DAF50094279D /* AVErrorUtils.m in Sources */,
@@ -4405,7 +4405,7 @@
 				8C841AB11A5A7A0000C5C6C4 /* LCRole.m in Sources */,
 				D37EE4D123ACF39700AACE99 /* LCURLSessionManager.m in Sources */,
 				D37EE4E123ACF39700AACE99 /* LCNetworkReachabilityManager.m in Sources */,
-				835092011EB1BDD0000DA884 /* AVSMS.m in Sources */,
+				835092011EB1BDD0000DA884 /* LCSMS.m in Sources */,
 				8C841B331A5A7A0000C5C6C4 /* LCPaasClient.m in Sources */,
 				8302AEDA1C192A0700E13F8A /* LCURLConnection.m in Sources */,
 				8C841B5D1A5A7A0000C5C6C4 /* AVErrorUtils.m in Sources */,
@@ -4598,7 +4598,7 @@
 				D30B6A8F24A09DDF006ABE09 /* LCDatabase.m in Sources */,
 				D30B6A7724A09DA3006ABE09 /* LCSearchQuery.m in Sources */,
 				D30B6AA424A09E35006ABE09 /* AVUtils.m in Sources */,
-				D30B6AB924A09E6F006ABE09 /* AVSMS.m in Sources */,
+				D30B6AB924A09E6F006ABE09 /* LCSMS.m in Sources */,
 				D30B6AD124A09ED2006ABE09 /* AVIMKeyedConversation.m in Sources */,
 				D30B6A8024A09DCA006ABE09 /* LCHTTPSessionManager.m in Sources */,
 				D30B6A3224A09C8E006ABE09 /* AVAnalytics.m in Sources */,

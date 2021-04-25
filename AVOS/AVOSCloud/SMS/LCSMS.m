@@ -6,18 +6,18 @@
 //  Copyright © 2017 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVSMS.h"
+#import "LCSMS.h"
 #import "LCPaasClient.h"
 #import "AVUtils.h"
 #import "AVDynamicObject_Internal.h"
 
-@interface AVShortMessageRequestOptions ()
+@interface LCShortMessageRequestOptions ()
 
 @property (nonatomic, copy, readonly) NSString *typeDescription;
 
 @end
 
-@implementation AVShortMessageRequestOptions
+@implementation LCShortMessageRequestOptions
 
 @dynamic TTL;
 @dynamic type;
@@ -29,9 +29,9 @@
 
 - (NSString *)typeDescription {
     switch (self.type) {
-    case AVShortMessageTypeText:
+        case LCShortMessageTypeText:
         return @"sms";
-    case AVShortMessageTypeVoice:
+        case LCShortMessageTypeVoice:
         return @"voice";
     }
 
@@ -40,10 +40,10 @@
 
 @end
 
-@implementation AVSMS
+@implementation LCSMS
 
 + (void)requestShortMessageForPhoneNumber:(NSString *)phoneNumber
-                                  options:(AVShortMessageRequestOptions *)options
+                                  options:(LCShortMessageRequestOptions *)options
                                  callback:(AVBooleanResultBlock)callback
 {
     NSParameterAssert(phoneNumber);

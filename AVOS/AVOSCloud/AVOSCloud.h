@@ -57,7 +57,7 @@
 #import "LCRole.h"
 
 #import "LCCaptcha.h"
-#import "AVSMS.h"
+#import "LCSMS.h"
 
 // Router
 #import "LCRouter.h"
