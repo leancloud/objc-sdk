@@ -39,7 +39,7 @@ static RouterKey RouterKeyRTMGroupUrl = @"groupUrl";
 static RouterKey RouterKeyRTMSecondary = @"secondary";
 static RouterKey RouterKeyRTMServer = @"server";
 
-@class AVApplication;
+@class LCApplication;
 
 @interface LCRouter ()
 
@@ -69,7 +69,7 @@ static RouterKey RouterKeyRTMServer = @"server";
 
 + (void)customAppServerURL:(NSString *)URLString key:(RouterKey)key;
 
-- (void)cleanCacheWithApplication:(AVApplication *)application
+- (void)cleanCacheWithApplication:(LCApplication *)application
                               key:(RouterCacheKey)key
                             error:(NSError * __autoreleasing *)error;
 

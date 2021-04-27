@@ -13,7 +13,7 @@
 #import "AVIMSignature.h"
 #import "LCIMConversationCache.h"
 
-#import "AVApplication_Internal.h"
+#import "LCApplication_Internal.h"
 
 #if DEBUG
 void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);

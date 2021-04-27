@@ -7,7 +7,7 @@
 //
 
 #import "LCRouter_Internal.h"
-#import "AVApplication_Internal.h"
+#import "LCApplication_Internal.h"
 #import "LCUtils.h"
 #import "LCErrorUtils.h"
 #import "LCPaasClient.h"
@@ -161,7 +161,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
     }
 }
 
-- (void)cleanCacheWithApplication:(AVApplication *)application
+- (void)cleanCacheWithApplication:(LCApplication *)application
                               key:(RouterCacheKey)key
                             error:(NSError * __autoreleasing *)error
 {

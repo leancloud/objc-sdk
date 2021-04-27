@@ -1,21 +1,21 @@
 //
-//  AVApplication.m
+//  LCApplication.m
 //  AVOS
 //
 //  Created by pzheng on 2020/05/20.
 //  Copyright © 2020 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVApplication_Internal.h"
+#import "LCApplication_Internal.h"
 
-@implementation AVApplication
+@implementation LCApplication
 
 + (instancetype)defaultApplication
 {
-    static AVApplication *instance;
+    static LCApplication *instance;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        instance = [[AVApplication alloc] init];
+        instance = [[LCApplication alloc] init];
     });
     return instance;
 }

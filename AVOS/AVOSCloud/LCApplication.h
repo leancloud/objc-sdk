@@ -1,5 +1,5 @@
 //
-//  AVApplication.h
+//  LCApplication.h
 //  AVOS
 //
 //  Created by pzheng on 2020/05/20.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AVApplication : NSObject
+@interface LCApplication : NSObject
 
 @property (nonatomic, readonly) NSString *identifier;
 @property (nonatomic, readonly) NSString *key;

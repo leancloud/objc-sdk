@@ -8,8 +8,8 @@
 
 #import "LCRTMConnection_Internal.h"
 
-#import "AVApplication.h"
-#import "AVApplication_Internal.h"
+#import "LCApplication.h"
+#import "LCApplication_Internal.h"
 #import "LCRouter.h"
 #import "LCRouter_Internal.h"
 #import "LCLogger.h"
@@ -39,7 +39,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 
 @implementation LCRTMServiceConsumer
 
-- (instancetype)initWithApplication:(AVApplication *)application
+- (instancetype)initWithApplication:(LCApplication *)application
                             service:(LCRTMService)service
                            protocol:(LCIMProtocol)protocol
                              peerID:(NSString *)peerID
@@ -172,7 +172,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     return result;
 }
 
-- (NSInteger)nextConnectingDelayIntervalForApplication:(AVApplication *)application
+- (NSInteger)nextConnectingDelayIntervalForApplication:(LCApplication *)application
 {
     NSString *appID = [application identifierThrowException];
     NSInteger interval;
@@ -190,7 +190,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     return interval;
 }
 
-- (void)resetConnectingDelayIntervalForApplication:(AVApplication *)application
+- (void)resetConnectingDelayIntervalForApplication:(LCApplication *)application
 {
     NSString *appID = [application identifierThrowException];
     [self.lock lock];
@@ -499,7 +499,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     gLCRTMConnectionConnectingTimeoutInterval = timeoutInterval;
 }
 
-- (instancetype)initWithApplication:(AVApplication *)application
+- (instancetype)initWithApplication:(LCApplication *)application
                            protocol:(LCIMProtocol)protocol
                               error:(NSError *__autoreleasing *)error
 {

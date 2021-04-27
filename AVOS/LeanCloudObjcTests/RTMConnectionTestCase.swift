@@ -216,7 +216,7 @@ class RTMConnectionTestCase: RTMBaseTestCase {
                 let outCommand = AVIMGenericCommand()
                 outCommand.cmd = .session
                 outCommand.op = .open
-                outCommand.appId = AVApplication.default().identifier
+                outCommand.appId = LCApplication.default().identifier
                 outCommand.peerId = peerID
                 let sessionCommand = AVIMSessionCommand()
                 sessionCommand.ua = USER_AGENT
@@ -328,7 +328,7 @@ class RTMConnectionTestCase: RTMBaseTestCase {
         }
         delegator.reset()
         let getRTMRouterDataTimestamp = { () -> TimeInterval? in
-            let appID = AVApplication.default().identifier
+            let appID = LCApplication.default().identifier
             let RTMRouterData = LCRouter.sharedInstance().rtmRouterMap[appID] as? [String: Any]
             return RTMRouterData?["timestamp"] as? TimeInterval
         }
@@ -389,7 +389,7 @@ class RTMConnectionTestCase: RTMBaseTestCase {
             let outCommand = AVIMGenericCommand()
             outCommand.cmd = .session
             outCommand.op = .open
-            outCommand.appId = AVApplication.default().identifier
+            outCommand.appId = LCApplication.default().identifier
             outCommand.peerId = peerID
             let sessionCommand = AVIMSessionCommand()
             sessionCommand.ua = USER_AGENT

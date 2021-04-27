@@ -22,7 +22,7 @@
 #import "LCObjectUtils.h"
 
 #import "LCRouter_Internal.h"
-#import "AVApplication_Internal.h"
+#import "LCApplication_Internal.h"
 
 @implementation AVOSCloud
 
@@ -82,7 +82,7 @@ static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
         }
     }
     
-    [[AVApplication defaultApplication] setWithIdentifier:applicationId
+    [[LCApplication defaultApplication] setWithIdentifier:applicationId
                                                       key:clientKey];
     
     [self initializePaasClient];
@@ -93,11 +93,11 @@ static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
 }
 
 + (NSString *)getApplicationId {
-    return [[AVApplication defaultApplication] identifierThrowException];
+    return [[LCApplication defaultApplication] identifierThrowException];
 }
 
 + (NSString *)getClientKey {
-    return [[AVApplication defaultApplication] keyThrowException];
+    return [[LCApplication defaultApplication] keyThrowException];
 }
 
 + (void)setLastModifyEnabled:(BOOL)enabled {

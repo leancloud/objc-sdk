@@ -9,7 +9,7 @@
 #import "AVSubscriber.h"
 #import "AVLiveQuery_Internal.h"
 
-#import "AVApplication_Internal.h"
+#import "LCApplication_Internal.h"
 #import "LCUtils.h"
 #import "LCObjectUtils.h"
 
@@ -59,7 +59,7 @@ NSNotificationName const AVLiveQueryEventNotification = @"AVLiveQueryEventNotifi
         _weakLiveQueryObjectTable = [NSHashTable weakObjectsHashTable];
         _loginCallbackArray = nil;
         _alive = false;
-        _serviceConsumer = [[LCRTMServiceConsumer alloc] initWithApplication:[AVApplication defaultApplication]
+        _serviceConsumer = [[LCRTMServiceConsumer alloc] initWithApplication:[LCApplication defaultApplication]
                                                                      service:LCRTMServiceLiveQuery
                                                                     protocol:LCIMProtocol3
                                                                       peerID:_identifier];

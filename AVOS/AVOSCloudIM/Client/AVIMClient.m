@@ -223,7 +223,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         queue;
     });
     _userInteractQueue = dispatch_get_main_queue();
-    _serviceConsumer = [[LCRTMServiceConsumer alloc] initWithApplication:[AVApplication defaultApplication]
+    _serviceConsumer = [[LCRTMServiceConsumer alloc] initWithApplication:[LCApplication defaultApplication]
                                                                  service:LCRTMServiceInstantMessaging
                                                                 protocol:[AVIMClient IMProtocol]
                                                                   peerID:_clientId];
