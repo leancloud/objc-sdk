@@ -7,8 +7,8 @@
 //
 
 #import "AVIMConversationQuery_Internal.h"
-#import "AVIMClient_Internal.h"
-#import "AVIMClientInternalConversationManager_Internal.h"
+#import "LCIMClient_Internal.h"
+#import "LCIMClientInternalConversationManager_Internal.h"
 #import "AVIMConversation_Internal.h"
 
 #import "LCIMConversationCache.h"
@@ -37,7 +37,7 @@
     AVIMConversationQuery *result = nil;
     
     if (queries.count > 0) {
-        AVIMClient *client = [[queries firstObject] client];
+        LCIMClient *client = [[queries firstObject] client];
         NSMutableArray *wheres = [[NSMutableArray alloc] initWithCapacity:queries.count];
         
         for (AVIMConversationQuery *query in queries) {
@@ -62,7 +62,7 @@
     AVIMConversationQuery *result = nil;
     
     if (queries.count > 0) {
-        AVIMClient *client = [[queries firstObject] client];
+        LCIMClient *client = [[queries firstObject] client];
         NSMutableArray *wheres = [[NSMutableArray alloc] initWithCapacity:queries.count];
         
         for (AVIMConversationQuery *query in queries) {
@@ -350,7 +350,7 @@ static NSString * quote(NSString *string)
 
 - (void)findConversationsWithCallback:(void (^)(NSArray<AVIMConversation *> * _Nullable, NSError * _Nullable))callback
 {
-    AVIMClient *client = self.client;
+    LCIMClient *client = self.client;
     if (!client) {
         return;
     }
@@ -390,7 +390,7 @@ static NSString * quote(NSString *string)
         commandWrapper;
     });
     
-    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
             if (self.cachePolicy == kLCIMCachePolicyNetworkElseCache) {
@@ -515,7 +515,7 @@ static NSString * quote(NSString *string)
 - (void)findTemporaryConversationsWith:(NSArray<NSString *> *)tempConvIds
                               callback:(void (^)(NSArray<AVIMTemporaryConversation *> * _Nullable, NSError * _Nullable))callback
 {
-    AVIMClient *client = self.client;
+    LCIMClient *client = self.client;
     if (!client) {
         return;
     }
@@ -552,7 +552,7 @@ static NSString * quote(NSString *string)
         commandWrapper;
     });
     
-    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
             [client invokeInUserInteractQueue:^{
@@ -625,12 +625,12 @@ static NSString * quote(NSString *string)
 }
 
 - (void)fetchCachedResultsForOutCommand:(AVIMGenericCommand *)outCommand
-                                 client:(AVIMClient *)client
+                                 client:(LCIMClient *)client
                                callback:(void(^)(NSArray *conversations))callback
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSArray *conversations = [client.conversationCache conversationsForCommand:outCommand.avim_conversationForCache];
-        [client addOperationToInternalSerialQueue:^(AVIMClient *client) {
+        [client addOperationToInternalSerialQueue:^(LCIMClient *client) {
             NSMutableArray *results = [NSMutableArray array];
             for (AVIMConversation *conv in conversations) {
                 AVIMConversation *convInMemory = [client.conversationManager conversationForId:conv.conversationId];

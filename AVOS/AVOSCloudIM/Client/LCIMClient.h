@@ -20,7 +20,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /// IM Client.
-@interface AVIMClient : NSObject
+@interface LCIMClient : NSObject
 
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
@@ -253,7 +253,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // MARK: Deprecated
 
-@interface AVIMClient (Deprecated)
+@interface LCIMClient (Deprecated)
 
 + (void)setUserOptions:(NSDictionary *)userOptions
 __deprecated_msg("Deprecated, DO NOT use it any more.");

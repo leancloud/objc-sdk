@@ -8,13 +8,13 @@
 
 #import "AVIMConversationQuery.h"
 
-@class AVIMClient;
+@class LCIMClient;
 
 @interface AVIMConversationQuery ()
 
 @property (nonatomic, strong) NSMutableDictionary *where;
 @property (nonatomic, strong) NSString *order;
-@property (nonatomic, weak) AVIMClient *client;
+@property (nonatomic, weak) LCIMClient *client;
 
 - (NSString *)whereString;
 

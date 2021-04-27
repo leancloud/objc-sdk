@@ -15,7 +15,7 @@ class RTMBaseTestCase: BaseTestCase {
     
     override class func setUp() {
         super.setUp()
-        AVIMClient.setUnreadNotificationEnabled(true)
+        LCIMClient.setUnreadNotificationEnabled(true)
     }
     
     func purgeConnectionRegistry() {

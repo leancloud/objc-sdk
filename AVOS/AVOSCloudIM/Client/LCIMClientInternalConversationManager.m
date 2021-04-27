@@ -1,13 +1,13 @@
 //
-//  AVIMClientInternalConversationManager.m
+//  LCIMClientInternalConversationManager.m
 //  AVOS
 //
 //  Created by zapcannon87 on 2018/7/18.
 //  Copyright © 2018 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMClientInternalConversationManager_Internal.h"
-#import "AVIMClient_Internal.h"
+#import "LCIMClientInternalConversationManager_Internal.h"
+#import "LCIMClient_Internal.h"
 #import "AVIMConversation_Internal.h"
 #import "AVIMErrorUtil.h"
 #import "LCErrorUtils.h"
@@ -17,14 +17,14 @@
 
 static NSUInteger batchQueryLimit = 20;
 
-@implementation AVIMClientInternalConversationManager
+@implementation LCIMClientInternalConversationManager
 
 + (void)setBatchQueryLimit:(NSUInteger)limit
 {
     batchQueryLimit = limit;
 }
 
-- (instancetype)initWithClient:(AVIMClient *)client
+- (instancetype)initWithClient:(LCIMClient *)client
 {
     self = [super init];
     if (self) {
@@ -80,7 +80,7 @@ static NSUInteger batchQueryLimit = 20;
     AssertRunInQueue(self.internalSerialQueue);
     NSParameterAssert(conversationIds);
     
-    AVIMClient *client = self.client;
+    LCIMClient *client = self.client;
     
     NSMutableArray<NSArray *> *tupleArray = [self slicingConversationIds:conversationIds callback:callback];
     
@@ -103,7 +103,7 @@ static NSUInteger batchQueryLimit = 20;
             commandWrapper;
         });
         
-        [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+        [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
             
             if (commandWrapper.error) {
                 LCLoggerError(LCLoggerDomainIM, @"Error: %@ for querying ids: %@", commandWrapper.error, batchIds);

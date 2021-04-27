@@ -9,7 +9,7 @@
 #import "LCIMConversationCacheStore.h"
 #import "LCIMConversationCacheStoreSQL.h"
 #import "LCIMMessageCacheStoreSQL.h"
-#import "AVIMClient_Internal.h"
+#import "LCIMClient_Internal.h"
 #import "AVIMConversation.h"
 #import "AVIMConversation_Internal.h"
 #import "LCDatabaseMigrator.h"

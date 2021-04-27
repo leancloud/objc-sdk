@@ -35,14 +35,14 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/TypedMessages/AVIMFileMessage.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMTypedMessage.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMImageMessage.h',
-      'AVOS/AVOSCloudIM/Client/AVIMClient.h',
+      'AVOS/AVOSCloudIM/Client/LCIMClient.h',
       'AVOS/AVOSCloudIM/LCIMCommon.h',
       'AVOS/AVOSCloudIM/Conversation/AVIMConversation.h',
       'AVOS/AVOSCloudIM/Message/AVIMMessage.h',
       'AVOS/AVOSCloudIM/Signature/AVIMSignature.h',
       'AVOS/AVOSCloudIM/Client/LCIMClientProtocol.h',
       'AVOS/AVOSCloudIM/Conversation/AVIMConversationMemberInfo.h',
-      'AVOS/AVOSCloudIM/Client/AVIMClientInternalConversationManager.h',
+      'AVOS/AVOSCloudIM/Client/LCIMClientInternalConversationManager.h',
       'AVOS/AVOSCloudIM/AVOSCloudIM.h'
 
     ss.exclude_files =

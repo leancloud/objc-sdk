@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMClient_Internal.h"
+#import "LCIMClient_Internal.h"
 #import "AVIMConversation_Internal.h"
 #import "AVIMKeyedConversation_internal.h"
 #import "AVIMConversationMemberInfo_Internal.h"
@@ -36,7 +36,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 }
 #endif
 
-@implementation AVIMClient {
+@implementation LCIMClient {
     LCIMClientStatus _status;
 }
 
@@ -225,7 +225,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     _userInteractQueue = dispatch_get_main_queue();
     _serviceConsumer = [[LCRTMServiceConsumer alloc] initWithApplication:[LCApplication defaultApplication]
                                                                  service:LCRTMServiceInstantMessaging
-                                                                protocol:[AVIMClient IMProtocol]
+                                                                protocol:[LCIMClient IMProtocol]
                                                                   peerID:_clientId];
     NSError *error;
     _connection = [[LCRTMConnectionManager sharedManager] registerWithServiceConsumer:_serviceConsumer
@@ -236,7 +236,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     _connectionDelegator = [[LCRTMConnectionDelegator alloc] initWithPeerID:_clientId
                                                                    delegate:self
                                                                       queue:_internalSerialQueue];
-    _conversationManager = [[AVIMClientInternalConversationManager alloc] initWithClient:self];
+    _conversationManager = [[LCIMClientInternalConversationManager alloc] initWithClient:self];
     _installation = installation;
     _currentDeviceToken = installation.deviceToken;
     [installation addObserver:self
@@ -272,7 +272,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 // MARK: Queue
 
-- (void)addOperationToInternalSerialQueue:(void (^)(AVIMClient *client))block
+- (void)addOperationToInternalSerialQueue:(void (^)(LCIMClient *client))block
 {
     dispatch_async(self.internalSerialQueue, ^{
         block(self);
@@ -360,7 +360,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         commandWrapper.outCommand = outCommand;
         commandWrapper;
     });
-    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         if (commandWrapper.error) {
             [client invokeInUserInteractQueue:^{
                 callback(false, commandWrapper.error);
@@ -386,7 +386,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 // MARK: Session
 
 - (void)getOpenSignatureWithToken:(NSString *)token
-                       completion:(void (^)(AVIMClient *client, AVIMSignature *signature))completion
+                       completion:(void (^)(LCIMClient *client, AVIMSignature *signature))completion
 {
     NSParameterAssert(token);
     NSString *path = @"/rtm/sign";
@@ -399,7 +399,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     __weak typeof(self) ws = self;
     [paasClient performRequest:request
                        success:^(NSHTTPURLResponse *response, id result) {
-        AVIMClient *ss = ws;
+        LCIMClient *ss = ws;
         if (!ss) {
             return;
         }
@@ -416,7 +416,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                 signature.signature = sign;
                 signature.timestamp = timestamp;
                 signature.nonce = nonce;
-                [ss addOperationToInternalSerialQueue:^(AVIMClient *client) {
+                [ss addOperationToInternalSerialQueue:^(LCIMClient *client) {
                     completion(client, signature);
                 }];
                 return;
@@ -427,16 +427,16 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                                    @"Malformed response data, path: %@, data: %@",
                                    path, result ?: @"nil"],
                                   nil);
-        [ss addOperationToInternalSerialQueue:^(AVIMClient *client) {
+        [ss addOperationToInternalSerialQueue:^(LCIMClient *client) {
             completion(client, signature);
         }];
     } failure:^(NSHTTPURLResponse *response, id result, NSError *error) {
-        AVIMClient *ss = ws;
+        LCIMClient *ss = ws;
         if (!ss) {
             return;
         }
         signature.error = error;
-        [ss addOperationToInternalSerialQueue:^(AVIMClient *client) {
+        [ss addOperationToInternalSerialQueue:^(LCIMClient *client) {
             completion(client, signature);
         }];
     }];
@@ -492,7 +492,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 - (void)getSessionOpenCommandWithToken:(NSString * _Nullable)token
                               isReopen:(BOOL)isReopen
-                            completion:(void (^)(AVIMClient *client, AVIMGenericCommand *openCommand))completion
+                            completion:(void (^)(LCIMClient *client, AVIMGenericCommand *openCommand))completion
 {
     AssertRunInQueue(self.internalSerialQueue);
     if (token) {
@@ -503,7 +503,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                                         isReopen:isReopen]);
     } else if (self.user.sessionToken) {
         [self getOpenSignatureWithToken:self.user.sessionToken
-                             completion:^(AVIMClient *client, AVIMSignature *signature) {
+                             completion:^(LCIMClient *client, AVIMSignature *signature) {
             AssertRunInQueue(client.internalSerialQueue);
             if (signature.error) {
                 [client sessionClosedWithSuccess:false
@@ -632,7 +632,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                           peerID:self.clientId
                          onQueue:self.internalSerialQueue
                         callback:^(AVIMGenericCommand * _Nullable inCommand, NSError * _Nullable error) {
-        AVIMClient *client = ws;
+        LCIMClient *client = ws;
         if (!client) {
             return;
         }
@@ -646,7 +646,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                 } else if (error.code == LCIMErrorCodeSessionTokenExpired) {
                     [client getSessionOpenCommandWithToken:nil
                                                   isReopen:true
-                                                completion:^(AVIMClient *client, AVIMGenericCommand *openCommand) {
+                                                completion:^(LCIMClient *client, AVIMGenericCommand *openCommand) {
                         [client sendSessionReopenCommand:openCommand];
                     }];
                 } else {
@@ -668,7 +668,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 - (void)getSessionTokenWithForcingRefresh:(BOOL)forcingRefresh
                                  callback:(void (^)(NSString *, NSError *))callback
 {
-    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+    [self addOperationToInternalSerialQueue:^(LCIMClient *client) {
         NSString *oldSessionToken = client.sessionToken;
         if (!oldSessionToken ||
             [client status] != LCIMClientStatusOpened) {
@@ -684,7 +684,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                                                                   token:oldSessionToken
                                                               signature:nil
                                                                isReopen:false];
-            [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+            [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
                 if (commandWrapper.error) {
                     callback(nil, commandWrapper.error);
                     return;
@@ -727,7 +727,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                                                    action:action
                                         actionOnClientIds:actionOnClientIds];
         }
-        [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+        [self addOperationToInternalSerialQueue:^(LCIMClient *client) {
             callback(signature);
         }];
     });
@@ -737,7 +737,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 - (void)sendCommandWrapper:(LCIMProtobufCommandWrapper *)commandWrapper
 {
-    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+    [self addOperationToInternalSerialQueue:^(LCIMClient *client) {
         if ([client status] != LCIMClientStatusOpened) {
             if (commandWrapper.callback) {
                 commandWrapper.error = LCError(LCIMErrorCodeClientNotOpen,
@@ -754,7 +754,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                                     peerID:client.clientId
                                    onQueue:client.internalSerialQueue
                                   callback:^(AVIMGenericCommand * _Nullable inCommand, NSError * _Nullable error) {
-                AVIMClient *sClient = wClient;
+                LCIMClient *sClient = wClient;
                 if (!sClient) {
                     return;
                 }
@@ -890,7 +890,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     if (self.openingCompletion) {
         [self getSessionOpenCommandWithToken:nil
                                     isReopen:(self.openingOption == LCIMClientOpenOptionReopen)
-                                  completion:^(AVIMClient *client, AVIMGenericCommand *openCommand) {
+                                  completion:^(LCIMClient *client, AVIMGenericCommand *openCommand) {
             AssertRunInQueue(client.internalSerialQueue);
             __weak typeof(client) wClient = client;
             [client.connection sendCommand:openCommand
@@ -898,7 +898,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                                     peerID:client.clientId
                                    onQueue:client.internalSerialQueue
                                   callback:^(AVIMGenericCommand * _Nullable inCommand, NSError * _Nullable error) {
-                AVIMClient *sClient = wClient;
+                LCIMClient *sClient = wClient;
                 if (!sClient) {
                     return;
                 }
@@ -922,7 +922,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         }
         [self getSessionOpenCommandWithToken:(isExpired ? nil : self.sessionToken)
                                     isReopen:true
-                                  completion:^(AVIMClient *client, AVIMGenericCommand *openCommand) {
+                                  completion:^(LCIMClient *client, AVIMGenericCommand *openCommand) {
             AssertRunInQueue(client.internalSerialQueue);
             [client sendSessionReopenCommand:openCommand];
         }];
@@ -1680,7 +1680,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             commandWrapper;
         });
         
-        [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+        [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
             
             if (commandWrapper.error) {
                 [client invokeInUserInteractQueue:^{
@@ -1781,7 +1781,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         }];
         return;
     }
-    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+    [self addOperationToInternalSerialQueue:^(LCIMClient *client) {
         NSMutableArray<AVIMConversation *> *array = [NSMutableArray array];
         for (NSString *conversationId in conversationIds) {
             AVIMConversation *conv = [client->_conversationManager conversationForId:conversationId];
@@ -1804,7 +1804,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         }];
         return;
     }
-    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+    [self addOperationToInternalSerialQueue:^(LCIMClient *client) {
         [client->_conversationManager removeConversationsWithIds:conversationIds];
         [client invokeInUserInteractQueue:^{
             callback();
@@ -1814,7 +1814,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 - (void)removeAllConversationsInMemoryWith:(void (^)(void))callback
 {
-    [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+    [self addOperationToInternalSerialQueue:^(LCIMClient *client) {
         [client->_conversationManager removeAllConversations];
         [client invokeInUserInteractQueue:^{
             callback();
@@ -1833,7 +1833,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             NSString *newToken = [NSString _lc_decoding:change key:NSKeyValueChangeNewKey];
             if (newToken &&
                 ![newToken isEqualToString:oldToken]) {
-                [self addOperationToInternalSerialQueue:^(AVIMClient *client) {
+                [self addOperationToInternalSerialQueue:^(LCIMClient *client) {
                     if (![client.currentDeviceToken isEqualToString:newToken]) {
                         client.currentDeviceToken = newToken;
                         [client reportDeviceToken:newToken
@@ -1869,11 +1869,11 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
     commandWrapper.outCommand = command;
 #if DEBUG
-    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         if (commandWrapper.error) {
             LCLoggerError(LCLoggerDomainIM, @"%@", commandWrapper.error);
         }
-        [NSNotificationCenter.defaultCenter postNotificationName:@"Test.AVIMClient.reportDeviceToken"
+        [NSNotificationCenter.defaultCenter postNotificationName:@"Test.LCIMClient.reportDeviceToken"
                                                           object:nil
                                                         userInfo:(commandWrapper.error
                                                                   ? @{ @"error": commandWrapper.error }
@@ -1919,7 +1919,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         commandWrapper;
     });
     
-    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
             [client invokeInUserInteractQueue:^{
@@ -2080,7 +2080,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 + (LCIMProtocol)IMProtocol
 {
-    NSNumber *useUnreadProtocol = [NSNumber _lc_decoding:AVIMClient.sessionProtocolOptions
+    NSNumber *useUnreadProtocol = [NSNumber _lc_decoding:LCIMClient.sessionProtocolOptions
                                                      key:kLCIMUserOptionUseUnread];
     if ([useUnreadProtocol boolValue]) {
         return LCIMProtocol3;
@@ -2103,10 +2103,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 {
     if (gClientHasInstantiated) {
         [NSException raise:NSInternalInconsistencyException
-                    format:@"This method should be invoked before initialization of `AVIMClient`."];
+                    format:@"This method should be invoked before initialization of `LCIMClient`."];
         return;
     }
-    AVIMClient.sessionProtocolOptions[kLCIMUserOptionUseUnread] = @(enabled);
+    LCIMClient.sessionProtocolOptions[kLCIMUserOptionUseUnread] = @(enabled);
 }
 
 // MARK: Deprecated
@@ -2117,13 +2117,13 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 {
     if (gClientHasInstantiated) {
         [NSException raise:NSInternalInconsistencyException
-                    format:@"This method should be invoked before initialization of `AVIMClient`."];
+                    format:@"This method should be invoked before initialization of `LCIMClient`."];
         return;
     }
     if (!userOptions) {
         return;
     }
-    [AVIMClient.sessionProtocolOptions addEntriesFromDictionary:userOptions];
+    [LCIMClient.sessionProtocolOptions addEntriesFromDictionary:userOptions];
 }
 #pragma clang diagnostic pop
 

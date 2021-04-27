@@ -7,7 +7,7 @@
 //
 
 #import "AVIMConversation_Internal.h"
-#import "AVIMClient_Internal.h"
+#import "LCIMClient_Internal.h"
 #import "AVIMKeyedConversation_internal.h"
 #import "AVIMConversationQuery_Internal.h"
 #import "AVIMConversationMemberInfo_Internal.h"
@@ -113,7 +113,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 {
     if (limit <= 0) { limit = 20; }
     
-    BOOL useUnread = [AVIMClient.sessionProtocolOptions[kLCIMUserOptionUseUnread] boolValue];
+    BOOL useUnread = [LCIMClient.sessionProtocolOptions[kLCIMUserOptionUseUnread] boolValue];
     
     NSUInteger max = useUnread ? 100 : 1000;
     
@@ -152,7 +152,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 // MARK: - Init
 
 + (instancetype)conversationWithRawJSONData:(NSMutableDictionary *)rawJSONData
-                                     client:(AVIMClient *)client
+                                     client:(LCIMClient *)client
 {
     NSString *conversationId = [NSString _lc_decoding:rawJSONData key:LCIMConversationKeyObjectId];
     if (!conversationId || !client) {
@@ -203,7 +203,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (instancetype)initWithRawJSONData:(NSMutableDictionary *)rawJSONData
                      conversationId:(NSString *)conversationId
-                             client:(AVIMClient *)client
+                             client:(LCIMClient *)client
 {
     self = [super init];
     
@@ -443,7 +443,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     return timestamp ? [NSDate dateWithTimeIntervalSince1970:(timestamp / 1000.0)] : nil;
 }
 
-- (BOOL)updateLastMessage:(AVIMMessage *)message client:(AVIMClient *)client
+- (BOOL)updateLastMessage:(AVIMMessage *)message client:(LCIMClient *)client
 {
     AssertRunInQueue(self->_internalSerialQueue);
     __block BOOL updated = false;
@@ -593,9 +593,9 @@ static dispatch_queue_t messageCacheOperationQueue;
         self->_rawJSONData = rawJSONData;
         lastMessage = [self decodingLastMessageFromRawJSONData:rawJSONData];
     }];
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (client && lastMessage) {
-        [client addOperationToInternalSerialQueue:^(AVIMClient *client) {
+        [client addOperationToInternalSerialQueue:^(LCIMClient *client) {
             [self updateLastMessage:lastMessage client:client];
         }];
     }
@@ -651,7 +651,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (void)fetchReceiptTimestampsInBackground
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client ||
         (self.convType == LCIMConvTypeTransient) ||
         (self.convType == LCIMConvTypeSystem)) {
@@ -673,7 +673,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         commandWrapper;
     });
     
-    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
             return;
@@ -711,7 +711,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 - (void)addMembersWithClientIds:(NSArray<NSString *> *)clientIds
                        callback:(void (^)(BOOL, NSError *))callback;
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -761,7 +761,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             commandWrapper;
         });
         
-        [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+        [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
             
             if (commandWrapper.error) {
                 [client invokeInUserInteractQueue:^{
@@ -793,7 +793,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 - (void)removeMembersWithClientIds:(NSArray<NSString *> *)clientIds
                           callback:(void (^)(BOOL, NSError *))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -843,7 +843,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             commandWrapper;
         });
         
-        [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+        [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
             
             if (commandWrapper.error) {
                 [client invokeInUserInteractQueue:^{
@@ -869,7 +869,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (void)countMembersWithCallback:(void (^)(NSInteger, NSError *))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -889,7 +889,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         commandWrapper;
     });
     
-    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
             [client invokeInUserInteractQueue:^{
@@ -914,7 +914,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (void)fetchWithCallback:(void (^)(BOOL, NSError *))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -933,7 +933,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (void)updateWithCallback:(void (^)(BOOL succeeded, NSError *error))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -976,7 +976,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 - (void)updateWithDictionary:(NSDictionary<NSString *, id> *)dictionary
                     callback:(void (^)(BOOL succeeded, NSError *error))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -1009,7 +1009,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         commandWrapper;
     });
     
-    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         if (commandWrapper.error) {
             callback(false, commandWrapper.error);
             return;
@@ -1109,7 +1109,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 - (void)muteWithCallback:(void (^)(BOOL, NSError *))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -1129,7 +1129,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         commandWrapper;
     });
     
-    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
             [client invokeInUserInteractQueue:^{
@@ -1156,7 +1156,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 - (void)unmuteWithCallback:(void (^)(BOOL, NSError *))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -1176,7 +1176,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         commandWrapper;
     });
     
-    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
             [client invokeInUserInteractQueue:^{
@@ -1205,7 +1205,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 - (void)readInBackground
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client ||
         (self.convType == LCIMConvTypeTransient)) {
         return;
@@ -1229,7 +1229,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     [self internalSyncLock:^{
         self->_unreadMessagesCount = 0;
     }];
-    [client addOperationToInternalSerialQueue:^(AVIMClient *client) {
+    [client addOperationToInternalSerialQueue:^(LCIMClient *client) {
         [client conversation:self didUpdateForKeys:@[LCIMConversationUpdatedKeyUnreadMessagesCount]];
     }];
     
@@ -1284,7 +1284,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
       progressBlock:(void (^)(NSInteger))progressBlock
            callback:(void (^)(BOOL, NSError * _Nullable))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -1310,7 +1310,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         LCFile *file = typedMessage.file;
         if (file) {
             [file uploadWithProgress:progressBlock completionHandler:^(BOOL succeeded, NSError * _Nullable error) {
-                AVIMClient *client = self.imClient;
+                LCIMClient *client = self.imClient;
                 if (!client) {
                     return;
                 }
@@ -1421,7 +1421,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                  option:(AVIMMessageOption *)option
                callback:(void (^)(BOOL, NSError * _Nullable))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -1478,7 +1478,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         commandWrapper;
     });
     
-    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
             message.status = AVIMMessageStatusFailed;
@@ -1522,7 +1522,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
          toNewMessage:(AVIMMessage *)newMessage
              callback:(void (^)(BOOL, NSError * _Nullable))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -1561,7 +1561,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         commandWrapper;
     });
     
-    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
             [client invokeInUserInteractQueue:^{
@@ -1604,7 +1604,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 - (void)recallMessage:(AVIMMessage *)oldMessage
              callback:(void (^)(BOOL, NSError * _Nullable, AVIMRecalledMessage * _Nullable))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -1640,7 +1640,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         commandWrapper;
     });
     
-    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
             [client invokeInUserInteractQueue:^{
@@ -1762,11 +1762,11 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 - (void)sendACKIfNeeded:(NSArray *)messages
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
-    NSDictionary *userOptions = [AVIMClient sessionProtocolOptions];
+    NSDictionary *userOptions = [LCIMClient sessionProtocolOptions];
     
     BOOL useUnread = [userOptions[kLCIMUserOptionUseUnread] boolValue];
     
@@ -1796,14 +1796,14 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 - (void)queryMessagesFromServerWithCommand:(AVIMGenericCommand *)genericCommand
                                   callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
     
     LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
     commandWrapper.outCommand = genericCommand;
-    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         if (commandWrapper.error) {
             [client invokeInUserInteractQueue:^{
                 callback(nil, commandWrapper.error);
@@ -2271,7 +2271,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                                fromTimestamp:(int64_t)timestamp
                                     callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -2287,7 +2287,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     
     LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
     commandWrapper.outCommand = genericCommand;
-    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         if (commandWrapper.error) {
             [client invokeInUserInteractQueue:^{
                 callback(nil, commandWrapper.error);
@@ -2359,7 +2359,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                            recursionCount:(NSUInteger)recursionCount
                                  callback:(void (^)(NSArray<AVIMConversationMemberInfo *> *, NSError *))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -2476,7 +2476,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                               memberId:(NSString *)memberId
                               callback:(void (^)(AVIMConversationMemberInfo *, NSError *))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -2519,7 +2519,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                                 role:(LCIMConversationMemberRole)role
                             callback:(void (^)(BOOL, NSError *))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -2566,7 +2566,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         commandWrapper;
     });
     
-    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
             [client invokeInUserInteractQueue:^{
@@ -2616,7 +2616,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                 isBlockAction:(BOOL)isBlockAction
                      callback:(void (^)(NSArray<NSString *> *, NSArray<AVIMOperationFailure *> *, NSError *))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -2656,7 +2656,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             commandWrapper;
         });
         
-        [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+        [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
             
             if (commandWrapper.error) {
                 [client invokeInUserInteractQueue:^{
@@ -2689,7 +2689,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                                 next:(NSString * _Nullable)next
                             callback:(void (^)(NSArray<NSString *> *, NSString *, NSError *))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -2715,7 +2715,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         commandWrapper;
     });
     
-    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
             [client invokeInUserInteractQueue:^{
@@ -2754,7 +2754,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                isMuteAction:(BOOL)isMuteAction
                    callback:(void (^)(NSArray<NSString *> *, NSArray<AVIMOperationFailure *> *, NSError *))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -2776,7 +2776,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         commandWrapper;
     });
     
-    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
             [client invokeInUserInteractQueue:^{
@@ -2808,7 +2808,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                               next:(NSString * _Nullable)next
                           callback:(void (^)(NSArray<NSString *> *, NSString *, NSError *))callback
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return;
     }
@@ -2833,7 +2833,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         commandWrapper;
     });
     
-    [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
+    [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
             [client invokeInUserInteractQueue:^{
@@ -2858,7 +2858,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 - (AVIMMessage *)process_direct:(AVIMDirectCommand *)directCommand messageId:(NSString *)messageId isTransientMsg:(BOOL)isTransientMsg
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return nil;
     }
@@ -2920,7 +2920,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 - (NSInteger)process_unread:(AVIMUnreadTuple *)unreadTuple
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return -1;
     }
@@ -2983,7 +2983,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 - (AVIMMessage *)process_patch_modified:(AVIMPatchItem *)patchItem
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return nil;
     }
@@ -3031,7 +3031,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 - (AVIMMessage *)process_rcp:(AVIMRcpCommand *)rcpCommand isReadRcp:(BOOL)isReadRcp
 {
-    AVIMClient *client = self.imClient;
+    LCIMClient *client = self.imClient;
     if (!client) {
         return nil;
     }

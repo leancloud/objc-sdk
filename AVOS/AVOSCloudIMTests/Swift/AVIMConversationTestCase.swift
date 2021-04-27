@@ -18,7 +18,7 @@ class AVIMConversationTestCase: LCIMTestBase {
         let clientId2: String = String(#function[..<#function.firstIndex(of: "(")!]) + "2"
         
         let delegate1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
-        guard let client1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1, delegate: delegate1) else {
+        guard let client1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1, delegate: delegate1) else {
             XCTFail()
             return
         }
@@ -43,7 +43,7 @@ class AVIMConversationTestCase: LCIMTestBase {
             }, failure: { XCTFail("timeout") })
         }
         
-        let client2: AVIMClient = try! AVIMClient(clientId: clientId2, error: ())
+        let client2: LCIMClient = try! LCIMClient(clientId: clientId2, error: ())
         let delegate2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
         client2.delegate = delegate2
         
@@ -260,12 +260,12 @@ class AVIMConversationTestCase: LCIMTestBase {
         let clientId1: String = String(#function[..<#function.firstIndex(of: "(")!]) + "1"
         let clientId2: String = String(#function[..<#function.firstIndex(of: "(")!]) + "2"
         
-        guard let client1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1) else {
+        guard let client1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1) else {
             XCTFail()
             return
         }
         
-        guard let client2: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId2) else {
+        guard let client2: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId2) else {
             XCTFail()
             return
         }
@@ -320,7 +320,7 @@ class AVIMConversationTestCase: LCIMTestBase {
         let clientId2: String = String(#function[..<#function.firstIndex(of: "(")!]) + "2"
         
         let delegate1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
-        guard let client1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1, delegate: delegate1) else {
+        guard let client1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1, delegate: delegate1) else {
             XCTFail()
             return
         }
@@ -330,7 +330,7 @@ class AVIMConversationTestCase: LCIMTestBase {
         LCRTMConnectionManager.shared().imProtobuf3Registry.removeAllObjects()
         
         let delegate2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
-        guard let _: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId2, delegate: delegate2) else {
+        guard let _: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId2, delegate: delegate2) else {
             XCTFail()
             return
         }
@@ -383,7 +383,7 @@ class AVIMConversationTestCase: LCIMTestBase {
         let clientId1: String = String(#function[..<#function.firstIndex(of: "(")!]) + "1"
         let clientId2: String = String(#function[..<#function.firstIndex(of: "(")!]) + "2"
         
-        guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1) else {
+        guard let client: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1) else {
             XCTFail()
             return
         }
@@ -421,7 +421,7 @@ class AVIMConversationTestCase: LCIMTestBase {
         let clientId1: String = "\(#function[..<#function.firstIndex(of: "(")!])" + "1"
         let clientId2: String = "\(#function[..<#function.firstIndex(of: "(")!])" + "2"
         
-        guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1) else {
+        guard let client: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1) else {
             XCTFail()
             return
         }
@@ -478,19 +478,19 @@ class AVIMConversationTestCase: LCIMTestBase {
         let clientId3: String = String(#function[..<#function.firstIndex(of: "(")!]) + "3"
         
         let delegate1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
-        guard let client1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1, delegate: delegate1) else {
+        guard let client1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1, delegate: delegate1) else {
             XCTFail()
             return
         }
         
         let delegate2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
-        guard let _: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId2, delegate: delegate2) else {
+        guard let _: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId2, delegate: delegate2) else {
             XCTFail()
             return
         }
         
         let delegate3: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
-        guard let _: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId3, delegate: delegate3) else {
+        guard let _: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId3, delegate: delegate3) else {
             XCTFail()
             return
         }
@@ -556,19 +556,19 @@ class AVIMConversationTestCase: LCIMTestBase {
         let clientId4: String = String(#function[..<#function.firstIndex(of: "(")!]) + "4"
         
         let delegate1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
-        guard let client1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1, delegate: delegate1) else {
+        guard let client1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1, delegate: delegate1) else {
             XCTFail()
             return
         }
         
         let delegate2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
-        guard let _: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId2, delegate: delegate2) else {
+        guard let _: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId2, delegate: delegate2) else {
             XCTFail()
             return
         }
         
         let delegate3: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
-        guard let _: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId3, delegate: delegate3) else {
+        guard let _: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId3, delegate: delegate3) else {
             XCTFail()
             return
         }
@@ -662,19 +662,19 @@ class AVIMConversationTestCase: LCIMTestBase {
         let clientId4: String = String(#function[..<#function.firstIndex(of: "(")!]) + "4"
         
         let delegate1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
-        guard let client1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1, delegate: delegate1) else {
+        guard let client1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1, delegate: delegate1) else {
             XCTFail()
             return
         }
         
         let delegate2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
-        guard let _: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId2, delegate: delegate2) else {
+        guard let _: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId2, delegate: delegate2) else {
             XCTFail()
             return
         }
         
         let delegate3: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
-        guard let _: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId3, delegate: delegate3) else {
+        guard let _: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId3, delegate: delegate3) else {
             XCTFail()
             return
         }

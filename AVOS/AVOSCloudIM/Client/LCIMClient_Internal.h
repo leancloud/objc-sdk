@@ -6,10 +6,10 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMClient.h"
+#import "LCIMClient.h"
 #import "LCIMCommon_Internal.h"
 #import "LCRTMConnection.h"
-#import "AVIMClientInternalConversationManager_Internal.h"
+#import "LCIMClientInternalConversationManager_Internal.h"
 #import "AVIMSignature.h"
 #import "LCIMConversationCache.h"
 
@@ -29,11 +29,11 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 @property (nonatomic) AVIMGenericCommand *outCommand;
 @property (nonatomic) AVIMGenericCommand *inCommand;
 @property (nonatomic) NSError *error;
-@property (nonatomic) void (^callback)(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper);
+@property (nonatomic) void (^callback)(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper);
 
 @end
 
-@interface AVIMClient () <LCRTMConnectionDelegate>
+@interface LCIMClient () <LCRTMConnectionDelegate>
 
 @property (nonatomic, readonly) int64_t sessionConfigBitmap;
 @property (nonatomic, readonly) NSLock *lock;
@@ -44,7 +44,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 @property (nonatomic, readonly) LCRTMServiceConsumer *serviceConsumer;
 @property (nonatomic, readonly) LCRTMConnectionDelegator *connectionDelegator;
 @property (nonatomic, readonly) LCInstallation *installation;
-@property (nonatomic, readonly) AVIMClientInternalConversationManager *conversationManager;
+@property (nonatomic, readonly) LCIMClientInternalConversationManager *conversationManager;
 @property (nonatomic, readonly) LCIMConversationCache *conversationCache;
 
 @property (nonatomic) void (^openingCompletion)(BOOL, NSError *);
@@ -67,7 +67,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
                 installation:(LCInstallation *)installation
                        error:(NSError * __autoreleasing *)error LC_WARN_UNUSED_RESULT;
 
-- (void)addOperationToInternalSerialQueue:(void (^)(AVIMClient *client))block;
+- (void)addOperationToInternalSerialQueue:(void (^)(LCIMClient *client))block;
 - (void)invokeInUserInteractQueue:(void (^)(void))block;
 - (void)invokeDelegateInUserInteractQueue:(void (^)(id<LCIMClientDelegate> delegate))block;
 

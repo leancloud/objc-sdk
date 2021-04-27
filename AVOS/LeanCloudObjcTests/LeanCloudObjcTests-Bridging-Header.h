@@ -7,5 +7,5 @@
 #import "LCApplication_Internal.h"
 #import "LCRouter_Internal.h"
 #import "LCPaasClient_internal.h"
-#import "AVIMClient_Internal.h"
+#import "LCIMClient_Internal.h"
 #import "LCRTMConnection_Internal.h"

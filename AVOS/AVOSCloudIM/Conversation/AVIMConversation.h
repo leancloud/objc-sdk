@@ -10,7 +10,7 @@
 #import "AVIMMessage.h"
 #import "AVIMMessageOption.h"
 
-@class AVIMClient;
+@class LCIMClient;
 @class AVIMKeyedConversation;
 @class AVIMRecalledMessage;
 @class AVIMConversationMemberInfo;
@@ -155,9 +155,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readonly) BOOL muted;
 
 /**
- *  The AVIMClient object which this conversation belongs to.
+ *  The LCIMClient object which this conversation belongs to.
  */
-@property (nonatomic, weak, readonly, nullable) AVIMClient *imClient;
+@property (nonatomic, weak, readonly, nullable) LCIMClient *imClient;
 
 @property (nonatomic, strong, readonly, nullable) NSDate *createAt
 __deprecated_msg("Deprecated, use `AVIMConversation.createdAt` instead.");

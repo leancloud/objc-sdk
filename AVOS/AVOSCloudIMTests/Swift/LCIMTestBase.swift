@@ -17,7 +17,7 @@ class LCIMTestBase: LCTestBase {
         if let RTMServerURL: String = LCTestEnvironment.sharedInstance().url_RTMServer {
             AVOSCloudIM.defaultOptions().rtmServer = RTMServerURL
         }
-        AVIMClient.setUnreadNotificationEnabled(true)
+        LCIMClient.setUnreadNotificationEnabled(true)
     }
     
     override class func tearDown() {
@@ -45,7 +45,7 @@ class LCIMTestBase: LCTestBase {
 
 extension LCIMTestBase {
     
-    static var clientDustbin: [AVIMClient] = []
+    static var clientDustbin: [LCIMClient] = []
     
     static func newOpenedClient(
         clientId: String,
@@ -53,9 +53,9 @@ extension LCIMTestBase {
         delegate: LCIMClientDelegate? = nil,
         installation: LCInstallation = LCInstallation.default(),
         openOption: LCIMClientOpenOption = .forceOpen
-        ) -> AVIMClient?
+        ) -> LCIMClient?
     {
-        var client: AVIMClient! = try! AVIMClient(clientId: clientId, tag: tag, installation: installation)
+        var client: LCIMClient! = try! LCIMClient(clientId: clientId, tag: tag, installation: installation)
         if let delegate: LCIMClientDelegate = delegate {
             client.delegate = delegate
         }
@@ -73,7 +73,7 @@ extension LCIMTestBase {
     }
     
     static func newConversation(
-        client: AVIMClient,
+        client: LCIMClient,
         clientIds: [String],
         name: String? = nil,
         attributes: [AnyHashable : Any]? = nil,
@@ -96,27 +96,27 @@ extension LCIMTestBase {
 
 class LCIMClientDelegateWrapper: NSObject, LCIMClientDelegate {
     
-    func imClientPaused(_ imClient: AVIMClient, error: Error?) {
+    func imClientPaused(_ imClient: LCIMClient, error: Error?) {
         
     }
     
-    var pausedClosure: ((AVIMClient) -> Void)?
-    func imClientPaused(_ imClient: AVIMClient) {
+    var pausedClosure: ((LCIMClient) -> Void)?
+    func imClientPaused(_ imClient: LCIMClient) {
         self.pausedClosure?(imClient)
     }
     
-    var resumingClosure: ((AVIMClient) -> Void)?
-    func imClientResuming(_ imClient: AVIMClient) {
+    var resumingClosure: ((LCIMClient) -> Void)?
+    func imClientResuming(_ imClient: LCIMClient) {
         self.resumingClosure?(imClient)
     }
     
-    var resumedClosure: ((AVIMClient) -> Void)?
-    func imClientResumed(_ imClient: AVIMClient) {
+    var resumedClosure: ((LCIMClient) -> Void)?
+    func imClientResumed(_ imClient: LCIMClient) {
         self.resumedClosure?(imClient)
     }
     
-    var closedClosure: ((AVIMClient, Error?) -> Void)?
-    func imClientClosed(_ imClient: AVIMClient, error: Error?) {
+    var closedClosure: ((LCIMClient, Error?) -> Void)?
+    func imClientClosed(_ imClient: LCIMClient, error: Error?) {
         self.closedClosure?(imClient, error)
     }
     
@@ -130,8 +130,8 @@ class LCIMClientDelegateWrapper: NSObject, LCIMClientDelegate {
         self.didReceiveCommonMessageClosure?(conversation, message)
     }
     
-    var didOfflineClosure: ((AVIMClient, Error?) -> Void)?
-    func client(_ client: AVIMClient, didOfflineWithError error: Error?) {
+    var didOfflineClosure: ((LCIMClient, Error?) -> Void)?
+    func client(_ client: LCIMClient, didOfflineWithError error: Error?) {
         self.didOfflineClosure?(client, error)
     }
     

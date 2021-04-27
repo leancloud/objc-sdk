@@ -28,13 +28,13 @@ class IMMessageTestCase: RTMBaseTestCase {
             return
         }
         
-        let delegator1 = AVIMClientDelegator()
+        let delegator1 = LCIMClientDelegator()
         client1.delegate = delegator1
-        let delegator2 = AVIMClientDelegator()
+        let delegator2 = LCIMClientDelegator()
         client2.delegate = delegator2
-        let delegator3 = AVIMClientDelegator()
+        let delegator3 = LCIMClientDelegator()
         client3.delegate = delegator3
-        let delegator4 = AVIMClientDelegator()
+        let delegator4 = LCIMClientDelegator()
         client4.delegate = delegator4
         var chatRoom1: AVIMChatRoom?
         var chatRoom2: AVIMChatRoom?
@@ -121,13 +121,13 @@ extension IMMessageTestCase {
     
     func newOpenedClient(
         clientID: String? = nil,
-        clientIDSuffix: String? = nil) -> AVIMClient?
+        clientIDSuffix: String? = nil) -> LCIMClient?
     {
         var ID = clientID ?? uuid
         if let suffix = clientIDSuffix {
             ID += "-\(suffix)"
         }
-        var client: AVIMClient? = try! AVIMClient(clientId: ID, error: ())
+        var client: LCIMClient? = try! LCIMClient(clientId: ID, error: ())
         expecting { (exp) in
             client?.open(callback: { (success, error) in
                 XCTAssertTrue(success)

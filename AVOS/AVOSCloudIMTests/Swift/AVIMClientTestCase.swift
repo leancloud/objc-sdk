@@ -1,5 +1,5 @@
 //
-//  AVIMClientTestCase.swift
+//  LCIMClientTestCase.swift
 //  AVOS
 //
 //  Created by zapcannon87 on 2018/4/11.
@@ -8,13 +8,13 @@
 
 import XCTest
 
-class AVIMClientTestCase: LCIMTestBase {
+class LCIMClientTestCase: LCIMTestBase {
     
     // MARK: - Server Testing
     
     func tests_session_open_close() {
         LCRouter.sharedInstance().cleanCache(with: .default(), key: .RTM, error: nil)
-        var client: AVIMClient! = AVIMClient(clientId: String(#function[..<#function.firstIndex(of: "(")!]))
+        var client: LCIMClient! = LCIMClient(clientId: String(#function[..<#function.firstIndex(of: "(")!]))
         let delegate: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
         client.delegate = delegate
         
@@ -47,8 +47,8 @@ class AVIMClientTestCase: LCIMTestBase {
         let tag: String = "tag"
         
         let delegate1 = LCIMClientDelegateWrapper()
-        var client1: AVIMClient! = {
-            let client: AVIMClient = try! AVIMClient(clientId: clientId, tag: tag, installation: LCInstallation())
+        var client1: LCIMClient! = {
+            let client: LCIMClient = try! LCIMClient(clientId: clientId, tag: tag, installation: LCInstallation())
             client.installation.setDeviceTokenHexString(UUID().uuidString, teamId: "LeanCloud")
             client.delegate = delegate1
             return client
@@ -70,15 +70,15 @@ class AVIMClientTestCase: LCIMTestBase {
             LCRTMConnectionManager.shared().imProtobuf1Registry.removeAllObjects()
             LCRTMConnectionManager.shared().imProtobuf3Registry.removeAllObjects()
             
-            var client2: AVIMClient! = {
-                let client: AVIMClient = try! AVIMClient(clientId: clientId, tag: tag, installation: LCInstallation())
+            var client2: LCIMClient! = {
+                let client: LCIMClient = try! LCIMClient(clientId: clientId, tag: tag, installation: LCInstallation())
                 client.installation.setDeviceTokenHexString(UUID().uuidString, teamId: "LeanCloud")
                 return client
             }()
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 semaphore.increment(2)
-                delegate1.didOfflineClosure = { (client: AVIMClient, error: Error?) in
+                delegate1.didOfflineClosure = { (client: LCIMClient, error: Error?) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.sessionConflict.rawValue)
@@ -110,7 +110,7 @@ class AVIMClientTestCase: LCIMTestBase {
     
     func tests_session_refresh() {
         
-        guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: String(#function[..<#function.firstIndex(of: "(")!])) else {
+        guard let client: LCIMClient = LCIMTestBase.newOpenedClient(clientId: String(#function[..<#function.firstIndex(of: "(")!])) else {
             XCTFail()
             return
         }
@@ -143,7 +143,7 @@ class AVIMClientTestCase: LCIMTestBase {
         let clientId1: String = String(#function[..<#function.firstIndex(of: "(")!]) + "1"
         let clientId2: String = String(#function[..<#function.firstIndex(of: "(")!]) + "2"
         
-        guard let client1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1) else {
+        guard let client1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1) else {
             XCTFail()
             return
         }
@@ -160,7 +160,7 @@ class AVIMClientTestCase: LCIMTestBase {
             })
         }, failure: { XCTFail("timeout") })
         
-        guard let client2: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId2) else {
+        guard let client2: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId2) else {
             XCTFail()
             return
         }
@@ -185,7 +185,7 @@ class AVIMClientTestCase: LCIMTestBase {
         let clientId2: String = String(#function[..<#function.firstIndex(of: "(")!]) + "2"
         let clientId3: String = String(#function[..<#function.firstIndex(of: "(")!]) + "3"
         
-        guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1) else {
+        guard let client: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1) else {
             XCTFail()
             return
         }
@@ -232,7 +232,7 @@ class AVIMClientTestCase: LCIMTestBase {
     func tests_conv_batch_query() {
         
         let clientId: String = String(#function[..<#function.firstIndex(of: "(")!])
-        guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId) else {
+        guard let client: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId) else {
             XCTFail()
             return
         }
@@ -308,7 +308,7 @@ class AVIMClientTestCase: LCIMTestBase {
         
         let installation: LCInstallation = LCInstallation()
         installation.setDeviceTokenHexString(UUID().uuidString, teamId: "LeanCloud")
-        guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: String(#function[..<#function.firstIndex(of: "(")!]), installation: installation) else {
+        guard let client: LCIMClient = LCIMTestBase.newOpenedClient(clientId: String(#function[..<#function.firstIndex(of: "(")!]), installation: installation) else {
             XCTFail()
             return
         }
@@ -342,7 +342,7 @@ class AVIMClientTestCase: LCIMTestBase {
             AVOSCloudIM.defaultOptions().rtmServer = nil;
         }
         
-        guard let client: AVIMClient = LCIMTestBase.newOpenedClient(clientId: String(#function[..<#function.firstIndex(of: "(")!])) else {
+        guard let client: LCIMClient = LCIMTestBase.newOpenedClient(clientId: String(#function[..<#function.firstIndex(of: "(")!])) else {
             XCTFail()
             return
         }

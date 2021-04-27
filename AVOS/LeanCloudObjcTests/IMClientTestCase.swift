@@ -13,23 +13,23 @@ class IMClientTestCase: RTMBaseTestCase {
     
     func testInitAndDealloc() {
         let peerID = uuid
-        var client: AVIMClient? = try! AVIMClient(clientId: peerID, error: ())
+        var client: LCIMClient? = try! LCIMClient(clientId: peerID, error: ())
         do {
-            _ = try AVIMClient(clientId: peerID, error: ())
+            _ = try LCIMClient(clientId: peerID, error: ())
             XCTFail()
         } catch {
             XCTAssertEqual((error as NSError).domain, kLeanCloudErrorDomain)
         }
         client = nil
-        client = try! AVIMClient(clientId: peerID, error: ())
+        client = try! LCIMClient(clientId: peerID, error: ())
         XCTAssertNotNil(client)
     }
     
     func testSessionConflict() {
         let peerID = uuid
         let tag = "SessionConflict"
-        let client1 = try! AVIMClient(clientId: peerID, tag: tag, error: ())
-        let delegator1 = AVIMClientDelegator()
+        let client1 = try! LCIMClient(clientId: peerID, tag: tag, error: ())
+        let delegator1 = LCIMClientDelegator()
         client1.delegate = delegator1
         client1.currentDeviceToken = uuid
         expecting { (exp) in
@@ -41,8 +41,8 @@ class IMClientTestCase: RTMBaseTestCase {
             }
         }
         purgeConnectionRegistry()
-        let client2 = try! AVIMClient(clientId: peerID, tag: tag, error: ())
-        let delegator2 = AVIMClientDelegator()
+        let client2 = try! LCIMClient(clientId: peerID, tag: tag, error: ())
+        let delegator2 = LCIMClientDelegator()
         client2.delegate = delegator2
         client2.currentDeviceToken = uuid
         expecting(
@@ -108,8 +108,8 @@ class IMClientTestCase: RTMBaseTestCase {
     }
     
     func testSessionTokenExpired() {
-        let client = try! AVIMClient(clientId: uuid, error: ())
-        let delegator = AVIMClientDelegator()
+        let client = try! LCIMClient(clientId: uuid, error: ())
+        let delegator = LCIMClientDelegator()
         client.delegate = delegator
         expecting { (exp) in
             client.open { (success, error) in
@@ -139,7 +139,7 @@ class IMClientTestCase: RTMBaseTestCase {
     
     func testReportDeviceToken() {
         let installation = LCInstallation.default()
-        let client = try! AVIMClient(clientId: uuid, error: ())
+        let client = try! LCIMClient(clientId: uuid, error: ())
         XCTAssertTrue(installation === client.installation)
         expecting { (exp) in
             client.open { (success, error) in
@@ -152,7 +152,7 @@ class IMClientTestCase: RTMBaseTestCase {
         var observer: NSObjectProtocol?
         expecting { (exp) in
             observer = NotificationCenter.default.addObserver(
-                forName: NSNotification.Name(rawValue: "Test.AVIMClient.reportDeviceToken"),
+                forName: NSNotification.Name(rawValue: "Test.LCIMClient.reportDeviceToken"),
                 object: nil,
                 queue: .main)
             { (notification) in
@@ -166,7 +166,7 @@ class IMClientTestCase: RTMBaseTestCase {
     }
 }
 
-class AVIMClientDelegator: NSObject, LCIMClientDelegate {
+class LCIMClientDelegator: NSObject, LCIMClientDelegate {
     
     func reset() {
         resuming = nil
@@ -177,28 +177,28 @@ class AVIMClientDelegator: NSObject, LCIMClientDelegate {
         didReceiveTypedMessage = nil
     }
     
-    var resuming: ((AVIMClient) -> Void)?
-    func imClientResuming(_ imClient: AVIMClient) {
+    var resuming: ((LCIMClient) -> Void)?
+    func imClientResuming(_ imClient: LCIMClient) {
         resuming?(imClient)
     }
     
-    var resumed: ((AVIMClient) -> Void)?
-    func imClientResumed(_ imClient: AVIMClient) {
+    var resumed: ((LCIMClient) -> Void)?
+    func imClientResumed(_ imClient: LCIMClient) {
         resumed?(imClient)
     }
     
-    var paused: ((AVIMClient, Error?) -> Void)?
-    func imClientPaused(_ imClient: AVIMClient, error: Error?) {
+    var paused: ((LCIMClient, Error?) -> Void)?
+    func imClientPaused(_ imClient: LCIMClient, error: Error?) {
         paused?(imClient, error)
     }
     
-    var closed: ((AVIMClient, Error?) -> Void)?
-    func imClientClosed(_ imClient: AVIMClient, error: Error?) {
+    var closed: ((LCIMClient, Error?) -> Void)?
+    func imClientClosed(_ imClient: LCIMClient, error: Error?) {
         closed?(imClient, error)
     }
     
-    var offline: ((AVIMClient, Error?) -> Void)?
-    func client(_ client: AVIMClient, didOfflineWithError error: Error?) {
+    var offline: ((LCIMClient, Error?) -> Void)?
+    func client(_ client: LCIMClient, didOfflineWithError error: Error?) {
         offline?(client, error)
     }
     

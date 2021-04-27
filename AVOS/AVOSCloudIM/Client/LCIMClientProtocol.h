@@ -8,7 +8,7 @@
 
 #import "LCIMCommon.h"
 
-@class AVIMClient;
+@class LCIMClient;
 @class AVIMConversation;
 @class AVIMMessage;
 @class AVIMTypedMessage;
@@ -31,15 +31,15 @@ NS_ASSUME_NONNULL_BEGIN
 ///
 /// @param imClient The client.
 /// @param error The reason for pause.
-- (void)imClientPaused:(AVIMClient *)imClient error:(NSError * _Nullable)error;
+- (void)imClientPaused:(LCIMClient *)imClient error:(NSError * _Nullable)error;
 
 /// Client in resuming, invoked when the client try recover connection automatically.
 /// @param imClient The client.
-- (void)imClientResuming:(AVIMClient *)imClient;
+- (void)imClientResuming:(LCIMClient *)imClient;
 
 /// Client resumed, means the client recover connection successfully.
 /// @param imClient The client.
-- (void)imClientResumed:(AVIMClient *)imClient;
+- (void)imClientResumed:(LCIMClient *)imClient;
 
 /// Client closed and will not try recover connection automatically.
 ///
@@ -49,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///
 /// @param imClient The client.
 /// @param error The reason for close.
-- (void)imClientClosed:(AVIMClient *)imClient error:(NSError * _Nullable)error;
+- (void)imClientClosed:(LCIMClient *)imClient error:(NSError * _Nullable)error;
 
 // MARK: Conversation
 
@@ -212,10 +212,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 // MARK: Deprecated
 
-- (void)imClientPaused:(AVIMClient *)imClient
+- (void)imClientPaused:(LCIMClient *)imClient
 __deprecated_msg("Deprecated, use `-[LCIMClientDelegate imClientPaused:error:]` instead.");
 
-- (void)client:(AVIMClient *)client didOfflineWithError:(NSError * _Nullable)error
+- (void)client:(LCIMClient *)client didOfflineWithError:(NSError * _Nullable)error
 __deprecated_msg("Deprecated, use `-[LCIMClientDelegate imClientClosed:error:]` instead.");
 
 - (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread

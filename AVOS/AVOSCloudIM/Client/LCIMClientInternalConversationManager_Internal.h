@@ -1,26 +1,26 @@
 //
-//  AVIMClientInternalConversationManager_Internal.h
+//  LCIMClientInternalConversationManager_Internal.h
 //  AVOS
 //
 //  Created by zapcannon87 on 2018/7/18.
 //  Copyright © 2018 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMClientInternalConversationManager.h"
+#import "LCIMClientInternalConversationManager.h"
 
-@class AVIMClient;
+@class LCIMClient;
 @class AVIMConversation;
 
-@interface AVIMClientInternalConversationManager ()
+@interface LCIMClientInternalConversationManager ()
 
 #if DEBUG
 @property (nonatomic, strong) dispatch_queue_t internalSerialQueue;
 #endif
-@property (nonatomic, weak) AVIMClient *client;
+@property (nonatomic, weak) LCIMClient *client;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableArray<void (^)(AVIMConversation *, NSError *)> *> *callbacksMap;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, AVIMConversation *> *conversationMap;
 
-- (instancetype)initWithClient:(AVIMClient *)client;
+- (instancetype)initWithClient:(LCIMClient *)client;
 
 - (void)insertConversation:(AVIMConversation *)conversation;
 - (AVIMConversation *)conversationForId:(NSString *)conversationId;

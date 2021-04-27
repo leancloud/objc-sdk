@@ -1,5 +1,5 @@
 //
-//  AVIMClientInternalConversationManager.h
+//  LCIMClientInternalConversationManager.h
 //  AVOS
 //
 //  Created by zapcannon87 on 2018/7/18.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AVIMClientInternalConversationManager : NSObject
+@interface LCIMClientInternalConversationManager : NSObject
 
 /**
  Limit of client internal batch query for conversations.

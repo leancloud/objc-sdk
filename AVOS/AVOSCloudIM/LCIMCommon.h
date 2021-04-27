@@ -156,7 +156,7 @@ typedef void(^LCIMTemporaryConversationResultBlock)(AVIMTemporaryConversation * 
 typedef void(^LCIMProgressBlock)(NSInteger);
 
 FOUNDATION_EXPORT NSString * const LCIMUserOptionUseUnread
-__deprecated_msg("Deprecated, use `+[AVIMClient setUnreadNotificationEnabled:]` instead.");
+__deprecated_msg("Deprecated, use `+[LCIMClient setUnreadNotificationEnabled:]` instead.");
 FOUNDATION_EXPORT NSString * const AVIMUserOptionCustomProtocols
 __deprecated_msg("Deprecated, DO NOT use it any more.");
 

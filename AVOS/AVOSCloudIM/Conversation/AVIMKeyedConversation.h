@@ -13,7 +13,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- *  Represents a conversation which intends to be archived. Can get this object from AVIMConversation by -[AVIMConversation keyedConversation]. Can convert this object to AVIMConverstaion by -[AVIMClient conversationWithKeyedConversation:].
+ *  Represents a conversation which intends to be archived. Can get this object from AVIMConversation by -[AVIMConversation keyedConversation]. Can convert this object to AVIMConverstaion by -[LCIMClient conversationWithKeyedConversation:].
  */
 @interface AVIMKeyedConversation : NSObject <NSCoding>
 

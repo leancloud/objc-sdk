@@ -15,7 +15,7 @@
 @property (nonatomic, readonly) LCIMConvType convType;
 
 + (instancetype)conversationWithRawJSONData:(NSMutableDictionary *)rawJSONData
-                                     client:(AVIMClient *)client;
+                                     client:(LCIMClient *)client;
 
 - (void)setRawJSONData:(NSMutableDictionary *)rawJSONData;
 - (void)updateRawJSONDataWith:(NSDictionary *)dictionary;
