@@ -2,7 +2,7 @@
 // Copyright 2013 AVOS, Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
-#import "AVConstants.h"
+#import "LCConstants.h"
 #import "LCObject.h"
 #import "LCSubclassing.h"
 
@@ -82,7 +82,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 /*!
  Whether the user is an authenticated object with the given sessionToken.
  */
-- (void)isAuthenticatedWithSessionToken:(NSString *)sessionToken callback:(AVBooleanResultBlock)callback;
+- (void)isAuthenticatedWithSessionToken:(NSString *)sessionToken callback:(LCBooleanResultBlock)callback;
 
 /** @name Creating a New User */
 
@@ -134,7 +134,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  *  @param email 邮件地址
  *  @param block 回调结果
  */
-+(void)requestEmailVerify:(NSString*)email withBlock:(AVBooleanResultBlock)block;
++(void)requestEmailVerify:(NSString*)email withBlock:(LCBooleanResultBlock)block;
 
 /*!
  Get roles which current user belongs to.
@@ -175,7 +175,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  Signs up the user asynchronously. Make sure that password and username are set. This will also enforce that the username isn't already taken.
  @param block The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error) 
  */
-- (void)signUpInBackgroundWithBlock:(AVBooleanResultBlock)block;
+- (void)signUpInBackgroundWithBlock:(LCBooleanResultBlock)block;
 
 /*!
  用旧密码来更新密码。在 3.1.6 之后，更新密码成功之后不再需要强制用户重新登录，仍然保持登录状态。
@@ -184,14 +184,14 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  @param block 完成时的回调，有以下签名 (id object, NSError *error)
  @warning 此用户必须登录且同时提供了新旧密码，否则不能更新成功。
  */
-- (void)updatePassword:(NSString *)oldPassword newPassword:(NSString *)newPassword block:(AVIdResultBlock)block;
+- (void)updatePassword:(NSString *)oldPassword newPassword:(NSString *)newPassword block:(LCIdResultBlock)block;
 
 /*!
  Refresh user session token asynchronously.
 
  @param block The callback of request.
  */
-- (void)refreshSessionTokenWithBlock:(AVBooleanResultBlock)block;
+- (void)refreshSessionTokenWithBlock:(LCBooleanResultBlock)block;
 
 /*!
  Makes a request to login a user with specified credentials. Returns an
@@ -254,7 +254,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  *  @param phoneNumber 11位电话号码
  *  @param block 回调结果
  */
-+(void)requestLoginSmsCode:(NSString *)phoneNumber withBlock:(AVBooleanResultBlock)block;
++(void)requestLoginSmsCode:(NSString *)phoneNumber withBlock:(LCBooleanResultBlock)block;
 
 /**
  Request a login code for a phone number.
@@ -265,7 +265,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  */
 + (void)requestLoginCodeForPhoneNumber:(NSString *)phoneNumber
                                options:(nullable LCUserShortMessageRequestOptions *)options
-                              callback:(AVBooleanResultBlock)callback;
+                              callback:(LCBooleanResultBlock)callback;
 
 /*!
  *  使用手机号码和验证码登录
@@ -353,7 +353,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  @param block The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error) 
  */
 + (void)requestPasswordResetForEmailInBackground:(NSString *)email
-                                           block:(AVBooleanResultBlock)block;
+                                           block:(LCBooleanResultBlock)block;
 
 /*!
  *  使用手机号请求密码重置，需要用户绑定手机号码
@@ -362,7 +362,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  *  @param block 回调结果
  */
 +(void)requestPasswordResetWithPhoneNumber:(NSString *)phoneNumber
-                                     block:(AVBooleanResultBlock)block;
+                                     block:(LCBooleanResultBlock)block;
 
 /**
  Request a password reset code for a phone number.
@@ -373,7 +373,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  */
 + (void)requestPasswordResetCodeForPhoneNumber:(NSString *)phoneNumber
                                        options:(nullable LCUserShortMessageRequestOptions *)options
-                                      callback:(AVBooleanResultBlock)callback;
+                                      callback:(LCBooleanResultBlock)callback;
 
 /*!
  *  使用验证码重置密码
@@ -383,7 +383,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  */
 +(void)resetPasswordWithSmsCode:(NSString *)code
                     newPassword:(NSString *)password
-                          block:(AVBooleanResultBlock)block;
+                          block:(LCBooleanResultBlock)block;
 
 /*!
  *  用 sessionToken 来登录用户

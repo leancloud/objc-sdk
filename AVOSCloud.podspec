@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
     'AVOS/AVOSCloud/ACL/AVRole.h',
     'AVOS/AVOSCloud/Object/LCSaveOption.h',
     'AVOS/AVOSCloud/Analytics/AVAnalytics.h',
-    'AVOS/AVOSCloud/AVConstants.h',
+    'AVOS/AVOSCloud/LCConstants.h',
     'AVOS/AVOSCloud/AVOSCloud.h',
     'AVOS/AVOSCloud/CloudCode/LCCloud.h',
     'AVOS/AVOSCloud/File/LCFile.h',
@@ -51,13 +51,13 @@ Pod::Spec.new do |s|
     'AVOS/AVOSCloud/User/LCUser.h',
     'AVOS/AVOSCloud/Utils/LCLogger.h',
     'AVOS/AVOSCloud/Router/LCRouter.h',
-    'AVOS/AVOSCloud/AVAvailability.h'
+    'AVOS/AVOSCloud/LCAvailability.h'
 
   s.watchos.exclude_files =
     'AVOS/AVOSCloud/Analytics/*.{h,m}'
 
   s.resources =
-    'AVOS/AVOSCloud/AVOSCloud_Art.inc'
+    'AVOS/AVOSCloud/LeanCloud_Art.inc'
     
   s.library =
     'sqlite3'

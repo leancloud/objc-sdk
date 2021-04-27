@@ -19,7 +19,7 @@
 - (NSString *)queryPath;
 -(void)queryWithBlock:(NSString *)path
            parameters:(NSDictionary *)parameters
-                block:(AVArrayResultBlock)resultBlock;
+                block:(LCArrayResultBlock)resultBlock;
 - (LCObject *)getFirstObjectWithBlock:(LCObjectResultBlock)resultBlock
                         waitUntilDone:(BOOL)wait
                                 error:(NSError **)theError;

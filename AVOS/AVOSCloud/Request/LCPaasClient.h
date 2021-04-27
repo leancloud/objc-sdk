@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVConstants.h"
+#import "LCConstants.h"
 #import "LCACL.h"
 #import "UserAgent.h"
 
@@ -59,41 +59,41 @@ FOUNDATION_EXPORT NSString *const LCHeaderFieldNameProduction;
 
 - (void)getObject:(NSString *)path
    withParameters:(NSDictionary *)parameters
-            block:(AVIdResultBlock)block;
+            block:(LCIdResultBlock)block;
 
 - (void)getObject:(NSString *)path
    withParameters:(NSDictionary *)parameters
-           policy:(AVCachePolicy)policy
+           policy:(LCCachePolicy)policy
       maxCacheAge:(NSTimeInterval)maxCacheAge
-            block:(AVIdResultBlock)block;
+            block:(LCIdResultBlock)block;
 
 -(void)putObject:(NSString *)path
   withParameters:(NSDictionary *)parameters
     sessionToken:(NSString *)sessionToken
-           block:(AVIdResultBlock)block;
+           block:(LCIdResultBlock)block;
 
--(void)postBatchObject:(NSArray *)parameterArray block:(AVArrayResultBlock)block;
--(void)postBatchObject:(NSArray *)parameterArray headerMap:(NSDictionary *)headerMap eventually:(BOOL)isEventually block:(AVArrayResultBlock)block;
+-(void)postBatchObject:(NSArray *)parameterArray block:(LCArrayResultBlock)block;
+-(void)postBatchObject:(NSArray *)parameterArray headerMap:(NSDictionary *)headerMap eventually:(BOOL)isEventually block:(LCArrayResultBlock)block;
 
--(void)postBatchSaveObject:(NSArray *)parameterArray headerMap:(NSDictionary *)headerMap eventually:(BOOL)isEventually block:(AVIdResultBlock)block;
+-(void)postBatchSaveObject:(NSArray *)parameterArray headerMap:(NSDictionary *)headerMap eventually:(BOOL)isEventually block:(LCIdResultBlock)block;
 
 -(void)postObject:(NSString *)path
   withParameters:(NSDictionary *)parameters
-           block:(AVIdResultBlock)block;
+           block:(LCIdResultBlock)block;
 
 -(void)postObject:(NSString *)path
    withParameters:(NSDictionary *)parameters
        eventually:(BOOL)isEventually
-            block:(AVIdResultBlock)block ;
+            block:(LCIdResultBlock)block ;
 
 -(void)deleteObject:(NSString *)path
      withParameters:(NSDictionary *)parameters
-              block:(AVIdResultBlock)block;
+              block:(LCIdResultBlock)block;
 
 - (void)deleteObject:(NSString *)path
       withParameters:(NSDictionary *)parameters
           eventually:(BOOL)isEventually
-               block:(AVIdResultBlock)block;
+               block:(LCIdResultBlock)block;
 
 - (NSString *)absoluteStringFromPath:(NSString *)path parameters:(NSDictionary *)parameters;
 

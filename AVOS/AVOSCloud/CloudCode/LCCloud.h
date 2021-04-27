@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVConstants.h"
+#import "LCConstants.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param parameters The parameters to send to the function.
  @param block The block to execute. The block should have the following argument signature:(id result, NSError *error).
  */
-+ (void)callFunctionInBackground:(NSString *)function withParameters:(nullable NSDictionary *)parameters block:(AVIdResultBlock)block;
++ (void)callFunctionInBackground:(NSString *)function withParameters:(nullable NSDictionary *)parameters block:(LCIdResultBlock)block;
 
 /*!
  Calls the given cloud function with the parameters passed in by RPC.
@@ -65,7 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param parameters The parameters to send to the function.
  @param block The block to execute. The block should have the following argument signature:(id result, NSError *error).
  */
-+ (void)rpcFunctionInBackground:(NSString *)function withParameters:(nullable id)parameters block:(AVIdResultBlock)block;
++ (void)rpcFunctionInBackground:(NSString *)function withParameters:(nullable id)parameters block:(LCIdResultBlock)block;
 
 /**
  *  Set call what production mode's cloud code

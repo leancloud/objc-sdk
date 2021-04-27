@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVAvailability.h"
+#import "LCAvailability.h"
 
 #define kAVSessionIdTag @"sessionId"
 #define kAVPrimaryKeyTag @"primaryKey"
@@ -40,6 +40,6 @@
 
 +(NSString *)safeString:(NSString *)string;
 
-+(NSString *)deviceId AV_WATCH_UNAVAILABLE AV_OSX_UNAVAILABLE;
++(NSString *)deviceId LC_WATCH_UNAVAILABLE LC_OSX_UNAVAILABLE;
 
 @end

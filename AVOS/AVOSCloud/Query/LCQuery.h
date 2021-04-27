@@ -483,7 +483,7 @@ typedef NS_ENUM(NSInteger, LCQueryDistanceUnit) {
 /*!
  Deprecated.  Please use [LCUser query] instead.
  */
-+ (instancetype)queryForUser AV_DEPRECATED("Use +[LCUser query] instead.");
++ (instancetype)queryForUser LC_DEPRECATED("Use +[LCUser query] instead.");
 
 #pragma mark -
 #pragma mark Find methods
@@ -513,13 +513,13 @@ typedef NS_ENUM(NSInteger, LCQueryDistanceUnit) {
  Finds objects asynchronously and calls the given block with the results.
  @param block The block to execute. The block should have the following argument signature:(NSArray *objects, NSError *error) 
  */
-- (void)findObjectsInBackgroundWithBlock:(AVArrayResultBlock)block;
+- (void)findObjectsInBackgroundWithBlock:(LCArrayResultBlock)block;
 
 /*!
  Remove objects asynchronously and calls the given block with the results.
  @param block The block to execute. The block should have the following argument signature:(NSArray *objects, NSError *error)
  */
-- (void)deleteAllInBackgroundWithBlock:(AVBooleanResultBlock)block;
+- (void)deleteAllInBackgroundWithBlock:(LCBooleanResultBlock)block;
 
 
 /** @name Getting the First Match in a Query */
@@ -587,7 +587,7 @@ typedef NS_ENUM(NSInteger, LCQueryDistanceUnit) {
  @param block The block to execute. The block should have the following argument signature:
  (int count, NSError *error) 
  */
-- (void)countObjectsInBackgroundWithBlock:(AVIntegerResultBlock)block;
+- (void)countObjectsInBackgroundWithBlock:(LCIntegerResultBlock)block;
 
 #pragma mark -
 #pragma mark Cancel methods
@@ -627,7 +627,7 @@ typedef NS_ENUM(NSInteger, LCQueryDistanceUnit) {
 /*!
  The cache policy to use for requests.
  */
-@property (readwrite, assign) AVCachePolicy cachePolicy;
+@property (readwrite, assign) LCCachePolicy cachePolicy;
 
 /* !
  The age(seconds) after which a cached value will be ignored.

@@ -10,8 +10,8 @@
 
 // Public headers
 
-#import "AVAvailability.h"
-#import "AVConstants.h"
+#import "LCAvailability.h"
+#import "LCConstants.h"
 #import "LCLogger.h"
 
 // Object
@@ -147,7 +147,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  开启LastModify支持, 减少流量消耗。默认关闭。
  *  @param enabled 开启
- *  @attention 该方法并不会修改任何LCQuery的缓存策略，缓存策略以当前LCQuery的设置为准。该方法仅在进行网络请求时生效。如果想发挥该函数的最大作用，建议在查询时，将缓存策略选择为kAVCachePolicyNetworkOnly
+ *  @attention 该方法并不会修改任何LCQuery的缓存策略，缓存策略以当前LCQuery的设置为准。该方法仅在进行网络请求时生效。如果想发挥该函数的最大作用，建议在查询时，将缓存策略选择为kLCCachePolicyNetworkOnly
  */
 + (void)setLastModifyEnabled:(BOOL)enabled;
 
@@ -239,7 +239,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (void)verifySmsCode:(NSString *)code
     mobilePhoneNumber:(NSString *)phoneNumber
-             callback:(AVBooleanResultBlock)callback;
+             callback:(LCBooleanResultBlock)callback;
 
 // MARK: Date
 
@@ -287,25 +287,25 @@ __deprecated_msg("No need any more, now it is NOP.");
 __deprecated_msg("No need any more, now it is NOP.");
 
 + (void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
-                             callback:(AVBooleanResultBlock)callback
+                             callback:(LCBooleanResultBlock)callback
 __deprecated_msg("Deprecated, `use +[LCSMS requestShortMessageForPhoneNumber:options:callback:]` instead.");
 
 + (void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
                               appName:(nullable NSString *)appName
                             operation:(nullable NSString *)operation
                            timeToLive:(NSUInteger)ttl
-                             callback:(AVBooleanResultBlock)callback
+                             callback:(LCBooleanResultBlock)callback
 __deprecated_msg("Deprecated, use `+[LCSMS requestShortMessageForPhoneNumber:options:callback:]` instead.");
 
 + (void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
                          templateName:(nullable NSString *)templateName
                             variables:(nullable NSDictionary *)variables
-                             callback:(AVBooleanResultBlock)callback
+                             callback:(LCBooleanResultBlock)callback
 __deprecated_msg("Deprecated, use `+[LCSMS requestShortMessageForPhoneNumber:options:callback:]` instead.");
 
 + (void)requestVoiceCodeWithPhoneNumber:(NSString *)phoneNumber
                                     IDD:(nullable NSString *)IDD
-                               callback:(AVBooleanResultBlock)callback
+                               callback:(LCBooleanResultBlock)callback
 __deprecated_msg("Deprecated, use `+[LCSMS requestShortMessageForPhoneNumber:options:callback:]` instead.");
 
 + (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken

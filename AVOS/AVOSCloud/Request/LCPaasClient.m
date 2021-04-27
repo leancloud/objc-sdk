@@ -20,7 +20,7 @@
 #import "LCObjectUtils.h"
 #import "LCNetworkStatistics.h"
 #import "LCRouter_Internal.h"
-#import "AVConstants.h"
+#import "LCConstants.h"
 
 static NSString * const kLC_code = @"code";
 static NSString * const kLC_error = @"error";
@@ -278,14 +278,14 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 - (void)getObject:(NSString *)path
    withParameters:(NSDictionary *)parameters
-            block:(AVIdResultBlock)block {
-    [self getObjectFromNetworkWithPath:path withParameters:parameters policy:kAVCachePolicyIgnoreCache block:block];
+            block:(LCIdResultBlock)block {
+    [self getObjectFromNetworkWithPath:path withParameters:parameters policy:kLCCachePolicyIgnoreCache block:block];
 }
 
 -(void)getObjectFromNetworkWithPath:(NSString *)path
                      withParameters:(NSDictionary *)parameters
-                             policy:(AVCachePolicy)policy
-                              block:(AVIdResultBlock)block
+                             policy:(LCCachePolicy)policy
+                              block:(LCIdResultBlock)block
 {
     NSURLRequest *request = [self requestWithPath:path method:@"GET" headers:nil parameters:parameters];
     
@@ -301,34 +301,34 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             }
         }];
     } else {
-        BOOL needCache = (policy != kAVCachePolicyIgnoreCache);
+        BOOL needCache = (policy != kLCCachePolicyIgnoreCache);
         [self performRequest:request saveResult:needCache block:block];
     }
 }
 
-- (void)getObject:(NSString *)path withParameters:(NSDictionary *)parameters policy:(AVCachePolicy)policy maxCacheAge:(NSTimeInterval)maxCacheAge block:(AVIdResultBlock)block {
+- (void)getObject:(NSString *)path withParameters:(NSDictionary *)parameters policy:(LCCachePolicy)policy maxCacheAge:(NSTimeInterval)maxCacheAge block:(LCIdResultBlock)block {
     
     NSString *key = [self absoluteStringFromPath:path parameters:parameters];
     
     switch (policy) {
-        case kAVCachePolicyIgnoreCache:
+        case kLCCachePolicyIgnoreCache:
         {
             [self getObjectFromNetworkWithPath:path withParameters:parameters policy:policy block:block];
         }
             break;
-        case kAVCachePolicyCacheOnly:
+        case kLCCachePolicyCacheOnly:
         {
             [[LCCacheManager sharedInstance] getWithKey:key maxCacheAge:maxCacheAge block:block];
         }
             break;
-        case kAVCachePolicyNetworkOnly:
+        case kLCCachePolicyNetworkOnly:
         {
             [self getObjectFromNetworkWithPath:path withParameters:parameters policy:policy block:^(id object, NSError *error) {
                 block(object, error);
             }];
         }
             break;
-        case kAVCachePolicyCacheElseNetwork:
+        case kLCCachePolicyCacheElseNetwork:
         {
             [[LCCacheManager sharedInstance] getWithKey:key maxCacheAge:maxCacheAge block:^(id object, NSError *error) {
                 if (error) {
@@ -339,7 +339,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             }];
         }
             break;
-        case kAVCachePolicyNetworkElseCache:
+        case kLCCachePolicyNetworkElseCache:
         {
             [self getObjectFromNetworkWithPath:path withParameters:parameters policy:policy block:^(id object, NSError *error) {
                 if (error) {
@@ -350,7 +350,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             }];
         }
             break;
-        case kAVCachePolicyCacheThenNetwork:
+        case kLCCachePolicyCacheThenNetwork:
         {
             [[LCCacheManager sharedInstance] getWithKey:key maxCacheAge:maxCacheAge block:^(id object, NSError *error) {
                 block(object, error);
@@ -383,7 +383,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 -(void)putObject:(NSString *)path
   withParameters:(NSDictionary *)parameters
     sessionToken:(NSString *)sessionToken
-           block:(AVIdResultBlock)block
+           block:(LCIdResultBlock)block
 {
     NSMutableURLRequest *request = [self requestWithPath:path method:@"PUT" headers:nil parameters:parameters];
     
@@ -394,16 +394,16 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     [self performRequest:request saveResult:NO block:block];
 }
 
--(void)postBatchObject:(NSArray *)parameterArray block:(AVArrayResultBlock)block {
+-(void)postBatchObject:(NSArray *)parameterArray block:(LCArrayResultBlock)block {
     [self postBatchObject:parameterArray headerMap:nil eventually:NO block:block];
 }
 
--(void)postBatchObject:(NSArray *)requests headerMap:(NSDictionary *)headerMap eventually:(BOOL)isEventually block:(AVArrayResultBlock)block {
+-(void)postBatchObject:(NSArray *)requests headerMap:(NSDictionary *)headerMap eventually:(BOOL)isEventually block:(LCArrayResultBlock)block {
     NSString *path = [LCObjectUtils batchPath];
     NSDictionary *parameters = @{@"requests": requests ?: @[]};
     NSMutableURLRequest *request = [self requestWithPath:path method:@"POST" headers:headerMap parameters:parameters];
     
-    AVIdResultBlock handleResultBlock = ^(NSArray *objects, NSError *error) {
+    LCIdResultBlock handleResultBlock = ^(NSArray *objects, NSError *error) {
         // 区分某个删除失败还是网络请求失败，两种情况 error 都不为空
         if (objects.count != requests.count) {
             // 网络请求失败，子操作数量不一致
@@ -447,7 +447,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     }
 }
 
--(void)postBatchSaveObject:(NSArray *)requests headerMap:(NSDictionary *)headerMap eventually:(BOOL)isEventually block:(AVIdResultBlock)block {
+-(void)postBatchSaveObject:(NSArray *)requests headerMap:(NSDictionary *)headerMap eventually:(BOOL)isEventually block:(LCIdResultBlock)block {
     NSString *path = [LCObjectUtils batchSavePath];
     NSDictionary *parameters = @{@"requests": requests};
     NSMutableURLRequest *request = [self requestWithPath:path method:@"POST" headers:headerMap parameters:parameters];
@@ -462,12 +462,12 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 -(void)postObject:(NSString *)path
    withParameters:(NSDictionary *)parameters
-            block:(AVIdResultBlock)block
+            block:(LCIdResultBlock)block
 {
     [self postObject:path withParameters:parameters eventually:NO block:block];
 }
 
--(void)postObject:(NSString *)path withParameters:(NSDictionary *)parameters eventually:(BOOL)isEventually block:(AVIdResultBlock)block {
+-(void)postObject:(NSString *)path withParameters:(NSDictionary *)parameters eventually:(BOOL)isEventually block:(LCIdResultBlock)block {
     NSMutableURLRequest *request = [self requestWithPath:path method:@"POST" headers:nil parameters:parameters];
     
     if (isEventually) {
@@ -480,12 +480,12 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 -(void)deleteObject:(NSString *)path
      withParameters:(NSDictionary *)parameters
-              block:(AVIdResultBlock)block
+              block:(LCIdResultBlock)block
 {
     [self deleteObject:path withParameters:parameters eventually:NO block:block];
 }
 
-- (void)deleteObject:(NSString *)path withParameters:(NSDictionary *)parameters eventually:(BOOL)isEventually block:(AVIdResultBlock)block {
+- (void)deleteObject:(NSString *)path withParameters:(NSDictionary *)parameters eventually:(BOOL)isEventually block:(LCIdResultBlock)block {
     NSMutableURLRequest *request = [self requestWithPath:path method:@"DELETE" headers:nil parameters:parameters];
     
     if (isEventually) {
@@ -498,11 +498,11 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 #pragma mark - The final method for network
 
-- (void)performRequest:(NSURLRequest *)request saveResult:(BOOL)saveResult block:(AVIdResultBlock)block {
+- (void)performRequest:(NSURLRequest *)request saveResult:(BOOL)saveResult block:(LCIdResultBlock)block {
     [self performRequest:request saveResult:saveResult block:block retryTimes:0];
 }
 
-- (void)performRequest:(NSURLRequest *)request saveResult:(BOOL)saveResult block:(AVIdResultBlock)block retryTimes:(NSInteger)retryTimes {
+- (void)performRequest:(NSURLRequest *)request saveResult:(BOOL)saveResult block:(LCIdResultBlock)block retryTimes:(NSInteger)retryTimes {
     NSURL *URL = request.URL;
     NSString *URLString = URL.absoluteString;
     NSMutableURLRequest *mutableRequest = [request mutableCopy];
@@ -727,7 +727,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     return userInfo && (userInfo[@"error"] || userInfo[@"code"]);
 }
 
-- (void)handleArchivedRequestAtPath:(NSString *)path block:(AVIdResultBlock)block {
+- (void)handleArchivedRequestAtPath:(NSString *)path block:(LCIdResultBlock)block {
     NSURLRequest *request = nil;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     

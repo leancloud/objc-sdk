@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "LCDynamicObject.h"
-#import "AVConstants.h"
+#import "LCConstants.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -88,7 +88,7 @@ typedef NS_ENUM(NSInteger, LCShortMessageType) {
  */
 + (void)requestShortMessageForPhoneNumber:(NSString *)phoneNumber
                                   options:(nullable LCShortMessageRequestOptions *)options
-                                 callback:(AVBooleanResultBlock)callback;
+                                 callback:(LCBooleanResultBlock)callback;
 
 @end
 

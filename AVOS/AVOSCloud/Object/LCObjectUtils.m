@@ -495,7 +495,7 @@
     }];
     NSArray * objects = @[localDataCopy, object._estimatedData];
     NSMutableDictionary * result = [NSMutableDictionary dictionary];
-    [result setObject:@"Object" forKey:kAVTypeTag];
+    [result setObject:@"Object" forKey:kLCTypeTag];
     
     for (NSDictionary *object in objects) {
         NSDictionary *dictionary = [object copy];

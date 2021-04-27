@@ -2,7 +2,7 @@
 // Copyright 2013 AVOS Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
-#import "AVConstants.h"
+#import "LCConstants.h"
 
 @class LCRelation;
 @class LCACL;
@@ -269,14 +269,14 @@ NS_ASSUME_NONNULL_BEGIN
  Saves the LCObject asynchronously and executes the given callback block.
  @param block The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
  */
-- (void)saveInBackgroundWithBlock:(AVBooleanResultBlock)block;
+- (void)saveInBackgroundWithBlock:(LCBooleanResultBlock)block;
 
 /*!
  * Saves the LCObject with option asynchronously and executes the given callback block.
  * @param option Option for current save.
  * @param block  The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
  */
-- (void)saveInBackgroundWithOption:(nullable LCSaveOption *)option block:(AVBooleanResultBlock)block;
+- (void)saveInBackgroundWithOption:(nullable LCSaveOption *)option block:(LCBooleanResultBlock)block;
 
 /*!
  * Saves the LCObject with option asynchronously and executes the given callback block.
@@ -284,7 +284,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param eventually Whether save in eventually or not.
  * @param block  The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
  */
-- (void)saveInBackgroundWithOption:(nullable LCSaveOption *)option eventually:(BOOL)eventually block:(AVBooleanResultBlock)block;
+- (void)saveInBackgroundWithOption:(nullable LCSaveOption *)option eventually:(BOOL)eventually block:(LCBooleanResultBlock)block;
 
 /*!
   @see saveEventually:
@@ -307,7 +307,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param callback The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
  */
-- (void)saveEventually:(AVBooleanResultBlock)callback;
+- (void)saveEventually:(LCBooleanResultBlock)callback;
 
 #pragma mark -
 #pragma mark Save All
@@ -341,7 +341,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param block The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
  */
 + (void)saveAllInBackground:(NSArray *)objects
-                      block:(AVBooleanResultBlock)block;
+                      block:(LCBooleanResultBlock)block;
 
 #pragma mark - Refresh
 
@@ -353,7 +353,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (BOOL)isDataAvailable;
 
-#if AV_IOS_ONLY
+#if LC_IOS_ONLY
 // Deprecated and intentionally not available on the new OS X SDK
 
 /*!
@@ -517,7 +517,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param block The block to execute. The block should have the following argument signature: (NSArray *objects, NSError *error)
  */
 + (void)fetchAllInBackground:(NSArray *)objects
-                       block:(AVArrayResultBlock)block;
+                       block:(LCArrayResultBlock)block;
 
 /*!
  Fetches all of the LCObjects with the current data from the server asynchronously and calls the given block.
@@ -525,7 +525,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param block The block to execute. The block should have the following argument signature: (NSArray *objects, NSError *error)
  */
 + (void)fetchAllIfNeededInBackground:(NSArray *)objects
-                               block:(AVArrayResultBlock)block;
+                               block:(LCArrayResultBlock)block;
 
 #pragma mark - Delete
 
@@ -559,7 +559,7 @@ NS_ASSUME_NONNULL_BEGIN
  Deletes the LCObject asynchronously and executes the given callback block.
  @param block The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
  */
-- (void)deleteInBackgroundWithBlock:(AVBooleanResultBlock)block;
+- (void)deleteInBackgroundWithBlock:(LCBooleanResultBlock)block;
 
 /*!
  Deletes this object from the server at some unspecified time in the future, even if LeanCloud is currently inaccessible.
@@ -580,7 +580,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param block The block to execute.
  */
-- (void)deleteEventuallyWithBlock:(AVIdResultBlock)block;
+- (void)deleteEventuallyWithBlock:(LCIdResultBlock)block;
 
 
 /*!
@@ -605,7 +605,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param block   The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
  */
 + (void)deleteAllInBackground:(NSArray *)objects
-                        block:(AVBooleanResultBlock)block;
+                        block:(LCBooleanResultBlock)block;
 
 #pragma mark - extension
 @property (nonatomic, readwrite) BOOL fetchWhenSave;
@@ -634,11 +634,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface LCObject (AVDeprecated)
 
-+ (instancetype)objectWithoutDataWithObjectId:(NSString *)objectId AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.9. Use +[LCObject objectWithObjectId:] instead.");
++ (instancetype)objectWithoutDataWithObjectId:(NSString *)objectId LC_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.9. Use +[LCObject objectWithObjectId:] instead.");
 
-+ (instancetype)objectWithoutDataWithClassName:(NSString *)className objectId:(NSString *)objectId AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.9. Use +[LCObject objectWithClassName:objectId:] instead.");
++ (instancetype)objectWithoutDataWithClassName:(NSString *)className objectId:(NSString *)objectId LC_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.9. Use +[LCObject objectWithClassName:objectId:] instead.");
 
-- (LCRelation *)relationforKey:(NSString *)key AV_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.3. Use -[LCObject relationForKey:] instead.");
+- (LCRelation *)relationforKey:(NSString *)key LC_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.3. Use -[LCObject relationForKey:] instead.");
 
 @end
 

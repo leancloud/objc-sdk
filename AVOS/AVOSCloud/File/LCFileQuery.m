@@ -53,7 +53,7 @@
     return [self filesWithObjects:objects];
 }
 
-- (void)findFilesInBackgroundWithBlock:(AVArrayResultBlock)resultBlock {
+- (void)findFilesInBackgroundWithBlock:(LCArrayResultBlock)resultBlock {
     [self findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         NSArray *files = [self filesWithObjects:objects];
         [LCUtils callArrayResultBlock:resultBlock array:files error:error];

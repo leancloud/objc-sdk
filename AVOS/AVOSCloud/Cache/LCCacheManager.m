@@ -59,7 +59,7 @@
     return [[NSFileManager defaultManager] fileExistsAtPath:[self pathForKey:key]];
 }
 
-- (void)getWithKey:(NSString *)key maxCacheAge:(NSTimeInterval)maxCacheAge block:(AVIdResultBlock)block {
+- (void)getWithKey:(NSString *)key maxCacheAge:(NSTimeInterval)maxCacheAge block:(LCIdResultBlock)block {
     dispatch_async(self.cacheQueue, ^{
         
         BOOL isTooOld = NO;

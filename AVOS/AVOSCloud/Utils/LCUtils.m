@@ -361,19 +361,19 @@ if (block) { \
     } \
 }
 
-+ (void)callBooleanResultBlock:(AVBooleanResultBlock)block
++ (void)callBooleanResultBlock:(LCBooleanResultBlock)block
                          error:(NSError *)error
 {
     safeBlock(error == nil);
 }
 
-+ (void)callIntegerResultBlock:(AVIntegerResultBlock)block
++ (void)callIntegerResultBlock:(LCIntegerResultBlock)block
                         number:(NSInteger)number
                          error:(NSError *)error {
     safeBlock(number);
 }
 
-+ (void)callArrayResultBlock:(AVArrayResultBlock)block
++ (void)callArrayResultBlock:(LCArrayResultBlock)block
                        array:(NSArray *)array
                        error:(NSError *)error {
     safeBlock(array);
@@ -391,13 +391,13 @@ if (block) { \
     safeBlock(user);
 }
 
-+ (void)callIdResultBlock:(AVIdResultBlock)block
++ (void)callIdResultBlock:(LCIdResultBlock)block
                    object:(id)object
                     error:(NSError *)error {
     safeBlock(object);
 }
 
-+ (void)callImageResultBlock:(AVImageResultBlock)block
++ (void)callImageResultBlock:(LCImageResultBlock)block
                        image:(UIImage *)image
                        error:(NSError *)error
 {
@@ -411,7 +411,7 @@ if (block) { \
     safeBlock(file);
 }
 
-+ (void)callProgressBlock:(AVProgressBlock)block
++ (void)callProgressBlock:(LCProgressBlock)block
                   percent:(NSInteger)percentDone {
     if (block) {
         if ([NSThread isMainThread]) {
@@ -424,7 +424,7 @@ if (block) { \
     }
 }
 
-+(void)callSetResultBlock:(AVSetResultBlock)block
++(void)callSetResultBlock:(LCSetResultBlock)block
                       set:(NSSet *)set
                     error:(NSError *)error
 {

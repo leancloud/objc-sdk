@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVGlobal.h"
+#import "LCGlobal.h"
 #import "LCGeoPoint.h"
 #import "LCACL.h"
 #import "LCObject.h"

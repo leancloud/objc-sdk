@@ -717,7 +717,7 @@ static NSString * quote(NSString *string)
 
 -(void)queryWithBlock:(NSString *)path
            parameters:(NSDictionary *)parameters
-                block:(AVArrayResultBlock)resultBlock
+                block:(LCArrayResultBlock)resultBlock
 {
 
     [[LCPaasClient sharedInstance] getObject:path withParameters:parameters policy:self.cachePolicy maxCacheAge:self.maxCacheAge block:^(id object, NSError *error) {
@@ -736,13 +736,13 @@ static NSString * quote(NSString *string)
     }];
 }
 
-- (void)findObjectsInBackgroundWithBlock:(AVArrayResultBlock)resultBlock
+- (void)findObjectsInBackgroundWithBlock:(LCArrayResultBlock)resultBlock
 {
     [self findObjectsWithBlock:resultBlock waitUntilDone:NO error:NULL];
 }
 
 // private method for sync and async using
-- (NSArray *)findObjectsWithBlock:(AVArrayResultBlock)resultBlock
+- (NSArray *)findObjectsWithBlock:(LCArrayResultBlock)resultBlock
                     waitUntilDone:(BOOL)wait
                             error:(NSError **)theError
 {
@@ -790,7 +790,7 @@ static NSString * quote(NSString *string)
     
 }
 
-- (void)deleteAllInBackgroundWithBlock:(AVBooleanResultBlock)block {
+- (void)deleteAllInBackgroundWithBlock:(LCBooleanResultBlock)block {
     [self findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (error) {
             block(NO, error);
@@ -917,12 +917,12 @@ static NSString * quote(NSString *string)
  @param block The block to execute. The block should have the following argument signature:
  (int count, NSError *error)
  */
-- (void)countObjectsInBackgroundWithBlock:(AVIntegerResultBlock)block
+- (void)countObjectsInBackgroundWithBlock:(LCIntegerResultBlock)block
 {
     [self countObjectsWithBlock:block waitUntilDone:NO error:NULL];
 }
 
-- (NSInteger)countObjectsWithBlock:(AVIntegerResultBlock)block
+- (NSInteger)countObjectsWithBlock:(LCIntegerResultBlock)block
                      waitUntilDone:(BOOL)wait
                              error:(NSError **)theError {
     if (wait) [self raiseSyncExceptionIfNeed];
@@ -1072,9 +1072,9 @@ static NSString * quote(NSString *string)
 
 #pragma mark - Util methods
 - (void)raiseSyncExceptionIfNeed {
-    if (self.cachePolicy == kAVCachePolicyCacheThenNetwork) {
+    if (self.cachePolicy == kLCCachePolicyCacheThenNetwork) {
         [NSException raise:NSInternalInconsistencyException
-                    format:@"kAVCachePolicyCacheThenNetwork can't not use in sync methods"];
+                    format:@"kLCCachePolicyCacheThenNetwork can't not use in sync methods"];
     };
 }
 

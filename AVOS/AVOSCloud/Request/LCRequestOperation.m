@@ -43,7 +43,7 @@
 }
 
 -(LCRequestOperation *)addOperation:(NSArray *)request
-                   withBlock:(AVBooleanResultBlock)block
+                   withBlock:(LCBooleanResultBlock)block
 {
     LCRequestOperation * operation = [LCRequestOperation operation:[request mutableCopy]];
     operation.sequence = self.currentSequence;

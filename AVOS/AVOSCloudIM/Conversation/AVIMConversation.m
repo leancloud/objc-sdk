@@ -3145,7 +3145,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 - (void)sendMessage:(AVIMMessage *)message
             options:(AVIMMessageSendOption)options
-      progressBlock:(AVProgressBlock)progressBlock
+      progressBlock:(LCProgressBlock)progressBlock
            callback:(AVIMBooleanResultBlock)callback
 {
     AVIMMessageOption *option = [[AVIMMessageOption alloc] init];

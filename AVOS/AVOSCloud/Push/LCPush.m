@@ -161,7 +161,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
 
 + (BOOL)sendPushMessage:(LCPush *)push
                    wait:(BOOL)wait
-                  block:(AVBooleanResultBlock)block
+                  block:(LCBooleanResultBlock)block
                   error:(NSError **)theError
 {
     BOOL __block theResult = NO;
@@ -210,7 +210,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
 
 + (void)sendPushMessageToChannelInBackground:(NSString *)channel
                                  withMessage:(NSString *)message
-                                       block:(AVBooleanResultBlock)block
+                                       block:(LCBooleanResultBlock)block
 {
     LCPush * push = [LCPush push];
     [push setChannel:channel];
@@ -239,7 +239,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
 
 + (void)sendPushMessageToQueryInBackground:(LCQuery *)query
                                withMessage:(NSString *)message
-                                     block:(AVBooleanResultBlock)block
+                                     block:(LCBooleanResultBlock)block
 {
     LCPush * push = [LCPush push];
     [push setQuery:query];
@@ -320,7 +320,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
     return data;
 }
 
-- (void)sendPushInBackgroundWithBlock:(AVBooleanResultBlock)block
+- (void)sendPushInBackgroundWithBlock:(LCBooleanResultBlock)block
 {
     NSString *path = [LCPush myObjectPath];
     [[LCPaasClient sharedInstance] postObject:path
@@ -352,7 +352,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
 
 + (void)sendPushDataToChannelInBackground:(NSString *)channel
                                  withData:(NSDictionary *)data
-                                    block:(AVBooleanResultBlock)block
+                                    block:(LCBooleanResultBlock)block
 {
     LCPush * push = [LCPush push];
     [push setChannel:channel];
@@ -381,7 +381,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
 
 + (void)sendPushDataToQueryInBackground:(LCQuery *)query
                                withData:(NSDictionary *)data
-                                  block:(AVBooleanResultBlock)block
+                                  block:(LCBooleanResultBlock)block
 {
     LCPush * push = [LCPush push];
     [push setQuery:query];
@@ -399,14 +399,14 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
     return [self getSubscribedChannels:error];
 }
 
-+ (void)getSubscribedChannelsInBackgroundWithBlock:(AVSetResultBlock)block
++ (void)getSubscribedChannelsInBackgroundWithBlock:(LCSetResultBlock)block
 {
     [LCPush getSubscribedChannelsWithBlock:^(NSSet *channels, NSError *error) {
         [LCUtils callSetResultBlock:block set:channels error:error];
     } wait:NO error:nil];
 }
 
-+ (NSSet *)getSubscribedChannelsWithBlock:(AVSetResultBlock)block
++ (NSSet *)getSubscribedChannelsWithBlock:(LCSetResultBlock)block
                                      wait:(BOOL)wait
                                     error:(NSError **)theError
 {
@@ -459,7 +459,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
 }
 
 + (void)subscribeToChannelInBackground:(NSString *)channel
-                                 block:(AVBooleanResultBlock)block
+                                 block:(LCBooleanResultBlock)block
 {
     LCInstallation * installation = [LCInstallation defaultInstallation];
     [installation addUniqueObject:channel forKey:channelsTag];
@@ -482,7 +482,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
 
 
 + (void)unsubscribeFromChannelInBackground:(NSString *)channel
-                                     block:(AVBooleanResultBlock)block
+                                     block:(LCBooleanResultBlock)block
 {
     LCInstallation * installation = [LCInstallation defaultInstallation];
     [installation removeObject:channel forKey:channelsTag];

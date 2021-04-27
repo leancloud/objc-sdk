@@ -75,7 +75,7 @@
     return result;
 }
 
-+ (void)callFunctionInBackground:(NSString *)function withParameters:(NSDictionary *)parameters block:(AVIdResultBlock)block
++ (void)callFunctionInBackground:(NSString *)function withParameters:(NSDictionary *)parameters block:(LCIdResultBlock)block
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSError *error;
@@ -109,7 +109,7 @@
     return object;
 }
 
-+ (void)rpcFunctionInBackground:(NSString *)function withParameters:(id)parameters block:(AVIdResultBlock)block {
++ (void)rpcFunctionInBackground:(NSString *)function withParameters:(id)parameters block:(LCIdResultBlock)block {
     NSDictionary *serializedParameters = nil;
 
     if (parameters) {

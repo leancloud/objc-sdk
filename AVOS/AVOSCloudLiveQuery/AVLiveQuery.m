@@ -237,12 +237,12 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
     return parameters;
 }
 
-- (void)unsubscribeWithCallback:(AVBooleanResultBlock)callback {
+- (void)unsubscribeWithCallback:(LCBooleanResultBlock)callback {
     [self stopToObserveSubscriber];
 
     NSDictionary *parameters = [self unsubscriptionParameters];
 
-    AVIdResultBlock block = ^(id object, NSError *error) {
+    LCIdResultBlock block = ^(id object, NSError *error) {
         if (error) {
             [LCUtils callBooleanResultBlock:callback error:error];
             return;

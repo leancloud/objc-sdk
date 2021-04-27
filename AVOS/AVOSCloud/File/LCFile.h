@@ -4,7 +4,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVConstants.h"
+#import "LCConstants.h"
 #import "LCACL.h"
 
 @class LCFileQuery;
@@ -328,7 +328,7 @@ typedef NS_OPTIONS(NSUInteger, LCFileDownloadOption) {
 - (void)getThumbnail:(BOOL)scaleToFit
                width:(int)width
               height:(int)height
-           withBlock:(AVImageResultBlock)block;
+           withBlock:(LCImageResultBlock)block;
 
 // MARK: - Query
 

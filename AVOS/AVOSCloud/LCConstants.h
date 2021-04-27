@@ -1,16 +1,16 @@
-// AVConstants.h
+// LCConstants.h
 // Copyright 2013 AVOS, Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
-#import "AVAvailability.h"
+#import "LCAvailability.h"
 
 @class LCObject;
 @class LCUser;
 @class LCFile;
 
-#if AV_IOS_ONLY
+#if LC_IOS_ONLY
 #import <UIKit/UIKit.h>
-#elif AV_OSX_ONLY
+#elif LC_OSX_ONLY
 #import <Cocoa/Cocoa.h>
 @compatibility_alias UIImage NSImage;
 @compatibility_alias UIColor NSColor;
@@ -18,24 +18,24 @@
 #endif
 
 /// Cache policies
-typedef NS_ENUM(int, AVCachePolicy) {
+typedef NS_ENUM(int, LCCachePolicy) {
     /// Query from server and do not save result to the local cache.
-    kAVCachePolicyIgnoreCache = 0,
+    kLCCachePolicyIgnoreCache = 0,
     
     /// Only query from the local cache.
-    kAVCachePolicyCacheOnly,
+    kLCCachePolicyCacheOnly,
     
     /// Only query from server, and save result to the local cache.
-    kAVCachePolicyNetworkOnly,
+    kLCCachePolicyNetworkOnly,
     
     /// Firstly query from the local cache, if fails, query from server.
-    kAVCachePolicyCacheElseNetwork,
+    kLCCachePolicyCacheElseNetwork,
     
     /// Firstly query from server, if fails, query the local cache.
-    kAVCachePolicyNetworkElseCache,
+    kLCCachePolicyNetworkElseCache,
     
     /// Firstly query from the local cache, return result. Then query from server, return result. The callback will be called twice.
-    kAVCachePolicyCacheThenNetwork,
+    kLCCachePolicyCacheThenNetwork,
 } ;
 
 // Errors
@@ -156,25 +156,25 @@ extern NSInteger const kLCErrorLinkedIdMissing;
 /*! @abstract 251: Invalid linked session */
 extern NSInteger const kLCErrorInvalidLinkedSession;
 
-typedef void (^AVBooleanResultBlock)(BOOL succeeded,  NSError * _Nullable error);
-typedef void (^AVIntegerResultBlock)(NSInteger number, NSError * _Nullable error);
-typedef void (^AVArrayResultBlock)(NSArray * _Nullable objects, NSError * _Nullable error);
+typedef void (^LCBooleanResultBlock)(BOOL succeeded,  NSError * _Nullable error);
+typedef void (^LCIntegerResultBlock)(NSInteger number, NSError * _Nullable error);
+typedef void (^LCArrayResultBlock)(NSArray * _Nullable objects, NSError * _Nullable error);
 typedef void (^LCObjectResultBlock)(LCObject * _Nullable object, NSError * _Nullable error);
-typedef void (^AVSetResultBlock)(NSSet * _Nullable channels, NSError * _Nullable error);
+typedef void (^LCSetResultBlock)(NSSet * _Nullable channels, NSError * _Nullable error);
 typedef void (^LCUserResultBlock)(LCUser * _Nullable user, NSError * _Nullable error);
-typedef void (^AVDataResultBlock)(NSData * _Nullable data, NSError * _Nullable error);
-#if AV_TARGET_OS_OSX
-typedef void (^AVImageResultBlock)(NSImage * _Nullable image, NSError * _Nullable error);
+typedef void (^LCDataResultBlock)(NSData * _Nullable data, NSError * _Nullable error);
+#if LC_TARGET_OS_OSX
+typedef void (^LCImageResultBlock)(NSImage * _Nullable image, NSError * _Nullable error);
 #else
-typedef void (^AVImageResultBlock)(UIImage * _Nullable image, NSError * _Nullable error);
+typedef void (^LCImageResultBlock)(UIImage * _Nullable image, NSError * _Nullable error);
 #endif
-typedef void (^AVDataStreamResultBlock)(NSInputStream * _Nullable stream, NSError * _Nullable error);
-typedef void (^AVStringResultBlock)(NSString * _Nullable string, NSError * _Nullable error);
-typedef void (^AVIdResultBlock)(id _Nullable object, NSError * _Nullable error);
-typedef void (^AVProgressBlock)(NSInteger percentDone);
+typedef void (^LCDataStreamResultBlock)(NSInputStream * _Nullable stream, NSError * _Nullable error);
+typedef void (^LCStringResultBlock)(NSString * _Nullable string, NSError * _Nullable error);
+typedef void (^LCIdResultBlock)(id _Nullable object, NSError * _Nullable error);
+typedef void (^LCProgressBlock)(NSInteger percentDone);
 typedef void (^LCFileResultBlock)(LCFile * _Nullable file, NSError * _Nullable error);
-typedef void (^AVDictionaryResultBlock)(NSDictionary * _Nullable dict, NSError * _Nullable error);
+typedef void (^LCDictionaryResultBlock)(NSDictionary * _Nullable dict, NSError * _Nullable error);
 
-#define AV_DEPRECATED(explain) __attribute__((deprecated(explain)))
+#define LC_DEPRECATED(explain) __attribute__((deprecated(explain)))
 
 #define LC_WARN_UNUSED_RESULT __attribute__((warn_unused_result))

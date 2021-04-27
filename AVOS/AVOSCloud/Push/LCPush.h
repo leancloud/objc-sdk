@@ -4,7 +4,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVConstants.h"
+#import "LCConstants.h"
 #import "LCQuery.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -184,7 +184,7 @@ extern NSString *const kLCPushTargetPlatformWindowsPhone;
  */
 + (void)sendPushMessageToChannelInBackground:(NSString *)channel
                                  withMessage:(NSString *)message
-                                       block:(AVBooleanResultBlock)block;
+                                       block:(LCBooleanResultBlock)block;
 
 /*!
  Send a push message to a query.
@@ -216,7 +216,7 @@ extern NSString *const kLCPushTargetPlatformWindowsPhone;
  */
 + (void)sendPushMessageToQueryInBackground:(LCQuery *)query
                                withMessage:(NSString *)message
-                                     block:(AVBooleanResultBlock)block;
+                                     block:(LCBooleanResultBlock)block;
 
 /*!
  Send this push message.
@@ -240,7 +240,7 @@ extern NSString *const kLCPushTargetPlatformWindowsPhone;
  Asynchronously send this push message and executes the given callback block.
  @param block The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error) 
  */
-- (void)sendPushInBackgroundWithBlock:(AVBooleanResultBlock)block;
+- (void)sendPushInBackgroundWithBlock:(LCBooleanResultBlock)block;
 
 /*!
  Send a push message with arbitrary data to a channel. See the guide for information about the dictionary structure.
@@ -272,7 +272,7 @@ extern NSString *const kLCPushTargetPlatformWindowsPhone;
  */
 + (void)sendPushDataToChannelInBackground:(NSString *)channel
                                  withData:(NSDictionary *)data
-                                    block:(AVBooleanResultBlock)block;
+                                    block:(LCBooleanResultBlock)block;
 
 /*!
  Send a push message with arbitrary data to a query. See the guide for information about the dictionary structure.
@@ -304,7 +304,7 @@ extern NSString *const kLCPushTargetPlatformWindowsPhone;
  */
 + (void)sendPushDataToQueryInBackground:(LCQuery *)query
                                withData:(NSDictionary *)data
-                                  block:(AVBooleanResultBlock)block;
+                                  block:(LCBooleanResultBlock)block;
 
 /*! @name Handling Notifications */
 
@@ -325,7 +325,7 @@ extern NSString *const kLCPushTargetPlatformWindowsPhone;
  Get all the channels that this device is subscribed to.
  @param block The block to execute. The block should have the following argument signature: (NSSet *channels, NSError *error) 
  */
-+ (void)getSubscribedChannelsInBackgroundWithBlock:(AVSetResultBlock)block;
++ (void)getSubscribedChannelsInBackgroundWithBlock:(LCSetResultBlock)block;
 
 /*!
  Subscribes the device to a channel of push notifications.
@@ -350,7 +350,7 @@ extern NSString *const kLCPushTargetPlatformWindowsPhone;
  @param block The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error) 
  */
 + (void)subscribeToChannelInBackground:(NSString *)channel
-                                 block:(AVBooleanResultBlock)block;
+                                 block:(LCBooleanResultBlock)block;
 
 /*!
  Unsubscribes the device to a channel of push notifications.
@@ -373,7 +373,7 @@ extern NSString *const kLCPushTargetPlatformWindowsPhone;
  @param block The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error) 
  */
 + (void)unsubscribeFromChannelInBackground:(NSString *)channel
-                                     block:(AVBooleanResultBlock)block;
+                                     block:(LCBooleanResultBlock)block;
 
 @end
 

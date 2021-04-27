@@ -824,16 +824,16 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }];
 }
 
-- (void)saveInBackgroundWithBlock:(AVBooleanResultBlock)block
+- (void)saveInBackgroundWithBlock:(LCBooleanResultBlock)block
 {
     [self saveInBackgroundWithOption:nil block:block];
 }
 
-- (void)saveInBackgroundWithOption:(LCSaveOption *)option block:(AVBooleanResultBlock)block {
+- (void)saveInBackgroundWithOption:(LCSaveOption *)option block:(LCBooleanResultBlock)block {
     [self saveInBackgroundWithOption:option eventually:NO block:block];
 }
 
-- (void)saveInBackgroundWithOption:(LCSaveOption *)option eventually:(BOOL)eventually block:(AVBooleanResultBlock)block {
+- (void)saveInBackgroundWithOption:(LCSaveOption *)option eventually:(BOOL)eventually block:(LCBooleanResultBlock)block {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSError *error;
         [self saveWithOption:option eventually:eventually error:&error];
@@ -1132,7 +1132,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }];
 }
 
-- (void)saveEventually:(AVBooleanResultBlock)callback
+- (void)saveEventually:(LCBooleanResultBlock)callback
 {
     [self saveInBackgroundWithOption:nil eventually:YES block:callback];
 }
@@ -1325,7 +1325,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 }
 
 + (void)saveAllInBackground:(NSArray *)objects
-                      block:(AVBooleanResultBlock)block
+                      block:(LCBooleanResultBlock)block
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSError *error;
@@ -1618,7 +1618,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 }
 
 + (void)fetchAllInBackground:(NSArray *)objects
-                       block:(AVArrayResultBlock)block
+                       block:(LCArrayResultBlock)block
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSError *error;
@@ -1628,7 +1628,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 }
 
 + (void)fetchAllIfNeededInBackground:(NSArray *)objects
-                               block:(AVArrayResultBlock)block
+                               block:(LCArrayResultBlock)block
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSError *error;
@@ -1674,13 +1674,13 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }];
 }
 
-- (void)deleteInBackgroundWithBlock:(AVBooleanResultBlock)block {
+- (void)deleteInBackgroundWithBlock:(LCBooleanResultBlock)block {
     [self internalDeleteWithEventually:NO block:^(BOOL succeeded, NSError *error) {
         [LCUtils callBooleanResultBlock:block error:error];
     }];
 }
 
-- (void)internalDeleteWithEventually:(BOOL)eventually block:(AVBooleanResultBlock)block {
+- (void)internalDeleteWithEventually:(BOOL)eventually block:(LCBooleanResultBlock)block {
     NSError *error;
     if (![[self class] isValidObjects:@[self] error:&error]) {
         [LCUtils callBooleanResultBlock:block error:error];
@@ -1704,7 +1704,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }];
 }
 
-- (void)deleteEventuallyWithBlock:(AVIdResultBlock)block {
+- (void)deleteEventuallyWithBlock:(LCIdResultBlock)block {
     [self internalDeleteWithEventually:YES block:^(BOOL succeeded, NSError *error) {
         [LCUtils callIdResultBlock:block object:self error:error];
     }];
@@ -1741,14 +1741,14 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
 }
 
 + (void)deleteAllInBackground:(NSArray *)objects
-                        block:(AVBooleanResultBlock)block {
+                        block:(LCBooleanResultBlock)block {
     [self internalDeleteAllInBackground:objects block:^(BOOL succeeded, NSError *error) {
         [LCUtils callBooleanResultBlock:block error:error];
     }];
 }
 
 + (void)internalDeleteAllInBackground:(NSArray *)objects
-                                block:(AVBooleanResultBlock)block {
+                                block:(LCBooleanResultBlock)block {
     objects = [objects copy];
     if (objects.count == 0) {
         [LCUtils callBooleanResultBlock:block error:nil];

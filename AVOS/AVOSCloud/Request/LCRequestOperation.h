@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVConstants.h"
+#import "LCConstants.h"
 
 @interface LCRequestOperation : NSObject
 
 @property (nonatomic, readwrite, strong) NSMutableArray * batchRequest;
-@property (nonatomic, readwrite, copy) AVBooleanResultBlock block;
+@property (nonatomic, readwrite, copy) LCBooleanResultBlock block;
 @property (nonatomic, readwrite) int sequence;
 
 +(LCRequestOperation *)operation:(NSArray *)request;
@@ -27,7 +27,7 @@
 
 -(void)increaseSequence;
 -(LCRequestOperation *)addOperation:(NSArray *)request
-                   withBlock:(AVBooleanResultBlock)block;
+                   withBlock:(LCBooleanResultBlock)block;
 -(LCRequestOperation *)popHead;
 -(BOOL)noPendingRequest;
 -(void)clearOperationWithSequence:(int)seq;

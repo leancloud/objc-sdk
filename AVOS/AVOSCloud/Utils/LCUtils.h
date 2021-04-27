@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVConstants.h"
+#import "LCConstants.h"
 #import "AVOSCloud.h"
 #import "LCHelpers.h"
 
@@ -56,14 +56,14 @@
 
 #pragma mark - Block
 
-+ (void)callBooleanResultBlock:(AVBooleanResultBlock)block
++ (void)callBooleanResultBlock:(LCBooleanResultBlock)block
                          error:(NSError *)error;
 
-+ (void)callIntegerResultBlock:(AVIntegerResultBlock)block
++ (void)callIntegerResultBlock:(LCIntegerResultBlock)block
                         number:(NSInteger)number
                          error:(NSError *)error;
 
-+ (void)callArrayResultBlock:(AVArrayResultBlock)block
++ (void)callArrayResultBlock:(LCArrayResultBlock)block
                        array:(NSArray *)array
                        error:(NSError *)error;
 
@@ -75,15 +75,15 @@
                        user:(LCUser *)user
                       error:(NSError *)error;
 
-+ (void)callIdResultBlock:(AVIdResultBlock)block
++ (void)callIdResultBlock:(LCIdResultBlock)block
                    object:(id)object
                     error:(NSError *)error;
 
-+ (void)callProgressBlock:(AVProgressBlock)block
++ (void)callProgressBlock:(LCProgressBlock)block
                   percent:(NSInteger)percentDone;
 
 
-+ (void)callImageResultBlock:(AVImageResultBlock)block
++ (void)callImageResultBlock:(LCImageResultBlock)block
                        image:(UIImage *)image
                        error:(NSError *)error;
 
@@ -91,7 +91,7 @@
                      file:(LCFile *)file
                       error:(NSError *)error;
 
-+ (void)callSetResultBlock:(AVSetResultBlock)block
++ (void)callSetResultBlock:(LCSetResultBlock)block
                        set:(NSSet *)set
                      error:(NSError *)error;
 

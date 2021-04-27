@@ -7,14 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVConstants.h"
+#import "LCConstants.h"
 
 @interface LCCacheManager : NSObject
 
 + (LCCacheManager *)sharedInstance;
 
 // cache
-- (void)getWithKey:(NSString *)key maxCacheAge:(NSTimeInterval)maxCacheAge block:(AVIdResultBlock)block;
+- (void)getWithKey:(NSString *)key maxCacheAge:(NSTimeInterval)maxCacheAge block:(LCIdResultBlock)block;
 - (void)saveJSON:(id)JSON forKey:(NSString *)key;
 
 - (BOOL)hasCacheForKey:(NSString *)key;

@@ -78,12 +78,12 @@
     return [self findObjects:error];
 }
 
-- (void)findInBackground:(AVArrayResultBlock)resultBlock {
+- (void)findInBackground:(LCArrayResultBlock)resultBlock {
     [self findObjectsWithBlock:resultBlock waitUntilDone:NO error:NULL];
 }
 
 
-- (NSArray *)findObjectsWithBlock:(AVArrayResultBlock)resultBlock
+- (NSArray *)findObjectsWithBlock:(LCArrayResultBlock)resultBlock
                     waitUntilDone:(BOOL)wait
                             error:(NSError **)theError {
 
@@ -118,7 +118,7 @@
 
 -(void)queryWithBlock:(NSString *)path
            parameters:(NSDictionary *)parameters
-                block:(AVArrayResultBlock)resultBlock {
+                block:(LCArrayResultBlock)resultBlock {
     
     [[LCPaasClient sharedInstance] getObject:path withParameters:parameters policy:self.cachePolicy maxCacheAge:self.maxCacheAge block:^(id object, NSError *error) {
         if (error == nil)
@@ -267,9 +267,9 @@
 
 #pragma mark - Util methods
 - (void)raiseSyncExceptionIfNeed {
-    if (self.cachePolicy == kAVCachePolicyCacheThenNetwork) {
+    if (self.cachePolicy == kLCCachePolicyCacheThenNetwork) {
         [NSException raise:NSInternalInconsistencyException
-                    format:@"kAVCachePolicyCacheThenNetwork can't not use in sync methods"];
+                    format:@"kLCCachePolicyCacheThenNetwork can't not use in sync methods"];
     };
 }
 

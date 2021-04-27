@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @see findFiles:
  *  @param resultBlock 回调 block
  */
-- (void)findFilesInBackgroundWithBlock:(AVArrayResultBlock)resultBlock;
+- (void)findFilesInBackgroundWithBlock:(LCArrayResultBlock)resultBlock;
 
 
 /**

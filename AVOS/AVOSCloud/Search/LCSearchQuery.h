@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVConstants.h"
+#import "LCConstants.h"
 @class LCSearchSortBuilder;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -71,7 +71,7 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  * 缓存策略
  */
-@property (readwrite, assign) AVCachePolicy cachePolicy;
+@property (readwrite, assign) LCCachePolicy cachePolicy;
 
 /* !
  * 最多缓存时间，单位为秒，默认值 24*3600 秒
@@ -112,7 +112,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  异步获取搜索结果，并回调block
  *  @param block 需要有这样的方法签名 (NSArray *objects, NSError *error)
  */
-- (void)findInBackground:(AVArrayResultBlock)block;
+- (void)findInBackground:(LCArrayResultBlock)block;
 
 #pragma mark - Sorting
 /*!

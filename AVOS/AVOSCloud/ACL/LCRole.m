@@ -9,7 +9,7 @@
 #import "LCRelation_Internal.h"
 #import "LCACL.h"
 #import "LCPaasClient.h"
-#import "AVGlobal.h"
+#import "LCGlobal.h"
 #import "LCUtils.h"
 
 @implementation LCRole

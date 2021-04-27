@@ -17,7 +17,7 @@
 #endif
 
 #import "LCUtils.h"
-#include "AVOSCloud_Art.inc"
+#include "LeanCloud_Art.inc"
 #import "LCNetworkStatistics.h"
 #import "LCObjectUtils.h"
 
@@ -38,7 +38,7 @@ static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
 
 + (void)logApplicationInfo
 {
-    const char *s = (const char *)AVOSCloud_Art_inc;
+    const char *s = (const char *)LeanCloud_Art_inc;
     printf("%s\n", s);
     printf("appid: %s\n", [[self getApplicationId] UTF8String]);
 #if !TARGET_OS_WATCH
@@ -190,7 +190,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
 
 + (void)verifySmsCode:(NSString *)code
     mobilePhoneNumber:(NSString *)phoneNumber
-             callback:(AVBooleanResultBlock)callback
+             callback:(LCBooleanResultBlock)callback
 {
     NSParameterAssert(code);
     NSParameterAssert(phoneNumber);
@@ -279,7 +279,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
 + (void)setTimeZoneForSecondsFromGMT:(NSInteger)seconds {}
 
 +(void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
-                            callback:(AVBooleanResultBlock)callback {
+                            callback:(LCBooleanResultBlock)callback {
     [self requestSmsCodeWithPhoneNumber:phoneNumber appName:nil operation:nil timeToLive:0 callback:callback];
 }
 
@@ -287,7 +287,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
                              appName:(NSString *)appName
                            operation:(NSString *)operation
                           timeToLive:(NSUInteger)ttl
-                            callback:(AVBooleanResultBlock)callback {
+                            callback:(LCBooleanResultBlock)callback {
     NSParameterAssert(phoneNumber);
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     //    [dict setObject:phoneNumber forKey:@"mobilePhoneNumber"];
@@ -306,7 +306,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
 +(void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
                         templateName:(NSString *)templateName
                            variables:(NSDictionary *)variables
-                            callback:(AVBooleanResultBlock)callback {
+                            callback:(LCBooleanResultBlock)callback {
     NSParameterAssert(phoneNumber);
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setObject:phoneNumber forKey:@"mobilePhoneNumber"];
@@ -321,7 +321,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
 
 + (void)requestVoiceCodeWithPhoneNumber:(NSString *)phoneNumber
                                     IDD:(NSString *)IDD
-                               callback:(AVBooleanResultBlock)callback {
+                               callback:(LCBooleanResultBlock)callback {
     NSParameterAssert(phoneNumber);
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];

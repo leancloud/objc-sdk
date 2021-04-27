@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 AVOS. All rights reserved.
 //
 
-#import "AVAvailability.h"
+#import "LCAvailability.h"
 
 #if TARGET_OS_WATCH
     #import <WatchKit/WatchKit.h>

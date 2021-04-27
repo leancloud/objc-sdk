@@ -102,7 +102,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
 
 -(void)queryWithBlock:(NSString *)path
            parameters:(NSDictionary *)parameters
-                block:(AVArrayResultBlock)resultBlock {
+                block:(LCArrayResultBlock)resultBlock {
     _end = NO;
     [super queryWithBlock:path parameters:parameters block:resultBlock];
 }
@@ -199,7 +199,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
     return q;
 }
 
-+(void)getStatusesWithType:(LCStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(AVArrayResultBlock)callback{
++(void)getStatusesWithType:(LCStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(LCArrayResultBlock)callback{
     NSParameterAssert(type);
     
     NSError *error=[self permissionCheck];
@@ -218,7 +218,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
     [q findObjectsInBackgroundWithBlock:callback];
     
 }
-+(void) getStatusesFromCurrentUserWithType:(LCStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(AVArrayResultBlock)callback{
++(void) getStatusesFromCurrentUserWithType:(LCStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(LCArrayResultBlock)callback{
     
     NSError *error=[self permissionCheck];
     if (error) {
@@ -229,7 +229,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
     [self getStatusesFromUser:[LCUser currentUser].objectId skip:skip limit:limit andCallback:callback];
     
 }
-+(void)getStatusesFromUser:(NSString *)userId skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(AVArrayResultBlock)callback{
++(void)getStatusesFromUser:(NSString *)userId skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(LCArrayResultBlock)callback{
     NSParameterAssert(userId);
     
     LCQuery *q=[LCStatus statusQuery];
@@ -260,7 +260,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
     }];
 }
 
-+(void)deleteStatusWithID:(NSString *)objectId andCallback:(AVBooleanResultBlock)callback{
++(void)deleteStatusWithID:(NSString *)objectId andCallback:(LCBooleanResultBlock)callback{
     NSError *error=[self permissionCheck];
     if (error) {
         callback(NO,error);
@@ -308,7 +308,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
     return responseError == nil;
 }
 
-+ (void)deleteInboxStatusInBackgroundForMessageId:(NSUInteger)messageId inboxType:(NSString *)inboxType receiver:(NSString *)receiver block:(AVBooleanResultBlock)block {
++ (void)deleteInboxStatusInBackgroundForMessageId:(NSUInteger)messageId inboxType:(NSString *)inboxType receiver:(NSString *)receiver block:(LCBooleanResultBlock)block {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSError *error = nil;
         [self deleteInboxStatusForMessageId:messageId inboxType:inboxType receiver:receiver error:&error];
@@ -316,7 +316,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
     });
 }
 
-+(void)getUnreadStatusesCountWithType:(LCStatusType*)type andCallback:(AVIntegerResultBlock)callback{
++(void)getUnreadStatusesCountWithType:(LCStatusType*)type andCallback:(LCIntegerResultBlock)callback{
     NSError *error=[self permissionCheck];
 
     if (error) {
@@ -332,7 +332,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
     }];
 }
 
-+ (void)resetUnreadStatusesCountWithType:(LCStatusType *)type andCallback:(AVBooleanResultBlock)callback {
++ (void)resetUnreadStatusesCountWithType:(LCStatusType *)type andCallback:(LCBooleanResultBlock)callback {
     NSError *error = [self permissionCheck];
 
     if (error) {
@@ -347,7 +347,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
     }];
 }
 
-+(void)sendStatusToFollowers:(LCStatus*)status andCallback:(AVBooleanResultBlock)callback{
++(void)sendStatusToFollowers:(LCStatus*)status andCallback:(LCBooleanResultBlock)callback{
     NSError *error=[self permissionCheck];
     if (error) {
         callback(NO,error);
@@ -358,7 +358,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
     [status sendInBackgroundWithBlock:callback];
 }
 
-+(void)sendPrivateStatus:(LCStatus *)status toUserWithID:(NSString *)userId andCallback:(AVBooleanResultBlock)callback{
++(void)sendPrivateStatus:(LCStatus *)status toUserWithID:(NSString *)userId andCallback:(LCBooleanResultBlock)callback{
     NSError *error=[self permissionCheck];
     if (error) {
         callback(NO,error);
@@ -405,7 +405,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
     return nil;
 }
 
--(void)sendInBackgroundWithBlock:(AVBooleanResultBlock)block{
+-(void)sendInBackgroundWithBlock:(LCBooleanResultBlock)block{
     NSError *error=[self preSave];
     if (error) {
         block(NO,error);

@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger skip;
 
 /*!
- Configures cache policy, default is kAVCachePolicyCacheElseNetwork
+ Configures cache policy, default is kLCCachePolicyCacheElseNetwork
  */
 @property (nonatomic, assign) AVIMCachePolicy cachePolicy;
 

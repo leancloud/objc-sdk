@@ -1,6 +1,6 @@
 
 #import <Foundation/Foundation.h>
-#import "AVConstants.h"
+#import "LCConstants.h"
 #import "LCFile.h"
 #import "LCFile_Internal.h"
 #import "LCFileTaskManager.h"
@@ -1349,7 +1349,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
 - (void)getThumbnail:(BOOL)scaleToFit
                width:(int)width
               height:(int)height
-           withBlock:(AVImageResultBlock)block
+           withBlock:(LCImageResultBlock)block
 {
     NSString *url = [self getThumbnailURLWithScaleToFit:scaleToFit width:width height:height];
     

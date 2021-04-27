@@ -90,7 +90,7 @@ static BOOL enableAutomatic = NO;
     return newUser;
 }
 
-- (void)isAuthenticatedWithSessionToken:(NSString *)sessionToken callback:(AVBooleanResultBlock)callback {
+- (void)isAuthenticatedWithSessionToken:(NSString *)sessionToken callback:(LCBooleanResultBlock)callback {
     if (sessionToken == nil) {
         [LCUtils callBooleanResultBlock:callback error:LCErrorInternal(@"sessionToken is nil")];
         return;
@@ -160,7 +160,7 @@ static BOOL enableAutomatic = NO;
     return [self signUp:error];
 }
 
-- (void)signUpInBackgroundWithBlock:(AVBooleanResultBlock)block
+- (void)signUpInBackgroundWithBlock:(LCBooleanResultBlock)block
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSError *error;
@@ -219,7 +219,7 @@ static BOOL enableAutomatic = NO;
     return body;
 }
 
-+(void)requestEmailVerify:(NSString*)email withBlock:(AVBooleanResultBlock)block{
++(void)requestEmailVerify:(NSString*)email withBlock:(LCBooleanResultBlock)block{
     NSParameterAssert(email);
     
     [[LCPaasClient sharedInstance] postObject:@"requestEmailVerify" withParameters:@{@"email":email} block:^(id object, NSError *error) {
@@ -227,7 +227,7 @@ static BOOL enableAutomatic = NO;
     }];
 }
 
-- (void)updatePassword:(NSString *)oldPassword newPassword:(NSString *)newPassword block:(AVIdResultBlock)block {
+- (void)updatePassword:(NSString *)oldPassword newPassword:(NSString *)newPassword block:(LCIdResultBlock)block {
     if (self.isAuthDataExistInMemory && oldPassword && newPassword) {
         NSString *path = [NSString stringWithFormat:@"users/%@/updatePassword", self.objectId];
         NSDictionary *params = @{@"old_password":oldPassword,
@@ -257,7 +257,7 @@ static BOOL enableAutomatic = NO;
     }
 }
 
-- (void)refreshSessionTokenWithBlock:(AVBooleanResultBlock)block {
+- (void)refreshSessionTokenWithBlock:(LCBooleanResultBlock)block {
     NSString *objectId = self.objectId;
     
     if (!objectId) {
@@ -481,13 +481,13 @@ static BOOL enableAutomatic = NO;
     return user;
 }
 
-+ (void)requestLoginSmsCode:(NSString *)phoneNumber withBlock:(AVBooleanResultBlock)block {
++ (void)requestLoginSmsCode:(NSString *)phoneNumber withBlock:(LCBooleanResultBlock)block {
     [self requestLoginCodeForPhoneNumber:phoneNumber options:nil callback:block];
 }
 
 + (void)requestLoginCodeForPhoneNumber:(NSString *)phoneNumber
                                options:(LCUserShortMessageRequestOptions *)options
-                              callback:(AVBooleanResultBlock)callback
+                              callback:(LCBooleanResultBlock)callback
 {
     NSParameterAssert(phoneNumber);
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
@@ -684,14 +684,14 @@ static BOOL enableAutomatic = NO;
 }
 
 + (void)requestPasswordResetForEmailInBackground:(NSString *)email
-                                           block:(AVBooleanResultBlock)block {
+                                           block:(LCBooleanResultBlock)block {
     [self internalRequestPasswordResetForEmailInBackground:email block:^(BOOL succeeded, NSError *error) {
         [LCUtils callBooleanResultBlock:block error:error];
     }];
 }
 
 + (void)internalRequestPasswordResetForEmailInBackground:(NSString *)email
-                                                   block:(AVBooleanResultBlock)block
+                                                   block:(LCBooleanResultBlock)block
 {
     NSDictionary * parameters = @{emailTag: email};
     [[LCPaasClient sharedInstance] postObject:@"requestPasswordReset" withParameters:parameters block:^(id object, NSError *error) {
@@ -701,13 +701,13 @@ static BOOL enableAutomatic = NO;
     }];
 }
 
-+ (void)requestPasswordResetWithPhoneNumber:(NSString *)phoneNumber block:(AVBooleanResultBlock)block {
++ (void)requestPasswordResetWithPhoneNumber:(NSString *)phoneNumber block:(LCBooleanResultBlock)block {
     [self requestPasswordResetCodeForPhoneNumber:phoneNumber options:nil callback:block];
 }
 
 + (void)requestPasswordResetCodeForPhoneNumber:(NSString *)phoneNumber
                                        options:(LCUserShortMessageRequestOptions *)options
-                                      callback:(AVBooleanResultBlock)callback
+                                      callback:(LCBooleanResultBlock)callback
 {
     NSParameterAssert(phoneNumber);
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
@@ -722,7 +722,7 @@ static BOOL enableAutomatic = NO;
 
 +(void)resetPasswordWithSmsCode:(NSString *)code
                     newPassword:(NSString *)password
-                          block:(AVBooleanResultBlock)block {
+                          block:(LCBooleanResultBlock)block {
     NSParameterAssert(code);
     
     NSString *path=[NSString stringWithFormat:@"resetPasswordBySmsCode/%@",code];
@@ -1428,11 +1428,11 @@ static BOOL enableAutomatic = NO;
     return [LCUser followerQuery:self.objectId];
 }
 
--(void)follow:(NSString*)userId andCallback:(AVBooleanResultBlock)callback{
+-(void)follow:(NSString*)userId andCallback:(LCBooleanResultBlock)callback{
     [self follow:userId userDictionary:nil andCallback:callback];
 }
 
--(void)follow:(NSString*)userId userDictionary:(NSDictionary *)dictionary andCallback:(AVBooleanResultBlock)callback{
+-(void)follow:(NSString*)userId userDictionary:(NSDictionary *)dictionary andCallback:(LCBooleanResultBlock)callback{
     if (![self isAuthDataExistInMemory]) {
         callback(NO, LCError(kLCErrorUserCannotBeAlteredWithoutSession, nil, nil));
         return;
@@ -1445,7 +1445,7 @@ static BOOL enableAutomatic = NO;
     }];
 }
 
--(void)unfollow:(NSString *)userId andCallback:(AVBooleanResultBlock)callback{
+-(void)unfollow:(NSString *)userId andCallback:(LCBooleanResultBlock)callback{
     if (![self isAuthDataExistInMemory]) {
         callback(NO, LCError(kLCErrorUserCannotBeAlteredWithoutSession, nil, nil));
         return;
@@ -1458,14 +1458,14 @@ static BOOL enableAutomatic = NO;
     }];
 }
 
--(void)getFollowers:(AVArrayResultBlock)callback{
+-(void)getFollowers:(LCArrayResultBlock)callback{
     
     LCQuery *query= [LCUser followerQuery:self.objectId];
     [query findObjectsInBackgroundWithBlock:callback];
     
 }
 
--(void)getFollowees:(AVArrayResultBlock)callback{
+-(void)getFollowees:(LCArrayResultBlock)callback{
     
     LCQuery *query= [LCUser followeeQuery:self.objectId];
     
@@ -1473,7 +1473,7 @@ static BOOL enableAutomatic = NO;
     
 }
 
--(void)getFollowersAndFollowees:(AVDictionaryResultBlock)callback{
+-(void)getFollowersAndFollowees:(LCDictionaryResultBlock)callback{
     NSString *path=[NSString stringWithFormat:@"users/%@/followersAndFollowees?include=follower,followee",self.objectId];
     
     [[LCPaasClient sharedInstance] getObject:path withParameters:nil block:^(NSDictionary *object, NSError *error) {

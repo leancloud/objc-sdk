@@ -44,7 +44,7 @@
 
 + (void)requestShortMessageForPhoneNumber:(NSString *)phoneNumber
                                   options:(LCShortMessageRequestOptions *)options
-                                 callback:(AVBooleanResultBlock)callback
+                                 callback:(LCBooleanResultBlock)callback
 {
     NSParameterAssert(phoneNumber);
 

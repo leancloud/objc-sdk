@@ -178,7 +178,7 @@ static NSString * currentSessionId;
     [AVAnalytics updateOnlineConfigWithBlock:nil];
 }
 
-+ (void)updateOnlineConfigWithBlock:(AVDictionaryResultBlock)block {
++ (void)updateOnlineConfigWithBlock:(LCDictionaryResultBlock)block {
     NSString *path = [NSString stringWithFormat:@"statistics/apps/%@/sendPolicy", [AVOSCloud getApplicationId]];
     
     [[LCPaasClient sharedInstance] getObject:path withParameters:nil block:^(id object, NSError *error) {

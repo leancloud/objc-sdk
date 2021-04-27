@@ -1,5 +1,5 @@
 //
-//  AVGlobal.h
+//  LCGlobal.h
 //  paas
 //
 //  Created by Zhu Zeng on 9/24/13.
@@ -29,6 +29,6 @@
 
 #define enableTag       @"enable"
 
-#define kAVTypeTag      @"__type"
+#define kLCTypeTag      @"__type"
 
-#define AV_DATE_FORMAT  @"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"
+#define LC_DATE_FORMAT  @"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"
