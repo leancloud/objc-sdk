@@ -11,7 +11,7 @@
 // constant
 #import "LCIMCommon.h"
 // client
-#import "AVIMClientProtocol.h"
+#import "LCIMClientProtocol.h"
 #import "AVIMClient.h"
 #import "AVIMClientInternalConversationManager.h"
 // conversation

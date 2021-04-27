@@ -286,7 +286,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     });
 }
 
-- (void)invokeDelegateInUserInteractQueue:(void (^)(id<AVIMClientDelegate> delegate))block
+- (void)invokeDelegateInUserInteractQueue:(void (^)(id<LCIMClientDelegate> delegate))block
 {
     dispatch_async(self.userInteractQueue, ^{
         block(self.delegate);
@@ -569,7 +569,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                 openingCompletion(true, nil);
             }];
         } else {
-            [self invokeDelegateInUserInteractQueue:^(id<AVIMClientDelegate> delegate) {
+            [self invokeDelegateInUserInteractQueue:^(id<LCIMClientDelegate> delegate) {
                 if ([delegate respondsToSelector:@selector(imClientResumed:)]) {
                     [delegate imClientResumed:self];
                 }
@@ -585,7 +585,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                             completion:openingCompletion];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        [self invokeDelegateInUserInteractQueue:^(id<AVIMClientDelegate> delegate) {
+        [self invokeDelegateInUserInteractQueue:^(id<LCIMClientDelegate> delegate) {
             if ([delegate respondsToSelector:@selector(client:didOfflineWithError:)]) {
                 [delegate client:self didOfflineWithError:error];
             }
@@ -615,7 +615,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             completion(success, error);
         }];
     } else {
-        [self invokeDelegateInUserInteractQueue:^(id<AVIMClientDelegate> delegate) {
+        [self invokeDelegateInUserInteractQueue:^(id<LCIMClientDelegate> delegate) {
             if ([delegate respondsToSelector:@selector(imClientClosed:error:)]) {
                 [delegate imClientClosed:self error:error];
             }
@@ -937,7 +937,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         return;
     }
     [self setStatus:LCIMClientStatusResuming];
-    [self invokeDelegateInUserInteractQueue:^(id<AVIMClientDelegate> delegate) {
+    [self invokeDelegateInUserInteractQueue:^(id<LCIMClientDelegate> delegate) {
         if ([delegate respondsToSelector:@selector(imClientResuming:)]) {
             [delegate imClientResuming:self];
         }
@@ -954,7 +954,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     } else if (self.sessionToken ||
                [self status] != LCIMClientStatusPaused) {
         [self setStatus:LCIMClientStatusPaused];
-        [self invokeDelegateInUserInteractQueue:^(id<AVIMClientDelegate> delegate) {
+        [self invokeDelegateInUserInteractQueue:^(id<LCIMClientDelegate> delegate) {
             if ([delegate respondsToSelector:@selector(imClientPaused:error:)]) {
                 [delegate imClientPaused:self error:error];
             }
@@ -980,7 +980,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                         completion:nil];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    [self invokeDelegateInUserInteractQueue:^(id<AVIMClientDelegate> delegate) {
+    [self invokeDelegateInUserInteractQueue:^(id<LCIMClientDelegate> delegate) {
         if ([delegate respondsToSelector:@selector(client:didOfflineWithError:)]) {
             [delegate client:self didOfflineWithError:error];
         }
@@ -1002,7 +1002,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
         if (error) { return; }
         [conversation addMembers:@[self->_clientId]];
-        id <AVIMClientDelegate> delegate = self->_delegate;
+        id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:invitedByClientId:);
         if (delegate && [delegate respondsToSelector:sel]) {
             [self invokeInUserInteractQueue:^{
@@ -1027,7 +1027,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
         if (error) { return; }
         [conversation addMembers:memberIds];
-        id <AVIMClientDelegate> delegate = self->_delegate;
+        id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:membersAdded:byClientId:);
         if (delegate && [delegate respondsToSelector:sel]) {
             [self invokeInUserInteractQueue:^{
@@ -1051,7 +1051,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
         if (error) { return; }
         [conversation removeMembers:@[self->_clientId]];
-        id <AVIMClientDelegate> delegate = self->_delegate;
+        id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:kickedByClientId:);
         if (delegate && [delegate respondsToSelector:sel]) {
             [self invokeInUserInteractQueue:^{
@@ -1076,7 +1076,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
         if (error) { return; }
         [conversation removeMembers:memberIds];
-        id <AVIMClientDelegate> delegate = self->_delegate;
+        id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:membersRemoved:byClientId:);
         if (delegate && [delegate respondsToSelector:sel]) {
             [self invokeInUserInteractQueue:^{
@@ -1135,7 +1135,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
         if (error) { return; }
         [conversation process_conv_updated_attr:attr attrModified:attrModified];
-        id <AVIMClientDelegate> delegate = self->_delegate;
+        id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didUpdateAt:byClientId:updatedData:);
         if (delegate && [delegate respondsToSelector:sel]) {
             [self invokeInUserInteractQueue:^{
@@ -1162,7 +1162,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
         if (error) { return; }
         [conversation process_member_info_changed:memberId role:roleKey];
-        id <AVIMClientDelegate> delegate = self->_delegate;
+        id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didMemberInfoUpdateBy:memberId:role:);
         if (delegate && [delegate respondsToSelector:sel]) {
             [self invokeInUserInteractQueue:^{
@@ -1186,7 +1186,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     
     [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
         if (error) { return; }
-        id <AVIMClientDelegate> delegate = self->_delegate;
+        id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didBlockBy:);
         if (delegate && [delegate respondsToSelector:sel]) {
             [self invokeInUserInteractQueue:^{
@@ -1210,7 +1210,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     
     [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
         if (error) { return; }
-        id <AVIMClientDelegate> delegate = self->_delegate;
+        id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didMembersBlockBy:memberIds:);
         if (delegate && [delegate respondsToSelector:sel]) {
             [self invokeInUserInteractQueue:^{
@@ -1233,7 +1233,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     
     [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
         if (error) { return; }
-        id <AVIMClientDelegate> delegate = self->_delegate;
+        id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didUnblockBy:);
         if (delegate && [delegate respondsToSelector:sel]) {
             [self invokeInUserInteractQueue:^{
@@ -1257,7 +1257,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     
     [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
         if (error) { return; }
-        id <AVIMClientDelegate> delegate = self->_delegate;
+        id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didMembersUnblockBy:memberIds:);
         if (delegate && [delegate respondsToSelector:sel]) {
             [self invokeInUserInteractQueue:^{
@@ -1280,7 +1280,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     
     [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
         if (error) { return; }
-        id <AVIMClientDelegate> delegate = self->_delegate;
+        id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didMuteBy:);
         if (delegate && [delegate respondsToSelector:sel]) {
             [self invokeInUserInteractQueue:^{
@@ -1304,7 +1304,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     
     [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
         if (error) { return; }
-        id <AVIMClientDelegate> delegate = self->_delegate;
+        id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didMembersMuteBy:memberIds:);
         if (delegate && [delegate respondsToSelector:sel]) {
             [self invokeInUserInteractQueue:^{
@@ -1327,7 +1327,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     
     [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
         if (error) { return; }
-        id <AVIMClientDelegate> delegate = self->_delegate;
+        id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didUnmuteBy:);
         if (delegate && [delegate respondsToSelector:sel]) {
             [self invokeInUserInteractQueue:^{
@@ -1351,7 +1351,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     
     [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
         if (error) { return; }
-        id <AVIMClientDelegate> delegate = self->_delegate;
+        id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didMembersUnmuteBy:memberIds:);
         if (delegate && [delegate respondsToSelector:sel]) {
             [self invokeInUserInteractQueue:^{
@@ -1389,7 +1389,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         if (error) { return; }
         AVIMPatchItem *patchItem = patchItemMap[conversation.conversationId];
         AVIMMessage *patchMessage = [conversation process_patch_modified:patchItem];
-        id <AVIMClientDelegate> delegate = self->_delegate;
+        id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:messageHasBeenUpdated:);
         if (patchMessage && delegate && [delegate respondsToSelector:sel]) {
             [self invokeInUserInteractQueue:^{
@@ -1429,7 +1429,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         if (error) { return; }
         AVIMMessage *message = [conversation process_rcp:rcpCommand isReadRcp:isReadRcp];
         if (!isReadRcp && message) {
-            id <AVIMClientDelegate> delegate = self->_delegate;
+            id <LCIMClientDelegate> delegate = self->_delegate;
             SEL sel = @selector(conversation:messageDelivered:);
             if (delegate && [delegate respondsToSelector:sel]) {
                 [self invokeInUserInteractQueue:^{
@@ -1472,7 +1472,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         NSInteger unreadCount = [conversation process_unread:unreadTuple];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        id <AVIMClientDelegate> delegate = self->_delegate;
+        id <LCIMClientDelegate> delegate = self->_delegate;
         SEL selector = @selector(conversation:didReceiveUnread:);
         if (unreadCount >= 0 && delegate && [delegate respondsToSelector:selector]) {
             [self invokeInUserInteractQueue:^{
@@ -1517,7 +1517,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         AVIMMessage *message = [conversation process_direct:directCommand
                                                   messageId:messageID
                                              isTransientMsg:isTransientMsg];
-        id <AVIMClientDelegate> delegate = self.delegate;
+        id <LCIMClientDelegate> delegate = self.delegate;
         if (message && delegate) {
             SEL selType = @selector(conversation:didReceiveTypedMessage:);
             SEL selCommon = @selector(conversation:didReceiveCommonMessage:);
@@ -2065,7 +2065,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         return;
     }
     
-    id <AVIMClientDelegate> delegate = self->_delegate;
+    id <LCIMClientDelegate> delegate = self->_delegate;
     SEL sel = @selector(conversation:didUpdateForKey:);
     if (delegate && [delegate respondsToSelector:sel]) {
         for (LCIMConversationUpdatedKey key in keys) {

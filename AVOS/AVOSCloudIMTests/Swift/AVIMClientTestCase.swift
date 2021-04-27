@@ -15,7 +15,7 @@ class AVIMClientTestCase: LCIMTestBase {
     func tests_session_open_close() {
         LCRouter.sharedInstance().cleanCache(with: .default(), key: .RTM, error: nil)
         var client: AVIMClient! = AVIMClient(clientId: String(#function[..<#function.firstIndex(of: "(")!]))
-        let delegate: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
+        let delegate: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
         client.delegate = delegate
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
@@ -46,7 +46,7 @@ class AVIMClientTestCase: LCIMTestBase {
         let clientId: String = String(#function[..<#function.firstIndex(of: "(")!])
         let tag: String = "tag"
         
-        let delegate1 = AVIMClientDelegateWrapper()
+        let delegate1 = LCIMClientDelegateWrapper()
         var client1: AVIMClient! = {
             let client: AVIMClient = try! AVIMClient(clientId: clientId, tag: tag, installation: LCInstallation())
             client.installation.setDeviceTokenHexString(UUID().uuidString, teamId: "LeanCloud")
@@ -346,7 +346,7 @@ class AVIMClientTestCase: LCIMTestBase {
             XCTFail()
             return
         }
-        let delegator = AVIMClientDelegateWrapper()
+        let delegator = LCIMClientDelegateWrapper()
         client.delegate = delegator
         
         AVOSCloudIM.defaultOptions().rtmServer = nil;

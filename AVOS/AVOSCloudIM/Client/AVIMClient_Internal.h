@@ -69,7 +69,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 
 - (void)addOperationToInternalSerialQueue:(void (^)(AVIMClient *client))block;
 - (void)invokeInUserInteractQueue:(void (^)(void))block;
-- (void)invokeDelegateInUserInteractQueue:(void (^)(id<AVIMClientDelegate> delegate))block;
+- (void)invokeDelegateInUserInteractQueue:(void (^)(id<LCIMClientDelegate> delegate))block;
 
 - (void)sendCommandWrapper:(LCIMProtobufCommandWrapper *)commandWrapper;
 

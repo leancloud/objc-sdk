@@ -7,7 +7,7 @@
 //
 
 #import "LCIMCommon.h"
-#import "AVIMClientProtocol.h"
+#import "LCIMClientProtocol.h"
 
 @class AVIMConversation;
 @class AVIMChatRoom;
@@ -38,8 +38,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param seconds The interval of timeout.
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds;
 
-/// The delegate for `AVIMClientDelegate`.
-@property (nonatomic, weak, nullable) id<AVIMClientDelegate> delegate;
+/// The delegate for `LCIMClientDelegate`.
+@property (nonatomic, weak, nullable) id<LCIMClientDelegate> delegate;
 
 /// The delegate for `AVIMSignatureDataSource`.
 @property (nonatomic, weak, nullable) id<AVIMSignatureDataSource> signatureDataSource;

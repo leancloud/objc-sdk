@@ -1,5 +1,5 @@
 //
-//  AVIMClientProtocol.h
+//  LCIMClientProtocol.h
 //  AVOS
 //
 //  Created by ZapCannon87 on 2018/7/24.
@@ -16,7 +16,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /// This protocol defines methods to handle the events about client, conversation, message and so on.
-@protocol AVIMClientDelegate <NSObject>
+@protocol LCIMClientDelegate <NSObject>
 
 @optional
 
@@ -213,13 +213,13 @@ NS_ASSUME_NONNULL_BEGIN
 // MARK: Deprecated
 
 - (void)imClientPaused:(AVIMClient *)imClient
-__deprecated_msg("Deprecated, use `-[AVIMClientDelegate imClientPaused:error:]` instead.");
+__deprecated_msg("Deprecated, use `-[LCIMClientDelegate imClientPaused:error:]` instead.");
 
 - (void)client:(AVIMClient *)client didOfflineWithError:(NSError * _Nullable)error
-__deprecated_msg("Deprecated, use `-[AVIMClientDelegate imClientClosed:error:]` instead.");
+__deprecated_msg("Deprecated, use `-[LCIMClientDelegate imClientClosed:error:]` instead.");
 
 - (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread
-__deprecated_msg("Deprecated, use `-[AVIMClientDelegate conversation:didUpdateForKey:]` instead.");
+__deprecated_msg("Deprecated, use `-[LCIMClientDelegate conversation:didUpdateForKey:]` instead.");
 
 @end
 

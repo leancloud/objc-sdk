@@ -50,13 +50,13 @@ extension LCIMTestBase {
     static func newOpenedClient(
         clientId: String,
         tag: String? = nil,
-        delegate: AVIMClientDelegate? = nil,
+        delegate: LCIMClientDelegate? = nil,
         installation: LCInstallation = LCInstallation.default(),
         openOption: LCIMClientOpenOption = .forceOpen
         ) -> AVIMClient?
     {
         var client: AVIMClient! = try! AVIMClient(clientId: clientId, tag: tag, installation: installation)
-        if let delegate: AVIMClientDelegate = delegate {
+        if let delegate: LCIMClientDelegate = delegate {
             client.delegate = delegate
         }
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
@@ -94,7 +94,7 @@ extension LCIMTestBase {
     
 }
 
-class AVIMClientDelegateWrapper: NSObject, AVIMClientDelegate {
+class LCIMClientDelegateWrapper: NSObject, LCIMClientDelegate {
     
     func imClientPaused(_ imClient: AVIMClient, error: Error?) {
         

@@ -166,7 +166,7 @@ class IMClientTestCase: RTMBaseTestCase {
     }
 }
 
-class AVIMClientDelegator: NSObject, AVIMClientDelegate {
+class AVIMClientDelegator: NSObject, LCIMClientDelegate {
     
     func reset() {
         resuming = nil
