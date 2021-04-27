@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMCommon.h"
+#import "LCIMCommon.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -41,13 +41,13 @@ NS_ASSUME_NONNULL_BEGIN
  对一个操作进行签名. 注意:本调用会在后台线程被执行
  @param clientId - 操作发起人的 id
  @param conversationId － 操作所属对话的 id
- @param action － @see AVIMSignatureAction
+ @param action － @see LCIMSignatureAction
  @param clientIds － 操作目标的 id 列表
  @return 一个 AVIMSignature 签名对象.
  */
 - (AVIMSignature *)signatureWithClientId:(NSString *)clientId
                           conversationId:(NSString * _Nullable)conversationId
-                                  action:(AVIMSignatureAction)action
+                                  action:(LCIMSignatureAction)action
                        actionOnClientIds:(NSArray<NSString *> * _Nullable)clientIds;
 @end
 

@@ -10,30 +10,30 @@
 #import "AVIMConversation_Internal.h"
 #import "LCUtils.h"
 
-AVIMConversationMemberRoleKey AVIMConversationMemberInfo_role_to_key(AVIMConversationMemberRole role)
+LCIMConversationMemberRoleKey AVIMConversationMemberInfo_role_to_key(LCIMConversationMemberRole role)
 {
     switch (role)
     {
-        case AVIMConversationMemberRoleMember:
-            return AVIMConversationMemberRoleKeyMember;
-        case AVIMConversationMemberRoleManager:
-            return AVIMConversationMemberRoleKeyManager;
-        case AVIMConversationMemberRoleOwner:
-            return AVIMConversationMemberRoleKeyOwner;
+        case LCIMConversationMemberRoleMember:
+            return LCIMConversationMemberRoleKeyMember;
+        case LCIMConversationMemberRoleManager:
+            return LCIMConversationMemberRoleKeyManager;
+        case LCIMConversationMemberRoleOwner:
+            return LCIMConversationMemberRoleKeyOwner;
         default:
             return nil;
     }
 }
 
-AVIMConversationMemberRole AVIMConversationMemberInfo_key_to_role(AVIMConversationMemberRoleKey key)
+LCIMConversationMemberRole AVIMConversationMemberInfo_key_to_role(LCIMConversationMemberRoleKey key)
 {
-    AVIMConversationMemberRole role = AVIMConversationMemberRoleMember;
-    if ([key isEqualToString:AVIMConversationMemberRoleKeyMember]) {
-        role = AVIMConversationMemberRoleMember;
-    } else if ([key isEqualToString:AVIMConversationMemberRoleKeyManager]) {
-        role = AVIMConversationMemberRoleManager;
-    } else if ([key isEqualToString:AVIMConversationMemberRoleKeyOwner]) {
-        role = AVIMConversationMemberRoleOwner;
+    LCIMConversationMemberRole role = LCIMConversationMemberRoleMember;
+    if ([key isEqualToString:LCIMConversationMemberRoleKeyMember]) {
+        role = LCIMConversationMemberRoleMember;
+    } else if ([key isEqualToString:LCIMConversationMemberRoleKeyManager]) {
+        role = LCIMConversationMemberRoleManager;
+    } else if ([key isEqualToString:LCIMConversationMemberRoleKeyOwner]) {
+        role = LCIMConversationMemberRoleOwner;
     }
     return role;
 }
@@ -85,7 +85,7 @@ AVIMConversationMemberRole AVIMConversationMemberInfo_key_to_role(AVIMConversati
 {
     __block NSString *value = nil;
     [self internalSyncLock:^{
-        value = [NSString _lc_decoding:self->_rawJSONData key:AVIMConversationMemberInfoKeyConversationId];
+        value = [NSString _lc_decoding:self->_rawJSONData key:LCIMConversationMemberInfoKeyConversationId];
     }];
     return value;
 }
@@ -94,16 +94,16 @@ AVIMConversationMemberRole AVIMConversationMemberInfo_key_to_role(AVIMConversati
 {
     __block NSString *value = nil;
     [self internalSyncLock:^{
-        value = [NSString _lc_decoding:self->_rawJSONData key:AVIMConversationMemberInfoKeyMemberId];
+        value = [NSString _lc_decoding:self->_rawJSONData key:LCIMConversationMemberInfoKeyMemberId];
     }];
     return value;
 }
 
-- (AVIMConversationMemberRole)role
+- (LCIMConversationMemberRole)role
 {
     __block NSString *value = nil;
     [self internalSyncLock:^{
-        value = [NSString _lc_decoding:self->_rawJSONData key:AVIMConversationMemberInfoKeyRole];
+        value = [NSString _lc_decoding:self->_rawJSONData key:LCIMConversationMemberInfoKeyRole];
     }];
     return AVIMConversationMemberInfo_key_to_role(value);
 }

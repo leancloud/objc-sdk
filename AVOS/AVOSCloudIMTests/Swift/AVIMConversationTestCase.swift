@@ -51,10 +51,10 @@ class AVIMConversationTestCase: LCIMTestBase {
             /// increment is 3 because both `conv.readInBackground()` & `conv read command` will update unreadMessagesCount
             /// in this case unreadMessagesCount updated event will appear 3 times.
             semaphore.increment(3)
-            delegate2.didUpdateForKeyClosure = { (conv: AVIMConversation, key: AVIMConversationUpdatedKey) in
+            delegate2.didUpdateForKeyClosure = { (conv: AVIMConversation, key: LCIMConversationUpdatedKey) in
                 XCTAssertTrue(Thread.isMainThread)
                 if conv.conversationId == normalConv.conversationId,
-                    key == AVIMConversationUpdatedKey.unreadMessagesCount
+                    key == LCIMConversationUpdatedKey.unreadMessagesCount
                 {
                     if conv.unreadMessagesCount > 0 {
                         conv.readInBackground()
@@ -73,13 +73,13 @@ class AVIMConversationTestCase: LCIMTestBase {
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment(2)
-            delegate1.didUpdateForKeyClosure = { (conv: AVIMConversation, key: AVIMConversationUpdatedKey) in
+            delegate1.didUpdateForKeyClosure = { (conv: AVIMConversation, key: LCIMConversationUpdatedKey) in
                 XCTAssertTrue(Thread.isMainThread)
                 if conv.conversationId == normalConv.conversationId {
-                    if key == AVIMConversationUpdatedKey.lastDeliveredAt {
+                    if key == LCIMConversationUpdatedKey.lastDeliveredAt {
                         semaphore.decrement()
                     }
-                    if key == AVIMConversationUpdatedKey.lastReadAt {
+                    if key == LCIMConversationUpdatedKey.lastReadAt {
                         semaphore.decrement()
                     }
                 }
@@ -502,7 +502,7 @@ class AVIMConversationTestCase: LCIMTestBase {
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment(3)
-            delegate2.memberInfoChangeClosure = { (conv: AVIMConversation, byClientId: String?, memberId: String?, role: AVIMConversationMemberRole) in
+            delegate2.memberInfoChangeClosure = { (conv: AVIMConversation, byClientId: String?, memberId: String?, role: LCIMConversationMemberRole) in
                 XCTAssertTrue(Thread.isMainThread)
                 if conv.conversationId == normalConv.conversationId {
                     semaphore.decrement()
@@ -511,7 +511,7 @@ class AVIMConversationTestCase: LCIMTestBase {
                     XCTAssertEqual(role, .manager)
                 }
             }
-            delegate3.memberInfoChangeClosure = { (conv: AVIMConversation, byClientId: String?, memberId: String?, role: AVIMConversationMemberRole) in
+            delegate3.memberInfoChangeClosure = { (conv: AVIMConversation, byClientId: String?, memberId: String?, role: LCIMConversationMemberRole) in
                 XCTAssertTrue(Thread.isMainThread)
                 if conv.conversationId == normalConv.conversationId {
                     semaphore.decrement()

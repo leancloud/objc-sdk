@@ -229,7 +229,7 @@ NSNotificationName const AVLiveQueryEventNotification = @"AVLiveQueryEventNotifi
             }
         } else if (error) {
             if ([error.domain isEqualToString:kLeanCloudErrorDomain] &&
-                error.code == AVIMErrorCodeCommandTimeout) {
+                error.code == LCIMErrorCodeCommandTimeout) {
                 [ws sendLoginCommand];
             }
         }

@@ -11,8 +11,6 @@
 #import "AVIMCommandFormatter.h"
 #import "AVIMErrorUtil.h"
 
-const NSInteger LCIMErrorCodeSessionTokenExpired = 4112;
-
 @implementation AVIMCommandFormatter
 
 + (NSString *)commandType:(AVIMCommandType)commandType {

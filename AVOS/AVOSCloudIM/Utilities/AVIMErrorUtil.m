@@ -9,28 +9,28 @@
 #import "AVIMErrorUtil.h"
 #import "LCErrorUtils.h"
 
-NSString *AVIMErrorMessage(AVIMErrorCode code)
+NSString *AVIMErrorMessage(LCIMErrorCode code)
 {
     switch (code) {
             // 90xx
-        case AVIMErrorCodeCommandTimeout:
+        case LCIMErrorCodeCommandTimeout:
             return @"Web Socket command timeout.";
-        case AVIMErrorCodeConnectionLost:
+        case LCIMErrorCodeConnectionLost:
             return @"Web Socket connection lost.";
-        case AVIMErrorCodeClientNotOpen:
+        case LCIMErrorCodeClientNotOpen:
             return @"IM client not open.";
-        case AVIMErrorCodeInvalidCommand:
+        case LCIMErrorCodeInvalidCommand:
             return @"Web Socket command received from server is invalid.";
-        case AVIMErrorCodeCommandDataLengthTooLong:
+        case LCIMErrorCodeCommandDataLengthTooLong:
             return @"Web socket command data length is too long.";
             // 91XX
-        case AVIMErrorCodeConversationNotFound:
+        case LCIMErrorCodeConversationNotFound:
             return @"Conversation not found.";
-        case AVIMErrorCodeUpdatingMessageNotAllowed:
+        case LCIMErrorCodeUpdatingMessageNotAllowed:
             return @"Updating message from others is not allowed.";
-        case AVIMErrorCodeUpdatingMessageNotSent:
+        case LCIMErrorCodeUpdatingMessageNotSent:
             return @"Message is not sent.";
-        case AVIMErrorCodeOwnerPromotionNotAllowed:
+        case LCIMErrorCodeOwnerPromotionNotAllowed:
             return @"Updating a member's role to owner is not allowed.";
         default:
             return nil;
@@ -43,13 +43,13 @@ NSError *LCErrorFromErrorCommand(AVIMErrorCommand *command)
     if (command) {
         NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
         if (command.hasAppCode) {
-            userInfo[kAVIMAppCodeKey] = @(command.appCode);
+            userInfo[kLCIMAppCodeKey] = @(command.appCode);
         }
         if (command.hasAppMsg) {
-            userInfo[kAVIMAppMsgKey] = command.appMsg;
+            userInfo[kLCIMAppMsgKey] = command.appMsg;
         }
         if (command.hasDetail) {
-            userInfo[kAVIMDetailKey] = command.detail;
+            userInfo[kLCIMDetailKey] = command.detail;
         }
         error = LCError(command.code,
                         command.hasReason ? command.reason : nil,
@@ -64,7 +64,7 @@ NSError *LCErrorFromSessionCommand(AVIMSessionCommand *command)
     if (command.hasCode) {
         NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
         if (command.hasDetail) {
-            userInfo[kAVIMDetailKey] = command.detail;
+            userInfo[kLCIMDetailKey] = command.detail;
         }
         error = LCError(command.code,
                         command.hasReason ? command.reason : nil,
@@ -80,10 +80,10 @@ NSError *LCErrorFromAckCommand(AVIMAckCommand *command)
         command.hasAppCode) {
         NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
         if (command.hasAppCode) {
-            userInfo[kAVIMAppCodeKey] = @(command.appCode);
+            userInfo[kLCIMAppCodeKey] = @(command.appCode);
         }
         if (command.hasAppMsg) {
-            userInfo[kAVIMAppMsgKey] = command.appMsg;
+            userInfo[kLCIMAppMsgKey] = command.appMsg;
         }
         error = LCError(command.code,
                         command.hasReason ? command.reason : nil,

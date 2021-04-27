@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMCommon.h"
+#import "LCIMCommon.h"
 #import "AVIMMessage.h"
 #import "AVIMMessageOption.h"
 
@@ -129,7 +129,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  Indicate whether it is a transient conversation. 
- *  @see AVIMConversationOptionTransient
+ *  @see LCIMConversationOptionTransient
  */
 @property (nonatomic, assign, readonly) BOOL transient;
 
@@ -410,7 +410,7 @@ __deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
  @param callback  Callback of query request.
  */
 - (void)queryMessagesInInterval:(AVIMMessageInterval *)interval
-                      direction:(AVIMMessageQueryDirection)direction
+                      direction:(LCIMMessageQueryDirection)direction
                           limit:(NSUInteger)limit
                        callback:(void (^)(NSArray<AVIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;
 
@@ -475,7 +475,7 @@ __deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
  @param callback Result callback.
  */
 - (void)updateMemberRoleWithMemberId:(NSString *)memberId
-                                role:(AVIMConversationMemberRole)role
+                                role:(LCIMConversationMemberRole)role
                             callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 // MARK: - Member Block
@@ -589,7 +589,7 @@ __deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
  */
 - (void)sendMessage:(AVIMMessage *)message
             options:(AVIMMessageSendOption)options
-      progressBlock:(nullable AVIMProgressBlock)progressBlock
+      progressBlock:(nullable LCIMProgressBlock)progressBlock
            callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback __deprecated_msg("deprecated. use -[sendMessage:option:progressBlock:callback:] instead.");
 
 /*!

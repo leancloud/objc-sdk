@@ -52,7 +52,7 @@ extension LCIMTestBase {
         tag: String? = nil,
         delegate: AVIMClientDelegate? = nil,
         installation: LCInstallation = LCInstallation.default(),
-        openOption: AVIMClientOpenOption = .forceOpen
+        openOption: LCIMClientOpenOption = .forceOpen
         ) -> AVIMClient?
     {
         var client: AVIMClient! = try! AVIMClient(clientId: clientId, tag: tag, installation: installation)
@@ -77,7 +77,7 @@ extension LCIMTestBase {
         clientIds: [String],
         name: String? = nil,
         attributes: [AnyHashable : Any]? = nil,
-        options: AVIMConversationOption = [],
+        options: LCIMConversationOption = [],
         temporaryTTL: Int32 = 0
         ) -> AVIMConversation?
     {
@@ -145,8 +145,8 @@ class AVIMClientDelegateWrapper: NSObject, AVIMClientDelegate {
         self.messageDeliveredClosure?(conversation, message)
     }
     
-    var didUpdateForKeyClosure: ((AVIMConversation, AVIMConversationUpdatedKey) -> Void)?
-    func conversation(_ conversation: AVIMConversation, didUpdateForKey key: AVIMConversationUpdatedKey) {
+    var didUpdateForKeyClosure: ((AVIMConversation, LCIMConversationUpdatedKey) -> Void)?
+    func conversation(_ conversation: AVIMConversation, didUpdateForKey key: LCIMConversationUpdatedKey) {
         self.didUpdateForKeyClosure?(conversation, key)
     }
     
@@ -175,8 +175,8 @@ class AVIMClientDelegateWrapper: NSObject, AVIMClientDelegate {
         self.membersRemovedClosure?(conversation, clientIds, clientId)
     }
     
-    var memberInfoChangeClosure: ((AVIMConversation, String?, String?, AVIMConversationMemberRole) -> Void)?
-    func conversation(_ conversation: AVIMConversation, didMemberInfoUpdateBy byClientId: String?, memberId: String?, role: AVIMConversationMemberRole) {
+    var memberInfoChangeClosure: ((AVIMConversation, String?, String?, LCIMConversationMemberRole) -> Void)?
+    func conversation(_ conversation: AVIMConversation, didMemberInfoUpdateBy byClientId: String?, memberId: String?, role: LCIMConversationMemberRole) {
         self.memberInfoChangeClosure?(conversation, byClientId, memberId, role)
     }
     

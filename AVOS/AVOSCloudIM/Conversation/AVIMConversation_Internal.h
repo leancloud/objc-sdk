@@ -7,7 +7,7 @@
 //
 
 #import "AVIMConversation.h"
-#import "AVIMCommon_Internal.h"
+#import "LCIMCommon_Internal.h"
 #import "MessagesProtoOrig.pbobjc.h"
 
 @interface AVIMConversation ()

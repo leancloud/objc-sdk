@@ -16,7 +16,7 @@
 #import "LCUtils.h"
 #import "LCErrorUtils.h"
 #import "AVOSCloudIM.h"
-#import "AVIMCommon_Internal.h"
+#import "LCIMCommon_Internal.h"
 #import "AVIMErrorUtil.h"
 
 LCIMProtocol const LCIMProtocol3 = @"lc.protobuf2.3";
@@ -353,7 +353,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             if ([command.expiration compare:currentDate] == NSOrderedDescending) {
                 break;
             } else {
-                NSError *error = LCError(AVIMErrorCodeCommandTimeout,
+                NSError *error = LCError(LCIMErrorCodeCommandTimeout,
                                          @"Command Timeout", nil);
                 for (LCRTMConnectionOutCommandCallback callback in command.callbacks) {
                     dispatch_async(command.callingQueue, ^{
@@ -465,7 +465,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
         }
         self.socket = nil;
         if (self.outCommandIndexSequence.count > 0) {
-            NSError *error = LCError(AVIMErrorCodeConnectionLost,
+            NSError *error = LCError(LCIMErrorCodeConnectionLost,
                                      @"Connection Lost", nil);
             for (NSNumber *i in self.outCommandIndexSequence) {
                 LCRTMConnectionOutCommand *command = self.outCommandCollection[i];
@@ -619,7 +619,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     } else if (oldState == LCRTMConnectionAppStateForeground &&
                newState == LCRTMConnectionAppStateBackground) {
         [self tryCleanConnectionWithError:
-         LCError(AVIMErrorCodeConnectionLost,
+         LCError(LCIMErrorCodeConnectionLost,
                  @"Application did enter background, connection lost.", nil)];
         [self resetConnectingDelayInterval];
     }
@@ -640,13 +640,13 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     if (oldStatus != LCNetworkReachabilityStatusNotReachable &&
         newStatus == LCNetworkReachabilityStatusNotReachable) {
         [self tryCleanConnectionWithError:
-         LCError(AVIMErrorCodeConnectionLost,
+         LCError(LCIMErrorCodeConnectionLost,
                  @"Network not reachable, connection lost.", nil)];
         [self resetConnectingDelayInterval];
     } else if (oldStatus != newStatus &&
                newStatus != LCNetworkReachabilityStatusNotReachable) {
         [self tryCleanConnectionWithError:
-         LCError(AVIMErrorCodeConnectionLost,
+         LCError(LCIMErrorCodeConnectionLost,
                  @"Network interface changed, connection lost.", nil)];
         [self resetConnectingDelayInterval];
         [self tryConnecting];
@@ -674,13 +674,13 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     NSParameterAssert([self assertSpecificSerialQueue]);
 #if TARGET_OS_IOS || TARGET_OS_TV
     if (self.previousAppState == LCRTMConnectionAppStateBackground) {
-        return LCError(AVIMErrorCodeConnectionLost,
+        return LCError(LCIMErrorCodeConnectionLost,
                        @"Application did enter background, connection lost.", nil);
     }
 #endif
 #if !TARGET_OS_WATCH
     if (self.previousReachabilityStatus == LCNetworkReachabilityStatusNotReachable) {
-        return LCError(AVIMErrorCodeConnectionLost,
+        return LCError(LCIMErrorCodeConnectionLost,
                        @"Network not reachable, connection lost.", nil);
     }
 #endif
@@ -908,7 +908,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             LCLoggerError(LCLoggerDomainIM, @"%@", error);
         }
         [self tryCleanConnectionWithError:
-         LCError(AVIMErrorCodeConnectionLost,
+         LCError(LCIMErrorCodeConnectionLost,
                  @"Connection did close by remote peer.", nil)];
         [self resetConnectingDelayInterval];
         [self tryConnecting];
@@ -929,7 +929,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             !timer) {
             if (needCallback) {
                 dispatch_async(queue, ^{
-                    callback(nil, LCError(AVIMErrorCodeConnectionLost,
+                    callback(nil, LCError(LCIMErrorCodeConnectionLost,
                                           @"Connection Lost", nil));
                 });
             }
@@ -951,7 +951,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
         if (!data) {
             if (needCallback) {
                 dispatch_async(queue, ^{
-                    callback(nil, LCError(AVIMErrorCodeInvalidCommand,
+                    callback(nil, LCError(LCIMErrorCodeInvalidCommand,
                                           @"Serializing out command failed.", nil));
                 });
             }
@@ -959,7 +959,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
         } else if (data.length > (1024 * 5)) {
             if (needCallback) {
                 dispatch_async(queue, ^{
-                    callback(nil, LCError(AVIMErrorCodeCommandDataLengthTooLong,
+                    callback(nil, LCError(LCIMErrorCodeCommandDataLengthTooLong,
                                           @"The size of the out command should less than 5KB.", nil));
                 });
             }
@@ -1070,7 +1070,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             error = LCErrorFromUnderlyingError(error);
         }
     } else {
-        error = LCError(AVIMErrorCodeConnectionLost,
+        error = LCError(LCIMErrorCodeConnectionLost,
                         @"Connection did close by remote peer.", nil);
     }
     LCLoggerError(LCLoggerDomainIM,

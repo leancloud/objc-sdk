@@ -7,10 +7,10 @@
 //
 
 #import "AVIMConversationMemberInfo.h"
-#import "AVIMCommon_Internal.h"
+#import "LCIMCommon_Internal.h"
 
-AVIMConversationMemberRoleKey AVIMConversationMemberInfo_role_to_key(AVIMConversationMemberRole role);
-AVIMConversationMemberRole AVIMConversationMemberInfo_key_to_role(AVIMConversationMemberRoleKey key);
+LCIMConversationMemberRoleKey AVIMConversationMemberInfo_role_to_key(LCIMConversationMemberRole role);
+LCIMConversationMemberRole AVIMConversationMemberInfo_key_to_role(LCIMConversationMemberRoleKey key);
 
 @class AVIMConversation;
 

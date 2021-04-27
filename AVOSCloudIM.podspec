@@ -36,7 +36,7 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/TypedMessages/AVIMTypedMessage.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMImageMessage.h',
       'AVOS/AVOSCloudIM/Client/AVIMClient.h',
-      'AVOS/AVOSCloudIM/AVIMCommon.h',
+      'AVOS/AVOSCloudIM/LCIMCommon.h',
       'AVOS/AVOSCloudIM/Conversation/AVIMConversation.h',
       'AVOS/AVOSCloudIM/Message/AVIMMessage.h',
       'AVOS/AVOSCloudIM/Signature/AVIMSignature.h',

@@ -52,13 +52,13 @@ class IMClientTestCase: RTMBaseTestCase {
             delegator1.closed = { client, error in
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(error)
-                XCTAssertEqual((error as NSError?)?.code, AVIMErrorCode.sessionConflict.rawValue)
+                XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.sessionConflict.rawValue)
                 exp.fulfill()
             }
             delegator1.offline = { client, error in
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(error)
-                XCTAssertEqual((error as NSError?)?.code, AVIMErrorCode.sessionConflict.rawValue)
+                XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.sessionConflict.rawValue)
                 exp.fulfill()
             }
             client2.open { (success, error) in
@@ -74,14 +74,14 @@ class IMClientTestCase: RTMBaseTestCase {
         { (exp) in
             delegator1.offline = { client, error in
                 XCTAssertNotNil(error)
-                XCTAssertEqual((error as NSError?)?.code, AVIMErrorCode.sessionConflict.rawValue)
+                XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.sessionConflict.rawValue)
                 exp.fulfill()
             }
             client1.open(with: .reopen) { (success, error) in
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertFalse(success)
                 XCTAssertNotNil(error)
-                XCTAssertEqual((error as NSError?)?.code, AVIMErrorCode.sessionConflict.rawValue)
+                XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.sessionConflict.rawValue)
                 exp.fulfill()
             }
         }
@@ -91,12 +91,12 @@ class IMClientTestCase: RTMBaseTestCase {
         { (exp) in
             delegator2.closed = { client, error in
                 XCTAssertNotNil(error)
-                XCTAssertEqual((error as NSError?)?.code, AVIMErrorCode.sessionConflict.rawValue)
+                XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.sessionConflict.rawValue)
                 exp.fulfill()
             }
             delegator2.offline = { client, error in
                 XCTAssertNotNil(error)
-                XCTAssertEqual((error as NSError?)?.code, AVIMErrorCode.sessionConflict.rawValue)
+                XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.sessionConflict.rawValue)
                 exp.fulfill()
             }
             client1.open(with: .forceOpen) { (success, error) in

@@ -22,25 +22,25 @@ if (block) { \
 
 @implementation AVIMBlockHelper
 
-+ (void)callBooleanResultBlock:(AVIMBooleanResultBlock)block
++ (void)callBooleanResultBlock:(LCIMBooleanResultBlock)block
                          error:(NSError *)error
 {
     safeBlock(error == nil);
 }
 
-+ (void)callIntegerResultBlock:(AVIMIntegerResultBlock)block
++ (void)callIntegerResultBlock:(LCIMIntegerResultBlock)block
                         number:(NSInteger)number
                          error:(NSError *)error {
     safeBlock(number);
 }
 
-+ (void)callArrayResultBlock:(AVIMArrayResultBlock)block
++ (void)callArrayResultBlock:(LCIMArrayResultBlock)block
                        array:(NSArray *)array
                        error:(NSError *)error {
     safeBlock(array);
 }
 
-+ (void)callConversationResultBlock:(AVIMConversationResultBlock)block
++ (void)callConversationResultBlock:(LCIMConversationResultBlock)block
                        conversation:(AVIMConversation *)conversation
                               error:(NSError *)error {
     safeBlock(conversation);

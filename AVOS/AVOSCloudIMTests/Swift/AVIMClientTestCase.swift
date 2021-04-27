@@ -81,7 +81,7 @@ class AVIMClientTestCase: LCIMTestBase {
                 delegate1.didOfflineClosure = { (client: AVIMClient, error: Error?) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
-                    XCTAssertEqual((error as NSError?)?.code, AVIMErrorCode.sessionConflict.rawValue)
+                    XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.sessionConflict.rawValue)
                     XCTAssertTrue(client === client1)
                 }
                 client2.open(with: .forceOpen, callback: { (succeeded: Bool, error: Error?  ) in
@@ -101,7 +101,7 @@ class AVIMClientTestCase: LCIMTestBase {
                         XCTAssertTrue(Thread.isMainThread)
                         XCTAssertFalse(succeeded)
                         XCTAssertNotNil(error)
-                        XCTAssertEqual((error as NSError?)?.code, AVIMErrorCode.sessionConflict.rawValue)
+                        XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.sessionConflict.rawValue)
                     })
                 }, failure: { XCTFail("timeout") })
             }

@@ -13,7 +13,7 @@
 #import "LCIMMessageCacheStore.h"
 #import "AVIMMessage.h"
 #import "AVIMMessage_Internal.h"
-#import "AVIMCommon.h"
+#import "LCIMCommon.h"
 
 @interface LCIMMessageCache ()
 

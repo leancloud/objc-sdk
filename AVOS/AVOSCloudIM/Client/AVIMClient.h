@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMCommon.h"
+#import "LCIMCommon.h"
 #import "AVIMClientProtocol.h"
 
 @class AVIMConversation;
@@ -104,18 +104,18 @@ NS_ASSUME_NONNULL_BEGIN
                                   tag:(NSString * _Nullable)tag
                                 error:(NSError * __autoreleasing *)error LC_WARN_UNUSED_RESULT;
 
-/// The current status of this client, see `AVIMClientStatus`.
-- (AVIMClientStatus)status;
+/// The current status of this client, see `LCIMClientStatus`.
+- (LCIMClientStatus)status;
 
 /// Open this client before using instant messaging service,
-/// this action use `AVIMClientOpenOptionForceOpen` as default open option.
+/// this action use `LCIMClientOpenOptionForceOpen` as default open option.
 /// @param callback The result callback.
 - (void)openWithCallback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /// Open this client before using instant messaging service
-/// @param openOption See `AVIMClientOpenOption`.
+/// @param openOption See `LCIMClientOpenOption`.
 /// @param callback The result callback.
-- (void)openWithOption:(AVIMClientOpenOption)openOption
+- (void)openWithOption:(LCIMClientOpenOption)openOption
               callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /// Close this client.
@@ -167,7 +167,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)createConversationWithName:(NSString * _Nullable)name
                          clientIds:(NSArray<NSString *> *)clientIds
                         attributes:(NSDictionary * _Nullable)attributes
-                           options:(AVIMConversationOption)options
+                           options:(LCIMConversationOption)options
                           callback:(void (^)(AVIMConversation * _Nullable conversation, NSError * _Nullable error))callback;
 
 /**
@@ -183,7 +183,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)createConversationWithName:(NSString * _Nullable)name
                          clientIds:(NSArray<NSString *> *)clientIds
                         attributes:(NSDictionary * _Nullable)attributes
-                           options:(AVIMConversationOption)options
+                           options:(LCIMConversationOption)options
                       temporaryTTL:(int32_t)temporaryTTL
                           callback:(void (^)(AVIMConversation * _Nullable conversation, NSError * _Nullable error))callback;
 

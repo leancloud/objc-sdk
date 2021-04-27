@@ -6,7 +6,7 @@
 //  Copyright © 2018 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMCommon.h"
+#import "LCIMCommon.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @return Role
  */
-- (AVIMConversationMemberRole)role;
+- (LCIMConversationMemberRole)role;
 
 /**
  Whether is the creator of the conversation.

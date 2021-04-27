@@ -35,6 +35,6 @@
 @property (nonatomic, assign) uint32_t       skip;
 @property (nonatomic, assign) uint32_t       limit;
 @property (nonatomic, assign) BOOL           unique;
-@property (nonatomic, assign) AVIMConversationQueryOption option;
+@property (nonatomic, assign) LCIMConversationQueryOption option;
 
 @end

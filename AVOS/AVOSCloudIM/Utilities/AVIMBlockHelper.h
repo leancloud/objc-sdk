@@ -6,22 +6,22 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMCommon.h"
+#import "LCIMCommon.h"
 
 @interface AVIMBlockHelper : NSObject
 
-+ (void)callBooleanResultBlock:(AVIMBooleanResultBlock)block
++ (void)callBooleanResultBlock:(LCIMBooleanResultBlock)block
                          error:(NSError *)error;
 
-+ (void)callIntegerResultBlock:(AVIMIntegerResultBlock)block
++ (void)callIntegerResultBlock:(LCIMIntegerResultBlock)block
                         number:(NSInteger)number
                          error:(NSError *)error;
 
-+ (void)callArrayResultBlock:(AVIMArrayResultBlock)block
++ (void)callArrayResultBlock:(LCIMArrayResultBlock)block
                        array:(NSArray *)array
                        error:(NSError *)error;
 
-+ (void)callConversationResultBlock:(AVIMConversationResultBlock)block
++ (void)callConversationResultBlock:(LCIMConversationResultBlock)block
                        conversation:(AVIMConversation *)conversation
                               error:(NSError *)error;
 

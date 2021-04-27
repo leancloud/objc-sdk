@@ -158,7 +158,7 @@ class RTMConnectionTestCase: RTMBaseTestCase {
                             calling: .main,
                             callback: { (_, error) in
                                 XCTAssertTrue(Thread.isMainThread)
-                                XCTAssertEqual((error as NSError?)?.code, AVIMErrorCode.commandTimeout.rawValue)
+                                XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.commandTimeout.rawValue)
                                 exp.fulfill()
                             }),
                         index: NSNumber(1))
@@ -405,7 +405,7 @@ class RTMConnectionTestCase: RTMBaseTestCase {
             { (inCommand, error) in
                 XCTAssertNil(inCommand)
                 XCTAssertNotNil(error)
-                XCTAssertEqual((error as NSError?)?.code, AVIMErrorCode.commandDataLengthTooLong.rawValue)
+                XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.commandDataLengthTooLong.rawValue)
                 exp.fulfill()
             }
         }

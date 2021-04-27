@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMCommon.h"
+#import "LCIMCommon.h"
 
 #define AVIMAttr(attr) ([NSString stringWithFormat:@"attr.%@", attr])
 
@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  Configures cache policy, default is kLCCachePolicyCacheElseNetwork
  */
-@property (nonatomic, assign) AVIMCachePolicy cachePolicy;
+@property (nonatomic, assign) LCIMCachePolicy cachePolicy;
 
 /*!
  Configures cache time, default is one hour (1 * 60 * 60)
@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  * Query conditions.
  */
-@property (nonatomic, assign) AVIMConversationQueryOption option;
+@property (nonatomic, assign) LCIMConversationQueryOption option;
 
 /*!
  * Build an query that is the OR of the passed in queries.

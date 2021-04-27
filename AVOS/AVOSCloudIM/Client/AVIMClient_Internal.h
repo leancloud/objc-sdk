@@ -7,7 +7,7 @@
 //
 
 #import "AVIMClient.h"
-#import "AVIMCommon_Internal.h"
+#import "LCIMCommon_Internal.h"
 #import "LCRTMConnection.h"
 #import "AVIMClientInternalConversationManager_Internal.h"
 #import "AVIMSignature.h"
@@ -48,7 +48,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 @property (nonatomic, readonly) LCIMConversationCache *conversationCache;
 
 @property (nonatomic) void (^openingCompletion)(BOOL, NSError *);
-@property (nonatomic) AVIMClientOpenOption openingOption;
+@property (nonatomic) LCIMClientOpenOption openingOption;
 @property (nonatomic) NSString *sessionToken;
 @property (nonatomic) NSDate *sessionTokenExpiration;
 @property (nonatomic) int64_t lastUnreadNotifTime;
@@ -74,13 +74,13 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 - (void)sendCommandWrapper:(LCIMProtobufCommandWrapper *)commandWrapper;
 
 - (void)getSignatureWithConversationId:(NSString *)conversationId
-                                action:(AVIMSignatureAction)action
+                                action:(LCIMSignatureAction)action
                      actionOnClientIds:(NSArray<NSString *> *)actionOnClientIds
                               callback:(void (^)(AVIMSignature *signature))callback;
 
 - (void)getSessionTokenWithForcingRefresh:(BOOL)forcingRefresh
                                  callback:(void (^)(NSString *sessionToken, NSError *error))callback;
 
-- (void)conversation:(AVIMConversation *)conversation didUpdateForKeys:(NSArray<AVIMConversationUpdatedKey> *)keys;
+- (void)conversation:(AVIMConversation *)conversation didUpdateForKeys:(NSArray<LCIMConversationUpdatedKey> *)keys;
 
 @end

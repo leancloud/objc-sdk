@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMCommon.h"
+#import "LCIMCommon.h"
 
 typedef NS_ENUM(int32_t, AVIMMessageMediaType) {
     kAVIMMessageMediaTypeNone = 0,

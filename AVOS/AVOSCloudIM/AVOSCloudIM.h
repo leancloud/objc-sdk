@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 // constant
-#import "AVIMCommon.h"
+#import "LCIMCommon.h"
 // client
 #import "AVIMClientProtocol.h"
 #import "AVIMClient.h"

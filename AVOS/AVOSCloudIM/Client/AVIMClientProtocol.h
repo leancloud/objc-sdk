@@ -6,7 +6,7 @@
 //  Copyright © 2018 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMCommon.h"
+#import "LCIMCommon.h"
 
 @class AVIMClient;
 @class AVIMConversation;
@@ -120,7 +120,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param conversation The updated conversation.
  @param key          The property name of updated conversation.
  */
-- (void)conversation:(AVIMConversation *)conversation didUpdateForKey:(AVIMConversationUpdatedKey)key;
+- (void)conversation:(AVIMConversation *)conversation didUpdateForKey:(LCIMConversationUpdatedKey)key;
 
 /**
  Notification for conversation's attribution updated.
@@ -140,7 +140,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param memberId Client ID of being updated.
  @param role Updated role.
  */
-- (void)conversation:(AVIMConversation *)conversation didMemberInfoUpdateBy:(NSString * _Nullable)byClientId memberId:(NSString * _Nullable)memberId role:(AVIMConversationMemberRole)role;
+- (void)conversation:(AVIMConversation *)conversation didMemberInfoUpdateBy:(NSString * _Nullable)byClientId memberId:(NSString * _Nullable)memberId role:(LCIMConversationMemberRole)role;
 
 /**
  Notification for this client was blocked by other client in the conversation.

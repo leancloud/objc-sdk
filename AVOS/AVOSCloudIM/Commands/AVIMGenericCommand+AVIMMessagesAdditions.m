@@ -7,7 +7,7 @@
 //
 
 #import "AVIMGenericCommand+AVIMMessagesAdditions.h"
-#import "AVIMCommon.h"
+#import "LCIMCommon.h"
 #import "AVIMErrorUtil.h"
 #import "AVIMConversationOutCommand.h"
 #import <objc/runtime.h>

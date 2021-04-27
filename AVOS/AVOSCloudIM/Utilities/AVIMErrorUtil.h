@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVIMCommon.h"
+#import "LCIMCommon.h"
 #import "MessagesProtoOrig.pbobjc.h"
 
-FOUNDATION_EXPORT NSString *AVIMErrorMessage(AVIMErrorCode code);
+FOUNDATION_EXPORT NSString *AVIMErrorMessage(LCIMErrorCode code);
 
 FOUNDATION_EXPORT NSError *LCErrorFromErrorCommand(AVIMErrorCommand *command);
 FOUNDATION_EXPORT NSError *LCErrorFromSessionCommand(AVIMSessionCommand *command);

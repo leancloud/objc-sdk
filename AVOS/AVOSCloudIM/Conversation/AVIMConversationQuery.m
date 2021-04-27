@@ -91,7 +91,7 @@
 - (instancetype)init {
     if ((self = [super init])) {
         _where = [[NSMutableDictionary alloc] init];
-        _cachePolicy = kAVIMCachePolicyCacheElseNetwork;
+        _cachePolicy = kLCIMCachePolicyCacheElseNetwork;
         _cacheMaxAge = 1 * 60 * 60; // an hour
     }
     return self;
@@ -331,15 +331,15 @@ static NSString * quote(NSString *string)
 - (void)getConversationById:(NSString *)conversationId
                    callback:(void (^)(AVIMConversation * _Nullable, NSError * _Nullable))callback
 {
-    [self whereKey:AVIMConversationKeyObjectId equalTo:conversationId];
+    [self whereKey:LCIMConversationKeyObjectId equalTo:conversationId];
     [self findConversationsWithCallback:^(NSArray<AVIMConversation *> * _Nullable conversations, NSError * _Nullable error) {
         if (error) {
             callback(nil, error);
             return;
         }
-        if (!conversations.firstObject && self.cachePolicy != kAVIMCachePolicyCacheOnly) {
+        if (!conversations.firstObject && self.cachePolicy != kLCIMCachePolicyCacheOnly) {
             callback(nil, ({
-                AVIMErrorCode code = AVIMErrorCodeConversationNotFound;
+                LCIMErrorCode code = LCIMErrorCodeConversationNotFound;
                 LCError(code, AVIMErrorMessage(code), nil);
             }));
             return;
@@ -393,7 +393,7 @@ static NSString * quote(NSString *string)
     [commandWrapper setCallback:^(AVIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
-            if (self.cachePolicy == kAVIMCachePolicyNetworkElseCache) {
+            if (self.cachePolicy == kLCIMCachePolicyNetworkElseCache) {
                 [self fetchCachedResultsForOutCommand:commandWrapper.outCommand client:client callback:^(NSArray *conversations) {
                     [client invokeInUserInteractQueue:^{
                         callback(conversations, nil);
@@ -417,7 +417,7 @@ static NSString * quote(NSString *string)
             if (!data) {
                 [client invokeInUserInteractQueue:^{
                     callback(nil, ({
-                        AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
+                        LCIMErrorCode code = LCIMErrorCodeInvalidCommand;
                         LCError(code, AVIMErrorMessage(code), nil);
                     }));
                 }];
@@ -428,7 +428,7 @@ static NSString * quote(NSString *string)
             if (error || ![NSMutableArray _lc_isTypeOf:results]) {
                 [client invokeInUserInteractQueue:^{
                     callback(nil, error ?: ({
-                        AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
+                        LCIMErrorCode code = LCIMErrorCodeInvalidCommand;
                         LCError(code, AVIMErrorMessage(code), nil);
                     }));
                 }];
@@ -443,7 +443,7 @@ static NSString * quote(NSString *string)
                 if (![NSMutableDictionary _lc_isTypeOf:jsonDic]) {
                     continue;
                 }
-                NSString *conversationId = [NSString _lc_decoding:jsonDic key:AVIMConversationKeyObjectId];
+                NSString *conversationId = [NSString _lc_decoding:jsonDic key:LCIMConversationKeyObjectId];
                 if (!conversationId) {
                     continue;
                 }
@@ -462,7 +462,7 @@ static NSString * quote(NSString *string)
             conversations;
         });
         
-        if (self.cachePolicy != kAVIMCachePolicyIgnoreCache) {
+        if (self.cachePolicy != kLCIMCachePolicyIgnoreCache) {
             [client.conversationCache cacheConversations:conversations maxAge:self.cacheMaxAge forCommand:commandWrapper.outCommand.avim_conversationForCache];
         }
         
@@ -473,13 +473,13 @@ static NSString * quote(NSString *string)
     
     switch (self.cachePolicy)
     {
-        case kAVIMCachePolicyIgnoreCache:
-        case kAVIMCachePolicyNetworkOnly:
-        case kAVIMCachePolicyNetworkElseCache:
+        case kLCIMCachePolicyIgnoreCache:
+        case kLCIMCachePolicyNetworkOnly:
+        case kLCIMCachePolicyNetworkElseCache:
         {
             [client sendCommandWrapper:commandWrapper];
         }break;
-        case kAVIMCachePolicyCacheOnly:
+        case kLCIMCachePolicyCacheOnly:
         {
             [self fetchCachedResultsForOutCommand:commandWrapper.outCommand client:client callback:^(NSArray *conversations) {
                 [client invokeInUserInteractQueue:^{
@@ -487,7 +487,7 @@ static NSString * quote(NSString *string)
                 }];
             }];
         }break;
-        case kAVIMCachePolicyCacheElseNetwork:
+        case kLCIMCachePolicyCacheElseNetwork:
         {
             [self fetchCachedResultsForOutCommand:commandWrapper.outCommand client:client callback:^(NSArray *conversations) {
                 if (conversations.count > 0) {
@@ -499,7 +499,7 @@ static NSString * quote(NSString *string)
                 }
             }];
         }break;
-        case kAVIMCachePolicyCacheThenNetwork:
+        case kLCIMCachePolicyCacheThenNetwork:
         {   // issue
             [self fetchCachedResultsForOutCommand:commandWrapper.outCommand client:client callback:^(NSArray *conversations) {
                 [client invokeInUserInteractQueue:^{
@@ -571,7 +571,7 @@ static NSString * quote(NSString *string)
             if (!data) {
                 [client invokeInUserInteractQueue:^{
                     callback(nil, ({
-                        AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
+                        LCIMErrorCode code = LCIMErrorCodeInvalidCommand;
                         LCError(code, AVIMErrorMessage(code), nil);
                     }));
                 }];
@@ -582,7 +582,7 @@ static NSString * quote(NSString *string)
             if (error || ![NSMutableArray _lc_isTypeOf:results]) {
                 [client invokeInUserInteractQueue:^{
                     callback(nil, error ?: ({
-                        AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
+                        LCIMErrorCode code = LCIMErrorCodeInvalidCommand;
                         LCError(code, AVIMErrorMessage(code), nil);
                     }));
                 }];
@@ -597,7 +597,7 @@ static NSString * quote(NSString *string)
                 if (![NSMutableDictionary _lc_isTypeOf:jsonDic]) {
                     continue;
                 }
-                NSString *conversationId = [NSString _lc_decoding:jsonDic key:AVIMConversationKeyObjectId];
+                NSString *conversationId = [NSString _lc_decoding:jsonDic key:LCIMConversationKeyObjectId];
                 if (!conversationId) {
                     continue;
                 }

@@ -132,7 +132,7 @@ static NSUInteger batchQueryLimit = 20;
                 if (![NSMutableDictionary _lc_isTypeOf:rawJSONData]) {
                     continue;
                 }
-                NSString *conversationId = [NSString _lc_decoding:rawJSONData key:AVIMConversationKeyObjectId];
+                NSString *conversationId = [NSString _lc_decoding:rawJSONData key:LCIMConversationKeyObjectId];
                 if (!conversationId) {
                     continue;
                 }
@@ -145,7 +145,7 @@ static NSUInteger batchQueryLimit = 20;
                         [self insertConversation:conversation];
                     } else {
                         NSError *error = ({
-                            AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
+                            LCIMErrorCode code = LCIMErrorCodeInvalidCommand;
                             LCError(code, AVIMErrorMessage(code), nil);
                         });
                         LCLoggerError(LCLoggerDomainIM, @"%@", error);
@@ -162,7 +162,7 @@ static NSUInteger batchQueryLimit = 20;
             
             for (NSString *convId in remainingIds) {
                 NSError *error = ({
-                    AVIMErrorCode code = AVIMErrorCodeConversationNotFound;
+                    LCIMErrorCode code = LCIMErrorCodeConversationNotFound;
                     LCError(code, AVIMErrorMessage(code), nil);
                 });
                 [self invokeCallbacksWithId:convId conversation:nil error:error];
@@ -236,9 +236,9 @@ static NSUInteger batchQueryLimit = 20;
         convCommand.where = ({
             id JSONObject = nil;
             if (conversationIds.count == 1) {
-                JSONObject = @{ AVIMConversationKeyObjectId: conversationIds.firstObject };
+                JSONObject = @{ LCIMConversationKeyObjectId: conversationIds.firstObject };
             } else {
-                JSONObject = @{ AVIMConversationKeyObjectId: @{ @"$in": conversationIds } };
+                JSONObject = @{ LCIMConversationKeyObjectId: @{ @"$in": conversationIds } };
             }
             NSError *error0 = nil;
             NSData *data = [NSJSONSerialization dataWithJSONObject:JSONObject options:0 error:&error0];
@@ -266,7 +266,7 @@ static NSUInteger batchQueryLimit = 20;
     if (!data) {
         if (error) {
             *error = ({
-                AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
+                LCIMErrorCode code = LCIMErrorCodeInvalidCommand;
                 LCError(code, AVIMErrorMessage(code), nil);
             });
         }
@@ -283,7 +283,7 @@ static NSUInteger batchQueryLimit = 20;
     if (![NSMutableArray _lc_isTypeOf:results]) {
         if (error) {
             *error = ({
-                AVIMErrorCode code = AVIMErrorCodeInvalidCommand;
+                LCIMErrorCode code = LCIMErrorCodeInvalidCommand;
                 LCError(code, AVIMErrorMessage(code), nil);
             });
         }

@@ -1012,13 +1012,13 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(message.deliveredTimestamp > 0)
                 }
                 
-                delegate_1.didUpdateForKeyClosure = { (conv: AVIMConversation, updatedKey: AVIMConversationUpdatedKey) in
-                    if updatedKey == AVIMConversationUpdatedKey.lastDeliveredAt {
+                delegate_1.didUpdateForKeyClosure = { (conv: AVIMConversation, updatedKey: LCIMConversationUpdatedKey) in
+                    if updatedKey == LCIMConversationUpdatedKey.lastDeliveredAt {
                         semaphore.decrement()
                         XCTAssertTrue(Thread.isMainThread)
                         XCTAssertEqual(conv.lastDeliveredAt, Date(timeIntervalSince1970: TimeInterval(commonMessage.deliveredTimestamp) / 1000.0))
                     }
-                    if updatedKey == AVIMConversationUpdatedKey.lastReadAt {
+                    if updatedKey == LCIMConversationUpdatedKey.lastReadAt {
                         semaphore.decrement()
                         XCTAssertTrue(Thread.isMainThread)
                         XCTAssertNotNil(conv.lastReadAt)
