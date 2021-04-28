@@ -9,12 +9,12 @@
 #import "LCIMCommon.h"
 #import "LCIMClientProtocol.h"
 
-@class AVIMConversation;
-@class AVIMChatRoom;
-@class AVIMServiceConversation;
-@class AVIMTemporaryConversation;
-@class AVIMKeyedConversation;
-@class AVIMConversationQuery;
+@class LCIMConversation;
+@class LCIMChatRoom;
+@class LCIMServiceConversation;
+@class LCIMTemporaryConversation;
+@class LCIMKeyedConversation;
+@class LCIMConversationQuery;
 @protocol AVIMSignatureDataSource;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -131,7 +131,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)createConversationWithName:(NSString * _Nullable)name
                          clientIds:(NSArray<NSString *> *)clientIds
-                          callback:(void (^)(AVIMConversation * _Nullable conversation, NSError * _Nullable error))callback;
+                          callback:(void (^)(LCIMConversation * _Nullable conversation, NSError * _Nullable error))callback;
 
 /**
  Create a new chat room conversation.
@@ -142,7 +142,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)createChatRoomWithName:(NSString * _Nullable)name
                     attributes:(NSDictionary * _Nullable)attributes
-                      callback:(void (^)(AVIMChatRoom * _Nullable chatRoom, NSError * _Nullable error))callback;
+                      callback:(void (^)(LCIMChatRoom * _Nullable chatRoom, NSError * _Nullable error))callback;
 
 /**
  Create a new temporary conversation.
@@ -153,7 +153,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)createTemporaryConversationWithClientIds:(NSArray<NSString *> *)clientIds
                                       timeToLive:(int32_t)ttl
-                                        callback:(void (^)(AVIMTemporaryConversation * _Nullable temporaryConversation, NSError * _Nullable error))callback;
+                                        callback:(void (^)(LCIMTemporaryConversation * _Nullable temporaryConversation, NSError * _Nullable error))callback;
 
 /*!
  创建一个新的用户对话。
@@ -168,7 +168,7 @@ NS_ASSUME_NONNULL_BEGIN
                          clientIds:(NSArray<NSString *> *)clientIds
                         attributes:(NSDictionary * _Nullable)attributes
                            options:(LCIMConversationOption)options
-                          callback:(void (^)(AVIMConversation * _Nullable conversation, NSError * _Nullable error))callback;
+                          callback:(void (^)(LCIMConversation * _Nullable conversation, NSError * _Nullable error))callback;
 
 /**
  Create a New Conversation.
@@ -185,7 +185,7 @@ NS_ASSUME_NONNULL_BEGIN
                         attributes:(NSDictionary * _Nullable)attributes
                            options:(LCIMConversationOption)options
                       temporaryTTL:(int32_t)temporaryTTL
-                          callback:(void (^)(AVIMConversation * _Nullable conversation, NSError * _Nullable error))callback;
+                          callback:(void (^)(LCIMConversation * _Nullable conversation, NSError * _Nullable error))callback;
 
 /**
  Get a Exist Conversation Retained by this Client.
@@ -194,7 +194,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param conversationId conversationId
  @return if the Conversation Exist, return the Instance; if not, return nil.
  */
-- (AVIMConversation * _Nullable)conversationForId:(NSString *)conversationId LC_WARN_UNUSED_RESULT;
+- (LCIMConversation * _Nullable)conversationForId:(NSString *)conversationId LC_WARN_UNUSED_RESULT;
 
 
 /**
@@ -205,7 +205,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param callback Result.
  */
 - (void)getConversationsFromMemoryWith:(NSArray<NSString *> *)conversationIds
-                              callback:(void (^)(NSArray<AVIMConversation *> * _Nullable conversations))callback;
+                              callback:(void (^)(NSArray<LCIMConversation *> * _Nullable conversations))callback;
 
 /**
  Remove Conversations Retained by this Client.
@@ -227,16 +227,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  创建一个绑定到当前 client 的会话。
- @param keyedConversation AVIMKeyedConversation 对象。
+ @param keyedConversation LCIMKeyedConversation 对象。
  @return 已绑定到当前 client 的会话。
  */
-- (AVIMConversation * _Nullable)conversationWithKeyedConversation:(AVIMKeyedConversation *)keyedConversation LC_WARN_UNUSED_RESULT;
+- (LCIMConversation * _Nullable)conversationWithKeyedConversation:(LCIMKeyedConversation *)keyedConversation LC_WARN_UNUSED_RESULT;
 
 /*!
  构造一个对话查询对象
  @return 对话查询对象.
  */
-- (AVIMConversationQuery *)conversationQuery LC_WARN_UNUSED_RESULT;
+- (LCIMConversationQuery *)conversationQuery LC_WARN_UNUSED_RESULT;
 
 /*!
  Query online clients within the given array of clients.

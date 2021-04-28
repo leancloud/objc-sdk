@@ -1,5 +1,5 @@
 //
-//  AVIMConversation.h
+//  LCIMConversation.h
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 12/4/14.
@@ -11,13 +11,13 @@
 #import "AVIMMessageOption.h"
 
 @class LCIMClient;
-@class AVIMKeyedConversation;
+@class LCIMKeyedConversation;
 @class AVIMRecalledMessage;
-@class AVIMConversationMemberInfo;
+@class LCIMConversationMemberInfo;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AVIMMessageIntervalBound : NSObject
+@interface LCIMMessageIntervalBound : NSObject
 
 @property (nonatomic, copy, nullable) NSString *messageId;
 @property (nonatomic, assign) int64_t timestamp;
@@ -29,17 +29,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface AVIMMessageInterval : NSObject
+@interface LCIMMessageInterval : NSObject
 
-@property (nonatomic, strong) AVIMMessageIntervalBound *startIntervalBound;
-@property (nonatomic, strong, nullable) AVIMMessageIntervalBound *endIntervalBound;
+@property (nonatomic, strong) LCIMMessageIntervalBound *startIntervalBound;
+@property (nonatomic, strong, nullable) LCIMMessageIntervalBound *endIntervalBound;
 
-- (instancetype)initWithStartIntervalBound:(AVIMMessageIntervalBound *)startIntervalBound
-                          endIntervalBound:(nullable AVIMMessageIntervalBound *)endIntervalBound;
+- (instancetype)initWithStartIntervalBound:(LCIMMessageIntervalBound *)startIntervalBound
+                          endIntervalBound:(nullable LCIMMessageIntervalBound *)endIntervalBound;
 
 @end
 
-@interface AVIMOperationFailure : NSObject
+@interface LCIMOperationFailure : NSObject
 
 @property (nonatomic, assign) NSInteger code;
 @property (nonatomic, strong, nullable) NSString *reason;
@@ -47,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface AVIMConversation : NSObject
+@interface LCIMConversation : NSObject
 
 /**
  *  The ID of the client which the conversation belongs to.
@@ -160,10 +160,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak, readonly, nullable) LCIMClient *imClient;
 
 @property (nonatomic, strong, readonly, nullable) NSDate *createAt
-__deprecated_msg("Deprecated, use `AVIMConversation.createdAt` instead.");
+__deprecated_msg("Deprecated, use `LCIMConversation.createdAt` instead.");
 
 @property (nonatomic, strong, readonly, nullable) NSDate *updateAt
-__deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
+__deprecated_msg("Deprecated, use `LCIMConversation.updatedAt` instead.");
 
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
@@ -179,7 +179,7 @@ __deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
 /**
  * Support to use subscript to set custom property.
  *
- * @see -[AVIMConversation setObject:forKey:]
+ * @see -[LCIMConversation setObject:forKey:]
  */
 - (void)setObject:(id _Nullable)object forKeyedSubscript:(NSString *)key;
 
@@ -195,15 +195,15 @@ __deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
 /**
  * Support to use subscript to set custom property.
  *
- * @see -[AVIMConversation objectForKey:]
+ * @see -[LCIMConversation objectForKey:]
  */
 - (id _Nullable)objectForKeyedSubscript:(NSString *)key;
 
 /*!
- Creates an AVIMKeyedConversation object for serialization.
- @return AVIMKeyedConversation object.
+ Creates an LCIMKeyedConversation object for serialization.
+ @return LCIMKeyedConversation object.
  */
-- (AVIMKeyedConversation * _Nullable)keyedConversation;
+- (LCIMKeyedConversation * _Nullable)keyedConversation;
 
 // MARK: - RCP Timestamps & Read
 
@@ -409,7 +409,7 @@ __deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
  @param limit     Limit of messages you want to query.
  @param callback  Callback of query request.
  */
-- (void)queryMessagesInInterval:(AVIMMessageInterval *)interval
+- (void)queryMessagesInInterval:(LCIMMessageInterval *)interval
                       direction:(LCIMMessageQueryDirection)direction
                           limit:(NSUInteger)limit
                        callback:(void (^)(NSArray<AVIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;
@@ -436,7 +436,7 @@ __deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
 
  @param callback Result callback.
  */
-- (void)getAllMemberInfoWithCallback:(void (^)(NSArray<AVIMConversationMemberInfo *> * _Nullable memberInfos, NSError * _Nullable error))callback;
+- (void)getAllMemberInfoWithCallback:(void (^)(NSArray<LCIMConversationMemberInfo *> * _Nullable memberInfos, NSError * _Nullable error))callback;
 
 /**
  Get all member info.
@@ -445,7 +445,7 @@ __deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
  @param callback Result callback.
  */
 - (void)getAllMemberInfoWithIgnoringCache:(BOOL)ignoringCache
-                                 callback:(void (^)(NSArray<AVIMConversationMemberInfo *> * _Nullable memberInfos, NSError * _Nullable error))callback;
+                                 callback:(void (^)(NSArray<LCIMConversationMemberInfo *> * _Nullable memberInfos, NSError * _Nullable error))callback;
 
 /**
  Get a member info by member id. using cache as a default.
@@ -454,7 +454,7 @@ __deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
  @param callback Result callback.
  */
 - (void)getMemberInfoWithMemberId:(NSString *)memberId
-                         callback:(void (^)(AVIMConversationMemberInfo * _Nullable memberInfo, NSError * _Nullable error))callback;
+                         callback:(void (^)(LCIMConversationMemberInfo * _Nullable memberInfo, NSError * _Nullable error))callback;
 
 /**
  Get a member info by member id.
@@ -465,7 +465,7 @@ __deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
  */
 - (void)getMemberInfoWithIgnoringCache:(BOOL)ignoringCache
                               memberId:(NSString *)memberId
-                              callback:(void (^)(AVIMConversationMemberInfo * _Nullable memberInfo, NSError * _Nullable error))callback;
+                              callback:(void (^)(LCIMConversationMemberInfo * _Nullable memberInfo, NSError * _Nullable error))callback;
 
 /**
  Change a member's role.
@@ -487,7 +487,7 @@ __deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
  @param callback Result callback.
  */
 - (void)blockMembers:(NSArray<NSString *> *)memberIds
-            callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<AVIMOperationFailure *> * _Nullable failedIds, NSError * _Nullable error))callback;
+            callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<LCIMOperationFailure *> * _Nullable failedIds, NSError * _Nullable error))callback;
 
 /**
  Unblocking some members in the conversation.
@@ -496,7 +496,7 @@ __deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
  @param callback Result callback.
  */
 - (void)unblockMembers:(NSArray<NSString *> *)memberIds
-              callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<AVIMOperationFailure *> * _Nullable failedIds, NSError * _Nullable error))callback;
+              callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<LCIMOperationFailure *> * _Nullable failedIds, NSError * _Nullable error))callback;
 
 /**
  Query blocked members in the conversation.
@@ -518,7 +518,7 @@ __deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
  @param callback Result callback.
  */
 - (void)muteMembers:(NSArray<NSString *> *)memberIds
-           callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<AVIMOperationFailure *> * _Nullable failedIds, NSError * _Nullable error))callback;
+           callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<LCIMOperationFailure *> * _Nullable failedIds, NSError * _Nullable error))callback;
 
 /**
  Unmuting some members in the conversation.
@@ -527,7 +527,7 @@ __deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
  @param callback Result callback.
  */
 - (void)unmuteMembers:(NSArray<NSString *> *)memberIds
-             callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<AVIMOperationFailure *> * _Nullable failedIds, NSError * _Nullable error))callback;
+             callback:(void (^)(NSArray<NSString *> * _Nullable successfulIds, NSArray<LCIMOperationFailure *> * _Nullable failedIds, NSError * _Nullable error))callback;
 
 /**
  Query muted members in the conversation.
@@ -542,11 +542,11 @@ __deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
 
 @end
 
-@interface AVIMChatRoom : AVIMConversation
+@interface LCIMChatRoom : LCIMConversation
 
 @end
 
-@interface AVIMServiceConversation : AVIMConversation
+@interface LCIMServiceConversation : LCIMConversation
 
 /**
  Add ID of conversation's client to conversation's members.
@@ -564,11 +564,11 @@ __deprecated_msg("Deprecated, use `AVIMConversation.updatedAt` instead.");
 
 @end
 
-@interface AVIMTemporaryConversation : AVIMConversation
+@interface LCIMTemporaryConversation : LCIMConversation
 
 @end
 
-@interface AVIMConversation (deprecated)
+@interface LCIMConversation (deprecated)
 
 /*!
  往对话中发送消息。

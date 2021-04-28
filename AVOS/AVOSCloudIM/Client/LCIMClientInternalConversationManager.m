@@ -8,7 +8,7 @@
 
 #import "LCIMClientInternalConversationManager_Internal.h"
 #import "LCIMClient_Internal.h"
-#import "AVIMConversation_Internal.h"
+#import "LCIMConversation_Internal.h"
 #import "AVIMErrorUtil.h"
 #import "LCErrorUtils.h"
 #import "LCUtils.h"
@@ -38,7 +38,7 @@ static NSUInteger batchQueryLimit = 20;
     return self;
 }
 
-- (void)insertConversation:(AVIMConversation *)conversation
+- (void)insertConversation:(LCIMConversation *)conversation
 {
     AssertRunInQueue(self.internalSerialQueue);
     NSParameterAssert(conversation);
@@ -46,7 +46,7 @@ static NSUInteger batchQueryLimit = 20;
     self.conversationMap[conversation.conversationId] = conversation;
 }
 
-- (AVIMConversation *)conversationForId:(NSString *)conversationId
+- (LCIMConversation *)conversationForId:(NSString *)conversationId
 {
     AssertRunInQueue(self.internalSerialQueue);
     NSParameterAssert(conversationId);
@@ -67,7 +67,7 @@ static NSUInteger batchQueryLimit = 20;
 }
 
 - (void)queryConversationWithId:(NSString *)conversationId
-                       callback:(void (^)(AVIMConversation *conversation, NSError *error))callback
+                       callback:(void (^)(LCIMConversation *conversation, NSError *error))callback
 {
     AssertRunInQueue(self.internalSerialQueue);
     NSParameterAssert(conversationId);
@@ -75,7 +75,7 @@ static NSUInteger batchQueryLimit = 20;
 }
 
 - (void)queryConversationsWithIds:(NSArray<NSString *> *)conversationIds
-                         callback:(void (^)(AVIMConversation *conversation, NSError *error))callback
+                         callback:(void (^)(LCIMConversation *conversation, NSError *error))callback
 {
     AssertRunInQueue(self.internalSerialQueue);
     NSParameterAssert(conversationIds);
@@ -136,11 +136,11 @@ static NSUInteger batchQueryLimit = 20;
                 if (!conversationId) {
                     continue;
                 }
-                AVIMConversation *conversation = [self conversationForId:conversationId];
+                LCIMConversation *conversation = [self conversationForId:conversationId];
                 if (conversation) {
                     [conversation setRawJSONData:rawJSONData];
                 } else {
-                    conversation = [AVIMConversation conversationWithRawJSONData:rawJSONData client:client];
+                    conversation = [LCIMConversation conversationWithRawJSONData:rawJSONData client:client];
                     if (conversation) {
                         [self insertConversation:conversation];
                     } else {
@@ -177,16 +177,16 @@ static NSUInteger batchQueryLimit = 20;
 }
 
 - (NSMutableArray<NSArray *> *)slicingConversationIds:(NSArray<NSString *> *)conversationIds
-                                             callback:(void (^)(AVIMConversation *conversation, NSError *error))callback
+                                             callback:(void (^)(LCIMConversation *conversation, NSError *error))callback
 {
     NSMutableArray<NSString *> *normalIds = [NSMutableArray array];
     NSMutableArray<NSString *> *temporaryIds = [NSMutableArray array];
     for (NSString *conversationId in conversationIds) {
-        AVIMConversation *conversation = [self conversationForId:conversationId];
+        LCIMConversation *conversation = [self conversationForId:conversationId];
         if (conversation) {
             callback(conversation, nil);
         } else {
-            NSMutableArray<void (^)(AVIMConversation *, NSError *)> *callbacks = self.callbacksMap[conversationId];
+            NSMutableArray<void (^)(LCIMConversation *, NSError *)> *callbacks = self.callbacksMap[conversationId];
             if (callbacks) {
                 [callbacks addObject:callback];
             } else {
@@ -292,12 +292,12 @@ static NSUInteger batchQueryLimit = 20;
     return results;
 }
 
-- (void)invokeCallbacksWithId:(NSString *)conversationId conversation:(AVIMConversation *)conversation error:(NSError *)error
+- (void)invokeCallbacksWithId:(NSString *)conversationId conversation:(LCIMConversation *)conversation error:(NSError *)error
 {
-    NSMutableArray<void (^)(AVIMConversation *, NSError *)> *callbacks = self.callbacksMap[conversationId];
+    NSMutableArray<void (^)(LCIMConversation *, NSError *)> *callbacks = self.callbacksMap[conversationId];
     [self.callbacksMap removeObjectForKey:conversationId];
     if (callbacks) {
-        for (void (^callback)(AVIMConversation *, NSError *) in callbacks) {
+        for (void (^callback)(LCIMConversation *, NSError *) in callbacks) {
             callback(conversation, error);
         }
     }

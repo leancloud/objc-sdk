@@ -9,7 +9,7 @@
 #import "AVIMSignature.h"
 #import "AVIMDynamicObject.h"
 #import "AVIMCommandCommon.h"
-#import "AVIMConversationQuery.h"
+#import "LCIMConversationQuery.h"
 
 @interface AVIMConversationOutCommand : AVIMDynamicObject
 

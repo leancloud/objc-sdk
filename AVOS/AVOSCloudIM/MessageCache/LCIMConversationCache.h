@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class LCIMClient;
-@class AVIMConversation;
+@class LCIMConversation;
 @class AVIMConversationOutCommand;
 
 @interface LCIMConversationCache : NSObject
@@ -24,7 +24,7 @@
  * @param conversationId Conversation ID.
  * @return A conversation or nil if conversation not found or expired.
  */
-- (AVIMConversation *)conversationForId:(NSString *)conversationId;
+- (LCIMConversation *)conversationForId:(NSString *)conversationId;
 
 /*!
  * Cache conversations for query command with max age.

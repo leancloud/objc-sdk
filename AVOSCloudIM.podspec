@@ -25,8 +25,8 @@ Pod::Spec.new do |s|
 
     ss.public_header_files =
       'AVOS/AVOSCloudIM/Message/AVIMMessageOption.h',
-      'AVOS/AVOSCloudIM/Conversation/AVIMKeyedConversation.h',
-      'AVOS/AVOSCloudIM/Conversation/AVIMConversationQuery.h',
+      'AVOS/AVOSCloudIM/Conversation/LCIMKeyedConversation.h',
+      'AVOS/AVOSCloudIM/Conversation/LCIMConversationQuery.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMTextMessage.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMRecalledMessage.h',
       'AVOS/AVOSCloudIM/TypedMessages/AVIMLocationMessage.h',
@@ -37,11 +37,11 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/TypedMessages/AVIMImageMessage.h',
       'AVOS/AVOSCloudIM/Client/LCIMClient.h',
       'AVOS/AVOSCloudIM/LCIMCommon.h',
-      'AVOS/AVOSCloudIM/Conversation/AVIMConversation.h',
+      'AVOS/AVOSCloudIM/Conversation/LCIMConversation.h',
       'AVOS/AVOSCloudIM/Message/AVIMMessage.h',
       'AVOS/AVOSCloudIM/Signature/AVIMSignature.h',
       'AVOS/AVOSCloudIM/Client/LCIMClientProtocol.h',
-      'AVOS/AVOSCloudIM/Conversation/AVIMConversationMemberInfo.h',
+      'AVOS/AVOSCloudIM/Conversation/LCIMConversationMemberInfo.h',
       'AVOS/AVOSCloudIM/Client/LCIMClientInternalConversationManager.h',
       'AVOS/AVOSCloudIM/AVOSCloudIM.h'
 

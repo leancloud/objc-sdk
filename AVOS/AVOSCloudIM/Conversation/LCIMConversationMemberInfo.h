@@ -1,5 +1,5 @@
 //
-//  AVIMConversationMemberInfo.h
+//  LCIMConversationMemberInfo.h
 //  AVOS
 //
 //  Created by zapcannon87 on 2018/4/9.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AVIMConversationMemberInfo : NSObject
+@interface LCIMConversationMemberInfo : NSObject
 
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;

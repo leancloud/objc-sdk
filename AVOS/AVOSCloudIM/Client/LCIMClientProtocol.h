@@ -9,7 +9,7 @@
 #import "LCIMCommon.h"
 
 @class LCIMClient;
-@class AVIMConversation;
+@class LCIMConversation;
 @class AVIMMessage;
 @class AVIMTypedMessage;
 
@@ -58,21 +58,21 @@ NS_ASSUME_NONNULL_BEGIN
  @param conversation － 所属对话
  @param message - 具体的消息
  */
-- (void)conversation:(AVIMConversation *)conversation didReceiveCommonMessage:(AVIMMessage *)message;
+- (void)conversation:(LCIMConversation *)conversation didReceiveCommonMessage:(AVIMMessage *)message;
 
 /*!
  接收到新的富媒体消息。
  @param conversation － 所属对话
  @param message - 具体的消息
  */
-- (void)conversation:(AVIMConversation *)conversation didReceiveTypedMessage:(AVIMTypedMessage *)message;
+- (void)conversation:(LCIMConversation *)conversation didReceiveTypedMessage:(AVIMTypedMessage *)message;
 
 /*!
  消息已投递给对方。
  @param conversation － 所属对话
  @param message - 具体的消息
  */
-- (void)conversation:(AVIMConversation *)conversation messageDelivered:(AVIMMessage *)message;
+- (void)conversation:(LCIMConversation *)conversation messageDelivered:(AVIMMessage *)message;
 
 /**
  Invoking when the sent message has been updated.
@@ -80,7 +80,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param conversation The conversation which the sent message belongs to.
  @param message      The updated message.
  */
-- (void)conversation:(AVIMConversation *)conversation messageHasBeenUpdated:(AVIMMessage *)message;
+- (void)conversation:(LCIMConversation *)conversation messageHasBeenUpdated:(AVIMMessage *)message;
 
 /*!
  对话中有新成员加入时所有成员都会收到这一通知。
@@ -88,7 +88,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param clientIds - 加入的新成员列表
  @param clientId - 邀请者的 id
  */
-- (void)conversation:(AVIMConversation *)conversation membersAdded:(NSArray<NSString *> * _Nullable)clientIds byClientId:(NSString * _Nullable)clientId;
+- (void)conversation:(LCIMConversation *)conversation membersAdded:(NSArray<NSString *> * _Nullable)clientIds byClientId:(NSString * _Nullable)clientId;
 
 /*!
  对话中有成员离开时所有剩余成员都会收到这一通知。
@@ -96,21 +96,21 @@ NS_ASSUME_NONNULL_BEGIN
  @param clientIds - 离开的成员列表
  @param clientId - 操作者的 id
  */
-- (void)conversation:(AVIMConversation *)conversation membersRemoved:(NSArray<NSString *> * _Nullable)clientIds byClientId:(NSString * _Nullable)clientId;
+- (void)conversation:(LCIMConversation *)conversation membersRemoved:(NSArray<NSString *> * _Nullable)clientIds byClientId:(NSString * _Nullable)clientId;
 
 /*!
  当前用户被邀请加入对话的通知。
  @param conversation － 所属对话
  @param clientId - 邀请者的 id
  */
-- (void)conversation:(AVIMConversation *)conversation invitedByClientId:(NSString * _Nullable)clientId;
+- (void)conversation:(LCIMConversation *)conversation invitedByClientId:(NSString * _Nullable)clientId;
 
 /*!
  当前用户被踢出对话的通知。
  @param conversation － 所属对话
  @param clientId - 操作者的 id
  */
-- (void)conversation:(AVIMConversation *)conversation kickedByClientId:(NSString * _Nullable)clientId;
+- (void)conversation:(LCIMConversation *)conversation kickedByClientId:(NSString * _Nullable)clientId;
 
 /*!
  Notification for conversation property update.
@@ -120,7 +120,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param conversation The updated conversation.
  @param key          The property name of updated conversation.
  */
-- (void)conversation:(AVIMConversation *)conversation didUpdateForKey:(LCIMConversationUpdatedKey)key;
+- (void)conversation:(LCIMConversation *)conversation didUpdateForKey:(LCIMConversationUpdatedKey)key;
 
 /**
  Notification for conversation's attribution updated.
@@ -130,7 +130,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param clientId Client ID of doing updates.
  @param data Updated data.
  */
-- (void)conversation:(AVIMConversation *)conversation didUpdateAt:(NSDate * _Nullable)date byClientId:(NSString * _Nullable)clientId updatedData:(NSDictionary * _Nullable)data;
+- (void)conversation:(LCIMConversation *)conversation didUpdateAt:(NSDate * _Nullable)date byClientId:(NSString * _Nullable)clientId updatedData:(NSDictionary * _Nullable)data;
 
 /**
  Notification for conversation's member info updated.
@@ -140,7 +140,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param memberId Client ID of being updated.
  @param role Updated role.
  */
-- (void)conversation:(AVIMConversation *)conversation didMemberInfoUpdateBy:(NSString * _Nullable)byClientId memberId:(NSString * _Nullable)memberId role:(LCIMConversationMemberRole)role;
+- (void)conversation:(LCIMConversation *)conversation didMemberInfoUpdateBy:(NSString * _Nullable)byClientId memberId:(NSString * _Nullable)memberId role:(LCIMConversationMemberRole)role;
 
 /**
  Notification for this client was blocked by other client in the conversation.
@@ -148,7 +148,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param conversation Conversation.
  @param byClientId Who blocking this client.
  */
-- (void)conversation:(AVIMConversation *)conversation didBlockBy:(NSString * _Nullable)byClientId;
+- (void)conversation:(LCIMConversation *)conversation didBlockBy:(NSString * _Nullable)byClientId;
 
 /**
  Notification for this client was Unblocked by other client in the conversation.
@@ -156,7 +156,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param conversation Conversation.
  @param byClientId Who unblocking this client.
  */
-- (void)conversation:(AVIMConversation *)conversation didUnblockBy:(NSString * _Nullable)byClientId;
+- (void)conversation:(LCIMConversation *)conversation didUnblockBy:(NSString * _Nullable)byClientId;
 
 /**
  Notification for some other clients was blocked by a client in the conversation.
@@ -165,7 +165,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param byClientId Who blocking these clients.
  @param memberIds Being blocked clients's ID array.
  */
-- (void)conversation:(AVIMConversation *)conversation didMembersBlockBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
+- (void)conversation:(LCIMConversation *)conversation didMembersBlockBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
 
 /**
  Notification for some other clients was unblocked by a client in the conversation.
@@ -174,7 +174,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param byClientId Who unblocking these clients.
  @param memberIds Being unblocked clients's ID array.
  */
-- (void)conversation:(AVIMConversation *)conversation didMembersUnblockBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
+- (void)conversation:(LCIMConversation *)conversation didMembersUnblockBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
 
 /**
  Notification for this client was muted by other client in the conversation.
@@ -182,7 +182,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param conversation Conversation.
  @param byClientId Who muting this client.
  */
-- (void)conversation:(AVIMConversation *)conversation didMuteBy:(NSString * _Nullable)byClientId;
+- (void)conversation:(LCIMConversation *)conversation didMuteBy:(NSString * _Nullable)byClientId;
 
 /**
  Notification for this client was Unmuted by other client in the conversation.
@@ -190,7 +190,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param conversation Conversation.
  @param byClientId Who unmuting this client.
  */
-- (void)conversation:(AVIMConversation *)conversation didUnmuteBy:(NSString * _Nullable)byClientId;
+- (void)conversation:(LCIMConversation *)conversation didUnmuteBy:(NSString * _Nullable)byClientId;
 
 /**
  Notification for some other clients was muted by a client in the conversation.
@@ -199,7 +199,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param byClientId Who muted these clients.
  @param memberIds Being muted clients's ID array.
  */
-- (void)conversation:(AVIMConversation *)conversation didMembersMuteBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
+- (void)conversation:(LCIMConversation *)conversation didMembersMuteBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
 
 /**
  Notification for some other clients was unmuted by a client in the conversation.
@@ -208,7 +208,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param byClientId Who unmuting these clients.
  @param memberIds Being unmuting clients's ID array.
  */
-- (void)conversation:(AVIMConversation *)conversation didMembersUnmuteBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
+- (void)conversation:(LCIMConversation *)conversation didMembersUnmuteBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
 
 // MARK: Deprecated
 
@@ -218,7 +218,7 @@ __deprecated_msg("Deprecated, use `-[LCIMClientDelegate imClientPaused:error:]` 
 - (void)client:(LCIMClient *)client didOfflineWithError:(NSError * _Nullable)error
 __deprecated_msg("Deprecated, use `-[LCIMClientDelegate imClientClosed:error:]` instead.");
 
-- (void)conversation:(AVIMConversation *)conversation didReceiveUnread:(NSInteger)unread
+- (void)conversation:(LCIMConversation *)conversation didReceiveUnread:(NSInteger)unread
 __deprecated_msg("Deprecated, use `-[LCIMClientDelegate conversation:didUpdateForKey:]` instead.");
 
 @end

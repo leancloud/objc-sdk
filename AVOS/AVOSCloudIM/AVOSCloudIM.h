@@ -15,11 +15,11 @@
 #import "LCIMClient.h"
 #import "LCIMClientInternalConversationManager.h"
 // conversation
-#import "AVIMConversation.h"
-#import "AVIMConversationMemberInfo.h"
-#import "AVIMKeyedConversation.h"
+#import "LCIMConversation.h"
+#import "LCIMConversationMemberInfo.h"
+#import "LCIMKeyedConversation.h"
 // query
-#import "AVIMConversationQuery.h"
+#import "LCIMConversationQuery.h"
 // message
 #import "AVIMMessage.h"
 #import "AVIMMessageOption.h"

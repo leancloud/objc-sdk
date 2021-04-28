@@ -7,10 +7,10 @@
 //
 
 #import "LCIMClient_Internal.h"
-#import "AVIMConversation_Internal.h"
-#import "AVIMKeyedConversation_internal.h"
-#import "AVIMConversationMemberInfo_Internal.h"
-#import "AVIMConversationQuery_Internal.h"
+#import "LCIMConversation_Internal.h"
+#import "LCIMKeyedConversation_internal.h"
+#import "LCIMConversationMemberInfo_Internal.h"
+#import "LCIMConversationQuery_Internal.h"
 #import "AVIMTypedMessage_Internal.h"
 
 #import "AVIMErrorUtil.h"
@@ -999,7 +999,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }
     NSString *initById = (convCommand.hasInitBy ? convCommand.initBy : nil);
     
-    [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+    [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         [conversation addMembers:@[self->_clientId]];
         id <LCIMClientDelegate> delegate = self->_delegate;
@@ -1024,7 +1024,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     NSArray<NSString *> *memberIds = convCommand.mArray;
     NSString *initById = (convCommand.hasInitBy ? convCommand.initBy : nil);
     
-    [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+    [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         [conversation addMembers:memberIds];
         id <LCIMClientDelegate> delegate = self->_delegate;
@@ -1048,7 +1048,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }
     NSString *initById = (convCommand.hasInitBy ? convCommand.initBy : nil);
     
-    [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+    [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         [conversation removeMembers:@[self->_clientId]];
         id <LCIMClientDelegate> delegate = self->_delegate;
@@ -1073,7 +1073,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     NSArray<NSString *> *memberIds = convCommand.mArray;
     NSString *initById = (convCommand.hasInitBy ? convCommand.initBy : nil);
     
-    [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+    [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         [conversation removeMembers:memberIds];
         id <LCIMClientDelegate> delegate = self->_delegate;
@@ -1132,7 +1132,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         updatedAt = [AVDate dateFromString:convCommand.udate];
     }
     
-    [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+    [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         [conversation process_conv_updated_attr:attr attrModified:attrModified];
         id <LCIMClientDelegate> delegate = self->_delegate;
@@ -1159,14 +1159,14 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     NSString *memberId = (convMemberInfo.hasPid ? convMemberInfo.pid : nil);
     NSString *roleKey = (convMemberInfo.hasRole ? convMemberInfo.role : nil);
     
-    [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+    [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         [conversation process_member_info_changed:memberId role:roleKey];
         id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didMemberInfoUpdateBy:memberId:role:);
         if (delegate && [delegate respondsToSelector:sel]) {
             [self invokeInUserInteractQueue:^{
-                LCIMConversationMemberRole role = AVIMConversationMemberInfo_key_to_role(roleKey);
+                LCIMConversationMemberRole role = LCIMConversationMemberInfo_key_to_role(roleKey);
                 [delegate conversation:conversation didMemberInfoUpdateBy:initById memberId:memberId role:role];
             }];
         }
@@ -1184,7 +1184,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }
     NSString *initById = (convCommand.hasInitBy ? convCommand.initBy : nil);
     
-    [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+    [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didBlockBy:);
@@ -1208,7 +1208,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     NSArray<NSString *> *memberIds = convCommand.mArray;
     NSString *initById = (convCommand.hasInitBy ? convCommand.initBy : nil);
     
-    [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+    [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didMembersBlockBy:memberIds:);
@@ -1231,7 +1231,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }
     NSString *initById = (convCommand.hasInitBy ? convCommand.initBy : nil);
     
-    [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+    [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didUnblockBy:);
@@ -1255,7 +1255,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     NSArray<NSString *> *memberIds = convCommand.mArray;
     NSString *initById = (convCommand.hasInitBy ? convCommand.initBy : nil);
     
-    [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+    [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didMembersUnblockBy:memberIds:);
@@ -1278,7 +1278,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }
     NSString *initById = (convCommand.hasInitBy ? convCommand.initBy : nil);
     
-    [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+    [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didMuteBy:);
@@ -1302,7 +1302,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     NSArray<NSString *> *memberIds = convCommand.mArray;
     NSString *initById = (convCommand.hasInitBy ? convCommand.initBy : nil);
     
-    [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+    [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didMembersMuteBy:memberIds:);
@@ -1325,7 +1325,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }
     NSString *initById = (convCommand.hasInitBy ? convCommand.initBy : nil);
     
-    [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+    [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didUnmuteBy:);
@@ -1349,7 +1349,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     NSArray<NSString *> *memberIds = convCommand.mArray;
     NSString *initById = (convCommand.hasInitBy ? convCommand.initBy : nil);
     
-    [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+    [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didMembersUnmuteBy:memberIds:);
@@ -1385,7 +1385,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         }
     });
     
-    [self->_conversationManager queryConversationsWithIds:conversationIds callback:^(AVIMConversation *conversation, NSError *error) {
+    [self->_conversationManager queryConversationsWithIds:conversationIds callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         AVIMPatchItem *patchItem = patchItemMap[conversation.conversationId];
         AVIMMessage *patchMessage = [conversation process_patch_modified:patchItem];
@@ -1425,7 +1425,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }
     BOOL isReadRcp = (rcpCommand.hasRead ? rcpCommand.read : false);
     
-    [self->_conversationManager queryConversationWithId:conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+    [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         AVIMMessage *message = [conversation process_rcp:rcpCommand isReadRcp:isReadRcp];
         if (!isReadRcp && message) {
@@ -1466,7 +1466,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         }
     });
     
-    [self->_conversationManager queryConversationsWithIds:conversationIds callback:^(AVIMConversation *conversation, NSError *error) {
+    [self->_conversationManager queryConversationsWithIds:conversationIds callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         AVIMUnreadTuple *unreadTuple = unreadTupleMap[conversation.conversationId];
         NSInteger unreadCount = [conversation process_unread:unreadTuple];
@@ -1493,7 +1493,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         !messageID) {
         return;
     }
-    [self.conversationManager queryConversationWithId:conversationID callback:^(AVIMConversation *conversation, NSError *error) {
+    [self.conversationManager queryConversationWithId:conversationID callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) {
             LCLoggerError(LCLoggerDomainIM, @"%@", error);
             return;
@@ -1540,26 +1540,26 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 - (void)createConversationWithName:(NSString * _Nullable)name
                          clientIds:(NSArray<NSString *> *)clientIds
-                          callback:(void (^)(AVIMConversation * _Nullable, NSError * _Nullable))callback
+                          callback:(void (^)(LCIMConversation * _Nullable, NSError * _Nullable))callback
 {
     [self createConversationWithName:name clientIds:clientIds attributes:nil options:(LCIMConversationOptionNone) temporaryTTL:0 callback:callback];
 }
 
 - (void)createChatRoomWithName:(NSString * _Nullable)name
                     attributes:(NSDictionary * _Nullable)attributes
-                      callback:(void (^)(AVIMChatRoom * _Nullable, NSError * _Nullable))callback
+                      callback:(void (^)(LCIMChatRoom * _Nullable, NSError * _Nullable))callback
 {
-    [self createConversationWithName:name clientIds:@[] attributes:attributes options:(LCIMConversationOptionTransient) temporaryTTL:0 callback:^(AVIMConversation * _Nullable conversation, NSError * _Nullable error) {
-        callback((AVIMChatRoom *)conversation, error);
+    [self createConversationWithName:name clientIds:@[] attributes:attributes options:(LCIMConversationOptionTransient) temporaryTTL:0 callback:^(LCIMConversation * _Nullable conversation, NSError * _Nullable error) {
+        callback((LCIMChatRoom *)conversation, error);
     }];
 }
 
 - (void)createTemporaryConversationWithClientIds:(NSArray<NSString *> *)clientIds
                                       timeToLive:(int32_t)ttl
-                                        callback:(void (^)(AVIMTemporaryConversation * _Nullable, NSError * _Nullable))callback
+                                        callback:(void (^)(LCIMTemporaryConversation * _Nullable, NSError * _Nullable))callback
 {
-    [self createConversationWithName:nil clientIds:clientIds attributes:nil options:(LCIMConversationOptionTemporary) temporaryTTL:ttl callback:^(AVIMConversation * _Nullable conversation, NSError * _Nullable error) {
-        callback((AVIMTemporaryConversation *)conversation, error);
+    [self createConversationWithName:nil clientIds:clientIds attributes:nil options:(LCIMConversationOptionTemporary) temporaryTTL:ttl callback:^(LCIMConversation * _Nullable conversation, NSError * _Nullable error) {
+        callback((LCIMTemporaryConversation *)conversation, error);
     }];
 }
 
@@ -1567,7 +1567,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                          clientIds:(NSArray<NSString *> *)clientIds
                         attributes:(NSDictionary * _Nullable)attributes
                            options:(LCIMConversationOption)options
-                          callback:(void (^)(AVIMConversation * _Nullable, NSError * _Nullable))callback
+                          callback:(void (^)(LCIMConversation * _Nullable, NSError * _Nullable))callback
 {
     [self createConversationWithName:name clientIds:clientIds attributes:attributes options:options temporaryTTL:0 callback:callback];
 }
@@ -1577,7 +1577,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                         attributes:(NSDictionary * _Nullable)attributes
                            options:(LCIMConversationOption)options
                       temporaryTTL:(int32_t)temporaryTTL
-                          callback:(void (^)(AVIMConversation * _Nullable, NSError * _Nullable))callback
+                          callback:(void (^)(LCIMConversation * _Nullable, NSError * _Nullable))callback
 {
     for (NSString *item in clientIds) {
         if (item.length > kClientIdLengthLimit || item.length == 0) {
@@ -1702,8 +1702,8 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                 return;
             }
             
-            AVIMConversation *conversation = ({
-                AVIMConversation *conversation = [client.conversationManager conversationForId:conversationId];
+            LCIMConversation *conversation = ({
+                LCIMConversation *conversation = [client.conversationManager conversationForId:conversationId];
                 if (conversation) {
                     NSMutableDictionary *mutableDic = [NSMutableDictionary dictionary];
                     if (name) {
@@ -1740,7 +1740,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                         mutableDic[LCIMConversationKeyObjectId] = conversationId;
                         mutableDic;
                     });
-                    conversation = [AVIMConversation conversationWithRawJSONData:mutableDic client:client];
+                    conversation = [LCIMConversation conversationWithRawJSONData:mutableDic client:client];
                     if (conversation) {
                         [client.conversationManager insertConversation:conversation];
                     }
@@ -1759,13 +1759,13 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 // MARK: Conversations Instance
 
-- (AVIMConversation *)conversationForId:(NSString *)conversationId
+- (LCIMConversation *)conversationForId:(NSString *)conversationId
 {
     AssertNotRunInQueue(self->_internalSerialQueue);
     if (!conversationId) {
         return nil;
     }
-    __block AVIMConversation *conv = nil;
+    __block LCIMConversation *conv = nil;
     dispatch_sync(self->_internalSerialQueue, ^{
         conv = [self->_conversationManager conversationForId:conversationId];
     });
@@ -1773,7 +1773,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 }
 
 - (void)getConversationsFromMemoryWith:(NSArray<NSString *> *)conversationIds
-                              callback:(void (^)(NSArray<AVIMConversation *> * _Nullable))callback
+                              callback:(void (^)(NSArray<LCIMConversation *> * _Nullable))callback
 {
     if (!conversationIds || conversationIds.count == 0) {
         [self invokeInUserInteractQueue:^{
@@ -1782,9 +1782,9 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         return;
     }
     [self addOperationToInternalSerialQueue:^(LCIMClient *client) {
-        NSMutableArray<AVIMConversation *> *array = [NSMutableArray array];
+        NSMutableArray<LCIMConversation *> *array = [NSMutableArray array];
         for (NSString *conversationId in conversationIds) {
-            AVIMConversation *conv = [client->_conversationManager conversationForId:conversationId];
+            LCIMConversation *conv = [client->_conversationManager conversationForId:conversationId];
             if (conv) {
                 [array addObject:conv];
             }
@@ -1948,14 +1948,14 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     [self sendCommandWrapper:commandWrapper];
 }
 
-- (AVIMConversationQuery *)conversationQuery
+- (LCIMConversationQuery *)conversationQuery
 {
-    AVIMConversationQuery *query = [[AVIMConversationQuery alloc] init];
+    LCIMConversationQuery *query = [[LCIMConversationQuery alloc] init];
     query.client = self;
     return query;
 }
 
-- (AVIMConversation *)conversationWithKeyedConversation:(AVIMKeyedConversation *)keyedConversation
+- (LCIMConversation *)conversationWithKeyedConversation:(LCIMKeyedConversation *)keyedConversation
 {
     AssertNotRunInQueue(self->_internalSerialQueue);
     NSString *conversationId = nil;
@@ -2044,11 +2044,11 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     if (!conversationId) {
         return nil;
     }
-    __block AVIMConversation *conv = nil;
+    __block LCIMConversation *conv = nil;
     dispatch_sync(self->_internalSerialQueue, ^{
         conv = [self->_conversationManager conversationForId:conversationId];
         if (!conv) {
-            conv = [AVIMConversation conversationWithRawJSONData:rawDataDic client:self];
+            conv = [LCIMConversation conversationWithRawJSONData:rawDataDic client:self];
             if (conv) {
                 [self->_conversationManager insertConversation:conv];
             }
@@ -2057,7 +2057,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     return conv;
 }
 
-- (void)conversation:(AVIMConversation *)conversation didUpdateForKeys:(NSArray<LCIMConversationUpdatedKey> *)keys
+- (void)conversation:(LCIMConversation *)conversation didUpdateForKeys:(NSArray<LCIMConversationUpdatedKey> *)keys
 {
     AssertRunInQueue(self->_internalSerialQueue);
     

@@ -79,12 +79,12 @@ extension LCIMTestBase {
         attributes: [AnyHashable : Any]? = nil,
         options: LCIMConversationOption = [],
         temporaryTTL: Int32 = 0
-        ) -> AVIMConversation?
+        ) -> LCIMConversation?
     {
-        var conversation: AVIMConversation? = nil
+        var conversation: LCIMConversation? = nil
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            client.createConversation(withName: name, clientIds: clientIds, attributes: attributes, options: options, temporaryTTL: temporaryTTL, callback: { (conv: AVIMConversation?, error: Error?) in
+            client.createConversation(withName: name, clientIds: clientIds, attributes: attributes, options: options, temporaryTTL: temporaryTTL, callback: { (conv: LCIMConversation?, error: Error?) in
                 semaphore.decrement()
                 conversation = conv
             })
@@ -120,13 +120,13 @@ class LCIMClientDelegateWrapper: NSObject, LCIMClientDelegate {
         self.closedClosure?(imClient, error)
     }
     
-    var didReceiveTypeMessageClosure: ((AVIMConversation, AVIMTypedMessage) -> Void)?
-    func conversation(_ conversation: AVIMConversation, didReceive message: AVIMTypedMessage) {
+    var didReceiveTypeMessageClosure: ((LCIMConversation, AVIMTypedMessage) -> Void)?
+    func conversation(_ conversation: LCIMConversation, didReceive message: AVIMTypedMessage) {
         self.didReceiveTypeMessageClosure?(conversation, message)
     }
     
-    var didReceiveCommonMessageClosure: ((AVIMConversation, AVIMMessage) -> Void)?
-    func conversation(_ conversation: AVIMConversation, didReceiveCommonMessage message: AVIMMessage) {
+    var didReceiveCommonMessageClosure: ((LCIMConversation, AVIMMessage) -> Void)?
+    func conversation(_ conversation: LCIMConversation, didReceiveCommonMessage message: AVIMMessage) {
         self.didReceiveCommonMessageClosure?(conversation, message)
     }
     
@@ -135,88 +135,88 @@ class LCIMClientDelegateWrapper: NSObject, LCIMClientDelegate {
         self.didOfflineClosure?(client, error)
     }
     
-    var messageHasBeenUpdatedClosure: ((AVIMConversation, AVIMMessage) -> Void)?
-    func conversation(_ conversation: AVIMConversation, messageHasBeenUpdated message: AVIMMessage) {
+    var messageHasBeenUpdatedClosure: ((LCIMConversation, AVIMMessage) -> Void)?
+    func conversation(_ conversation: LCIMConversation, messageHasBeenUpdated message: AVIMMessage) {
         self.messageHasBeenUpdatedClosure?(conversation, message)
     }
     
-    var messageDeliveredClosure: ((AVIMConversation, AVIMMessage) -> Void)?
-    func conversation(_ conversation: AVIMConversation, messageDelivered message: AVIMMessage) {
+    var messageDeliveredClosure: ((LCIMConversation, AVIMMessage) -> Void)?
+    func conversation(_ conversation: LCIMConversation, messageDelivered message: AVIMMessage) {
         self.messageDeliveredClosure?(conversation, message)
     }
     
-    var didUpdateForKeyClosure: ((AVIMConversation, LCIMConversationUpdatedKey) -> Void)?
-    func conversation(_ conversation: AVIMConversation, didUpdateForKey key: LCIMConversationUpdatedKey) {
+    var didUpdateForKeyClosure: ((LCIMConversation, LCIMConversationUpdatedKey) -> Void)?
+    func conversation(_ conversation: LCIMConversation, didUpdateForKey key: LCIMConversationUpdatedKey) {
         self.didUpdateForKeyClosure?(conversation, key)
     }
     
-    var updateByClosure: ((AVIMConversation, Date?, String?, [AnyHashable : Any]?) -> Void)?
-    func conversation(_ conversation: AVIMConversation, didUpdateAt date: Date?, byClientId clientId: String?, updatedData data: [AnyHashable : Any]?) {
+    var updateByClosure: ((LCIMConversation, Date?, String?, [AnyHashable : Any]?) -> Void)?
+    func conversation(_ conversation: LCIMConversation, didUpdateAt date: Date?, byClientId clientId: String?, updatedData data: [AnyHashable : Any]?) {
         self.updateByClosure?(conversation, date, clientId, data)
     }
     
-    var invitedByClosure: ((AVIMConversation, String?) -> Void)?
-    func conversation(_ conversation: AVIMConversation, invitedByClientId clientId: String?) {
+    var invitedByClosure: ((LCIMConversation, String?) -> Void)?
+    func conversation(_ conversation: LCIMConversation, invitedByClientId clientId: String?) {
         self.invitedByClosure?(conversation, clientId)
     }
     
-    var kickedByClosure: ((AVIMConversation, String?) -> Void)?
-    func conversation(_ conversation: AVIMConversation, kickedByClientId clientId: String?) {
+    var kickedByClosure: ((LCIMConversation, String?) -> Void)?
+    func conversation(_ conversation: LCIMConversation, kickedByClientId clientId: String?) {
         self.kickedByClosure?(conversation, clientId)
     }
     
-    var membersAddedClosure: ((AVIMConversation, [String]?, String?) -> Void)?
-    func conversation(_ conversation: AVIMConversation, membersAdded clientIds: [String]?, byClientId clientId: String?) {
+    var membersAddedClosure: ((LCIMConversation, [String]?, String?) -> Void)?
+    func conversation(_ conversation: LCIMConversation, membersAdded clientIds: [String]?, byClientId clientId: String?) {
         self.membersAddedClosure?(conversation, clientIds, clientId)
     }
     
-    var membersRemovedClosure: ((AVIMConversation, [String]?, String?) -> Void)?
-    func conversation(_ conversation: AVIMConversation, membersRemoved clientIds: [String]?, byClientId clientId: String?) {
+    var membersRemovedClosure: ((LCIMConversation, [String]?, String?) -> Void)?
+    func conversation(_ conversation: LCIMConversation, membersRemoved clientIds: [String]?, byClientId clientId: String?) {
         self.membersRemovedClosure?(conversation, clientIds, clientId)
     }
     
-    var memberInfoChangeClosure: ((AVIMConversation, String?, String?, LCIMConversationMemberRole) -> Void)?
-    func conversation(_ conversation: AVIMConversation, didMemberInfoUpdateBy byClientId: String?, memberId: String?, role: LCIMConversationMemberRole) {
+    var memberInfoChangeClosure: ((LCIMConversation, String?, String?, LCIMConversationMemberRole) -> Void)?
+    func conversation(_ conversation: LCIMConversation, didMemberInfoUpdateBy byClientId: String?, memberId: String?, role: LCIMConversationMemberRole) {
         self.memberInfoChangeClosure?(conversation, byClientId, memberId, role)
     }
     
-    var blockByClosure: ((AVIMConversation, String?) -> Void)?
-    func conversation(_ conversation: AVIMConversation, didBlockBy byClientId: String?) {
+    var blockByClosure: ((LCIMConversation, String?) -> Void)?
+    func conversation(_ conversation: LCIMConversation, didBlockBy byClientId: String?) {
         self.blockByClosure?(conversation, byClientId)
     }
     
-    var unblockByClosure: ((AVIMConversation, String?) -> Void)?
-    func conversation(_ conversation: AVIMConversation, didUnblockBy byClientId: String?) {
+    var unblockByClosure: ((LCIMConversation, String?) -> Void)?
+    func conversation(_ conversation: LCIMConversation, didUnblockBy byClientId: String?) {
         self.unblockByClosure?(conversation, byClientId)
     }
     
-    var membersBlockByClosure: ((AVIMConversation, String?, [String]?) -> Void)?
-    func conversation(_ conversation: AVIMConversation, didMembersBlockBy byClientId: String?, memberIds: [String]?) {
+    var membersBlockByClosure: ((LCIMConversation, String?, [String]?) -> Void)?
+    func conversation(_ conversation: LCIMConversation, didMembersBlockBy byClientId: String?, memberIds: [String]?) {
         self.membersBlockByClosure?(conversation, byClientId, memberIds)
     }
     
-    var membersUnblockByClosure: ((AVIMConversation, String?, [String]?) -> Void)?
-    func conversation(_ conversation: AVIMConversation, didMembersUnblockBy byClientId: String?, memberIds: [String]?) {
+    var membersUnblockByClosure: ((LCIMConversation, String?, [String]?) -> Void)?
+    func conversation(_ conversation: LCIMConversation, didMembersUnblockBy byClientId: String?, memberIds: [String]?) {
         self.membersUnblockByClosure?(conversation, byClientId, memberIds)
     }
     
-    var muteByClosure: ((AVIMConversation, String?) -> Void)?
-    func conversation(_ conversation: AVIMConversation, didMuteBy byClientId: String?) {
+    var muteByClosure: ((LCIMConversation, String?) -> Void)?
+    func conversation(_ conversation: LCIMConversation, didMuteBy byClientId: String?) {
         self.muteByClosure?(conversation, byClientId)
     }
     
-    var unmuteByClosure: ((AVIMConversation, String?) -> Void)?
-    func conversation(_ conversation: AVIMConversation, didMembersMuteBy byClientId: String?, memberIds: [String]?) {
+    var unmuteByClosure: ((LCIMConversation, String?) -> Void)?
+    func conversation(_ conversation: LCIMConversation, didMembersMuteBy byClientId: String?, memberIds: [String]?) {
         self.membersMuteByClosure?(conversation, byClientId, memberIds)
     }
     
-    var membersMuteByClosure: ((AVIMConversation, String?, [String]?) -> Void)?
-    func conversation(_ conversation: AVIMConversation, didUnmuteBy byClientId: String?) {
+    var membersMuteByClosure: ((LCIMConversation, String?, [String]?) -> Void)?
+    func conversation(_ conversation: LCIMConversation, didUnmuteBy byClientId: String?) {
         self.unmuteByClosure?(conversation, byClientId)
     }
     
-    var membersUnmuteByClosure: ((AVIMConversation, String?, [String]?) -> Void)?
-    func conversation(_ conversation: AVIMConversation, didMembersUnmuteBy byClientId: String?, memberIds: [String]?) {
+    var membersUnmuteByClosure: ((LCIMConversation, String?, [String]?) -> Void)?
+    func conversation(_ conversation: LCIMConversation, didMembersUnmuteBy byClientId: String?, memberIds: [String]?) {
         self.membersUnmuteByClosure?(conversation, byClientId, memberIds)
     }
     

@@ -1,16 +1,16 @@
 //
-//  AVIMConversation_Internal.h
+//  LCIMConversation_Internal.h
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 12/12/14.
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMConversation.h"
+#import "LCIMConversation.h"
 #import "LCIMCommon_Internal.h"
 #import "MessagesProtoOrig.pbobjc.h"
 
-@interface AVIMConversation ()
+@interface LCIMConversation ()
 
 @property (nonatomic, readonly) LCIMConvType convType;
 
@@ -47,14 +47,14 @@
 
 @end
 
-@interface AVIMChatRoom ()
+@interface LCIMChatRoom ()
 
 @end
 
-@interface AVIMServiceConversation ()
+@interface LCIMServiceConversation ()
 
 @end
 
-@interface AVIMTemporaryConversation ()
+@interface LCIMTemporaryConversation ()
 
 @end

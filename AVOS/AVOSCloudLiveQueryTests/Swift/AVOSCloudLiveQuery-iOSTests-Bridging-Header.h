@@ -7,4 +7,4 @@
 #import "AVOSCloudIM.h"
 #import "AVOSCloudLiveQuery.h"
 #import "LCIMClient_Internal.h"
-#import "AVIMConversation_Internal.h"
+#import "LCIMConversation_Internal.h"

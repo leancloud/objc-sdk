@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMKeyedConversation.h"
+#import "LCIMKeyedConversation.h"
 
 @class AVIMMessage;
 
-@interface AVIMKeyedConversation ()
+@interface LCIMKeyedConversation ()
 
 @property (nonatomic, copy)   NSString     *conversationId;
 @property (nonatomic, copy)   NSString     *clientId;

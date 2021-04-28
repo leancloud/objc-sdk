@@ -9,7 +9,7 @@
 #import "LCIMClientInternalConversationManager.h"
 
 @class LCIMClient;
-@class AVIMConversation;
+@class LCIMConversation;
 
 @interface LCIMClientInternalConversationManager ()
 
@@ -17,21 +17,21 @@
 @property (nonatomic, strong) dispatch_queue_t internalSerialQueue;
 #endif
 @property (nonatomic, weak) LCIMClient *client;
-@property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableArray<void (^)(AVIMConversation *, NSError *)> *> *callbacksMap;
-@property (nonatomic, strong) NSMutableDictionary<NSString *, AVIMConversation *> *conversationMap;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableArray<void (^)(LCIMConversation *, NSError *)> *> *callbacksMap;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, LCIMConversation *> *conversationMap;
 
 - (instancetype)initWithClient:(LCIMClient *)client;
 
-- (void)insertConversation:(AVIMConversation *)conversation;
-- (AVIMConversation *)conversationForId:(NSString *)conversationId;
+- (void)insertConversation:(LCIMConversation *)conversation;
+- (LCIMConversation *)conversationForId:(NSString *)conversationId;
 - (void)removeConversationsWithIds:(NSArray<NSString *> *)conversationIds;
 - (void)removeAllConversations;
 
 - (void)queryConversationWithId:(NSString *)conversationId
-                       callback:(void (^)(AVIMConversation *conversation, NSError *error))callback;
+                       callback:(void (^)(LCIMConversation *conversation, NSError *error))callback;
 
 - (void)queryConversationsWithIds:(NSArray<NSString *> *)conversationIds
-                         callback:(void (^)(AVIMConversation *conversation, NSError *error))callback;
+                         callback:(void (^)(LCIMConversation *conversation, NSError *error))callback;
 
 
 @end

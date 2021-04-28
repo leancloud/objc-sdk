@@ -1,15 +1,15 @@
 //
-//  AVIMConversationQuery.m
+//  LCIMConversationQuery.m
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 2/3/15.
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMConversationQuery_Internal.h"
+#import "LCIMConversationQuery_Internal.h"
 #import "LCIMClient_Internal.h"
 #import "LCIMClientInternalConversationManager_Internal.h"
-#import "AVIMConversation_Internal.h"
+#import "LCIMConversation_Internal.h"
 
 #import "LCIMConversationCache.h"
 #import "AVIMErrorUtil.h"
@@ -20,7 +20,7 @@
 
 #import "AVIMGenericCommand+AVIMMessagesAdditions.h"
 
-@implementation AVIMConversationQuery
+@implementation LCIMConversationQuery
 
 +(NSDictionary *)dictionaryFromGeoPoint:(LCGeoPoint *)point {
     return @{ @"__type": @"GeoPoint", @"latitude": @(point.latitude), @"longitude": @(point.longitude) };
@@ -33,14 +33,14 @@
     return point;
 }
 
-+ (instancetype)orQueryWithSubqueries:(NSArray<AVIMConversationQuery *> *)queries {
-    AVIMConversationQuery *result = nil;
++ (instancetype)orQueryWithSubqueries:(NSArray<LCIMConversationQuery *> *)queries {
+    LCIMConversationQuery *result = nil;
     
     if (queries.count > 0) {
         LCIMClient *client = [[queries firstObject] client];
         NSMutableArray *wheres = [[NSMutableArray alloc] initWithCapacity:queries.count];
         
-        for (AVIMConversationQuery *query in queries) {
+        for (LCIMConversationQuery *query in queries) {
             NSString *eachClientId = query.client.clientId;
             
             if (!eachClientId || ![eachClientId isEqualToString:client.clientId]) {
@@ -58,14 +58,14 @@
     return result;
 }
 
-+ (instancetype)andQueryWithSubqueries:(NSArray<AVIMConversationQuery *> *)queries {
-    AVIMConversationQuery *result = nil;
++ (instancetype)andQueryWithSubqueries:(NSArray<LCIMConversationQuery *> *)queries {
+    LCIMConversationQuery *result = nil;
     
     if (queries.count > 0) {
         LCIMClient *client = [[queries firstObject] client];
         NSMutableArray *wheres = [[NSMutableArray alloc] initWithCapacity:queries.count];
         
-        for (AVIMConversationQuery *query in queries) {
+        for (LCIMConversationQuery *query in queries) {
             NSString *eachClientId = query.client.clientId;
             
             if (!eachClientId || ![eachClientId isEqualToString:client.clientId]) {
@@ -329,10 +329,10 @@ static NSString * quote(NSString *string)
 }
 
 - (void)getConversationById:(NSString *)conversationId
-                   callback:(void (^)(AVIMConversation * _Nullable, NSError * _Nullable))callback
+                   callback:(void (^)(LCIMConversation * _Nullable, NSError * _Nullable))callback
 {
     [self whereKey:LCIMConversationKeyObjectId equalTo:conversationId];
-    [self findConversationsWithCallback:^(NSArray<AVIMConversation *> * _Nullable conversations, NSError * _Nullable error) {
+    [self findConversationsWithCallback:^(NSArray<LCIMConversation *> * _Nullable conversations, NSError * _Nullable error) {
         if (error) {
             callback(nil, error);
             return;
@@ -348,7 +348,7 @@ static NSString * quote(NSString *string)
     }];
 }
 
-- (void)findConversationsWithCallback:(void (^)(NSArray<AVIMConversation *> * _Nullable, NSError * _Nullable))callback
+- (void)findConversationsWithCallback:(void (^)(NSArray<LCIMConversation *> * _Nullable, NSError * _Nullable))callback
 {
     LCIMClient *client = self.client;
     if (!client) {
@@ -437,8 +437,8 @@ static NSString * quote(NSString *string)
             results;
         });
         
-        NSMutableArray<AVIMConversation *> *conversations = ({
-            NSMutableArray<AVIMConversation *> *conversations = [NSMutableArray array];
+        NSMutableArray<LCIMConversation *> *conversations = ({
+            NSMutableArray<LCIMConversation *> *conversations = [NSMutableArray array];
             for (NSMutableDictionary *jsonDic in results) {
                 if (![NSMutableDictionary _lc_isTypeOf:jsonDic]) {
                     continue;
@@ -447,12 +447,12 @@ static NSString * quote(NSString *string)
                 if (!conversationId) {
                     continue;
                 }
-                AVIMConversation *conv = [client.conversationManager conversationForId:conversationId];
+                LCIMConversation *conv = [client.conversationManager conversationForId:conversationId];
                 if (conv) {
                     [conv setRawJSONData:jsonDic];
                     [conversations addObject:conv];
                 } else {
-                    conv = [AVIMConversation conversationWithRawJSONData:jsonDic client:client];
+                    conv = [LCIMConversation conversationWithRawJSONData:jsonDic client:client];
                     if (conv) {
                         [client.conversationManager insertConversation:conv];
                         [conversations addObject:conv];
@@ -513,7 +513,7 @@ static NSString * quote(NSString *string)
 }
 
 - (void)findTemporaryConversationsWith:(NSArray<NSString *> *)tempConvIds
-                              callback:(void (^)(NSArray<AVIMTemporaryConversation *> * _Nullable, NSError * _Nullable))callback
+                              callback:(void (^)(NSArray<LCIMTemporaryConversation *> * _Nullable, NSError * _Nullable))callback
 {
     LCIMClient *client = self.client;
     if (!client) {
@@ -591,8 +591,8 @@ static NSString * quote(NSString *string)
             results;
         });
         
-        NSArray<AVIMTemporaryConversation *> *conversations = ({
-            NSMutableArray<AVIMTemporaryConversation *> *conversations = [NSMutableArray array];
+        NSArray<LCIMTemporaryConversation *> *conversations = ({
+            NSMutableArray<LCIMTemporaryConversation *> *conversations = [NSMutableArray array];
             for (NSMutableDictionary *jsonDic in results) {
                 if (![NSMutableDictionary _lc_isTypeOf:jsonDic]) {
                     continue;
@@ -601,12 +601,12 @@ static NSString * quote(NSString *string)
                 if (!conversationId) {
                     continue;
                 }
-                AVIMTemporaryConversation *tempConv = (AVIMTemporaryConversation *)[client.conversationManager conversationForId:conversationId];
+                LCIMTemporaryConversation *tempConv = (LCIMTemporaryConversation *)[client.conversationManager conversationForId:conversationId];
                 if (tempConv) {
                     [tempConv setRawJSONData:jsonDic];
                     [conversations addObject:tempConv];
                 } else {
-                    tempConv = [AVIMTemporaryConversation conversationWithRawJSONData:jsonDic client:client];
+                    tempConv = [LCIMTemporaryConversation conversationWithRawJSONData:jsonDic client:client];
                     if (tempConv) {
                         [client.conversationManager insertConversation:tempConv];
                         [conversations addObject:tempConv];
@@ -632,8 +632,8 @@ static NSString * quote(NSString *string)
         NSArray *conversations = [client.conversationCache conversationsForCommand:outCommand.avim_conversationForCache];
         [client addOperationToInternalSerialQueue:^(LCIMClient *client) {
             NSMutableArray *results = [NSMutableArray array];
-            for (AVIMConversation *conv in conversations) {
-                AVIMConversation *convInMemory = [client.conversationManager conversationForId:conv.conversationId];
+            for (LCIMConversation *conv in conversations) {
+                LCIMConversation *convInMemory = [client.conversationManager conversationForId:conv.conversationId];
                 if (convInMemory) {
                     [results addObject:convInMemory];
                 } else {

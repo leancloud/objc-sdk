@@ -81,6 +81,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 - (void)getSessionTokenWithForcingRefresh:(BOOL)forcingRefresh
                                  callback:(void (^)(NSString *sessionToken, NSError *error))callback;
 
-- (void)conversation:(AVIMConversation *)conversation didUpdateForKeys:(NSArray<LCIMConversationUpdatedKey> *)keys;
+- (void)conversation:(LCIMConversation *)conversation didUpdateForKeys:(NSArray<LCIMConversationUpdatedKey> *)keys;
 
 @end

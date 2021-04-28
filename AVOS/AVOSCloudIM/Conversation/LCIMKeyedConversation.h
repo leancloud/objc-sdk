@@ -1,5 +1,5 @@
 //
-//  AVIMKeyedConversation.h
+//  LCIMKeyedConversation.h
 //  AVOS
 //
 //  Created by Tang Tianyong on 6/12/15.
@@ -13,9 +13,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- *  Represents a conversation which intends to be archived. Can get this object from AVIMConversation by -[AVIMConversation keyedConversation]. Can convert this object to AVIMConverstaion by -[LCIMClient conversationWithKeyedConversation:].
+ *  Represents a conversation which intends to be archived. Can get this object from LCIMConversation by -[LCIMConversation keyedConversation]. Can convert this object to AVIMConverstaion by -[LCIMClient conversationWithKeyedConversation:].
  */
-@interface AVIMKeyedConversation : NSObject <NSCoding>
+@interface LCIMKeyedConversation : NSObject <NSCoding>
 
 @property (nonatomic, copy,   readonly, nullable) NSString     *conversationId; // 对话 id
 @property (nonatomic, copy,   readonly, nullable) NSString     *creator;        // 创建者 id

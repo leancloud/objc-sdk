@@ -9,7 +9,7 @@
 #import "AVIMMessage.h"
 #import "AVIMMessageObject.h"
 #import "AVIMMessage_Internal.h"
-#import "AVIMConversation_Internal.h"
+#import "LCIMConversation_Internal.h"
 #import "AVIMTypedMessage_Internal.h"
 
 /*

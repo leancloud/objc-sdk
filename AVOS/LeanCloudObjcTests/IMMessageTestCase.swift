@@ -36,10 +36,10 @@ class IMMessageTestCase: RTMBaseTestCase {
         client3.delegate = delegator3
         let delegator4 = LCIMClientDelegator()
         client4.delegate = delegator4
-        var chatRoom1: AVIMChatRoom?
-        var chatRoom2: AVIMChatRoom?
-        var chatRoom3: AVIMChatRoom?
-        var chatRoom4: AVIMChatRoom?
+        var chatRoom1: LCIMChatRoom?
+        var chatRoom2: LCIMChatRoom?
+        var chatRoom3: LCIMChatRoom?
+        var chatRoom4: LCIMChatRoom?
         
         expecting(count: 7) { (exp) in
             client1.createChatRoom(withName: nil, attributes: nil) { (chatRoom, error) in
@@ -49,7 +49,7 @@ class IMMessageTestCase: RTMBaseTestCase {
                 if let ID = chatRoom1?.conversationId {
                     client2.conversationQuery().getConversationById(ID) { (conv, error) in
                         XCTAssertNil(error)
-                        chatRoom2 = conv as? AVIMChatRoom
+                        chatRoom2 = conv as? LCIMChatRoom
                         exp.fulfill()
                         chatRoom2?.join(callback: { (success, error) in
                             XCTAssertTrue(success)
@@ -57,7 +57,7 @@ class IMMessageTestCase: RTMBaseTestCase {
                             exp.fulfill()
                             client3.conversationQuery().getConversationById(ID) { (conv, error) in
                                 XCTAssertNil(error)
-                                chatRoom3 = conv as? AVIMChatRoom
+                                chatRoom3 = conv as? LCIMChatRoom
                                 exp.fulfill()
                                 chatRoom3?.join(callback: { (success, error) in
                                     XCTAssertTrue(success)
@@ -65,7 +65,7 @@ class IMMessageTestCase: RTMBaseTestCase {
                                     exp.fulfill()
                                     client4.conversationQuery().getConversationById(ID) { (conv, error) in
                                         XCTAssertNil(error)
-                                        chatRoom4 = conv as? AVIMChatRoom
+                                        chatRoom4 = conv as? LCIMChatRoom
                                         exp.fulfill()
                                         chatRoom4?.join(callback: { (success, error) in
                                             XCTAssertTrue(success)

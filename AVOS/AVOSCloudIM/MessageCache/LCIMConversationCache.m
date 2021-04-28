@@ -9,7 +9,7 @@
 #import "LCIMConversationCache.h"
 #import "LCIMConversationCacheStore.h"
 #import "LCIMConversationQueryCacheStore.h"
-#import "AVIMConversation.h"
+#import "LCIMConversation.h"
 
 @interface LCIMConversationCache ()
 
@@ -31,14 +31,14 @@
     return self;
 }
 
-- (AVIMConversation *)conversationForId:(NSString *)conversationId {
+- (LCIMConversation *)conversationForId:(NSString *)conversationId {
     return [self.cacheStore conversationForId:conversationId];
 }
 
 - (NSArray *)conversationIdsFromConversations:(NSArray *)conversations {
     NSMutableArray *conversationIds = [NSMutableArray array];
 
-    for (AVIMConversation *conversation in conversations) {
+    for (LCIMConversation *conversation in conversations) {
         if (conversation.conversationId) {
             [conversationIds addObject:conversation.conversationId];
         }

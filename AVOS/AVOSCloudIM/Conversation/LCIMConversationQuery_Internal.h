@@ -1,16 +1,16 @@
 //
-//  AVIMConversationQuery_Internal.h
+//  LCIMConversationQuery_Internal.h
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 2/11/15.
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMConversationQuery.h"
+#import "LCIMConversationQuery.h"
 
 @class LCIMClient;
 
-@interface AVIMConversationQuery ()
+@interface LCIMConversationQuery ()
 
 @property (nonatomic, strong) NSMutableDictionary *where;
 @property (nonatomic, strong) NSString *order;

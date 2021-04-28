@@ -192,7 +192,7 @@ class LCIMClientTestCase: LCIMTestBase {
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            client.createConversation(withName: "name", clientIds: [clientId1, clientId2, clientId3], attributes: ["key": "value"], options: [.unique], temporaryTTL: 0, callback: { (conv: AVIMConversation?, error: Error?) in
+            client.createConversation(withName: "name", clientIds: [clientId1, clientId2, clientId3], attributes: ["key": "value"], options: [.unique], temporaryTTL: 0, callback: { (conv: LCIMConversation?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(conv)
@@ -204,7 +204,7 @@ class LCIMClientTestCase: LCIMTestBase {
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            client.createConversation(withName: nil, clientIds: [], attributes: nil, options: [.transient], temporaryTTL: 0, callback: { (conv: AVIMConversation?, error: Error?) in
+            client.createConversation(withName: nil, clientIds: [], attributes: nil, options: [.transient], temporaryTTL: 0, callback: { (conv: LCIMConversation?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(conv)
@@ -217,7 +217,7 @@ class LCIMClientTestCase: LCIMTestBase {
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
             let temporaryTTL: Int32 = 600
-            client.createConversation(withName: nil, clientIds: [clientId1, clientId2], attributes: nil, options: [.temporary], temporaryTTL: temporaryTTL, callback: { (conv: AVIMConversation?, error: Error?) in
+            client.createConversation(withName: nil, clientIds: [clientId1, clientId2], attributes: nil, options: [.temporary], temporaryTTL: temporaryTTL, callback: { (conv: LCIMConversation?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(conv)
@@ -242,10 +242,10 @@ class LCIMClientTestCase: LCIMTestBase {
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            let query: AVIMConversationQuery = client.conversationQuery()
+            let query: LCIMConversationQuery = client.conversationQuery()
             query.limit = batchSize
             query.cachePolicy = .networkOnly
-            query.findConversations(callback: { (convs: [AVIMConversation]?, error: Error?) in
+            query.findConversations(callback: { (convs: [LCIMConversation]?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(convs)
@@ -262,7 +262,7 @@ class LCIMClientTestCase: LCIMTestBase {
             for i in 0..<(batchSize - conversationIds.count) {
                 RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     semaphore.increment()
-                    client.createConversation(withName: nil, clientIds: [clientId, clientId + "\(i)"], callback: { (conv: AVIMConversation?, error: Error?) in
+                    client.createConversation(withName: nil, clientIds: [clientId, clientId + "\(i)"], callback: { (conv: LCIMConversation?, error: Error?) in
                         semaphore.decrement()
                         XCTAssertTrue(Thread.isMainThread)
                         XCTAssertNotNil(conv)
@@ -289,7 +289,7 @@ class LCIMClientTestCase: LCIMTestBase {
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment(conversationIds.count)
             client.addOperation(toInternalSerialQueue: { (_) in
-                client.conversationManager.queryConversations(withIds: Array<String>(conversationIds), callback: { (conv: AVIMConversation?, error: Error?) in
+                client.conversationManager.queryConversations(withIds: Array<String>(conversationIds), callback: { (conv: LCIMConversation?, error: Error?) in
                     semaphore.decrement()
                     XCTAssertNotNil(conv)
                     XCTAssertNil(error)

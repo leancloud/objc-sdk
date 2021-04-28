@@ -22,7 +22,7 @@
                        error:(NSError *)error;
 
 + (void)callConversationResultBlock:(LCIMConversationResultBlock)block
-                       conversation:(AVIMConversation *)conversation
+                       conversation:(LCIMConversation *)conversation
                               error:(NSError *)error;
 
 @end

@@ -1,15 +1,15 @@
 //
-//  AVIMKeyedConversation.m
+//  LCIMKeyedConversation.m
 //  AVOS
 //
 //  Created by Tang Tianyong on 6/12/15.
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMKeyedConversation_internal.h"
+#import "LCIMKeyedConversation_internal.h"
 #import "AVIMMessage.h"
 
-@implementation AVIMKeyedConversation
+@implementation LCIMKeyedConversation
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {

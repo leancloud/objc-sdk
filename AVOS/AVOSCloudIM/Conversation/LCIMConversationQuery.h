@@ -1,5 +1,5 @@
 //
-//  AVIMConversationQuery.h
+//  LCIMConversationQuery.h
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 2/3/15.
@@ -8,11 +8,11 @@
 
 #import "LCIMCommon.h"
 
-#define AVIMAttr(attr) ([NSString stringWithFormat:@"attr.%@", attr])
+#define LCIMAttr(attr) ([NSString stringWithFormat:@"attr.%@", attr])
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AVIMConversationQuery : NSObject
+@interface LCIMConversationQuery : NSObject
 
 /*!
  The max count of the query result, default is 10. 
@@ -44,14 +44,14 @@ NS_ASSUME_NONNULL_BEGIN
  * @param queries The list of queries to OR together.
  * @return an query that is the OR of the passed in queries.
  */
-+ (instancetype)orQueryWithSubqueries:(NSArray<AVIMConversationQuery *> *)queries;
++ (instancetype)orQueryWithSubqueries:(NSArray<LCIMConversationQuery *> *)queries;
 
 /*!
  * Build an query that is the AND of the passed in queries.
  * @param queries The list of queries to AND together.
  * @return an query that is the AND of the passed in queries.
  */
-+ (instancetype)andQueryWithSubqueries:(NSArray<AVIMConversationQuery *> *)queries;
++ (instancetype)andQueryWithSubqueries:(NSArray<LCIMConversationQuery *> *)queries;
 
 /*!
  Add a constraint that requires a particular key exists.
@@ -210,18 +210,18 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)orderBySortDescriptors:(NSArray *)sortDescriptors;
 
 /*!
- Queries for an AVIMConversation object based on its conversationId.
+ Queries for an LCIMConversation object based on its conversationId.
  @param callback on returned results
  */
 - (void)getConversationById:(NSString *)conversationId
-                   callback:(void (^)(AVIMConversation * _Nullable conversation, NSError * _Nullable error))callback;
+                   callback:(void (^)(LCIMConversation * _Nullable conversation, NSError * _Nullable error))callback;
 
 /*!
- Queries for an array of AVIMConversation objects.
+ Queries for an array of LCIMConversation objects.
  If limit is unspecified or invalid, it will return 10 results by default.
  @param callback on returned results
  */
-- (void)findConversationsWithCallback:(void (^)(NSArray<AVIMConversation *> * _Nullable conversations, NSError * _Nullable error))callback;
+- (void)findConversationsWithCallback:(void (^)(NSArray<LCIMConversation *> * _Nullable conversations, NSError * _Nullable error))callback;
 
 
 /**
@@ -231,7 +231,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param callback Result callback.
  */
 - (void)findTemporaryConversationsWith:(NSArray<NSString *> *)tempConvIds
-                              callback:(void (^)(NSArray<AVIMTemporaryConversation *> * _Nullable conversations, NSError * _Nullable error))callback;
+                              callback:(void (^)(NSArray<LCIMTemporaryConversation *> * _Nullable conversations, NSError * _Nullable error))callback;
 
 @end
 

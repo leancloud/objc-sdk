@@ -10,9 +10,9 @@
 #import <AVFoundation/AVFoundation.h>
 #import <AVOSCloud/AVOSCloud.h>
 
-@class AVIMConversation;
-@class AVIMChatRoom;
-@class AVIMTemporaryConversation;
+@class LCIMConversation;
+@class LCIMChatRoom;
+@class LCIMTemporaryConversation;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -150,9 +150,9 @@ FOUNDATION_EXPORT LCIMSignatureAction const LCIMSignatureActionUnblock;
 typedef void(^LCIMBooleanResultBlock)(BOOL, NSError * _Nullable);
 typedef void(^LCIMIntegerResultBlock)(NSInteger, NSError * _Nullable);
 typedef void(^LCIMArrayResultBlock)(NSArray * _Nullable, NSError * _Nullable);
-typedef void(^LCIMConversationResultBlock)(AVIMConversation * _Nullable, NSError * _Nullable);
-typedef void(^LCIMChatRoomResultBlock)(AVIMChatRoom * _Nullable, NSError * _Nullable);
-typedef void(^LCIMTemporaryConversationResultBlock)(AVIMTemporaryConversation * _Nullable, NSError * _Nullable);
+typedef void(^LCIMConversationResultBlock)(LCIMConversation * _Nullable, NSError * _Nullable);
+typedef void(^LCIMChatRoomResultBlock)(LCIMChatRoom * _Nullable, NSError * _Nullable);
+typedef void(^LCIMTemporaryConversationResultBlock)(LCIMTemporaryConversation * _Nullable, NSError * _Nullable);
 typedef void(^LCIMProgressBlock)(NSInteger);
 
 FOUNDATION_EXPORT NSString * const LCIMUserOptionUseUnread
