@@ -1,13 +1,13 @@
 //
-//  AVSubscriber.m
+//  LCSubscriber.m
 //  AVOS
 //
 //  Created by Tang Tianyong on 16/05/2017.
 //  Copyright © 2017 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVSubscriber.h"
-#import "AVLiveQuery_Internal.h"
+#import "LCSubscriber.h"
+#import "LCLiveQuery_Internal.h"
 
 #import "LCApplication_Internal.h"
 #import "LCUtils.h"
@@ -17,30 +17,30 @@
 #import "MessagesProtoOrig.pbobjc.h"
 #import "LCIMErrorUtil.h"
 
-static NSString * const AVIdentifierPrefix = @"livequery";
-NSString * const AVLiveQueryEventKey = @"AVLiveQueryEventKey";
-NSNotificationName const AVLiveQueryEventNotification = @"AVLiveQueryEventNotification";
+static NSString * const LCIdentifierPrefix = @"livequery";
+NSString * const LCLiveQueryEventKey = @"LCLiveQueryEventKey";
+NSNotificationName const LCLiveQueryEventNotification = @"LCLiveQueryEventNotification";
 
-@interface AVSubscriber () <LCRTMConnectionDelegate>
+@interface LCSubscriber () <LCRTMConnectionDelegate>
 
 @property (nonatomic) dispatch_queue_t internalSerialQueue;
 @property (nonatomic) BOOL alive;
 @property (nonatomic) LCRTMConnection *connection;
 @property (nonatomic) LCRTMServiceConsumer *serviceConsumer;
 @property (nonatomic) LCRTMConnectionDelegator *connectionDelegator;
-@property (nonatomic) NSHashTable<AVLiveQuery *> *weakLiveQueryObjectTable;
+@property (nonatomic) NSHashTable<LCLiveQuery *> *weakLiveQueryObjectTable;
 @property (nonatomic) NSMutableArray<void (^)(BOOL, NSError *)> *loginCallbackArray;
 
 @end
 
-@implementation AVSubscriber
+@implementation LCSubscriber
 
 + (instancetype)sharedInstance
 {
-    static AVSubscriber *instance;
+    static LCSubscriber *instance;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        instance = [[AVSubscriber alloc] init];
+        instance = [[LCSubscriber alloc] init];
     });
     return instance;
 }
@@ -50,7 +50,7 @@ NSNotificationName const AVLiveQueryEventNotification = @"AVLiveQueryEventNotifi
     self = [super init];
     if (self) {
         NSString *deviceUUID = [LCUtils deviceUUID];
-        _identifier = [NSString stringWithFormat:@"%@-%@", AVIdentifierPrefix, deviceUUID];
+        _identifier = [NSString stringWithFormat:@"%@-%@", LCIdentifierPrefix, deviceUUID];
         _internalSerialQueue = dispatch_queue_create([NSString stringWithFormat:
                                                       @"LC.Objc.%@.%@",
                                                       NSStringFromClass(self.class),
@@ -84,7 +84,7 @@ NSNotificationName const AVLiveQueryEventNotification = @"AVLiveQueryEventNotifi
 
 // MARK: Queue
 
-- (void)addOperationToInternalSerialQueue:(void (^)(AVSubscriber *subscriber))block
+- (void)addOperationToInternalSerialQueue:(void (^)(LCSubscriber *subscriber))block
 {
     dispatch_async(self.internalSerialQueue, ^{
         block(self);
@@ -115,7 +115,7 @@ NSNotificationName const AVLiveQueryEventNotification = @"AVLiveQueryEventNotifi
     [self invokeAllLoginCallbackWithSucceeded:false
                                         error:error];
     BOOL liveQueryExist = false;
-    for (AVLiveQuery *item in self.weakLiveQueryObjectTable) {
+    for (LCLiveQuery *item in self.weakLiveQueryObjectTable) {
         if (item) {
             liveQueryExist = true;
             break;
@@ -151,9 +151,9 @@ NSNotificationName const AVLiveQueryEventNotification = @"AVLiveQueryEventNotifi
     NSDictionary *event = (NSDictionary *)[LCObjectUtils objectFromDictionary:dictionary
                                                                     recursive:YES];
     if ([event isKindOfClass:[NSDictionary class]]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:AVLiveQueryEventNotification
+        [[NSNotificationCenter defaultCenter] postNotificationName:LCLiveQueryEventNotification
                                                             object:self
-                                                          userInfo:@{ AVLiveQueryEventKey: event }];
+                                                          userInfo:@{ LCLiveQueryEventKey: event }];
     }
 }
 
@@ -184,7 +184,7 @@ NSNotificationName const AVLiveQueryEventNotification = @"AVLiveQueryEventNotifi
 
 - (void)loginWithCallback:(void (^)(BOOL succeeded, NSError *error))callback
 {
-    [self addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
+    [self addOperationToInternalSerialQueue:^(LCSubscriber *subscriber) {
         if (subscriber.loginCallbackArray) {
             [subscriber.loginCallbackArray addObject:callback];
         } else {
@@ -213,7 +213,7 @@ NSNotificationName const AVLiveQueryEventNotification = @"AVLiveQueryEventNotifi
                           peerID:self.identifier
                          onQueue:self.internalSerialQueue
                         callback:^(AVIMGenericCommand * _Nullable inCommand, NSError * _Nullable error) {
-        AVSubscriber *ss = ws;
+        LCSubscriber *ss = ws;
         if (!ss) {
             return;
         }
@@ -224,7 +224,7 @@ NSNotificationName const AVLiveQueryEventNotification = @"AVLiveQueryEventNotifi
         if (ss.alive) {
             [ss invokeAllLoginCallbackWithSucceeded:true
                                               error:nil];
-            for (AVLiveQuery *item in ss.weakLiveQueryObjectTable) {
+            for (LCLiveQuery *item in ss.weakLiveQueryObjectTable) {
                 [item resubscribe];
             }
         } else if (error) {
@@ -238,16 +238,16 @@ NSNotificationName const AVLiveQueryEventNotification = @"AVLiveQueryEventNotifi
 
 // MARK: Weak Retainer
 
-- (void)addLiveQueryObjectToWeakTable:(AVLiveQuery *)liveQueryObject
+- (void)addLiveQueryObjectToWeakTable:(LCLiveQuery *)liveQueryObject
 {
-    [self addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
+    [self addOperationToInternalSerialQueue:^(LCSubscriber *subscriber) {
         [subscriber.weakLiveQueryObjectTable addObject:liveQueryObject];
     }];
 }
 
-- (void)removeLiveQueryObjectFromWeakTable:(AVLiveQuery *)liveQueryObject
+- (void)removeLiveQueryObjectFromWeakTable:(LCLiveQuery *)liveQueryObject
 {
-    [self addOperationToInternalSerialQueue:^(AVSubscriber *subscriber) {
+    [self addOperationToInternalSerialQueue:^(LCSubscriber *subscriber) {
         [subscriber.weakLiveQueryObjectTable removeObject:liveQueryObject];
     }];
 }

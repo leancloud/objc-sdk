@@ -38,8 +38,8 @@ class LCLiveQueryTestBase: LCTestBase {
         let query: LCQuery = LCQuery(className: "Todo")
         query.whereKeyExists("objectId")
         
-        let liveQuery: AVLiveQuery = AVLiveQuery(query: query)
-        let liveQueryDelegate: AVLiveQueryDelegateWrapper = AVLiveQueryDelegateWrapper()
+        let liveQuery: LCLiveQuery = LCLiveQuery(query: query)
+        let liveQueryDelegate: LCLiveQueryDelegateWrapper = LCLiveQueryDelegateWrapper()
         liveQuery.delegate = liveQueryDelegate
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
@@ -55,7 +55,7 @@ class LCLiveQueryTestBase: LCTestBase {
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             let todo: LCObject = LCObject(className: "Todo")
             semaphore.increment(2)
-            liveQueryDelegate.objectDidCreateClosure = { (liveQuery: AVLiveQuery, object: Any) in
+            liveQueryDelegate.objectDidCreateClosure = { (liveQuery: LCLiveQuery, object: Any) in
                 XCTAssertTrue(Thread.isMainThread)
                 semaphore.decrement()
                 XCTAssertEqual(todo.objectId, (object as? LCObject)?.objectId)
@@ -71,35 +71,35 @@ class LCLiveQueryTestBase: LCTestBase {
     
 }
 
-class AVLiveQueryDelegateWrapper: NSObject, AVLiveQueryDelegate {
+class LCLiveQueryDelegateWrapper: NSObject, LCLiveQueryDelegate {
     
-    var userDidLoginClosure: ((AVLiveQuery, LCUser) -> Void)?
-    func liveQuery(_ liveQuery: AVLiveQuery, userDidLogin user: LCUser) {
+    var userDidLoginClosure: ((LCLiveQuery, LCUser) -> Void)?
+    func liveQuery(_ liveQuery: LCLiveQuery, userDidLogin user: LCUser) {
         self.userDidLoginClosure?(liveQuery, user)
     }
     
-    var objectDidCreateClosure: ((AVLiveQuery, Any) -> Void)?
-    func liveQuery(_ liveQuery: AVLiveQuery, objectDidCreate object: Any) {
+    var objectDidCreateClosure: ((LCLiveQuery, Any) -> Void)?
+    func liveQuery(_ liveQuery: LCLiveQuery, objectDidCreate object: Any) {
         self.objectDidCreateClosure?(liveQuery, object)
     }
     
-    var objectDidDeleteClosure: ((AVLiveQuery, Any) -> Void)?
-    func liveQuery(_ liveQuery: AVLiveQuery, objectDidDelete object: Any) {
+    var objectDidDeleteClosure: ((LCLiveQuery, Any) -> Void)?
+    func liveQuery(_ liveQuery: LCLiveQuery, objectDidDelete object: Any) {
         self.objectDidDeleteClosure?(liveQuery, object)
     }
     
-    var objectDidEnterWithUpdatedKeysClosure: ((AVLiveQuery, Any, [String]) -> Void)?
-    func liveQuery(_ liveQuery: AVLiveQuery, objectDidEnter object: Any, updatedKeys: [String]) {
+    var objectDidEnterWithUpdatedKeysClosure: ((LCLiveQuery, Any, [String]) -> Void)?
+    func liveQuery(_ liveQuery: LCLiveQuery, objectDidEnter object: Any, updatedKeys: [String]) {
         self.objectDidEnterWithUpdatedKeysClosure?(liveQuery, object, updatedKeys)
     }
     
-    var objectDidLeaveWithUpdatedKeysClosure: ((AVLiveQuery, Any, [String]) -> Void)?
-    func liveQuery(_ liveQuery: AVLiveQuery, objectDidLeave object: Any, updatedKeys: [String]) {
+    var objectDidLeaveWithUpdatedKeysClosure: ((LCLiveQuery, Any, [String]) -> Void)?
+    func liveQuery(_ liveQuery: LCLiveQuery, objectDidLeave object: Any, updatedKeys: [String]) {
         self.objectDidLeaveWithUpdatedKeysClosure?(liveQuery, object, updatedKeys)
     }
     
-    var objectDidUpdateWithUpdatedKeysClosure: ((AVLiveQuery, Any, [String]) -> Void)?
-    func liveQuery(_ liveQuery: AVLiveQuery, objectDidUpdate object: Any, updatedKeys: [String]) {
+    var objectDidUpdateWithUpdatedKeysClosure: ((LCLiveQuery, Any, [String]) -> Void)?
+    func liveQuery(_ liveQuery: LCLiveQuery, objectDidUpdate object: Any, updatedKeys: [String]) {
         self.objectDidUpdateWithUpdatedKeysClosure?(liveQuery, object, updatedKeys)
     }
     

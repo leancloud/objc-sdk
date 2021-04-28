@@ -1,5 +1,5 @@
 //
-//  AVLiveQuery.h
+//  LCLiveQuery.h
 //  AVOS
 //
 //  Created by Tang Tianyong on 15/05/2017.
@@ -10,14 +10,14 @@
 
 @class LCUser;
 @class LCQuery;
-@class AVLiveQuery;
+@class LCLiveQuery;
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
  Protocol of delegate that receives live query notifications.
  */
-@protocol AVLiveQueryDelegate <NSObject>
+@protocol LCLiveQueryDelegate <NSObject>
 
 @optional
 
@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param liveQuery The live query object.
  @param object    The object that matches live query.
  */
-- (void)liveQuery:(AVLiveQuery *)liveQuery objectDidCreate:(id)object;
+- (void)liveQuery:(LCLiveQuery *)liveQuery objectDidCreate:(id)object;
 
 /**
  Called when an object updated and it matches the query.
@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param object      The object that matches live query.
  @param updatedKeys The updated keys.
  */
-- (void)liveQuery:(AVLiveQuery *)liveQuery objectDidUpdate:(id)object updatedKeys:(NSArray<NSString *> *)updatedKeys;
+- (void)liveQuery:(LCLiveQuery *)liveQuery objectDidUpdate:(id)object updatedKeys:(NSArray<NSString *> *)updatedKeys;
 
 /**
  Called when an object deleted and it matches the query.
@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param liveQuery The live query object.
  @param object    The object that matches live query.
  */
-- (void)liveQuery:(AVLiveQuery *)liveQuery objectDidDelete:(id)object;
+- (void)liveQuery:(LCLiveQuery *)liveQuery objectDidDelete:(id)object;
 
 /**
  Called when an object matches query after updated.
@@ -52,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param liveQuery The live query object.
  @param object    The object that matches live query.
  */
-- (void)liveQuery:(AVLiveQuery *)liveQuery objectDidEnter:(id)object updatedKeys:(NSArray<NSString *> *)updatedKeys;
+- (void)liveQuery:(LCLiveQuery *)liveQuery objectDidEnter:(id)object updatedKeys:(NSArray<NSString *> *)updatedKeys;
 
 /**
  Called when an object mismatches query after updated.
@@ -60,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param liveQuery The live query object.
  @param object    The object that matches live query.
  */
-- (void)liveQuery:(AVLiveQuery *)liveQuery objectDidLeave:(id)object updatedKeys:(NSArray<NSString *> *)updatedKeys;
+- (void)liveQuery:(LCLiveQuery *)liveQuery objectDidLeave:(id)object updatedKeys:(NSArray<NSString *> *)updatedKeys;
 
 /**
  Called when an user did login and who matches the query.
@@ -68,7 +68,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param liveQuery The live query object.
  @param user      The user who did login.
  */
-- (void)liveQuery:(AVLiveQuery *)liveQuery userDidLogin:(LCUser *)user;
+- (void)liveQuery:(LCLiveQuery *)liveQuery userDidLogin:(LCUser *)user;
 
 @end
 
@@ -76,12 +76,12 @@ NS_ASSUME_NONNULL_BEGIN
  A type that defines an object which can observe various kinds of
  change events of objects that a query matches.
  */
-@interface AVLiveQuery : NSObject
+@interface LCLiveQuery : NSObject
 
 /**
  The delegate which receive change event of objects which the query matches.
  */
-@property (nonatomic, weak, nullable) id<AVLiveQueryDelegate> delegate;
+@property (nonatomic, weak, nullable) id<LCLiveQueryDelegate> delegate;
 
 /**
  The query which matches objects that you want to observe.

@@ -1,13 +1,13 @@
 //
-//  AVLiveQuery.m
+//  LCLiveQuery.m
 //  AVOS
 //
 //  Created by Tang Tianyong on 15/05/2017.
 //  Copyright © 2017 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVLiveQuery_Internal.h"
-#import "AVSubscriber.h"
+#import "LCLiveQuery_Internal.h"
+#import "LCSubscriber.h"
 
 #import "LCUser.h"
 #import "LCQuery.h"
@@ -17,24 +17,24 @@
 
 static NSString *const LCQueryIdKey = @"query_id";
 
-static NSString *const AVSubscriptionEndpoint = @"LiveQuery/subscribe";
-static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
+static NSString *const LCSubscriptionEndpoint = @"LiveQuery/subscribe";
+static NSString *const LCUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
 
-@interface AVLiveQuery ()
+@interface LCLiveQuery ()
 
 @property (nonatomic, copy) NSString *queryId;
-@property (nonatomic, weak) AVSubscriber *subscriber;
+@property (nonatomic, weak) LCSubscriber *subscriber;
 
 @end
 
-@implementation AVLiveQuery
+@implementation LCLiveQuery
 
 - (instancetype)initWithQuery:(LCQuery *)query {
     self = [super init];
 
     if (self) {
         _query = query;
-        _subscriber = [AVSubscriber sharedInstance];
+        _subscriber = [LCSubscriber sharedInstance];
     }
 
     return self;
@@ -43,19 +43,19 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
 - (void)observeSubscriber {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(eventDidReceive:)
-                                                 name:AVLiveQueryEventNotification
+                                                 name:LCLiveQueryEventNotification
                                                object:self.subscriber];
 }
 
 - (void)stopToObserveSubscriber {
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:AVLiveQueryEventNotification
+                                                    name:LCLiveQueryEventNotification
                                                   object:self.subscriber];
 }
 
 - (void)eventDidReceive:(NSNotification *)notification {
     NSDictionary *userInfo = notification.userInfo;
-    NSDictionary *event = userInfo[AVLiveQueryEventKey];
+    NSDictionary *event = userInfo[LCLiveQueryEventKey];
 
     /* Filter out other live query events. */
     if (![event[LCQueryIdKey] isEqualToString:self.queryId])
@@ -222,7 +222,7 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
             });
         };
         
-        [[LCPaasClient sharedInstance] postObject:AVSubscriptionEndpoint
+        [[LCPaasClient sharedInstance] postObject:LCSubscriptionEndpoint
                                    withParameters:parameters
                                             block:block];
     }];
@@ -253,7 +253,7 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
         [LCUtils callBooleanResultBlock:callback error:nil];
     };
 
-    [[LCPaasClient sharedInstance] postObject:AVUnsubscriptionEndpoint
+    [[LCPaasClient sharedInstance] postObject:LCUnsubscriptionEndpoint
                                withParameters:parameters
                                         block:block];
 }
@@ -264,7 +264,7 @@ static NSString *const AVUnsubscriptionEndpoint = @"LiveQuery/unsubscribe";
         
         NSDictionary *parameters = [self subscriptionParameters];
         
-        [[LCPaasClient sharedInstance] postObject:AVSubscriptionEndpoint withParameters:parameters block:^(id  _Nullable object, NSError * _Nullable error) {
+        [[LCPaasClient sharedInstance] postObject:LCSubscriptionEndpoint withParameters:parameters block:^(id  _Nullable object, NSError * _Nullable error) {
             // do nothing.
         }];
     }
