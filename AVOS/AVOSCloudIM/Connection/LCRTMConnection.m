@@ -17,7 +17,7 @@
 #import "LCErrorUtils.h"
 #import "AVOSCloudIM.h"
 #import "LCIMCommon_Internal.h"
-#import "AVIMErrorUtil.h"
+#import "LCIMErrorUtil.h"
 
 LCIMProtocol const LCIMProtocol3 = @"lc.protobuf2.3";
 LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";

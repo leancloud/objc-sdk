@@ -15,7 +15,7 @@
 
 #import "LCRTMConnection.h"
 #import "MessagesProtoOrig.pbobjc.h"
-#import "AVIMErrorUtil.h"
+#import "LCIMErrorUtil.h"
 
 static NSString * const AVIdentifierPrefix = @"livequery";
 NSString * const AVLiveQueryEventKey = @"AVLiveQueryEventKey";

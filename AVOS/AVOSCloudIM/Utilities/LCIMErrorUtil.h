@@ -1,5 +1,5 @@
 //
-//  AVIMErrorUtil.h
+//  LCIMErrorUtil.h
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 1/20/15.
@@ -10,7 +10,7 @@
 #import "LCIMCommon.h"
 #import "MessagesProtoOrig.pbobjc.h"
 
-FOUNDATION_EXPORT NSString *AVIMErrorMessage(LCIMErrorCode code);
+FOUNDATION_EXPORT NSString *LCIMErrorMessage(LCIMErrorCode code);
 
 FOUNDATION_EXPORT NSError *LCErrorFromErrorCommand(AVIMErrorCommand *command);
 FOUNDATION_EXPORT NSError *LCErrorFromSessionCommand(AVIMSessionCommand *command);

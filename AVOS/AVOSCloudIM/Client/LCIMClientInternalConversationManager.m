@@ -9,7 +9,7 @@
 #import "LCIMClientInternalConversationManager_Internal.h"
 #import "LCIMClient_Internal.h"
 #import "LCIMConversation_Internal.h"
-#import "AVIMErrorUtil.h"
+#import "LCIMErrorUtil.h"
 #import "LCErrorUtils.h"
 #import "LCUtils.h"
 #import "LCIMConversationCache.h"
@@ -146,7 +146,7 @@ static NSUInteger batchQueryLimit = 20;
                     } else {
                         NSError *error = ({
                             LCIMErrorCode code = LCIMErrorCodeInvalidCommand;
-                            LCError(code, AVIMErrorMessage(code), nil);
+                            LCError(code, LCIMErrorMessage(code), nil);
                         });
                         LCLoggerError(LCLoggerDomainIM, @"%@", error);
                         [self invokeCallbacksWithId:conversationId conversation:nil error:error];
@@ -163,7 +163,7 @@ static NSUInteger batchQueryLimit = 20;
             for (NSString *convId in remainingIds) {
                 NSError *error = ({
                     LCIMErrorCode code = LCIMErrorCodeConversationNotFound;
-                    LCError(code, AVIMErrorMessage(code), nil);
+                    LCError(code, LCIMErrorMessage(code), nil);
                 });
                 [self invokeCallbacksWithId:convId conversation:nil error:error];
             }
@@ -267,7 +267,7 @@ static NSUInteger batchQueryLimit = 20;
         if (error) {
             *error = ({
                 LCIMErrorCode code = LCIMErrorCodeInvalidCommand;
-                LCError(code, AVIMErrorMessage(code), nil);
+                LCError(code, LCIMErrorMessage(code), nil);
             });
         }
         return nil;
@@ -284,7 +284,7 @@ static NSUInteger batchQueryLimit = 20;
         if (error) {
             *error = ({
                 LCIMErrorCode code = LCIMErrorCodeInvalidCommand;
-                LCError(code, AVIMErrorMessage(code), nil);
+                LCError(code, LCIMErrorMessage(code), nil);
             });
         }
         return nil;

@@ -1,12 +1,12 @@
 //
-//  AVIMBlockHelper.m
+//  LCIMBlockHelper.m
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 12/9/14.
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMBlockHelper.h"
+#import "LCIMBlockHelper.h"
 #import <libkern/OSAtomic.h>
 
 #define safeBlock(first_param) \
@@ -20,7 +20,7 @@ if (block) { \
     } \
 }
 
-@implementation AVIMBlockHelper
+@implementation LCIMBlockHelper
 
 + (void)callBooleanResultBlock:(LCIMBooleanResultBlock)block
                          error:(NSError *)error

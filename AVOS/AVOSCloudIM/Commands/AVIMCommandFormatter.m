@@ -9,7 +9,7 @@
 #import <AVOSCloud/AVOSCloud.h>
 
 #import "AVIMCommandFormatter.h"
-#import "AVIMErrorUtil.h"
+#import "LCIMErrorUtil.h"
 
 @implementation AVIMCommandFormatter
 

@@ -1,5 +1,5 @@
 //
-//  AVIMBlockHelper.h
+//  LCIMBlockHelper.h
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 12/9/14.
@@ -8,7 +8,7 @@
 
 #import "LCIMCommon.h"
 
-@interface AVIMBlockHelper : NSObject
+@interface LCIMBlockHelper : NSObject
 
 + (void)callBooleanResultBlock:(LCIMBooleanResultBlock)block
                          error:(NSError *)error;

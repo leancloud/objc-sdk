@@ -1,15 +1,15 @@
 //
-//  AVIMErrorUtil.m
+//  LCIMErrorUtil.m
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 1/20/15.
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMErrorUtil.h"
+#import "LCIMErrorUtil.h"
 #import "LCErrorUtils.h"
 
-NSString *AVIMErrorMessage(LCIMErrorCode code)
+NSString *LCIMErrorMessage(LCIMErrorCode code)
 {
     switch (code) {
             // 90xx

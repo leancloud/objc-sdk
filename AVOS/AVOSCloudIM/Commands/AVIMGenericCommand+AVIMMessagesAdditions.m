@@ -8,7 +8,7 @@
 
 #import "AVIMGenericCommand+AVIMMessagesAdditions.h"
 #import "LCIMCommon.h"
-#import "AVIMErrorUtil.h"
+#import "LCIMErrorUtil.h"
 #import "LCIMConversationOutCommand.h"
 #import <objc/runtime.h>
 #import "LCIMMessage.h"

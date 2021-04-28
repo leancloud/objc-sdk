@@ -12,7 +12,7 @@
 #import "LCIMConversation_Internal.h"
 
 #import "LCIMConversationCache.h"
-#import "AVIMErrorUtil.h"
+#import "LCIMErrorUtil.h"
 
 #import "LCUtils.h"
 #import "LCObjectUtils.h"
@@ -340,7 +340,7 @@ static NSString * quote(NSString *string)
         if (!conversations.firstObject && self.cachePolicy != kLCIMCachePolicyCacheOnly) {
             callback(nil, ({
                 LCIMErrorCode code = LCIMErrorCodeConversationNotFound;
-                LCError(code, AVIMErrorMessage(code), nil);
+                LCError(code, LCIMErrorMessage(code), nil);
             }));
             return;
         }
@@ -418,7 +418,7 @@ static NSString * quote(NSString *string)
                 [client invokeInUserInteractQueue:^{
                     callback(nil, ({
                         LCIMErrorCode code = LCIMErrorCodeInvalidCommand;
-                        LCError(code, AVIMErrorMessage(code), nil);
+                        LCError(code, LCIMErrorMessage(code), nil);
                     }));
                 }];
                 return;
@@ -429,7 +429,7 @@ static NSString * quote(NSString *string)
                 [client invokeInUserInteractQueue:^{
                     callback(nil, error ?: ({
                         LCIMErrorCode code = LCIMErrorCodeInvalidCommand;
-                        LCError(code, AVIMErrorMessage(code), nil);
+                        LCError(code, LCIMErrorMessage(code), nil);
                     }));
                 }];
                 return;
@@ -572,7 +572,7 @@ static NSString * quote(NSString *string)
                 [client invokeInUserInteractQueue:^{
                     callback(nil, ({
                         LCIMErrorCode code = LCIMErrorCodeInvalidCommand;
-                        LCError(code, AVIMErrorMessage(code), nil);
+                        LCError(code, LCIMErrorMessage(code), nil);
                     }));
                 }];
                 return;
@@ -583,7 +583,7 @@ static NSString * quote(NSString *string)
                 [client invokeInUserInteractQueue:^{
                     callback(nil, error ?: ({
                         LCIMErrorCode code = LCIMErrorCodeInvalidCommand;
-                        LCError(code, AVIMErrorMessage(code), nil);
+                        LCError(code, LCIMErrorMessage(code), nil);
                     }));
                 }];
                 return;

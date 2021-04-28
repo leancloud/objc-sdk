@@ -19,8 +19,8 @@
 #import "LCIMMessageCacheStore.h"
 #import "LCIMConversationCache.h"
 
-#import "AVIMBlockHelper.h"
-#import "AVIMErrorUtil.h"
+#import "LCIMBlockHelper.h"
+#import "LCIMErrorUtil.h"
 
 #import "LCFile_Internal.h"
 #import "LCPaasClient.h"
@@ -1023,7 +1023,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             if (!data) {
                 callback(false, ({
                     LCIMErrorCode code = LCIMErrorCodeInvalidCommand;
-                    LCError(code, AVIMErrorMessage(code), nil);
+                    LCError(code, LCIMErrorMessage(code), nil);
                 }));
                 return;
             }
@@ -1032,7 +1032,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             if (error || ![NSDictionary _lc_isTypeOf:dic]) {
                 callback(false, error ?: ({
                     LCIMErrorCode code = LCIMErrorCodeInvalidCommand;
-                    LCError(code, AVIMErrorMessage(code), nil);
+                    LCError(code, LCIMErrorMessage(code), nil);
                 }));
                 return;
             }
@@ -1294,7 +1294,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         [client invokeInUserInteractQueue:^{
             callback(false, ({
                 LCIMErrorCode code = LCIMErrorCodeClientNotOpen;
-                LCError(code, AVIMErrorMessage(code), nil);
+                LCError(code, LCIMErrorMessage(code), nil);
             }));
         }];
         return;
@@ -1903,7 +1903,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
      {
         if (error) {
             
-            [AVIMBlockHelper callArrayResultBlock:callback
+            [LCIMBlockHelper callArrayResultBlock:callback
                                             array:nil
                                             error:error];
             
@@ -1912,7 +1912,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         
         if (!self.imClient.messageQueryCacheEnabled) {
             
-            [AVIMBlockHelper callArrayResultBlock:callback
+            [LCIMBlockHelper callArrayResultBlock:callback
                                             array:messages
                                             error:nil];
             
@@ -1924,7 +1924,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             [self cacheContinuousMessages:messages
                            withBreakpoint:YES];
             
-            [AVIMBlockHelper callArrayResultBlock:callback
+            [LCIMBlockHelper callArrayResultBlock:callback
                                             array:messages
                                             error:nil];
         });
@@ -1955,10 +1955,10 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             
             NSError *error = ({
                 LCIMErrorCode code = LCIMErrorCodeClientNotOpen;
-                LCError(code, AVIMErrorMessage(code), nil);
+                LCError(code, LCIMErrorMessage(code), nil);
             });
             
-            [AVIMBlockHelper callArrayResultBlock:callback
+            [LCIMBlockHelper callArrayResultBlock:callback
                                             array:nil
                                             error:error];
             
@@ -1976,7 +1976,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         
         NSArray *messages = [self queryMessagesFromCacheWithLimit:limit];
         
-        [AVIMBlockHelper callArrayResultBlock:callback
+        [LCIMBlockHelper callArrayResultBlock:callback
                                         array:messages
                                         error:nil];
         
@@ -2000,7 +2000,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                 
                 NSArray *messages = [self queryMessagesFromCacheWithLimit:limit];
                 
-                [AVIMBlockHelper callArrayResultBlock:callback
+                [LCIMBlockHelper callArrayResultBlock:callback
                                                 array:messages
                                                 error:nil];
                 
@@ -2008,7 +2008,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             }
             
             /* If error is not network relevant, return it */
-            [AVIMBlockHelper callArrayResultBlock:callback
+            [LCIMBlockHelper callArrayResultBlock:callback
                                             array:nil
                                             error:error];
             
@@ -2022,7 +2022,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             
             NSArray *messages = [self queryMessagesFromCacheWithLimit:limit];
             
-            [AVIMBlockHelper callArrayResultBlock:callback
+            [LCIMBlockHelper callArrayResultBlock:callback
                                             array:messages
                                             error:nil];
         });
@@ -2038,7 +2038,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         
         NSString *reason = @"`messageId` can't be nil";
         
-        [AVIMBlockHelper callArrayResultBlock:callback
+        [LCIMBlockHelper callArrayResultBlock:callback
                                         array:nil
                                         error:LCErrorInternal(reason)];
         
@@ -2058,7 +2058,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                                         limit:limit
                                      callback:^(NSArray *messages, NSError *error)
          {
-            [AVIMBlockHelper callArrayResultBlock:callback
+            [LCIMBlockHelper callArrayResultBlock:callback
                                             array:messages
                                             error:error];
         }];
@@ -2088,7 +2088,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                     [self cacheContinuousMessages:messages
                                       plusMessage:fromMessage];
                     
-                    [AVIMBlockHelper callArrayResultBlock:callback
+                    [LCIMBlockHelper callArrayResultBlock:callback
                                                     array:messages
                                                     error:error];
                 });
@@ -2128,7 +2128,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         if ((continuous && cachedMessages.count == limit) ||
             !socketOpened) {
             
-            [AVIMBlockHelper callArrayResultBlock:callback
+            [LCIMBlockHelper callArrayResultBlock:callback
                                             array:cachedMessages
                                             error:nil];
             
@@ -2203,7 +2203,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                                                                       messageId:messageId
                                                                           limit:limit];
                         
-                        [AVIMBlockHelper callArrayResultBlock:callback
+                        [LCIMBlockHelper callArrayResultBlock:callback
                                                         array:messages
                                                         error:nil];
                     });
@@ -2528,7 +2528,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         [client invokeInUserInteractQueue:^{
             NSError *error = ({
                 LCIMErrorCode code = LCIMErrorCodeOwnerPromotionNotAllowed;
-                LCError(code, AVIMErrorMessage(code), nil);
+                LCError(code, LCIMErrorMessage(code), nil);
             });
             callback(false, error);
         }];

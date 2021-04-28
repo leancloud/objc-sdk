@@ -13,7 +13,7 @@
 #import "LCIMConversationQuery_Internal.h"
 #import "LCIMTypedMessage_Internal.h"
 
-#import "AVIMErrorUtil.h"
+#import "LCIMErrorUtil.h"
 
 #import "UserAgent.h"
 #import "LCObjectUtils.h"
@@ -1696,7 +1696,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                 [client invokeInUserInteractQueue:^{
                     callback(nil, ({
                         LCIMErrorCode code = LCIMErrorCodeInvalidCommand;
-                        LCError(code, AVIMErrorMessage(code), nil);
+                        LCError(code, LCIMErrorMessage(code), nil);
                     }));
                 }];
                 return;
@@ -1934,7 +1934,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             [client invokeInUserInteractQueue:^{
                 callback(nil, ({
                     LCIMErrorCode code = LCIMErrorCodeInvalidCommand;
-                    LCError(code, AVIMErrorMessage(code), nil);
+                    LCError(code, LCIMErrorMessage(code), nil);
                 }));
             }];
             return;
