@@ -7,8 +7,8 @@
 //
 
 #import "LCIMCommon.h"
-#import "AVIMMessage.h"
-#import "AVIMMessageOption.h"
+#import "LCIMMessage.h"
+#import "LCIMMessageOption.h"
 
 @class LCIMClient;
 @class LCIMKeyedConversation;
@@ -74,7 +74,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  The last message in this conversation.
  *  @attention Getter method may query lastMessage from SQL, this may take a long time, be careful to use getter method in main thread.
  */
-@property (nonatomic, strong, readonly, nullable) AVIMMessage *lastMessage;
+@property (nonatomic, strong, readonly, nullable) LCIMMessage *lastMessage;
 
 /**
  *  The send timestamp of the last message in this conversation.
@@ -289,7 +289,7 @@ __deprecated_msg("Deprecated, use `LCIMConversation.updatedAt` instead.");
  @param message － The message to send.
  @param callback － A callback on results.
  */
-- (void)sendMessage:(AVIMMessage *)message
+- (void)sendMessage:(LCIMMessage *)message
            callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
@@ -298,8 +298,8 @@ __deprecated_msg("Deprecated, use `LCIMConversation.updatedAt` instead.");
  @param option － Message sending options.
  @param callback － A callback on results.
  */
-- (void)sendMessage:(AVIMMessage *)message
-             option:(AVIMMessageOption * _Nullable)option
+- (void)sendMessage:(LCIMMessage *)message
+             option:(LCIMMessageOption * _Nullable)option
            callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
@@ -308,7 +308,7 @@ __deprecated_msg("Deprecated, use `LCIMConversation.updatedAt` instead.");
  @param progressBlock - A callback on uploading progress. This is only applicable to uploading files. This callback will not be invoked when sending a text message.
  @param callback － A callback on results.
  */
-- (void)sendMessage:(AVIMMessage *)message
+- (void)sendMessage:(LCIMMessage *)message
       progressBlock:(void (^ _Nullable)(NSInteger progress))progressBlock
            callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
@@ -319,8 +319,8 @@ __deprecated_msg("Deprecated, use `LCIMConversation.updatedAt` instead.");
  @param progressBlock - A callback on uploading progress. This is only applicable to uploading files. This callback will not be invoked when sending a text message. 
  @param callback － A callback on results. 
  */
-- (void)sendMessage:(AVIMMessage *)message
-             option:(nullable AVIMMessageOption *)option
+- (void)sendMessage:(LCIMMessage *)message
+             option:(nullable LCIMMessageOption *)option
       progressBlock:(void (^ _Nullable)(NSInteger progress))progressBlock
            callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
@@ -333,8 +333,8 @@ __deprecated_msg("Deprecated, use `LCIMConversation.updatedAt` instead.");
  @param newMessage A new message.
  @param callback   Callback of message update.
  */
-- (void)updateMessage:(AVIMMessage *)oldMessage
-         toNewMessage:(AVIMMessage *)newMessage
+- (void)updateMessage:(LCIMMessage *)oldMessage
+         toNewMessage:(LCIMMessage *)newMessage
              callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
 /*!
@@ -343,7 +343,7 @@ __deprecated_msg("Deprecated, use `LCIMConversation.updatedAt` instead.");
  @param oldMessage The message you've sent which will be replaced by newMessage.
  @param callback   Callback of message update.
  */
-- (void)recallMessage:(AVIMMessage *)oldMessage
+- (void)recallMessage:(LCIMMessage *)oldMessage
              callback:(void (^)(BOOL succeeded, NSError * _Nullable error, AVIMRecalledMessage * _Nullable recalledMessage))callback;
 
 // MARK: - Message Cache
@@ -353,14 +353,14 @@ __deprecated_msg("Deprecated, use `LCIMConversation.updatedAt` instead.");
 
  @param message The message to be cached.
  */
-- (void)addMessageToCache:(AVIMMessage *)message;
+- (void)addMessageToCache:(LCIMMessage *)message;
 
 /*!
  Remove a message from cache.
 
  @param message The message which you want to remove from cache.
  */
-- (void)removeMessageFromCache:(AVIMMessage *)message;
+- (void)removeMessageFromCache:(LCIMMessage *)message;
 
 // MARK: - Message Query
 
@@ -370,7 +370,7 @@ __deprecated_msg("Deprecated, use `LCIMConversation.updatedAt` instead.");
  @param callback A callback on returned results.
  */
 - (void)queryMessagesFromServerWithLimit:(NSUInteger)limit
-                                callback:(void (^)(NSArray<AVIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;
+                                callback:(void (^)(NSArray<LCIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;
 
 /*!
  Queries recent messages from the cache. 
@@ -385,7 +385,7 @@ __deprecated_msg("Deprecated, use `LCIMConversation.updatedAt` instead.");
  @param callback A callback on returned results.
  */
 - (void)queryMessagesWithLimit:(NSUInteger)limit
-                      callback:(void (^)(NSArray<AVIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;
+                      callback:(void (^)(NSArray<LCIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;
 
 /*!
  Queries historical messages.
@@ -399,7 +399,7 @@ __deprecated_msg("Deprecated, use `LCIMConversation.updatedAt` instead.");
 - (void)queryMessagesBeforeId:(NSString *)messageId
                     timestamp:(int64_t)timestamp
                         limit:(NSUInteger)limit
-                     callback:(void (^)(NSArray<AVIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;
+                     callback:(void (^)(NSArray<LCIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;
 
 /**
  Query messages from a message to an another message with specified direction applied.
@@ -412,22 +412,22 @@ __deprecated_msg("Deprecated, use `LCIMConversation.updatedAt` instead.");
 - (void)queryMessagesInInterval:(LCIMMessageInterval *)interval
                       direction:(LCIMMessageQueryDirection)direction
                           limit:(NSUInteger)limit
-                       callback:(void (^)(NSArray<AVIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;
+                       callback:(void (^)(NSArray<LCIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;
 
 /**
  Query Specific Media Type Message from Server.
 
- @param type Specific Media Type you want to query, see `AVIMMessageMediaType`.
+ @param type Specific Media Type you want to query, see `LCIMMessageMediaType`.
  @param limit Limit of messages you want to query.
  @param messageId If set it and MessageId is Valid, the Query Result is Decending base on Timestamp and will Not Include the Message that its messageId is this parameter.
  @param timestamp Set Zero or Negative, it will query from latest Message and result include the latest Message; Set a valid timestamp, the Query Result is Decending base on Timestamp and will Not Include the Message that its timestamp is this parameter.
  @param callback Result callback.
  */
-- (void)queryMediaMessagesFromServerWithType:(AVIMMessageMediaType)type
+- (void)queryMediaMessagesFromServerWithType:(LCIMMessageMediaType)type
                                        limit:(NSUInteger)limit
                                fromMessageId:(NSString * _Nullable)messageId
                                fromTimestamp:(int64_t)timestamp
-                                    callback:(void (^)(NSArray<AVIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;
+                                    callback:(void (^)(NSArray<LCIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;
 
 // MARK: - Member Info
 
@@ -576,7 +576,7 @@ __deprecated_msg("Deprecated, use `LCIMConversation.updatedAt` instead.");
  @param options － 可选参数，可以使用或 “|” 操作表示多个选项
  @param callback － 结果回调
  */
-- (void)sendMessage:(AVIMMessage *)message
+- (void)sendMessage:(LCIMMessage *)message
             options:(AVIMMessageSendOption)options
            callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback __deprecated_msg("deprecated. use -[sendMessage:option:callback:] instead.");
 
@@ -587,7 +587,7 @@ __deprecated_msg("Deprecated, use `LCIMConversation.updatedAt` instead.");
  @param progressBlock - 发送进度回调。仅对文件上传有效，发送文本消息时不进行回调。
  @param callback － 结果回调
  */
-- (void)sendMessage:(AVIMMessage *)message
+- (void)sendMessage:(LCIMMessage *)message
             options:(AVIMMessageSendOption)options
       progressBlock:(nullable LCIMProgressBlock)progressBlock
            callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback __deprecated_msg("deprecated. use -[sendMessage:option:progressBlock:callback:] instead.");

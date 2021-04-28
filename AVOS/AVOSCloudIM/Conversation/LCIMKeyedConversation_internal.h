@@ -8,7 +8,7 @@
 
 #import "LCIMKeyedConversation.h"
 
-@class AVIMMessage;
+@class LCIMMessage;
 
 @interface LCIMKeyedConversation ()
 
@@ -20,7 +20,7 @@
 @property (nonatomic, strong) NSDate       *lastMessageAt;
 @property (nonatomic, strong) NSDate       *lastDeliveredAt;
 @property (nonatomic, strong) NSDate       *lastReadAt;
-@property (nonatomic, strong) AVIMMessage  *lastMessage;
+@property (nonatomic, strong) LCIMMessage  *lastMessage;
 @property (nonatomic, copy)   NSString     *name;
 @property (nonatomic, strong) NSArray      *members;
 @property (nonatomic, strong) NSDictionary *attributes;

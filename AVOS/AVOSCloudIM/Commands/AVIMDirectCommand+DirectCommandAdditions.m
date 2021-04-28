@@ -11,11 +11,11 @@
 
 @implementation AVIMDirectCommand (DirectCommandAdditions)
 
-- (AVIMMessage *)message {
+- (LCIMMessage *)message {
     return objc_getAssociatedObject(self, @selector(message));
 }
 
-- (void)setMessage:(AVIMMessage *)message {
+- (void)setMessage:(LCIMMessage *)message {
     objc_setAssociatedObject(self, @selector(message), message, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 

@@ -16,9 +16,9 @@
     [self registerSubclass];
 }
 
-+ (AVIMMessageMediaType)classMediaType
++ (LCIMMessageMediaType)classMediaType
 {
-    return kAVIMMessageMediaTypeText;
+    return kLCIMMessageMediaTypeText;
 }
 
 + (instancetype)messageWithText:(NSString *)text

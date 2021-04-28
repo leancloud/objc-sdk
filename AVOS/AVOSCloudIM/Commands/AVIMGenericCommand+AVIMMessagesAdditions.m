@@ -11,7 +11,7 @@
 #import "AVIMErrorUtil.h"
 #import "AVIMConversationOutCommand.h"
 #import <objc/runtime.h>
-#import "AVIMMessage.h"
+#import "LCIMMessage.h"
 #import "LCErrorUtils.h"
 
 NSString *const kAVIMConversationOperationQuery = @"query";
@@ -58,7 +58,7 @@ NSString *const kAVIMConversationOperationQuery = @"query";
     }
 }
 
-- (void)avim_addRequiredKeyForDirectMessageWithMessage:(AVIMMessage *)message transient:(BOOL)transient {
+- (void)avim_addRequiredKeyForDirectMessageWithMessage:(LCIMMessage *)message transient:(BOOL)transient {
     NSAssert(self.hasDirectMessage, ([NSString stringWithFormat:@"before call %@, make sure you have called `-avim_addRequiredKey`", NSStringFromSelector(_cmd)]));
     if (message) {
         self.peerId = message.clientId;

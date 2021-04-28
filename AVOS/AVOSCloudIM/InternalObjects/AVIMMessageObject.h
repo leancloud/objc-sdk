@@ -7,12 +7,12 @@
 //
 
 #import "AVIMDynamicObject.h"
-#import "AVIMMessage.h"
+#import "LCIMMessage.h"
 
 @interface AVIMMessageObject : AVIMDynamicObject
 
-@property (nonatomic, assign) AVIMMessageIOType  ioType;
-@property (nonatomic, assign) AVIMMessageStatus  status;
+@property (nonatomic, assign) LCIMMessageIOType  ioType;
+@property (nonatomic, assign) LCIMMessageStatus  status;
 @property (nonatomic,   copy) NSString          *messageId;
 @property (nonatomic,   copy) NSString          *clientId;
 @property (nonatomic,   copy) NSString          *conversationId;

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class AVIMMessage;
+@class LCIMMessage;
 
 @interface LCIMMessageCache : NSObject
 
@@ -54,7 +54,7 @@
  * @param message Message object.
  * @param conversationId Conversation id of message.
  */
-- (AVIMMessage *)nextMessageForMessage:(AVIMMessage *)message conversationId:(NSString *)conversationId;
+- (LCIMMessage *)nextMessageForMessage:(LCIMMessage *)message conversationId:(NSString *)conversationId;
 
 /*!
  * Fetch latest messages of conversation.
@@ -69,14 +69,14 @@
  * @param conversationId Conversation id of message.
  * @return YES if cache contains message, otherwise NO.
  */
-- (BOOL)containMessage:(AVIMMessage *)message forConversationId:(NSString *)conversationId;
+- (BOOL)containMessage:(LCIMMessage *)message forConversationId:(NSString *)conversationId;
 
 /*!
  * Update message without it bearkpoint.
  * @param message Message which for updating.
  * @param conversationId Conversation id of message.
  */
-- (void)updateMessage:(AVIMMessage *)message forConversationId:(NSString *)conversationId;
+- (void)updateMessage:(LCIMMessage *)message forConversationId:(NSString *)conversationId;
 
 /*!
  * Clean cache for conversation.

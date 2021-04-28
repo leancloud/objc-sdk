@@ -11,8 +11,8 @@
 #import "LCPersistenceUtils.h"
 #import "LCIMMessageCache.h"
 #import "LCIMMessageCacheStore.h"
-#import "AVIMMessage.h"
-#import "AVIMMessage_Internal.h"
+#import "LCIMMessage.h"
+#import "LCIMMessage_Internal.h"
 #import "LCIMCommon.h"
 
 @interface LCIMMessageCache ()
@@ -77,7 +77,7 @@
     if (continuous) {
         *continuous = YES;
 
-        for (AVIMMessage *message in cachedMessages) {
+        for (LCIMMessage *message in cachedMessages) {
             if (message.breakpoint) {
                 *continuous = NO;
                 break;
@@ -108,8 +108,8 @@
 
     NSMutableArray *allMessages = [[self messagesOrderedByTimestampDescending:messages] mutableCopy];
 
-    AVIMMessage *oldestMessage = [allMessages lastObject];
-    AVIMMessage *newestMessage = [allMessages firstObject];
+    LCIMMessage *oldestMessage = [allMessages lastObject];
+    LCIMMessage *newestMessage = [allMessages firstObject];
     NSArray     *newerMessages = [allMessages subarrayWithRange:NSMakeRange(0, [allMessages count] - 1)];
 
     /* insert breakpoint message or update oldest message without breakpoint */
@@ -123,7 +123,7 @@
     [cacheStore insertOrUpdateMessages:newerMessages];
 
     if (!newestMessageExisted) {
-        AVIMMessage *nextMessage = [self nextMessageForMessage:newestMessage conversationId:conversationId];
+        LCIMMessage *nextMessage = [self nextMessageForMessage:newestMessage conversationId:conversationId];
 
         if (nextMessage) {
             [cacheStore updateBreakpoint:YES forMessage:nextMessage];
@@ -131,7 +131,7 @@
     }
 }
 
-- (void)insertMessageAndUpdateBreakpoint:(AVIMMessage *)message forConversationId:(NSString *)conversationId {
+- (void)insertMessageAndUpdateBreakpoint:(LCIMMessage *)message forConversationId:(NSString *)conversationId {
     LCIMMessageCacheStore *cacheStore = [self cacheStoreWithConversationId:conversationId];
 
     if ([cacheStore containMessage:message]) {
@@ -145,17 +145,17 @@
 - (void)deleteMessages:(NSArray *)messages forConversationId:(NSString *)conversationId {
     LCIMMessageCacheStore *cacheStore = [self cacheStoreWithConversationId:conversationId];
 
-    for (AVIMMessage *message in messages) {
-        AVIMMessage *nextMessage = [self nextMessageForMessage:message conversationId:conversationId];
+    for (LCIMMessage *message in messages) {
+        LCIMMessage *nextMessage = [self nextMessageForMessage:message conversationId:conversationId];
 
         [cacheStore updateBreakpoint:YES forMessage:nextMessage];
         [cacheStore deleteMessage:message];
     }
 }
 
-- (AVIMMessage *)nextMessageForMessage:(AVIMMessage *)message conversationId:(NSString *)conversationId {
+- (LCIMMessage *)nextMessageForMessage:(LCIMMessage *)message conversationId:(NSString *)conversationId {
     LCIMMessageCacheStore *cacheStore = [self cacheStoreWithConversationId:conversationId];
-    AVIMMessage *nextMessage = [cacheStore nextMessageForId:message.messageId timestamp:message.sendTimestamp];
+    LCIMMessage *nextMessage = [cacheStore nextMessageForId:message.messageId timestamp:message.sendTimestamp];
 
     return nextMessage;
 }
@@ -167,13 +167,13 @@
     return messages;
 }
 
-- (BOOL)containMessage:(AVIMMessage *)message forConversationId:(NSString *)conversationId {
+- (BOOL)containMessage:(LCIMMessage *)message forConversationId:(NSString *)conversationId {
     LCIMMessageCacheStore *cacheStore = [self cacheStoreWithConversationId:conversationId];
 
     return [cacheStore containMessage:message];
 }
 
-- (void)updateMessage:(AVIMMessage *)message forConversationId:(NSString *)conversationId {
+- (void)updateMessage:(LCIMMessage *)message forConversationId:(NSString *)conversationId {
     LCIMMessageCacheStore *cacheStore = [self cacheStoreWithConversationId:conversationId];
 
     [cacheStore updateMessageWithoutBreakpoint:message];

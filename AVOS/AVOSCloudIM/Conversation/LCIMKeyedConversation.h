@@ -8,7 +8,7 @@
 
 #import "LCIMCommon.h"
 
-@class AVIMMessage;
+@class LCIMMessage;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly, nullable) NSDate       *lastMessageAt;  // 对话中最后一条消息的发送时间
 @property (nonatomic, strong, readonly, nullable) NSDate       *lastDeliveredAt; // 对话中最近的、消息抵达对方设备的回执时间
 @property (nonatomic, strong, readonly, nullable) NSDate       *lastReadAt;      // 对话中最近的、消息被接收方标记为已读的时间
-@property (nonatomic, strong, readonly, nullable) AVIMMessage  *lastMessage;    // 对话中最后一条消息
+@property (nonatomic, strong, readonly, nullable) LCIMMessage  *lastMessage;    // 对话中最后一条消息
 @property (nonatomic, copy,   readonly, nullable) NSString     *name;           // 对话名字
 @property (nonatomic, strong, readonly, nullable) NSArray      *members;        // 对话参与者列表
 @property (nonatomic, strong, readonly, nullable) NSDictionary *attributes;     // 自定义属性

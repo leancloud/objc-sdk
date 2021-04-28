@@ -1,14 +1,14 @@
 //
-//  AVIMMessage.m
+//  LCIMMessage.m
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 12/4/14.
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMMessage.h"
+#import "LCIMMessage.h"
 #import "AVIMMessageObject.h"
-#import "AVIMMessage_Internal.h"
+#import "LCIMMessage_Internal.h"
 #import "LCIMConversation_Internal.h"
 #import "AVIMTypedMessage_Internal.h"
 
@@ -25,16 +25,16 @@
  }
  */
 
-@implementation AVIMMessage
+@implementation LCIMMessage
 
 + (instancetype)messageWithContent:(NSString *)content {
-    AVIMMessage *message = [[self alloc] init];
+    LCIMMessage *message = [[self alloc] init];
     message.content = content;
     return message;
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    AVIMMessage *message = [[self class] allocWithZone:zone];
+    LCIMMessage *message = [[self class] allocWithZone:zone];
     if (message) {
         message.status = _status;
         message.messageId = _messageId;
@@ -93,20 +93,20 @@
     return self.content;
 }
 
-- (AVIMMessageIOType)ioType {
+- (LCIMMessageIOType)ioType {
     if (!self.clientId || !self.localClientId) {
-        return AVIMMessageIOTypeOut;
+        return LCIMMessageIOTypeOut;
     }
 
     if ([self.clientId isEqualToString:self.localClientId]) {
-        return AVIMMessageIOTypeOut;
+        return LCIMMessageIOTypeOut;
     } else {
-        return AVIMMessageIOTypeIn;
+        return LCIMMessageIOTypeIn;
     }
 }
 
 - (BOOL)mentioned {
-    if (self.ioType == AVIMMessageIOTypeOut)
+    if (self.ioType == LCIMMessageIOTypeOut)
         return NO;
 
     if (self.mentionAll || [self.mentionList containsObject:self.localClientId])

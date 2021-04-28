@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMMessage.h"
+#import "LCIMMessage.h"
 
 @class LCFile;
 @class LCGeoPoint;
@@ -20,14 +20,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// The type of the typed message,
 /// The zero and negative number is reserved for default typed message,
 /// Any other typed message should use positive number.
-+ (AVIMMessageMediaType)classMediaType;
++ (LCIMMessageMediaType)classMediaType;
 
 @end
 
 /**
  * Base class for rich media message.
  */
-@interface AVIMTypedMessage : AVIMMessage
+@interface AVIMTypedMessage : LCIMMessage
 
 /// The string text.
 @property (nonatomic, nullable) NSString *text;

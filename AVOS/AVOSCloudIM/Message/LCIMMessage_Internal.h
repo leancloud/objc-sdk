@@ -1,16 +1,16 @@
 //
-//  AVIMMessage_Internal.h
+//  LCIMMessage_Internal.h
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 1/28/15.
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMMessage.h"
+#import "LCIMMessage.h"
 
-@interface AVIMMessage ()
+@interface LCIMMessage ()
 
-@property (nonatomic, assign) AVIMMessageMediaType mediaType;
+@property (nonatomic, assign) LCIMMessageMediaType mediaType;
 
 /*!
  * Wether message has breakpoint or not
@@ -52,7 +52,7 @@
 //======================================================================
 
 /* 表示消息状态*/
-@property (nonatomic, assign) AVIMMessageStatus status;
+@property (nonatomic, assign) LCIMMessageStatus status;
 /*消息 id*/
 @property (nonatomic, strong) NSString *messageId;
 /*消息发送/接收方 id*/

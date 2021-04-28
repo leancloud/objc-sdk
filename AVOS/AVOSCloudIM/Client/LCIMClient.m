@@ -1388,7 +1388,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     [self->_conversationManager queryConversationsWithIds:conversationIds callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         AVIMPatchItem *patchItem = patchItemMap[conversation.conversationId];
-        AVIMMessage *patchMessage = [conversation process_patch_modified:patchItem];
+        LCIMMessage *patchMessage = [conversation process_patch_modified:patchItem];
         id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:messageHasBeenUpdated:);
         if (patchMessage && delegate && [delegate respondsToSelector:sel]) {
@@ -1427,7 +1427,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     
     [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
-        AVIMMessage *message = [conversation process_rcp:rcpCommand isReadRcp:isReadRcp];
+        LCIMMessage *message = [conversation process_rcp:rcpCommand isReadRcp:isReadRcp];
         if (!isReadRcp && message) {
             id <LCIMClientDelegate> delegate = self->_delegate;
             SEL sel = @selector(conversation:messageDelivered:);
@@ -1514,7 +1514,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             });
             [self sendCommandWrapper:ackCommandWrapper];
         }
-        AVIMMessage *message = [conversation process_direct:directCommand
+        LCIMMessage *message = [conversation process_direct:directCommand
                                                   messageId:messageID
                                              isTransientMsg:isTransientMsg];
         id <LCIMClientDelegate> delegate = self.delegate;
@@ -1526,7 +1526,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                 [self invokeInUserInteractQueue:^{
                     [delegate conversation:conversation didReceiveTypedMessage:(AVIMTypedMessage *)message];
                 }];
-            } else if ([message isKindOfClass:[AVIMMessage class]] &&
+            } else if ([message isKindOfClass:[LCIMMessage class]] &&
                        [delegate respondsToSelector:selCommon]) {
                 [self invokeInUserInteractQueue:^{
                     [delegate conversation:conversation didReceiveCommonMessage:message];
@@ -2009,7 +2009,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         }
     }
     if (keyedConversation.lastMessage) {
-        AVIMMessage *message = keyedConversation.lastMessage;
+        LCIMMessage *message = keyedConversation.lastMessage;
         [rawDataDic removeObjectsForKeys:({
             @[LCIMConversationKeyLastMessageContent,
               LCIMConversationKeyLastMessageId,

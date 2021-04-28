@@ -16,9 +16,9 @@
     [self registerSubclass];
 }
 
-+ (AVIMMessageMediaType)classMediaType
++ (LCIMMessageMediaType)classMediaType
 {
-    return kAVIMMessageMediaTypeVideo;
+    return kLCIMMessageMediaTypeVideo;
 }
 
 - (double)size {

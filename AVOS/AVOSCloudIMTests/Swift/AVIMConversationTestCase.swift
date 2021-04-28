@@ -31,7 +31,7 @@ class AVIMConversationTestCase: LCIMTestBase {
         let messageCount: Int = 1
         for i in 0..<messageCount {
             let content: String = "test\(i)"
-            let commonMessage: AVIMMessage = AVIMMessage.init(content: content)
+            let commonMessage: LCIMMessage = LCIMMessage.init(content: content)
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 semaphore.increment()
                 normalConv.send(commonMessage, callback: { (succeeded: Bool, error: Error?) in

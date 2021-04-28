@@ -73,7 +73,7 @@
     NSString *_conversationId;
     
     // public mutable
-    AVIMMessage *_lastMessage;
+    LCIMMessage *_lastMessage;
     int64_t _lastDeliveredTimestamp;
     int64_t _lastReadTimestamp;
     NSUInteger _unreadMessagesCount;
@@ -91,7 +91,7 @@
     NSMutableDictionary<NSString *, LCIMConversationMemberInfo *> *_memberInfoTable;
     
     // message cache for rcp
-    NSMutableDictionary<NSString *, AVIMMessage *> *_rcpMessageTable;
+    NSMutableDictionary<NSString *, LCIMMessage *> *_rcpMessageTable;
     
 #if DEBUG
     dispatch_queue_t _internalSerialQueue;
@@ -423,9 +423,9 @@ static dispatch_queue_t messageCacheOperationQueue;
     return value.unsignedIntegerValue;
 }
 
-- (AVIMMessage *)lastMessage
+- (LCIMMessage *)lastMessage
 {
-    __block AVIMMessage *lastMessage = nil;
+    __block LCIMMessage *lastMessage = nil;
     [self internalSyncLock:^{
         lastMessage = self->_lastMessage;
     }];
@@ -443,13 +443,13 @@ static dispatch_queue_t messageCacheOperationQueue;
     return timestamp ? [NSDate dateWithTimeIntervalSince1970:(timestamp / 1000.0)] : nil;
 }
 
-- (BOOL)updateLastMessage:(AVIMMessage *)message client:(LCIMClient *)client
+- (BOOL)updateLastMessage:(LCIMMessage *)message client:(LCIMClient *)client
 {
     AssertRunInQueue(self->_internalSerialQueue);
     __block BOOL updated = false;
     __block BOOL newMessageArrived = false;
     [self internalSyncLock:^{
-        AVIMMessage *lastMessage = self->_lastMessage;
+        LCIMMessage *lastMessage = self->_lastMessage;
         if (!lastMessage) {
             // 1. no lastMessage
             updated = true;
@@ -490,9 +490,9 @@ static dispatch_queue_t messageCacheOperationQueue;
     return newMessageArrived;
 }
 
-- (AVIMMessage *)decodingLastMessageFromRawJSONData:(NSMutableDictionary *)rawJSONData
+- (LCIMMessage *)decodingLastMessageFromRawJSONData:(NSMutableDictionary *)rawJSONData
 {
-    AVIMMessage *lastMessage = nil;
+    LCIMMessage *lastMessage = nil;
     NSString *msgContent = [NSString _lc_decoding:rawJSONData key:LCIMConversationKeyLastMessageContent];
     NSString *msgId = [NSString _lc_decoding:rawJSONData key:LCIMConversationKeyLastMessageId];
     NSString *msgFrom = [NSString _lc_decoding:rawJSONData key:LCIMConversationKeyLastMessageFrom];
@@ -502,9 +502,9 @@ static dispatch_queue_t messageCacheOperationQueue;
         if ([typedMessageObject isValidTypedMessageObject]) {
             lastMessage = [AVIMTypedMessage messageWithMessageObject:typedMessageObject];
         } else {
-            lastMessage = [[AVIMMessage alloc] init];
+            lastMessage = [[LCIMMessage alloc] init];
         }
-        lastMessage.status = AVIMMessageStatusDelivered;
+        lastMessage.status = LCIMMessageStatusDelivered;
         lastMessage.conversationId = self->_conversationId;
         lastMessage.content = msgContent;
         lastMessage.messageId = msgId;
@@ -588,7 +588,7 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 - (void)setRawJSONData:(NSMutableDictionary *)rawJSONData
 {
-    __block AVIMMessage *lastMessage = nil;
+    __block LCIMMessage *lastMessage = nil;
     [self internalSyncLock:^{
         self->_rawJSONData = rawJSONData;
         lastMessage = [self decodingLastMessageFromRawJSONData:rawJSONData];
@@ -1214,7 +1214,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     NSString *messageId = nil;
     int64_t timestamp = 0;
     
-    __block AVIMMessage *lastMessage = nil;
+    __block LCIMMessage *lastMessage = nil;
     [self internalSyncLock:^{
         lastMessage = self->_lastMessage;
     }];
@@ -1259,28 +1259,28 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 // MARK: - Message Send
 
-- (void)sendMessage:(AVIMMessage *)message
+- (void)sendMessage:(LCIMMessage *)message
            callback:(void (^)(BOOL, NSError * _Nullable))callback
 {
     [self sendMessage:message option:nil progressBlock:nil callback:callback];
 }
 
-- (void)sendMessage:(AVIMMessage *)message
-             option:(AVIMMessageOption *)option
+- (void)sendMessage:(LCIMMessage *)message
+             option:(LCIMMessageOption *)option
            callback:(void (^)(BOOL, NSError * _Nullable))callback
 {
     [self sendMessage:message option:option progressBlock:nil callback:callback];
 }
 
-- (void)sendMessage:(AVIMMessage *)message
+- (void)sendMessage:(LCIMMessage *)message
       progressBlock:(void (^)(NSInteger))progressBlock
            callback:(void (^)(BOOL, NSError * _Nullable))callback
 {
     [self sendMessage:message option:nil progressBlock:progressBlock callback:callback];
 }
 
-- (void)sendMessage:(AVIMMessage *)message
-             option:(AVIMMessageOption *)option
+- (void)sendMessage:(LCIMMessage *)message
+             option:(LCIMMessageOption *)option
       progressBlock:(void (^)(NSInteger))progressBlock
            callback:(void (^)(BOOL, NSError * _Nullable))callback
 {
@@ -1290,7 +1290,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     }
     
     if (client.status != LCIMClientStatusOpened) {
-        message.status = AVIMMessageStatusFailed;
+        message.status = LCIMMessageStatusFailed;
         [client invokeInUserInteractQueue:^{
             callback(false, ({
                 LCIMErrorCode code = LCIMErrorCodeClientNotOpen;
@@ -1303,7 +1303,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     message.clientId = self->_clientId;
     message.localClientId = self->_clientId;
     message.conversationId = self->_conversationId;
-    message.status = AVIMMessageStatusSending;
+    message.status = LCIMMessageStatusSending;
     
     if ([message isKindOfClass:[AVIMTypedMessage class]]) {
         AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)message;
@@ -1315,7 +1315,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                     return;
                 }
                 if (error) {
-                    message.status = AVIMMessageStatusFailed;
+                    message.status = LCIMMessageStatusFailed;
                     [client invokeInUserInteractQueue:^{
                         callback(false, error);
                     }];
@@ -1339,7 +1339,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     NSMutableDictionary *metaData = (file.metaData.mutableCopy
                                      ?: [NSMutableDictionary dictionary]);
     switch (typedMessage.mediaType) {
-        case kAVIMMessageMediaTypeImage:
+        case kLCIMMessageMediaTypeImage:
         {
             double width = [metaData[@"width"] doubleValue];
             double height = [metaData[@"height"] doubleValue];
@@ -1378,8 +1378,8 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             }
         }
             break;
-        case kAVIMMessageMediaTypeAudio:
-        case kAVIMMessageMediaTypeVideo:
+        case kLCIMMessageMediaTypeAudio:
+        case kLCIMMessageMediaTypeVideo:
         {
             double seconds = [metaData[@"duration"] doubleValue];
             if (!(seconds > 0)) {
@@ -1398,7 +1398,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             }
         }
             break;
-        case kAVIMMessageMediaTypeFile:
+        case kLCIMMessageMediaTypeFile:
         default:
             break;
     }
@@ -1417,8 +1417,8 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     typedMessage.file = file;
 }
 
-- (void)sendRealMessage:(AVIMMessage *)message
-                 option:(AVIMMessageOption *)option
+- (void)sendRealMessage:(LCIMMessage *)message
+                 option:(LCIMMessageOption *)option
                callback:(void (^)(BOOL, NSError * _Nullable))callback
 {
     LCIMClient *client = self.imClient;
@@ -1430,7 +1430,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     BOOL transientMsg = option.transient;
     BOOL receipt = option.receipt;
     BOOL will = option.will;
-    AVIMMessagePriority priority = option.priority;
+    LCIMMessagePriority priority = option.priority;
     NSDictionary *pushData = option.pushData;
     
     LCIMProtobufCommandWrapper *commandWrapper = ({
@@ -1481,7 +1481,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     [commandWrapper setCallback:^(LCIMClient *client, LCIMProtobufCommandWrapper *commandWrapper) {
         
         if (commandWrapper.error) {
-            message.status = AVIMMessageStatusFailed;
+            message.status = LCIMMessageStatusFailed;
             [client invokeInUserInteractQueue:^{
                 callback(false, commandWrapper.error);
             }];
@@ -1493,7 +1493,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         message.sendTimestamp = (ackCommand.hasT ? ackCommand.t : 0);
         message.messageId = (ackCommand.hasUid ? ackCommand.uid : nil);
         message.transient = (transientConv || transientMsg);
-        message.status = AVIMMessageStatusSent;
+        message.status = LCIMMessageStatusSent;
         if (receipt && message.messageId) {
             [self internalSyncLock:^{
                 self->_rcpMessageTable[message.messageId] = message;
@@ -1518,8 +1518,8 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 // MARK: - Message Patch
 
-- (void)updateMessage:(AVIMMessage *)oldMessage
-         toNewMessage:(AVIMMessage *)newMessage
+- (void)updateMessage:(LCIMMessage *)oldMessage
+         toNewMessage:(LCIMMessage *)newMessage
              callback:(void (^)(BOOL, NSError * _Nullable))callback
 {
     LCIMClient *client = self.imClient;
@@ -1601,7 +1601,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     [client sendCommandWrapper:commandWrapper];
 }
 
-- (void)recallMessage:(AVIMMessage *)oldMessage
+- (void)recallMessage:(LCIMMessage *)oldMessage
              callback:(void (^)(BOOL, NSError * _Nullable, AVIMRecalledMessage * _Nullable))callback
 {
     LCIMClient *client = self.imClient;
@@ -1687,7 +1687,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 {
     NSMutableArray *continuousMessages = [NSMutableArray array];
     
-    for (AVIMMessage *message in messages.reverseObjectEnumerator) {
+    for (LCIMMessage *message in messages.reverseObjectEnumerator) {
         
         if (message.breakpoint) {
             
@@ -1718,7 +1718,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 }
 
 - (void)cacheContinuousMessages:(NSArray *)messages
-                    plusMessage:(AVIMMessage *)message
+                    plusMessage:(LCIMMessage *)message
 {
     NSMutableArray *cachedMessages = [NSMutableArray array];
     
@@ -1747,14 +1747,14 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     [[self messageCacheStore] cleanCache];
 }
 
-- (void)addMessageToCache:(AVIMMessage *)message {
+- (void)addMessageToCache:(LCIMMessage *)message {
     message.clientId = self.imClient.clientId;
     message.conversationId = _conversationId;
     
     [[self messageCacheStore] insertOrUpdateMessage:message];
 }
 
-- (void)removeMessageFromCache:(AVIMMessage *)message {
+- (void)removeMessageFromCache:(LCIMMessage *)message {
     [[self messageCacheStore] deleteMessage:message];
 }
 
@@ -1794,7 +1794,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 }
 
 - (void)queryMessagesFromServerWithCommand:(AVIMGenericCommand *)genericCommand
-                                  callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback
+                                  callback:(void (^)(NSArray<LCIMMessage *> * messages, NSError * error))callback
 {
     LCIMClient *client = self.imClient;
     if (!client) {
@@ -1815,7 +1815,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         NSArray *logs = [logsInCommand.logsArray copy];
         NSMutableArray *messages = [[NSMutableArray alloc] init];
         for (AVIMLogItem *logsItem in logs) {
-            AVIMMessage *message = nil;
+            LCIMMessage *message = nil;
             id data = [logsItem data_p];
             if (![data isKindOfClass:[NSString class]]) {
                 LCLoggerError(LCLoggerDomainIM, @"Received an invalid message.");
@@ -1826,7 +1826,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                 AVIMTypedMessage *m = [AVIMTypedMessage messageWithMessageObject:messageObject];
                 message = m;
             } else {
-                AVIMMessage *m = [[AVIMMessage alloc] init];
+                LCIMMessage *m = [[LCIMMessage alloc] init];
                 m.content = data;
                 message = m;
             }
@@ -1856,7 +1856,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 - (void)queryMessagesFromServerBeforeId:(NSString *)messageId
                               timestamp:(int64_t)timestamp
                                   limit:(NSUInteger)limit
-                               callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback
+                               callback:(void (^)(NSArray<LCIMMessage *> * messages, NSError * error))callback
 {
     AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
     AVIMLogsCommand *logsCommand = [[AVIMLogsCommand alloc] init];
@@ -1874,7 +1874,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                             toMessageId:(NSString *)toMessageId
                             toTimestamp:(int64_t)toTimestamp
                                   limit:(NSUInteger)limit
-                               callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback
+                               callback:(void (^)(NSArray<LCIMMessage *> * messages, NSError * error))callback
 {
     AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
     AVIMLogsCommand *logsCommand = [[AVIMLogsCommand alloc] init];
@@ -1890,7 +1890,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 }
 
 - (void)queryMessagesFromServerWithLimit:(NSUInteger)limit
-                                callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback
+                                callback:(void (^)(NSArray<LCIMMessage *> * messages, NSError * error))callback
 {
     limit = [self.class validLimit:limit];
     
@@ -1941,7 +1941,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 }
 
 - (void)queryMessagesWithLimit:(NSUInteger)limit
-                      callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback
+                      callback:(void (^)(NSArray<LCIMMessage *> * messages, NSError * error))callback
 {
     limit = [self.class validLimit:limit];
     
@@ -2032,7 +2032,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 - (void)queryMessagesBeforeId:(NSString *)messageId
                     timestamp:(int64_t)timestamp
                         limit:(NSUInteger)limit
-                     callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback
+                     callback:(void (^)(NSArray<LCIMMessage *> * messages, NSError * error))callback
 {
     if (messageId == nil) {
         
@@ -2073,7 +2073,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         
         LCIMMessageCacheStore *cacheStore = self.messageCacheStore;
         
-        AVIMMessage *fromMessage = [cacheStore getMessageById:messageId
+        LCIMMessage *fromMessage = [cacheStore getMessageById:messageId
                                                     timestamp:timestamp];
         
         void (^queryMessageFromServerBefore_block)(void) = ^ {
@@ -2149,7 +2149,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
              * Then, fetch rest of messages from remote server.
              */
             NSUInteger restCount = 0;
-            AVIMMessage *startMessage = nil;
+            LCIMMessage *startMessage = nil;
             
             if (hasContinuous) {
                 
@@ -2159,7 +2159,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             } else {
                 
                 restCount = limit;
-                AVIMMessage *last = cachedMessages.lastObject;
+                LCIMMessage *last = cachedMessages.lastObject;
                 startMessage = [cache nextMessageForMessage:last
                                              conversationId:self.conversationId];
             }
@@ -2223,7 +2223,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 - (void)queryMessagesInInterval:(LCIMMessageInterval *)interval
                       direction:(LCIMMessageQueryDirection)direction
                           limit:(NSUInteger)limit
-                       callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback
+                       callback:(void (^)(NSArray<LCIMMessage *> * messages, NSError * error))callback
 {
     AVIMLogsCommand *logsCommand = [[AVIMLogsCommand alloc] init];
     
@@ -2259,17 +2259,17 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 }
 
 - (void)postprocessMessages:(NSArray *)messages {
-    for (AVIMMessage *message in messages) {
-        message.status = AVIMMessageStatusSent;
+    for (LCIMMessage *message in messages) {
+        message.status = LCIMMessageStatusSent;
         message.localClientId = self.imClient.clientId;
     }
 }
 
-- (void)queryMediaMessagesFromServerWithType:(AVIMMessageMediaType)type
+- (void)queryMediaMessagesFromServerWithType:(LCIMMessageMediaType)type
                                        limit:(NSUInteger)limit
                                fromMessageId:(NSString *)messageId
                                fromTimestamp:(int64_t)timestamp
-                                    callback:(void (^)(NSArray<AVIMMessage *> * messages, NSError * error))callback
+                                    callback:(void (^)(NSArray<LCIMMessage *> * messages, NSError * error))callback
 {
     LCIMClient *client = self.imClient;
     if (!client) {
@@ -2299,7 +2299,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         NSMutableArray *messageArray = [[NSMutableArray alloc] init];
         NSEnumerator *reverseLogsArray = logsInCommand.logsArray.reverseObjectEnumerator;
         for (AVIMLogItem *logsItem in reverseLogsArray) {
-            AVIMMessage *message = nil;
+            LCIMMessage *message = nil;
             id data = [logsItem data_p];
             if (![data isKindOfClass:[NSString class]]) {
                 LCLoggerError(LCLoggerDomainIM, @"Received an invalid message.");
@@ -2310,7 +2310,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                 AVIMTypedMessage *m = [AVIMTypedMessage messageWithMessageObject:messageObject];
                 message = m;
             } else {
-                AVIMMessage *m = [[AVIMMessage alloc] init];
+                LCIMMessage *m = [[LCIMMessage alloc] init];
                 m.content = data;
                 message = m;
             }
@@ -2323,7 +2323,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             if (logsItem.hasPatchTimestamp) {
                 message.updatedAt = [NSDate dateWithTimeIntervalSince1970:(logsItem.patchTimestamp / 1000.0)];
             }
-            message.status = AVIMMessageStatusSent;
+            message.status = LCIMMessageStatusSent;
             message.localClientId = client.clientId;
             [messageArray addObject:message];
         }
@@ -2856,7 +2856,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 // MARK: - Event Handler
 
-- (AVIMMessage *)process_direct:(AVIMDirectCommand *)directCommand messageId:(NSString *)messageId isTransientMsg:(BOOL)isTransientMsg
+- (LCIMMessage *)process_direct:(AVIMDirectCommand *)directCommand messageId:(NSString *)messageId isTransientMsg:(BOOL)isTransientMsg
 {
     LCIMClient *client = self.imClient;
     if (!client) {
@@ -2873,13 +2873,13 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         return nil;
     }
     
-    AVIMMessage *message = ({
-        AVIMMessage *message = nil;
+    LCIMMessage *message = ({
+        LCIMMessage *message = nil;
         AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:content];
         if ([messageObject isValidTypedMessageObject]) {
             message = [AVIMTypedMessage messageWithMessageObject:messageObject];
         } else {
-            message = [[AVIMMessage alloc] init];
+            message = [[LCIMMessage alloc] init];
         }
         message.conversationId = self->_conversationId;
         message.messageId = messageId;
@@ -2893,10 +2893,10 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         message.mentionAll = (directCommand.hasMentionAll ? directCommand.mentionAll : false);
         message.mentionList = directCommand.mentionPidsArray;
         message.updatedAt = (directCommand.hasPatchTimestamp ? [NSDate dateWithTimeIntervalSince1970:(directCommand.patchTimestamp / 1000.0)] : nil);
-        if (message.ioType == AVIMMessageIOTypeOut) {
-            message.status = AVIMMessageStatusSent;
+        if (message.ioType == LCIMMessageIOTypeOut) {
+            message.status = LCIMMessageStatusSent;
         } else {
-            message.status = AVIMMessageStatusDelivered;
+            message.status = LCIMMessageStatusDelivered;
         }
         message;
     });
@@ -2934,8 +2934,8 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     BOOL mentioned = (unreadTuple.hasMentioned ? unreadTuple.mentioned : false);
     
     if (unreadCount > 0) {
-        AVIMMessage *lastMessage = ({
-            AVIMMessage *lastMessage = nil;
+        LCIMMessage *lastMessage = ({
+            LCIMMessage *lastMessage = nil;
             NSString *content = (unreadTuple.hasData_p ? unreadTuple.data_p : nil);
             NSString *messageId = (unreadTuple.hasMid ? unreadTuple.mid : nil);
             int64_t timestamp = (unreadTuple.hasTimestamp ? unreadTuple.timestamp : 0);
@@ -2945,10 +2945,10 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                 if ([typedMessageObject isValidTypedMessageObject]) {
                     lastMessage = [AVIMTypedMessage messageWithMessageObject:typedMessageObject];
                 } else {
-                    lastMessage = [[AVIMMessage alloc] init];
+                    lastMessage = [[LCIMMessage alloc] init];
                 }
                 int64_t patchTimestamp = (unreadTuple.hasPatchTimestamp ? unreadTuple.patchTimestamp : 0);
-                lastMessage.status = AVIMMessageStatusDelivered;
+                lastMessage.status = LCIMMessageStatusDelivered;
                 lastMessage.conversationId = self->_conversationId;
                 lastMessage.content = content;
                 lastMessage.messageId = messageId;
@@ -2981,7 +2981,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     return unreadCount;
 }
 
-- (AVIMMessage *)process_patch_modified:(AVIMPatchItem *)patchItem
+- (LCIMMessage *)process_patch_modified:(AVIMPatchItem *)patchItem
 {
     LCIMClient *client = self.imClient;
     if (!client) {
@@ -2998,13 +2998,13 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         return nil;
     }
     
-    AVIMMessage *patchMessage = ({
-        AVIMMessage *message = nil;
+    LCIMMessage *patchMessage = ({
+        LCIMMessage *message = nil;
         AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:content];
         if ([messageObject isValidTypedMessageObject]) {
             message = [AVIMTypedMessage messageWithMessageObject:messageObject];
         } else {
-            message = [[AVIMMessage alloc] init];
+            message = [[LCIMMessage alloc] init];
         }
         message.messageId = messageId;
         message.content = content;
@@ -3012,7 +3012,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         message.clientId = fromId;
         message.conversationId = self->_conversationId;
         message.localClientId = self->_clientId;
-        message.status = AVIMMessageStatusDelivered;
+        message.status = LCIMMessageStatusDelivered;
         message.mentionAll = (patchItem.hasMentionAll ? patchItem.mentionAll : false);
         message.mentionList = patchItem.mentionPidsArray;
         message.updatedAt = [NSDate dateWithTimeIntervalSince1970:(patchTimestamp / 1000.0)];
@@ -3029,7 +3029,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     return patchMessage;
 }
 
-- (AVIMMessage *)process_rcp:(AVIMRcpCommand *)rcpCommand isReadRcp:(BOOL)isReadRcp
+- (LCIMMessage *)process_rcp:(AVIMRcpCommand *)rcpCommand isReadRcp:(BOOL)isReadRcp
 {
     LCIMClient *client = self.imClient;
     if (!client) {
@@ -3040,14 +3040,14 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     NSString *messageId = (rcpCommand.hasId_p ? rcpCommand.id_p : nil);
     int64_t timestamp = (rcpCommand.hasT ? rcpCommand.t : 0);
     
-    __block AVIMMessage *message = nil;
+    __block LCIMMessage *message = nil;
     if (messageId && !isReadRcp) {
         [self internalSyncLock:^{
             message = self->_rcpMessageTable[messageId];
             [self->_rcpMessageTable removeObjectForKey:messageId];
         }];
         if (message) {
-            message.status = AVIMMessageStatusDelivered;
+            message.status = LCIMMessageStatusDelivered;
             message.deliveredTimestamp = timestamp;
         }
     }
@@ -3132,7 +3132,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-implementations"
-- (void)sendMessage:(AVIMMessage *)message
+- (void)sendMessage:(LCIMMessage *)message
             options:(AVIMMessageSendOption)options
            callback:(LCIMBooleanResultBlock)callback
 {
@@ -3143,12 +3143,12 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 }
 
 
-- (void)sendMessage:(AVIMMessage *)message
+- (void)sendMessage:(LCIMMessage *)message
             options:(AVIMMessageSendOption)options
       progressBlock:(LCProgressBlock)progressBlock
            callback:(LCIMBooleanResultBlock)callback
 {
-    AVIMMessageOption *option = [[AVIMMessageOption alloc] init];
+    LCIMMessageOption *option = [[LCIMMessageOption alloc] init];
     
     if (options & AVIMMessageSendOptionTransient)
         option.transient = YES;

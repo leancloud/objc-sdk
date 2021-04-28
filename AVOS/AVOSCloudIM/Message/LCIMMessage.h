@@ -1,5 +1,5 @@
 //
-//  AVIMMessage.h
+//  LCIMMessage.h
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 12/4/14.
@@ -8,46 +8,46 @@
 
 #import "LCIMCommon.h"
 
-typedef NS_ENUM(int32_t, AVIMMessageMediaType) {
-    kAVIMMessageMediaTypeNone = 0,
-    kAVIMMessageMediaTypeText = -1,
-    kAVIMMessageMediaTypeImage = -2,
-    kAVIMMessageMediaTypeAudio = -3,
-    kAVIMMessageMediaTypeVideo = -4,
-    kAVIMMessageMediaTypeLocation = -5,
-    kAVIMMessageMediaTypeFile = -6,
-    kAVIMMessageMediaTypeRecalled = -127
+typedef NS_ENUM(int32_t, LCIMMessageMediaType) {
+    kLCIMMessageMediaTypeNone = 0,
+    kLCIMMessageMediaTypeText = -1,
+    kLCIMMessageMediaTypeImage = -2,
+    kLCIMMessageMediaTypeAudio = -3,
+    kLCIMMessageMediaTypeVideo = -4,
+    kLCIMMessageMediaTypeLocation = -5,
+    kLCIMMessageMediaTypeFile = -6,
+    kLCIMMessageMediaTypeRecalled = -127
 };
 
-typedef NS_ENUM(int8_t, AVIMMessageIOType) {
-    AVIMMessageIOTypeIn = 1,
-    AVIMMessageIOTypeOut,
+typedef NS_ENUM(int8_t, LCIMMessageIOType) {
+    LCIMMessageIOTypeIn = 1,
+    LCIMMessageIOTypeOut,
 };
 
-typedef NS_ENUM(int8_t, AVIMMessageStatus) {
-    AVIMMessageStatusNone = 0,
-    AVIMMessageStatusSending = 1,
-    AVIMMessageStatusSent,
-    AVIMMessageStatusDelivered,
-    AVIMMessageStatusFailed,
-    AVIMMessageStatusRead
+typedef NS_ENUM(int8_t, LCIMMessageStatus) {
+    LCIMMessageStatusNone = 0,
+    LCIMMessageStatusSending = 1,
+    LCIMMessageStatusSent,
+    LCIMMessageStatusDelivered,
+    LCIMMessageStatusFailed,
+    LCIMMessageStatusRead
 };
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AVIMMessage : NSObject <NSCopying, NSCoding>
+@interface LCIMMessage : NSObject <NSCopying, NSCoding>
 
-@property (nonatomic, assign, readonly) AVIMMessageMediaType mediaType;
+@property (nonatomic, assign, readonly) LCIMMessageMediaType mediaType;
 
 /*!
  * 表示接收和发出的消息
  */
-@property (nonatomic, assign, readonly) AVIMMessageIOType ioType;
+@property (nonatomic, assign, readonly) LCIMMessageIOType ioType;
 
 /*!
  * 表示消息状态
  */
-@property (nonatomic, assign, readonly) AVIMMessageStatus status;
+@property (nonatomic, assign, readonly) LCIMMessageStatus status;
 
 /*!
  * 消息 id

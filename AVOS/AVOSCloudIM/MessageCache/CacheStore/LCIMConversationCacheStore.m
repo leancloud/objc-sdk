@@ -54,7 +54,7 @@
         date ? @(date.timeIntervalSince1970) : NSNull.null;
     });
     id lastMessage = ({
-        AVIMMessage *lastMessage = conversation.lastMessage;
+        LCIMMessage *lastMessage = conversation.lastMessage;
         lastMessage ? [NSKeyedArchiver archivedDataWithRootObject:lastMessage] : NSNull.null;
     });
     id muted = @(conversation.muted);

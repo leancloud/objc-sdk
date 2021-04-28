@@ -161,11 +161,11 @@ FOUNDATION_EXPORT NSString * const AVIMUserOptionCustomProtocols
 __deprecated_msg("Deprecated, DO NOT use it any more.");
 
 typedef uint64_t AVIMMessageSendOption
-__deprecated_msg("Deprecated, use `AVIMMessageOption` instead.");
+__deprecated_msg("Deprecated, use `LCIMMessageOption` instead.");
 enum : AVIMMessageSendOption {
     AVIMMessageSendOptionNone               = 0,
     AVIMMessageSendOptionTransient          = 1 << 0,
     AVIMMessageSendOptionRequestReceipt     = 1 << 1,
-} __deprecated_msg("Deprecated, use `AVIMMessageOption` instead.");
+} __deprecated_msg("Deprecated, use `LCIMMessageOption` instead.");
 
 NS_ASSUME_NONNULL_END

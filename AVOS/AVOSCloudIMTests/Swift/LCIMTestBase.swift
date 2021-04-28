@@ -125,8 +125,8 @@ class LCIMClientDelegateWrapper: NSObject, LCIMClientDelegate {
         self.didReceiveTypeMessageClosure?(conversation, message)
     }
     
-    var didReceiveCommonMessageClosure: ((LCIMConversation, AVIMMessage) -> Void)?
-    func conversation(_ conversation: LCIMConversation, didReceiveCommonMessage message: AVIMMessage) {
+    var didReceiveCommonMessageClosure: ((LCIMConversation, LCIMMessage) -> Void)?
+    func conversation(_ conversation: LCIMConversation, didReceiveCommonMessage message: LCIMMessage) {
         self.didReceiveCommonMessageClosure?(conversation, message)
     }
     
@@ -135,13 +135,13 @@ class LCIMClientDelegateWrapper: NSObject, LCIMClientDelegate {
         self.didOfflineClosure?(client, error)
     }
     
-    var messageHasBeenUpdatedClosure: ((LCIMConversation, AVIMMessage) -> Void)?
-    func conversation(_ conversation: LCIMConversation, messageHasBeenUpdated message: AVIMMessage) {
+    var messageHasBeenUpdatedClosure: ((LCIMConversation, LCIMMessage) -> Void)?
+    func conversation(_ conversation: LCIMConversation, messageHasBeenUpdated message: LCIMMessage) {
         self.messageHasBeenUpdatedClosure?(conversation, message)
     }
     
-    var messageDeliveredClosure: ((LCIMConversation, AVIMMessage) -> Void)?
-    func conversation(_ conversation: LCIMConversation, messageDelivered message: AVIMMessage) {
+    var messageDeliveredClosure: ((LCIMConversation, LCIMMessage) -> Void)?
+    func conversation(_ conversation: LCIMConversation, messageDelivered message: LCIMMessage) {
         self.messageDeliveredClosure?(conversation, message)
     }
     

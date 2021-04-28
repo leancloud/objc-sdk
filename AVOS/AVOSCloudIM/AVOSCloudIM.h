@@ -21,8 +21,8 @@
 // query
 #import "LCIMConversationQuery.h"
 // message
-#import "AVIMMessage.h"
-#import "AVIMMessageOption.h"
+#import "LCIMMessage.h"
+#import "LCIMMessageOption.h"
 #import "AVIMTypedMessage.h"
 #import "AVIMTextMessage.h"
 #import "AVIMImageMessage.h"

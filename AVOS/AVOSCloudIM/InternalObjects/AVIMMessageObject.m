@@ -10,8 +10,8 @@
 
 @implementation AVIMMessageObject
 
-LC_FORWARD_PROPERTY_ACCESSOR_NUMBER         (ioType,                setIoType,              AVIMMessageIOType)
-LC_FORWARD_PROPERTY_ACCESSOR_NUMBER         (status,                setStatus,              AVIMMessageStatus)
+LC_FORWARD_PROPERTY_ACCESSOR_NUMBER         (ioType,                setIoType,              LCIMMessageIOType)
+LC_FORWARD_PROPERTY_ACCESSOR_NUMBER         (status,                setStatus,              LCIMMessageStatus)
 LC_FORWARD_PROPERTY_ACCESSOR_OBJECT_COPY    (messageId,             setMessageId)
 LC_FORWARD_PROPERTY_ACCESSOR_OBJECT_COPY    (clientId,              setClientId)
 LC_FORWARD_PROPERTY_ACCESSOR_OBJECT_COPY    (conversationId,        setConversationId)

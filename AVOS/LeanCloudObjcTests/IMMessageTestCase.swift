@@ -96,7 +96,7 @@ class IMMessageTestCase: RTMBaseTestCase {
             delegator4.didReceiveTypedMessage = { _, _ in
                 exp.fulfill()
             }
-            let options = AVIMMessageOption()
+            let options = LCIMMessageOption()
             options.priority = .high
             chatRoom1?.send(AVIMTextMessage(text: "1", attributes: nil), option: options, callback: { (success, error) in
                 XCTAssertTrue(success)

@@ -8,7 +8,7 @@
 
 #import "AVIMTypedMessage.h"
 #import "AVIMTypedMessageObject.h"
-#import "AVIMMessage_Internal.h"
+#import "LCIMMessage_Internal.h"
 #import "LCFile_Internal.h"
 #import "LCGeoPoint_Internal.h"
 

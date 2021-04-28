@@ -11,7 +11,7 @@
 
 @class AVIMConversationOutCommand;
 @class AVIMSignature;
-@class AVIMMessage;
+@class LCIMMessage;
 
 typedef void (^AVIMCommandResultBlock)(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error);
 
@@ -36,11 +36,11 @@ typedef void (^AVIMCommandResultBlock)(AVIMGenericCommand *outCommand, AVIMGener
 
 /*!
  序列化时必须要调用。为AVIMGenericCommand对象添加必要的三个字段：peerId、cid、msg、transient。请确保在调用本方法前调用了avim_addRequiredKey
- @param message AVIMMessage消息
+ @param message LCIMMessage消息
  @param transient 是否为暂态消息
  *
  */
-- (void)avim_addRequiredKeyForDirectMessageWithMessage:(AVIMMessage *)message transient:(BOOL)transient;
+- (void)avim_addRequiredKeyForDirectMessageWithMessage:(LCIMMessage *)message transient:(BOOL)transient;
 
 /*!
  反序列化时获取Command所属的具体的消息类型对象

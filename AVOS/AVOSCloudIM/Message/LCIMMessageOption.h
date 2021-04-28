@@ -1,5 +1,5 @@
 //
-//  AVIMMessageOption.h
+//  LCIMMessageOption.h
 //  AVOS
 //
 //  Created by Tang Tianyong on 9/13/16.
@@ -8,20 +8,20 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSInteger, AVIMMessagePriority) {
-    AVIMMessagePriorityHigh    = 1,
-    AVIMMessagePriorityNormal  = 2,
-    AVIMMessagePriorityLow     = 3,
+typedef NS_ENUM(NSInteger, LCIMMessagePriority) {
+    LCIMMessagePriorityHigh    = 1,
+    LCIMMessagePriorityNormal  = 2,
+    LCIMMessagePriorityLow     = 3,
 };
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AVIMMessageOption : NSObject
+@interface LCIMMessageOption : NSObject
 
 @property (nonatomic, assign)           BOOL                 receipt;
 @property (nonatomic, assign)           BOOL                 transient;
 @property (nonatomic, assign)           BOOL                 will;
-@property (nonatomic, assign)           AVIMMessagePriority  priority;
+@property (nonatomic, assign)           LCIMMessagePriority  priority;
 @property (nonatomic, strong, nullable) NSDictionary        *pushData;
 
 @end

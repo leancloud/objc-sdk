@@ -18,9 +18,9 @@
     });
 }
 
-+ (AVIMMessageMediaType)classMediaType
++ (LCIMMessageMediaType)classMediaType
 {
-    return kAVIMMessageMediaTypeRecalled;
+    return kLCIMMessageMediaTypeRecalled;
 }
 
 @end

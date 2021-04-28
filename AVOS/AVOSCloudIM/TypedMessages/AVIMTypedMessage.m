@@ -7,7 +7,7 @@
 //
 
 #import "AVIMTypedMessage_Internal.h"
-#import "AVIMMessage_Internal.h"
+#import "LCIMMessage_Internal.h"
 #import "LCUtils.h"
 
 NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
@@ -26,7 +26,7 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
     }
 }
 
-+ (Class)classForMediaType:(AVIMMessageMediaType)mediaType
++ (Class)classForMediaType:(LCIMMessageMediaType)mediaType
 {
     Class class = [_typeDict objectForKey:@(mediaType)];
     if (!class) {
@@ -36,7 +36,7 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
 }
 
 + (void)registerClass:(Class)class
-         forMediaType:(AVIMMessageMediaType)mediaType
+         forMediaType:(LCIMMessageMediaType)mediaType
 {
     if (!_typeDict) {
         _typeDict = [NSMutableDictionary dictionary];
@@ -92,7 +92,7 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
 
 + (instancetype)messageWithMessageObject:(AVIMTypedMessageObject *)messageObject
 {
-    AVIMMessageMediaType mediaType = messageObject._lctype;
+    LCIMMessageMediaType mediaType = messageObject._lctype;
     Class class = [self classForMediaType:mediaType];
     AVIMTypedMessage *message = [[class alloc] init];
     [message setMessageObject:messageObject];
@@ -157,12 +157,12 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
     return _messageObject;
 }
 
-- (AVIMMessageMediaType)mediaType
+- (LCIMMessageMediaType)mediaType
 {
     return self.messageObject._lctype;
 }
 
-- (void)setMediaType:(AVIMMessageMediaType)mediaType
+- (void)setMediaType:(LCIMMessageMediaType)mediaType
 {
     self.messageObject._lctype = mediaType;
 }

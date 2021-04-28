@@ -10,7 +10,7 @@
 
 @class LCIMClient;
 @class LCIMConversation;
-@class AVIMMessage;
+@class LCIMMessage;
 @class AVIMTypedMessage;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -58,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param conversation － 所属对话
  @param message - 具体的消息
  */
-- (void)conversation:(LCIMConversation *)conversation didReceiveCommonMessage:(AVIMMessage *)message;
+- (void)conversation:(LCIMConversation *)conversation didReceiveCommonMessage:(LCIMMessage *)message;
 
 /*!
  接收到新的富媒体消息。
@@ -72,7 +72,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param conversation － 所属对话
  @param message - 具体的消息
  */
-- (void)conversation:(LCIMConversation *)conversation messageDelivered:(AVIMMessage *)message;
+- (void)conversation:(LCIMConversation *)conversation messageDelivered:(LCIMMessage *)message;
 
 /**
  Invoking when the sent message has been updated.
@@ -80,7 +80,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param conversation The conversation which the sent message belongs to.
  @param message      The updated message.
  */
-- (void)conversation:(LCIMConversation *)conversation messageHasBeenUpdated:(AVIMMessage *)message;
+- (void)conversation:(LCIMConversation *)conversation messageHasBeenUpdated:(LCIMMessage *)message;
 
 /*!
  对话中有新成员加入时所有成员都会收到这一通知。

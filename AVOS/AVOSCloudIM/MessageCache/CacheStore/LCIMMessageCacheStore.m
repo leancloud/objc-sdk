@@ -8,8 +8,8 @@
 
 #import "LCIMMessageCacheStore.h"
 #import "LCIMMessageCacheStoreSQL.h"
-#import "AVIMMessage.h"
-#import "AVIMMessage_Internal.h"
+#import "LCIMMessage.h"
+#import "LCIMMessage_Internal.h"
 #import "AVIMTypedMessage.h"
 #import "AVIMTypedMessage_Internal.h"
 #import "LCDatabaseMigrator.h"
@@ -32,20 +32,20 @@
     return self;
 }
 
-- (NSNumber *)timestampForMessage:(AVIMMessage *)message {
+- (NSNumber *)timestampForMessage:(LCIMMessage *)message {
     NSTimeInterval ts = message.sendTimestamp ?: [self currentTimestamp];
     return [NSNumber numberWithDouble:ts];
 }
 
-- (NSNumber *)receiptTimestampForMessage:(AVIMMessage *)message {
+- (NSNumber *)receiptTimestampForMessage:(LCIMMessage *)message {
     return [NSNumber numberWithDouble:message.deliveredTimestamp];
 }
 
-- (NSNumber *)readTimestampForMessage:(AVIMMessage *)message {
+- (NSNumber *)readTimestampForMessage:(LCIMMessage *)message {
     return [NSNumber numberWithDouble:message.readTimestamp];
 }
 
-- (NSNumber *)patchTimestampForMessage:(AVIMMessage *)message {
+- (NSNumber *)patchTimestampForMessage:(LCIMMessage *)message {
     double timestamp = 0;
 
     if (message.updatedAt)
@@ -65,7 +65,7 @@
     return [[NSDate date] timeIntervalSince1970] * 1000;
 }
 
-- (NSArray *)updationRecordForMessage:(AVIMMessage *)message {
+- (NSArray *)updationRecordForMessage:(LCIMMessage *)message {
     return @[
         message.clientId,
         @(message.mentionAll),
@@ -81,7 +81,7 @@
     ];
 }
 
-- (NSArray *)replacingRecordForMessage:(AVIMMessage *)message withBreakpoint:(BOOL)breakpoint {
+- (NSArray *)replacingRecordForMessage:(LCIMMessage *)message withBreakpoint:(BOOL)breakpoint {
     NSAssert(message.seq > 0, @"Message must has a sequence number.");
 
     NSMutableArray *record = [[self insertionRecordForMessage:message withBreakpoint:breakpoint] mutableCopy];
@@ -90,7 +90,7 @@
     return record;
 }
 
-- (NSArray *)insertionRecordForMessage:(AVIMMessage *)message withBreakpoint:(BOOL)breakpoint {
+- (NSArray *)insertionRecordForMessage:(LCIMMessage *)message withBreakpoint:(BOOL)breakpoint {
     return @[
         message.messageId ?: [NSNull null],
         self.conversationId,
@@ -107,11 +107,11 @@
     ];
 }
 
-- (void)insertOrUpdateMessage:(AVIMMessage *)message {
+- (void)insertOrUpdateMessage:(LCIMMessage *)message {
     [self insertOrUpdateMessage:message withBreakpoint:NO];
 }
 
-- (void)insertOrUpdateMessage:(AVIMMessage *)message withBreakpoint:(BOOL)breakpoint {
+- (void)insertOrUpdateMessage:(LCIMMessage *)message withBreakpoint:(BOOL)breakpoint {
     LCIM_OPEN_DATABASE(db, ({
         if (message.seq) {
             NSArray *args = [self replacingRecordForMessage:message withBreakpoint:breakpoint];
@@ -131,14 +131,14 @@
     }));
 }
 
-- (void)insertOrUpdateMessages:(NSArray<AVIMMessage *> *)messages {
-    for (AVIMMessage *message in messages)
+- (void)insertOrUpdateMessages:(NSArray<LCIMMessage *> *)messages {
+    for (LCIMMessage *message in messages)
         [self insertOrUpdateMessage:message];
 }
 
 - (void)updateBreakpoint:(BOOL)breakpoint forMessages:(NSArray *)messages {
     LCIM_OPEN_DATABASE(db, ({
-        for (AVIMMessage *message in messages) {
+        for (LCIMMessage *message in messages) {
             NSArray *args = @[
                 @(breakpoint),
                 self.conversationId,
@@ -150,11 +150,11 @@
     }));
 }
 
-- (void)updateBreakpoint:(BOOL)breakpoint forMessage:(AVIMMessage *)message {
+- (void)updateBreakpoint:(BOOL)breakpoint forMessage:(LCIMMessage *)message {
     [self updateBreakpoint:breakpoint forMessages:@[message]];
 }
 
-- (void)updateMessageWithoutBreakpoint:(AVIMMessage *)message {
+- (void)updateMessageWithoutBreakpoint:(LCIMMessage *)message {
     LCIM_OPEN_DATABASE(db, ({
         NSArray *args = [self updationRecordForMessage:message];
         [db executeUpdate:LCIM_SQL_UPDATE_MESSAGE withArgumentsInArray:args];
@@ -192,7 +192,7 @@
     }));
 }
 
-- (void)deleteMessage:(AVIMMessage *)message {
+- (void)deleteMessage:(LCIMMessage *)message {
     LCIM_OPEN_DATABASE(db, ({
         NSArray *args = @[
             self.conversationId,
@@ -203,7 +203,7 @@
     }));
 }
 
-- (BOOL)containMessage:(AVIMMessage *)message {
+- (BOOL)containMessage:(LCIMMessage *)message {
     return [self messageForId:message.messageId] != nil;
 }
 
@@ -234,10 +234,10 @@
     return messages;
 }
 
-- (AVIMMessage *)messageForId:(NSString *)messageId {
+- (LCIMMessage *)messageForId:(NSString *)messageId {
     if (!messageId) return nil;
 
-    __block AVIMMessage *message = nil;
+    __block LCIMMessage *message = nil;
 
     LCIM_OPEN_DATABASE(db, ({
         NSArray *args = @[self.conversationId, messageId];
@@ -253,11 +253,11 @@
     return message;
 }
 
-- (AVIMMessage *)getMessageById:(NSString *)messageId timestamp:(int64_t)timestamp
+- (LCIMMessage *)getMessageById:(NSString *)messageId timestamp:(int64_t)timestamp
 {
     if (!messageId || !self.conversationId) { return nil; }
     
-    __block AVIMMessage *message = nil;
+    __block LCIMMessage *message = nil;
     
     LCIM_OPEN_DATABASE(db, ({
         NSArray *args = @[self.conversationId, messageId, @(timestamp)];
@@ -273,8 +273,8 @@
     return message;
 }
 
-- (AVIMMessage *)nextMessageForId:(NSString *)messageId timestamp:(int64_t)timestamp {
-    __block AVIMMessage *message = nil;
+- (LCIMMessage *)nextMessageForId:(NSString *)messageId timestamp:(int64_t)timestamp {
+    __block LCIMMessage *message = nil;
 
     LCIM_OPEN_DATABASE(db, ({
         NSArray *args = @[
@@ -297,7 +297,7 @@
 }
 
 - (id)messageForRecord:(LCResultSet *)record {
-    AVIMMessage *message = nil;
+    LCIMMessage *message = nil;
 
     NSData *data = [record dataForColumn:LCIM_FIELD_PAYLOAD];
     NSString *payload = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
@@ -307,7 +307,7 @@
     if ([messageObject isValidTypedMessageObject]) {
         message = [AVIMTypedMessage messageWithMessageObject:messageObject];
     } else {
-        message = [[AVIMMessage alloc] init];
+        message = [[LCIMMessage alloc] init];
     }
 
     message.seq                = [record longLongIntForColumn:@"seq"];
@@ -349,8 +349,8 @@
     return messages;
 }
 
-- (AVIMMessage *)latestNoBreakpointMessage {
-    __block AVIMMessage *message = nil;
+- (LCIMMessage *)latestNoBreakpointMessage {
+    __block LCIMMessage *message = nil;
 
     LCIM_OPEN_DATABASE(db, ({
         NSArray *args = @[self.conversationId];

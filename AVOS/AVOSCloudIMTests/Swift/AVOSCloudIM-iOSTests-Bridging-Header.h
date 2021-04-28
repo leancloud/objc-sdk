@@ -9,7 +9,7 @@
 #import "LCIMClient_Internal.h"
 #import "LCIMConversation_Internal.h"
 #import "LCIMConversationMemberInfo_Internal.h"
-#import "AVIMMessage_Internal.h"
+#import "LCIMMessage_Internal.h"
 #import "LCIMClientInternalConversationManager_Internal.h"
 #import "LCPaasClient.h"
 #import "LCRTMConnection_Internal.h"

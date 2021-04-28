@@ -7,7 +7,7 @@
 //
 
 #import "LCIMKeyedConversation_internal.h"
-#import "AVIMMessage.h"
+#import "LCIMMessage.h"
 
 @implementation LCIMKeyedConversation
 
