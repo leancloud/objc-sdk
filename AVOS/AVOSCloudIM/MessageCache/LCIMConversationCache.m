@@ -47,7 +47,7 @@
     return conversationIds;
 }
 
-- (void)cacheConversations:(NSArray *)conversations maxAge:(NSTimeInterval)maxAge forCommand:(AVIMConversationOutCommand *)command {
+- (void)cacheConversations:(NSArray *)conversations maxAge:(NSTimeInterval)maxAge forCommand:(LCIMConversationOutCommand *)command {
     NSArray *conversationIds = [self conversationIdsFromConversations:conversations];
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -56,7 +56,7 @@
     });
 }
 
-- (NSArray *)conversationsForCommand:(AVIMConversationOutCommand *)command {
+- (NSArray *)conversationsForCommand:(LCIMConversationOutCommand *)command {
     NSArray *result = nil;
     NSArray *conversationIds = [self.queryCacheStore conversationIdsForCommand:command];
 

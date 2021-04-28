@@ -9,7 +9,7 @@
 #import "MessagesProtoOrig.pbobjc.h"
 #import "AVIMDirectCommand+DirectCommandAdditions.h"
 
-@class AVIMConversationOutCommand;
+@class LCIMConversationOutCommand;
 @class LCIMSignature;
 @class LCIMMessage;
 
@@ -49,10 +49,10 @@ typedef void (^AVIMCommandResultBlock)(AVIMGenericCommand *outCommand, AVIMGener
 - (LCGPBMessage *)avim_messageCommand;
 
 /*!
- 做 conversation 缓存时，为了使 key 能兼容，需要将 AVIMGenericCommand 对象转换为 AVIMConversationOutCommand 对象
- @return AVIMGenericCommand 对应的 AVIMConversationOutCommand 对象
+ 做 conversation 缓存时，为了使 key 能兼容，需要将 AVIMGenericCommand 对象转换为 LCIMConversationOutCommand 对象
+ @return AVIMGenericCommand 对应的 LCIMConversationOutCommand 对象
  */
-- (AVIMConversationOutCommand *)avim_conversationForCache;
+- (LCIMConversationOutCommand *)avim_conversationForCache;
 
 /*!
  获取Command所属的具体的消息类型的字符串描述，仅在打印日志时使用

@@ -7,7 +7,7 @@
 //
 
 #import "AVIMTypedMessage.h"
-#import "AVIMTypedMessageObject.h"
+#import "LCIMTypedMessageObject.h"
 #import "LCIMMessage_Internal.h"
 #import "LCFile_Internal.h"
 #import "LCGeoPoint_Internal.h"
@@ -16,9 +16,9 @@ extern NSMutableDictionary<NSNumber *, Class> const *_typeDict;
 
 @interface AVIMTypedMessage ()
 
-@property (nonatomic) AVIMTypedMessageObject *messageObject;
+@property (nonatomic) LCIMTypedMessageObject *messageObject;
 
-+ (instancetype)messageWithMessageObject:(AVIMTypedMessageObject *)messageObject;
++ (instancetype)messageWithMessageObject:(LCIMTypedMessageObject *)messageObject;
 
 - (NSString *)decodingUrl;
 - (NSDictionary *)decodingMetaData;

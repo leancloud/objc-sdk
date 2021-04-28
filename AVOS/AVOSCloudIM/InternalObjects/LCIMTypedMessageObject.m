@@ -1,16 +1,16 @@
 //
-//  AVIMTypedMessageObject.m
+//  LCIMTypedMessageObject.m
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 1/8/15.
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMTypedMessageObject.h"
+#import "LCIMTypedMessageObject.h"
 #import "AVIMTypedMessage_Internal.h"
 #import "LCUtils.h"
 
-@implementation AVIMTypedMessageObject
+@implementation LCIMTypedMessageObject
 
 - (int32_t)_lctype {
     return [NSNumber _lc_decoding:self.localData key:@"_lctype"].intValue;

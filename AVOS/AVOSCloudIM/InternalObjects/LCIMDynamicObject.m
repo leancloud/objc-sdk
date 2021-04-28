@@ -1,15 +1,15 @@
 //
-//  AVIMDynamicObject.m
+//  LCIMDynamicObject.m
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 12/4/14.
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMDynamicObject.h"
+#import "LCIMDynamicObject.h"
 #import "AVMPMessagePack.h"
 
-@implementation AVIMDynamicObject {
+@implementation LCIMDynamicObject {
     NSMutableDictionary<NSString *, id> *_localData;
 }
 
@@ -138,7 +138,7 @@
     for (NSString *key in self.localData) {
         id object = [self.localData objectForKey:key];
         if (object) {
-            if ([object isKindOfClass:[AVIMDynamicObject class]]) {
+            if ([object isKindOfClass:[LCIMDynamicObject class]]) {
                 NSDictionary *childDictionary = [object rawDictionaryWithVisitedObjects:visitedObjects];
                 if (childDictionary) {
                     [mutableDictionary setObject:childDictionary forKey:key];

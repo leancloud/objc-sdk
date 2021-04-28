@@ -90,7 +90,7 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
     return dictionary ? [LCGeoPoint geoPointFromDictionary:dictionary] : nil;
 }
 
-+ (instancetype)messageWithMessageObject:(AVIMTypedMessageObject *)messageObject
++ (instancetype)messageWithMessageObject:(LCIMTypedMessageObject *)messageObject
 {
     LCIMMessageMediaType mediaType = messageObject._lctype;
     Class class = [self classForMediaType:mediaType];
@@ -129,7 +129,7 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
     if (self) {
         NSData *data = [coder decodeObjectForKey:@"typedMessage"];
         if (data) {
-            AVIMTypedMessageObject *object = [[AVIMTypedMessageObject alloc] initWithMessagePack:data];
+            LCIMTypedMessageObject *object = [[LCIMTypedMessageObject alloc] initWithMessagePack:data];
             [self setMessageObject:object];
             [self setFileIvar:[[self class] fileFromDictionary:object._lcfile]];
             [self setLocationIvar:[[self class] locationFromDictionary:object._lcloc]];
@@ -149,10 +149,10 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
     return message;
 }
 
-- (AVIMTypedMessageObject *)messageObject
+- (LCIMTypedMessageObject *)messageObject
 {
     if (!_messageObject) {
-        _messageObject = [[AVIMTypedMessageObject alloc] init];
+        _messageObject = [[LCIMTypedMessageObject alloc] init];
     }
     return _messageObject;
 }

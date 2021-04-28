@@ -9,7 +9,7 @@
 #import "AVIMGenericCommand+AVIMMessagesAdditions.h"
 #import "LCIMCommon.h"
 #import "AVIMErrorUtil.h"
-#import "AVIMConversationOutCommand.h"
+#import "LCIMConversationOutCommand.h"
 #import <objc/runtime.h>
 #import "LCIMMessage.h"
 #import "LCErrorUtils.h"
@@ -243,8 +243,8 @@ NSString *const kAVIMConversationOperationQuery = @"query";
     return result;
 }
 
-- (AVIMConversationOutCommand *)avim_conversationForCache {
-    AVIMConversationOutCommand *command = [[AVIMConversationOutCommand alloc] init];
+- (LCIMConversationOutCommand *)avim_conversationForCache {
+    LCIMConversationOutCommand *command = [[LCIMConversationOutCommand alloc] init];
     [command setObject:self.peerId forKey:@"peerId"];
     [command setObject:kAVIMConversationOperationQuery forKey:@"op"];
 
@@ -259,7 +259,7 @@ NSString *const kAVIMConversationOperationQuery = @"query";
     }
     [command setObject:@(self.convMessage.limit) forKey:@"limit"];
 
-    //there is no need to add signature for AVIMConversationOutCommand because we won't cache it ,  please go to `- (AVIMGenericCommand *)queryCommand` for more detail
+    //there is no need to add signature for LCIMConversationOutCommand because we won't cache it ,  please go to `- (AVIMGenericCommand *)queryCommand` for more detail
     return command;
 }
 

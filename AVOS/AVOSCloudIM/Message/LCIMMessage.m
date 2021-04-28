@@ -7,7 +7,7 @@
 //
 
 #import "LCIMMessage.h"
-#import "AVIMMessageObject.h"
+#import "LCIMMessageObject.h"
 #import "LCIMMessage_Internal.h"
 #import "LCIMConversation_Internal.h"
 #import "AVIMTypedMessage_Internal.h"
@@ -49,7 +49,7 @@
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-    AVIMMessageObject *object = [[AVIMMessageObject alloc] init];
+    LCIMMessageObject *object = [[LCIMMessageObject alloc] init];
     object.ioType = self.ioType;
     object.status = self.status;
     object.messageId = self.messageId;
@@ -74,7 +74,7 @@
 - (id)initWithCoder:(NSCoder *)coder {
     if ((self = [self init])) {
         NSData *data = [coder decodeObjectForKey:@"data"];
-        AVIMMessageObject *object = [[AVIMMessageObject alloc] initWithMessagePack:data];
+        LCIMMessageObject *object = [[LCIMMessageObject alloc] initWithMessagePack:data];
         self.status = object.status;
         self.messageId = object.messageId;
         self.clientId = object.clientId;

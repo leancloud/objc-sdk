@@ -498,7 +498,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     NSString *msgFrom = [NSString _lc_decoding:rawJSONData key:LCIMConversationKeyLastMessageFrom];
     int64_t msgTimestamp = [NSNumber _lc_decoding:rawJSONData key:LCIMConversationKeyLastMessageTimestamp].longLongValue;
     if (msgContent && msgId && msgFrom && msgTimestamp) {
-        AVIMTypedMessageObject *typedMessageObject = [[AVIMTypedMessageObject alloc] initWithJSON:msgContent];
+        LCIMTypedMessageObject *typedMessageObject = [[LCIMTypedMessageObject alloc] initWithJSON:msgContent];
         if ([typedMessageObject isValidTypedMessageObject]) {
             lastMessage = [AVIMTypedMessage messageWithMessageObject:typedMessageObject];
         } else {
@@ -1821,7 +1821,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                 LCLoggerError(LCLoggerDomainIM, @"Received an invalid message.");
                 continue;
             }
-            AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:data];
+            LCIMTypedMessageObject *messageObject = [[LCIMTypedMessageObject alloc] initWithJSON:data];
             if ([messageObject isValidTypedMessageObject]) {
                 AVIMTypedMessage *m = [AVIMTypedMessage messageWithMessageObject:messageObject];
                 message = m;
@@ -2305,7 +2305,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
                 LCLoggerError(LCLoggerDomainIM, @"Received an invalid message.");
                 continue;
             }
-            AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:data];
+            LCIMTypedMessageObject *messageObject = [[LCIMTypedMessageObject alloc] initWithJSON:data];
             if ([messageObject isValidTypedMessageObject]) {
                 AVIMTypedMessage *m = [AVIMTypedMessage messageWithMessageObject:messageObject];
                 message = m;
@@ -2875,7 +2875,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     
     LCIMMessage *message = ({
         LCIMMessage *message = nil;
-        AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:content];
+        LCIMTypedMessageObject *messageObject = [[LCIMTypedMessageObject alloc] initWithJSON:content];
         if ([messageObject isValidTypedMessageObject]) {
             message = [AVIMTypedMessage messageWithMessageObject:messageObject];
         } else {
@@ -2941,7 +2941,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             int64_t timestamp = (unreadTuple.hasTimestamp ? unreadTuple.timestamp : 0);
             NSString *fromId = (unreadTuple.hasFrom ? unreadTuple.from : nil);
             if (content && messageId && timestamp && fromId) {
-                AVIMTypedMessageObject *typedMessageObject = [[AVIMTypedMessageObject alloc] initWithJSON:content];
+                LCIMTypedMessageObject *typedMessageObject = [[LCIMTypedMessageObject alloc] initWithJSON:content];
                 if ([typedMessageObject isValidTypedMessageObject]) {
                     lastMessage = [AVIMTypedMessage messageWithMessageObject:typedMessageObject];
                 } else {
@@ -3000,7 +3000,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     
     LCIMMessage *patchMessage = ({
         LCIMMessage *message = nil;
-        AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:content];
+        LCIMTypedMessageObject *messageObject = [[LCIMTypedMessageObject alloc] initWithJSON:content];
         if ([messageObject isValidTypedMessageObject]) {
             message = [AVIMTypedMessage messageWithMessageObject:messageObject];
         } else {

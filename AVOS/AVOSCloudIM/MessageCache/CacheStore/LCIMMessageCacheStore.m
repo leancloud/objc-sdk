@@ -302,7 +302,7 @@
     NSData *data = [record dataForColumn:LCIM_FIELD_PAYLOAD];
     NSString *payload = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 
-    AVIMTypedMessageObject *messageObject = [[AVIMTypedMessageObject alloc] initWithJSON:payload];
+    LCIMTypedMessageObject *messageObject = [[LCIMTypedMessageObject alloc] initWithJSON:payload];
 
     if ([messageObject isValidTypedMessageObject]) {
         message = [AVIMTypedMessage messageWithMessageObject:messageObject];

@@ -1,5 +1,5 @@
 //
-//  AVIMConversationOutCommand.h
+//  LCIMConversationOutCommand.h
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 12/8/14.
@@ -7,11 +7,11 @@
 //  处于兼容性考虑，保留该类。该类仅仅用在conversation 缓存时，生成 SQL 中 conversationID 对应的 key。
 
 #import "LCIMSignature.h"
-#import "AVIMDynamicObject.h"
+#import "LCIMDynamicObject.h"
 #import "AVIMCommandCommon.h"
 #import "LCIMConversationQuery.h"
 
-@interface AVIMConversationOutCommand : AVIMDynamicObject
+@interface LCIMConversationOutCommand : LCIMDynamicObject
 
 @property (nonatomic, assign) uint16_t i;
 @property (nonatomic, copy) NSString *cmd;

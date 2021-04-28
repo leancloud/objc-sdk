@@ -1,15 +1,15 @@
 //
-//  AVIMMessageObject.h
+//  LCIMMessageObject.h
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 1/28/15.
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMDynamicObject.h"
+#import "LCIMDynamicObject.h"
 #import "LCIMMessage.h"
 
-@interface AVIMMessageObject : AVIMDynamicObject
+@interface LCIMMessageObject : LCIMDynamicObject
 
 @property (nonatomic, assign) LCIMMessageIOType  ioType;
 @property (nonatomic, assign) LCIMMessageStatus  status;

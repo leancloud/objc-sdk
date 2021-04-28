@@ -1,14 +1,14 @@
 //
-//  AVIMMessageObject.m
+//  LCIMMessageObject.m
 //  AVOS
 //
 //  Created by Qihe Bian on 1/28/15.
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMMessageObject.h"
+#import "LCIMMessageObject.h"
 
-@implementation AVIMMessageObject
+@implementation LCIMMessageObject
 
 LC_FORWARD_PROPERTY_ACCESSOR_NUMBER         (ioType,                setIoType,              LCIMMessageIOType)
 LC_FORWARD_PROPERTY_ACCESSOR_NUMBER         (status,                setStatus,              LCIMMessageStatus)

@@ -10,7 +10,7 @@
 
 @class LCIMClient;
 @class LCIMConversation;
-@class AVIMConversationOutCommand;
+@class LCIMConversationOutCommand;
 
 @interface LCIMConversationCache : NSObject
 
@@ -32,14 +32,14 @@
  * @param maxAge Max cache age, expiration interval.
  * @param command Conversation query command.
  */
-- (void)cacheConversations:(NSArray *)conversations maxAge:(NSTimeInterval)maxAge forCommand:(AVIMConversationOutCommand *)command;
+- (void)cacheConversations:(NSArray *)conversations maxAge:(NSTimeInterval)maxAge forCommand:(LCIMConversationOutCommand *)command;
 
 /*!
  * Get alive cached conversations for command.
  * @param command Conversation query command.
  * @return All alive (not expired) cached conversations or nil if cache not found.
  */
-- (NSArray *)conversationsForCommand:(AVIMConversationOutCommand *)command;
+- (NSArray *)conversationsForCommand:(LCIMConversationOutCommand *)command;
 
 /*!
  * Remove conversations from cache.

@@ -1,5 +1,5 @@
 //
-//  AVIMDynamicObject.h
+//  LCIMDynamicObject.h
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 12/4/14.
@@ -60,7 +60,7 @@
     setter_name,                                    \
     [getter_name copy])
 
-@interface AVIMDynamicObject : NSObject
+@interface LCIMDynamicObject : NSObject
 
 @property (nonatomic, readonly) NSMutableDictionary<NSString *, id> *localData;
 
