@@ -1,12 +1,12 @@
 //
-//  AVIMTypedMessage_Internal.h
+//  LCIMTypedMessage_Internal.h
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 1/8/15.
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMTypedMessage.h"
+#import "LCIMTypedMessage.h"
 #import "LCIMTypedMessageObject.h"
 #import "LCIMMessage_Internal.h"
 #import "LCFile_Internal.h"
@@ -14,7 +14,7 @@
 
 extern NSMutableDictionary<NSNumber *, Class> const *_typeDict;
 
-@interface AVIMTypedMessage ()
+@interface LCIMTypedMessage ()
 
 @property (nonatomic) LCIMTypedMessageObject *messageObject;
 

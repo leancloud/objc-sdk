@@ -11,7 +11,7 @@
 #import "LCIMKeyedConversation_internal.h"
 #import "LCIMConversationMemberInfo_Internal.h"
 #import "LCIMConversationQuery_Internal.h"
-#import "AVIMTypedMessage_Internal.h"
+#import "LCIMTypedMessage_Internal.h"
 
 #import "AVIMErrorUtil.h"
 
@@ -1521,10 +1521,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         if (message && delegate) {
             SEL selType = @selector(conversation:didReceiveTypedMessage:);
             SEL selCommon = @selector(conversation:didReceiveCommonMessage:);
-            if ([message isKindOfClass:[AVIMTypedMessage class]] &&
+            if ([message isKindOfClass:[LCIMTypedMessage class]] &&
                 [delegate respondsToSelector:selType]) {
                 [self invokeInUserInteractQueue:^{
-                    [delegate conversation:conversation didReceiveTypedMessage:(AVIMTypedMessage *)message];
+                    [delegate conversation:conversation didReceiveTypedMessage:(LCIMTypedMessage *)message];
                 }];
             } else if ([message isKindOfClass:[LCIMMessage class]] &&
                        [delegate respondsToSelector:selCommon]) {

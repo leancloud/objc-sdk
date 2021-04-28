@@ -1,26 +1,26 @@
 //
-//  AVIMTypedMessage.m
+//  LCIMTypedMessage.m
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 1/8/15.
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMTypedMessage_Internal.h"
+#import "LCIMTypedMessage_Internal.h"
 #import "LCIMMessage_Internal.h"
 #import "LCUtils.h"
 
 NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
 
-@implementation AVIMTypedMessage
+@implementation LCIMTypedMessage
 
 @synthesize file = _file;
 @synthesize location = _location;
 
 + (void)registerSubclass
 {
-    if ([self conformsToProtocol:@protocol(AVIMTypedMessageSubclassing)]) {
-        Class<AVIMTypedMessageSubclassing> class = self;
+    if ([self conformsToProtocol:@protocol(LCIMTypedMessageSubclassing)]) {
+        Class<LCIMTypedMessageSubclassing> class = self;
         [self registerClass:class
                forMediaType:[class classMediaType]];
     }
@@ -30,7 +30,7 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
 {
     Class class = [_typeDict objectForKey:@(mediaType)];
     if (!class) {
-        class = [AVIMTypedMessage class];
+        class = [LCIMTypedMessage class];
     }
     return class;
 }
@@ -69,7 +69,7 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
                            file:(LCFile *)file
                      attributes:(NSDictionary *)attributes
 {
-    AVIMTypedMessage *message = [[self alloc] init];
+    LCIMTypedMessage *message = [[self alloc] init];
     if (text) {
         message.text = text;
     }
@@ -94,7 +94,7 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
 {
     LCIMMessageMediaType mediaType = messageObject._lctype;
     Class class = [self classForMediaType:mediaType];
-    AVIMTypedMessage *message = [[class alloc] init];
+    LCIMTypedMessage *message = [[class alloc] init];
     [message setMessageObject:messageObject];
     [message setFileIvar:[self fileFromDictionary:messageObject._lcfile]];
     [message setLocationIvar:[self locationFromDictionary:messageObject._lcloc]];
@@ -103,9 +103,9 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
 
 - (instancetype)init
 {
-    if (![self conformsToProtocol:@protocol(AVIMTypedMessageSubclassing)]) {
+    if (![self conformsToProtocol:@protocol(LCIMTypedMessageSubclassing)]) {
         [NSException raise:NSInternalInconsistencyException
-                    format:@"This Class does not conform `AVIMTypedMessageSubclassing` protocol."];
+                    format:@"This Class does not conform `LCIMTypedMessageSubclassing` protocol."];
     }
     self = [super init];
     if (self) {
@@ -140,7 +140,7 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
 
 - (id)copyWithZone:(NSZone *)zone
 {
-    AVIMTypedMessage *message = [super copyWithZone:zone];
+    LCIMTypedMessage *message = [super copyWithZone:zone];
     if (message) {
         [message setMessageObject:self.messageObject];
         [message setFileIvar:self.file];

@@ -7,7 +7,7 @@
 //
 
 #import "LCIMTypedMessageObject.h"
-#import "AVIMTypedMessage_Internal.h"
+#import "LCIMTypedMessage_Internal.h"
 #import "LCUtils.h"
 
 @implementation LCIMTypedMessageObject

@@ -11,8 +11,8 @@
 #import "LCIMKeyedConversation_internal.h"
 #import "LCIMConversationQuery_Internal.h"
 #import "LCIMConversationMemberInfo_Internal.h"
-#import "AVIMTypedMessage_Internal.h"
-#import "AVIMRecalledMessage.h"
+#import "LCIMTypedMessage_Internal.h"
+#import "LCIMRecalledMessage.h"
 #import "LCIMSignature.h"
 
 #import "LCIMMessageCache.h"
@@ -500,7 +500,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     if (msgContent && msgId && msgFrom && msgTimestamp) {
         LCIMTypedMessageObject *typedMessageObject = [[LCIMTypedMessageObject alloc] initWithJSON:msgContent];
         if ([typedMessageObject isValidTypedMessageObject]) {
-            lastMessage = [AVIMTypedMessage messageWithMessageObject:typedMessageObject];
+            lastMessage = [LCIMTypedMessage messageWithMessageObject:typedMessageObject];
         } else {
             lastMessage = [[LCIMMessage alloc] init];
         }
@@ -1305,8 +1305,8 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     message.conversationId = self->_conversationId;
     message.status = LCIMMessageStatusSending;
     
-    if ([message isKindOfClass:[AVIMTypedMessage class]]) {
-        AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)message;
+    if ([message isKindOfClass:[LCIMTypedMessage class]]) {
+        LCIMTypedMessage *typedMessage = (LCIMTypedMessage *)message;
         LCFile *file = typedMessage.file;
         if (file) {
             [file uploadWithProgress:progressBlock completionHandler:^(BOOL succeeded, NSError * _Nullable error) {
@@ -1334,7 +1334,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     }
 }
 
-- (void)fillTypedMessage:(AVIMTypedMessage *)typedMessage withFile:(LCFile *)file
+- (void)fillTypedMessage:(LCIMTypedMessage *)typedMessage withFile:(LCFile *)file
 {
     NSMutableDictionary *metaData = (file.metaData.mutableCopy
                                      ?: [NSMutableDictionary dictionary]);
@@ -1602,7 +1602,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 }
 
 - (void)recallMessage:(LCIMMessage *)oldMessage
-             callback:(void (^)(BOOL, NSError * _Nullable, AVIMRecalledMessage * _Nullable))callback
+             callback:(void (^)(BOOL, NSError * _Nullable, LCIMRecalledMessage * _Nullable))callback
 {
     LCIMClient *client = self.imClient;
     if (!client) {
@@ -1652,7 +1652,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         AVIMGenericCommand *inCommand = commandWrapper.inCommand;
         AVIMPatchCommand *patchCommand = (inCommand.hasPatchMessage ? inCommand.patchMessage : nil);
         
-        AVIMRecalledMessage *recalledMessage = [[AVIMRecalledMessage alloc] init];
+        LCIMRecalledMessage *recalledMessage = [[LCIMRecalledMessage alloc] init];
         recalledMessage.messageId = oldMessage.messageId;
         recalledMessage.clientId = oldMessage.clientId;
         recalledMessage.localClientId = oldMessage.localClientId;
@@ -1823,7 +1823,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             }
             LCIMTypedMessageObject *messageObject = [[LCIMTypedMessageObject alloc] initWithJSON:data];
             if ([messageObject isValidTypedMessageObject]) {
-                AVIMTypedMessage *m = [AVIMTypedMessage messageWithMessageObject:messageObject];
+                LCIMTypedMessage *m = [LCIMTypedMessage messageWithMessageObject:messageObject];
                 message = m;
             } else {
                 LCIMMessage *m = [[LCIMMessage alloc] init];
@@ -2307,7 +2307,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             }
             LCIMTypedMessageObject *messageObject = [[LCIMTypedMessageObject alloc] initWithJSON:data];
             if ([messageObject isValidTypedMessageObject]) {
-                AVIMTypedMessage *m = [AVIMTypedMessage messageWithMessageObject:messageObject];
+                LCIMTypedMessage *m = [LCIMTypedMessage messageWithMessageObject:messageObject];
                 message = m;
             } else {
                 LCIMMessage *m = [[LCIMMessage alloc] init];
@@ -2877,7 +2877,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         LCIMMessage *message = nil;
         LCIMTypedMessageObject *messageObject = [[LCIMTypedMessageObject alloc] initWithJSON:content];
         if ([messageObject isValidTypedMessageObject]) {
-            message = [AVIMTypedMessage messageWithMessageObject:messageObject];
+            message = [LCIMTypedMessage messageWithMessageObject:messageObject];
         } else {
             message = [[LCIMMessage alloc] init];
         }
@@ -2943,7 +2943,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             if (content && messageId && timestamp && fromId) {
                 LCIMTypedMessageObject *typedMessageObject = [[LCIMTypedMessageObject alloc] initWithJSON:content];
                 if ([typedMessageObject isValidTypedMessageObject]) {
-                    lastMessage = [AVIMTypedMessage messageWithMessageObject:typedMessageObject];
+                    lastMessage = [LCIMTypedMessage messageWithMessageObject:typedMessageObject];
                 } else {
                     lastMessage = [[LCIMMessage alloc] init];
                 }
@@ -3002,7 +3002,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         LCIMMessage *message = nil;
         LCIMTypedMessageObject *messageObject = [[LCIMTypedMessageObject alloc] initWithJSON:content];
         if ([messageObject isValidTypedMessageObject]) {
-            message = [AVIMTypedMessage messageWithMessageObject:messageObject];
+            message = [LCIMTypedMessage messageWithMessageObject:messageObject];
         } else {
             message = [[LCIMMessage alloc] init];
         }

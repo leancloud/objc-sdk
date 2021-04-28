@@ -12,7 +12,7 @@
 
 @class LCIMClient;
 @class LCIMKeyedConversation;
-@class AVIMRecalledMessage;
+@class LCIMRecalledMessage;
 @class LCIMConversationMemberInfo;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -344,7 +344,7 @@ __deprecated_msg("Deprecated, use `LCIMConversation.updatedAt` instead.");
  @param callback   Callback of message update.
  */
 - (void)recallMessage:(LCIMMessage *)oldMessage
-             callback:(void (^)(BOOL succeeded, NSError * _Nullable error, AVIMRecalledMessage * _Nullable recalledMessage))callback;
+             callback:(void (^)(BOOL succeeded, NSError * _Nullable error, LCIMRecalledMessage * _Nullable recalledMessage))callback;
 
 // MARK: - Message Cache
 

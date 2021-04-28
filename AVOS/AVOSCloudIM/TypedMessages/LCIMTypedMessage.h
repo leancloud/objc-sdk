@@ -1,5 +1,5 @@
 //
-//  AVIMTypedMessage.h
+//  LCIMTypedMessage.h
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 1/8/15.
@@ -13,7 +13,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol AVIMTypedMessageSubclassing <NSObject>
+@protocol LCIMTypedMessageSubclassing <NSObject>
 
 @required
 
@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * Base class for rich media message.
  */
-@interface AVIMTypedMessage : LCIMMessage
+@interface LCIMTypedMessage : LCIMMessage
 
 /// The string text.
 @property (nonatomic, nullable) NSString *text;

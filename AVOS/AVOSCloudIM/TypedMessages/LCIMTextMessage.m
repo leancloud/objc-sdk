@@ -1,15 +1,15 @@
 //
-//  AVIMTextMessage.m
+//  LCIMTextMessage.m
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 1/12/15.
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMTextMessage.h"
-#import "AVIMTypedMessage_Internal.h"
+#import "LCIMTextMessage.h"
+#import "LCIMTypedMessage_Internal.h"
 
-@implementation AVIMTextMessage
+@implementation LCIMTextMessage
 
 + (void)load
 {
@@ -24,7 +24,7 @@
 + (instancetype)messageWithText:(NSString *)text
                      attributes:(NSDictionary *)attributes
 {
-    AVIMTextMessage *message = [[self alloc] init];
+    LCIMTextMessage *message = [[self alloc] init];
     message.text = text;
     if (attributes) {
         message.attributes = attributes;

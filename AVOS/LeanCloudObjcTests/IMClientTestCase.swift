@@ -202,8 +202,8 @@ class LCIMClientDelegator: NSObject, LCIMClientDelegate {
         offline?(client, error)
     }
     
-    var didReceiveTypedMessage: ((LCIMConversation, AVIMTypedMessage) -> Void)?
-    func conversation(_ conversation: LCIMConversation, didReceive message: AVIMTypedMessage) {
+    var didReceiveTypedMessage: ((LCIMConversation, LCIMTypedMessage) -> Void)?
+    func conversation(_ conversation: LCIMConversation, didReceive message: LCIMTypedMessage) {
         didReceiveTypedMessage?(conversation, message)
     }
 }

@@ -1,16 +1,16 @@
 //
-//  AVIMLocationMessage.m
+//  LCIMLocationMessage.m
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 1/12/15.
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMLocationMessage.h"
+#import "LCIMLocationMessage.h"
 #import "LCGeoPoint_Internal.h"
-#import "AVIMTypedMessage_Internal.h"
+#import "LCIMTypedMessage_Internal.h"
 
-@implementation AVIMLocationMessage
+@implementation LCIMLocationMessage
 
 + (void)load
 {
@@ -27,7 +27,7 @@
                       longitude:(double)longitude
                      attributes:(NSDictionary *)attributes
 {
-    AVIMLocationMessage *message = [[self alloc] init];
+    LCIMLocationMessage *message = [[self alloc] init];
     if (text) {
         message.text = text;
     }

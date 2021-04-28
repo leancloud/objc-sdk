@@ -1,15 +1,15 @@
 //
-//  AVIMAudioMessage.m
-//  AVOSCloudIM
+//  LCIMFileMessage.m
+//  AVOS
 //
-//  Created by Qihe Bian on 1/12/15.
+//  Created by Tang Tianyong on 7/30/15.
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMAudioMessage.h"
-#import "AVIMTypedMessage_Internal.h"
+#import "LCIMFileMessage.h"
+#import "LCIMTypedMessage_Internal.h"
 
-@implementation AVIMAudioMessage
+@implementation LCIMFileMessage
 
 + (void)load
 {
@@ -18,15 +18,11 @@
 
 + (LCIMMessageMediaType)classMediaType
 {
-    return kLCIMMessageMediaTypeAudio;
+    return kLCIMMessageMediaTypeFile;
 }
 
 - (double)size {
     return [self decodingSize];
-}
-
-- (double)duration {
-    return [self decodingDuration];
 }
 
 - (NSString *)url {

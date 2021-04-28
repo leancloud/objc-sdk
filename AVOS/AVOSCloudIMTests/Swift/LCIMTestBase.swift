@@ -120,8 +120,8 @@ class LCIMClientDelegateWrapper: NSObject, LCIMClientDelegate {
         self.closedClosure?(imClient, error)
     }
     
-    var didReceiveTypeMessageClosure: ((LCIMConversation, AVIMTypedMessage) -> Void)?
-    func conversation(_ conversation: LCIMConversation, didReceive message: AVIMTypedMessage) {
+    var didReceiveTypeMessageClosure: ((LCIMConversation, LCIMTypedMessage) -> Void)?
+    func conversation(_ conversation: LCIMConversation, didReceive message: LCIMTypedMessage) {
         self.didReceiveTypeMessageClosure?(conversation, message)
     }
     

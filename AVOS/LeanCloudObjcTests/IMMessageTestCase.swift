@@ -98,11 +98,11 @@ class IMMessageTestCase: RTMBaseTestCase {
             }
             let options = LCIMMessageOption()
             options.priority = .high
-            chatRoom1?.send(AVIMTextMessage(text: "1", attributes: nil), option: options, callback: { (success, error) in
+            chatRoom1?.send(LCIMTextMessage(text: "1", attributes: nil), option: options, callback: { (success, error) in
                 XCTAssertTrue(success)
                 XCTAssertNil(error)
                 exp.fulfill()
-                chatRoom2?.send(AVIMTextMessage(text: "2", attributes: nil), option: options, callback: { (success, error) in
+                chatRoom2?.send(LCIMTextMessage(text: "2", attributes: nil), option: options, callback: { (success, error) in
                     XCTAssertTrue(success)
                     XCTAssertNil(error)
                     exp.fulfill()

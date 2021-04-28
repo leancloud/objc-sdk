@@ -11,7 +11,7 @@
 @class LCIMClient;
 @class LCIMConversation;
 @class LCIMMessage;
-@class AVIMTypedMessage;
+@class LCIMTypedMessage;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -65,7 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param conversation － 所属对话
  @param message - 具体的消息
  */
-- (void)conversation:(LCIMConversation *)conversation didReceiveTypedMessage:(AVIMTypedMessage *)message;
+- (void)conversation:(LCIMConversation *)conversation didReceiveTypedMessage:(LCIMTypedMessage *)message;
 
 /*!
  消息已投递给对方。

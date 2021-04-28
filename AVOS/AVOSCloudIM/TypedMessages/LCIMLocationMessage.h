@@ -1,19 +1,19 @@
 //
-//  AVIMLocationMessage.h
+//  LCIMLocationMessage.h
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 1/12/15.
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMTypedMessage.h"
+#import "LCIMTypedMessage.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  Location Message.
  */
-@interface AVIMLocationMessage : AVIMTypedMessage <AVIMTypedMessageSubclassing>
+@interface LCIMLocationMessage : LCIMTypedMessage <LCIMTypedMessageSubclassing>
 
 /**
  *  Latitude. Should be 0~90.

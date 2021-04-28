@@ -23,14 +23,14 @@
 // message
 #import "LCIMMessage.h"
 #import "LCIMMessageOption.h"
-#import "AVIMTypedMessage.h"
-#import "AVIMTextMessage.h"
-#import "AVIMImageMessage.h"
-#import "AVIMAudioMessage.h"
-#import "AVIMVideoMessage.h"
-#import "AVIMLocationMessage.h"
-#import "AVIMFileMessage.h"
-#import "AVIMRecalledMessage.h"
+#import "LCIMTypedMessage.h"
+#import "LCIMTextMessage.h"
+#import "LCIMImageMessage.h"
+#import "LCIMAudioMessage.h"
+#import "LCIMVideoMessage.h"
+#import "LCIMLocationMessage.h"
+#import "LCIMFileMessage.h"
+#import "LCIMRecalledMessage.h"
 // signature
 #import "LCIMSignature.h"
 

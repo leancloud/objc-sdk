@@ -10,8 +10,8 @@
 #import "LCIMMessageCacheStoreSQL.h"
 #import "LCIMMessage.h"
 #import "LCIMMessage_Internal.h"
-#import "AVIMTypedMessage.h"
-#import "AVIMTypedMessage_Internal.h"
+#import "LCIMTypedMessage.h"
+#import "LCIMTypedMessage_Internal.h"
 #import "LCDatabaseMigrator.h"
 
 @interface LCIMMessageCacheStore ()
@@ -305,7 +305,7 @@
     LCIMTypedMessageObject *messageObject = [[LCIMTypedMessageObject alloc] initWithJSON:payload];
 
     if ([messageObject isValidTypedMessageObject]) {
-        message = [AVIMTypedMessage messageWithMessageObject:messageObject];
+        message = [LCIMTypedMessage messageWithMessageObject:messageObject];
     } else {
         message = [[LCIMMessage alloc] init];
     }

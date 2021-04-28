@@ -10,7 +10,7 @@
 #import "LCIMMessageObject.h"
 #import "LCIMMessage_Internal.h"
 #import "LCIMConversation_Internal.h"
-#import "AVIMTypedMessage_Internal.h"
+#import "LCIMTypedMessage_Internal.h"
 
 /*
  {

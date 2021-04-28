@@ -189,11 +189,11 @@ class AVIMMessageTestCase: LCIMTestBase {
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let text: String = "test"
-                let textMessage: AVIMTextMessage = AVIMTextMessage.init(text: text, attributes: nil)
+                let textMessage: LCIMTextMessage = LCIMTextMessage.init(text: text, attributes: nil)
                 
                 semaphore.increment(2)
                 
-                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: AVIMTypedMessage) in
+                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: LCIMTypedMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.clientId, client_2.clientId)
@@ -284,11 +284,11 @@ class AVIMMessageTestCase: LCIMTestBase {
                 let text: String = "test"
                 let latitude = 22.0
                 let longitude = 33.0
-                let locationMessage: AVIMLocationMessage = AVIMLocationMessage.init(text: text, latitude: latitude, longitude: longitude, attributes: nil)
+                let locationMessage: LCIMLocationMessage = LCIMLocationMessage.init(text: text, latitude: latitude, longitude: longitude, attributes: nil)
                 
                 semaphore.increment(2)
                 
-                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: AVIMTypedMessage) in
+                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: LCIMTypedMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.clientId, client_2.clientId)
@@ -309,8 +309,8 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(message.readTimestamp == 0)
                     XCTAssertFalse(message.transient)
                     XCTAssertNil(message.updatedAt)
-                    XCTAssertEqual((message as? AVIMLocationMessage)?.latitude ?? 0, latitude)
-                    XCTAssertEqual((message as? AVIMLocationMessage)?.longitude ?? 0, longitude)
+                    XCTAssertEqual((message as? LCIMLocationMessage)?.latitude ?? 0, latitude)
+                    XCTAssertEqual((message as? LCIMLocationMessage)?.longitude ?? 0, longitude)
                 }
                 
                 normalConv.send(locationMessage, callback: { (succeeded: Bool, error: Error?) in
@@ -390,11 +390,11 @@ class AVIMMessageTestCase: LCIMTestBase {
                     return (data, "image.png")
                 }()
                 let imageFile: LCFile = LCFile.init(data: dataTuple.data, name: dataTuple.name)
-                let imageMessage: AVIMImageMessage = AVIMImageMessage.init(text: text, file: imageFile, attributes: nil)
+                let imageMessage: LCIMImageMessage = LCIMImageMessage.init(text: text, file: imageFile, attributes: nil)
                 
                 semaphore.increment(2)
                 
-                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: AVIMTypedMessage) in
+                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: LCIMTypedMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.clientId, client_2.clientId)
@@ -415,10 +415,10 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(message.readTimestamp == 0)
                     XCTAssertFalse(message.transient)
                     XCTAssertNil(message.updatedAt)
-                    XCTAssertEqual((message as? AVIMImageMessage)?.size ?? 0, Double(dataTuple.data.count))
-                    XCTAssertTrue(((message as? AVIMImageMessage)?.height ?? 0) > 0)
-                    XCTAssertTrue(((message as? AVIMImageMessage)?.width ?? 0) > 0)
-                    XCTAssertEqual((message as? AVIMImageMessage)?.format, (dataTuple.name as NSString).pathExtension)
+                    XCTAssertEqual((message as? LCIMImageMessage)?.size ?? 0, Double(dataTuple.data.count))
+                    XCTAssertTrue(((message as? LCIMImageMessage)?.height ?? 0) > 0)
+                    XCTAssertTrue(((message as? LCIMImageMessage)?.width ?? 0) > 0)
+                    XCTAssertEqual((message as? LCIMImageMessage)?.format, (dataTuple.name as NSString).pathExtension)
                     let file: LCFile? = message.file
                     XCTAssertNotNil(file)
                     if let file: LCFile = file {
@@ -517,11 +517,11 @@ class AVIMMessageTestCase: LCIMTestBase {
                     return (data, "audio.mp3")
                 }()
                 let audioFile: LCFile = LCFile.init(data: dataTuple.data, name: dataTuple.name)
-                let audioMessage: AVIMAudioMessage = AVIMAudioMessage.init(text: text, file: audioFile, attributes: nil)
+                let audioMessage: LCIMAudioMessage = LCIMAudioMessage.init(text: text, file: audioFile, attributes: nil)
                 
                 semaphore.increment(2)
                 
-                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: AVIMTypedMessage) in
+                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: LCIMTypedMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.clientId, client_2.clientId)
@@ -542,9 +542,9 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(message.readTimestamp == 0)
                     XCTAssertFalse(message.transient)
                     XCTAssertNil(message.updatedAt)
-                    XCTAssertEqual((message as? AVIMAudioMessage)?.size ?? 0, Double(dataTuple.data.count))
-                    XCTAssertTrue(((message as? AVIMAudioMessage)?.duration ?? 0) > 0)
-                    XCTAssertEqual((message as? AVIMAudioMessage)?.format, (dataTuple.name as NSString).pathExtension)
+                    XCTAssertEqual((message as? LCIMAudioMessage)?.size ?? 0, Double(dataTuple.data.count))
+                    XCTAssertTrue(((message as? LCIMAudioMessage)?.duration ?? 0) > 0)
+                    XCTAssertEqual((message as? LCIMAudioMessage)?.format, (dataTuple.name as NSString).pathExtension)
                     let file: LCFile? = message.file
                     XCTAssertNotNil(file)
                     if let file: LCFile = file {
@@ -642,11 +642,11 @@ class AVIMMessageTestCase: LCIMTestBase {
                     return (data, "video.mp4")
                 }()
                 let videoFile: LCFile = LCFile.init(data: dataTuple.data, name: dataTuple.name)
-                let videoMessage: AVIMVideoMessage = AVIMVideoMessage.init(text: text, file: videoFile, attributes: nil)
+                let videoMessage: LCIMVideoMessage = LCIMVideoMessage.init(text: text, file: videoFile, attributes: nil)
                 
                 semaphore.increment(2)
                 
-                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: AVIMTypedMessage) in
+                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: LCIMTypedMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.clientId, client_2.clientId)
@@ -667,9 +667,9 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(message.readTimestamp == 0)
                     XCTAssertFalse(message.transient)
                     XCTAssertNil(message.updatedAt)
-                    XCTAssertEqual((message as? AVIMVideoMessage)?.size ?? 0, Double(dataTuple.data.count))
-                    XCTAssertTrue(((message as? AVIMVideoMessage)?.duration ?? 0) > 0)
-                    XCTAssertEqual((message as? AVIMVideoMessage)?.format, (dataTuple.name as NSString).pathExtension)
+                    XCTAssertEqual((message as? LCIMVideoMessage)?.size ?? 0, Double(dataTuple.data.count))
+                    XCTAssertTrue(((message as? LCIMVideoMessage)?.duration ?? 0) > 0)
+                    XCTAssertEqual((message as? LCIMVideoMessage)?.format, (dataTuple.name as NSString).pathExtension)
                     let file: LCFile? = message.file
                     XCTAssertNotNil(file)
                     if let file: LCFile = file {
@@ -767,11 +767,11 @@ class AVIMMessageTestCase: LCIMTestBase {
                     return (data, "file.md")
                 }()
                 let file: LCFile = LCFile.init(data: dataTuple.data, name: dataTuple.name)
-                let fileMessage: AVIMFileMessage = AVIMFileMessage.init(text: text, file: file, attributes: nil)
+                let fileMessage: LCIMFileMessage = LCIMFileMessage.init(text: text, file: file, attributes: nil)
                 
                 semaphore.increment(2)
                 
-                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: AVIMTypedMessage) in
+                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: LCIMTypedMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.clientId, client_2.clientId)
@@ -885,7 +885,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                 
                 semaphore.increment(2)
                 
-                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: AVIMTypedMessage) in
+                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: LCIMTypedMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.clientId, client_2.clientId)
@@ -1611,7 +1611,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertEqual(message.sendTimestamp, commonMessage.sendTimestamp)
                     XCTAssertEqual(message.clientId, commonMessage.clientId)
                     XCTAssertNotNil(message.updatedAt)
-                    XCTAssertTrue(message.isKind(of: AVIMRecalledMessage.self))
+                    XCTAssertTrue(message.isKind(of: LCIMRecalledMessage.self))
                 }
                 
                 normalConv.send(commonMessage, callback: { (succeeded: Bool, error: Error?) in
@@ -1624,7 +1624,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertNotNil(commonMessage.clientId)
                     if succeeded {
                         sleep(1)
-                        normalConv.recall(commonMessage, callback: { (succeeded: Bool, error: Error?, recalledMessage: AVIMRecalledMessage?) in
+                        normalConv.recall(commonMessage, callback: { (succeeded: Bool, error: Error?, recalledMessage: LCIMRecalledMessage?) in
                             semaphore.decrement()
                             XCTAssertTrue(Thread.isMainThread)
                             XCTAssertTrue(succeeded)
@@ -1713,7 +1713,7 @@ class AVIMMessageTestCase: LCIMTestBase {
     
 }
 
-class AVIMCustomTypedMessage: AVIMTypedMessage, AVIMTypedMessageSubclassing {
+class AVIMCustomTypedMessage: LCIMTypedMessage, LCIMTypedMessageSubclassing {
     
     class func classMediaType() -> LCIMMessageMediaType {
         return LCIMMessageMediaType(rawValue: 1)!
