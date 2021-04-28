@@ -386,7 +386,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 // MARK: Session
 
 - (void)getOpenSignatureWithToken:(NSString *)token
-                       completion:(void (^)(LCIMClient *client, AVIMSignature *signature))completion
+                       completion:(void (^)(LCIMClient *client, LCIMSignature *signature))completion
 {
     NSParameterAssert(token);
     NSString *path = @"/rtm/sign";
@@ -395,7 +395,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                                                  method:@"POST"
                                                 headers:nil
                                              parameters:@{ @"session_token": token }];
-    AVIMSignature *signature = [AVIMSignature new];
+    LCIMSignature *signature = [LCIMSignature new];
     __weak typeof(self) ws = self;
     [paasClient performRequest:request
                        success:^(NSHTTPURLResponse *response, id result) {
@@ -444,7 +444,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 - (AVIMGenericCommand *)newSessionCommandWithOp:(AVIMOpType)op
                                           token:(NSString * _Nullable)token
-                                      signature:(AVIMSignature * _Nullable)signature
+                                      signature:(LCIMSignature * _Nullable)signature
                                        isReopen:(BOOL)isReopen
 {
     AssertRunInQueue(self.internalSerialQueue);
@@ -503,7 +503,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                                         isReopen:isReopen]);
     } else if (self.user.sessionToken) {
         [self getOpenSignatureWithToken:self.user.sessionToken
-                             completion:^(LCIMClient *client, AVIMSignature *signature) {
+                             completion:^(LCIMClient *client, LCIMSignature *signature) {
             AssertRunInQueue(client.internalSerialQueue);
             if (signature.error) {
                 [client sessionClosedWithSuccess:false
@@ -521,7 +521,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         [self getSignatureWithConversationId:nil
                                       action:LCIMSignatureActionOpen
                            actionOnClientIds:nil
-                                    callback:^(AVIMSignature *signature) {
+                                    callback:^(LCIMSignature *signature) {
             AssertRunInQueue(self.internalSerialQueue);
             if (signature.error) {
                 [self sessionClosedWithSuccess:false
@@ -716,11 +716,11 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 - (void)getSignatureWithConversationId:(NSString *)conversationId
                                 action:(LCIMSignatureAction)action
                      actionOnClientIds:(NSArray<NSString *> *)actionOnClientIds
-                              callback:(void (^)(AVIMSignature *))callback
+                              callback:(void (^)(LCIMSignature *))callback
 {
     dispatch_async(self.signatureQueue, ^{
-        AVIMSignature *signature;
-        id<AVIMSignatureDataSource> dataSource = self.signatureDataSource;
+        LCIMSignature *signature;
+        id<LCIMSignatureDataSource> dataSource = self.signatureDataSource;
         if ([dataSource respondsToSelector:@selector(signatureWithClientId:conversationId:action:actionOnClientIds:)]) {
             signature = [dataSource signatureWithClientId:self.clientId
                                            conversationId:conversationId
@@ -1605,7 +1605,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         set.allObjects.mutableCopy;
     });
     
-    [self getSignatureWithConversationId:nil action:LCIMSignatureActionStart actionOnClientIds:members.copy callback:^(AVIMSignature *signature) {
+    [self getSignatureWithConversationId:nil action:LCIMSignatureActionStart actionOnClientIds:members.copy callback:^(LCIMSignature *signature) {
         
         AssertRunInQueue(self->_internalSerialQueue);
         

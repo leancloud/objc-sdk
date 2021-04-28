@@ -15,7 +15,7 @@
 @class LCIMTemporaryConversation;
 @class LCIMKeyedConversation;
 @class LCIMConversationQuery;
-@protocol AVIMSignatureDataSource;
+@protocol LCIMSignatureDataSource;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -41,8 +41,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// The delegate for `LCIMClientDelegate`.
 @property (nonatomic, weak, nullable) id<LCIMClientDelegate> delegate;
 
-/// The delegate for `AVIMSignatureDataSource`.
-@property (nonatomic, weak, nullable) id<AVIMSignatureDataSource> signatureDataSource;
+/// The delegate for `LCIMSignatureDataSource`.
+@property (nonatomic, weak, nullable) id<LCIMSignatureDataSource> signatureDataSource;
 
 /// The ID of this client.
 @property (nonatomic, readonly) NSString *clientId;

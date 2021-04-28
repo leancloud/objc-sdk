@@ -13,7 +13,7 @@
 #import "LCIMConversationMemberInfo_Internal.h"
 #import "AVIMTypedMessage_Internal.h"
 #import "AVIMRecalledMessage.h"
-#import "AVIMSignature.h"
+#import "LCIMSignature.h"
 
 #import "LCIMMessageCache.h"
 #import "LCIMMessageCacheStore.h"
@@ -728,7 +728,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         [NSSet setWithArray:clientIds].allObjects;
     });
     
-    [client getSignatureWithConversationId:self->_conversationId action:LCIMSignatureActionAdd actionOnClientIds:clientIds callback:^(AVIMSignature *signature) {
+    [client getSignatureWithConversationId:self->_conversationId action:LCIMSignatureActionAdd actionOnClientIds:clientIds callback:^(LCIMSignature *signature) {
         
         AssertRunInQueue(self->_internalSerialQueue);
         
@@ -810,7 +810,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         [NSSet setWithArray:clientIds].allObjects;
     });
     
-    [client getSignatureWithConversationId:self->_conversationId action:LCIMSignatureActionAdd actionOnClientIds:clientIds callback:^(AVIMSignature *signature) {
+    [client getSignatureWithConversationId:self->_conversationId action:LCIMSignatureActionAdd actionOnClientIds:clientIds callback:^(LCIMSignature *signature) {
         
         AssertRunInQueue(self->_internalSerialQueue);
         
@@ -2623,7 +2623,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     
     LCIMSignatureAction action = (isBlockAction ? LCIMSignatureActionBlock : LCIMSignatureActionUnblock);
     
-    [client getSignatureWithConversationId:self->_conversationId action:action actionOnClientIds:memberIds callback:^(AVIMSignature *signature) {
+    [client getSignatureWithConversationId:self->_conversationId action:action actionOnClientIds:memberIds callback:^(LCIMSignature *signature) {
         
         AssertRunInQueue(self->_internalSerialQueue);
         

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //  处于兼容性考虑，保留该类。该类仅仅用在conversation 缓存时，生成 SQL 中 conversationID 对应的 key。
 
-#import "AVIMSignature.h"
+#import "LCIMSignature.h"
 #import "AVIMDynamicObject.h"
 #import "AVIMCommandCommon.h"
 #import "LCIMConversationQuery.h"
@@ -28,7 +28,7 @@
 @property(nonatomic, assign) bool transient;
 @property(nonatomic, assign) bool muted;
 
-@property (nonatomic, strong) AVIMSignature *signature;
+@property (nonatomic, strong) LCIMSignature *signature;
 @property (nonatomic, strong) NSDictionary  *attr;
 @property (nonatomic, strong) NSDictionary  *where;
 @property (nonatomic, strong) NSString      *sort;

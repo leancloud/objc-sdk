@@ -7,10 +7,10 @@
 //
 
 #import "AVIMConversationOutCommand.h"
-#import "AVIMSignature.h"
+#import "LCIMSignature.h"
 
 @interface AVIMConversationOutCommand () {
-    AVIMSignature *_signature;
+    LCIMSignature *_signature;
 }
 @property (nonatomic, strong) NSString *s;
 @property (nonatomic, assign) int64_t   t;
@@ -21,7 +21,7 @@
 
 @dynamic i, cmd, code, appCode, reason, peerId, needResponse, callback, op, cid, m, transient, muted, s, t, n, signature, attr, where, sort, skip, limit, unique, option;
 
-- (void)setSignature:(AVIMSignature *)signature {
+- (void)setSignature:(LCIMSignature *)signature {
     _signature = signature;
     if (signature) {
         self.s = signature.signature;
@@ -30,7 +30,7 @@
     }
 }
 
-- (AVIMSignature *)signature {
+- (LCIMSignature *)signature {
     return _signature;
 }
 

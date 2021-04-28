@@ -32,7 +32,7 @@
 #import "AVIMFileMessage.h"
 #import "AVIMRecalledMessage.h"
 // signature
-#import "AVIMSignature.h"
+#import "LCIMSignature.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

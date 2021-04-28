@@ -39,7 +39,7 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/LCIMCommon.h',
       'AVOS/AVOSCloudIM/Conversation/LCIMConversation.h',
       'AVOS/AVOSCloudIM/Message/LCIMMessage.h',
-      'AVOS/AVOSCloudIM/Signature/AVIMSignature.h',
+      'AVOS/AVOSCloudIM/Signature/LCIMSignature.h',
       'AVOS/AVOSCloudIM/Client/LCIMClientProtocol.h',
       'AVOS/AVOSCloudIM/Conversation/LCIMConversationMemberInfo.h',
       'AVOS/AVOSCloudIM/Client/LCIMClientInternalConversationManager.h',

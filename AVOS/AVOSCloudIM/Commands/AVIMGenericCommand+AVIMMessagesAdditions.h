@@ -10,7 +10,7 @@
 #import "AVIMDirectCommand+DirectCommandAdditions.h"
 
 @class AVIMConversationOutCommand;
-@class AVIMSignature;
+@class LCIMSignature;
 @class LCIMMessage;
 
 typedef void (^AVIMCommandResultBlock)(AVIMGenericCommand *outCommand, AVIMGenericCommand *inCommand, NSError *error);
@@ -22,17 +22,17 @@ typedef void (^AVIMCommandResultBlock)(AVIMGenericCommand *outCommand, AVIMGener
 
 /*!
  序列化时必须要调用。为AVIMGenericCommand对象添加必要的三个字段：s、t、n
- @param signature AVIMSignature签名对象
+ @param signature LCIMSignature签名对象
  *
  */
-- (void)avim_addRequiredKeyForConvMessageWithSignature:(AVIMSignature *)signature;
+- (void)avim_addRequiredKeyForConvMessageWithSignature:(LCIMSignature *)signature;
 
 /*!
  序列化时必须要调用。为AVIMGenericCommand对象添加必要的三个字段：s、t、n
- @param signature AVIMSignature签名对象
+ @param signature LCIMSignature签名对象
  *
  */
-- (void)avim_addRequiredKeyForSessionMessageWithSignature:(AVIMSignature *)signature;
+- (void)avim_addRequiredKeyForSessionMessageWithSignature:(LCIMSignature *)signature;
 
 /*!
  序列化时必须要调用。为AVIMGenericCommand对象添加必要的三个字段：peerId、cid、msg、transient。请确保在调用本方法前调用了avim_addRequiredKey

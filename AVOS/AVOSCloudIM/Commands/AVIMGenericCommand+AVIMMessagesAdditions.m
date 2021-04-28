@@ -36,7 +36,7 @@ NSString *const kAVIMConversationOperationQuery = @"query";
     objc_setAssociatedObject(self, @selector(needResponse), needResponseObject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)avim_addRequiredKeyForConvMessageWithSignature:(AVIMSignature *)signature {
+- (void)avim_addRequiredKeyForConvMessageWithSignature:(LCIMSignature *)signature {
     NSAssert(self.hasConvMessage, ([NSString stringWithFormat:@"before call %@, make sure you have called `-avim_addRequiredKey`", NSStringFromSelector(_cmd)]));
     if (signature) {
         self.convMessage.s = signature.signature;
@@ -45,7 +45,7 @@ NSString *const kAVIMConversationOperationQuery = @"query";
     }
 }
 
-- (void)avim_addRequiredKeyForSessionMessageWithSignature:(AVIMSignature *)signature {
+- (void)avim_addRequiredKeyForSessionMessageWithSignature:(LCIMSignature *)signature {
     NSAssert(self.hasSessionMessage, ([NSString stringWithFormat:@"before call %@, make sure you have called `-avim_addRequiredKey`", NSStringFromSelector(_cmd)]));
     if (signature) {
         /* `st` and `s t n` are The mutex relationship, If you want `s t n` there is no need to add `st`. Otherwise, it will case SESSION_TOKEN_EXPIRED error, and this may cause an error whose code is 1001(Stream end encountered), 4108(LOGIN_TIMEOUT) */

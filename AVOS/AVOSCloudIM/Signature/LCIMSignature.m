@@ -1,13 +1,13 @@
 //
-//  AVIMSignature.m
+//  LCIMSignature.m
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 12/4/14.
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
 //
 
-#import "AVIMSignature.h"
+#import "LCIMSignature.h"
 
-@implementation AVIMSignature
+@implementation LCIMSignature
 
 @end

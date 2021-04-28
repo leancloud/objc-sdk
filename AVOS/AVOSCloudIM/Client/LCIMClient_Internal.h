@@ -10,7 +10,7 @@
 #import "LCIMCommon_Internal.h"
 #import "LCRTMConnection.h"
 #import "LCIMClientInternalConversationManager_Internal.h"
-#import "AVIMSignature.h"
+#import "LCIMSignature.h"
 #import "LCIMConversationCache.h"
 
 #import "LCApplication_Internal.h"
@@ -76,7 +76,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 - (void)getSignatureWithConversationId:(NSString *)conversationId
                                 action:(LCIMSignatureAction)action
                      actionOnClientIds:(NSArray<NSString *> *)actionOnClientIds
-                              callback:(void (^)(AVIMSignature *signature))callback;
+                              callback:(void (^)(LCIMSignature *signature))callback;
 
 - (void)getSessionTokenWithForcingRefresh:(BOOL)forcingRefresh
                                  callback:(void (^)(NSString *sessionToken, NSError *error))callback;

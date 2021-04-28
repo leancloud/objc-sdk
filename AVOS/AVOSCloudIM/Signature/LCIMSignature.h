@@ -1,5 +1,5 @@
 //
-//  AVIMSignature.h
+//  LCIMSignature.h
 //  AVOSCloudIM
 //
 //  Created by Qihe Bian on 12/4/14.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AVIMSignature : NSObject
+@interface LCIMSignature : NSObject
 
 /**
  *  Signture result signed by server master key.
@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@protocol AVIMSignatureDataSource <NSObject>
+@protocol LCIMSignatureDataSource <NSObject>
 @optional
 
 /*!
@@ -43,9 +43,9 @@ NS_ASSUME_NONNULL_BEGIN
  @param conversationId － 操作所属对话的 id
  @param action － @see LCIMSignatureAction
  @param clientIds － 操作目标的 id 列表
- @return 一个 AVIMSignature 签名对象.
+ @return 一个 LCIMSignature 签名对象.
  */
-- (AVIMSignature *)signatureWithClientId:(NSString *)clientId
+- (LCIMSignature *)signatureWithClientId:(NSString *)clientId
                           conversationId:(NSString * _Nullable)conversationId
                                   action:(LCIMSignatureAction)action
                        actionOnClientIds:(NSArray<NSString *> * _Nullable)clientIds;
