@@ -1078,6 +1078,8 @@
 		D328B8E920FEE2200039091A /* LCIMClientInternalConversationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D328B8E620FEE2200039091A /* LCIMClientInternalConversationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D328B8EA20FEE2200039091A /* LCIMClientInternalConversationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D328B8E720FEE2200039091A /* LCIMClientInternalConversationManager.m */; };
 		D328B8EB20FEE2200039091A /* LCIMClientInternalConversationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D328B8E720FEE2200039091A /* LCIMClientInternalConversationManager.m */; };
+		D32AA480263BF2F30044E74E /* Foundation.h in Headers */ = {isa = PBXBuildFile; fileRef = D32AA47F263BF2F30044E74E /* Foundation.h */; };
+		D32AA482263BF39C0044E74E /* Realtime.h in Headers */ = {isa = PBXBuildFile; fileRef = D32AA481263BF39C0044E74E /* Realtime.h */; };
 		D336C570212D02A2008D0E3E /* LCRouterTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D336C56F212D02A2008D0E3E /* LCRouterTestCase.swift */; };
 		D341F2A32018B6DB00408778 /* _10_MB_.png in Resources */ = {isa = PBXBuildFile; fileRef = D341F2A22018B6DB00408778 /* _10_MB_.png */; };
 		D3460577238BE9390027E1D5 /* AVOSCloud_macOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3460576238BE9390027E1D5 /* AVOSCloud_macOSTests.swift */; };
@@ -1697,6 +1699,9 @@
 		D328B8E120FC85200039091A /* LCLiveQueryTestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCLiveQueryTestBase.swift; sourceTree = "<group>"; };
 		D328B8E620FEE2200039091A /* LCIMClientInternalConversationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCIMClientInternalConversationManager.h; sourceTree = "<group>"; };
 		D328B8E720FEE2200039091A /* LCIMClientInternalConversationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCIMClientInternalConversationManager.m; sourceTree = "<group>"; };
+		D32AA47F263BF2F30044E74E /* Foundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Foundation.h; sourceTree = "<group>"; };
+		D32AA481263BF39C0044E74E /* Realtime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Realtime.h; sourceTree = "<group>"; };
+		D32AA483263BF5160044E74E /* LeanCloudObjc.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = LeanCloudObjc.podspec; path = ../LeanCloudObjc.podspec; sourceTree = "<group>"; };
 		D336C56F212D02A2008D0E3E /* LCRouterTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCRouterTestCase.swift; sourceTree = "<group>"; };
 		D341F2A22018B6DB00408778 /* _10_MB_.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = _10_MB_.png; sourceTree = "<group>"; };
 		D3460574238BE9390027E1D5 /* AVOSCloud-macOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AVOSCloud-macOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2588,6 +2593,7 @@
 				D3078A5B201041B200A4C5FD /* AVOSCloud.podspec */,
 				D3078A5D201041B200A4C5FD /* AVOSCloudIM.podspec */,
 				D3078A5A201041B200A4C5FD /* AVOSCloudLiveQuery.podspec */,
+				D32AA483263BF5160044E74E /* LeanCloudObjc.podspec */,
 			);
 			name = Podspec;
 			sourceTree = "<group>";
@@ -2605,6 +2611,8 @@
 			isa = PBXGroup;
 			children = (
 				D30B6A0D24A09978006ABE09 /* LeanCloudObjc.h */,
+				D32AA47F263BF2F30044E74E /* Foundation.h */,
+				D32AA481263BF39C0044E74E /* Realtime.h */,
 				D30B6A0E24A09978006ABE09 /* Info.plist */,
 			);
 			path = LeanCloudObjc;
@@ -3406,6 +3414,7 @@
 				D30B6B3824A09F79006ABE09 /* LCIMMessageCacheStore.h in Headers */,
 				D30B6B1924A09F28006ABE09 /* AVMPDefines.h in Headers */,
 				D30B6ADD24A09F1E006ABE09 /* LCGPBArray_PackagePrivate.h in Headers */,
+				D32AA482263BF39C0044E74E /* Realtime.h in Headers */,
 				D30B6AFB24A09F1F006ABE09 /* LCGPBProtocolBuffers.h in Headers */,
 				D30B6B2A24A09F66006ABE09 /* LCIMDynamicObject.h in Headers */,
 				D30B6AA824A09E35006ABE09 /* LCDatabaseMigrator.h in Headers */,
@@ -3495,6 +3504,7 @@
 				D30B6B0224A09F1F006ABE09 /* LCGPBStruct.pbobjc.h in Headers */,
 				D30B6A4824A09CFE006ABE09 /* LCFile_Internal.h in Headers */,
 				D30B6ACC24A09ED2006ABE09 /* LCIMConversationQuery.h in Headers */,
+				D32AA480263BF2F30044E74E /* Foundation.h in Headers */,
 				D30B6B5C24A0A03D006ABE09 /* LCLiveQuery_Internal.h in Headers */,
 				D30B6A3624A09C8E006ABE09 /* AVAnalyticsImpl.h in Headers */,
 				D30B6AA124A09E35006ABE09 /* LCLogger.h in Headers */,

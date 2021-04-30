@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
     'AVOS/AVOSCloud/Utils/LCDynamicObject.h',
     'AVOS/AVOSCloud/SMS/LCSMS.h',
     'AVOS/AVOSCloud/ACL/LCACL.h',
-    'AVOS/AVOSCloud/ACL/AVRole.h',
+    'AVOS/AVOSCloud/ACL/LCRole.h',
     'AVOS/AVOSCloud/Object/LCSaveOption.h',
     'AVOS/AVOSCloud/Analytics/AVAnalytics.h',
     'AVOS/AVOSCloud/LCConstants.h',

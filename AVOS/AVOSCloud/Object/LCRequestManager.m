@@ -320,7 +320,7 @@ typedef enum {
     return result;
 }
 
-// Todo, 只有在 AVRole 中调用，应该可以移除
+// Todo, 只有在 LCRole 中调用，应该可以移除
 -(NSMutableDictionary *)initialSetAndAddRelationDict {
     NSMutableDictionary * result = [NSMutableDictionary dictionary];
 
