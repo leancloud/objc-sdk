@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#import <AVOSCloud/AVOSCloud.h>
+#import "AVOSCloud.h"
 
 #import "AVIMCommandFormatter.h"
 #import "LCIMErrorUtil.h"
