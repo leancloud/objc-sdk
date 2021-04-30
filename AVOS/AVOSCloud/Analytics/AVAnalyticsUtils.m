@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 AVOS. All rights reserved.
 //
 
-#import "AVAvailability.h"
+#import "LCAvailability.h"
 
 #if TARGET_OS_WATCH
     #import <WatchKit/WatchKit.h>
@@ -33,8 +33,8 @@
 #import "AVAnalyticsUtils.h"
 #import "UserAgent.h"
 #import "LCNetworkReachabilityManager.h"
-#import "AVUtils.h"
-#import "AVUser.h"
+#import "LCUtils.h"
+#import "LCUser.h"
 
 static NSString * identifierForVendorTag = @"identifierForVendor";
 
@@ -282,7 +282,7 @@ static NSString * identifierForVendorTag = @"identifierForVendor";
     
     [dic addEntriesFromDictionary:dynamicDic];
     
-    AVUser *currentUser = [AVUser currentUser];
+    LCUser *currentUser = [LCUser currentUser];
     
     if (currentUser && currentUser.objectId) {
         
@@ -291,7 +291,7 @@ static NSString * identifierForVendorTag = @"identifierForVendor";
         [dic addEntriesFromDictionary:currentUserDic];
     }
     
-    AVInstallation *currentInstallation = [AVInstallation defaultInstallation];
+    LCInstallation *currentInstallation = [LCInstallation defaultInstallation];
     
     if (currentInstallation && currentInstallation.objectId) {
         

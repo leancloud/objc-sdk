@@ -7,29 +7,29 @@
 //
 
 #import "AVOSCloud.h"
-#import "AVPaasClient.h"
-#import "AVScheduler.h"
-#import "AVPersistenceUtils.h"
+#import "LCPaasClient.h"
+#import "LCScheduler.h"
+#import "LCPersistenceUtils.h"
 
 #if !TARGET_OS_WATCH
 #import "AVAnalytics_Internal.h"
 #import "AVAnalyticsUtils.h"
 #endif
 
-#import "AVUtils.h"
-#include "AVOSCloud_Art.inc"
+#import "LCUtils.h"
+#include "LeanCloud_Art.inc"
 #import "LCNetworkStatistics.h"
-#import "AVObjectUtils.h"
+#import "LCObjectUtils.h"
 
 #import "LCRouter_Internal.h"
-#import "AVApplication_Internal.h"
+#import "LCApplication_Internal.h"
 
 @implementation AVOSCloud
 
 static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
 
 + (void)setAllLogsEnabled:(BOOL)enabled {
-    [AVLogger setAllLogsEnabled:enabled];
+    [LCLogger setAllLogsEnabled:enabled];
 }
 
 + (void)setVerbosePolicy:(AVVerbosePolicy)verbosePolicy {
@@ -38,7 +38,7 @@ static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
 
 + (void)logApplicationInfo
 {
-    const char *s = (const char *)AVOSCloud_Art_inc;
+    const char *s = (const char *)LeanCloud_Art_inc;
     printf("%s\n", s);
     printf("appid: %s\n", [[self getApplicationId] UTF8String]);
 #if !TARGET_OS_WATCH
@@ -53,7 +53,7 @@ static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
 
 + (void)initializePaasClient
 {
-    AVPaasClient *paasClient = [AVPaasClient sharedInstance];
+    LCPaasClient *paasClient = [LCPaasClient sharedInstance];
     
     paasClient.applicationId = [self getApplicationId];
     paasClient.clientKey     = [self getClientKey];
@@ -82,7 +82,7 @@ static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
         }
     }
     
-    [[AVApplication defaultApplication] setWithIdentifier:applicationId
+    [[LCApplication defaultApplication] setWithIdentifier:applicationId
                                                       key:clientKey];
     
     [self initializePaasClient];
@@ -93,26 +93,26 @@ static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
 }
 
 + (NSString *)getApplicationId {
-    return [[AVApplication defaultApplication] identifierThrowException];
+    return [[LCApplication defaultApplication] identifierThrowException];
 }
 
 + (NSString *)getClientKey {
-    return [[AVApplication defaultApplication] keyThrowException];
+    return [[LCApplication defaultApplication] keyThrowException];
 }
 
 + (void)setLastModifyEnabled:(BOOL)enabled {
-    [AVPaasClient sharedInstance].isLastModifyEnabled=enabled;
+    [LCPaasClient sharedInstance].isLastModifyEnabled=enabled;
 }
 
 /**
  *  获取是否开启LastModify支持
  */
 + (BOOL)getLastModifyEnabled {
-    return [AVPaasClient sharedInstance].isLastModifyEnabled;
+    return [LCPaasClient sharedInstance].isLastModifyEnabled;
 }
 
 + (void)clearLastModifyCache {
-    [[AVPaasClient sharedInstance] clearLastModifyCache];
+    [[LCPaasClient sharedInstance] clearLastModifyCache];
 }
 
 + (void)setServerURLString:(NSString *)URLString
@@ -145,12 +145,12 @@ static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
 
 + (NSTimeInterval)networkTimeoutInterval
 {
-    return [[AVPaasClient sharedInstance] timeoutInterval];
+    return [[LCPaasClient sharedInstance] timeoutInterval];
 }
 
 + (void)setNetworkTimeoutInterval:(NSTimeInterval)time
 {
-    [[AVPaasClient sharedInstance] setTimeoutInterval:time];
+    [[LCPaasClient sharedInstance] setTimeoutInterval:time];
 }
 
 #pragma mark - Log
@@ -173,32 +173,32 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
 #pragma mark Schedule work
 
 + (NSInteger)queryCacheExpiredDays {
-    return [AVScheduler sharedInstance].queryCacheExpiredDays;
+    return [LCScheduler sharedInstance].queryCacheExpiredDays;
 }
 
 + (void)setQueryCacheExpiredDays:(NSInteger)days {
-    [AVScheduler sharedInstance].queryCacheExpiredDays = days;
+    [LCScheduler sharedInstance].queryCacheExpiredDays = days;
 }
 
 + (NSInteger)fileCacheExpiredDays {
-    return [AVScheduler sharedInstance].fileCacheExpiredDays;
+    return [LCScheduler sharedInstance].fileCacheExpiredDays;
 }
 
 + (void)setFileCacheExpiredDays:(NSInteger)days {
-    [AVScheduler sharedInstance].fileCacheExpiredDays = days;
+    [LCScheduler sharedInstance].fileCacheExpiredDays = days;
 }
 
 + (void)verifySmsCode:(NSString *)code
     mobilePhoneNumber:(NSString *)phoneNumber
-             callback:(AVBooleanResultBlock)callback
+             callback:(LCBooleanResultBlock)callback
 {
     NSParameterAssert(code);
     NSParameterAssert(phoneNumber);
     
     NSString *path=[NSString stringWithFormat:@"verifySmsCode/%@",code];
     NSDictionary *params = @{ @"mobilePhoneNumber": phoneNumber };
-    [[AVPaasClient sharedInstance] postObject:path withParameters:params block:^(id object, NSError *error) {
-        [AVUtils callBooleanResultBlock:callback error:error];
+    [[LCPaasClient sharedInstance] postObject:path withParameters:params block:^(id object, NSError *error) {
+        [LCUtils callBooleanResultBlock:callback error:error];
     }];
 }
 
@@ -208,7 +208,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
     __block NSDate *date;
     __block NSError *err;
     __block BOOL finished = false;
-    [[AVPaasClient sharedInstance] getObject:@"date"
+    [[LCPaasClient sharedInstance] getObject:@"date"
                               withParameters:nil
                                        block:^(id object, NSError *error) {
         if (error) {
@@ -218,7 +218,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
         }
         finished = true;
     }];
-    AV_WAIT_TIL_TRUE(finished, 0.1);
+    LC_WAIT_TIL_TRUE(finished, 0.1);
     if (errorPtr) {
         *errorPtr = err;
     }
@@ -253,9 +253,9 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
 
 + (void)handleRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
                                           teamId:(NSString *)teamId
-               constructingInstallationWithBlock:(void (^)(AVInstallation *))block
+               constructingInstallationWithBlock:(void (^)(LCInstallation *))block
 {
-    AVInstallation *installation = [AVInstallation defaultInstallation];
+    LCInstallation *installation = [LCInstallation defaultInstallation];
     [installation setDeviceTokenFromData:deviceToken
                                   teamId:teamId];
     if (block) {
@@ -263,9 +263,9 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
     }
     [installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (error) {
-            AVLoggerError(AVLoggerDomainDefault, @"default installation save failed: %@", error);
+            LCLoggerError(LCLoggerDomainDefault, @"default installation save failed: %@", error);
         } else {
-            AVLoggerInfo(AVLoggerDomainDefault, @"default installation save success");
+            LCLoggerInfo(LCLoggerDomainDefault, @"default installation save success");
         }
     }];
 }
@@ -279,7 +279,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
 + (void)setTimeZoneForSecondsFromGMT:(NSInteger)seconds {}
 
 +(void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
-                            callback:(AVBooleanResultBlock)callback {
+                            callback:(LCBooleanResultBlock)callback {
     [self requestSmsCodeWithPhoneNumber:phoneNumber appName:nil operation:nil timeToLive:0 callback:callback];
 }
 
@@ -287,7 +287,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
                              appName:(NSString *)appName
                            operation:(NSString *)operation
                           timeToLive:(NSUInteger)ttl
-                            callback:(AVBooleanResultBlock)callback {
+                            callback:(LCBooleanResultBlock)callback {
     NSParameterAssert(phoneNumber);
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     //    [dict setObject:phoneNumber forKey:@"mobilePhoneNumber"];
@@ -306,7 +306,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
 +(void)requestSmsCodeWithPhoneNumber:(NSString *)phoneNumber
                         templateName:(NSString *)templateName
                            variables:(NSDictionary *)variables
-                            callback:(AVBooleanResultBlock)callback {
+                            callback:(LCBooleanResultBlock)callback {
     NSParameterAssert(phoneNumber);
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setObject:phoneNumber forKey:@"mobilePhoneNumber"];
@@ -314,14 +314,14 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
         [dict setObject:templateName forKey:@"template"];
     }
     [dict addEntriesFromDictionary:variables];
-    [[AVPaasClient sharedInstance] postObject:@"requestSmsCode" withParameters:dict block:^(id object, NSError *error) {
-        [AVUtils callBooleanResultBlock:callback error:error];
+    [[LCPaasClient sharedInstance] postObject:@"requestSmsCode" withParameters:dict block:^(id object, NSError *error) {
+        [LCUtils callBooleanResultBlock:callback error:error];
     }];
 }
 
 + (void)requestVoiceCodeWithPhoneNumber:(NSString *)phoneNumber
                                     IDD:(NSString *)IDD
-                               callback:(AVBooleanResultBlock)callback {
+                               callback:(LCBooleanResultBlock)callback {
     NSParameterAssert(phoneNumber);
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
@@ -333,8 +333,8 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
         params[@"IDD"] = IDD;
     }
     
-    [[AVPaasClient sharedInstance] postObject:@"requestSmsCode" withParameters:params block:^(id object, NSError *error) {
-        [AVUtils callBooleanResultBlock:callback error:error];
+    [[LCPaasClient sharedInstance] postObject:@"requestSmsCode" withParameters:params block:^(id object, NSError *error) {
+        [LCUtils callBooleanResultBlock:callback error:error];
     }];
 }
 #pragma clang diagnostic pop

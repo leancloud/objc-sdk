@@ -9,8 +9,6 @@
 @import Foundation;
 #import "AVIMCommandCommon.h"
 
-FOUNDATION_EXPORT const NSInteger LCIMErrorCodeSessionTokenExpired;
-
 @interface AVIMCommandFormatter : NSObject
 
 /*!

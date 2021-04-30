@@ -3,9 +3,9 @@
 //
 
 #import "LeanCloudObjc.h"
-#import "AVErrorUtils.h"
-#import "AVApplication_Internal.h"
+#import "LCErrorUtils.h"
+#import "LCApplication_Internal.h"
 #import "LCRouter_Internal.h"
-#import "AVPaasClient_internal.h"
-#import "AVIMClient_Internal.h"
+#import "LCPaasClient_internal.h"
+#import "LCIMClient_Internal.h"
 #import "LCRTMConnection_Internal.h"

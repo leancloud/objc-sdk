@@ -7,11 +7,11 @@
 //
 
 #import "LCRouter_Internal.h"
-#import "AVApplication_Internal.h"
-#import "AVUtils.h"
-#import "AVErrorUtils.h"
-#import "AVPaasClient.h"
-#import "AVPersistenceUtils.h"
+#import "LCApplication_Internal.h"
+#import "LCUtils.h"
+#import "LCErrorUtils.h"
+#import "LCPaasClient.h"
+#import "LCPersistenceUtils.h"
 
 RouterCacheKey const RouterCacheKeyApp = @"RouterCacheDataApp";
 RouterCacheKey const RouterCacheKeyRTM = @"RouterCacheDataRTM";
@@ -58,7 +58,7 @@ static NSMutableDictionary<NSString *, NSString *> *customAppServerTable;
                     NSMutableDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
                     if (error || ![NSMutableDictionary _lc_isTypeOf:dictionary]) {
                         if (!error) { error = LCErrorInternal([NSString stringWithFormat:@"file: %@ is invalid.", filePath]); }
-                        AVLoggerError(AVLoggerDomainDefault, @"%@", error);
+                        LCLoggerError(LCLoggerDomainDefault, @"%@", error);
                     } else {
                         return dictionary;
                     }
@@ -113,7 +113,7 @@ static NSString * pathWithVersion(NSString *path)
 
 + (NSString *)routerCacheDirectoryPath
 {
-    return [AVPersistenceUtils homeDirectoryLibraryCachesLeanCloudCachesRouter];
+    return [LCPersistenceUtils homeDirectoryLibraryCachesLeanCloudCachesRouter];
 }
 
 static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
@@ -127,7 +127,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
         NSData *data = [NSJSONSerialization dataWithJSONObject:routerDataMap options:0 error:&error];
         if (error || ![data length]) {
             if (!error) { error = LCErrorInternal(@"data invalid."); }
-            AVLoggerError(AVLoggerDomainDefault, @"%@", error);
+            LCLoggerError(LCLoggerDomainDefault, @"%@", error);
             return;
         }
         data;
@@ -140,11 +140,11 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
             NSError *error = nil;
             [[NSFileManager defaultManager] createDirectoryAtPath:routerCacheDirectoryPath withIntermediateDirectories:true attributes:nil error:&error];
             if (error) {
-                AVLoggerError(AVLoggerDomainDefault, @"%@", error);
+                LCLoggerError(LCLoggerDomainDefault, @"%@", error);
                 return;
             }
         } else if (isExists && !isDirectory) {
-            AVLoggerError(AVLoggerDomainDefault, @"%@", LCErrorInternal(@"can't create directory for router."));
+            LCLoggerError(LCLoggerDomainDefault, @"%@", LCErrorInternal(@"can't create directory for router."));
             return;
         }
         [routerCacheDirectoryPath stringByAppendingPathComponent:key];
@@ -161,7 +161,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
     }
 }
 
-- (void)cleanCacheWithApplication:(AVApplication *)application
+- (void)cleanCacheWithApplication:(LCApplication *)application
                               key:(RouterCacheKey)key
                             error:(NSError * __autoreleasing *)error
 {
@@ -183,7 +183,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
 - (void)getAppRouterDataWithAppID:(NSString *)appID callback:(void (^)(NSDictionary *dataDictionary, NSError *error))callback
 {
     NSParameterAssert(appID);
-    [[AVPaasClient sharedInstance] getObject:AppRouterURLString withParameters:@{@"appId":appID} block:^(id _Nullable object, NSError * _Nullable error) {
+    [[LCPaasClient sharedInstance] getObject:AppRouterURLString withParameters:@{@"appId":appID} block:^(id _Nullable object, NSError * _Nullable error) {
         if (error) {
             callback(nil, error);
         } else {
@@ -205,7 +205,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
     }
     self.isUpdatingAppRouter = true;
     [self getAppRouterDataWithAppID:appID callback:^(NSDictionary *dataDictionary, NSError *error) {
-        if (error) { AVLoggerError(AVLoggerDomainDefault, @"%@", error); }
+        if (error) { LCLoggerError(LCLoggerDomainDefault, @"%@", error); }
         if (dataDictionary) {
             NSDictionary *routerDataTuple = ({
                 @{ RouterCacheKeyData : dataDictionary,
@@ -315,7 +315,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
 {
     NSParameterAssert(appID);
     NSParameterAssert(RTMRouterURL);
-    AVPaasClient *paasClient = [AVPaasClient sharedInstance];
+    LCPaasClient *paasClient = [LCPaasClient sharedInstance];
     NSURLRequest *request = [paasClient requestWithPath:RTMRouterURL
                                                  method:@"GET"
                                                 headers:nil
@@ -327,7 +327,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
         if ([NSDictionary _lc_isTypeOf:responseObject]) {
             callback(responseObject, nil);
         } else {
-            callback(nil, LCError(AVErrorInternalErrorCodeMalformedData,
+            callback(nil, LCError(LCErrorInternalErrorCodeMalformedData,
                                   @"Response data is malformed.",
                                   @{ @"data": (responseObject ?: @"nil") }));
         }

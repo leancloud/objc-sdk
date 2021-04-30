@@ -8,16 +8,16 @@
 
 #import "LCRTMConnection_Internal.h"
 
-#import "AVApplication.h"
-#import "AVApplication_Internal.h"
+#import "LCApplication.h"
+#import "LCApplication_Internal.h"
 #import "LCRouter.h"
 #import "LCRouter_Internal.h"
-#import "AVLogger.h"
-#import "AVUtils.h"
-#import "AVErrorUtils.h"
+#import "LCLogger.h"
+#import "LCUtils.h"
+#import "LCErrorUtils.h"
 #import "AVOSCloudIM.h"
-#import "AVIMCommon_Internal.h"
-#import "AVIMErrorUtil.h"
+#import "LCIMCommon_Internal.h"
+#import "LCIMErrorUtil.h"
 
 LCIMProtocol const LCIMProtocol3 = @"lc.protobuf2.3";
 LCIMProtocol const LCIMProtocol1 = @"lc.protobuf2.1";
@@ -39,7 +39,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 
 @implementation LCRTMServiceConsumer
 
-- (instancetype)initWithApplication:(AVApplication *)application
+- (instancetype)initWithApplication:(LCApplication *)application
                             service:(LCRTMService)service
                            protocol:(LCIMProtocol)protocol
                              peerID:(NSString *)peerID
@@ -94,7 +94,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             if (sharedConnection) {
                 if (connectionMap[serviceConsumer.peerID]) {
                     if (error) {
-                        *error = LCError(AVErrorInternalErrorCodeInconsistency,
+                        *error = LCError(LCErrorInternalErrorCodeInconsistency,
                                          @"Duplicate registration for connection.", nil);
                     }
                     return nil;
@@ -172,7 +172,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     return result;
 }
 
-- (NSInteger)nextConnectingDelayIntervalForApplication:(AVApplication *)application
+- (NSInteger)nextConnectingDelayIntervalForApplication:(LCApplication *)application
 {
     NSString *appID = [application identifierThrowException];
     NSInteger interval;
@@ -190,7 +190,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     return interval;
 }
 
-- (void)resetConnectingDelayIntervalForApplication:(AVApplication *)application
+- (void)resetConnectingDelayIntervalForApplication:(LCApplication *)application
 {
     NSString *appID = [application identifierThrowException];
     [self.lock lock];
@@ -305,7 +305,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 
 - (void)dealloc
 {
-    AVLoggerInfo(AVLoggerDomainIM,
+    LCLoggerInfo(LCLoggerDomainIM,
                  @"\n%@: %p"
                  @"\n\t- dealloc",
                  NSStringFromClass([self class]), self);
@@ -324,7 +324,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 - (void)receivePong
 {
     NSParameterAssert([self assertSpecificQueue]);
-    AVLoggerDebug(AVLoggerDomainIM,
+    LCLoggerDebug(LCLoggerDomainIM,
                   @"\n%@: %p"
                   @"\n\t- pong received",
                   NSStringFromClass([self class]), self);
@@ -336,7 +336,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     NSParameterAssert([self assertSpecificQueue]);
     [self.socket sendPong:data completion:^{
         NSParameterAssert([self assertSpecificQueue]);
-        AVLoggerDebug(AVLoggerDomainIM,
+        LCLoggerDebug(LCLoggerDomainIM,
                       @"\n%@: %p"
                       @"\n\t- pong sent",
                       NSStringFromClass([self class]), self);
@@ -353,7 +353,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             if ([command.expiration compare:currentDate] == NSOrderedDescending) {
                 break;
             } else {
-                NSError *error = LCError(AVIMErrorCodeCommandTimeout,
+                NSError *error = LCError(LCIMErrorCodeCommandTimeout,
                                          @"Command Timeout", nil);
                 for (LCRTMConnectionOutCommandCallback callback in command.callbacks) {
                     dispatch_async(command.callingQueue, ^{
@@ -384,7 +384,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     if (isLastPingTimeout || shouldNextPingPong) {
         [self.socket sendPing:[NSData data] completion:^{
             NSParameterAssert([self assertSpecificQueue]);
-            AVLoggerDebug(AVLoggerDomainIM,
+            LCLoggerDebug(LCLoggerDomainIM,
                           @"\n%@: %p"
                           @"\n\t- ping sent",
                           NSStringFromClass([self class]), self);
@@ -465,7 +465,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
         }
         self.socket = nil;
         if (self.outCommandIndexSequence.count > 0) {
-            NSError *error = LCError(AVIMErrorCodeConnectionLost,
+            NSError *error = LCError(LCIMErrorCodeConnectionLost,
                                      @"Connection Lost", nil);
             for (NSNumber *i in self.outCommandIndexSequence) {
                 LCRTMConnectionOutCommand *command = self.outCommandCollection[i];
@@ -499,7 +499,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     gLCRTMConnectionConnectingTimeoutInterval = timeoutInterval;
 }
 
-- (instancetype)initWithApplication:(AVApplication *)application
+- (instancetype)initWithApplication:(LCApplication *)application
                            protocol:(LCIMProtocol)protocol
                               error:(NSError *__autoreleasing *)error
 {
@@ -573,7 +573,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 
 - (void)dealloc
 {
-    AVLoggerInfo(AVLoggerDomainIM,
+    LCLoggerInfo(LCLoggerDomainIM,
                  @"\n%@: %p"
                  @"\n\t- dealloc",
                  NSStringFromClass([self class]), self);
@@ -606,7 +606,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 - (void)applicationStateChanged:(LCRTMConnectionAppState)newState
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
-    AVLoggerInfo(AVLoggerDomainIM,
+    LCLoggerInfo(LCLoggerDomainIM,
                  @"\n%@: %p"
                  @"\n\t- application state: %@",
                  NSStringFromClass([self class]), self,
@@ -619,7 +619,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     } else if (oldState == LCRTMConnectionAppStateForeground &&
                newState == LCRTMConnectionAppStateBackground) {
         [self tryCleanConnectionWithError:
-         LCError(AVIMErrorCodeConnectionLost,
+         LCError(LCIMErrorCodeConnectionLost,
                  @"Application did enter background, connection lost.", nil)];
         [self resetConnectingDelayInterval];
     }
@@ -630,7 +630,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 - (void)networkReachabilityStatusChanged:(LCNetworkReachabilityStatus)newStatus
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
-    AVLoggerInfo(AVLoggerDomainIM,
+    LCLoggerInfo(LCLoggerDomainIM,
                  @"\n%@: %p"
                  @"\n\t- network reachability status: %@",
                  NSStringFromClass([self class]), self,
@@ -640,13 +640,13 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     if (oldStatus != LCNetworkReachabilityStatusNotReachable &&
         newStatus == LCNetworkReachabilityStatusNotReachable) {
         [self tryCleanConnectionWithError:
-         LCError(AVIMErrorCodeConnectionLost,
+         LCError(LCIMErrorCodeConnectionLost,
                  @"Network not reachable, connection lost.", nil)];
         [self resetConnectingDelayInterval];
     } else if (oldStatus != newStatus &&
                newStatus != LCNetworkReachabilityStatusNotReachable) {
         [self tryCleanConnectionWithError:
-         LCError(AVIMErrorCodeConnectionLost,
+         LCError(LCIMErrorCodeConnectionLost,
                  @"Network interface changed, connection lost.", nil)];
         [self resetConnectingDelayInterval];
         [self tryConnecting];
@@ -674,13 +674,13 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     NSParameterAssert([self assertSpecificSerialQueue]);
 #if TARGET_OS_IOS || TARGET_OS_TV
     if (self.previousAppState == LCRTMConnectionAppStateBackground) {
-        return LCError(AVIMErrorCodeConnectionLost,
+        return LCError(LCIMErrorCodeConnectionLost,
                        @"Application did enter background, connection lost.", nil);
     }
 #endif
 #if !TARGET_OS_WATCH
     if (self.previousReachabilityStatus == LCNetworkReachabilityStatusNotReachable) {
-        return LCError(AVIMErrorCodeConnectionLost,
+        return LCError(LCIMErrorCodeConnectionLost,
                        @"Network not reachable, connection lost.", nil);
     }
 #endif
@@ -792,7 +792,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             socket.delegate = connection;
             connection.socket = socket;
             [socket open];
-            AVLoggerDebug(AVLoggerDomainIM,
+            LCLoggerDebug(LCLoggerDomainIM,
                           @"\n%@: %p"
                           @"\n\t- open with server: %@",
                           NSStringFromClass([socket class]), socket,
@@ -844,7 +844,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
                     }
                     NSError *error;
                     if (!serverURL) {
-                        error = LCError(AVErrorInternalErrorCodeNotFound,
+                        error = LCError(LCErrorInternalErrorCodeNotFound,
                                         @"RTM server URL not found.", nil);
                     }
                     completion(ss, serverURL, error);
@@ -905,10 +905,10 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
                                                          key:RouterCacheKeyRTM
                                                        error:&error];
         if (error) {
-            AVLoggerError(AVLoggerDomainIM, @"%@", error);
+            LCLoggerError(LCLoggerDomainIM, @"%@", error);
         }
         [self tryCleanConnectionWithError:
-         LCError(AVIMErrorCodeConnectionLost,
+         LCError(LCIMErrorCodeConnectionLost,
                  @"Connection did close by remote peer.", nil)];
         [self resetConnectingDelayInterval];
         [self tryConnecting];
@@ -929,7 +929,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             !timer) {
             if (needCallback) {
                 dispatch_async(queue, ^{
-                    callback(nil, LCError(AVIMErrorCodeConnectionLost,
+                    callback(nil, LCError(LCIMErrorCodeConnectionLost,
                                           @"Connection Lost", nil));
                 });
             }
@@ -951,7 +951,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
         if (!data) {
             if (needCallback) {
                 dispatch_async(queue, ^{
-                    callback(nil, LCError(AVIMErrorCodeInvalidCommand,
+                    callback(nil, LCError(LCIMErrorCodeInvalidCommand,
                                           @"Serializing out command failed.", nil));
                 });
             }
@@ -959,7 +959,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
         } else if (data.length > (1024 * 5)) {
             if (needCallback) {
                 dispatch_async(queue, ^{
-                    callback(nil, LCError(AVIMErrorCodeCommandDataLengthTooLong,
+                    callback(nil, LCError(LCIMErrorCodeCommandDataLengthTooLong,
                                           @"The size of the out command should less than 5KB.", nil));
                 });
             }
@@ -980,7 +980,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 #if DEBUG
             assert(dispatch_get_specific(specificKey) == specificKey);
 #endif
-            AVLoggerDebug(AVLoggerDomainIM,
+            LCLoggerDebug(LCLoggerDomainIM,
                           @"\n------ BEGIN LeanCloud Out Command"
                           @"\n%@: %p"
                           @"\nService: %d"
@@ -1037,7 +1037,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
     NSParameterAssert(self.socket == socket && !self.timer);
-    AVLoggerDebug(AVLoggerDomainIM,
+    LCLoggerDebug(LCLoggerDomainIM,
                   @"\n%@: %p"
                   @"\n\t- did open with"
                   @"\n\t\tprotocol: %@"
@@ -1070,10 +1070,10 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
             error = LCErrorFromUnderlyingError(error);
         }
     } else {
-        error = LCError(AVIMErrorCodeConnectionLost,
+        error = LCError(LCIMErrorCodeConnectionLost,
                         @"Connection did close by remote peer.", nil);
     }
-    AVLoggerError(AVLoggerDomainIM,
+    LCLoggerError(LCLoggerDomainIM,
                   @"\n%@: %p"
                   @"\n\t- did close with error: %@",
                   NSStringFromClass([socket class]), socket,
@@ -1093,10 +1093,10 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
         AVIMGenericCommand *inCommand = [AVIMGenericCommand parseFromData:message.data
                                                                     error:&error];
         if (error) {
-            AVLoggerError(AVLoggerDomainIM, @"%@", error);
+            LCLoggerError(LCLoggerDomainIM, @"%@", error);
             return;
         }
-        AVLoggerDebug(AVLoggerDomainIM,
+        LCLoggerDebug(LCLoggerDomainIM,
                       @"\n------ BEGIN LeanCloud In Command"
                       @"\n%@: %p"
                       @"\n%@"

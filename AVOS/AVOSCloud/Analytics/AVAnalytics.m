@@ -8,9 +8,9 @@
 
 #import "AVAnalytics.h"
 #import "AVAnalyticsImpl.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVAnalyticsUtils.h"
-#import "AVUtils.h"
+#import "LCUtils.h"
 
 static NSString * endPoint = @"statistics";
 
@@ -178,10 +178,10 @@ static NSString * currentSessionId;
     [AVAnalytics updateOnlineConfigWithBlock:nil];
 }
 
-+ (void)updateOnlineConfigWithBlock:(AVDictionaryResultBlock)block {
++ (void)updateOnlineConfigWithBlock:(LCDictionaryResultBlock)block {
     NSString *path = [NSString stringWithFormat:@"statistics/apps/%@/sendPolicy", [AVOSCloud getApplicationId]];
     
-    [[AVPaasClient sharedInstance] getObject:path withParameters:nil block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] getObject:path withParameters:nil block:^(id object, NSError *error) {
         if (error == nil) {
             // make sure we call the onlineConfigChanged in main thread
             // otherwise timer may not work correctly.
@@ -189,10 +189,10 @@ static NSString * currentSessionId;
                 [[AVAnalyticsImpl sharedInstance] onlineConfigChanged:object];
             });
         } else {
-            AVLoggerE(@"Update online config failed %@", error);
+            LCLoggerE(@"Update online config failed %@", error);
         }
 
-        [AVUtils callIdResultBlock:block object:object error:error];
+        [LCUtils callIdResultBlock:block object:object error:error];
     }];
 }
 

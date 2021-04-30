@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
     'AVOS/AVOSCloudLiveQuery/**/*.{h,m}'
 
   s.public_header_files =
-    'AVOS/AVOSCloudLiveQuery/AVLiveQuery.h',
+    'AVOS/AVOSCloudLiveQuery/LCLiveQuery.h',
     'AVOS/AVOSCloudLiveQuery/AVOSCloudLiveQuery.h'
 
   s.dependency 'AVOSCloud', "#{s.version}"

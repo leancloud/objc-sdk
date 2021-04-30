@@ -9,30 +9,30 @@
 #import <Foundation/Foundation.h>
 
 // constant
-#import "AVIMCommon.h"
+#import "LCIMCommon.h"
 // client
-#import "AVIMClientProtocol.h"
-#import "AVIMClient.h"
-#import "AVIMClientInternalConversationManager.h"
+#import "LCIMClientProtocol.h"
+#import "LCIMClient.h"
+#import "LCIMClientInternalConversationManager.h"
 // conversation
-#import "AVIMConversation.h"
-#import "AVIMConversationMemberInfo.h"
-#import "AVIMKeyedConversation.h"
+#import "LCIMConversation.h"
+#import "LCIMConversationMemberInfo.h"
+#import "LCIMKeyedConversation.h"
 // query
-#import "AVIMConversationQuery.h"
+#import "LCIMConversationQuery.h"
 // message
-#import "AVIMMessage.h"
-#import "AVIMMessageOption.h"
-#import "AVIMTypedMessage.h"
-#import "AVIMTextMessage.h"
-#import "AVIMImageMessage.h"
-#import "AVIMAudioMessage.h"
-#import "AVIMVideoMessage.h"
-#import "AVIMLocationMessage.h"
-#import "AVIMFileMessage.h"
-#import "AVIMRecalledMessage.h"
+#import "LCIMMessage.h"
+#import "LCIMMessageOption.h"
+#import "LCIMTypedMessage.h"
+#import "LCIMTextMessage.h"
+#import "LCIMImageMessage.h"
+#import "LCIMAudioMessage.h"
+#import "LCIMVideoMessage.h"
+#import "LCIMLocationMessage.h"
+#import "LCIMFileMessage.h"
+#import "LCIMRecalledMessage.h"
 // signature
-#import "AVIMSignature.h"
+#import "LCIMSignature.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

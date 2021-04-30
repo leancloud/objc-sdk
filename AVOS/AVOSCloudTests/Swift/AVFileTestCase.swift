@@ -1,5 +1,5 @@
 //
-//  AVFile_TestCase.swift
+//  LCFile_TestCase.swift
 //  AVOS
 //
 //  Created by zapcannon87 on 22/01/2018.
@@ -8,7 +8,7 @@
 
 import XCTest
 
-class AVFile_TestCase: LCTestBase {
+class LCFile_TestCase: LCTestBase {
     
     let remoteURL: URL = URL(string: "https://lc-nq0awk3l.cn-n1.lcfile.com/yQpOeKBh4V4eJB1xMaRjLgD.png")!
     
@@ -41,7 +41,7 @@ class AVFile_TestCase: LCTestBase {
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let remoteURL: URL = self.remoteURL
-            let file: AVFile = AVFile(remoteURL: remoteURL)
+            let file: LCFile = LCFile(remoteURL: remoteURL)
             
             semaphore.increment()
             
@@ -66,7 +66,7 @@ class AVFile_TestCase: LCTestBase {
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let remoteURL: URL = self.remoteURL
-            let file: AVFile = AVFile(remoteURL: remoteURL)
+            let file: LCFile = LCFile(remoteURL: remoteURL)
             var hasProgress: Bool = false
             
             semaphore.increment()
@@ -103,7 +103,7 @@ class AVFile_TestCase: LCTestBase {
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let uploadDataTuple: (data: Data, name: String) = self.smallDataTuple
-            let file: AVFile = AVFile(data: uploadDataTuple.data, name: uploadDataTuple.name)
+            let file: LCFile = LCFile(data: uploadDataTuple.data, name: uploadDataTuple.name)
             
             semaphore.increment()
             
@@ -142,7 +142,7 @@ class AVFile_TestCase: LCTestBase {
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let uploaDataTuple: (data: Data, name: String) = self.bigDataTuple
-            let file: AVFile = AVFile(data: uploaDataTuple.data, name: uploaDataTuple.name)
+            let file: LCFile = LCFile(data: uploaDataTuple.data, name: uploaDataTuple.name)
             var hasProgress = false
             
             semaphore.increment()
@@ -190,7 +190,7 @@ class AVFile_TestCase: LCTestBase {
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let uploaDataTuple: (data: Data, name: String)  = self.smallDataTuple
-            let file: AVFile = AVFile(data: uploaDataTuple.data, name: uploaDataTuple.name)
+            let file: LCFile = LCFile(data: uploaDataTuple.data, name: uploaDataTuple.name)
             
             semaphore.increment()
             
@@ -240,9 +240,9 @@ class AVFile_TestCase: LCTestBase {
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
-            var file: AVFile! = nil
+            var file: LCFile! = nil
             do {
-                file = try AVFile(localPath: filePath.path)
+                file = try LCFile(localPath: filePath.path)
             } catch let err {
                 XCTFail("\(err)")
             }
@@ -287,9 +287,9 @@ class AVFile_TestCase: LCTestBase {
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
-            var file: AVFile! = nil
+            var file: LCFile! = nil
             do {
-                file = try AVFile(localPath: filePath.path)
+                file = try LCFile(localPath: filePath.path)
             } catch let err {
                 XCTFail("\(err)")
             }
@@ -341,9 +341,9 @@ class AVFile_TestCase: LCTestBase {
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
-            var file: AVFile! = nil
+            var file: LCFile! = nil
             do {
-                file = try AVFile(localPath: filePath.path)
+                file = try LCFile(localPath: filePath.path)
             } catch let err {
                 XCTFail("\(err)")
             }
@@ -381,7 +381,7 @@ class AVFile_TestCase: LCTestBase {
         
         if self.isServerTesting { return }
         
-        var downloadFile: AVFile!
+        var downloadFile: LCFile!
         let uploadDataTuple: (data: Data, name: String) = self.bigDataTuple
         let removeItemAtPath: (String) -> Bool = { (path: String) in
             if FileManager.default.fileExists(atPath: path) {
@@ -399,7 +399,7 @@ class AVFile_TestCase: LCTestBase {
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
-            let file: AVFile = AVFile(data: uploadDataTuple.data, name: uploadDataTuple.name)
+            let file: LCFile = LCFile(data: uploadDataTuple.data, name: uploadDataTuple.name)
             
             semaphore.increment()
             
@@ -583,7 +583,7 @@ class AVFile_TestCase: LCTestBase {
         
         downloadFile.clearPersistentCache()
         XCTAssertFalse(FileManager.default.fileExists(atPath: cachedPath))
-        AVFile.clearAllPersistentCache()
+        LCFile.clearAllPersistentCache()
         XCTAssertFalse(FileManager.default.fileExists(atPath: URL.init(fileURLWithPath: cachedPath).deletingLastPathComponent().path))
     }
     
@@ -605,13 +605,13 @@ class AVFile_TestCase: LCTestBase {
             }
         }
         
-        var externalURLFile: AVFile!
+        var externalURLFile: LCFile!
         
         let remoteURL: URL = self.remoteURL
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
-            let file: AVFile = AVFile(remoteURL: remoteURL)
+            let file: LCFile = LCFile(remoteURL: remoteURL)
             
             semaphore.increment()
             
@@ -669,7 +669,7 @@ class AVFile_TestCase: LCTestBase {
         
         externalURLFile.clearPersistentCache()
         XCTAssertFalse(FileManager.default.fileExists(atPath: cachedPath))
-        AVFile.clearAllPersistentCache()
+        LCFile.clearAllPersistentCache()
         XCTAssertFalse(FileManager.default.fileExists(atPath: URL.init(fileURLWithPath: cachedPath).deletingLastPathComponent().path))
     }
     
@@ -680,7 +680,7 @@ class AVFile_TestCase: LCTestBase {
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let uploadDataTuple: (data: Data, name: String) = self.bigDataTuple
-            let file: AVFile = AVFile(data: uploadDataTuple.data, name: uploadDataTuple.name)
+            let file: LCFile = LCFile(data: uploadDataTuple.data, name: uploadDataTuple.name)
             var canceled: Bool = false
             
             semaphore.increment()
@@ -706,12 +706,12 @@ class AVFile_TestCase: LCTestBase {
             XCTFail("timeout")
         })
         
-        var downloadCancelFile: AVFile!
+        var downloadCancelFile: LCFile!
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
             let uploadDataTuple: (data: Data, name: String) = self.bigDataTuple
-            let file: AVFile = AVFile(data: uploadDataTuple.data, name: uploadDataTuple.name)
+            let file: LCFile = LCFile(data: uploadDataTuple.data, name: uploadDataTuple.name)
             
             semaphore.increment()
             
@@ -772,10 +772,10 @@ class AVFile_TestCase: LCTestBase {
         
         if self.isServerTesting { return }
         
-        let uploadedFile = { () -> AVFile? in
+        let uploadedFile = { () -> LCFile? in
             
             let remoteURL: URL = self.remoteURL
-            let file: AVFile = AVFile(remoteURL: remoteURL)
+            let file: LCFile = LCFile(remoteURL: remoteURL)
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
@@ -803,9 +803,9 @@ class AVFile_TestCase: LCTestBase {
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             
-            var array: [AVFile] = []
+            var array: [LCFile] = []
             for _ in 0..<3 {
-                guard let file: AVFile = uploadedFile() else {
+                guard let file: LCFile = uploadedFile() else {
                     continue
                 }
                 array.append(file)
@@ -813,7 +813,7 @@ class AVFile_TestCase: LCTestBase {
             
             semaphore.increment()
             
-            AVFile.delete(with: array, completionHandler: { (succeeded: Bool, error: Error?) in
+            LCFile.delete(with: array, completionHandler: { (succeeded: Bool, error: Error?) in
                 
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
@@ -832,10 +832,10 @@ class AVFile_TestCase: LCTestBase {
         
         if self.isServerTesting { return }
         
-        let uploadedFile = { () -> AVFile? in
+        let uploadedFile = { () -> LCFile? in
             
             let remoteURL: URL = self.remoteURL
-            let file: AVFile = AVFile(remoteURL: remoteURL)
+            let file: LCFile = LCFile(remoteURL: remoteURL)
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
@@ -870,7 +870,7 @@ class AVFile_TestCase: LCTestBase {
             
             semaphore.increment()
             
-            AVFile.getWithObjectId(objectId, completionHandler: { (file: AVFile?, error: Error?) in
+            LCFile.getWithObjectId(objectId, completionHandler: { (file: LCFile?, error: Error?) in
                 
                 semaphore.decrement()
                 
@@ -891,7 +891,7 @@ class AVFile_TestCase: LCTestBase {
     
     func testc_multiple_download() {
         let uploadExp = expectation(description: "upload file")
-        let file = AVFile(data: self.bigDataTuple.data, name: self.bigDataTuple.name)
+        let file = LCFile(data: self.bigDataTuple.data, name: self.bigDataTuple.name)
         file.upload { (success, error) in
             XCTAssertTrue(success)
             XCTAssertNil(error)
@@ -902,7 +902,7 @@ class AVFile_TestCase: LCTestBase {
         let downloadExp = expectation(description: "multiple download file")
         downloadExp.expectedFulfillmentCount = 5
         for i in 0..<downloadExp.expectedFulfillmentCount {
-            let file = AVFile(objectId: file.objectId()! + "\(i)", url: file.url()!)
+            let file = LCFile(objectId: file.objectId()! + "\(i)", url: file.url()!)
             file.download(completionHandler: { (fileURL, error) in
                 XCTAssertNotNil(fileURL)
                 XCTAssertNil(error)

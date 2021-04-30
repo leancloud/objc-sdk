@@ -8,11 +8,11 @@
 
 #import "AVAnalyticsImpl.h"
 #import "AVAnalyticsSession.h"
-#import "AVPaasClient.h"
+#import "LCPaasClient.h"
 #import "AVAnalyticsUtils.h"
-#import "AVGlobal.h"
-#import "AVUtils.h"
-#import "AVErrorUtils.h"
+#import "LCGlobal.h"
+#import "LCUtils.h"
+#import "LCErrorUtils.h"
 #import "LCRouter_Internal.h"
 
 static NSString *const kAVOnlineConfig = @"AVOS_ONLINE_CONFIG";
@@ -323,7 +323,7 @@ static NSString *const kAVOnlineConfig = @"AVOS_ONLINE_CONFIG";
 }
 
 - (void)sendOneSession:(NSDictionary *)session {
-    [[AVPaasClient sharedInstance] postObject:[[[self class] myObjectPath] stringByAppendingString:@"/collect"]
+    [[LCPaasClient sharedInstance] postObject:[[[self class] myObjectPath] stringByAppendingString:@"/collect"]
                                withParameters:[session copy]
                                    eventually:YES
                                         block:^(id object, NSError *error)
@@ -344,7 +344,7 @@ static NSString *const kAVOnlineConfig = @"AVOS_ONLINE_CONFIG";
     [self debugDump];
     
     if (!self.enableReport) {
-        AVLoggerI(@"Report is disabled by caller");
+        LCLoggerI(@"Report is disabled by caller");
         return;
     }
     
@@ -451,10 +451,10 @@ static NSString *const kAVOnlineConfig = @"AVOS_ONLINE_CONFIG";
     if (!self.enableDebugLog) {
         return;
     }
-    AVLoggerI(@"Report policy is %d", self.reportPolicy);
+    LCLoggerI(@"Report policy is %d", self.reportPolicy);
     NSArray * array = [self allSessionData];
     for(NSDictionary * dict in array) {
-        AVLoggerI(@"session data %@", dict);
+        LCLoggerI(@"session data %@", dict);
     }
 }
 

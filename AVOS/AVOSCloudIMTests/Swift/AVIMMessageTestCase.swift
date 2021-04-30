@@ -13,14 +13,14 @@ class AVIMMessageTestCase: LCIMTestBase {
     // MARK: - Message Send
     
     func testSendAndReceiveLargeSizeMessage() {
-        let delegate1 = AVIMClientDelegateWrapper()
-        let delegate2 = AVIMClientDelegateWrapper()
+        let delegate1 = LCIMClientDelegateWrapper()
+        let delegate2 = LCIMClientDelegateWrapper()
         guard let client1 = LCIMTestBase.newOpenedClient(clientId: uuid, delegate: delegate1),
             let client2 = LCIMTestBase.newOpenedClient(clientId: uuid, delegate: delegate2) else {
                 XCTFail()
                 return
         }
-        var conversation: AVIMConversation!
+        var conversation: LCIMConversation!
         expecting { (exp) in
             client1.createConversation(
                 withName: nil,
@@ -46,7 +46,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                 exp.fulfill()
             }
             for _ in 0..<25 {
-                let message = AVIMMessage(content: content)
+                let message = LCIMMessage(content: content)
                 conversation.send(message, callback: { (succeeded: Bool, error: Error?) in
                     XCTAssertTrue(succeeded)
                     XCTAssertNil(error)
@@ -65,23 +65,23 @@ class AVIMMessageTestCase: LCIMTestBase {
             "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
+        let delegate_1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_2: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
+        let delegate_2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_2: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
         }
         XCTAssertTrue(client_1.connection === client_2.connection)
-        var normalConv: AVIMConversation! = nil
+        var normalConv: LCIMConversation! = nil
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
+            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: LCIMConversation?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(conv)
@@ -91,16 +91,16 @@ class AVIMMessageTestCase: LCIMTestBase {
             })
         }, failure: { XCTFail("timeout") })
         
-        if let normalConv: AVIMConversation = normalConv {
+        if let normalConv: LCIMConversation = normalConv {
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let content: String = "test"
-                let commonMessage: AVIMMessage = AVIMMessage.init(content: content)
+                let commonMessage: LCIMMessage = LCIMMessage.init(content: content)
                 
                 semaphore.increment(2)
                 
-                delegate_2.didReceiveCommonMessageClosure = { (conv: AVIMConversation, message: AVIMMessage) in
+                delegate_2.didReceiveCommonMessageClosure = { (conv: LCIMConversation, message: LCIMMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.clientId, client_2.clientId)
@@ -158,23 +158,23 @@ class AVIMMessageTestCase: LCIMTestBase {
             "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
+        let delegate_1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_2: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
+        let delegate_2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_2: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        var normalConv: AVIMConversation! = nil
+        var normalConv: LCIMConversation! = nil
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
+            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: LCIMConversation?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(conv)
@@ -184,16 +184,16 @@ class AVIMMessageTestCase: LCIMTestBase {
             })
         }, failure: { XCTFail("timeout") })
         
-        if let normalConv: AVIMConversation = normalConv {
+        if let normalConv: LCIMConversation = normalConv {
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let text: String = "test"
-                let textMessage: AVIMTextMessage = AVIMTextMessage.init(text: text, attributes: nil)
+                let textMessage: LCIMTextMessage = LCIMTextMessage.init(text: text, attributes: nil)
                 
                 semaphore.increment(2)
                 
-                delegate_2.didReceiveTypeMessageClosure = { (conv: AVIMConversation, message: AVIMTypedMessage) in
+                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: LCIMTypedMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.clientId, client_2.clientId)
@@ -251,23 +251,23 @@ class AVIMMessageTestCase: LCIMTestBase {
             "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
+        let delegate_1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_2: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
+        let delegate_2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_2: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        var normalConv: AVIMConversation! = nil
+        var normalConv: LCIMConversation! = nil
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
+            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: LCIMConversation?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(conv)
@@ -277,18 +277,18 @@ class AVIMMessageTestCase: LCIMTestBase {
             })
         }, failure: { XCTFail("timeout") })
         
-        if let normalConv: AVIMConversation = normalConv {
+        if let normalConv: LCIMConversation = normalConv {
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let text: String = "test"
                 let latitude = 22.0
                 let longitude = 33.0
-                let locationMessage: AVIMLocationMessage = AVIMLocationMessage.init(text: text, latitude: latitude, longitude: longitude, attributes: nil)
+                let locationMessage: LCIMLocationMessage = LCIMLocationMessage.init(text: text, latitude: latitude, longitude: longitude, attributes: nil)
                 
                 semaphore.increment(2)
                 
-                delegate_2.didReceiveTypeMessageClosure = { (conv: AVIMConversation, message: AVIMTypedMessage) in
+                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: LCIMTypedMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.clientId, client_2.clientId)
@@ -309,8 +309,8 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(message.readTimestamp == 0)
                     XCTAssertFalse(message.transient)
                     XCTAssertNil(message.updatedAt)
-                    XCTAssertEqual((message as? AVIMLocationMessage)?.latitude ?? 0, latitude)
-                    XCTAssertEqual((message as? AVIMLocationMessage)?.longitude ?? 0, longitude)
+                    XCTAssertEqual((message as? LCIMLocationMessage)?.latitude ?? 0, latitude)
+                    XCTAssertEqual((message as? LCIMLocationMessage)?.longitude ?? 0, longitude)
                 }
                 
                 normalConv.send(locationMessage, callback: { (succeeded: Bool, error: Error?) in
@@ -350,23 +350,23 @@ class AVIMMessageTestCase: LCIMTestBase {
             "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
+        let delegate_1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_2: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
+        let delegate_2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_2: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        var normalConv: AVIMConversation! = nil
+        var normalConv: LCIMConversation! = nil
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
+            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: LCIMConversation?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(conv)
@@ -376,9 +376,9 @@ class AVIMMessageTestCase: LCIMTestBase {
             })
         }, failure: { XCTFail("timeout") })
         
-        if let normalConv: AVIMConversation = normalConv {
+        if let normalConv: LCIMConversation = normalConv {
             
-            var receiveFile: AVFile! = nil
+            var receiveFile: LCFile! = nil
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
@@ -389,12 +389,12 @@ class AVIMMessageTestCase: LCIMTestBase {
                     let data: Data = try! Data.init(contentsOf: url)
                     return (data, "image.png")
                 }()
-                let imageFile: AVFile = AVFile.init(data: dataTuple.data, name: dataTuple.name)
-                let imageMessage: AVIMImageMessage = AVIMImageMessage.init(text: text, file: imageFile, attributes: nil)
+                let imageFile: LCFile = LCFile.init(data: dataTuple.data, name: dataTuple.name)
+                let imageMessage: LCIMImageMessage = LCIMImageMessage.init(text: text, file: imageFile, attributes: nil)
                 
                 semaphore.increment(2)
                 
-                delegate_2.didReceiveTypeMessageClosure = { (conv: AVIMConversation, message: AVIMTypedMessage) in
+                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: LCIMTypedMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.clientId, client_2.clientId)
@@ -415,13 +415,13 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(message.readTimestamp == 0)
                     XCTAssertFalse(message.transient)
                     XCTAssertNil(message.updatedAt)
-                    XCTAssertEqual((message as? AVIMImageMessage)?.size ?? 0, Double(dataTuple.data.count))
-                    XCTAssertTrue(((message as? AVIMImageMessage)?.height ?? 0) > 0)
-                    XCTAssertTrue(((message as? AVIMImageMessage)?.width ?? 0) > 0)
-                    XCTAssertEqual((message as? AVIMImageMessage)?.format, (dataTuple.name as NSString).pathExtension)
-                    let file: AVFile? = message.file
+                    XCTAssertEqual((message as? LCIMImageMessage)?.size ?? 0, Double(dataTuple.data.count))
+                    XCTAssertTrue(((message as? LCIMImageMessage)?.height ?? 0) > 0)
+                    XCTAssertTrue(((message as? LCIMImageMessage)?.width ?? 0) > 0)
+                    XCTAssertEqual((message as? LCIMImageMessage)?.format, (dataTuple.name as NSString).pathExtension)
+                    let file: LCFile? = message.file
                     XCTAssertNotNil(file)
-                    if let file: AVFile = file {
+                    if let file: LCFile = file {
                         receiveFile = file
                     }
                 }
@@ -454,7 +454,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                 })
             }, failure: { XCTFail("timeout") })
             
-            if let receiveFile: AVFile = receiveFile {
+            if let receiveFile: LCFile = receiveFile {
                 RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     semaphore.increment()
                     receiveFile.download(completionHandler: { (url: URL?, error: Error?) in
@@ -477,23 +477,23 @@ class AVIMMessageTestCase: LCIMTestBase {
             "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
+        let delegate_1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_2: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
+        let delegate_2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_2: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        var normalConv: AVIMConversation! = nil
+        var normalConv: LCIMConversation! = nil
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
+            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: LCIMConversation?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(conv)
@@ -503,9 +503,9 @@ class AVIMMessageTestCase: LCIMTestBase {
             })
         }, failure: { XCTFail("timeout") })
         
-        if let normalConv: AVIMConversation = normalConv {
+        if let normalConv: LCIMConversation = normalConv {
             
-            var receiveFile: AVFile! = nil
+            var receiveFile: LCFile! = nil
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
@@ -516,12 +516,12 @@ class AVIMMessageTestCase: LCIMTestBase {
                     let data: Data = try! Data.init(contentsOf: url)
                     return (data, "audio.mp3")
                 }()
-                let audioFile: AVFile = AVFile.init(data: dataTuple.data, name: dataTuple.name)
-                let audioMessage: AVIMAudioMessage = AVIMAudioMessage.init(text: text, file: audioFile, attributes: nil)
+                let audioFile: LCFile = LCFile.init(data: dataTuple.data, name: dataTuple.name)
+                let audioMessage: LCIMAudioMessage = LCIMAudioMessage.init(text: text, file: audioFile, attributes: nil)
                 
                 semaphore.increment(2)
                 
-                delegate_2.didReceiveTypeMessageClosure = { (conv: AVIMConversation, message: AVIMTypedMessage) in
+                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: LCIMTypedMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.clientId, client_2.clientId)
@@ -542,12 +542,12 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(message.readTimestamp == 0)
                     XCTAssertFalse(message.transient)
                     XCTAssertNil(message.updatedAt)
-                    XCTAssertEqual((message as? AVIMAudioMessage)?.size ?? 0, Double(dataTuple.data.count))
-                    XCTAssertTrue(((message as? AVIMAudioMessage)?.duration ?? 0) > 0)
-                    XCTAssertEqual((message as? AVIMAudioMessage)?.format, (dataTuple.name as NSString).pathExtension)
-                    let file: AVFile? = message.file
+                    XCTAssertEqual((message as? LCIMAudioMessage)?.size ?? 0, Double(dataTuple.data.count))
+                    XCTAssertTrue(((message as? LCIMAudioMessage)?.duration ?? 0) > 0)
+                    XCTAssertEqual((message as? LCIMAudioMessage)?.format, (dataTuple.name as NSString).pathExtension)
+                    let file: LCFile? = message.file
                     XCTAssertNotNil(file)
-                    if let file: AVFile = file {
+                    if let file: LCFile = file {
                         receiveFile = file
                     }
                 }
@@ -579,7 +579,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                 })
             }, failure: { XCTFail("timeout") })
             
-            if let receiveFile: AVFile = receiveFile {
+            if let receiveFile: LCFile = receiveFile {
                 RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     semaphore.increment()
                     receiveFile.download(completionHandler: { (url: URL?, error: Error?) in
@@ -602,23 +602,23 @@ class AVIMMessageTestCase: LCIMTestBase {
             "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
+        let delegate_1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_2: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
+        let delegate_2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_2: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        var normalConv: AVIMConversation! = nil
+        var normalConv: LCIMConversation! = nil
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
+            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: LCIMConversation?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(conv)
@@ -628,9 +628,9 @@ class AVIMMessageTestCase: LCIMTestBase {
             })
         }, failure: { XCTFail("timeout") })
         
-        if let normalConv: AVIMConversation = normalConv {
+        if let normalConv: LCIMConversation = normalConv {
             
-            var receiveFile: AVFile! = nil
+            var receiveFile: LCFile! = nil
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
@@ -641,12 +641,12 @@ class AVIMMessageTestCase: LCIMTestBase {
                     let data: Data = try! Data.init(contentsOf: url)
                     return (data, "video.mp4")
                 }()
-                let videoFile: AVFile = AVFile.init(data: dataTuple.data, name: dataTuple.name)
-                let videoMessage: AVIMVideoMessage = AVIMVideoMessage.init(text: text, file: videoFile, attributes: nil)
+                let videoFile: LCFile = LCFile.init(data: dataTuple.data, name: dataTuple.name)
+                let videoMessage: LCIMVideoMessage = LCIMVideoMessage.init(text: text, file: videoFile, attributes: nil)
                 
                 semaphore.increment(2)
                 
-                delegate_2.didReceiveTypeMessageClosure = { (conv: AVIMConversation, message: AVIMTypedMessage) in
+                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: LCIMTypedMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.clientId, client_2.clientId)
@@ -667,12 +667,12 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(message.readTimestamp == 0)
                     XCTAssertFalse(message.transient)
                     XCTAssertNil(message.updatedAt)
-                    XCTAssertEqual((message as? AVIMVideoMessage)?.size ?? 0, Double(dataTuple.data.count))
-                    XCTAssertTrue(((message as? AVIMVideoMessage)?.duration ?? 0) > 0)
-                    XCTAssertEqual((message as? AVIMVideoMessage)?.format, (dataTuple.name as NSString).pathExtension)
-                    let file: AVFile? = message.file
+                    XCTAssertEqual((message as? LCIMVideoMessage)?.size ?? 0, Double(dataTuple.data.count))
+                    XCTAssertTrue(((message as? LCIMVideoMessage)?.duration ?? 0) > 0)
+                    XCTAssertEqual((message as? LCIMVideoMessage)?.format, (dataTuple.name as NSString).pathExtension)
+                    let file: LCFile? = message.file
                     XCTAssertNotNil(file)
-                    if let file: AVFile = file {
+                    if let file: LCFile = file {
                         receiveFile = file
                     }
                 }
@@ -704,7 +704,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                 })
             }, failure: { XCTFail("timeout") })
             
-            if let receiveFile: AVFile = receiveFile {
+            if let receiveFile: LCFile = receiveFile {
                 RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     semaphore.increment()
                     receiveFile.download(completionHandler: { (url: URL?, error: Error?) in
@@ -727,23 +727,23 @@ class AVIMMessageTestCase: LCIMTestBase {
             "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
+        let delegate_1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_2: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
+        let delegate_2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_2: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        var normalConv: AVIMConversation! = nil
+        var normalConv: LCIMConversation! = nil
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
+            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: LCIMConversation?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(conv)
@@ -753,9 +753,9 @@ class AVIMMessageTestCase: LCIMTestBase {
             })
         }, failure: { XCTFail("timeout") })
         
-        if let normalConv: AVIMConversation = normalConv {
+        if let normalConv: LCIMConversation = normalConv {
             
-            var receiveFile: AVFile! = nil
+            var receiveFile: LCFile! = nil
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
@@ -766,12 +766,12 @@ class AVIMMessageTestCase: LCIMTestBase {
                     let data: Data = try! Data.init(contentsOf: url)
                     return (data, "file.md")
                 }()
-                let file: AVFile = AVFile.init(data: dataTuple.data, name: dataTuple.name)
-                let fileMessage: AVIMFileMessage = AVIMFileMessage.init(text: text, file: file, attributes: nil)
+                let file: LCFile = LCFile.init(data: dataTuple.data, name: dataTuple.name)
+                let fileMessage: LCIMFileMessage = LCIMFileMessage.init(text: text, file: file, attributes: nil)
                 
                 semaphore.increment(2)
                 
-                delegate_2.didReceiveTypeMessageClosure = { (conv: AVIMConversation, message: AVIMTypedMessage) in
+                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: LCIMTypedMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.clientId, client_2.clientId)
@@ -792,9 +792,9 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(message.readTimestamp == 0)
                     XCTAssertFalse(message.transient)
                     XCTAssertNil(message.updatedAt)
-                    let file: AVFile? = message.file
+                    let file: LCFile? = message.file
                     XCTAssertNotNil(file)
-                    if let file: AVFile = file {
+                    if let file: LCFile = file {
                         receiveFile = file
                     }
                 }
@@ -823,7 +823,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                 })
             }, failure: { XCTFail("timeout") })
             
-            if let receiveFile: AVFile = receiveFile {
+            if let receiveFile: LCFile = receiveFile {
                 RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     semaphore.increment()
                     receiveFile.download(completionHandler: { (url: URL?, error: Error?) in
@@ -848,23 +848,23 @@ class AVIMMessageTestCase: LCIMTestBase {
             "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
+        let delegate_1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_2: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
+        let delegate_2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_2: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        var normalConv: AVIMConversation! = nil
+        var normalConv: LCIMConversation! = nil
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
+            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: LCIMConversation?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(conv)
@@ -874,7 +874,7 @@ class AVIMMessageTestCase: LCIMTestBase {
             })
         }, failure: { XCTFail("timeout") })
         
-        if let normalConv: AVIMConversation = normalConv {
+        if let normalConv: LCIMConversation = normalConv {
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
@@ -885,7 +885,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                 
                 semaphore.increment(2)
                 
-                delegate_2.didReceiveTypeMessageClosure = { (conv: AVIMConversation, message: AVIMTypedMessage) in
+                delegate_2.didReceiveTypeMessageClosure = { (conv: LCIMConversation, message: LCIMTypedMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.clientId, client_2.clientId)
@@ -944,23 +944,23 @@ class AVIMMessageTestCase: LCIMTestBase {
             "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
+        let delegate_1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_2: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
+        let delegate_2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_2: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        var normalConv: AVIMConversation! = nil
+        var normalConv: LCIMConversation! = nil
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
+            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: LCIMConversation?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(conv)
@@ -970,18 +970,18 @@ class AVIMMessageTestCase: LCIMTestBase {
             })
         }, failure: { XCTFail("timeout") })
         
-        if let normalConv: AVIMConversation = normalConv {
+        if let normalConv: LCIMConversation = normalConv {
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let content: String = "test"
-                let commonMessage: AVIMMessage = AVIMMessage.init(content: content)
-                let option: AVIMMessageOption = AVIMMessageOption()
+                let commonMessage: LCIMMessage = LCIMMessage.init(content: content)
+                let option: LCIMMessageOption = LCIMMessageOption()
                 option.receipt = true
                 
                 semaphore.increment(5)
                 
-                delegate_2.didReceiveCommonMessageClosure = { (conv: AVIMConversation, message: AVIMMessage) in
+                delegate_2.didReceiveCommonMessageClosure = { (conv: LCIMConversation, message: LCIMMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.clientId, client_2.clientId)
@@ -1003,7 +1003,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     conv.readInBackground()
                 }
                 
-                delegate_1.messageDeliveredClosure = { (conv: AVIMConversation, message: AVIMMessage) in
+                delegate_1.messageDeliveredClosure = { (conv: LCIMConversation, message: LCIMMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertTrue(message === commonMessage)
@@ -1012,13 +1012,13 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertTrue(message.deliveredTimestamp > 0)
                 }
                 
-                delegate_1.didUpdateForKeyClosure = { (conv: AVIMConversation, updatedKey: AVIMConversationUpdatedKey) in
-                    if updatedKey == AVIMConversationUpdatedKey.lastDeliveredAt {
+                delegate_1.didUpdateForKeyClosure = { (conv: LCIMConversation, updatedKey: LCIMConversationUpdatedKey) in
+                    if updatedKey == LCIMConversationUpdatedKey.lastDeliveredAt {
                         semaphore.decrement()
                         XCTAssertTrue(Thread.isMainThread)
                         XCTAssertEqual(conv.lastDeliveredAt, Date(timeIntervalSince1970: TimeInterval(commonMessage.deliveredTimestamp) / 1000.0))
                     }
-                    if updatedKey == AVIMConversationUpdatedKey.lastReadAt {
+                    if updatedKey == LCIMConversationUpdatedKey.lastReadAt {
                         semaphore.decrement()
                         XCTAssertTrue(Thread.isMainThread)
                         XCTAssertNotNil(conv.lastReadAt)
@@ -1057,35 +1057,35 @@ class AVIMMessageTestCase: LCIMTestBase {
             "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
+        let delegate_1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_2: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
+        let delegate_2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_2: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        var normalConv: AVIMConversation! = nil
+        var normalConv: LCIMConversation! = nil
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment(3)
-            client_1.createConversation(withName: nil, clientIds: clientIds, attributes: nil, options: [.transient], callback: { (conv: AVIMConversation?, error: Error?) in
+            client_1.createConversation(withName: nil, clientIds: clientIds, attributes: nil, options: [.transient], callback: { (conv: LCIMConversation?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(conv)
                 XCTAssertNil(error)
                 XCTAssertNotNil(conv?.conversationId)
                 if let conversationId: String = conv?.conversationId {
-                    client_2.conversationQuery().getConversationById(conversationId, callback: { (conv1: AVIMConversation?, error: Error?) in
+                    client_2.conversationQuery().getConversationById(conversationId, callback: { (conv1: LCIMConversation?, error: Error?) in
                         semaphore.decrement()
                         XCTAssertTrue(Thread.isMainThread)
                         XCTAssertNotNil(conv1)
                         XCTAssertNil(error)
-                        if let conv1: AVIMConversation = conv1 {
+                        if let conv1: LCIMConversation = conv1 {
                             conv1.join(callback: { (succeeded: Bool, error: Error?) in
                                 semaphore.decrement()
                                 XCTAssertTrue(Thread.isMainThread)
@@ -1105,22 +1105,22 @@ class AVIMMessageTestCase: LCIMTestBase {
             })
         }, failure: { XCTFail("timeout") })
         
-        if let normalConv: AVIMConversation = normalConv {
+        if let normalConv: LCIMConversation = normalConv {
             
-            let priorityArray: [AVIMMessagePriority] = [.high, .normal, .low]
+            let priorityArray: [LCIMMessagePriority] = [.high, .normal, .low]
             
             for item in priorityArray {
                 
                 RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                     
                     let content: String = "test"
-                    let commonMessage: AVIMMessage = AVIMMessage.init(content: content)
-                    let option: AVIMMessageOption = AVIMMessageOption()
+                    let commonMessage: LCIMMessage = LCIMMessage.init(content: content)
+                    let option: LCIMMessageOption = LCIMMessageOption()
                     option.priority = item
                     
                     semaphore.increment(2)
                     
-                    delegate_2.didReceiveCommonMessageClosure = { (conv: AVIMConversation, message: AVIMMessage) in
+                    delegate_2.didReceiveCommonMessageClosure = { (conv: LCIMConversation, message: LCIMMessage) in
                         semaphore.decrement()
                         XCTAssertTrue(Thread.isMainThread)
                         XCTAssertEqual(conv.clientId, client_2.clientId)
@@ -1182,23 +1182,23 @@ class AVIMMessageTestCase: LCIMTestBase {
             "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
+        let delegate_1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_2: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
+        let delegate_2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_2: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        var normalConv: AVIMConversation! = nil
+        var normalConv: LCIMConversation! = nil
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
+            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: LCIMConversation?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(conv)
@@ -1208,18 +1208,18 @@ class AVIMMessageTestCase: LCIMTestBase {
             })
         }, failure: { XCTFail("timeout") })
         
-        if let normalConv: AVIMConversation = normalConv {
+        if let normalConv: LCIMConversation = normalConv {
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let content: String = "test"
-                let commonMessage: AVIMMessage = AVIMMessage.init(content: content)
-                let option: AVIMMessageOption = AVIMMessageOption()
+                let commonMessage: LCIMMessage = LCIMMessage.init(content: content)
+                let option: LCIMMessageOption = LCIMMessageOption()
                 option.transient = true
                 
                 semaphore.increment(2)
                 
-                delegate_2.didReceiveCommonMessageClosure = { (conv: AVIMConversation, message: AVIMMessage) in
+                delegate_2.didReceiveCommonMessageClosure = { (conv: LCIMConversation, message: LCIMMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.clientId, client_2.clientId)
@@ -1277,23 +1277,23 @@ class AVIMMessageTestCase: LCIMTestBase {
             "\(#function[..<#function.firstIndex(of: "(")!])_2"
         ]
         
-        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
+        let delegate_1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        guard let client_2: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
+        let delegate_2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        guard let client_2: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        var normalConv: AVIMConversation! = nil
+        var normalConv: LCIMConversation! = nil
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
+            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: LCIMConversation?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(conv)
@@ -1303,18 +1303,18 @@ class AVIMMessageTestCase: LCIMTestBase {
             })
         }, failure: { XCTFail("timeout") })
         
-        if let normalConv: AVIMConversation = normalConv {
+        if let normalConv: LCIMConversation = normalConv {
             
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let content: String = "test"
-                let commonMessage: AVIMMessage = AVIMMessage.init(content: content)
+                let commonMessage: LCIMMessage = LCIMMessage.init(content: content)
                 commonMessage.mentionAll = true
                 commonMessage.mentionList = clientIds
                 
                 semaphore.increment(2)
                 
-                delegate_2.didReceiveCommonMessageClosure = { (conv: AVIMConversation, message: AVIMMessage) in
+                delegate_2.didReceiveCommonMessageClosure = { (conv: LCIMConversation, message: LCIMMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.clientId, client_2.clientId)
@@ -1373,10 +1373,10 @@ class AVIMMessageTestCase: LCIMTestBase {
         
         let clientId: String = "\(#function[..<#function.firstIndex(of: "(")!])"
         
-        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        let installation_1: AVInstallation = AVInstallation()
+        let delegate_1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        let installation_1: LCInstallation = LCInstallation()
         installation_1.setDeviceTokenHexString(UUID().uuidString, teamId: "LeanCloud")
-        guard let client_1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId, delegate: delegate_1, installation: installation_1) else {
+        guard let client_1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId, delegate: delegate_1, installation: installation_1) else {
             XCTFail()
             return
         }
@@ -1385,19 +1385,19 @@ class AVIMMessageTestCase: LCIMTestBase {
         LCRTMConnectionManager.shared().imProtobuf1Registry.removeAllObjects()
         LCRTMConnectionManager.shared().imProtobuf3Registry.removeAllObjects()
         
-        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
-        let installation_2: AVInstallation = AVInstallation()
+        let delegate_2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
+        let installation_2: LCInstallation = LCInstallation()
         installation_2.setDeviceTokenHexString(UUID().uuidString, teamId: "LeanCloud")
-        guard let _: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId, delegate: delegate_2, installation: installation_2) else {
+        guard let _: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId, delegate: delegate_2, installation: installation_2) else {
             XCTFail()
             return
         }
         
-        var normalConv: AVIMConversation! = nil
+        var normalConv: LCIMConversation! = nil
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            client_1.createConversation(withName: nil, clientIds: [clientId, "\(clientId)_1"], callback: { (conv: AVIMConversation?, error: Error?) in
+            client_1.createConversation(withName: nil, clientIds: [clientId, "\(clientId)_1"], callback: { (conv: LCIMConversation?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(conv)
@@ -1412,11 +1412,11 @@ class AVIMMessageTestCase: LCIMTestBase {
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let content: String = "test"
-                let commonMessage: AVIMMessage = AVIMMessage.init(content: content)
+                let commonMessage: LCIMMessage = LCIMMessage.init(content: content)
                 
                 semaphore.increment(2)
                 
-                delegate_2.didReceiveCommonMessageClosure = { (conv: AVIMConversation, message: AVIMMessage) in
+                delegate_2.didReceiveCommonMessageClosure = { (conv: LCIMConversation, message: LCIMMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.clientId, clientId)
@@ -1476,23 +1476,23 @@ class AVIMMessageTestCase: LCIMTestBase {
             "\(#function[..<#function.firstIndex(of: "(")!])_2",
         ]
         
-        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
+        let delegate_1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
         guard let client_1 = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
+        let delegate_2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
         guard let _ = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        var normalConv: AVIMConversation! = nil
+        var normalConv: LCIMConversation! = nil
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
+            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: LCIMConversation?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(conv)
@@ -1507,16 +1507,16 @@ class AVIMMessageTestCase: LCIMTestBase {
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let content: String = "test"
-                let commonMessage: AVIMMessage = AVIMMessage.init(content: content)
+                let commonMessage: LCIMMessage = LCIMMessage.init(content: content)
                 commonMessage.mentionAll = true
                 commonMessage.mentionList = clientIds
                 
                 let newContent: String = "new_test"
-                let newCommonMessage: AVIMMessage = AVIMMessage.init(content: newContent)
+                let newCommonMessage: LCIMMessage = LCIMMessage.init(content: newContent)
                 
                 semaphore.increment(3)
                 
-                delegate_2.messageHasBeenUpdatedClosure = { (conv: AVIMConversation, message: AVIMMessage) in
+                delegate_2.messageHasBeenUpdatedClosure = { (conv: LCIMConversation, message: LCIMMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.conversationId, normalConv.conversationId)
@@ -1566,23 +1566,23 @@ class AVIMMessageTestCase: LCIMTestBase {
             "\(#function[..<#function.firstIndex(of: "(")!])_2",
         ]
         
-        let delegate_1: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
+        let delegate_1: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
         guard let client_1 = LCIMTestBase.newOpenedClient(clientId: clientIds[0], delegate: delegate_1) else {
             XCTFail()
             return
         }
         
-        let delegate_2: AVIMClientDelegateWrapper = AVIMClientDelegateWrapper()
+        let delegate_2: LCIMClientDelegateWrapper = LCIMClientDelegateWrapper()
         guard let _ = LCIMTestBase.newOpenedClient(clientId: clientIds[1], delegate: delegate_2) else {
             XCTFail()
             return
         }
         
-        var normalConv: AVIMConversation! = nil
+        var normalConv: LCIMConversation! = nil
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: AVIMConversation?, error: Error?) in
+            client_1.createConversation(withName: nil, clientIds: clientIds, callback: { (conv: LCIMConversation?, error: Error?) in
                 semaphore.decrement()
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(conv)
@@ -1597,13 +1597,13 @@ class AVIMMessageTestCase: LCIMTestBase {
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
                 
                 let content: String = "test"
-                let commonMessage: AVIMMessage = AVIMMessage.init(content: content)
+                let commonMessage: LCIMMessage = LCIMMessage.init(content: content)
                 commonMessage.mentionAll = true
                 commonMessage.mentionList = clientIds
                 
                 semaphore.increment(3)
                 
-                delegate_2.messageHasBeenUpdatedClosure = { (conv: AVIMConversation, message: AVIMMessage) in
+                delegate_2.messageHasBeenUpdatedClosure = { (conv: LCIMConversation, message: LCIMMessage) in
                     semaphore.decrement()
                     XCTAssertTrue(Thread.isMainThread)
                     XCTAssertEqual(conv.conversationId, normalConv.conversationId)
@@ -1611,7 +1611,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertEqual(message.sendTimestamp, commonMessage.sendTimestamp)
                     XCTAssertEqual(message.clientId, commonMessage.clientId)
                     XCTAssertNotNil(message.updatedAt)
-                    XCTAssertTrue(message.isKind(of: AVIMRecalledMessage.self))
+                    XCTAssertTrue(message.isKind(of: LCIMRecalledMessage.self))
                 }
                 
                 normalConv.send(commonMessage, callback: { (succeeded: Bool, error: Error?) in
@@ -1624,7 +1624,7 @@ class AVIMMessageTestCase: LCIMTestBase {
                     XCTAssertNotNil(commonMessage.clientId)
                     if succeeded {
                         sleep(1)
-                        normalConv.recall(commonMessage, callback: { (succeeded: Bool, error: Error?, recalledMessage: AVIMRecalledMessage?) in
+                        normalConv.recall(commonMessage, callback: { (succeeded: Bool, error: Error?, recalledMessage: LCIMRecalledMessage?) in
                             semaphore.decrement()
                             XCTAssertTrue(Thread.isMainThread)
                             XCTAssertTrue(succeeded)
@@ -1653,20 +1653,20 @@ class AVIMMessageTestCase: LCIMTestBase {
         let clientId1: String = String(#function[..<#function.firstIndex(of: "(")!]) + "1"
         let clientId2: String = String(#function[..<#function.firstIndex(of: "(")!]) + "2"
         
-        guard let client1: AVIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1) else {
+        guard let client1: LCIMClient = LCIMTestBase.newOpenedClient(clientId: clientId1) else {
             XCTFail()
             return
         }
         
-        guard let conversation: AVIMConversation = LCIMTestBase.newConversation(client: client1, clientIds: [clientId1, clientId2]) else {
+        guard let conversation: LCIMConversation = LCIMTestBase.newConversation(client: client1, clientIds: [clientId1, clientId2]) else {
             XCTFail()
             return
         }
         
-        var sentMessages: [AVIMMessage] = []
+        var sentMessages: [LCIMMessage] = []
         for _ in 0..<10 {
             RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
-                let message: AVIMMessage = AVIMMessage.init(content: "test")
+                let message: LCIMMessage = LCIMMessage.init(content: "test")
                 semaphore.increment()
                 conversation.send(message, callback: { (succeeded: Bool, error: Error?) in
                     XCTAssertTrue(Thread.isMainThread)
@@ -1679,7 +1679,7 @@ class AVIMMessageTestCase: LCIMTestBase {
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            conversation.queryMessagesFromServer(beforeId: sentMessages.last?.messageId, timestamp: sentMessages.last?.sendTimestamp ?? 0, limit: 10, callback: { (messages: [AVIMMessage]?, error: Error?) in
+            conversation.queryMessagesFromServer(beforeId: sentMessages.last?.messageId, timestamp: sentMessages.last?.sendTimestamp ?? 0, limit: 10, callback: { (messages: [LCIMMessage]?, error: Error?) in
                 XCTAssertTrue(Thread.isMainThread)
                 semaphore.decrement()
                 XCTAssertEqual(messages?.count, sentMessages.count - 1)
@@ -1689,7 +1689,7 @@ class AVIMMessageTestCase: LCIMTestBase {
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            conversation.queryMessagesFromServer(beforeId: sentMessages.last?.messageId, timestamp: sentMessages.last?.sendTimestamp ?? 0, toMessageId: sentMessages.first?.messageId, toTimestamp: sentMessages.first?.sendTimestamp ?? 0, limit: 10, callback: { (messages: [AVIMMessage]?, error: Error?) in
+            conversation.queryMessagesFromServer(beforeId: sentMessages.last?.messageId, timestamp: sentMessages.last?.sendTimestamp ?? 0, toMessageId: sentMessages.first?.messageId, toTimestamp: sentMessages.first?.sendTimestamp ?? 0, limit: 10, callback: { (messages: [LCIMMessage]?, error: Error?) in
                 XCTAssertTrue(Thread.isMainThread)
                 semaphore.decrement()
                 XCTAssertEqual(messages?.count, sentMessages.count - 2)
@@ -1699,10 +1699,10 @@ class AVIMMessageTestCase: LCIMTestBase {
         
         RunLoopSemaphore.wait(async: { (semaphore: RunLoopSemaphore) in
             semaphore.increment()
-            let startBound: AVIMMessageIntervalBound = AVIMMessageIntervalBound(messageId: sentMessages.last?.messageId, timestamp: sentMessages.last?.sendTimestamp ?? 0, closed: true)
-            let endBound: AVIMMessageIntervalBound = AVIMMessageIntervalBound(messageId: sentMessages.first?.messageId, timestamp: sentMessages.first?.sendTimestamp ?? 0, closed: true)
-            let interval: AVIMMessageInterval = AVIMMessageInterval(start: startBound, end: endBound)
-            conversation.queryMessages(in: interval, direction: .fromNewToOld, limit: 10, callback: { (message: [AVIMMessage]?, error: Error?) in
+            let startBound: LCIMMessageIntervalBound = LCIMMessageIntervalBound(messageId: sentMessages.last?.messageId, timestamp: sentMessages.last?.sendTimestamp ?? 0, closed: true)
+            let endBound: LCIMMessageIntervalBound = LCIMMessageIntervalBound(messageId: sentMessages.first?.messageId, timestamp: sentMessages.first?.sendTimestamp ?? 0, closed: true)
+            let interval: LCIMMessageInterval = LCIMMessageInterval(start: startBound, end: endBound)
+            conversation.queryMessages(in: interval, direction: .fromNewToOld, limit: 10, callback: { (message: [LCIMMessage]?, error: Error?) in
                 XCTAssertTrue(Thread.isMainThread)
                 semaphore.decrement()
                 XCTAssertEqual(message?.count, sentMessages.count)
@@ -1713,10 +1713,10 @@ class AVIMMessageTestCase: LCIMTestBase {
     
 }
 
-class AVIMCustomTypedMessage: AVIMTypedMessage, AVIMTypedMessageSubclassing {
+class AVIMCustomTypedMessage: LCIMTypedMessage, LCIMTypedMessageSubclassing {
     
-    class func classMediaType() -> AVIMMessageMediaType {
-        return AVIMMessageMediaType(rawValue: 1)!
+    class func classMediaType() -> LCIMMessageMediaType {
+        return LCIMMessageMediaType(rawValue: 1)!
     }
     
 }

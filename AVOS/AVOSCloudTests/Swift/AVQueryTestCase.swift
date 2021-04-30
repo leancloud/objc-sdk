@@ -1,5 +1,5 @@
 //
-//  AVQueryTestCase.swift
+//  LCQueryTestCase.swift
 //  AVOSCloud-iOSTests
 //
 //  Created by zapcannon87 on 2019/4/1.
@@ -8,10 +8,10 @@
 
 import XCTest
 
-class AVQueryTestCase: LCTestBase {
+class LCQueryTestCase: LCTestBase {
 
     func testQuery() {
-        let query = AVQuery(className: "TestObject")
+        let query = LCQuery(className: "TestObject")
         
         XCTAssertNotNil(query.findObjects())
     }

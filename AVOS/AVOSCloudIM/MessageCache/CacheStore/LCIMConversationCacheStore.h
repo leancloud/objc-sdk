@@ -8,12 +8,12 @@
 
 #import "LCIMCacheStore.h"
 
-@class AVIMClient;
-@class AVIMConversation;
+@class LCIMClient;
+@class LCIMConversation;
 
 @interface LCIMConversationCacheStore : LCIMCacheStore
 
-@property (nonatomic, weak) AVIMClient *client;
+@property (nonatomic, weak) LCIMClient *client;
 
 /*!
  * Cache conversations with max age.
@@ -32,7 +32,7 @@
  * Delete a conversation.
  * @param conversation Conversation to be deleted from cache.
  */
-- (void)deleteConversation:(AVIMConversation *)conversation;
+- (void)deleteConversation:(LCIMConversation *)conversation;
 
 /*!
  * Delete a conversation by id.
@@ -42,7 +42,7 @@
 
 /*!
  * Delete a conversation and it's messages.
- * @see `- (void)deleteConversation:(AVIMConversation *)conversation;`.
+ * @see `- (void)deleteConversation:(LCIMConversation *)conversation;`.
  * NOTE: All conversation's message will also be deleted from message table.
  */
 - (void)deleteConversationAndItsMessagesForId:(NSString *)conversationId;
@@ -57,7 +57,7 @@
  * @param conversationId Conversation id.
  * @return A conversation or nil if conversation not found or expired.
  */
-- (AVIMConversation *)conversationForId:(NSString *)conversationId;
+- (LCIMConversation *)conversationForId:(NSString *)conversationId;
 
 /*!
  * Get conversation list from cache by ids.

@@ -7,10 +7,10 @@
 //
 
 #import "MessagesProtoOrig.pbobjc.h"
-#import "AVIMMessage.h"
+#import "LCIMMessage.h"
 
 @interface AVIMDirectCommand (DirectCommandAdditions)
 
-@property(nonatomic, strong) AVIMMessage *message;
+@property(nonatomic, strong) LCIMMessage *message;
 
 @end

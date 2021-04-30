@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVConstants.h"
+#import "LCConstants.h"
 #import "AVAnalytics.h"
 
 @interface AVAnalytics ()

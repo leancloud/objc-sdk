@@ -8,24 +8,24 @@
 
 #import <Foundation/Foundation.h>
 
-#import "AVUser.h"
-#import "AVQuery.h"
+#import "LCUser.h"
+#import "LCQuery.h"
 
 typedef NSString AVStatusType;
 
-@class AVStatus, AVStatusQuery;
+@class LCStatus, LCStatusQuery;
 
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString * const kAVStatusTypeTimeline;
-extern NSString * const kAVStatusTypePrivateMessage;
+extern NSString * const kLCStatusTypeTimeline;
+extern NSString * const kLCStatusTypePrivateMessage;
 
-typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Nullable error);
+typedef void (^AVStatusResultBlock)(LCStatus * _Nullable status, NSError * _Nullable error);
 
 /**
  *  发送和获取状态更新和消息
  */
-@interface AVStatus : NSObject
+@interface LCStatus : NSObject
 
 /**
  *  此状态的ID 具有唯一性
@@ -49,9 +49,9 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
 @property (nonatomic, strong, nullable) NSDictionary *data;
 
 /**
- *  状态的发出"人",可以是AVUser 也可以是任意的AVObject,也可能是nil
+ *  状态的发出"人",可以是AVUser 也可以是任意的LCObject,也可能是nil
  */
-@property (nonatomic, strong, nullable) AVObject *source;
+@property (nonatomic, strong, nullable) LCObject *source;
 
 /**
  *  状态类型,默认是kAVStatusTypeTimeline, 可以是任意自定义字符串
@@ -76,7 +76,7 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
  *  @param objectId 状态的objectId
  *  @param callback 回调结果
  */
-+(void)deleteStatusWithID:(NSString*)objectId andCallback:(AVBooleanResultBlock)callback;
++(void)deleteStatusWithID:(NSString*)objectId andCallback:(LCBooleanResultBlock)callback;
 
 /**
  * 删除收件箱中的状态
@@ -95,14 +95,14 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
  * @param receiver  收件人的 objectId
  * @param block     回调 block
  */
-+ (void)deleteInboxStatusInBackgroundForMessageId:(NSUInteger)messageId inboxType:(NSString *)inboxType receiver:(NSString *)receiver block:(AVBooleanResultBlock)block;
++ (void)deleteInboxStatusInBackgroundForMessageId:(NSUInteger)messageId inboxType:(NSString *)inboxType receiver:(NSString *)receiver block:(LCBooleanResultBlock)block;
 
 /**
  *  设置受众群体
  *
  *  @param query 限定条件
  */
--(void)setQuery:(AVQuery*)query;
+-(void)setQuery:(LCQuery*)query;
 
 
 /** @name 获取状态 */
@@ -113,14 +113,14 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
  *  @param inboxType 收件箱类型
  *  @return 用于查询的AVStatusQuery
  */
-+(AVStatusQuery*)inboxQuery:(AVStatusType *)inboxType;
++(LCStatusQuery*)inboxQuery:(AVStatusType *)inboxType;
 
 /**
  *  获取当前用户发出的状态
  *
  *  @return 用于查询的AVStatusQuery
  */
-+(AVStatusQuery*)statusQuery;
++(LCStatusQuery*)statusQuery;
 
 
 /**
@@ -128,14 +128,14 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
  *  @param type 收件箱类型
  *  @param callback 回调结果
  */
-+(void)getUnreadStatusesCountWithType:(AVStatusType*)type andCallback:(AVIntegerResultBlock)callback;
++(void)getUnreadStatusesCountWithType:(AVStatusType*)type andCallback:(LCIntegerResultBlock)callback;
 
 /**
  *  Reset unread count of specific status type (inbox).
  *  @param type     Status type.
  *  @param callback Callback of reset request.
  */
-+(void)resetUnreadStatusesCountWithType:(AVStatusType*)type andCallback:(AVBooleanResultBlock)callback;
++(void)resetUnreadStatusesCountWithType:(AVStatusType*)type andCallback:(LCBooleanResultBlock)callback;
 
 /**
  *  获取当前用户接收到的状态
@@ -144,7 +144,7 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
  *  @param limit    需要返回的条数 默认`100`，最大`100`
  *  @param callback 回调结果
  */
-+(void)getStatusesWithType:(AVStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(AVArrayResultBlock)callback AV_DEPRECATED("2.3.2以后不再需要，请使用inboxQuery类方法");
++(void)getStatusesWithType:(AVStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(LCArrayResultBlock)callback AV_DEPRECATED("2.3.2以后不再需要，请使用inboxQuery类方法");
 
 /**
  *  获取当前用户发布的状态
@@ -154,7 +154,7 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
  *  @param limit    需要返回的条数 默认`100`，最大`100`
  *  @param callback 回调结果
  */
-+(void) getStatusesFromCurrentUserWithType:(AVStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(AVArrayResultBlock)callback AV_DEPRECATED("2.3.2以后不再需要，请使用statusQuery类方法");
++(void) getStatusesFromCurrentUserWithType:(AVStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(LCArrayResultBlock)callback AV_DEPRECATED("2.3.2以后不再需要，请使用statusQuery类方法");
 
 /**
  *  通过用户ID获取其发布的公开的状态列表
@@ -164,7 +164,7 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
  *  @param limit    需要返回的条数 默认`100`，最大`100`
  *  @param callback 回调结果
  */
-+(void) getStatusesFromUser:(NSString*)userId skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(AVArrayResultBlock)callback AV_DEPRECATED("2.3.2以后不再需要，请使用statusQuery");
++(void) getStatusesFromUser:(NSString*)userId skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(LCArrayResultBlock)callback AV_DEPRECATED("2.3.2以后不再需要，请使用statusQuery");
 
 /** @name 发送状态 */
 
@@ -174,7 +174,7 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
  *  @param  status 状态
  *  @param  callback 回调结果
  */
-+(void)sendStatusToFollowers:(AVStatus*)status andCallback:(AVBooleanResultBlock)callback;
++(void)sendStatusToFollowers:(LCStatus*)status andCallback:(LCBooleanResultBlock)callback;
 
 /**
  *  向用户发私信
@@ -183,54 +183,54 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
  *  @param  userId 接受私信的用户objectId
  *  @param  callback 回调结果
  */
-+(void)sendPrivateStatus:(AVStatus*)status toUserWithID:(NSString*)userId andCallback:(AVBooleanResultBlock)callback;
++(void)sendPrivateStatus:(LCStatus*)status toUserWithID:(NSString*)userId andCallback:(LCBooleanResultBlock)callback;
 
 /**
  *  发送
  *
  *  @param block 回调结果
  */
--(void)sendInBackgroundWithBlock:(AVBooleanResultBlock)block;
+-(void)sendInBackgroundWithBlock:(LCBooleanResultBlock)block;
 @end
 
 /**
  *  用户好友关系
  */
-@interface AVUser(Friendship)
+@interface LCUser(Friendship)
 
 /* @name 好友关系 */
 
 /**
- *  获取用户粉丝AVQuery
+ *  获取用户粉丝LCQuery
  *
  *  @param userObjectId 用户ID
  *
- *  @return 用于查询的AVQuery
+ *  @return 用于查询的LCQuery
  */
-+(AVQuery*)followerQuery:(NSString*)userObjectId;
++(LCQuery*)followerQuery:(NSString*)userObjectId;
 
 /**
- *  获取本用户粉丝AVQuery
+ *  获取本用户粉丝LCQuery
  *
- *  @return 用于查询的AVQuery
+ *  @return 用于查询的LCQuery
  */
--(AVQuery*)followerQuery;
+-(LCQuery*)followerQuery;
 
 /**
- *  获取用户关注AVQuery
+ *  获取用户关注LCQuery
  *
  *  @param userObjectId 用户ID
  *
- *  @return 用于查询的AVQuery
+ *  @return 用于查询的LCQuery
  */
-+(AVQuery*)followeeQuery:(NSString*)userObjectId;
++(LCQuery*)followeeQuery:(NSString*)userObjectId;
 
 /**
- *  获取本用户关注AVQuery
+ *  获取本用户关注LCQuery
  *
- *  @return 用于查询的AVQuery
+ *  @return 用于查询的LCQuery
  */
--(AVQuery*)followeeQuery;
+-(LCQuery*)followeeQuery;
 
 /**
  *  通过ID来关注其他用户
@@ -238,7 +238,7 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
  *  @param userId 要关注的用户objectId
  *  @param callback 回调结果
  */
--(void)follow:(NSString*)userId andCallback:(AVBooleanResultBlock)callback;
+-(void)follow:(NSString*)userId andCallback:(LCBooleanResultBlock)callback;
 
 /**
  *  通过ID来关注其他用户
@@ -247,7 +247,7 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
  *  @param dictionary 添加的自定义属性
  *  @param callback 回调结果
  */
--(void)follow:(NSString*)userId userDictionary:(nullable NSDictionary *)dictionary andCallback:(AVBooleanResultBlock)callback;
+-(void)follow:(NSString*)userId userDictionary:(nullable NSDictionary *)dictionary andCallback:(LCBooleanResultBlock)callback;
 
 /**
  *  通过ID来取消关注其他用户
@@ -256,14 +256,14 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
  *  @param callback 回调结果
  *
  */
--(void)unfollow:(NSString*)userId andCallback:(AVBooleanResultBlock)callback;
+-(void)unfollow:(NSString*)userId andCallback:(LCBooleanResultBlock)callback;
 
 /**
  *  获取当前用户粉丝的列表
  *
  *  @param callback 回调结果
  */
--(void)getFollowers:(AVArrayResultBlock)callback;
+-(void)getFollowers:(LCArrayResultBlock)callback;
 
 /**
  *  获取当前用户所关注的列表
@@ -271,14 +271,14 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
  *  @param callback 回调结果
  *
  */
--(void)getFollowees:(AVArrayResultBlock)callback;
+-(void)getFollowees:(LCArrayResultBlock)callback;
 
 /**
  *  同时获取当前用户的粉丝和关注列表
  *
  *  @param callback 回调结果, 列表字典包含`followers`数组和`followees`数组
  */
--(void)getFollowersAndFollowees:(AVDictionaryResultBlock)callback;
+-(void)getFollowersAndFollowees:(LCDictionaryResultBlock)callback;
 
 
 @end
@@ -286,7 +286,7 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
 /**
  *  查询AVStatus
  */
-@interface AVStatusQuery : AVQuery
+@interface LCStatusQuery : LCQuery
 /**
  *  设置起始messageId, 仅用于Inbox中的查询
  */
@@ -300,7 +300,7 @@ typedef void (^AVStatusResultBlock)(AVStatus * _Nullable status, NSError * _Null
 /**
  *  设置查询的Inbox的所有者, 即查询这个"人"的收件箱
  */
-@property(nonatomic, strong, nullable) AVObject *owner;
+@property(nonatomic, strong, nullable) LCObject *owner;
 
 /**
  *  设置查询的Inbox的类型

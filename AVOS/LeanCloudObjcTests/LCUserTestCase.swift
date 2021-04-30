@@ -16,7 +16,7 @@ class LCUserTestCase: BaseTestCase {
     
     func testVerifyPhoneNumberBySMSCode() {
         /*
-        let user = AVUser()
+        let user = LCUser()
         let username = uuid
         let password = uuid
         let phoneNumber = LCUserTestCase.testablePhoneNumber
@@ -25,19 +25,19 @@ class LCUserTestCase: BaseTestCase {
         user.mobilePhoneNumber = phoneNumber
         XCTAssertTrue(user.signUp(nil))
         expecting { (exp) in
-            AVUser.logInWithUsername(
+            LCUser.logInWithUsername(
                 inBackground: username,
                 password: password)
             { (user, error) in
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(user)
                 XCTAssertNil(error)
-                XCTAssertTrue(user === AVUser.current())
+                XCTAssertTrue(user === LCUser.current())
                 exp.fulfill()
             }
         }
         expecting { (exp) in
-            AVUser.requestVerificationCode(
+            LCUser.requestVerificationCode(
                 forPhoneNumber: phoneNumber,
                 options: nil)
             { (succeeded, error) in
@@ -48,7 +48,7 @@ class LCUserTestCase: BaseTestCase {
             }
         }
         expecting { (exp) in
-            AVUser.verifyCode(
+            LCUser.verifyCode(
                 forPhoneNumber: phoneNumber,
                 code: LCUserTestCase.testableSMSCode)
             { (succeeded, error) in
@@ -58,13 +58,13 @@ class LCUserTestCase: BaseTestCase {
                 exp.fulfill()
             }
         }
-        AVUser.logOut()
+        LCUser.logOut()
          */
     }
     
     func testUpdatePhoneNumberBySMSCode() {
         /*
-        let user = AVUser()
+        let user = LCUser()
         let username = uuid
         let password = uuid
         let phoneNumber = LCUserTestCase.testablePhoneNumber
@@ -73,19 +73,19 @@ class LCUserTestCase: BaseTestCase {
         user.mobilePhoneNumber = phoneNumber
         XCTAssertTrue(user.signUp(nil))
         expecting { (exp) in
-            AVUser.logInWithUsername(
+            LCUser.logInWithUsername(
                 inBackground: username,
                 password: password)
             { (user, error) in
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(user)
                 XCTAssertNil(error)
-                XCTAssertTrue(user === AVUser.current())
+                XCTAssertTrue(user === LCUser.current())
                 exp.fulfill()
             }
         }
         expecting { (exp) in
-            AVUser.requestVerificationCode(
+            LCUser.requestVerificationCode(
                 forUpdatingPhoneNumber: phoneNumber,
                 options: nil)
             { (succeeded, error) in
@@ -96,7 +96,7 @@ class LCUserTestCase: BaseTestCase {
             }
         }
         expecting { (exp) in
-            AVUser.verifyCode(
+            LCUser.verifyCode(
                 toUpdatePhoneNumber: phoneNumber,
                 code: LCUserTestCase.testableSMSCode)
             { (succeeded, error) in
@@ -106,7 +106,7 @@ class LCUserTestCase: BaseTestCase {
                 exp.fulfill()
             }
         }
-        AVUser.logOut()
+        LCUser.logOut()
         */
     }
 }

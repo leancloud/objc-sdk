@@ -5,14 +5,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVUser.h"
-#import "AVConstants.h"
+#import "LCUser.h"
+#import "LCConstants.h"
 #import "AVAnonymousUtils.h"
-#import "AVUtils.h"
-#import "AVObjectUtils.h"
-#import "AVPaasClient.h"
-#import "AVUser.h"
-#import "AVUser_Internal.h"
+#import "LCUtils.h"
+#import "LCObjectUtils.h"
+#import "LCPaasClient.h"
+#import "LCUser.h"
+#import "LCUser_Internal.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-implementations"
@@ -22,7 +22,7 @@
 {
     NSString *anonymousId = [[NSUserDefaults standardUserDefaults] objectForKey:AnonymousIdKey];
     if (!anonymousId) {
-        anonymousId = [AVUtils generateCompactUUID];
+        anonymousId = [LCUtils generateCompactUUID];
         [[NSUserDefaults standardUserDefaults] setObject:anonymousId forKey:AnonymousIdKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
@@ -30,26 +30,26 @@
     return data;
 }
 
-+ (void)logInWithBlock:(AVUserResultBlock)block
++ (void)logInWithBlock:(LCUserResultBlock)block
 {
     NSDictionary * parameters = [AVAnonymousUtils anonymousAuthData];
-    [[AVPaasClient sharedInstance] postObject:@"users" withParameters:parameters block:^(id object, NSError *error) {
-        AVUser * user = nil;
+    [[LCPaasClient sharedInstance] postObject:@"users" withParameters:parameters block:^(id object, NSError *error) {
+        LCUser * user = nil;
         if (error == nil)
         {
             if (![object objectForKey:@"authData"]) {
                 object = [NSMutableDictionary dictionaryWithDictionary:object];
                 [object addEntriesFromDictionary:parameters];
             }
-            user = [AVUser userOrSubclassUser];
-            [AVObjectUtils copyDictionary:object toObject:user];
-            [AVUser changeCurrentUser:user save:YES];
+            user = [LCUser userOrSubclassUser];
+            [LCObjectUtils copyDictionary:object toObject:user];
+            [LCUser changeCurrentUser:user save:YES];
         }
-        [AVUtils callUserResultBlock:block user:user error:error];
+        [LCUtils callUserResultBlock:block user:user error:error];
     }];
 }
 
-+ (BOOL)isLinkedWithUser:(AVUser *)user
++ (BOOL)isLinkedWithUser:(LCUser *)user
 {
     if ([[user linkedServiceNames] containsObject:@"anonymous"])
     {

@@ -13,7 +13,7 @@ class AVCloud_TestCase: LCTestBase {
     
     func testError() {
         let exp = self.expectation(description: "error")
-        AVCloud.callFunction(inBackground: "error", withParameters: nil) { (result, error) in
+        LCCloud.callFunction(inBackground: "error", withParameters: nil) { (result, error) in
             XCTAssertNil(result)
             XCTAssertNotNil(error)
             exp.fulfill()

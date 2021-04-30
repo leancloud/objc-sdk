@@ -9,7 +9,7 @@
 #import "LCIMConversationCache.h"
 #import "LCIMConversationCacheStore.h"
 #import "LCIMConversationQueryCacheStore.h"
-#import "AVIMConversation.h"
+#import "LCIMConversation.h"
 
 @interface LCIMConversationCache ()
 
@@ -31,14 +31,14 @@
     return self;
 }
 
-- (AVIMConversation *)conversationForId:(NSString *)conversationId {
+- (LCIMConversation *)conversationForId:(NSString *)conversationId {
     return [self.cacheStore conversationForId:conversationId];
 }
 
 - (NSArray *)conversationIdsFromConversations:(NSArray *)conversations {
     NSMutableArray *conversationIds = [NSMutableArray array];
 
-    for (AVIMConversation *conversation in conversations) {
+    for (LCIMConversation *conversation in conversations) {
         if (conversation.conversationId) {
             [conversationIds addObject:conversation.conversationId];
         }
@@ -47,7 +47,7 @@
     return conversationIds;
 }
 
-- (void)cacheConversations:(NSArray *)conversations maxAge:(NSTimeInterval)maxAge forCommand:(AVIMConversationOutCommand *)command {
+- (void)cacheConversations:(NSArray *)conversations maxAge:(NSTimeInterval)maxAge forCommand:(LCIMConversationOutCommand *)command {
     NSArray *conversationIds = [self conversationIdsFromConversations:conversations];
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -56,7 +56,7 @@
     });
 }
 
-- (NSArray *)conversationsForCommand:(AVIMConversationOutCommand *)command {
+- (NSArray *)conversationsForCommand:(LCIMConversationOutCommand *)command {
     NSArray *result = nil;
     NSArray *conversationIds = [self.queryCacheStore conversationIdsForCommand:command];
 

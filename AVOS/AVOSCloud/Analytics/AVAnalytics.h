@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVConstants.h"
+#import "LCConstants.h"
 
 
 /**
@@ -48,7 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Start analytics.
  */
-+ (void)start AV_DEPRECATED("Analytics is deprecated.");
++ (void)start LC_DEPRECATED("Analytics is deprecated.");
 
 /**
  *  设置渠道名称, 如果不设置, 默认是 `App Store`
@@ -79,14 +79,14 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param value 设置成 YES,就可以开启CrashReport收集.
  */
-+ (void)setCrashReportEnabled:(BOOL)value AV_DEPRECATED("使用 AVOSCloudCrashReporting.framework");
++ (void)setCrashReportEnabled:(BOOL)value LC_DEPRECATED("使用 AVOSCloudCrashReporting.framework");
 
 /** 开启CrashReport收集, 默认是关闭状态.
  
  @param value 设置成 YES,就可以开启CrashReport收集.
  @param completion 设置完成后回调.
  */
-+ (void)setCrashReportEnabled:(BOOL)value completion:(nullable void (^)(void))completion AV_DEPRECATED("使用 AVOSCloudCrashReporting.framework");
++ (void)setCrashReportEnabled:(BOOL)value completion:(nullable void (^)(void))completion LC_DEPRECATED("使用 AVOSCloudCrashReporting.framework");
 
 /** 开启CrashReport收集, 并且尝试忽略异常.
  @discuss 当异常被捕获后,如果开启了CrashReport功能,异常会被自动捕获,如果开启ignore,会尝试阻止app崩溃, 如果阻止成功,则会提示(UIAlertView)用户程序可能不稳定,请用户选择继续运行还是退出.
@@ -96,7 +96,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param ignore 设置成YES,可以尝试忽略异常.
  */
 
-+ (void)setCrashReportEnabled:(BOOL)value andIgnore:(BOOL)ignore AV_DEPRECATED("使用 AVOSCloudCrashReporting.framework");
++ (void)setCrashReportEnabled:(BOOL)value andIgnore:(BOOL)ignore LC_DEPRECATED("使用 AVOSCloudCrashReporting.framework");
 
 
 /** 开启CrashReport收集, 并且尝试忽略异常.
@@ -108,7 +108,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param alertQuit `退出`按钮的文字
  @param alertContinue `继续`按钮的文字
  */
-+ (void)setCrashReportEnabled:(BOOL)value withIgnoreAlertTitle:(nullable NSString*)alertTitle andMessage:(nullable NSString*)alertMsg andQuitTitle:(nullable NSString*)alertQuit andContinueTitle:(nullable NSString*)alertContinue AV_DEPRECATED("使用 AVOSCloudCrashReporting.framework");
++ (void)setCrashReportEnabled:(BOOL)value withIgnoreAlertTitle:(nullable NSString*)alertTitle andMessage:(nullable NSString*)alertMsg andQuitTitle:(nullable NSString*)alertQuit andContinueTitle:(nullable NSString*)alertContinue LC_DEPRECATED("使用 AVOSCloudCrashReporting.framework");
 
 
 /** 设置是否打印sdk的log信息,默认不开启
@@ -282,7 +282,7 @@ NS_ASSUME_NONNULL_BEGIN
  请在[AVAnalytics start]方法之后调用;
  @param block 自定义的接收block，您的配置参数会通过block传给您的应用.
  */
-+ (void)updateOnlineConfigWithBlock:(nullable AVDictionaryResultBlock)block;
++ (void)updateOnlineConfigWithBlock:(nullable LCDictionaryResultBlock)block;
 
 
 /** 从[NSUserDefaults standardUserDefaults]获取缓存的在线参数的数值

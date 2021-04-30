@@ -8,13 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-@class AVIMClient;
-@class AVIMConversation;
-@class AVIMConversationOutCommand;
+@class LCIMClient;
+@class LCIMConversation;
+@class LCIMConversationOutCommand;
 
 @interface LCIMConversationCache : NSObject
 
-@property (nonatomic, weak) AVIMClient *client;
+@property (nonatomic, weak) LCIMClient *client;
 @property (nonatomic, copy, readonly) NSString *clientId;
 
 - (instancetype)initWithClientId:(NSString *)clientId;
@@ -24,7 +24,7 @@
  * @param conversationId Conversation ID.
  * @return A conversation or nil if conversation not found or expired.
  */
-- (AVIMConversation *)conversationForId:(NSString *)conversationId;
+- (LCIMConversation *)conversationForId:(NSString *)conversationId;
 
 /*!
  * Cache conversations for query command with max age.
@@ -32,14 +32,14 @@
  * @param maxAge Max cache age, expiration interval.
  * @param command Conversation query command.
  */
-- (void)cacheConversations:(NSArray *)conversations maxAge:(NSTimeInterval)maxAge forCommand:(AVIMConversationOutCommand *)command;
+- (void)cacheConversations:(NSArray *)conversations maxAge:(NSTimeInterval)maxAge forCommand:(LCIMConversationOutCommand *)command;
 
 /*!
  * Get alive cached conversations for command.
  * @param command Conversation query command.
  * @return All alive (not expired) cached conversations or nil if cache not found.
  */
-- (NSArray *)conversationsForCommand:(AVIMConversationOutCommand *)command;
+- (NSArray *)conversationsForCommand:(LCIMConversationOutCommand *)command;
 
 /*!
  * Remove conversations from cache.

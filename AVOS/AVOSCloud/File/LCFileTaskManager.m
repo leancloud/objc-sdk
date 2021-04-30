@@ -7,11 +7,11 @@
 //
 
 #import "LCFileTaskManager.h"
-#import "AVErrorUtils.h"
-#import "AVUtils.h"
-#import "AVFile_Internal.h"
-#import "AVPaasClient.h"
-#import "AVObjectUtils.h"
+#import "LCErrorUtils.h"
+#import "LCUtils.h"
+#import "LCFile_Internal.h"
+#import "LCPaasClient.h"
+#import "LCObjectUtils.h"
 #import "LCNetworking.h"
 
 static NSString * const kLCFileTokensProvider_qiniu = @"qiniu";

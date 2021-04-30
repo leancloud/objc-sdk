@@ -10,7 +10,7 @@
 #import "LCKeyValueSQL.h"
 #import "LCDatabase.h"
 #import "LCDatabaseQueue.h"
-#import "AVPersistenceUtils.h"
+#import "LCPersistenceUtils.h"
 
 #import <libkern/OSAtomic.h>
 
@@ -59,7 +59,7 @@ static OSSpinLock dbQueueLock = OS_SPINLOCK_INIT;
     static dispatch_once_t onceToken;
 
     dispatch_once(&onceToken, ^{
-        instance = [[self alloc] initWithDatabasePath:[AVPersistenceUtils userDefaultsPath]];
+        instance = [[self alloc] initWithDatabasePath:[LCPersistenceUtils userDefaultsPath]];
     });
 
     return instance;
@@ -135,7 +135,7 @@ static OSSpinLock dbQueueLock = OS_SPINLOCK_INIT;
 }
 
 - (NSString *)dbPath {
-    return _dbPath ?: [AVPersistenceUtils keyValueDatabasePath];
+    return _dbPath ?: [LCPersistenceUtils keyValueDatabasePath];
 }
 
 - (NSString *)tableName {

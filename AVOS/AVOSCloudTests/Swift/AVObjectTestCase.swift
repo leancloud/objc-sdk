@@ -1,5 +1,5 @@
 //
-//  AVObject_TestCase.swift
+//  LCObject_TestCase.swift
 //  AVOS
 //
 //  Created by zapcannon87 on 27/03/2018.
@@ -8,7 +8,7 @@
 
 import XCTest
 
-class AVObject_TestCase: LCTestBase {
+class LCObject_TestCase: LCTestBase {
     
     func testc_save_associate_file_object() {
         
@@ -24,20 +24,20 @@ class AVObject_TestCase: LCTestBase {
             
             let data: Data = try! Data.init(contentsOf: url)
             
-            let file: AVFile = AVFile(data: data)
+            let file: LCFile = LCFile(data: data)
             
-            let avObject: AVObject = AVObject(className: "Todo")
+            let lcObjectt: LCObject = LCObject(className: "Todo")
             
-            avObject.setObject(file, forKey: "image")
+            lcObjectt.setObject(file, forKey: "image")
             
             semaphore.increment()
             
-            avObject.saveInBackground({ (succeeded: Bool, error: Error?) in
+            lcObjectt.saveInBackground({ (succeeded: Bool, error: Error?) in
                 
                 semaphore.decrement()
                 
                 XCTAssertTrue(Thread.isMainThread)
-                objectID = avObject.objectId
+                objectID = lcObjectt.objectId
                 XCTAssertTrue(succeeded)
                 XCTAssertNil(error)
             })
@@ -48,14 +48,14 @@ class AVObject_TestCase: LCTestBase {
         })
         
         if let objectID = objectID {
-            let object = AVObject(className: "Todo", objectId: objectID)
+            let object = LCObject(className: "Todo", objectId: objectID)
             XCTAssertTrue(object.fetch())
         }
     }
 
     func testc_fetch_all_objects() {
-        let object1 = AVObject()
-        let object2 = AVObject()
+        let object1 = LCObject()
+        let object2 = LCObject()
 
         object1["firstName"] = "Bar"
         object1["lastName"]  = "Foo"
@@ -63,18 +63,18 @@ class AVObject_TestCase: LCTestBase {
         object2["firstName"] = "Baz"
         object2["lastName"]  = "Foo"
 
-        XCTAssertTrue(AVObject.saveAll([object1, object2]))
+        XCTAssertTrue(LCObject.saveAll([object1, object2]))
 
         RunLoopSemaphore.wait(timeout: 60, async: { semaphore in
             semaphore.increment()
 
             let objects = [
-                AVObject(objectId: object1.objectId!),
-                AVObject(objectId: object2.objectId!)
+                LCObject(objectId: object1.objectId!),
+                LCObject(objectId: object2.objectId!)
             ]
 
-            AVObject.fetchAll(inBackground: objects) { (objects, error) in
-                guard let objects = objects as? [AVObject], objects.count == 2 else {
+            LCObject.fetchAll(inBackground: objects) { (objects, error) in
+                guard let objects = objects as? [LCObject], objects.count == 2 else {
                     XCTFail()
                     return
                 }
@@ -96,8 +96,8 @@ class AVObject_TestCase: LCTestBase {
     }
     
     func testDate() {
-        let className = "AVObjectTestCase"
-        let object = AVObject(className: className)
+        let className = "LCObjectTestCase"
+        let object = LCObject(className: className)
         object.setObject(Date(), forKey: "date")
         let exp1 = expectation(description: "save date")
         object.saveInBackground { (success, error) in
@@ -109,7 +109,7 @@ class AVObject_TestCase: LCTestBase {
         }
         wait(for: [exp1], timeout: 60)
         
-        let fetchObject = AVObject(className: className, objectId: object.objectId!)
+        let fetchObject = LCObject(className: className, objectId: object.objectId!)
         let exp2 = expectation(description: "fetch object")
         fetchObject.fetchInBackground { (object, error) in
             XCTAssertNotNil(object)

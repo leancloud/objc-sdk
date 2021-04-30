@@ -8,7 +8,7 @@
 
 #import "LCIMConversationQueryCacheStore.h"
 #import "LCIMCacheStore.h"
-#import "AVIMConversationOutCommand.h"
+#import "LCIMConversationOutCommand.h"
 #import "NSDictionary+LCHash.h"
 
 #define LCIM_CONVERSATION_QUERY_TABLE_NAME @"command_query"
@@ -26,21 +26,21 @@
     return self;
 }
 
-- (NSDictionary *)dictionaryForCommand:(AVIMConversationOutCommand *)command {
+- (NSDictionary *)dictionaryForCommand:(LCIMConversationOutCommand *)command {
     NSMutableDictionary *dictionary = [[command dictionary] mutableCopy];
     [dictionary removeObjectForKey:@"i"]; // Remove the serial id for command
 
     return [dictionary copy];
 }
 
-- (void)cacheConversationIds:(NSArray *)conversationIds forCommand:(AVIMConversationOutCommand *)command {
+- (void)cacheConversationIds:(NSArray *)conversationIds forCommand:(LCIMConversationOutCommand *)command {
     NSString *key = [[self dictionaryForCommand:command] lc_SHA1String];
     NSData *data  = [[conversationIds componentsJoinedByString:@","] dataUsingEncoding:NSUTF8StringEncoding];
 
     [self setData:data forKey:key];
 }
 
-- (NSArray *)conversationIdsForCommand:(AVIMConversationOutCommand *)command {
+- (NSArray *)conversationIdsForCommand:(LCIMConversationOutCommand *)command {
     NSArray *result = nil;
 
     NSString *key = [[self dictionaryForCommand:command] lc_SHA1String];
@@ -54,7 +54,7 @@
     return result;
 }
 
-- (void)removeConversationIdsForCommand:(AVIMConversationOutCommand *)command {
+- (void)removeConversationIdsForCommand:(LCIMConversationOutCommand *)command {
     NSString *key = [[self dictionaryForCommand:command] lc_SHA1String];
 
     [self deleteKey:key];

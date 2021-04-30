@@ -92,7 +92,7 @@ class RTMConnectionTestCase: RTMBaseTestCase {
             delegator.didDisconnect = { connection, error in
                 if let error = error as NSError? {
                     XCTAssertEqual(error.domain, kLeanCloudErrorDomain)
-                    XCTAssertEqual(error.code, AVErrorInternalErrorCode.underlyingError.rawValue)
+                    XCTAssertEqual(error.code, LCErrorInternalErrorCode.underlyingError.rawValue)
                 } else {
                     XCTFail()
                 }
@@ -158,7 +158,7 @@ class RTMConnectionTestCase: RTMBaseTestCase {
                             calling: .main,
                             callback: { (_, error) in
                                 XCTAssertTrue(Thread.isMainThread)
-                                XCTAssertEqual((error as NSError?)?.code, AVIMErrorCode.commandTimeout.rawValue)
+                                XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.commandTimeout.rawValue)
                                 exp.fulfill()
                             }),
                         index: NSNumber(1))
@@ -216,7 +216,7 @@ class RTMConnectionTestCase: RTMBaseTestCase {
                 let outCommand = AVIMGenericCommand()
                 outCommand.cmd = .session
                 outCommand.op = .open
-                outCommand.appId = AVApplication.default().identifier
+                outCommand.appId = LCApplication.default().identifier
                 outCommand.peerId = peerID
                 let sessionCommand = AVIMSessionCommand()
                 sessionCommand.ua = USER_AGENT
@@ -328,7 +328,7 @@ class RTMConnectionTestCase: RTMBaseTestCase {
         }
         delegator.reset()
         let getRTMRouterDataTimestamp = { () -> TimeInterval? in
-            let appID = AVApplication.default().identifier
+            let appID = LCApplication.default().identifier
             let RTMRouterData = LCRouter.sharedInstance().rtmRouterMap[appID] as? [String: Any]
             return RTMRouterData?["timestamp"] as? TimeInterval
         }
@@ -389,7 +389,7 @@ class RTMConnectionTestCase: RTMBaseTestCase {
             let outCommand = AVIMGenericCommand()
             outCommand.cmd = .session
             outCommand.op = .open
-            outCommand.appId = AVApplication.default().identifier
+            outCommand.appId = LCApplication.default().identifier
             outCommand.peerId = peerID
             let sessionCommand = AVIMSessionCommand()
             sessionCommand.ua = USER_AGENT
@@ -405,7 +405,7 @@ class RTMConnectionTestCase: RTMBaseTestCase {
             { (inCommand, error) in
                 XCTAssertNil(inCommand)
                 XCTAssertNotNil(error)
-                XCTAssertEqual((error as NSError?)?.code, AVIMErrorCode.commandDataLengthTooLong.rawValue)
+                XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.commandDataLengthTooLong.rawValue)
                 exp.fulfill()
             }
         }

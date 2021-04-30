@@ -34,9 +34,9 @@ typedef NSMutableDictionary<NSString *, LCRTMConnection *> * LCRTMLiveQueryRegis
 @property (nonatomic) LCRTMInstantMessagingRegistry imProtobuf1Registry;
 @property (nonatomic) LCRTMLiveQueryRegistryRegistry liveQueryRegistry;
 
-- (NSInteger)nextConnectingDelayIntervalForApplication:(AVApplication *)application;
+- (NSInteger)nextConnectingDelayIntervalForApplication:(LCApplication *)application;
 
-- (void)resetConnectingDelayIntervalForApplication:(AVApplication *)application;
+- (void)resetConnectingDelayIntervalForApplication:(LCApplication *)application;
 
 @end
 
@@ -121,7 +121,7 @@ typedef NSMutableDictionary<NSString *, LCRTMConnection *> * LCRTMLiveQueryRegis
 @property (nonatomic) dispatch_block_t previousConnectingBlock;
 @property (nonatomic) BOOL useSecondaryServer;
 
-- (instancetype)initWithApplication:(AVApplication *)application
+- (instancetype)initWithApplication:(LCApplication *)application
                            protocol:(LCIMProtocol)protocol
                               error:(NSError * __autoreleasing *)error;
 

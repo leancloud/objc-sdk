@@ -11,8 +11,8 @@
 #if !TARGET_OS_WATCH
 #import "AVAnalyticsUtils.h"
 #endif
-#import "AVPaasClient.h"
-#import "AVUtils.h"
+#import "LCPaasClient.h"
+#import "LCUtils.h"
 #import <libkern/OSAtomic.h>
 
 #define LC_INTERVAL_HALF_AN_HOUR 30 * 60
@@ -137,7 +137,7 @@ static NSInteger LCNetworkStatisticsCacheSize     = 20;
     payloadDic[@"client"] = clientDic;
 #endif
 #endif
-    AVPaasClient *client = [AVPaasClient sharedInstance];
+    LCPaasClient *client = [LCPaasClient sharedInstance];
     NSURLRequest *request = [client requestWithPath:@"always_collect" method:@"POST" headers:nil parameters:payloadDic];
     [client
      performRequest:request
@@ -211,7 +211,7 @@ static NSInteger LCNetworkStatisticsCacheSize     = 20;
 {
     NSAssert(![NSThread isMainThread], @"This method must run in background.");
 
-    AV_WAIT_WITH_ROUTINE_TIL_TRUE(!self.enable, LCNetworkStatisticsCheckInterval, ({
+    LC_WAIT_WITH_ROUTINE_TIL_TRUE(!self.enable, LCNetworkStatisticsCheckInterval, ({
         NSDictionary *statisticsInfo = [[self statisticsInfo] copy];
 
         NSInteger total = [statisticsInfo[@"total"] integerValue];

@@ -12,7 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class LCRTMConnection;
-@class AVApplication;
+@class LCApplication;
 
 typedef NS_ENUM(int32_t, LCRTMService) {
     LCRTMServiceLiveQuery = 1,
@@ -30,12 +30,12 @@ typedef void(^LCRTMConnectionOutCommandCallback)(AVIMGenericCommand * _Nullable 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;
 
-@property (nonatomic, readonly) AVApplication *application;
+@property (nonatomic, readonly) LCApplication *application;
 @property (nonatomic, readonly) LCRTMService service;
 @property (nonatomic, readonly) LCIMProtocol protocol;
 @property (nonatomic, readonly) NSString *peerID;
 
-- (instancetype)initWithApplication:(AVApplication *)application
+- (instancetype)initWithApplication:(LCApplication *)application
                             service:(LCRTMService)service
                            protocol:(LCIMProtocol)protocol
                              peerID:(NSString *)peerID NS_DESIGNATED_INITIALIZER;
@@ -88,7 +88,7 @@ typedef void(^LCRTMConnectionOutCommandCallback)(AVIMGenericCommand * _Nullable 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;
 
-@property (nonatomic, readonly) AVApplication *application;
+@property (nonatomic, readonly) LCApplication *application;
 @property (nonatomic, readonly) LCIMProtocol protocol;
 
 + (void)setConnectingTimeoutInterval:(NSTimeInterval)timeoutInterval;

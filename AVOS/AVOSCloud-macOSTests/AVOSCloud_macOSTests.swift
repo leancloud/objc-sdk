@@ -11,7 +11,7 @@ import XCTest
 class AVOSCloud_macOSTests: LCTestBase {
 
     func testMacOS() {
-        let object = AVObject(className: "Test")
+        let object = LCObject(className: "Test")
         XCTAssertTrue(object.save())
     }
 }

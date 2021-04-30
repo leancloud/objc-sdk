@@ -9,9 +9,9 @@
 #import "LCIMConversationCacheStore.h"
 #import "LCIMConversationCacheStoreSQL.h"
 #import "LCIMMessageCacheStoreSQL.h"
-#import "AVIMClient_Internal.h"
-#import "AVIMConversation.h"
-#import "AVIMConversation_Internal.h"
+#import "LCIMClient_Internal.h"
+#import "LCIMConversation.h"
+#import "LCIMConversation_Internal.h"
 #import "LCDatabaseMigrator.h"
 
 #define LCIM_CONVERSATION_MAX_CACHE_AGE 60 * 60 * 24
@@ -27,7 +27,7 @@
     return sql;
 }
 
-- (NSArray *)insertionRecordForConversation:(AVIMConversation *)conversation expireAt:(NSTimeInterval)expireAt
+- (NSArray *)insertionRecordForConversation:(LCIMConversation *)conversation expireAt:(NSTimeInterval)expireAt
 {
     id conversationId = conversation.conversationId;
     id name = (conversation.name ?: NSNull.null);
@@ -54,7 +54,7 @@
         date ? @(date.timeIntervalSince1970) : NSNull.null;
     });
     id lastMessage = ({
-        AVIMMessage *lastMessage = conversation.lastMessage;
+        LCIMMessage *lastMessage = conversation.lastMessage;
         lastMessage ? [NSKeyedArchiver archivedDataWithRootObject:lastMessage] : NSNull.null;
     });
     id muted = @(conversation.muted);
@@ -76,7 +76,7 @@
 
 - (void)insertConversations:(NSArray *)conversations maxAge:(NSTimeInterval)maxAge {
     NSTimeInterval expireAt = [[NSDate date] timeIntervalSince1970] + maxAge;
-    for (AVIMConversation *conversation in conversations) {
+    for (LCIMConversation *conversation in conversations) {
         if (!conversation.conversationId) continue;
         NSArray *insertionRecord = [self insertionRecordForConversation:conversation expireAt:expireAt];
         LCIM_OPEN_DATABASE(db, ({
@@ -85,7 +85,7 @@
     }
 }
 
-- (void)deleteConversation:(AVIMConversation *)conversation {
+- (void)deleteConversation:(LCIMConversation *)conversation {
     [self deleteConversationForId:conversation.conversationId];
 }
 
@@ -126,8 +126,8 @@
     }));
 }
 
-- (AVIMConversation *)conversationForId:(NSString *)conversationId timestamp:(NSTimeInterval)timestamp {
-    __block AVIMConversation *conversation = nil;
+- (LCIMConversation *)conversationForId:(NSString *)conversationId timestamp:(NSTimeInterval)timestamp {
+    __block LCIMConversation *conversation = nil;
 
     LCIM_OPEN_DATABASE(db, ({
         conversation = [self conversationForId:conversationId database:db timestamp:timestamp];
@@ -136,10 +136,10 @@
     return conversation;
 }
 
-- (AVIMConversation *)conversationForId:(NSString *)conversationId database:(LCDatabase *)database timestamp:(NSTimeInterval)timestamp {
+- (LCIMConversation *)conversationForId:(NSString *)conversationId database:(LCDatabase *)database timestamp:(NSTimeInterval)timestamp {
     if (!conversationId) return nil;
 
-    AVIMConversation *conversation = nil;
+    LCIMConversation *conversation = nil;
 
     NSArray *args = @[conversationId];
     LCResultSet *result = [database executeQuery:LCIM_SQL_SELECT_CONVERSATION withArgumentsInArray:args];
@@ -159,7 +159,7 @@
     return conversation;
 }
 
-- (AVIMConversation *)conversationForId:(NSString *)conversationId {
+- (LCIMConversation *)conversationForId:(NSString *)conversationId {
     NSTimeInterval timestamp = [[NSDate date] timeIntervalSince1970];
 
     return [self conversationForId:conversationId timestamp:timestamp];
@@ -169,14 +169,14 @@
     return timeInterval ? [NSDate dateWithTimeIntervalSince1970:timeInterval] : nil;
 }
 
-- (AVIMConversation *)conversationWithResult:(LCResultSet *)result
+- (LCIMConversation *)conversationWithResult:(LCResultSet *)result
 {
-    AVIMConversation *conversation = ({
+    LCIMConversation *conversation = ({
         NSDictionary *rawDataDic = ({
             NSData *data = [result dataForColumn:LCIM_FIELD_RAW_DATA];
             data ? [NSKeyedUnarchiver unarchiveObjectWithData:data] : nil;
         });
-        AVIMConversation *conv = [AVIMConversation conversationWithRawJSONData:rawDataDic.mutableCopy client:self.client];
+        LCIMConversation *conv = [LCIMConversation conversationWithRawJSONData:rawDataDic.mutableCopy client:self.client];
         conv;
     });
     return conversation;
@@ -190,7 +190,7 @@
 
     LCIM_OPEN_DATABASE(db, ({
         for (NSString *conversationId in conversationIds) {
-            AVIMConversation *conversation = [self conversationForId:conversationId database:db timestamp:timestamp];
+            LCIMConversation *conversation = [self conversationForId:conversationId database:db timestamp:timestamp];
 
             if (conversation) {
                 [conversations addObject:conversation];

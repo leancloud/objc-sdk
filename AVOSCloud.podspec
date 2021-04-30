@@ -23,41 +23,41 @@ Pod::Spec.new do |s|
     'AVOS/AVOSCloud/**/*.{h,m}'
 
   s.public_header_files =
-    'AVOS/AVOSCloud/Captcha/AVCaptcha.h',
-    'AVOS/AVOSCloud/Utils/AVDynamicObject.h',
-    'AVOS/AVOSCloud/SMS/AVSMS.h',
-    'AVOS/AVOSCloud/ACL/AVACL.h',
-    'AVOS/AVOSCloud/ACL/AVRole.h',
-    'AVOS/AVOSCloud/Object/AVSaveOption.h',
+    'AVOS/AVOSCloud/Captcha/LCCaptcha.h',
+    'AVOS/AVOSCloud/Utils/LCDynamicObject.h',
+    'AVOS/AVOSCloud/SMS/LCSMS.h',
+    'AVOS/AVOSCloud/ACL/LCACL.h',
+    'AVOS/AVOSCloud/ACL/LCRole.h',
+    'AVOS/AVOSCloud/Object/LCSaveOption.h',
     'AVOS/AVOSCloud/Analytics/AVAnalytics.h',
-    'AVOS/AVOSCloud/AVConstants.h',
+    'AVOS/AVOSCloud/LCConstants.h',
     'AVOS/AVOSCloud/AVOSCloud.h',
-    'AVOS/AVOSCloud/CloudCode/AVCloud.h',
-    'AVOS/AVOSCloud/File/AVFile.h',
-    'AVOS/AVOSCloud/Geo/AVGeoPoint.h',
-    'AVOS/AVOSCloud/Object/AVObject+Subclass.h',
-    'AVOS/AVOSCloud/Object/AVObject.h',
-    'AVOS/AVOSCloud/Object/AVRelation.h',
-    'AVOS/AVOSCloud/Object/AVSubclassing.h',
-    'AVOS/AVOSCloud/Push/AVInstallation.h',
-    'AVOS/AVOSCloud/File/AVFileQuery.h',
-    'AVOS/AVOSCloud/Push/AVPush.h',
-    'AVOS/AVOSCloud/Query/AVCloudQueryResult.h',
-    'AVOS/AVOSCloud/Query/AVQuery.h',
-    'AVOS/AVOSCloud/Search/AVSearchQuery.h',
-    'AVOS/AVOSCloud/Search/AVSearchSortBuilder.h',
-    'AVOS/AVOSCloud/Status/AVStatus.h',
+    'AVOS/AVOSCloud/CloudCode/LCCloud.h',
+    'AVOS/AVOSCloud/File/LCFile.h',
+    'AVOS/AVOSCloud/Geo/LCGeoPoint.h',
+    'AVOS/AVOSCloud/Object/LCObject+Subclass.h',
+    'AVOS/AVOSCloud/Object/LCObject.h',
+    'AVOS/AVOSCloud/Object/LCRelation.h',
+    'AVOS/AVOSCloud/Object/LCSubclassing.h',
+    'AVOS/AVOSCloud/Push/LCInstallation.h',
+    'AVOS/AVOSCloud/File/LCFileQuery.h',
+    'AVOS/AVOSCloud/Push/LCPush.h',
+    'AVOS/AVOSCloud/Query/LCCloudQueryResult.h',
+    'AVOS/AVOSCloud/Query/LCQuery.h',
+    'AVOS/AVOSCloud/Search/LCSearchQuery.h',
+    'AVOS/AVOSCloud/Search/LCSearchSortBuilder.h',
+    'AVOS/AVOSCloud/Status/LCStatus.h',
     'AVOS/AVOSCloud/User/AVAnonymousUtils.h',
-    'AVOS/AVOSCloud/User/AVUser.h',
-    'AVOS/AVOSCloud/Utils/AVLogger.h',
+    'AVOS/AVOSCloud/User/LCUser.h',
+    'AVOS/AVOSCloud/Utils/LCLogger.h',
     'AVOS/AVOSCloud/Router/LCRouter.h',
-    'AVOS/AVOSCloud/AVAvailability.h'
+    'AVOS/AVOSCloud/LCAvailability.h'
 
   s.watchos.exclude_files =
     'AVOS/AVOSCloud/Analytics/*.{h,m}'
 
   s.resources =
-    'AVOS/AVOSCloud/AVOSCloud_Art.inc'
+    'AVOS/AVOSCloud/LeanCloud_Art.inc'
     
   s.library =
     'sqlite3'

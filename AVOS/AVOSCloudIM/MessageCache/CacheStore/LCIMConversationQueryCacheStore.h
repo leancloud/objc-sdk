@@ -8,7 +8,7 @@
 
 #import "LCKeyValueStore.h"
 
-@class AVIMConversationOutCommand;
+@class LCIMConversationOutCommand;
 
 @interface LCIMConversationQueryCacheStore : LCKeyValueStore
 
@@ -16,15 +16,15 @@
 
 - (instancetype)initWithClientId:(NSString *)clientId;
 
-- (void)cacheConversationIds:(NSArray *)conversationIds forCommand:(AVIMConversationOutCommand *)command;
+- (void)cacheConversationIds:(NSArray *)conversationIds forCommand:(LCIMConversationOutCommand *)command;
 
-- (void)removeConversationIdsForCommand:(AVIMConversationOutCommand *)command;
+- (void)removeConversationIdsForCommand:(LCIMConversationOutCommand *)command;
 
 /*!
  * Get conversation id list for a given command.
- * @param command AVIMConversationOutCommand object.
+ * @param command LCIMConversationOutCommand object.
  * @return A conversation id list or nil if cache not found.
  */
-- (NSArray *)conversationIdsForCommand:(AVIMConversationOutCommand *)command;
+- (NSArray *)conversationIdsForCommand:(LCIMConversationOutCommand *)command;
 
 @end
