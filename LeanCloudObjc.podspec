@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'LeanCloudObjc'
-  s.version  = '0.0.1-alpha.1'
+  s.version  = '0.0.1-alpha.2'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud Objective-C SDK'
   s.authors  = 'LeanCloud'
