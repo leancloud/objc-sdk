@@ -18,7 +18,6 @@
 #import "LCPersistenceUtils.h"
 #import "LCScheduler.h"
 #import "LCObjectUtils.h"
-#import "LCNetworkStatistics.h"
 #import "LCRouter_Internal.h"
 #import "LCConstants.h"
 
@@ -632,20 +631,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             if (failureBlock) {
                 failureBlock(HTTPResponse, responseObject, callbackError);
             }
-            
-            // Doing network statistics
-            NSInteger statusCode = HTTPResponse.statusCode;
-            if ([self shouldStatisticsForPath:path statusCode:statusCode]) {
-                LCNetworkStatistics *statistician = [LCNetworkStatistics sharedInstance];
-                
-                if (error.code == NSURLErrorTimedOut) {
-                    [statistician addIncrementalAttribute:1 forKey:@"timeout"];
-                } else {
-                    [statistician addIncrementalAttribute:1 forKey:[NSString stringWithFormat:@"%ld", (long)statusCode]];
-                }
-                
-                [statistician addIncrementalAttribute:1 forKey:@"total"];
-            }
         } else {
             
             NSTimeInterval costTime = -([operationEnqueueDate timeIntervalSinceNow] * 1000);
@@ -653,19 +638,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
             
             if (successBlock) {
                 successBlock(HTTPResponse, responseObject);
-            }
-            
-            // Doing network statistics
-            NSInteger statusCode = HTTPResponse.statusCode;
-            if ([self shouldStatisticsForPath:path statusCode:statusCode]) {
-                LCNetworkStatistics *statistician = [LCNetworkStatistics sharedInstance];
-                
-                if ((NSInteger)(statusCode / 100) == 2) {
-                    [statistician addAverageAttribute:costTime forKey:@"avg"];
-                }
-                
-                [statistician addIncrementalAttribute:1 forKey:[NSString stringWithFormat:@"%ld", (long)statusCode]];
-                [statistician addIncrementalAttribute:1 forKey:@"total"];
             }
         }
         

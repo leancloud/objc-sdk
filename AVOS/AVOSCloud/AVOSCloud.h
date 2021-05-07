@@ -42,7 +42,6 @@
 
 // User
 #import "LCUser.h"
-#import "AVAnonymousUtils.h"
 
 // CloudCode
 #import "LCCloud.h"
@@ -61,11 +60,6 @@
 
 // Router
 #import "LCRouter.h"
-
-#if !TARGET_OS_WATCH
-// Analytics
-#import "AVAnalytics.h"
-#endif
 
 typedef enum : NSUInteger {
     kAVVerboseShow,
@@ -260,8 +254,6 @@ NS_ASSUME_NONNULL_BEGIN
 // MARK: Deprecated
 
 @interface AVOSCloud (AVDeprecated)
-
-+ (void)startNetworkStatistics __deprecated;
 
 typedef NS_ENUM(NSInteger, AVStorageType) {
     AVStorageTypeQiniu = 0,

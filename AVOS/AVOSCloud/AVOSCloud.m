@@ -11,14 +11,8 @@
 #import "LCScheduler.h"
 #import "LCPersistenceUtils.h"
 
-#if !TARGET_OS_WATCH
-#import "AVAnalytics_Internal.h"
-#import "AVAnalyticsUtils.h"
-#endif
-
 #import "LCUtils.h"
 #include "LeanCloud_Art.inc"
-#import "LCNetworkStatistics.h"
 #import "LCObjectUtils.h"
 
 #import "LCRouter_Internal.h"
@@ -34,21 +28,6 @@ static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
 
 + (void)setVerbosePolicy:(AVVerbosePolicy)verbosePolicy {
     gVerbosePolicy = verbosePolicy;
-}
-
-+ (void)logApplicationInfo
-{
-    const char *s = (const char *)LeanCloud_Art_inc;
-    printf("%s\n", s);
-    printf("appid: %s\n", [[self getApplicationId] UTF8String]);
-#if !TARGET_OS_WATCH
-    NSDictionary *dict = [AVAnalyticsUtils deviceInfo];
-    for (NSString *key in dict) {
-        id value = [dict objectForKey:key];
-        printf("%s: %s\n", [key UTF8String], [[NSString stringWithFormat:@"%@", value] UTF8String]);
-    }
-#endif
-    printf("----------------------------------------------------------\n");
 }
 
 + (void)initializePaasClient
@@ -86,10 +65,6 @@ static AVVerbosePolicy gVerbosePolicy = kAVVerboseAuto;
                                                       key:clientKey];
     
     [self initializePaasClient];
-    
-    if (gVerbosePolicy == kAVVerboseShow) {
-        [self logApplicationInfo];
-    }
 }
 
 + (NSString *)getApplicationId {
@@ -268,10 +243,6 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
             LCLoggerInfo(LCLoggerDomainDefault, @"default installation save success");
         }
     }];
-}
-
-+ (void)startNetworkStatistics {
-    [[LCNetworkStatistics sharedInstance] start];
 }
 
 + (void)setStorageType:(AVStorageType)storageType {}

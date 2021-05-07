@@ -33,7 +33,6 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloud/ACL/LCACL.h',
       'AVOS/AVOSCloud/ACL/LCRole.h',
       'AVOS/AVOSCloud/Object/LCSaveOption.h',
-      'AVOS/AVOSCloud/Analytics/AVAnalytics.h',
       'AVOS/AVOSCloud/LCConstants.h',
       'AVOS/AVOSCloud/AVOSCloud.h',
       'AVOS/AVOSCloud/CloudCode/LCCloud.h',
@@ -51,14 +50,10 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloud/Search/LCSearchQuery.h',
       'AVOS/AVOSCloud/Search/LCSearchSortBuilder.h',
       'AVOS/AVOSCloud/Status/LCStatus.h',
-      'AVOS/AVOSCloud/User/AVAnonymousUtils.h',
       'AVOS/AVOSCloud/User/LCUser.h',
       'AVOS/AVOSCloud/Utils/LCLogger.h',
       'AVOS/AVOSCloud/Router/LCRouter.h',
       'AVOS/AVOSCloud/LCAvailability.h'
-
-    ss.watchos.exclude_files =
-      'AVOS/AVOSCloud/Analytics/*.{h,m}'
 
     ss.resources =
       'AVOS/AVOSCloud/LeanCloud_Art.inc'

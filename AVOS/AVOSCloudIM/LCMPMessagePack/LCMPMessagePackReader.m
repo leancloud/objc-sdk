@@ -6,20 +6,19 @@
 //  Copyright (c) 2014 Gabriel Handford. All rights reserved.
 //
 
-#import "AVMPMessagePackReader.h"
+#import "LCMPMessagePackReader.h"
 
 #include "avmp.h"
-#import "AVMPDefines.h"
 
-#import "AVMPOrderedDictionary.h"
+#import "LCMPOrderedDictionary.h"
 
-@interface AVMPMessagePackReader ()
+@interface LCMPMessagePackReader ()
 @property NSData *data;
 @property size_t index;
-@property AVMPMessagePackReaderOptions options;
+@property LCMPMessagePackReaderOptions options;
 @end
 
-@implementation AVMPMessagePackReader
+@implementation LCMPMessagePackReader
 
 - (instancetype)initWithData:(NSData *)data {
   if ((self = [super init])) {
@@ -28,7 +27,7 @@
   return self;
 }
 
-- (instancetype)initWithData:(NSData *)data options:(AVMPMessagePackReaderOptions)options {
+- (instancetype)initWithData:(NSData *)data options:(LCMPMessagePackReaderOptions)options {
   if ((self = [self initWithData:data])) {
     _options = options;
   }
@@ -92,7 +91,6 @@
       if (!str) {
         // Invalid string encoding
         // Other languages have a raw byte string but not Objective-C
-        AVMPErr(@"Invalid string encoding (type=%@), using str instead of bin? We'll have to return an NSData. (%@)", @(obj.type), data);
         return data;
         //return [NSNull null];
       }
@@ -145,8 +143,8 @@
   NSUInteger capacity = length < 1000 ? length : 1000;
 
   id dict = nil;
-  if ((_options & AVMPMessagePackReaderOptionsUseOrderedDictionary) == AVMPMessagePackReaderOptionsUseOrderedDictionary) {
-    dict = [[AVMPOrderedDictionary alloc] initWithCapacity:capacity];
+  if ((_options & LCMPMessagePackReaderOptionsUseOrderedDictionary) == LCMPMessagePackReaderOptionsUseOrderedDictionary) {
+    dict = [[LCMPOrderedDictionary alloc] initWithCapacity:capacity];
   } else {
     dict = [NSMutableDictionary dictionaryWithCapacity:capacity];
   }
@@ -184,7 +182,7 @@
 }
 
 static bool mp_reader(avmp_ctx_t *ctx, void *data, size_t limit) {
-  AVMPMessagePackReader *mp = (__bridge AVMPMessagePackReader *)ctx->buf;
+  LCMPMessagePackReader *mp = (__bridge LCMPMessagePackReader *)ctx->buf;
   return [mp read:data limit:limit];
 }
 
@@ -205,8 +203,8 @@ static size_t mp_writer(avmp_ctx_t *ctx, const void *data, size_t count) {
   return [self readData:data options:0 error:error];
 }
 
-+ (id)readData:(NSData *)data options:(AVMPMessagePackReaderOptions)options error:(NSError * __autoreleasing *)error {
-  AVMPMessagePackReader *messagePackReader = [[AVMPMessagePackReader alloc] initWithData:data options:options];
++ (id)readData:(NSData *)data options:(LCMPMessagePackReaderOptions)options error:(NSError * __autoreleasing *)error {
+  LCMPMessagePackReader *messagePackReader = [[LCMPMessagePackReader alloc] initWithData:data options:options];
   id obj = [messagePackReader readObject:error];
   
   if (!obj) {

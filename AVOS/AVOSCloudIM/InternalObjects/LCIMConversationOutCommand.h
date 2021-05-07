@@ -8,7 +8,8 @@
 
 #import "LCIMSignature.h"
 #import "LCIMDynamicObject.h"
-#import "AVIMCommandCommon.h"
+#import "MessagesProtoOrig.pbobjc.h"
+#import "AVIMGenericCommand+AVIMMessagesAdditions.h"
 #import "LCIMConversationQuery.h"
 
 @interface LCIMConversationOutCommand : LCIMDynamicObject
@@ -20,7 +21,7 @@
 @property (nonatomic, copy) NSString *reason;
 @property (nonatomic, copy) NSString *peerId;
 @property (nonatomic, assign) BOOL needResponse;
-@property (nonatomic, copy) AVIMCommandResultBlock callback;
+@property (nonatomic, copy) LCIMCommandResultBlock callback;
 
 @property(nonatomic, strong) NSString *op;
 @property(nonatomic, strong) NSString *cid;

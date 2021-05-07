@@ -7,7 +7,7 @@
 //
 
 #import "LCIMDynamicObject.h"
-#import "AVMPMessagePack.h"
+#import "LCMPMessagePack.h"
 
 @implementation LCIMDynamicObject {
     NSMutableDictionary<NSString *, id> *_localData;
@@ -67,7 +67,7 @@
     if (!data) {
         return nil;
     }
-    NSDictionary *dic = [AVMPMessagePackReader readData:data options:0 error:nil];
+    NSDictionary *dic = [LCMPMessagePackReader readData:data options:0 error:nil];
     return ([dic isKindOfClass:[NSDictionary class]]
             ? [self initWithDictionary:dic]
             : nil);
@@ -173,7 +173,7 @@
 - (NSData *)messagePack
 {
     NSDictionary *dic = [self rawDictionary];
-    return [AVMPMessagePackWriter writeObject:dic options:0 error:nil];
+    return [LCMPMessagePackWriter writeObject:dic options:0 error:nil];
 }
 
 @end

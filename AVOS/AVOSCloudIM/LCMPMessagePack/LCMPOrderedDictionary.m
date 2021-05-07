@@ -1,21 +1,21 @@
 //
-//  AVMPOrderedDictionary.m
-//  AVMPMessagePack
+//  LCMPOrderedDictionary.m
+//  LCMPMessagePack
 //
 //  Created by Gabriel on 7/8/14.
 //  Copyright (c) 2014 Gabriel Handford. All rights reserved.
 //
 
-#import "AVMPOrderedDictionary.h"
+#import "LCMPOrderedDictionary.h"
 
-#import "AVMPMessagePackWriter.h"
+#import "LCMPMessagePackWriter.h"
 
-@interface AVMPOrderedDictionary ()
+@interface LCMPOrderedDictionary ()
 @property NSMutableArray *array;
 @property NSMutableDictionary *dictionary;
 @end
 
-@implementation AVMPOrderedDictionary
+@implementation LCMPOrderedDictionary
 
 - (instancetype)init {
   return [self initWithCapacity:10];
@@ -41,7 +41,7 @@
 }
 
 - (id)mutableCopyWithZone:(NSZone *)zone {
-  AVMPOrderedDictionary *mutableCopy = [[AVMPOrderedDictionary allocWithZone:zone] init];
+  LCMPOrderedDictionary *mutableCopy = [[LCMPOrderedDictionary allocWithZone:zone] init];
   mutableCopy.array = [_array mutableCopy];
   mutableCopy.dictionary = [_dictionary mutableCopy];
   return mutableCopy;
@@ -144,7 +144,7 @@
 }
 
 - (NSData *)avmp_messagePack {
-  return [AVMPMessagePackWriter writeObject:self error:nil];
+  return [LCMPMessagePackWriter writeObject:self error:nil];
 }
 
 - (NSString *)description {
@@ -158,8 +158,8 @@
 }
 
 - (BOOL)isEqual:(id)object {
-  if ([object isKindOfClass:[AVMPOrderedDictionary class]]) {
-    AVMPOrderedDictionary *dict = (AVMPOrderedDictionary *)object;
+  if ([object isKindOfClass:[LCMPOrderedDictionary class]]) {
+    LCMPOrderedDictionary *dict = (LCMPOrderedDictionary *)object;
     return [[dict toDictionary] isEqual:_dictionary] && [[dict allKeys] isEqual:[self allKeys]];
   }
   return NO;
