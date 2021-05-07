@@ -1,5 +1,5 @@
 // LCConstants.h
-// Copyright 2013 AVOS, Inc. All rights reserved.
+// Copyright 2013 LeanCloud, Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
 #import "LCAvailability.h"
@@ -45,7 +45,7 @@ FOUNDATION_EXPORT NSString * _Nonnull const kLeanCloudRESTAPIResponseError;
 
 /*! @abstract 1: Internal server error. No information available. */
 extern NSInteger const kLCErrorInternalServer;
-/*! @abstract 100: The connection to the AVOS servers failed. */
+/*! @abstract 100: The connection to the LeanCloud servers failed. */
 extern NSInteger const kLCErrorConnectionFailed;
 /*! @abstract 101: Object doesn't exist, or has an incorrect password. */
 extern NSInteger const kLCErrorObjectNotFound;

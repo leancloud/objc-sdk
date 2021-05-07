@@ -363,11 +363,11 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
 }
 
 - (NSDate *)createdAt {
-    return [AVDate dateFromValue:self->_rawJSONData[@"createdAt"]];
+    return [LCDate dateFromValue:self->_rawJSONData[@"createdAt"]];
 }
 
 - (NSDate *)updatedAt {
-    return [AVDate dateFromValue:self->_rawJSONData[@"updatedAt"]];
+    return [LCDate dateFromValue:self->_rawJSONData[@"updatedAt"]];
 }
 
 - (NSDictionary<NSString *,NSString *> *)uploadingHeaders

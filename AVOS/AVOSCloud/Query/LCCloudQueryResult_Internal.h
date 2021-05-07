@@ -1,6 +1,6 @@
 //
 //  LCCloudQueryResult_Internal.h
-//  AVOS
+//  LeanCloud
 //
 //  Created by Qihe Bian on 9/22/14.
 //

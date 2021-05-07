@@ -1,6 +1,6 @@
 //
 //  LCCloudQueryResult.h
-//  AVOS
+//  LeanCloud
 //
 //  Created by Qihe Bian on 9/22/14.
 //
@@ -28,6 +28,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-typedef void(^AVCloudQueryCallback)(LCCloudQueryResult * _Nullable result, NSError * _Nullable error);
+typedef void(^LCCloudQueryCallback)(LCCloudQueryResult * _Nullable result, NSError * _Nullable error);
 
 NS_ASSUME_NONNULL_END

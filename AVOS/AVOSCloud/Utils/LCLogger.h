@@ -1,6 +1,6 @@
 //
 //  LCLogger.h
-//  AVOS
+//  LeanCloud
 //
 //  Created by Qihe Bian on 9/9/14.
 //

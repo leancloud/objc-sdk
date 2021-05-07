@@ -3,7 +3,7 @@
 //  paas
 //
 //  Created by Zhu Zeng on 9/10/13.
-//  Copyright (c) 2013 AVOS. All rights reserved.
+//  Copyright (c) 2013 LeanCloud. All rights reserved.
 //
 
 #import "LCRequestManager.h"
@@ -21,50 +21,50 @@ typedef enum {
     ADD_RELATION,
     REMOVE,
     REMOVE_RELATION,
-} AVOp;
+} LCOp;
 
-#define kAVOpAddRelation @"AddRelation"
-#define kAVOpRemoveRelation @"RemoveRelation"
-#define kAVOpAddUnique @"AddUnique"
-#define kAVOpDelete @"Delete"
-#define kAVOpIncrement @"Increment"
-#define kAVOpAdd @"Add"
-#define kAVOpRemove @"Remove"
+#define kLCOpAddRelation @"AddRelation"
+#define kLCOpRemoveRelation @"RemoveRelation"
+#define kLCOpAddUnique @"AddUnique"
+#define kLCOpDelete @"Delete"
+#define kLCOpIncrement @"Increment"
+#define kLCOpAdd @"Add"
+#define kLCOpRemove @"Remove"
 
 @implementation LCRequestManager {
     NSRecursiveLock *_lock;
 }
 
-+ (NSString *)serverOpForOp:(AVOp)op {
++ (NSString *)serverOpForOp:(LCOp)op {
     switch (op) {
         case SET:
             return nil;
         case UNSET:
-            return kAVOpDelete;
+            return kLCOpDelete;
         case INC:
-            return kAVOpIncrement;
+            return kLCOpIncrement;
         case ADD:
-            return kAVOpAdd;
+            return kLCOpAdd;
         case ADD_UNIQUE:
-            return kAVOpAddUnique;
+            return kLCOpAddUnique;
         case ADD_RELATION:
-            return kAVOpAddRelation;
+            return kLCOpAddRelation;
         case REMOVE:
-            return kAVOpRemove;
+            return kLCOpRemove;
         case REMOVE_RELATION:
-            return kAVOpRemoveRelation;
+            return kLCOpRemoveRelation;
     }
     return nil;
 }
 
 +(NSDictionary *)unsetOpForKey:(NSString *)key {
-    NSDictionary * op = @{key: @{@"__op": kAVOpDelete}};
+    NSDictionary * op = @{key: @{@"__op": kLCOpDelete}};
     return op;
 }
 
 +(NSDictionary *)incOpForKey:(NSString *)key
                        value:(double)value {
-    NSDictionary * op = @{key: @{@"__op": kAVOpIncrement, @"amount": @(value)}};
+    NSDictionary * op = @{key: @{@"__op": kLCOpIncrement, @"amount": @(value)}};
     return op;
 }
 
@@ -121,7 +121,7 @@ typedef enum {
     return array;
 }
 
--(NSMutableDictionary *)requestDictForOp:(AVOp)type {
+-(NSMutableDictionary *)requestDictForOp:(LCOp)type {
     __block NSMutableDictionary *dictionary = nil;
 
     [self synchronize:^{
@@ -271,7 +271,7 @@ typedef enum {
     return dict;
 }
 
-- (NSDictionary *)jsonForOp:(AVOp)op {
+- (NSDictionary *)jsonForOp:(LCOp)op {
     if (op == SET) {
         return [self jsonForSetWithIgnoreObject:YES];
     } else {
@@ -337,7 +337,7 @@ typedef enum {
 
 -(NSMutableArray *)allJsonDict {
     NSMutableArray * array = [NSMutableArray array];
-    for(AVOp op = SET; op <= REMOVE_RELATION; op++) {
+    for(LCOp op = SET; op <= REMOVE_RELATION; op++) {
         NSDictionary *dict = [self jsonForOp:op];
         if (dict.count > 0) {
             [array addObject:dict];

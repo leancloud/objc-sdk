@@ -1,6 +1,6 @@
 //
 //  LCPaasClient_internal.h
-//  AVOS
+//  LeanCloud
 //
 //  Created by Tang Tianyong on 5/23/16.
 //  Copyright © 2016 LeanCloud Inc. All rights reserved.

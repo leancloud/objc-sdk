@@ -1,6 +1,6 @@
 //
 //  LCURLConnection.m
-//  AVOS
+//  LeanCloud
 //
 //  Created by Tang Tianyong on 12/10/15.
 //  Copyright © 2015 LeanCloud Inc. All rights reserved.

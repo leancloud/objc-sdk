@@ -1,6 +1,6 @@
 //
 //  LCFileQuery.h
-//  AVOS-DynamicFramework
+//  LeanCloud-DynamicFramework
 //
 //  Created by lzw on 15/10/8.
 //  Copyright © 2015年 tang3w. All rights reserved.

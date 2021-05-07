@@ -1,6 +1,6 @@
 //
 //  LCIMCommon_Internal.h
-//  AVOS
+//  LeanCloud
 //
 //  Created by zapcannon87 on 2018/7/27.
 //  Copyright © 2018 LeanCloud Inc. All rights reserved.

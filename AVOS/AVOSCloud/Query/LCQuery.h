@@ -1,5 +1,5 @@
 // LCQuery.m
-// Copyright 2013 AVOS Inc. All rights reserved.
+// Copyright 2013 LeanCloud Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
 #import "LCGeoPoint.h"
@@ -62,7 +62,7 @@ typedef NS_ENUM(NSInteger, LCQueryDistanceUnit) {
  *  @param cql CQL 字符串
  *  @param callback 查询结果回调
  */
-+ (void)doCloudQueryInBackgroundWithCQL:(NSString *)cql callback:(AVCloudQueryCallback)callback;
++ (void)doCloudQueryInBackgroundWithCQL:(NSString *)cql callback:(LCCloudQueryCallback)callback;
 
 /*!
  *  使用 CQL 异步查询
@@ -70,7 +70,7 @@ typedef NS_ENUM(NSInteger, LCQueryDistanceUnit) {
  *  @param pvalues 参数列表
  *  @param callback 查询结果回调
  */
-+ (void)doCloudQueryInBackgroundWithCQL:(NSString *)cql pvalues:(nullable NSArray *)pvalues callback:(AVCloudQueryCallback)callback;
++ (void)doCloudQueryInBackgroundWithCQL:(NSString *)cql pvalues:(nullable NSArray *)pvalues callback:(LCCloudQueryCallback)callback;
 
 /*!
  Initializes the query with a class name.

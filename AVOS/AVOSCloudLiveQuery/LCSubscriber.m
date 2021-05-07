@@ -1,6 +1,6 @@
 //
 //  LCSubscriber.m
-//  AVOS
+//  LeanCloud
 //
 //  Created by Tang Tianyong on 16/05/2017.
 //  Copyright © 2017 LeanCloud Inc. All rights reserved.

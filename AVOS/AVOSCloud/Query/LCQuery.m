@@ -1,5 +1,5 @@
 // LCQuery.m
-// Copyright 2013 AVOS, Inc. All rights reserved.
+// Copyright 2013 LeanCloud, Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
 #import "LCGeoPoint.h"
@@ -76,15 +76,15 @@ NSString *LCStringFromDistanceUnit(LCQueryDistanceUnit unit) {
     return [self cloudQueryWithCQL:cql pvalues:pvalues callback:nil waitUntilDone:YES error:error];
 }
 
-+ (void)doCloudQueryInBackgroundWithCQL:(NSString *)cql callback:(AVCloudQueryCallback)callback {
++ (void)doCloudQueryInBackgroundWithCQL:(NSString *)cql callback:(LCCloudQueryCallback)callback {
     [self doCloudQueryInBackgroundWithCQL:cql pvalues:nil callback:callback];
 }
 
-+ (void)doCloudQueryInBackgroundWithCQL:(NSString *)cql pvalues:(NSArray *)pvalues callback:(AVCloudQueryCallback)callback {
++ (void)doCloudQueryInBackgroundWithCQL:(NSString *)cql pvalues:(NSArray *)pvalues callback:(LCCloudQueryCallback)callback {
     [self cloudQueryWithCQL:cql pvalues:pvalues callback:callback waitUntilDone:NO error:NULL];
 }
 
-+ (LCCloudQueryResult *)cloudQueryWithCQL:(NSString *)cql pvalues:(NSArray *)pvalues callback:(AVCloudQueryCallback)callback waitUntilDone:(BOOL)wait error:(NSError **)error{
++ (LCCloudQueryResult *)cloudQueryWithCQL:(NSString *)cql pvalues:(NSArray *)pvalues callback:(LCCloudQueryCallback)callback waitUntilDone:(BOOL)wait error:(NSError **)error{
     if (!cql) {
         NSError *err = LCError(kLCErrorInvalidQuery, @"cql can not be nil", nil);
         if (error) {

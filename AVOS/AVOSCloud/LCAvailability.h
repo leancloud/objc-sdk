@@ -1,6 +1,6 @@
 //
 //  LCAvailability.h
-//  AVOS
+//  LeanCloud
 //
 //  Created by Tang Tianyong on 1/6/16.
 //  Copyright © 2016 LeanCloud Inc. All rights reserved.

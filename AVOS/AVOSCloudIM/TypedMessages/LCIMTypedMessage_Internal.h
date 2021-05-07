@@ -1,6 +1,6 @@
 //
 //  LCIMTypedMessage_Internal.h
-//  AVOSCloudIM
+//  LeanCloudIM
 //
 //  Created by Qihe Bian on 1/8/15.
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  LCIMClientProtocol.h
-//  AVOS
+//  LeanCloud
 //
 //  Created by ZapCannon87 on 2018/7/24.
 //  Copyright © 2018 LeanCloud Inc. All rights reserved.

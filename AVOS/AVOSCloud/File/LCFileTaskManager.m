@@ -3,7 +3,7 @@
 //  IconMan
 //
 //  Created by Zhu Zeng on 3/16/13.
-//  Copyright (c) 2013 AVOS. All rights reserved.
+//  Copyright (c) 2013 LeanCloud. All rights reserved.
 //
 
 #import "LCFileTaskManager.h"

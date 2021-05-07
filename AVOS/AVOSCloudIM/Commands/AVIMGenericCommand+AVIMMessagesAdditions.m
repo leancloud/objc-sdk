@@ -1,6 +1,6 @@
 //
 //  AVIMGenericCommand+AVIMMessagesAdditions.m
-//  AVOS
+//  LeanCloud
 //
 //  Created by 陈宜龙 on 15/11/18.
 //  Copyright © 2015年 LeanCloud Inc. All rights reserved.

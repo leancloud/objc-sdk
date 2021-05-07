@@ -1,5 +1,5 @@
 // LCObject.h
-// Copyright 2011 AVOS Inc. All rights reserved.
+// Copyright 2011 LeanCloud Inc. All rights reserved.
 
 #import "LCObject_Internal.h"
 #import "LCPaasClient.h"
@@ -26,8 +26,8 @@
 #import "LCUser_Internal.h"
 #import "LCInstallation_Internal.h"
 
-#define AV_BATCH_SAVE_SIZE 100
-#define AV_BATCH_CONCURRENT_SIZE 20
+#define LC_BATCH_SAVE_SIZE 100
+#define LC_BATCH_CONCURRENT_SIZE 20
 
 NSString *const internalIdTag = @"__internalId";
 
@@ -1225,7 +1225,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     
     while ([files count] && saveOK) {
         __block int32_t uploadCount = 0;
-        NSArray *subFiles = [self reduceObjectsFromArray:files count:AV_BATCH_CONCURRENT_SIZE];
+        NSArray *subFiles = [self reduceObjectsFromArray:files count:LC_BATCH_CONCURRENT_SIZE];
         
         for (LCFile *file in subFiles) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -1262,11 +1262,11 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     __block BOOL saveOK = YES;
 
     while ([dirtyObjects count] && saveOK) {
-        // requests 在 AV_BATCH_SAVE_SIZE 以内，计算这一批可处理多少个 objects
+        // requests 在 LC_BATCH_SAVE_SIZE 以内，计算这一批可处理多少个 objects
         NSInteger requestCount = 0;
         NSInteger objectCount = 0;
         for (NSArray *requests in requestsArray) {
-            if (requestCount + requests.count > AV_BATCH_SAVE_SIZE) {
+            if (requestCount + requests.count > LC_BATCH_SAVE_SIZE) {
                 break;
             } else {
                 requestCount += requests.count;

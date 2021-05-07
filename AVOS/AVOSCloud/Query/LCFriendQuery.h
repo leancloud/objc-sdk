@@ -3,7 +3,7 @@
 //  paas
 //
 //  Created by Travis on 14-1-26.
-//  Copyright (c) 2014年 AVOS. All rights reserved.
+//  Copyright (c) 2014年 LeanCloud. All rights reserved.
 //
 
 #import "LCQuery.h"

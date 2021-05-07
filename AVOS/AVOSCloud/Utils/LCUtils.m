@@ -3,7 +3,7 @@
 //  paas
 //
 //  Created by Zhu Zeng on 2/27/13.
-//  Copyright (c) 2013 AVOS. All rights reserved.
+//  Copyright (c) 2013 LeanCloud. All rights reserved.
 //
 
 #import <objc/runtime.h>
@@ -439,7 +439,7 @@ if (block) { \
     }
 }
 
-+(void)callCloudQueryResultBlock:(AVCloudQueryCallback)block
++(void)callCloudQueryResultBlock:(LCCloudQueryCallback)block
                           result:(LCCloudQueryResult *)result
                            error:error {
     safeBlock(result);

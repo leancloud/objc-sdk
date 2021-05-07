@@ -3,7 +3,7 @@
 //  paas
 //
 //  Created by Zhu Zeng on 2/25/13.
-//  Copyright (c) 2013 AVOS. All rights reserved.
+//  Copyright (c) 2013 LeanCloud. All rights reserved.
 //
 
 #import "AVOSCloud.h"
@@ -188,7 +188,7 @@ static AVLogLevel avlogLevel = AVLogLevelDefault;
         if (error) {
             err = error;
         } else {
-            date = [AVDate dateFromDictionary:object];
+            date = [LCDate dateFromDictionary:object];
         }
         finished = true;
     }];

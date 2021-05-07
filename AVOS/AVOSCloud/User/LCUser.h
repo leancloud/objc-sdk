@@ -1,5 +1,5 @@
 // LCUser.h
-// Copyright 2013 AVOS, Inc. All rights reserved.
+// Copyright 2013 LeanCloud, Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
 #import "LCConstants.h"

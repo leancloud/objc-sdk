@@ -1,6 +1,6 @@
 //
 //  LCIMKeyedConversation.h
-//  AVOS
+//  LeanCloud
 //
 //  Created by Tang Tianyong on 6/12/15.
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
@@ -13,7 +13,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- *  Represents a conversation which intends to be archived. Can get this object from LCIMConversation by -[LCIMConversation keyedConversation]. Can convert this object to AVIMConverstaion by -[LCIMClient conversationWithKeyedConversation:].
+ *  Represents a conversation which intends to be archived. Can get this object from LCIMConversation by -[LCIMConversation keyedConversation]. Can convert this object to LCIMConverstaion by -[LCIMClient conversationWithKeyedConversation:].
  */
 @interface LCIMKeyedConversation : NSObject <NSCoding>
 

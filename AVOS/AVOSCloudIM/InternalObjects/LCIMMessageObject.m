@@ -1,6 +1,6 @@
 //
 //  LCIMMessageObject.m
-//  AVOS
+//  LeanCloud
 //
 //  Created by Qihe Bian on 1/28/15.
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  LCIMConversationQuery.h
-//  AVOSCloudIM
+//  LeanCloudIM
 //
 //  Created by Qihe Bian on 2/3/15.
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.

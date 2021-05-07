@@ -1,6 +1,6 @@
 //
 //  LCRTMWebSocket.h
-//  AVOSCloudIM
+//  LeanCloudIM
 //
 //  Created by zapcannon87 on 2020/4/23.
 //  Copyright © 2020 LeanCloud Inc. All rights reserved.

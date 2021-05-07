@@ -3,7 +3,7 @@
 //  LeanCloud
 //
 //  Created by Summer on 13-3-19.
-//  Copyright (c) 2013年 AVOS. All rights reserved.
+//  Copyright (c) 2013年 LeanCloud. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

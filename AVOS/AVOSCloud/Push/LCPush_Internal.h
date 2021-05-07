@@ -3,7 +3,7 @@
 //  Paas
 //
 //  Created by Zhu Zeng on 3/28/13.
-//  Copyright (c) 2013 AVOS. All rights reserved.
+//  Copyright (c) 2013 LeanCloud. All rights reserved.
 //
 
 #import "LCPush.h"

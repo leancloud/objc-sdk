@@ -1,6 +1,6 @@
 //
 //  LCIMMessageCacheStore.h
-//  AVOS
+//  LeanCloud
 //
 //  Created by Tang Tianyong on 5/21/15.
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  LCRTMConnection.m
-//  AVOSCloudIM
+//  LeanCloudIM
 //
 //  Created by pzheng on 2020/05/20.
 //  Copyright © 2020 LeanCloud Inc. All rights reserved.

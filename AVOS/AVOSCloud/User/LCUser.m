@@ -1,5 +1,5 @@
 // LCUser.h
-// Copyright 2013 AVOS, Inc. All rights reserved.
+// Copyright 2013 LeanCloud, Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
 #import "LCUser_Internal.h"
@@ -291,7 +291,7 @@ static BOOL enableAutomatic = NO;
     [HTTPClient performRequest:request
                        success:^(NSHTTPURLResponse *response, id result) {
         self.sessionToken = result[@"sessionToken"];
-        self.updatedAt = [AVDate dateFromValue:result[@"updatedAt"]];
+        self.updatedAt = [LCDate dateFromValue:result[@"updatedAt"]];
         if ([self isEqual:[LCUser currentUser]]) {
             [LCUser changeCurrentUser:self save:YES];
         }

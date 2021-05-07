@@ -1,9 +1,9 @@
 //
 //  LCRequestOperation.h
-//  AVOSCloud
+//  LeanCloud
 //
 //  Created by Zhu Zeng on 7/9/13.
-//  Copyright (c) 2013 AVOS. All rights reserved.
+//  Copyright (c) 2013 LeanCloud. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

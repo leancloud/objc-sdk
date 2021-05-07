@@ -3,7 +3,7 @@
 //  paas
 //
 //  Created by Travis on 13-12-23.
-//  Copyright (c) 2013年 AVOS. All rights reserved.
+//  Copyright (c) 2013年 LeanCloud. All rights reserved.
 //
 
 #import "LCStatus.h"
@@ -150,7 +150,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
         
         status.objectId=data[@"objectId"];
         status.type=data[@"inboxType"];
-        status.createdAt = [AVDate dateFromValue:data[@"createdAt"]];
+        status.createdAt = [LCDate dateFromValue:data[@"createdAt"]];
         status.messageId=[data[@"messageId"] integerValue];
         status.source=[LCObjectUtils lcObjectFromDictionary:data[@"source"]];
         
@@ -436,7 +436,7 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
 
              if (objectId) {
                  self.objectId = objectId;
-                 self.createdAt = [AVDate dateFromValue:responseObject[@"createdAt"]];
+                 self.createdAt = [LCDate dateFromValue:responseObject[@"createdAt"]];
                  [LCUtils callBooleanResultBlock:block error:nil];
                  return;
              }

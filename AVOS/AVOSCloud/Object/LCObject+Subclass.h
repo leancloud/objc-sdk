@@ -3,7 +3,7 @@
 //  paas
 //
 //  Created by Summer on 13-4-2.
-//  Copyright (c) 2013年 AVOS. All rights reserved.
+//  Copyright (c) 2013年 LeanCloud. All rights reserved.
 //
 
 #import "LCObject.h"

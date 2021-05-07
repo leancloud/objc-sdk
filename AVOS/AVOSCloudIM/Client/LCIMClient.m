@@ -1,6 +1,6 @@
 //
-//  AVIM.m
-//  AVOSCloudIM
+//  LCIMClient.m
+//  LeanCloudIM
 //
 //  Created by Qihe Bian on 12/4/14.
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
@@ -1129,7 +1129,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     NSString *initById = (convCommand.hasInitBy ? convCommand.initBy : nil);
     NSDate *updatedAt;
     if (convCommand.hasUdate) {
-        updatedAt = [AVDate dateFromString:convCommand.udate];
+        updatedAt = [LCDate dateFromString:convCommand.udate];
     }
     
     [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
@@ -1972,10 +1972,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             rawDataDic[LCIMConversationKeyCreator] = keyedConversation.creator;
         }
         if (keyedConversation.createAt) {
-            rawDataDic[LCIMConversationKeyCreatedAt] = [AVDate stringFromDate:keyedConversation.createAt];
+            rawDataDic[LCIMConversationKeyCreatedAt] = [LCDate stringFromDate:keyedConversation.createAt];
         }
         if (keyedConversation.updateAt) {
-            rawDataDic[LCIMConversationKeyUpdatedAt] = [AVDate stringFromDate:keyedConversation.updateAt];
+            rawDataDic[LCIMConversationKeyUpdatedAt] = [LCDate stringFromDate:keyedConversation.updateAt];
         }
         if (keyedConversation.name) {
             rawDataDic[LCIMConversationKeyName] = keyedConversation.name;

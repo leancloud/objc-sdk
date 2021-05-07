@@ -1,9 +1,9 @@
 //
 //  LCObjectUtils.m
-//  AVOSCloud
+//  LeanCloud
 //
 //  Created by Zhu Zeng on 7/4/13.
-//  Copyright (c) 2013 AVOS. All rights reserved.
+//  Copyright (c) 2013 LeanCloud. All rights reserved.
 //
 
 #import <objc/runtime.h>
@@ -22,7 +22,7 @@
 #import "LCRelation_Internal.h"
 #import "LCUtils.h"
 
-@implementation AVDate
+@implementation LCDate
 
 + (NSDateFormatter *)iso8601DateFormatter {
     static NSDateFormatter *dateFormatter;
@@ -208,7 +208,7 @@
         return point;
     }
     else if ([LCObjectUtils isDate:type]) {
-        return [AVDate dateFromDictionary:dict];;
+        return [LCDate dateFromDictionary:dict];;
     }
     else if ([LCObjectUtils isData:type])
     {
@@ -270,7 +270,7 @@
         [target setObject:[LCObjectUtils aclFromDictionary:dict] forKey:ACLTag submit:NO];
     }
     else if ([LCObjectUtils isDate:type]) {
-        [target setObject:[AVDate dateFromDictionary:dict]
+        [target setObject:[LCDate dateFromDictionary:dict]
                    forKey:key
                    submit:NO];
     }
@@ -322,9 +322,9 @@
                       value:(NSObject *)value
 {
     if ([key isEqualToString:@"createdAt"]) {
-        target.createdAt = [AVDate dateFromValue:value];
+        target.createdAt = [LCDate dateFromValue:value];
     } else if ([key isEqualToString:@"updatedAt"]) {
-        target.updatedAt = [AVDate dateFromValue:value];
+        target.updatedAt = [LCDate dateFromValue:value];
     } else if ([key isEqualToString:ACLTag]) {
         LCACL * acl = [LCObjectUtils aclFromDictionary:(NSDictionary *)value];
         [target setObject:acl forKey:key submit:NO];
@@ -656,7 +656,7 @@
     } else if ([obj isKindOfClass:[LCGeoPoint class]]) {
         return [LCObjectUtils dictionaryFromGeoPoint:obj];
     } else if ([obj isKindOfClass:[NSDate class]]) {
-        return [AVDate dictionaryFromDate:obj];
+        return [LCDate dictionaryFromDate:obj];
     } else if ([obj isKindOfClass:[NSData class]]) {
         return [LCObjectUtils dictionaryFromData:obj];
     } else if ([obj isKindOfClass:[LCFile class]]) {

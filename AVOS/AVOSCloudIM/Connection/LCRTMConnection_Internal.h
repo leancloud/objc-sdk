@@ -1,6 +1,6 @@
 //
 //  LCRTMConnection_Internal.h
-//  AVOS
+//  LeanCloud
 //
 //  Created by zapcannon87 on 2020/5/31.
 //  Copyright © 2020 LeanCloud Inc. All rights reserved.

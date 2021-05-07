@@ -1,6 +1,6 @@
 //
 //  LCPush.h
-//  AVOS Inc
+//  LeanCloud Inc
 //
 
 #import <Foundation/Foundation.h>
@@ -296,14 +296,14 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
     }
     
     if (self.pushTime) {
-        data[@"push_time"] = [AVDate stringFromDate:self.pushTime];
+        data[@"push_time"] = [LCDate stringFromDate:self.pushTime];
     }
     if (self.expirationDate) {
-        data[@"expiration_time"] = [AVDate stringFromDate:self.expirationDate];
+        data[@"expiration_time"] = [LCDate stringFromDate:self.expirationDate];
     }
     if (self.expireTimeInterval > 0) {
         if (!self.pushTime) {
-            data[@"push_time"] = [AVDate stringFromDate:[NSDate date]];
+            data[@"push_time"] = [LCDate stringFromDate:[NSDate date]];
         }
         data[@"expiration_interval"] = @(self.expireTimeInterval);
     }

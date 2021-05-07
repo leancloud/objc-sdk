@@ -1,6 +1,6 @@
 //
 //  LCIMConversation.m
-//  AVOSCloudIM
+//  LeanCloudIM
 //
 //  Created by Qihe Bian on 12/4/14.
 //  Copyright (c) 2014 LeanCloud Inc. All rights reserved.
@@ -267,7 +267,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     if ([NSDate _lc_isTypeOf:value]) {
         return value;
     } else {
-        return [AVDate dateFromValue:value];
+        return [LCDate dateFromValue:value];
     }
 }
 
@@ -283,7 +283,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     if ([NSDate _lc_isTypeOf:value]) {
         return value;
     } else {
-        return [AVDate dateFromValue:value];
+        return [LCDate dateFromValue:value];
     }
 }
 
