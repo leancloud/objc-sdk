@@ -12,7 +12,6 @@
 #import "LCPersistenceUtils.h"
 
 #import "LCUtils.h"
-#include "LeanCloud_Art.inc"
 #import "LCObjectUtils.h"
 
 #import "LCRouter_Internal.h"

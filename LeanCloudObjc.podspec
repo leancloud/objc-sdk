@@ -55,9 +55,6 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloud/Router/LCRouter.h',
       'AVOS/AVOSCloud/LCAvailability.h'
 
-    ss.resources =
-      'AVOS/AVOSCloud/LeanCloud_Art.inc'
-    
     ss.library =
       'sqlite3'
   end

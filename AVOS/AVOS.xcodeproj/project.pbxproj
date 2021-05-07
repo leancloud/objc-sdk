@@ -1436,7 +1436,6 @@
 		8C8419E21A5A79FF00C5C6C4 /* LCRole_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCRole_Internal.h; sourceTree = "<group>"; };
 		8C8419F31A5A79FF00C5C6C4 /* LCConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCConstants.h; sourceTree = "<group>"; };
 		8C8419F41A5A79FF00C5C6C4 /* LCGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGlobal.h; sourceTree = "<group>"; };
-		8C8419F51A5A79FF00C5C6C4 /* LeanCloud_Art.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = LeanCloud_Art.inc; sourceTree = "<group>"; };
 		8C8419F81A5A79FF00C5C6C4 /* AVOSCloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVOSCloud.m; sourceTree = "<group>"; };
 		8C8419FA1A5A79FF00C5C6C4 /* LCCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCacheManager.h; sourceTree = "<group>"; };
 		8C8419FB1A5A79FF00C5C6C4 /* LCCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCacheManager.m; sourceTree = "<group>"; };
@@ -2015,7 +2014,6 @@
 				8C841AAC1A5A7A0000C5C6C4 /* UserAgent.h */,
 				8C8419F31A5A79FF00C5C6C4 /* LCConstants.h */,
 				8C8419F41A5A79FF00C5C6C4 /* LCGlobal.h */,
-				8C8419F51A5A79FF00C5C6C4 /* LeanCloud_Art.inc */,
 				8311CD841C3D25B9007DEFF8 /* LCAvailability.h */,
 				8C84198B1A5A791300C5C6C4 /* AVOSCloud.h */,
 				8C8419F81A5A79FF00C5C6C4 /* AVOSCloud.m */,
