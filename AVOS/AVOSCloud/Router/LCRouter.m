@@ -299,7 +299,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
 #pragma clang diagnostic ignored "-Wdeprecated-implementations"
 - (NSString *)URLStringForPath:(NSString *)path
 {
-    return [self appURLForPath:path appID:[AVOSCloud getApplicationId]];
+    return [self appURLForPath:path appID:[LCApplication getApplicationId]];
 }
 #pragma clang diagnostic pop
 

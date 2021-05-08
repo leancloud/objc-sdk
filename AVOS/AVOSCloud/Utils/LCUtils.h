@@ -7,8 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LCConstants.h"
-#import "AVOSCloud.h"
+#import "Foundation.h"
 #import "LCHelpers.h"
 
 // ref: https://github.com/keitaito/KeyPathMacroTestApp

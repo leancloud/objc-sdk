@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "AVOSCloud.h"
+#import "Foundation.h"
 #import "AVOSCloudIM.h"
 #import "AVOSCloudLiveQuery.h"

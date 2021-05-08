@@ -22,11 +22,11 @@
     return NSHomeDirectory();
 #elif TARGET_OS_OSX
     /// ~/Library/Application Support/LeanCloud/appId
-    NSAssert([AVOSCloud getApplicationId] != nil, @"Please call +[AVOSCloud setApplicationId:clientKey:] first.");
+    NSAssert([LCApplication getApplicationId] != nil, @"Please call +[AVOSCloud setApplicationId:clientKey:] first.");
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *directoryPath = [paths firstObject];
     directoryPath = [directoryPath stringByAppendingPathComponent:LCRootDirName];
-    directoryPath = [directoryPath stringByAppendingPathComponent:[AVOSCloud getApplicationId]];
+    directoryPath = [directoryPath stringByAppendingPathComponent:[LCApplication getApplicationId]];
     [self createDirectoryIfNeeded:directoryPath];
     return directoryPath;
 #else
@@ -68,7 +68,7 @@
 
 // ~/Library/Caches/LeanCloud/{applicationId}
 + (NSString *)cacheSandboxPath {
-    NSString *applicationId = [AVOSCloud getApplicationId];
+    NSString *applicationId = [LCApplication getApplicationId];
 
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *sandboxPath = [paths firstObject];

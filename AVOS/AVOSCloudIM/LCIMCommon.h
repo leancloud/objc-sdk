@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
-#import "AVOSCloud.h"
+#import "Foundation.h"
 
 @class LCIMConversation;
 @class LCIMChatRoom;

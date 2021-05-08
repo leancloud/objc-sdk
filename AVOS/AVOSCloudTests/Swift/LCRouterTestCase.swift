@@ -181,7 +181,7 @@ class LCRouterTestCase: LCTestBase {
         let appID: String = AVOSCloud.getApplicationId()
         let router: LCRouter = LCRouter.sharedInstance()
         
-        let modules: [AVServiceModule] = [.API, .push, .engine, .statistics, .RTM]
+        let modules: [LCServiceModule] = [.API, .push, .engine, .statistics, .RTM]
         let customAPIURLString: String = "beta.leancloud.cn"
         let customRTMRouterURLString: String = "router-g0-push.leancloud.cn"
         for item in modules {

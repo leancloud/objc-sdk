@@ -44,7 +44,7 @@ NSString *const kLCPushTargetPlatformWindowsPhone = @"wp";
 
 +(NSString *)myObjectPath
 {
-    return [[LCRouter sharedInstance] appURLForPath:@"push" appID:[AVOSCloud getApplicationId]];
+    return [[LCRouter sharedInstance] appURLForPath:@"push" appID:[LCApplication getApplicationId]];
 }
 
 -(id)init

@@ -34,7 +34,7 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloud/ACL/LCRole.h',
       'AVOS/AVOSCloud/Object/LCSaveOption.h',
       'AVOS/AVOSCloud/LCConstants.h',
-      'AVOS/AVOSCloud/AVOSCloud.h',
+      'AVOS/AVOSCloud/LCApplication.h',
       'AVOS/AVOSCloud/CloudCode/LCCloud.h',
       'AVOS/AVOSCloud/File/LCFile.h',
       'AVOS/AVOSCloud/Geo/LCGeoPoint.h',

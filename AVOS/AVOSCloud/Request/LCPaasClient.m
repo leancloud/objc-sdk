@@ -240,7 +240,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     NSURL *URL = [NSURL URLWithString:path];
     
     if (!URL.scheme.length) {
-        NSString *URLString = [[LCRouter sharedInstance] appURLForPath:path appID:[AVOSCloud getApplicationId]];
+        NSString *URLString = [[LCRouter sharedInstance] appURLForPath:path appID:[LCApplication getApplicationId]];
         URL = [NSURL URLWithString:URLString];
     }
     

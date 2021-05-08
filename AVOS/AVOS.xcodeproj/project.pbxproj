@@ -88,7 +88,6 @@
 		70C288B11BB55E0300A4773C /* TestInstallationSave.json in Resources */ = {isa = PBXBuildFile; fileRef = 70C288B01BB55E0300A4773C /* TestInstallationSave.json */; };
 		70CA7F721BDE3721000A3B21 /* LCACL.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419DE1A5A79FF00C5C6C4 /* LCACL.m */; };
 		70CA7F731BDE3721000A3B21 /* LCRole.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419E11A5A79FF00C5C6C4 /* LCRole.m */; };
-		70CA7F7B1BDE3721000A3B21 /* AVOSCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419F81A5A79FF00C5C6C4 /* AVOSCloud.m */; };
 		70CA7F7C1BDE3721000A3B21 /* LCCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419FB1A5A79FF00C5C6C4 /* LCCacheManager.m */; };
 		70CA7F7D1BDE3721000A3B21 /* LCPersistenceUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419FD1A5A79FF00C5C6C4 /* LCPersistenceUtils.m */; };
 		70CA7F7E1BDE3721000A3B21 /* LCScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419FF1A5A79FF00C5C6C4 /* LCScheduler.m */; };
@@ -130,7 +129,6 @@
 		70CA7FDE1BDE42F5000A3B21 /* LCRole_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419E21A5A79FF00C5C6C4 /* LCRole_Internal.h */; };
 		70CA7FE71BDE42F6000A3B21 /* LCConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419F31A5A79FF00C5C6C4 /* LCConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		70CA7FE81BDE42F6000A3B21 /* LCGlobal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419F41A5A79FF00C5C6C4 /* LCGlobal.h */; };
-		70CA7FEA1BDE42F6000A3B21 /* AVOSCloud.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C84198B1A5A791300C5C6C4 /* AVOSCloud.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		70CA7FEB1BDE42F6000A3B21 /* LCCacheManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419FA1A5A79FF00C5C6C4 /* LCCacheManager.h */; };
 		70CA7FEC1BDE42F6000A3B21 /* LCPersistenceUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419FC1A5A79FF00C5C6C4 /* LCPersistenceUtils.h */; };
 		70CA7FED1BDE42F6000A3B21 /* LCScheduler.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419FE1A5A79FF00C5C6C4 /* LCScheduler.h */; };
@@ -236,7 +234,6 @@
 		8320F8991C1918C60024B45E /* LCUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A9F1A5A7A0000C5C6C4 /* LCUser.m */; };
 		8320F89B1C1918C60024B45E /* LCInstallation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A5C1A5A79FF00C5C6C4 /* LCInstallation.m */; };
 		8320F89C1C1918C60024B45E /* LCDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DF02AA1AF86032000E289C /* LCDatabasePool.m */; };
-		8320F89E1C1918C60024B45E /* AVOSCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419F81A5A79FF00C5C6C4 /* AVOSCloud.m */; };
 		8320F8A01C1918C60024B45E /* LCObjectUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A551A5A79FF00C5C6C4 /* LCObjectUtils.m */; };
 		8320F8A51C1918C60024B45E /* LCCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A021A5A79FF00C5C6C4 /* LCCloud.m */; };
 		8320F8A61C1918C60024B45E /* LCObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A521A5A79FF00C5C6C4 /* LCObject.m */; };
@@ -263,7 +260,6 @@
 		8320F8DA1C1918C60024B45E /* LCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DF02AD1AF86032000E289C /* LCDB.h */; };
 		8320F8DB1C1918C60024B45E /* LCRole.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419E01A5A79FF00C5C6C4 /* LCRole.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8320F8DD1C1918C60024B45E /* LCConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419F31A5A79FF00C5C6C4 /* LCConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8320F8DE1C1918C60024B45E /* AVOSCloud.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C84198B1A5A791300C5C6C4 /* AVOSCloud.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8320F8DF1C1918C60024B45E /* LCCloud.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A011A5A79FF00C5C6C4 /* LCCloud.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8320F8E01C1918C60024B45E /* LCDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DF02A51AF86032000E289C /* LCDatabase.h */; };
 		8320F8E11C1918C60024B45E /* NSDictionary+LCHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 837CC71C1B568431001333AD /* NSDictionary+LCHash.h */; };
@@ -403,7 +399,6 @@
 		83D8CE921C17DAF50094279D /* LCUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A9F1A5A7A0000C5C6C4 /* LCUser.m */; };
 		83D8CE941C17DAF50094279D /* LCInstallation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A5C1A5A79FF00C5C6C4 /* LCInstallation.m */; };
 		83D8CE951C17DAF50094279D /* LCDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DF02AA1AF86032000E289C /* LCDatabasePool.m */; };
-		83D8CE971C17DAF50094279D /* AVOSCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419F81A5A79FF00C5C6C4 /* AVOSCloud.m */; };
 		83D8CE991C17DAF50094279D /* LCObjectUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A551A5A79FF00C5C6C4 /* LCObjectUtils.m */; };
 		83D8CE9E1C17DAF50094279D /* LCCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A021A5A79FF00C5C6C4 /* LCCloud.m */; };
 		83D8CE9F1C17DAF50094279D /* LCObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A521A5A79FF00C5C6C4 /* LCObject.m */; };
@@ -430,7 +425,6 @@
 		83D8CED31C17DAF50094279D /* LCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DF02AD1AF86032000E289C /* LCDB.h */; };
 		83D8CED41C17DAF50094279D /* LCRole.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419E01A5A79FF00C5C6C4 /* LCRole.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83D8CED61C17DAF50094279D /* LCConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419F31A5A79FF00C5C6C4 /* LCConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		83D8CED71C17DAF50094279D /* AVOSCloud.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C84198B1A5A791300C5C6C4 /* AVOSCloud.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83D8CED81C17DAF50094279D /* LCCloud.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A011A5A79FF00C5C6C4 /* LCCloud.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83D8CED91C17DAF50094279D /* LCDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 83DF02A51AF86032000E289C /* LCDatabase.h */; };
 		83D8CEDA1C17DAF50094279D /* NSDictionary+LCHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 837CC71C1B568431001333AD /* NSDictionary+LCHash.h */; };
@@ -508,7 +502,6 @@
 		83F9A2C81CE014430002E21B /* LCRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F9A2C61CE014430002E21B /* LCRouter.m */; };
 		8C630C811A6EB259008F1B00 /* LCIMErrorUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C630C7F1A6EB259008F1B00 /* LCIMErrorUtil.h */; };
 		8C630C821A6EB259008F1B00 /* LCIMErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C630C801A6EB259008F1B00 /* LCIMErrorUtil.m */; };
-		8C84198C1A5A791300C5C6C4 /* AVOSCloud.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C84198B1A5A791300C5C6C4 /* AVOSCloud.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C8419C81A5A796000C5C6C4 /* AVOSCloudIM.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419C71A5A796000C5C6C4 /* AVOSCloudIM.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C8419CE1A5A796000C5C6C4 /* AVOSCloudIM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8419C31A5A796000C5C6C4 /* AVOSCloudIM.framework */; };
 		8C841AAD1A5A7A0000C5C6C4 /* LCACL.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419DD1A5A79FF00C5C6C4 /* LCACL.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -519,7 +512,6 @@
 		8C841AB21A5A7A0000C5C6C4 /* LCRole_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419E21A5A79FF00C5C6C4 /* LCRole_Internal.h */; };
 		8C841AC21A5A7A0000C5C6C4 /* LCConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419F31A5A79FF00C5C6C4 /* LCConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C841AC31A5A7A0000C5C6C4 /* LCGlobal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419F41A5A79FF00C5C6C4 /* LCGlobal.h */; };
-		8C841AC71A5A7A0000C5C6C4 /* AVOSCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419F81A5A79FF00C5C6C4 /* AVOSCloud.m */; };
 		8C841AC81A5A7A0000C5C6C4 /* LCCacheManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419FA1A5A79FF00C5C6C4 /* LCCacheManager.h */; };
 		8C841AC91A5A7A0000C5C6C4 /* LCCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419FB1A5A79FF00C5C6C4 /* LCCacheManager.m */; };
 		8C841ACA1A5A7A0000C5C6C4 /* LCPersistenceUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419FC1A5A79FF00C5C6C4 /* LCPersistenceUtils.h */; };
@@ -672,9 +664,7 @@
 		D30B6A2324A09B1F006ABE09 /* LCConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419F31A5A79FF00C5C6C4 /* LCConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A2424A09B1F006ABE09 /* LCGlobal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419F41A5A79FF00C5C6C4 /* LCGlobal.h */; };
 		D30B6A2524A09B1F006ABE09 /* LCAvailability.h in Headers */ = {isa = PBXBuildFile; fileRef = 8311CD841C3D25B9007DEFF8 /* LCAvailability.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D30B6A2624A09B1F006ABE09 /* AVOSCloud.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C84198B1A5A791300C5C6C4 /* AVOSCloud.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D30B6A2724A09B1F006ABE09 /* AVOSCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8419F81A5A79FF00C5C6C4 /* AVOSCloud.m */; };
-		D30B6A2824A09B1F006ABE09 /* LCApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B782475345C00678B2B /* LCApplication.h */; };
+		D30B6A2824A09B1F006ABE09 /* LCApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B782475345C00678B2B /* LCApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A2924A09B1F006ABE09 /* LCApplication_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3596DAC2480EEED002D2D22 /* LCApplication_Internal.h */; };
 		D30B6A2A24A09B1F006ABE09 /* LCApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = D3700B792475345C00678B2B /* LCApplication.m */; };
 		D30B6A2B24A09B4C006ABE09 /* LCACL.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419DD1A5A79FF00C5C6C4 /* LCACL.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -984,8 +974,8 @@
 		D328B8E920FEE2200039091A /* LCIMClientInternalConversationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D328B8E620FEE2200039091A /* LCIMClientInternalConversationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D328B8EA20FEE2200039091A /* LCIMClientInternalConversationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D328B8E720FEE2200039091A /* LCIMClientInternalConversationManager.m */; };
 		D328B8EB20FEE2200039091A /* LCIMClientInternalConversationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D328B8E720FEE2200039091A /* LCIMClientInternalConversationManager.m */; };
-		D32AA480263BF2F30044E74E /* Foundation.h in Headers */ = {isa = PBXBuildFile; fileRef = D32AA47F263BF2F30044E74E /* Foundation.h */; };
-		D32AA482263BF39C0044E74E /* Realtime.h in Headers */ = {isa = PBXBuildFile; fileRef = D32AA481263BF39C0044E74E /* Realtime.h */; };
+		D32AA480263BF2F30044E74E /* Foundation.h in Headers */ = {isa = PBXBuildFile; fileRef = D32AA47F263BF2F30044E74E /* Foundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D32AA482263BF39C0044E74E /* Realtime.h in Headers */ = {isa = PBXBuildFile; fileRef = D32AA481263BF39C0044E74E /* Realtime.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D336C570212D02A2008D0E3E /* LCRouterTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D336C56F212D02A2008D0E3E /* LCRouterTestCase.swift */; };
 		D341F2A32018B6DB00408778 /* _10_MB_.png in Resources */ = {isa = PBXBuildFile; fileRef = D341F2A22018B6DB00408778 /* _10_MB_.png */; };
 		D3460577238BE9390027E1D5 /* AVOSCloud_macOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3460576238BE9390027E1D5 /* AVOSCloud_macOSTests.swift */; };
@@ -1009,10 +999,10 @@
 		D3700B752475244E00678B2B /* LCRTMConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B722475244E00678B2B /* LCRTMConnection.h */; };
 		D3700B762475244E00678B2B /* LCRTMConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D3700B732475244E00678B2B /* LCRTMConnection.m */; };
 		D3700B772475244E00678B2B /* LCRTMConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D3700B732475244E00678B2B /* LCRTMConnection.m */; };
-		D3700B7A2475345C00678B2B /* LCApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B782475345C00678B2B /* LCApplication.h */; };
-		D3700B7B2475345C00678B2B /* LCApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B782475345C00678B2B /* LCApplication.h */; };
-		D3700B7C2475345C00678B2B /* LCApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B782475345C00678B2B /* LCApplication.h */; };
-		D3700B7D2475345C00678B2B /* LCApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B782475345C00678B2B /* LCApplication.h */; };
+		D3700B7A2475345C00678B2B /* LCApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B782475345C00678B2B /* LCApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D3700B7B2475345C00678B2B /* LCApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B782475345C00678B2B /* LCApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D3700B7C2475345C00678B2B /* LCApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B782475345C00678B2B /* LCApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D3700B7D2475345C00678B2B /* LCApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B782475345C00678B2B /* LCApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D3700B7E2475345C00678B2B /* LCApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = D3700B792475345C00678B2B /* LCApplication.m */; };
 		D3700B7F2475345C00678B2B /* LCApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = D3700B792475345C00678B2B /* LCApplication.m */; };
 		D3700B802475345C00678B2B /* LCApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = D3700B792475345C00678B2B /* LCApplication.m */; };
@@ -1212,6 +1202,10 @@
 		D3D6E4F223544F5A0048E58F /* LCGPBSourceContext.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D6E47623544F590048E58F /* LCGPBSourceContext.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		D3D80081210AFC7F0058F86C /* LCIMCommon_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D80080210AFC7F0058F86C /* LCIMCommon_Internal.h */; };
 		D3D80082210AFC7F0058F86C /* LCIMCommon_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3D80080210AFC7F0058F86C /* LCIMCommon_Internal.h */; };
+		D3F227A726467A6F00A599F5 /* Foundation.h in Headers */ = {isa = PBXBuildFile; fileRef = D32AA47F263BF2F30044E74E /* Foundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D3F227A826467A7000A599F5 /* Foundation.h in Headers */ = {isa = PBXBuildFile; fileRef = D32AA47F263BF2F30044E74E /* Foundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D3F227A926467A7100A599F5 /* Foundation.h in Headers */ = {isa = PBXBuildFile; fileRef = D32AA47F263BF2F30044E74E /* Foundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D3F227AA26467A7100A599F5 /* Foundation.h in Headers */ = {isa = PBXBuildFile; fileRef = D32AA47F263BF2F30044E74E /* Foundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D3F8747B20F8B1690035C7D1 /* LCTestEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F8747A20F8B1690035C7D1 /* LCTestEnvironment.m */; };
 		D3F8747D20F8B1690035C7D1 /* LCTestEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F8747A20F8B1690035C7D1 /* LCTestEnvironment.m */; };
 		D3F8747F20F8B1690035C7D1 /* LCTestEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = D3F8747A20F8B1690035C7D1 /* LCTestEnvironment.m */; };
@@ -1423,7 +1417,6 @@
 		8C630C7F1A6EB259008F1B00 /* LCIMErrorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMErrorUtil.h; sourceTree = "<group>"; };
 		8C630C801A6EB259008F1B00 /* LCIMErrorUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMErrorUtil.m; sourceTree = "<group>"; };
 		8C8419861A5A791300C5C6C4 /* AVOSCloud.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloud.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8C84198B1A5A791300C5C6C4 /* AVOSCloud.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloud.h; sourceTree = "<group>"; };
 		8C8419911A5A791300C5C6C4 /* AVOSCloud-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AVOSCloud-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C8419C31A5A796000C5C6C4 /* AVOSCloudIM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AVOSCloudIM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C8419C71A5A796000C5C6C4 /* AVOSCloudIM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVOSCloudIM.h; sourceTree = "<group>"; };
@@ -1436,7 +1429,6 @@
 		8C8419E21A5A79FF00C5C6C4 /* LCRole_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCRole_Internal.h; sourceTree = "<group>"; };
 		8C8419F31A5A79FF00C5C6C4 /* LCConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCConstants.h; sourceTree = "<group>"; };
 		8C8419F41A5A79FF00C5C6C4 /* LCGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGlobal.h; sourceTree = "<group>"; };
-		8C8419F81A5A79FF00C5C6C4 /* AVOSCloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVOSCloud.m; sourceTree = "<group>"; };
 		8C8419FA1A5A79FF00C5C6C4 /* LCCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCacheManager.h; sourceTree = "<group>"; };
 		8C8419FB1A5A79FF00C5C6C4 /* LCCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCacheManager.m; sourceTree = "<group>"; };
 		8C8419FC1A5A79FF00C5C6C4 /* LCPersistenceUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCPersistenceUtils.h; sourceTree = "<group>"; };
@@ -2015,8 +2007,6 @@
 				8C8419F31A5A79FF00C5C6C4 /* LCConstants.h */,
 				8C8419F41A5A79FF00C5C6C4 /* LCGlobal.h */,
 				8311CD841C3D25B9007DEFF8 /* LCAvailability.h */,
-				8C84198B1A5A791300C5C6C4 /* AVOSCloud.h */,
-				8C8419F81A5A79FF00C5C6C4 /* AVOSCloud.m */,
 				D3700B782475345C00678B2B /* LCApplication.h */,
 				D3596DAC2480EEED002D2D22 /* LCApplication_Internal.h */,
 				D3700B792475345C00678B2B /* LCApplication.m */,
@@ -2733,6 +2723,7 @@
 				70CA800D1BDE4314000A3B21 /* LCSearchQuery.h in Headers */,
 				70CA800E1BDE4314000A3B21 /* LCSearchSortBuilder.h in Headers */,
 				70CA7FE71BDE42F6000A3B21 /* LCConstants.h in Headers */,
+				D3F227A826467A7000A599F5 /* Foundation.h in Headers */,
 				70CA7FFD1BDE4313000A3B21 /* LCRelation.h in Headers */,
 				70CA80001BDE4313000A3B21 /* LCSubclassing.h in Headers */,
 				D3596DAE2480EEED002D2D22 /* LCApplication_Internal.h in Headers */,
@@ -2748,7 +2739,6 @@
 				70CA7FDB1BDE42F5000A3B21 /* LCACL.h in Headers */,
 				70CA7FDD1BDE42F5000A3B21 /* LCRole.h in Headers */,
 				D37EE4DE23ACF39700AACE99 /* LCNetworkReachabilityManager.h in Headers */,
-				70CA7FEA1BDE42F6000A3B21 /* AVOSCloud.h in Headers */,
 				70CA7FEE1BDE42F6000A3B21 /* LCCloud.h in Headers */,
 				70CA7FF01BDE42F6000A3B21 /* LCFile.h in Headers */,
 				70CA7FF11BDE42F6000A3B21 /* LCFileQuery.h in Headers */,
@@ -2821,11 +2811,11 @@
 				D37EE4DC23ACF39700AACE99 /* LCHTTPSessionManager.h in Headers */,
 				8320F8DA1C1918C60024B45E /* LCDB.h in Headers */,
 				8320F8DB1C1918C60024B45E /* LCRole.h in Headers */,
+				D3F227AA26467A7100A599F5 /* Foundation.h in Headers */,
 				8320F8DD1C1918C60024B45E /* LCConstants.h in Headers */,
 				D37EE4BC23ACF39700AACE99 /* LCURLResponseSerialization.h in Headers */,
 				D3700B7D2475345C00678B2B /* LCApplication.h in Headers */,
 				D37EE4D823ACF39700AACE99 /* LCCompatibilityMacros.h in Headers */,
-				8320F8DE1C1918C60024B45E /* AVOSCloud.h in Headers */,
 				8320F8DF1C1918C60024B45E /* LCCloud.h in Headers */,
 				8320F8E01C1918C60024B45E /* LCDatabase.h in Headers */,
 				8320F8E11C1918C60024B45E /* NSDictionary+LCHash.h in Headers */,
@@ -2920,11 +2910,11 @@
 				83D8CED21C17DAF50094279D /* LCACL.h in Headers */,
 				83D8CED31C17DAF50094279D /* LCDB.h in Headers */,
 				83D8CED41C17DAF50094279D /* LCRole.h in Headers */,
+				D3F227A926467A7100A599F5 /* Foundation.h in Headers */,
 				830EB9F71C44D68400BA917F /* LCSaveOption.h in Headers */,
 				D3596DAF2480EEED002D2D22 /* LCApplication_Internal.h in Headers */,
 				D34EBDCF211C20FF0092A538 /* LCRouter_Internal.h in Headers */,
 				83D8CED61C17DAF50094279D /* LCConstants.h in Headers */,
-				83D8CED71C17DAF50094279D /* AVOSCloud.h in Headers */,
 				83D8CED81C17DAF50094279D /* LCCloud.h in Headers */,
 				83D8CED91C17DAF50094279D /* LCDatabase.h in Headers */,
 				83D8CEDA1C17DAF50094279D /* NSDictionary+LCHash.h in Headers */,
@@ -3008,11 +2998,11 @@
 				8C841AAD1A5A7A0000C5C6C4 /* LCACL.h in Headers */,
 				83DF02B81AF86032000E289C /* LCDB.h in Headers */,
 				8C841AB01A5A7A0000C5C6C4 /* LCRole.h in Headers */,
+				D3F227A726467A6F00A599F5 /* Foundation.h in Headers */,
 				830EB9F41C44D68400BA917F /* LCSaveOption.h in Headers */,
 				D3596DAD2480EEED002D2D22 /* LCApplication_Internal.h in Headers */,
 				8C841AC21A5A7A0000C5C6C4 /* LCConstants.h in Headers */,
 				D34EBDCD211C20FF0092A538 /* LCRouter_Internal.h in Headers */,
-				8C84198C1A5A791300C5C6C4 /* AVOSCloud.h in Headers */,
 				8C841ACE1A5A7A0000C5C6C4 /* LCCloud.h in Headers */,
 				83DF02B01AF86032000E289C /* LCDatabase.h in Headers */,
 				837CC71E1B568431001333AD /* NSDictionary+LCHash.h in Headers */,
@@ -3310,7 +3300,6 @@
 				D30B6B0824A09F1F006ABE09 /* LCGPBUnknownField_PackagePrivate.h in Headers */,
 				D30B6B2324A09F59006ABE09 /* AVIMGenericCommand+AVIMMessagesAdditions.h in Headers */,
 				D30B6AF824A09F1F006ABE09 /* LCGPBMessage.h in Headers */,
-				D30B6A2624A09B1F006ABE09 /* AVOSCloud.h in Headers */,
 				D30B6A2924A09B1F006ABE09 /* LCApplication_Internal.h in Headers */,
 				D30B6A5E24A09D23006ABE09 /* LCSaveOption_internal.h in Headers */,
 				D30B6A9E24A09E35006ABE09 /* LCErrorUtils.h in Headers */,
@@ -3966,7 +3955,6 @@
 				70CA7F721BDE3721000A3B21 /* LCACL.m in Sources */,
 				70CA7F731BDE3721000A3B21 /* LCRole.m in Sources */,
 				D37EE4BE23ACF39700AACE99 /* LCURLRequestSerialization.m in Sources */,
-				70CA7F7B1BDE3721000A3B21 /* AVOSCloud.m in Sources */,
 				83331D591EB9D55100CADC9C /* NSDictionary+LeanCloud.m in Sources */,
 				70CA7F7C1BDE3721000A3B21 /* LCCacheManager.m in Sources */,
 				70CA7F7D1BDE3721000A3B21 /* LCPersistenceUtils.m in Sources */,
@@ -4030,7 +4018,6 @@
 				8320F89C1C1918C60024B45E /* LCDatabasePool.m in Sources */,
 				D37EE4B423ACF39700AACE99 /* LCSecurityPolicy.m in Sources */,
 				830EB9FD1C44D68400BA917F /* LCSaveOption.m in Sources */,
-				8320F89E1C1918C60024B45E /* AVOSCloud.m in Sources */,
 				8320F8A01C1918C60024B45E /* LCObjectUtils.m in Sources */,
 				8320F8A51C1918C60024B45E /* LCCloud.m in Sources */,
 				8320F8A61C1918C60024B45E /* LCObject.m in Sources */,
@@ -4107,7 +4094,6 @@
 				83D8CE941C17DAF50094279D /* LCInstallation.m in Sources */,
 				83D8CE951C17DAF50094279D /* LCDatabasePool.m in Sources */,
 				D37EE4BF23ACF39700AACE99 /* LCURLRequestSerialization.m in Sources */,
-				83D8CE971C17DAF50094279D /* AVOSCloud.m in Sources */,
 				83D8CE991C17DAF50094279D /* LCObjectUtils.m in Sources */,
 				83D8CE9E1C17DAF50094279D /* LCCloud.m in Sources */,
 				83D8CE9F1C17DAF50094279D /* LCObject.m in Sources */,
@@ -4167,7 +4153,6 @@
 				8C841B221A5A7A0000C5C6C4 /* LCInstallation.m in Sources */,
 				83DF02B51AF86032000E289C /* LCDatabasePool.m in Sources */,
 				D37EE4BD23ACF39700AACE99 /* LCURLRequestSerialization.m in Sources */,
-				8C841AC71A5A7A0000C5C6C4 /* AVOSCloud.m in Sources */,
 				8C841B1C1A5A7A0000C5C6C4 /* LCObjectUtils.m in Sources */,
 				8C841ACF1A5A7A0000C5C6C4 /* LCCloud.m in Sources */,
 				8C841B191A5A7A0000C5C6C4 /* LCObject.m in Sources */,
@@ -4360,7 +4345,6 @@
 				D30B6B3724A09F79006ABE09 /* LCIMCacheStore.m in Sources */,
 				D30B6A6A24A09D62006ABE09 /* LCFriendQuery.m in Sources */,
 				D30B6B5924A09FB6006ABE09 /* LCRTMWebSocket.m in Sources */,
-				D30B6A2724A09B1F006ABE09 /* AVOSCloud.m in Sources */,
 				D30B6A8F24A09DDF006ABE09 /* LCDatabase.m in Sources */,
 				D30B6A7724A09DA3006ABE09 /* LCSearchQuery.m in Sources */,
 				D30B6AA424A09E35006ABE09 /* LCUtils.m in Sources */,
@@ -4546,7 +4530,6 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_dylib;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.avoscloud.AVOSCloudIMOSX;
 				PRODUCT_NAME = AVOSCloudIM;
@@ -4567,7 +4550,6 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_dylib;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.avoscloud.AVOSCloudIMOSX;
 				PRODUCT_NAME = AVOSCloudIM;
@@ -4588,7 +4570,6 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_dylib;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-l\"sqlite3\"",
@@ -4612,7 +4593,6 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_dylib;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-l\"sqlite3\"",
@@ -4645,7 +4625,6 @@
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
 		};
@@ -4670,7 +4649,6 @@
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
 		};
@@ -4683,7 +4661,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_dylib;
 				OTHER_LDFLAGS = "$(inherited)";
@@ -4703,7 +4680,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_dylib;
 				OTHER_LDFLAGS = "$(inherited)";
@@ -4761,7 +4737,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LC_APP_ID = "\\@\\\"default\\\"";
 				LC_APP_KEY = "\\@\\\"default\\\"";
 				LC_SERVER_TESTING = 0;
@@ -4823,7 +4798,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LC_APP_ID = "\\@\\\"default\\\"";
 				LC_APP_KEY = "\\@\\\"default\\\"";
 				LC_SERVER_TESTING = 0;
@@ -4861,7 +4835,6 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Debug;
 		};
@@ -4885,7 +4858,6 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Release;
 		};
@@ -5024,7 +4996,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_dylib;
 				OTHER_LDFLAGS = (
@@ -5047,7 +5018,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_dylib;
 				OTHER_LDFLAGS = (
@@ -5105,7 +5075,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LC_APP_ID = "\\@\\\"default\\\"";
 				LC_APP_KEY = "\\@\\\"default\\\"";
 				LC_SERVER_TESTING = 0;
@@ -5162,7 +5131,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LC_APP_ID = "\\@\\\"default\\\"";
 				LC_APP_KEY = "\\@\\\"default\\\"";
 				LC_SERVER_TESTING = 0;
@@ -5189,7 +5157,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_dylib;
 				OTHER_LDFLAGS = "$(inherited)";
@@ -5209,7 +5176,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_dylib;
 				OTHER_LDFLAGS = "$(inherited)";
@@ -5264,7 +5230,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LC_APP_ID = "\\@\\\"default\\\"";
 				LC_APP_KEY = "\\@\\\"default\\\"";
 				LC_SERVER_TESTING = 0;
@@ -5324,7 +5289,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Resources/$(TARGET_NAME).info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LC_APP_ID = "\\@\\\"default\\\"";
 				LC_APP_KEY = "\\@\\\"default\\\"";
 				LC_SERVER_TESTING = 0;
@@ -5432,7 +5396,6 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_dylib;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = "LeanCloud.AVOSCloudLiveQuery-macOS";
 				PRODUCT_NAME = AVOSCloudLiveQuery;
 				SDKROOT = macosx;
@@ -5452,7 +5415,6 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_dylib;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = "LeanCloud.AVOSCloudLiveQuery-macOS";
 				PRODUCT_NAME = AVOSCloudLiveQuery;
 				SDKROOT = macosx;
@@ -5566,7 +5528,6 @@
 				LC_URL_RTMRouter = "\\@\\\"default\\\"";
 				LC_URL_RTMServer = "\\@\\\"default\\\"";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "LeanCloud.AVOSCloud-macOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -5598,7 +5559,6 @@
 				LC_URL_RTMRouter = "\\@\\\"default\\\"";
 				LC_URL_RTMServer = "\\@\\\"default\\\"";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "LeanCloud.AVOSCloud-macOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
