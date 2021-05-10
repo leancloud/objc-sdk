@@ -51,9 +51,9 @@ class RTMConnectionTestCase: RTMBaseTestCase {
     }
     
     func testConnectingDelayAndStop() {
-        AVOSCloudIM.defaultOptions().rtmServer = RTMBaseTestCase.testableRTMServer + "n"
+        LCApplication.default().rtmServer = RTMBaseTestCase.testableRTMServer + "n"
         defer {
-            AVOSCloudIM.defaultOptions().rtmServer = nil
+            LCApplication.default().rtmServer = nil
         }
         let peerID = uuid
         let consumer = LCRTMServiceConsumer(

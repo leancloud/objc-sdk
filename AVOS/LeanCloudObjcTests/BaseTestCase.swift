@@ -45,11 +45,11 @@ class BaseTestCase: XCTestCase {
     override class func setUp() {
         super.setUp()
         let app = BaseTestCase.cnApp
-        AVOSCloud.setAllLogsEnabled(true)
+        LCApplication.setAllLogsEnabled(true)
         if app.serverURL.isEmpty {
-            AVOSCloud.setApplicationId(app.id, clientKey: app.key)
+            LCApplication.setApplicationId(app.id, clientKey: app.key)
         } else {
-            AVOSCloud.setApplicationId(app.id, clientKey: app.key, serverURLString: app.serverURL)
+            LCApplication.setApplicationId(app.id, clientKey: app.key, serverURLString: app.serverURL)
         }
     }
     

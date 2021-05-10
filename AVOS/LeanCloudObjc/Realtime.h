@@ -8,6 +8,38 @@
 
 #import <Foundation/Foundation.h>
 
-#import "AVOSCloud.h"
-#import "AVOSCloudIM.h"
-#import "AVOSCloudLiveQuery.h"
+#import "Foundation.h"
+
+// Constant
+#import "LCIMCommon.h"
+
+// Client
+#import "LCIMClientProtocol.h"
+#import "LCIMClient.h"
+#import "LCIMClientInternalConversationManager.h"
+
+// Signature
+#import "LCIMSignature.h"
+
+// Conversation
+#import "LCIMConversation.h"
+#import "LCIMConversationMemberInfo.h"
+#import "LCIMKeyedConversation.h"
+
+// Conversation Query
+#import "LCIMConversationQuery.h"
+
+// Message
+#import "LCIMMessage.h"
+#import "LCIMMessageOption.h"
+#import "LCIMTypedMessage.h"
+#import "LCIMTextMessage.h"
+#import "LCIMImageMessage.h"
+#import "LCIMAudioMessage.h"
+#import "LCIMVideoMessage.h"
+#import "LCIMLocationMessage.h"
+#import "LCIMFileMessage.h"
+#import "LCIMRecalledMessage.h"
+
+// Live Query
+#import "LCLiveQuery.h"
