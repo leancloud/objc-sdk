@@ -290,7 +290,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 
 /*!
  *  使用手机号码和验证码注册或登录
- *  用于手机号直接注册用户，需要使用 [AVOSCloud requestSmsCodeWithPhoneNumber:callback:] 获取验证码
+ *  用于手机号直接注册用户，需要使用 [LCApplication requestSmsCodeWithPhoneNumber:callback:] 获取验证码
  *  @param phoneNumber 11位电话号码
  *  @param code 6位验证码
  *  @param error 发生错误通过此参数返回
@@ -301,7 +301,7 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 
 /*!
  *  使用手机号码和验证码注册或登录
- *  用于手机号直接注册用户，需要使用 [AVOSCloud requestSmsCodeWithPhoneNumber:callback:] 获取验证码
+ *  用于手机号直接注册用户，需要使用 [LCApplication requestSmsCodeWithPhoneNumber:callback:] 获取验证码
  *  @param phoneNumber 11位电话号码
  *  @param code 6位验证码
  *  @param block 回调结果

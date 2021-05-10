@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  Lets LeanCloud know this class should be used to instantiate all objects with class type parseClassName.
- This method must be called before [AVOSCloud setApplicationId:clientKey:]
+ This method must be called before [LCApplication setApplicationId:clientKey:]
  */
 + (void)registerSubclass;
 

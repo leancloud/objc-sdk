@@ -22,7 +22,7 @@
     return NSHomeDirectory();
 #elif TARGET_OS_OSX
     /// ~/Library/Application Support/LeanCloud/appId
-    NSAssert([LCApplication getApplicationId] != nil, @"Please call +[AVOSCloud setApplicationId:clientKey:] first.");
+    NSAssert([LCApplication getApplicationId] != nil, @"Please call +[LCApplication setApplicationId:clientKey:] first.");
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *directoryPath = [paths firstObject];
     directoryPath = [directoryPath stringByAppendingPathComponent:LCRootDirName];

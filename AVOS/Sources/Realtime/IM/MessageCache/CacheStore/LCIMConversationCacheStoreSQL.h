@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#ifndef AVOS_LCIMConversationCacheStoreSQL_h
-#define AVOS_LCIMConversationCacheStoreSQL_h
+#ifndef LeanCloud_LCIMConversationCacheStoreSQL_h
+#define LeanCloud_LCIMConversationCacheStoreSQL_h
 
 #define LCIM_TABLE_CONVERSATION_V2      @"conversation_v2"
 

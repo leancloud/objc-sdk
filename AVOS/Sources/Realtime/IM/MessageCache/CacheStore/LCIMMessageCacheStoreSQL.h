@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 LeanCloud Inc. All rights reserved.
 //
 
-#ifndef AVOS_LCIMMessageCacheSQL_h
-#define AVOS_LCIMMessageCacheSQL_h
+#ifndef LeanCloud_LCIMMessageCacheSQL_h
+#define LeanCloud_LCIMMessageCacheSQL_h
 
 #define LCIM_TABLE_MESSAGE              @"message"
 

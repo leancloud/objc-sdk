@@ -166,7 +166,7 @@ class XcodebuildTask: Task {
         }
     }
     
-    enum SchemeSuffix: String {
+    enum Platform: String {
         case iOS
         case macOS
         case tvOS
@@ -175,25 +175,21 @@ class XcodebuildTask: Task {
     
     static func building(
         project: String = XcodebuildTask.projectPath,
-        schemeSuffixes: [SchemeSuffix] = [.iOS, .macOS, .tvOS, .watchOS])
+        platforms: [Platform] = [.iOS, .macOS, .tvOS])
         throws
     {
         try version()
         let xcodeproj = try getXcodeproj(name: project)
         let start = Date()
-        try xcodeproj.project.schemes.forEach { (scheme) in
-            try schemeSuffixes.forEach { (schemeSuffix) in
-                guard scheme.hasSuffix(schemeSuffix.rawValue) else {
-                    return
-                }
-                try xcodeproj.project.configurations.forEach { (configuration) in
-                    try building(
-                        project: project,
-                        scheme: scheme,
-                        configuration: configuration,
-                        destination: scheme.hasSuffix(SchemeSuffix.macOS.rawValue) ?
-                            nil : "generic/platform=\(schemeSuffix.rawValue)")
-                }
+        try platforms.forEach { (platform) in
+            try xcodeproj.project.configurations.forEach { (configuration) in
+                try building(
+                    project: project,
+                    scheme: "LeanCloudObjc",
+                    configuration: configuration,
+                    destination: platform == .macOS
+                        ? "platform=\(platform.rawValue)"
+                        : "generic/platform=\(platform.rawValue)")
             }
         }
         print("\nBuilding Time Cost: \(Date().timeIntervalSince(start) / 60.0) minutes.\n")
@@ -336,9 +332,7 @@ class PodTask: Task {
 
 class VersionUpdater {
     static let userAgentFilePath: String = "./AVOS/Sources/Foundation/UserAgent.h"
-    static let AVOSCloudPodspecFilePath: String = "./AVOSCloud.podspec"
-    static let AVOSCloudIMPodspecFilePath: String = "./AVOSCloudIM.podspec"
-    static let AVOSCloudLiveQueryPodspecFilePath: String = "./AVOSCloudLiveQuery.podspec"
+    static let LeanCloudObjcFilePath: String = "./LeanCloudObjc.podspec"
     
     static func checkFileExists(path: String) throws {
         guard FileManager.default.fileExists(atPath: path) else {
@@ -400,11 +394,7 @@ class VersionUpdater {
     }
     
     static func newVersion(_ newVersion: Version, replace oldVersion: Version) throws {
-        let paths = [
-            userAgentFilePath,
-            AVOSCloudPodspecFilePath,
-            AVOSCloudIMPodspecFilePath,
-            AVOSCloudLiveQueryPodspecFilePath]
+        let paths = [userAgentFilePath, LeanCloudObjcFilePath]
         for path in paths {
             try checkFileExists(path: path)
             try (try String(contentsOfFile: path))
