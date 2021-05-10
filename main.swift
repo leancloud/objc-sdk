@@ -624,10 +624,7 @@ class CLI {
     }
     
     static func podTrunk() throws {
-        try PodTask.trunkPush(paths: [
-            "AVOSCloud.podspec",
-            "AVOSCloudIM.podspec",
-            "AVOSCloudLiveQuery.podspec"])
+        try PodTask.trunkPush(paths: ["LeanCloudObjc.podspec"])
     }
     
     static func apiDocsUpdate() throws {
