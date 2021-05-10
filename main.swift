@@ -335,7 +335,7 @@ class PodTask: Task {
 }
 
 class VersionUpdater {
-    static let userAgentFilePath: String = "./AVOS/AVOSCloud/UserAgent.h"
+    static let userAgentFilePath: String = "./AVOS/Sources/Foundation/UserAgent.h"
     static let AVOSCloudPodspecFilePath: String = "./AVOSCloud.podspec"
     static let AVOSCloudIMPodspecFilePath: String = "./AVOSCloudIM.podspec"
     static let AVOSCloudLiveQueryPodspecFilePath: String = "./AVOSCloudLiveQuery.podspec"
@@ -513,7 +513,7 @@ class JazzyTask: Task {
 
 class ThirdPartyLibraryUpgrader {
     static let protobufObjcDirectoryPath = "../protobuf/objectivec/"
-    static let lcProtobufObjcDirectoryPath = "./AVOS/AVOSCloudIM/Protobuf/"
+    static let lcProtobufObjcDirectoryPath = "./AVOS/Sources/Realtime/IM/Protobuf/"
     
     static func checkDirectoryExists(path: String) throws {
         var isDirectory: ObjCBool = false

@@ -23,37 +23,37 @@ Pod::Spec.new do |s|
   s.subspec 'Foundation' do |ss|
     ss.source_files =
       'AVOS/LeanCloudObjc/Foundation.h',
-      'AVOS/AVOSCloud/**/*.{h,m}'
+      'AVOS/Sources/Foundation/**/*.{h,m}'
     
     ss.public_header_files =
       'AVOS/LeanCloudObjc/Foundation.h',
-      'AVOS/AVOSCloud/Captcha/LCCaptcha.h',
-      'AVOS/AVOSCloud/Utils/LCDynamicObject.h',
-      'AVOS/AVOSCloud/SMS/LCSMS.h',
-      'AVOS/AVOSCloud/ACL/LCACL.h',
-      'AVOS/AVOSCloud/ACL/LCRole.h',
-      'AVOS/AVOSCloud/Object/LCSaveOption.h',
-      'AVOS/AVOSCloud/LCConstants.h',
-      'AVOS/AVOSCloud/LCApplication.h',
-      'AVOS/AVOSCloud/CloudCode/LCCloud.h',
-      'AVOS/AVOSCloud/File/LCFile.h',
-      'AVOS/AVOSCloud/Geo/LCGeoPoint.h',
-      'AVOS/AVOSCloud/Object/LCObject+Subclass.h',
-      'AVOS/AVOSCloud/Object/LCObject.h',
-      'AVOS/AVOSCloud/Object/LCRelation.h',
-      'AVOS/AVOSCloud/Object/LCSubclassing.h',
-      'AVOS/AVOSCloud/Push/LCInstallation.h',
-      'AVOS/AVOSCloud/File/LCFileQuery.h',
-      'AVOS/AVOSCloud/Push/LCPush.h',
-      'AVOS/AVOSCloud/Query/LCCloudQueryResult.h',
-      'AVOS/AVOSCloud/Query/LCQuery.h',
-      'AVOS/AVOSCloud/Search/LCSearchQuery.h',
-      'AVOS/AVOSCloud/Search/LCSearchSortBuilder.h',
-      'AVOS/AVOSCloud/Status/LCStatus.h',
-      'AVOS/AVOSCloud/User/LCUser.h',
-      'AVOS/AVOSCloud/Utils/LCLogger.h',
-      'AVOS/AVOSCloud/Router/LCRouter.h',
-      'AVOS/AVOSCloud/LCAvailability.h'
+      'AVOS/Sources/Foundation/Captcha/LCCaptcha.h',
+      'AVOS/Sources/Foundation/Utils/LCDynamicObject.h',
+      'AVOS/Sources/Foundation/SMS/LCSMS.h',
+      'AVOS/Sources/Foundation/ACL/LCACL.h',
+      'AVOS/Sources/Foundation/ACL/LCRole.h',
+      'AVOS/Sources/Foundation/Object/LCSaveOption.h',
+      'AVOS/Sources/Foundation/LCConstants.h',
+      'AVOS/Sources/Foundation/LCApplication.h',
+      'AVOS/Sources/Foundation/CloudCode/LCCloud.h',
+      'AVOS/Sources/Foundation/File/LCFile.h',
+      'AVOS/Sources/Foundation/Geo/LCGeoPoint.h',
+      'AVOS/Sources/Foundation/Object/LCObject+Subclass.h',
+      'AVOS/Sources/Foundation/Object/LCObject.h',
+      'AVOS/Sources/Foundation/Object/LCRelation.h',
+      'AVOS/Sources/Foundation/Object/LCSubclassing.h',
+      'AVOS/Sources/Foundation/Push/LCInstallation.h',
+      'AVOS/Sources/Foundation/File/LCFileQuery.h',
+      'AVOS/Sources/Foundation/Push/LCPush.h',
+      'AVOS/Sources/Foundation/Query/LCCloudQueryResult.h',
+      'AVOS/Sources/Foundation/Query/LCQuery.h',
+      'AVOS/Sources/Foundation/Search/LCSearchQuery.h',
+      'AVOS/Sources/Foundation/Search/LCSearchSortBuilder.h',
+      'AVOS/Sources/Foundation/Status/LCStatus.h',
+      'AVOS/Sources/Foundation/User/LCUser.h',
+      'AVOS/Sources/Foundation/Utils/LCLogger.h',
+      'AVOS/Sources/Foundation/Router/LCRouter.h',
+      'AVOS/Sources/Foundation/LCAvailability.h'
 
     ss.library =
       'sqlite3'
@@ -63,8 +63,8 @@ Pod::Spec.new do |s|
     ss.requires_arc = false
 
     ss.source_files =
-      'AVOS/AVOSCloudIM/Protobuf/*.{h,m}',
-      'AVOS/AVOSCloudIM/Commands/MessagesProtoOrig.pbobjc.{h,m}'
+      'AVOS/Sources/Realtime/IM/Protobuf/*.{h,m}',
+      'AVOS/Sources/Realtime/IM/Commands/MessagesProtoOrig.pbobjc.{h,m}'
   end
 
   s.subspec 'Realtime' do |ss|
@@ -76,34 +76,34 @@ Pod::Spec.new do |s|
 
     ss.source_files =
       'AVOS/LeanCloudObjc/Realtime.h',
-      'AVOS/AVOSCloudIM/**/*.{h,m,c}',
-      'AVOS/AVOSCloudLiveQuery/**/*.{h,m}'
+      'AVOS/Sources/Realtime/IM/**/*.{h,m,c}',
+      'AVOS/Sources/Realtime/LiveQuery/**/*.{h,m}'
 
     ss.public_header_files =
       'AVOS/LeanCloudObjc/Realtime.h',
-      'AVOS/AVOSCloudIM/Message/LCIMMessageOption.h',
-      'AVOS/AVOSCloudIM/Conversation/LCIMKeyedConversation.h',
-      'AVOS/AVOSCloudIM/Conversation/LCIMConversationQuery.h',
-      'AVOS/AVOSCloudIM/TypedMessages/LCIMTextMessage.h',
-      'AVOS/AVOSCloudIM/TypedMessages/LCIMRecalledMessage.h',
-      'AVOS/AVOSCloudIM/TypedMessages/LCIMLocationMessage.h',
-      'AVOS/AVOSCloudIM/TypedMessages/LCIMAudioMessage.h',
-      'AVOS/AVOSCloudIM/TypedMessages/LCIMVideoMessage.h',
-      'AVOS/AVOSCloudIM/TypedMessages/LCIMFileMessage.h',
-      'AVOS/AVOSCloudIM/TypedMessages/LCIMTypedMessage.h',
-      'AVOS/AVOSCloudIM/TypedMessages/LCIMImageMessage.h',
-      'AVOS/AVOSCloudIM/Client/LCIMClient.h',
-      'AVOS/AVOSCloudIM/LCIMCommon.h',
-      'AVOS/AVOSCloudIM/Conversation/LCIMConversation.h',
-      'AVOS/AVOSCloudIM/Message/LCIMMessage.h',
-      'AVOS/AVOSCloudIM/Signature/LCIMSignature.h',
-      'AVOS/AVOSCloudIM/Client/LCIMClientProtocol.h',
-      'AVOS/AVOSCloudIM/Conversation/LCIMConversationMemberInfo.h',
-      'AVOS/AVOSCloudIM/Client/LCIMClientInternalConversationManager.h',
-      'AVOS/AVOSCloudLiveQuery/LCLiveQuery.h'
+      'AVOS/Sources/Realtime/IM/Message/LCIMMessageOption.h',
+      'AVOS/Sources/Realtime/IM/Conversation/LCIMKeyedConversation.h',
+      'AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h',
+      'AVOS/Sources/Realtime/IM/TypedMessages/LCIMTextMessage.h',
+      'AVOS/Sources/Realtime/IM/TypedMessages/LCIMRecalledMessage.h',
+      'AVOS/Sources/Realtime/IM/TypedMessages/LCIMLocationMessage.h',
+      'AVOS/Sources/Realtime/IM/TypedMessages/LCIMAudioMessage.h',
+      'AVOS/Sources/Realtime/IM/TypedMessages/LCIMVideoMessage.h',
+      'AVOS/Sources/Realtime/IM/TypedMessages/LCIMFileMessage.h',
+      'AVOS/Sources/Realtime/IM/TypedMessages/LCIMTypedMessage.h',
+      'AVOS/Sources/Realtime/IM/TypedMessages/LCIMImageMessage.h',
+      'AVOS/Sources/Realtime/IM/Client/LCIMClient.h',
+      'AVOS/Sources/Realtime/IM/LCIMCommon.h',
+      'AVOS/Sources/Realtime/IM/Conversation/LCIMConversation.h',
+      'AVOS/Sources/Realtime/IM/Message/LCIMMessage.h',
+      'AVOS/Sources/Realtime/IM/Signature/LCIMSignature.h',
+      'AVOS/Sources/Realtime/IM/Client/LCIMClientProtocol.h',
+      'AVOS/Sources/Realtime/IM/Conversation/LCIMConversationMemberInfo.h',
+      'AVOS/Sources/Realtime/IM/Client/LCIMClientInternalConversationManager.h',
+      'AVOS/Sources/Realtime/LiveQuery/LCLiveQuery.h'
 
     ss.exclude_files =
-      'AVOS/AVOSCloudIM/Protobuf/*.{h,m}',
-      'AVOS/AVOSCloudIM/Commands/MessagesProtoOrig.pbobjc.{h,m}'
+      'AVOS/Sources/Realtime/IM/Protobuf/*.{h,m}',
+      'AVOS/Sources/Realtime/IM/Commands/MessagesProtoOrig.pbobjc.{h,m}'
   end
 end

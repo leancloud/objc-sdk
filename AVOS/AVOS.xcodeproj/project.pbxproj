@@ -705,7 +705,7 @@
 			path = MessageCache;
 			sourceTree = "<group>";
 		};
-		838CE31C1EC97E6E00B24F5B /* AVOSCloudLiveQuery */ = {
+		838CE31C1EC97E6E00B24F5B /* LiveQuery */ = {
 			isa = PBXGroup;
 			children = (
 				838CE3521EC9838500B24F5B /* LCLiveQuery.h */,
@@ -714,7 +714,7 @@
 				834A54811ECAF3A0006C8F4B /* LCSubscriber.h */,
 				834A54821ECAF3A0006C8F4B /* LCSubscriber.m */,
 			);
-			path = AVOSCloudLiveQuery;
+			path = LiveQuery;
 			sourceTree = "<group>";
 		};
 		83DF02A41AF86032000E289C /* LCDB */ = {
@@ -787,12 +787,10 @@
 			isa = PBXGroup;
 			children = (
 				D3F227BB2649115600A599F5 /* LeanCloudObjc.podspec */,
-				8C8419881A5A791300C5C6C4 /* AVOSCloud */,
-				8C8419C41A5A796000C5C6C4 /* AVOSCloudIM */,
-				838CE31C1EC97E6E00B24F5B /* AVOSCloudLiveQuery */,
-				D305F7AE2355771B00222EBC /* CLI */,
+				D3F227BC2649133900A599F5 /* Sources */,
 				D30B6A0C24A09978006ABE09 /* LeanCloudObjc */,
 				D30B6A1724A09978006ABE09 /* LeanCloudObjcTests */,
+				D305F7AE2355771B00222EBC /* CLI */,
 				8C8419871A5A791300C5C6C4 /* Products */,
 				D328B8E320FC863F0039091A /* Frameworks */,
 			);
@@ -810,7 +808,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		8C8419881A5A791300C5C6C4 /* AVOSCloud */ = {
+		8C8419881A5A791300C5C6C4 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
 				8C841AAC1A5A7A0000C5C6C4 /* UserAgent.h */,
@@ -838,10 +836,10 @@
 				83331D421EB9A24D00CADC9C /* Captcha */,
 				835091FA1EB1BD90000DA884 /* SMS */,
 			);
-			path = AVOSCloud;
+			path = Foundation;
 			sourceTree = "<group>";
 		};
-		8C8419C41A5A796000C5C6C4 /* AVOSCloudIM */ = {
+		8C8419C41A5A796000C5C6C4 /* IM */ = {
 			isa = PBXGroup;
 			children = (
 				8C841BCE1A5A84C600C5C6C4 /* LCIMCommon.h */,
@@ -860,7 +858,7 @@
 				8C841BFF1A5A84C600C5C6C4 /* Utilities */,
 				D3700B7124750CB300678B2B /* Connection */,
 			);
-			path = AVOSCloudIM;
+			path = IM;
 			sourceTree = "<group>";
 		};
 		8C8419DC1A5A79FF00C5C6C4 /* ACL */ = {
@@ -1306,6 +1304,24 @@
 				831E29591D882CBB006E502B /* LCIMMessageOption.m */,
 			);
 			path = Message;
+			sourceTree = "<group>";
+		};
+		D3F227BC2649133900A599F5 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				8C8419881A5A791300C5C6C4 /* Foundation */,
+				D3F227BD264914E400A599F5 /* Realtime */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		D3F227BD264914E400A599F5 /* Realtime */ = {
+			isa = PBXGroup;
+			children = (
+				8C8419C41A5A796000C5C6C4 /* IM */,
+				838CE31C1EC97E6E00B24F5B /* LiveQuery */,
+			);
+			path = Realtime;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
