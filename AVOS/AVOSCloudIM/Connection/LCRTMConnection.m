@@ -15,7 +15,6 @@
 #import "LCLogger.h"
 #import "LCUtils.h"
 #import "LCErrorUtils.h"
-#import "AVOSCloudIM.h"
 #import "LCIMCommon_Internal.h"
 #import "LCIMErrorUtil.h"
 
@@ -814,8 +813,8 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 - (void)getRTMServerWithCompletion:(void(^)(LCRTMConnection *connection, NSURL *serverURL, NSError *error))completion
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
-    if ([AVOSCloudIM defaultOptions].RTMServer) {
-        completion(self, [NSURL URLWithString:[AVOSCloudIM defaultOptions].RTMServer], nil);
+    if (self.application.RTMServer) {
+        completion(self, [NSURL URLWithString:self.application.RTMServer], nil);
     } else {
         __weak typeof(self) ws = self;
         [[LCRouter sharedInstance] getRTMURLWithAppID:[self.application identifierThrowException]
@@ -898,7 +897,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 - (void)handleGoaway:(AVIMGenericCommand *)inCommand
 {
     NSParameterAssert([self assertSpecificSerialQueue]);
-    if (![AVOSCloudIM defaultOptions].RTMServer &&
+    if (!self.application.RTMServer &&
         inCommand.cmd == AVIMCommandType_Goaway) {
         NSError *error;
         [[LCRouter sharedInstance] cleanCacheWithApplication:self.application

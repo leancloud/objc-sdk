@@ -100,9 +100,7 @@ Pod::Spec.new do |s|
       'AVOS/AVOSCloudIM/Client/LCIMClientProtocol.h',
       'AVOS/AVOSCloudIM/Conversation/LCIMConversationMemberInfo.h',
       'AVOS/AVOSCloudIM/Client/LCIMClientInternalConversationManager.h',
-      'AVOS/AVOSCloudIM/AVOSCloudIM.h',
-      'AVOS/AVOSCloudLiveQuery/LCLiveQuery.h',
-      'AVOS/AVOSCloudLiveQuery/AVOSCloudLiveQuery.h'
+      'AVOS/AVOSCloudLiveQuery/LCLiveQuery.h'
 
     ss.exclude_files =
       'AVOS/AVOSCloudIM/Protobuf/*.{h,m}',
