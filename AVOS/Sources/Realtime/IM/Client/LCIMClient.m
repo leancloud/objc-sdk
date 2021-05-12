@@ -36,6 +36,18 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 }
 #endif
 
+@implementation LCIMConversationCreationOption
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _isUnique = true;
+    }
+    return self;
+}
+
+@end
+
 @implementation LCIMClient {
     LCIMClientStatus _status;
 }
@@ -68,26 +80,11 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 // MARK: Initialization
 
 - (instancetype)initWithClientId:(NSString *)clientId
-{
-    return [self initWithClientId:clientId
-                              tag:nil
-                            error:nil];
-}
-
-- (instancetype)initWithClientId:(NSString *)clientId
                            error:(NSError *__autoreleasing  _Nullable *)error
 {
     return [self initWithClientId:clientId
                               tag:nil
                             error:error];
-}
-
-- (instancetype)initWithClientId:(NSString *)clientId
-                             tag:(NSString *)tag
-{
-    return [self initWithClientId:clientId
-                              tag:tag
-                            error:nil];
 }
 
 - (instancetype)initWithClientId:(NSString *)clientId
@@ -101,26 +98,11 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 }
 
 - (instancetype)initWithUser:(LCUser *)user
-{
-    return [self initWithUser:user
-                          tag:nil
-                        error:nil];
-}
-
-- (instancetype)initWithUser:(LCUser *)user
                        error:(NSError *__autoreleasing  _Nullable *)error
 {
     return [self initWithUser:user
                           tag:nil
                         error:error];
-}
-
-- (instancetype)initWithUser:(LCUser *)user
-                         tag:(NSString *)tag
-{
-    return [self initWithUser:user
-                          tag:tag
-                        error:nil];
 }
 
 - (instancetype)initWithUser:(LCUser *)user
@@ -1538,38 +1520,68 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 // MARK: Conversation Create
 
-- (void)createConversationWithName:(NSString * _Nullable)name
-                         clientIds:(NSArray<NSString *> *)clientIds
-                          callback:(void (^)(LCIMConversation * _Nullable, NSError * _Nullable))callback
+- (void)createConversationWithClientIds:(NSArray<NSString *> *)clientIds
+                               callback:(void (^)(LCIMConversation * _Nullable, NSError * _Nullable))callback
 {
-    [self createConversationWithName:name clientIds:clientIds attributes:nil options:(LCIMConversationOptionNone) temporaryTTL:0 callback:callback];
+    [self createConversationWithClientIds:clientIds option:nil callback:callback];
 }
 
-- (void)createChatRoomWithName:(NSString * _Nullable)name
-                    attributes:(NSDictionary * _Nullable)attributes
-                      callback:(void (^)(LCIMChatRoom * _Nullable, NSError * _Nullable))callback
+- (void)createConversationWithClientIds:(NSArray<NSString *> *)clientIds
+                                 option:(LCIMConversationCreationOption *)option
+                               callback:(void (^)(LCIMConversation * _Nullable, NSError * _Nullable))callback
 {
-    [self createConversationWithName:name clientIds:@[] attributes:attributes options:(LCIMConversationOptionTransient) temporaryTTL:0 callback:^(LCIMConversation * _Nullable conversation, NSError * _Nullable error) {
+    LCIMConversationOption convOption = LCIMConversationOptionUnique;
+    if (option && !option.isUnique) {
+        convOption = LCIMConversationOptionNone;
+    }
+    [self createConversationWithName:option.name
+                           clientIds:clientIds
+                          attributes:option.attributes
+                             options:convOption
+                        temporaryTTL:0
+                            callback:callback];
+}
+
+- (void)createChatRoomWithCallback:(void (^)(LCIMChatRoom * _Nullable, NSError * _Nullable))callback
+{
+    [self createChatRoomWithOption:nil callback:callback];
+}
+
+- (void)createChatRoomWithOption:(LCIMConversationCreationOption *)option
+                        callback:(void (^)(LCIMChatRoom * _Nullable, NSError * _Nullable))callback
+{
+    [self createConversationWithName:option.name
+                           clientIds:@[]
+                          attributes:option.attributes
+                             options:LCIMConversationOptionTransient
+                        temporaryTTL:0
+                            callback:^(LCIMConversation * _Nullable conversation, NSError * _Nullable error) {
         callback((LCIMChatRoom *)conversation, error);
     }];
 }
 
 - (void)createTemporaryConversationWithClientIds:(NSArray<NSString *> *)clientIds
-                                      timeToLive:(int32_t)ttl
                                         callback:(void (^)(LCIMTemporaryConversation * _Nullable, NSError * _Nullable))callback
 {
-    [self createConversationWithName:nil clientIds:clientIds attributes:nil options:(LCIMConversationOptionTemporary) temporaryTTL:ttl callback:^(LCIMConversation * _Nullable conversation, NSError * _Nullable error) {
-        callback((LCIMTemporaryConversation *)conversation, error);
-    }];
+    [self createTemporaryConversationWithClientIds:clientIds option:nil callback:callback];
 }
 
-- (void)createConversationWithName:(NSString * _Nullable)name
-                         clientIds:(NSArray<NSString *> *)clientIds
-                        attributes:(NSDictionary * _Nullable)attributes
-                           options:(LCIMConversationOption)options
-                          callback:(void (^)(LCIMConversation * _Nullable, NSError * _Nullable))callback
+- (void)createTemporaryConversationWithClientIds:(NSArray<NSString *> *)clientIds
+                                          option:(LCIMConversationCreationOption *)option
+                                        callback:(void (^)(LCIMTemporaryConversation * _Nullable, NSError * _Nullable))callback
 {
-    [self createConversationWithName:name clientIds:clientIds attributes:attributes options:options temporaryTTL:0 callback:callback];
+    int32_t ttl = 0;
+    if (option.timeToLive > 0) {
+        ttl = (int32_t)(option.timeToLive);
+    }
+    [self createConversationWithName:nil
+                           clientIds:clientIds
+                          attributes:nil
+                             options:LCIMConversationOptionTemporary
+                        temporaryTTL:ttl
+                            callback:^(LCIMConversation * _Nullable conversation, NSError * _Nullable error) {
+        callback((LCIMTemporaryConversation *)conversation, error);
+    }];
 }
 
 - (void)createConversationWithName:(NSString * _Nullable)name
@@ -2108,24 +2120,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }
     LCIMClient.sessionProtocolOptions[kLCIMUserOptionUseUnread] = @(enabled);
 }
-
-// MARK: Deprecated
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-implementations"
-+ (void)setUserOptions:(NSDictionary *)userOptions
-{
-    if (gClientHasInstantiated) {
-        [NSException raise:NSInternalInconsistencyException
-                    format:@"This method should be invoked before initialization of `LCIMClient`."];
-        return;
-    }
-    if (!userOptions) {
-        return;
-    }
-    [LCIMClient.sessionProtocolOptions addEntriesFromDictionary:userOptions];
-}
-#pragma clang diagnostic pop
 
 @end
 

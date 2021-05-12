@@ -42,7 +42,7 @@ class IMMessageTestCase: RTMBaseTestCase {
         var chatRoom4: LCIMChatRoom?
         
         expecting(count: 7) { (exp) in
-            client1.createChatRoom(withName: nil, attributes: nil) { (chatRoom, error) in
+            client1.createChatRoom() { (chatRoom, error) in
                 XCTAssertNil(error)
                 chatRoom1 = chatRoom
                 exp.fulfill()
@@ -127,7 +127,7 @@ extension IMMessageTestCase {
         if let suffix = clientIDSuffix {
             ID += "-\(suffix)"
         }
-        var client: LCIMClient? = try! LCIMClient(clientId: ID, error: ())
+        var client: LCIMClient? = try! LCIMClient(clientId: ID)
         expecting { (exp) in
             client?.open(callback: { (success, error) in
                 XCTAssertTrue(success)
