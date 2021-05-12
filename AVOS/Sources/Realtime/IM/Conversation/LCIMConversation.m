@@ -1653,6 +1653,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         AVIMPatchCommand *patchCommand = (inCommand.hasPatchMessage ? inCommand.patchMessage : nil);
         
         LCIMRecalledMessage *recalledMessage = [[LCIMRecalledMessage alloc] init];
+        recalledMessage.isRecall = true;
         recalledMessage.messageId = oldMessage.messageId;
         recalledMessage.clientId = oldMessage.clientId;
         recalledMessage.localClientId = oldMessage.localClientId;
@@ -3016,6 +3017,10 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
         message.mentionAll = (patchItem.hasMentionAll ? patchItem.mentionAll : false);
         message.mentionList = patchItem.mentionPidsArray;
         message.updatedAt = [NSDate dateWithTimeIntervalSince1970:(patchTimestamp / 1000.0)];
+        if (patchItem.hasRecall && patchItem.recall &&
+            [message isKindOfClass:[LCIMRecalledMessage class]]) {
+            ((LCIMRecalledMessage *)message).isRecall = true;
+        }
         message;
     });
     
