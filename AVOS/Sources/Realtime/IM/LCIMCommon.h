@@ -69,18 +69,6 @@ typedef NS_ENUM(NSUInteger, LCIMClientOpenOption) {
 
 // MARK: Conversation
 
-/// option for create conversation
-typedef NS_OPTIONS(uint64_t, LCIMConversationOption) {
-    /// Default conversation. At most allow 500 people to join the conversation.
-    LCIMConversationOptionNone          = 0,
-    /// Unique conversation. If the server detects the conversation with that members exists, will return it instead of creating a new one.
-    LCIMConversationOptionUnique        = 1 << 0,
-    /// Transient conversation. No headcount limits. But the functionality is limited. No offline messages, no offline notifications, etc.
-    LCIMConversationOptionTransient     = 1 << 1,
-    /// Temporary conversation
-    LCIMConversationOptionTemporary     = 1 << 2,
-};
-
 /// key for updated property of conversation
 typedef NSString * LCIMConversationUpdatedKey NS_STRING_ENUM;
 FOUNDATION_EXPORT LCIMConversationUpdatedKey const LCIMConversationUpdatedKeyLastMessage;

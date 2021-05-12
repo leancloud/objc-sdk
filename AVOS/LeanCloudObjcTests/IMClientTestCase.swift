@@ -13,22 +13,22 @@ class IMClientTestCase: RTMBaseTestCase {
     
     func testInitAndDealloc() {
         let peerID = uuid
-        var client: LCIMClient? = try! LCIMClient(clientId: peerID, error: ())
+        var client: LCIMClient? = try! LCIMClient(clientId: peerID)
         do {
-            _ = try LCIMClient(clientId: peerID, error: ())
+            _ = try LCIMClient(clientId: peerID)
             XCTFail()
         } catch {
             XCTAssertEqual((error as NSError).domain, kLeanCloudErrorDomain)
         }
         client = nil
-        client = try! LCIMClient(clientId: peerID, error: ())
+        client = try! LCIMClient(clientId: peerID)
         XCTAssertNotNil(client)
     }
     
     func testSessionConflict() {
         let peerID = uuid
         let tag = "SessionConflict"
-        let client1 = try! LCIMClient(clientId: peerID, tag: tag, error: ())
+        let client1 = try! LCIMClient(clientId: peerID, tag: tag)
         let delegator1 = LCIMClientDelegator()
         client1.delegate = delegator1
         client1.currentDeviceToken = uuid
@@ -41,7 +41,7 @@ class IMClientTestCase: RTMBaseTestCase {
             }
         }
         purgeConnectionRegistry()
-        let client2 = try! LCIMClient(clientId: peerID, tag: tag, error: ())
+        let client2 = try! LCIMClient(clientId: peerID, tag: tag)
         let delegator2 = LCIMClientDelegator()
         client2.delegate = delegator2
         client2.currentDeviceToken = uuid
@@ -108,7 +108,7 @@ class IMClientTestCase: RTMBaseTestCase {
     }
     
     func testSessionTokenExpired() {
-        let client = try! LCIMClient(clientId: uuid, error: ())
+        let client = try! LCIMClient(clientId: uuid)
         let delegator = LCIMClientDelegator()
         client.delegate = delegator
         expecting { (exp) in
@@ -139,7 +139,7 @@ class IMClientTestCase: RTMBaseTestCase {
     
     func testReportDeviceToken() {
         let installation = LCInstallation.default()
-        let client = try! LCIMClient(clientId: uuid, error: ())
+        let client = try! LCIMClient(clientId: uuid)
         XCTAssertTrue(installation === client.installation)
         expecting { (exp) in
             client.open { (success, error) in

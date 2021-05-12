@@ -29,6 +29,18 @@ typedef NS_OPTIONS(NSUInteger, LCIMSessionConfigOptions) {
     LCIMSessionConfigOptionsOmitPeerID                          = 1 << 7,
 };
 
+/// option for create conversation
+typedef NS_OPTIONS(uint64_t, LCIMConversationOption) {
+    /// Default conversation. At most allow 500 people to join the conversation.
+    LCIMConversationOptionNone          = 0,
+    /// Unique conversation. If the server detects the conversation with that members exists, will return it instead of creating a new one.
+    LCIMConversationOptionUnique        = 1 << 0,
+    /// Transient conversation. No headcount limits. But the functionality is limited. No offline messages, no offline notifications, etc.
+    LCIMConversationOptionTransient     = 1 << 1,
+    /// Temporary conversation
+    LCIMConversationOptionTemporary     = 1 << 2,
+};
+
 /// conversation property key
 typedef NSString * LCIMConversationKey NS_STRING_ENUM;
 static LCIMConversationKey const LCIMConversationKeyObjectId                    = @"objectId";
