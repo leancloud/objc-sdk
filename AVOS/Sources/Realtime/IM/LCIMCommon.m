@@ -33,8 +33,3 @@ LCIMSignatureAction const LCIMSignatureActionAdd        = @"invite";
 LCIMSignatureAction const LCIMSignatureActionRemove     = @"kick";
 LCIMSignatureAction const LCIMSignatureActionBlock      = @"block";
 LCIMSignatureAction const LCIMSignatureActionUnblock    = @"unblock";
-
-// MARK: Deprecated
-
-NSString * const LCIMUserOptionUseUnread = @"LCIMUserOptionUseUnread";
-NSString * const AVIMUserOptionCustomProtocols = @"AVIMUserOptionCustomProtocols";

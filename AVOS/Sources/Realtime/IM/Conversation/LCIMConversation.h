@@ -159,12 +159,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, weak, readonly, nullable) LCIMClient *imClient;
 
-@property (nonatomic, strong, readonly, nullable) NSDate *createAt
-__deprecated_msg("Deprecated, use `LCIMConversation.createdAt` instead.");
-
-@property (nonatomic, strong, readonly, nullable) NSDate *updateAt
-__deprecated_msg("Deprecated, use `LCIMConversation.updatedAt` instead.");
-
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
 
@@ -565,46 +559,6 @@ __deprecated_msg("Deprecated, use `LCIMConversation.updatedAt` instead.");
 @end
 
 @interface LCIMTemporaryConversation : LCIMConversation
-
-@end
-
-@interface LCIMConversation (deprecated)
-
-/*!
- 往对话中发送消息。
- @param message － 消息对象
- @param options － 可选参数，可以使用或 “|” 操作表示多个选项
- @param callback － 结果回调
- */
-- (void)sendMessage:(LCIMMessage *)message
-            options:(AVIMMessageSendOption)options
-           callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback __deprecated_msg("deprecated. use -[sendMessage:option:callback:] instead.");
-
-/*!
- 往对话中发送消息。
- @param message － 消息对象
- @param options － 可选参数，可以使用或 “|” 操作表示多个选项
- @param progressBlock - 发送进度回调。仅对文件上传有效，发送文本消息时不进行回调。
- @param callback － 结果回调
- */
-- (void)sendMessage:(LCIMMessage *)message
-            options:(AVIMMessageSendOption)options
-      progressBlock:(nullable LCIMProgressBlock)progressBlock
-           callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback __deprecated_msg("deprecated. use -[sendMessage:option:progressBlock:callback:] instead.");
-
-/*!
- 发送更新。
- @param updateDict － 需要更新的数据，可通过 AVIMConversationUpdateBuilder 生成
- @param callback － 结果回调
- */
-- (void)update:(NSDictionary *)updateDict
-      callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback __deprecated_msg("deprecated. use -[updateWithCallback:] instead.");
-
-/*!
- 标记该会话已读。
- 将服务端该会话的未读消息数置零。
- */
-- (void)markAsReadInBackground __deprecated_msg("deprecated. use -[readInBackground] instead.");
 
 @end
 

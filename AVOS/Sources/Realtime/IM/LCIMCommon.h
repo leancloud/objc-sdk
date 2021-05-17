@@ -133,7 +133,7 @@ FOUNDATION_EXPORT LCIMSignatureAction const LCIMSignatureActionRemove;
 FOUNDATION_EXPORT LCIMSignatureAction const LCIMSignatureActionBlock;
 FOUNDATION_EXPORT LCIMSignatureAction const LCIMSignatureActionUnblock;
 
-// MARK: Deprecated
+// MARK: Misc
 
 typedef void(^LCIMBooleanResultBlock)(BOOL, NSError * _Nullable);
 typedef void(^LCIMIntegerResultBlock)(NSInteger, NSError * _Nullable);
@@ -142,18 +142,5 @@ typedef void(^LCIMConversationResultBlock)(LCIMConversation * _Nullable, NSError
 typedef void(^LCIMChatRoomResultBlock)(LCIMChatRoom * _Nullable, NSError * _Nullable);
 typedef void(^LCIMTemporaryConversationResultBlock)(LCIMTemporaryConversation * _Nullable, NSError * _Nullable);
 typedef void(^LCIMProgressBlock)(NSInteger);
-
-FOUNDATION_EXPORT NSString * const LCIMUserOptionUseUnread
-__deprecated_msg("Deprecated, use `+[LCIMClient setUnreadNotificationEnabled:]` instead.");
-FOUNDATION_EXPORT NSString * const AVIMUserOptionCustomProtocols
-__deprecated_msg("Deprecated, DO NOT use it any more.");
-
-typedef uint64_t AVIMMessageSendOption
-__deprecated_msg("Deprecated, use `LCIMMessageOption` instead.");
-enum : AVIMMessageSendOption {
-    AVIMMessageSendOptionNone               = 0,
-    AVIMMessageSendOptionTransient          = 1 << 0,
-    AVIMMessageSendOptionRequestReceipt     = 1 << 1,
-} __deprecated_msg("Deprecated, use `LCIMMessageOption` instead.");
 
 NS_ASSUME_NONNULL_END
