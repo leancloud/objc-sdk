@@ -565,14 +565,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         [self sessionClosedWithSuccess:false
                                  error:error
                             completion:openingCompletion];
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        [self invokeDelegateInUserInteractQueue:^(id<LCIMClientDelegate> delegate) {
-            if ([delegate respondsToSelector:@selector(client:didOfflineWithError:)]) {
-                [delegate client:self didOfflineWithError:error];
-            }
-        }];
-#pragma clang diagnostic pop
     } else {
         [self sessionClosedWithSuccess:false
                                  error:LCError(LCIMErrorCodeInvalidCommand,
@@ -940,12 +932,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             if ([delegate respondsToSelector:@selector(imClientPaused:error:)]) {
                 [delegate imClientPaused:self error:error];
             }
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-            if ([delegate respondsToSelector:@selector(imClientPaused:)]) {
-                [delegate imClientPaused:self];
-            }
-#pragma clang diagnostic pop
         }];
     }
 }
@@ -960,14 +946,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     [self sessionClosedWithSuccess:false
                              error:error
                         completion:nil];
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    [self invokeDelegateInUserInteractQueue:^(id<LCIMClientDelegate> delegate) {
-        if ([delegate respondsToSelector:@selector(client:didOfflineWithError:)]) {
-            [delegate client:self didOfflineWithError:error];
-        }
-    }];
-#pragma clang diagnostic pop
 }
 
 - (void)process_conv_joined:(AVIMGenericCommand *)inCommand
@@ -1451,17 +1429,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     [self->_conversationManager queryConversationsWithIds:conversationIds callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         AVIMUnreadTuple *unreadTuple = unreadTupleMap[conversation.conversationId];
-        NSInteger unreadCount = [conversation process_unread:unreadTuple];
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        id <LCIMClientDelegate> delegate = self->_delegate;
-        SEL selector = @selector(conversation:didReceiveUnread:);
-        if (unreadCount >= 0 && delegate && [delegate respondsToSelector:selector]) {
-            [self invokeInUserInteractQueue:^{
-                [delegate conversation:conversation didReceiveUnread:unreadCount];
-            }];
-        }
-#pragma clang diagnostic pop
+        __unused NSInteger unreadCount = [conversation process_unread:unreadTuple];
     }];
 }
 

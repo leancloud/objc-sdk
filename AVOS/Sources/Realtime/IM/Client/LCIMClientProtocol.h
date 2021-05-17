@@ -210,17 +210,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)conversation:(LCIMConversation *)conversation didMembersUnmuteBy:(NSString * _Nullable)byClientId memberIds:(NSArray<NSString *> * _Nullable)memberIds;
 
-// MARK: Deprecated
-
-- (void)imClientPaused:(LCIMClient *)imClient
-__deprecated_msg("Deprecated, use `-[LCIMClientDelegate imClientPaused:error:]` instead.");
-
-- (void)client:(LCIMClient *)client didOfflineWithError:(NSError * _Nullable)error
-__deprecated_msg("Deprecated, use `-[LCIMClientDelegate imClientClosed:error:]` instead.");
-
-- (void)conversation:(LCIMConversation *)conversation didReceiveUnread:(NSInteger)unread
-__deprecated_msg("Deprecated, use `-[LCIMClientDelegate conversation:didUpdateForKey:]` instead.");
-
 @end
 
 NS_ASSUME_NONNULL_END
