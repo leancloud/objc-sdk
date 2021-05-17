@@ -6,7 +6,7 @@
 //  Copyright © 2018 LeanCloud Inc. All rights reserved.
 //
 
-#import "LCIMClientInternalConversationManager_Internal.h"
+#import "LCIMClientInternalConversationManager.h"
 #import "LCIMClient_Internal.h"
 #import "LCIMConversation_Internal.h"
 #import "LCIMErrorUtil.h"
@@ -15,14 +15,9 @@
 #import "LCIMConversationCache.h"
 #import "AVIMGenericCommand+AVIMMessagesAdditions.h"
 
-static NSUInteger batchQueryLimit = 20;
+static NSUInteger batchQueryLimit = 100;
 
 @implementation LCIMClientInternalConversationManager
-
-+ (void)setBatchQueryLimit:(NSUInteger)limit
-{
-    batchQueryLimit = limit;
-}
 
 - (instancetype)initWithClient:(LCIMClient *)client
 {

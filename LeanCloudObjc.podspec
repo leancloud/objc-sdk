@@ -99,7 +99,6 @@ Pod::Spec.new do |s|
       'AVOS/Sources/Realtime/IM/Signature/LCIMSignature.h',
       'AVOS/Sources/Realtime/IM/Client/LCIMClientProtocol.h',
       'AVOS/Sources/Realtime/IM/Conversation/LCIMConversationMemberInfo.h',
-      'AVOS/Sources/Realtime/IM/Client/LCIMClientInternalConversationManager.h',
       'AVOS/Sources/Realtime/LiveQuery/LCLiveQuery.h'
 
     ss.exclude_files =

@@ -8,17 +8,29 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
+@class LCIMClient;
+@class LCIMConversation;
 
 @interface LCIMClientInternalConversationManager : NSObject
 
-/**
- Limit of client internal batch query for conversations.
+#if DEBUG
+@property (nonatomic, strong) dispatch_queue_t internalSerialQueue;
+#endif
+@property (nonatomic, weak) LCIMClient *client;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableArray<void (^)(LCIMConversation *, NSError *)> *> *callbacksMap;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, LCIMConversation *> *conversationMap;
 
- @param limit Default is 20.
- */
-+ (void)setBatchQueryLimit:(NSUInteger)limit;
+- (instancetype)initWithClient:(LCIMClient *)client;
+
+- (void)insertConversation:(LCIMConversation *)conversation;
+- (LCIMConversation *)conversationForId:(NSString *)conversationId;
+- (void)removeConversationsWithIds:(NSArray<NSString *> *)conversationIds;
+- (void)removeAllConversations;
+
+- (void)queryConversationWithId:(NSString *)conversationId
+                       callback:(void (^)(LCIMConversation *conversation, NSError *error))callback;
+
+- (void)queryConversationsWithIds:(NSArray<NSString *> *)conversationIds
+                         callback:(void (^)(LCIMConversation *conversation, NSError *error))callback;
 
 @end
-
-NS_ASSUME_NONNULL_END
