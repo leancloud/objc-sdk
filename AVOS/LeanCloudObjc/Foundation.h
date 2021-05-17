@@ -58,6 +58,3 @@
 // SMS & Captcha
 #import "LCCaptcha.h"
 #import "LCSMS.h"
-
-// Router
-#import "LCRouter.h"

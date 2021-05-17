@@ -29,12 +29,5 @@ FOUNDATION_EXPORT RouterCacheKey const RouterCacheKeyRTM;
 
 @end
 
-@interface LCRouter (Deprecated)
-
-- (NSString *)URLStringForPath:(NSString *)path
-__deprecated_msg("Deprecated, keep it for compatibility.");
-
-@end
-
 NS_ASSUME_NONNULL_END
 

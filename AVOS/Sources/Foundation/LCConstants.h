@@ -175,6 +175,4 @@ typedef void (^LCProgressBlock)(NSInteger percentDone);
 typedef void (^LCFileResultBlock)(LCFile * _Nullable file, NSError * _Nullable error);
 typedef void (^LCDictionaryResultBlock)(NSDictionary * _Nullable dict, NSError * _Nullable error);
 
-#define LC_DEPRECATED(explain) __attribute__((deprecated(explain)))
-
 #define LC_WARN_UNUSED_RESULT __attribute__((warn_unused_result))

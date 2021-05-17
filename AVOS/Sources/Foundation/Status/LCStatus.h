@@ -137,35 +137,6 @@ typedef void (^LCStatusResultBlock)(LCStatus * _Nullable status, NSError * _Null
  */
 +(void)resetUnreadStatusesCountWithType:(LCStatusType*)type andCallback:(LCBooleanResultBlock)callback;
 
-/**
- *  获取当前用户接收到的状态
- *  @param type     状态类型,默认是kLCStatusTypeTimeline, 可以是任意自定义字符串
- *  @param skip     跳过条数
- *  @param limit    需要返回的条数 默认`100`，最大`100`
- *  @param callback 回调结果
- */
-+(void)getStatusesWithType:(LCStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(LCArrayResultBlock)callback LC_DEPRECATED("2.3.2以后不再需要，请使用inboxQuery类方法");
-
-/**
- *  获取当前用户发布的状态
- *
- *  @param type     状态类型,默认是kLCStatusTypeTimeline, 可以是任意自定义字符串
- *  @param skip     跳过条数
- *  @param limit    需要返回的条数 默认`100`，最大`100`
- *  @param callback 回调结果
- */
-+(void) getStatusesFromCurrentUserWithType:(LCStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(LCArrayResultBlock)callback LC_DEPRECATED("2.3.2以后不再需要，请使用statusQuery类方法");
-
-/**
- *  通过用户ID获取其发布的公开的状态列表
- *
- *  @param userId   用户的objectId
- *  @param skip     跳过条数
- *  @param limit    需要返回的条数 默认`100`，最大`100`
- *  @param callback 回调结果
- */
-+(void) getStatusesFromUser:(NSString*)userId skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(LCArrayResultBlock)callback LC_DEPRECATED("2.3.2以后不再需要，请使用statusQuery");
-
 /** @name 发送状态 */
 
 /**

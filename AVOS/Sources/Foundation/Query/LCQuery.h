@@ -480,11 +480,6 @@ typedef NS_ENUM(NSInteger, LCQueryDistanceUnit) {
 + (nullable LCUser *)getUserObjectWithId:(NSString *)objectId
                                    error:(NSError **)error;
 
-/*!
- Deprecated.  Please use [LCUser query] instead.
- */
-+ (instancetype)queryForUser LC_DEPRECATED("Use +[LCUser query] instead.");
-
 #pragma mark -
 #pragma mark Find methods
 

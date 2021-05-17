@@ -2009,23 +2009,6 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     [self._requestManager clear];
 }
 
-// MARK: Deprecated
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-implementations"
-+ (instancetype)objectWithoutDataWithObjectId:(NSString *)objectId {
-    return [self objectWithObjectId:objectId];
-}
-
-+ (instancetype)objectWithoutDataWithClassName:(NSString *)className objectId:(NSString *)objectId {
-    return [self objectWithClassName:className objectId:objectId];
-}
-
-- (LCRelation *)relationforKey:(NSString *)key {
-    return [self relationForKey:key];
-}
-#pragma clang diagnostic pop
-
 @end
 
 

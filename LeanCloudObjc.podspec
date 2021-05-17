@@ -52,7 +52,6 @@ Pod::Spec.new do |s|
       'AVOS/Sources/Foundation/Status/LCStatus.h',
       'AVOS/Sources/Foundation/User/LCUser.h',
       'AVOS/Sources/Foundation/Utils/LCLogger.h',
-      'AVOS/Sources/Foundation/Router/LCRouter.h',
       'AVOS/Sources/Foundation/LCAvailability.h'
 
     ss.library =
