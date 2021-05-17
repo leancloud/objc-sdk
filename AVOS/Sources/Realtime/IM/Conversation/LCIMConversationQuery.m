@@ -8,7 +8,7 @@
 
 #import "LCIMConversationQuery_Internal.h"
 #import "LCIMClient_Internal.h"
-#import "LCIMClientInternalConversationManager_Internal.h"
+#import "LCIMClientInternalConversationManager.h"
 #import "LCIMConversation_Internal.h"
 
 #import "LCIMConversationCache.h"

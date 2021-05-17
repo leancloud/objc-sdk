@@ -337,21 +337,12 @@ typedef NS_OPTIONS(NSUInteger, LCFileDownloadOption) {
  */
 + (LCFileQuery *)query;
 
-// MARK: - Deprecated
+// MARK: Compatibility
+
+- (void)saveInBackgroundWithBlock:(void (^)(BOOL succeeded, NSError * _Nullable error))block;
 
 - (void)saveInBackgroundWithBlock:(void (^)(BOOL succeeded, NSError * _Nullable error))block
-__deprecated_msg("use -[uploadWithCompletionHandler:] instead.");
-
-- (void)saveInBackgroundWithBlock:(void (^)(BOOL succeeded, NSError * _Nullable error))block
-                    progressBlock:(void (^ _Nullable)(NSInteger number))progressBlock
-__deprecated_msg("use -[uploadWithProgress:completionHandler:] instead.");
-
-- (void)getDataInBackgroundWithBlock:(void (^)(NSData * _Nullable data, NSError * _Nullable error))block
-__deprecated_msg("use -[downloadWithCompletionHandler:] instead.");
-
-- (void)getDataInBackgroundWithBlock:(void (^)(NSData * _Nullable data, NSError * _Nullable error))block
-                       progressBlock:(void (^ _Nullable)(NSInteger number))progressBlock
-__deprecated_msg("use -[downloadWithProgress:completionHandler:] instead.");
+                    progressBlock:(void (^ _Nullable)(NSInteger number))progressBlock;
 
 @end
 

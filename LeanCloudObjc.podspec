@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'LeanCloudObjc'
-  s.version  = '13.0.0-beta.2'
+  s.version  = '13.0.0-beta.3'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud Objective-C SDK'
   s.authors  = 'LeanCloud'
@@ -52,7 +52,6 @@ Pod::Spec.new do |s|
       'AVOS/Sources/Foundation/Status/LCStatus.h',
       'AVOS/Sources/Foundation/User/LCUser.h',
       'AVOS/Sources/Foundation/Utils/LCLogger.h',
-      'AVOS/Sources/Foundation/Router/LCRouter.h',
       'AVOS/Sources/Foundation/LCAvailability.h'
 
     ss.library =
@@ -99,7 +98,6 @@ Pod::Spec.new do |s|
       'AVOS/Sources/Realtime/IM/Signature/LCIMSignature.h',
       'AVOS/Sources/Realtime/IM/Client/LCIMClientProtocol.h',
       'AVOS/Sources/Realtime/IM/Conversation/LCIMConversationMemberInfo.h',
-      'AVOS/Sources/Realtime/IM/Client/LCIMClientInternalConversationManager.h',
       'AVOS/Sources/Realtime/LiveQuery/LCLiveQuery.h'
 
     ss.exclude_files =

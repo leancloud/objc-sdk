@@ -679,14 +679,6 @@ static NSString * quote(NSString *string)
     return nil;
 }
 
-/*!
- Deprecated.  Please use [LCUser query] instead.
- */
-+ (LCQuery *)queryForUser __attribute__ ((deprecated))
-{
-    return [LCUser query];
-}
-
 #pragma mark -
 #pragma mark Find methods
 

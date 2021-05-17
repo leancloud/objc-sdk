@@ -9,7 +9,7 @@
 #import "LCIMClient.h"
 #import "LCIMCommon_Internal.h"
 #import "LCRTMConnection.h"
-#import "LCIMClientInternalConversationManager_Internal.h"
+#import "LCIMClientInternalConversationManager.h"
 #import "LCIMSignature.h"
 #import "LCIMConversationCache.h"
 

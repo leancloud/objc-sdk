@@ -630,16 +630,4 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-#pragma mark - Deprecated API
-
-@interface LCObject (AVDeprecated)
-
-+ (instancetype)objectWithoutDataWithObjectId:(NSString *)objectId LC_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.9. Use +[LCObject objectWithObjectId:] instead.");
-
-+ (instancetype)objectWithoutDataWithClassName:(NSString *)className objectId:(NSString *)objectId LC_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.9. Use +[LCObject objectWithClassName:objectId:] instead.");
-
-- (LCRelation *)relationforKey:(NSString *)key LC_DEPRECATED("Deprecated in AVOSCloud SDK 3.2.3. Use -[LCObject relationForKey:] instead.");
-
-@end
-
 NS_ASSUME_NONNULL_END

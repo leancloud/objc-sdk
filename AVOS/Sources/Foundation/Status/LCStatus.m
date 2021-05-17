@@ -199,48 +199,6 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
     return q;
 }
 
-+(void)getStatusesWithType:(LCStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(LCArrayResultBlock)callback{
-    NSParameterAssert(type);
-    
-    NSError *error=[self permissionCheck];
-    if (error) {
-        callback(nil,error);
-        return;
-    }
-    
-    if (limit>100 || limit<=0) {
-        limit=100;
-    }
-    
-    LCStatusQuery *q=[LCStatus inboxQuery:type];
-    q.limit=limit;
-    q.skip=skip;
-    [q findObjectsInBackgroundWithBlock:callback];
-    
-}
-+(void) getStatusesFromCurrentUserWithType:(LCStatusType*)type skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(LCArrayResultBlock)callback{
-    
-    NSError *error=[self permissionCheck];
-    if (error) {
-        callback(nil,error);
-        return;
-    }
-    
-    [self getStatusesFromUser:[LCUser currentUser].objectId skip:skip limit:limit andCallback:callback];
-    
-}
-+(void)getStatusesFromUser:(NSString *)userId skip:(NSUInteger)skip limit:(NSUInteger)limit andCallback:(LCArrayResultBlock)callback{
-    NSParameterAssert(userId);
-    
-    LCQuery *q=[LCStatus statusQuery];
-    q.limit=limit;
-    q.skip=skip;
-    [q whereKey:@"source" equalTo:[LCObject objectWithoutDataWithClassName:@"_User" objectId:userId]];
-    [q findObjectsInBackgroundWithBlock:callback];
-}
-
-
-
 +(void)getStatusWithID:(NSString *)objectId andCallback:(LCStatusResultBlock)callback{
     NSError *error=[self permissionCheck];
     if (error) {

@@ -16,7 +16,6 @@
 // Client
 #import "LCIMClientProtocol.h"
 #import "LCIMClient.h"
-#import "LCIMClientInternalConversationManager.h"
 
 // Signature
 #import "LCIMSignature.h"

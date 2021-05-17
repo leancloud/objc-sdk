@@ -3133,54 +3133,6 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     return keyedConversation;
 }
 
-// MARK: - Deprecated
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-implementations"
-- (void)sendMessage:(LCIMMessage *)message
-            options:(AVIMMessageSendOption)options
-           callback:(LCIMBooleanResultBlock)callback
-{
-    [self sendMessage:message
-              options:options
-        progressBlock:nil
-             callback:callback];
-}
-
-
-- (void)sendMessage:(LCIMMessage *)message
-            options:(AVIMMessageSendOption)options
-      progressBlock:(LCProgressBlock)progressBlock
-           callback:(LCIMBooleanResultBlock)callback
-{
-    LCIMMessageOption *option = [[LCIMMessageOption alloc] init];
-    
-    if (options & AVIMMessageSendOptionTransient)
-        option.transient = YES;
-    
-    if (options & AVIMMessageSendOptionRequestReceipt)
-        option.receipt = YES;
-    
-    [self sendMessage:message option:option progressBlock:progressBlock callback:callback];
-}
-
-
-- (void)update:(NSDictionary *)attributes
-      callback:(void (^)(BOOL, NSError * _Nullable))callback
-{
-    [self updateWithDictionary:attributes callback:^(BOOL succeeded, NSError *error) {
-        [self.imClient invokeInUserInteractQueue:^{
-            callback(succeeded, error);
-        }];
-    }];
-}
-
-- (void)markAsReadInBackground
-{
-    [self readInBackground];
-}
-#pragma clang diagnostic pop
-
 @end
 
 @implementation LCIMChatRoom
