@@ -8,10 +8,6 @@
 
 #import "LCIMCommon.h"
 
-/// { kLCIMUserOptionUseUnread: true } support unread notification feature. use `lc.protobuf2.3`
-/// { kLCIMUserOptionUseUnread: false } not support unread notification feature. use `lc.protobuf2.1`
-static NSString * const kLCIMUserOptionUseUnread = @"LCIMUserOptionUseUnread";
-
 /// some limit
 static NSUInteger const kClientIdLengthLimit = 64;
 static NSString * const kClientTagDefault = @"default";

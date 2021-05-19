@@ -111,14 +111,11 @@ static dispatch_queue_t messageCacheOperationQueue;
 
 + (NSUInteger)validLimit:(NSUInteger)limit
 {
-    if (limit <= 0) { limit = 20; }
-    
-    BOOL useUnread = [LCIMClient.sessionProtocolOptions[kLCIMUserOptionUseUnread] boolValue];
-    
-    NSUInteger max = useUnread ? 100 : 1000;
-    
-    if (limit > max) { limit = max; }
-    
+    if (limit <= 0) {
+        limit = 20;
+    } else if (limit > 100) {
+        limit = 100;
+    }
     return limit;
 }
 
@@ -1761,39 +1758,6 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 #pragma mark - Message Query
 
-- (void)sendACKIfNeeded:(NSArray *)messages
-{
-    LCIMClient *client = self.imClient;
-    if (!client) {
-        return;
-    }
-    NSDictionary *userOptions = [LCIMClient sessionProtocolOptions];
-    
-    BOOL useUnread = [userOptions[kLCIMUserOptionUseUnread] boolValue];
-    
-    if (useUnread) {
-        
-        AVIMAckCommand *ackCommand = [[AVIMAckCommand alloc] init];
-        
-        ackCommand.cid = self.conversationId;
-        
-        int64_t fromts = [[messages firstObject] sendTimestamp];
-        int64_t tots   = [[messages lastObject] sendTimestamp];
-        
-        ackCommand.fromts = MIN(fromts, tots);
-        ackCommand.tots   = MAX(fromts, tots);
-        
-        AVIMGenericCommand *genericCommand = [[AVIMGenericCommand alloc] init];
-        
-        genericCommand.cmd = AVIMCommandType_Ack;
-        genericCommand.ackMessage = ackCommand;
-        
-        LCIMProtobufCommandWrapper *commandWrapper = [LCIMProtobufCommandWrapper new];
-        commandWrapper.outCommand = genericCommand;
-        [client sendCommandWrapper:commandWrapper];
-    }
-}
-
 - (void)queryMessagesFromServerWithCommand:(AVIMGenericCommand *)genericCommand
                                   callback:(void (^)(NSArray<LCIMMessage *> * messages, NSError * error))callback
 {
@@ -1846,7 +1810,6 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             [self updateLastMessage:messages.firstObject client:client];
         }
         [self postprocessMessages:messages];
-        [self sendACKIfNeeded:messages];
         [client invokeInUserInteractQueue:^{
             callback(messages, nil);
         }];
@@ -2328,7 +2291,6 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
             message.localClientId = client.clientId;
             [messageArray addObject:message];
         }
-        [self sendACKIfNeeded:messageArray];
         [client invokeInUserInteractQueue:^{
             callback(messageArray, nil);
         }];

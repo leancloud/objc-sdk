@@ -21,8 +21,6 @@
 #import "LCPaasClient.h"
 #import "LCErrorUtils.h"
 
-static BOOL gClientHasInstantiated = false;
-
 #if DEBUG
 void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 {
@@ -50,12 +48,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 @implementation LCIMClient {
     LCIMClientStatus _status;
-}
-
-+ (instancetype)alloc
-{
-    gClientHasInstantiated = true;
-    return [super alloc];
 }
 
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds
@@ -2056,37 +2048,8 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }
 }
 
-// MARK: IM Protocol Options
-
-+ (LCIMProtocol)IMProtocol
-{
-    NSNumber *useUnreadProtocol = [NSNumber _lc_decoding:LCIMClient.sessionProtocolOptions
-                                                     key:kLCIMUserOptionUseUnread];
-    if ([useUnreadProtocol boolValue]) {
-        return LCIMProtocol3;
-    } else {
-        return LCIMProtocol1;
-    }
-}
-
-+ (NSMutableDictionary *)sessionProtocolOptions
-{
-    static dispatch_once_t onceToken;
-    static NSMutableDictionary *options;
-    dispatch_once(&onceToken, ^{
-        options = [NSMutableDictionary dictionary];
-    });
-    return options;
-}
-
-+ (void)setUnreadNotificationEnabled:(BOOL)enabled
-{
-    if (gClientHasInstantiated) {
-        [NSException raise:NSInternalInconsistencyException
-                    format:@"This method should be invoked before initialization of `LCIMClient`."];
-        return;
-    }
-    LCIMClient.sessionProtocolOptions[kLCIMUserOptionUseUnread] = @(enabled);
++ (LCIMProtocol)IMProtocol {
+    return LCIMProtocol3;
 }
 
 @end
