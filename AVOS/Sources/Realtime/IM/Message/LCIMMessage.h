@@ -100,11 +100,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readonly) int64_t readTimestamp;
 
 /*!
- * 是否是暂态消息
- */
-@property (nonatomic, assign, readonly) BOOL transient;
-
-/*!
  The message update time.
  */
 @property (nonatomic, strong, readonly, nullable) NSDate *updatedAt;
