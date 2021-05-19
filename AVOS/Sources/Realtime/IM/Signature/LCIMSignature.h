@@ -34,21 +34,23 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@protocol LCIMSignatureDataSource <NSObject>
-@optional
+@class LCIMClient;
+@class LCIMConversation;
 
-/*!
- 对一个操作进行签名. 注意:本调用会在后台线程被执行
- @param clientId - 操作发起人的 id
- @param conversationId － 操作所属对话的 id
- @param action － @see LCIMSignatureAction
- @param clientIds － 操作目标的 id 列表
- @return 一个 LCIMSignature 签名对象.
- */
-- (LCIMSignature *)signatureWithClientId:(NSString *)clientId
-                          conversationId:(NSString * _Nullable)conversationId
-                                  action:(LCIMSignatureAction)action
-                       actionOnClientIds:(NSArray<NSString *> * _Nullable)clientIds;
+@protocol LCIMSignatureDataSource <NSObject>
+
+/// Delegate function of the signature action.
+/// @param client The signature action belong to.
+/// @param action See `LCIMSignatureAction`.
+/// @param conversation The signature action belong to.
+/// @param clientIds The targets.
+/// @param handler The handler for the signature.
+- (void)client:(LCIMClient *)client
+        action:(LCIMSignatureAction)action
+  conversation:(LCIMConversation * _Nullable)conversation
+     clientIds:(NSArray<NSString *> * _Nullable)clientIds
+signatureHandler:(void (^)(LCIMSignature * _Nullable))handler;
+
 @end
 
 NS_ASSUME_NONNULL_END
