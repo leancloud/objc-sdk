@@ -55,8 +55,6 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 @property (nonatomic) int64_t lastPatchTime;
 @property (nonatomic) NSString *currentDeviceToken;
 
-+ (NSMutableDictionary *)sessionProtocolOptions;
-
 - (instancetype)initWithClientId:(NSString *)clientId
                              tag:(NSString *)tag
                     installation:(LCInstallation *)installation

@@ -39,15 +39,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// IM Client.
 @interface LCIMClient : NSObject
 
-/*!
- Set what server will issues for offline messages when client did login.
- 
- @param enabled Set `YES` if you want server just issues the count of offline messages in each conversation.
- Set `NO` if you want server issues concrete offline messages.
- Defaults to `NO`.
- */
-+ (void)setUnreadNotificationEnabled:(BOOL)enabled;
-
 /// Set up connecting timeout, default is `60` seconds.
 /// @param seconds The interval of timeout.
 + (void)setTimeoutIntervalInSeconds:(NSTimeInterval)seconds;
