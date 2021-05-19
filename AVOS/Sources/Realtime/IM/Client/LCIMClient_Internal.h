@@ -71,10 +71,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 
 - (void)sendCommandWrapper:(LCIMProtobufCommandWrapper *)commandWrapper;
 
-- (void)getSignatureWithConversationId:(NSString *)conversationId
-                                action:(LCIMSignatureAction)action
-                     actionOnClientIds:(NSArray<NSString *> *)actionOnClientIds
-                              callback:(void (^)(LCIMSignature *signature))callback;
+- (void)getSignatureWithConversation:(LCIMConversation *)conversation
+                              action:(LCIMSignatureAction)action
+                   actionOnClientIds:(NSArray<NSString *> *)actionOnClientIds
+                            callback:(void (^)(LCIMSignature *signature))callback;
 
 - (void)getSessionTokenWithForcingRefresh:(BOOL)forcingRefresh
                                  callback:(void (^)(NSString *sessionToken, NSError *error))callback;

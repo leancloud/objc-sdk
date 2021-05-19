@@ -492,10 +492,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             }
         }];
     } else if (self.signatureDataSource) {
-        [self getSignatureWithConversationId:nil
-                                      action:LCIMSignatureActionOpen
-                           actionOnClientIds:nil
-                                    callback:^(LCIMSignature *signature) {
+        [self getSignatureWithConversation:nil
+                                    action:LCIMSignatureActionOpen
+                         actionOnClientIds:nil
+                                  callback:^(LCIMSignature *signature) {
             AssertRunInQueue(self.internalSerialQueue);
             if (signature.error) {
                 [self sessionClosedWithSuccess:false
@@ -679,23 +679,29 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 // MARK: Signature
 
-- (void)getSignatureWithConversationId:(NSString *)conversationId
-                                action:(LCIMSignatureAction)action
-                     actionOnClientIds:(NSArray<NSString *> *)actionOnClientIds
-                              callback:(void (^)(LCIMSignature *))callback
+- (void)getSignatureWithConversation:(LCIMConversation *)conversation
+                              action:(LCIMSignatureAction)action
+                   actionOnClientIds:(NSArray<NSString *> *)actionOnClientIds
+                            callback:(void (^)(LCIMSignature *))callback
 {
     dispatch_async(self.signatureQueue, ^{
-        LCIMSignature *signature;
         id<LCIMSignatureDataSource> dataSource = self.signatureDataSource;
-        if ([dataSource respondsToSelector:@selector(signatureWithClientId:conversationId:action:actionOnClientIds:)]) {
-            signature = [dataSource signatureWithClientId:self.clientId
-                                           conversationId:conversationId
-                                                   action:action
-                                        actionOnClientIds:actionOnClientIds];
+        if (dataSource &&
+            [dataSource respondsToSelector:@selector(client:action:conversation:clientIds:signatureHandler:)]) {
+            [dataSource client:self
+                        action:action
+                  conversation:conversation
+                     clientIds:actionOnClientIds
+              signatureHandler:^(LCIMSignature * _Nullable signature) {
+                [self addOperationToInternalSerialQueue:^(LCIMClient *client) {
+                    callback(signature);
+                }];
+            }];
+        } else {
+            [self addOperationToInternalSerialQueue:^(LCIMClient *client) {
+                callback(nil);
+            }];
         }
-        [self addOperationToInternalSerialQueue:^(LCIMClient *client) {
-            callback(signature);
-        }];
     });
 }
 
@@ -1577,7 +1583,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         set.allObjects.mutableCopy;
     });
     
-    [self getSignatureWithConversationId:nil action:LCIMSignatureActionStart actionOnClientIds:members.copy callback:^(LCIMSignature *signature) {
+    [self getSignatureWithConversation:nil action:LCIMSignatureActionStart actionOnClientIds:members.copy callback:^(LCIMSignature *signature) {
         
         AssertRunInQueue(self->_internalSerialQueue);
         

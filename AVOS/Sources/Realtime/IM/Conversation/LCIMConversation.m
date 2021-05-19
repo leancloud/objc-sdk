@@ -725,7 +725,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         [NSSet setWithArray:clientIds].allObjects;
     });
     
-    [client getSignatureWithConversationId:self->_conversationId action:LCIMSignatureActionAdd actionOnClientIds:clientIds callback:^(LCIMSignature *signature) {
+    [client getSignatureWithConversation:self action:LCIMSignatureActionAdd actionOnClientIds:clientIds callback:^(LCIMSignature *signature) {
         
         AssertRunInQueue(self->_internalSerialQueue);
         
@@ -807,7 +807,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         [NSSet setWithArray:clientIds].allObjects;
     });
     
-    [client getSignatureWithConversationId:self->_conversationId action:LCIMSignatureActionAdd actionOnClientIds:clientIds callback:^(LCIMSignature *signature) {
+    [client getSignatureWithConversation:self action:LCIMSignatureActionAdd actionOnClientIds:clientIds callback:^(LCIMSignature *signature) {
         
         AssertRunInQueue(self->_internalSerialQueue);
         
@@ -2586,7 +2586,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     
     LCIMSignatureAction action = (isBlockAction ? LCIMSignatureActionBlock : LCIMSignatureActionUnblock);
     
-    [client getSignatureWithConversationId:self->_conversationId action:action actionOnClientIds:memberIds callback:^(LCIMSignature *signature) {
+    [client getSignatureWithConversation:self action:action actionOnClientIds:memberIds callback:^(LCIMSignature *signature) {
         
         AssertRunInQueue(self->_internalSerialQueue);
         
