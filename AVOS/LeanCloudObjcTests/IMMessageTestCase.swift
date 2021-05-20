@@ -115,6 +115,77 @@ class IMMessageTestCase: RTMBaseTestCase {
         delegator3.reset()
         delegator4.reset()
     }
+    
+    func testUpdateAndRecallMessage() {
+        guard let client1 = newOpenedClient(clientIDSuffix: "1"),
+              let client2 = newOpenedClient(clientIDSuffix: "2") else {
+            XCTFail()
+            return
+        }
+        
+        let delegator1 = LCIMClientDelegator()
+        client1.delegate = delegator1
+        let delegator2 = LCIMClientDelegator()
+        client2.delegate = delegator2
+        var conv: LCIMConversation?
+        
+        expecting { exp in
+            client1.createConversation(withClientIds: [client2.clientId]) { conversation, error in
+                if let conversation = conversation {
+                    conv = conversation
+                    exp.fulfill()
+                } else {
+                    XCTAssertNil(error)
+                }
+            }
+        }
+        
+        let oldMessage = LCIMTextMessage(text: "old")
+        expecting(description: "send message", count: 2) { exp in
+            delegator2.didReceiveTypedMessage = { conversation, message in
+                exp.fulfill()
+            }
+            conv?.send(oldMessage, callback: { succeeded, error in
+                if succeeded {
+                    exp.fulfill()
+                } else {
+                    XCTAssertNil(error)
+                }
+            })
+        }
+        
+        delay()
+        
+        let newMessage = LCIMTextMessage(text: "new")
+        expecting(description: "update message", count: 2) { exp in
+            delegator2.messageHasBeenUpdated = { conversation, message, _ in
+                exp.fulfill()
+            }
+            conv?.update(oldMessage, toNewMessage: newMessage, callback: { succeeded, error in
+                if succeeded {
+                    exp.fulfill()
+                } else {
+                    XCTAssertNil(error)
+                }
+            })
+        }
+        
+        delay()
+        
+        expecting(description: "recall message", count: 2) { exp in
+            delegator2.messageHasBeenRecalled = { conversation, message, _ in
+                exp.fulfill()
+            }
+            conv?.recall(newMessage, callback: { succeeded, error, recalledMessage in
+                if succeeded {
+                    XCTAssertNotNil(recalledMessage)
+                    exp.fulfill()
+                } else {
+                    XCTAssertNil(error)
+                }
+            })
+        }
+    }
 }
 
 extension IMMessageTestCase {

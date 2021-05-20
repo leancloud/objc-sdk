@@ -11,7 +11,9 @@
 @class LCIMClient;
 @class LCIMConversation;
 @class LCIMMessage;
+@class LCIMMessagePatchedReason;
 @class LCIMTypedMessage;
+@class LCIMRecalledMessage;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -74,13 +76,17 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)conversation:(LCIMConversation *)conversation messageDelivered:(LCIMMessage *)message;
 
-/**
- Invoking when the sent message has been updated.
- 
- @param conversation The conversation which the sent message belongs to.
- @param message      The updated message.
- */
-- (void)conversation:(LCIMConversation *)conversation messageHasBeenUpdated:(LCIMMessage *)message;
+/// Invoking when the sent message has been updated.
+/// @param conversation The conversation which the sent message belongs to.
+/// @param message The updated message.
+/// @param reason The reason when the message was forced to be modified by the server.
+- (void)conversation:(LCIMConversation *)conversation messageHasBeenUpdated:(LCIMMessage *)message reason:(LCIMMessagePatchedReason * _Nullable)reason;
+
+/// Invoking when the sent message has been recalled.
+/// @param conversation The conversation which the sent message belongs to.
+/// @param message The recalled message.
+/// @param reason The reason when the message was forced to be modified by the server.
+- (void)conversation:(LCIMConversation *)conversation messageHasBeenRecalled:(LCIMRecalledMessage *)message reason:(LCIMMessagePatchedReason * _Nullable)reason;
 
 /*!
  对话中有新成员加入时所有成员都会收到这一通知。

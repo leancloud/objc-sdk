@@ -24,12 +24,12 @@
 - (void)addMembers:(NSArray<NSString *> *)members;
 - (void)removeMembers:(NSArray<NSString *> *)members;
 
-- (LCIMMessage *)process_direct:(AVIMDirectCommand *)directCommand messageId:(NSString *)messageId isTransientMsg:(BOOL)isTransientMsg LC_WARN_UNUSED_RESULT;
-- (LCIMMessage *)process_rcp:(AVIMRcpCommand *)rcpCommand isReadRcp:(BOOL)isReadRcp LC_WARN_UNUSED_RESULT;
-- (NSInteger)process_unread:(AVIMUnreadTuple *)unreadTuple LC_WARN_UNUSED_RESULT;
-- (LCIMMessage *)process_patch_modified:(AVIMPatchItem *)patchItem LC_WARN_UNUSED_RESULT;
-- (void)process_conv_updated_attr:(NSDictionary *)attr attrModified:(NSDictionary *)attrModified;
-- (void)process_member_info_changed:(NSString *)memberId role:(NSString *)role;
+- (LCIMMessage *)processDirect:(AVIMDirectCommand *)directCommand messageId:(NSString *)messageId isTransientMsg:(BOOL)isTransientMsg LC_WARN_UNUSED_RESULT;
+- (LCIMMessage *)processRCP:(AVIMRcpCommand *)rcpCommand isRead:(BOOL)isRead LC_WARN_UNUSED_RESULT;
+- (NSInteger)processUnread:(AVIMUnreadTuple *)unreadTuple LC_WARN_UNUSED_RESULT;
+- (LCIMMessage *)processPatchModified:(AVIMPatchItem *)patchItem LC_WARN_UNUSED_RESULT;
+- (void)processConvUpdatedAttr:(NSDictionary *)attr attrModified:(NSDictionary *)attrModified;
+- (void)processMemberInfoChanged:(NSString *)memberId role:(NSString *)role;
 
 - (void)queryMessagesFromServerBeforeId:(NSString *)messageId
                               timestamp:(int64_t)timestamp

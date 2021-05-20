@@ -97,6 +97,7 @@ extension BaseTestCase {
     }
     
     func delay(seconds: TimeInterval = 3.0) {
+        print("\n------\nwait \(seconds) seconds.\n------\n")
         let exp = expectation(description: "delay \(seconds) seconds.")
         exp.isInverted = true
         wait(for: [exp], timeout: seconds)

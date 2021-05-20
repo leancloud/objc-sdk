@@ -206,4 +206,14 @@ class LCIMClientDelegator: NSObject, LCIMClientDelegate {
     func conversation(_ conversation: LCIMConversation, didReceive message: LCIMTypedMessage) {
         didReceiveTypedMessage?(conversation, message)
     }
+    
+    var messageHasBeenUpdated: ((LCIMConversation, LCIMMessage, LCIMMessagePatchedReason?) -> Void)?
+    func conversation(_ conversation: LCIMConversation, messageHasBeenUpdated message: LCIMMessage, reason: LCIMMessagePatchedReason?) {
+        messageHasBeenUpdated?(conversation, message, reason)
+    }
+    
+    var messageHasBeenRecalled: ((LCIMConversation, LCIMRecalledMessage, LCIMMessagePatchedReason?) -> Void)?
+    func conversation(_ conversation: LCIMConversation, messageHasBeenRecalled message: LCIMRecalledMessage, reason: LCIMMessagePatchedReason?) {
+        messageHasBeenRecalled?(conversation, message, reason)
+    }
 }

@@ -22,6 +22,11 @@
 }
 
 + (instancetype)messageWithText:(NSString *)text
+{
+    return [self messageWithText:text attributes:nil];
+}
+
++ (instancetype)messageWithText:(NSString *)text
                      attributes:(NSDictionary *)attributes
 {
     LCIMTextMessage *message = [[self alloc] init];

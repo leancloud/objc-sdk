@@ -35,6 +35,13 @@ typedef NS_ENUM(int8_t, LCIMMessageStatus) {
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface LCIMMessagePatchedReason : NSObject
+
+@property (nonatomic) NSInteger code;
+@property (nonatomic, nullable) NSString *reason;
+
+@end
+
 @interface LCIMMessage : NSObject <NSCopying, NSCoding>
 
 @property (nonatomic, assign, readonly) LCIMMessageMediaType mediaType;
