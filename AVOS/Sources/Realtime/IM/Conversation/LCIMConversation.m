@@ -1036,7 +1036,7 @@ static dispatch_queue_t messageCacheOperationQueue;
             dic;
         });
         [self internalSyncLock:^{
-            process_attr_and_attrModified(dictionary, modifiedAttr, self->_rawJSONData);
+            processAttrAndAttrModified(dictionary, modifiedAttr, self->_rawJSONData);
             [self->_pendingData removeObjectsForKeys:dictionary.allKeys];
         }];
         [self removeCachedConversation];
@@ -1046,7 +1046,7 @@ static dispatch_queue_t messageCacheOperationQueue;
     [client sendCommandWrapper:commandWrapper];
 }
 
-static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attrModified, NSMutableDictionary *rawJSONData)
+static void processAttrAndAttrModified(NSDictionary *attr, NSDictionary *attrModified, NSMutableDictionary *rawJSONData)
 {
     if (!attr || !attrModified || !rawJSONData) {
         return;
@@ -2819,7 +2819,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
 
 // MARK: - Event Handler
 
-- (LCIMMessage *)process_direct:(AVIMDirectCommand *)directCommand messageId:(NSString *)messageId isTransientMsg:(BOOL)isTransientMsg
+- (LCIMMessage *)processDirect:(AVIMDirectCommand *)directCommand messageId:(NSString *)messageId isTransientMsg:(BOOL)isTransientMsg
 {
     LCIMClient *client = self.imClient;
     if (!client) {
@@ -2881,7 +2881,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     return message;
 }
 
-- (NSInteger)process_unread:(AVIMUnreadTuple *)unreadTuple
+- (NSInteger)processUnread:(AVIMUnreadTuple *)unreadTuple
 {
     LCIMClient *client = self.imClient;
     if (!client) {
@@ -2944,7 +2944,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     return unreadCount;
 }
 
-- (LCIMMessage *)process_patch_modified:(AVIMPatchItem *)patchItem
+- (LCIMMessage *)processPatchModified:(AVIMPatchItem *)patchItem
 {
     LCIMClient *client = self.imClient;
     if (!client) {
@@ -2996,7 +2996,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     return patchMessage;
 }
 
-- (LCIMMessage *)process_rcp:(AVIMRcpCommand *)rcpCommand isReadRcp:(BOOL)isReadRcp
+- (LCIMMessage *)processRCP:(AVIMRcpCommand *)rcpCommand isRead:(BOOL)isRead
 {
     LCIMClient *client = self.imClient;
     if (!client) {
@@ -3008,7 +3008,7 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     int64_t timestamp = (rcpCommand.hasT ? rcpCommand.t : 0);
     
     __block LCIMMessage *message = nil;
-    if (messageId && !isReadRcp) {
+    if (messageId && !isRead) {
         [self internalSyncLock:^{
             message = self->_rcpMessageTable[messageId];
             [self->_rcpMessageTable removeObjectForKey:messageId];
@@ -3020,30 +3020,30 @@ static void process_attr_and_attrModified(NSDictionary *attr, NSDictionary *attr
     }
     
     [self internalSyncLock:^{
-        if (isReadRcp) {
+        if (isRead) {
             self->_lastReadTimestamp = timestamp;
         } else {
             self->_lastDeliveredTimestamp = timestamp;
         }
     }];
     
-    [client conversation:self didUpdateForKeys:@[(isReadRcp ? LCIMConversationUpdatedKeyLastReadAt : LCIMConversationUpdatedKeyLastDeliveredAt)]];
+    [client conversation:self didUpdateForKeys:@[(isRead ? LCIMConversationUpdatedKeyLastReadAt : LCIMConversationUpdatedKeyLastDeliveredAt)]];
     
     return message;
 }
 
-- (void)process_conv_updated_attr:(NSDictionary *)attr attrModified:(NSDictionary *)attrModified
+- (void)processConvUpdatedAttr:(NSDictionary *)attr attrModified:(NSDictionary *)attrModified
 {
     AssertRunInQueue(self->_internalSerialQueue);
     
     [self internalSyncLock:^{
-        process_attr_and_attrModified(attr, attrModified, self->_rawJSONData);
+        processAttrAndAttrModified(attr, attrModified, self->_rawJSONData);
     }];
     
     [self removeCachedConversation];
 }
 
-- (void)process_member_info_changed:(NSString *)memberId role:(NSString *)role
+- (void)processMemberInfoChanged:(NSString *)memberId role:(NSString *)role
 {
     AssertRunInQueue(self->_internalSerialQueue);
     

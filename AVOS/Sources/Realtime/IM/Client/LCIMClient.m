@@ -765,7 +765,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             {
                 case AVIMOpType_Closed:
                 {
-                    [self process_session_closed:inCommand];
+                    [self processSessionClosed:inCommand];
                 } break;
                 default: break;
             }
@@ -776,59 +776,59 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             {
                 case AVIMOpType_Joined:
                 {
-                    [self process_conv_joined:inCommand];
+                    [self processConvJoined:inCommand];
                 } break;
                 case AVIMOpType_MembersJoined:
                 {
-                    [self process_conv_members_joined:inCommand];
+                    [self processConvMembersJoined:inCommand];
                 } break;
                 case AVIMOpType_Left:
                 {
-                    [self process_conv_left:inCommand];
+                    [self processConvLeft:inCommand];
                 } break;
                 case AVIMOpType_MembersLeft:
                 {
-                    [self process_conv_members_left:inCommand];
+                    [self processConvMembersLeft:inCommand];
                 } break;
                 case AVIMOpType_Updated:
                 {
-                    [self process_conv_updated:inCommand];
+                    [self processConvUpdated:inCommand];
                 } break;
                 case AVIMOpType_MemberInfoChanged:
                 {
-                    [self process_conv_member_info_changed:inCommand];
+                    [self processConvMemberInfoChanged:inCommand];
                 } break;
                 case AVIMOpType_Blocked:
                 {
-                    [self process_conv_blocked:inCommand];
+                    [self processConvBlocked:inCommand];
                 } break;
                 case AVIMOpType_MembersBlocked:
                 {
-                    [self process_conv_members_blocked:inCommand];
+                    [self processConvMembersBlocked:inCommand];
                 } break;
                 case AVIMOpType_Unblocked:
                 {
-                    [self process_conv_unblocked:inCommand];
+                    [self processConvUnblocked:inCommand];
                 } break;
                 case AVIMOpType_MembersUnblocked:
                 {
-                    [self process_conv_members_unblocked:inCommand];
+                    [self processConvMembersUnblocked:inCommand];
                 } break;
                 case AVIMOpType_Shutuped:
                 {
-                    [self process_conv_shutuped:inCommand];
+                    [self processConvShutuped:inCommand];
                 } break;
                 case AVIMOpType_MembersShutuped:
                 {
-                    [self process_conv_members_shutuped:inCommand];
+                    [self processConvMembersShutuped:inCommand];
                 } break;
                 case AVIMOpType_Unshutuped:
                 {
-                    [self process_conv_unshutuped:inCommand];
+                    [self processConvUnshutuped:inCommand];
                 } break;
                 case AVIMOpType_MembersUnshutuped:
                 {
-                    [self process_conv_members_unshutuped:inCommand];
+                    [self processConvMembersUnshutuped:inCommand];
                 } break;
                 default: break;
             }
@@ -839,11 +839,11 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         } break;
         case AVIMCommandType_Rcp:
         {
-            [self process_rcp:inCommand];
+            [self processRCP:inCommand];
         } break;
         case AVIMCommandType_Unread:
         {
-            [self process_unread:inCommand];
+            [self processUnread:inCommand];
         } break;
         case AVIMCommandType_Patch:
         {
@@ -940,7 +940,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 // MARK: Process Command
 
-- (void)process_session_closed:(AVIMGenericCommand *)inCommand
+- (void)processSessionClosed:(AVIMGenericCommand *)inCommand
 {
     NSError *error = LCErrorFromSessionCommand((inCommand.hasSessionMessage
                                                 ? inCommand.sessionMessage
@@ -950,7 +950,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                         completion:nil];
 }
 
-- (void)process_conv_joined:(AVIMGenericCommand *)inCommand
+- (void)processConvJoined:(AVIMGenericCommand *)inCommand
 {
     AssertRunInQueue(self->_internalSerialQueue);
     
@@ -974,7 +974,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-- (void)process_conv_members_joined:(AVIMGenericCommand *)inCommand
+- (void)processConvMembersJoined:(AVIMGenericCommand *)inCommand
 {
     AssertRunInQueue(self->_internalSerialQueue);
     
@@ -999,7 +999,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-- (void)process_conv_left:(AVIMGenericCommand *)inCommand
+- (void)processConvLeft:(AVIMGenericCommand *)inCommand
 {
     AssertRunInQueue(self->_internalSerialQueue);
     
@@ -1023,7 +1023,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-- (void)process_conv_members_left:(AVIMGenericCommand *)inCommand
+- (void)processConvMembersLeft:(AVIMGenericCommand *)inCommand
 {
     AssertRunInQueue(self->_internalSerialQueue);
     
@@ -1048,7 +1048,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-- (void)process_conv_updated:(AVIMGenericCommand *)inCommand
+- (void)processConvUpdated:(AVIMGenericCommand *)inCommand
 {
     AssertRunInQueue(self->_internalSerialQueue);
     
@@ -1096,7 +1096,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     
     [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
-        [conversation process_conv_updated_attr:attr attrModified:attrModified];
+        [conversation processConvUpdatedAttr:attr attrModified:attrModified];
         id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didUpdateAt:byClientId:updatedData:);
         if (delegate && [delegate respondsToSelector:sel]) {
@@ -1107,7 +1107,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-- (void)process_conv_member_info_changed:(AVIMGenericCommand *)inCommand
+- (void)processConvMemberInfoChanged:(AVIMGenericCommand *)inCommand
 {
     AssertRunInQueue(self->_internalSerialQueue);
     
@@ -1123,7 +1123,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     
     [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
-        [conversation process_member_info_changed:memberId role:roleKey];
+        [conversation processMemberInfoChanged:memberId role:roleKey];
         id <LCIMClientDelegate> delegate = self->_delegate;
         SEL sel = @selector(conversation:didMemberInfoUpdateBy:memberId:role:);
         if (delegate && [delegate respondsToSelector:sel]) {
@@ -1135,7 +1135,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-- (void)process_conv_blocked:(AVIMGenericCommand *)inCommand
+- (void)processConvBlocked:(AVIMGenericCommand *)inCommand
 {
     AssertRunInQueue(self->_internalSerialQueue);
     
@@ -1158,7 +1158,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-- (void)process_conv_members_blocked:(AVIMGenericCommand *)inCommand
+- (void)processConvMembersBlocked:(AVIMGenericCommand *)inCommand
 {
     AssertRunInQueue(self->_internalSerialQueue);
     
@@ -1182,7 +1182,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-- (void)process_conv_unblocked:(AVIMGenericCommand *)inCommand
+- (void)processConvUnblocked:(AVIMGenericCommand *)inCommand
 {
     AssertRunInQueue(self->_internalSerialQueue);
     
@@ -1205,7 +1205,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-- (void)process_conv_members_unblocked:(AVIMGenericCommand *)inCommand
+- (void)processConvMembersUnblocked:(AVIMGenericCommand *)inCommand
 {
     AssertRunInQueue(self->_internalSerialQueue);
     
@@ -1229,7 +1229,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-- (void)process_conv_shutuped:(AVIMGenericCommand *)inCommand
+- (void)processConvShutuped:(AVIMGenericCommand *)inCommand
 {
     AssertRunInQueue(self->_internalSerialQueue);
     
@@ -1252,7 +1252,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-- (void)process_conv_members_shutuped:(AVIMGenericCommand *)inCommand
+- (void)processConvMembersShutuped:(AVIMGenericCommand *)inCommand
 {
     AssertRunInQueue(self->_internalSerialQueue);
     
@@ -1276,7 +1276,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-- (void)process_conv_unshutuped:(AVIMGenericCommand *)inCommand
+- (void)processConvUnshutuped:(AVIMGenericCommand *)inCommand
 {
     AssertRunInQueue(self->_internalSerialQueue);
     
@@ -1299,7 +1299,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-- (void)process_conv_members_unshutuped:(AVIMGenericCommand *)inCommand
+- (void)processConvMembersUnshutuped:(AVIMGenericCommand *)inCommand
 {
     AssertRunInQueue(self->_internalSerialQueue);
     
@@ -1356,7 +1356,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             patchedReason.code = (patchItem.hasPatchCode ? patchItem.patchCode : 0);
             patchedReason.reason = (patchItem.hasPatchReason ? patchItem.patchReason : nil);
         }
-        LCIMMessage *patchMessage = [conversation process_patch_modified:patchItem];
+        LCIMMessage *patchMessage = [conversation processPatchModified:patchItem];
         id <LCIMClientDelegate> delegate = self.delegate;
         if (patchMessage && delegate) {
             if ([patchMessage isKindOfClass:[LCIMRecalledMessage class]] &&
@@ -1377,7 +1377,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-- (void)process_rcp:(AVIMGenericCommand *)inCommand
+- (void)processRCP:(AVIMGenericCommand *)inCommand
 {
     AssertRunInQueue(self->_internalSerialQueue);
     
@@ -1386,12 +1386,12 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     if (!conversationId) {
         return;
     }
-    BOOL isReadRcp = (rcpCommand.hasRead ? rcpCommand.read : false);
+    BOOL isRead = (rcpCommand.hasRead ? rcpCommand.read : false);
     
     [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
-        LCIMMessage *message = [conversation process_rcp:rcpCommand isReadRcp:isReadRcp];
-        if (!isReadRcp && message) {
+        LCIMMessage *message = [conversation processRCP:rcpCommand isRead:isRead];
+        if (!isRead && message) {
             id <LCIMClientDelegate> delegate = self->_delegate;
             SEL sel = @selector(conversation:messageDelivered:);
             if (delegate && [delegate respondsToSelector:sel]) {
@@ -1403,7 +1403,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-- (void)process_unread:(AVIMGenericCommand *)inCommand
+- (void)processUnread:(AVIMGenericCommand *)inCommand
 {
     AssertRunInQueue(self->_internalSerialQueue);
     
@@ -1432,7 +1432,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     [self->_conversationManager queryConversationsWithIds:conversationIds callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         AVIMUnreadTuple *unreadTuple = unreadTupleMap[conversation.conversationId];
-        __unused NSInteger unreadCount = [conversation process_unread:unreadTuple];
+        __unused NSInteger unreadCount = [conversation processUnread:unreadTuple];
     }];
 }
 
@@ -1467,7 +1467,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             });
             [self sendCommandWrapper:ackCommandWrapper];
         }
-        LCIMMessage *message = [conversation process_direct:directCommand
+        LCIMMessage *message = [conversation processDirect:directCommand
                                                   messageId:messageID
                                              isTransientMsg:isTransientMsg];
         id <LCIMClientDelegate> delegate = self.delegate;
