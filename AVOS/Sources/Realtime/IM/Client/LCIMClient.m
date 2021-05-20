@@ -12,6 +12,7 @@
 #import "LCIMConversationMemberInfo_Internal.h"
 #import "LCIMConversationQuery_Internal.h"
 #import "LCIMTypedMessage_Internal.h"
+#import "LCIMRecalledMessage.h"
 
 #import "LCIMErrorUtil.h"
 
@@ -533,6 +534,9 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         if (sessionCommand.hasStTtl) {
             self.sessionTokenExpiration = [NSDate dateWithTimeIntervalSinceNow:sessionCommand.stTtl];
         }
+        if (self.lastPatchTime == 0) {
+            self.lastPatchTime = (inCommand.hasServerTs ? inCommand.serverTs : 0);
+        }
         [self setStatus:LCIMClientStatusOpened];
         if (openCommand) {
             [self reportDeviceToken:self.currentDeviceToken
@@ -847,7 +851,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
             {
                 case AVIMOpType_Modify:
                 {
-                    [self process_patch_modify:inCommand];
+                    [self processPatchModify:inCommand];
                 } break;
                 default: break;
             }
@@ -1319,9 +1323,9 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     }];
 }
 
-- (void)process_patch_modify:(AVIMGenericCommand *)inCommand
+- (void)processPatchModify:(AVIMGenericCommand *)inCommand
 {
-    AssertRunInQueue(self->_internalSerialQueue);
+    AssertRunInQueue(self.internalSerialQueue);
     
     AVIMPatchCommand *patchCommand = (inCommand.hasPatchMessage ? inCommand.patchMessage : nil);
     if (!patchCommand) {
@@ -1330,46 +1334,47 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     
     NSMutableDictionary<NSString *, AVIMPatchItem *> *patchItemMap = [NSMutableDictionary dictionary];
     NSMutableArray<NSString *> *conversationIds = [NSMutableArray array];
-    ({
-        for (AVIMPatchItem *patchItem in patchCommand.patchesArray) {
-            if (patchItem.hasPatchTimestamp && patchItem.patchTimestamp > self.lastPatchTime) {
-                self.lastPatchTime = patchItem.patchTimestamp;
-            }
-            NSString *conversationId = (patchItem.hasCid ? patchItem.cid : nil);
-            if (conversationId) {
-                [conversationIds addObject:conversationId];
-                patchItemMap[conversationId] = patchItem;
-            }
+    for (AVIMPatchItem *patchItem in patchCommand.patchesArray) {
+        if (patchItem.hasPatchTimestamp &&
+            patchItem.patchTimestamp > self.lastPatchTime) {
+            self.lastPatchTime = patchItem.patchTimestamp;
         }
-    });
+        NSString *conversationId = (patchItem.hasCid ? patchItem.cid : nil);
+        if (conversationId) {
+            [conversationIds addObject:conversationId];
+            patchItemMap[conversationId] = patchItem;
+        }
+    }
     
-    [self->_conversationManager queryConversationsWithIds:conversationIds callback:^(LCIMConversation *conversation, NSError *error) {
+    [self.conversationManager queryConversationsWithIds:conversationIds
+                                               callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         AVIMPatchItem *patchItem = patchItemMap[conversation.conversationId];
+        LCIMMessagePatchedReason *patchedReason;
+        if (patchItem.hasPatchCode || patchItem.hasPatchReason) {
+            patchedReason = [LCIMMessagePatchedReason new];
+            patchedReason.code = (patchItem.hasPatchCode ? patchItem.patchCode : 0);
+            patchedReason.reason = (patchItem.hasPatchReason ? patchItem.patchReason : nil);
+        }
         LCIMMessage *patchMessage = [conversation process_patch_modified:patchItem];
-        id <LCIMClientDelegate> delegate = self->_delegate;
-        SEL sel = @selector(conversation:messageHasBeenUpdated:);
-        if (patchMessage && delegate && [delegate respondsToSelector:sel]) {
-            [self invokeInUserInteractQueue:^{
-                [delegate conversation:conversation messageHasBeenUpdated:patchMessage];
-            }];
+        id <LCIMClientDelegate> delegate = self.delegate;
+        if (patchMessage && delegate) {
+            if ([patchMessage isKindOfClass:[LCIMRecalledMessage class]] &&
+                ((LCIMRecalledMessage *)patchMessage).isRecall) {
+                if ([delegate respondsToSelector:@selector(conversation:messageHasBeenRecalled:reason:)]) {
+                    [self invokeInUserInteractQueue:^{
+                        [delegate conversation:conversation messageHasBeenRecalled:(LCIMRecalledMessage *)patchMessage reason:patchedReason];
+                    }];
+                }
+            } else {
+                if ([delegate respondsToSelector:@selector(conversation:messageHasBeenUpdated:reason:)]) {
+                    [self invokeInUserInteractQueue:^{
+                        [delegate conversation:conversation messageHasBeenUpdated:patchMessage reason:patchedReason];
+                    }];
+                }
+            }
         }
     }];
-    
-    ({
-        LCIMProtobufCommandWrapper *ackCommandWrapper = ({
-            AVIMGenericCommand *outCommand = [[AVIMGenericCommand alloc] init];
-            AVIMPatchCommand *patchMessage = [[AVIMPatchCommand alloc] init];
-            outCommand.cmd = AVIMCommandType_Patch;
-            outCommand.op = AVIMOpType_Modified;
-            outCommand.patchMessage = patchMessage;
-            patchMessage.lastPatchTime = self.lastPatchTime;
-            LCIMProtobufCommandWrapper *commandWrapper = [[LCIMProtobufCommandWrapper alloc] init];
-            commandWrapper.outCommand = outCommand;
-            commandWrapper;
-        });
-        [self sendCommandWrapper:ackCommandWrapper];
-    });
 }
 
 - (void)process_rcp:(AVIMGenericCommand *)inCommand

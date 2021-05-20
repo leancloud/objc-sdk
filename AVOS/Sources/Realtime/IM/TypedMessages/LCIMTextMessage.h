@@ -17,6 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Create a text message.
 /// @param text The string text.
++ (instancetype)messageWithText:(NSString *)text;
+
+/// Create a text message.
+/// @param text The string text.
 /// @param attributes The custom attributes.
 + (instancetype)messageWithText:(NSString *)text
                      attributes:(NSDictionary * _Nullable)attributes;

@@ -12,18 +12,9 @@
 #import "LCIMConversation_Internal.h"
 #import "LCIMTypedMessage_Internal.h"
 
-/*
- {
- "cmd": "direct",
- "cid": "549bc8a5e4b0606024ec1677",
- "r": false,
- "transient": false,
- "i": 5343,
- "msg": "hello, world",
- "appId": "appid",
- "peerId": "Tom"
- }
- */
+@implementation LCIMMessagePatchedReason
+
+@end
 
 @implementation LCIMMessage
 
