@@ -128,15 +128,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)conversation:(LCIMConversation *)conversation didUpdateForKey:(LCIMConversationUpdatedKey)key;
 
-/**
- Notification for conversation's attribution updated.
- 
- @param conversation Updated conversation.
- @param date Updated date.
- @param clientId Client ID of doing updates.
- @param data Updated data.
- */
-- (void)conversation:(LCIMConversation *)conversation didUpdateAt:(NSDate * _Nullable)date byClientId:(NSString * _Nullable)clientId updatedData:(NSDictionary * _Nullable)data;
+/// Notification for conversation's attribution updated.
+/// @param conversation Updated conversation.
+/// @param date Updated date.
+/// @param clientId Client ID which do this update.
+/// @param updatedData Updated data.
+/// @param updatingData Updating data.
+- (void)conversation:(LCIMConversation *)conversation didUpdateAt:(NSDate * _Nullable)date byClientId:(NSString * _Nullable)clientId updatedData:(NSDictionary * _Nullable)updatedData updatingData:(NSDictionary * _Nullable)updatingData;
 
 /**
  Notification for conversation's member info updated.
