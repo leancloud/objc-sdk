@@ -1050,7 +1050,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 - (void)processConvUpdated:(AVIMGenericCommand *)inCommand
 {
-    AssertRunInQueue(self->_internalSerialQueue);
+    AssertRunInQueue(self.internalSerialQueue);
     
     AVIMConvCommand *convCommand = (inCommand.hasConvMessage ? inCommand.convMessage : nil);
     NSString *conversationId = (convCommand.hasCid ? convCommand.cid : nil);
@@ -1094,14 +1094,13 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         updatedAt = [LCDate dateFromString:convCommand.udate];
     }
     
-    [self->_conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
+    [self.conversationManager queryConversationWithId:conversationId callback:^(LCIMConversation *conversation, NSError *error) {
         if (error) { return; }
         [conversation processConvUpdatedAttr:attr attrModified:attrModified];
-        id <LCIMClientDelegate> delegate = self->_delegate;
-        SEL sel = @selector(conversation:didUpdateAt:byClientId:updatedData:);
-        if (delegate && [delegate respondsToSelector:sel]) {
+        id <LCIMClientDelegate> delegate = self.delegate;
+        if ([delegate respondsToSelector:@selector(conversation:didUpdateAt:byClientId:updatedData:updatingData:)]) {
             [self invokeInUserInteractQueue:^{
-                [delegate conversation:conversation didUpdateAt:updatedAt byClientId:initById updatedData:attrModified];
+                [delegate conversation:conversation didUpdateAt:updatedAt byClientId:initById updatedData:attrModified updatingData:attr];
             }];
         }
     }];
