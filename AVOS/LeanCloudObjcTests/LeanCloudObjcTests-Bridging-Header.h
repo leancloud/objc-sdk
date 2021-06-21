@@ -9,3 +9,4 @@
 #import "LCPaasClient_internal.h"
 #import "LCIMClient_Internal.h"
 #import "LCRTMConnection_Internal.h"
+#import "LCIMMessage_Internal.h"
