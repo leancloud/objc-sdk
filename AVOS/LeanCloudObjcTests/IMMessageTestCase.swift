@@ -186,6 +186,35 @@ class IMMessageTestCase: RTMBaseTestCase {
             })
         }
     }
+    
+    func testMessageCache() {
+        guard let client1 = newOpenedClient(clientIDSuffix: "1") else {
+            XCTFail()
+            return
+        }
+        
+        var conv: LCIMConversation?
+        
+        expecting { exp in
+            client1.createConversation(withClientIds: [uuid]) { conversation, error in
+                if let conversation = conversation {
+                    conv = conversation
+                    exp.fulfill()
+                } else {
+                    XCTAssertNil(error)
+                }
+            }
+        }
+        
+        delay()
+        
+        let failedMessage = LCIMTextMessage(text: "failed")
+        failedMessage.status = .failed
+        conv?.addMessage(toCache: failedMessage)
+        let result = conv?.queryMessagesFromCache(withLimit: 10)
+        XCTAssertEqual(result?.count, 1)
+        XCTAssertEqual((result?.first as? LCIMMessage)?.status, .failed)
+    }
 }
 
 extension IMMessageTestCase {
