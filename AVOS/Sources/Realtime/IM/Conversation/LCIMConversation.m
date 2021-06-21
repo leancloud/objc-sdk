@@ -2224,7 +2224,9 @@ static void processAttrAndAttrModified(NSDictionary *attr, NSDictionary *attrMod
 
 - (void)postprocessMessages:(NSArray *)messages {
     for (LCIMMessage *message in messages) {
-        message.status = LCIMMessageStatusSent;
+        if (message.status != LCIMMessageStatusFailed) {
+            message.status = LCIMMessageStatusSent;
+        }
         message.localClientId = self.imClient.clientId;
     }
 }
