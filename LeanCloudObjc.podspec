@@ -51,6 +51,7 @@ Pod::Spec.new do |s|
       'AVOS/Sources/Foundation/Search/LCSearchSortBuilder.h',
       'AVOS/Sources/Foundation/Status/LCStatus.h',
       'AVOS/Sources/Foundation/User/LCUser.h',
+      'AVOS/Sources/Foundation/User/LCFriendship.h',
       'AVOS/Sources/Foundation/Utils/LCLogger.h',
       'AVOS/Sources/Foundation/LCAvailability.h'
 

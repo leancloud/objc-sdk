@@ -21,6 +21,7 @@
 #import "LCGeoPoint_Internal.h"
 #import "LCRelation_Internal.h"
 #import "LCUtils.h"
+#import "LCFriendship.h"
 
 @implementation LCDate
 
@@ -570,6 +571,8 @@
         } else if ([LCObjectUtils isRoleClass:className]) {
             // TODO
             object = [LCRole role];
+        } else if ([LCObjectUtils isFriendshipRequestClass:className]) {
+            object = [[LCFriendshipRequest alloc] init];
         } else {
             object = [LCObject objectWithClassName:className];
         }
@@ -703,6 +706,10 @@
 +(BOOL)isInstallationClass:(NSString *)className
 {
     return [className isEqualToString:[LCInstallation className]];
+}
+
++ (BOOL)isFriendshipRequestClass:(NSString *)className {
+    return [className isEqualToString:[LCFriendshipRequest className]];
 }
 
 +(NSString *)classEndPoint:(NSString *)className

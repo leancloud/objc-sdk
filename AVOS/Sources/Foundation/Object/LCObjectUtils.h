@@ -72,12 +72,12 @@
 
 
 #pragma mark - batch request from operation list
-+(BOOL)isUserClass:(NSString *)className;
-+(BOOL)isRoleClass:(NSString *)className;
-+(BOOL)isFileClass:(NSString *)className;
-+(BOOL)isInstallationClass:(NSString *)className;
-+(NSString *)objectPath:(NSString *)className
-                   objectId:(NSString *)objectId;
++ (BOOL)isUserClass:(NSString *)className;
++ (BOOL)isRoleClass:(NSString *)className;
++ (BOOL)isFileClass:(NSString *)className;
++ (BOOL)isInstallationClass:(NSString *)className;
++ (BOOL)isFriendshipRequestClass:(NSString *)className;
++ (NSString *)objectPath:(NSString *)className objectId:(NSString *)objectId;
 
 #pragma mark - Array utils
 +(BOOL)safeAdd:(NSDictionary *)dict
