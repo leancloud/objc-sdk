@@ -23,6 +23,7 @@
     LCQuery *query = [LCQuery queryWithClassName:[self className]];
     [query whereKey:@"friend" equalTo:[LCUser currentUser]];
     [query whereKey:@"status" equalTo:@"pending"];
+    [query includeKey:@"user"];
     return query;
 }
 
