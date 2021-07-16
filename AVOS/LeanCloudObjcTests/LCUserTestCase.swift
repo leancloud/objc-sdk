@@ -184,7 +184,8 @@ class LCUserTestCase: BaseTestCase {
         }
         
         expecting { exp in
-            user_1.getFolloweeObjects { followees, error in
+            query = user_1.followeeObjectsQuery()
+            query.findObjectsInBackground { followees, error in
                 let followee = followees?.first as? LCObject
                 XCTAssertNotNil(followee)
                 XCTAssertEqual(followee?["group"] as? String, "music")
@@ -200,7 +201,8 @@ class LCUserTestCase: BaseTestCase {
                 XCTAssertNil(error)
                 exp.fulfill()
                 if succeeded {
-                    user_2.getFolloweeObjects { followees, error in
+                    query = user_2.followeeObjectsQuery()
+                    query.findObjectsInBackground { followees, error in
                         let followee = followees?.first as? LCObject
                         XCTAssertNotNil(followee)
                         XCTAssertEqual(followee?["group"] as? String, "sport")

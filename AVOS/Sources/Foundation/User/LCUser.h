@@ -540,6 +540,9 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  */
 - (LCQuery *)followeeQuery;
 
+/// New query for followee objects.
+- (LCQuery *)followeeObjectsQuery;
+
 /**
  *  通过ID来关注其他用户
  *  @warning 如果需要被关注者收到消息 需要手动给他发送一条LCStatus.
@@ -580,10 +583,6 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  *
  */
 - (void)getFollowees:(LCArrayResultBlock)callback;
-
-/// Get followee objects.
-/// @param callback Result callback.
-- (void)getFolloweeObjectsWithCallback:(void (^)(NSArray * _Nullable objects, NSError * _Nullable error))callback;
 
 /**
  *  同时获取当前用户的粉丝和关注列表

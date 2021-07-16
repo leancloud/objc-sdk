@@ -1313,6 +1313,13 @@ static BOOL enableAutomatic = NO;
     return [LCUser followerQuery:self.objectId];
 }
 
+- (LCQuery *)followeeObjectsQuery {
+    LCQuery *query = [LCQuery queryWithClassName:@"_Followee"];
+    [query whereKey:@"user" equalTo:self];
+    [query includeKey:@"followee"];
+    return query;
+}
+
 - (void)follow:(NSString *)userId andCallback:(LCBooleanResultBlock)callback {
     [self follow:userId userDictionary:nil andCallback:callback];
 }
@@ -1350,13 +1357,6 @@ static BOOL enableAutomatic = NO;
 
 - (void)getFollowees:(LCArrayResultBlock)callback {
     LCQuery *query = [LCUser followeeQuery:self.objectId];
-    [query findObjectsInBackgroundWithBlock:callback];
-}
-
-- (void)getFolloweeObjectsWithCallback:(void (^)(NSArray * _Nullable, NSError * _Nullable))callback {
-    LCQuery *query = [LCQuery queryWithClassName:@"_Followee"];
-    [query whereKey:@"user" equalTo:self];
-    [query includeKey:@"followee"];
     [query findObjectsInBackgroundWithBlock:callback];
 }
 
