@@ -305,6 +305,8 @@
 		D39724C424A5CD3C0099A518 /* RTMBaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39724C324A5CD3C0099A518 /* RTMBaseTestCase.swift */; };
 		D39724C624A852400099A518 /* IMClientTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39724C524A852400099A518 /* IMClientTestCase.swift */; };
 		D3A397F124A5A4670087D6F8 /* RTMConnectionTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A397F024A5A4670087D6F8 /* RTMConnectionTestCase.swift */; };
+		D3A3FA39269ECD40002531C7 /* LCFriendship.h in Headers */ = {isa = PBXBuildFile; fileRef = D3A3FA37269ECD40002531C7 /* LCFriendship.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D3A3FA3A269ECD40002531C7 /* LCFriendship.m in Sources */ = {isa = PBXBuildFile; fileRef = D3A3FA38269ECD40002531C7 /* LCFriendship.m */; };
 		D3AD74AB24BC216200D1BBEE /* LCUserTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AD74AA24BC216200D1BBEE /* LCUserTestCase.swift */; };
 /* End PBXBuildFile section */
 
@@ -570,6 +572,8 @@
 		D39724C324A5CD3C0099A518 /* RTMBaseTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTMBaseTestCase.swift; sourceTree = "<group>"; };
 		D39724C524A852400099A518 /* IMClientTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMClientTestCase.swift; sourceTree = "<group>"; };
 		D3A397F024A5A4670087D6F8 /* RTMConnectionTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTMConnectionTestCase.swift; sourceTree = "<group>"; };
+		D3A3FA37269ECD40002531C7 /* LCFriendship.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCFriendship.h; sourceTree = "<group>"; };
+		D3A3FA38269ECD40002531C7 /* LCFriendship.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCFriendship.m; sourceTree = "<group>"; };
 		D3AD74AA24BC216200D1BBEE /* LCUserTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCUserTestCase.swift; sourceTree = "<group>"; };
 		D3C53FCB2106D84A00D48686 /* LCIMClientProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCIMClientProtocol.h; sourceTree = "<group>"; };
 		D3D6E43923544F520048E58F /* LCGPBExtensionRegistry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBExtensionRegistry.m; sourceTree = "<group>"; };
@@ -1016,6 +1020,8 @@
 				8C841A9E1A5A7A0000C5C6C4 /* LCUser.h */,
 				8C841AA01A5A7A0000C5C6C4 /* LCUser_Internal.h */,
 				8C841A9F1A5A7A0000C5C6C4 /* LCUser.m */,
+				D3A3FA37269ECD40002531C7 /* LCFriendship.h */,
+				D3A3FA38269ECD40002531C7 /* LCFriendship.m */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -1391,6 +1397,7 @@
 				D30B6AB424A09E35006ABE09 /* LCDynamicObject_Internal.h in Headers */,
 				D30B6ACA24A09ED1006ABE09 /* LCIMConversationMemberInfo_Internal.h in Headers */,
 				D30B6A6B24A09D62006ABE09 /* LCQuery.h in Headers */,
+				D3A3FA39269ECD40002531C7 /* LCFriendship.h in Headers */,
 				D30B6B4024A09F84006ABE09 /* LCIMTypedMessage.h in Headers */,
 				D30B6A7C24A09DBE006ABE09 /* LCStatus.h in Headers */,
 				D30B6AE124A09F1E006ABE09 /* LCGPBCodedInputStream_PackagePrivate.h in Headers */,
@@ -1687,6 +1694,7 @@
 				D30B6AF024A09F1E006ABE09 /* LCGPBEmpty.pbobjc.m in Sources */,
 				D30B6A8B24A09DCA006ABE09 /* LCURLSessionManager.m in Sources */,
 				D30B6AAC24A09E35006ABE09 /* LCKeyValueStore.m in Sources */,
+				D3A3FA3A269ECD40002531C7 /* LCFriendship.m in Sources */,
 				D30B6B3F24A09F79006ABE09 /* LCIMConversationQueryCacheStore.m in Sources */,
 				D30B6B0D24A09F1F006ABE09 /* LCGPBUnknownFieldSet.m in Sources */,
 				D30B6B5224A09FAD006ABE09 /* LCIMBlockHelper.m in Sources */,

@@ -1277,12 +1277,12 @@ static BOOL enableAutomatic = NO;
 
 @implementation LCUser (Friendship)
 
-+(LCQuery*)followerQuery:(NSString*)userObjectId{
-    LCFriendQuery *query=[LCFriendQuery queryWithClassName:@"_Follower"];
-    query.targetFeild=@"follower";
++ (LCQuery *)followerQuery:(NSString *)userObjectId {
+    LCFriendQuery *query = [LCFriendQuery queryWithClassName:@"_Follower"];
+    query.targetFeild = @"follower";
     
-    LCUser *user=[self user];
-    user.objectId=userObjectId;
+    LCUser *user = [self user];
+    user.objectId = userObjectId;
     [query whereKey:@"user" equalTo:user];
     
     [query includeKey:@"follower"];
@@ -1291,12 +1291,12 @@ static BOOL enableAutomatic = NO;
     return query;
 }
 
-+(LCQuery*)followeeQuery:(NSString*)userObjectId{
-    LCFriendQuery *query=[LCFriendQuery queryWithClassName:@"_Followee"];
-    query.targetFeild=@"followee";
++ (LCQuery *)followeeQuery:(NSString *)userObjectId {
+    LCFriendQuery *query = [LCFriendQuery queryWithClassName:@"_Followee"];
+    query.targetFeild = @"followee";
     
-    LCUser *user=[self user];
-    user.objectId=userObjectId;
+    LCUser *user = [self user];
+    user.objectId = userObjectId;
     [query whereKey:@"user" equalTo:user];
     
     [query includeKey:@"followee"];
@@ -1305,77 +1305,78 @@ static BOOL enableAutomatic = NO;
     return query;
 }
 
--(LCQuery*)followeeQuery{
+- (LCQuery *)followeeQuery {
     return [LCUser followeeQuery:self.objectId];
 }
 
--(LCQuery*)followerQuery{
+- (LCQuery *)followerQuery {
     return [LCUser followerQuery:self.objectId];
 }
 
--(void)follow:(NSString*)userId andCallback:(LCBooleanResultBlock)callback{
+- (LCQuery *)followeeObjectsQuery {
+    LCQuery *query = [LCQuery queryWithClassName:@"_Followee"];
+    [query whereKey:@"user" equalTo:self];
+    [query includeKey:@"followee"];
+    return query;
+}
+
+- (void)follow:(NSString *)userId andCallback:(LCBooleanResultBlock)callback {
     [self follow:userId userDictionary:nil andCallback:callback];
 }
 
--(void)follow:(NSString*)userId userDictionary:(NSDictionary *)dictionary andCallback:(LCBooleanResultBlock)callback{
+- (void)follow:(NSString *)userId userDictionary:(NSDictionary *)dictionary andCallback:(LCBooleanResultBlock)callback {
     if (![self isAuthDataExistInMemory]) {
         callback(NO, LCError(kLCErrorUserCannotBeAlteredWithoutSession, nil, nil));
         return;
     }
     NSDictionary *dict = [LCObjectUtils dictionaryFromObject:dictionary];
-    NSString *path=[NSString stringWithFormat:@"users/self/friendship/%@",userId];
+    NSString *path = [NSString stringWithFormat:@"users/self/friendship/%@", userId];
     
-    [[LCPaasClient sharedInstance] postObject:path withParameters:dict block:^(NSDictionary *object, NSError *error) {
+    [[LCPaasClient sharedInstance] postObject:path withParameters:dict block:^(id object, NSError *error) {
         [LCUtils callBooleanResultBlock:callback error:error];
     }];
 }
 
--(void)unfollow:(NSString *)userId andCallback:(LCBooleanResultBlock)callback{
+- (void)unfollow:(NSString *)userId andCallback:(LCBooleanResultBlock)callback {
     if (![self isAuthDataExistInMemory]) {
         callback(NO, LCError(kLCErrorUserCannotBeAlteredWithoutSession, nil, nil));
         return;
     }
     
-    NSString *path=[NSString stringWithFormat:@"users/self/friendship/%@",userId];
+    NSString *path = [NSString stringWithFormat:@"users/self/friendship/%@", userId];
     
-    [[LCPaasClient sharedInstance] deleteObject:path withParameters:nil block:^(NSDictionary *object, NSError *error) {
+    [[LCPaasClient sharedInstance] deleteObject:path withParameters:nil block:^(id object, NSError *error) {
         [LCUtils callBooleanResultBlock:callback error:error];
     }];
 }
 
--(void)getFollowers:(LCArrayResultBlock)callback{
-    
-    LCQuery *query= [LCUser followerQuery:self.objectId];
+- (void)getFollowers:(LCArrayResultBlock)callback {
+    LCQuery *query = [LCUser followerQuery:self.objectId];
     [query findObjectsInBackgroundWithBlock:callback];
-    
 }
 
--(void)getFollowees:(LCArrayResultBlock)callback{
-    
-    LCQuery *query= [LCUser followeeQuery:self.objectId];
-    
+- (void)getFollowees:(LCArrayResultBlock)callback {
+    LCQuery *query = [LCUser followeeQuery:self.objectId];
     [query findObjectsInBackgroundWithBlock:callback];
-    
 }
 
--(void)getFollowersAndFollowees:(LCDictionaryResultBlock)callback{
-    NSString *path=[NSString stringWithFormat:@"users/%@/followersAndFollowees?include=follower,followee",self.objectId];
+- (void)getFollowersAndFollowees:(LCDictionaryResultBlock)callback {
+    NSString *path = [NSString stringWithFormat:@"users/%@/followersAndFollowees?include=follower,followee", self.objectId];
     
     [[LCPaasClient sharedInstance] getObject:path withParameters:nil block:^(NSDictionary *object, NSError *error) {
-        if (error==nil) {
-            NSMutableDictionary *dict=[NSMutableDictionary dictionaryWithCapacity:2];
+        if (!error) {
+            NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:2];
             @try {
-                NSArray *orig=nil;
-                NSArray *result=nil;
+                NSArray *orig;
+                NSArray *result;
                 
-                orig=[object[@"followees"] valueForKeyPath:@"followee"];
-                result=[LCObjectUtils arrayFromArray:orig];
+                orig = [object[@"followees"] valueForKeyPath:@"followee"];
+                result = [LCObjectUtils arrayFromArray:orig];
                 [dict setObject:result forKey:@"followees"];
                 
-                orig=[object[@"followers"] valueForKeyPath:@"follower"];
-                result=[LCObjectUtils arrayFromArray:orig];
+                orig = [object[@"followers"] valueForKeyPath:@"follower"];
+                result = [LCObjectUtils arrayFromArray:orig];
                 [dict setObject:result forKey:@"followers"];
-                
             }
             @catch (NSException *exception) {
                 error = LCErrorInternal(@"wrong format return");

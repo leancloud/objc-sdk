@@ -501,4 +501,96 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 
 @end
 
+/**
+ *  用户好友关系
+ */
+@interface LCUser (Friendship)
+
+/* @name 好友关系 */
+
+/**
+ *  获取用户粉丝LCQuery
+ *
+ *  @param userObjectId 用户ID
+ *
+ *  @return 用于查询的LCQuery
+ */
++ (LCQuery *)followerQuery:(NSString *)userObjectId;
+
+/**
+ *  获取本用户粉丝LCQuery
+ *
+ *  @return 用于查询的LCQuery
+ */
+- (LCQuery *)followerQuery;
+
+/**
+ *  获取用户关注LCQuery
+ *
+ *  @param userObjectId 用户ID
+ *
+ *  @return 用于查询的LCQuery
+ */
++ (LCQuery *)followeeQuery:(NSString *)userObjectId;
+
+/**
+ *  获取本用户关注LCQuery
+ *
+ *  @return 用于查询的LCQuery
+ */
+- (LCQuery *)followeeQuery;
+
+/// New query for followee objects.
+- (LCQuery *)followeeObjectsQuery;
+
+/**
+ *  通过ID来关注其他用户
+ *  @warning 如果需要被关注者收到消息 需要手动给他发送一条LCStatus.
+ *  @param userId 要关注的用户objectId
+ *  @param callback 回调结果
+ */
+- (void)follow:(NSString *)userId andCallback:(LCBooleanResultBlock)callback;
+
+/**
+ *  通过ID来关注其他用户
+ *  @warning 如果需要被关注者收到消息 需要手动给他发送一条LCStatus.
+ *  @param userId 要关注的用户objectId
+ *  @param dictionary 添加的自定义属性
+ *  @param callback 回调结果
+ */
+- (void)follow:(NSString *)userId userDictionary:(nullable NSDictionary *)dictionary andCallback:(LCBooleanResultBlock)callback;
+
+/**
+ *  通过ID来取消关注其他用户
+ *
+ *  @param userId 要取消关注的用户objectId
+ *  @param callback 回调结果
+ *
+ */
+- (void)unfollow:(NSString *)userId andCallback:(LCBooleanResultBlock)callback;
+
+/**
+ *  获取当前用户粉丝的列表
+ *
+ *  @param callback 回调结果
+ */
+- (void)getFollowers:(LCArrayResultBlock)callback;
+
+/**
+ *  获取当前用户所关注的列表
+ *
+ *  @param callback 回调结果
+ *
+ */
+- (void)getFollowees:(LCArrayResultBlock)callback;
+
+/**
+ *  同时获取当前用户的粉丝和关注列表
+ *
+ *  @param callback 回调结果, 列表字典包含`followers`数组和`followees`数组
+ */
+- (void)getFollowersAndFollowees:(LCDictionaryResultBlock)callback;
+
+@end
+
 NS_ASSUME_NONNULL_END

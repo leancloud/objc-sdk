@@ -42,6 +42,7 @@
 
 // User
 #import "LCUser.h"
+#import "LCFriendship.h"
 
 // CloudCode
 #import "LCCloud.h"
