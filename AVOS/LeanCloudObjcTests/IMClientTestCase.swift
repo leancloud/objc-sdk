@@ -47,15 +47,9 @@ class IMClientTestCase: RTMBaseTestCase {
         client2.currentDeviceToken = uuid
         expecting(
             description: "Session Conflict",
-            count: 3)
+            count: 2)
         { (exp) in
             delegator1.closed = { client, error in
-                XCTAssertTrue(Thread.isMainThread)
-                XCTAssertNotNil(error)
-                XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.sessionConflict.rawValue)
-                exp.fulfill()
-            }
-            delegator1.offline = { client, error in
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(error)
                 XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.sessionConflict.rawValue)
@@ -70,13 +64,8 @@ class IMClientTestCase: RTMBaseTestCase {
         delegator1.reset()
         expecting(
             description: "Reopen",
-            count: 2)
+            count: 1)
         { (exp) in
-            delegator1.offline = { client, error in
-                XCTAssertNotNil(error)
-                XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.sessionConflict.rawValue)
-                exp.fulfill()
-            }
             client1.open(with: .reopen) { (success, error) in
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertFalse(success)
@@ -87,14 +76,9 @@ class IMClientTestCase: RTMBaseTestCase {
         }
         expecting(
             description: "Force Open",
-            count: 3)
+            count: 2)
         { (exp) in
             delegator2.closed = { client, error in
-                XCTAssertNotNil(error)
-                XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.sessionConflict.rawValue)
-                exp.fulfill()
-            }
-            delegator2.offline = { client, error in
                 XCTAssertNotNil(error)
                 XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.sessionConflict.rawValue)
                 exp.fulfill()
@@ -173,7 +157,6 @@ class LCIMClientDelegator: NSObject, LCIMClientDelegate {
         resumed = nil
         paused = nil
         closed = nil
-        offline = nil
         didReceiveTypedMessage = nil
     }
     
@@ -195,11 +178,6 @@ class LCIMClientDelegator: NSObject, LCIMClientDelegate {
     var closed: ((LCIMClient, Error?) -> Void)?
     func imClientClosed(_ imClient: LCIMClient, error: Error?) {
         closed?(imClient, error)
-    }
-    
-    var offline: ((LCIMClient, Error?) -> Void)?
-    func client(_ client: LCIMClient, didOfflineWithError error: Error?) {
-        offline?(client, error)
     }
     
     var didReceiveTypedMessage: ((LCIMConversation, LCIMTypedMessage) -> Void)?
