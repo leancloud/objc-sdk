@@ -185,6 +185,7 @@ class LCUserTestCase: BaseTestCase {
         
         expecting { exp in
             query = user_1.followeeObjectsQuery()
+            query.whereKey("friendStatus", equalTo: true)
             query.findObjectsInBackground { followees, error in
                 let followee = followees?.first as? LCObject
                 XCTAssertNotNil(followee)
@@ -202,6 +203,7 @@ class LCUserTestCase: BaseTestCase {
                 exp.fulfill()
                 if succeeded {
                     query = user_2.followeeObjectsQuery()
+                    query.whereKey("friendStatus", equalTo: true)
                     query.findObjectsInBackground { followees, error in
                         let followee = followees?.first as? LCObject
                         XCTAssertNotNil(followee)
@@ -300,6 +302,21 @@ class LCUserTestCase: BaseTestCase {
                         }
                     }
                 }
+            }
+        }
+        
+        expecting { exp in
+            query = LCFriendshipRequest.query()
+            query.whereKey("status", equalTo: "declined")
+            query.findObjectsInBackground { requests, error in
+                let request = requests?.first as? LCFriendshipRequest
+                let friend = request?["friend"] as? LCUser
+                let user = request?["user"] as? LCUser
+                XCTAssertNotNil(request)
+                XCTAssertNotNil(friend)
+                XCTAssertNotNil(user)
+                XCTAssertNil(error)
+                exp.fulfill()
             }
         }
         
