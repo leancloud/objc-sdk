@@ -831,7 +831,7 @@ static BOOL enableAutomatic = NO;
     if (options.validationToken) {
         parameters[@"validate_token"] = options.validationToken;
     }
-    if (options.timeToLive) {
+    if (options.timeToLive != nil) {
         parameters[@"ttl"] = options.timeToLive;
     }
     [[LCPaasClient sharedInstance] postObject:@"requestChangePhoneNumber"
