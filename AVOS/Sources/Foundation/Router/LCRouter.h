@@ -24,8 +24,8 @@ FOUNDATION_EXPORT RouterCacheKey const RouterCacheKeyRTM;
 /// Clean disk cache.
 /// @param key See `RouterCacheKey`.
 /// @param error The pointer to `NSErrorPointer`.
-- (void)cleanCacheWithKey:(RouterCacheKey)key
-                    error:(NSError **)error;
+- (BOOL)cleanCacheWithKey:(RouterCacheKey)key
+                    error:(NSError * __autoreleasing *)error;
 
 @end
 

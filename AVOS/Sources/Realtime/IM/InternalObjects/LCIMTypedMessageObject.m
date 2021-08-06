@@ -56,7 +56,7 @@
 {
     NSNumber *typeNumber = [NSNumber _lc_decoding:self.localData
                                               key:@"_lctype"];
-    return (typeNumber
+    return ((typeNumber != nil)
             ? ([_typeDict objectForKey:typeNumber] ? true : false)
             : false);
 }

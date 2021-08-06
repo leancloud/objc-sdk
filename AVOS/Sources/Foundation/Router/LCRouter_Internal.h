@@ -69,7 +69,7 @@ static RouterKey RouterKeyRTMServer = @"server";
 
 + (void)customAppServerURL:(NSString *)URLString key:(RouterKey)key;
 
-- (void)cleanCacheWithApplication:(LCApplication *)application
+- (BOOL)cleanCacheWithApplication:(LCApplication *)application
                               key:(RouterCacheKey)key
                             error:(NSError * __autoreleasing *)error;
 

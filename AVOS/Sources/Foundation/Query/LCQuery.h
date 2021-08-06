@@ -309,14 +309,14 @@ typedef NS_ENUM(NSInteger, LCQueryDistanceUnit) {
  @param queries The list of queries to or together.
  @return a LCQuery that is the or of the passed in LCQuerys.
  */
-+ (LCQuery *)orQueryWithSubqueries:(NSArray *)queries;
++ (nullable LCQuery *)orQueryWithSubqueries:(NSArray<LCQuery *> *)queries;
 
 /*!
  Returns a LCQuery that is the AND of the passed in LCQuerys.
  @param queries The list of queries to AND together.
  @return a LCQuery that is the AND of the passed in LCQuerys.
  */
-+ (LCQuery *)andQueryWithSubqueries:(NSArray *)queries;
++ (nullable LCQuery *)andQueryWithSubqueries:(NSArray<LCQuery *> *)queries;
 
 /*!
  Adds a constraint that requires that a key's value matches a value in another key

@@ -411,52 +411,46 @@ static NSString * quote(NSString *string)
     [self whereKey:key matchesRegex:[NSString stringWithFormat:@".*%@$", quote(suffix)]];
 }
 
-+ (LCQuery *)orQueryWithSubqueries:(NSArray *)queries
-{
-    NSString * className = nil;
-    NSMutableArray * input = [[NSMutableArray alloc] initWithCapacity:queries.count];
-    for(LCQuery * query in queries)
-    {
-        [input addObject:query.where];
-
-        //classname must be same, or will get assert
-        if (className!=nil) {
-            NSAssert([query.className isEqualToString:className], @"the OR query requires same classNames, but here got %@ v.s. %@",className,query.className);
++ (LCQuery *)orQueryWithSubqueries:(NSArray<LCQuery *> *)queries {
+    LCQuery *orQuery;
+    NSString *firstClassName = queries.firstObject.className;
+    if (firstClassName) {
+        NSMutableArray *wheres = [[NSMutableArray alloc] initWithCapacity:queries.count];
+        for (LCQuery *query in queries) {
+            NSAssert([query.className isEqualToString:firstClassName], @"the `queries` require same `className`");
+            if (query.where.count > 0) {
+                [wheres addObject:query.where];
+            }
         }
-
-        className = query.className;
+        if (wheres.count > 0) {
+            orQuery = [LCQuery queryWithClassName:firstClassName];
+            [orQuery.where setValue:wheres forKey:@"$or"];
+        }
     }
-    LCQuery * result = [LCQuery queryWithClassName:className];
-    [result.where setValue:input forKey:@"$or"];
-    return result;
+    return orQuery;
 }
 
-+ (LCQuery *)andQueryWithSubqueries:(NSArray *)queries
-{
-    if (queries.count <= 0) {
-        return nil;
-    }
-
-    NSString * className = nil;
-    NSMutableArray * input = [[NSMutableArray alloc] initWithCapacity:queries.count];
-    for(LCQuery * query in queries)
-    {
-        [input addObject:query.where];
-
-        //classname must be same, or will get assert
-        if (className!=nil) {
-            NSAssert([query.className isEqualToString:className], @"the AND query requires same classNames, but here got %@ v.s. %@",className,query.className);
++ (LCQuery *)andQueryWithSubqueries:(NSArray<LCQuery *> *)queries {
+    LCQuery *andQuery;
+    NSString *firstClassName = queries.firstObject.className;
+    if (firstClassName) {
+        NSMutableArray *wheres = [[NSMutableArray alloc] initWithCapacity:queries.count];
+        for (LCQuery *query in queries) {
+            NSAssert([query.className isEqualToString:firstClassName], @"the `queries` require same `className`");
+            if (query.where.count > 0) {
+                [wheres addObject:query.where];
+            }
         }
-
-        className = query.className;
+        if (wheres.count > 0) {
+            andQuery = [LCQuery queryWithClassName:firstClassName];
+            if (wheres.count > 1) {
+                [andQuery.where setValue:wheres forKey:@"$and"];
+            } else {
+                [andQuery.where addEntriesFromDictionary:wheres[0]];
+            }
+        }
     }
-    LCQuery * result = [LCQuery queryWithClassName:className];
-    if (input.count > 1) {
-        [result.where setValue:input forKey:@"$and"];
-    } else {
-        [result.where addEntriesFromDictionary:[input objectAtIndex:0]];
-    }
-    return result;
+    return andQuery;
 }
 
 // 'where={"belongTo":{"$select":{"query":{"className":"Person","where":{"gender":"Male"}},"key":"name"}}}'

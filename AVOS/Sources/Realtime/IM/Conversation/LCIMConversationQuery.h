@@ -44,14 +44,14 @@ NS_ASSUME_NONNULL_BEGIN
  * @param queries The list of queries to OR together.
  * @return an query that is the OR of the passed in queries.
  */
-+ (instancetype)orQueryWithSubqueries:(NSArray<LCIMConversationQuery *> *)queries;
++ (nullable instancetype)orQueryWithSubqueries:(NSArray<LCIMConversationQuery *> *)queries;
 
 /*!
  * Build an query that is the AND of the passed in queries.
  * @param queries The list of queries to AND together.
  * @return an query that is the AND of the passed in queries.
  */
-+ (instancetype)andQueryWithSubqueries:(NSArray<LCIMConversationQuery *> *)queries;
++ (nullable instancetype)andQueryWithSubqueries:(NSArray<LCIMConversationQuery *> *)queries;
 
 /*!
  Add a constraint that requires a particular key exists.

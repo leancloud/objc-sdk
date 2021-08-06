@@ -627,7 +627,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         localNumber = self._localData[key];
     }];
     NSNumber * estimatedNumber = [self._estimatedData valueForKey:key];
-    if (localNumber)
+    if (localNumber != nil)
     {
         [self._estimatedData setValue:localNumber forKey:key];
         [self internalSyncLock:^{
@@ -635,7 +635,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
         }];
         return YES;
     }
-    if (estimatedNumber)
+    if (estimatedNumber != nil)
     {
         return YES;
     }
@@ -1490,18 +1490,19 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }];
 }
 
-- (void)handleFetchResult:(id)object error:(NSError **)error{
+- (BOOL)handleFetchResult:(id)object error:(NSError * __autoreleasing *)error {
     if ([object allKeys].count <= 0) {
-        // 返回 {}
         if (error != NULL) {
             *error = LCError(kLCErrorObjectNotFound, @"not found the object to fetch", nil);
         }
+        return false;
     } else {
         [self removeLocalData];
         [LCObjectUtils copyDictionary:object toObject:self];
         if (self == [LCUser currentUser]) {
             [[self class] changeCurrentUser:(LCUser *)self save:YES];
         }
+        return true;
     }
 }
 

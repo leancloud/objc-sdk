@@ -616,7 +616,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         
         __block BOOL isUploading = false;
         [self internalSyncLock:^{
-            if (self->_uploadOption) {
+            if (self->_uploadOption != nil) {
                 isUploading = true;
             } else {
                 self->_uploadOption = @(uploadOption);

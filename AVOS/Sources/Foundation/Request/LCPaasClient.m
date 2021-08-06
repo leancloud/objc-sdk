@@ -603,7 +603,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
                 // decoding 'code'
                 NSNumber *code = [NSNumber _lc_decoding:userInfo key:kLC_code];
                 
-                if (code) {
+                if (code != nil) {
                     
                     // decoding 'error'
                     NSString *reason = [NSString _lc_decoding:userInfo key:kLC_error];

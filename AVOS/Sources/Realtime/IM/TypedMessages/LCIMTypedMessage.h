@@ -64,9 +64,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param text The string text.
 /// @param attachedFilePath The local path of the file.
 /// @param attributes The custom attributes.
-+ (instancetype)messageWithText:(NSString * _Nullable)text
-               attachedFilePath:(NSString *)attachedFilePath
-                     attributes:(NSDictionary * _Nullable)attributes;
++ (nullable instancetype)messageWithText:(NSString * _Nullable)text
+                        attachedFilePath:(NSString *)attachedFilePath
+                              attributes:(NSDictionary * _Nullable)attributes;
 
 /// Create a message with text, file and attributes.
 /// @param text The string text.

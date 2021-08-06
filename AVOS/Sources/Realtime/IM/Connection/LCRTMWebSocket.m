@@ -416,7 +416,7 @@ static const UInt8 LCRTMWebSocketFrameBitMaskPayloadLength = 0x7F;
     }
     BOOL isTLS = [LCRTMWebSocket isTLS:url];
     NSNumber *port = url.port;
-    if (!port) {
+    if (port == nil) {
         port = isTLS ? @443 : @80;
     }
     NSString *hostWithPort = [NSString stringWithFormat:@"%@:%@", url.host, port];

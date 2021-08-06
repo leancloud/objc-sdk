@@ -511,7 +511,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         lastMessage.updatedAt = ({
             NSNumber *patchTimestamp = [NSNumber _lc_decoding:rawJSONData key:LCIMConversationKeyLastMessagePatchTimestamp];
             NSDate *date = nil;
-            if (patchTimestamp) {
+            if (patchTimestamp != nil) {
                 date = [NSDate dateWithTimeIntervalSince1970:(patchTimestamp.doubleValue / 1000.0)];
             }
             date;

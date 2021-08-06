@@ -152,16 +152,19 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
     [data writeToFile:filePath atomically:true];
 }
 
-- (void)cleanCacheWithKey:(RouterCacheKey)key error:(NSError * __autoreleasing *)error
+- (BOOL)cleanCacheWithKey:(RouterCacheKey)key
+                    error:(NSError * __autoreleasing *)error
 {
     NSParameterAssert(key);
+    BOOL result = false;
     NSString *filePath = [[LCRouter routerCacheDirectoryPath] stringByAppendingPathComponent:key];
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-        [[NSFileManager defaultManager] removeItemAtPath:filePath error:error];
+        result = [[NSFileManager defaultManager] removeItemAtPath:filePath error:error];
     }
+    return result;
 }
 
-- (void)cleanCacheWithApplication:(LCApplication *)application
+- (BOOL)cleanCacheWithApplication:(LCApplication *)application
                               key:(RouterCacheKey)key
                             error:(NSError * __autoreleasing *)error
 {
@@ -175,7 +178,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
         [self->_RTMRouterMap removeObjectForKey:appID];
         [self->_lock unlock];
     }
-    [self cleanCacheWithKey:key error:error];
+    return [self cleanCacheWithKey:key error:error];
 }
 
 // MARK: - App Router

@@ -297,13 +297,9 @@ class RTMConnectionTestCase: RTMBaseTestCase {
     }
     
     func testGoaway() {
-        var error: NSError?
-        LCRouter.sharedInstance()
-            .cleanCache(
-                with: .default(),
-                key: .RTM,
-                error: &error)
-        if let error = error {
+        do {
+            try LCRouter.sharedInstance().cleanCache(with: .default(), key: .RTM)
+        } catch {
             XCTFail("\(error)")
             return
         }
