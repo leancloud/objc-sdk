@@ -77,14 +77,8 @@ FOUNDATION_EXPORT NSString *const LCHeaderFieldNameProduction;
 
 -(void)postBatchSaveObject:(NSArray *)parameterArray headerMap:(NSDictionary *)headerMap eventually:(BOOL)isEventually block:(LCIdResultBlock)block;
 
--(void)postObject:(NSString *)path
-  withParameters:(NSDictionary *)parameters
-           block:(LCIdResultBlock)block;
-
--(void)postObject:(NSString *)path
-   withParameters:(NSDictionary *)parameters
-       eventually:(BOOL)isEventually
-            block:(LCIdResultBlock)block ;
+- (void)postObject:(NSString *)path withParameters:(id)parameters block:(LCIdResultBlock)block;
+- (void)postObject:(NSString *)path withParameters:(id)parameters eventually:(BOOL)isEventually block:(LCIdResultBlock)block;
 
 -(void)deleteObject:(NSString *)path
      withParameters:(NSDictionary *)parameters
@@ -115,7 +109,7 @@ FOUNDATION_EXPORT NSString *const LCHeaderFieldNameProduction;
 - (NSMutableURLRequest *)requestWithPath:(NSString *)path
                                   method:(NSString *)method
                                  headers:(NSDictionary *)headers
-                              parameters:(NSDictionary *)parameters;
+                              parameters:(id)parameters;
 
 - (void)performRequest:(NSURLRequest *)request
                success:(void (^)(NSHTTPURLResponse *response, id responseObject))successBlock

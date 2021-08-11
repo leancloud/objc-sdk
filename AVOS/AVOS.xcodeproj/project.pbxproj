@@ -302,6 +302,8 @@
 		D313718026BBDAC200123756 /* LCQueryTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D313717F26BBDAC200123756 /* LCQueryTestCase.swift */; };
 		D32AA480263BF2F30044E74E /* Foundation.h in Headers */ = {isa = PBXBuildFile; fileRef = D32AA47F263BF2F30044E74E /* Foundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D32AA482263BF39C0044E74E /* Realtime.h in Headers */ = {isa = PBXBuildFile; fileRef = D32AA481263BF39C0044E74E /* Realtime.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D365E42426C3D29F00148DE8 /* LCLeaderboard.h in Headers */ = {isa = PBXBuildFile; fileRef = D365E42226C3D29F00148DE8 /* LCLeaderboard.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D365E42526C3D29F00148DE8 /* LCLeaderboard.m in Sources */ = {isa = PBXBuildFile; fileRef = D365E42326C3D29F00148DE8 /* LCLeaderboard.m */; };
 		D36A095A25BEA75000A4F312 /* IMMessageTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36A095925BEA75000A4F312 /* IMMessageTestCase.swift */; };
 		D39724C424A5CD3C0099A518 /* RTMBaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39724C324A5CD3C0099A518 /* RTMBaseTestCase.swift */; };
 		D39724C624A852400099A518 /* IMClientTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39724C524A852400099A518 /* IMClientTestCase.swift */; };
@@ -552,6 +554,8 @@
 		D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCRouter_Internal.h; sourceTree = "<group>"; };
 		D34FD72B2068CFE900B7C11B /* LCLiveQuery_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCLiveQuery_Internal.h; sourceTree = "<group>"; };
 		D3596DAC2480EEED002D2D22 /* LCApplication_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCApplication_Internal.h; sourceTree = "<group>"; };
+		D365E42226C3D29F00148DE8 /* LCLeaderboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCLeaderboard.h; sourceTree = "<group>"; };
+		D365E42326C3D29F00148DE8 /* LCLeaderboard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCLeaderboard.m; sourceTree = "<group>"; };
 		D36A095925BEA75000A4F312 /* IMMessageTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMMessageTestCase.swift; sourceTree = "<group>"; };
 		D3700B722475244E00678B2B /* LCRTMConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCRTMConnection.h; sourceTree = "<group>"; };
 		D3700B732475244E00678B2B /* LCRTMConnection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCRTMConnection.m; sourceTree = "<group>"; };
@@ -839,6 +843,7 @@
 				8C841AA11A5A7A0000C5C6C4 /* Utils */,
 				83331D421EB9A24D00CADC9C /* Captcha */,
 				835091FA1EB1BD90000DA884 /* SMS */,
+				D365E42126C3D23900148DE8 /* Leaderboard */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -1279,6 +1284,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D365E42126C3D23900148DE8 /* Leaderboard */ = {
+			isa = PBXGroup;
+			children = (
+				D365E42226C3D29F00148DE8 /* LCLeaderboard.h */,
+				D365E42326C3D29F00148DE8 /* LCLeaderboard.m */,
+			);
+			path = Leaderboard;
+			sourceTree = "<group>";
+		};
 		D3700B7124750CB300678B2B /* Connection */ = {
 			isa = PBXGroup;
 			children = (
@@ -1491,6 +1505,7 @@
 				D30B6AA524A09E35006ABE09 /* LCDatabaseCommon.h in Headers */,
 				D30B6B2124A09F59006ABE09 /* MessagesProtoOrig.pbobjc.h in Headers */,
 				D30B6B3A24A09F79006ABE09 /* LCIMMessageCacheStoreSQL.h in Headers */,
+				D365E42426C3D29F00148DE8 /* LCLeaderboard.h in Headers */,
 				D30B6A6624A09D62006ABE09 /* LCCloudQueryResult.h in Headers */,
 				D30B6A8124A09DCA006ABE09 /* LCNetworking.h in Headers */,
 				D30B6B3B24A09F79006ABE09 /* LCIMConversationCacheStore.h in Headers */,
@@ -1688,6 +1703,7 @@
 				D30B6B5924A09FB6006ABE09 /* LCRTMWebSocket.m in Sources */,
 				D30B6A8F24A09DDF006ABE09 /* LCDatabase.m in Sources */,
 				D30B6A7724A09DA3006ABE09 /* LCSearchQuery.m in Sources */,
+				D365E42526C3D29F00148DE8 /* LCLeaderboard.m in Sources */,
 				D30B6AA424A09E35006ABE09 /* LCUtils.m in Sources */,
 				D30B6AB924A09E6F006ABE09 /* LCSMS.m in Sources */,
 				D30B6AD124A09ED2006ABE09 /* LCIMKeyedConversation.m in Sources */,

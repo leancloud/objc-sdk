@@ -607,13 +607,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)deleteAllInBackground:(NSArray *)objects
                         block:(LCBooleanResultBlock)block;
 
-#pragma mark - extension
-@property (nonatomic, readwrite) BOOL fetchWhenSave;
+// MARK: Extension
 
-/*!
- Generate JSON dictionary from LCObject or its subclass object.
- */
--(NSMutableDictionary *)dictionaryForObject;
+@property (nonatomic) BOOL fetchWhenSave;
 
 /*!
  * Construct an LCObject or its subclass object with dictionary.
@@ -621,12 +617,17 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (nullable LCObject *)objectWithDictionary:(NSDictionary *)dictionary;
 
+/*!
+ Generate JSON dictionary from LCObject or its subclass object.
+ */
+- (NSMutableDictionary *)dictionaryForObject;
+
 /**
  *  Load object properties from JSON dictionary.
  *
- *  @param dict JSON dictionary
+ *  @param dictionary JSON dictionary
  */
--(void)objectFromDictionary:(NSDictionary *)dict;
+- (void)objectFromDictionary:(NSDictionary *)dictionary;
 
 @end
 

@@ -235,7 +235,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 - (NSMutableURLRequest *)requestWithPath:(NSString *)path
                                   method:(NSString *)method
                                  headers:(NSDictionary *)headers
-                              parameters:(NSDictionary *)parameters
+                              parameters:(id)parameters
 {
     NSURL *URL = [NSURL URLWithString:path];
     
@@ -459,16 +459,12 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     }
 }
 
--(void)postObject:(NSString *)path
-   withParameters:(NSDictionary *)parameters
-            block:(LCIdResultBlock)block
-{
+- (void)postObject:(NSString *)path withParameters:(id)parameters block:(LCIdResultBlock)block {
     [self postObject:path withParameters:parameters eventually:NO block:block];
 }
 
--(void)postObject:(NSString *)path withParameters:(NSDictionary *)parameters eventually:(BOOL)isEventually block:(LCIdResultBlock)block {
+- (void)postObject:(NSString *)path withParameters:(id)parameters eventually:(BOOL)isEventually block:(LCIdResultBlock)block {
     NSMutableURLRequest *request = [self requestWithPath:path method:@"POST" headers:nil parameters:parameters];
-    
     if (isEventually) {
         NSString *filePath = [self archiveRequest:request];
         [self handleArchivedRequestAtPath:filePath block:block];

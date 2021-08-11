@@ -1985,18 +1985,18 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     return aError;
 }
 
-#pragma mark - Serialization, Deserialization
-
--(NSMutableDictionary *)dictionaryForObject {
-    return [LCObjectUtils objectSnapshot:self];
-}
+// MARK: Serialization & Deserialization
 
 + (LCObject *)objectWithDictionary:(NSDictionary *)dictionary {
     return [LCObjectUtils lcObjectFromDictionary:dictionary];
 }
 
--(void)objectFromDictionary:(NSDictionary *)dict {
-    [LCObjectUtils copyDictionary:dict toObject:self];
+- (NSMutableDictionary *)dictionaryForObject {
+    return [LCObjectUtils objectSnapshot:self];
+}
+
+- (void)objectFromDictionary:(NSDictionary *)dictionary {
+    [LCObjectUtils copyDictionary:dictionary toObject:self];
 }
 
 #pragma mark -
