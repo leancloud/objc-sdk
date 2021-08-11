@@ -1352,7 +1352,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         LCIMMessagePatchedReason *patchedReason;
         if (patchItem.hasPatchCode || patchItem.hasPatchReason) {
             patchedReason = [LCIMMessagePatchedReason new];
-            patchedReason.code = (patchItem.hasPatchCode ? patchItem.patchCode : 0);
+            patchedReason.code = (NSInteger)(patchItem.hasPatchCode ? patchItem.patchCode : 0);
             patchedReason.reason = (patchItem.hasPatchReason ? patchItem.patchReason : nil);
         }
         LCIMMessage *patchMessage = [conversation processPatchModified:patchItem];
