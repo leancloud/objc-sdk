@@ -45,7 +45,7 @@
 +(NSDictionary *)dictionaryFromObjectPointer:(LCObject *)object;
 +(NSDictionary *)dictionaryFromGeoPoint:(LCGeoPoint *)point;
 +(NSDictionary *)dictionaryFromData:(NSData *)data;
-+(NSDictionary *)dictionaryFromFile:(LCFile *)file;
++ (NSDictionary *)dictionaryFromFile:(LCFile *)file;
 +(NSDictionary *)dictionaryFromACL:(LCACL *)acl;
 + (id)dictionaryFromObject:(id)obj;
 + (id)dictionaryFromObject:(id)obj topObject:(BOOL)topObject;

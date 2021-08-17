@@ -616,11 +616,18 @@
     return @{@"__type": @"Bytes", @"base64":base64};
 }
 
-+(NSDictionary *)dictionaryFromFile:(LCFile *)file
-{
-    NSMutableDictionary *dic = [file rawJSONDataMutableCopy];
-    [dic setObject:@"File" forKey:@"__type"];
-    return dic;
++ (NSDictionary *)dictionaryFromFile:(LCFile *)file {
+    NSDictionary *dictionary;
+    NSString *objectId = file.objectId;
+    if (objectId && objectId.length != 0) {
+        dictionary = @{
+            @"id" : objectId,
+            @"__type" : @"File",
+        };
+    } else {
+        dictionary = [file rawJSONDataMutableCopy];
+    }
+    return dictionary;
 }
 
 +(NSDictionary *)dictionaryFromACL:(LCACL *)acl {
