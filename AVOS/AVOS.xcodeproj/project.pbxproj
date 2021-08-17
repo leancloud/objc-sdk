@@ -301,6 +301,7 @@
 		D30B6B6224A0A933006ABE09 /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30B6B6124A0A933006ABE09 /* BaseTestCase.swift */; };
 		D32AA480263BF2F30044E74E /* Foundation.h in Headers */ = {isa = PBXBuildFile; fileRef = D32AA47F263BF2F30044E74E /* Foundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D32AA482263BF39C0044E74E /* Realtime.h in Headers */ = {isa = PBXBuildFile; fileRef = D32AA481263BF39C0044E74E /* Realtime.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D33127D326CBAD6D00BBDE09 /* LCFileTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33127D226CBAD6D00BBDE09 /* LCFileTestCase.swift */; };
 		D36A095A25BEA75000A4F312 /* IMMessageTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36A095925BEA75000A4F312 /* IMMessageTestCase.swift */; };
 		D39724C424A5CD3C0099A518 /* RTMBaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39724C324A5CD3C0099A518 /* RTMBaseTestCase.swift */; };
 		D39724C624A852400099A518 /* IMClientTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39724C524A852400099A518 /* IMClientTestCase.swift */; };
@@ -546,6 +547,7 @@
 		D328B8E720FEE2200039091A /* LCIMClientInternalConversationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCIMClientInternalConversationManager.m; sourceTree = "<group>"; };
 		D32AA47F263BF2F30044E74E /* Foundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Foundation.h; sourceTree = "<group>"; };
 		D32AA481263BF39C0044E74E /* Realtime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Realtime.h; sourceTree = "<group>"; };
+		D33127D226CBAD6D00BBDE09 /* LCFileTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCFileTestCase.swift; sourceTree = "<group>"; };
 		D34C417D2483C3FD00CD2459 /* LCRTMConnection_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCRTMConnection_Internal.h; sourceTree = "<group>"; };
 		D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCRouter_Internal.h; sourceTree = "<group>"; };
 		D34FD72B2068CFE900B7C11B /* LCLiveQuery_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCLiveQuery_Internal.h; sourceTree = "<group>"; };
@@ -1228,6 +1230,7 @@
 				D30B6B6024A0A932006ABE09 /* LeanCloudObjcTests-Bridging-Header.h */,
 				D30B6B6124A0A933006ABE09 /* BaseTestCase.swift */,
 				D3AD74AA24BC216200D1BBEE /* LCUserTestCase.swift */,
+				D33127D226CBAD6D00BBDE09 /* LCFileTestCase.swift */,
 				D39724C324A5CD3C0099A518 /* RTMBaseTestCase.swift */,
 				D3A397F024A5A4670087D6F8 /* RTMConnectionTestCase.swift */,
 				D39724C524A852400099A518 /* IMClientTestCase.swift */,
@@ -1774,6 +1777,7 @@
 				D30B6B6224A0A933006ABE09 /* BaseTestCase.swift in Sources */,
 				D36A095A25BEA75000A4F312 /* IMMessageTestCase.swift in Sources */,
 				D3AD74AB24BC216200D1BBEE /* LCUserTestCase.swift in Sources */,
+				D33127D326CBAD6D00BBDE09 /* LCFileTestCase.swift in Sources */,
 				D3A397F124A5A4670087D6F8 /* RTMConnectionTestCase.swift in Sources */,
 				D39724C624A852400099A518 /* IMClientTestCase.swift in Sources */,
 				D39724C424A5CD3C0099A518 /* RTMBaseTestCase.swift in Sources */,
