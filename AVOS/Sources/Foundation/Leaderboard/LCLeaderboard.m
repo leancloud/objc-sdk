@@ -7,20 +7,31 @@
 //
 
 #import "LCLeaderboard.h"
+#import "LCObject.h"
 #import "LCUser.h"
 #import "LCUtils.h"
 #import "LCErrorUtils.h"
 #import "LCPaasClient.h"
+
+typedef NSString * LCLeaderboardPath NS_STRING_ENUM;
+static LCLeaderboardPath const LCLeaderboardPathUsers = @"users";
+static LCLeaderboardPath const LCLeaderboardPathObjects = @"objects";
+static LCLeaderboardPath const LCLeaderboardPathEntities = @"entities";
+static LCLeaderboardPath const LCLeaderboardPathUser = @"user";
+static LCLeaderboardPath const LCLeaderboardPathObject = @"object";
+static LCLeaderboardPath const LCLeaderboardPathEntity = @"entity";
 
 @implementation LCLeaderboardStatistic
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary {
     self = [super init];
     if (self) {
-        _user = (LCUser *)[LCObject objectWithDictionary:[NSDictionary _lc_decoding:dictionary key:@"user"]];
         _name = [NSString _lc_decoding:dictionary key:@"statisticName"];
-        _value = [NSNumber _lc_decoding:dictionary key:@"statisticValue"].doubleValue;
         _version = [NSNumber _lc_decoding:dictionary key:@"version"].integerValue;
+        _value = [NSNumber _lc_decoding:dictionary key:@"statisticValue"].doubleValue;
+        _user = (LCUser *)[LCObject objectWithDictionary:[NSDictionary _lc_decoding:dictionary key:@"user"]];
+        _object = [LCObject objectWithDictionary:[NSDictionary _lc_decoding:dictionary key:@"object"]];
+        _entity = [NSString _lc_decoding:dictionary key:@"entity"];
     }
     return self;
 }
@@ -32,10 +43,9 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary {
     self = [super init];
     if (self) {
+        _statisticName = [NSString _lc_decoding:dictionary key:@"statisticName"];
         _rank = [NSNumber _lc_decoding:dictionary key:@"rank"].integerValue;
         _value = [NSNumber _lc_decoding:dictionary key:@"statisticValue"].doubleValue;
-        _user = (LCUser *)[LCObject objectWithDictionary:[NSDictionary _lc_decoding:dictionary key:@"user"]];
-        _statisticName = [NSString _lc_decoding:dictionary key:@"statisticName"];
         _includedStatistics = ({
             NSMutableArray<LCLeaderboardStatistic *> *statistics = [NSMutableArray array];
             NSArray *dictionaries = [NSArray _lc_decoding:dictionary key:@"statistics"];
@@ -45,15 +55,18 @@
                     [statistics addObject:statistic];
                 }
             }
-            statistics;
+            statistics.count > 0 ? statistics : nil;
         });
+        _user = (LCUser *)[LCObject objectWithDictionary:[NSDictionary _lc_decoding:dictionary key:@"user"]];
+        _object = [LCObject objectWithDictionary:[NSDictionary _lc_decoding:dictionary key:@"object"]];
+        _entity = [NSString _lc_decoding:dictionary key:@"entity"];
     }
     return self;
 }
 
 @end
 
-@implementation LCLeaderboardUserQueryOption
+@implementation LCLeaderboardQueryOption
 
 @end
 
@@ -63,12 +76,15 @@
     self = [super init];
     if (self) {
         _statisticName = [statisticName copy];
+        _version = -1;
     }
     return self;
 }
 
-+ (void)updateStatistics:(NSDictionary *)statistics
-                callback:(void (^)(NSArray<LCLeaderboardStatistic *> * _Nullable, NSError * _Nullable))callback
+// MARK: Update & Delete Statistics
+
++ (void)updateCurrentUserStatistics:(NSDictionary *)statistics
+                           callback:(void (^)(NSArray<LCLeaderboardStatistic *> * _Nullable, NSError * _Nullable))callback
 {
     if (![LCUser currentUser].sessionToken) {
         NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Please login first.", nil);
@@ -96,44 +112,15 @@
         parameters;
     });
     NSString *path = [NSString stringWithFormat:@"leaderboard/users/%@/statistics", [LCUser currentUser].objectId];
-    [[LCPaasClient sharedInstance] postObject:path withParameters:parameters block:^(id  _Nullable object, NSError * _Nullable error) {
+    [[LCPaasClient sharedInstance] postObject:path
+                               withParameters:parameters
+                                        block:^(id  _Nullable object, NSError * _Nullable error) {
         [self handleStatisticsCallback:callback error:error object:object];
     }];
 }
 
-+ (void)getStatisticsWithUserId:(NSString *)userId
-                 statisticNames:(NSArray<NSString *> *)statisticNames
-                         option:(LCLeaderboardUserQueryOption *)option
-                       callback:(void (^)(NSArray<LCLeaderboardStatistic *> * _Nullable, NSError * _Nullable))callback
-{
-    if (!userId || userId.length == 0) {
-        NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Parameter `userId` invalid.", nil);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            callback(nil, error);
-        });
-        return;
-    }
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    if (statisticNames && statisticNames.count > 0) {
-        parameters[@"statistics"] = [statisticNames componentsJoinedByString:@","];
-    }
-    NSError *error = [self trySetOption:option parameters:parameters];
-    if (error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            callback(nil, error);
-        });
-        return;
-    }
-    NSString *path = [NSString stringWithFormat:@"leaderboard/users/%@/statistics", userId];
-    [[LCPaasClient sharedInstance] getObject:path
-                              withParameters:(parameters.count > 0 ? parameters : nil)
-                                       block:^(id  _Nullable object, NSError * _Nullable error) {
-        [self handleStatisticsCallback:callback error:error object:object];
-    }];
-}
-
-+ (void)deleteStatistics:(NSArray<NSString *> *)statisticNames
-                callback:(void (^)(BOOL, NSError * _Nullable))callback
++ (void)deleteCurrentUserStatistics:(NSArray<NSString *> *)statisticNames
+                           callback:(void (^)(BOOL, NSError * _Nullable))callback
 {
     if (![LCUser currentUser].sessionToken) {
         NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Please login first.", nil);
@@ -153,27 +140,131 @@
     NSDictionary *parameters = @{
         @"statistics" : [statisticNames componentsJoinedByString:@","],
     };
-    [[LCPaasClient sharedInstance] deleteObject:path withParameters:parameters block:^(id  _Nullable object, NSError * _Nullable error) {
+    [[LCPaasClient sharedInstance] deleteObject:path
+                                 withParameters:parameters
+                                          block:^(id  _Nullable object, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             callback(!error, error);
         });
     }];
 }
 
-- (void)getStatisticsWithUserIds:(NSArray<NSString *> *)userIds
-                          option:(LCLeaderboardUserQueryOption *)option
-                        callback:(void (^)(NSArray<LCLeaderboardStatistic *> * _Nullable, NSError * _Nullable))callback
+// MARK: Get One Statistics
+
++ (void)getStatisticsWithUserId:(NSString *)userId
+                 statisticNames:(NSArray<NSString *> *)statisticNames
+                         option:(LCLeaderboardQueryOption *)option
+                       callback:(void (^)(NSArray<LCLeaderboardStatistic *> * _Nullable, NSError * _Nullable))callback
 {
-    if (!userIds || userIds.count == 0) {
-        NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Parameter `userIds` invalid.", nil);
+    [self getStatisticsWithIdentity:userId
+                    leaderboardPath:LCLeaderboardPathUsers
+                     statisticNames:statisticNames
+                             option:option
+                           callback:callback];
+}
+
++ (void)getStatisticsWithObjectId:(NSString *)objectId
+                   statisticNames:(NSArray<NSString *> *)statisticNames
+                           option:(LCLeaderboardQueryOption *)option
+                         callback:(void (^)(NSArray<LCLeaderboardStatistic *> * _Nullable, NSError * _Nullable))callback
+{
+    [self getStatisticsWithIdentity:objectId
+                    leaderboardPath:LCLeaderboardPathObjects
+                     statisticNames:statisticNames
+                             option:option
+                           callback:callback];
+}
+
++ (void)getStatisticsWithEntity:(NSString *)entity
+                 statisticNames:(NSArray<NSString *> *)statisticNames
+                       callback:(void (^)(NSArray<LCLeaderboardStatistic *> * _Nullable, NSError * _Nullable))callback
+{
+    [self getStatisticsWithIdentity:entity
+                    leaderboardPath:LCLeaderboardPathEntities
+                     statisticNames:statisticNames
+                             option:nil
+                           callback:callback];
+}
+
++ (void)getStatisticsWithIdentity:(NSString *)identity
+                  leaderboardPath:(LCLeaderboardPath)leaderboardPath
+                   statisticNames:(NSArray<NSString *> *)statisticNames
+                           option:(LCLeaderboardQueryOption *)option
+                         callback:(void (^)(NSArray<LCLeaderboardStatistic *> * _Nullable, NSError * _Nullable))callback
+{
+    if (!identity || identity.length == 0) {
+        NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"First parameter invalid.", nil);
         dispatch_async(dispatch_get_main_queue(), ^{
             callback(nil, error);
         });
         return;
     }
-    NSString *path = [NSString stringWithFormat:@"leaderboard/users/statistics/%@", self.statisticName];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    if (statisticNames && statisticNames.count > 0) {
+        parameters[@"statistics"] = [statisticNames componentsJoinedByString:@","];
+    }
+    NSError *error = [self trySetOption:option parameters:parameters leaderboardPath:leaderboardPath];
+    if (error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            callback(nil, error);
+        });
+        return;
+    }
+    NSString *path = [NSString stringWithFormat:@"leaderboard/%@/%@/statistics", leaderboardPath, identity];
+    [[LCPaasClient sharedInstance] getObject:path
+                              withParameters:(parameters.count > 0 ? parameters : nil)
+                                       block:^(id  _Nullable object, NSError * _Nullable error) {
+        [self handleStatisticsCallback:callback error:error object:object];
+    }];
+}
+
+// MARK: Get Group Statistics
+
+- (void)getStatisticsWithUserIds:(NSArray<NSString *> *)userIds
+                          option:(LCLeaderboardQueryOption *)option
+                        callback:(void (^)(NSArray<LCLeaderboardStatistic *> * _Nullable, NSError * _Nullable))callback
+{
+    [self getStatisticsWithIdentities:userIds
+                      leaderboardPath:LCLeaderboardPathUsers
+                               option:option
+                             callback:callback];
+}
+
+- (void)getStatisticsWithObjectIds:(NSArray<NSString *> *)objectIds
+                            option:(LCLeaderboardQueryOption *)option
+                          callback:(void (^)(NSArray<LCLeaderboardStatistic *> * _Nullable, NSError * _Nullable))callback
+{
+    [self getStatisticsWithIdentities:objectIds
+                      leaderboardPath:LCLeaderboardPathObjects
+                               option:option
+                             callback:callback];
+}
+
+- (void)getStatisticsWithEntities:(NSArray<NSString *> *)entities
+                         callback:(void (^)(NSArray<LCLeaderboardStatistic *> * _Nullable, NSError * _Nullable))callback
+{
+    [self getStatisticsWithIdentities:entities
+                      leaderboardPath:LCLeaderboardPathEntities
+                               option:nil
+                             callback:callback];
+}
+
+- (void)getStatisticsWithIdentities:(NSArray<NSString *> *)identities
+                    leaderboardPath:(LCLeaderboardPath)leaderboardPath
+                             option:(LCLeaderboardQueryOption *)option
+                           callback:(void (^)(NSArray<LCLeaderboardStatistic *> * _Nullable, NSError * _Nullable))callback
+{
+    if (!identities || identities.count == 0) {
+        NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"First parameter invalid.", nil);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            callback(nil, error);
+        });
+        return;
+    }
+    NSString *path = [NSString stringWithFormat:@"leaderboard/%@/statistics/%@", leaderboardPath, self.statisticName];
     if (option) {
-        if (![LCUser currentUser].sessionToken) {
+        if ([leaderboardPath isEqualToString:LCLeaderboardPathUsers] &&
+            ![LCUser currentUser].sessionToken) {
             NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Please login first.", nil);
             dispatch_async(dispatch_get_main_queue(), ^{
                 callback(nil, error);
@@ -183,35 +274,84 @@
         NSMutableArray<NSString *> *queryStrings = [NSMutableArray array];
         if (option.selectKeys && option.selectKeys.count > 0) {
             NSString *selectKeysString = [option.selectKeys componentsJoinedByString:@","];
-            NSString *queryString = [NSString stringWithFormat:@"selectUserKeys=%@", selectKeysString];
+            NSString *queryString = [NSString stringWithFormat:@"selectKeys=%@", selectKeysString];
             [queryStrings addObject:queryString];
         }
         if (option.includeKeys && option.includeKeys.count > 0) {
             NSString *includeKeysString = [option.includeKeys componentsJoinedByString:@","];
-            NSString *queryString = [NSString stringWithFormat:@"includeUser=%@", includeKeysString];
+            NSString *queryString = [NSString stringWithFormat:@"includeKeys=%@", includeKeysString];
             [queryStrings addObject:queryString];
         }
         if (queryStrings.count > 0) {
             path = [path stringByAppendingFormat:@"?%@", [queryStrings componentsJoinedByString:@"&"]];
         }
     }
-    [[LCPaasClient sharedInstance] postObject:path withParameters:userIds block:^(id  _Nullable object, NSError * _Nullable error) {
+    [[LCPaasClient sharedInstance] postObject:path
+                               withParameters:identities
+                                        block:^(id  _Nullable object, NSError * _Nullable error) {
         [[self class] handleStatisticsCallback:callback error:error object:object];
     }];
 }
 
-- (void)getResultsWithOption:(LCLeaderboardUserQueryOption *)option
-                    callback:(void (^)(NSArray<LCLeaderboardRanking *> * _Nullable, NSInteger, NSError * _Nullable))callback
+// MARK: Get Rankings
+
+- (void)getUserResultsWithOption:(LCLeaderboardQueryOption *)option
+                        callback:(void (^)(NSArray<LCLeaderboardRanking *> * _Nullable, NSInteger, NSError * _Nullable))callback
 {
-    [self getResultsAroundUser:nil option:option callback:callback];
+    [self getUserResultsAroundUser:nil
+                            option:option
+                          callback:callback];
 }
 
-- (void)getResultsAroundUser:(NSString *)userId
-                      option:(LCLeaderboardUserQueryOption *)option
-                    callback:(void (^)(NSArray<LCLeaderboardRanking *> * _Nullable, NSInteger, NSError * _Nullable))callback
+- (void)getUserResultsAroundUser:(NSString *)userId
+                          option:(LCLeaderboardQueryOption *)option
+                        callback:(void (^)(NSArray<LCLeaderboardRanking *> * _Nullable, NSInteger, NSError * _Nullable))callback
+{
+    [self getResultsAroundIdentity:userId
+                   leaderboardPath:LCLeaderboardPathUser
+                            option:option
+                          callback:callback];
+}
+
+- (void)getObjectResultsWithOption:(LCLeaderboardQueryOption *)option
+                          callback:(void (^)(NSArray<LCLeaderboardRanking *> * _Nullable, NSInteger, NSError * _Nullable))callback
+{
+    [self getObjectResultsAroundObject:nil
+                                option:option
+                              callback:callback];
+}
+
+- (void)getObjectResultsAroundObject:(NSString *)objectId
+                              option:(LCLeaderboardQueryOption *)option
+                            callback:(void (^)(NSArray<LCLeaderboardRanking *> * _Nullable, NSInteger, NSError * _Nullable))callback
+{
+    [self getResultsAroundIdentity:objectId
+                   leaderboardPath:LCLeaderboardPathObject
+                            option:option
+                          callback:callback];
+}
+
+- (void)getEntityResultsWithCallback:(void (^)(NSArray<LCLeaderboardRanking *> * _Nullable, NSInteger, NSError * _Nullable))callback
+{
+    [self getEntityResultsAroundEntity:nil
+                              callback:callback];
+}
+
+- (void)getEntityResultsAroundEntity:(NSString *)entity callback:(void (^)(NSArray<LCLeaderboardRanking *> * _Nullable, NSInteger, NSError * _Nullable))callback
+{
+    [self getResultsAroundIdentity:entity
+                   leaderboardPath:LCLeaderboardPathEntity
+                            option:nil
+                          callback:callback];
+}
+
+- (void)getResultsAroundIdentity:(NSString *)identity
+                 leaderboardPath:(LCLeaderboardPath)leaderboardPath
+                          option:(LCLeaderboardQueryOption *)option
+                        callback:(void (^)(NSArray<LCLeaderboardRanking *> * _Nullable, NSInteger, NSError * _Nullable))callback
 {
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    NSError *error = [[self class] trySetOption:option parameters:parameters];
+    NSError *error = [[self class] trySetOption:option parameters:parameters leaderboardPath:leaderboardPath];
     if (error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             callback(nil, -1, error);
@@ -227,15 +367,15 @@
     if (self.includeStatistics && self.includeStatistics.count > 0) {
         parameters[@"includeStatistics"] = [self.includeStatistics componentsJoinedByString:@","];
     }
-    if (self.version != nil) {
-        parameters[@"version"] = self.version;
+    if (self.version > -1) {
+        parameters[@"version"] = @(self.version);
     }
     if (self.returnCount) {
         parameters[@"count"] = @1;
     }
-    NSString *path = [NSString stringWithFormat:@"leaderboard/leaderboards/user/%@/ranks", self.statisticName];
-    if (userId && userId.length > 0) {
-        path = [path stringByAppendingPathComponent:userId];
+    NSString *path = [NSString stringWithFormat:@"leaderboard/leaderboards/%@/%@/ranks", leaderboardPath, self.statisticName];
+    if (identity && identity.length > 0) {
+        path = [path stringByAppendingPathComponent:identity];
     }
     [[LCPaasClient sharedInstance] getObject:path
                               withParameters:(parameters.count > 0 ? parameters : nil)
@@ -268,16 +408,23 @@
     }];
 }
 
-+ (NSError *)trySetOption:(LCLeaderboardUserQueryOption * _Nullable)option parameters:(NSMutableDictionary *)parameters {
+// MARK: Misc
+
++ (NSError *)trySetOption:(LCLeaderboardQueryOption * _Nullable)option
+               parameters:(NSMutableDictionary *)parameters
+          leaderboardPath:(LCLeaderboardPath)leaderboardPath
+{
     if (option) {
-        if (![LCUser currentUser].sessionToken) {
+        if (([leaderboardPath isEqualToString:LCLeaderboardPathUsers] ||
+             [leaderboardPath isEqualToString:LCLeaderboardPathUser]) &&
+            ![LCUser currentUser].sessionToken) {
             return LCError(LCErrorInternalErrorCodeInconsistency, @"Please login first.", nil);
         }
         if (option.selectKeys && option.selectKeys.count > 0) {
-            parameters[@"selectUserKeys"] = [option.selectKeys componentsJoinedByString:@","];
+            parameters[@"selectKeys"] = [option.selectKeys componentsJoinedByString:@","];
         }
         if (option.includeKeys && option.includeKeys.count > 0) {
-            parameters[@"includeUser"] = [option.includeKeys componentsJoinedByString:@","];
+            parameters[@"includeKeys"] = [option.includeKeys componentsJoinedByString:@","];
         }
     }
     return nil;
