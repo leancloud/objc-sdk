@@ -302,9 +302,10 @@
 		D313718026BBDAC200123756 /* LCQueryTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D313717F26BBDAC200123756 /* LCQueryTestCase.swift */; };
 		D32AA480263BF2F30044E74E /* Foundation.h in Headers */ = {isa = PBXBuildFile; fileRef = D32AA47F263BF2F30044E74E /* Foundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D32AA482263BF39C0044E74E /* Realtime.h in Headers */ = {isa = PBXBuildFile; fileRef = D32AA481263BF39C0044E74E /* Realtime.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D33127D326CBAD6D00BBDE09 /* LCFileTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33127D226CBAD6D00BBDE09 /* LCFileTestCase.swift */; };
+		D33127D526CE391500BBDE09 /* LCLeaderboardTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33127D426CE391500BBDE09 /* LCLeaderboardTestCase.swift */; };
 		D365E42426C3D29F00148DE8 /* LCLeaderboard.h in Headers */ = {isa = PBXBuildFile; fileRef = D365E42226C3D29F00148DE8 /* LCLeaderboard.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D365E42526C3D29F00148DE8 /* LCLeaderboard.m in Sources */ = {isa = PBXBuildFile; fileRef = D365E42326C3D29F00148DE8 /* LCLeaderboard.m */; };
-		D33127D326CBAD6D00BBDE09 /* LCFileTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33127D226CBAD6D00BBDE09 /* LCFileTestCase.swift */; };
 		D36A095A25BEA75000A4F312 /* IMMessageTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36A095925BEA75000A4F312 /* IMMessageTestCase.swift */; };
 		D39724C424A5CD3C0099A518 /* RTMBaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39724C324A5CD3C0099A518 /* RTMBaseTestCase.swift */; };
 		D39724C624A852400099A518 /* IMClientTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39724C524A852400099A518 /* IMClientTestCase.swift */; };
@@ -552,6 +553,7 @@
 		D32AA47F263BF2F30044E74E /* Foundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Foundation.h; sourceTree = "<group>"; };
 		D32AA481263BF39C0044E74E /* Realtime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Realtime.h; sourceTree = "<group>"; };
 		D33127D226CBAD6D00BBDE09 /* LCFileTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCFileTestCase.swift; sourceTree = "<group>"; };
+		D33127D426CE391500BBDE09 /* LCLeaderboardTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCLeaderboardTestCase.swift; sourceTree = "<group>"; };
 		D34C417D2483C3FD00CD2459 /* LCRTMConnection_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCRTMConnection_Internal.h; sourceTree = "<group>"; };
 		D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCRouter_Internal.h; sourceTree = "<group>"; };
 		D34FD72B2068CFE900B7C11B /* LCLiveQuery_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCLiveQuery_Internal.h; sourceTree = "<group>"; };
@@ -1239,6 +1241,7 @@
 				D3AD74AA24BC216200D1BBEE /* LCUserTestCase.swift */,
 				D313717F26BBDAC200123756 /* LCQueryTestCase.swift */,
 				D33127D226CBAD6D00BBDE09 /* LCFileTestCase.swift */,
+				D33127D426CE391500BBDE09 /* LCLeaderboardTestCase.swift */,
 				D39724C324A5CD3C0099A518 /* RTMBaseTestCase.swift */,
 				D3A397F024A5A4670087D6F8 /* RTMConnectionTestCase.swift */,
 				D39724C524A852400099A518 /* IMClientTestCase.swift */,
@@ -1797,6 +1800,7 @@
 				D313718026BBDAC200123756 /* LCQueryTestCase.swift in Sources */,
 				D36A095A25BEA75000A4F312 /* IMMessageTestCase.swift in Sources */,
 				D3AD74AB24BC216200D1BBEE /* LCUserTestCase.swift in Sources */,
+				D33127D526CE391500BBDE09 /* LCLeaderboardTestCase.swift in Sources */,
 				D33127D326CBAD6D00BBDE09 /* LCFileTestCase.swift in Sources */,
 				D3A397F124A5A4670087D6F8 /* RTMConnectionTestCase.swift in Sources */,
 				D39724C624A852400099A518 /* IMClientTestCase.swift in Sources */,
