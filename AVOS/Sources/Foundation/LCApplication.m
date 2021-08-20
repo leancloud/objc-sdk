@@ -15,16 +15,6 @@
 
 @implementation LCApplication
 
-+ (void)initializePaasClient
-{
-    LCPaasClient *paasClient = [LCPaasClient sharedInstance];
-    
-    paasClient.applicationId = [self getApplicationId];
-    paasClient.clientKey     = [self getClientKey];
-    
-    [paasClient handleAllArchivedRequests];
-}
-
 + (void)setApplicationId:(NSString *)applicationId
                clientKey:(NSString *)clientKey
          serverURLString:(NSString *)serverURLString
@@ -44,11 +34,11 @@
                         format:@"Server URL not found."] ;
         }
     }
-    
     [[LCApplication defaultApplication] setWithIdentifier:applicationId
                                                       key:clientKey];
-    
-    [self initializePaasClient];
+    LCPaasClient *paasClient = [LCPaasClient sharedInstance];
+    paasClient.application = [LCApplication defaultApplication];
+    [paasClient handleAllArchivedRequests];
 }
 
 + (NSString *)getApplicationId {
@@ -184,8 +174,7 @@ static LCLogLevel globalLogLevel = LCLogLevelDefault;
     });
 }
 
-+ (instancetype)defaultApplication
-{
++ (instancetype)defaultApplication {
     static LCApplication *instance;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -194,14 +183,12 @@ static LCLogLevel globalLogLevel = LCLogLevelDefault;
     return instance;
 }
 
-- (void)setWithIdentifier:(NSString *)identifier key:(NSString *)key
-{
+- (void)setWithIdentifier:(NSString *)identifier key:(NSString *)key {
     _identifier = [identifier copy];
     _key = [key copy];
 }
 
-- (NSString *)identifierThrowException
-{
+- (NSString *)identifierThrowException {
     if (!self.identifier) {
         [NSException raise:NSInternalInconsistencyException
                     format:@"Application identifier not found."];
@@ -209,8 +196,7 @@ static LCLogLevel globalLogLevel = LCLogLevelDefault;
     return self.identifier;
 }
 
-- (NSString *)keyThrowException
-{
+- (NSString *)keyThrowException {
     if (!self.key) {
         [NSException raise:NSInternalInconsistencyException
                     format:@"Application key not found."];

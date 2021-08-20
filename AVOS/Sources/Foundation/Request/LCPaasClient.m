@@ -20,6 +20,7 @@
 #import "LCObjectUtils.h"
 #import "LCRouter_Internal.h"
 #import "LCConstants.h"
+#import "LCApplication_Internal.h"
 
 static NSString * const kLC_code = @"code";
 static NSString * const kLC_error = @"error";
@@ -195,10 +196,10 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 }
 
 - (NSString *)signatureHeaderFieldValue {
-    NSString *timestamp=[NSString stringWithFormat:@"%.0f",1000*[[NSDate date] timeIntervalSince1970]];
-    NSString *sign=[[[NSString stringWithFormat:@"%@%@",timestamp,self.clientKey] LCMD5String] lowercaseString];
-    NSString *headerValue=[NSString stringWithFormat:@"%@,%@",sign,timestamp];
-    
+    NSString *key = [self.application keyThrowException];
+    NSString *timestamp = [NSString stringWithFormat:@"%.0f", 1000 * [[NSDate date] timeIntervalSince1970]];
+    NSString *sign = [[[NSString stringWithFormat:@"%@%@", timestamp, key] LCMD5String] lowercaseString];
+    NSString *headerValue = [NSString stringWithFormat:@"%@,%@", sign, timestamp];
     return headerValue;
 }
 
@@ -245,10 +246,11 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     }
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
+    NSString *appID = [self.application identifierThrowException];
     
     [request setHTTPMethod:method];
     [request setTimeoutInterval:self.timeoutInterval];
-    [request setValue:self.applicationId forHTTPHeaderField:LCHeaderFieldNameId];
+    [request setValue:appID forHTTPHeaderField:LCHeaderFieldNameId];
     [request setValue:[self signatureHeaderFieldValue] forHTTPHeaderField:LCHeaderFieldNameSign];
     [request setValue:self.productionMode ? @"1": @"0" forHTTPHeaderField:LCHeaderFieldNameProduction];
     [request setValue:USER_AGENT forHTTPHeaderField:@"User-Agent"];
@@ -257,7 +259,6 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
     
     NSString *sessionToken = self.currentUser.sessionToken;
-    
     if (sessionToken) {
         [request setValue:sessionToken forHTTPHeaderField:LCHeaderFieldNameSession];
     }

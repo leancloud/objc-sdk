@@ -11,20 +11,21 @@
 #import "LCACL.h"
 #import "UserAgent.h"
 
-static NSString *const USER_AGENT = @"LeanCloud-Objc-SDK/" SDK_VERSION;
+@class LCApplication;
 
-FOUNDATION_EXPORT NSString *const LCHeaderFieldNameId;
-FOUNDATION_EXPORT NSString *const LCHeaderFieldNameKey;
-FOUNDATION_EXPORT NSString *const LCHeaderFieldNameSign;
-FOUNDATION_EXPORT NSString *const LCHeaderFieldNameSession;
-FOUNDATION_EXPORT NSString *const LCHeaderFieldNameProduction;
+static NSString * const USER_AGENT = @"LeanCloud-Objc-SDK/" SDK_VERSION;
+
+FOUNDATION_EXPORT NSString * const LCHeaderFieldNameId;
+FOUNDATION_EXPORT NSString * const LCHeaderFieldNameKey;
+FOUNDATION_EXPORT NSString * const LCHeaderFieldNameSign;
+FOUNDATION_EXPORT NSString * const LCHeaderFieldNameSession;
+FOUNDATION_EXPORT NSString * const LCHeaderFieldNameProduction;
 
 @interface LCPaasClient : NSObject
 
-+(LCPaasClient *)sharedInstance;
++ (LCPaasClient *)sharedInstance;
 
-@property (nonatomic, readwrite, copy) NSString * applicationId;
-@property (nonatomic, readwrite, copy) NSString * clientKey;
+@property (nonatomic) LCApplication *application;
 @property (nonatomic, readonly, copy) NSString * apiVersion;
 @property (nonatomic, readwrite, copy) NSString * applicationIdField;
 @property (nonatomic, readwrite, copy) NSString * applicationKeyField;
