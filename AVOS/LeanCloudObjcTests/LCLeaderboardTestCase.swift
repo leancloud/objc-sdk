@@ -27,57 +27,9 @@ class LCLeaderboardTestCase: BaseTestCase {
                 exp.fulfill()
             }
         }
-        
-        let option = LCLeaderboardQueryOption()
-        option.selectKeys = [uuid]
-        option.includeKeys = [uuid]
-        
-        expecting { exp in
-            LCLeaderboard.getStatisticsWithUserId(uuid, statisticNames: nil, option: option) { statistics, error in
-                XCTAssertNil(statistics)
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
-        }
-        
-        let leaderboard = LCLeaderboard(statisticName: uuid)
-        
-        expecting { exp in
-            leaderboard.getStatisticsWithUserIds([uuid], option: option) { statistics, error in
-                XCTAssertNil(statistics)
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
-        }
-        
-        expecting { exp in
-            leaderboard.getUserResults(with: option) { rankings, count, error in
-                XCTAssertNil(rankings)
-                XCTAssertEqual(count, -1)
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
-        }
-        
-        expecting { exp in
-            leaderboard.getUserResultsAroundUser(uuid, option: option) { rankings, count, error in
-                XCTAssertNil(rankings)
-                XCTAssertEqual(count, -1)
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
-        }
     }
     
     func testInvalidParameter() {
-        let user = LCUser()
-        expecting { exp in
-            user.login(withAuthData: ["openid" : uuid], platformId: "test", options: nil) { _, error in
-                XCTAssertNil(error)
-                exp.fulfill()
-            }
-        }
-        
         expecting { exp in
             LCLeaderboard.updateCurrentUserStatistics([:]) { statistics, error in
                 XCTAssertNil(statistics)
@@ -95,7 +47,7 @@ class LCLeaderboardTestCase: BaseTestCase {
         }
         
         expecting { exp in
-            LCLeaderboard.getStatisticsWithUserId("", statisticNames: nil, option: nil) { statistics, error in
+            LCLeaderboard.getStatisticsWithUserId("", statisticNames: nil) { statistics, error in
                 XCTAssertNil(statistics)
                 XCTAssertNotNil(error)
                 exp.fulfill()
@@ -105,22 +57,16 @@ class LCLeaderboardTestCase: BaseTestCase {
         let leaderboard = LCLeaderboard(statisticName: uuid)
         
         expecting { exp in
-            leaderboard.getStatisticsWithUserIds([], option: nil) { statistics, error in
+            leaderboard.getStatisticsWithUserIds([]) { statistics, error in
                 XCTAssertNil(statistics)
                 XCTAssertNotNil(error)
                 exp.fulfill()
             }
         }
-        
-        LCUser.logOut()
     }
     
     func testGetUserStatistics() {
-        let object = LCObject()
-        XCTAssertTrue(object.save())
         let user = LCUser()
-        let objectFieldKey = "objectField"
-        user[objectFieldKey] = object
         expecting { exp in
             user.login(withAuthData: ["openid" : uuid], platformId: "test", options: nil) { _, error in
                 XCTAssertNil(error)
@@ -132,8 +78,8 @@ class LCLeaderboardTestCase: BaseTestCase {
             return
         }
         
-        let statisticName0 = "test0"
-        let statisticName1 = "test1"
+        let statisticName0 = "test-user-0"
+        let statisticName1 = "test-user-1"
         
         expecting { exp in
             LCLeaderboard.updateCurrentUserStatistics(
@@ -152,15 +98,10 @@ class LCLeaderboardTestCase: BaseTestCase {
             }
         }
         
-        let option = LCLeaderboardQueryOption()
-        option.selectKeys = ["username", objectFieldKey]
-        option.includeKeys = [objectFieldKey]
-        
         expecting { exp in
             LCLeaderboard.getStatisticsWithUserId(
                 userObjectId,
-                statisticNames: [statisticName0, statisticName1],
-                option: option)
+                statisticNames: [statisticName0, statisticName1])
             { statistics, error in
                 XCTAssertEqual(statistics?.count, 2)
                 XCTAssertNil(error)
@@ -169,8 +110,7 @@ class LCLeaderboardTestCase: BaseTestCase {
                     XCTAssertTrue([statisticName0, statisticName1].contains(item.name ?? ""))
                     XCTAssertEqual(item.value, 100)
                     XCTAssertGreaterThanOrEqual(item.version, 0)
-                    XCTAssertNotNil(item.user?["username"])
-                    XCTAssertTrue(item.user?[objectFieldKey] is LCObject)
+                    XCTAssertNotNil(item.user)
                     XCTAssertNil(item.object)
                     XCTAssertNil(item.entity)
                 }
@@ -182,26 +122,24 @@ class LCLeaderboardTestCase: BaseTestCase {
         let leaderboard1 = LCLeaderboard(statisticName: statisticName1)
         
         expecting(count: 2) { exp in
-            leaderboard0.getStatisticsWithUserIds([userObjectId], option: option) { statistics, error in
+            leaderboard0.getStatisticsWithUserIds([userObjectId]) { statistics, error in
 //                XCTAssertEqual(statistics?.count, 1)
 //                XCTAssertNil(error)
 //                XCTAssertEqual(leaderboard0.statisticName, statistics?.first?.name)
 //                XCTAssertEqual(statistics?.first?.value, 100)
 //                XCTAssertGreaterThanOrEqual(statistics?.first?.version ?? -1, 0)
-//                XCTAssertNotNil(statistics?.first?.user?["username"])
-//                XCTAssertTrue(statistics?.first?.user?[objectFieldKey] is LCObject)
+//                XCTAssertNotNil(statistics?.first?.user)
 //                XCTAssertNil(statistics?.first?.object)
 //                XCTAssertNil(statistics?.first?.entity)
                 exp.fulfill()
             }
-            leaderboard1.getStatisticsWithUserIds([userObjectId], option: option) { statistics, error in
+            leaderboard1.getStatisticsWithUserIds([userObjectId]) { statistics, error in
 //                XCTAssertEqual(statistics?.count, 1)
 //                XCTAssertNil(error)
 //                XCTAssertEqual(leaderboard1.statisticName, statistics?.first?.name)
 //                XCTAssertEqual(statistics?.first?.value, 100)
 //                XCTAssertGreaterThanOrEqual(statistics?.first?.version ?? -1, 0)
-//                XCTAssertNotNil(statistics?.first?.user?["username"])
-//                XCTAssertTrue(statistics?.first?.user?[objectFieldKey] is LCObject)
+//                XCTAssertNotNil(statistics?.first?.user)
 //                XCTAssertNil(statistics?.first?.object)
 //                XCTAssertNil(statistics?.first?.entity)
                 exp.fulfill()
@@ -219,5 +157,93 @@ class LCLeaderboardTestCase: BaseTestCase {
         LCUser.logOut()
     }
     
-    
+    func testGetObjectStatistics() {
+        let object = LCObject()
+        let objectFieldKey = "objectField"
+        object[objectFieldKey] = LCObject()
+        XCTAssertTrue(object.save())
+        guard let objectId = object.objectId else {
+            XCTFail()
+            return
+        }
+        
+        let statisticName0 = "test-object-0"
+        let statisticName1 = "test-object-1"
+        
+        useMasterKey()
+        expecting { exp in
+            LCLeaderboard.update(
+                withIdentity: objectId,
+                leaderboardPath: .objects,
+                statistics: [
+                    statisticName0 : 100,
+                    statisticName1 : 100,
+                ])
+            { statistics, error in
+                XCTAssertEqual(statistics?.count, 2)
+                XCTAssertNil(error)
+                XCTAssertNotEqual(statistics?.first?.name, statistics?.last?.name)
+                for item in statistics ?? [] {
+                    XCTAssertTrue([statisticName0, statisticName1].contains(item.name ?? ""))
+                    XCTAssertEqual(item.value, 100)
+                    XCTAssertGreaterThanOrEqual(item.version, 0)
+                }
+                exp.fulfill()
+            }
+        }
+        useCommonKey()
+        
+        let option = LCLeaderboardQueryOption()
+        option.selectKeys = [objectFieldKey]
+        option.includeKeys = [objectFieldKey]
+        
+        expecting { exp in
+            LCLeaderboard.getStatisticsWithObjectId(
+                objectId,
+                statisticNames: [statisticName0, statisticName1],
+                option: option)
+            { statistics, error in
+                XCTAssertEqual(statistics?.count, 2)
+                XCTAssertNil(error)
+                XCTAssertNotEqual(statistics?.first?.name, statistics?.last?.name)
+                for item in statistics ?? [] {
+                    XCTAssertTrue([statisticName0, statisticName1].contains(item.name ?? ""))
+                    XCTAssertEqual(item.value, 100)
+                    XCTAssertGreaterThanOrEqual(item.version, 0)
+                    XCTAssertNotNil((item.object?[objectFieldKey] as? LCObject)?.createdAt)
+                    XCTAssertNil(item.user)
+                    XCTAssertNil(item.entity)
+                }
+                exp.fulfill()
+            }
+        }
+        
+        let leaderboard0 = LCLeaderboard(statisticName: statisticName0)
+        let leaderboard1 = LCLeaderboard(statisticName: statisticName1)
+        
+        expecting(count: 2) { exp in
+            leaderboard0.getStatisticsWithObjectIds([objectId], option: option) { statistics, error in
+                XCTAssertEqual(statistics?.count, 1)
+                XCTAssertNil(error)
+                XCTAssertEqual(leaderboard0.statisticName, statistics?.first?.name)
+                XCTAssertEqual(statistics?.first?.value, 100)
+                XCTAssertGreaterThanOrEqual(statistics?.first?.version ?? -1, 0)
+                XCTAssertNotNil((statistics?.first?.object?[objectFieldKey] as? LCObject)?.createdAt)
+                XCTAssertNil(statistics?.first?.user)
+                XCTAssertNil(statistics?.first?.entity)
+                exp.fulfill()
+            }
+            leaderboard1.getStatisticsWithObjectIds([objectId], option: option) { statistics, error in
+                XCTAssertEqual(statistics?.count, 1)
+                XCTAssertNil(error)
+                XCTAssertEqual(leaderboard1.statisticName, statistics?.first?.name)
+                XCTAssertEqual(statistics?.first?.value, 100)
+                XCTAssertGreaterThanOrEqual(statistics?.first?.version ?? -1, 0)
+                XCTAssertNotNil((statistics?.first?.object?[objectFieldKey] as? LCObject)?.createdAt)
+                XCTAssertNil(statistics?.first?.user)
+                XCTAssertNil(statistics?.first?.entity)
+                exp.fulfill()
+            }
+        }
+    }
 }

@@ -12,6 +12,7 @@
 #import "UserAgent.h"
 
 @class LCApplication;
+@class LCURLSessionManager;
 
 static NSString * const USER_AGENT = @"LeanCloud-Objc-SDK/" SDK_VERSION;
 
@@ -23,27 +24,23 @@ FOUNDATION_EXPORT NSString * const LCHeaderFieldNameProduction;
 
 @interface LCPaasClient : NSObject
 
-+ (LCPaasClient *)sharedInstance;
-
 @property (nonatomic) LCApplication *application;
-@property (nonatomic, readonly, copy) NSString * apiVersion;
-@property (nonatomic, readwrite, copy) NSString * applicationIdField;
-@property (nonatomic, readwrite, copy) NSString * applicationKeyField;
-@property (nonatomic, readwrite, copy) NSString * sessionTokenField;
-@property (nonatomic, readwrite, strong) LCUser * currentUser;
-@property (nonatomic, readwrite, strong) LCACL * defaultACL;
-@property (nonatomic, readwrite) BOOL currentUserAccessForDefaultACL;
+@property (nonatomic, readonly, copy) NSString *apiVersion;
+@property (nonatomic) LCUser *currentUser;
+@property (nonatomic) LCACL *defaultACL;
+@property (nonatomic) BOOL currentUserAccessForDefaultACL;
+@property (nonatomic) NSTimeInterval timeoutInterval;
+@property (nonatomic) NSMutableDictionary *subclassTable;
+@property (nonatomic) BOOL productionMode;
+@property (nonatomic) BOOL isLastModifyEnabled;
+@property (nonatomic) NSLock *lock;
+@property (nonatomic) NSMapTable *requestTable;
+@property (nonatomic) LCURLSessionManager *sessionManager;
+@property (nonatomic) dispatch_queue_t completionQueue;
+@property (nonatomic) NSMutableSet *runningArchivedRequests;
+@property (atomic) NSMutableDictionary *lastModify;
 
-@property (nonatomic, readwrite, assign) NSTimeInterval timeoutInterval;
-
-@property (nonatomic, readwrite, strong) NSMutableDictionary * subclassTable;
-
-// only for cloud code yet
-@property (nonatomic, assign) BOOL productionMode;
-
-@property (nonatomic, assign) BOOL isLastModifyEnabled;
-
-@property (nonatomic, strong) NSLock *lock;
++ (LCPaasClient *)sharedInstance;
 
 -(void)clearLastModifyCache;
 

@@ -6,20 +6,12 @@
 //  Copyright © 2021 LeanCloud Inc. All rights reserved.
 //
 
-#import "LCLeaderboard.h"
+#import "LCLeaderboard_Internal.h"
 #import "LCObject.h"
 #import "LCUser.h"
 #import "LCUtils.h"
 #import "LCErrorUtils.h"
 #import "LCPaasClient.h"
-
-typedef NSString * LCLeaderboardPath NS_STRING_ENUM;
-static LCLeaderboardPath const LCLeaderboardPathUsers = @"users";
-static LCLeaderboardPath const LCLeaderboardPathObjects = @"objects";
-static LCLeaderboardPath const LCLeaderboardPathEntities = @"entities";
-static LCLeaderboardPath const LCLeaderboardPathUser = @"user";
-static LCLeaderboardPath const LCLeaderboardPathObject = @"object";
-static LCLeaderboardPath const LCLeaderboardPathEntity = @"entity";
 
 @implementation LCLeaderboardStatistic
 
@@ -100,6 +92,17 @@ static LCLeaderboardPath const LCLeaderboardPathEntity = @"entity";
         });
         return;
     }
+    [self updateWithIdentity:[LCUser currentUser].objectId
+             leaderboardPath:LCLeaderboardPathUsers
+                  statistics:statistics
+                    callback:callback];
+}
+
++ (void)updateWithIdentity:(NSString *)identity
+           leaderboardPath:(LCLeaderboardPath)leaderboardPath
+                statistics:(NSDictionary *)statistics
+                  callback:(void (^)(NSArray<LCLeaderboardStatistic *> * _Nullable, NSError * _Nullable))callback
+{
     NSArray *parameters = ({
         NSMutableArray<NSDictionary *> *parameters = [NSMutableArray array];
         [statistics enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
@@ -111,7 +114,7 @@ static LCLeaderboardPath const LCLeaderboardPathEntity = @"entity";
         }];
         parameters;
     });
-    NSString *path = [NSString stringWithFormat:@"leaderboard/users/%@/statistics", [LCUser currentUser].objectId];
+    NSString *path = [NSString stringWithFormat:@"leaderboard/%@/%@/statistics", leaderboardPath, identity];
     [[LCPaasClient sharedInstance] postObject:path
                                withParameters:parameters
                                         block:^(id  _Nullable object, NSError * _Nullable error) {
@@ -153,13 +156,12 @@ static LCLeaderboardPath const LCLeaderboardPathEntity = @"entity";
 
 + (void)getStatisticsWithUserId:(NSString *)userId
                  statisticNames:(NSArray<NSString *> *)statisticNames
-                         option:(LCLeaderboardQueryOption *)option
                        callback:(void (^)(NSArray<LCLeaderboardStatistic *> * _Nullable, NSError * _Nullable))callback
 {
     [self getStatisticsWithIdentity:userId
                     leaderboardPath:LCLeaderboardPathUsers
                      statisticNames:statisticNames
-                             option:option
+                             option:nil
                            callback:callback];
 }
 
@@ -203,13 +205,7 @@ static LCLeaderboardPath const LCLeaderboardPathEntity = @"entity";
     if (statisticNames && statisticNames.count > 0) {
         parameters[@"statistics"] = [statisticNames componentsJoinedByString:@","];
     }
-    NSError *error = [self trySetOption:option parameters:parameters leaderboardPath:leaderboardPath];
-    if (error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            callback(nil, error);
-        });
-        return;
-    }
+    [self trySetOption:option parameters:parameters];
     NSString *path = [NSString stringWithFormat:@"leaderboard/%@/%@/statistics", leaderboardPath, identity];
     [[LCPaasClient sharedInstance] getObject:path
                               withParameters:(parameters.count > 0 ? parameters : nil)
@@ -221,12 +217,11 @@ static LCLeaderboardPath const LCLeaderboardPathEntity = @"entity";
 // MARK: Get Group Statistics
 
 - (void)getStatisticsWithUserIds:(NSArray<NSString *> *)userIds
-                          option:(LCLeaderboardQueryOption *)option
                         callback:(void (^)(NSArray<LCLeaderboardStatistic *> * _Nullable, NSError * _Nullable))callback
 {
     [self getStatisticsWithIdentities:userIds
                       leaderboardPath:LCLeaderboardPathUsers
-                               option:option
+                               option:nil
                              callback:callback];
 }
 
@@ -263,14 +258,6 @@ static LCLeaderboardPath const LCLeaderboardPathEntity = @"entity";
     }
     NSString *path = [NSString stringWithFormat:@"leaderboard/%@/statistics/%@", leaderboardPath, self.statisticName];
     if (option) {
-        if ([leaderboardPath isEqualToString:LCLeaderboardPathUsers] &&
-            ![LCUser currentUser].sessionToken) {
-            NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Please login first.", nil);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                callback(nil, error);
-            });
-            return;
-        }
         NSMutableArray<NSString *> *queryStrings = [NSMutableArray array];
         if (option.selectKeys && option.selectKeys.count > 0) {
             NSString *selectKeysString = [option.selectKeys componentsJoinedByString:@","];
@@ -351,13 +338,7 @@ static LCLeaderboardPath const LCLeaderboardPathEntity = @"entity";
                         callback:(void (^)(NSArray<LCLeaderboardRanking *> * _Nullable, NSInteger, NSError * _Nullable))callback
 {
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    NSError *error = [[self class] trySetOption:option parameters:parameters leaderboardPath:leaderboardPath];
-    if (error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            callback(nil, -1, error);
-        });
-        return;
-    }
+    [[self class] trySetOption:option parameters:parameters];
     if (self.skip > 0) {
         parameters[@"startPosition"] = @(self.skip);
     }
@@ -410,16 +391,8 @@ static LCLeaderboardPath const LCLeaderboardPathEntity = @"entity";
 
 // MARK: Misc
 
-+ (NSError *)trySetOption:(LCLeaderboardQueryOption * _Nullable)option
-               parameters:(NSMutableDictionary *)parameters
-          leaderboardPath:(LCLeaderboardPath)leaderboardPath
-{
++ (void)trySetOption:(LCLeaderboardQueryOption * _Nullable)option parameters:(NSMutableDictionary *)parameters {
     if (option) {
-        if (([leaderboardPath isEqualToString:LCLeaderboardPathUsers] ||
-             [leaderboardPath isEqualToString:LCLeaderboardPathUser]) &&
-            ![LCUser currentUser].sessionToken) {
-            return LCError(LCErrorInternalErrorCodeInconsistency, @"Please login first.", nil);
-        }
         if (option.selectKeys && option.selectKeys.count > 0) {
             parameters[@"selectKeys"] = [option.selectKeys componentsJoinedByString:@","];
         }
@@ -427,7 +400,6 @@ static LCLeaderboardPath const LCLeaderboardPathEntity = @"entity";
             parameters[@"includeKeys"] = [option.includeKeys componentsJoinedByString:@","];
         }
     }
-    return nil;
 }
 
 + (void)handleStatisticsCallback:(void (^ _Nonnull)(NSArray<LCLeaderboardStatistic *> * _Nullable, NSError * _Nullable))callback

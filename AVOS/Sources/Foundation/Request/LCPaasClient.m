@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 LeanCloud. All rights reserved.
 //
 
-#import "LCPaasClient_internal.h"
+#import "LCPaasClient.h"
 #import "LCNetworking.h"
 #import "LCUtils.h"
 #import "LCUser_Internal.h"
@@ -22,16 +22,11 @@
 #import "LCConstants.h"
 #import "LCApplication_Internal.h"
 
-static NSString * const kLC_code = @"code";
-static NSString * const kLC_error = @"error";
-
-#define MAX_LAG_TIME 5.0
-
-NSString *const LCHeaderFieldNameId = @"X-LC-Id";
-NSString *const LCHeaderFieldNameKey = @"X-LC-Key";
-NSString *const LCHeaderFieldNameSign = @"X-LC-Sign";
-NSString *const LCHeaderFieldNameSession = @"X-LC-Session";
-NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
+NSString * const LCHeaderFieldNameId = @"X-LC-Id";
+NSString * const LCHeaderFieldNameKey = @"X-LC-Key";
+NSString * const LCHeaderFieldNameSign = @"X-LC-Sign";
+NSString * const LCHeaderFieldNameSession = @"X-LC-Session";
+NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 #define LC_REST_REQUEST_LOG_FORMAT \
 @"\n------ BEGIN LeanCloud REST Request -------\n" \
@@ -46,7 +41,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 @"response: %@\n" \
 @"------ END --------------------------------"
 
-@implementation NSMutableString (URLRequestFormatter)
+@implementation NSMutableString (LCURLRequestFormatter)
 
 - (void)appendCommandLineArgument:(NSString *)arg {
     [self appendFormat:@" %@", [arg stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
@@ -54,7 +49,7 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 @end
 
-@implementation NSURLRequest (curl)
+@implementation NSURLRequest (LCCurl)
 
 - (NSString *)cURLCommand
 {
@@ -107,62 +102,43 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     
     return [NSString stringWithString:command];
 }
-@end
-
-@interface LCPaasClient()
-
-@property (nonatomic, strong) LCURLSessionManager *sessionManager;
-
-@property (nonatomic, strong) dispatch_queue_t completionQueue;
-
-@property (nonatomic, strong) NSMutableSet *runningArchivedRequests;
-
-@property (atomic, strong) NSMutableDictionary *lastModify;
 
 @end
 
 @implementation LCPaasClient
 
-+(LCPaasClient *)sharedInstance
-{
-    static dispatch_once_t once;
-    static LCPaasClient * sharedInstance;
-    dispatch_once(&once, ^{
-        sharedInstance = [[self alloc] init];
-        sharedInstance.productionMode = YES;
-        sharedInstance.timeoutInterval = 60.0;
-        
-        sharedInstance.applicationIdField = LCHeaderFieldNameId;
-        sharedInstance.applicationKeyField = LCHeaderFieldNameKey;
-        sharedInstance.sessionTokenField = LCHeaderFieldNameSession;
-        
-        sharedInstance.runningArchivedRequests=[[NSMutableSet alloc] init];
-        
-        [LCScheduler sharedInstance];
++ (LCPaasClient *)sharedInstance {
+    static LCPaasClient *instance;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        instance = [[self alloc] init];
     });
-    return sharedInstance;
+    return instance;
 }
 
 - (instancetype)init {
     self = [super init];
-    
     if (self) {
+        _productionMode = true;
+        _timeoutInterval = 60.0;
         _requestTable = [NSMapTable strongToWeakObjectsMapTable];
-        _completionQueue = dispatch_queue_create("avos.paas.completionQueue", DISPATCH_QUEUE_CONCURRENT);
+        _runningArchivedRequests = [[NSMutableSet alloc] init];
+        _completionQueue = dispatch_queue_create([NSString stringWithFormat:
+                                                  @"LC.Objc.%@.%@",
+                                                  NSStringFromClass([self class]),
+                                                  keyPath(self, completionQueue)].UTF8String,
+                                                 DISPATCH_QUEUE_CONCURRENT);
         _sessionManager = ({
             NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
             LCURLSessionManager *manager = [[LCURLSessionManager alloc] initWithSessionConfiguration:configuration];
             manager.completionQueue = _completionQueue;
-            
-            /* Remove all null value of result. */
             LCJSONResponseSerializer *responseSerializer = (LCJSONResponseSerializer *)manager.responseSerializer;
-            responseSerializer.removesKeysWithNullValues = YES;
-            
+            responseSerializer.removesKeysWithNullValues = true;
             manager;
         });
         _lock = [[NSLock alloc] init];
+        [LCScheduler sharedInstance];
     }
-    
     return self;
 }
 
@@ -247,11 +223,16 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
     NSString *appID = [self.application identifierThrowException];
+    NSString *appKey = [self.application keyThrowException];
     
     [request setHTTPMethod:method];
     [request setTimeoutInterval:self.timeoutInterval];
     [request setValue:appID forHTTPHeaderField:LCHeaderFieldNameId];
-    [request setValue:[self signatureHeaderFieldValue] forHTTPHeaderField:LCHeaderFieldNameSign];
+    if ([appKey hasSuffix:@",master"]) {
+        [request setValue:appKey forHTTPHeaderField:LCHeaderFieldNameKey];
+    } else {
+        [request setValue:[self signatureHeaderFieldValue] forHTTPHeaderField:LCHeaderFieldNameSign];
+    }
     [request setValue:self.productionMode ? @"1": @"0" forHTTPHeaderField:LCHeaderFieldNameProduction];
     [request setValue:USER_AGENT forHTTPHeaderField:@"User-Agent"];
     [request setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
@@ -598,14 +579,14 @@ NSString *const LCHeaderFieldNameProduction = @"X-LC-Prod";
                 NSMutableDictionary *userInfo = ((NSDictionary *)responseObject).mutableCopy;
                 
                 // decoding 'code'
-                NSNumber *code = [NSNumber _lc_decoding:userInfo key:kLC_code];
+                NSNumber *code = [NSNumber _lc_decoding:userInfo key:@"code"];
                 
                 if (code != nil) {
                     
                     // decoding 'error'
-                    NSString *reason = [NSString _lc_decoding:userInfo key:kLC_error];
+                    NSString *reason = [NSString _lc_decoding:userInfo key:@"error"];
                     
-                    [userInfo removeObjectsForKeys:@[kLC_code, kLC_error]];
+                    [userInfo removeObjectsForKeys:@[@"code", @"error"]];
                     
                     /* for compatibility */
                     id data = error.userInfo[LCNetworkingOperationFailingURLResponseDataErrorKey];

@@ -69,7 +69,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)getStatisticsWithUserId:(NSString *)userId
                  statisticNames:(NSArray<NSString *> * _Nullable)statisticNames
-                         option:(LCLeaderboardQueryOption * _Nullable)option
                        callback:(void (^)(NSArray<LCLeaderboardStatistic *> * _Nullable statistics, NSError * _Nullable error))callback;
 
 + (void)getStatisticsWithObjectId:(NSString *)objectId
@@ -84,7 +83,6 @@ NS_ASSUME_NONNULL_BEGIN
 // MARK: Get Group Statistics
 
 - (void)getStatisticsWithUserIds:(NSArray<NSString *> *)userIds
-                          option:(LCLeaderboardQueryOption * _Nullable)option
                         callback:(void (^)(NSArray<LCLeaderboardStatistic *> * _Nullable statistics, NSError * _Nullable error))callback;
 
 - (void)getStatisticsWithObjectIds:(NSArray<NSString *> *)objectIds

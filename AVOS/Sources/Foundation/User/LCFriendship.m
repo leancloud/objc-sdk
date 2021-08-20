@@ -9,7 +9,7 @@
 #import "LCFriendship.h"
 #import "LCUser_Internal.h"
 #import "LCErrorUtils.h"
-#import "LCPaasClient_internal.h"
+#import "LCPaasClient.h"
 #import "LCObjectUtils.h"
 #import "LCQuery.h"
 
