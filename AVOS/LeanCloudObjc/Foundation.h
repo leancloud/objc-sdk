@@ -59,3 +59,6 @@
 // SMS & Captcha
 #import "LCCaptcha.h"
 #import "LCSMS.h"
+
+// Leaderboard
+#import "LCLeaderboard.h"

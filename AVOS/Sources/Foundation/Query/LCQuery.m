@@ -7,7 +7,7 @@
 #import "LCQuery.h"
 #import "LCUtils.h"
 #import "LCPaasClient.h"
-#import "LCPaasClient_internal.h"
+#import "LCPaasClient.h"
 #import "LCUser_Internal.h"
 #import "LCGeoPoint_Internal.h"
 #import "LCCacheManager.h"

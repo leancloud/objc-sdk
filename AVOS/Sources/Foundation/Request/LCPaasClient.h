@@ -11,38 +11,36 @@
 #import "LCACL.h"
 #import "UserAgent.h"
 
-static NSString *const USER_AGENT = @"LeanCloud-Objc-SDK/" SDK_VERSION;
+@class LCApplication;
+@class LCURLSessionManager;
 
-FOUNDATION_EXPORT NSString *const LCHeaderFieldNameId;
-FOUNDATION_EXPORT NSString *const LCHeaderFieldNameKey;
-FOUNDATION_EXPORT NSString *const LCHeaderFieldNameSign;
-FOUNDATION_EXPORT NSString *const LCHeaderFieldNameSession;
-FOUNDATION_EXPORT NSString *const LCHeaderFieldNameProduction;
+static NSString * const USER_AGENT = @"LeanCloud-Objc-SDK/" SDK_VERSION;
+
+FOUNDATION_EXPORT NSString * const LCHeaderFieldNameId;
+FOUNDATION_EXPORT NSString * const LCHeaderFieldNameKey;
+FOUNDATION_EXPORT NSString * const LCHeaderFieldNameSign;
+FOUNDATION_EXPORT NSString * const LCHeaderFieldNameSession;
+FOUNDATION_EXPORT NSString * const LCHeaderFieldNameProduction;
 
 @interface LCPaasClient : NSObject
 
-+(LCPaasClient *)sharedInstance;
+@property (nonatomic) LCApplication *application;
+@property (nonatomic, readonly, copy) NSString *apiVersion;
+@property (nonatomic) LCUser *currentUser;
+@property (nonatomic) LCACL *defaultACL;
+@property (nonatomic) BOOL currentUserAccessForDefaultACL;
+@property (nonatomic) NSTimeInterval timeoutInterval;
+@property (nonatomic) NSMutableDictionary *subclassTable;
+@property (nonatomic) BOOL productionMode;
+@property (nonatomic) BOOL isLastModifyEnabled;
+@property (nonatomic) NSLock *lock;
+@property (nonatomic) NSMapTable *requestTable;
+@property (nonatomic) LCURLSessionManager *sessionManager;
+@property (nonatomic) dispatch_queue_t completionQueue;
+@property (nonatomic) NSMutableSet *runningArchivedRequests;
+@property (atomic) NSMutableDictionary *lastModify;
 
-@property (nonatomic, readwrite, copy) NSString * applicationId;
-@property (nonatomic, readwrite, copy) NSString * clientKey;
-@property (nonatomic, readonly, copy) NSString * apiVersion;
-@property (nonatomic, readwrite, copy) NSString * applicationIdField;
-@property (nonatomic, readwrite, copy) NSString * applicationKeyField;
-@property (nonatomic, readwrite, copy) NSString * sessionTokenField;
-@property (nonatomic, readwrite, strong) LCUser * currentUser;
-@property (nonatomic, readwrite, strong) LCACL * defaultACL;
-@property (nonatomic, readwrite) BOOL currentUserAccessForDefaultACL;
-
-@property (nonatomic, readwrite, assign) NSTimeInterval timeoutInterval;
-
-@property (nonatomic, readwrite, strong) NSMutableDictionary * subclassTable;
-
-// only for cloud code yet
-@property (nonatomic, assign) BOOL productionMode;
-
-@property (nonatomic, assign) BOOL isLastModifyEnabled;
-
-@property (nonatomic, strong) NSLock *lock;
++ (LCPaasClient *)sharedInstance;
 
 -(void)clearLastModifyCache;
 
@@ -77,14 +75,8 @@ FOUNDATION_EXPORT NSString *const LCHeaderFieldNameProduction;
 
 -(void)postBatchSaveObject:(NSArray *)parameterArray headerMap:(NSDictionary *)headerMap eventually:(BOOL)isEventually block:(LCIdResultBlock)block;
 
--(void)postObject:(NSString *)path
-  withParameters:(NSDictionary *)parameters
-           block:(LCIdResultBlock)block;
-
--(void)postObject:(NSString *)path
-   withParameters:(NSDictionary *)parameters
-       eventually:(BOOL)isEventually
-            block:(LCIdResultBlock)block ;
+- (void)postObject:(NSString *)path withParameters:(id)parameters block:(LCIdResultBlock)block;
+- (void)postObject:(NSString *)path withParameters:(id)parameters eventually:(BOOL)isEventually block:(LCIdResultBlock)block;
 
 -(void)deleteObject:(NSString *)path
      withParameters:(NSDictionary *)parameters
@@ -115,7 +107,7 @@ FOUNDATION_EXPORT NSString *const LCHeaderFieldNameProduction;
 - (NSMutableURLRequest *)requestWithPath:(NSString *)path
                                   method:(NSString *)method
                                  headers:(NSDictionary *)headers
-                              parameters:(NSDictionary *)parameters;
+                              parameters:(id)parameters;
 
 - (void)performRequest:(NSURLRequest *)request
                success:(void (^)(NSHTTPURLResponse *response, id responseObject))successBlock

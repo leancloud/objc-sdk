@@ -25,22 +25,32 @@ class BaseTestCase: XCTestCase {
         let id: String
         let key: String
         let serverURL: String
+        let masterKey: String
     }
     
     static let cnApp = AppInfo(
         id: "S5vDI3IeCk1NLLiM1aFg3262-gzGzoHsz",
         key: "7g5pPsI55piz2PRLPWK5MPz0",
-        serverURL: "https://s5vdi3ie.lc-cn-n1-shared.com")
+        serverURL: "https://s5vdi3ie.lc-cn-n1-shared.com",
+        masterKey: "Q26gTodbyi1Ki7lM9vtncF6U,master")
     
     static let ceApp = AppInfo(
         id: "skhiVsqIk7NLVdtHaUiWn0No-9Nh9j0Va",
         key: "T3TEAIcL8Ls5XGPsGz41B1bz",
-        serverURL: "https://skhivsqi.lc-cn-e1-shared.com")
+        serverURL: "https://skhivsqi.lc-cn-e1-shared.com",
+        masterKey: "FTPdEcG7vLKxNqKxYhTFdK4g,master")
     
     static let usApp = AppInfo(
         id: "jenSt9nvWtuJtmurdE28eg5M-MdYXbMMI",
         key: "8VLPsDlskJi8KsKppED4xKS0",
-        serverURL: "")
+        serverURL: "",
+        masterKey: "fasiJXz8jvSwn3G2B2QeraRe,master")
+    
+    static let appInfoTable = [
+        cnApp.id : cnApp,
+        ceApp.id : ceApp,
+        usApp.id : usApp,
+    ]
     
     override class func setUp() {
         super.setUp()
@@ -101,5 +111,24 @@ extension BaseTestCase {
         let exp = expectation(description: "delay \(seconds) seconds.")
         exp.isInverted = true
         wait(for: [exp], timeout: seconds)
+    }
+}
+
+extension BaseTestCase {
+    
+    func useMasterKey(_ application: LCApplication = .default()) {
+        guard let appInfo = BaseTestCase.appInfoTable[application.identifier],
+              !appInfo.masterKey.isEmpty else {
+            return
+        }
+        application.setWithIdentifier(appInfo.id, key: appInfo.masterKey)
+    }
+    
+    func useCommonKey(_ application: LCApplication = .default()) {
+        guard let appInfo = BaseTestCase.appInfoTable[application.identifier],
+              !appInfo.masterKey.isEmpty else {
+            return
+        }
+        application.setWithIdentifier(appInfo.id, key: appInfo.key)
     }
 }

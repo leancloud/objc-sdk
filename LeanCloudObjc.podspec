@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'LeanCloudObjc'
-  s.version  = '13.1.0'
+  s.version  = '13.2.0'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud Objective-C SDK'
   s.authors  = 'LeanCloud'
@@ -30,6 +30,7 @@ Pod::Spec.new do |s|
       'AVOS/Sources/Foundation/Captcha/LCCaptcha.h',
       'AVOS/Sources/Foundation/Utils/LCDynamicObject.h',
       'AVOS/Sources/Foundation/SMS/LCSMS.h',
+      'AVOS/Sources/Foundation/Leaderboard/LCLeaderboard.h',
       'AVOS/Sources/Foundation/ACL/LCACL.h',
       'AVOS/Sources/Foundation/ACL/LCRole.h',
       'AVOS/Sources/Foundation/Object/LCSaveOption.h',
