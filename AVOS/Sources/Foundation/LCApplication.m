@@ -12,6 +12,7 @@
 #import "LCScheduler.h"
 #import "LCUtils.h"
 #import "LCObjectUtils.h"
+#import "LCLogger.h"
 
 @implementation LCApplication
 

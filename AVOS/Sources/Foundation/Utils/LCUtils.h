@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Foundation.h"
-#import "LCHelpers.h"
+#import "LCConstants.h"
+#import "LCCloudQueryResult.h"
 
 // ref: https://github.com/keitaito/KeyPathMacroTestApp
 #define keyPath(base, path) ({ __unused typeof(base.path) _; @#path; })
@@ -26,9 +26,6 @@
 
 + (void)warnMainThreadIfNecessary;
 
-+ (BOOL)containsProperty:(Class)objectClass
-                property:(NSString *)name;
-
 + (BOOL)containsProperty:(NSString *)name
                  inClass:(Class)objectClass
             containSuper:(BOOL)containSuper
@@ -38,12 +35,6 @@
                   inClass:(Class)objectClass
                  withType:(Class)targetClass
              containSuper:(BOOL)containSuper;
-
-+ (void)copyPropertiesFrom:(NSObject *)src
-                  toObject:(NSObject *)target;
-
-+ (void)copyPropertiesFromDictionary:(NSDictionary *)src
-                          toNSObject:(NSObject *)target;
 
 + (NSString *)jsonStringFromDictionary:(NSDictionary *)dictionary;
 

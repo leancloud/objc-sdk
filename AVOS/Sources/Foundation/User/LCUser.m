@@ -12,6 +12,7 @@
 #import "LCPaasClient.h"
 #import "LCErrorUtils.h"
 #import "LCFriendQuery.h"
+#import "LCRelation_Internal.h"
 
 LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiBo  = @"weibo";
 LeanCloudSocialPlatform const LeanCloudSocialPlatformQQ     = @"qq";

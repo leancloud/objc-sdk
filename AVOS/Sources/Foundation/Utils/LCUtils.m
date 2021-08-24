@@ -7,54 +7,20 @@
 //
 
 #import <objc/runtime.h>
-#import "LCUtils.h"
-#import "LCObject.h"
+#import <CommonCrypto/CommonDigest.h>
+
+#import "LCLogger.h"
+#import "LCUtils_Internal.h"
 #import "LCObject_Internal.h"
 #import "LCGeoPoint_Internal.h"
-#import "LCUser.h"
 #import "LCUser_Internal.h"
-#import "LCObject.h"
 #import "LCRole_Internal.h"
-#import "LCFile.h"
 #import "LCFile_Internal.h"
-
 #import "LCObjectUtils.h"
 #import "LCPaasClient.h"
 #import "LCCloudQueryResult.h"
 #import "LCKeychain.h"
 #import "LCURLConnection.h"
-
-#import <CommonCrypto/CommonDigest.h>
-#import <AssertMacros.h>
-
-#include<string.h>
-#include<sys/socket.h>
-#include<netdb.h>
-#include<arpa/inet.h>
-
-static dispatch_queue_t LCUtilsDefaultSerialQueue = NULL;
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-function"
-
-static void b62_divide(const unsigned char* dividend, int dividend_len,
-                       unsigned char* quotient, unsigned int* remainder)
-{
-    unsigned int quantity;
-    int i;
-    
-    quantity = 0;
-    for (i=dividend_len-2;i>=0;i-=2) {
-        quantity |= *((unsigned short*)&dividend[i]);
-        *((unsigned short *)&quotient[i]) = (unsigned short)(quantity/62);
-        quantity = (quantity%62)<<16;
-    }
-    *remainder = quantity>>16;
-}
-
-#pragma clang diagnostic pop
-
-#define msg_id_length (((134359*(sizeof(time_t)+sizeof(int)*2))/100000)+2)
 
 static char base62_tab[62] = {
     'A','B','C','D','E','F','G','H',
@@ -132,75 +98,10 @@ static int b62_encode(char* out, const void *data, int length)
 
 @implementation LCUtils
 
-+ (void)initialize {
-    static dispatch_once_t onceToken;
-
-    dispatch_once(&onceToken, ^{
-        LCUtilsDefaultSerialQueue = dispatch_queue_create("cn.leancloud.utils", DISPATCH_QUEUE_SERIAL);
-    });
-}
-
-+(void)warnMainThreadIfNecessary {
-    if (getenv("GHUNIT_CLI")) return;
-    
++ (void)warnMainThreadIfNecessary {
     if ([NSThread isMainThread]) {
         LCLoggerI(@"Warning: A long-running Paas operation is being executed on the main thread.");
     }
-}
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-function"
-
-static const char *getPropertyType(objc_property_t property)
-{
-    const char *attributes = property_getAttributes(property);
-    char buffer[1 + strlen(attributes)];
-    strcpy(buffer, attributes);
-    char *state = buffer, *attribute;
-    while ((attribute = strsep(&state, ",")) != NULL) {
-        if (attribute[0] == 'T') {
-            return (const char *)[[NSData dataWithBytes:(attribute + 3) length:strlen(attribute) - 4] bytes];
-        }
-    }
-    return "@";
-}
-
-#pragma clang diagnostic pop
-
-+(void)copyPropertiesFrom:(NSObject *)src
-                 toObject:(NSObject *)target
-{
-    unsigned int outCount, i;
-    objc_property_t *properties = class_copyPropertyList([src class], &outCount);
-    for(i = 0; i < outCount; i++) {
-    	objc_property_t property = properties[i];
-    	const char *propName = property_getName(property);
-    	if (propName) {
-    		NSString *propertyName = [NSString stringWithCString:propName encoding:NSUTF8StringEncoding];
-            NSObject * valueObject = [src valueForKey:propertyName];
-            [target setValue:valueObject forKey:propertyName];
-    	}
-    }
-    free(properties);
-}
-
-+(void)copyPropertiesFromDictionary:(NSDictionary *)src
-                         toNSObject:(NSObject *)target
-{
-    NSArray * keys = [src allKeys];
-    for(NSString * key in keys)
-    {
-        NSObject * valueObject = [src valueForKey:key];
-        if ([LCUtils containsProperty:[target class] property:key])
-        {
-            [target setValue:valueObject forKey:key];
-        }
-    }
-}
-
-+(BOOL)containsProperty:(Class)objectClass property:(NSString *)name
-{
-    return [LCUtils containsProperty:name inClass:objectClass containSuper:YES filterDynamic:NO];
 }
 
 + (BOOL)containsProperty:(NSString *)name inClass:(Class)objectClass containSuper:(BOOL)containSuper filterDynamic:(BOOL)filterDynamic {
@@ -323,20 +224,25 @@ static const char *getPropertyType(objc_property_t property)
     }
 }
 
++ (dispatch_queue_t)defaultSerialQueue {
+    static dispatch_queue_t queue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        queue = dispatch_queue_create("cn.leancloud.utils", DISPATCH_QUEUE_SERIAL);
+    });
+    return queue;
+}
+
 + (NSString *)deviceUUID {
-    static NSString *UUID = nil;
-
+    static NSString *UUID;
     if (!UUID) {
-        dispatch_sync(LCUtilsDefaultSerialQueue, ^{
+        dispatch_sync([self defaultSerialQueue], ^{
             NSString *key = [self deviceUUIDKey];
-
             NSString *savedUUID = [LCKeychain loadValueForKey:key];
-
             if (savedUUID) {
                 UUID = savedUUID;
             } else {
                 NSString *tempUUID = [self generateUUID];
-
                 if (tempUUID) {
                     [LCKeychain saveValue:tempUUID forKey:key];
                     UUID = tempUUID;
@@ -344,7 +250,6 @@ static const char *getPropertyType(objc_property_t property)
             }
         });
     }
-
     return UUID;
 }
 

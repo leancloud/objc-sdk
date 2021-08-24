@@ -21,6 +21,8 @@
 #import "LCRouter_Internal.h"
 #import "LCConstants.h"
 #import "LCApplication_Internal.h"
+#import "LCLogger.h"
+#import "LCHelpers.h"
 
 NSString * const LCHeaderFieldNameId = @"X-LC-Id";
 NSString * const LCHeaderFieldNameKey = @"X-LC-Key";

@@ -1,7 +1,8 @@
 
 #import <Foundation/Foundation.h>
+#import <CommonCrypto/CommonCrypto.h>
+
 #import "LCConstants.h"
-#import "LCFile.h"
 #import "LCFile_Internal.h"
 #import "LCFileTaskManager.h"
 #import "LCPaasClient.h"
@@ -11,7 +12,9 @@
 #import "LCPersistenceUtils.h"
 #import "LCObjectUtils.h"
 #import "LCACL_Internal.h"
-#import <CommonCrypto/CommonCrypto.h>
+#import "LCUser_Internal.h"
+#import "LCFileQuery.h"
+#import "LCLogger.h"
 
 static NSString * LCFile_CustomPersistentCacheDirectory = nil;
 

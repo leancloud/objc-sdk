@@ -22,6 +22,7 @@
 #import "LCRelation_Internal.h"
 #import "LCUtils.h"
 #import "LCFriendship.h"
+#import "LCHelpers.h"
 
 @implementation LCDate
 

@@ -12,6 +12,7 @@
 #import "LCErrorUtils.h"
 #import "LCPaasClient.h"
 #import "LCPersistenceUtils.h"
+#import "LCLogger.h"
 
 RouterCacheKey const RouterCacheKeyApp = @"RouterCacheDataApp";
 RouterCacheKey const RouterCacheKeyRTM = @"RouterCacheDataRTM";

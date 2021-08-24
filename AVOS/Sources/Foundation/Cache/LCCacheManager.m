@@ -10,7 +10,7 @@
 #import "LCErrorUtils.h"
 #import "LCUtils.h"
 #import "LCPersistenceUtils.h"
-
+#import "LCHelpers.h"
 
 @interface LCCacheManager ()
 @property (nonatomic, copy) NSString *diskCachePath;

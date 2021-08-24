@@ -44,6 +44,6 @@ NS_ASSUME_NONNULL_END
 #define LCLoggerDebug(domain, ...) _LCLoggerDebug(domain, __VA_ARGS__)
 #define LCLoggerError(domain, ...) _LCLoggerError(domain, __VA_ARGS__)
 
-#define LCLoggerI(...)  LCLoggerInfo(LCLoggerDomainDefault, __VA_ARGS__)
+#define LCLoggerI(...) LCLoggerInfo(LCLoggerDomainDefault, __VA_ARGS__)
 #define LCLoggerD(...) LCLoggerDebug(LCLoggerDomainDefault, __VA_ARGS__)
 #define LCLoggerE(...) LCLoggerError(LCLoggerDomainDefault, __VA_ARGS__)
