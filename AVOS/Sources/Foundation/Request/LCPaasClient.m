@@ -391,7 +391,7 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
             if (error) {
                 block(nil, error);
             } else {
-                block(nil, LCErrorInternal(@"The batch count of server response is not equal to request count"));
+                block(nil, LCErrorInternalServer(@"The batch count of server response is not equal to request count"));
             }
         } else {
             // 网络请求成功

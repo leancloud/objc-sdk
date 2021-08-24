@@ -9,8 +9,7 @@
 #import "LCErrorUtils.h"
 #import "LCUtils.h"
 
-NSString * const kLeanCloudErrorDomain = @"com.LeanCloud.ErrorDomain";
-NSString * const kLeanCloudRESTAPIResponseError = @"com.leancloud.restapi.response.error";
+// MARK: Error Code
 
 NSInteger const kLCErrorInternalServer = 1;
 NSInteger const kLCErrorConnectionFailed = 100;
@@ -41,10 +40,7 @@ NSInteger const kLCErrorTimeout = 124;
 NSInteger const kLCErrorInvalidEmailAddress = 125;
 /*! @abstract 127: The mobile phone number was invalid. */
 NSInteger const kLCErrorInvalidMobilePhoneNumber = 127;
-
 NSInteger const kLCErrorDuplicateValue = 137;
-
-
 /*! @abstract 139: Role's name is invalid. */
 NSInteger const kLCErrorInvalidRoleName = 139;
 /*! @abstract 140: Exceeded an application quota.  Upgrade to resolve. */
@@ -73,7 +69,6 @@ NSInteger const kLCErrorInvalidImageData = 150;
 NSInteger const kLCErrorUnsavedFile = 151;
 /*! @abstract 153: Fail to delete file. */
 NSInteger const kLCErrorFileDeleteFailure = 153;
-
 /*! @abstract 200: Username is missing or empty */
 NSInteger const kLCErrorUsernameMissing = 200;
 /*! @abstract 201: Password is missing or empty */
@@ -108,36 +103,42 @@ NSInteger const kLCErrorUserMobilePhoneNumberTaken = 214;
 NSInteger const kLCErrorUserMobilePhoneNotVerified = 215;
 /*! @abstract 216: SNS Auth Data's format is invalid. */
 NSInteger const kLCErrorUserSNSAuthDataInvalid = 216;
-
 /*! @abstract 250: Linked id missing from request */
 NSInteger const kLCErrorLinkedIdMissing = 250;
 /*! @abstract 251: Invalid linked session */
 NSInteger const kLCErrorInvalidLinkedSession = 251;
-
 /*! Local file not found */
 NSInteger const kLCErrorFileNotFound = 400;
-
 /*! File Data not available */
 NSInteger const kLCErrorFileDataNotAvailable = 401;
 
-NSError *LCError(NSInteger code, NSString *failureReason, NSDictionary *userInfo)
-{
-    NSMutableDictionary *mutableDictionary;
+// MARK: Error Domain
+
+NSString * const kLeanCloudErrorDomain = @"com.LeanCloud.ErrorDomain";
+NSString * const kLeanCloudRESTAPIResponseError = @"com.leancloud.restapi.response.error";
+
+// MARK: Error
+
+NSError *LCError(NSInteger code, NSString *failureReason, NSDictionary *userInfo) {
+    NSMutableDictionary *dictionary;
     if (userInfo) {
-        mutableDictionary = [NSMutableDictionary dictionaryWithDictionary:userInfo];
+        dictionary = [NSMutableDictionary dictionaryWithDictionary:userInfo];
     } else {
-        mutableDictionary = [NSMutableDictionary dictionary];
+        dictionary = [NSMutableDictionary dictionary];
     }
     if (failureReason) {
-        mutableDictionary[NSLocalizedFailureReasonErrorKey] = failureReason;
+        dictionary[NSLocalizedFailureReasonErrorKey] = failureReason;
     }
     return [NSError errorWithDomain:kLeanCloudErrorDomain
                                code:code
-                           userInfo:mutableDictionary];
+                           userInfo:dictionary];
 }
 
-NSError *LCErrorFromUnderlyingError(NSError *underlyingError)
-{
+NSError *LCErrorInconsistency(NSString *failureReason) {
+    return LCError(LCErrorInternalErrorCodeInconsistency, failureReason, nil);
+}
+
+NSError *LCErrorFromUnderlyingError(NSError *underlyingError) {
     if ([underlyingError.domain isEqualToString:kLeanCloudErrorDomain]) {
         return underlyingError;
     } else {
@@ -151,7 +152,6 @@ NSError *LCErrorFromUnderlyingError(NSError *underlyingError)
     }
 }
 
-NSError *LCErrorInternal(NSString *failureReason)
-{
+NSError *LCErrorInternalServer(NSString *failureReason) {
     return LCError(kLCErrorInternalServer, failureReason, nil);
 }

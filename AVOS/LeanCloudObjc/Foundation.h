@@ -15,6 +15,7 @@
 #import "LCAvailability.h"
 #import "LCConstants.h"
 #import "LCLogger.h"
+#import "LCErrorUtils.h"
 
 // Object
 #import "LCObject.h"

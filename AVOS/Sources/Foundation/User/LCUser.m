@@ -92,7 +92,7 @@ static BOOL enableAutomatic = NO;
 
 - (void)isAuthenticatedWithSessionToken:(NSString *)sessionToken callback:(LCBooleanResultBlock)callback {
     if (sessionToken == nil) {
-        [LCUtils callBooleanResultBlock:callback error:LCErrorInternal(@"sessionToken is nil")];
+        [LCUtils callBooleanResultBlock:callback error:LCErrorInternalServer(@"sessionToken is nil")];
         return;
     }
     
@@ -450,7 +450,7 @@ static BOOL enableAutomatic = NO;
 + (void)internalBecomeWithSessionTokenInBackground:(NSString *)sessionToken block:(LCUserResultBlock)block {
     if (sessionToken == nil) {
         if (block) {
-            block(nil, LCErrorInternal(@"sessionToken is nil"));
+            block(nil, LCErrorInternalServer(@"sessionToken is nil"));
         }
         return;
     }
@@ -955,7 +955,7 @@ static BOOL enableAutomatic = NO;
                 
                 callback(false, ({
                     NSString *reason = @"response invalid.";
-                    LCErrorInternal(reason);
+                    LCErrorInternalServer(reason);
                 }));
             });
             
@@ -987,7 +987,7 @@ static BOOL enableAutomatic = NO;
             
             NSError *aError = ({
                 NSString *reason = @"objectId invalid.";
-                LCErrorInternal(reason);
+                LCErrorInternalServer(reason);
             });
             
             callback(false, aError);
@@ -1046,7 +1046,7 @@ static BOOL enableAutomatic = NO;
                 
                 callback(false, ({
                     NSString *reason = @"response invalid.";
-                    LCErrorInternal(reason);
+                    LCErrorInternalServer(reason);
                 }));
             });
             
@@ -1089,7 +1089,7 @@ static BOOL enableAutomatic = NO;
             
             NSError *aError = ({
                 NSString *reason = @"objectId invalid.";
-                LCErrorInternal(reason);
+                LCErrorInternalServer(reason);
             });
             
             callback(false, aError);
@@ -1124,7 +1124,7 @@ static BOOL enableAutomatic = NO;
                 
                 callback(false, ({
                     NSString *reason = @"response invalid.";
-                    LCErrorInternal(reason);
+                    LCErrorInternalServer(reason);
                 }));
             });
             
@@ -1379,7 +1379,7 @@ static BOOL enableAutomatic = NO;
                 [dict setObject:result forKey:@"followers"];
             }
             @catch (NSException *exception) {
-                error = LCErrorInternal(@"wrong format return");
+                error = LCErrorInternalServer(@"wrong format return");
             }
             @finally {
                 [LCUtils callIdResultBlock:callback object:dict error:error];

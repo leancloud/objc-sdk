@@ -630,7 +630,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         dispatch_async(dispatch_get_main_queue(), ^{
             completionHandler(false, ({
                 NSString *reason = @"File is in uploading, Can't do repeated upload operation.";
-                LCErrorInternal(reason);
+                LCErrorInternalServer(reason);
             }));
         });
         
@@ -749,7 +749,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         
         completionHandler(false, ({
             NSString *reason = @"No data or URL to Upload.";
-            LCErrorInternal(reason);
+            LCErrorInternalServer(reason);
         }));
     });
 }
@@ -879,7 +879,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
             
             completionHandler(false, ({
                 NSString *reason = @"response invalid.";
-                LCErrorInternal(reason);
+                LCErrorInternalServer(reason);
             }));
             
             return;
@@ -909,7 +909,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         if (![NSDictionary _lc_isTypeOf:dic]) {
             callback(nil, ({
                 NSString *reason = @"fileTokens response invalid.";
-                LCErrorInternal(reason);
+                LCErrorInternalServer(reason);
             }));
             return;
         }
@@ -955,7 +955,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         dispatch_async(dispatch_get_main_queue(), ^{
             completionHandler(nil, ({
                 NSString *reason = @"File is in downloading, Can't do repeated download operation.";
-                LCErrorInternal(reason);
+                LCErrorInternalServer(reason);
             }));
         });
         
@@ -969,7 +969,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         dispatch_async(dispatch_get_main_queue(), ^{
             completionHandler(nil, ({
                 NSString *reason = @"url is invalid.";
-                LCErrorInternal(reason);
+                LCErrorInternalServer(reason);
             }));
         });
         
@@ -1134,7 +1134,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         if (error) {
             *error = ({
                 NSString *reason = @"objectId invalid.";
-                LCErrorInternal(reason);
+                LCErrorInternalServer(reason);
             });
         }
         return nil;
@@ -1178,7 +1178,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
             
             NSError *aError = ({
                 NSString *reason = @"`objectId` is invalid.";
-                LCErrorInternal(reason);
+                LCErrorInternalServer(reason);
             });
             
             completionHandler(false, aError);
@@ -1256,7 +1256,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
             
             NSError *aError = ({
                 NSString *reason = @"`objectId` is invalid.";
-                LCErrorInternal(reason);
+                LCErrorInternalServer(reason);
             });
             
             completionHandler(nil, aError);
@@ -1283,7 +1283,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
                 
                 NSError *aError = ({
                     NSString *reason = @"Get an invalid Object.";
-                    LCErrorInternal(reason);
+                    LCErrorInternalServer(reason);
                 });
                 
                 completionHandler(nil, aError);

@@ -113,7 +113,7 @@
 		D30B6A9924A09DF2006ABE09 /* LCUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A9E1A5A7A0000C5C6C4 /* LCUser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A9A24A09DF2006ABE09 /* LCUser_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841AA01A5A7A0000C5C6C4 /* LCUser_Internal.h */; };
 		D30B6A9B24A09DF2006ABE09 /* LCUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A9F1A5A7A0000C5C6C4 /* LCUser.m */; };
-		D30B6A9E24A09E35006ABE09 /* LCErrorUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841AA21A5A7A0000C5C6C4 /* LCErrorUtils.h */; };
+		D30B6A9E24A09E35006ABE09 /* LCErrorUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841AA21A5A7A0000C5C6C4 /* LCErrorUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A9F24A09E35006ABE09 /* LCErrorUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841AA31A5A7A0000C5C6C4 /* LCErrorUtils.m */; };
 		D30B6AA024A09E35006ABE09 /* LCHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841AA41A5A7A0000C5C6C4 /* LCHelpers.h */; };
 		D30B6AA124A09E35006ABE09 /* LCLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841AA61A5A7A0000C5C6C4 /* LCLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };

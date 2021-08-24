@@ -12,6 +12,7 @@
 #import "LCApplication_Internal.h"
 #import "LCUtils.h"
 #import "LCObjectUtils.h"
+#import "LCErrorUtils.h"
 
 #import "LCRTMConnection.h"
 #import "MessagesProtoOrig.pbobjc.h"

@@ -57,7 +57,7 @@ static NSMutableDictionary<NSString *, NSString *> *customAppServerTable;
                     NSError *error = nil;
                     NSMutableDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
                     if (error || ![NSMutableDictionary _lc_isTypeOf:dictionary]) {
-                        if (!error) { error = LCErrorInternal([NSString stringWithFormat:@"file: %@ is invalid.", filePath]); }
+                        if (!error) { error = LCErrorInternalServer([NSString stringWithFormat:@"file: %@ is invalid.", filePath]); }
                         LCLoggerError(LCLoggerDomainDefault, @"%@", error);
                     } else {
                         return dictionary;
@@ -126,7 +126,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
         NSError *error = nil;
         NSData *data = [NSJSONSerialization dataWithJSONObject:routerDataMap options:0 error:&error];
         if (error || ![data length]) {
-            if (!error) { error = LCErrorInternal(@"data invalid."); }
+            if (!error) { error = LCErrorInternalServer(@"data invalid."); }
             LCLoggerError(LCLoggerDomainDefault, @"%@", error);
             return;
         }
@@ -144,7 +144,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
                 return;
             }
         } else if (isExists && !isDirectory) {
-            LCLoggerError(LCLoggerDomainDefault, @"%@", LCErrorInternal(@"can't create directory for router."));
+            LCLoggerError(LCLoggerDomainDefault, @"%@", LCErrorInternalServer(@"can't create directory for router."));
             return;
         }
         [routerCacheDirectoryPath stringByAppendingPathComponent:key];
@@ -194,7 +194,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
             if ([NSDictionary _lc_isTypeOf:dictionary]) {
                 callback(dictionary, nil);
             } else {
-                callback(nil, LCErrorInternal(@"response data invalid."));
+                callback(nil, LCErrorInternalServer(@"response data invalid."));
             }
         }
     }];

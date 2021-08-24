@@ -54,6 +54,7 @@ Pod::Spec.new do |s|
       'AVOS/Sources/Foundation/User/LCUser.h',
       'AVOS/Sources/Foundation/User/LCFriendship.h',
       'AVOS/Sources/Foundation/Utils/LCLogger.h',
+      'AVOS/Sources/Foundation/Utils/LCErrorUtils.h',
       'AVOS/Sources/Foundation/LCAvailability.h'
 
     ss.library =

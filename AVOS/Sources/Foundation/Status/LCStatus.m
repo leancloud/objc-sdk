@@ -234,12 +234,12 @@ NSString * const kLCStatusTypePrivateMessage=@"private";
 
 + (BOOL)deleteInboxStatusForMessageId:(NSUInteger)messageId inboxType:(NSString *)inboxType receiver:(NSString *)receiver error:(NSError *__autoreleasing *)error {
     if (!receiver) {
-        if (error) *error = LCErrorInternal(@"Receiver of status can not be nil.");
+        if (error) *error = LCErrorInternalServer(@"Receiver of status can not be nil.");
         return NO;
     }
 
     if (!inboxType) {
-        if (error) *error = LCErrorInternal(@"Inbox type of status can not be nil.");
+        if (error) *error = LCErrorInternalServer(@"Inbox type of status can not be nil.");
         return NO;
     }
 
