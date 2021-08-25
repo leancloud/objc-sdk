@@ -6,7 +6,7 @@
 #import <Foundation/Foundation.h>
 #import "LCPush_Internal.h"
 #import "LCPaasClient.h"
-#import "LCUtils.h"
+#import "LCUtils_Internal.h"
 #import "LCQuery_Internal.h"
 #import "LCInstallation_Internal.h"
 #import "LCObjectUtils.h"

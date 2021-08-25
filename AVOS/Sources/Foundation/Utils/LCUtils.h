@@ -7,136 +7,59 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LCConstants.h"
-#import "LCCloudQueryResult.h"
-
-// ref: https://github.com/keitaito/KeyPathMacroTestApp
-#define keyPath(base, path) ({ __unused typeof(base.path) _; @#path; })
-#define ivarName(base, path) ({ __unused typeof(base->path) _; @#path; })
-
-#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
-    #import <MobileCoreServices/MobileCoreServices.h>
-#else
-    #import <CoreServices/CoreServices.h>
-#endif
 
 @class LCObject;
+@class LCUser;
+@class LCFile;
+@class LCCloudQueryResult;
+
+NS_ASSUME_NONNULL_BEGIN
+
+typedef void (^LCBooleanResultBlock)(BOOL succeeded,  NSError * _Nullable error);
+typedef void (^LCIntegerResultBlock)(NSInteger number, NSError * _Nullable error);
+typedef void (^LCStringResultBlock)(NSString * _Nullable string, NSError * _Nullable error);
+typedef void (^LCDataResultBlock)(NSData * _Nullable data, NSError * _Nullable error);
+typedef void (^LCArrayResultBlock)(NSArray * _Nullable objects, NSError * _Nullable error);
+typedef void (^LCSetResultBlock)(NSSet * _Nullable set, NSError * _Nullable error);
+typedef void (^LCDictionaryResultBlock)(NSDictionary * _Nullable dictionary, NSError * _Nullable error);
+typedef void (^LCIdResultBlock)(id _Nullable object, NSError * _Nullable error);
+typedef void (^LCProgressBlock)(NSInteger percent);
+typedef void (^LCObjectResultBlock)(LCObject * _Nullable object, NSError * _Nullable error);
+typedef void (^LCUserResultBlock)(LCUser * _Nullable user, NSError * _Nullable error);
+typedef void (^LCFileResultBlock)(LCFile * _Nullable file, NSError * _Nullable error);
+typedef void (^LCCloudQueryCallback)(LCCloudQueryResult * _Nullable result, NSError * _Nullable error);
 
 @interface LCUtils : NSObject
 
-+ (void)warnMainThreadIfNecessary;
+// MARK: JSON String
 
-+ (BOOL)containsProperty:(NSString *)name
-                 inClass:(Class)objectClass
-            containSuper:(BOOL)containSuper
-           filterDynamic:(BOOL)filterDynamic;
++ (NSString * _Nullable)jsonStringFromDictionary:(NSDictionary *)dictionary;
++ (NSString * _Nullable)jsonStringFromArray:(NSArray *)array;
++ (NSString * _Nullable)jsonStringFromJSONObject:(id)JSONObject;
 
-+ (BOOL)isDynamicProperty:(NSString *)name
-                  inClass:(Class)objectClass
-                 withType:(Class)targetClass
-             containSuper:(BOOL)containSuper;
+// MARK: Call Block
 
-+ (NSString *)jsonStringFromDictionary:(NSDictionary *)dictionary;
++ (void)callBooleanResultBlock:(LCBooleanResultBlock)block error:(NSError * _Nullable)error;
++ (void)callIntegerResultBlock:(LCIntegerResultBlock)block number:(NSInteger)number error:(NSError * _Nullable)error;
++ (void)callStringResultBlock:(LCStringResultBlock)block string:(NSString * _Nullable)string error:(NSError * _Nullable)error;
++ (void)callDataResultBlock:(LCDataResultBlock)block data:(NSData * _Nullable)data error:(NSError * _Nullable)error;
++ (void)callArrayResultBlock:(LCArrayResultBlock)block array:(NSArray * _Nullable)array error:(NSError * _Nullable)error;
++ (void)callSetResultBlock:(LCSetResultBlock)block set:(NSSet * _Nullable)set error:(NSError * _Nullable)error;
++ (void)callDictionaryResultBlock:(LCDictionaryResultBlock)block dictionary:(NSDictionary * _Nullable)dictionary error:(NSError * _Nullable)error;
++ (void)callIdResultBlock:(LCIdResultBlock)block object:(id _Nullable)object error:(NSError * _Nullable)error;
++ (void)callProgressBlock:(LCProgressBlock)block percent:(NSInteger)percent;
++ (void)callObjectResultBlock:(LCObjectResultBlock)block object:(LCObject * _Nullable)object error:(NSError * _Nullable)error;
++ (void)callUserResultBlock:(LCUserResultBlock)block user:(LCUser * _Nullable)user error:(NSError * _Nullable)error;
++ (void)callFileResultBlock:(LCFileResultBlock)block file:(LCFile * _Nullable)file error:(NSError * _Nullable)error;
++ (void)callCloudQueryCallback:(LCCloudQueryCallback)block result:(LCCloudQueryResult * _Nullable)result error:(NSError * _Nullable)error;
 
-+ (NSString *)jsonStringFromArray:(NSArray *)array;
-
-+ (NSString *)generateUUID;
-+ (NSString *)generateCompactUUID;
-+ (NSString *)deviceUUID;
-
-#pragma mark - Block
-
-+ (void)callBooleanResultBlock:(LCBooleanResultBlock)block
-                         error:(NSError *)error;
-
-+ (void)callIntegerResultBlock:(LCIntegerResultBlock)block
-                        number:(NSInteger)number
-                         error:(NSError *)error;
-
-+ (void)callArrayResultBlock:(LCArrayResultBlock)block
-                       array:(NSArray *)array
-                       error:(NSError *)error;
-
-+ (void)callObjectResultBlock:(LCObjectResultBlock)block
-                       object:(LCObject *)object
-                        error:(NSError *)error;
-
-+ (void)callUserResultBlock:(LCUserResultBlock)block
-                       user:(LCUser *)user
-                      error:(NSError *)error;
-
-+ (void)callIdResultBlock:(LCIdResultBlock)block
-                   object:(id)object
-                    error:(NSError *)error;
-
-+ (void)callProgressBlock:(LCProgressBlock)block
-                  percent:(NSInteger)percentDone;
-
-
-+ (void)callImageResultBlock:(LCImageResultBlock)block
-                       image:(UIImage *)image
-                       error:(NSError *)error;
-
-+ (void)callFileResultBlock:(LCFileResultBlock)block
-                     file:(LCFile *)file
-                      error:(NSError *)error;
-
-+ (void)callSetResultBlock:(LCSetResultBlock)block
-                       set:(NSSet *)set
-                     error:(NSError *)error;
-
-+ (void)callCloudQueryResultBlock:(LCCloudQueryCallback)block
-                           result:(LCCloudQueryResult *)result
-                            error:error;
-
-/*!
- Dispatch task on background thread.
-
- @param task The task to be dispatched.
- */
-+ (void)asynchronizeTask:(void(^)(void))task;
-
-#pragma mark - String Util
-
-+ (NSString *)MIMEType:(NSString *)filePathOrName;
-+ (NSString *)MIMETypeFromPath:(NSString *)fullPath;
-+ (NSString *)contentTypeForImageData:(NSData *)data;
-
-@end
-
-#define LC_WAIT_TIL_TRUE(signal, interval) \
-do {                                       \
-    while(!(signal)) {                     \
-        @autoreleasepool {                 \
-            if (![[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:(interval)]]) { \
-                [NSThread sleepForTimeInterval:(interval)]; \
-            }                              \
-        }                                  \
-    }                                      \
-} while (0)
-
-#define LC_WAIT_WITH_ROUTINE_TIL_TRUE(signal, interval, routine) \
-do {                                       \
-    while(!(signal)) {                     \
-        @autoreleasepool {                 \
-            routine;                       \
-            if (![[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:(interval)]]) { \
-                [NSThread sleepForTimeInterval:(interval)]; \
-            }                              \
-        }                                  \
-    }                                      \
-} while (0)
-
-@interface NSString (LCAES256)
-- (NSString *)LCAES256Encrypt;
-- (NSString *)LCAES256Decrypt;
 @end
 
 @interface NSObject (LeanCloudObjcSDK)
 
-+ (BOOL)_lc_isTypeOf:(id)instance LC_WARN_UNUSED_RESULT;
-
-+ (instancetype)_lc_decoding:(NSDictionary *)dictionary
-                         key:(NSString *)key LC_WARN_UNUSED_RESULT;
++ (BOOL)_lc_isTypeOf:(id)instance;
++ (instancetype _Nullable)_lc_decoding:(NSDictionary *)dictionary key:(NSString *)key;
 
 @end
+
+NS_ASSUME_NONNULL_END

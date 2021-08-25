@@ -6,12 +6,21 @@
 #import "LCObject.h"
 #import "LCCloudQueryResult.h"
 
-NS_ASSUME_NONNULL_BEGIN
-
-/*!
- A class that defines a query that is used to query for LCObjects.
- */
-@interface LCQuery : NSObject
+/// Cache policies
+typedef NS_ENUM(NSInteger, LCCachePolicy) {
+    /// Query from server and do not save result to the local cache.
+    kLCCachePolicyIgnoreCache = 0,
+    /// Only query from the local cache.
+    kLCCachePolicyCacheOnly,
+    /// Only query from server, and save result to the local cache.
+    kLCCachePolicyNetworkOnly,
+    /// Firstly query from the local cache, if fails, query from server.
+    kLCCachePolicyCacheElseNetwork,
+    /// Firstly query from server, if fails, query the local cache.
+    kLCCachePolicyNetworkElseCache,
+    /// Firstly query from the local cache, return result. Then query from server, return result. The callback will be called twice.
+    kLCCachePolicyCacheThenNetwork,
+};
 
 /*!
  * Distance unit for query.
@@ -21,6 +30,13 @@ typedef NS_ENUM(NSInteger, LCQueryDistanceUnit) {
     LCQueryDistanceUnitKilometer,
     LCQueryDistanceUnitRadian
 };
+
+NS_ASSUME_NONNULL_BEGIN
+
+/*!
+ A class that defines a query that is used to query for LCObjects.
+ */
+@interface LCQuery : NSObject
 
 #pragma mark Query options
 

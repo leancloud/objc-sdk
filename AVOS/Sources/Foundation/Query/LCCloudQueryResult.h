@@ -28,6 +28,4 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-typedef void(^LCCloudQueryCallback)(LCCloudQueryResult * _Nullable result, NSError * _Nullable error);
-
 NS_ASSUME_NONNULL_END

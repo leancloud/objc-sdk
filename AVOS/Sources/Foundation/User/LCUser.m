@@ -5,7 +5,7 @@
 #import "LCUser_Internal.h"
 #import "LCObject_Internal.h"
 #import "LCPaasClient.h"
-#import "LCUtils.h"
+#import "LCUtils_Internal.h"
 #import "LCQuery.h"
 #import "LCPersistenceUtils.h"
 #import "LCObjectUtils.h"

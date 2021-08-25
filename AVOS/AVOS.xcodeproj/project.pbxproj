@@ -11,9 +11,7 @@
 		D30B6A1424A09978006ABE09 /* LeanCloudObjc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D30B6A0B24A09978006ABE09 /* LeanCloudObjc.framework */; };
 		D30B6A1B24A09978006ABE09 /* LeanCloudObjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D30B6A0D24A09978006ABE09 /* LeanCloudObjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A2224A09B1F006ABE09 /* UserAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841AAC1A5A7A0000C5C6C4 /* UserAgent.h */; };
-		D30B6A2324A09B1F006ABE09 /* LCConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419F31A5A79FF00C5C6C4 /* LCConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A2424A09B1F006ABE09 /* LCGlobal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419F41A5A79FF00C5C6C4 /* LCGlobal.h */; };
-		D30B6A2524A09B1F006ABE09 /* LCAvailability.h in Headers */ = {isa = PBXBuildFile; fileRef = 8311CD841C3D25B9007DEFF8 /* LCAvailability.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A2824A09B1F006ABE09 /* LCApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B782475345C00678B2B /* LCApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A2924A09B1F006ABE09 /* LCApplication_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3596DAC2480EEED002D2D22 /* LCApplication_Internal.h */; };
 		D30B6A2A24A09B1F006ABE09 /* LCApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = D3700B792475345C00678B2B /* LCApplication.m */; };
@@ -118,7 +116,7 @@
 		D30B6AA024A09E35006ABE09 /* LCHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841AA41A5A7A0000C5C6C4 /* LCHelpers.h */; };
 		D30B6AA124A09E35006ABE09 /* LCLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841AA61A5A7A0000C5C6C4 /* LCLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6AA224A09E35006ABE09 /* LCLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841AA71A5A7A0000C5C6C4 /* LCLogger.m */; };
-		D30B6AA324A09E35006ABE09 /* LCUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841AAA1A5A7A0000C5C6C4 /* LCUtils.h */; };
+		D30B6AA324A09E35006ABE09 /* LCUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841AAA1A5A7A0000C5C6C4 /* LCUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6AA424A09E35006ABE09 /* LCUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841AAB1A5A7A0000C5C6C4 /* LCUtils.m */; };
 		D30B6AA524A09E35006ABE09 /* LCDatabaseCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 830E7CFE1B1CB07B005F4B22 /* LCDatabaseCommon.h */; };
 		D30B6AA624A09E35006ABE09 /* LCDatabaseCoordinator.h in Headers */ = {isa = PBXBuildFile; fileRef = 830E7CF61B1CA2A2005F4B22 /* LCDatabaseCoordinator.h */; };
@@ -355,7 +353,6 @@
 		830EB9FE1C44F3D600BA917F /* LCSaveOption_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCSaveOption_internal.h; sourceTree = "<group>"; };
 		830F159E1F010F260009B4D0 /* LCIMRecalledMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMRecalledMessage.h; sourceTree = "<group>"; };
 		830F159F1F010F260009B4D0 /* LCIMRecalledMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMRecalledMessage.m; sourceTree = "<group>"; };
-		8311CD841C3D25B9007DEFF8 /* LCAvailability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCAvailability.h; sourceTree = "<group>"; };
 		831E29581D882CBB006E502B /* LCIMMessageOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageOption.h; sourceTree = "<group>"; };
 		831E29591D882CBB006E502B /* LCIMMessageOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMMessageOption.m; sourceTree = "<group>"; };
 		83331D431EB9A25F00CADC9C /* LCCaptcha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCaptcha.h; sourceTree = "<group>"; };
@@ -419,7 +416,6 @@
 		8C8419E01A5A79FF00C5C6C4 /* LCRole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCRole.h; sourceTree = "<group>"; };
 		8C8419E11A5A79FF00C5C6C4 /* LCRole.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCRole.m; sourceTree = "<group>"; };
 		8C8419E21A5A79FF00C5C6C4 /* LCRole_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCRole_Internal.h; sourceTree = "<group>"; };
-		8C8419F31A5A79FF00C5C6C4 /* LCConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCConstants.h; sourceTree = "<group>"; };
 		8C8419F41A5A79FF00C5C6C4 /* LCGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGlobal.h; sourceTree = "<group>"; };
 		8C8419FA1A5A79FF00C5C6C4 /* LCCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCacheManager.h; sourceTree = "<group>"; };
 		8C8419FB1A5A79FF00C5C6C4 /* LCCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCacheManager.m; sourceTree = "<group>"; };
@@ -826,9 +822,7 @@
 			isa = PBXGroup;
 			children = (
 				8C841AAC1A5A7A0000C5C6C4 /* UserAgent.h */,
-				8C8419F31A5A79FF00C5C6C4 /* LCConstants.h */,
 				8C8419F41A5A79FF00C5C6C4 /* LCGlobal.h */,
-				8311CD841C3D25B9007DEFF8 /* LCAvailability.h */,
 				D3700B782475345C00678B2B /* LCApplication.h */,
 				D3596DAC2480EEED002D2D22 /* LCApplication_Internal.h */,
 				D3700B792475345C00678B2B /* LCApplication.m */,
@@ -1482,14 +1476,12 @@
 				D30B6A6524A09D52006ABE09 /* LCPush_Internal.h in Headers */,
 				D30B6A6924A09D62006ABE09 /* LCFriendQuery.h in Headers */,
 				D30B6A7424A09D87006ABE09 /* LCRouter_Internal.h in Headers */,
-				D30B6A2524A09B1F006ABE09 /* LCAvailability.h in Headers */,
 				D30B6AAD24A09E35006ABE09 /* NSDictionary+LCHash.h in Headers */,
 				D30B6AE724A09F1E006ABE09 /* LCGPBDescriptor_PackagePrivate.h in Headers */,
 				D30B6B4524A09F84006ABE09 /* LCIMImageMessage.h in Headers */,
 				D30B6AAA24A09E35006ABE09 /* LCKeyValueSQL.h in Headers */,
 				D30B6A8224A09DCA006ABE09 /* LCNetworkReachabilityManager.h in Headers */,
 				D30B6B3624A09F79006ABE09 /* LCIMCacheStore.h in Headers */,
-				D30B6A2324A09B1F006ABE09 /* LCConstants.h in Headers */,
 				D30B6AC624A09ED1006ABE09 /* LCIMConversation.h in Headers */,
 				D30B6A9924A09DF2006ABE09 /* LCUser.h in Headers */,
 				D30B6AD024A09ED2006ABE09 /* LCIMKeyedConversation_internal.h in Headers */,

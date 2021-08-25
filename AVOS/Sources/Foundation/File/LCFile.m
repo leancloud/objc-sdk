@@ -2,11 +2,10 @@
 #import <Foundation/Foundation.h>
 #import <CommonCrypto/CommonCrypto.h>
 
-#import "LCConstants.h"
 #import "LCFile_Internal.h"
 #import "LCFileTaskManager.h"
 #import "LCPaasClient.h"
-#import "LCUtils.h"
+#import "LCUtils_Internal.h"
 #import "LCNetworking.h"
 #import "LCErrorUtils.h"
 #import "LCPersistenceUtils.h"
@@ -1352,7 +1351,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
 - (void)getThumbnail:(BOOL)scaleToFit
                width:(int)width
               height:(int)height
-           withBlock:(LCImageResultBlock)block
+           withBlock:(LCIdResultBlock)block
 {
     NSString *url = [self getThumbnailURLWithScaleToFit:scaleToFit width:width height:height];
     

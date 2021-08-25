@@ -10,7 +10,7 @@
 #import "LCLiveQuery_Internal.h"
 
 #import "LCApplication_Internal.h"
-#import "LCUtils.h"
+#import "LCUtils_Internal.h"
 #import "LCObjectUtils.h"
 #import "LCErrorUtils.h"
 

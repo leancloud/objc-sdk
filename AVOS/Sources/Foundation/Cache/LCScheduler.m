@@ -7,43 +7,69 @@
 //
 
 #import "LCScheduler.h"
-#import "LCFile.h"
-#import "LCFile_Internal.h"
 #import "LCCacheManager.h"
 #import "LCPaasClient.h"
-#import "LCUtils.h"
 
-static NSUInteger const ExpiredDays = 30;
+#if TARGET_OS_IOS || TARGET_OS_TV
+#import <UIKit/UIKit.h>
+#elif TARGET_OS_OSX
+#import <Cocoa/Cocoa.h>
+#endif
 
 @implementation LCScheduler
 
 + (LCScheduler *)sharedInstance {
     static dispatch_once_t once;
-    static LCScheduler *_sharedInstance;
+    static LCScheduler *instance;
     dispatch_once(&once, ^{
-        _sharedInstance = [[LCScheduler alloc] init];
-        [_sharedInstance setup];
+        instance = [[LCScheduler alloc] init];
+        [instance setup];
     });
-    return _sharedInstance;
+    return instance;
 }
 
 - (void)setup {
-    self.queryCacheExpiredDays = ExpiredDays;
-    self.fileCacheExpiredDays = ExpiredDays;
+    self.queryCacheExpiredDays = 30;
+    self.fileCacheExpiredDays = 30;
     
-#if !TARGET_OS_WATCH
-#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMemoryWarning:) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willTerminate:) name:UIApplicationWillTerminateNotification object:nil];
-#elif defined(__MAX_OS_X_VERSION_MIN_REQUIRED)
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackground:) name:NSApplicationDidFinishLaunchingNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willEnterForeground:) name:NSApplicationDidBecomeActiveNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishLaunching:) name:NSApplicationDidFinishLaunchingNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willTerminate:) name:NSApplicationWillTerminateNotification object:nil];
-#endif
+#if TARGET_OS_IOS || TARGET_OS_TV
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didEnterBackground:)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(willEnterForeground:)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didFinishLaunching:)
+                                                 name:UIApplicationDidFinishLaunchingNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveMemoryWarning:)
+                                                 name:UIApplicationDidReceiveMemoryWarningNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(willTerminate:)
+                                                 name:UIApplicationWillTerminateNotification
+                                               object:nil];
+#elif TARGET_OS_OSX
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didEnterBackground:)
+                                                 name:NSApplicationDidFinishLaunchingNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(willEnterForeground:)
+                                                 name:NSApplicationDidBecomeActiveNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didFinishLaunching:)
+                                                 name:NSApplicationDidFinishLaunchingNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(willTerminate:)
+                                                 name:NSApplicationWillTerminateNotification
+                                               object:nil];
 #endif
 }
 
@@ -51,12 +77,7 @@ static NSUInteger const ExpiredDays = 30;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-#pragma mark - Schedule
-
-#pragma mark Notification
-
 #if !TARGET_OS_WATCH
-
 - (void)didEnterBackground:(NSNotification *)notification {
     [self clearCache];
 }
@@ -76,7 +97,6 @@ static NSUInteger const ExpiredDays = 30;
 - (void)willTerminate:(NSNotification *)notification {
     // Stub method
 }
-
 #endif
 
 - (void)handleArchivedRequests {

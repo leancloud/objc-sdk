@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LCConstants.h"
+#import "LCUtils.h"
 
 @interface LCCacheManager : NSObject
 

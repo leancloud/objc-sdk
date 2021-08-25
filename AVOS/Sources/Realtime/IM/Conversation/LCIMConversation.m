@@ -30,6 +30,12 @@
 
 #import "AVIMGenericCommand+AVIMMessagesAdditions.h"
 
+#if TARGET_OS_IOS || TARGET_OS_TV || TARGET_OS_WATCH
+#import <UIKit/UIKit.h>
+#elif TARGET_OS_OSX
+#import <Cocoa/Cocoa.h>
+#endif
+
 @implementation LCIMMessageIntervalBound
 
 - (instancetype)initWithMessageId:(NSString *)messageId

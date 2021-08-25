@@ -7,9 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LCConstants.h"
+#import "LCUtils.h"
 #import "LCACL.h"
 #import "UserAgent.h"
+#import "LCQuery.h"
 
 @class LCApplication;
 @class LCURLSessionManager;

@@ -34,7 +34,6 @@ Pod::Spec.new do |s|
       'AVOS/Sources/Foundation/ACL/LCACL.h',
       'AVOS/Sources/Foundation/ACL/LCRole.h',
       'AVOS/Sources/Foundation/Object/LCSaveOption.h',
-      'AVOS/Sources/Foundation/LCConstants.h',
       'AVOS/Sources/Foundation/LCApplication.h',
       'AVOS/Sources/Foundation/CloudCode/LCCloud.h',
       'AVOS/Sources/Foundation/File/LCFile.h',
@@ -55,7 +54,7 @@ Pod::Spec.new do |s|
       'AVOS/Sources/Foundation/User/LCFriendship.h',
       'AVOS/Sources/Foundation/Utils/LCLogger.h',
       'AVOS/Sources/Foundation/Utils/LCErrorUtils.h',
-      'AVOS/Sources/Foundation/LCAvailability.h'
+      'AVOS/Sources/Foundation/Utils/LCUtils.h'
 
     ss.library =
       'sqlite3'

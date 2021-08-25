@@ -148,7 +148,7 @@
 +(NSData *)dataFromDictionary:(NSDictionary *)dict
 {
     NSString * string = [dict valueForKey:@"base64"];
-    NSData * data = [NSData LCdataFromBase64String:string];
+    NSData * data = [NSData _lc_dataFromBase64String:string];
     return data;
 }
 
@@ -613,7 +613,7 @@
 
 +(NSDictionary *)dictionaryFromData:(NSData *)data
 {
-    NSString *base64 = [data LCbase64EncodedString];
+    NSString *base64 = [data _lc_base64EncodedString];
     return @{@"__type": @"Bytes", @"base64":base64};
 }
 

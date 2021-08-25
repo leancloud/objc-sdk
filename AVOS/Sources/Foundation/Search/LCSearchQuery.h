@@ -7,7 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LCConstants.h"
+#import "LCQuery.h"
+#import "LCUtils.h"
+
 @class LCSearchSortBuilder;
 
 NS_ASSUME_NONNULL_BEGIN

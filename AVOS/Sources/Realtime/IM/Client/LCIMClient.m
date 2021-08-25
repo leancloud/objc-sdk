@@ -18,7 +18,7 @@
 
 #import "UserAgent.h"
 #import "LCObjectUtils.h"
-#import "LCUtils.h"
+#import "LCUtils_Internal.h"
 #import "LCPaasClient.h"
 #import "LCErrorUtils.h"
 

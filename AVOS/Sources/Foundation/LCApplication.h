@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LCConstants.h"
+#import "LCUtils.h"
 
 typedef NS_OPTIONS(NSUInteger, LCLogLevel) {
     LCLogLevelNone      = 0,

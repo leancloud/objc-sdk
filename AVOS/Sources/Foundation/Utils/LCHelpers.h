@@ -10,21 +10,13 @@
 
 @interface NSData (LCBase64)
 
-+ (NSData *)LCdataFromBase64String:(NSString *)aString;
-
-- (NSString *)LCbase64EncodedString;
++ (NSData *)_lc_dataFromBase64String:(NSString *)string;
+- (NSString *)_lc_base64EncodedString;
 
 @end
 
 @interface NSString (LCMD5)
 
-- (NSString *)LCMD5String;
-
-@end
-
-
-@interface NSURLRequest (LCCurl)
-
-- (NSString *)cURLCommand;
+- (NSString *)_lc_MD5String;
 
 @end
