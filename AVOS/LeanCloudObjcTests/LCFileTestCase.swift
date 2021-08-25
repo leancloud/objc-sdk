@@ -36,4 +36,27 @@ class LCFileTestCase: BaseTestCase {
         XCTAssertTrue(object0.fetch())
         XCTAssertTrue(object0[fileFieldKey] is LCFile)
     }
+    
+    /*
+    func testPathPrefix() {
+        let prefixKey = "prefix"
+        let prefixValue = "gamesaves"
+        let file = LCFile(data: uuid.data(using: .utf8)!)
+        file.setPathPrefix(prefixValue)
+        XCTAssertEqual(file.metaData?[prefixKey] as? String, prefixValue)
+        file.clearPathPrefix()
+        XCTAssertNil(file.metaData?[prefixKey])
+        file.setPathPrefix(prefixValue)
+        expecting { exp in
+            file.saveInBackground { succeeded, error in
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+        XCTAssertEqual(file.metaData?[prefixKey] as? String, prefixValue)
+        XCTAssertNil(file.object(forKey: prefixKey))
+        XCTAssertTrue((file.url ?? "").contains("/\(prefixValue)/"))
+    }
+     */
 }
