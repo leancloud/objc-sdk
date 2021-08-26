@@ -134,16 +134,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
             mimeType ?: @"application/octet-stream";
         });
         
-        _rawJSONData[kLCFile_metaData] = ({
-            
-            NSMutableDictionary *metaData = [NSMutableDictionary dictionary];
-            metaData[kLCFile_size] = @(data.length);
-            NSString *objectId = LCPaasClient.sharedInstance.currentUser.objectId;
-            if (objectId && objectId.length > 0) {
-                metaData[kLCFile_owner] = objectId;
-            }
-            metaData.copy;
-        });
+        _rawJSONData[kLCFile_metaData] = @{ kLCFile_size : @(data.length) };
         
         _ACL = ({
             
@@ -196,16 +187,8 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
             mimeType ?: @"application/octet-stream";
         });
         
-        _rawJSONData[kLCFile_metaData] = ({
-            
-            NSMutableDictionary *metaData = [NSMutableDictionary dictionary];
-            metaData[kLCFile_size] = fileAttributes[NSFileSize];
-            NSString *objectId = [LCPaasClient sharedInstance].currentUser.objectId;
-            if (objectId && objectId.length > 0) {
-                metaData[kLCFile_owner] = objectId;
-            }
-            metaData.copy;
-        });
+        NSNumber *fileSize = fileAttributes[NSFileSize];
+        _rawJSONData[kLCFile_metaData] = fileSize ? @{ kLCFile_size : fileSize } : @{};
         
         _ACL = ({
             
@@ -247,7 +230,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
             mimeType ?: @"application/octet-stream";
         });
         
-        _rawJSONData[kLCFile_metaData] = @{ kLCFile___source : @"external" };
+        _rawJSONData[kLCFile_metaData] = @{ @"__source" : @"external" };
         
         _ACL = ({
             
@@ -425,7 +408,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
 - (NSDictionary *)metaData {
     __block NSDictionary *metaData;
     [self internalSyncLock:^{
-        metaData = [LCFile decodingMetaDataFromDic:self->_rawJSONData];
+        metaData = [NSDictionary _lc_decoding:self->_rawJSONData key:kLCFile_metaData];
     }];
     return metaData;
 }
@@ -667,6 +650,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
               completionHandler:(void (^)(BOOL succeeded, NSError *error))completionHandler
 {
     NSMutableDictionary *parameters = [self rawJSONDataMutableCopy];
+    [parameters removeObjectsForKeys:@[@"__type", @"className"]];
     [self getFileTokensWithParameters:parameters callback:^(LCFileTokens *fileTokens, NSError *error) {
         
         if (error) {
@@ -1281,19 +1265,6 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
     if (value) { return value; }
     
     value = [NSString _lc_decoding:dic key:kLCFile_id];
-    
-    return value;
-}
-
-+ (NSDictionary *)decodingMetaDataFromDic:(NSDictionary *)dic
-{
-    /* @note For compatibility, should decoding multiple keys ... ... */
-    
-    NSDictionary *value = [NSDictionary _lc_decoding:dic key:kLCFile_metaData];
-    
-    if (value) { return value; }
-    
-    value = [NSDictionary _lc_decoding:dic key:kLCFile_metadata];
     
     return value;
 }

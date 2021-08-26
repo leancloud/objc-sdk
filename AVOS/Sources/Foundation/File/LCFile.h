@@ -5,8 +5,9 @@
 
 #import <Foundation/Foundation.h>
 #import "LCUtils.h"
-#import "LCACL.h"
 
+@class LCObject;
+@class LCACL;
 @class LCFileQuery;
 
 NS_ASSUME_NONNULL_BEGIN
