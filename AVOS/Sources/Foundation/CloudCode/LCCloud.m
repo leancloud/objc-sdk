@@ -9,7 +9,7 @@
 #import "LCCloud.h"
 #import "LCPaasClient.h"
 #import "LCErrorUtils.h"
-#import "LCUtils.h"
+#import "LCUtils_Internal.h"
 #import "LCObject_Internal.h"
 #import "LCFile_Internal.h"
 #import "LCGeoPoint_Internal.h"

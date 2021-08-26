@@ -7,54 +7,26 @@
 //
 
 #import <objc/runtime.h>
-#import "LCUtils.h"
-#import "LCObject.h"
+#import <CommonCrypto/CommonDigest.h>
+#if TARGET_OS_IOS || TARGET_OS_WATCH || TARGET_OS_TV
+#import <MobileCoreServices/MobileCoreServices.h>
+#else
+#import <CoreServices/CoreServices.h>
+#endif
+
+#import "LCUtils_Internal.h"
+#import "LCHelpers.h"
+#import "LCLogger.h"
 #import "LCObject_Internal.h"
 #import "LCGeoPoint_Internal.h"
-#import "LCUser.h"
 #import "LCUser_Internal.h"
-#import "LCObject.h"
 #import "LCRole_Internal.h"
-#import "LCFile.h"
 #import "LCFile_Internal.h"
-
 #import "LCObjectUtils.h"
 #import "LCPaasClient.h"
 #import "LCCloudQueryResult.h"
 #import "LCKeychain.h"
 #import "LCURLConnection.h"
-
-#import <CommonCrypto/CommonDigest.h>
-#import <AssertMacros.h>
-
-#include<string.h>
-#include<sys/socket.h>
-#include<netdb.h>
-#include<arpa/inet.h>
-
-static dispatch_queue_t LCUtilsDefaultSerialQueue = NULL;
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-function"
-
-static void b62_divide(const unsigned char* dividend, int dividend_len,
-                       unsigned char* quotient, unsigned int* remainder)
-{
-    unsigned int quantity;
-    int i;
-    
-    quantity = 0;
-    for (i=dividend_len-2;i>=0;i-=2) {
-        quantity |= *((unsigned short*)&dividend[i]);
-        *((unsigned short *)&quotient[i]) = (unsigned short)(quantity/62);
-        quantity = (quantity%62)<<16;
-    }
-    *remainder = quantity>>16;
-}
-
-#pragma clang diagnostic pop
-
-#define msg_id_length (((134359*(sizeof(time_t)+sizeof(int)*2))/100000)+2)
 
 static char base62_tab[62] = {
     'A','B','C','D','E','F','G','H',
@@ -132,75 +104,10 @@ static int b62_encode(char* out, const void *data, int length)
 
 @implementation LCUtils
 
-+ (void)initialize {
-    static dispatch_once_t onceToken;
-
-    dispatch_once(&onceToken, ^{
-        LCUtilsDefaultSerialQueue = dispatch_queue_create("cn.leancloud.utils", DISPATCH_QUEUE_SERIAL);
-    });
-}
-
-+(void)warnMainThreadIfNecessary {
-    if (getenv("GHUNIT_CLI")) return;
-    
++ (void)warnMainThreadIfNecessary {
     if ([NSThread isMainThread]) {
         LCLoggerI(@"Warning: A long-running Paas operation is being executed on the main thread.");
     }
-}
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-function"
-
-static const char *getPropertyType(objc_property_t property)
-{
-    const char *attributes = property_getAttributes(property);
-    char buffer[1 + strlen(attributes)];
-    strcpy(buffer, attributes);
-    char *state = buffer, *attribute;
-    while ((attribute = strsep(&state, ",")) != NULL) {
-        if (attribute[0] == 'T') {
-            return (const char *)[[NSData dataWithBytes:(attribute + 3) length:strlen(attribute) - 4] bytes];
-        }
-    }
-    return "@";
-}
-
-#pragma clang diagnostic pop
-
-+(void)copyPropertiesFrom:(NSObject *)src
-                 toObject:(NSObject *)target
-{
-    unsigned int outCount, i;
-    objc_property_t *properties = class_copyPropertyList([src class], &outCount);
-    for(i = 0; i < outCount; i++) {
-    	objc_property_t property = properties[i];
-    	const char *propName = property_getName(property);
-    	if (propName) {
-    		NSString *propertyName = [NSString stringWithCString:propName encoding:NSUTF8StringEncoding];
-            NSObject * valueObject = [src valueForKey:propertyName];
-            [target setValue:valueObject forKey:propertyName];
-    	}
-    }
-    free(properties);
-}
-
-+(void)copyPropertiesFromDictionary:(NSDictionary *)src
-                         toNSObject:(NSObject *)target
-{
-    NSArray * keys = [src allKeys];
-    for(NSString * key in keys)
-    {
-        NSObject * valueObject = [src valueForKey:key];
-        if ([LCUtils containsProperty:[target class] property:key])
-        {
-            [target setValue:valueObject forKey:key];
-        }
-    }
-}
-
-+(BOOL)containsProperty:(Class)objectClass property:(NSString *)name
-{
-    return [LCUtils containsProperty:name inClass:objectClass containSuper:YES filterDynamic:NO];
 }
 
 + (BOOL)containsProperty:(NSString *)name inClass:(Class)objectClass containSuper:(BOOL)containSuper filterDynamic:(BOOL)filterDynamic {
@@ -275,24 +182,37 @@ static const char *getPropertyType(objc_property_t property)
     return NO;
 }
 
-+(NSString *)jsonStringFromDictionary:(NSDictionary *)dictionary
-{
-    if (!dictionary) return @"{}";
-    NSData* data = [NSJSONSerialization dataWithJSONObject:dictionary
-                                                   options:0 error:nil];
-    return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
++ (NSString *)jsonStringFromDictionary:(NSDictionary *)dictionary {
+    if (![NSDictionary _lc_isTypeOf:dictionary]) {
+        return nil;
+    }
+    return [self jsonStringFromJSONObject:dictionary];
 }
 
-+(NSString *)jsonStringFromArray:(NSArray *)array
-{
-    if (!array) return @"[]";
-    NSData* data = [NSJSONSerialization dataWithJSONObject:array
-                                                   options:0 error:nil];
-    return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
++ (NSString *)jsonStringFromArray:(NSArray *)array {
+    if (![NSArray _lc_isTypeOf:array]) {
+        return nil;
+    }
+    return [self jsonStringFromJSONObject:array];
 }
 
-+ (NSString *)generateUUID
-{
++ (NSString *)jsonStringFromJSONObject:(id)JSONObject {
+    if (JSONObject == nil) {
+        return nil;
+    }
+    NSError *error;
+    NSData *data = [NSJSONSerialization dataWithJSONObject:JSONObject options:0 error:&error];
+    if (error) {
+        LCLoggerE(@"%@", error);
+    }
+    if (data) {
+        return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    } else {
+        return nil;
+    }
+}
+
++ (NSString *)generateUUID {
     CFUUIDRef theUUID = CFUUIDCreate(NULL);
     NSString * string = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, theUUID);
     string = [string lowercaseString];
@@ -300,8 +220,7 @@ static const char *getPropertyType(objc_property_t property)
     return string;
 }
 
-+ (NSString *)generateCompactUUID
-{
++ (NSString *)generateCompactUUID {
     CFUUIDRef uuid = CFUUIDCreate(NULL);
     CFUUIDBytes bytes = CFUUIDGetUUIDBytes(uuid);
     CFRelease(uuid);
@@ -315,7 +234,6 @@ static const char *getPropertyType(objc_property_t property)
 + (NSString *)deviceUUIDKey {
     static NSString *const suffix = @"@leancloud";
     NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
-
     if (bundleIdentifier) {
         return [bundleIdentifier stringByAppendingString:suffix];
     } else {
@@ -323,20 +241,25 @@ static const char *getPropertyType(objc_property_t property)
     }
 }
 
++ (dispatch_queue_t)defaultSerialQueue {
+    static dispatch_queue_t queue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        queue = dispatch_queue_create("cn.leancloud.utils", DISPATCH_QUEUE_SERIAL);
+    });
+    return queue;
+}
+
 + (NSString *)deviceUUID {
-    static NSString *UUID = nil;
-
+    static NSString *UUID;
     if (!UUID) {
-        dispatch_sync(LCUtilsDefaultSerialQueue, ^{
+        dispatch_sync([self defaultSerialQueue], ^{
             NSString *key = [self deviceUUIDKey];
-
             NSString *savedUUID = [LCKeychain loadValueForKey:key];
-
             if (savedUUID) {
                 UUID = savedUUID;
             } else {
                 NSString *tempUUID = [self generateUUID];
-
                 if (tempUUID) {
                     [LCKeychain saveValue:tempUUID forKey:key];
                     UUID = tempUUID;
@@ -344,150 +267,42 @@ static const char *getPropertyType(objc_property_t property)
             }
         });
     }
-
     return UUID;
-}
-
-#pragma mark - Safe way to call block
-
-#define safeBlock(first_param) \
-if (block) { \
-    if ([NSThread isMainThread]) { \
-        block(first_param, error); \
-    } else {\
-        dispatch_async(dispatch_get_main_queue(), ^{ \
-            block(first_param, error); \
-        }); \
-    } \
-}
-
-+ (void)callBooleanResultBlock:(LCBooleanResultBlock)block
-                         error:(NSError *)error
-{
-    safeBlock(error == nil);
-}
-
-+ (void)callIntegerResultBlock:(LCIntegerResultBlock)block
-                        number:(NSInteger)number
-                         error:(NSError *)error {
-    safeBlock(number);
-}
-
-+ (void)callArrayResultBlock:(LCArrayResultBlock)block
-                       array:(NSArray *)array
-                       error:(NSError *)error {
-    safeBlock(array);
-}
-
-+ (void)callObjectResultBlock:(LCObjectResultBlock)block
-                       object:(LCObject *)object
-                        error:(NSError *)error {
-    safeBlock(object);
-}
-
-+ (void)callUserResultBlock:(LCUserResultBlock)block
-                       user:(LCUser *)user
-                      error:(NSError *)error {
-    safeBlock(user);
-}
-
-+ (void)callIdResultBlock:(LCIdResultBlock)block
-                   object:(id)object
-                    error:(NSError *)error {
-    safeBlock(object);
-}
-
-+ (void)callImageResultBlock:(LCImageResultBlock)block
-                       image:(UIImage *)image
-                       error:(NSError *)error
-{
-    safeBlock(image);
-}
-
-+ (void)callFileResultBlock:(LCFileResultBlock)block
-                     file:(LCFile *)file
-                      error:(NSError *)error
-{
-    safeBlock(file);
-}
-
-+ (void)callProgressBlock:(LCProgressBlock)block
-                  percent:(NSInteger)percentDone {
-    if (block) {
-        if ([NSThread isMainThread]) {
-            block(percentDone);
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{ 
-                block(percentDone); 
-            });
-        }
-    }
-}
-
-+(void)callSetResultBlock:(LCSetResultBlock)block
-                      set:(NSSet *)set
-                    error:(NSError *)error
-{
-    if (block) {
-        if ([NSThread isMainThread]) {
-            block(set, error);
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                block(set, error);
-            });
-        }
-    }
-}
-
-+(void)callCloudQueryResultBlock:(LCCloudQueryCallback)block
-                          result:(LCCloudQueryResult *)result
-                           error:error {
-    safeBlock(result);
 }
 
 + (dispatch_queue_t)asynchronousTaskQueue {
     static dispatch_queue_t queue;
     static dispatch_once_t onceToken;
-
-    if (queue)
-        return queue;
-
     dispatch_once(&onceToken, ^{
         queue = dispatch_queue_create("avos.common.dispatchQueue", DISPATCH_QUEUE_CONCURRENT);
     });
-
     return queue;
 }
 
 + (void)asynchronizeTask:(void (^)(void))task {
     NSAssert(task != nil, @"Task cannot be nil.");
-
     dispatch_async([self asynchronousTaskQueue], ^{
         task();
     });
 }
 
-#pragma mark - String Util
 + (NSString *)MIMEType:(NSString *)filePathOrName {
     CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)[filePathOrName pathExtension], NULL);
     CFStringRef MIMEType = UTTypeCopyPreferredTagWithClass (UTI, kUTTagClassMIMEType);
-    
     CFRelease(UTI);
     return MIMEType ? (__bridge_transfer NSString *)MIMEType : @"application/octet-stream";
 }
 
-+ (NSString *)MIMETypeFromPath:(NSString *)fullPath
-{
-    NSURL* fileUrl = [NSURL fileURLWithPath:fullPath];
-    NSURLRequest* fileUrlRequest = [[NSURLRequest alloc] initWithURL:fileUrl cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:.1];
-    NSError* error = nil;
-    NSURLResponse* response = nil;
++ (NSString *)MIMETypeFromPath:(NSString *)fullPath {
+    NSURL *fileUrl = [NSURL fileURLWithPath:fullPath];
+    NSURLRequest *fileUrlRequest = [[NSURLRequest alloc] initWithURL:fileUrl cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:.1];
+    NSError *error;
+    NSURLResponse *response;
     [LCURLConnection sendSynchronousRequest:fileUrlRequest returningResponse:&response error:&error];
-    NSString* mimeType = [response MIMEType];
-    return mimeType;
+    return [response MIMEType];
 }
 
-+(NSString *)contentTypeForImageData:(NSData *)data {
++ (NSString *)contentTypeForImageData:(NSData *)data {
     uint8_t c;
     [data getBytes:&c length:1];
     switch (c) {
@@ -504,9 +319,82 @@ if (block) { \
     return nil;
 }
 
+// MARK: Call block
+
+#define safeBlock(first_param) \
+if (block) { \
+    if ([NSThread isMainThread]) { \
+        block(first_param, error); \
+    } else {\
+        dispatch_async(dispatch_get_main_queue(), ^{ \
+            block(first_param, error); \
+        }); \
+    } \
+}
+
++ (void)callBooleanResultBlock:(LCBooleanResultBlock)block error:(NSError *)error {
+    safeBlock(error == nil);
+}
+
++ (void)callIntegerResultBlock:(LCIntegerResultBlock)block number:(NSInteger)number error:(NSError *)error {
+    safeBlock(number);
+}
+
++ (void)callStringResultBlock:(LCStringResultBlock)block string:(NSString *)string error:(NSError *)error {
+    safeBlock(string);
+}
+
++ (void)callDataResultBlock:(LCDataResultBlock)block data:(NSData *)data error:(NSError *)error {
+    safeBlock(data);
+}
+
++ (void)callArrayResultBlock:(LCArrayResultBlock)block array:(NSArray *)array error:(NSError *)error {
+    safeBlock(array);
+}
+
++ (void)callSetResultBlock:(LCSetResultBlock)block set:(NSSet *)set error:(NSError *)error {
+    safeBlock(set);
+}
+
++ (void)callDictionaryResultBlock:(LCDictionaryResultBlock)block dictionary:(NSDictionary *)dictionary error:(NSError *)error {
+    safeBlock(dictionary);
+}
+
++ (void)callIdResultBlock:(LCIdResultBlock)block object:(id)object error:(NSError *)error {
+    safeBlock(object);
+}
+
++ (void)callProgressBlock:(LCProgressBlock)block percent:(NSInteger)percent {
+    if (block) {
+        if ([NSThread isMainThread]) {
+            block(percent);
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                block(percent);
+            });
+        }
+    }
+}
+
++ (void)callObjectResultBlock:(LCObjectResultBlock)block object:(LCObject *)object error:(NSError *)error {
+    safeBlock(object);
+}
+
++ (void)callUserResultBlock:(LCUserResultBlock)block user:(LCUser *)user error:(NSError *)error {
+    safeBlock(user);
+}
+
++ (void)callFileResultBlock:(LCFileResultBlock)block file:(LCFile *)file error:(NSError *)error {
+    safeBlock(file);
+}
+
++ (void)callCloudQueryCallback:(LCCloudQueryCallback)block result:(LCCloudQueryResult *)result error:(NSError *)error {
+    safeBlock(result);
+}
+
 @end
 
-
+// MARK: Base64
 
 //
 // Mapping from 6 bit pattern to ASCII character.
@@ -747,59 +635,36 @@ char *avNewBase64Encode(
 	return outputBuffer;
 }
 
-@implementation NSData (Base64)
+@implementation NSData (LCBase64)
 
-//
-// dataFromBase64String:
-//
-// Creates an NSData object containing the base64 decoded representation of
-// the base64 string 'aString'
-//
-// Parameters:
-//    aString - the base64 string to decode
-//
-// returns the autoreleased NSData representation of the base64 string
-//
-+ (NSData *)LCdataFromBase64String:(NSString *)aString
-{
-	NSData *data = [aString dataUsingEncoding:NSASCIIStringEncoding];
-	size_t outputLength;
-	void *outputBuffer = avNewBase64Decode([data bytes], [data length], &outputLength);
-	NSData *result = [NSData dataWithBytes:outputBuffer length:outputLength];
-	free(outputBuffer);
-	return result;
++ (NSData *)_lc_dataFromBase64String:(NSString *)string {
+    NSData *data = [string dataUsingEncoding:NSASCIIStringEncoding];
+    size_t outputLength;
+    void *outputBuffer = avNewBase64Decode([data bytes], [data length], &outputLength);
+    NSData *result = [NSData dataWithBytes:outputBuffer length:outputLength];
+    free(outputBuffer);
+    return result;
 }
 
-//
-// base64EncodedString
-//
-// Creates an NSString object that contains the base 64 encoding of the
-// receiver's data. Lines are broken at 64 characters long.
-//
-// returns an autoreleased NSString being the base 64 representation of the
-//	receiver.
-//
-- (NSString *)LCbase64EncodedString
-{
-	size_t outputLength=0;
-	char *outputBuffer =
+- (NSString *)_lc_base64EncodedString {
+    size_t outputLength=0;
+    char *outputBuffer =
     avNewBase64Encode([self bytes], [self length], true, &outputLength);
-	
-	NSString *result =
+    
+    NSString *result =
     [[NSString alloc]
      initWithBytes:outputBuffer
      length:outputLength
      encoding:NSASCIIStringEncoding];
-	free(outputBuffer);
-	return result;
+    free(outputBuffer);
+    return result;
 }
 
 @end
 
+@implementation NSString (LCMD5)
 
-@implementation NSString (MD5)
-
-- (NSString *)LCMD5String {
+- (NSString *)_lc_MD5String {
     const char *cstr = [self UTF8String];
     unsigned char result[16];
     CC_MD5(cstr, (CC_LONG)strlen(cstr), result);
@@ -813,112 +678,13 @@ char *avNewBase64Encode(
 
 @end
 
-
-#import <CommonCrypto/CommonCryptor.h>
-#import <CommonCrypto/CommonKeyDerivation.h>
-
-#define PASSWORD @"QxciDjdHjuAIf8VCsqhmGK3OZV7pBQTZ"
-
-const NSUInteger kLCAlgorithmKeySize = kCCKeySizeAES256;
-const NSUInteger kLCPBKDFRounds = 10000;  // ~80ms on an iPhone 4
-
-static Byte saltBuff[] = {0,1,2,3,4,5,6,7,8,9,0xA,0xB,0xC,0xD,0xE,0xF};
-
-static Byte ivBuff[]   = {0xA,1,0xB,5,4,0xF,7,9,0x17,3,1,6,8,0xC,0xD,91};
-
-@implementation NSString (LCAES256)
-
-+ (NSData *)LCAESKeyForPassword:(NSString *)password{                  //Derive a key from a text password/passphrase
-    
-    NSMutableData *derivedKey = [NSMutableData dataWithLength:kLCAlgorithmKeySize];
-    
-    NSData *salt = [NSData dataWithBytes:saltBuff length:kCCKeySizeAES128];
-    
-    __unused int result = CCKeyDerivationPBKDF(kCCPBKDF2,        // algorithm算法
-                                               password.UTF8String,  // password密码
-                                               password.length,      // passwordLength密码的长度
-                                               salt.bytes,           // salt内容
-                                               salt.length,          // saltLen长度
-                                               kCCPRFHmacAlgSHA1,    // PRF
-                                               kLCPBKDFRounds,         // rounds循环次数
-                                               derivedKey.mutableBytes, // derivedKey
-                                               derivedKey.length);   // derivedKeyLen derive:出自
-    
-    NSAssert(result == kCCSuccess,
-             @"Unable to create AES key for spassword: %d", result);
-    return derivedKey;
-}
-
-/*加密方法*/
-- (NSString *)LCAES256Encrypt {
-    NSData *plainText = [self dataUsingEncoding:NSUTF8StringEncoding];
-	// 'key' should be 32 bytes for AES256, will be null-padded otherwise
-	char keyPtr[kCCKeySizeAES256+1]; // room for terminator (unused)
-	bzero(keyPtr, sizeof(keyPtr)); // fill with zeroes (for padding)
-    
-	NSUInteger dataLength = [plainText length];
-    
-	size_t bufferSize = dataLength + kCCBlockSizeAES128;
-	void *buffer = malloc(bufferSize);
-    bzero(buffer, sizeof(buffer));
-	
-	size_t numBytesEncrypted = 0;
-    
-	CCCryptorStatus cryptStatus = CCCrypt(kCCEncrypt, kCCAlgorithmAES128,kCCOptionPKCS7Padding,
-                                          [[[self class] LCAESKeyForPassword:PASSWORD] bytes], kCCKeySizeAES256,
-										  ivBuff /* initialization vector (optional) */,
-										  [plainText bytes], dataLength, /* input */
-										  buffer, bufferSize, /* output */
-										  &numBytesEncrypted);
-	if (cryptStatus == kCCSuccess) {
-        NSData *encryptData = [NSData dataWithBytesNoCopy:buffer length:numBytesEncrypted];
-		return [encryptData LCbase64EncodedString];
-	}
-	
-	free(buffer); //free the buffer;
-	return nil;
-}
-
-- (NSString *)LCAES256Decrypt{
-    NSData *cipherData = [NSData LCdataFromBase64String:self];
-	// 'key' should be 32 bytes for AES256, will be null-padded otherwise
-	char keyPtr[kCCKeySizeAES256+1]; // room for terminator (unused)
-	bzero(keyPtr, sizeof(keyPtr)); // fill with zeroes (for padding)
-    
-	NSUInteger dataLength = [cipherData length];
-	
-	size_t bufferSize = dataLength + kCCBlockSizeAES128;
-	void *buffer = malloc(bufferSize);
-    
-	size_t numBytesDecrypted = 0;
-	CCCryptorStatus cryptStatus = CCCrypt(kCCDecrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
-										  [[[self class] LCAESKeyForPassword:PASSWORD] bytes], kCCKeySizeAES256,
-										  ivBuff ,/* initialization vector (optional) */
-										  [cipherData bytes], dataLength, /* input */
-										  buffer, bufferSize, /* output */
-										  &numBytesDecrypted);
-	
-	if (cryptStatus == kCCSuccess) {
-        NSData *encryptData = [NSData dataWithBytesNoCopy:buffer length:numBytesDecrypted];
-		return [[NSString alloc] initWithData:encryptData encoding:NSUTF8StringEncoding];
-	}
-	
-	free(buffer); //free the buffer;
-	return nil;
-}
-
-@end
-
 @implementation NSObject (LeanCloudObjcSDK)
 
-+ (BOOL)_lc_isTypeOf:(id)instance
-{
++ (BOOL)_lc_isTypeOf:(id)instance {
     return [instance isKindOfClass:self];
 }
 
-+ (instancetype)_lc_decoding:(NSDictionary *)dictionary
-                         key:(NSString *)key
-{
++ (instancetype)_lc_decoding:(NSDictionary *)dictionary key:(NSString *)key {
     if (!key) {
         return nil;
     }

@@ -9,6 +9,8 @@
 #import "LCPersistenceUtils.h"
 #import <TargetConditionals.h>
 #import "LCUtils.h"
+#import "LCLogger.h"
+#import "LCApplication_Internal.h"
 
 #define LCRootDirName @"LeanCloud"
 #define LCMessageCacheDirName @"MessageCache"

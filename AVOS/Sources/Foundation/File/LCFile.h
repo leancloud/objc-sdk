@@ -4,9 +4,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LCConstants.h"
-#import "LCACL.h"
+#import "LCUtils.h"
 
+@class LCObject;
+@class LCACL;
 @class LCFileQuery;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -36,7 +37,7 @@ typedef NS_OPTIONS(NSUInteger, LCFileDownloadOption) {
  */
 @interface LCFile : NSObject <NSCoding>
 
-// MARK: - Create
+// MARK: Create
 
 /**
  Create file from NSData.
@@ -87,63 +88,22 @@ typedef NS_OPTIONS(NSUInteger, LCFileDownloadOption) {
 + (instancetype)fileWithObjectId:(NSString *)objectId
                              url:(NSString *)url;
 
-// MARK: - Property
-
-/*!
- The name of the file.
- */
-- (NSString * _Nullable)name;
-
-/*!
- The id of the file.
- */
-- (NSString * _Nullable)objectId;
-
-/*!
- The url of the file.
- */
-- (NSString * _Nullable)url;
-
-/*!
- File metadata, caller is able to store additional values here.
- */
-@property (nonatomic, strong, nullable) NSDictionary *metaData;
-
-/**
- Owner ID of file, Customizable.
- */
-@property (nonatomic, strong, nullable) NSString *ownerId;
-
-/**
- Checksum of file, Customizable.
- */
-@property (nonatomic, strong, nullable) NSString *checksum;
-
-/**
- Size of file.
- */
-- (NSUInteger)size;
-
-/**
- Path Extension of file.
- */
-- (NSString * _Nullable)pathExtension;
-
-/**
- MIME Type of file.
- */
-- (NSString * _Nullable)mimeType;
-
-/*!
- *  The access control list for this file.
- */
-@property (nonatomic, strong, nullable) LCACL *ACL;
-
+/// The id of the file.
+@property (nonatomic, readonly, nullable) NSString *objectId;
+/// The url of the file.
+@property (nonatomic, readonly, nullable) NSString *url;
+/// The name of the file.
+@property (nonatomic, nullable) NSString *name;
+/// File metadata, caller is able to store additional values here.
+@property (nonatomic, nullable) NSDictionary *metaData;
+/// MIME Type of file.
+@property (nonatomic, nullable) NSString *mimeType;
+/// The access control list for this file.
+@property (nonatomic, nullable) LCACL *ACL;
 /// Created date.
-@property (nonatomic, strong, readonly, nullable) NSDate *createdAt;
-
+@property (nonatomic, readonly, nullable) NSDate *createdAt;
 /// Updated date.
-@property (nonatomic, strong, readonly, nullable) NSDate *updatedAt;
+@property (nonatomic, readonly, nullable) NSDate *updatedAt;
 
 /*!
  Request headers for file uploading.
@@ -152,7 +112,7 @@ typedef NS_OPTIONS(NSUInteger, LCFileDownloadOption) {
  Currently, it only supports files in US node, aka. the files hosted on AmazonS3.
  See https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPUT.html for all request headers.
  */
-@property (nonatomic, strong, nullable) NSDictionary<NSString *, NSString *> *uploadingHeaders;
+@property (nonatomic, nullable) NSDictionary<NSString *, NSString *> *uploadingHeaders;
 
 /**
  Returns the value associated with a given key.
@@ -162,7 +122,7 @@ typedef NS_OPTIONS(NSUInteger, LCFileDownloadOption) {
  */
 - (id _Nullable)objectForKey:(id)key;
 
-// MARK: - Upload
+// MARK: Upload
 
 /**
  Upload Method. Use default option `LCFileUploadOptionCachingData`.
@@ -191,7 +151,7 @@ typedef NS_OPTIONS(NSUInteger, LCFileDownloadOption) {
                 progress:(void (^ _Nullable)(NSInteger number))uploadProgressBlock
        completionHandler:(void (^)(BOOL succeeded, NSError * _Nullable error))completionHandler;
 
-// MARK: - Download
+// MARK: Download
 
 /**
  Download Method. Use default option `LCFileDownloadOptionCachedData`.
@@ -220,7 +180,7 @@ typedef NS_OPTIONS(NSUInteger, LCFileDownloadOption) {
                   progress:(void (^ _Nullable)(NSInteger number))downloadProgressBlock
          completionHandler:(void (^)(NSURL * _Nullable filePath, NSError * _Nullable error))completionHandler;
 
-// MARK: - Cancel
+// MARK: Cancel
 
 /**
  Cancel Uploading Task.
@@ -232,7 +192,7 @@ typedef NS_OPTIONS(NSUInteger, LCFileDownloadOption) {
  */
 - (void)cancelDownloading;
 
-// MARK: - Cache
+// MARK: Cache
 
 /**
  Set a Custom Persistent Cache Directory for files.
@@ -259,7 +219,7 @@ typedef NS_OPTIONS(NSUInteger, LCFileDownloadOption) {
  */
 - (NSString * _Nullable)persistentCachePath;
 
-// MARK: - Delete
+// MARK: Delete
 
 /**
  Delete This File Object from server.
@@ -277,7 +237,7 @@ typedef NS_OPTIONS(NSUInteger, LCFileDownloadOption) {
 + (void)deleteWithFiles:(NSArray<LCFile *> *)files
       completionHandler:(void (^)(BOOL succeeded, NSError * _Nullable error))completionHandler;
 
-// MARK: - Get
+// MARK: Get
 
 /**
  Get File Object from server.
@@ -288,7 +248,7 @@ typedef NS_OPTIONS(NSUInteger, LCFileDownloadOption) {
 + (void)getFileWithObjectId:(NSString *)objectId
           completionHandler:(void (^)(LCFile * _Nullable file, NSError * _Nullable error))completionHandler;
 
-// MARK: - Thumbnail
+// MARK: Thumbnail
 
 /*!
  Get a thumbnail URL for image saved on Qiniu.
@@ -328,9 +288,9 @@ typedef NS_OPTIONS(NSUInteger, LCFileDownloadOption) {
 - (void)getThumbnail:(BOOL)scaleToFit
                width:(int)width
               height:(int)height
-           withBlock:(LCImageResultBlock)block;
+           withBlock:(LCIdResultBlock)block;
 
-// MARK: - Query
+// MARK: Query
 
 /*!
  Create an LCFileQuery which returns files.
@@ -343,6 +303,9 @@ typedef NS_OPTIONS(NSUInteger, LCFileDownloadOption) {
 
 - (void)saveInBackgroundWithBlock:(void (^)(BOOL succeeded, NSError * _Nullable error))block
                     progressBlock:(void (^ _Nullable)(NSInteger number))progressBlock;
+
+- (void)setPathPrefix:(NSString *)prefix;
+- (void)clearPathPrefix;
 
 @end
 

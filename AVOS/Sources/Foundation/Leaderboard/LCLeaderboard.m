@@ -128,14 +128,14 @@
     if (![LCUser currentUser].sessionToken) {
         NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Please login first.", nil);
         dispatch_async(dispatch_get_main_queue(), ^{
-            callback(nil, error);
+            callback(false, error);
         });
         return;
     }
     if (!statisticNames || statisticNames.count == 0) {
         NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Parameter `statisticNames` invalid.", nil);
         dispatch_async(dispatch_get_main_queue(), ^{
-            callback(nil, error);
+            callback(false, error);
         });
         return;
     }

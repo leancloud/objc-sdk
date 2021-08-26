@@ -8,12 +8,10 @@
 
 #import "LCRTMConnection_Internal.h"
 
-#import "LCApplication.h"
 #import "LCApplication_Internal.h"
-#import "LCRouter.h"
 #import "LCRouter_Internal.h"
 #import "LCLogger.h"
-#import "LCUtils.h"
+#import "LCUtils_Internal.h"
 #import "LCErrorUtils.h"
 #import "LCIMCommon_Internal.h"
 #import "LCIMErrorUtil.h"

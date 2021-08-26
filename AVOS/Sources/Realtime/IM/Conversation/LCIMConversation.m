@@ -30,6 +30,12 @@
 
 #import "AVIMGenericCommand+AVIMMessagesAdditions.h"
 
+#if TARGET_OS_IOS || TARGET_OS_TV || TARGET_OS_WATCH
+#import <UIKit/UIKit.h>
+#elif TARGET_OS_OSX
+#import <Cocoa/Cocoa.h>
+#endif
+
 @implementation LCIMMessageIntervalBound
 
 - (instancetype)initWithMessageId:(NSString *)messageId
@@ -717,7 +723,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         for (NSString *item in clientIds) {
             if (item.length > kClientIdLengthLimit || item.length == 0) {
                 [client invokeInUserInteractQueue:^{
-                    callback(false, LCErrorInternal([NSString stringWithFormat:@"client id's length should in range [1 %lu].", (unsigned long)kClientIdLengthLimit]));
+                    callback(false, LCErrorInternalServer([NSString stringWithFormat:@"client id's length should in range [1 %lu].", (unsigned long)kClientIdLengthLimit]));
                 }];
                 return;
             }
@@ -799,7 +805,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         for (NSString *item in clientIds) {
             if (item.length > kClientIdLengthLimit || item.length == 0) {
                 [client invokeInUserInteractQueue:^{
-                    callback(false, LCErrorInternal([NSString stringWithFormat:@"client id's length should in range [1 %lu].", (unsigned long)kClientIdLengthLimit]));
+                    callback(false, LCErrorInternalServer([NSString stringWithFormat:@"client id's length should in range [1 %lu].", (unsigned long)kClientIdLengthLimit]));
                 }];
                 return;
             }
@@ -941,7 +947,7 @@ static dispatch_queue_t messageCacheOperationQueue;
         }];
         if (!pendingData) {
             [client invokeInUserInteractQueue:^{
-                callback(false, LCErrorInternal(@"can't update before last update done."));
+                callback(false, LCErrorInternalServer(@"can't update before last update done."));
             }];
             return;
         }
@@ -1529,7 +1535,7 @@ static void processAttrAndAttrModified(NSDictionary *attr, NSDictionary *attrMod
         ![oldMessage.conversationId isEqualToString:self->_conversationId] ||
         ![oldMessage.clientId isEqualToString:self->_clientId]) {
         [client invokeInUserInteractQueue:^{
-            callback(false, LCErrorInternal(@"oldMessage invalid."));
+            callback(false, LCErrorInternalServer(@"oldMessage invalid."));
         }];
         return;
     }
@@ -1611,7 +1617,7 @@ static void processAttrAndAttrModified(NSDictionary *attr, NSDictionary *attrMod
         ![oldMessage.conversationId isEqualToString:self->_conversationId] ||
         ![oldMessage.clientId isEqualToString:self->_clientId]) {
         [client invokeInUserInteractQueue:^{
-            callback(false, LCErrorInternal(@"oldMessage invalid."), nil);
+            callback(false, LCErrorInternalServer(@"oldMessage invalid."), nil);
         }];
         return;
     }
@@ -2004,7 +2010,7 @@ static void processAttrAndAttrModified(NSDictionary *attr, NSDictionary *attrMod
         
         [LCIMBlockHelper callArrayResultBlock:callback
                                         array:nil
-                                        error:LCErrorInternal(reason)];
+                                        error:LCErrorInternalServer(reason)];
         
         return;
     }
@@ -2376,7 +2382,7 @@ static void processAttrAndAttrModified(NSDictionary *attr, NSDictionary *attrMod
         [paasClient performRequest:request success:^(NSHTTPURLResponse *response, id responseObject) {
             if (![NSDictionary _lc_isTypeOf:responseObject]) {
                 [self.imClient invokeInUserInteractQueue:^{
-                    callback(nil, LCErrorInternal(@"response invalid."));
+                    callback(nil, LCErrorInternalServer(@"response invalid."));
                 }];
                 return;
             }
@@ -2521,7 +2527,7 @@ static void processAttrAndAttrModified(NSDictionary *attr, NSDictionary *attrMod
             convMemberInfo.role = roleString;
         } else {
             [client invokeInUserInteractQueue:^{
-                callback(false, LCErrorInternal(@"role invalid."));
+                callback(false, LCErrorInternalServer(@"role invalid."));
             }];
             return;
         }

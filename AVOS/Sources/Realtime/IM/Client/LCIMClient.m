@@ -18,7 +18,7 @@
 
 #import "UserAgent.h"
 #import "LCObjectUtils.h"
-#import "LCUtils.h"
+#import "LCUtils_Internal.h"
 #import "LCPaasClient.h"
 #import "LCErrorUtils.h"
 
@@ -1564,7 +1564,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     for (NSString *item in clientIds) {
         if (item.length > kClientIdLengthLimit || item.length == 0) {
             [self invokeInUserInteractQueue:^{
-                callback(nil, LCErrorInternal([NSString stringWithFormat:@"client id's length should in range [1 %lu].", (unsigned long)kClientIdLengthLimit]));
+                callback(nil, LCErrorInternalServer([NSString stringWithFormat:@"client id's length should in range [1 %lu].", (unsigned long)kClientIdLengthLimit]));
             }];
             return;
         }
@@ -1576,7 +1576,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     
     if ((unique && transient) || (unique && temporary) || (transient && temporary)) {
         [self invokeInUserInteractQueue:^{
-            callback(nil, LCErrorInternal(@"options invalid."));
+            callback(nil, LCErrorInternalServer(@"options invalid."));
         }];
         return;
     }
@@ -1880,7 +1880,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         NSUInteger clientsCountMax = 20;
         if (clients.count > clientsCountMax) {
             [self invokeInUserInteractQueue:^{
-                callback(nil, LCErrorInternal([NSString stringWithFormat:@"clients count beyond max %lu", (unsigned long)clientsCountMax]));
+                callback(nil, LCErrorInternalServer([NSString stringWithFormat:@"clients count beyond max %lu", (unsigned long)clientsCountMax]));
             }];
             return;
         }

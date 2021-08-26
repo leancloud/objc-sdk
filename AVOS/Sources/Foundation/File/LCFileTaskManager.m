@@ -161,7 +161,7 @@ static NSString * const kLCFileTokensProvider_s3 = @"s3";
         
         NSError *aError = ({
             NSString *reason = [NSString stringWithFormat:@"Provider: (%@) can't be matched.", fileTokens.provider];
-            LCErrorInternal(reason);
+            LCErrorInternalServer(reason);
         });
         
         uploadCompletionHandler(false, aError);
@@ -260,7 +260,7 @@ static NSString * const kLCFileTokensProvider_s3 = @"s3";
         
         NSError *aError = ({
             NSString *reason = [NSString stringWithFormat:@"Provider: (%@) can't be matched.", fileTokens.provider];
-            LCErrorInternal(reason);
+            LCErrorInternalServer(reason);
         });
         
         uploadCompletionHandler(false, aError);
@@ -382,7 +382,7 @@ static NSString * const kLCFileTokensProvider_s3 = @"s3";
                 
                 NSError *aError = ({
                     NSString *reason = [NSString stringWithFormat:@"%@", dic];
-                    LCErrorInternal(reason);
+                    LCErrorInternalServer(reason);
                 });
                 
                 uploadCompletionHandler(false, aError);

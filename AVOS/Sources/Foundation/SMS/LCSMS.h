@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "LCDynamicObject.h"
-#import "LCConstants.h"
+#import "LCUtils.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

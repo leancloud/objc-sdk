@@ -10,8 +10,9 @@
 #import "LCPaasClient.h"
 #import "LCRouter_Internal.h"
 #import "LCScheduler.h"
-#import "LCUtils.h"
+#import "LCUtils_Internal.h"
 #import "LCObjectUtils.h"
+#import "LCLogger.h"
 
 @implementation LCApplication
 

@@ -5,7 +5,7 @@
 #import "LCGeoPoint.h"
 #import "LCObject_Internal.h"
 #import "LCQuery.h"
-#import "LCUtils.h"
+#import "LCUtils_Internal.h"
 #import "LCPaasClient.h"
 #import "LCPaasClient.h"
 #import "LCUser_Internal.h"
@@ -91,7 +91,7 @@ NSString *LCStringFromDistanceUnit(LCQueryDistanceUnit unit) {
             *error = err;
         }
         if (callback) {
-            [LCUtils callCloudQueryResultBlock:callback result:nil error:err];
+            [LCUtils callCloudQueryCallback:callback result:nil error:err];
         }
         return nil;
     }
@@ -100,13 +100,13 @@ NSString *LCStringFromDistanceUnit(LCQueryDistanceUnit unit) {
     NSError __block *blockError = nil;
     
     NSString *path = @"cloudQuery";
-    NSDictionary *parameters = nil;
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:cql forKey:@"cql"];
     if (pvalues.count > 0) {
         NSArray *parsedPvalues = [LCObjectUtils dictionaryFromObject:pvalues];
         NSString *jsonString = [LCUtils jsonStringFromArray:parsedPvalues];
-        parameters = @{@"cql":cql, @"pvalues":jsonString};
-    } else {
-        parameters = @{@"cql":cql};
+        if (jsonString) {
+            parameters[@"pvalues"] = jsonString;
+        }
     }
     
     [[LCPaasClient sharedInstance] getObject:path withParameters:parameters block:^(id dict, NSError *error) {
@@ -126,7 +126,7 @@ NSString *LCStringFromDistanceUnit(LCQueryDistanceUnit unit) {
             [theResultObject setCount:[count intValue]];
             [theResultObject setClassName:className];
         }
-        [LCUtils callCloudQueryResultBlock:callback result:theResultObject error:error];
+        [LCUtils callCloudQueryCallback:callback result:theResultObject error:error];
         if (wait) {
             blockError = error;
             hasCalledBack = YES;

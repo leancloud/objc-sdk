@@ -8,7 +8,7 @@
 
 #import "LCPaasClient.h"
 #import "LCNetworking.h"
-#import "LCUtils.h"
+#import "LCUtils_Internal.h"
 #import "LCUser_Internal.h"
 #import "LCObject_Internal.h"
 #import "LCRole_Internal.h"
@@ -19,8 +19,9 @@
 #import "LCScheduler.h"
 #import "LCObjectUtils.h"
 #import "LCRouter_Internal.h"
-#import "LCConstants.h"
 #import "LCApplication_Internal.h"
+#import "LCLogger.h"
+#import "LCHelpers.h"
 
 NSString * const LCHeaderFieldNameId = @"X-LC-Id";
 NSString * const LCHeaderFieldNameKey = @"X-LC-Key";
@@ -51,7 +52,7 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
 
 @implementation NSURLRequest (LCCurl)
 
-- (NSString *)cURLCommand
+- (NSString *)_lc_cURLCommand
 {
     NSMutableString *command = [NSMutableString stringWithString:@"curl -v \\\n"];
     
@@ -174,7 +175,7 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
 - (NSString *)signatureHeaderFieldValue {
     NSString *key = [self.application keyThrowException];
     NSString *timestamp = [NSString stringWithFormat:@"%.0f", 1000 * [[NSDate date] timeIntervalSince1970]];
-    NSString *sign = [[[NSString stringWithFormat:@"%@%@", timestamp, key] LCMD5String] lowercaseString];
+    NSString *sign = [[[NSString stringWithFormat:@"%@%@", timestamp, key] _lc_MD5String] lowercaseString];
     NSString *headerValue = [NSString stringWithFormat:@"%@,%@", sign, timestamp];
     return headerValue;
 }
@@ -391,7 +392,7 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
             if (error) {
                 block(nil, error);
             } else {
-                block(nil, LCErrorInternal(@"The batch count of server response is not equal to request count"));
+                block(nil, LCErrorInternalServer(@"The batch count of server response is not equal to request count"));
             }
         } else {
             // 网络请求成功
@@ -485,7 +486,7 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
     NSMutableURLRequest *mutableRequest = [request mutableCopy];
     
     if (self.isLastModifyEnabled && [request.HTTPMethod isEqualToString:@"GET"]) {
-        NSString *modifiedSince = self.lastModify[[URLString LCMD5String]];
+        NSString *modifiedSince = self.lastModify[[URLString _lc_MD5String]];
         if (modifiedSince && [[LCCacheManager sharedInstance] hasCacheForKey:URLString]) {
             [mutableRequest setValue:modifiedSince forHTTPHeaderField:@"If-Modified-Since"];
         }
@@ -500,7 +501,7 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
         }
         
         if (self.isLastModifyEnabled && [request.HTTPMethod isEqualToString:@"GET"]) {
-            NSString *URLMD5 = [URLString LCMD5String];
+            NSString *URLMD5 = [URLString _lc_MD5String];
             NSString *lastModified = [response.allHeaderFields objectForKey:@"Last-Modified"];
             
             if (lastModified && ![self.lastModify[URLMD5] isEqualToString:lastModified]) {
@@ -520,7 +521,7 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
             [[LCCacheManager sharedInstance] getWithKey:URLString maxCacheAge:3600 * 24 * 30 block:^(id object, NSError *error) {
                 if (error) {
                     if (retryTimes < 3) {
-                        [self.lastModify removeObjectForKey:[URLString LCMD5String]];
+                        [self.lastModify removeObjectForKey:[URLString _lc_MD5String]];
                         [[LCCacheManager sharedInstance] clearCacheForKey:URLString];
                         [mutableRequest setValue:@"" forHTTPHeaderField:@"If-Modified-Since"];
                         [self performRequest:mutableRequest saveResult:saveResult block:block retryTimes:retryTimes + 1];
@@ -558,7 +559,7 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
 {
     dispatch_semaphore_t semaphore;
     NSString *path = request.URL.path;
-    LCLoggerDebug(LCLoggerDomainNetwork, LC_REST_REQUEST_LOG_FORMAT, path, [request cURLCommand]);
+    LCLoggerDebug(LCLoggerDomainNetwork, LC_REST_REQUEST_LOG_FORMAT, path, [request _lc_cURLCommand]);
     
     NSDate *operationEnqueueDate = [NSDate date];
     

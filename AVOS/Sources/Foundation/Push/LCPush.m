@@ -4,14 +4,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LCPush.h"
 #import "LCPush_Internal.h"
 #import "LCPaasClient.h"
-#import "LCUtils.h"
+#import "LCUtils_Internal.h"
 #import "LCQuery_Internal.h"
 #import "LCInstallation_Internal.h"
 #import "LCObjectUtils.h"
 #import "LCRouter_Internal.h"
+#import "LCApplication_Internal.h"
 
 /*!
  A class which defines a push notification that can be sent from

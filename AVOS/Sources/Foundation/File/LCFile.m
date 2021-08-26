@@ -1,17 +1,19 @@
 
 #import <Foundation/Foundation.h>
-#import "LCConstants.h"
-#import "LCFile.h"
+#import <CommonCrypto/CommonCrypto.h>
+
 #import "LCFile_Internal.h"
 #import "LCFileTaskManager.h"
 #import "LCPaasClient.h"
-#import "LCUtils.h"
+#import "LCUtils_Internal.h"
 #import "LCNetworking.h"
 #import "LCErrorUtils.h"
 #import "LCPersistenceUtils.h"
 #import "LCObjectUtils.h"
 #import "LCACL_Internal.h"
-#import <CommonCrypto/CommonCrypto.h>
+#import "LCUser_Internal.h"
+#import "LCFileQuery.h"
+#import "LCLogger.h"
 
 static NSString * LCFile_CustomPersistentCacheDirectory = nil;
 
@@ -132,16 +134,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
             mimeType ?: @"application/octet-stream";
         });
         
-        _rawJSONData[kLCFile_metaData] = ({
-            
-            NSMutableDictionary *metaData = [NSMutableDictionary dictionary];
-            metaData[kLCFile_size] = @(data.length);
-            NSString *objectId = LCPaasClient.sharedInstance.currentUser.objectId;
-            if (objectId && objectId.length > 0) {
-                metaData[kLCFile_owner] = objectId;
-            }
-            metaData.copy;
-        });
+        _rawJSONData[kLCFile_metaData] = @{ kLCFile_size : @(data.length) };
         
         _ACL = ({
             
@@ -194,16 +187,8 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
             mimeType ?: @"application/octet-stream";
         });
         
-        _rawJSONData[kLCFile_metaData] = ({
-            
-            NSMutableDictionary *metaData = [NSMutableDictionary dictionary];
-            metaData[kLCFile_size] = fileAttributes[NSFileSize];
-            NSString *objectId = [LCPaasClient sharedInstance].currentUser.objectId;
-            if (objectId && objectId.length > 0) {
-                metaData[kLCFile_owner] = objectId;
-            }
-            metaData.copy;
-        });
+        NSNumber *fileSize = fileAttributes[NSFileSize];
+        _rawJSONData[kLCFile_metaData] = fileSize ? @{ kLCFile_size : fileSize } : @{};
         
         _ACL = ({
             
@@ -245,7 +230,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
             mimeType ?: @"application/octet-stream";
         });
         
-        _rawJSONData[kLCFile_metaData] = @{ kLCFile___source : @"external" };
+        _rawJSONData[kLCFile_metaData] = @{ @"__source" : @"external" };
         
         _ACL = ({
             
@@ -390,157 +375,62 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
     }];
 }
 
-- (NSString *)name
-{
-    __block NSString *name = nil;
-    
+- (NSString *)objectId {
+    __block NSString *objectId;
     [self internalSyncLock:^{
-        
-        name = [NSString _lc_decoding:self->_rawJSONData key:kLCFile_name];
-    }];
-    
-    return name;
-}
-
-- (NSString *)objectId
-{
-    __block NSString *objectId = nil;
-    
-    [self internalSyncLock:^{
-        
         objectId = [LCFile decodingObjectIdFromDic:self->_rawJSONData];
     }];
-    
     return objectId;
 }
 
-- (NSString *)url
-{
-    __block NSString *url = nil;
-    
+- (NSString *)name {
+    __block NSString *name;
     [self internalSyncLock:^{
-        
+        name = [NSString _lc_decoding:self->_rawJSONData key:kLCFile_name];
+    }];
+    return name;
+}
+
+- (void)setName:(NSString *)name {
+    [self internalSyncLock:^{
+        self->_rawJSONData[kLCFile_name] = name;
+    }];
+}
+
+- (NSString *)url {
+    __block NSString *url;
+    [self internalSyncLock:^{
         url = [NSString _lc_decoding:self->_rawJSONData key:kLCFile_url];
     }];
-    
     return url;
 }
 
-- (NSDictionary *)metaData
-{
-    __block NSDictionary *metaData = nil;
-    
+- (NSDictionary *)metaData {
+    __block NSDictionary *metaData;
     [self internalSyncLock:^{
-        
-        metaData = [LCFile decodingMetaDataFromDic:self->_rawJSONData];
+        metaData = [NSDictionary _lc_decoding:self->_rawJSONData key:kLCFile_metaData];
     }];
-    
     return metaData;
 }
 
-- (void)setMetaData:(NSDictionary *)metaData
-{
+- (void)setMetaData:(NSDictionary *)metaData {
     [self internalSyncLock:^{
-        
         self->_rawJSONData[kLCFile_metaData] = metaData;
     }];
 }
 
-- (NSString *)ownerId
-{
-    NSDictionary *metaData = [self metaData];
-    
-    return metaData ? metaData[kLCFile_owner] : nil;
-}
-
-- (void)setOwnerId:(NSString *)ownerId
-{
+- (NSString *)mimeType {
+    __block NSString *mimeType;
     [self internalSyncLock:^{
-        
-        NSMutableDictionary *metaData = [[LCFile decodingMetaDataFromDic:self->_rawJSONData] mutableCopy];
-        
-        if (metaData) {
-            
-            if (ownerId) {
-                
-                metaData[kLCFile_owner] = ownerId;
-                
-            } else {
-                
-                [metaData removeObjectForKey:kLCFile_owner];
-            }
-            
-            self->_rawJSONData[kLCFile_metaData] = [metaData copy];
-        }
-        else if (ownerId) {
-            
-            self->_rawJSONData[kLCFile_metaData] = @{ kLCFile_owner : ownerId };
-        }
-    }];
-}
-
-- (NSString *)checksum
-{
-    NSDictionary *metaData = [self metaData];
-    
-    return metaData ? metaData[kLCFile__checksum] : nil;
-}
-
-- (void)setChecksum:(NSString *)checksum
-{
-    [self internalSyncLock:^{
-        
-        NSMutableDictionary *metaData = [[LCFile decodingMetaDataFromDic:self->_rawJSONData] mutableCopy];
-        
-        if (metaData) {
-            
-            if (checksum) {
-                
-                metaData[kLCFile__checksum] = checksum;
-                
-            } else {
-                
-                [metaData removeObjectForKey:kLCFile__checksum];
-            }
-            
-            self->_rawJSONData[kLCFile_metaData] = [metaData copy];
-        }
-        else if (checksum) {
-            
-            self->_rawJSONData[kLCFile_metaData] = @{ kLCFile__checksum : checksum };
-        }
-    }];
-}
-
-- (NSUInteger)size
-{
-    NSDictionary *metaData = [self metaData];
-    
-    if (metaData) {
-        
-        id size = metaData[kLCFile_size];
-        
-        return size ? [size unsignedIntegerValue] : 0;
-    }
-    
-    return 0;
-}
-
-- (NSString *)pathExtension
-{
-    return self->_pathExtension;
-}
-
-- (NSString *)mimeType
-{
-    __block NSString *mimeType = nil;
-    
-    [self internalSyncLock:^{
-        
         mimeType = [NSString _lc_decoding:self->_rawJSONData key:kLCFile_mime_type];
     }];
-    
     return mimeType;
+}
+
+- (void)setMimeType:(NSString *)mimeType {
+    [self internalSyncLock:^{
+        self->_rawJSONData[kLCFile_mime_type] = mimeType;
+    }];
 }
 
 - (id)objectForKey:(id)key
@@ -630,7 +520,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         dispatch_async(dispatch_get_main_queue(), ^{
             completionHandler(false, ({
                 NSString *reason = @"File is in uploading, Can't do repeated upload operation.";
-                LCErrorInternal(reason);
+                LCErrorInternalServer(reason);
             }));
         });
         
@@ -749,7 +639,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         
         completionHandler(false, ({
             NSString *reason = @"No data or URL to Upload.";
-            LCErrorInternal(reason);
+            LCErrorInternalServer(reason);
         }));
     });
 }
@@ -759,30 +649,16 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
                        progress:(void (^)(NSInteger number))uploadProgressBlock
               completionHandler:(void (^)(BOOL succeeded, NSError *error))completionHandler
 {
-    NSMutableDictionary *mutableParameters = ({
-        
-        __block NSMutableDictionary *mutableDic = nil;
-        [self internalSyncLock:^{
-            mutableDic = self->_rawJSONData.mutableCopy;
-        }];
-        mutableDic[kLCFile_key] = ({
-            NSString *key = LCFile_CompactUUID();
-            if (_pathExtension) {
-                key = [key stringByAppendingPathExtension:_pathExtension];
-            }
-            key;
-        });
-        mutableDic;
-    });
-    
-    NSDictionary *parameters = mutableParameters.copy;
-    
+    NSMutableDictionary *parameters = [self rawJSONDataMutableCopy];
+    [parameters removeObjectsForKeys:@[@"__type", @"className"]];
     [self getFileTokensWithParameters:parameters callback:^(LCFileTokens *fileTokens, NSError *error) {
         
         if (error) {
             completionHandler(false, error);
             return;
         }
+        
+        [parameters addEntriesFromDictionary:fileTokens.rawDic];
         
         NSURLSessionUploadTask *task = ({
             
@@ -819,9 +695,8 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
                 }
                 
                 fileCallback_block(true);
-                [mutableParameters addEntriesFromDictionary:fileTokens.rawDic];
                 [self internalSyncLock:^{
-                    self->_rawJSONData = mutableParameters;
+                    self->_rawJSONData = parameters;
                 }];
                 
                 completionHandler(true, nil);
@@ -879,7 +754,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
             
             completionHandler(false, ({
                 NSString *reason = @"response invalid.";
-                LCErrorInternal(reason);
+                LCErrorInternalServer(reason);
             }));
             
             return;
@@ -897,6 +772,12 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
 - (void)getFileTokensWithParameters:(NSDictionary *)parameters
                            callback:(void (^)(LCFileTokens *fileTokens, NSError *error))callback
 {
+    NSDictionary *metaData = parameters[@"metaData"];
+    NSString *prefix = metaData[@"prefix"];
+    if (prefix) {
+        parameters = [parameters mutableCopy];
+        ((NSMutableDictionary *)parameters)[@"prefix"] = prefix;
+    }
     [LCPaasClient.sharedInstance postObject:@"fileTokens" withParameters:parameters block:^(id _Nullable object, NSError * _Nullable error) {
         
         if (error) {
@@ -909,7 +790,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         if (![NSDictionary _lc_isTypeOf:dic]) {
             callback(nil, ({
                 NSString *reason = @"fileTokens response invalid.";
-                LCErrorInternal(reason);
+                LCErrorInternalServer(reason);
             }));
             return;
         }
@@ -955,7 +836,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         dispatch_async(dispatch_get_main_queue(), ^{
             completionHandler(nil, ({
                 NSString *reason = @"File is in downloading, Can't do repeated download operation.";
-                LCErrorInternal(reason);
+                LCErrorInternalServer(reason);
             }));
         });
         
@@ -969,7 +850,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         dispatch_async(dispatch_get_main_queue(), ^{
             completionHandler(nil, ({
                 NSString *reason = @"url is invalid.";
-                LCErrorInternal(reason);
+                LCErrorInternalServer(reason);
             }));
         });
         
@@ -1134,7 +1015,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         if (error) {
             *error = ({
                 NSString *reason = @"objectId invalid.";
-                LCErrorInternal(reason);
+                LCErrorInternalServer(reason);
             });
         }
         return nil;
@@ -1178,7 +1059,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
             
             NSError *aError = ({
                 NSString *reason = @"`objectId` is invalid.";
-                LCErrorInternal(reason);
+                LCErrorInternalServer(reason);
             });
             
             completionHandler(false, aError);
@@ -1256,7 +1137,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
             
             NSError *aError = ({
                 NSString *reason = @"`objectId` is invalid.";
-                LCErrorInternal(reason);
+                LCErrorInternalServer(reason);
             });
             
             completionHandler(nil, aError);
@@ -1283,7 +1164,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
                 
                 NSError *aError = ({
                     NSString *reason = @"Get an invalid Object.";
-                    LCErrorInternal(reason);
+                    LCErrorInternalServer(reason);
                 });
                 
                 completionHandler(nil, aError);
@@ -1349,7 +1230,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
 - (void)getThumbnail:(BOOL)scaleToFit
                width:(int)width
               height:(int)height
-           withBlock:(LCImageResultBlock)block
+           withBlock:(LCIdResultBlock)block
 {
     NSString *url = [self getThumbnailURLWithScaleToFit:scaleToFit width:width height:height];
     
@@ -1388,19 +1269,6 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
     return value;
 }
 
-+ (NSDictionary *)decodingMetaDataFromDic:(NSDictionary *)dic
-{
-    /* @note For compatibility, should decoding multiple keys ... ... */
-    
-    NSDictionary *value = [NSDictionary _lc_decoding:dic key:kLCFile_metaData];
-    
-    if (value) { return value; }
-    
-    value = [NSDictionary _lc_decoding:dic key:kLCFile_metadata];
-    
-    return value;
-}
-
 // MARK: Compatibility
 
 - (void)saveInBackgroundWithBlock:(void (^)(BOOL, NSError * _Nullable))block
@@ -1412,6 +1280,23 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
                     progressBlock:(void (^)(NSInteger))progressBlock
 {
     [self uploadWithProgress:progressBlock completionHandler:block];
+}
+
+- (void)setPathPrefix:(NSString *)prefix {
+    if ([NSString _lc_isTypeOf:prefix] &&
+        prefix.length != 0) {
+        NSMutableDictionary *metaData = [self.metaData mutableCopy] ?: [NSMutableDictionary dictionary];
+        metaData[@"prefix"] = prefix;
+        self.metaData = metaData;
+    }
+}
+
+- (void)clearPathPrefix {
+    NSMutableDictionary *metaData = [self.metaData mutableCopy];
+    if (metaData) {
+        [metaData removeObjectForKey:@"prefix"];
+        self.metaData = metaData;
+    }
 }
 
 @end

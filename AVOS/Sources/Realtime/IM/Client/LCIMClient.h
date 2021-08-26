@@ -73,7 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param clientId The length of the ID should in range `[1, 64]`.
 /// @param error Throws exception when error occurred.
 - (nullable instancetype)initWithClientId:(NSString *)clientId
-                                    error:(NSError * __autoreleasing *)error LC_WARN_UNUSED_RESULT;
+                                    error:(NSError * __autoreleasing *)error;
 
 /// Initializing with an ID and a tag.
 /// @param clientId The length of the ID should in range `[1, 64]`.
@@ -81,13 +81,13 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param error Throws exception when error occurred.
 - (nullable instancetype)initWithClientId:(NSString *)clientId
                                       tag:(NSString * _Nullable)tag
-                                    error:(NSError * __autoreleasing *)error LC_WARN_UNUSED_RESULT;
+                                    error:(NSError * __autoreleasing *)error;
 
 /// Initializing with an `LCUser`.
 /// @param user The user should have logged in.
 /// @param error Throws exception when error occurred.
 - (nullable instancetype)initWithUser:(LCUser *)user
-                                error:(NSError * __autoreleasing *)error LC_WARN_UNUSED_RESULT;
+                                error:(NSError * __autoreleasing *)error;
 
 /// Initializing with an `LCUser` and a tag.
 /// @param user The user should have logged in.
@@ -95,7 +95,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param error Throws exception when error occurred.
 - (nullable instancetype)initWithUser:(LCUser *)user
                                   tag:(NSString * _Nullable)tag
-                                error:(NSError * __autoreleasing *)error LC_WARN_UNUSED_RESULT;
+                                error:(NSError * __autoreleasing *)error;
 
 // MARK: Open & Close
 
@@ -163,7 +163,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param conversationId conversationId
  @return if the Conversation Exist, return the Instance; if not, return nil.
  */
-- (LCIMConversation * _Nullable)conversationForId:(NSString *)conversationId LC_WARN_UNUSED_RESULT;
+- (LCIMConversation * _Nullable)conversationForId:(NSString *)conversationId;
 
 
 /**
@@ -195,12 +195,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeAllConversationsInMemoryWith:(void (^)(void))callback;
 
 
-- (LCIMConversation * _Nullable)conversationWithKeyedConversation:(LCIMKeyedConversation *)keyedConversation LC_WARN_UNUSED_RESULT;
+- (LCIMConversation * _Nullable)conversationWithKeyedConversation:(LCIMKeyedConversation *)keyedConversation;
 
 // MARK: Conversation Query
 
 /// Create a new conversation query.
-- (LCIMConversationQuery *)conversationQuery LC_WARN_UNUSED_RESULT;
+- (LCIMConversationQuery *)conversationQuery;
 
 // MARK: Online Query
 

@@ -19,15 +19,15 @@
 
 - (void)setRawJSONData:(NSMutableDictionary *)rawJSONData;
 - (void)updateRawJSONDataWith:(NSDictionary *)dictionary;
-- (NSDictionary *)rawJSONDataCopy LC_WARN_UNUSED_RESULT;
+- (NSDictionary *)rawJSONDataCopy;
 
 - (void)addMembers:(NSArray<NSString *> *)members;
 - (void)removeMembers:(NSArray<NSString *> *)members;
 
-- (LCIMMessage *)processDirect:(AVIMDirectCommand *)directCommand messageId:(NSString *)messageId isTransientMsg:(BOOL)isTransientMsg LC_WARN_UNUSED_RESULT;
-- (LCIMMessage *)processRCP:(AVIMRcpCommand *)rcpCommand isRead:(BOOL)isRead LC_WARN_UNUSED_RESULT;
-- (NSInteger)processUnread:(AVIMUnreadTuple *)unreadTuple LC_WARN_UNUSED_RESULT;
-- (LCIMMessage *)processPatchModified:(AVIMPatchItem *)patchItem LC_WARN_UNUSED_RESULT;
+- (LCIMMessage *)processDirect:(AVIMDirectCommand *)directCommand messageId:(NSString *)messageId isTransientMsg:(BOOL)isTransientMsg;
+- (LCIMMessage *)processRCP:(AVIMRcpCommand *)rcpCommand isRead:(BOOL)isRead;
+- (NSInteger)processUnread:(AVIMUnreadTuple *)unreadTuple;
+- (LCIMMessage *)processPatchModified:(AVIMPatchItem *)patchItem;
 - (void)processConvUpdatedAttr:(NSDictionary *)attr attrModified:(NSDictionary *)attrModified;
 - (void)processMemberInfoChanged:(NSString *)memberId role:(NSString *)role;
 
