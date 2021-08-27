@@ -66,9 +66,6 @@ class LCLeaderboardTestCase: BaseTestCase {
     }
     
     func testGetUserStatistics() {
-        defer {
-            LCUser.logOut()
-        }
         let user = LCUser()
         expecting { exp in
             user.login(withAuthData: ["openid" : uuid], platformId: "test", options: nil) { _, error in
@@ -328,9 +325,6 @@ class LCLeaderboardTestCase: BaseTestCase {
     }
     
     func testGetUserRankings() {
-        defer {
-            LCUser.logOut()
-        }
         let object = LCObject()
         XCTAssertTrue(object.save())
         let user = LCUser()

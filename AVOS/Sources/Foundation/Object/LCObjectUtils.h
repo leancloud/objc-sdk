@@ -60,9 +60,9 @@
 + (NSMutableDictionary *)objectSnapshot:(LCObject *)object;
 + (NSMutableDictionary *)objectSnapshot:(LCObject *)object recursive:(BOOL)recursive;
 
-+(LCObject *)lcObjectFromDictionary:(NSDictionary *)dict;
-+(LCObject *)lcObjectForClass:(NSString *)className;
-+(LCObject *)targetObjectFromRelationDictionary:(NSDictionary *)dict;
++ (LCObject *)lcObjectForClass:(NSString *)className;
++ (LCObject *)lcObjectFromDictionary:(NSDictionary *)dictionary;
++ (LCObject *)targetObjectFromRelationDictionary:(NSDictionary *)dictionary;
 
 +(NSSet *)allObjectProperties:(Class)objectClass;
 
@@ -70,8 +70,8 @@
 +(void)setupRelation:(LCObject *)parent
       withDictionary:(NSDictionary *)relationMap;
 
+// MARK: Batch Request from operation list
 
-#pragma mark - batch request from operation list
 + (BOOL)isUserClass:(NSString *)className;
 + (BOOL)isRoleClass:(NSString *)className;
 + (BOOL)isFileClass:(NSString *)className;

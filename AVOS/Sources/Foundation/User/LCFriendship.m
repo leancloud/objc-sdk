@@ -19,6 +19,10 @@
     return @"_FriendshipRequest";
 }
 
++ (NSString *)parseClassName {
+    return [self className];
+}
+
 + (LCQuery *)query {
     LCQuery *query = [LCQuery queryWithClassName:[self className]];
     [query whereKey:@"friend" equalTo:[LCUser currentUser]];

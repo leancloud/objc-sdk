@@ -42,8 +42,7 @@ static BOOL enableAutomatic = NO;
     [self registerSubclass];
 }
 
-+ (NSString *)parseClassName
-{
++ (NSString *)parseClassName {
     return [LCUser userTag];
 }
 
@@ -1250,11 +1249,6 @@ static BOOL enableAutomatic = NO;
     [user._requestManager clear];
     
     [self changeCurrentUser:user save:YES];
-}
-
--(NSString *)internalClassName
-{
-    return @"_User";
 }
 
 -(void)setNewFlag:(BOOL)isNew
