@@ -76,71 +76,56 @@
 
 @implementation LCObjectUtils
 
-#pragma mark - Check type
+// MARK: Check Type
 
-+(BOOL)isRelation:(NSString *)type
-{
++ (BOOL)isRelation:(NSString *)type {
     return [type isEqualToString:@"Relation"];
 }
 
-/// The remote LCObject can be a pointer object or a normal object without pointer property
-/// When adding LCObject, we have to check if it's a pointer or not.
-+(BOOL)isRelationDictionary:(NSDictionary *)dict
-{
-    NSString * type = [dict objectForKey:@"__type"];
-    if ([type isEqualToString:@"Relation"]) {
-        return YES;
-    }
-    return NO;
-}
-
-+(BOOL)isPointerDictionary:(NSDictionary *)dict
-{
-    NSString * type = [dict objectForKey:@"__type"];
-    if ([type isEqualToString:@"Pointer"]) {
-        return YES;
-    }
-    return NO;
-}
-
-+(BOOL)isPointer:(NSString *)type
-{
++ (BOOL)isPointer:(NSString *)type {
     return [type isEqualToString:@"Pointer"];
 }
 
-+(BOOL)isGeoPoint:(NSString *)type
-{
++ (BOOL)isGeoPoint:(NSString *)type {
     return [type isEqualToString:@"GeoPoint"];
 }
 
-+(BOOL)isACL:(NSString *)type
-{
-    return [type isEqualToString:ACLTag];
++ (BOOL)isACL:(NSString *)type {
+    return [type isEqualToString:@"ACL"];
 }
 
-+(BOOL)isDate:(NSString *)type
-{
++ (BOOL)isDate:(NSString *)type {
     return [type isEqualToString:@"Date"];
 }
 
-+(BOOL)isData:(NSString *)type
-{
++ (BOOL)isData:(NSString *)type {
     return [type isEqualToString:@"Bytes"];
 }
 
-+(BOOL)isFile:(NSString *)type
-{
++ (BOOL)isFile:(NSString *)type {
     return [type isEqualToString:@"File"];
 }
 
-+(BOOL)isFilePointer:(NSDictionary *)dict {
-    return ([[dict objectForKey:classNameTag] isEqualToString:@"_File"]);
++ (BOOL)isPointerDictionary:(NSDictionary *)dictionary {
+    NSString *type = [dictionary objectForKey:@"__type"];
+    if ([type isKindOfClass:[NSString class]]) {
+        return [self isPointer:type];
+    } else {
+        return false;
+    }
 }
 
-+(BOOL)isLCObject:(NSDictionary *)dict
-{
-    // Should check for __type is Object ?
-    return ([dict objectForKey:classNameTag] != nil);
++ (BOOL)isFilePointer:(NSDictionary *)dictionary {
+    NSString *className = [dictionary objectForKey:@"className"];
+    if ([className isKindOfClass:[NSString class]]) {
+        return [className isEqualToString:@"_File"];
+    } else {
+        return false;
+    }
+}
+
++ (BOOL)isLCObject:(NSDictionary *)dictionary {
+    return [[dictionary objectForKey:@"className"] isKindOfClass:[NSString class]];
 }
 
 #pragma mark - Simple objecitive-c object from server side dictionary
@@ -525,8 +510,6 @@
                          @"_localData",
                          @"_relationData",
                          @"_estimatedData",
-                         @"_isPointer",
-                         @"_running",
                          @"_operationQueue",
                          @"_requestManager",
                          @"_inSetter",
@@ -554,13 +537,13 @@
     return result;
 }
 
-+(LCObject *)lcObjectForClass:(NSString *)className {
-    if (className == nil) {
++ (LCObject *)lcObjectForClass:(NSString *)className {
+    if (![className isKindOfClass:[NSString class]]) {
         return nil;
     }
-    LCObject *object = nil;
+    LCObject *object;
     Class classObject = [[LCPaasClient sharedInstance] classFor:className];
-    if (classObject != nil && [classObject isSubclassOfClass:[LCObject class]]) {
+    if (classObject && [classObject isSubclassOfClass:[LCObject class]]) {
         if ([classObject respondsToSelector:@selector(object)]) {
             object = [classObject performSelector:@selector(object)];
         }
@@ -570,7 +553,6 @@
         } else if ([LCObjectUtils isInstallationClass:className]) {
             object = [LCInstallation installation];
         } else if ([LCObjectUtils isRoleClass:className]) {
-            // TODO
             object = [LCRole role];
         } else if ([LCObjectUtils isFriendshipRequestClass:className]) {
             object = [[LCFriendshipRequest alloc] init];
@@ -581,29 +563,24 @@
     return object;
 }
 
-+(LCObject *)lcObjectFromDictionary:(NSDictionary *)src
-                          className:(NSString *)className {
-    if (src == nil || className == nil || src.count == 0) {
++ (LCObject *)lcObjectFromDictionary:(NSDictionary *)dictionary {
+    if (![dictionary isKindOfClass:[NSDictionary class]]) {
+        return nil;
+    }
+    NSString *className = [dictionary objectForKey:@"className"];
+    if (![className isKindOfClass:[NSString class]]) {
         return nil;
     }
     LCObject *object = [LCObjectUtils lcObjectForClass:className];
-    [LCObjectUtils copyDictionary:src toObject:object];
-    if ([LCObjectUtils isPointerDictionary:src]) {
-        object._isPointer = YES;
+    [LCObjectUtils copyDictionary:dictionary toObject:object];
+    return object;
+}
+
++ (LCObject *)targetObjectFromRelationDictionary:(NSDictionary *)dictionary {
+    if (![dictionary isKindOfClass:[NSDictionary class]]) {
+        return nil;
     }
-    return object;
-}
-
-+(LCObject *)lcObjectFromDictionary:(NSDictionary *)dict {
-    NSString * className = [dict objectForKey:classNameTag];
-    return [LCObjectUtils lcObjectFromDictionary:dict className:className];
-}
-
-// create relation target object instead of relation object.
-+(LCObject *)targetObjectFromRelationDictionary:(NSDictionary *)dict
-{
-    LCObject * object = [LCObjectUtils lcObjectForClass:[dict valueForKey:classNameTag]];
-    return object;
+    return [LCObjectUtils lcObjectForClass:[dictionary objectForKey:@"className"]];
 }
 
 +(NSDictionary *)dictionaryFromGeoPoint:(LCGeoPoint *)point
@@ -695,24 +672,21 @@
     }
 }
 
-#pragma mark - batch request from operation list
-+(BOOL)isUserClass:(NSString *)className
-{
+// MARK: Batch Request from operation list
+
++ (BOOL)isUserClass:(NSString *)className {
     return [className isEqualToString:[LCUser userTag]];
 }
 
-+(BOOL)isRoleClass:(NSString *)className
-{
++ (BOOL)isRoleClass:(NSString *)className {
     return [className isEqualToString:[LCRole className]];
 }
 
-+(BOOL)isFileClass:(NSString *)className
-{
++ (BOOL)isFileClass:(NSString *)className {
     return [className isEqualToString:[LCFile className]];
 }
 
-+(BOOL)isInstallationClass:(NSString *)className
-{
++ (BOOL)isInstallationClass:(NSString *)className {
     return [className isEqualToString:[LCInstallation className]];
 }
 
@@ -720,62 +694,47 @@
     return [className isEqualToString:[LCFriendshipRequest className]];
 }
 
-+(NSString *)classEndPoint:(NSString *)className
-                  objectId:(NSString *)objectId
-{
-    if (objectId == nil)
-    {
++ (NSString *)classEndPoint:(NSString *)className objectId:(NSString *)objectId {
+    if (objectId) {
+        return [NSString stringWithFormat:@"classes/%@/%@", className, objectId];
+    } else {
         return [NSString stringWithFormat:@"classes/%@", className];
     }
-    return [NSString stringWithFormat:@"classes/%@/%@", className, objectId];
 }
 
-+(NSString *)userObjectPath:(NSString *)objectId
-{
-    if (objectId == nil)
-    {
++ (NSString *)userObjectPath:(NSString *)objectId {
+    if (objectId) {
+        return [NSString stringWithFormat:@"%@/%@", [LCUser endPoint], objectId];
+    } else {
         return [LCUser endPoint];
     }
-    return [NSString stringWithFormat:@"%@/%@", [LCUser endPoint], objectId];
 }
 
-
-+(NSString *)roleObjectPath:(NSString *)objectId
-{
-    if (objectId == nil)
-    {
++ (NSString *)roleObjectPath:(NSString *)objectId {
+    if (objectId) {
+        return [NSString stringWithFormat:@"%@/%@", [LCRole endPoint], objectId];
+    } else {
         return [LCRole endPoint];
     }
-    return [NSString stringWithFormat:@"%@/%@", [LCRole endPoint], objectId];
 }
 
-+(NSString *)installationObjectPath:(NSString *)objectId
-{
-    if (objectId == nil)
-    {
++ (NSString *)installationObjectPath:(NSString *)objectId {
+    if (objectId) {
+        return [NSString stringWithFormat:@"%@/%@", [LCInstallation endPoint], objectId];
+    } else {
         return [LCInstallation endPoint];
     }
-    return [NSString stringWithFormat:@"%@/%@", [LCInstallation endPoint], objectId];
 }
 
-+(NSString *)objectPath:(NSString *)className
-               objectId:(NSString *)objectId
-{
-    //FIXME: 而且等于nil也没问题 只不过不应该再发请求
-    //NSAssert(objectClass!=nil, @"className should not be nil!");
-    if ([LCObjectUtils isUserClass:className])
-    {
-        return [LCObjectUtils userObjectPath:objectId];
++ (NSString *)objectPath:(NSString *)className objectId:(NSString *)objectId {
+    if ([self isUserClass:className]) {
+        return [self userObjectPath:objectId];
+    } else if ([self isRoleClass:className]) {
+        return [self roleObjectPath:objectId];
+    } else if ([self isInstallationClass:className]) {
+        return [self installationObjectPath:objectId];
     }
-    else if ([LCObjectUtils isRoleClass:className])
-    {
-        return [LCObjectUtils roleObjectPath:objectId];
-    }
-    else if ([LCObjectUtils isInstallationClass:className])
-    {
-        return [LCObjectUtils installationObjectPath:objectId];
-    }
-    return [LCObjectUtils classEndPoint:className objectId:objectId];
+    return [self classEndPoint:className objectId:objectId];
 }
 
 +(NSString *)batchPath {

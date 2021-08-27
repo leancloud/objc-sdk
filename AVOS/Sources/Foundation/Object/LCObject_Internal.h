@@ -44,8 +44,6 @@ NSString *request_object_id(NSDictionary *request) {
 @property (nonatomic, strong) NSMutableDictionary *_relationData;
 
 @property (nonatomic,   copy) NSString *_uuid;
-@property (nonatomic, assign) BOOL _isPointer;
-@property (nonatomic, assign) BOOL _running;
 @property (nonatomic, strong) LCRequestOperationQueue *_operationQueue;
 @property (nonatomic, strong) LCRequestManager *_requestManager;
 

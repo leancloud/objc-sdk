@@ -58,7 +58,6 @@ class LCUserTestCase: BaseTestCase {
                 exp.fulfill()
             }
         }
-        LCUser.logOut()
          */
     }
     
@@ -106,17 +105,13 @@ class LCUserTestCase: BaseTestCase {
                 exp.fulfill()
             }
         }
-        LCUser.logOut()
         */
     }
     
     func testFriendshipRequestAccept() {
-        let openid_1 = uuid
-        let openid_2 = uuid
-        
         let user_1 = LCUser()
         expecting { exp in
-            user_1.login(withAuthData: ["openid": openid_1], platformId: "test", options: nil) { succeeded, error in
+            user_1.login(withAuthData: ["openid": uuid], platformId: "test", options: nil) { succeeded, error in
                 XCTAssertTrue(succeeded)
                 XCTAssertNil(error)
                 exp.fulfill()
@@ -132,7 +127,7 @@ class LCUserTestCase: BaseTestCase {
         
         let user_2 = LCUser()
         expecting { exp in
-            user_2.login(withAuthData: ["openid": openid_2], platformId: "test", options: nil) { succeeded, error in
+            user_2.login(withAuthData: ["openid": uuid], platformId: "test", options: nil) { succeeded, error in
                 XCTAssertTrue(succeeded)
                 XCTAssertNil(error)
                 exp.fulfill()
@@ -153,31 +148,25 @@ class LCUserTestCase: BaseTestCase {
             }
         }
         
-        LCUser.logOut()
+        LCUser.changeCurrentUser(user_1, save: false)
         
         var query: LCQuery!
-        expecting(description: "Accept Friendship Request", count: 3) { exp in
-            user_1.login(withAuthData: ["openid": openid_1], platformId: "test", options: nil) { succeeded, error in
+        expecting(description: "Accept Friendship Request", count: 2) { exp in
+            query = LCFriendshipRequest.query()
+            query.findObjectsInBackground { requests, error in
+                let request = requests?.first as? LCFriendshipRequest
+                let friend = request?["friend"] as? LCUser
+                let user = request?["user"] as? LCUser
+                XCTAssertNotNil(request)
+                XCTAssertNotNil(friend)
+                XCTAssertNotNil(user)
                 XCTAssertNil(error)
                 exp.fulfill()
-                if succeeded {
-                    query = LCFriendshipRequest.query()
-                    query.findObjectsInBackground { requests, error in
-                        let request = requests?.first as? LCFriendshipRequest
-                        let friend = request?["friend"] as? LCUser
-                        let user = request?["user"] as? LCUser
-                        XCTAssertNotNil(request)
-                        XCTAssertNotNil(friend)
-                        XCTAssertNotNil(user)
+                if let request = request {
+                    LCFriendship.accept(request, attributes: ["group": "music"]) { succeeded, error in
+                        XCTAssertTrue(succeeded)
                         XCTAssertNil(error)
                         exp.fulfill()
-                        if let request = request {
-                            LCFriendship.accept(request, attributes: ["group": "music"]) { succeeded, error in
-                                XCTAssertTrue(succeeded)
-                                XCTAssertNil(error)
-                                exp.fulfill()
-                            }
-                        }
                     }
                 }
             }
@@ -195,50 +184,39 @@ class LCUserTestCase: BaseTestCase {
             }
         }
         
-        LCUser.logOut()
+        LCUser.changeCurrentUser(user_2, save: false)
         
-        expecting(count: 4) { exp in
-            user_2.login(withAuthData: ["openid": openid_2], platformId: "test", options: nil) { succeeded, error in
+        expecting(count: 3) { exp in
+            query = user_2.followeeObjectsQuery()
+            query.whereKey("friendStatus", equalTo: true)
+            query.findObjectsInBackground { followees, error in
+                let followee = followees?.first as? LCObject
+                XCTAssertNotNil(followee)
+                XCTAssertEqual(followee?["group"] as? String, "sport")
                 XCTAssertNil(error)
                 exp.fulfill()
-                if succeeded {
-                    query = user_2.followeeObjectsQuery()
-                    query.whereKey("friendStatus", equalTo: true)
-                    query.findObjectsInBackground { followees, error in
-                        let followee = followees?.first as? LCObject
-                        XCTAssertNotNil(followee)
-                        XCTAssertEqual(followee?["group"] as? String, "sport")
+                if let followee = followee {
+                    followee["group"] = "music"
+                    followee.saveInBackground { succeeded, error in
                         XCTAssertNil(error)
                         exp.fulfill()
-                        if let followee = followee {
-                            followee["group"] = "music"
-                            followee.saveInBackground { succeeded, error in
+                        if succeeded {
+                            user_2.unfollow(user_1.objectId!) { succeeded, error in
+                                XCTAssertTrue(succeeded)
                                 XCTAssertNil(error)
                                 exp.fulfill()
-                                if succeeded {
-                                    user_2.unfollow(user_1.objectId!) { succeeded, error in
-                                        XCTAssertTrue(succeeded)
-                                        XCTAssertNil(error)
-                                        exp.fulfill()
-                                    }
-                                }
                             }
                         }
                     }
                 }
             }
         }
-        
-        LCUser.logOut()
     }
     
     func testFriendshipRequestDecline() {
-        let openid_1 = uuid
-        let openid_2 = uuid
-        
         let user_1 = LCUser()
         expecting { exp in
-            user_1.login(withAuthData: ["openid": openid_1], platformId: "test", options: nil) { succeeded, error in
+            user_1.login(withAuthData: ["openid": uuid], platformId: "test", options: nil) { succeeded, error in
                 XCTAssertTrue(succeeded)
                 XCTAssertNil(error)
                 exp.fulfill()
@@ -254,7 +232,7 @@ class LCUserTestCase: BaseTestCase {
         
         let user_2 = LCUser()
         expecting { exp in
-            user_2.login(withAuthData: ["openid": openid_2], platformId: "test", options: nil) { succeeded, error in
+            user_2.login(withAuthData: ["openid": uuid], platformId: "test", options: nil) { succeeded, error in
                 XCTAssertTrue(succeeded)
                 XCTAssertNil(error)
                 exp.fulfill()
@@ -275,37 +253,31 @@ class LCUserTestCase: BaseTestCase {
             }
         }
         
-        LCUser.logOut()
+        LCUser.changeCurrentUser(user_1, save: false)
         
         var query: LCQuery!
-        expecting(description: "Decline Friendship Request", count: 3) { exp in
-            user_1.login(withAuthData: ["openid": openid_1], platformId: "test", options: nil) { succeeded, error in
+        expecting(description: "Decline Friendship Request", count: 2) { exp in
+            query = LCFriendshipRequest.query()
+            query.findObjectsInBackground { requests, error in
+                let request = requests?.first as? LCFriendshipRequest
+                let friend = request?["friend"] as? LCUser
+                let user = request?["user"] as? LCUser
+                XCTAssertNotNil(request)
+                XCTAssertNotNil(friend)
+                XCTAssertNotNil(user)
                 XCTAssertNil(error)
                 exp.fulfill()
-                if succeeded {
-                    query = LCFriendshipRequest.query()
-                    query.findObjectsInBackground { requests, error in
-                        let request = requests?.first as? LCFriendshipRequest
-                        let friend = request?["friend"] as? LCUser
-                        let user = request?["user"] as? LCUser
-                        XCTAssertNotNil(request)
-                        XCTAssertNotNil(friend)
-                        XCTAssertNotNil(user)
+                if let request = request {
+                    LCFriendship.declineRequest(request) { succeeded, error in
+                        XCTAssertTrue(succeeded)
                         XCTAssertNil(error)
                         exp.fulfill()
-                        if let request = request {
-                            LCFriendship.declineRequest(request) { succeeded, error in
-                                XCTAssertTrue(succeeded)
-                                XCTAssertNil(error)
-                                exp.fulfill()
-                            }
-                        }
                     }
                 }
             }
         }
         
-        expecting { exp in
+        expecting(description: "Delete Friendship Request", count: 2) { exp in
             query = LCFriendshipRequest.query()
             query.whereKey("status", equalTo: "declined")
             query.findObjectsInBackground { requests, error in
@@ -317,9 +289,12 @@ class LCUserTestCase: BaseTestCase {
                 XCTAssertNotNil(user)
                 XCTAssertNil(error)
                 exp.fulfill()
+                request?.deleteInBackground({ succeeded, error in
+                    XCTAssertTrue(succeeded)
+                    XCTAssertNil(error)
+                    exp.fulfill()
+                })
             }
         }
-        
-        LCUser.logOut()
     }
 }

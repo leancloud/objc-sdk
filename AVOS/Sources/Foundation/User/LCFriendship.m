@@ -19,6 +19,10 @@
     return @"_FriendshipRequest";
 }
 
++ (NSString *)parseClassName {
+    return [self className];
+}
+
 + (LCQuery *)query {
     LCQuery *query = [LCQuery queryWithClassName:[self className]];
     [query whereKey:@"friend" equalTo:[LCUser currentUser]];
@@ -38,13 +42,17 @@
 + (void)requestWithUserId:(NSString *)userId attributes:(NSDictionary *)attributes callback:(void (^)(BOOL, NSError * _Nullable))callback {
     if (!userId) {
         NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Parameter `userId` invalid.", nil);
-        callback(false, error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            callback(false, error);
+        });
         return;
     }
     LCUser *currentUser = [LCUser currentUser];
     if (!currentUser.sessionToken) {
         NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Please signin an user.", nil);
-        callback(false, error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            callback(false, error);
+        });
         return;
     }
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
@@ -69,13 +77,17 @@
 + (void)acceptRequest:(LCFriendshipRequest *)request attributes:(NSDictionary *)attributes callback:(void (^)(BOOL, NSError * _Nullable))callback {
     if (!request.objectId) {
         NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Parameter `request` invalid.", nil);
-        callback(false, error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            callback(false, error);
+        });
         return;
     }
     LCUser *currentUser = [LCUser currentUser];
     if (!currentUser.sessionToken) {
         NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Please signin an user.", nil);
-        callback(false, error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            callback(false, error);
+        });
         return;
     }
     NSString *path = [NSString stringWithFormat:@"users/friendshipRequests/%@/accept", request.objectId];
@@ -96,13 +108,17 @@
 + (void)declineRequest:(LCFriendshipRequest *)request callback:(void (^)(BOOL, NSError * _Nullable))callback {
     if (!request.objectId) {
         NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Parameter `request` invalid.", nil);
-        callback(false, error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            callback(false, error);
+        });
         return;
     }
     LCUser *currentUser = [LCUser currentUser];
     if (!currentUser.sessionToken) {
         NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Please signin an user.", nil);
-        callback(false, error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            callback(false, error);
+        });
         return;
     }
     NSString *path = [NSString stringWithFormat:@"users/friendshipRequests/%@/decline", request.objectId];

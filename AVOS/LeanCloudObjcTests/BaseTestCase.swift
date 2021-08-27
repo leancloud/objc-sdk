@@ -32,6 +32,7 @@ class BaseTestCase: XCTestCase {
         id: "S5vDI3IeCk1NLLiM1aFg3262-gzGzoHsz",
         key: "7g5pPsI55piz2PRLPWK5MPz0",
         serverURL: "https://s5vdi3ie.lc-cn-n1-shared.com",
+//        serverURL: "https://beta.leancloud.cn",
         masterKey: "Q26gTodbyi1Ki7lM9vtncF6U,master")
     
     static let ceApp = AppInfo(
@@ -65,6 +66,11 @@ class BaseTestCase: XCTestCase {
     
     override class func tearDown() {
         LCFile.clearAllPersistentCache()
+        super.tearDown()
+    }
+    
+    override func tearDown() {
+        LCUser.logOut()
         super.tearDown()
     }
 }

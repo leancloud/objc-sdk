@@ -22,7 +22,7 @@
 + (NSString *)userTag;
 
 + (NSString *)endPoint;
-- (NSString *)internalClassName;
+
 - (void)setNewFlag:(BOOL)isNew;
 
 - (NSArray *)linkedServiceNames;
