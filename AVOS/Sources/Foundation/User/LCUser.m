@@ -647,11 +647,17 @@ static BOOL enableAutomatic = NO;
     }];
 }
 
-// MARK: - logout
+// MARK: Log out
 
 + (void)logOut {
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:AnonymousIdKey];
-    [[self class] changeCurrentUser:nil save:YES];
+    [self logOutWithClearingAnonymousId:true];
+}
+
++ (void)logOutWithClearingAnonymousId:(BOOL)clearingAnonymousId {
+    if (clearingAnonymousId) {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:AnonymousIdKey];
+    }
+    [self changeCurrentUser:nil save:true];
 }
 
 // MARK: - password reset
