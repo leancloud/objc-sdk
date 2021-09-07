@@ -14,8 +14,8 @@ class LCUserTestCase: BaseTestCase {
     static let testablePhoneNumber = "+8618622223333"
     static let testableSMSCode = "170402"
     
+    /*
     func testVerifyPhoneNumberBySMSCode() {
-        /*
         let user = LCUser()
         let username = uuid
         let password = uuid
@@ -58,11 +58,11 @@ class LCUserTestCase: BaseTestCase {
                 exp.fulfill()
             }
         }
-         */
     }
+     */
     
+    /*
     func testUpdatePhoneNumberBySMSCode() {
-        /*
         let user = LCUser()
         let username = uuid
         let password = uuid
@@ -105,7 +105,40 @@ class LCUserTestCase: BaseTestCase {
                 exp.fulfill()
             }
         }
-        */
+    }
+     */
+    
+    func testLogOut() {
+        var uid1: String?
+        expecting { exp in
+            LCUser.loginAnonymously { user, error in
+                uid1 = user?.objectId
+                XCTAssertNotNil(uid1)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+        
+        LCUser.logOut(withClearingAnonymousId: false)
+        
+        expecting { exp in
+            LCUser.loginAnonymously { user, error in
+                XCTAssertEqual(uid1, user?.objectId)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+        
+        LCUser.logOut()
+        
+        expecting { exp in
+            LCUser.loginAnonymously { user, error in
+                XCTAssertNotNil(user?.objectId)
+                XCTAssertNotEqual(uid1, user?.objectId)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
     }
     
     func testFriendshipRequestAccept() {

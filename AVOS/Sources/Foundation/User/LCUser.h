@@ -322,13 +322,15 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
                                               password:(NSString *)password
                                                  block:(LCUserResultBlock)block;
 
+// MARK: Log out
 
-/** @name Logging Out */
-
-/*!
- Logs out the currently logged in user on disk.
- */
+/// Clearing local persistent cache data of the current user and set it to `nil`.
+/// It will also clearing local persistent cache of anonymous id.
 + (void)logOut;
+
+/// Clearing local persistent cache data of the current user and set it to `nil`.
+/// @param clearingAnonymousId `true` means clearing local persistent cache of anonymous id, `false` means NOT.
++ (void)logOutWithClearingAnonymousId:(BOOL)clearingAnonymousId;
 
 /** @name Requesting a Password Reset */
 
