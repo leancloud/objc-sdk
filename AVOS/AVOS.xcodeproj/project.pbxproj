@@ -85,7 +85,7 @@
 		D30B6A7F24A09DCA006ABE09 /* LCHTTPSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4AD23ACF39700AACE99 /* LCHTTPSessionManager.h */; };
 		D30B6A8024A09DCA006ABE09 /* LCHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D37EE4AA23ACF39700AACE99 /* LCHTTPSessionManager.m */; };
 		D30B6A8124A09DCA006ABE09 /* LCNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4A923ACF39700AACE99 /* LCNetworking.h */; };
-		D30B6A8224A09DCA006ABE09 /* LCNetworkReachabilityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4AE23ACF39700AACE99 /* LCNetworkReachabilityManager.h */; };
+		D30B6A8224A09DCA006ABE09 /* LCNetworkReachabilityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4AE23ACF39700AACE99 /* LCNetworkReachabilityManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A8324A09DCA006ABE09 /* LCNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D37EE4AF23ACF39700AACE99 /* LCNetworkReachabilityManager.m */; };
 		D30B6A8424A09DCA006ABE09 /* LCSecurityPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4B023ACF39700AACE99 /* LCSecurityPolicy.h */; };
 		D30B6A8524A09DCA006ABE09 /* LCSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = D37EE4A323ACF39600AACE99 /* LCSecurityPolicy.m */; };
