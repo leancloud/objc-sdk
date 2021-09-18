@@ -27,6 +27,7 @@ Pod::Spec.new do |s|
     
     ss.public_header_files =
       'AVOS/LeanCloudObjc/Foundation.h',
+      'AVOS/Sources/Foundation/Vendor/LCNetworking/LCNetworkReachabilityManager.h',
       'AVOS/Sources/Foundation/Captcha/LCCaptcha.h',
       'AVOS/Sources/Foundation/Utils/LCDynamicObject.h',
       'AVOS/Sources/Foundation/SMS/LCSMS.h',
