@@ -288,7 +288,7 @@
 		D30B6B5524A09FB6006ABE09 /* LCRTMConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B722475244E00678B2B /* LCRTMConnection.h */; };
 		D30B6B5624A09FB6006ABE09 /* LCRTMConnection_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34C417D2483C3FD00CD2459 /* LCRTMConnection_Internal.h */; };
 		D30B6B5724A09FB6006ABE09 /* LCRTMConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D3700B732475244E00678B2B /* LCRTMConnection.m */; };
-		D30B6B5824A09FB6006ABE09 /* LCRTMWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = D3120E0823B0DA8E00A64120 /* LCRTMWebSocket.h */; };
+		D30B6B5824A09FB6006ABE09 /* LCRTMWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = D3120E0823B0DA8E00A64120 /* LCRTMWebSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6B5924A09FB6006ABE09 /* LCRTMWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = D3120E0923B0DA8E00A64120 /* LCRTMWebSocket.m */; };
 		D30B6B5B24A0A03D006ABE09 /* LCLiveQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 838CE3521EC9838500B24F5B /* LCLiveQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6B5C24A0A03D006ABE09 /* LCLiveQuery_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34FD72B2068CFE900B7C11B /* LCLiveQuery_Internal.h */; };
