@@ -82,6 +82,7 @@ Pod::Spec.new do |s|
 
     ss.public_header_files =
       'AVOS/LeanCloudObjc/Realtime.h',
+      'AVOS/Sources/Realtime/IM/Connection/LCRTMWebSocket.h',
       'AVOS/Sources/Realtime/IM/Message/LCIMMessageOption.h',
       'AVOS/Sources/Realtime/IM/Conversation/LCIMKeyedConversation.h',
       'AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h',

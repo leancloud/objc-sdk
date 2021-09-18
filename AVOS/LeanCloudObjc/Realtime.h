@@ -10,6 +10,9 @@
 
 #import "Foundation.h"
 
+// WebSocket
+#import "LCRTMWebSocket.h"
+
 // Constant
 #import "LCIMCommon.h"
 
