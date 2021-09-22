@@ -10,7 +10,7 @@
 
 #import "Foundation.h"
 
-// WebSocket
+// Vendor
 #import "LCRTMWebSocket.h"
 
 // Constant

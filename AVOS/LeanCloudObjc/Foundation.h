@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+// Vendor
+#import "LCNetworking.h"
+
 // Application
 #import "LCApplication.h"
 
@@ -62,6 +65,3 @@
 
 // Leaderboard
 #import "LCLeaderboard.h"
-
-// Misc
-#import "LCNetworkReachabilityManager.h"

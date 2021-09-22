@@ -23,11 +23,12 @@ Pod::Spec.new do |s|
   s.subspec 'Foundation' do |ss|
     ss.source_files =
       'AVOS/LeanCloudObjc/Foundation.h',
+      'AVOS/Sources/Vendor/LCNetworking/*.{h,m}',
       'AVOS/Sources/Foundation/**/*.{h,m}'
     
     ss.public_header_files =
       'AVOS/LeanCloudObjc/Foundation.h',
-      'AVOS/Sources/Foundation/Vendor/LCNetworking/LCNetworkReachabilityManager.h',
+      'AVOS/Sources/Vendor/LCNetworking/*.h',
       'AVOS/Sources/Foundation/Captcha/LCCaptcha.h',
       'AVOS/Sources/Foundation/Utils/LCDynamicObject.h',
       'AVOS/Sources/Foundation/SMS/LCSMS.h',
@@ -78,12 +79,13 @@ Pod::Spec.new do |s|
 
     ss.source_files =
       'AVOS/LeanCloudObjc/Realtime.h',
+      'AVOS/Sources/Vendor/WebSocket/*.{h,m}',
       'AVOS/Sources/Realtime/IM/**/*.{h,m,c}',
       'AVOS/Sources/Realtime/LiveQuery/**/*.{h,m}'
 
     ss.public_header_files =
       'AVOS/LeanCloudObjc/Realtime.h',
-      'AVOS/Sources/Realtime/IM/Connection/LCRTMWebSocket.h',
+      'AVOS/Sources/Vendor/WebSocket/*.h',
       'AVOS/Sources/Realtime/IM/Message/LCIMMessageOption.h',
       'AVOS/Sources/Realtime/IM/Conversation/LCIMKeyedConversation.h',
       'AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h',
