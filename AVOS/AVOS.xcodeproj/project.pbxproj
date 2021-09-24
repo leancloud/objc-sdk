@@ -10,7 +10,7 @@
 		D305F7B0235577AD00222EBC /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D305F7AF235577AD00222EBC /* main.swift */; };
 		D30B6A1424A09978006ABE09 /* LeanCloudObjc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D30B6A0B24A09978006ABE09 /* LeanCloudObjc.framework */; };
 		D30B6A1B24A09978006ABE09 /* LeanCloudObjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D30B6A0D24A09978006ABE09 /* LeanCloudObjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D30B6A2224A09B1F006ABE09 /* UserAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841AAC1A5A7A0000C5C6C4 /* UserAgent.h */; };
+		D30B6A2224A09B1F006ABE09 /* UserAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841AAC1A5A7A0000C5C6C4 /* UserAgent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A2424A09B1F006ABE09 /* LCGlobal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419F41A5A79FF00C5C6C4 /* LCGlobal.h */; };
 		D30B6A2824A09B1F006ABE09 /* LCApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B782475345C00678B2B /* LCApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A2924A09B1F006ABE09 /* LCApplication_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3596DAC2480EEED002D2D22 /* LCApplication_Internal.h */; };
@@ -70,7 +70,7 @@
 		D30B6A6D24A09D62006ABE09 /* LCQuery_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A691A5A79FF00C5C6C4 /* LCQuery_Internal.h */; };
 		D30B6A6E24A09D7B006ABE09 /* LCRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A6C1A5A79FF00C5C6C4 /* LCRequestOperation.h */; };
 		D30B6A6F24A09D7B006ABE09 /* LCRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A6D1A5A79FF00C5C6C4 /* LCRequestOperation.m */; };
-		D30B6A7024A09D7B006ABE09 /* LCPaasClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A6E1A5A79FF00C5C6C4 /* LCPaasClient.h */; };
+		D30B6A7024A09D7B006ABE09 /* LCPaasClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A6E1A5A79FF00C5C6C4 /* LCPaasClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A7224A09D7B006ABE09 /* LCPaasClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A6F1A5A79FF00C5C6C4 /* LCPaasClient.m */; };
 		D30B6A7324A09D87006ABE09 /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F9A2C51CE014430002E21B /* LCRouter.h */; };
 		D30B6A7424A09D87006ABE09 /* LCRouter_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */; };
