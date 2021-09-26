@@ -171,17 +171,23 @@ NSString *LCStringFromDistanceUnit(LCQueryDistanceUnit unit) {
     _maxCacheAge = 24 * 3600;
 }
 
-- (void)includeKey:(NSString *)key
-{
+- (void)includeKey:(NSString *)key {
     [self.include addObject:key];
 }
 
-- (void)selectKeys:(NSArray *)keys
-{
-    if (self.selectedKeys == nil) {
-        _selectedKeys = [[NSMutableSet alloc] initWithCapacity:keys.count];
+- (void)resetIncludeKey {
+    self.include = [[NSMutableSet alloc] init];
+}
+
+- (void)selectKeys:(NSArray<NSString *> *)keys {
+    if (!self.selectedKeys) {
+        self.selectedKeys = [[NSMutableSet alloc] initWithCapacity:keys.count];
     }
     [self.selectedKeys addObjectsFromArray:keys];
+}
+
+- (void)resetSelectKey {
+    self.selectedKeys = nil;
 }
 
 - (void)addWhereItem:(id)dict forKey:(NSString *)key {

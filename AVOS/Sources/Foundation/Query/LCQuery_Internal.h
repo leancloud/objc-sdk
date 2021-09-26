@@ -11,7 +11,7 @@
 @interface LCQuery ()
 @property (nonatomic, readwrite, strong) NSMutableDictionary *parameters;
 @property (nonatomic, readwrite, strong) NSMutableDictionary *where;
-@property (nonatomic, readwrite, strong) NSMutableSet * selectedKeys;
+@property (nonatomic) NSMutableSet<NSString *> *selectedKeys;
 @property (nonatomic, strong) NSMutableDictionary *extraParameters;
 
 - (NSDictionary *)assembleParameters;
