@@ -184,6 +184,10 @@ static LCLogLevel globalLogLevel = LCLogLevelDefault;
     return instance;
 }
 
+- (NSString *)serverURLString {
+    return [LCRouter serverURLString];
+}
+
 - (void)setWithIdentifier:(NSString *)identifier key:(NSString *)key {
     _identifier = [identifier copy];
     _key = [key copy];
