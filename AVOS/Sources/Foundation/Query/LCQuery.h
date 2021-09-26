@@ -109,12 +109,18 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)includeKey:(NSString *)key;
 
+/// Reset included keys.
+- (void)resetIncludeKey;
+
 /*!
  Make the query restrict the fields of the returned LCObjects to include only the provided keys.
  If this is called multiple times, then all of the keys specified in each of the calls will be included.
  @param keys The keys to include in the result.
  */
-- (void)selectKeys:(NSArray *)keys;
+- (void)selectKeys:(NSArray<NSString *> *)keys;
+
+/// Reset selected keys.
+- (void)resetSelectKey;
 
 /*!
  Add a constraint that requires a particular key exists.
