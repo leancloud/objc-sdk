@@ -10,6 +10,9 @@
 
 @interface LCApplication ()
 
+@property (nonatomic) NSString *identifier;
+@property (nonatomic) NSString *key;
+
 - (NSString *)identifierThrowException;
 - (NSString *)keyThrowException;
 
