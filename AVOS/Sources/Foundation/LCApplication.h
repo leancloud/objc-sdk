@@ -166,6 +166,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSString *identifier;
 @property (nonatomic, readonly) NSString *key;
+@property (nonatomic, readonly, nullable) NSString *serverURLString;
 @property (nonatomic, copy, nullable) NSString *RTMServer;
 
 - (void)setWithIdentifier:(NSString *)identifier key:(NSString *)key;

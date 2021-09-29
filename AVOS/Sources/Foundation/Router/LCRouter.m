@@ -30,7 +30,7 @@ static NSMutableDictionary<NSString *, NSString *> *customAppServerTable;
 }
 
 + (void)setServerURLString:(NSString *)URLString {
-    serverURLString = URLString;
+    serverURLString = [URLString copy];
 }
 
 + (instancetype)sharedInstance

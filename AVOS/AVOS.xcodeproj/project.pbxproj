@@ -10,7 +10,7 @@
 		D305F7B0235577AD00222EBC /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D305F7AF235577AD00222EBC /* main.swift */; };
 		D30B6A1424A09978006ABE09 /* LeanCloudObjc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D30B6A0B24A09978006ABE09 /* LeanCloudObjc.framework */; };
 		D30B6A1B24A09978006ABE09 /* LeanCloudObjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D30B6A0D24A09978006ABE09 /* LeanCloudObjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D30B6A2224A09B1F006ABE09 /* UserAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841AAC1A5A7A0000C5C6C4 /* UserAgent.h */; };
+		D30B6A2224A09B1F006ABE09 /* UserAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841AAC1A5A7A0000C5C6C4 /* UserAgent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A2424A09B1F006ABE09 /* LCGlobal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8419F41A5A79FF00C5C6C4 /* LCGlobal.h */; };
 		D30B6A2824A09B1F006ABE09 /* LCApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B782475345C00678B2B /* LCApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A2924A09B1F006ABE09 /* LCApplication_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D3596DAC2480EEED002D2D22 /* LCApplication_Internal.h */; };
@@ -70,7 +70,7 @@
 		D30B6A6D24A09D62006ABE09 /* LCQuery_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A691A5A79FF00C5C6C4 /* LCQuery_Internal.h */; };
 		D30B6A6E24A09D7B006ABE09 /* LCRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A6C1A5A79FF00C5C6C4 /* LCRequestOperation.h */; };
 		D30B6A6F24A09D7B006ABE09 /* LCRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A6D1A5A79FF00C5C6C4 /* LCRequestOperation.m */; };
-		D30B6A7024A09D7B006ABE09 /* LCPaasClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A6E1A5A79FF00C5C6C4 /* LCPaasClient.h */; };
+		D30B6A7024A09D7B006ABE09 /* LCPaasClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A6E1A5A79FF00C5C6C4 /* LCPaasClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A7224A09D7B006ABE09 /* LCPaasClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A6F1A5A79FF00C5C6C4 /* LCPaasClient.m */; };
 		D30B6A7324A09D87006ABE09 /* LCRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 83F9A2C51CE014430002E21B /* LCRouter.h */; };
 		D30B6A7424A09D87006ABE09 /* LCRouter_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34EBDCC211C20FF0092A538 /* LCRouter_Internal.h */; };
@@ -81,19 +81,19 @@
 		D30B6A7924A09DA3006ABE09 /* LCSearchSortBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A761A5A79FF00C5C6C4 /* LCSearchSortBuilder.m */; };
 		D30B6A7C24A09DBE006ABE09 /* LCStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A781A5A7A0000C5C6C4 /* LCStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A7D24A09DBF006ABE09 /* LCStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A791A5A7A0000C5C6C4 /* LCStatus.m */; };
-		D30B6A7E24A09DCA006ABE09 /* LCCompatibilityMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4AC23ACF39700AACE99 /* LCCompatibilityMacros.h */; };
-		D30B6A7F24A09DCA006ABE09 /* LCHTTPSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4AD23ACF39700AACE99 /* LCHTTPSessionManager.h */; };
+		D30B6A7E24A09DCA006ABE09 /* LCCompatibilityMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4AC23ACF39700AACE99 /* LCCompatibilityMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D30B6A7F24A09DCA006ABE09 /* LCHTTPSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4AD23ACF39700AACE99 /* LCHTTPSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A8024A09DCA006ABE09 /* LCHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D37EE4AA23ACF39700AACE99 /* LCHTTPSessionManager.m */; };
-		D30B6A8124A09DCA006ABE09 /* LCNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4A923ACF39700AACE99 /* LCNetworking.h */; };
-		D30B6A8224A09DCA006ABE09 /* LCNetworkReachabilityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4AE23ACF39700AACE99 /* LCNetworkReachabilityManager.h */; };
+		D30B6A8124A09DCA006ABE09 /* LCNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4A923ACF39700AACE99 /* LCNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D30B6A8224A09DCA006ABE09 /* LCNetworkReachabilityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4AE23ACF39700AACE99 /* LCNetworkReachabilityManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A8324A09DCA006ABE09 /* LCNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D37EE4AF23ACF39700AACE99 /* LCNetworkReachabilityManager.m */; };
-		D30B6A8424A09DCA006ABE09 /* LCSecurityPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4B023ACF39700AACE99 /* LCSecurityPolicy.h */; };
+		D30B6A8424A09DCA006ABE09 /* LCSecurityPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4B023ACF39700AACE99 /* LCSecurityPolicy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A8524A09DCA006ABE09 /* LCSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = D37EE4A323ACF39600AACE99 /* LCSecurityPolicy.m */; };
-		D30B6A8624A09DCA006ABE09 /* LCURLRequestSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4A423ACF39600AACE99 /* LCURLRequestSerialization.h */; };
+		D30B6A8624A09DCA006ABE09 /* LCURLRequestSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4A423ACF39600AACE99 /* LCURLRequestSerialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A8724A09DCA006ABE09 /* LCURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = D37EE4A623ACF39700AACE99 /* LCURLRequestSerialization.m */; };
-		D30B6A8824A09DCA006ABE09 /* LCURLResponseSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4A523ACF39600AACE99 /* LCURLResponseSerialization.h */; };
+		D30B6A8824A09DCA006ABE09 /* LCURLResponseSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4A523ACF39600AACE99 /* LCURLResponseSerialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A8924A09DCA006ABE09 /* LCURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = D37EE4A723ACF39700AACE99 /* LCURLResponseSerialization.m */; };
-		D30B6A8A24A09DCA006ABE09 /* LCURLSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4A823ACF39700AACE99 /* LCURLSessionManager.h */; };
+		D30B6A8A24A09DCA006ABE09 /* LCURLSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D37EE4A823ACF39700AACE99 /* LCURLSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A8B24A09DCA006ABE09 /* LCURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D37EE4AB23ACF39700AACE99 /* LCURLSessionManager.m */; };
 		D30B6A8C24A09DD8006ABE09 /* LCKeychain.h in Headers */ = {isa = PBXBuildFile; fileRef = 836705DC1BA1C1710050E968 /* LCKeychain.h */; };
 		D30B6A8D24A09DD8006ABE09 /* LCKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 836705DD1BA1C1710050E968 /* LCKeychain.m */; };
@@ -288,7 +288,7 @@
 		D30B6B5524A09FB6006ABE09 /* LCRTMConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = D3700B722475244E00678B2B /* LCRTMConnection.h */; };
 		D30B6B5624A09FB6006ABE09 /* LCRTMConnection_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34C417D2483C3FD00CD2459 /* LCRTMConnection_Internal.h */; };
 		D30B6B5724A09FB6006ABE09 /* LCRTMConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D3700B732475244E00678B2B /* LCRTMConnection.m */; };
-		D30B6B5824A09FB6006ABE09 /* LCRTMWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = D3120E0823B0DA8E00A64120 /* LCRTMWebSocket.h */; };
+		D30B6B5824A09FB6006ABE09 /* LCRTMWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = D3120E0823B0DA8E00A64120 /* LCRTMWebSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6B5924A09FB6006ABE09 /* LCRTMWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = D3120E0923B0DA8E00A64120 /* LCRTMWebSocket.m */; };
 		D30B6B5B24A0A03D006ABE09 /* LCLiveQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 838CE3521EC9838500B24F5B /* LCLiveQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6B5C24A0A03D006ABE09 /* LCLiveQuery_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D34FD72B2068CFE900B7C11B /* LCLiveQuery_Internal.h */; };
@@ -1013,7 +1013,6 @@
 		8C841A7A1A5A7A0000C5C6C4 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				83FCB9911CEDC57C007D8712 /* LCNetworking */,
 				836705DA1BA1C1710050E968 /* JNKeychain */,
 				83DF02A41AF86032000E289C /* LCDB */,
 			);
@@ -1286,6 +1285,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D3516D1A26FB19640013BCF3 /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				83FCB9911CEDC57C007D8712 /* LCNetworking */,
+				D3516D1B26FB19860013BCF3 /* WebSocket */,
+			);
+			path = Vendor;
+			sourceTree = "<group>";
+		};
+		D3516D1B26FB19860013BCF3 /* WebSocket */ = {
+			isa = PBXGroup;
+			children = (
+				D3120E0823B0DA8E00A64120 /* LCRTMWebSocket.h */,
+				D3120E0923B0DA8E00A64120 /* LCRTMWebSocket.m */,
+			);
+			path = WebSocket;
+			sourceTree = "<group>";
+		};
 		D365E42126C3D23900148DE8 /* Leaderboard */ = {
 			isa = PBXGroup;
 			children = (
@@ -1302,8 +1319,6 @@
 				D3700B722475244E00678B2B /* LCRTMConnection.h */,
 				D34C417D2483C3FD00CD2459 /* LCRTMConnection_Internal.h */,
 				D3700B732475244E00678B2B /* LCRTMConnection.m */,
-				D3120E0823B0DA8E00A64120 /* LCRTMWebSocket.h */,
-				D3120E0923B0DA8E00A64120 /* LCRTMWebSocket.m */,
 			);
 			path = Connection;
 			sourceTree = "<group>";
@@ -1332,6 +1347,7 @@
 		D3F227BC2649133900A599F5 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				D3516D1A26FB19640013BCF3 /* Vendor */,
 				8C8419881A5A791300C5C6C4 /* Foundation */,
 				D3F227BD264914E400A599F5 /* Realtime */,
 			);

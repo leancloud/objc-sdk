@@ -188,7 +188,7 @@ static NSString * LCFile_ObjectPath(NSString *objectId)
         });
         
         NSNumber *fileSize = fileAttributes[NSFileSize];
-        _rawJSONData[kLCFile_metaData] = fileSize ? @{ kLCFile_size : fileSize } : @{};
+        _rawJSONData[kLCFile_metaData] = (fileSize != nil) ? @{ kLCFile_size : fileSize } : @{};
         
         _ACL = ({
             

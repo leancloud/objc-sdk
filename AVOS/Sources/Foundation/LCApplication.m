@@ -184,25 +184,37 @@ static LCLogLevel globalLogLevel = LCLogLevelDefault;
     return instance;
 }
 
+- (NSString *)serverURLString {
+    return [LCRouter serverURLString];
+}
+
 - (void)setWithIdentifier:(NSString *)identifier key:(NSString *)key {
     _identifier = [identifier copy];
     _key = [key copy];
 }
 
+- (NSString *)identifier {
+    return [self identifierThrowException];
+}
+
+- (NSString *)key {
+    return [self keyThrowException];
+}
+
 - (NSString *)identifierThrowException {
-    if (!self.identifier) {
+    if (!_identifier || _identifier.length == 0) {
         [NSException raise:NSInternalInconsistencyException
                     format:@"Application identifier not found."];
     }
-    return self.identifier;
+    return _identifier;
 }
 
 - (NSString *)keyThrowException {
-    if (!self.key) {
+    if (!_key || _key.length == 0) {
         [NSException raise:NSInternalInconsistencyException
                     format:@"Application key not found."];
     }
-    return self.key;
+    return _key;
 }
 
 @end
