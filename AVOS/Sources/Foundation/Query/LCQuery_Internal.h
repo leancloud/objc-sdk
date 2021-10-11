@@ -14,7 +14,7 @@
 @property (nonatomic) NSMutableSet<NSString *> *selectedKeys;
 @property (nonatomic, strong) NSMutableDictionary *extraParameters;
 
-- (NSDictionary *)assembleParameters;
+- (NSMutableDictionary *)assembleParameters;
 + (NSDictionary *)dictionaryFromIncludeKeys:(NSArray *)array;
 - (NSString *)queryPath;
 -(void)queryWithBlock:(NSString *)path

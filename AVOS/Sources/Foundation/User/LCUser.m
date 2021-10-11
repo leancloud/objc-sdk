@@ -6,7 +6,7 @@
 #import "LCObject_Internal.h"
 #import "LCPaasClient.h"
 #import "LCUtils_Internal.h"
-#import "LCQuery.h"
+#import "LCQuery_Internal.h"
 #import "LCPersistenceUtils.h"
 #import "LCObjectUtils.h"
 #import "LCPaasClient.h"
@@ -1189,6 +1189,30 @@ static BOOL enableAutomatic = NO;
 - (BOOL)isAnonymous
 {
     return [[self linkedServiceNames] containsObject:anonymousTag];
+}
+
+// MARK: Strictly Find
+
++ (void)strictlyFindWithQuery:(LCQuery *)query
+                     callback:(void (^)(NSArray<LCUser *> * _Nullable, NSError * _Nullable))callback
+{
+    [[LCPaasClient sharedInstance] getObject:@"users/strictlyQuery"
+                              withParameters:[query assembleParameters]
+                                       block:^(id  _Nullable object, NSError * _Nullable error) {
+        NSMutableArray<LCUser *> *users;
+        if (!error && [NSDictionary _lc_isTypeOf:object]) {
+            NSArray *results = [NSArray _lc_decoding:object key:@"results"];
+            users = [NSMutableArray arrayWithCapacity:results.count];
+            for (NSDictionary *dictionary in results) {
+                if ([NSDictionary _lc_isTypeOf:dictionary]) {
+                    LCUser *user = (LCUser *)[LCObjectUtils lcObjectForClass:[LCUser userTag]];
+                    [LCObjectUtils copyDictionary:dictionary toObject:user];
+                    [users addObject:user];
+                }
+            }
+        }
+        [LCUtils callArrayResultBlock:callback array:users error:error];
+    }];
 }
 
 #pragma mark - Override from LCObject
