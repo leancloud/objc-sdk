@@ -500,6 +500,15 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  */
 - (BOOL)isAnonymous;
 
+// MARK: Strictly Find
+
+/// More restrictive on query conditions to find user.
+/// Constraints: NOT support `skip`; NOT support the protected fields; NOT support `inQuery` ...
+/// @param query The query conditions.
+/// @param callback Result callback.
++ (void)strictlyFindWithQuery:(LCQuery *)query
+                     callback:(void (^)(NSArray<LCUser *> * _Nullable users, NSError * _Nullable error))callback;
+
 @end
 
 /**

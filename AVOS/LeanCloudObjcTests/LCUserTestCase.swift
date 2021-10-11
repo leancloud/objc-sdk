@@ -330,4 +330,46 @@ class LCUserTestCase: BaseTestCase {
             }
         }
     }
+    
+    func testStrictlyFind() {
+        expecting { exp in
+            LCUser.loginAnonymously { user, error in
+                XCTAssertNotNil(user)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+        guard let user = LCUser.current() else {
+            XCTFail()
+            return
+        }
+        let hiddenField = "hiddenField"
+        let exposedField = "exposedField"
+        user[hiddenField] = uuid
+        user[exposedField] = uuid
+        XCTAssertTrue(user.save())
+        
+        expecting { exp in
+            let query = LCQuery()
+            query.whereKey(hiddenField, equalTo: user[hiddenField] ?? "")
+            LCUser.strictlyFind(with: query) { users, error in
+                XCTAssertTrue(Thread.isMainThread)
+                XCTAssertNil(users)
+                XCTAssertNotNil(error)
+                exp.fulfill()
+            }
+        }
+        
+        expecting { exp in
+            let query = LCQuery()
+            query.whereKey(exposedField, equalTo: user[exposedField] ?? "")
+            LCUser.strictlyFind(with: query) { users, error in
+                XCTAssertTrue(Thread.isMainThread)
+                XCTAssertEqual(users?.count, 1)
+                XCTAssertEqual(users?.first?.objectId, user.objectId)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+    }
 }

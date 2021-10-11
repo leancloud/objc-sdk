@@ -69,6 +69,11 @@ class BaseTestCase: XCTestCase {
         super.tearDown()
     }
     
+    override func setUp() {
+        super.setUp()
+        LCUser.logOut()
+    }
+    
     override func tearDown() {
         LCUser.logOut()
         super.tearDown()

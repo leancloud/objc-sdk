@@ -1012,39 +1012,30 @@ static NSString * quote(NSString *string)
 
 - (NSMutableDictionary *)assembleParameters {
     [self.parameters removeAllObjects];
-
-    if ([self.where allKeys].count > 0)
-    {
+    if (self.where.count > 0) {
         [self.parameters setObject:[self whereString] forKey:@"where"];
     }
-
-    if (self.limit > 0)
-    {
+    if (self.limit > 0) {
         [self.parameters setObject:@(self.limit) forKey:@"limit"];
     }
-    if (self.skip > 0)
-    {
+    if (self.skip > 0) {
         [self.parameters setObject:@(self.skip) forKey:@"skip"];
     }
-    if (self.order.length > 0)
-    {
+    if (self.order.length > 0) {
         [self.parameters setObject:self.order forKey:@"order"];
     }
-    if (self.include.count > 0)
-    {
-        NSString * myIncludes = [[self.include allObjects] componentsJoinedByString:@","];
-        [self.parameters setObject:myIncludes forKey:@"include"];
+    if (self.include.count > 0) {
+        NSString *includes = [[self.include allObjects] componentsJoinedByString:@","];
+        [self.parameters setObject:includes forKey:@"include"];
     }
-    if (self.selectedKeys.count > 0)
-    {
-        NSString * keys = [[self.selectedKeys allObjects] componentsJoinedByString:@","];
+    if (self.selectedKeys.count > 0) {
+        NSString *keys = [[self.selectedKeys allObjects] componentsJoinedByString:@","];
         [self.parameters setObject:keys forKey:@"keys"];
     }
-    if (self.includeACL)
-    {
+    if (self.includeACL) {
         [self.parameters setObject:@"true" forKey:@"returnACL"];
     }
-    if ([self.extraParameters allKeys].count > 0) {
+    if (self.extraParameters.count > 0) {
         [self.parameters addEntriesFromDictionary:self.extraParameters];
     }
     return self.parameters;
