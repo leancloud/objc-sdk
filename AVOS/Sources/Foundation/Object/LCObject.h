@@ -7,6 +7,7 @@
 @class LCRelation;
 @class LCACL;
 @class LCSaveOption;
+@class LCObjectFetchOption;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -343,151 +344,28 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)saveAllInBackground:(NSArray *)objects
                       block:(LCBooleanResultBlock)block;
 
-#pragma mark - Refresh
+// MARK: Fetch
 
-/*! @name Getting an Object from LeanCloud */
-
-/*!
- Gets whether the LCObject has been fetched.
- @return YES if the LCObject is new or has been fetched or refreshed.  NO otherwise.
- */
-- (BOOL)isDataAvailable;
-
-#if LC_IOS_ONLY
-// Deprecated and intentionally not available on the new OS X SDK
-
-/*!
- Refreshes the LCObject with the current data from the server.
- */
-- (void)refresh;
-
-/*!
- Refreshes the LCObject with the current data from the server.
- @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
- */
-- (void)refreshWithKeys:(NSArray *)keys;
-
-/*!
- Refreshes the LCObject with the current data from the server and sets an error if it occurs.
- @param error Pointer to an NSError that will be set if necessary.
- @return success or not
- */
-- (BOOL)refresh:(NSError **)error;
-
-/*!
- An alias of `-[LCObject refresh:]` methods that supports Swift exception.
- @seealso `-[LCObject refresh:]`
- */
-- (BOOL)refreshAndThrowsWithError:(NSError **)error;
-
-/*!
- Refreshes the LCObject asynchronously and executes the given callback block.
- @param block The block to execute. The block should have the following argument signature: (LCObject *object, NSError *error)
- */
-- (void)refreshInBackgroundWithBlock:(LCObjectResultBlock)block;
-
-/*!
- Refreshes the LCObject with the current data from the server.
- @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
- @param block The block to execute. The block should have the following argument signature: (LCObject *object, NSError *error)
- */
-- (void)refreshInBackgroundWithKeys:(NSArray *)keys
-                              block:(LCObjectResultBlock)block;
-
-#endif
-
-#pragma mark - Fetch
-
-/*!
- Fetches the LCObject with the current data from the server.
- */
+/// Fetching the data of the object from the server synchronously.
 - (BOOL)fetch;
-/*!
- Fetches the LCObject with the current data from the server and sets an error if it occurs.
- @param error Pointer to an NSError that will be set if necessary.
- @return success or not
- */
-- (BOOL)fetch:(NSError **)error;
 
-/*!
- An alias of `-[LCObject fetch:]` methods that supports Swift exception.
- @seealso `-[LCObject fetch:]`
- */
-- (BOOL)fetchAndThrowsWithError:(NSError **)error;
+/// Fetching the data of the object from the server synchronously.
+/// @param error The pointer of `NSError *`.
+- (BOOL)fetchAndThrowsWithError:(NSError * __autoreleasing *)error;
 
-/*!
- Fetches the LCObject with the current data and specified keys from the server and sets an error if it occurs.
- @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
- */
-- (void)fetchWithKeys:(nullable NSArray *)keys;
+/// Fetching the data of the object from the server synchronously.
+/// @param option See `LCObjectFetchOption`.
+/// @param error The pointer of `NSError *`.
+- (BOOL)fetchWithOption:(nullable LCObjectFetchOption *)option error:(NSError * __autoreleasing *)error;
 
-/*!
- Fetches the LCObject with the current data and specified keys from the server and sets an error if it occurs.
- @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
- @param error Pointer to an NSError that will be set if necessary.
- @return success or not
- */
-- (BOOL)fetchWithKeys:(nullable NSArray *)keys
-                error:(NSError **)error;
-
-/*!
- Fetches the LCObject's data from the server if isDataAvailable is false.
- */
-- (LCObject *)fetchIfNeeded;
-
-/*!
- Fetches the LCObject's data from the server if isDataAvailable is false.
- @param error Pointer to an NSError that will be set if necessary.
- */
-- (LCObject *)fetchIfNeeded:(NSError **)error;
-
-/*!
- An alias of `-[LCObject fetchIfNeeded:]` methods that supports Swift exception.
- @seealso `-[LCObject fetchIfNeeded:]`
- */
-- (LCObject *)fetchIfNeededAndThrowsWithError:(NSError **)error;
-
-/*!
- Fetches the LCObject's data from the server if isDataAvailable is false.
- @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
- */
-- (LCObject *)fetchIfNeededWithKeys:(nullable NSArray *)keys;
-
-/*!
- Fetches the LCObject's data from the server if isDataAvailable is false.
- @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
- @param error Pointer to an NSError that will be set if necessary.
- */
-- (LCObject *)fetchIfNeededWithKeys:(nullable NSArray *)keys
-                              error:(NSError **)error;
-
-/*!
- Fetches the LCObject asynchronously and executes the given callback block.
- @param block The block to execute. The block should have the following argument signature: (LCObject *object, NSError *error)
- */
+/// Fetching the data of the object from the server asynchronously.
+/// @param block Result callback.
 - (void)fetchInBackgroundWithBlock:(LCObjectResultBlock)block;
 
-/*!
- Fetches the LCObject asynchronously and executes the given callback block.
- @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
- @param block The block to execute. The block should have the following argument signature: (LCObject *object, NSError *error)
- */
-- (void)fetchInBackgroundWithKeys:(nullable NSArray *)keys
-                            block:(LCObjectResultBlock)block;
-
-/*!
- Fetches the LCObject's data asynchronously if isDataAvailable is false, then calls the callback block.
- @param block The block to execute.  The block should have the following argument signature: (LCObject *object, NSError *error)
- */
-- (void)fetchIfNeededInBackgroundWithBlock:(LCObjectResultBlock)block;
-
-/*! @name Getting Many Objects from LeanCloud */
-
-/*!
- Fetches all of the LCObjects with the current data from the server
- @param objects The list of objects to fetch.
- */
-+ (void)fetchAll:(NSArray *)objects;
+/// Fetching the data of the object from the server asynchronously.
+/// @param option See `LCObjectFetchOption`.
+/// @param block Result callback.
+- (void)fetchInBackgroundWithOption:(nullable LCObjectFetchOption *)option block:(LCObjectResultBlock)block;
 
 /*!
  Fetches all of the LCObjects with the current data from the server and sets an error if it occurs.
@@ -495,37 +373,14 @@ NS_ASSUME_NONNULL_BEGIN
  @param error Pointer to an NSError that will be set  if necessary
  @return success or not
  */
-+ (BOOL)fetchAll:(NSArray *)objects error:(NSError **)error;
-
-/*!
- Fetches all of the LCObjects with the current data from the server
- @param objects The list of objects to fetch.
- */
-+ (void)fetchAllIfNeeded:(NSArray *)objects;
-
-/*!
- Fetches all of the LCObjects with the current data from the server and sets an error if it occurs.
- @param objects The list of objects to fetch.
- @param error Pointer to an NSError that will be set  if necessary
-  @return success or not
- */
-+ (BOOL)fetchAllIfNeeded:(NSArray *)objects error:(NSError **)error;
++ (BOOL)fetchAll:(NSArray *)objects error:(NSError * __autoreleasing *)error;
 
 /*!
  Fetches all of the LCObjects with the current data from the server asynchronously and calls the given block.
  @param objects The list of objects to fetch.
  @param block The block to execute. The block should have the following argument signature: (NSArray *objects, NSError *error)
  */
-+ (void)fetchAllInBackground:(NSArray *)objects
-                       block:(LCArrayResultBlock)block;
-
-/*!
- Fetches all of the LCObjects with the current data from the server asynchronously and calls the given block.
- @param objects The list of objects to fetch.
- @param block The block to execute. The block should have the following argument signature: (NSArray *objects, NSError *error)
- */
-+ (void)fetchAllIfNeededInBackground:(NSArray *)objects
-                               block:(LCArrayResultBlock)block;
++ (void)fetchAllInBackground:(NSArray *)objects block:(LCArrayResultBlock)block;
 
 #pragma mark - Delete
 
@@ -628,6 +483,113 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param dictionary JSON dictionary
  */
 - (void)objectFromDictionary:(NSDictionary *)dictionary;
+
+// MARK: Deprecated
+
+/*!
+ Fetches the LCObject with the current data from the server and sets an error if it occurs.
+ @param error Pointer to an NSError that will be set if necessary.
+ @return success or not
+ */
+- (BOOL)fetch:(NSError * __autoreleasing *)error
+__deprecated_msg("Deprecated! please use `-[LCObject fetchAndThrowsWithError:]` instead, this method may be removed in the future.");
+
+/*!
+ Fetches the LCObject with the current data and specified keys from the server and sets an error if it occurs.
+ @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
+ */
+- (void)fetchWithKeys:(nullable NSArray *)keys
+__deprecated_msg("Deprecated! please use `-[LCObject fetchWithOption:error:]` instead, this method may be removed in the future.");
+
+/*!
+ Fetches the LCObject with the current data and specified keys from the server and sets an error if it occurs.
+ @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
+ @param error Pointer to an NSError that will be set if necessary.
+ @return success or not
+ */
+- (BOOL)fetchWithKeys:(nullable NSArray *)keys error:(NSError **)error
+__deprecated_msg("Deprecated! please use `-[LCObject fetchWithOption:error:]` instead, this method may be removed in the future.");
+
+/*!
+ Fetches the LCObject's data from the server if isDataAvailable is false.
+ */
+- (LCObject *)fetchIfNeeded
+__deprecated_msg("Deprecated! please use `-[LCObject fetchAndThrowsWithError:]` instead, this method may be removed in the future.");
+
+/*!
+ Fetches the LCObject's data from the server if isDataAvailable is false.
+ @param error Pointer to an NSError that will be set if necessary.
+ */
+- (LCObject *)fetchIfNeeded:(NSError **)error
+__deprecated_msg("Deprecated! please use `-[LCObject fetchAndThrowsWithError:]` instead, this method may be removed in the future.");
+
+/*!
+ An alias of `-[LCObject fetchIfNeeded:]` methods that supports Swift exception.
+ @seealso `-[LCObject fetchIfNeeded:]`
+ */
+- (LCObject *)fetchIfNeededAndThrowsWithError:(NSError **)error
+__deprecated_msg("Deprecated! please use `-[LCObject fetchAndThrowsWithError:]` instead, this method may be removed in the future.");
+
+/*!
+ Fetches the LCObject's data from the server if isDataAvailable is false.
+ @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
+ */
+- (LCObject *)fetchIfNeededWithKeys:(nullable NSArray *)keys
+__deprecated_msg("Deprecated! please use `-[LCObject fetchWithOption:error:]` instead, this method may be removed in the future.");
+
+/*!
+ Fetches the LCObject's data from the server if isDataAvailable is false.
+ @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
+ @param error Pointer to an NSError that will be set if necessary.
+ */
+- (LCObject *)fetchIfNeededWithKeys:(nullable NSArray *)keys error:(NSError **)error
+__deprecated_msg("Deprecated! please use `-[LCObject fetchWithOption:error:]` instead, this method may be removed in the future.");
+
+/*!
+ Fetches the LCObject asynchronously and executes the given callback block.
+ @param keys Pointer to an NSArray that contains objects specified by the keys want to fetch.
+ @param block The block to execute. The block should have the following argument signature: (LCObject *object, NSError *error)
+ */
+- (void)fetchInBackgroundWithKeys:(nullable NSArray *)keys block:(LCObjectResultBlock)block
+__deprecated_msg("Deprecated! please use `-[LCObject fetchInBackgroundWithOption:block:]` instead, this method may be removed in the future.");
+
+/*!
+ Fetches the LCObject's data asynchronously if isDataAvailable is false, then calls the callback block.
+ @param block The block to execute.  The block should have the following argument signature: (LCObject *object, NSError *error)
+ */
+- (void)fetchIfNeededInBackgroundWithBlock:(LCObjectResultBlock)block
+__deprecated_msg("Deprecated! please use `-[LCObject fetchInBackgroundWithOption:block:]` instead, this method may be removed in the future.");
+
+/*!
+ Fetches all of the LCObjects with the current data from the server
+ @param objects The list of objects to fetch.
+ */
++ (void)fetchAll:(NSArray *)objects
+__deprecated_msg("Deprecated! please use `+[LCObject fetchAll:error:]` instead, this method may be removed in the future.");
+
+/*!
+ Fetches all of the LCObjects with the current data from the server
+ @param objects The list of objects to fetch.
+ */
++ (void)fetchAllIfNeeded:(NSArray *)objects
+__deprecated_msg("Deprecated! please use `+[LCObject fetchAll:error:]` instead, this method may be removed in the future.");
+
+/*!
+ Fetches all of the LCObjects with the current data from the server and sets an error if it occurs.
+ @param objects The list of objects to fetch.
+ @param error Pointer to an NSError that will be set  if necessary
+ @return success or not
+ */
++ (BOOL)fetchAllIfNeeded:(NSArray *)objects error:(NSError **)error
+__deprecated_msg("Deprecated! please use `+[LCObject fetchAll:error:]` instead, this method may be removed in the future.");
+
+/*!
+ Fetches all of the LCObjects with the current data from the server asynchronously and calls the given block.
+ @param objects The list of objects to fetch.
+ @param block The block to execute. The block should have the following argument signature: (NSArray *objects, NSError *error)
+ */
++ (void)fetchAllIfNeededInBackground:(NSArray *)objects block:(LCArrayResultBlock)block
+__deprecated_msg("Deprecated! please use `+[LCObject fetchAllInBackground:block:]` instead, this method may be removed in the future.");
 
 @end
 

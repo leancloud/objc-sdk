@@ -6,8 +6,8 @@
 //  Copyright © 2016 LeanCloud Inc. All rights reserved.
 //
 
-#import "LCSaveOption.h"
-#import "LCSaveOption_internal.h"
+#import "LCObjectOption.h"
+#import "LCObjectOption_Internal.h"
 #import "LCQuery.h"
 #import "LCQuery_Internal.h"
 
@@ -24,5 +24,9 @@
 
     return result;
 }
+
+@end
+
+@implementation LCObjectFetchOption
 
 @end
