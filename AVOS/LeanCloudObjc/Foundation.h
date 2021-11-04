@@ -26,7 +26,7 @@
 // Object
 #import "LCObject.h"
 #import "LCObject+Subclass.h"
-#import "LCSaveOption.h"
+#import "LCObjectOption.h"
 #import "LCSubclassing.h"
 #import "LCRelation.h"
 

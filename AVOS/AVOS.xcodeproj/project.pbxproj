@@ -53,9 +53,9 @@
 		D30B6A5A24A09D23006ABE09 /* LCRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7068A7221BA3614D0004623A /* LCRequestManager.m */; };
 		D30B6A5B24A09D23006ABE09 /* LCRelation_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A581A5A79FF00C5C6C4 /* LCRelation_Internal.h */; };
 		D30B6A5C24A09D23006ABE09 /* LCSubclassing.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A591A5A79FF00C5C6C4 /* LCSubclassing.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D30B6A5D24A09D23006ABE09 /* LCSaveOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 830EB9F21C44D68400BA917F /* LCSaveOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D30B6A5E24A09D23006ABE09 /* LCSaveOption_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 830EB9FE1C44F3D600BA917F /* LCSaveOption_internal.h */; };
-		D30B6A5F24A09D23006ABE09 /* LCSaveOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 830EB9F31C44D68400BA917F /* LCSaveOption.m */; };
+		D30B6A5D24A09D23006ABE09 /* LCObjectOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 830EB9F21C44D68400BA917F /* LCObjectOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D30B6A5E24A09D23006ABE09 /* LCObjectOption_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 830EB9FE1C44F3D600BA917F /* LCObjectOption_Internal.h */; };
+		D30B6A5F24A09D23006ABE09 /* LCObjectOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 830EB9F31C44D68400BA917F /* LCObjectOption.m */; };
 		D30B6A6024A09D52006ABE09 /* LCInstallation.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A5B1A5A79FF00C5C6C4 /* LCInstallation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D30B6A6124A09D52006ABE09 /* LCInstallation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C841A5C1A5A79FF00C5C6C4 /* LCInstallation.m */; };
 		D30B6A6224A09D52006ABE09 /* LCInstallation_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C841A5D1A5A79FF00C5C6C4 /* LCInstallation_Internal.h */; };
@@ -350,9 +350,9 @@
 		830E7CFA1B1CAD3B005F4B22 /* LCDatabaseMigrator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCDatabaseMigrator.h; sourceTree = "<group>"; };
 		830E7CFB1B1CAD3B005F4B22 /* LCDatabaseMigrator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCDatabaseMigrator.m; sourceTree = "<group>"; };
 		830E7CFE1B1CB07B005F4B22 /* LCDatabaseCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCDatabaseCommon.h; sourceTree = "<group>"; };
-		830EB9F21C44D68400BA917F /* LCSaveOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCSaveOption.h; sourceTree = "<group>"; };
-		830EB9F31C44D68400BA917F /* LCSaveOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCSaveOption.m; sourceTree = "<group>"; };
-		830EB9FE1C44F3D600BA917F /* LCSaveOption_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCSaveOption_internal.h; sourceTree = "<group>"; };
+		830EB9F21C44D68400BA917F /* LCObjectOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCObjectOption.h; sourceTree = "<group>"; };
+		830EB9F31C44D68400BA917F /* LCObjectOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCObjectOption.m; sourceTree = "<group>"; };
+		830EB9FE1C44F3D600BA917F /* LCObjectOption_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCObjectOption_Internal.h; sourceTree = "<group>"; };
 		830F159E1F010F260009B4D0 /* LCIMRecalledMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMRecalledMessage.h; sourceTree = "<group>"; };
 		830F159F1F010F260009B4D0 /* LCIMRecalledMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMRecalledMessage.m; sourceTree = "<group>"; };
 		831E29581D882CBB006E502B /* LCIMMessageOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMMessageOption.h; sourceTree = "<group>"; };
@@ -949,9 +949,9 @@
 				7068A7221BA3614D0004623A /* LCRequestManager.m */,
 				8C841A581A5A79FF00C5C6C4 /* LCRelation_Internal.h */,
 				8C841A591A5A79FF00C5C6C4 /* LCSubclassing.h */,
-				830EB9F21C44D68400BA917F /* LCSaveOption.h */,
-				830EB9FE1C44F3D600BA917F /* LCSaveOption_internal.h */,
-				830EB9F31C44D68400BA917F /* LCSaveOption.m */,
+				830EB9F21C44D68400BA917F /* LCObjectOption.h */,
+				830EB9FE1C44F3D600BA917F /* LCObjectOption_Internal.h */,
+				830EB9F31C44D68400BA917F /* LCObjectOption.m */,
 			);
 			path = Object;
 			sourceTree = "<group>";
@@ -1492,7 +1492,7 @@
 				D30B6B2324A09F59006ABE09 /* AVIMGenericCommand+AVIMMessagesAdditions.h in Headers */,
 				D30B6AF824A09F1F006ABE09 /* LCGPBMessage.h in Headers */,
 				D30B6A2924A09B1F006ABE09 /* LCApplication_Internal.h in Headers */,
-				D30B6A5E24A09D23006ABE09 /* LCSaveOption_internal.h in Headers */,
+				D30B6A5E24A09D23006ABE09 /* LCObjectOption_Internal.h in Headers */,
 				D30B6A9E24A09E35006ABE09 /* LCErrorUtils.h in Headers */,
 				D30B6A6824A09D62006ABE09 /* LCCloudQueryResult_Internal.h in Headers */,
 				D30B6AAB24A09E35006ABE09 /* LCKeyValueStore.h in Headers */,
@@ -1536,7 +1536,7 @@
 				D30B6A8124A09DCA006ABE09 /* LCNetworking.h in Headers */,
 				D30B6B3B24A09F79006ABE09 /* LCIMConversationCacheStore.h in Headers */,
 				D30B6A4224A09CC2006ABE09 /* LCScheduler.h in Headers */,
-				D30B6A5D24A09D23006ABE09 /* LCSaveOption.h in Headers */,
+				D30B6A5D24A09D23006ABE09 /* LCObjectOption.h in Headers */,
 				D30B6AEF24A09F1E006ABE09 /* LCGPBEmpty.pbobjc.h in Headers */,
 				D30B6AEB24A09F1E006ABE09 /* LCGPBDictionary.h in Headers */,
 				D30B6A7E24A09DCA006ABE09 /* LCCompatibilityMacros.h in Headers */,
@@ -1695,7 +1695,7 @@
 				D30B6AB524A09E35006ABE09 /* LCDynamicObject.m in Sources */,
 				D30B6A4124A09CC2006ABE09 /* LCPersistenceUtils.m in Sources */,
 				D30B6A4324A09CC2006ABE09 /* LCScheduler.m in Sources */,
-				D30B6A5F24A09D23006ABE09 /* LCSaveOption.m in Sources */,
+				D30B6A5F24A09D23006ABE09 /* LCObjectOption.m in Sources */,
 				D30B6A5824A09D23006ABE09 /* LCRelation.m in Sources */,
 				D30B6A7224A09D7B006ABE09 /* LCPaasClient.m in Sources */,
 				D30B6B4E24A09F85006ABE09 /* LCIMFileMessage.m in Sources */,

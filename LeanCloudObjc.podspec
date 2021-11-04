@@ -37,7 +37,7 @@ Pod::Spec.new do |s|
       'AVOS/Sources/Foundation/Leaderboard/LCLeaderboard.h',
       'AVOS/Sources/Foundation/ACL/LCACL.h',
       'AVOS/Sources/Foundation/ACL/LCRole.h',
-      'AVOS/Sources/Foundation/Object/LCSaveOption.h',
+      'AVOS/Sources/Foundation/Object/LCObjectOption.h',
       'AVOS/Sources/Foundation/LCApplication.h',
       'AVOS/Sources/Foundation/CloudCode/LCCloud.h',
       'AVOS/Sources/Foundation/File/LCFile.h',
