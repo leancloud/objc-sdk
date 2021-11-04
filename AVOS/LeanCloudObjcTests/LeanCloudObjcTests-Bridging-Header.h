@@ -11,3 +11,4 @@
 #import "LCRTMConnection_Internal.h"
 #import "LCIMMessage_Internal.h"
 #import "LCLeaderboard_Internal.h"
+#import "LCTestObject.h"
