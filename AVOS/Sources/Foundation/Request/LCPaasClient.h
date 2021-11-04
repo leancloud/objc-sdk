@@ -59,20 +59,27 @@ FOUNDATION_EXPORT NSString * const LCHeaderFieldNameProduction;
 - (void)getObject:(NSString *)path
    withParameters:(NSDictionary *)parameters
             block:(LCIdResultBlock)block;
-
+- (void)getObject:(NSString *)path
+   withParameters:(NSDictionary *)parameters
+            block:(LCIdResultBlock)block
+             wait:(BOOL)wait;
 - (void)getObject:(NSString *)path
    withParameters:(NSDictionary *)parameters
            policy:(LCCachePolicy)policy
       maxCacheAge:(NSTimeInterval)maxCacheAge
             block:(LCIdResultBlock)block;
 
--(void)putObject:(NSString *)path
-  withParameters:(NSDictionary *)parameters
-    sessionToken:(NSString *)sessionToken
-           block:(LCIdResultBlock)block;
+- (void)putObject:(NSString *)path
+   withParameters:(NSDictionary *)parameters
+     sessionToken:(NSString *)sessionToken
+            block:(LCIdResultBlock)block;
 
--(void)postBatchObject:(NSArray *)parameterArray block:(LCArrayResultBlock)block;
--(void)postBatchObject:(NSArray *)parameterArray headerMap:(NSDictionary *)headerMap eventually:(BOOL)isEventually block:(LCArrayResultBlock)block;
+- (void)postBatchObject:(NSArray *)parameterArray
+                  block:(LCArrayResultBlock)block;
+- (void)postBatchObject:(NSArray *)parameterArray
+              headerMap:(NSDictionary *)headerMap
+                  block:(LCArrayResultBlock)block
+                   wait:(BOOL)wait;
 
 -(void)postBatchSaveObject:(NSArray *)parameterArray headerMap:(NSDictionary *)headerMap eventually:(BOOL)isEventually block:(LCIdResultBlock)block;
 

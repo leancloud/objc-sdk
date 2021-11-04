@@ -17,8 +17,8 @@
 #import "LCLogger.h"
 #import "LCObject+Subclass.h"
 #import "LCSubclassing.h"
-#import "LCSaveOption.h"
-#import "LCSaveOption_internal.h"
+#import "LCObjectOption.h"
+#import "LCObjectOption_Internal.h"
 #import "LCUser_Internal.h"
 #import "LCInstallation_Internal.h"
 #import "LCFile_Internal.h"
@@ -1331,308 +1331,154 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     });
 }
 
-- (BOOL)isDataAvailable
-{
-    return self.objectId.length > 0 && self.createdAt != nil;
+- (BOOL)isDataAvailable {
+    return [self hasValidObjectId];
 }
 
-#pragma mark - Refresh
+// MARK: Fetch
 
-- (void)refresh
-{
-    [self refresh:NULL];
-}
-
-- (void)refreshWithKeys:(NSArray *)keys {
-    [self refreshWithBlock:NULL keys:keys waitUntilDone:YES error:nil];
-}
-
-- (BOOL)refresh:(NSError **)error
-{
-    return [self refreshWithBlock:NULL keys:nil waitUntilDone:YES error:error];
-}
-
-- (BOOL)refreshAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
-    return [self refresh:error];
-}
-
-- (void)refreshInBackgroundWithBlock:(LCObjectResultBlock)block {
-    [self refreshWithBlock:block keys:nil waitUntilDone:NO error:NULL];
-}
-
-- (void)refreshInBackgroundWithKeys:(NSArray *)keys
-                              block:(LCObjectResultBlock)block {
-    [self refreshWithBlock:block keys:keys waitUntilDone:NO error:NULL];
-}
-
-- (BOOL)refreshWithBlock:(LCObjectResultBlock)block
-                    keys:(NSArray *)keys
-           waitUntilDone:(BOOL)wait
-                   error:(NSError **)theError {
-    
-    BOOL __block hasCalledBack = NO;
-    NSError __block *blockError = nil;
-    
-    NSString *path = [self myObjectPath];
-    NSDictionary * parameters = nil;
-    if (keys) {
-        parameters = [LCQuery dictionaryFromIncludeKeys:keys];
-    }
-    [[LCPaasClient sharedInstance] getObject:path withParameters:parameters block:^(id object, NSError *error) {
-        
-        if (error == nil)
-        {
-            [self removeLocalData];
-            [LCObjectUtils copyDictionary:object toObject:self];
-        }
-        else
-        {
-            
-        }
-        if (self == [LCUser currentUser]) {
-            [[self class] changeCurrentUser:(LCUser *)self save:YES];
-        }
-        [LCUtils callObjectResultBlock:block object:self error:error];
-        
-        if (wait) {
-            blockError = error;
-            hasCalledBack = YES;
-        }
-    }];
-    
-    // wait until called back if necessary
-    if (wait) {
-        [LCUtils warnMainThreadIfNecessary];
-        
-        LC_WAIT_TIL_TRUE(hasCalledBack, 0.1);
-    };
-    
-    if (theError != NULL && blockError) {
-        *theError = blockError;
-        return NO;
-    }
-    return YES;
-}
-
-#pragma mark - Fetch
-
-- (BOOL)fetch
-{
-    return [self fetch:NULL];
-}
-
-- (BOOL)fetch:(NSError **)error
-{
-    return [self fetchWithKeys:nil error:error];
+- (BOOL)fetch {
+    return [self fetchAndThrowsWithError:nil];
 }
 
 - (BOOL)fetchAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
-    return [self fetch:error];
+    return [self fetchWithOption:nil error:error];
 }
 
-- (void)fetchWithKeys:(NSArray *)keys {
-    [self fetchWithKeys:keys error:nil];
-}
-
-- (BOOL)fetchWithKeys:(NSArray *)keys
-                error:(NSError **)error {
-    __block NSError *blockError;
-    __block BOOL hasCallback = NO;
-    [self internalFetchInBackgroundWithKeys:keys block:^(LCObject *object, NSError *error) {
-        blockError = error;
-        hasCallback = YES;
-    }];
-    LC_WAIT_TIL_TRUE(hasCallback, 0.1);
-    if (blockError && error != NULL) {
-        *error = blockError;
+- (BOOL)fetchWithOption:(LCObjectFetchOption *)option error:(NSError *__autoreleasing  _Nullable *)error {
+    __block NSError *resultError;
+    [self fetchInBackgroundWithOption:option block:^(LCObject * _Nullable object, NSError * _Nullable error) {
+        resultError = error;
+    } wait:true];
+    if (error) {
+        *error = resultError;
     }
-    return blockError == nil;
+    return !resultError;
 }
 
-- (LCObject *)fetchIfNeeded
-{
-    return [self fetchIfNeededWithKeys:nil];
+- (void)fetchInBackgroundWithBlock:(LCObjectResultBlock)block {
+    [self fetchInBackgroundWithOption:nil block:block];
 }
 
-- (LCObject *)fetchIfNeeded:(NSError **)error
-{
-    return [self fetchIfNeededWithKeys:nil error:error];
-}
-
-- (LCObject *)fetchIfNeededAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
-    return [self fetchIfNeeded:error];
-}
-
-- (LCObject *)fetchIfNeededWithKeys:(NSArray *)keys {
-    return [self fetchIfNeededWithKeys:keys error:nil];
-}
-
-- (LCObject *)fetchIfNeededWithKeys:(NSArray *)keys
-                              error:(NSError **)error {
-    if (![self isDataAvailable]) {
-        [self fetchWithKeys:keys error:error];
-    }
-    return self;
-}
-
-- (void)fetchInBackgroundWithBlock:(LCObjectResultBlock)resultBlock
-{
-    [self fetchInBackgroundWithKeys:nil block:resultBlock];
-}
-
-- (void)fetchInBackgroundWithKeys:(NSArray *)keys
-                            block:(LCObjectResultBlock)block {
-    [self internalFetchInBackgroundWithKeys:keys block:^(LCObject *object, NSError *error) {
+- (void)fetchInBackgroundWithOption:(LCObjectFetchOption *)option block:(LCObjectResultBlock)block {
+    [self fetchInBackgroundWithOption:option block:^(LCObject * _Nullable object, NSError * _Nullable error) {
         [LCUtils callObjectResultBlock:block object:object error:error];
-    }];
+    } wait:false];
 }
 
 - (BOOL)handleFetchResult:(id)object error:(NSError * __autoreleasing *)error {
-    if ([object allKeys].count <= 0) {
-        if (error != NULL) {
-            *error = LCError(kLCErrorObjectNotFound, @"not found the object to fetch", nil);
+    if (![NSDictionary _lc_isTypeOf:object]) {
+        if (error) {
+            *error = LCError(LCErrorInternalErrorCodeMalformedData,
+                             @"Malformed data.",
+                             @{ @"object" : object ?: [NSNull null] });
         }
         return false;
-    } else {
-        [self removeLocalData];
-        [LCObjectUtils copyDictionary:object toObject:self];
-        if (self == [LCUser currentUser]) {
-            [[self class] changeCurrentUser:(LCUser *)self save:YES];
-        }
-        return true;
     }
+    NSDictionary *dictionary = object;
+    if (dictionary.count == 0) {
+        if (error) {
+            *error = LCError(kLCErrorObjectNotFound, @"Object NOT found.", nil);
+        }
+        return false;
+    }
+    [self removeLocalData];
+    [LCObjectUtils copyDictionary:dictionary toObject:self];
+    if (self == [LCUser currentUser]) {
+        [[self class] changeCurrentUser:(LCUser *)self save:true];
+    }
+    return true;
 }
 
-- (void)internalFetchInBackgroundWithKeys:(NSArray *)keys
-                                    block:(LCObjectResultBlock)resultBlock
+- (void)fetchInBackgroundWithOption:(nullable LCObjectFetchOption *)option
+                              block:(LCObjectResultBlock)block
+                               wait:(BOOL)wait
 {
-    
     if (![self hasValidObjectId]) {
-        NSError *error = LCError(kLCErrorMissingObjectId, @"Missing ObjectId", nil);
-        [LCUtils callObjectResultBlock:resultBlock object:nil error:error];
+        NSError *error = LCError(kLCErrorMissingObjectId, @"Missing object id.", nil);
+        block(nil, error);
         return;
     }
-    
-    NSString *path = [self myObjectPath];
-    NSDictionary * parameters = nil;
-    if (keys) {
-        parameters = [LCQuery dictionaryFromIncludeKeys:keys];
+    NSMutableDictionary *parameters;
+    if (option) {
+        parameters = [NSMutableDictionary dictionary];
+        if (option.selectKeys.count > 0) {
+            parameters[@"keys"] = [option.selectKeys componentsJoinedByString:@","];
+        }
+        if (option.includeKeys.count > 0) {
+            parameters[@"include"] = [option.includeKeys componentsJoinedByString:@","];
+        }
     }
-    [[LCPaasClient sharedInstance] getObject:path withParameters:parameters block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] getObject:[self myObjectPath]
+                              withParameters:(parameters.count > 0 ? parameters : nil)
+                                       block:^(id object, NSError *error) {
         if (!error) {
             NSError *theError;
             [self handleFetchResult:object error:&theError];
             error = theError;
         }
-        if (resultBlock) {
-            resultBlock(self, error);
-        }
-    }];
+        block(self, error);
+    } wait:wait];
 }
 
-- (void)fetchIfNeededInBackgroundWithBlock:(LCObjectResultBlock)block
-{
-    if (![self isDataAvailable]) {
-        [self fetchInBackgroundWithBlock:^(LCObject *object, NSError *error) {
-            if (block) block(object, error);
-        }];
-    } else {
-        if (block) block(self, nil);
++ (BOOL)fetchAll:(NSArray *)objects error:(NSError *__autoreleasing  _Nullable *)error {
+    __block NSError *resultError;
+    [self fetchAllInBackground:objects block:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+        resultError = error;
+    } wait:true];
+    if (error) {
+        *error = resultError;
     }
+    return !resultError;
 }
 
-+ (void)fetchAll:(NSArray *)objects
-{
-    [[self class] fetchAll:objects error:NULL];
-}
-
-+ (BOOL)fetchAll:(NSArray *)objects error:(NSError **)error
-{
-    return [[self class] fetchAll:objects error:error checkIfNeed:NO];
-}
-
-+ (void)fetchAllIfNeeded:(NSArray *)objects
-{
-    [[self class] fetchAllIfNeeded:objects error:NULL];
-}
-
-+ (BOOL)fetchAllIfNeeded:(NSArray *)objects error:(NSError **)error
-{
-    return [[self class] fetchAll:objects error:error checkIfNeed:YES];
-}
-
-+ (BOOL)fetchAll:(NSArray *)objects error:(NSError **)error checkIfNeed:(BOOL)check {
-    objects = [objects copy];
-    NSError __block *retError;
-    if (![self isValidObjects:objects error:&retError]) {
-        return NO;
-    }
-    NSMutableArray *fetches = [NSMutableArray array];
-    NSMutableArray *fetchObjects = [NSMutableArray array];
-    // Add a task to the group
-    for (LCObject *obj in objects) {
-        if ([obj isKindOfClass:[LCObject class]]) {
-            if (!check || ![obj isDataAvailable]) {
-                NSDictionary* fetch = [LCPaasClient batchMethod:@"GET" path:[obj myObjectPath] body:nil parameters:nil];
-                [fetches addObject:fetch];
-                [fetchObjects addObject:obj];
-            }
-        }
-    }
-    if (fetches.count > 0) {
-        __block BOOL hasCalledBlcok = NO;
-        [[LCPaasClient sharedInstance] postBatchObject:fetches block:^(NSArray *results, NSError *error) {
-            if (error) {
-                retError = error;
-            } else {
-                if (results.count == fetches.count) {
-                    for (NSInteger i = 0; i < fetches.count; i++) {
-                        LCObject *object = fetchObjects[i];
-                        id result = results[i];
-                        if ([result isKindOfClass:[NSDictionary class]]) {
-                            NSError *theError;
-                            [object handleFetchResult:result error:&theError];
-                            if (theError && retError == nil) {
-                                // retError 只需记录第一个错误
-                                retError = theError;
-                            }
-                        } else {
-                            if (retError == nil) {
-                                retError = result;
-                            }
-                        }
-                    }
-                }
-            }
-            hasCalledBlcok = YES;
-        }];
-        LC_WAIT_TIL_TRUE(hasCalledBlcok, 0.1);
-    }
-    if (retError && error) {
-        *error=retError;
-        return NO;
-    }
-    return YES;
++ (void)fetchAllInBackground:(NSArray *)objects block:(LCArrayResultBlock)block {
+    [self fetchAllInBackground:objects block:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+        [LCUtils callArrayResultBlock:block array:objects error:error];
+    } wait:false];
 }
 
 + (void)fetchAllInBackground:(NSArray *)objects
                        block:(LCArrayResultBlock)block
+                        wait:(BOOL)wait
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        NSError *error;
-        [[self class] fetchAll:objects error:&error];
-        [LCUtils callArrayResultBlock:block array:objects error:error];
-    });
-}
-
-+ (void)fetchAllIfNeededInBackground:(NSArray *)objects
-                               block:(LCArrayResultBlock)block
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        NSError *error;
-        [[self class] fetchAllIfNeeded:objects error:&error];
-        [LCUtils callArrayResultBlock:block array:objects error:error];
-    });
+    NSError *error;
+    if (![self isValidObjects:objects error:&error]) {
+        block(nil, error);
+        return;
+    }
+    NSMutableArray *requests = [NSMutableArray arrayWithCapacity:objects.count];
+    NSMutableArray *fetchedObjects = [NSMutableArray arrayWithCapacity:objects.count];
+    for (LCObject *object in objects) {
+        NSDictionary *request = [LCPaasClient batchMethod:@"GET" path:[object myObjectPath] body:nil parameters:nil];
+        [requests addObject:request];
+        [fetchedObjects addObject:object];
+    }
+    if (requests.count > 0) {
+        [[LCPaasClient sharedInstance] postBatchObject:requests headerMap:nil block:^(NSArray * _Nullable results, NSError * _Nullable error) {
+            if (error) {
+                block(nil, error);
+                return;
+            }
+            if (results.count != fetchedObjects.count) {
+                block(nil, LCError(LCErrorInternalErrorCodeMalformedData, @"Malformed data, inconsistent quantity.", nil));
+                return;
+            }
+            NSError *firstError;
+            for (NSInteger i = 0; i < results.count; i++) {
+                LCObject *object = fetchedObjects[i];
+                id result = results[i];
+                if (firstError) {
+                    [object handleFetchResult:result error:nil];
+                } else {
+                    [object handleFetchResult:result error:&firstError];
+                }
+            }
+            block(fetchedObjects, firstError);
+        } wait:wait];
+    } else {
+        block(@[], nil);
+    }
 }
 
 #pragma mark - delete
@@ -1708,16 +1554,30 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     }];
 }
 
-// check className & objectId
 + (BOOL)isValidObjects:(NSArray *)objects error:(NSError **)error {
-    for(LCObject * object in [objects copy]) {
-        if (object.className.length <= 0 || ![object hasValidObjectId]) {
-            if (error != NULL)
-                *error = LCError(kLCErrorMissingObjectId, @"Invaid className or objectId", nil);
-            return NO;
+    for (LCObject *object in objects) {
+        if (![LCObject _lc_isTypeOf:object]) {
+            if (error) {
+                NSString *class = NSStringFromClass([object class]);
+                NSString *reason = [NSString stringWithFormat:@"Invalid type, `%@` is NOT kind of `LCObject`.", class];
+                *error = LCError(LCErrorInternalErrorCodeInvalidType, reason, nil);
+            }
+            return false;
+        }
+        if (object.className.length == 0) {
+            if (error) {
+                *error = LCError(kLCErrorInvalidClassName, @"Invalid class name.", @{ @"object" : object });
+            }
+            return false;
+        }
+        if (![object hasValidObjectId]) {
+            if (error) {
+                *error = LCError(kLCErrorMissingObjectId, @"Missing object id.", @{ @"object" : object });
+            }
+            return false;
         }
     }
-    return YES;
+    return true;
 }
 
 + (BOOL)deleteAll:(NSArray *)objects {
@@ -1948,7 +1808,7 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     return NO;
 }
 
--(BOOL)hasValidObjectId {
+- (BOOL)hasValidObjectId {
     return (self.objectId.length > 0);
 }
 
@@ -2005,6 +1865,79 @@ BOOL requests_contain_request(NSArray *requests, NSDictionary *request) {
     [self._relationData removeAllObjects];
     [self._estimatedData removeAllObjects];
     [self._requestManager clear];
+}
+
+// MARK: Deprecated
+
+- (BOOL)fetch:(NSError *__autoreleasing  _Nullable *)error {
+    return [self fetchAndThrowsWithError:error];
+}
+
+- (void)fetchWithKeys:(NSArray *)keys {
+    LCObjectFetchOption *option = [LCObjectFetchOption new];
+    option.includeKeys = keys;
+    [self fetchWithOption:option error:nil];
+}
+
+- (BOOL)fetchWithKeys:(NSArray *)keys error:(NSError **)error {
+    LCObjectFetchOption *option = [LCObjectFetchOption new];
+    option.includeKeys = keys;
+    return [self fetchWithOption:option error:error];
+}
+
+- (LCObject *)fetchIfNeeded {
+    [self fetch];
+    return self;
+}
+
+- (LCObject *)fetchIfNeeded:(NSError **)error {
+    [self fetchAndThrowsWithError:error];
+    return self;
+}
+
+- (LCObject *)fetchIfNeededAndThrowsWithError:(NSError * _Nullable __autoreleasing *)error {
+    [self fetchAndThrowsWithError:error];
+    return self;
+}
+
+- (LCObject *)fetchIfNeededWithKeys:(NSArray *)keys {
+    LCObjectFetchOption *option = [LCObjectFetchOption new];
+    option.includeKeys = keys;
+    [self fetchWithOption:option error:nil];
+    return self;
+}
+
+- (LCObject *)fetchIfNeededWithKeys:(NSArray *)keys error:(NSError **)error {
+    LCObjectFetchOption *option = [LCObjectFetchOption new];
+    option.includeKeys = keys;
+    [self fetchWithOption:option error:error];
+    return self;
+}
+
+- (void)fetchIfNeededInBackgroundWithBlock:(LCObjectResultBlock)block {
+    [self fetchInBackgroundWithBlock:block];
+}
+
+- (void)fetchInBackgroundWithKeys:(NSArray *)keys block:(LCObjectResultBlock)block {
+    LCObjectFetchOption *option = [LCObjectFetchOption new];
+    option.includeKeys = keys;
+    [self fetchInBackgroundWithOption:option block:block];
+}
+
++ (void)fetchAll:(NSArray *)objects {
+    [self fetchAll:objects error:nil];
+}
+
++ (void)fetchAllIfNeeded:(NSArray *)objects {
+    [self fetchAll:objects error:nil];
+}
+
++ (BOOL)fetchAllIfNeeded:(NSArray *)objects error:(NSError **)error {
+    return [self fetchAll:objects error:error];
+}
+
++ (void)fetchAllIfNeededInBackground:(NSArray *)objects block:(LCArrayResultBlock)block {
+    [self fetchAllInBackground:objects block:block];
 }
 
 @end

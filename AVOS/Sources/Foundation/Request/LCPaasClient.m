@@ -258,34 +258,40 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
     return request;
 }
 
-- (void)getObject:(NSString *)path
-   withParameters:(NSDictionary *)parameters
-            block:(LCIdResultBlock)block {
-    [self getObjectFromNetworkWithPath:path withParameters:parameters policy:kLCCachePolicyIgnoreCache block:block];
+- (void)getObject:(NSString *)path withParameters:(NSDictionary *)parameters block:(LCIdResultBlock)block {
+    [self getObject:path withParameters:parameters block:block wait:false];
 }
 
--(void)getObjectFromNetworkWithPath:(NSString *)path
-                     withParameters:(NSDictionary *)parameters
-                             policy:(LCCachePolicy)policy
-                              block:(LCIdResultBlock)block
+- (void)getObject:(NSString *)path withParameters:(NSDictionary *)parameters block:(LCIdResultBlock)block wait:(BOOL)wait {
+    [self getObjectFromNetworkWithPath:path withParameters:parameters policy:kLCCachePolicyIgnoreCache block:block wait:wait];
+}
+
+- (void)getObjectFromNetworkWithPath:(NSString *)path
+                      withParameters:(NSDictionary *)parameters
+                              policy:(LCCachePolicy)policy
+                               block:(LCIdResultBlock)block
+                                wait:(BOOL)wait
 {
     NSURLRequest *request = [self requestWithPath:path method:@"GET" headers:nil parameters:parameters];
     
-    /* If GET request too heavy,
-     wrap it into a POST request and ignore cache policy. */
     if (parameters && request.URL.absoluteString.length > 4096) {
+        /* If GET request too heavy, wrap it into a POST request and ignore cache policy. */
         NSDictionary *request = [LCPaasClient batchMethod:@"GET" path:path body:nil parameters:parameters];
-        [self postBatchObject:@[request] block:^(NSArray * _Nullable objects, NSError * _Nullable error) {
-            if (!error) {
-                [LCUtils callIdResultBlock:block object:objects.firstObject error:nil];
+        [self postBatchObject:@[request] headerMap:nil block:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+            if (error) {
+                block(nil, error);
             } else {
-                [LCUtils callIdResultBlock:block object:nil error:error];
+                block(objects.firstObject, nil);
             }
-        }];
+        } wait:wait];
     } else {
         BOOL needCache = (policy != kLCCachePolicyIgnoreCache);
-        [self performRequest:request saveResult:needCache block:block];
+        [self performRequest:request saveResult:needCache block:block wait:wait];
     }
+}
+
+- (void)getObjectFromNetworkWithPath:(NSString *)path withParameters:(NSDictionary *)parameters policy:(LCCachePolicy)policy block:(LCIdResultBlock)block {
+    [self getObjectFromNetworkWithPath:path withParameters:parameters policy:policy block:block wait:false];
 }
 
 - (void)getObject:(NSString *)path withParameters:(NSDictionary *)parameters policy:(LCCachePolicy)policy maxCacheAge:(NSTimeInterval)maxCacheAge block:(LCIdResultBlock)block {
@@ -362,10 +368,10 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
     }
 }
 
--(void)putObject:(NSString *)path
-  withParameters:(NSDictionary *)parameters
-    sessionToken:(NSString *)sessionToken
-           block:(LCIdResultBlock)block
+- (void)putObject:(NSString *)path
+   withParameters:(NSDictionary *)parameters
+     sessionToken:(NSString *)sessionToken
+            block:(LCIdResultBlock)block
 {
     NSMutableURLRequest *request = [self requestWithPath:path method:@"PUT" headers:nil parameters:parameters];
     
@@ -373,60 +379,43 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
         [request setValue:sessionToken forHTTPHeaderField:LCHeaderFieldNameSession];
     }
     
-    [self performRequest:request saveResult:NO block:block];
+    [self performRequest:request block:block];
 }
 
--(void)postBatchObject:(NSArray *)parameterArray block:(LCArrayResultBlock)block {
-    [self postBatchObject:parameterArray headerMap:nil eventually:NO block:block];
+- (void)postBatchObject:(NSArray *)parameterArray block:(LCArrayResultBlock)block {
+    [self postBatchObject:parameterArray headerMap:nil block:block wait:false];
 }
 
--(void)postBatchObject:(NSArray *)requests headerMap:(NSDictionary *)headerMap eventually:(BOOL)isEventually block:(LCArrayResultBlock)block {
+- (void)postBatchObject:(NSArray *)requests headerMap:(NSDictionary *)headerMap block:(LCArrayResultBlock)block wait:(BOOL)wait
+{
     NSString *path = [LCObjectUtils batchPath];
     NSDictionary *parameters = @{@"requests": requests ?: @[]};
     NSMutableURLRequest *request = [self requestWithPath:path method:@"POST" headers:headerMap parameters:parameters];
     
-    LCIdResultBlock handleResultBlock = ^(NSArray *objects, NSError *error) {
-        // 区分某个删除失败还是网络请求失败，两种情况 error 都不为空
+    [self performRequest:request saveResult:false block:^(NSArray *objects, NSError *error) {
         if (objects.count != requests.count) {
-            // 网络请求失败，子操作数量不一致
             if (error) {
                 block(nil, error);
             } else {
                 block(nil, LCErrorInternalServer(@"The batch count of server response is not equal to request count"));
             }
         } else {
-            // 网络请求成功
             NSMutableArray *results = [NSMutableArray array];
             for (NSDictionary *object in objects) {
-                
                 id success = object[@"success"];
-                
                 if (success) {
-                    
                     [results addObject:success];
-                    
                     continue;
                 }
-                
                 id error = object[@"error"];
-                
                 if (error) {
-                    
                     [results addObject:error];
-                    
                     continue;
                 }
             }
             block(results, nil);
         }
-    };
-    
-    if (isEventually) {
-        NSString *filePath = [self archiveRequest:request];
-        [self handleArchivedRequestAtPath:filePath block:handleResultBlock];
-    } else {
-        [self performRequest:request saveResult:NO block:handleResultBlock];
-    }
+    } wait:wait];
 }
 
 -(void)postBatchSaveObject:(NSArray *)requests headerMap:(NSDictionary *)headerMap eventually:(BOOL)isEventually block:(LCIdResultBlock)block {
@@ -438,7 +427,7 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
         NSString *filePath = [self archiveRequest:request];
         [self handleArchivedRequestAtPath:filePath block:block];
     } else {
-        [self performRequest:request saveResult:NO block:block];
+        [self performRequest:request block:block];
     }
 }
 
@@ -452,7 +441,7 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
         NSString *filePath = [self archiveRequest:request];
         [self handleArchivedRequestAtPath:filePath block:block];
     } else {
-        [self performRequest:request saveResult:NO block:block];
+        [self performRequest:request block:block];
     }
 }
 
@@ -470,17 +459,26 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
         NSString *filePath = [self archiveRequest:request];
         [self handleArchivedRequestAtPath:filePath block:block];
     } else {
-        [self performRequest:request saveResult:NO block:block];
+        [self performRequest:request block:block];
     }
 }
 
 #pragma mark - The final method for network
 
-- (void)performRequest:(NSURLRequest *)request saveResult:(BOOL)saveResult block:(LCIdResultBlock)block {
-    [self performRequest:request saveResult:saveResult block:block retryTimes:0];
+- (void)performRequest:(NSURLRequest *)request block:(LCIdResultBlock)block {
+    [self performRequest:request saveResult:false block:block wait:false];
 }
 
-- (void)performRequest:(NSURLRequest *)request saveResult:(BOOL)saveResult block:(LCIdResultBlock)block retryTimes:(NSInteger)retryTimes {
+- (void)performRequest:(NSURLRequest *)request saveResult:(BOOL)saveResult block:(LCIdResultBlock)block wait:(BOOL)wait {
+    [self performRequest:request saveResult:saveResult block:block retryTimes:0 wait:wait];
+}
+
+- (void)performRequest:(NSURLRequest *)request
+            saveResult:(BOOL)saveResult
+                 block:(LCIdResultBlock)block
+            retryTimes:(NSInteger)retryTimes
+                  wait:(BOOL)wait
+{
     NSURL *URL = request.URL;
     NSString *URLString = URL.absoluteString;
     NSMutableURLRequest *mutableRequest = [request mutableCopy];
@@ -493,17 +491,14 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
     }
     
     [self performRequest:mutableRequest
-                 success:^(NSHTTPURLResponse *response, id responseObject)
-     {
+                 success:
+     ^(NSHTTPURLResponse *response, id responseObject) {
         if (block) {
-            
             block(responseObject, nil);
         }
-        
         if (self.isLastModifyEnabled && [request.HTTPMethod isEqualToString:@"GET"]) {
             NSString *URLMD5 = [URLString _lc_MD5String];
             NSString *lastModified = [response.allHeaderFields objectForKey:@"Last-Modified"];
-            
             if (lastModified && ![self.lastModify[URLMD5] isEqualToString:lastModified]) {
                 [[LCCacheManager sharedInstance] saveJSON:responseObject forKey:URLString];
                 [self.lastModify setObject:lastModified forKey:URLMD5];
@@ -512,10 +507,9 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
             [[LCCacheManager sharedInstance] saveJSON:responseObject forKey:URLString];
         }
     }
-                 failure:^(NSHTTPURLResponse *response, id responseObject, NSError *error)
-     {
+                 failure:
+     ^(NSHTTPURLResponse *response, id responseObject, NSError *error) {
         NSInteger statusCode = response.statusCode;
-        
         if (statusCode == 304) {
             // 304 is not error
             [[LCCacheManager sharedInstance] getWithKey:URLString maxCacheAge:3600 * 24 * 30 block:^(id object, NSError *error) {
@@ -524,7 +518,7 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
                         [self.lastModify removeObjectForKey:[URLString _lc_MD5String]];
                         [[LCCacheManager sharedInstance] clearCacheForKey:URLString];
                         [mutableRequest setValue:@"" forHTTPHeaderField:@"If-Modified-Since"];
-                        [self performRequest:mutableRequest saveResult:saveResult block:block retryTimes:retryTimes + 1];
+                        [self performRequest:mutableRequest saveResult:saveResult block:block retryTimes:retryTimes + 1 wait:wait];
                     } else {
                         if (block)
                             block(object, error);
@@ -539,7 +533,7 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
                 block(responseObject, error);
             }
         }
-    }];
+    } wait:wait];
 }
 
 - (void)performRequest:(NSURLRequest *)request
@@ -557,45 +551,33 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
                failure:(void (^)(NSHTTPURLResponse *response, id responseObject, NSError *error))failureBlock
                   wait:(BOOL)wait
 {
-    dispatch_semaphore_t semaphore;
     NSString *path = request.URL.path;
     LCLoggerDebug(LCLoggerDomainNetwork, LC_REST_REQUEST_LOG_FORMAT, path, [request _lc_cURLCommand]);
-    
-    NSDate *operationEnqueueDate = [NSDate date];
-    
-    if (wait)
+    dispatch_semaphore_t semaphore;
+    if (wait) {
         semaphore = dispatch_semaphore_create(0);
-    NSURLSessionDataTask *dataTask = [self.sessionManager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-        /* As Apple say:
-         > Whenever you make an HTTP request,
-         > the NSURLResponse object you get back is actually an instance of the NSHTTPURLResponse class.
-         */
+    }
+    NSDate *operationEnqueueDate = [NSDate date];
+    NSURLSessionDataTask *dataTask = [self.sessionManager dataTaskWithRequest:request
+                                                            completionHandler:
+                                      ^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         NSHTTPURLResponse *HTTPResponse = (NSHTTPURLResponse *)response;
-        
         if (error) {
-            
             NSError *callbackError = nil;
             if ([NSDictionary _lc_isTypeOf:responseObject]) {
-                
                 NSMutableDictionary *userInfo = ((NSDictionary *)responseObject).mutableCopy;
-                
                 // decoding 'code'
                 NSNumber *code = [NSNumber _lc_decoding:userInfo key:@"code"];
-                
                 if (code != nil) {
-                    
                     // decoding 'error'
                     NSString *reason = [NSString _lc_decoding:userInfo key:@"error"];
-                    
                     [userInfo removeObjectsForKeys:@[@"code", @"error"]];
-                    
                     /* for compatibility */
                     id data = error.userInfo[LCNetworkingOperationFailingURLResponseDataErrorKey];
                     if (data) {
                         userInfo[LCNetworkingOperationFailingURLResponseDataErrorKey] = data;
                     }
                     userInfo[kLeanCloudRESTAPIResponseError] = responseObject;
-                    
                     callbackError = LCError(code.integerValue, reason, userInfo);
                 } else {
                     callbackError = error;
@@ -603,35 +585,29 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
             } else {
                 callbackError = error;
             }
-            
             NSTimeInterval costTime = -([operationEnqueueDate timeIntervalSinceNow] * 1000);
             LCLoggerDebug(LCLoggerDomainNetwork, LC_REST_RESPONSE_LOG_FORMAT, path, costTime, callbackError);
-            
             if (failureBlock) {
                 failureBlock(HTTPResponse, responseObject, callbackError);
             }
         } else {
-            
             NSTimeInterval costTime = -([operationEnqueueDate timeIntervalSinceNow] * 1000);
             LCLoggerDebug(LCLoggerDomainNetwork, LC_REST_RESPONSE_LOG_FORMAT, path, costTime, responseObject);
-            
             if (successBlock) {
                 successBlock(HTTPResponse, responseObject);
             }
         }
-        
-        if (wait)
+        if (wait) {
             dispatch_semaphore_signal(semaphore);
+        }
     }];
-    
     [self.lock lock];
     [self.requestTable setObject:dataTask forKey:request.URL.absoluteString];
     [self.lock unlock];
-    
     [dataTask resume];
-    
-    if (wait)
+    if (wait) {
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    }
 }
 
 - (BOOL)validateStatusCode:(NSInteger)statusCode {
@@ -708,7 +684,7 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
         [self.runningArchivedRequests addObject:path];
     }
     
-    [self performRequest:request saveResult:NO block:^(id object, NSError *error) {
+    [self performRequest:request block:^(id object, NSError *error) {
         if (!error) {
             [fileManager removeItemAtPath:path error:NULL];
         } else {

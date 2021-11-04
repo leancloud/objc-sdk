@@ -85,7 +85,7 @@ NSString *request_object_id(NSDictionary *request) {
 
 - (NSMutableArray *) buildSaveRequests;
 
--(BOOL)hasValidObjectId;
+- (BOOL)hasValidObjectId;
 
 - (void)setObject:(id)object
            forKey:(NSString *)key
