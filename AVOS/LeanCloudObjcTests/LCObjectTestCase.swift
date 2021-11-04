@@ -148,8 +148,10 @@ class LCObjectTestCase: BaseTestCase {
         newObject = LCObject.init(className: LCObjectTestCase.className, objectId: object.objectId!)
         newObject.setObject(1888, forKey: TestField.integer.rawValue)
         newObject.setObject(false, forKey: TestField.boolean.rawValue)
+        let option = LCObjectFetchOption()
+        option.selectKeys = [TestField.double.rawValue, TestField.string.rawValue]
         expecting { exp in
-            newObject.fetchInBackground(withKeys: [TestField.double.rawValue, TestField.string.rawValue]) { object, error in
+            newObject.fetchInBackground(with: option) { object, error in
                 XCTAssertNotNil(object)
                 XCTAssertNil(error)
                 exp.fulfill()
@@ -464,6 +466,86 @@ class LCObjectTestCase: BaseTestCase {
         XCTAssertNotNil(newObject)
         LCObjectTestCase.verifyLCObjectValues(object: newObject!, needVerifyFields: fields)
         
+    }
+    
+    
+    func testFetch() {
+        let objectWithInvalidID = LCObject(objectId: uuid)
+        XCTAssertFalse(objectWithInvalidID.fetch())
+        do {
+            try objectWithInvalidID.fetchAndThrows()
+            XCTFail()
+        } catch {
+            XCTAssertEqual((error as NSError).code, kLCErrorObjectNotFound)
+        }
+        do {
+            try objectWithInvalidID.fetch(with: nil)
+            XCTFail()
+        } catch {
+            XCTAssertEqual((error as NSError).code, kLCErrorObjectNotFound)
+        }
+        do {
+            try LCObject.fetchAll([objectWithInvalidID], error: ())
+            XCTFail()
+        } catch {
+            XCTAssertNotNil(error)
+        }
+        
+        let validObject = LCObject()
+        let childObject = LCObject()
+        let key = "childObject"
+        validObject[key] = childObject
+        XCTAssertTrue(validObject.save())
+        
+        guard let objectId = validObject.objectId else {
+            XCTFail()
+            return
+        }
+        
+        expecting { exp in
+            let object = LCObject(objectId: objectId)
+            object.fetchInBackground { obj, error in
+                XCTAssertTrue(Thread.isMainThread)
+                XCTAssertTrue(obj === object)
+                XCTAssertNil(error)
+                let child = object[key] as? LCObject
+                XCTAssertEqual(child?.objectId, childObject.objectId)
+                XCTAssertNil(child?.createdAt)
+                XCTAssertNil(child?.updatedAt)
+                exp.fulfill()
+            }
+        }
+        
+        expecting { exp in
+            let object = LCObject(objectId: objectId)
+            let option = LCObjectFetchOption()
+            option.selectKeys = [key]
+            option.includeKeys = [key]
+            object.fetchInBackground(with: option) { obj, error in
+                XCTAssertTrue(Thread.isMainThread)
+                XCTAssertTrue(obj === object)
+                XCTAssertNil(error)
+                let child = object[key] as? LCObject
+                XCTAssertEqual(child?.objectId, childObject.objectId)
+                XCTAssertNotNil(child?.createdAt)
+                XCTAssertNotNil(child?.updatedAt)
+                exp.fulfill()
+            }
+        }
+        
+        expecting { exp in
+            let object = LCObject(objectId: objectId)
+            LCObject.fetchAll(inBackground: [object]) { objects, error in
+                XCTAssertTrue(Thread.isMainThread)
+                XCTAssertEqual(objects?.count, 1)
+                let child = (objects?.first as? LCObject)?[key] as? LCObject
+                XCTAssertEqual(child?.objectId, childObject.objectId)
+                XCTAssertNil(child?.createdAt)
+                XCTAssertNil(child?.updatedAt)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
     }
     
     
