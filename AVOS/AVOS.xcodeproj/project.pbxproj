@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C43D444627281D39006A31FD /* LCTestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = C43D444527281D39006A31FD /* LCTestObject.m */; };
+		C4B25E3D27267DE700F9414F /* LCObjectTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B25E3C27267DE700F9414F /* LCObjectTestCase.swift */; };
 		D305F7B0235577AD00222EBC /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D305F7AF235577AD00222EBC /* main.swift */; };
 		D30B6A1424A09978006ABE09 /* LeanCloudObjc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D30B6A0B24A09978006ABE09 /* LeanCloudObjc.framework */; };
 		D30B6A1B24A09978006ABE09 /* LeanCloudObjc.h in Headers */ = {isa = PBXBuildFile; fileRef = D30B6A0D24A09978006ABE09 /* LeanCloudObjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -529,6 +531,9 @@
 		9AD392491BFD7BE600D28074 /* MessagesProtoOrig.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessagesProtoOrig.pbobjc.m; sourceTree = "<group>"; };
 		9AD651D31BD9470900C55F85 /* LCIMDynamicObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCIMDynamicObject.h; sourceTree = "<group>"; };
 		9AD651D41BD9470900C55F85 /* LCIMDynamicObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMDynamicObject.m; sourceTree = "<group>"; };
+		C43D444427281D39006A31FD /* LCTestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCTestObject.h; sourceTree = "<group>"; };
+		C43D444527281D39006A31FD /* LCTestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCTestObject.m; sourceTree = "<group>"; };
+		C4B25E3C27267DE700F9414F /* LCObjectTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCObjectTestCase.swift; sourceTree = "<group>"; };
 		D305F7A72355760100222EBC /* CLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CLI; sourceTree = BUILT_PRODUCTS_DIR; };
 		D305F7AF235577AD00222EBC /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = main.swift; path = ../main.swift; sourceTree = "<group>"; };
 		D30B6A0B24A09978006ABE09 /* LeanCloudObjc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LeanCloudObjc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1232,8 +1237,11 @@
 			isa = PBXGroup;
 			children = (
 				D30B6B6024A0A932006ABE09 /* LeanCloudObjcTests-Bridging-Header.h */,
+				C43D444427281D39006A31FD /* LCTestObject.h */,
+				C43D444527281D39006A31FD /* LCTestObject.m */,
 				D30B6B6124A0A933006ABE09 /* BaseTestCase.swift */,
 				D3AD74AA24BC216200D1BBEE /* LCUserTestCase.swift */,
+				C4B25E3C27267DE700F9414F /* LCObjectTestCase.swift */,
 				D313717F26BBDAC200123756 /* LCQueryTestCase.swift */,
 				D33127D226CBAD6D00BBDE09 /* LCFileTestCase.swift */,
 				D33127D426CE391500BBDE09 /* LCLeaderboardTestCase.swift */,
@@ -1811,6 +1819,8 @@
 				D30B6B6224A0A933006ABE09 /* BaseTestCase.swift in Sources */,
 				D313718026BBDAC200123756 /* LCQueryTestCase.swift in Sources */,
 				D36A095A25BEA75000A4F312 /* IMMessageTestCase.swift in Sources */,
+				C43D444627281D39006A31FD /* LCTestObject.m in Sources */,
+				C4B25E3D27267DE700F9414F /* LCObjectTestCase.swift in Sources */,
 				D3AD74AB24BC216200D1BBEE /* LCUserTestCase.swift in Sources */,
 				D33127D526CE391500BBDE09 /* LCLeaderboardTestCase.swift in Sources */,
 				D33127D326CBAD6D00BBDE09 /* LCFileTestCase.swift in Sources */,

@@ -14,6 +14,20 @@ class BaseTestCase: XCTestCase {
     static let timeout: TimeInterval = 60.0
     let timeout: TimeInterval = 60.0
     
+    static let className = "TestObject"
+    
+    enum TestField: String {
+        case integer = "testInteger"
+        case double = "testDouble"
+        case boolean = "testBoolean"
+        case string = "testString"
+        case array = "testArray"
+        case dict = "testDictionary"
+        case date = "testDate"
+        case data = "testData"
+        case object = "testObject"
+    }
+    
     static var uuid: String {
         return UUID().uuidString.replacingOccurrences(of: "-", with: "")
     }
@@ -143,3 +157,114 @@ extension BaseTestCase {
         application.setWithIdentifier(appInfo.id, key: appInfo.key)
     }
 }
+
+
+
+enum LCTestError: String, Error {
+
+    case valueNotExist
+    case typeNotMatch
+}
+
+extension LCTestError: LocalizedError {
+    var errorDescription: String? {
+        return self.rawValue
+    }
+}
+
+extension BaseTestCase {
+    
+    static func valueIsEqual<T: Equatable> (first: T, second: T) -> Bool {
+        return first == second
+    }
+    
+    static func getValue<T>(from object: LCObject, key field: String) throws -> T {
+        let value = object.object(forKey: field)
+        guard let value = value else {
+            throw LCTestError.valueNotExist
+        }
+        
+        guard let value = value as? T else {
+            throw LCTestError.typeNotMatch
+        }
+        return value
+    }
+    
+    static func verifyLCObjectValues(object: LCObject, needVerifyFields: [TestField: Any]) {
+        // 这里类型一致需要开发者自己控制，如果不一致不要调用该方法，自己手动校验
+        for (field, value) in needVerifyFields {
+            switch field {
+            case .integer:
+                verifyLCObjectFieldValue(object: object, fieldName: field.rawValue, value: value as! Int)
+            case .double:
+                verifyLCObjectFieldValue(object: object, fieldName: field.rawValue, value: value as! Double)
+            case .boolean:
+                verifyLCObjectFieldValue(object: object, fieldName: field.rawValue, value: value as! Bool)
+            case .string:
+                verifyLCObjectFieldValue(object: object, fieldName: field.rawValue, value: value as! String)
+            case .array:
+                verifyLCObjectFieldValue(object: object, fieldName: field.rawValue, value: value as! NSArray)
+            case .dict:
+                verifyLCObjectFieldValue(object: object, fieldName: field.rawValue, value: value as! NSDictionary)
+            case .date:
+                if let verifyValue = value as? Date,
+                   let realValue: Date = try? getValue(from: object, key: field.rawValue) {
+                    let interval = verifyValue.timeIntervalSince(realValue)
+                    XCTAssert(fabs(interval) < 0.01, "字段\(field.rawValue)发生错误，需要校验的值为：\(verifyValue)，实际值却是：\(realValue)")
+                } else {
+                    XCTFail("字段\(field.rawValue)类型错误")
+                }
+            case .data:
+                verifyLCObjectFieldValue(object: object, fieldName: field.rawValue, value: value as! Data)
+            case .object:
+                verifyLCObjectFieldValue(object: object, fieldName: field.rawValue, value: value as! LCObject)
+            }
+        
+        }
+    }
+    
+    
+    static func verifyLCObjectValues(objectID: String, needVerifyFields: [TestField: Any], className: String = LCObjectTestCase.className) {
+        let object = LCObject.init(className: className, objectId: objectID)
+        XCTAssert(object.fetch())
+        verifyLCObjectValues(object: object, needVerifyFields: needVerifyFields)
+    }
+    
+    static func verifyLCObjectFieldValue<T :Equatable>(object: LCObject, fieldName: String, value: T) {
+        
+        do {
+            let realValue: T = try getValue(from: object, key: fieldName)
+            XCTAssert(value == realValue, "字段\(fieldName)发生错误，需要校验的值为：\(value)，实际值却是：\(realValue)")
+        } catch  {
+            XCTFail("字段\(fieldName)发生错误: " + error.localizedDescription)
+        }
+    }
+    
+    static func createLCObject(fields: [TestField: Any], save: Bool = true, className: String = LCObjectTestCase.className) -> LCObject {
+        let object = LCObject.init(className: className)
+        for (field, value) in fields {
+            object.setObject(value, forKey: field.rawValue)
+        }
+        if save {
+            XCTAssert(object.save())
+            XCTAssertNotNil(object.objectId)
+        }
+        return object
+    }
+    
+//    @inline(__always)
+//    func setLCObjectFieldValues(object: LCObject, fields: [TestField: Any]){
+//        for (field, value) in fields {
+//            object.setObject(value, forKey: field.rawValue)
+//        }
+//    }
+    
+    static func updateLCObject(objectID: String, className: String = LCObjectTestCase.className, updateAction: ((LCObject) -> ())) {
+        let object = LCObject.init(className: className, objectId: objectID)
+        updateAction(object)
+        XCTAssert(object.save())
+    }
+    
+    
+}
+
