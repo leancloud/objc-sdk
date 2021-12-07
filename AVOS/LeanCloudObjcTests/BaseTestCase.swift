@@ -9,6 +9,10 @@
 import XCTest
 @testable import LeanCloudObjc
 
+//extension LCGeoPoint: Equatable {
+//
+//}
+
 class BaseTestCase: XCTestCase {
     
     static let timeout: TimeInterval = 60.0
@@ -26,6 +30,7 @@ class BaseTestCase: XCTestCase {
         case date = "testDate"
         case data = "testData"
         case object = "testObject"
+        case point = "testPoint"
     }
     
     static var uuid: String {
@@ -218,6 +223,8 @@ extension BaseTestCase {
                 verifyLCObjectFieldValue(object: object, fieldName: field.rawValue, value: value as! Data)
             case .object:
                 verifyLCObjectFieldValue(object: object, fieldName: field.rawValue, value: value as! LCObject)
+            case .point:
+                verifyLCObjectFieldValue(object: object, fieldName: field.rawValue, value: value as! LCGeoPoint)
             }
         
         }
@@ -266,5 +273,23 @@ extension BaseTestCase {
     }
     
     
+}
+
+extension BaseTestCase {
+    func getDistance(point1: LCGeoPoint, point2: LCGeoPoint) -> Double {
+        let EARTH_RADIUS = 6378137.0
+        
+        let radLat1 = point1.latitude * Double.pi / 180.0
+        let radLat2 = point2.latitude * Double.pi / 180.0
+        let radLng1 = point1.longitude * Double.pi / 180.0
+        let radLng2 = point2.longitude * Double.pi / 180.0
+        
+        let a = radLat1 - radLat2
+        let b = radLng1 - radLng2
+        
+        var s: Double = 2 * asin(sqrt(pow(sin(a/2), 2) + cos(radLat1) * cos(radLat2) * pow(sin(b/2), 2)))
+        s = s * EARTH_RADIUS
+        return s
+    }
 }
 

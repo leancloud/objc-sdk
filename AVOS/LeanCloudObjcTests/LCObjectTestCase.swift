@@ -170,6 +170,11 @@ class LCObjectTestCase: BaseTestCase {
     
     func testUpdateObject() {
         
+//        Latitude of point in degrees.  Valid range (-90.0, 90.0).
+//        Longitude of point in degrees.  Valid range (-180.0, 180.0).
+//        let result = getDistance(lat1: 30, lng1: 90, lat2: 30.001, lng2: 90.001)
+//        print(result)
+        
         let testInteger = 2021
         let testDouble = 3.14
         let testBoolean = true

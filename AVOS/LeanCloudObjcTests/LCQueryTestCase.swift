@@ -9,7 +9,7 @@
 import XCTest
 @testable import LeanCloudObjc
 
-// MARK: 测试用例初始化
+// MARK: Test case initialization
 extension LCQueryTestCase {
     
     static let QueryName = "QueryObject"
@@ -18,41 +18,8 @@ extension LCQueryTestCase {
     override class func setUp() {
         super.setUp()
         deleteAllObjects()
-        
-        let object = createLCObject(fields: [
-            .integer: 1,
-//            .double: testDouble,
-//            .boolean: testBoolean,
-//            .string: testString,
-//            .array: testArray,
-//            .dict: testDictionary,
-//            .date: testDate,
-//            .data: testData,
-        ], save: false, className: QueryName)
-        queryObjects.append(object)
-        
-        
-        let object1 = createLCObject(fields: [
-            .string: "Jack",
-        ], save: false, className: QueryName)
-        queryObjects.append(object1)
-        
-        
-        for i in 0..<20 {
-            let object = createLCObject(fields: [
-                .integer: i,
-            ], save: false, className: QueryName)
-            queryObjects.append(object)
-        }
-        
-        XCTAssert(LCObject.saveAll(queryObjects))
-        
+        generateTestObjects()
     }
-    
-//    override class func tearDown() {
-//        super.tearDown()
-//        deleteAllObjects()
-//    }
     
     static func deleteAllObjects() {
         let query = LCQuery.init(className: QueryName)
@@ -63,13 +30,57 @@ extension LCQueryTestCase {
         XCTAssert(LCObject.deleteAll(objects))
     }
     
+    static func generateTestObjects() {
+        let object = createLCObject(fields: [
+            .integer: 1,
+            .array: [7, 8, 9, 10]
+        ], save: false, className: QueryName)
+        queryObjects.append(object)
+        
+        let object1 = createLCObject(fields: [
+            .string: "Jack",
+        ], save: false, className: QueryName)
+        queryObjects.append(object1)
+        
+        let object2 = createLCObject(fields: [
+            .string: "Jac",
+        ], save: false, className: QueryName)
+        queryObjects.append(object2)
+        
+        let object3 = createLCObject(fields: [
+            .string: "ack",
+        ], save: false, className: QueryName)
+        queryObjects.append(object3)
+        
+        for i in 0..<20 {
+            let total = Double(i) * Double(i + 1)/2
+            let object = createLCObject(fields: [
+                .integer: i,
+                .array: Array(0..<i),
+                .point: LCGeoPoint.init(latitude: total * 0.1 , longitude: total * 0.1)
+            ], save: false, className: QueryName)
+            queryObjects.append(object)
+        }
+        
+        XCTAssert(LCObject.saveAll(queryObjects))
+        
+        XCTAssertNotNil(object.objectId)
+        XCTAssertNotNil(object1.objectId)
+        XCTAssertNotNil(object2.objectId)
+        XCTAssertNotNil(object3.objectId)
+        object1[TestField.object.rawValue] = object
+        object2[TestField.object.rawValue] = object1
+        object3[TestField.object.rawValue] = object2
+        XCTAssert(LCObject.saveAll([object1, object2, object3]))
+        
+
+    }
+    
     func createQuery() -> LCQuery {
         return LCQuery.init(className: LCQueryTestCase.QueryName)
     }
     
-    func queryTest(queryCondition: ((LCQuery) -> ()), filterCondition: ((LCObject) -> Bool)) {
-        let query = createQuery()
-        queryCondition(query)
+    func queryTest(query: LCQuery, filterCondition: ((LCObject) -> Bool)) {
         let queryResults = query.findObjects()
         guard let queryResults = queryResults as? [LCObject] else {
             XCTFail()
@@ -84,9 +95,16 @@ extension LCQueryTestCase {
               """)
         XCTAssert(queryResults.count == filterResults.count)
     }
+    
+    func queryTest(queryCondition: ((LCQuery) -> ()), filterCondition: ((LCObject) -> Bool)) {
+        
+        let query = createQuery()
+        queryCondition(query)
+        queryTest(query: query, filterCondition: filterCondition)
+    }
 }
 
-// MARK: 查询的单元测试
+// MARK: Unit tests of queries
 class LCQueryTestCase: BaseTestCase {
     
     func testKeyExists() {
@@ -191,65 +209,543 @@ class LCQueryTestCase: BaseTestCase {
         }
     }
     
-//    - (void)whereKey:(NSString *)key containedIn:(NSArray *)array;
-//
-//
-//    - (void)whereKey:(NSString *)key notContainedIn:(NSArray *)array;
-//
-//
-//    - (void)whereKey:(NSString *)key containsAllObjectsInArray:(NSArray *)array;
+    func testContainedIn() {
+        let arrayKey = TestField.array.rawValue
+        let value = [7, 8, 9]
+        queryTest {
+            $0.whereKey(arrayKey, containedIn: value)
+        } filterCondition: {
+            if let result = $0.object(forKey: arrayKey) as? [Int] {
+                let resultSet = Set(result)
+                let valueSet = Set(value)
+                // Check whether the number of intersections is greater than 0
+                return resultSet.intersection(valueSet).count > 0
+            }
+            return false
+        }
+    }
     
+    func testNotContainedIn() {
+        let arrayKey = TestField.array.rawValue
+        let value = [8, 9]
+        queryTest {
+            $0.whereKey(arrayKey, notContainedIn: value)
+        } filterCondition: {
+            if let result = $0.object(forKey: arrayKey) as? [Int] {
+                let resultSet = Set(result)
+                let valueSet = Set(value)
+                // Determine whether the number of intersections is equal to 0
+                return resultSet.intersection(valueSet).count == 0
+            }
+            return true
+        }
+    }
+    
+    func testContainsAllObjectsIn() {
+        let arrayKey = TestField.array.rawValue
+        let value = [7, 8, 9, 10]
+        queryTest {
+            $0.whereKey(arrayKey, containsAllObjectsIn: value)
+        } filterCondition: {
+            if let result = $0.object(forKey: arrayKey) as? [Int] {
+                let resultSet = Set(result)
+                let valueSet = Set(value)
+                // Check whether valueSet is a subset of resultSet
+                return resultSet.isSuperset(of: valueSet)
+            }
+            return false
+        }
+    }
+    
+    
+    func testSizeEqualTo() {
+        let arrayKey = TestField.array.rawValue
+        let value: UInt = 4
+        queryTest {
+            $0.whereKey(arrayKey, sizeEqualTo: value)
+        } filterCondition: {
+            if let result = $0.object(forKey: arrayKey) as? [Int] {
+                return result.count == value
+            }
+            return false
+        }
+    }
+    
+    func testContainsString() {
+        let stringKey = TestField.string.rawValue
+        let value = "ac"
+        queryTest {
+            $0.whereKey(stringKey, contains: value)
+        } filterCondition: {
+            if let result = $0.object(forKey: stringKey) as? String {
+                return result.contains(value)
+            }
+            return false
+        }
+    }
 
+    func testHasPrefix() {
+        let stringKey = TestField.string.rawValue
+        let value = "Jac"
+        queryTest {
+            $0.whereKey(stringKey, hasPrefix: value)
+        } filterCondition: {
+            if let result = $0.object(forKey: stringKey) as? String {
+                return result.hasPrefix(value)
+            }
+            return false
+        }
+    }
     
+    func testHasSuffix() {
+        let stringKey = TestField.string.rawValue
+        let value = "ack"
+        queryTest {
+            $0.whereKey(stringKey, hasSuffix: value)
+        } filterCondition: {
+            if let result = $0.object(forKey: stringKey) as? String {
+                return result.hasSuffix(value)
+            }
+            return false
+        }
+    }
+    
+    func testMatchesRegex() {
+        let stringKey = TestField.string.rawValue
+        let value = "Jack"
+        queryTest {
+            $0.whereKey(stringKey, matchesRegex: value)
+        } filterCondition: {
+            if let result = $0.object(forKey: stringKey) as? String {
+                return NSPredicate(format: "SELF MATCHES %@", value).evaluate(with: result)
+            }
+            return false
+        }
+    }
+    
+    func testMatchesRegexAndModifiers() {
+        let stringKey = TestField.string.rawValue
+        let value = "jack"
+        queryTest {
+            //ignore case
+            $0.whereKey(stringKey, matchesRegex: value, modifiers: "i")
+        } filterCondition: {
+            if let result = $0.object(forKey: stringKey) as? String {
+                //ignore case
+                return NSPredicate(format: "SELF MATCHES[c] %@", value).evaluate(with: result)
+            }
+            return false
+        }
+    }
     
     func testOrQuery() {
-        let object1 = LCObject()
-        let object2 = LCObject()
         
-        XCTAssertTrue(LCObject.saveAll([object1, object2]))
-        XCTAssertNotNil(object1.objectId)
-        XCTAssertNotNil(object2.objectId)
+        let arrayKey = TestField.array.rawValue
+        let value1 = 8
+        let value2 = 9
         
-        let object1id = object1.objectId!
-        let object2id = object2.objectId!
-
+        let query1 = createQuery()
+        query1.whereKey(arrayKey, equalTo: value1)
         
-        let query1 = LCQuery(className: object1.className)
-        query1.whereKey("objectId", equalTo: object1id)
-        let query2 = LCQuery(className: object2.className)
-        query2.whereKey("objectId", equalTo: object2id)
+        let query2 = createQuery()
+        query2.whereKey(arrayKey, equalTo: value2)
         
-        XCTAssertEqual(LCQuery.orQuery(withSubqueries: [query1, query2])?.findObjects()?.count, 2)
-        XCTAssertEqual(LCQuery.orQuery(withSubqueries: [query1])?.findObjects()?.count, 1)
-        XCTAssertEqual(LCQuery.orQuery(withSubqueries: [])?.findObjects()?.count, nil)
-        XCTAssertEqual(LCQuery.orQuery(withSubqueries: [LCQuery(className: object1.className)])?.findObjects()?.count, nil)
+        let query = LCQuery.orQuery(withSubqueries: [query1, query2])
+        XCTAssertNotNil(query)
+        
+        queryTest(query: query!) {
+            if let result = $0.object(forKey: arrayKey) as? [Int] {
+                let resultSet = Set(result)
+                return resultSet.contains(value1) || resultSet.contains(value2)
+            }
+            return false
+        }
     }
     
     func testAndQuery() {
-        let andKeySame = "andKeySame"
-        let andKeyDiff = "andKeyDiff"
-        let sameValue = uuid
-        let diffValue1 = uuid
-        let diffValue2 = uuid
-        let object1 = LCObject()
-        object1[andKeySame] = sameValue
-        object1[andKeyDiff] = diffValue1
-        let object2 = LCObject()
-        object2[andKeySame] = sameValue
-        object2[andKeyDiff] = diffValue2
+        let arrayKey = TestField.array.rawValue
+        let value1 = 8
+        let value2 = 9
         
-        XCTAssertTrue(LCObject.saveAll([object1, object2]))
-        XCTAssertNotNil(object1.objectId)
-        XCTAssertNotNil(object2.objectId)
+        let query1 = createQuery()
+        query1.whereKey(arrayKey, equalTo: value1)
         
-        let query1 = LCQuery(className: object1.className)
-        query1.whereKey(andKeySame, equalTo: sameValue)
-        let query2 = LCQuery(className: object2.className)
-        query2.whereKey(andKeyDiff, equalTo: diffValue2)
+        let query2 = createQuery()
+        query2.whereKey(arrayKey, equalTo: value2)
         
-        XCTAssertEqual(LCQuery.andQuery(withSubqueries: [query1, query2])?.findObjects()?.count, 1)
-        XCTAssertEqual(LCQuery.andQuery(withSubqueries: [query1])?.findObjects()?.count, 2)
-        XCTAssertEqual(LCQuery.andQuery(withSubqueries: [])?.findObjects()?.count, nil)
-        XCTAssertEqual(LCQuery.andQuery(withSubqueries: [LCQuery(className: object1.className)])?.findObjects()?.count, nil)
+        let query = LCQuery.andQuery(withSubqueries: [query1, query2])
+        XCTAssertNotNil(query)
+        
+        queryTest(query: query!) {
+            if let result = $0.object(forKey: arrayKey) as? [Int] {
+                let resultSet = Set(result)
+                return resultSet.contains(value1) && resultSet.contains(value2)
+            }
+            return false
+        }
     }
+    
+    
+    func testMultipleConditions() {
+        let arrayKey = TestField.array.rawValue
+        let value1 = 8
+        let value2 = 9
+
+        queryTest {
+            $0.whereKey(arrayKey, equalTo: value1)
+            $0.whereKey(arrayKey, equalTo: value2)
+        } filterCondition: {
+            if let result = $0.object(forKey: arrayKey) as? [Int] {
+                let resultSet = Set(result)
+                return resultSet.contains(value1) && resultSet.contains(value2)
+            }
+            return false
+        }
+    }
+    
+   
+    func testNearGeoPoint () {
+        let stringKey = TestField.point.rawValue
+        let value = LCGeoPoint.init(latitude: 10, longitude: 10)
+        queryTest {
+            $0.whereKey(stringKey, nearGeoPoint: value)
+        } filterCondition: {
+            if let _ = $0.object(forKey: stringKey) as? LCGeoPoint {
+                return true
+            }
+            return false
+        }
+    }
+    
+    func testNearGeoPointWithinMiles () {
+        let stringKey = TestField.point.rawValue
+        let value = LCGeoPoint.init(latitude: 10, longitude: 10)
+        let miles = 500.0
+        queryTest {
+            $0.whereKey(stringKey, nearGeoPoint: value, withinMiles: miles)
+        } filterCondition: {
+            if let result = $0.object(forKey: stringKey) as? LCGeoPoint {
+                return getDistance(point1: result, point2: value) <= miles * 1609
+            }
+            return false
+        }
+    }
+    
+    func testNearGeoPointWithinKilometers () {
+        let stringKey = TestField.point.rawValue
+        let value = LCGeoPoint.init(latitude: 10, longitude: 10)
+        let kilometers = 500.0
+        queryTest {
+            $0.whereKey(stringKey, nearGeoPoint: value, withinKilometers: kilometers)
+        } filterCondition: {
+            if let result = $0.object(forKey: stringKey) as? LCGeoPoint {
+                return getDistance(point1: result, point2: value) <= kilometers * 1000
+            }
+            return false
+        }
+    }
+    
+    func testNearGeoPointWithMinDistance () {
+        let stringKey = TestField.point.rawValue
+        let value = LCGeoPoint.init(latitude: 10, longitude: 10)
+        let kilometers = 500.0
+        queryTest {
+            $0.whereKey(stringKey, nearGeoPoint: value, minDistance: kilometers, minDistanceUnit: .kilometer)
+        } filterCondition: {
+            if let result = $0.object(forKey: stringKey) as? LCGeoPoint {
+                return getDistance(point1: result, point2: value) >= kilometers * 1000
+            }
+            return false
+        }
+    }
+    
+    func testNearGeoPointFromSouthwestToNortheast () {
+        let stringKey = TestField.point.rawValue
+        let Southwest = LCGeoPoint.init(latitude: 5, longitude: 10)
+        let Northeast = LCGeoPoint.init(latitude: 10, longitude: 5)
+        queryTest {
+            $0.whereKey(stringKey, withinGeoBoxFromSouthwest: Southwest, toNortheast: Northeast)
+        } filterCondition: {
+            if let result = $0.object(forKey: stringKey) as? LCGeoPoint {
+                if result.latitude >= Southwest.latitude,
+                   result.latitude <= Northeast.latitude,
+                   result.longitude >= Northeast.longitude,
+                   result.longitude <= Southwest.longitude {
+                    return true
+                }
+            }
+            return false
+        }
+    }
+
+
+
+    func testMatchesKeyInQuery() {
+        let strKey = TestField.string.rawValue
+        let value = "Jack"
+
+        queryTest {
+            let query = createQuery()
+            query.whereKey(strKey, equalTo: value)
+            $0.whereKey(strKey, matchesKey: strKey, in: query)
+        } filterCondition: {
+            if let str = $0.object(forKey: strKey) as? String{
+                return str == value
+            }
+            return false
+        }
+    }
+    
+    func testNotMatchesKeyInQuery() {
+        let strKey = TestField.string.rawValue
+        let value = "Jack"
+
+        queryTest {
+            let query = createQuery()
+            query.whereKey(strKey, equalTo: value)
+            $0.whereKey(strKey, doesNotMatchKey: strKey, in: query)
+        } filterCondition: {
+            if let str = $0.object(forKey: strKey) as? String{
+                return str != value
+            }
+            return true
+        }
+    }
+
+    
+    func testMatchesQuery() {
+        let strKey = TestField.string.rawValue
+        let objKey = TestField.object.rawValue
+        let value = "Jack"
+
+        queryTest {
+            let query = createQuery()
+            query.whereKey(strKey, equalTo: value)
+            $0.whereKey(objKey, matchesQuery: query)
+        } filterCondition: {
+            if let result = $0.object(forKey: objKey) as? LCObject,
+               let str = result.object(forKey: strKey) as? String{
+                return str == value
+            }
+            return false
+        }
+    }
+
+    func testNotMatchesQuery() {
+        let strKey = TestField.string.rawValue
+        let objKey = TestField.object.rawValue
+        let value = "Jack"
+
+        queryTest {
+            let query = createQuery()
+            query.whereKey(strKey, equalTo: value)
+            $0.whereKey(objKey, doesNotMatch: query)
+        } filterCondition: {
+            if let result = $0.object(forKey: objKey) as? LCObject,
+               let str = result.object(forKey: strKey) as? String{
+                return str != value
+            }
+            return true
+        }
+    }
+    
+    func testLimit() {
+        let integerKey = TestField.integer.rawValue
+        let limit = 8
+        var currentCount = 0
+        queryTest {
+            $0.whereKeyExists(integerKey)
+            $0.limit = limit
+        } filterCondition: {
+            if $0.object(forKey: integerKey) != nil {
+                if currentCount >= limit {
+                    return false
+                } else {
+                    currentCount += 1
+                    return true
+                }
+            }
+            return false
+        }
+    }
+    
+    func testSkip() {
+        let integerKey = TestField.integer.rawValue
+        let skip = 8
+        var currentCount = 0
+        queryTest {
+            $0.whereKeyExists(integerKey)
+            $0.skip = skip
+        } filterCondition: {
+            if $0.object(forKey: integerKey) != nil {
+                if currentCount >= skip {
+                    return true
+                } else {
+                    currentCount += 1
+                    return false
+                }
+            }
+            return false
+        }
+    }
+    
+    func testOrderByAscending() {
+        let integerKey = TestField.integer.rawValue
+        let query = createQuery()
+        query.whereKeyExists(integerKey)
+        query.addAscendingOrder(integerKey)
+        let queryResults = query.findObjects()
+        guard let queryResults = queryResults as? [LCObject] else {
+            XCTFail()
+            return
+        }
+        var filterResults = LCQueryTestCase.queryObjects.filter {
+            if $0.object(forKey: integerKey) != nil {
+                return true
+            }
+            return false
+        }
+        XCTAssert(queryResults.count == filterResults.count)
+        filterResults.sort {
+            if let first = $0.object(forKey: integerKey) as? Int, let second = $1.object(forKey: integerKey) as? Int {
+                return first < second
+            }
+            XCTFail()
+            return false
+        }
+        for i in 0..<queryResults.count {
+            if let first = queryResults[i].object(forKey: integerKey) as? Int,
+                let second = filterResults[i].object(forKey: integerKey) as? Int {
+                XCTAssert(first == second)
+            } else {
+                XCTFail()
+            }
+        }
+    }
+    
+    func testOrderByDescending() {
+        let integerKey = TestField.integer.rawValue
+        let query = createQuery()
+        query.whereKeyExists(integerKey)
+        query.order(byDescending: integerKey)
+        let queryResults = query.findObjects()
+        guard let queryResults = queryResults as? [LCObject] else {
+            XCTFail()
+            return
+        }
+        var filterResults = LCQueryTestCase.queryObjects.filter {
+            if $0.object(forKey: integerKey) != nil {
+                return true
+            }
+            return false
+        }
+        XCTAssert(queryResults.count == filterResults.count)
+        filterResults.sort {
+            if let first = $0.object(forKey: integerKey) as? Int, let second = $1.object(forKey: integerKey) as? Int {
+                return first > second
+            }
+            XCTFail()
+            return false
+        }
+        for i in 0..<queryResults.count {
+            if let first = queryResults[i].object(forKey: integerKey) as? Int,
+                let second = filterResults[i].object(forKey: integerKey) as? Int {
+                XCTAssert(first == second)
+            } else {
+                XCTFail()
+            }
+        }
+    }
+    
+    func testSelectKeys() {
+        let integerKey = TestField.integer.rawValue
+        let stringKey = TestField.string.rawValue
+        let query = createQuery()
+        query.selectKeys([stringKey])
+        let queryResults = query.findObjects()
+        guard let queryResults = queryResults as? [LCObject] else {
+            XCTFail()
+            return
+        }
+        queryResults.forEach {
+            if $0.object(forKey: integerKey) != nil {
+                XCTFail()
+            }
+        }
+    }
+
+    func testIncludeKey() {
+        let objectKey = TestField.object.rawValue
+        let query = createQuery()
+        query.includeKey(objectKey)
+        let queryResults = query.findObjects()
+        guard let queryResults = queryResults as? [LCObject] else {
+            XCTFail()
+            return
+        }
+        var hasObject = false;
+        for object in queryResults {
+            if let result = object.object(forKey: objectKey) as? LCObject,
+               result.allKeys().count > 1 {
+                hasObject = true
+                break
+            }
+        }
+        if hasObject == false {
+            XCTFail()
+        }
+    }
+    
+    func testQueryCount() {
+        let integerKey = TestField.integer.rawValue
+        let query = createQuery()
+        query.whereKeyExists(integerKey)
+        expecting { exp in
+            query.countObjectsInBackground { count, error in
+                XCTAssertNil(error)
+                let filterResults = LCQueryTestCase.queryObjects.filter {
+                    if $0.object(forKey: integerKey) != nil {
+                        return true
+                    }
+                    return false
+                }
+                XCTAssertEqual(filterResults.count, count)
+                exp.fulfill()
+            }
+        }
+        
+    }
+    
+    
+    func testQueryCache() {
+        let integerKey = TestField.integer.rawValue
+        let query = createQuery()
+        query.whereKeyExists(integerKey)
+        query.cachePolicy = .cacheElseNetwork
+        query.maxCacheAge = 60 * 60 * 24
+        let queryResults = query.findObjects()
+        guard let _ = queryResults as? [LCObject] else {
+            XCTFail()
+            return
+        }
+        query.findObjects()
+        var isInCache = query.hasCachedResult()
+        XCTAssertTrue(isInCache)
+        
+        query.clearCachedResult()
+        isInCache = query.hasCachedResult()
+        XCTAssertFalse(isInCache)
+        
+        query.findObjects()
+        query.findObjects()
+        isInCache = query.hasCachedResult()
+        XCTAssertTrue(isInCache)
+        
+        LCQuery.clearAllCachedResults()
+        isInCache = query.hasCachedResult()
+        XCTAssertFalse(isInCache)
+        
+        
+    }
+    
 }
