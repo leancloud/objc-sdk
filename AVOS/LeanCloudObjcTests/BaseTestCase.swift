@@ -15,10 +15,10 @@ import XCTest
 
 class BaseTestCase: XCTestCase {
     
-    static let timeout: TimeInterval = 30.0
-    let timeout: TimeInterval = 30.0
+    static let timeout: TimeInterval = 60.0
+    let timeout: TimeInterval = 60.0
     
-    static let className = "TestObject"
+    static let TestName = "TestObject"
     
     enum TestField: String {
         case integer = "testInteger"
@@ -231,7 +231,7 @@ extension BaseTestCase {
     }
     
     
-    static func verifyLCObjectValues(objectID: String, needVerifyFields: [TestField: Any], className: String = LCObjectTestCase.className) {
+    static func verifyLCObjectValues(objectID: String, needVerifyFields: [TestField: Any], className: String = LCObjectTestCase.TestName) {
         let object = LCObject.init(className: className, objectId: objectID)
         XCTAssert(object.fetch())
         verifyLCObjectValues(object: object, needVerifyFields: needVerifyFields)
@@ -247,7 +247,7 @@ extension BaseTestCase {
         }
     }
     
-    static func createLCObject(fields: [TestField: Any], save: Bool = true, className: String = LCObjectTestCase.className) -> LCObject {
+    static func createLCObject(fields: [TestField: Any], save: Bool = true, className: String = LCObjectTestCase.TestName) -> LCObject {
         let object = LCObject.init(className: className)
         object.set(fields: fields)
         if save {
@@ -264,7 +264,7 @@ extension BaseTestCase {
 //        }
 //    }
     
-    static func updateLCObject(objectID: String, className: String = LCObjectTestCase.className, updateAction: ((LCObject) -> ())) {
+    static func updateLCObject(objectID: String, className: String = LCObjectTestCase.TestName, updateAction: ((LCObject) -> ())) {
         let object = LCObject.init(className: className, objectId: objectID)
         updateAction(object)
         XCTAssert(object.save())

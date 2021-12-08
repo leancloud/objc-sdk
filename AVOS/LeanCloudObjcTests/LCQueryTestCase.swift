@@ -77,6 +77,8 @@ extension LCQueryTestCase {
     }
     
     func createQuery() -> LCQuery {
+//        NotificationCenter.default .addObserver(self, selector: #selector(createQuery), name: NSNotification, object: <#T##Any?#>)
+
         return LCQuery.init(className: LCQueryTestCase.QueryName)
     }
     
