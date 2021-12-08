@@ -15,8 +15,8 @@ import XCTest
 
 class BaseTestCase: XCTestCase {
     
-    static let timeout: TimeInterval = 60.0
-    let timeout: TimeInterval = 60.0
+    static let timeout: TimeInterval = 30.0
+    let timeout: TimeInterval = 30.0
     
     static let className = "TestObject"
     
@@ -249,9 +249,7 @@ extension BaseTestCase {
     
     static func createLCObject(fields: [TestField: Any], save: Bool = true, className: String = LCObjectTestCase.className) -> LCObject {
         let object = LCObject.init(className: className)
-        for (field, value) in fields {
-            object.setObject(value, forKey: field.rawValue)
-        }
+        object.set(fields: fields)
         if save {
             XCTAssert(object.save())
             XCTAssertNotNil(object.objectId)
@@ -290,6 +288,14 @@ extension BaseTestCase {
         var s: Double = 2 * asin(sqrt(pow(sin(a/2), 2) + cos(radLat1) * cos(radLat2) * pow(sin(b/2), 2)))
         s = s * EARTH_RADIUS
         return s
+    }
+}
+
+extension LCObject {
+    func set(fields: [BaseTestCase.TestField: Any]) {
+        for (field, value) in fields {
+            setObject(value, forKey: field.rawValue)
+        }
     }
 }
 

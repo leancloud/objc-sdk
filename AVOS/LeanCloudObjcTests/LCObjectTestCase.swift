@@ -73,21 +73,23 @@ class LCObjectTestCase: BaseTestCase {
         let testObject = LCObject.init(className: LCObjectTestCase.className)
         
         let testInteger = 2021
-        testObject.setObject(testInteger, forKey: TestField.integer.rawValue)
         let testDouble = 3.14
-        testObject.setObject(testDouble, forKey: TestField.double.rawValue)
         let testBoolean = true
-        testObject.setObject(testBoolean, forKey: TestField.boolean.rawValue)
         let testString = "流行音乐榜单"
-        testObject.setObject(testString, forKey: TestField.string.rawValue)
         let testArray = [testString]
-        testObject.setObject(testArray, forKey: TestField.array.rawValue)
         let testDictionary = ["流行音乐": 2014, "榜单": 2018]
-        testObject.setObject(testDictionary, forKey: TestField.dict.rawValue)
         let testDate = Date.init()
-        testObject.setObject(testDate, forKey: TestField.date.rawValue)
         let testData = testString.data(using: .utf8)!
-        testObject.setObject(testData, forKey: TestField.data.rawValue)
+        testObject.set(fields: [
+            .integer: testInteger,
+            .double: testDouble,
+            .boolean: testBoolean,
+            .string: testString,
+            .array: testArray,
+            .dict: testDictionary,
+            .date: testDate,
+            .data: testData,
+        ])
         
         
         expecting { exp in
@@ -146,8 +148,10 @@ class LCObjectTestCase: BaseTestCase {
         
         
         newObject = LCObject.init(className: LCObjectTestCase.className, objectId: object.objectId!)
-        newObject.setObject(1888, forKey: TestField.integer.rawValue)
-        newObject.setObject(false, forKey: TestField.boolean.rawValue)
+        newObject.set(fields: [
+            .integer: 1888,
+            .boolean: false,
+        ])
         let option = LCObjectFetchOption()
         option.selectKeys = [TestField.double.rawValue, TestField.string.rawValue]
         expecting { exp in
