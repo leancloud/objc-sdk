@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		C43D444627281D39006A31FD /* LCTestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = C43D444527281D39006A31FD /* LCTestObject.m */; };
+		C497E8C52760A77300441160 /* LCPushTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C497E8C42760A77300441160 /* LCPushTestCase.swift */; };
+		C4997A2F2761D6B30055EF2E /* LCIMTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4997A2E2761D6B30055EF2E /* LCIMTestCase.swift */; };
+		C4997A312761F6630055EF2E /* LCIMClientDelegator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4997A302761F6630055EF2E /* LCIMClientDelegator.swift */; };
+		C49BC44B275F6ABE00032059 /* LCLiveQueryTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49BC44A275F6ABE00032059 /* LCLiveQueryTestCase.swift */; };
 		C4B25E3D27267DE700F9414F /* LCObjectTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B25E3C27267DE700F9414F /* LCObjectTestCase.swift */; };
 		D305F7B0235577AD00222EBC /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D305F7AF235577AD00222EBC /* main.swift */; };
 		D30B6A1424A09978006ABE09 /* LeanCloudObjc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D30B6A0B24A09978006ABE09 /* LeanCloudObjc.framework */; };
@@ -533,6 +537,10 @@
 		9AD651D41BD9470900C55F85 /* LCIMDynamicObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMDynamicObject.m; sourceTree = "<group>"; };
 		C43D444427281D39006A31FD /* LCTestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCTestObject.h; sourceTree = "<group>"; };
 		C43D444527281D39006A31FD /* LCTestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCTestObject.m; sourceTree = "<group>"; };
+		C497E8C42760A77300441160 /* LCPushTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCPushTestCase.swift; sourceTree = "<group>"; };
+		C4997A2E2761D6B30055EF2E /* LCIMTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCase.swift; sourceTree = "<group>"; };
+		C4997A302761F6630055EF2E /* LCIMClientDelegator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMClientDelegator.swift; sourceTree = "<group>"; };
+		C49BC44A275F6ABE00032059 /* LCLiveQueryTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCLiveQueryTestCase.swift; sourceTree = "<group>"; };
 		C4B25E3C27267DE700F9414F /* LCObjectTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCObjectTestCase.swift; sourceTree = "<group>"; };
 		D305F7A72355760100222EBC /* CLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CLI; sourceTree = BUILT_PRODUCTS_DIR; };
 		D305F7AF235577AD00222EBC /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = main.swift; path = ../main.swift; sourceTree = "<group>"; };
@@ -1243,12 +1251,16 @@
 				D3AD74AA24BC216200D1BBEE /* LCUserTestCase.swift */,
 				C4B25E3C27267DE700F9414F /* LCObjectTestCase.swift */,
 				D313717F26BBDAC200123756 /* LCQueryTestCase.swift */,
+				C49BC44A275F6ABE00032059 /* LCLiveQueryTestCase.swift */,
 				D33127D226CBAD6D00BBDE09 /* LCFileTestCase.swift */,
+				C497E8C42760A77300441160 /* LCPushTestCase.swift */,
 				D33127D426CE391500BBDE09 /* LCLeaderboardTestCase.swift */,
 				D39724C324A5CD3C0099A518 /* RTMBaseTestCase.swift */,
 				D3A397F024A5A4670087D6F8 /* RTMConnectionTestCase.swift */,
 				D39724C524A852400099A518 /* IMClientTestCase.swift */,
+				C4997A302761F6630055EF2E /* LCIMClientDelegator.swift */,
 				D36A095925BEA75000A4F312 /* IMMessageTestCase.swift */,
+				C4997A2E2761D6B30055EF2E /* LCIMTestCase.swift */,
 				D30B6A1A24A09978006ABE09 /* Info.plist */,
 			);
 			path = LeanCloudObjcTests;
@@ -1818,11 +1830,15 @@
 			files = (
 				D30B6B6224A0A933006ABE09 /* BaseTestCase.swift in Sources */,
 				D313718026BBDAC200123756 /* LCQueryTestCase.swift in Sources */,
+				C497E8C52760A77300441160 /* LCPushTestCase.swift in Sources */,
 				D36A095A25BEA75000A4F312 /* IMMessageTestCase.swift in Sources */,
 				C43D444627281D39006A31FD /* LCTestObject.m in Sources */,
 				C4B25E3D27267DE700F9414F /* LCObjectTestCase.swift in Sources */,
+				C4997A2F2761D6B30055EF2E /* LCIMTestCase.swift in Sources */,
+				C49BC44B275F6ABE00032059 /* LCLiveQueryTestCase.swift in Sources */,
 				D3AD74AB24BC216200D1BBEE /* LCUserTestCase.swift in Sources */,
 				D33127D526CE391500BBDE09 /* LCLeaderboardTestCase.swift in Sources */,
+				C4997A312761F6630055EF2E /* LCIMClientDelegator.swift in Sources */,
 				D33127D326CBAD6D00BBDE09 /* LCFileTestCase.swift in Sources */,
 				D3A397F124A5A4670087D6F8 /* RTMConnectionTestCase.swift in Sources */,
 				D39724C624A852400099A518 /* IMClientTestCase.swift in Sources */,
@@ -2091,6 +2107,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -2113,6 +2130,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = LeanCloudObjcTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = LeanCloud.LeanCloudObjcTests;

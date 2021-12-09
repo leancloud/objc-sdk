@@ -49,7 +49,7 @@ class IMClientTestCase: RTMBaseTestCase {
             description: "Session Conflict",
             count: 2)
         { (exp) in
-            delegator1.closed = { client, error in
+            delegator1.imClientClosed = { client, error in
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(error)
                 XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.sessionConflict.rawValue)
@@ -78,7 +78,7 @@ class IMClientTestCase: RTMBaseTestCase {
             description: "Force Open",
             count: 2)
         { (exp) in
-            delegator2.closed = { client, error in
+            delegator2.imClientClosed = { client, error in
                 XCTAssertNotNil(error)
                 XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.sessionConflict.rawValue)
                 exp.fulfill()
@@ -105,7 +105,7 @@ class IMClientTestCase: RTMBaseTestCase {
         XCTAssertNotNil(client.sessionToken)
         client.sessionToken = uuid
         expecting { (exp) in
-            delegator.resumed = { client in
+            delegator.imClientResumed = { client in
                 XCTAssertTrue(Thread.isMainThread)
                 exp.fulfill()
             }
@@ -150,48 +150,4 @@ class IMClientTestCase: RTMBaseTestCase {
     }
 }
 
-class LCIMClientDelegator: NSObject, LCIMClientDelegate {
-    
-    func reset() {
-        resuming = nil
-        resumed = nil
-        paused = nil
-        closed = nil
-        didReceiveTypedMessage = nil
-    }
-    
-    var resuming: ((LCIMClient) -> Void)?
-    func imClientResuming(_ imClient: LCIMClient) {
-        resuming?(imClient)
-    }
-    
-    var resumed: ((LCIMClient) -> Void)?
-    func imClientResumed(_ imClient: LCIMClient) {
-        resumed?(imClient)
-    }
-    
-    var paused: ((LCIMClient, Error?) -> Void)?
-    func imClientPaused(_ imClient: LCIMClient, error: Error?) {
-        paused?(imClient, error)
-    }
-    
-    var closed: ((LCIMClient, Error?) -> Void)?
-    func imClientClosed(_ imClient: LCIMClient, error: Error?) {
-        closed?(imClient, error)
-    }
-    
-    var didReceiveTypedMessage: ((LCIMConversation, LCIMTypedMessage) -> Void)?
-    func conversation(_ conversation: LCIMConversation, didReceive message: LCIMTypedMessage) {
-        didReceiveTypedMessage?(conversation, message)
-    }
-    
-    var messageHasBeenUpdated: ((LCIMConversation, LCIMMessage, LCIMMessagePatchedReason?) -> Void)?
-    func conversation(_ conversation: LCIMConversation, messageHasBeenUpdated message: LCIMMessage, reason: LCIMMessagePatchedReason?) {
-        messageHasBeenUpdated?(conversation, message, reason)
-    }
-    
-    var messageHasBeenRecalled: ((LCIMConversation, LCIMRecalledMessage, LCIMMessagePatchedReason?) -> Void)?
-    func conversation(_ conversation: LCIMConversation, messageHasBeenRecalled message: LCIMRecalledMessage, reason: LCIMMessagePatchedReason?) {
-        messageHasBeenRecalled?(conversation, message, reason)
-    }
-}
+

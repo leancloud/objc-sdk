@@ -9,12 +9,16 @@
 import XCTest
 @testable import LeanCloudObjc
 
+//extension LCGeoPoint: Equatable {
+//
+//}
+
 class BaseTestCase: XCTestCase {
     
     static let timeout: TimeInterval = 60.0
     let timeout: TimeInterval = 60.0
     
-    static let className = "TestObject"
+    static let TestName = "TestObject"
     
     enum TestField: String {
         case integer = "testInteger"
@@ -26,6 +30,7 @@ class BaseTestCase: XCTestCase {
         case date = "testDate"
         case data = "testData"
         case object = "testObject"
+        case point = "testPoint"
     }
     
     static var uuid: String {
@@ -218,13 +223,15 @@ extension BaseTestCase {
                 verifyLCObjectFieldValue(object: object, fieldName: field.rawValue, value: value as! Data)
             case .object:
                 verifyLCObjectFieldValue(object: object, fieldName: field.rawValue, value: value as! LCObject)
+            case .point:
+                verifyLCObjectFieldValue(object: object, fieldName: field.rawValue, value: value as! LCGeoPoint)
             }
         
         }
     }
     
     
-    static func verifyLCObjectValues(objectID: String, needVerifyFields: [TestField: Any], className: String = LCObjectTestCase.className) {
+    static func verifyLCObjectValues(objectID: String, needVerifyFields: [TestField: Any], className: String = LCObjectTestCase.TestName) {
         let object = LCObject.init(className: className, objectId: objectID)
         XCTAssert(object.fetch())
         verifyLCObjectValues(object: object, needVerifyFields: needVerifyFields)
@@ -240,11 +247,9 @@ extension BaseTestCase {
         }
     }
     
-    static func createLCObject(fields: [TestField: Any], save: Bool = true, className: String = LCObjectTestCase.className) -> LCObject {
+    static func createLCObject(fields: [TestField: Any], save: Bool = true, className: String = LCObjectTestCase.TestName) -> LCObject {
         let object = LCObject.init(className: className)
-        for (field, value) in fields {
-            object.setObject(value, forKey: field.rawValue)
-        }
+        object.set(fields: fields)
         if save {
             XCTAssert(object.save())
             XCTAssertNotNil(object.objectId)
@@ -259,12 +264,38 @@ extension BaseTestCase {
 //        }
 //    }
     
-    static func updateLCObject(objectID: String, className: String = LCObjectTestCase.className, updateAction: ((LCObject) -> ())) {
+    static func updateLCObject(objectID: String, className: String = LCObjectTestCase.TestName, updateAction: ((LCObject) -> ())) {
         let object = LCObject.init(className: className, objectId: objectID)
         updateAction(object)
         XCTAssert(object.save())
     }
     
     
+}
+
+extension BaseTestCase {
+    func getDistance(point1: LCGeoPoint, point2: LCGeoPoint) -> Double {
+        let EARTH_RADIUS = 6378137.0
+        
+        let radLat1 = point1.latitude * Double.pi / 180.0
+        let radLat2 = point2.latitude * Double.pi / 180.0
+        let radLng1 = point1.longitude * Double.pi / 180.0
+        let radLng2 = point2.longitude * Double.pi / 180.0
+        
+        let a = radLat1 - radLat2
+        let b = radLng1 - radLng2
+        
+        var s: Double = 2 * asin(sqrt(pow(sin(a/2), 2) + cos(radLat1) * cos(radLat2) * pow(sin(b/2), 2)))
+        s = s * EARTH_RADIUS
+        return s
+    }
+}
+
+extension LCObject {
+    func set(fields: [BaseTestCase.TestField: Any]) {
+        for (field, value) in fields {
+            setObject(value, forKey: field.rawValue)
+        }
+    }
 }
 
