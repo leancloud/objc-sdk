@@ -70,24 +70,26 @@ class LCObjectTestCase: BaseTestCase {
     
     
     func testSaveBasicTypeData() {
-        let testObject = LCObject.init(className: LCObjectTestCase.className)
+        let testObject = LCObject.init(className: LCObjectTestCase.TestName)
         
         let testInteger = 2021
-        testObject.setObject(testInteger, forKey: TestField.integer.rawValue)
         let testDouble = 3.14
-        testObject.setObject(testDouble, forKey: TestField.double.rawValue)
         let testBoolean = true
-        testObject.setObject(testBoolean, forKey: TestField.boolean.rawValue)
         let testString = "流行音乐榜单"
-        testObject.setObject(testString, forKey: TestField.string.rawValue)
         let testArray = [testString]
-        testObject.setObject(testArray, forKey: TestField.array.rawValue)
         let testDictionary = ["流行音乐": 2014, "榜单": 2018]
-        testObject.setObject(testDictionary, forKey: TestField.dict.rawValue)
         let testDate = Date.init()
-        testObject.setObject(testDate, forKey: TestField.date.rawValue)
         let testData = testString.data(using: .utf8)!
-        testObject.setObject(testData, forKey: TestField.data.rawValue)
+        testObject.set(fields: [
+            .integer: testInteger,
+            .double: testDouble,
+            .boolean: testBoolean,
+            .string: testString,
+            .array: testArray,
+            .dict: testDictionary,
+            .date: testDate,
+            .data: testData,
+        ])
         
         
         expecting { exp in
@@ -128,7 +130,7 @@ class LCObjectTestCase: BaseTestCase {
             .string: testString,
         ])
         
-        var newObject = LCObject.init(className: LCObjectTestCase.className, objectId: object.objectId!)
+        var newObject = LCObject.init(className: LCObjectTestCase.TestName, objectId: object.objectId!)
         expecting { exp in
             newObject.fetchInBackground { object, error in
                 XCTAssertNotNil(object)
@@ -145,9 +147,11 @@ class LCObjectTestCase: BaseTestCase {
         ])
         
         
-        newObject = LCObject.init(className: LCObjectTestCase.className, objectId: object.objectId!)
-        newObject.setObject(1888, forKey: TestField.integer.rawValue)
-        newObject.setObject(false, forKey: TestField.boolean.rawValue)
+        newObject = LCObject.init(className: LCObjectTestCase.TestName, objectId: object.objectId!)
+        newObject.set(fields: [
+            .integer: 1888,
+            .boolean: false,
+        ])
         let option = LCObjectFetchOption()
         option.selectKeys = [TestField.double.rawValue, TestField.string.rawValue]
         expecting { exp in
@@ -169,6 +173,11 @@ class LCObjectTestCase: BaseTestCase {
     }
     
     func testUpdateObject() {
+        
+//        Latitude of point in degrees.  Valid range (-90.0, 90.0).
+//        Longitude of point in degrees.  Valid range (-180.0, 180.0).
+//        let result = getDistance(lat1: 30, lng1: 90, lat2: 30.001, lng2: 90.001)
+//        print(result)
         
         let testInteger = 2021
         let testDouble = 3.14
@@ -212,7 +221,7 @@ class LCObjectTestCase: BaseTestCase {
         ])
         
         
-        var newObject = LCObject.init(className: LCObjectTestCase.className, objectId: object.objectId!)
+        var newObject = LCObject.init(className: LCObjectTestCase.TestName, objectId: object.objectId!)
         var change = testInteger
         newObject.incrementKey(TestField.integer.rawValue, byAmount: NSNumber.init(value: -change))
         
@@ -239,7 +248,7 @@ class LCObjectTestCase: BaseTestCase {
         ])
 
          
-        newObject = LCObject.init(className: LCObjectTestCase.className, objectId: object.objectId!)
+        newObject = LCObject.init(className: LCObjectTestCase.TestName, objectId: object.objectId!)
         change = testInteger - 1
         newObject.incrementKey(TestField.integer.rawValue, byAmount: NSNumber.init(value: -change))
         
@@ -347,7 +356,7 @@ class LCObjectTestCase: BaseTestCase {
         // To generate the object
         let object = LCObjectTestCase.createLCObject(fields: [:])
         
-        var newObject = LCObject.init(className: LCObjectTestCase.className, objectId: object.objectId!)
+        var newObject = LCObject.init(className: LCObjectTestCase.TestName, objectId: object.objectId!)
         expecting { exp in
             newObject.deleteInBackground { result, error in
                 XCTAssert(result)
@@ -356,7 +365,7 @@ class LCObjectTestCase: BaseTestCase {
             }
         }
 
-        newObject = LCObject.init(className: LCObjectTestCase.className, objectId: object.objectId!)
+        newObject = LCObject.init(className: LCObjectTestCase.TestName, objectId: object.objectId!)
         XCTAssertFalse(newObject.fetch())
 
     }
@@ -392,7 +401,7 @@ class LCObjectTestCase: BaseTestCase {
         
         // 批量同步
         let newObjects = objectIDs.map {
-            LCObject.init(className: BaseTestCase.className, objectId: $0)
+            LCObject.init(className: BaseTestCase.TestName, objectId: $0)
         }
         expecting { exp in
             LCObject.fetchAll(inBackground: newObjects) { result, error in
@@ -416,7 +425,7 @@ class LCObjectTestCase: BaseTestCase {
         }
         
         objectIDs.forEach {
-            let temp = LCObject.init(className: LCObjectTestCase.className, objectId: $0)
+            let temp = LCObject.init(className: LCObjectTestCase.TestName, objectId: $0)
             XCTAssertFalse(temp.fetch())
             temp.saveEventually()
         }

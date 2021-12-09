@@ -8,105 +8,181 @@
 
 import XCTest
 @testable import LeanCloudObjc
+import AVFoundation
 
 class LCUserTestCase: BaseTestCase {
     
     static let testablePhoneNumber = "+8618622223333"
     static let testableSMSCode = "170402"
     
-    /*
-    func testVerifyPhoneNumberBySMSCode() {
-        let user = LCUser()
+    func testSignUpAndLoginAndOther() {
+        
         let username = uuid
         let password = uuid
-        let phoneNumber = LCUserTestCase.testablePhoneNumber
+        let email = uuid + "@163.com"
+        
+        let user = LCUser()
         user.username = username
         user.password = password
-        user.mobilePhoneNumber = phoneNumber
-        XCTAssertTrue(user.signUp(nil))
-        expecting { (exp) in
-            LCUser.logInWithUsername(
-                inBackground: username,
-                password: password)
-            { (user, error) in
-                XCTAssertTrue(Thread.isMainThread)
-                XCTAssertNotNil(user)
+        user.email = email
+        
+        expecting { exp in
+            user.signUpInBackground { result, error in
+                XCTAssertNil(error)
+                XCTAssertTrue(result)
+                exp.fulfill()
+            }
+        }
+        XCTAssertNotNil(LCUser.current())
+        LCUser.logOut()
+        XCTAssertNil(LCUser.current())
+        
+        expecting { exp in
+            LCUser.logInWithUsername(inBackground: username, password: password) { user, error in
                 XCTAssertNil(error)
                 XCTAssertTrue(user === LCUser.current())
                 exp.fulfill()
             }
         }
-        expecting { (exp) in
-            LCUser.requestVerificationCode(
-                forPhoneNumber: phoneNumber,
-                options: nil)
-            { (succeeded, error) in
-                XCTAssertTrue(Thread.isMainThread)
-                XCTAssertTrue(succeeded)
+        
+        XCTAssertNotNil(LCUser.current())
+        LCUser.logOut()
+        XCTAssertNil(LCUser.current())
+        
+        expecting { exp in
+            LCUser.logInWithMobilePhoneNumber(inBackground: LCUserTestCase.testablePhoneNumber, smsCode: LCUserTestCase.testableSMSCode) { user, error in
                 XCTAssertNil(error)
+                XCTAssertTrue(user === LCUser.current())
                 exp.fulfill()
             }
         }
-        expecting { (exp) in
-            LCUser.verifyCode(
-                forPhoneNumber: phoneNumber,
-                code: LCUserTestCase.testableSMSCode)
-            { (succeeded, error) in
-                XCTAssertTrue(Thread.isMainThread)
-                XCTAssertTrue(succeeded)
+        
+        XCTAssertNotNil(LCUser.current())
+        LCUser.logOut()
+        XCTAssertNil(LCUser.current())
+        
+        expecting { exp in
+            LCUser.login(withEmail: email, password: password) { user, error in
                 XCTAssertNil(error)
+                XCTAssertTrue(user === LCUser.current())
                 exp.fulfill()
             }
         }
+        
+        XCTAssertNotNil(LCUser.current())
+        let current = LCUser.current()!;
+        XCTAssertNotNil(current.sessionToken)
+        
+        expecting { exp in
+            current.isAuthenticated(withSessionToken: current.sessionToken!) { ret, error in
+                XCTAssertNil(error)
+                XCTAssertTrue(ret)
+                exp.fulfill()
+            }
+        }
+        
     }
-     */
     
-    /*
-    func testUpdatePhoneNumberBySMSCode() {
-        let user = LCUser()
-        let username = uuid
-        let password = uuid
-        let phoneNumber = LCUserTestCase.testablePhoneNumber
-        user.username = username
-        user.password = password
-        user.mobilePhoneNumber = phoneNumber
-        XCTAssertTrue(user.signUp(nil))
-        expecting { (exp) in
-            LCUser.logInWithUsername(
-                inBackground: username,
-                password: password)
-            { (user, error) in
-                XCTAssertTrue(Thread.isMainThread)
-                XCTAssertNotNil(user)
-                XCTAssertNil(error)
-                XCTAssertTrue(user === LCUser.current())
-                exp.fulfill()
-            }
-        }
-        expecting { (exp) in
-            LCUser.requestVerificationCode(
-                forUpdatingPhoneNumber: phoneNumber,
-                options: nil)
-            { (succeeded, error) in
-                XCTAssertTrue(Thread.isMainThread)
-                XCTAssertTrue(succeeded)
-                XCTAssertNil(error)
-                exp.fulfill()
-            }
-        }
-        expecting { (exp) in
-            LCUser.verifyCode(
-                toUpdatePhoneNumber: phoneNumber,
-                code: LCUserTestCase.testableSMSCode)
-            { (succeeded, error) in
-                XCTAssertTrue(Thread.isMainThread)
-                XCTAssertTrue(succeeded)
-                XCTAssertNil(error)
-                exp.fulfill()
-            }
-        }
-    }
-     */
+  
+//    func testVerifyPhoneNumberBySMSCode() {
+//        let user = LCUser()
+//        let username = uuid
+//        let password = uuid
+//        let phoneNumber = LCUserTestCase.testablePhoneNumber
+//        user.username = username
+//        user.password = password
+//        user.mobilePhoneNumber = phoneNumber
+//        do {
+//            try user.signUp()
+//        } catch  {
+//            XCTFail()
+//        }
+//        expecting { (exp) in
+//            LCUser.logInWithUsername(
+//                inBackground: username,
+//                password: password)
+//            { (user, error) in
+//                XCTAssertTrue(Thread.isMainThread)
+//                XCTAssertNotNil(user)
+//                XCTAssertNil(error)
+//                XCTAssertTrue(user === LCUser.current())
+//                exp.fulfill()
+//            }
+//        }
+//        expecting { (exp) in
+//            LCUser.requestVerificationCode(
+//                forPhoneNumber: phoneNumber,
+//                options: nil)
+//            { (succeeded, error) in
+//                XCTAssertTrue(Thread.isMainThread)
+//                XCTAssertTrue(succeeded)
+//                XCTAssertNil(error)
+//                exp.fulfill()
+//            }
+//        }
+//        expecting { (exp) in
+//            LCUser.verifyCode(
+//                forPhoneNumber: phoneNumber,
+//                code: LCUserTestCase.testableSMSCode)
+//            { (succeeded, error) in
+//                XCTAssertTrue(Thread.isMainThread)
+//                XCTAssertTrue(succeeded)
+//                XCTAssertNil(error)
+//                exp.fulfill()
+//            }
+//        }
+//    }
+
+//    func testUpdatePhoneNumberBySMSCode() {
+//        let user = LCUser()
+//        let username = uuid
+//        let password = uuid
+//        let phoneNumber = LCUserTestCase.testablePhoneNumber
+//        user.username = username
+//        user.password = password
+//        user.mobilePhoneNumber = phoneNumber
+//        do {
+//            try user.signUp()
+//        } catch  {
+//            XCTFail()
+//        }
+//
+//        expecting { (exp) in
+//            LCUser.logInWithUsername(
+//                inBackground: username,
+//                password: password)
+//            { (user, error) in
+//                XCTAssertTrue(Thread.isMainThread)
+//                XCTAssertNotNil(user)
+//                XCTAssertNil(error)
+//                XCTAssertTrue(user === LCUser.current())
+//                exp.fulfill()
+//            }
+//        }
+//        expecting { (exp) in
+//            LCUser.requestVerificationCode(
+//                forUpdatingPhoneNumber: phoneNumber,
+//                options: nil)
+//            { (succeeded, error) in
+//                XCTAssertTrue(Thread.isMainThread)
+//                XCTAssertTrue(succeeded)
+//                XCTAssertNil(error)
+//                exp.fulfill()
+//            }
+//        }
+//        expecting { (exp) in
+//            LCUser.verifyCode(
+//                toUpdatePhoneNumber: phoneNumber,
+//                code: LCUserTestCase.testableSMSCode)
+//            { (succeeded, error) in
+//                XCTAssertTrue(Thread.isMainThread)
+//                XCTAssertTrue(succeeded)
+//                XCTAssertNil(error)
+//                exp.fulfill()
+//            }
+//        }
+//    }
+
     
     func testLogOut() {
         var uid1: String?
