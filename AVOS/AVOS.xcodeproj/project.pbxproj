@@ -1642,7 +1642,6 @@
 					};
 					D30B6A1224A09978006ABE09 = {
 						CreatedOnToolsVersion = 11.5;
-						DevelopmentTeam = TJXP3ULET5;
 						LastSwiftMigration = 1150;
 						ProvisioningStyle = Automatic;
 					};
@@ -2100,7 +2099,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TJXP3ULET5;
+				DEVELOPMENT_TEAM = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -2123,7 +2122,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = TJXP3ULET5;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = LeanCloudObjcTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = LeanCloud.LeanCloudObjcTests;
