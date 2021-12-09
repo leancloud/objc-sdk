@@ -49,7 +49,7 @@ typedef NSMutableDictionary<NSString *, LCRTMConnection *> * LCRTMLiveQueryRegis
 @property (nonatomic, readonly) AVIMGenericCommand *command;
 @property (nonatomic, readonly) dispatch_queue_t callingQueue;
 @property (nonatomic, readonly) NSMutableArray<LCRTMConnectionOutCommandCallback> *callbacks;
-@property (nonatomic, readonly) NSDate *expiration;
+@property (nonatomic) NSDate *expiration;
 
 - (instancetype)initWithPeerID:(NSString *)peerID
                        command:(AVIMGenericCommand *)command
@@ -124,5 +124,10 @@ typedef NSMutableDictionary<NSString *, LCRTMConnection *> * LCRTMLiveQueryRegis
 - (instancetype)initWithApplication:(LCApplication *)application
                            protocol:(LCIMProtocol)protocol
                               error:(NSError * __autoreleasing *)error;
+
+#if DEBUG
+// Internal access level for unit testing
+- (BOOL)canConnecting;
+#endif
 
 @end

@@ -52,19 +52,20 @@ class RTMConnectionTestCase: RTMBaseTestCase {
     
     func testConnectingDelayAndStop() {
         LCApplication.default().rtmServer = RTMBaseTestCase.testableRTMServer + "n"
-        defer {
-            LCApplication.default().rtmServer = nil
-        }
         let peerID = uuid
         let consumer = LCRTMServiceConsumer(
             application: .default(),
             service: .instantMessaging,
             protocol: .protocol3,
             peerID: peerID)
+        defer {
+            LCApplication.default().rtmServer = nil
+            LCRTMConnectionManager.shared().unregister(with: consumer)
+        }
         let connection = try! LCRTMConnectionManager.shared().register(with: consumer)
         let delegator = RTMConnectionDelegator()
         var connectingCount = 0
-        let maxCount = 10
+        let maxCount = 7
         var timeout: TimeInterval = 0.0
         for i in 0..<maxCount {
             if i > 1 {
@@ -109,24 +110,16 @@ class RTMConnectionTestCase: RTMBaseTestCase {
         XCTAssertTrue(duration > timeout)
         XCTAssertTrue(duration < timeout + 10)
         connection.removeDelegator(with: consumer)
-        delay()
-        expecting(
-            timeout: 30)
-        { () -> XCTestExpectation in
-            let exp = self.expectation(description: "NOT Connecting")
-            exp.isInverted = true
-            return exp
-        } testcase: { (exp) in
-            delegator.inConnecting = { connection in
-                exp.fulfill()
-            }
-            delegator.didConnect = { connection in
+        expecting { exp in
+            connection.serialQueue.async {
+#if DEBUG
+                XCTAssertFalse(connection.canConnecting())
+#endif
+                XCTAssertNil(connection.socket)
+                XCTAssertNil(connection.timer)
                 exp.fulfill()
             }
         }
-        XCTAssertNil(connection.socket)
-        XCTAssertNil(connection.timer)
-        LCRTMConnectionManager.shared().unregister(with: consumer)
     }
     
     func testLoginAndCommandTimeout() {
@@ -137,11 +130,15 @@ class RTMConnectionTestCase: RTMBaseTestCase {
             protocol: .protocol3,
             peerID: peerID)
         let connection = try! LCRTMConnectionManager.shared().register(with: consumer)
+        defer {
+            connection.removeDelegator(with: consumer)
+            LCRTMConnectionManager.shared().unregister(with: consumer)
+        }
+        let timeout: TimeInterval = 0.1
         let delegator = RTMConnectionDelegator()
         expecting(
             description: "Login and Command Timeout",
-            count: 4,
-            timeout: 90)
+            count: 3)
         { (exp) in
             delegator.inConnecting = { connection in
                 XCTAssertTrue(Thread.isMainThread)
@@ -151,40 +148,23 @@ class RTMConnectionTestCase: RTMBaseTestCase {
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNotNil(connection.timer)
                 connection.serialQueue.async {
-                    connection.timer.append(
-                        .init(
-                            peerID: self.uuid,
-                            command: AVIMGenericCommand(),
-                            calling: .main,
-                            callback: { (_, error) in
-                                XCTAssertTrue(Thread.isMainThread)
-                                XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.commandTimeout.rawValue)
-                                exp.fulfill()
-                            }),
-                        index: NSNumber(1))
+                    let outCommand = LCRTMConnectionOutCommand(
+                        peerID: self.uuid,
+                        command: AVIMGenericCommand(),
+                        calling: .main,
+                        callback: { (_, error) in
+                            XCTAssertTrue(Thread.isMainThread)
+                            XCTAssertEqual((error as NSError?)?.code, LCIMErrorCode.commandTimeout.rawValue)
+                            exp.fulfill()
+                            delegator.reset()
+                        })
+                    outCommand?.expiration = Date(timeIntervalSinceNow: timeout)
+                    connection.timer.append(outCommand, index: NSNumber(1))
                 }
                 exp.fulfill()
             }
-            delegator.didDisconnect = { connection, error in
-                XCTAssertTrue(Thread.isMainThread)
-                if let error = error as NSError? {
-                    XCTAssertEqual(error.domain, kLeanCloudErrorDomain)
-                    XCTAssertEqual(error.code, 4108)
-                } else {
-                    XCTFail()
-                }
-                delegator.reset()
-                exp.fulfill()
-            }
-            connection.connect(
-                with: consumer,
-                delegator: .init(
-                    peerID: peerID,
-                    delegate: delegator,
-                    queue: .main))
+            connection.connect(with: consumer, delegator: .init(peerID: peerID, delegate: delegator, queue: .main))
         }
-        connection.removeDelegator(with: consumer)
-        LCRTMConnectionManager.shared().unregister(with: consumer)
     }
     
     func testThrottlingOutCommand() {
