@@ -62,6 +62,17 @@ class LCLiveQueryTestCase: BaseTestCase, LCLiveQueryDelegate {
         }
     }
     
+    override func tearDown() {
+        super.tearDown()
+        liveQuery.delegate = nil
+        objectDidCreate = nil
+        objectDidDelete = nil
+        userDidLogin = nil
+        objectDidEnter = nil
+        objectDidLeave = nil
+        objectDidUpdate = nil
+    }
+    
     
     func testObjectDidCreate() {
         let object = LCLiveQueryTestCase.createLCObject(fields: [
@@ -71,9 +82,8 @@ class LCLiveQueryTestCase: BaseTestCase, LCLiveQueryDelegate {
         ], save: false, className: LCLiveQueryTestCase.QueryName)
         
         expecting { exp in
-            objectDidCreate = { [weak self]
+            objectDidCreate = {
                 liveQuery, obj in
-                self?.objectDidCreate = nil;
                 if let obj = obj as? LCObject {
                     XCTAssertEqual(object.objectId, obj.objectId)
                 } else {
@@ -94,9 +104,8 @@ class LCLiveQueryTestCase: BaseTestCase, LCLiveQueryDelegate {
         ], save: true, className: LCLiveQueryTestCase.QueryName)
         
         expecting { exp in
-            objectDidDelete = { [weak self]
+            objectDidDelete = {
                 liveQuery, obj in
-                self?.objectDidDelete = nil;
                 if let obj = obj as? LCObject {
                     XCTAssertEqual(object.objectId, obj.objectId)
                 } else {
@@ -117,9 +126,8 @@ class LCLiveQueryTestCase: BaseTestCase, LCLiveQueryDelegate {
         let fieldKey = TestField.string
         
         expecting { exp in
-            objectDidEnter = { [weak self]
+            objectDidEnter = {
                 liveQuery, obj, updatedKeys in
-                self?.objectDidEnter = nil;
                 
                 if let obj = obj as? LCObject {
                     XCTAssertEqual(object.objectId, obj.objectId)
@@ -147,9 +155,8 @@ class LCLiveQueryTestCase: BaseTestCase, LCLiveQueryDelegate {
         let fieldKey = TestField.string
         
         expecting { exp in
-            objectDidLeave = { [weak self]
+            objectDidLeave = {
                 liveQuery, obj, updatedKeys in
-                self?.objectDidLeave = nil;
                 
                 if let obj = obj as? LCObject {
                     XCTAssertEqual(object.objectId, obj.objectId)
@@ -175,9 +182,8 @@ class LCLiveQueryTestCase: BaseTestCase, LCLiveQueryDelegate {
         let fieldKey = TestField.string
         
         expecting { exp in
-            objectDidUpdate = { [weak self]
+            objectDidUpdate = {
                 liveQuery, obj, updatedKeys in
-                self?.objectDidUpdate = nil;
                 
                 if let obj = obj as? LCObject {
                     XCTAssertEqual(object.objectId, obj.objectId)
