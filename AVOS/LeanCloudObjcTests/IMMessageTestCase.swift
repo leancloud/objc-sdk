@@ -16,13 +16,13 @@ class IMMessageTestCase: RTMBaseTestCase {
             XCTFail()
             return
         }
-        purgeConnectionRegistry()
+        IMMessageTestCase.purgeConnectionRegistry()
         guard let client2 = newOpenedClient(clientIDSuffix: "2"),
               let client3 = newOpenedClient(clientIDSuffix: "3") else {
             XCTFail()
             return
         }
-        purgeConnectionRegistry()
+        RTMBaseTestCase.purgeConnectionRegistry()
         guard let client4 = newOpenedClient(clientIDSuffix: "4") else {
             XCTFail()
             return

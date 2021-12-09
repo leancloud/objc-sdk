@@ -17,7 +17,7 @@ class RTMBaseTestCase: BaseTestCase {
         super.setUp()
     }
     
-    func purgeConnectionRegistry() {
+    static func purgeConnectionRegistry() {
         LCRTMConnectionManager.shared().liveQueryRegistry.removeAllObjects()
         LCRTMConnectionManager.shared().imProtobuf1Registry.removeAllObjects()
         LCRTMConnectionManager.shared().imProtobuf3Registry.removeAllObjects()

@@ -40,7 +40,7 @@ class IMClientTestCase: RTMBaseTestCase {
                 exp.fulfill()
             }
         }
-        purgeConnectionRegistry()
+        RTMBaseTestCase.purgeConnectionRegistry()
         let client2 = try! LCIMClient(clientId: peerID, tag: tag)
         let delegator2 = LCIMClientDelegator()
         client2.delegate = delegator2
