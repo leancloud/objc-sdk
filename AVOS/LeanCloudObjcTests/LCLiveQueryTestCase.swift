@@ -22,6 +22,11 @@ extension LCLiveQueryTestCase {
         generateTestObjects()
     }
     
+    override class func tearDown() {
+        RTMBaseTestCase.purgeConnectionRegistry()
+        super.tearDown()
+    }
+    
     static func deleteAllObjects() {
         let query = LCQuery.init(className: QueryName)
         let objects = query.findObjects()

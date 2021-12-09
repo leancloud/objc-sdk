@@ -11,6 +11,11 @@ import XCTest
 
 class RTMConnectionTestCase: RTMBaseTestCase {
     
+    override class func setUp() {
+        super.setUp()
+        purgeConnectionRegistry()
+    }
+    
     func testDuplicatedRegisterAndDealloc() {
         weak var wConnection: LCRTMConnection?
         expecting { (exp) in
