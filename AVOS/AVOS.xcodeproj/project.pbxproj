@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C43D444627281D39006A31FD /* LCTestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = C43D444527281D39006A31FD /* LCTestObject.m */; };
+		C474960127672EC600DBBF06 /* yellowicon.png in Resources */ = {isa = PBXBuildFile; fileRef = C474960027672EC500DBBF06 /* yellowicon.png */; };
 		C497E8C52760A77300441160 /* LCPushTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C497E8C42760A77300441160 /* LCPushTestCase.swift */; };
 		C4997A2F2761D6B30055EF2E /* LCIMTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4997A2E2761D6B30055EF2E /* LCIMTestCase.swift */; };
 		C4997A312761F6630055EF2E /* LCIMClientDelegator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4997A302761F6630055EF2E /* LCIMClientDelegator.swift */; };
@@ -537,6 +538,7 @@
 		9AD651D41BD9470900C55F85 /* LCIMDynamicObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCIMDynamicObject.m; sourceTree = "<group>"; };
 		C43D444427281D39006A31FD /* LCTestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCTestObject.h; sourceTree = "<group>"; };
 		C43D444527281D39006A31FD /* LCTestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCTestObject.m; sourceTree = "<group>"; };
+		C474960027672EC500DBBF06 /* yellowicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yellowicon.png; sourceTree = "<group>"; };
 		C497E8C42760A77300441160 /* LCPushTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCPushTestCase.swift; sourceTree = "<group>"; };
 		C4997A2E2761D6B30055EF2E /* LCIMTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCase.swift; sourceTree = "<group>"; };
 		C4997A302761F6630055EF2E /* LCIMClientDelegator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMClientDelegator.swift; sourceTree = "<group>"; };
@@ -1261,6 +1263,7 @@
 				C4997A302761F6630055EF2E /* LCIMClientDelegator.swift */,
 				D36A095925BEA75000A4F312 /* IMMessageTestCase.swift */,
 				C4997A2E2761D6B30055EF2E /* LCIMTestCase.swift */,
+				C474960027672EC500DBBF06 /* yellowicon.png */,
 				D30B6A1A24A09978006ABE09 /* Info.plist */,
 			);
 			path = LeanCloudObjcTests;
@@ -1685,6 +1688,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C474960127672EC600DBBF06 /* yellowicon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

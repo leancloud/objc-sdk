@@ -36,6 +36,15 @@
             isEnabled = "YES">
          </AdditionalOption>
       </AdditionalOptions>
+      <CodeCoverageTargets>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "D30B6A0A24A09978006ABE09"
+            BuildableName = "LeanCloudObjc.framework"
+            BlueprintName = "LeanCloudObjc"
+            ReferencedContainer = "container:AVOS.xcodeproj">
+         </BuildableReference>
+      </CodeCoverageTargets>
       <Testables>
          <TestableReference
             skipped = "NO">
