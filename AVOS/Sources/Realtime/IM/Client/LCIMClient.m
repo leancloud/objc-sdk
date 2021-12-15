@@ -237,12 +237,18 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                  @"\n%@: %p"
                  @"\n\t- dealloc",
                  NSStringFromClass([self class]), self);
-    LCInstallation *installation = self.installation;
-    [installation removeObserver:self
-                      forKeyPath:keyPath(installation, deviceToken)
-                         context:(__bridge void *)(self)];
-    [self.connection removeDelegatorWithServiceConsumer:self.serviceConsumer];
-    [[LCRTMConnectionManager sharedManager] unregisterWithServiceConsumer:self.serviceConsumer];
+    if (self.installation) {
+        LCInstallation *installation = self.installation;
+        [installation removeObserver:self
+                          forKeyPath:keyPath(installation, deviceToken)
+                             context:(__bridge void *)(self)];
+    }
+    if (self.connection && self.serviceConsumer) {
+        [self.connection removeDelegatorWithServiceConsumer:self.serviceConsumer];
+    }
+    if (self.serviceConsumer) {
+        [[LCRTMConnectionManager sharedManager] unregisterWithServiceConsumer:self.serviceConsumer];
+    }
 }
 
 // MARK: Queue
