@@ -593,7 +593,8 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 {
 #if DEBUG
     void *specificKey = (__bridge void *)(self.serialQueue);
-    return dispatch_get_specific(specificKey) == specificKey;
+    void *result = dispatch_get_specific(specificKey);
+    return result == specificKey;
 #else
     return true;
 #endif
@@ -807,6 +808,24 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
         }
     }];
 }
+
+
+- (void)disconnect {
+    dispatch_async(self.serialQueue, ^{
+        NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: @"connection did close by local peer."};
+        NSError *error = [NSError errorWithDomain:@"RTMConnection" code:-1 userInfo:userInfo];
+        
+        [self tryCleanConnectionWithError:error];
+    });
+}
+
+
+- (void)testConnect {
+    dispatch_async(self.serialQueue, ^{
+        [self connect];
+    });
+}
+
 
 - (void)getRTMServerWithCompletion:(void(^)(LCRTMConnection *connection, NSURL *serverURL, NSError *error))completion
 {
