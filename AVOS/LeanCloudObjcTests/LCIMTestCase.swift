@@ -17,18 +17,18 @@ class LCIMTestCase: BaseTestCase {
     
     var tomClient: LCIMClient!
     var jerryClient: LCIMClient!
-//    static var maryClient: LCIMClient!
+    //    static var maryClient: LCIMClient!
     var tomConversation: LCIMConversation!
     var jerryConversation: LCIMConversation!
-//    static var maryConversation: LCIMConversation!
+    //    static var maryConversation: LCIMConversation!
     
-        
+    
     override func setUp() {
         super.setUp()
-
+        
         do {
-            tomClient = try LCIMClient.init(clientId: "Tom")
-            jerryClient = try LCIMClient.init(clientId: "Jerry")
+            tomClient = try LCIMClient.init(clientId: uuid)
+            jerryClient = try LCIMClient.init(clientId: uuid)
             expecting (count: 2){ exp in
                 tomClient.open { ret, error in
                     XCTAssertTrue(ret)
@@ -52,11 +52,11 @@ class LCIMTestCase: BaseTestCase {
                     self?.tomConversation = conversation
                     exp.fulfill()
                 }
-                jerryDelegator.didUpdateForKey = { [weak jerryDelegator]
-                    conversation, updateKey in
-                    XCTAssertNotNil(conversation.conversationId)
-                    self.jerryConversation = conversation
-                    jerryDelegator?.didUpdateForKey = nil
+                jerryDelegator.invitedByClientId = { [weak self]
+                    conversation, clientId in
+                    XCTAssertEqual(clientId, self?.tomConversation.clientId)
+                    XCTAssertEqual(conversation.conversationId, self?.tomConversation.conversationId)
+                    self?.jerryConversation = conversation
                     exp.fulfill()
                 }
             }
@@ -67,8 +67,8 @@ class LCIMTestCase: BaseTestCase {
     
     override func tearDown() {
         super.tearDown()
-        self.tomClient = nil
-        self.jerryClient = nil
+        tomClient = nil
+        jerryClient = nil
     }
     
     func testCreateWithUser() {
@@ -101,7 +101,7 @@ class LCIMTestCase: BaseTestCase {
                 XCTAssertNil(error)
                 exp.fulfill()
             })
-
+            
             jerryDelegator.didReceiveTypedMessage = {
                 conversation, typedMessage in
                 if let msg = typedMessage as? LCIMTextMessage {
@@ -227,7 +227,7 @@ class LCIMTestCase: BaseTestCase {
                 XCTAssertNil(error)
                 exp.fulfill()
             }
-
+            
             maryDelegator.kickedByClientId = { [weak self]
                 conversation, kickedByClientId in
                 XCTAssertEqual(kickedByClientId, self?.tomConversation.clientId)
@@ -309,26 +309,297 @@ class LCIMTestCase: BaseTestCase {
     }
     
     
-//    func testTypedMessage() {
-//        let jerryDelegator = LCIMClientDelegator.init()
-//        jerryClient.delegate = jerryDelegator
-//        expecting (count: 2){ exp in
-//            let members = ["Mary", "rry", "r677886555ry"]
-//            jerryDelegator.membersAdded = { [weak self]
-//                conversation, clientIds, byClientId in
-//                XCTAssertEqual(byClientId, self?.tomConversation.clientId)
-//                XCTAssertEqual(clientIds, members)
-//                exp.fulfill()
-//            }
-//            
-//            tomConversation.addMembers(withClientIds: members) { ret, error in
-//                XCTAssertTrue(ret)
-//                XCTAssertNil(error)
-//                exp.fulfill()
-//            }
-//        }
-//    }
+    func testImageMessage() {
+        let jerryDelegator = LCIMClientDelegator.init()
+        jerryClient.delegate = jerryDelegator
+        
+        let path: String! = Bundle.init(for: type(of: self)).path(forResource: "yellowicon", ofType: "png")
+        XCTAssertNotNil(path)
+        expecting (count: 2){ exp in
+            let imageFile = try? LCFile.init(localPath: path)
+            XCTAssertNotNil(imageFile)
+            
+            let message = LCIMImageMessage.init(text: "玉米", file: imageFile!, attributes: nil)
+            tomConversation.send(message, callback: { ret, error in
+                XCTAssertTrue(ret)
+                XCTAssertNil(error)
+                exp.fulfill()
+            })
+            
+            jerryDelegator.didReceiveTypedMessage = {
+                conversation, typedMessage in
+                if let msg = typedMessage as? LCIMImageMessage {
+                    XCTAssertEqual(msg.text, message.text)
+                    XCTAssertNotNil(msg.url)
+                    XCTAssertNotNil(msg.clientId)
+                } else {
+                    XCTFail()
+                }
+                exp.fulfill()
+            }
+        }
+        
+        expecting (count: 2){ exp in
+            let imageUrl = URL.init(string: "http://ww3.sinaimg.cn/bmiddle/596b0666gw1ed70eavm5tg20bq06m7wi.gif")
+            XCTAssertNotNil(imageUrl)
+            let imageFile = LCFile.init(remoteURL: imageUrl!)
+            
+            let message = LCIMImageMessage.init(text: "玉米", file: imageFile, attributes: nil)
+            tomConversation.send(message, callback: { ret, error in
+                XCTAssertTrue(ret)
+                XCTAssertNil(error)
+                exp.fulfill()
+            })
+            
+            jerryDelegator.didReceiveTypedMessage = {
+                conversation, typedMessage in
+                if let msg = typedMessage as? LCIMImageMessage {
+                    XCTAssertEqual(msg.text, message.text)
+                    XCTAssertNotNil(msg.url)
+                } else {
+                    XCTFail()
+                }
+                exp.fulfill()
+            }
+        }
+        
+    }
     
-
-
+    func testFileMessage() {
+        let jerryDelegator = LCIMClientDelegator.init()
+        jerryClient.delegate = jerryDelegator
+        
+        let fileUrl = URL.init(string: "http://ww3.sinaimg.cn/bmiddle/596b0666gw1ed70eavm5tg20bq06m7wi.gif")
+        XCTAssertNotNil(fileUrl)
+        let file = LCFile.init(remoteURL: fileUrl!)
+        
+        expecting (count: 2){ exp in
+            let message = LCIMAudioMessage.init(text: "玉米", file: file, attributes: nil)
+            tomConversation.send(message, callback: { ret, error in
+                XCTAssertTrue(ret)
+                XCTAssertNil(error)
+                exp.fulfill()
+            })
+            
+            jerryDelegator.didReceiveTypedMessage = {
+                conversation, typedMessage in
+                if let msg = typedMessage as? LCIMAudioMessage {
+                    XCTAssertEqual(msg.text, message.text)
+                    XCTAssertNotNil(msg.url)
+                } else {
+                    XCTFail()
+                }
+                exp.fulfill()
+            }
+        }
+        
+        expecting (count: 2){ exp in
+            let message = LCIMVideoMessage.init(text: "玉米", file: file, attributes: nil)
+            tomConversation.send(message, callback: { ret, error in
+                XCTAssertTrue(ret)
+                XCTAssertNil(error)
+                exp.fulfill()
+            })
+            
+            jerryDelegator.didReceiveTypedMessage = {
+                conversation, typedMessage in
+                if let msg = typedMessage as? LCIMVideoMessage {
+                    XCTAssertEqual(msg.text, message.text)
+                    XCTAssertNotNil(msg.url)
+                } else {
+                    XCTFail()
+                }
+                exp.fulfill()
+            }
+        }
+        
+        expecting (count: 2){ exp in
+            let message = LCIMFileMessage.init(text: "玉米", file: file, attributes: nil)
+            tomConversation.send(message, callback: { ret, error in
+                XCTAssertTrue(ret)
+                XCTAssertNil(error)
+                exp.fulfill()
+            })
+            
+            jerryDelegator.didReceiveTypedMessage = {
+                conversation, typedMessage in
+                if let msg = typedMessage as? LCIMFileMessage {
+                    XCTAssertEqual(msg.text, message.text)
+                    XCTAssertNotNil(msg.url)
+                } else {
+                    XCTFail()
+                }
+                exp.fulfill()
+            }
+        }
+        
+    }
+    
+    
+    func testLocationMessage() {
+        let jerryDelegator = LCIMClientDelegator.init()
+        jerryClient.delegate = jerryDelegator
+        let latitude = 31.3753285
+        let longitude = 120.9664658
+        expecting (count: 2){ exp in
+            let message = LCIMLocationMessage.init(text: "坐标", latitude: latitude, longitude: longitude, attributes: nil)
+            tomConversation.send(message, callback: { ret, error in
+                XCTAssertTrue(ret)
+                XCTAssertNil(error)
+                exp.fulfill()
+            })
+            
+            jerryDelegator.didReceiveTypedMessage = {
+                conversation, typedMessage in
+                if let msg = typedMessage as? LCIMLocationMessage {
+                    XCTAssertEqual(msg.text, message.text)
+                    XCTAssertEqual(latitude, msg.latitude)
+                    XCTAssertEqual(longitude, msg.longitude)
+                } else {
+                    XCTFail()
+                }
+                exp.fulfill()
+            }
+        }
+    }
+    
+    func testConversationCustomAttributes() {
+        let option = LCIMConversationCreationOption.init()
+        option.name = "猫和老鼠"
+        option.attributes = [
+            "type": "private",
+            "pinned": true,
+        ]
+        option.isUnique = false
+        let jerryDelegator = LCIMClientDelegator.init()
+        jerryClient.delegate = jerryDelegator
+        expecting (count: 2){ exp in
+            tomClient.createConversation(withClientIds: [jerryClient.clientId], option: option) {
+                [weak self] conversation, error in
+                XCTAssertNotNil(conversation?.conversationId)
+                XCTAssertNil(error)
+                self?.tomConversation = conversation
+                XCTAssertEqual(conversation?.attributes?.keys, option.attributes?.keys)
+                exp.fulfill()
+            }
+            jerryDelegator.invitedByClientId = { [weak self]
+                conversation, clientId in
+                XCTAssertEqual(clientId, self?.tomConversation.clientId)
+                XCTAssertEqual(conversation.conversationId, self?.tomConversation.conversationId)
+                XCTAssertEqual(conversation.attributes?.keys, option.attributes?.keys)
+                exp.fulfill()
+            }
+        }
+        
+        let updateName = "聪明的喵星人"
+        tomConversation["name"] = updateName
+        
+        expecting (count: 2){ exp in
+            tomConversation.update { ret, error in
+                XCTAssertTrue(ret)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+            
+            jerryDelegator.didUpdateAt = {[weak self]
+                conversation, didUpdateAt, byClientId, updatedData, updatingData in
+                XCTAssertEqual(byClientId, self?.tomConversation.clientId)
+                XCTAssertEqual(conversation.conversationId, self?.tomConversation.conversationId)
+                XCTAssertEqual(conversation.name, updateName)
+                if let updatedData = updatedData, let name = updatedData["name"] as? String {
+                    XCTAssertEqual(name, updateName)
+                } else {
+                    XCTFail()
+                }
+                exp.fulfill()
+            }
+        }
+    }
+    
+    func testGetMembers() {
+        expecting { exp in
+            tomConversation.fetch { ret, error in
+                XCTAssertTrue(ret)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+        if let count = tomConversation.members?.count {
+            XCTAssertEqual(count, 2)
+        } else {
+            XCTFail()
+        }
+    }
+    
+    
+    func testQueryMessageHistoryList() {
+        var messages = [String]()
+        let count = 20
+        let queryCount = 10
+        let otherCount = count - queryCount
+        for i in 0..<count {
+            messages.append("message\(i)")
+        }
+        
+        expecting (count: count){ exp in
+            messages.forEach {
+                delay(seconds: 0.1)
+                let message = LCIMTextMessage.init(text: $0)
+                tomConversation.send(message, callback: { ret, error in
+                    XCTAssertTrue(ret)
+                    XCTAssertNil(error)
+                    exp.fulfill()
+                })
+            }
+        }
+        var queryMessages: [LCIMMessage]!
+        
+        expecting { exp in
+            tomConversation.queryMessages(withLimit: UInt(queryCount)) { msgs, error in
+                XCTAssertNil(error)
+                queryMessages = msgs
+                exp.fulfill()
+            }
+        }
+        XCTAssertNotNil(queryMessages)
+        XCTAssertEqual(queryMessages.count, queryCount)
+        for i in 0..<queryCount {
+            if let msg = queryMessages[i] as? LCIMTextMessage, let msg = msg.text {
+                XCTAssertEqual(msg, messages[i + otherCount])
+            } else {
+                XCTFail()
+            }
+        }
+        
+        
+        expecting { exp in
+            guard let messageId = queryMessages.first?.messageId,
+                  let timestamp = queryMessages.first?.sendTimestamp
+            else {
+                XCTFail()
+                return;
+            }
+            tomConversation.queryMessages(beforeId: messageId, timestamp: timestamp, limit: UInt(otherCount)) { msgs, error in
+                XCTAssertNil(error)
+                queryMessages = msgs
+                exp.fulfill()
+            }
+        }
+        
+        XCTAssertNotNil(queryMessages)
+        XCTAssertEqual(queryMessages.count, otherCount)
+        for i in 0..<otherCount {
+            if let msg = queryMessages[i] as? LCIMTextMessage, let msg = msg.text {
+                XCTAssertEqual(msg, messages[i])
+            } else {
+                XCTFail()
+            }
+        }
+        
+        
+        
+    }
+    
+    
+    
 }

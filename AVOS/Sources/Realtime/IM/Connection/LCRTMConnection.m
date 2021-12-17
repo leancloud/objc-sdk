@@ -809,7 +809,7 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
     }];
 }
 
-
+#if DEBUG
 - (void)disconnect {
     dispatch_async(self.serialQueue, ^{
         NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: @"connection did close by local peer."};
@@ -822,9 +822,11 @@ static NSString * LCRTMStringFromConnectionAppState(LCRTMConnectionAppState stat
 
 - (void)testConnect {
     dispatch_async(self.serialQueue, ^{
-        [self connect];
+        [self tryConnecting];
     });
 }
+#endif
+
 
 
 - (void)getRTMServerWithCompletion:(void(^)(LCRTMConnection *connection, NSURL *serverURL, NSError *error))completion
