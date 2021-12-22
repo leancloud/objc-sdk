@@ -107,7 +107,6 @@ extension LCIMClientDelegator: LCIMClientDelegate {
         membersAdded?(conversation, clientIds, clientId)
     }
     
-    
     func conversation(_ conversation: LCIMConversation, didMuteBy byClientId: String?) {
         didMuteBy?(conversation, byClientId)
     }

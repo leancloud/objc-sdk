@@ -128,6 +128,8 @@ typedef NSMutableDictionary<NSString *, LCRTMConnection *> * LCRTMLiveQueryRegis
 #if DEBUG
 // Internal access level for unit testing
 - (BOOL)canConnecting;
+- (void)testConnect;
+- (void)disconnect;
 #endif
 
 @end
