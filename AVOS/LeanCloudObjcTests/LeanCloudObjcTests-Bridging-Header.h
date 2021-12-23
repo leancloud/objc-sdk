@@ -12,3 +12,6 @@
 #import "LCIMMessage_Internal.h"
 #import "LCLeaderboard_Internal.h"
 #import "LCTestObject.h"
+#import "LCIMConversation_Internal.h"
+#import "LCIMMessage_Internal.h"
+

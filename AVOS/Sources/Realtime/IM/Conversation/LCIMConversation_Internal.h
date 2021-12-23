@@ -13,6 +13,9 @@
 @interface LCIMConversation ()
 
 @property (nonatomic, readonly) LCIMConvType convType;
+#if DEBUG
+@property (nonatomic, readonly) NSMutableDictionary<NSString *, LCIMConversationMemberInfo *> *memberInfoTable;
+#endif
 
 + (instancetype)conversationWithRawJSONData:(NSMutableDictionary *)rawJSONData
                                      client:(LCIMClient *)client;

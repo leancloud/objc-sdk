@@ -11,67 +11,55 @@ import XCTest
 @testable import LeanCloudObjc
 
 extension LCIMClientTestCase {
-    func openClient(clientID: String, tag: String? = nil, delegator: LCIMClientDelegator? = nil) -> LCIMClient {
-        let client: LCIMClient! = try? LCIMClient.init(clientId: clientID, tag: tag)
-        XCTAssertNotNil(client)
-        client.delegate = delegator
-        expecting { (exp) in
-            client.open { ret, error in
-                XCTAssertTrue(ret)
-                XCTAssertNil(error)
-                exp.fulfill()
+    
+    
+    class SignatureDelegator: NSObject,
+                              LCIMSignatureDataSource {
+        
+        var sessionToken: String?
+        
+        func getOpenSignature(client: LCIMClient, completion: @escaping (LCIMSignature?) -> Void) {
+            guard let sessionToken = self.sessionToken else {
+                XCTFail()
+                return
+            }
+            let paasClient = LCPaasClient.sharedInstance()
+            let request = paasClient?.request(withPath: "https://s5vdi3ie.lc-cn-n1-shared.com/1.2/rtm/clients/sign", method: "GET", headers: nil, parameters: ["session_token": sessionToken])
+            paasClient?.perform(request as URLRequest?, success: { response, responseObject in
+                guard let value = responseObject as? [String: Any],
+                      let client_id = value["client_id"] as? String,
+                      client_id == client.clientId,
+                      let signature = value["signature"] as? String,
+                      let timestamp = value["timestamp"] as? Int64,
+                      let nonce = value["nonce"] as? String else {
+                          XCTFail()
+                          return
+                      }
+                let ret = LCIMSignature.init()
+                ret.signature = signature
+                ret.timestamp = timestamp
+                ret.nonce = nonce
+                completion(ret)
+            }, failure: { _, _, _ in
+                completion(nil)
+                XCTFail()
+            })
+            
+        }
+        
+        func client(_ client: LCIMClient, action: LCIMSignatureAction, conversation: LCIMConversation?, clientIds: [String]?, signatureHandler handler: @escaping (LCIMSignature?) -> Void) {
+            if action == .open {
+                getOpenSignature(client: client, completion: handler)
+            } else {
+                XCTFail()
             }
         }
-        return client
     }
-    
-    //    class SignatureDelegator: NSObject, LCIMSignatureDataSource {
-    //
-    //        var sessionToken: String?
-    //
-    //        func getOpenSignature(client: LCIMClient, completion: @escaping (LCIMSignature) -> Void) {
-    //            guard let sessionToken = self.sessionToken else {
-    //                XCTFail()
-    //                return
-    //            }
-    //            LCHTTPSessionManager.init()
-    //            _ = client.application.httpClient.request(
-    //                url: client.application.v2router.route(
-    //                    path: "rtm/clients/sign",
-    //                    module: .api)!,
-    //                method: .get,
-    //                parameters: ["session_token": sessionToken])
-    //            { (response) in
-    //                guard let value = response.value as? [String: Any],
-    //                      let client_id = value["client_id"] as? String,
-    //                      client_id == client.ID,
-    //                      let signature = value["signature"] as? String,
-    //                      let timestamp = value["timestamp"] as? Int64,
-    //                      let nonce = value["nonce"] as? String else {
-    //                          XCTFail()
-    //                          return
-    //                      }
-    //                completion(IMSignature(
-    //                    signature: signature,
-    //                    timestamp: timestamp,
-    //                    nonce: nonce))
-    //            }
-    //        }
-    //
-    //        func client(_ client: LCIMClient, action: LCIMSignatureAction, conversation: LCIMConversation?, clientIds: [String]?, signatureHandler handler: @escaping (LCIMSignature?) -> Void) {
-    //            XCTAssertTrue(Thread.isMainThread)
-    //            if action == .open {
-    //
-    //            } else {
-    //
-    //            }
-    //        }
-    //    }
 }
 
 
 
-class LCIMClientTestCase: BaseTestCase {
+class LCIMClientTestCase: RTMBaseTestCase {
     
     func testInit() {
         do {
@@ -97,13 +85,13 @@ class LCIMClientTestCase: BaseTestCase {
         }
     }
     
-
+    
     
     func testInitWithUser() {
         let user = LCUser()
         user.username = uuid
         user.password = uuid
-
+        
         expecting { exp in
             user.signUpInBackground { ret, error in
                 XCTAssertNil(error)
@@ -111,7 +99,7 @@ class LCIMClientTestCase: BaseTestCase {
                 exp.fulfill()
             }
         }
-
+        
         do {
             let client = try LCIMClient.init(user: user)
             XCTAssertNotNil(client.user)
@@ -120,7 +108,7 @@ class LCIMClientTestCase: BaseTestCase {
             XCTFail("\(error)")
         }
     }
-
+    
     func testDeinit() {
         var client: LCIMClient? = try? LCIMClient.init(clientId: uuid, tag: uuid)
         XCTAssertNotNil(client)
@@ -129,11 +117,11 @@ class LCIMClientTestCase: BaseTestCase {
         delay()
         XCTAssertNil(wClient)
     }
-
+    
     func testOpenAndClose() {
         let client: LCIMClient! = try? LCIMClient.init(clientId: uuid)
         XCTAssertNotNil(client)
-
+        
         expecting { (exp) in
             client.open { ret, error in
                 XCTAssertTrue(Thread.isMainThread)
@@ -147,7 +135,7 @@ class LCIMClientTestCase: BaseTestCase {
                 exp.fulfill()
             }
         }
-
+        
         expecting { (exp) in
             client.open { ret, error in
                 XCTAssertFalse(ret)
@@ -155,7 +143,7 @@ class LCIMClientTestCase: BaseTestCase {
                 exp.fulfill()
             }
         }
-
+        
         expecting { (exp) in
             client.close { ret, error in
                 XCTAssertTrue(Thread.isMainThread)
@@ -170,66 +158,57 @@ class LCIMClientTestCase: BaseTestCase {
             }
         }
     }
-
-//    func testOpenWithSignature() {
-//        let user = LCUser()
-//        user.username = uuid
-//        user.password = uuid
-//        expecting { exp in
-//            user.signUpInBackground { ret, error in
-//                XCTAssertNil(error)
-//                XCTAssertTrue(ret)
-//                exp.fulfill()
-//            }
-//        }
-//
-//        guard let objectID = user.objectId,
-//              let sessionToken = user.sessionToken else {
-//                  XCTFail()
-//                  return
-//              }
-//
-////        do {
-////            let client = try LCIMClient.init(user: user)
-////            XCTAssertNotNil(client.user)
-////            XCTAssertEqual(client.clientId, user.objectId)
-////        } catch {
-////            XCTFail("\(error)")
-////        }
-//        var clientFromUser: LCIMClient! = try? LCIMClient.init(user: user)
-//        XCTAssertNotNil(clientFromUser)
-//
-//        expecting { (exp) in
-//            clientFromUser.open { ret, error in
-//                XCTAssertTrue(ret)
-//                XCTAssertNil(error)
-//                exp.fulfill()
-//            }
-//        }
-//        clientFromUser = nil
-//        delay()
-//
-//        let signatureDelegator = SignatureDelegator()
-//        signatureDelegator.sessionToken = sessionToken
-//        let clientFromID = try! IMClient(
-//            ID: objectID,
-//            options: [],
-//            signatureDelegate: signatureDelegator)
-//        expecting { (exp) in
-//            clientFromID.open(completion: { (result) in
-//                XCTAssertTrue(result.isSuccess)
-//                XCTAssertNil(result.error)
-//                exp.fulfill()
-//            })
-//        }
-//    }
-//
-
-
-
+    
+    func testOpenWithSignature() {
+        let user = LCUser()
+        user.username = uuid
+        user.password = uuid
+        expecting { exp in
+            user.signUpInBackground { ret, error in
+                XCTAssertNil(error)
+                XCTAssertTrue(ret)
+                exp.fulfill()
+            }
+        }
+        
+        guard let objectID = user.objectId,
+              let sessionToken = user.sessionToken else {
+                  XCTFail()
+                  return
+              }
+        
+        var clientFromUser: LCIMClient! = try? LCIMClient.init(user: user)
+        XCTAssertNotNil(clientFromUser)
+        expecting { (exp) in
+            clientFromUser.open { ret, error in
+                XCTAssertTrue(ret)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+        clientFromUser = nil
+        delay()
+        
+        let signatureDelegator = SignatureDelegator()
+        signatureDelegator.sessionToken = sessionToken
+        let client: LCIMClient! = try? LCIMClient.init(clientId: objectID)
+        XCTAssertNotNil(client)
+        client.signatureDataSource = signatureDelegator
+        expecting { (exp) in
+            client.open { ret, error in
+                XCTAssertTrue(ret)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+    }
+    
+    
+    
+    
     func testDelegateEvent() {
         let delegator = LCIMClientDelegator.init()
-        let client = openClient(clientID: uuid, delegator: delegator)
+        let client = newOpenedClient(clientID: uuid, delegator: delegator)
         
         expecting { exp in
             client.connection.disconnect()
@@ -255,17 +234,17 @@ class LCIMClientTestCase: BaseTestCase {
                 exp.fulfill()
             }
         }
-
+        
     }
     
     
-
+    
     func testSessionConflict() {
-
-
+        
+        
         let clientID: String = uuid
         let tag: String = "tag"
-
+        
         let installation1: LCInstallation! = LCInstallation.init()
         installation1.setDeviceTokenHexString(uuid, teamId: "LeanCloud")
         XCTAssertTrue(installation1.save())
@@ -281,19 +260,19 @@ class LCIMClientTestCase: BaseTestCase {
                 exp.fulfill()
             }
         }
-
+        
         LCRTMConnectionManager.shared().imProtobuf1Registry.removeAllObjects()
         LCRTMConnectionManager.shared().imProtobuf3Registry.removeAllObjects()
         
         let installation2 = LCInstallation.init()
         installation2.setDeviceTokenHexString(uuid, teamId: "LeanCloud")
         XCTAssertTrue(installation2.save())
-
+        
         let delegator2 = LCIMClientDelegator.init()
         let client2: LCIMClient! = try? LCIMClient.init(clientId: clientID, tag: tag, installation: installation2)
         XCTAssertNotNil(client2)
         client2.delegate = delegator2
-
+        
         expecting(
             description: "client2 open success & kick client1 success",
             count: 2) { exp in
@@ -340,7 +319,7 @@ class LCIMClientTestCase: BaseTestCase {
                 }
                 exp.fulfill()
             }
-           
+            
         }
         
         installation1.setDeviceTokenHexString(installation2.deviceToken!, teamId: "LeanCloud")
@@ -355,20 +334,20 @@ class LCIMClientTestCase: BaseTestCase {
                 XCTAssertNil(error)
                 exp.fulfill()
             }
-           
+            
         }
     }
-
-
-
+    
+    
+    
     func testSessionTokenExpired() {
         let delegator = LCIMClientDelegator.init()
-        let client = openClient(clientID: uuid, tag: nil, delegator: delegator)
-
+        let client = newOpenedClient(clientID: uuid, tag: nil, delegator: delegator)
+        
         client.sessionToken = self.uuid
         client.sessionTokenExpiration = Date(timeIntervalSinceNow: 36000)
-
-//        var ob: NSObjectProtocol? = nil
+        
+        //        var ob: NSObjectProtocol? = nil
         expecting(
             description: "Pause -> Resume -> First-Reopen Then session token expired, Final Second-Reopen success",
             count: 3)
@@ -390,57 +369,57 @@ class LCIMClientTestCase: BaseTestCase {
                 XCTAssertEqual(imClient, client)
                 exp.fulfill()
             }
-
-//            ob = NotificationCenter.default.addObserver(
-//                forName: IMClient.TestSessionTokenExpiredNotification,
-//                object: client,
-//                queue: .main
-//            ) { (notification) in
-//                XCTAssertEqual(
-//                    (notification.userInfo?["error"] as? LCError)?.code,
-//                    LCError.ServerErrorCode.sessionTokenExpired.rawValue)
-//                exp.fulfill()
-//            }
+            
+            //            ob = NotificationCenter.default.addObserver(
+            //                forName: IMClient.TestSessionTokenExpiredNotification,
+            //                object: client,
+            //                queue: .main
+            //            ) { (notification) in
+            //                XCTAssertEqual(
+            //                    (notification.userInfo?["error"] as? LCError)?.code,
+            //                    LCError.ServerErrorCode.sessionTokenExpired.rawValue)
+            //                exp.fulfill()
+            //            }
             client.connection.disconnect()
             client.connection.testConnect()
         }
         
-//        if let ob = ob {
-//            NotificationCenter.default.removeObserver(ob)
-//        }
+        //        if let ob = ob {
+        //            NotificationCenter.default.removeObserver(ob)
+        //        }
     }
-
-//    func testReportDeviceToken() {
-//        let application = LCApplication.default
-//        let currentDeviceToken = application.currentInstallation.deviceToken?.value
-//        let client: IMClient = try! IMClient(application: application, ID: uuid, options: [])
-//        delay()
-//        XCTAssertEqual(currentDeviceToken, client.currentDeviceToken)
-//
-//        let exp = expectation(description: "client report device token success")
-//        exp.expectedFulfillmentCount = 2
-//        let otherDeviceToken: String = uuid
-//        let ob = NotificationCenter.default.addObserver(forName: IMClient.TestReportDeviceTokenNotification, object: client, queue: OperationQueue.main) { (notification) in
-//            let result = notification.userInfo?["result"] as? RTMConnection.CommandCallback.Result
-//            XCTAssertEqual(result?.command?.cmd, .report)
-//            XCTAssertEqual(result?.command?.op, .uploaded)
-//            exp.fulfill()
-//        }
-//        client.open { (result) in
-//            XCTAssertTrue(result.isSuccess)
-//            client.installation.set(deviceToken: otherDeviceToken, apnsTeamId: "")
-//            exp.fulfill()
-//        }
-//        wait(for: [exp], timeout: timeout)
-//        XCTAssertEqual(otherDeviceToken, client.currentDeviceToken)
-//        NotificationCenter.default.removeObserver(ob)
-//    }
-
+    
+    //    func testReportDeviceToken() {
+    //        let application = LCApplication.default
+    //        let currentDeviceToken = application.currentInstallation.deviceToken?.value
+    //        let client: IMClient = try! IMClient(application: application, ID: uuid, options: [])
+    //        delay()
+    //        XCTAssertEqual(currentDeviceToken, client.currentDeviceToken)
+    //
+    //        let exp = expectation(description: "client report device token success")
+    //        exp.expectedFulfillmentCount = 2
+    //        let otherDeviceToken: String = uuid
+    //        let ob = NotificationCenter.default.addObserver(forName: IMClient.TestReportDeviceTokenNotification, object: client, queue: OperationQueue.main) { (notification) in
+    //            let result = notification.userInfo?["result"] as? RTMConnection.CommandCallback.Result
+    //            XCTAssertEqual(result?.command?.cmd, .report)
+    //            XCTAssertEqual(result?.command?.op, .uploaded)
+    //            exp.fulfill()
+    //        }
+    //        client.open { (result) in
+    //            XCTAssertTrue(result.isSuccess)
+    //            client.installation.set(deviceToken: otherDeviceToken, apnsTeamId: "")
+    //            exp.fulfill()
+    //        }
+    //        wait(for: [exp], timeout: timeout)
+    //        XCTAssertEqual(otherDeviceToken, client.currentDeviceToken)
+    //        NotificationCenter.default.removeObserver(ob)
+    //    }
+    
     func testSessionQuery() {
-
+        
         let client1ID = uuid
         let client2ID = uuid
-        let client1 = openClient(clientID: client1ID)
+        let client1 = newOpenedClient(clientID: client1ID)
         expecting { exp in
             client1.queryOnlineClients(inClients: []) { inClients, error in
                 XCTAssertEqual(inClients, [])
@@ -471,8 +450,8 @@ class LCIMClientTestCase: BaseTestCase {
             }
         }
         
-        let client2 = openClient(clientID: client2ID)
-
+        let client2 = newOpenedClient(clientID: client2ID)
+        
         expecting { exp in
             client1.queryOnlineClients(inClients: [client2ID]) { inClients, error in
                 XCTAssertTrue(Thread.isMainThread)
