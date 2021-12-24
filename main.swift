@@ -497,7 +497,7 @@ class JazzyTask: Task {
         try generateDocumentation(currentVersion: currentVersion)
         try moveGeneratedDocumentationToRepo()
         try commitPush()
-        try OpenTask.url("http://jenkins.avoscloud.com/job/cn-api-doc-prod-ucloud/build")
+        try OpenTask.url("https://jenkins.leancloud.cn/job/cn-api-doc-prod-ucloud/build")
     }
 }
 
