@@ -1,3 +1,9 @@
+# Brew
+Brewfile.lock.json
+
+# Gem
+Gemfile.lock
+
 # macOS
 *.DS_Store
 
