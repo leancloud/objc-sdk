@@ -234,18 +234,21 @@ extension LCIMClientDelegator: LCIMClientDelegate {
 
     func conversation(_ conversation: LCIMConversation, didUpdateForKey key: LCIMConversationUpdatedKey) {
         didUpdateForKey?(conversation, key)
+        guard let client = conversation.imClient else {
+            return
+        }
         switch key {
         case .lastReadAt:
             callMessageEvent(conversation, .read(lastReadAt: conversation.lastReadAt!))
         case .lastMessage:
-            conversationEvent?(conversation.imClient!, conversation, .lastMessageUpdated(newMessage: true))
+            conversationEvent?(client, conversation, .lastMessageUpdated(newMessage: true))
         case .lastMessageAt:
             break
 //            conversationEvent?(conversation.imClient!, conversation, .lastMessageUpdated(newMessage: true))
         case .lastDeliveredAt:
-            conversationEvent?(conversation.imClient!, conversation, .lastDeliveredAtUpdated)
+            conversationEvent?(client, conversation, .lastDeliveredAtUpdated)
         case .unreadMessagesCount:
-            conversationEvent?(conversation.imClient!, conversation, .unreadMessageCountUpdated)
+            conversationEvent?(client, conversation, .unreadMessageCountUpdated)
 //        case .unreadMessagesMentioned:
 //            conversationEvent?(conversation.imClient!, conversation, .unreadMessageCountUpdated)
         default: break
@@ -265,7 +268,10 @@ extension LCIMClientDelegator: LCIMClientDelegate {
 
     func conversation(_ conversation: LCIMConversation, didMembersUnmuteBy byClientId: String?, memberIds: [String]?) {
         didMembersUnmuteBy?(conversation, byClientId, memberIds)
-        conversationEvent?(conversation.imClient!, conversation, .membersUnmuted(members: memberIds!, byClientID: byClientId))
+        guard let client = conversation.imClient else {
+            return
+        }
+        conversationEvent?(client, conversation, .membersUnmuted(members: memberIds!, byClientID: byClientId))
     }
 
     func conversation(_ conversation: LCIMConversation, didMembersUnblockBy byClientId: String?, memberIds: [String]?) {

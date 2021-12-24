@@ -9,9 +9,13 @@
 /* Begin PBXBuildFile section */
 		C43D444627281D39006A31FD /* LCTestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = C43D444527281D39006A31FD /* LCTestObject.m */; };
 		C474960127672EC600DBBF06 /* yellowicon.png in Resources */ = {isa = PBXBuildFile; fileRef = C474960027672EC500DBBF06 /* yellowicon.png */; };
+		C48D1B0527747095004568E4 /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C48D1B0027747095004568E4 /* test.mp4 */; };
+		C48D1B0627747095004568E4 /* test.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C48D1B0127747095004568E4 /* test.mp3 */; };
+		C48D1B0727747095004568E4 /* test.zip in Resources */ = {isa = PBXBuildFile; fileRef = C48D1B0227747095004568E4 /* test.zip */; };
+		C48D1B0827747095004568E4 /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C48D1B0327747095004568E4 /* test.jpg */; };
+		C48D1B0927747095004568E4 /* test.png in Resources */ = {isa = PBXBuildFile; fileRef = C48D1B0427747095004568E4 /* test.png */; };
 		C497609E276B5C1E00E8045D /* LCIMMessageTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C497609D276B5C1E00E8045D /* LCIMMessageTestCase.swift */; };
 		C497E8C52760A77300441160 /* LCPushTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C497E8C42760A77300441160 /* LCPushTestCase.swift */; };
-		C4997A2F2761D6B30055EF2E /* LCIMTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4997A2E2761D6B30055EF2E /* LCIMTestCase.swift */; };
 		C4997A312761F6630055EF2E /* TestCaseDelegator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4997A302761F6630055EF2E /* TestCaseDelegator.swift */; };
 		C49BC44B275F6ABE00032059 /* LCLiveQueryTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49BC44A275F6ABE00032059 /* LCLiveQueryTestCase.swift */; };
 		C4B25E3D27267DE700F9414F /* LCObjectTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B25E3C27267DE700F9414F /* LCObjectTestCase.swift */; };
@@ -542,9 +546,13 @@
 		C43D444427281D39006A31FD /* LCTestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCTestObject.h; sourceTree = "<group>"; };
 		C43D444527281D39006A31FD /* LCTestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCTestObject.m; sourceTree = "<group>"; };
 		C474960027672EC500DBBF06 /* yellowicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yellowicon.png; sourceTree = "<group>"; };
+		C48D1B0027747095004568E4 /* test.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.mp4; sourceTree = "<group>"; };
+		C48D1B0127747095004568E4 /* test.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = test.mp3; sourceTree = "<group>"; };
+		C48D1B0227747095004568E4 /* test.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = test.zip; sourceTree = "<group>"; };
+		C48D1B0327747095004568E4 /* test.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test.jpg; sourceTree = "<group>"; };
+		C48D1B0427747095004568E4 /* test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test.png; sourceTree = "<group>"; };
 		C497609D276B5C1E00E8045D /* LCIMMessageTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMMessageTestCase.swift; sourceTree = "<group>"; };
 		C497E8C42760A77300441160 /* LCPushTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCPushTestCase.swift; sourceTree = "<group>"; };
-		C4997A2E2761D6B30055EF2E /* LCIMTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCIMTestCase.swift; sourceTree = "<group>"; };
 		C4997A302761F6630055EF2E /* TestCaseDelegator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCaseDelegator.swift; sourceTree = "<group>"; };
 		C49BC44A275F6ABE00032059 /* LCLiveQueryTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCLiveQueryTestCase.swift; sourceTree = "<group>"; };
 		C4B25E3C27267DE700F9414F /* LCObjectTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCObjectTestCase.swift; sourceTree = "<group>"; };
@@ -1230,6 +1238,18 @@
 			path = Protobuf;
 			sourceTree = "<group>";
 		};
+		C48D1AFF27747095004568E4 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C48D1B0027747095004568E4 /* test.mp4 */,
+				C48D1B0127747095004568E4 /* test.mp3 */,
+				C48D1B0227747095004568E4 /* test.zip */,
+				C48D1B0327747095004568E4 /* test.jpg */,
+				C48D1B0427747095004568E4 /* test.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		D305F7AE2355771B00222EBC /* CLI */ = {
 			isa = PBXGroup;
 			children = (
@@ -1252,6 +1272,7 @@
 		D30B6A1724A09978006ABE09 /* LeanCloudObjcTests */ = {
 			isa = PBXGroup;
 			children = (
+				C48D1AFF27747095004568E4 /* Resources */,
 				D30B6B6024A0A932006ABE09 /* LeanCloudObjcTests-Bridging-Header.h */,
 				C43D444427281D39006A31FD /* LCTestObject.h */,
 				C43D444527281D39006A31FD /* LCTestObject.m */,
@@ -1268,7 +1289,6 @@
 				D39724C524A852400099A518 /* IMClientTestCase.swift */,
 				C4997A302761F6630055EF2E /* TestCaseDelegator.swift */,
 				D36A095925BEA75000A4F312 /* IMMessageTestCase.swift */,
-				C4997A2E2761D6B30055EF2E /* LCIMTestCase.swift */,
 				C4B7A99227698C4A00D8833B /* LCIMClientTestCase.swift */,
 				C4E9B1CA276C3293004CA642 /* LCIMConversationTestCase.swift */,
 				C497609D276B5C1E00E8045D /* LCIMMessageTestCase.swift */,
@@ -1698,6 +1718,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				C474960127672EC600DBBF06 /* yellowicon.png in Resources */,
+				C48D1B0827747095004568E4 /* test.jpg in Resources */,
+				C48D1B0727747095004568E4 /* test.zip in Resources */,
+				C48D1B0527747095004568E4 /* test.mp4 in Resources */,
+				C48D1B0627747095004568E4 /* test.mp3 in Resources */,
+				C48D1B0927747095004568E4 /* test.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1848,7 +1873,6 @@
 				D36A095A25BEA75000A4F312 /* IMMessageTestCase.swift in Sources */,
 				C43D444627281D39006A31FD /* LCTestObject.m in Sources */,
 				C4B25E3D27267DE700F9414F /* LCObjectTestCase.swift in Sources */,
-				C4997A2F2761D6B30055EF2E /* LCIMTestCase.swift in Sources */,
 				C49BC44B275F6ABE00032059 /* LCLiveQueryTestCase.swift in Sources */,
 				C4E9B1CB276C3293004CA642 /* LCIMConversationTestCase.swift in Sources */,
 				D3AD74AB24BC216200D1BBEE /* LCUserTestCase.swift in Sources */,

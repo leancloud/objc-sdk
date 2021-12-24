@@ -1961,27 +1961,6 @@ class LCIMConversationTestCase: RTMBaseTestCase {
 }
 
 extension LCIMConversationTestCase {
-
-    
-    func newServiceConversation() -> String {
-        
-        var objectID: String?
-        let paasClient = LCPaasClient.sharedInstance()
-        let request = paasClient?.request(withPath: "https://s5vdi3ie.lc-cn-n1-shared.com/1.2/rtm/service-conversations", method: "POST", headers: nil, parameters: ["name": uuid])
-        expecting { exp in
-            paasClient?.perform(request as URLRequest?, success: { response, responseObject in
-                guard let response = responseObject as? [String: Any] else {
-                    return
-                }
-                objectID = response["objectId"]  as? String
-                exp.fulfill()
-            }, failure: { _, _, _ in
-                exp.fulfill()
-            })
-        }
-        XCTAssertNotNil(objectID)
-        return objectID!
-    }
     
     func subscribing(serviceConversation conversationID: String, by clientID: String) -> Bool {
         var success: Bool = false
@@ -1997,29 +1976,5 @@ extension LCIMConversationTestCase {
         }
         return success
     }
-
-    @discardableResult
-    func broadcastingMessage(to conversationID: String, content: String = "test") -> (String, Int64) {
-        var tuple: (String, Int64)?
-        let paasClient = LCPaasClient.sharedInstance()
-        let request = paasClient?.request(withPath: "https://s5vdi3ie.lc-cn-n1-shared.com/1.2/rtm/service-conversations/\(conversationID)/broadcasts", method: "POST", headers: ["X-LC-Key": BaseTestCase.cnApp.masterKey], parameters: ["from_client": "master", "message": content])
-        expecting { exp in
-            paasClient?.perform(request as URLRequest?, success: { response, responseObject in
-        
-                if let result = responseObject as? [String: Any],
-                   let result = result["result"] as? [String: Any],
-                    let messageID: String = result["msg-id"] as? String,
-                    let timestamp: Int64 = result["timestamp"] as? Int64 {
-                    tuple = (messageID, timestamp)
-                }
-                exp.fulfill()
-            }, failure: { _, _, _ in
-                exp.fulfill()
-            })
-        }
-        XCTAssertNotNil(tuple)
-        return tuple!
-    }
-    
 
 }

@@ -403,7 +403,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param limit     Limit of messages you want to query.
  @param callback  Callback of query request.
  */
-- (void)queryMessagesInInterval:(LCIMMessageInterval *)interval
+- (void)queryMessagesInInterval:(nullable LCIMMessageInterval *)interval
                       direction:(LCIMMessageQueryDirection)direction
                           limit:(NSUInteger)limit
                        callback:(void (^)(NSArray<LCIMMessage *> * _Nullable messages, NSError * _Nullable error))callback;

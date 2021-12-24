@@ -161,6 +161,11 @@ extension BaseTestCase {
         }
         application.setWithIdentifier(appInfo.id, key: appInfo.key)
     }
+    
+    func bundleResourceURL(name: String, ext: String) -> URL {
+        return Bundle(for: type(of: self))
+            .url(forResource: name, withExtension: ext)!
+    }
 }
 
 
