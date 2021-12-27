@@ -11,6 +11,9 @@
 @class LCFile;
 @class LCGeoPoint;
 
+
+typedef int32_t MessageMediaType;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol LCIMTypedMessageSubclassing <NSObject>
@@ -20,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// The type of the typed message,
 /// The zero and negative number is reserved for default typed message,
 /// Any other typed message should use positive number.
-+ (LCIMMessageMediaType)classMediaType;
++ (MessageMediaType)classMediaType;
 
 @end
 

@@ -161,6 +161,11 @@ extension BaseTestCase {
         }
         application.setWithIdentifier(appInfo.id, key: appInfo.key)
     }
+    
+    func bundleResourceURL(name: String, ext: String) -> URL {
+        return Bundle(for: type(of: self))
+            .url(forResource: name, withExtension: ext)!
+    }
 }
 
 
@@ -231,7 +236,7 @@ extension BaseTestCase {
     }
     
     
-    static func verifyLCObjectValues(objectID: String, needVerifyFields: [TestField: Any], className: String = LCObjectTestCase.TestName) {
+    static func verifyLCObjectValues(objectID: String, needVerifyFields: [TestField: Any], className: String = BaseTestCase.TestName) {
         let object = LCObject.init(className: className, objectId: objectID)
         XCTAssert(object.fetch())
         verifyLCObjectValues(object: object, needVerifyFields: needVerifyFields)
@@ -247,7 +252,7 @@ extension BaseTestCase {
         }
     }
     
-    static func createLCObject(fields: [TestField: Any], save: Bool = true, className: String = LCObjectTestCase.TestName) -> LCObject {
+    static func createLCObject(fields: [TestField: Any], save: Bool = true, className: String = BaseTestCase.TestName) -> LCObject {
         let object = LCObject.init(className: className)
         object.set(fields: fields)
         if save {
@@ -264,7 +269,7 @@ extension BaseTestCase {
 //        }
 //    }
     
-    static func updateLCObject(objectID: String, className: String = LCObjectTestCase.TestName, updateAction: ((LCObject) -> ())) {
+    static func updateLCObject(objectID: String, className: String = BaseTestCase.TestName, updateAction: ((LCObject) -> ())) {
         let object = LCObject.init(className: className, objectId: objectID)
         updateAction(object)
         XCTAssert(object.save())
