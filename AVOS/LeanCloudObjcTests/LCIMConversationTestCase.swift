@@ -16,9 +16,9 @@ extension LCIMConversationTestCase {
 }
 
 class LCIMConversationTestCase: RTMBaseTestCase {
-
+    
     func testCreateConversationThenErrorThrows() {
-
+        
         let client: LCIMClient! = try? LCIMClient.init(clientId: uuid)
         XCTAssertNotNil(client)
         expecting(description: "not open") { exp in
@@ -39,7 +39,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             }
         }
-
+        
     }
     
     func testCreateNormalConversation() {
@@ -49,7 +49,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
         let clientB = newOpenedClient(delegator: delegatorB)
         
         let delegators = [delegatorA, delegatorB];
-
+        
         let name: String? = "normalConv"
         let attribution: [String: Any] = [
             "String": "",
@@ -59,16 +59,16 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             "Array": Array<String>(),
             "Dictionary": Dictionary<String, Any>()
         ]
-
+        
         let convAssertion: (LCIMConversation, LCIMClient) -> Void = { conv, client in
             XCTAssertTrue(type(of: conv) == LCIMConversation.self)
             guard let convAttr = conv.attributes as? [String: Any] else {
                 XCTFail()
                 return
             }
-//            XCTAssertEqual(conv["objectId"] as? String, conv.conversationId)
+            //            XCTAssertEqual(conv["objectId"] as? String, conv.conversationId)
             XCTAssertEqual(conv.convType.rawValue, 1)
-//            conv. == .normal
+            //            conv. == .normal
             XCTAssertEqual(conv.convType, .normal)
             XCTAssertEqual(conv.members?.count, 2)
             XCTAssertEqual(conv.members?.contains(clientA.clientId), true)
@@ -145,9 +145,9 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             }
         }
-
-//        delay(seconds: 5)
-
+        
+        //        delay(seconds: 5)
+        
         XCTAssertEqual(clientA.convCollection.count, 1)
         XCTAssertEqual(clientB.convCollection.count, 1)
         XCTAssertEqual(
@@ -157,7 +157,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
         XCTAssertTrue(clientA.convQueryCallbackCollection.isEmpty)
         XCTAssertTrue(clientB.convQueryCallbackCollection.isEmpty)
     }
-
+    
     func testCreateNormalAndUniqueConversation() {
         let delegatorA = LCIMClientDelegator.init()
         let delegatorB = LCIMClientDelegator.init()
@@ -166,9 +166,9 @@ class LCIMConversationTestCase: RTMBaseTestCase {
         
         let existingKey = "existingKey"
         let existingValue = "existingValue"
-
+        
         let delegators = [delegatorA, delegatorB];
-
+        
         expecting(description: "create unique conversation", count: 5) { exp in
             delegators.forEach {
                 $0.conversationEvent = { _, _, event in
@@ -198,12 +198,12 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             }
         }
-
+        
         delegatorA.conversationEvent = nil
         delegatorB.conversationEvent = nil
-
+        
         delay(seconds: 5)
-
+        
         clientB.convCollection.removeAll()
         
         expecting(description: "recreate unique conversation") { exp in
@@ -225,8 +225,8 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 }
             }
         }
-
-
+        
+        
         XCTAssertEqual(
             clientA.convCollection.first?.value.ID,
             clientB.convCollection.first?.value.ID
@@ -235,9 +235,9 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             clientA.convCollection.first?.value.uniqueID,
             clientB.convCollection.first?.value.uniqueID
         )
-
+        
     }
-
+    
     func testCreateChatRoom() {
         let client = newOpenedClient()
         expecting(description: "create chat room") { exp in
@@ -250,14 +250,14 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             }
         }
     }
-
+    
     func testCreateTemporaryConversation() {
         let delegatorA = LCIMClientDelegator.init()
         let delegatorB = LCIMClientDelegator.init()
         let clientA = newOpenedClient(delegator: delegatorA)
         let clientB = newOpenedClient(delegator: delegatorB)
         let delegators = [delegatorA, delegatorB];
-
+        
         let ttl: Int32 = 3600
         expecting(description: "create conversation", count: 5) { exp in
             delegators.forEach {
@@ -291,7 +291,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             }
         }
-
+        
         XCTAssertEqual(
             clientA.convCollection.first?.value.ID,
             clientB.convCollection.first?.value.ID
@@ -301,7 +301,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             true
         )
     }
-
+    
     func testServiceConversationSubscription() {
         let client = newOpenedClient()
         let serviceConversationID = newServiceConversation()
@@ -317,7 +317,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             }
         }
         XCTAssertNotNil(serviceConversation)
-
+        
         expecting(
             description: "service conversation subscription",
             count: 1)
@@ -342,15 +342,15 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             }
         }
     }
-
+    
     func testNormalConversationUnreadEvent() {
         let clientA = newOpenedClient()
-
+        
         let clientBID = uuid
-
+        
         var conversation1: LCIMConversation!
         var conversation2: LCIMConversation!
-
+        
         let message1 = LCIMMessage.init(content: uuid)
         let message2 = LCIMMessage.init(content: uuid)
         
@@ -385,10 +385,10 @@ class LCIMConversationTestCase: RTMBaseTestCase {
         }
         
         delay()
-
+        
         XCTAssertNotNil(conversation1)
         XCTAssertNotNil(conversation2)
-
+        
         LCRTMConnectionManager.shared().imProtobuf1Registry.removeAllObjects()
         LCRTMConnectionManager.shared().imProtobuf3Registry.removeAllObjects()
         
@@ -396,7 +396,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
         let clientB: LCIMClient! = try? LCIMClient.init(clientId: clientBID)
         XCTAssertNotNil(clientB)
         clientB.delegate = delegatorB
-
+        
         expecting(
             description: "open, then receive unread event",
             count: 5)
@@ -412,7 +412,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                         exp.fulfill()
                     case .unreadMessageCountUpdated:
                         XCTAssertEqual(conversation.unreadMessageCount, 1)
-//                        XCTAssertTrue(conversation.isUnreadMessageContainMention)
+                        //                        XCTAssertTrue(conversation.isUnreadMessageContainMention)
                         exp.fulfill()
                     default:
                         break
@@ -440,7 +440,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             }
         }
-
+        
         expecting { (exp) in
             delegatorB.clientEvent = { client, event in
                 switch event {
@@ -452,12 +452,12 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             }
             clientB.connection.disconnect()
         }
-
+        
         delay()
         XCTAssertTrue(clientB.lastUnreadNotifTime != 0)
-
+        
         let message3 = LCIMMessage.init(content: uuid)
-
+        
         expecting { (exp) in
             conversation1.send(message3, callback: { ret, error in
                 XCTAssertNil(error)
@@ -465,7 +465,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             })
         }
-
+        
         expecting(
             description: "reconnect, then receive unread event",
             count: 3)
@@ -489,7 +489,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                         exp.fulfill()
                     case .unreadMessageCountUpdated:
                         XCTAssertEqual(conversation.unreadMessageCount, 2)
-//                        XCTAssertTrue(conversation.isUnreadMessageContainMention)
+                        //                        XCTAssertTrue(conversation.isUnreadMessageContainMention)
                         exp.fulfill()
                     default:
                         break
@@ -498,7 +498,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             }
             clientB.connection.testConnect()
         }
-
+        
         expecting(
             description: "read",
             count: 2)
@@ -527,10 +527,10 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             }
         }
     }
-
+    
     func testTemporaryConversationUnreadEvent() {
         let clientA = newOpenedClient()
-
+        
         let otherClientID: String = uuid
         let message = LCIMMessage.init(content: "test")
         message.isAllMembersMentioned = true
@@ -554,7 +554,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
         let clientB: LCIMClient! = try? LCIMClient.init(clientId: otherClientID)
         XCTAssertNotNil(clientB)
         clientB.delegate = delegator
-
+        
         expecting(description: "opened and get unread event", count: 3) { exp in
             delegator.conversationEvent = { client, conversation, event in
                 if client === clientB, conversation.ID == message.conversationID {
@@ -593,19 +593,19 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 conv.read()
             }
         }
-
+        
     }
-
+    
     func testServiceConversationUnreadEvent() {
-
+        
         let clientID = uuid
-
+        
         let serviceConvID = newServiceConversation()
         XCTAssertTrue(subscribing(serviceConversation: serviceConvID, by: clientID))
         broadcastingMessage(to: serviceConvID)
-
+        
         delay(seconds: 15)
-
+        
         let delegator = LCIMClientDelegator.init()
         let clientA: LCIMClient! = try? LCIMClient.init(clientId: clientID)
         XCTAssertNotNil(clientA)
@@ -630,7 +630,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             }
         }
-
+        
         expecting(description: "read") { exp in
             delegator.conversationEvent = { client, conversation, event in
                 if client === clientA, conversation.ID == serviceConvID {
@@ -644,15 +644,15 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 conv.read()
             }
         }
-
+        
     }
-
+    
     func testLargeUnreadEvent() {
         let clientA = newOpenedClient()
-
+        
         let otherClientID: String = uuid
         let count: Int = 20
-
+        
         for i in 0..<count {
             let exp = expectation(description: "create conversation and send message")
             exp.expectedFulfillmentCount = 2
@@ -687,7 +687,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 wait(for: [exp], timeout: timeout)
             }
         }
-
+        
         let convIDSet = Set<String>(clientA.convCollection.keys)
         let delegator = LCIMClientDelegator.init()
         let clientB: LCIMClient! = try? LCIMClient.init(clientId: otherClientID)
@@ -696,17 +696,17 @@ class LCIMConversationTestCase: RTMBaseTestCase {
         
         let largeUnreadExp = expectation(description: "opened and get large unread event")
         largeUnreadExp.expectedFulfillmentCount = (count + 2) + 1
-//        var lcount = 0
-//        var ucount = 0
+        //        var lcount = 0
+        //        var ucount = 0
         delegator.conversationEvent = { client, conversaton, event in
             switch event {
             case .lastMessageUpdated:
-//                lcount += 1
-//                print("lastMessageUpdated count---\(lcount)")
+                //                lcount += 1
+                //                print("lastMessageUpdated count---\(lcount)")
                 largeUnreadExp.fulfill()
             case .unreadMessageCountUpdated:
-//                ucount += 1
-//                print("unreadMessageCountUpdated count---\(ucount)")
+                //                ucount += 1
+                //                print("unreadMessageCountUpdated count---\(ucount)")
                 largeUnreadExp.fulfill()
             default:
                 break
@@ -718,10 +718,10 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             largeUnreadExp.fulfill()
         }
         wait(for: [largeUnreadExp], timeout: timeout)
-
+        
         delay()
         XCTAssertNotNil(clientB.lastUnreadNotifTime)
-
+        
         let allReadExp = expectation(description: "all read")
         allReadExp.expectedFulfillmentCount = count
         delegator.conversationEvent = { client, conversation, event in
@@ -736,15 +736,15 @@ class LCIMConversationTestCase: RTMBaseTestCase {
         }
         wait(for: [allReadExp], timeout: timeout)
     }
-
+    
     func testMembersChange() {
         let delegatorA = LCIMClientDelegator.init()
         let delegatorB = LCIMClientDelegator.init()
         let clientA = newOpenedClient(delegator: delegatorA)
         let clientB = newOpenedClient(delegator: delegatorB)
-
+        
         var convA: LCIMConversation!
-
+        
         expecting(
             description: "create conversation",
             count: 5)
@@ -786,10 +786,10 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             }
         }
-
+        
         let convB = clientB.convCollection[convA?.ID ?? ""]
         XCTAssertNotNil(convB)
-
+        
         expecting(
             description: "leave",
             count: 3)
@@ -825,7 +825,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             })
         }
-
+        
         expecting(
             description: "join",
             count: 4)
@@ -871,7 +871,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             }
         }
-
+        
         expecting(
             description: "remove",
             count: 3)
@@ -907,7 +907,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             }
         }
-
+        
         expecting(
             description: "add",
             count: 4)
@@ -953,7 +953,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             })
         }
-
+        
         expecting { (exp) in
             convA?.countMembers(callback: { num, error in
                 XCTAssertTrue(Thread.isMainThread)
@@ -963,13 +963,13 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             })
         }
     }
-
+    
     func testGetChatRoomOnlineMembers() {
         let clientA = newOpenedClient()
         let clientB = newOpenedClient()
-
+        
         var chatRoomA: LCIMChatRoom?
-
+        
         expecting { (exp) in
             clientA.createChatRoom { room, error in
                 XCTAssertNil(error)
@@ -978,9 +978,9 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             }
         }
-
+        
         var chatRoomB: LCIMChatRoom?
-
+        
         expecting { (exp) in
             if let ID = chatRoomA?.ID {
                 clientB.conversationQuery().getConversationById(ID) { conv, error in
@@ -994,7 +994,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             }
         }
-
+        
         expecting(
             description: "get online count",
             count: 7)
@@ -1039,13 +1039,13 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             })
         }
     }
-
+    
     func testMuteAndUnmute() {
         let client = newOpenedClient()
-
+        
         var conversation: LCIMConversation? = nil
-//        var previousUpdatedAt: Date?
-
+        //        var previousUpdatedAt: Date?
+        
         let createExp = expectation(description: "create conversation")
         let option = LCIMConversationCreationOption.init()
         option.isUnique = false
@@ -1053,14 +1053,14 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             XCTAssertNil(error)
             XCTAssertNotNil(conv)
             conversation = conv
-//            previousUpdatedAt = conversation?.updatedAt ?? conversation?.createdAt
+            //            previousUpdatedAt = conversation?.updatedAt ?? conversation?.createdAt
             createExp.fulfill()
         }
         
         wait(for: [createExp], timeout: timeout)
-
+        
         delay()
-
+        
         let muteExp = expectation(description: "mute")
         conversation?.mute(callback: {[weak conversation] ret, error in
             XCTAssertTrue(Thread.isMainThread)
@@ -1070,18 +1070,18 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             let mutedMembers = conversation?.rawJSONDataCopy()[LCIMConversationKey.mutedMembers] as? [String]
             XCTAssertEqual(mutedMembers?.count, 1)
             XCTAssertEqual(mutedMembers?.contains(client.ID), true)
-//            if let updatedAt = conversation?.updatedAt, let preUpdatedAt = previousUpdatedAt {
-//                XCTAssertGreaterThan(updatedAt, preUpdatedAt)
-//                previousUpdatedAt = updatedAt
-//            } else {
-//                XCTFail()
-//            }
+            //            if let updatedAt = conversation?.updatedAt, let preUpdatedAt = previousUpdatedAt {
+            //                XCTAssertGreaterThan(updatedAt, preUpdatedAt)
+            //                previousUpdatedAt = updatedAt
+            //            } else {
+            //                XCTFail()
+            //            }
             muteExp.fulfill()
         })
         wait(for: [muteExp], timeout: timeout)
-
+        
         delay()
-
+        
         let unmuteExp = expectation(description: "unmute")
         conversation?.unmute(callback: { [weak conversation] ret, error in
             XCTAssertTrue(Thread.isMainThread)
@@ -1090,20 +1090,20 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             XCTAssertEqual(conversation?.isMuted, false)
             let mutedMembers = conversation?.rawJSONDataCopy()[LCIMConversationKey.mutedMembers] as? [String]
             XCTAssertEqual(mutedMembers?.count, 0)
-//            if let updatedAt = conversation?.updatedAt, let preUpdatedAt = previousUpdatedAt {
-//                XCTAssertGreaterThan(updatedAt, preUpdatedAt)
-//                previousUpdatedAt = updatedAt
-//            } else {
-//                XCTFail()
-//            }
+            //            if let updatedAt = conversation?.updatedAt, let preUpdatedAt = previousUpdatedAt {
+            //                XCTAssertGreaterThan(updatedAt, preUpdatedAt)
+            //                previousUpdatedAt = updatedAt
+            //            } else {
+            //                XCTFail()
+            //            }
             unmuteExp.fulfill()
         })
         wait(for: [unmuteExp], timeout: timeout)
     }
-
+    
     func testConversationQuery() {
         let clientA = newOpenedClient()
-
+        
         var ID1: String? = nil
         var ID2: String? = nil
         var ID3: String? = nil
@@ -1156,21 +1156,21 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 break
             }
         }
-
+        
         guard
             let normalConvID = ID1,
             let chatRoomID = ID2,
             let serviceID = ID3,
             let tempID = ID4
-            else
+        else
         {
             XCTFail()
             return
         }
-
+        
         delay()
         clientA.convCollection.removeAll()
-
+        
         let queryExp1 = expectation(description: "query normal conversation with message and without member")
         let query1 = clientA.conversationQuery()
         query1.option = [.compact, .withMessage]
@@ -1183,7 +1183,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             queryExp1.fulfill()
         }
         wait(for: [queryExp1], timeout: timeout)
-
+        
         let queryExp2 = expectation(description: "query chat room")
         clientA.conversationQuery().getConversationById(chatRoomID) { conv, error in
             XCTAssertNil(error)
@@ -1192,7 +1192,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             queryExp2.fulfill()
         }
         wait(for: [queryExp2], timeout: timeout)
-
+        
         let queryExp3 = expectation(description: "query service conversation")
         clientA.conversationQuery().getConversationById(serviceID) { conv, error in
             XCTAssertNil(error)
@@ -1201,9 +1201,9 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             queryExp3.fulfill()
         }
         wait(for: [queryExp3], timeout: timeout)
-
+        
         clientA.convCollection.removeAll()
-
+        
         let queryTempExp = expectation(description: "query temporary conversation")
         clientA.conversationQuery().findTemporaryConversations(with: [tempID]) { conv, error in
             XCTAssertNil(error)
@@ -1217,9 +1217,9 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             queryTempExp.fulfill()
         }
         wait(for: [queryTempExp], timeout: timeout)
-
+        
         clientA.convCollection.removeAll()
-
+        
         let generalQueryExp1 = expectation(description: "general query with default conditon")
         clientA.conversationQuery().findConversations { convs, error in
             XCTAssertNil(error)
@@ -1229,7 +1229,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             generalQueryExp1.fulfill()
         }
         wait(for: [generalQueryExp1], timeout: timeout)
-
+        
         let generalQueryExp2 = expectation(description: "general query with custom conditon")
         let generalQuery1 = clientA.conversationQuery()
         generalQuery1.whereKey(LCIMConversationKey.transient.rawValue, equalTo: true)
@@ -1257,26 +1257,26 @@ class LCIMConversationTestCase: RTMBaseTestCase {
         }
         wait(for: [generalQueryExp2], timeout: timeout)
     }
-
+    
     func testUpdateAttribution() {
         let delegatorA = LCIMClientDelegator.init()
         let clientA = newOpenedClient(delegator: delegatorA)
-
+        
         LCRTMConnectionManager.shared().imProtobuf1Registry.removeAllObjects()
         LCRTMConnectionManager.shared().imProtobuf3Registry.removeAllObjects()
-       
+        
         let delegatorB = LCIMClientDelegator.init()
         let clientB = newOpenedClient(delegator: delegatorB)
-
+        
         var convA: LCIMConversation? = nil
         var convB: LCIMConversation? = nil
-
+        
         let nameKey = LCIMConversationKey.name.rawValue
         let attrKey = LCIMConversationKey.attributes.rawValue
         let createKey = "create"
         let deleteKey = "delete"
         let arrayKey = "array"
-
+        
         let createConvExp = expectation(description: "create conversation")
         let option = LCIMConversationCreationOption.init()
         option.isUnique = false
@@ -1292,16 +1292,16 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             createConvExp.fulfill()
         }
         wait(for: [createConvExp], timeout: timeout)
-
+        
         delay()
-
+        
         let data: [String: Any] = [
             nameKey: uuid,
             "\(attrKey).\(createKey)": uuid,
             "\(attrKey).\(deleteKey)": ["__op": "Delete"],
             "\(attrKey).\(arrayKey)": ["__op": "Add", "objects": [uuid]]
         ]
-
+        
         let updateExp = expectation(description: "update")
         updateExp.expectedFulfillmentCount = 2
         delegatorB.conversationEvent = { client, conv, event in
@@ -1311,7 +1311,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                     XCTAssertNotNil(updatedData)
                     XCTAssertNotNil(updatingData)
                     XCTAssertEqual(byClientID, clientA.ID)
-
+                    
                     convB = conv
                     updateExp.fulfill()
                 default:
@@ -1329,7 +1329,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             updateExp.fulfill()
         })
         wait(for: [updateExp], timeout: timeout)
-
+        
         let check = { (conv: LCIMConversation?) in
             XCTAssertEqual(conv?.name, data[nameKey] as? String)
             XCTAssertEqual(conv?.attributes?[createKey] as? String, data["\(attrKey).\(createKey)"] as? String)
@@ -1340,17 +1340,17 @@ class LCIMConversationTestCase: RTMBaseTestCase {
         check(convB)
         XCTAssertEqual(convA?.attributes?[arrayKey] as? [String], convB?.attributes?[arrayKey] as? [String])
     }
-
+    
     func testOfflineEvents() {
         let delegatorA = LCIMClientDelegator.init()
         let clientA = newOpenedClient(delegator: delegatorA)
-
+        
         LCRTMConnectionManager.shared().imProtobuf1Registry.removeAllObjects()
         LCRTMConnectionManager.shared().imProtobuf3Registry.removeAllObjects()
-       
+        
         let delegatorB = LCIMClientDelegator.init()
         let clientB = newOpenedClient(delegator: delegatorB)
-
+        
         expecting(expectation: { () -> XCTestExpectation in
             let exp = self.expectation(description: "create conv and send msg with rcp")
             exp.expectedFulfillmentCount = 5
@@ -1396,11 +1396,11 @@ class LCIMConversationTestCase: RTMBaseTestCase {
         }
         delegatorA.reset()
         delegatorB.reset()
-
+        
         delay()
         clientB.connection.disconnect()
         delay()
-
+        
         expecting(expectation: { () -> XCTestExpectation in
             let exp = self.expectation(description: "conv read")
             exp.expectedFulfillmentCount = 1
@@ -1418,7 +1418,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             conv?.read()
         }
         delegatorA.reset()
-
+        
         expecting(expectation: { () -> XCTestExpectation in
             let exp = self.expectation(description: "create another normal conv")
             exp.expectedFulfillmentCount = 3
@@ -1443,7 +1443,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             }
         }
         delegatorA.reset()
-
+        
         expecting(description: "update normal conv attr") { (exp) in
             let conv = clientA.convCollection.first?.value
             let name = self.uuid
@@ -1464,7 +1464,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             })
         }
         delegatorA.reset()
-
+        
         expecting(expectation: { () -> XCTestExpectation in
             let exp = self.expectation(description: "create temp conv")
             exp.expectedFulfillmentCount = 3
@@ -1488,59 +1488,59 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             }
         }
-//        delegatorA.reset()
-//
-//        delay()
-//
-//        expecting(expectation: { () -> XCTestExpectation in
-//            let exp = self.expectation(description: "get offline events")
-//            exp.expectedFulfillmentCount = 6
-//            return exp
-//        }) { (exp) in
-//            delegatorB.conversationEvent = { client, conv, event in
-//                switch event {
-//                case .joined:
-//                    if conv is LCIMTemporaryConversation {
-//                        exp.fulfill()
-//                    } else {
-//                        exp.fulfill()
-//                    }
-//                case .membersJoined:
-//                    if conv is LCIMTemporaryConversation {
-//                        exp.fulfill()
-//                    } else {
-//                        exp.fulfill()
-//                    }
-//                case .dataUpdated:
-//                    exp.fulfill()
-//                case .message(event: let msgEvent):
-//                    switch msgEvent {
-//                    case .read:
-//                        exp.fulfill()
-//                    default:
-//                        break
-//                    }
-//                default:
-//                    break
-//                }
-//            }
-//            clientB.connection.testConnect()
-//        }
-//        delegatorB.reset()
+        //        delegatorA.reset()
+        //
+        //        delay()
+        //
+        //        expecting(expectation: { () -> XCTestExpectation in
+        //            let exp = self.expectation(description: "get offline events")
+        //            exp.expectedFulfillmentCount = 6
+        //            return exp
+        //        }) { (exp) in
+        //            delegatorB.conversationEvent = { client, conv, event in
+        //                switch event {
+        //                case .joined:
+        //                    if conv is LCIMTemporaryConversation {
+        //                        exp.fulfill()
+        //                    } else {
+        //                        exp.fulfill()
+        //                    }
+        //                case .membersJoined:
+        //                    if conv is LCIMTemporaryConversation {
+        //                        exp.fulfill()
+        //                    } else {
+        //                        exp.fulfill()
+        //                    }
+        //                case .dataUpdated:
+        //                    exp.fulfill()
+        //                case .message(event: let msgEvent):
+        //                    switch msgEvent {
+        //                    case .read:
+        //                        exp.fulfill()
+        //                    default:
+        //                        break
+        //                    }
+        //                default:
+        //                    break
+        //                }
+        //            }
+        //            clientB.connection.testConnect()
+        //        }
+        //        delegatorB.reset()
     }
-
+    
     func testMemberInfo() {
         
         let delegatorA = LCIMClientDelegator.init()
         let clientA = newOpenedClient(delegator: delegatorA)
-       
+        
         let delegatorB = LCIMClientDelegator.init()
         let clientB = newOpenedClient(delegator: delegatorB)
-       
+        
         let clientCID: String = self.uuid
-
+        
         var convA: LCIMConversation?
-
+        
         expecting { (exp) in
             clientA.createConversation(withClientIds: [clientB.ID, clientCID]) { conv, error in
                 XCTAssertNil(error)
@@ -1557,7 +1557,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             })
         }
-
+        
         expecting { (exp) in
             convA?.getAllMemberInfo(callback: {[weak convA] infos, error in
                 XCTAssertTrue(Thread.isMainThread)
@@ -1567,14 +1567,14 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             })
         }
-
+        
         multiExpecting(expectations: { () -> [XCTestExpectation] in
             let exp = self.expectation(description: "change member role to manager")
             exp.expectedFulfillmentCount = 2
             return [exp]
         }) { (exps) in
             let exp = exps[0]
-
+            
             delegatorB.conversationEvent = { client, conv, event in
                 switch event {
                 case let .memberInfoChanged(memberId: memberId, role: role, byClientID: byClientID):
@@ -1588,7 +1588,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                     break
                 }
             }
-
+            
             convA?.updateMemberRole(withMemberId: clientB.ID, role: .manager, callback: { ret, error in
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNil(error)
@@ -1598,7 +1598,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             })
         }
-
+        
         delay()
         
         expecting { (exp) in
@@ -1611,7 +1611,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             })
         }
-
+        
         expecting { (exp) in
             convA?.getAllMemberInfo(callback: {[weak convA] infos, error in
                 XCTAssertTrue(Thread.isMainThread)
@@ -1621,14 +1621,14 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             })
         }
-
+        
         multiExpecting(expectations: { () -> [XCTestExpectation] in
             let exp = self.expectation(description: "change member role to member")
             exp.expectedFulfillmentCount = 2
             return [exp]
         }) { (exps) in
             let exp = exps[0]
-
+            
             delegatorB.conversationEvent = { client, conv, event in
                 switch event {
                 case let .memberInfoChanged(memberId: memberId, role: role, byClientID: byClientID):
@@ -1652,7 +1652,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             })
         }
     }
-
+    
     func testMemberBlock() {
         let delegatorA = LCIMClientDelegator.init()
         let clientA = newOpenedClient(delegator: delegatorA)
@@ -1660,9 +1660,9 @@ class LCIMConversationTestCase: RTMBaseTestCase {
         let clientB = newOpenedClient(delegator: delegatorB)
         let delegatorC = LCIMClientDelegator.init()
         let clientC = newOpenedClient(delegator: delegatorC)
-
+        
         var convA: LCIMConversation?
-
+        
         expecting { (exp) in
             clientA.createConversation(withClientIds: [clientB.ID, clientC.ID]) { conv, error in
                 XCTAssertNil(error)
@@ -1671,14 +1671,14 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             }
         }
-
+        
         multiExpecting(expectations: { () -> [XCTestExpectation] in
             let exp = self.expectation(description: "block member")
             exp.expectedFulfillmentCount = 7
             return [exp]
         }) { (exps) in
             let exp = exps[0]
-
+            
             delegatorA.conversationEvent = { client, conv, event in
                 switch event {
                 case let .membersBlocked(members: members, byClientID: byClientID):
@@ -1697,7 +1697,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                     break
                 }
             }
-
+            
             delegatorB.conversationEvent = { client, conv, event in
                 switch event {
                 case let .blocked(byClientID: byClientID):
@@ -1710,7 +1710,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                     break
                 }
             }
-
+            
             delegatorC.conversationEvent = { client, conv, event in
                 switch event {
                 case let .blocked(byClientID: byClientID):
@@ -1723,7 +1723,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                     break
                 }
             }
-
+            
             convA?.blockMembers([clientB.ID, clientC.ID], callback: { ids, oper, error in
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNil(error)
@@ -1731,14 +1731,14 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             })
         }
-
+        
         delegatorA.reset()
         delegatorB.reset()
         delegatorC.reset()
         
-
+        
         var next: String?
-
+        
         expecting { (exp) in
             convA?.queryBlockedMembers(withLimit: 1, next: nil, callback: { members, _next, error in
                 XCTAssertTrue(Thread.isMainThread)
@@ -1752,7 +1752,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             })
         }
-
+        
         expecting { (exp) in
             convA?.queryBlockedMembers(withLimit: 50, next: next, callback: { members, _next, error in
                 XCTAssertNil(error)
@@ -1764,14 +1764,14 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             })
         }
-
+        
         multiExpecting(expectations: { () -> [XCTestExpectation] in
             let exp = self.expectation(description: "unblock member")
             exp.expectedFulfillmentCount = 4
             return [exp]
         }) { (exps) in
             let exp = exps[0]
-
+            
             delegatorA.conversationEvent = { client, conv, event in
                 switch event {
                 case let .membersUnblocked(members: members, byClientID: byClientID):
@@ -1784,7 +1784,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                     break
                 }
             }
-
+            
             delegatorB.conversationEvent = { client, conv, event in
                 switch event {
                 case let .unblocked(byClientID: byClientID):
@@ -1794,7 +1794,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                     break
                 }
             }
-
+            
             delegatorC.conversationEvent = { client, conv, event in
                 switch event {
                 case let .unblocked(byClientID: byClientID):
@@ -1804,7 +1804,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                     break
                 }
             }
-
+            
             convA?.unblockMembers([clientB.ID, clientC.ID], callback: { members, fails, error in
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNil(error)
@@ -1812,7 +1812,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             })
         }
     }
-
+    
     func testMemberMute() {
         let delegatorA = LCIMClientDelegator.init()
         let clientA = newOpenedClient(delegator: delegatorA)
@@ -1820,9 +1820,9 @@ class LCIMConversationTestCase: RTMBaseTestCase {
         let clientB = newOpenedClient(delegator: delegatorB)
         let delegatorC = LCIMClientDelegator.init()
         let clientC = newOpenedClient(delegator: delegatorC)
-
+        
         var convA: LCIMConversation?
-
+        
         expecting { (exp) in
             clientA.createConversation(withClientIds: [clientB.ID, clientC.ID]) { conv, error in
                 XCTAssertNil(error)
@@ -1831,14 +1831,14 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             }
         }
-
+        
         multiExpecting(expectations: { () -> [XCTestExpectation] in
             let exp = self.expectation(description: "mute member")
             exp.expectedFulfillmentCount = 4
             return [exp]
         }) { (exps) in
             let exp = exps[0]
-
+            
             delegatorA.conversationEvent = { client, conv, event in
                 switch event {
                 case let .membersMuted(members: members, byClientID: byClientID):
@@ -1851,7 +1851,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                     break
                 }
             }
-
+            
             delegatorB.conversationEvent = { client, conv, event in
                 switch event {
                 case let .muted(byClientID: byClientID):
@@ -1861,7 +1861,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                     break
                 }
             }
-
+            
             delegatorC.conversationEvent = { client, conv, event in
                 switch event {
                 case let .muted(byClientID: byClientID):
@@ -1871,20 +1871,20 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                     break
                 }
             }
-
+            
             convA?.muteMembers([clientB.ID, clientC.ID], callback: { members, fails, error in
                 XCTAssertTrue(Thread.isMainThread)
                 XCTAssertNil(error)
                 exp.fulfill()
             })
         }
-
+        
         delegatorA.reset()
         delegatorB.reset()
         delegatorC.reset()
-
+        
         var next: String?
-
+        
         expecting { (exp) in
             convA?.queryMutedMembers(withLimit: 1, next: nil, callback: { members, _next, error in
                 XCTAssertTrue(Thread.isMainThread)
@@ -1898,7 +1898,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             })
         }
-
+        
         expecting { (exp) in
             convA?.queryMutedMembers(withLimit: 50, next: next, callback: { members, _next, error in
                 XCTAssertNil(error)
@@ -1910,14 +1910,14 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                 exp.fulfill()
             })
         }
-
+        
         multiExpecting(expectations: { () -> [XCTestExpectation] in
             let exp = self.expectation(description: "unmute member")
             exp.expectedFulfillmentCount = 4
             return [exp]
         }) { (exps) in
             let exp = exps[0]
-
+            
             delegatorA.conversationEvent = { client, conv, event in
                 switch event {
                 case let .membersUnmuted(members: members, byClientID: byClientID):
@@ -1930,7 +1930,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                     break
                 }
             }
-
+            
             delegatorB.conversationEvent = { client, conv, event in
                 switch event {
                 case let .unmuted(byClientID: byClientID):
@@ -1940,7 +1940,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
                     break
                 }
             }
-
+            
             delegatorC.conversationEvent = { client, conv, event in
                 switch event {
                 case let .unmuted(byClientID: byClientID):
@@ -1957,7 +1957,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             })
         }
     }
-
+    
 }
 
 extension LCIMConversationTestCase {
@@ -1976,5 +1976,5 @@ extension LCIMConversationTestCase {
         }
         return success
     }
-
+    
 }

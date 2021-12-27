@@ -19,9 +19,9 @@ class IMMessageTestCase: RTMBaseTestCase {
         IMMessageTestCase.purgeConnectionRegistry()
         guard let client2 = newOpenedClient(clientIDSuffix: "2"),
               let client3 = newOpenedClient(clientIDSuffix: "3") else {
-            XCTFail()
-            return
-        }
+                  XCTFail()
+                  return
+              }
         RTMBaseTestCase.purgeConnectionRegistry()
         guard let client4 = newOpenedClient(clientIDSuffix: "4") else {
             XCTFail()
@@ -119,9 +119,9 @@ class IMMessageTestCase: RTMBaseTestCase {
     func testUpdateAndRecallMessage() {
         guard let client1 = newOpenedClient(clientIDSuffix: "1"),
               let client2 = newOpenedClient(clientIDSuffix: "2") else {
-            XCTFail()
-            return
-        }
+                  XCTFail()
+                  return
+              }
         
         let delegator1 = LCIMClientDelegator()
         client1.delegate = delegator1

@@ -16,17 +16,17 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             let tuples = convenienceInit(),
             let tuple1 = tuples.first,
             let tuple2 = tuples.last
-            else
+        else
         {
             XCTFail()
             return
         }
-
+        
         let delegatorA = tuple1.delegator
         let conversationA = tuple1.conversation
         let delegatorB = tuple2.delegator
         let conversationB = tuple2.conversation
-
+        
         let checkMessage: (LCIMConversation, LCIMMessage, LCIMMessageStatus) -> Void = { conv, message, status in
             XCTAssertEqual(message.status, status)
             XCTAssertNotNil(message.ID)
@@ -36,7 +36,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             XCTAssertNotNil(message.sentDate)
             XCTAssertNotNil(message.content)
         }
-
+        
         let exp1 = expectation(description: "A send message to B")
         exp1.expectedFulfillmentCount = 6
         let stringMessage = LCIMMessage.init(content: "string")
@@ -81,10 +81,10 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             exp1.fulfill()
         }
         wait(for: [exp1], timeout: timeout)
-
+        
         delegatorA.reset()
         delegatorB.reset()
-
+        
         let exp2 = expectation(description: "B send message to A")
         exp2.expectedFulfillmentCount = 6
         let dataMessage = LCIMMessage.init(content: "data")
@@ -129,10 +129,10 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             exp2.fulfill()
         }
         wait(for: [exp2], timeout: timeout)
-
+        
         delegatorA.reset()
         delegatorB.reset()
-
+        
         XCTAssertEqual(conversationA.unreadMessageCount, 0)
         XCTAssertEqual(conversationB.unreadMessageCount, 0)
         XCTAssertNotNil(conversationA.lastMessage?.ID)
@@ -150,7 +150,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             conversationA.lastMessage?.sentTimestamp,
             conversationB.lastMessage?.sentTimestamp
         )
-
+        
         expecting { (exp) in
             conversationB.quit { ret, error in
                 XCTAssertTrue(ret)
@@ -158,7 +158,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
                 exp.fulfill()
             }
         }
-
+        
         expecting { (exp) in
             let message = LCIMTextMessage.init(text: uuid)
             conversationB.send(message) { ret, error in
@@ -175,7 +175,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             let tuples = convenienceInit(),
             let tuple1 = tuples.first,
             let tuple2 = tuples.last
-            else
+        else
         {
             XCTFail()
             return
@@ -198,7 +198,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
                 case .received(message: let message):
                     receivedMessageCountA -= 1
                     if receivedMessageCountA == 0,
-                        let msgID = message.ID {
+                       let msgID = message.ID {
                         lastMessageIDSet.insert(msgID)
                     }
                     conversation.read()
@@ -208,7 +208,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
                 }
             case .unreadMessageCountUpdated:
                 if receivedMessageCountA == 0,
-                    conversation.unreadMessageCount == 0 {
+                   conversation.unreadMessageCount == 0 {
                     exp.fulfill()
                 }
             default:
@@ -223,7 +223,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
                 case .received(message: let message):
                     receivedMessageCountB -= 1
                     if receivedMessageCountB == 0,
-                        let msgID = message.ID {
+                       let msgID = message.ID {
                         lastMessageIDSet.insert(msgID)
                     }
                     conversation.read()
@@ -233,7 +233,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
                 }
             case .unreadMessageCountUpdated:
                 if receivedMessageCountB == 0,
-                    conversation.unreadMessageCount == 0 {
+                   conversation.unreadMessageCount == 0 {
                     exp.fulfill()
                 }
             default:
@@ -248,7 +248,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
                 XCTAssertNil(error)
                 sendAExp.fulfill()
             }
-
+            
             wait(for: [sendAExp], timeout: timeout)
             let sendBExp = expectation(description: "send message")
             let messageB = LCIMMessage.init(content: "test")
@@ -281,16 +281,16 @@ class LCIMMessageTestCase: RTMBaseTestCase {
         XCTAssertTrue([1,2].contains(lastMessageIDSet.count))
         XCTAssertTrue(lastMessageIDSet.contains(conversationA.lastMessage?.ID ?? ""))
     }
-
+    
     func testMessageReceipt() {
         guard
             let convSuites = convenienceInit(shouldConnectionShared: false),
             let convSuite1 = convSuites.first,
             let convSuite2 = convSuites.last else
-        {
-            XCTFail()
-            return
-        }
+            {
+                XCTFail()
+                return
+            }
         
         var message = LCIMTextMessage.init(text: "")
         var deliveredMessageID: String?
@@ -298,7 +298,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
         expecting(description: "delivery rcp", count: 3) { (exp) in
             convSuite1.delegator.messageEvent = { client, conv, event in
                 if case let .delivered(message: message) = event {
-//                    XCTAssertEqual(message.fromClientID, convSuite2.client.ID)
+                    //                    XCTAssertEqual(message.fromClientID, convSuite2.client.ID)
                     XCTAssertGreaterThan(message.deliveredTimestamp, 0)
                     deliveredMessageID = message.ID
                     exp.fulfill()
@@ -330,7 +330,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
                     XCTAssertNotNil(date)
                     exp.fulfill()
                 }
-
+                
             }
             convSuite2.delegator.conversationEvent = { client, conv, event in
                 if case .unreadMessageCountUpdated = event {
@@ -382,15 +382,15 @@ class LCIMMessageTestCase: RTMBaseTestCase {
         convSuite2.delegator.reset()
         delay(seconds: 5)
         
-//        expecting { (exp) in
-//            convSuite1.delegator.messageEvent = { client, conv, event in
-//                if case let .read(lastReadAt: date) = event {
-//                    XCTAssertNotNil(date)
-//                    exp.fulfill()
-//                }
-//            }
-//            convSuite1.client.connection.testConnect()
-//        }
+        //        expecting { (exp) in
+        //            convSuite1.delegator.messageEvent = { client, conv, event in
+        //                if case let .read(lastReadAt: date) = event {
+        //                    XCTAssertNotNil(date)
+        //                    exp.fulfill()
+        //                }
+        //            }
+        //            convSuite1.client.connection.testConnect()
+        //        }
     }
     
     func testTransientMessageSendingAndReceiving() {
@@ -398,7 +398,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             let tuples = convenienceInit(),
             let tuple1 = tuples.first,
             let tuple2 = tuples.last
-            else
+        else
         {
             XCTFail()
             return
@@ -411,7 +411,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             XCTAssertNotNil(message.ID)
             XCTAssertNotNil(message.sentTimestamp)
             XCTAssertNotNil(message.conversationID)
-//            XCTAssertEqual(message.status, .sent)
+            //            XCTAssertEqual(message.status, .sent)
         }
         
         let exp = expectation(description: "send transient message")
@@ -444,7 +444,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             let tuples = convenienceInit(shouldConnectionShared: false),
             let tuple1 = tuples.first,
             let tuple2 = tuples.last
-            else
+        else
         {
             XCTFail()
             return
@@ -462,7 +462,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             XCTAssertTrue(ret)
             XCTAssertNil(error)
             XCTAssertNil(conversationA.lastMessage)
-//            XCTAssertTrue(willMessage.isWill)
+            //            XCTAssertTrue(willMessage.isWill)
             XCTAssertNotNil(willMessage.sentTimestamp)
             sendExp.fulfill()
         }
@@ -505,8 +505,8 @@ class LCIMMessageTestCase: RTMBaseTestCase {
         LCRTMConnectionManager.shared().imProtobuf3Registry.removeAllObjects()
         
         let client4 = newOpenedClient(clientID: client4ID, delegator: delegator4)
-
-
+        
+        
         client4.delegate = delegator4
         var chatRoom1: LCIMChatRoom?
         var chatRoom2: LCIMChatRoom?
@@ -554,7 +554,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
                 exp.fulfill()
             }
         }
-
+        
         expecting { exp in
             chatRoom3?.join(callback: { ret, error in
                 XCTAssertTrue(ret)
@@ -572,7 +572,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
                 exp.fulfill()
             }
         }
-          
+        
         expecting { exp in
             chatRoom4?.join(callback: { ret, error in
                 XCTAssertTrue(ret)
@@ -641,10 +641,10 @@ class LCIMMessageTestCase: RTMBaseTestCase {
         XCTAssertNil(chatRoom2?.lastMessage)
         XCTAssertNil(chatRoom3?.lastMessage)
         XCTAssertNil(chatRoom4?.lastMessage)
-//        XCTAssertTrue((chatRoom1?.members ?? []).isEmpty)
-//        XCTAssertTrue((chatRoom2?.members ?? []).isEmpty)
-//        XCTAssertTrue((chatRoom3?.members ?? []).isEmpty)
-//        XCTAssertTrue((chatRoom4?.members ?? []).isEmpty)
+        //        XCTAssertTrue((chatRoom1?.members ?? []).isEmpty)
+        //        XCTAssertTrue((chatRoom2?.members ?? []).isEmpty)
+        //        XCTAssertTrue((chatRoom3?.members ?? []).isEmpty)
+        //        XCTAssertTrue((chatRoom4?.members ?? []).isEmpty)
     }
     
     func testReceiveMessageFromServiceConversation() {
@@ -730,14 +730,14 @@ class LCIMMessageTestCase: RTMBaseTestCase {
         })
         XCTAssertTrue(success)
     }
-
+    
     func testImageMessageSendingAndReceiving() {
         for i in 0...1 {
             let format: String = (i == 0) ? "png" : "jpg"
             let imageFile = try? LCFile.init(localPath: bundleResourceURL(name: "test", ext: format).path)
             XCTAssertNotNil(imageFile)
             let outMessage = LCIMImageMessage.init(text: "test", file: imageFile!, attributes: nil)
-           
+            
             XCTAssertTrue(sendingAndReceiving(sentMessage: outMessage, receivedMessageChecker: { (inMessage) in
                 XCTAssertNotNil(inMessage?.file?.objectId)
                 XCTAssertEqual(inMessage?.format, format)
@@ -804,13 +804,13 @@ class LCIMMessageTestCase: RTMBaseTestCase {
         XCTAssertTrue(success)
         XCTAssertTrue(progress > 0.0)
     }
-
+    
     func testFileMessageSendingAndReceiving() {
         let format: String = "zip"
         let file = try? LCFile.init(localPath: bundleResourceURL(name: "test", ext: format).path)
         XCTAssertNotNil(file)
         let message = LCIMFileMessage.init(text: "test", file: file!, attributes: nil)
-
+        
         let success = sendingAndReceiving(sentMessage: message, receivedMessageChecker: { (rMessage) in
             XCTAssertNotNil(rMessage?.file?.objectId)
             XCTAssertEqual(rMessage?.format, format)
@@ -836,16 +836,16 @@ class LCIMMessageTestCase: RTMBaseTestCase {
         })
         XCTAssertTrue(success)
     }
-
+    
     func testBinaryMessage() {
         guard let tuples = convenienceInit(),
-            let clientA = tuples.first?.client,
-            let clientB = tuples.last?.client,
-            let delegatorB = tuples.last?.delegator,
-            let conversation = tuples.first?.conversation else {
-                XCTFail()
-                return
-        }
+              let clientA = tuples.first?.client,
+              let clientB = tuples.last?.client,
+              let delegatorB = tuples.last?.delegator,
+              let conversation = tuples.first?.conversation else {
+                  XCTFail()
+                  return
+              }
         let content = "bin"
         let message = LCIMMessage.init(content: content)
         
@@ -905,7 +905,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             }
         }
     }
-
+    
     func testMessageUpdating() {
         let oldContent: String = "old"
         let oldMessage = LCIMMessage.init(content: oldContent)
@@ -929,17 +929,17 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             XCTAssertEqual(patchedMessage.content, newContent)
         }
         
-//        expecting { exp in
-//            receivingTuple?.conversation.update(oldMessage, toNewMessage: newMessage, callback: { ret, error in
-//                XCTAssertNotNil(error)
-//                XCTAssertFalse(ret)
-//            })
-//        }
+        //        expecting { exp in
+        //            receivingTuple?.conversation.update(oldMessage, toNewMessage: newMessage, callback: { ret, error in
+        //                XCTAssertNotNil(error)
+        //                XCTAssertFalse(ret)
+        //            })
+        //        }
         
         
         let exp = expectation(description: "message patch")
         exp.expectedFulfillmentCount = 2
-
+        
         receivingTuple?.delegator.messageEvent = { client, conv, event in
             switch event {
             case .updated(updatedMessage: let patchedMessage, reason: let reason):
@@ -959,7 +959,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             exp.fulfill()
         })
         wait(for: [exp], timeout: timeout)
-
+        
     }
     
     func testMessageRecalling() {
@@ -976,8 +976,8 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             XCTAssertNotNil(patchedMessage.ID)
             XCTAssertNotNil(patchedMessage.conversationID)
             XCTAssertNotNil(patchedMessage.sentTimestamp)
-//            XCTAssertNotNil(patchedMessage.patchedTimestamp)
-//            XCTAssertNotNil(patchedMessage.patchedDate)
+            //            XCTAssertNotNil(patchedMessage.patchedTimestamp)
+            //            XCTAssertNotNil(patchedMessage.patchedDate)
             XCTAssertEqual(patchedMessage.ID, originMessage.ID)
             XCTAssertEqual(patchedMessage.conversationID, originMessage.conversationID)
             XCTAssertEqual(patchedMessage.sentTimestamp, originMessage.sentTimestamp)
@@ -986,12 +986,12 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             XCTAssertEqual((patchedMessage as? LCIMRecalledMessage)?.isRecall, true)
         }
         
-//        expecting { exp in
-//            receivingTuple?.conversation.recall(oldMessage, callback: { ret, error, reMsg in
-//                XCTAssertNotNil(error)
-//                XCTAssertFalse(ret)
-//            })
-//        }
+        //        expecting { exp in
+        //            receivingTuple?.conversation.recall(oldMessage, callback: { ret, error, reMsg in
+        //                XCTAssertNotNil(error)
+        //                XCTAssertFalse(ret)
+        //            })
+        //        }
         
         let exp = expectation(description: "message patch")
         exp.expectedFulfillmentCount = 2
@@ -1020,7 +1020,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             exp.fulfill()
         })
         wait(for: [exp], timeout: timeout)
-
+        
     }
     
     func testMessagePatchNotification() {
@@ -1028,7 +1028,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             let tuples = convenienceInit(shouldConnectionShared: false),
             let sendingTuple = tuples.first,
             let receivingTuple = tuples.last
-            else
+        else
         {
             XCTFail()
             return
@@ -1130,14 +1130,14 @@ class LCIMMessageTestCase: RTMBaseTestCase {
     }
     
     func testMessagePatchError() {
-//        guard LCApplication.default.id != BaseTestCase.usApp.id else {
-//            return
-//        }
+        //        guard LCApplication.default.id != BaseTestCase.usApp.id else {
+        //            return
+        //        }
         guard
             let tuples = convenienceInit(clientCount: 3),
             let sendingTuple = tuples.first,
             let receivingTuple = tuples.last
-            else
+        else
         {
             XCTFail()
             return
@@ -1192,23 +1192,23 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             receivingTuple: &receivingTuple
         )
         XCTAssertTrue(success)
-
+        
         delay()
-
+        
         let readExp = expectation(description: "read message")
         readExp.expectedFulfillmentCount = 2
         receivingTuple?.delegator.conversationEvent = { client, conv, event in
             if conv === receivingTuple?.conversation,
-                case .unreadMessageCountUpdated = event {
+               case .unreadMessageCountUpdated = event {
                 XCTAssertEqual(conv.unreadMessageCount, 0)
                 readExp.fulfill()
             }
         }
         receivingTuple?.conversation.read()
         wait(for: [readExp], timeout: timeout)
-
+        
         delay()
-
+        
         let getReadFlagExp = expectation(description: "get read flag timestamp")
         getReadFlagExp.expectedFulfillmentCount = 1
         sendingTuple?.delegator.conversationEvent = { client, conv, event in
@@ -1216,16 +1216,16 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             case .lastDeliveredAtUpdated:
                 XCTAssertNotNil(conv.lastDeliveredAt)
                 getReadFlagExp.fulfill()
-//            case .lastReadAtUpdated:
-//                XCTAssertNotNil(conv.lastReadAt)
-//                getReadFlagExp.fulfill()
+                //            case .lastReadAtUpdated:
+                //                XCTAssertNotNil(conv.lastReadAt)
+                //                getReadFlagExp.fulfill()
             default:
                 break
             }
         }
         sendingTuple?.conversation.fetchReceiptTimestampsInBackground()
         wait(for: [getReadFlagExp], timeout: timeout)
-
+        
         let sendNeedRCPMessageExp = expectation(description: "send need RCP message")
         sendNeedRCPMessageExp.expectedFulfillmentCount = 3
         sendingTuple?.delegator.conversationEvent = { client, conv, event in
@@ -1253,7 +1253,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
         }
         let needRCPMessage = LCIMMessage.init(content: "test")
         let msgOpt = LCIMMessageOption.init()
-//        msgOpt.transient = true
+        //        msgOpt.transient = true
         msgOpt.receipt = true
         sendingTuple?.conversation.send(needRCPMessage, option: msgOpt, callback: { ret, error in
             XCTAssertTrue(ret)
@@ -1261,41 +1261,41 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             sendNeedRCPMessageExp.fulfill()
         })
         wait(for: [sendNeedRCPMessageExp], timeout: timeout)
-
-//        delay()
-
-//        let getDeliveredFlagExp = expectation(description: "get delivered flag timestamp")
-//        try! sendingTuple?.conversation.getMessageReceiptFlag(completion: { (result) in
-//            XCTAssertTrue(Thread.isMainThread)
-//            XCTAssertTrue(result.isSuccess)
-//            XCTAssertNil(result.error)
-//            XCTAssertNotNil(result.value?.deliveredFlagTimestamp)
-//            XCTAssertNotNil(result.value?.deliveredFlagDate)
-//            XCTAssertNotEqual(result.value?.deliveredFlagTimestamp, result.value?.readFlagTimestamp)
-//            XCTAssertNotEqual(result.value?.deliveredFlagDate, result.value?.readFlagDate)
-//            XCTAssertGreaterThanOrEqual(result.value?.deliveredFlagTimestamp ?? 0, needRCPMessage.sentTimestamp ?? 0)
-//            getDeliveredFlagExp.fulfill()
-//        })
-//        wait(for: [getDeliveredFlagExp], timeout: timeout)
-//
-//        let client = try! IMClient(ID: uuid, options: [])
-//        let conversation = IMConversation(ID: uuid, rawData: [:], convType: .normal, client: client, caching: false)
-//        do {
-//            try conversation.getMessageReceiptFlag(completion: { (_) in })
-//            XCTFail()
-//        } catch {
-//            XCTAssertTrue(error is LCError)
-//        }
+        
+        //        delay()
+        
+        //        let getDeliveredFlagExp = expectation(description: "get delivered flag timestamp")
+        //        try! sendingTuple?.conversation.getMessageReceiptFlag(completion: { (result) in
+        //            XCTAssertTrue(Thread.isMainThread)
+        //            XCTAssertTrue(result.isSuccess)
+        //            XCTAssertNil(result.error)
+        //            XCTAssertNotNil(result.value?.deliveredFlagTimestamp)
+        //            XCTAssertNotNil(result.value?.deliveredFlagDate)
+        //            XCTAssertNotEqual(result.value?.deliveredFlagTimestamp, result.value?.readFlagTimestamp)
+        //            XCTAssertNotEqual(result.value?.deliveredFlagDate, result.value?.readFlagDate)
+        //            XCTAssertGreaterThanOrEqual(result.value?.deliveredFlagTimestamp ?? 0, needRCPMessage.sentTimestamp ?? 0)
+        //            getDeliveredFlagExp.fulfill()
+        //        })
+        //        wait(for: [getDeliveredFlagExp], timeout: timeout)
+        //
+        //        let client = try! IMClient(ID: uuid, options: [])
+        //        let conversation = IMConversation(ID: uuid, rawData: [:], convType: .normal, client: client, caching: false)
+        //        do {
+        //            try conversation.getMessageReceiptFlag(completion: { (_) in })
+        //            XCTFail()
+        //        } catch {
+        //            XCTAssertTrue(error is LCError)
+        //        }
     }
-
+    
     func testMessageQuery() {
         CustomMessage.registerSubclass()
         
         let clientA = newOpenedClient()
         let clientB = newOpenedClient()
         let conversation = createConversation(client: clientA, clientIDs: [clientA.ID, clientB.ID])
-
-
+        
+        
         var sentTuples: [(String, Int64)] = []
         for i in 0...8 {
             var message: LCIMMessage!
@@ -1348,9 +1348,9 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             wait(for: [exp], timeout: timeout)
         }
         XCTAssertEqual(sentTuples.count, 9)
-
+        
         delay(seconds: 5)
-
+        
         let defaultQueryExp = expectation(description: "default query")
         conversation?.queryMessages(withLimit: 50, callback: { msgs, error in
             XCTAssertTrue(Thread.isMainThread)
@@ -1363,7 +1363,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             defaultQueryExp.fulfill()
         })
         wait(for: [defaultQueryExp], timeout: timeout)
-
+        
         let directionQueryExp = expectation(description: "direction query")
         directionQueryExp.expectedFulfillmentCount = 2
         conversation?.queryMessages(in: nil, direction: LCIMMessageQueryDirection.fromOldToNew, limit: 1, callback: { msgs, error in
@@ -1381,13 +1381,13 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             directionQueryExp.fulfill()
         })
         wait(for: [directionQueryExp], timeout: timeout)
-
+        
         let endpointQueryExp = expectation(description: "endpoint query")
         endpointQueryExp.expectedFulfillmentCount = 2
         let endpointQueryTuple = sentTuples[sentTuples.count / 2]
         let endpointQueryStart1 = LCIMMessageIntervalBound.init(messageId: endpointQueryTuple.0, timestamp: endpointQueryTuple.1, closed: true)
         let iMMessageInterval1 = LCIMMessageInterval.init(start: endpointQueryStart1, end: nil)
-
+        
         conversation?.queryMessages(in: iMMessageInterval1, direction: .fromNewToOld, limit: 5, callback: { msgs, error in
             XCTAssertNil(error)
             XCTAssertEqual(msgs?.count, 5)
@@ -1397,7 +1397,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             }
             endpointQueryExp.fulfill()
         })
-    
+        
         let endpointQueryStart2 = LCIMMessageIntervalBound.init(messageId: endpointQueryTuple.0, timestamp: endpointQueryTuple.1, closed: false)
         let iMMessageInterval2 = LCIMMessageInterval.init(start: endpointQueryStart2, end: nil)
         conversation?.queryMessages(in: iMMessageInterval2, direction: .fromOldToNew, limit: 5, callback: { msgs, error in
@@ -1411,13 +1411,13 @@ class LCIMMessageTestCase: RTMBaseTestCase {
         })
         
         wait(for: [endpointQueryExp], timeout: timeout)
-
+        
         let intervalQueryExp = expectation(description: "interval query")
-
+        
         let end = LCIMMessageIntervalBound.init(messageId: sentTuples.first?.0, timestamp: sentTuples.first!.1, closed: true)
         let start = LCIMMessageIntervalBound.init(messageId: sentTuples.last?.0, timestamp: sentTuples.last!.1, closed: true)
         let iMMessageInterval = LCIMMessageInterval.init(start: start, end: end)
-
+        
         conversation?.queryMessages(in: iMMessageInterval, direction: .fromNewToOld, limit: UInt(sentTuples.count), callback: { msgs, error in
             XCTAssertNil(error)
             XCTAssertEqual(msgs?.count, sentTuples.count)
@@ -1427,9 +1427,9 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             }
             intervalQueryExp.fulfill()
         })
-
+        
         wait(for: [intervalQueryExp], timeout: timeout)
-
+        
         let typeQuery = expectation(description: "type query")
         conversation?.queryMediaMessagesFromServer(with: .text, limit: 10, fromMessageId: nil, fromTimestamp: 0, callback: { msgs, error in
             XCTAssertNil(error)
@@ -1439,7 +1439,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
             typeQuery.fulfill()
         })
         wait(for: [typeQuery], timeout: timeout)
-
+        
         XCTAssertEqual(conversation?.lastMessage?.ID, sentTuples.last?.0)
         XCTAssertEqual(conversation?.lastMessage?.sentTimestamp, sentTuples.last?.1)
     }
@@ -1514,15 +1514,15 @@ extension LCIMMessageTestCase {
             }
         }
         if let clientID: String = clientIDs.first,
-            let client = clientMap[clientID] {
+           let client = clientMap[clientID] {
             let _ = createConversation(client: client, clientIDs: Set(clientIDs))
         }
         wait(for: [exp], timeout: timeout)
         var convID: String? = nil
         for item in clientIDs {
             if let client = clientMap[item],
-                let conv = conversationMap[item],
-                let delegator = delegatorMap[item] {
+               let conv = conversationMap[item],
+               let delegator = delegatorMap[item] {
                 if let convID = convID {
                     XCTAssertEqual(convID, conv.ID)
                 } else {
@@ -1542,7 +1542,7 @@ extension LCIMMessageTestCase {
         sentMessage: T,
         progress: ((Double) -> Void)? = nil,
         receivedMessageChecker: ((T?) -> Void)? = nil)
-        -> Bool
+    -> Bool
     {
         var sendingTuple: ConversationSuite? = nil
         var receivingTuple: ConversationSuite? = nil
@@ -1561,13 +1561,13 @@ extension LCIMMessageTestCase {
         receivingTuple: inout ConversationSuite?,
         progress: ((Double) -> Void)? = nil,
         receivedMessageChecker: ((T?) -> Void)? = nil)
-        -> Bool
+    -> Bool
     {
         guard
             let tuples = convenienceInit(),
             let tuple1 = tuples.first,
             let tuple2 = tuples.last
-            else
+        else
         {
             XCTFail()
             return false
@@ -1604,7 +1604,7 @@ extension LCIMMessageTestCase {
             }
             exp.fulfill()
         }
-
+        
         wait(for: [exp], timeout: timeout)
         tuple2.delegator.messageEvent = nil
         XCTAssertNotNil(sentMessage.ID)
