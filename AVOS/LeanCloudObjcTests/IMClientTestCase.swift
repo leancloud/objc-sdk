@@ -147,6 +147,9 @@ class IMClientTestCase: RTMBaseTestCase {
         }
         XCTAssertEqual(client.currentDeviceToken, deviceToken)
         XCTAssertNotNil(observer)
+        if let observer = observer {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
 }
 
