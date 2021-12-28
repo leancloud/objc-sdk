@@ -1341,69 +1341,59 @@ static void processAttrAndAttrModified(NSDictionary *attr, NSDictionary *attrMod
 {
     NSMutableDictionary *metaData = (file.metaData.mutableCopy
                                      ?: [NSMutableDictionary dictionary]);
-    switch (typedMessage.mediaType) {
-        case kLCIMMessageMediaTypeImage:
-        {
-            double width = [metaData[@"width"] doubleValue];
-            double height = [metaData[@"height"] doubleValue];
-            if (!(width > 0 && height > 0)) {
+    if (typedMessage.mediaType == LCIMMessageMediaTypeImage) {
+        double width = [metaData[@"width"] doubleValue];
+        double height = [metaData[@"height"] doubleValue];
+        if (!(width > 0 && height > 0)) {
 #if TARGET_OS_IOS || TARGET_OS_TV || TARGET_OS_WATCH
-                UIImage *image = ({
-                    UIImage *image;
-                    NSString *cachedPath = file.persistentCachePath;
-                    if ([[NSFileManager defaultManager] fileExistsAtPath:cachedPath]) {
-                        NSData *data = [NSData dataWithContentsOfFile:cachedPath];
-                        image = [UIImage imageWithData:data];
-                    }
-                    image;
-                });
-                width = image.size.width * image.scale;
-                height = image.size.height * image.scale;
+            UIImage *image = ({
+                UIImage *image;
+                NSString *cachedPath = file.persistentCachePath;
+                if ([[NSFileManager defaultManager] fileExistsAtPath:cachedPath]) {
+                    NSData *data = [NSData dataWithContentsOfFile:cachedPath];
+                    image = [UIImage imageWithData:data];
+                }
+                image;
+            });
+            width = image.size.width * image.scale;
+            height = image.size.height * image.scale;
 #elif TARGET_OS_OSX
-                NSImage *image = ({
-                    NSImage *image;
-                    NSString *cachedPath = file.persistentCachePath;
-                    if ([[NSFileManager defaultManager] fileExistsAtPath:cachedPath]) {
-                        NSData *data = [NSData dataWithContentsOfFile:cachedPath];
-                        image = [[NSImage alloc] initWithData:data];
-                    }
-                    image;
-                });
-                width = image.size.width;
-                height = image.size.height;
+            NSImage *image = ({
+                NSImage *image;
+                NSString *cachedPath = file.persistentCachePath;
+                if ([[NSFileManager defaultManager] fileExistsAtPath:cachedPath]) {
+                    NSData *data = [NSData dataWithContentsOfFile:cachedPath];
+                    image = [[NSImage alloc] initWithData:data];
+                }
+                image;
+            });
+            width = image.size.width;
+            height = image.size.height;
 #endif
-                if (width > 0) {
-                    metaData[@"width"] = @(width);
-                }
-                if (height > 0) {
-                    metaData[@"height"] = @(height);
-                }
+            if (width > 0) {
+                metaData[@"width"] = @(width);
+            }
+            if (height > 0) {
+                metaData[@"height"] = @(height);
             }
         }
-            break;
-        case kLCIMMessageMediaTypeAudio:
-        case kLCIMMessageMediaTypeVideo:
-        {
-            double seconds = [metaData[@"duration"] doubleValue];
-            if (!(seconds > 0)) {
-                NSString *path = file.persistentCachePath;
-                if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-                    NSURL *fileURL = [NSURL fileURLWithPath:path];
-                    if (fileURL) {
-                        AVURLAsset* audioAsset = [AVURLAsset URLAssetWithURL:fileURL
-                                                                     options:nil];
-                        seconds = CMTimeGetSeconds(audioAsset.duration);
-                        if (seconds > 0) {
-                            metaData[@"duration"] = @(seconds);
-                        }
+    } else if (typedMessage.mediaType == LCIMMessageMediaTypeAudio ||
+               typedMessage.mediaType == LCIMMessageMediaTypeVideo) {
+        double seconds = [metaData[@"duration"] doubleValue];
+        if (!(seconds > 0)) {
+            NSString *path = file.persistentCachePath;
+            if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+                NSURL *fileURL = [NSURL fileURLWithPath:path];
+                if (fileURL) {
+                    AVURLAsset* audioAsset = [AVURLAsset URLAssetWithURL:fileURL
+                                                                 options:nil];
+                    seconds = CMTimeGetSeconds(audioAsset.duration);
+                    if (seconds > 0) {
+                        metaData[@"duration"] = @(seconds);
                     }
                 }
             }
         }
-            break;
-        case kLCIMMessageMediaTypeFile:
-        default:
-            break;
     }
     NSString *fileName = file.name;
     if (fileName) {

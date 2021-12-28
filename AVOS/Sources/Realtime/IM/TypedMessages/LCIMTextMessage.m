@@ -18,7 +18,7 @@
 
 + (LCIMMessageMediaType)classMediaType
 {
-    return kLCIMMessageMediaTypeText;
+    return LCIMMessageMediaTypeText;
 }
 
 + (instancetype)messageWithText:(NSString *)text

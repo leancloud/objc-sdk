@@ -12,6 +12,15 @@
 #import "LCIMConversation_Internal.h"
 #import "LCIMTypedMessage_Internal.h"
 
+const LCIMMessageMediaType LCIMMessageMediaTypeNone     = 0;
+const LCIMMessageMediaType LCIMMessageMediaTypeText     = -1;
+const LCIMMessageMediaType LCIMMessageMediaTypeImage    = -2;
+const LCIMMessageMediaType LCIMMessageMediaTypeAudio    = -3;
+const LCIMMessageMediaType LCIMMessageMediaTypeVideo    = -4;
+const LCIMMessageMediaType LCIMMessageMediaTypeLocation = -5;
+const LCIMMessageMediaType LCIMMessageMediaTypeFile     = -6;
+const LCIMMessageMediaType LCIMMessageMediaTypeRecalled = -127;
+
 @implementation LCIMMessagePatchedReason
 
 @end

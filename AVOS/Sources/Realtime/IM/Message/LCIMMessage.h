@@ -8,7 +8,17 @@
 
 #import "LCIMCommon.h"
 
-typedef NS_ENUM(int32_t, LCIMMessageMediaType) {
+typedef int32_t LCIMMessageMediaType NS_TYPED_EXTENSIBLE_ENUM;
+FOUNDATION_EXPORT const LCIMMessageMediaType LCIMMessageMediaTypeNone;
+FOUNDATION_EXPORT const LCIMMessageMediaType LCIMMessageMediaTypeText;
+FOUNDATION_EXPORT const LCIMMessageMediaType LCIMMessageMediaTypeImage;
+FOUNDATION_EXPORT const LCIMMessageMediaType LCIMMessageMediaTypeAudio;
+FOUNDATION_EXPORT const LCIMMessageMediaType LCIMMessageMediaTypeVideo;
+FOUNDATION_EXPORT const LCIMMessageMediaType LCIMMessageMediaTypeLocation;
+FOUNDATION_EXPORT const LCIMMessageMediaType LCIMMessageMediaTypeFile;
+FOUNDATION_EXPORT const LCIMMessageMediaType LCIMMessageMediaTypeRecalled;
+
+typedef NS_ENUM(int32_t, kLCIMMessageMediaType) {
     kLCIMMessageMediaTypeNone = 0,
     kLCIMMessageMediaTypeText = -1,
     kLCIMMessageMediaTypeImage = -2,
@@ -17,7 +27,7 @@ typedef NS_ENUM(int32_t, LCIMMessageMediaType) {
     kLCIMMessageMediaTypeLocation = -5,
     kLCIMMessageMediaTypeFile = -6,
     kLCIMMessageMediaTypeRecalled = -127
-};
+} __deprecated_enum_msg("Deprecated! please use `LCIMMessageMediaType` instead, this ENUM may be removed in the future.");
 
 typedef NS_ENUM(int8_t, LCIMMessageIOType) {
     LCIMMessageIOTypeIn = 1,
