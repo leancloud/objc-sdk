@@ -735,6 +735,7 @@ class LCIMConversationTestCase: RTMBaseTestCase {
             conv.read()
         }
         wait(for: [allReadExp], timeout: timeout)
+        delegator.reset()
     }
     
     func testMembersChange() {
