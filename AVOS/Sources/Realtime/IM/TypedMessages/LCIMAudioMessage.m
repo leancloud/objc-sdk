@@ -18,7 +18,7 @@
 
 + (LCIMMessageMediaType)classMediaType
 {
-    return kLCIMMessageMediaTypeAudio;
+    return LCIMMessageMediaTypeAudio;
 }
 
 - (double)size {

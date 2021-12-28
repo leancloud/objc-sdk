@@ -18,7 +18,7 @@
 
 + (LCIMMessageMediaType)classMediaType
 {
-    return kLCIMMessageMediaTypeVideo;
+    return LCIMMessageMediaTypeVideo;
 }
 
 - (double)size {

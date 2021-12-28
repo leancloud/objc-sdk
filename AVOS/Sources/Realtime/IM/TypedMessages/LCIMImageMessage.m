@@ -18,7 +18,7 @@
 
 + (LCIMMessageMediaType)classMediaType
 {
-    return kLCIMMessageMediaTypeImage;
+    return LCIMMessageMediaTypeImage;
 }
 
 - (double)width {

@@ -1431,7 +1431,7 @@ class LCIMMessageTestCase: RTMBaseTestCase {
         wait(for: [intervalQueryExp], timeout: timeout)
         
         let typeQuery = expectation(description: "type query")
-        conversation?.queryMediaMessagesFromServer(with: .text, limit: 10, fromMessageId: nil, fromTimestamp: 0, callback: { msgs, error in
+        conversation?.queryMediaMessagesFromServer(withType: .text, limit: 10, fromMessageId: nil, fromTimestamp: 0, callback: { msgs, error in
             XCTAssertNil(error)
             XCTAssertEqual(msgs?.count, 1)
             XCTAssertNotNil(msgs?.first?.deliveredTimestamp)
@@ -1450,14 +1450,14 @@ extension LCIMMessageTestCase {
     typealias ConversationSuite = (client: LCIMClient, delegator: LCIMClientDelegator, conversation: LCIMConversation)
     
     class CustomMessage: LCIMTypedMessage, LCIMTypedMessageSubclassing {
-        static func classMediaType() -> MessageMediaType {
-            return 1
+        static func classMediaType() -> LCIMMessageMediaType {
+            return LCIMMessageMediaType(1)
         }
     }
     
     class InvalidCustomMessage: LCIMTypedMessage, LCIMTypedMessageSubclassing {
-        static func classMediaType() -> MessageMediaType {
-            return -1
+        static func classMediaType() -> LCIMMessageMediaType {
+            return LCIMMessageMediaType(-1)
         }
     }
     

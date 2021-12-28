@@ -20,7 +20,7 @@
 
 + (LCIMMessageMediaType)classMediaType
 {
-    return kLCIMMessageMediaTypeRecalled;
+    return LCIMMessageMediaTypeRecalled;
 }
 
 @end
