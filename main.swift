@@ -61,6 +61,7 @@ class Task {
                 completion?($0)
                 group.leave()
             }
+            print("Run Task: \(self.task.arguments?[0] ?? "") \(self.task.arguments?[1] ?? "") ...")
             try self.task.run()
             self.task.waitUntilExit()
         } catch {
