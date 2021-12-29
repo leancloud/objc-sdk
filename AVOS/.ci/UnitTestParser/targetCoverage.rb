@@ -26,7 +26,7 @@ def parse_xcresult_json(cov_json_path)
         files = target['files']
         files.delete_if do |file|
             path = file['path']
-            path =~ %r{/Protobuf/|/Vendor/|\.pbobjc}
+            path =~ %r{/Protobuf/|/LCMPMessagePack/|/Vendor/|\.pbobjc}
         end
         coveredLines_taget = 0
         executableLines_taget = 0
