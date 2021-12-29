@@ -18,8 +18,33 @@ require_relative 'trollop'
 
 # 解析覆盖率报告
 def parse_xcresult_json(cov_json_path)
-    json = File.read(cov_json_path)
-    return JSON.parse(json)
+    json = JSON.parse(File.read(cov_json_path))
+    targets = json['targets']
+    coveredLines_all = 0
+    executableLines_all = 0
+    targets.each do |target|
+        files = target['files']
+        files.delete_if do |file|
+            path = file['path']
+            path =~ %r{/Protobuf/|/LCMPMessagePack/|/Vendor/|\.pbobjc}
+        end
+        coveredLines_taget = 0
+        executableLines_taget = 0
+        files.each do |file|
+            coveredLines_taget += file['coveredLines']
+            executableLines_taget += file['executableLines']
+        end
+        target['coveredLines'] = coveredLines_taget
+        target['executableLines'] = executableLines_taget
+        target['lineCoverage'] = coveredLines_taget / executableLines_taget.to_f
+        coveredLines_all += coveredLines_taget
+        executableLines_all += executableLines_taget
+    end
+    json['coveredLines'] = coveredLines_all
+    json['executableLines'] = executableLines_all
+    json['lineCoverage'] = coveredLines_all / executableLines_all.to_f
+
+    return json
 end
 
 # 格式化输出信息
