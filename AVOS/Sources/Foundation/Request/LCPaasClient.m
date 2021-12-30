@@ -541,12 +541,37 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
                failure:(void (^)(NSHTTPURLResponse *response, id responseObject, NSError *error))failureBlock
 {
     [self performRequest:request
+               validator:nil
+                 success:successBlock
+                 failure:failureBlock];
+}
+
+- (void)performRequest:(NSURLRequest *)request
+             validator:(BOOL (^)(NSHTTPURLResponse *, id))validator
+               success:(void (^)(NSHTTPURLResponse *, id))successBlock
+               failure:(void (^)(NSHTTPURLResponse *, id, NSError *))failureBlock
+{
+    [self performRequest:request
+               validator:validator
                  success:successBlock
                  failure:failureBlock
                     wait:NO];
 }
 
 - (void)performRequest:(NSURLRequest *)request
+               success:(void (^)(NSHTTPURLResponse *, id))successBlock
+               failure:(void (^)(NSHTTPURLResponse *, id, NSError *))failureBlock
+                  wait:(BOOL)wait
+{
+    [self performRequest:request
+               validator:nil
+                 success:successBlock
+                 failure:failureBlock
+                    wait:wait];
+}
+
+- (void)performRequest:(NSURLRequest *)request
+             validator:(BOOL (^)(NSHTTPURLResponse *, id))validator
                success:(void (^)(NSHTTPURLResponse *response, id responseObject))successBlock
                failure:(void (^)(NSHTTPURLResponse *response, id responseObject, NSError *error))failureBlock
                   wait:(BOOL)wait
@@ -593,8 +618,17 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
         } else {
             NSTimeInterval costTime = -([operationEnqueueDate timeIntervalSinceNow] * 1000);
             LCLoggerDebug(LCLoggerDomainNetwork, LC_REST_RESPONSE_LOG_FORMAT, path, costTime, responseObject);
-            if (successBlock) {
-                successBlock(HTTPResponse, responseObject);
+            if (validator && !validator(HTTPResponse, responseObject)) {
+                if (failureBlock) {
+                    NSError *err = LCError(LCErrorInternalErrorCodeMalformedData,
+                                           @"Malformed response data.",
+                                           @{ @"responseObject" : responseObject ?: NSNull.null });
+                    failureBlock(HTTPResponse, responseObject, err);
+                }
+            } else {
+                if (successBlock) {
+                    successBlock(HTTPResponse, responseObject);
+                }
             }
         }
         if (wait) {
