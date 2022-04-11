@@ -553,6 +553,12 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 /// New query for followee objects.
 - (LCQuery *)followeeObjectsQuery;
 
+/// New query for friend list.
+- (LCQuery *)friendshipQuery;
+
+/// New query for block list.
+- (LCQuery *)friendshipBlockQuery;
+
 /**
  *  通过ID来关注其他用户
  *  @warning 如果需要被关注者收到消息 需要手动给他发送一条LCStatus.

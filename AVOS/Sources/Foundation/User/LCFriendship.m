@@ -42,31 +42,25 @@
 + (void)requestWithUserId:(NSString *)userId attributes:(NSDictionary *)attributes callback:(void (^)(BOOL, NSError * _Nullable))callback {
     if (!userId) {
         NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Parameter `userId` invalid.", nil);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            callback(false, error);
-        });
+        [LCUtils callBooleanResultBlock:callback error:error];
         return;
     }
     LCUser *currentUser = [LCUser currentUser];
     if (!currentUser.sessionToken) {
         NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Please signin an user.", nil);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            callback(false, error);
-        });
+        [LCUtils callBooleanResultBlock:callback error:error];
         return;
     }
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     parameters[@"user"] = [LCObjectUtils dictionaryFromObjectPointer:currentUser];
     parameters[@"friend"] = [LCObjectUtils dictionaryFromObjectPointer:[LCUser objectWithObjectId:userId]];
-    if (attributes) {
+    if (attributes && attributes.count > 0) {
         parameters[@"friendship"] = attributes;
     }
     [[LCPaasClient sharedInstance] postObject:@"users/friendshipRequests"
                                withParameters:parameters
                                         block:^(id  _Nullable object, NSError * _Nullable error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            callback(!error, error);
-        });
+        [LCUtils callBooleanResultBlock:callback error:error];
     }];
 }
 
@@ -75,61 +69,79 @@
 }
 
 + (void)acceptRequest:(LCFriendshipRequest *)request attributes:(NSDictionary *)attributes callback:(void (^)(BOOL, NSError * _Nullable))callback {
+    [self acceptOrDeclineRequest:request operation:@"accept" attributes:attributes callback:callback];
+}
+
++ (void)declineRequest:(LCFriendshipRequest *)request callback:(void (^)(BOOL, NSError * _Nullable))callback {
+    [self acceptOrDeclineRequest:request operation:@"decline" attributes:nil callback:callback];
+}
+
++ (void)acceptOrDeclineRequest:(LCFriendshipRequest *)request
+                     operation:(NSString *)operation
+                    attributes:(NSDictionary *)attributes
+                      callback:(void (^)(BOOL, NSError * _Nullable))callback
+{
     if (!request.objectId) {
         NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Parameter `request` invalid.", nil);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            callback(false, error);
-        });
+        [LCUtils callBooleanResultBlock:callback error:error];
         return;
     }
     LCUser *currentUser = [LCUser currentUser];
     if (!currentUser.sessionToken) {
         NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Please signin an user.", nil);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            callback(false, error);
-        });
+        [LCUtils callBooleanResultBlock:callback error:error];
         return;
     }
-    NSString *path = [NSString stringWithFormat:@"users/friendshipRequests/%@/accept", request.objectId];
+    NSString *path = [NSString stringWithFormat:@"users/friendshipRequests/%@/%@", request.objectId, operation];
     NSDictionary *parameters;
-    if (attributes) {
+    if (attributes && attributes.count > 0) {
         parameters = @{ @"friendship" : attributes };
     }
     [[LCPaasClient sharedInstance] putObject:path
                               withParameters:parameters
                                 sessionToken:currentUser.sessionToken
                                        block:^(id  _Nullable object, NSError * _Nullable error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            callback(!error, error);
-        });
+        [LCUtils callBooleanResultBlock:callback error:error];
     }];
 }
 
-+ (void)declineRequest:(LCFriendshipRequest *)request callback:(void (^)(BOOL, NSError * _Nullable))callback {
-    if (!request.objectId) {
-        NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Parameter `request` invalid.", nil);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            callback(false, error);
-        });
++ (void)blockFriendWithUserId:(NSString *)userId callback:(void (^)(BOOL, NSError * _Nullable))callback {
+    [self blockOrUnblockFriendWithUserId:userId isBlock:true callback:callback];
+}
+
++ (void)unblockFriendWithUserId:(NSString *)userId callback:(void (^)(BOOL, NSError * _Nullable))callback {
+    [self blockOrUnblockFriendWithUserId:userId isBlock:false callback:callback];
+}
+
++ (void)blockOrUnblockFriendWithUserId:(NSString *)userId
+                               isBlock:(BOOL)isBlock
+                              callback:(void (^)(BOOL, NSError * _Nullable))callback
+{
+    if (!userId) {
+        NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Parameter `userId` invalid.", nil);
+        [LCUtils callBooleanResultBlock:callback error:error];
         return;
     }
     LCUser *currentUser = [LCUser currentUser];
     if (!currentUser.sessionToken) {
         NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"Please signin an user.", nil);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            callback(false, error);
-        });
+        [LCUtils callBooleanResultBlock:callback error:error];
         return;
     }
-    NSString *path = [NSString stringWithFormat:@"users/friendshipRequests/%@/decline", request.objectId];
-    [[LCPaasClient sharedInstance] putObject:path
-                              withParameters:nil
-                                sessionToken:currentUser.sessionToken
-                                       block:^(id  _Nullable object, NSError * _Nullable error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            callback(!error, error);
-        });
-    }];
+    NSString *path = [NSString stringWithFormat:@"users/self/friendBlocklist/%@", userId];
+    if (isBlock) {
+        [[LCPaasClient sharedInstance] postObject:path
+                                   withParameters:nil
+                                            block:^(id  _Nullable object, NSError * _Nullable error) {
+            [LCUtils callBooleanResultBlock:callback error:error];
+        }];
+    } else {
+        [[LCPaasClient sharedInstance] deleteObject:path
+                                     withParameters:nil
+                                              block:^(id  _Nullable object, NSError * _Nullable error) {
+            [LCUtils callBooleanResultBlock:callback error:error];
+        }];
+    }
 }
 
 @end

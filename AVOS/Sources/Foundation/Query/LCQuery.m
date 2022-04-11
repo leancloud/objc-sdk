@@ -1003,7 +1003,11 @@ static NSString * quote(NSString *string)
 
 #pragma mark - Handle the data for communication with server
 - (NSString *)queryPath {
-    return [LCObjectUtils objectPath:self.className objectId:nil];
+    if (self.endpoint) {
+        return self.endpoint;
+    } else {
+        return [LCObjectUtils objectPath:self.className objectId:nil];
+    }
 }
 
 + (NSDictionary *)dictionaryFromIncludeKeys:(NSArray *)array {
