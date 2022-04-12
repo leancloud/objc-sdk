@@ -83,106 +83,106 @@ class LCUserTestCase: BaseTestCase {
         
     }
     
-  
-//    func testVerifyPhoneNumberBySMSCode() {
-//        let user = LCUser()
-//        let username = uuid
-//        let password = uuid
-//        let phoneNumber = LCUserTestCase.testablePhoneNumber
-//        user.username = username
-//        user.password = password
-//        user.mobilePhoneNumber = phoneNumber
-//        do {
-//            try user.signUp()
-//        } catch  {
-//            XCTFail()
-//        }
-//        expecting { (exp) in
-//            LCUser.logInWithUsername(
-//                inBackground: username,
-//                password: password)
-//            { (user, error) in
-//                XCTAssertTrue(Thread.isMainThread)
-//                XCTAssertNotNil(user)
-//                XCTAssertNil(error)
-//                XCTAssertTrue(user === LCUser.current())
-//                exp.fulfill()
-//            }
-//        }
-//        expecting { (exp) in
-//            LCUser.requestVerificationCode(
-//                forPhoneNumber: phoneNumber,
-//                options: nil)
-//            { (succeeded, error) in
-//                XCTAssertTrue(Thread.isMainThread)
-//                XCTAssertTrue(succeeded)
-//                XCTAssertNil(error)
-//                exp.fulfill()
-//            }
-//        }
-//        expecting { (exp) in
-//            LCUser.verifyCode(
-//                forPhoneNumber: phoneNumber,
-//                code: LCUserTestCase.testableSMSCode)
-//            { (succeeded, error) in
-//                XCTAssertTrue(Thread.isMainThread)
-//                XCTAssertTrue(succeeded)
-//                XCTAssertNil(error)
-//                exp.fulfill()
-//            }
-//        }
-//    }
-
-//    func testUpdatePhoneNumberBySMSCode() {
-//        let user = LCUser()
-//        let username = uuid
-//        let password = uuid
-//        let phoneNumber = LCUserTestCase.testablePhoneNumber
-//        user.username = username
-//        user.password = password
-//        user.mobilePhoneNumber = phoneNumber
-//        do {
-//            try user.signUp()
-//        } catch  {
-//            XCTFail()
-//        }
-//
-//        expecting { (exp) in
-//            LCUser.logInWithUsername(
-//                inBackground: username,
-//                password: password)
-//            { (user, error) in
-//                XCTAssertTrue(Thread.isMainThread)
-//                XCTAssertNotNil(user)
-//                XCTAssertNil(error)
-//                XCTAssertTrue(user === LCUser.current())
-//                exp.fulfill()
-//            }
-//        }
-//        expecting { (exp) in
-//            LCUser.requestVerificationCode(
-//                forUpdatingPhoneNumber: phoneNumber,
-//                options: nil)
-//            { (succeeded, error) in
-//                XCTAssertTrue(Thread.isMainThread)
-//                XCTAssertTrue(succeeded)
-//                XCTAssertNil(error)
-//                exp.fulfill()
-//            }
-//        }
-//        expecting { (exp) in
-//            LCUser.verifyCode(
-//                toUpdatePhoneNumber: phoneNumber,
-//                code: LCUserTestCase.testableSMSCode)
-//            { (succeeded, error) in
-//                XCTAssertTrue(Thread.isMainThread)
-//                XCTAssertTrue(succeeded)
-//                XCTAssertNil(error)
-//                exp.fulfill()
-//            }
-//        }
-//    }
-
+    
+    //    func testVerifyPhoneNumberBySMSCode() {
+    //        let user = LCUser()
+    //        let username = uuid
+    //        let password = uuid
+    //        let phoneNumber = LCUserTestCase.testablePhoneNumber
+    //        user.username = username
+    //        user.password = password
+    //        user.mobilePhoneNumber = phoneNumber
+    //        do {
+    //            try user.signUp()
+    //        } catch  {
+    //            XCTFail()
+    //        }
+    //        expecting { (exp) in
+    //            LCUser.logInWithUsername(
+    //                inBackground: username,
+    //                password: password)
+    //            { (user, error) in
+    //                XCTAssertTrue(Thread.isMainThread)
+    //                XCTAssertNotNil(user)
+    //                XCTAssertNil(error)
+    //                XCTAssertTrue(user === LCUser.current())
+    //                exp.fulfill()
+    //            }
+    //        }
+    //        expecting { (exp) in
+    //            LCUser.requestVerificationCode(
+    //                forPhoneNumber: phoneNumber,
+    //                options: nil)
+    //            { (succeeded, error) in
+    //                XCTAssertTrue(Thread.isMainThread)
+    //                XCTAssertTrue(succeeded)
+    //                XCTAssertNil(error)
+    //                exp.fulfill()
+    //            }
+    //        }
+    //        expecting { (exp) in
+    //            LCUser.verifyCode(
+    //                forPhoneNumber: phoneNumber,
+    //                code: LCUserTestCase.testableSMSCode)
+    //            { (succeeded, error) in
+    //                XCTAssertTrue(Thread.isMainThread)
+    //                XCTAssertTrue(succeeded)
+    //                XCTAssertNil(error)
+    //                exp.fulfill()
+    //            }
+    //        }
+    //    }
+    
+    //    func testUpdatePhoneNumberBySMSCode() {
+    //        let user = LCUser()
+    //        let username = uuid
+    //        let password = uuid
+    //        let phoneNumber = LCUserTestCase.testablePhoneNumber
+    //        user.username = username
+    //        user.password = password
+    //        user.mobilePhoneNumber = phoneNumber
+    //        do {
+    //            try user.signUp()
+    //        } catch  {
+    //            XCTFail()
+    //        }
+    //
+    //        expecting { (exp) in
+    //            LCUser.logInWithUsername(
+    //                inBackground: username,
+    //                password: password)
+    //            { (user, error) in
+    //                XCTAssertTrue(Thread.isMainThread)
+    //                XCTAssertNotNil(user)
+    //                XCTAssertNil(error)
+    //                XCTAssertTrue(user === LCUser.current())
+    //                exp.fulfill()
+    //            }
+    //        }
+    //        expecting { (exp) in
+    //            LCUser.requestVerificationCode(
+    //                forUpdatingPhoneNumber: phoneNumber,
+    //                options: nil)
+    //            { (succeeded, error) in
+    //                XCTAssertTrue(Thread.isMainThread)
+    //                XCTAssertTrue(succeeded)
+    //                XCTAssertNil(error)
+    //                exp.fulfill()
+    //            }
+    //        }
+    //        expecting { (exp) in
+    //            LCUser.verifyCode(
+    //                toUpdatePhoneNumber: phoneNumber,
+    //                code: LCUserTestCase.testableSMSCode)
+    //            { (succeeded, error) in
+    //                XCTAssertTrue(Thread.isMainThread)
+    //                XCTAssertTrue(succeeded)
+    //                XCTAssertNil(error)
+    //                exp.fulfill()
+    //            }
+    //        }
+    //    }
+    
     
     func testLogOut() {
         var uid1: String?
@@ -227,11 +227,14 @@ class LCUserTestCase: BaseTestCase {
             }
         }
         
-        guard let _ = user_1.objectId,
-              LCUser.current() === user_1 else {
+        guard
+            let _ = user_1.objectId,
+            LCUser.current() === user_1
+        else {
             XCTFail()
             return
         }
+        
         LCUser.logOut()
         
         let user_2 = LCUser()
@@ -243,8 +246,10 @@ class LCUserTestCase: BaseTestCase {
             }
         }
         
-        guard let _ = user_2.objectId,
-              LCUser.current() === user_2 else {
+        guard
+            let _ = user_2.objectId,
+            LCUser.current() === user_2
+        else {
             XCTFail()
             return
         }
@@ -258,8 +263,8 @@ class LCUserTestCase: BaseTestCase {
         }
         
         LCUser.changeCurrentUser(user_1, save: false)
-        
         var query: LCQuery!
+        
         expecting(description: "Accept Friendship Request", count: 2) { exp in
             query = LCFriendshipRequest.query()
             query.findObjectsInBackground { requests, error in
@@ -332,11 +337,14 @@ class LCUserTestCase: BaseTestCase {
             }
         }
         
-        guard let _ = user_1.objectId,
-              LCUser.current() === user_1 else {
+        guard
+            let _ = user_1.objectId,
+            LCUser.current() === user_1
+        else {
             XCTFail()
             return
         }
+        
         LCUser.logOut()
         
         let user_2 = LCUser()
@@ -348,8 +356,10 @@ class LCUserTestCase: BaseTestCase {
             }
         }
         
-        guard let _ = user_2.objectId,
-              LCUser.current() === user_2 else {
+        guard
+            let _ = user_2.objectId,
+            LCUser.current() === user_2
+        else {
             XCTFail()
             return
         }
@@ -363,8 +373,8 @@ class LCUserTestCase: BaseTestCase {
         }
         
         LCUser.changeCurrentUser(user_1, save: false)
-        
         var query: LCQuery!
+        
         expecting(description: "Decline Friendship Request", count: 2) { exp in
             query = LCFriendshipRequest.query()
             query.findObjectsInBackground { requests, error in
@@ -403,6 +413,119 @@ class LCUserTestCase: BaseTestCase {
                     XCTAssertNil(error)
                     exp.fulfill()
                 })
+            }
+        }
+    }
+    
+    func testFriendshipBlockAndUnblockAndQuery() {
+        let user_1 = LCUser()
+        expecting { exp in
+            user_1.login(withAuthData: ["openid": uuid], platformId: "test", options: nil) { succeeded, error in
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+        
+        guard
+            let _ = user_1.objectId,
+            LCUser.current() === user_1
+        else {
+            XCTFail()
+            return
+        }
+        
+        LCUser.logOut()
+        
+        let user_2 = LCUser()
+        expecting { exp in
+            user_2.login(withAuthData: ["openid": uuid], platformId: "test", options: nil) { succeeded, error in
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+        
+        guard
+            let _ = user_2.objectId,
+            LCUser.current() === user_2
+        else {
+            XCTFail()
+            return
+        }
+        
+        expecting { exp in
+            LCFriendship.request(withUserId: user_1.objectId!, attributes: ["group": "sport"]) { succeeded, error in
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+        
+        LCUser.changeCurrentUser(user_1, save: false)
+        
+        var query: LCQuery!
+        expecting(description: "Accept Friendship Request", count: 2) { exp in
+            query = LCFriendshipRequest.query()
+            query.findObjectsInBackground { requests, error in
+                let request = requests?.first as? LCFriendshipRequest
+                let friend = request?["friend"] as? LCUser
+                let user = request?["user"] as? LCUser
+                XCTAssertNotNil(request)
+                XCTAssertNotNil(friend)
+                XCTAssertNotNil(user)
+                XCTAssertNil(error)
+                exp.fulfill()
+                if let request = request {
+                    LCFriendship.accept(request, attributes: ["group": "music"]) { succeeded, error in
+                        XCTAssertTrue(succeeded)
+                        XCTAssertNil(error)
+                        exp.fulfill()
+                    }
+                }
+            }
+        }
+        
+        expecting { exp in
+            query = user_1.friendshipQuery()
+            query.includeKey("followee")
+            query.findObjectsInBackground { followees, error in
+                let first = followees?.first as? LCObject
+                let followee = first?["followee"] as? LCObject
+                XCTAssertNotNil(followee)
+                XCTAssertNotNil(followee?["username"] as? String)
+                XCTAssertEqual(first?["group"] as? String, "music")
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+        
+        expecting { exp in
+            LCFriendship.blockFriend(withUserId: user_2.objectId!) { succeeded, error in
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+        
+        expecting { exp in
+            query = user_1.friendshipBlockQuery()
+            query.includeKey("blockedUser")
+            query.findObjectsInBackground { blockedUsers, error in
+                let first = blockedUsers?.first as? LCObject
+                let blockedUser = first?["blockedUser"] as? LCObject
+                XCTAssertNotNil(blockedUser)
+                XCTAssertNotNil(blockedUser?["username"] as? String)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+        
+        expecting { exp in
+            LCFriendship.unblockFriend(withUserId: user_2.objectId!) { succeeded, error in
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                exp.fulfill()
             }
         }
     }
