@@ -13,6 +13,7 @@
 @property (nonatomic, readwrite, strong) NSMutableDictionary *where;
 @property (nonatomic) NSMutableSet<NSString *> *selectedKeys;
 @property (nonatomic, strong) NSMutableDictionary *extraParameters;
+@property (nonatomic) NSString *endpoint;
 
 - (NSMutableDictionary *)assembleParameters;
 + (NSDictionary *)dictionaryFromIncludeKeys:(NSArray *)array;

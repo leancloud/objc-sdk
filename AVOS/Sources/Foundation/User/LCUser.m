@@ -1345,6 +1345,18 @@ static BOOL enableAutomatic = NO;
     return query;
 }
 
+- (LCQuery *)friendshipQuery {
+    LCQuery *query = [LCQuery queryWithClassName:@"_Followee"];
+    query.endpoint = @"users/self/friends";
+    return query;
+}
+
+- (LCQuery *)friendshipBlockQuery {
+    LCQuery *query = [LCQuery queryWithClassName:@"_Blocklist"];
+    query.endpoint = @"users/self/friendBlocklist";
+    return query;
+}
+
 - (void)follow:(NSString *)userId andCallback:(LCBooleanResultBlock)callback {
     [self follow:userId userDictionary:nil andCallback:callback];
 }

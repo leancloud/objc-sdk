@@ -61,6 +61,18 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)declineRequest:(LCFriendshipRequest *)request
               callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
 
+/// Block a friend by user id.
+/// @param userId The `objectId` of the user.
+/// @param callback Result callback.
++ (void)blockFriendWithUserId:(NSString *)userId
+                     callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
+
+/// Unblock a friend by user id.
+/// @param userId The `objectId` of the user.
+/// @param callback Result callback.
++ (void)unblockFriendWithUserId:(NSString *)userId
+                       callback:(void (^)(BOOL succeeded, NSError * _Nullable error))callback;
+
 @end
 
 NS_ASSUME_NONNULL_END
