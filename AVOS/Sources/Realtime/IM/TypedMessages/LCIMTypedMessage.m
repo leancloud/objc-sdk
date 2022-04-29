@@ -174,6 +174,10 @@ NSMutableDictionary<NSNumber *, Class> const *_typeDict = nil;
 
 - (void)setText:(NSString *)text
 {
+    if (text && ![NSString _lc_isTypeOf:text]) {
+        [NSException raise:NSInvalidArgumentException
+                    format:@"The type of text is not `NSString`."];
+    }
     self.messageObject._lctext = text;
 }
 
