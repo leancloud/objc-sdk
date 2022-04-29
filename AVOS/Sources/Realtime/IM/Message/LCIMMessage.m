@@ -28,6 +28,10 @@ const LCIMMessageMediaType LCIMMessageMediaTypeRecalled = -127;
 @implementation LCIMMessage
 
 + (instancetype)messageWithContent:(NSString *)content {
+    if (content && ![NSString _lc_isTypeOf:content]) {
+        [NSException raise:NSInvalidArgumentException
+                    format:@"The type of content is not `NSString`."];
+    }
     LCIMMessage *message = [[self alloc] init];
     message.content = content;
     return message;
