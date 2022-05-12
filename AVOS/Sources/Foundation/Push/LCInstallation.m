@@ -11,6 +11,7 @@
 #import "LCPersistenceUtils.h"
 #import "LCErrorUtils.h"
 #import "LCRouter_Internal.h"
+#import "LCLogger.h"
 
 @implementation LCInstallation {
     NSString *_deviceToken;
@@ -43,12 +44,10 @@
     dispatch_once(&onceToken, ^{
         instance = [LCInstallation installation];
         NSString *path = [LCPersistenceUtils currentInstallationArchivePath];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-            NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:
-                                               [LCPersistenceUtils getJSONFromPath:path]];
-            if (dictionary) {
-                [LCObjectUtils copyDictionary:dictionary
-                                     toObject:instance];
+        if (path && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
+            NSDictionary *dictionary = [LCPersistenceUtils getJSONFromPath:path];
+            if ([dictionary isKindOfClass:[NSDictionary class]]) {
+                [LCObjectUtils copyDictionary:dictionary toObject:instance];
             }
         }
     });
@@ -58,6 +57,17 @@
 + (instancetype)currentInstallation
 {
     return [LCInstallation defaultInstallation];
+}
+
++ (void)clearPersistentCache {
+    NSString *path = [LCPersistenceUtils currentInstallationArchivePath];
+    if (path && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        NSError *error = nil;
+        [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
+        if (error) {
+            LCLoggerError(LCLoggerDomainStorage, @"Error: %@", error);
+        }
+    }
 }
 
 + (NSString *)deviceType

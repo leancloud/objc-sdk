@@ -47,6 +47,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// For compatibility, same as the `defaultInstallation`.
 + (instancetype)currentInstallation;
 
+/// Clear default/current installation's Persistent Cache.
++ (void)clearPersistentCache;
+
 /// Create a new installation instance.
 + (instancetype)installation;
 
