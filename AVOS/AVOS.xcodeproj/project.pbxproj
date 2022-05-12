@@ -326,6 +326,7 @@
 		D3A3FA39269ECD40002531C7 /* LCFriendship.h in Headers */ = {isa = PBXBuildFile; fileRef = D3A3FA37269ECD40002531C7 /* LCFriendship.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D3A3FA3A269ECD40002531C7 /* LCFriendship.m in Sources */ = {isa = PBXBuildFile; fileRef = D3A3FA38269ECD40002531C7 /* LCFriendship.m */; };
 		D3AD74AB24BC216200D1BBEE /* LCUserTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AD74AA24BC216200D1BBEE /* LCUserTestCase.swift */; };
+		D3D41AA9282D226800F6E5CD /* LCInstallationTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D41AA8282D226800F6E5CD /* LCInstallationTestCase.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -613,6 +614,7 @@
 		D3A3FA38269ECD40002531C7 /* LCFriendship.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCFriendship.m; sourceTree = "<group>"; };
 		D3AD74AA24BC216200D1BBEE /* LCUserTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCUserTestCase.swift; sourceTree = "<group>"; };
 		D3C53FCB2106D84A00D48686 /* LCIMClientProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LCIMClientProtocol.h; sourceTree = "<group>"; };
+		D3D41AA8282D226800F6E5CD /* LCInstallationTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCInstallationTestCase.swift; sourceTree = "<group>"; };
 		D3D6E43923544F520048E58F /* LCGPBExtensionRegistry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCGPBExtensionRegistry.m; sourceTree = "<group>"; };
 		D3D6E43A23544F520048E58F /* LCGPBApi.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBApi.pbobjc.h; sourceTree = "<group>"; };
 		D3D6E43B23544F520048E58F /* LCGPBEmpty.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCGPBEmpty.pbobjc.h; sourceTree = "<group>"; };
@@ -1277,6 +1279,7 @@
 				C43D444427281D39006A31FD /* LCTestObject.h */,
 				C43D444527281D39006A31FD /* LCTestObject.m */,
 				D30B6B6124A0A933006ABE09 /* BaseTestCase.swift */,
+				D3D41AA8282D226800F6E5CD /* LCInstallationTestCase.swift */,
 				D3AD74AA24BC216200D1BBEE /* LCUserTestCase.swift */,
 				C4B25E3C27267DE700F9414F /* LCObjectTestCase.swift */,
 				D313717F26BBDAC200123756 /* LCQueryTestCase.swift */,
@@ -1868,6 +1871,7 @@
 			files = (
 				D30B6B6224A0A933006ABE09 /* BaseTestCase.swift in Sources */,
 				D313718026BBDAC200123756 /* LCQueryTestCase.swift in Sources */,
+				D3D41AA9282D226800F6E5CD /* LCInstallationTestCase.swift in Sources */,
 				C497E8C52760A77300441160 /* LCPushTestCase.swift in Sources */,
 				C4B7A99327698C4A00D8833B /* LCIMClientTestCase.swift in Sources */,
 				D36A095A25BEA75000A4F312 /* IMMessageTestCase.swift in Sources */,

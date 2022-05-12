@@ -14,4 +14,4 @@
 #import "LCTestObject.h"
 #import "LCIMConversation_Internal.h"
 #import "LCIMMessage_Internal.h"
-
+#import "LCPersistenceUtils.h"
