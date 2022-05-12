@@ -151,6 +151,44 @@ class IMClientTestCase: RTMBaseTestCase {
             NotificationCenter.default.removeObserver(observer)
         }
     }
+    
+    func testDisableAutoBindingInstallation() {
+        let installation = LCInstallation.default()
+        let option = LCIMClientOption()
+        option.isAutoBindingInstallationDisabled = true
+        let client = try! LCIMClient(clientId: uuid, option: option)
+        XCTAssertNil(client.installation)
+        XCTAssertNil(client.currentDeviceToken)
+        expecting { (exp) in
+            client.open { (success, error) in
+                XCTAssertTrue(success)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+        let deviceToken = uuid
+        var observer: NSObjectProtocol?
+        expecting(timeout: 5, expectation: {
+            let exp = self.expectation(description: "will not upload deviceToken")
+            exp.expectedFulfillmentCount = 1
+            exp.isInverted = true
+            return exp
+        }) { (exp) in
+            observer = NotificationCenter.default.addObserver(
+                forName: NSNotification.Name(rawValue: "Test.LCIMClient.reportDeviceToken"),
+                object: nil,
+                queue: .main)
+            { (notification) in
+                XCTAssertNil(notification.userInfo?["error"])
+                exp.fulfill()
+            }
+            installation.setDeviceTokenHexString(deviceToken, teamId: "LeanCloud")
+        }
+        XCTAssertNil(client.installation)
+        XCTAssertNil(client.currentDeviceToken)
+        XCTAssertNotNil(observer)
+        if let observer = observer {
+            NotificationCenter.default.removeObserver(observer)
+        }
+    }
 }
-
-

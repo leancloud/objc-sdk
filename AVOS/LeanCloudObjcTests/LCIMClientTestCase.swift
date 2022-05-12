@@ -250,7 +250,7 @@ class LCIMClientTestCase: RTMBaseTestCase {
         XCTAssertTrue(installation1.save())
         
         let delegator1 = LCIMClientDelegator.init()
-        let client1: LCIMClient! = try? LCIMClient.init(clientId: clientID, tag: tag, installation: installation1)
+        let client1: LCIMClient! = try? LCIMClient.init(clientId: clientID, tag: tag, option: nil, installation: installation1)
         XCTAssertNotNil(client1)
         client1.delegate = delegator1
         expecting { (exp) in
@@ -269,7 +269,7 @@ class LCIMClientTestCase: RTMBaseTestCase {
         XCTAssertTrue(installation2.save())
         
         let delegator2 = LCIMClientDelegator.init()
-        let client2: LCIMClient! = try? LCIMClient.init(clientId: clientID, tag: tag, installation: installation2)
+        let client2: LCIMClient! = try? LCIMClient.init(clientId: clientID, tag: tag, option: nil, installation: installation2)
         XCTAssertNotNil(client2)
         client2.delegate = delegator2
         
