@@ -36,6 +36,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+/// The option of the client.
+@interface LCIMClientOption : NSObject
+
+/// Set with `true` means disabling auto-binding current/default installation and client.
+@property (nonatomic) BOOL isAutoBindingInstallationDisabled;
+
+@end
+
 /// IM Client.
 @interface LCIMClient : NSObject
 
@@ -75,6 +83,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable instancetype)initWithClientId:(NSString *)clientId
                                     error:(NSError * __autoreleasing *)error;
 
+/// Initializing with an ID and an option.
+/// @param clientId The length of the ID should in range `[1, 64]`.
+/// @param option See `LCIMClientOption`.
+/// @param error Throws exception when error occurred.
+- (nullable instancetype)initWithClientId:(NSString *)clientId
+                                   option:(LCIMClientOption * _Nullable)option
+                                    error:(NSError * __autoreleasing *)error;
+
 /// Initializing with an ID and a tag.
 /// @param clientId The length of the ID should in range `[1, 64]`.
 /// @param tag Using a tag to specify the context, `@"default"` is reserved.
@@ -83,10 +99,28 @@ NS_ASSUME_NONNULL_BEGIN
                                       tag:(NSString * _Nullable)tag
                                     error:(NSError * __autoreleasing *)error;
 
+/// Initializing with an ID, a tag and an option.
+/// @param clientId The length of the ID should in range `[1, 64]`.
+/// @param tag Using a tag to specify the context, `@"default"` is reserved.
+/// @param option See `LCIMClientOption`.
+/// @param error Throws exception when error occurred.
+- (nullable instancetype)initWithClientId:(NSString *)clientId
+                                      tag:(NSString * _Nullable)tag
+                                   option:(LCIMClientOption * _Nullable)option
+                                    error:(NSError * __autoreleasing *)error;
+
 /// Initializing with an `LCUser`.
 /// @param user The user should have logged in.
 /// @param error Throws exception when error occurred.
 - (nullable instancetype)initWithUser:(LCUser *)user
+                                error:(NSError * __autoreleasing *)error;
+
+/// Initializing with an `LCUser` and an option.
+/// @param user The user should have logged in.
+/// @param option See `LCIMClientOption`.
+/// @param error Throws exception when error occurred.
+- (nullable instancetype)initWithUser:(LCUser *)user
+                               option:(LCIMClientOption * _Nullable)option
                                 error:(NSError * __autoreleasing *)error;
 
 /// Initializing with an `LCUser` and a tag.
@@ -95,6 +129,16 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param error Throws exception when error occurred.
 - (nullable instancetype)initWithUser:(LCUser *)user
                                   tag:(NSString * _Nullable)tag
+                                error:(NSError * __autoreleasing *)error;
+
+/// Initializing with an `LCUser`, a tag and an option.
+/// @param user The user should have logged in.
+/// @param tag Using a tag to specify the context, `@"default"` is reserved.
+/// @param option See `LCIMClientOption`.
+/// @param error Throws exception when error occurred.
+- (nullable instancetype)initWithUser:(LCUser *)user
+                                  tag:(NSString * _Nullable)tag
+                               option:(LCIMClientOption * _Nullable)option
                                 error:(NSError * __autoreleasing *)error;
 
 // MARK: Open & Close

@@ -47,6 +47,10 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 @end
 
+@implementation LCIMClientOption
+
+@end
+
 @implementation LCIMClient {
     LCIMClientStatus _status;
 }
@@ -75,41 +79,64 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 - (instancetype)initWithClientId:(NSString *)clientId
                            error:(NSError *__autoreleasing  _Nullable *)error
 {
-    return [self initWithClientId:clientId
-                              tag:nil
-                            error:error];
+    return [self initWithClientId:clientId tag:nil error:error];
+}
+
+- (instancetype)initWithClientId:(NSString *)clientId
+                          option:(LCIMClientOption *)option
+                           error:(NSError *__autoreleasing  _Nullable *)error
+{
+    return [self initWithClientId:clientId tag:nil option:option error:error];
 }
 
 - (instancetype)initWithClientId:(NSString *)clientId
                              tag:(NSString *)tag
                            error:(NSError *__autoreleasing  _Nullable *)error
 {
-    return [self initWithClientId:clientId
-                              tag:tag
-                     installation:[LCInstallation defaultInstallation]
-                            error:error];
+    return [self initWithClientId:clientId tag:tag option:nil error:error];
+}
+
+- (instancetype)initWithClientId:(NSString *)clientId
+                             tag:(NSString *)tag
+                          option:(LCIMClientOption *)option
+                           error:(NSError *__autoreleasing  _Nullable *)error
+{
+    LCInstallation *installation = [LCInstallation defaultInstallation];
+    return [self initWithClientId:clientId tag:tag option:option installation:installation error:error];
 }
 
 - (instancetype)initWithUser:(LCUser *)user
                        error:(NSError *__autoreleasing  _Nullable *)error
 {
-    return [self initWithUser:user
-                          tag:nil
-                        error:error];
+    return [self initWithUser:user tag:nil error:error];
+}
+
+- (instancetype)initWithUser:(LCUser *)user
+                      option:(LCIMClientOption *)option
+                       error:(NSError *__autoreleasing  _Nullable *)error
+{
+    return [self initWithUser:user tag:nil option:option error:error];
 }
 
 - (instancetype)initWithUser:(LCUser *)user
                          tag:(NSString *)tag
                        error:(NSError *__autoreleasing  _Nullable *)error
 {
-    return [self initWithUser:user
-                          tag:tag
-                 installation:[LCInstallation defaultInstallation]
-                        error:error];
+    return [self initWithUser:user tag:tag option:nil error:error];
+}
+
+- (instancetype)initWithUser:(LCUser *)user
+                         tag:(NSString *)tag
+                      option:(LCIMClientOption *)option
+                       error:(NSError *__autoreleasing  _Nullable *)error
+{
+    LCInstallation *installation = [LCInstallation defaultInstallation];
+    return [self initWithUser:user tag:tag option:option installation:installation error:error];
 }
 
 - (instancetype)initWithClientId:(NSString *)clientId
                              tag:(NSString *)tag
+                          option:(LCIMClientOption *)option
                     installation:(LCInstallation *)installation
                            error:(NSError *__autoreleasing  _Nullable *)error
 {
@@ -117,6 +144,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
     if (self) {
         NSError *err = [self doInitializationWithClientId:clientId
                                                       tag:tag
+                                                   option:option
                                              installation:installation];
         if (err) {
             if (error) {
@@ -130,6 +158,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 - (instancetype)initWithUser:(LCUser *)user
                          tag:(NSString *)tag
+                      option:(LCIMClientOption *)option
                 installation:(LCInstallation *)installation
                        error:(NSError *__autoreleasing  _Nullable *)error
 {
@@ -138,6 +167,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
         _user = user;
         NSError *err = [self doInitializationWithClientId:user.objectId
                                                       tag:tag
+                                                   option:option
                                              installation:installation];
         if (err) {
             if (error) {
@@ -151,6 +181,7 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 
 - (NSError *)doInitializationWithClientId:(NSString *)clientId
                                       tag:(NSString *)tag
+                                   option:(LCIMClientOption *)option
                              installation:(LCInstallation *)installation
 {
     if (!clientId ||
@@ -212,14 +243,17 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
                                                                    delegate:self
                                                                       queue:_internalSerialQueue];
     _conversationManager = [[LCIMClientInternalConversationManager alloc] initWithClient:self];
-    _installation = installation;
-    _currentDeviceToken = installation.deviceToken;
-    [installation addObserver:self
-                   forKeyPath:keyPath(installation, deviceToken)
-                      options:(NSKeyValueObservingOptionNew |
-                               NSKeyValueObservingOptionOld |
-                               NSKeyValueObservingOptionInitial)
-                      context:(__bridge void *)(self)];
+    BOOL isAutoBindingInstallationEnabled = (option ? !option.isAutoBindingInstallationDisabled : true);
+    if (isAutoBindingInstallationEnabled) {
+        _installation = installation;
+        _currentDeviceToken = installation.deviceToken;
+        [installation addObserver:self
+                       forKeyPath:keyPath(installation, deviceToken)
+                          options:(NSKeyValueObservingOptionNew |
+                                   NSKeyValueObservingOptionOld |
+                                   NSKeyValueObservingOptionInitial)
+                          context:(__bridge void *)(self)];
+    }
     _conversationCache = ({
         LCIMConversationCache *cache = [[LCIMConversationCache alloc] initWithClientId:_clientId];
         cache.client = self;
@@ -1815,7 +1849,8 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn)
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if (context == (__bridge void *)(self)) {
-        if ([keyPath isEqualToString:keyPath(self.installation, deviceToken)] &&
+        if (self.installation &&
+            [keyPath isEqualToString:keyPath(self.installation, deviceToken)] &&
             object == self.installation) {
             NSString *oldToken = [NSString _lc_decoding:change key:NSKeyValueChangeOldKey];
             NSString *newToken = [NSString _lc_decoding:change key:NSKeyValueChangeNewKey];

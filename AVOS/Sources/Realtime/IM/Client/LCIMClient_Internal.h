@@ -57,11 +57,13 @@ void assertContextOfQueue(dispatch_queue_t queue, BOOL isRunIn);
 
 - (instancetype)initWithClientId:(NSString *)clientId
                              tag:(NSString *)tag
+                          option:(LCIMClientOption *)option
                     installation:(LCInstallation *)installation
                            error:(NSError * __autoreleasing *)error;
 
 - (instancetype)initWithUser:(LCUser *)user
                          tag:(NSString *)tag
+                      option:(LCIMClientOption *)option
                 installation:(LCInstallation *)installation
                        error:(NSError * __autoreleasing *)error;
 
