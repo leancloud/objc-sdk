@@ -565,4 +565,86 @@ class LCLeaderboardTestCase: BaseTestCase {
             }
         }
     }
+    
+    func testGetGroupUserRankings() {
+        let object = LCObject()
+        XCTAssertTrue(object.save())
+        let user = LCUser()
+        let objectFieldKey = "objectField"
+        user[objectFieldKey] = object
+        expecting { exp in
+            user.login(withAuthData: ["openid" : uuid], platformId: "test", options: nil) { _, error in
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+        guard let userObjectId = user.objectId else {
+            XCTFail()
+            return
+        }
+        
+        let statisticName0 = "test-user-0"
+        let statisticName1 = "test-user-1"
+        var statistic0version = -1
+        var statistic1version = -1
+        
+        expecting { exp in
+            LCLeaderboard.updateCurrentUserStatistics(
+                [statisticName0 : 100,
+                 statisticName1 : 100])
+            { statistics, error in
+                XCTAssertEqual(statistics?.count, 2)
+                XCTAssertNil(error)
+                XCTAssertNotEqual(statistics?.first?.name, statistics?.last?.name)
+                for item in statistics ?? [] {
+                    XCTAssertTrue([statisticName0, statisticName1].contains(item.name ?? ""))
+                    XCTAssertEqual(item.value, 100)
+                    XCTAssertGreaterThanOrEqual(item.version, 0)
+                    if (item.name ?? "") == statisticName0 {
+                        statistic0version = item.version
+                    } else {
+                        statistic1version = item.version
+                    }
+                }
+                exp.fulfill()
+            }
+        }
+        
+        let leaderboard0 = LCLeaderboard(statisticName: statisticName0)
+        let leaderboard1 = LCLeaderboard(statisticName: statisticName1)
+        let option = LCLeaderboardQueryOption()
+        option.selectKeys = [objectFieldKey]
+        option.includeKeys = [objectFieldKey]
+        
+        expecting(count: 2) { exp in
+            leaderboard0.limit = 1
+            leaderboard0.includeStatistics = [statisticName1]
+            leaderboard0.version = statistic0version
+            leaderboard0.getGroupUserResults(withUserIds: [userObjectId], aroundUser: userObjectId, option: option) { rankings, error in
+                XCTAssertEqual(rankings?.count, 1)
+                XCTAssertNil(error)
+                for item in rankings ?? [] {
+                    XCTAssertEqual(item.statisticName, leaderboard0.statisticName)
+                    XCTAssertGreaterThanOrEqual(item.rank, 0)
+                    XCTAssertEqual(item.value, 100)
+                    XCTAssertEqual(item.includedStatistics?.first?.name, statisticName1)
+                    XCTAssertEqual(item.includedStatistics?.first?.value, 100)
+                    XCTAssertEqual(item.user?.objectId, userObjectId)
+                    XCTAssertNotNil((item.user?[objectFieldKey] as? LCObject)?.createdAt)
+                    XCTAssertNil(item.object)
+                    XCTAssertNil(item.entity)
+                }
+                exp.fulfill()
+            }
+            leaderboard1.skip = 1
+            leaderboard1.version = statistic1version
+            leaderboard1.getGroupUserResults(withUserIds: [userObjectId], option: option) { rankings, error in
+                for item in rankings ?? [] {
+                    XCTAssertNotEqual(item.rank, 0)
+                }
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+    }
 }

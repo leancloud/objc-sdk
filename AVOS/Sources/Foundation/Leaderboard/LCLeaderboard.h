@@ -184,6 +184,24 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)getEntityResultsAroundEntity:(NSString * _Nullable)entity
                             callback:(void (^)(NSArray<LCLeaderboardRanking *> * _Nullable rankings, NSInteger count, NSError * _Nullable error))callback;
 
+/// Get rankings of a group of user on this leaderboard.
+/// @param userIds A group of user's object id.
+/// @param option The query option, see `LCLeaderboardQueryOption`.
+/// @param callback Result callback.
+- (void)getGroupUserResultsWithUserIds:(NSArray<NSString *> *)userIds
+                                option:(LCLeaderboardQueryOption * _Nullable)option
+                              callback:(void (^)(NSArray<LCLeaderboardRanking *> * _Nullable rankings, NSError * _Nullable error))callback;
+
+/// Get rankings of a group of user around one user on this leaderboard.
+/// @param userIds A group of user's object id.
+/// @param userId The object id of the around user.
+/// @param option The query option, see `LCLeaderboardQueryOption`.
+/// @param callback Result callback.
+- (void)getGroupUserResultsWithUserIds:(NSArray<NSString *> *)userIds
+                            aroundUser:(NSString * _Nullable)userId
+                                option:(LCLeaderboardQueryOption * _Nullable)option
+                              callback:(void (^)(NSArray<LCLeaderboardRanking *> * _Nullable rankings, NSError * _Nullable error))callback;
+
 @end
 
 NS_ASSUME_NONNULL_END

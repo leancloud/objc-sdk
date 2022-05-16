@@ -256,6 +256,7 @@
         });
         return;
     }
+    NSDictionary *parameters = @{ @"ids" : identities };
     NSString *path = [NSString stringWithFormat:@"leaderboard/%@/statistics/%@", leaderboardPath, self.statisticName];
     if (option) {
         NSMutableArray<NSString *> *queryStrings = [NSMutableArray array];
@@ -274,7 +275,7 @@
         }
     }
     [[LCPaasClient sharedInstance] postObject:path
-                               withParameters:identities
+                               withParameters:parameters
                                         block:^(id  _Nullable object, NSError * _Nullable error) {
         [[self class] handleStatisticsCallback:callback error:error object:object];
     }];
@@ -385,6 +386,98 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 callback(nil, -1, error);
             });
+        }
+    }];
+}
+
+- (void)getGroupUserResultsWithUserIds:(NSArray<NSString *> *)userIds
+                                option:(LCLeaderboardQueryOption *)option
+                              callback:(void (^)(NSArray<LCLeaderboardRanking *> * _Nullable, NSError * _Nullable))callback
+{
+    [self getGroupUserResultsWithIdentities:userIds
+                            leaderboardPath:LCLeaderboardPathUser
+                             aroundIdentity:nil
+                                     option:option
+                                   callback:callback];
+}
+
+- (void)getGroupUserResultsWithUserIds:(NSArray<NSString *> *)userIds
+                            aroundUser:(NSString *)userId
+                                option:(LCLeaderboardQueryOption *)option
+                              callback:(void (^)(NSArray<LCLeaderboardRanking *> * _Nullable, NSError * _Nullable))callback
+{
+    [self getGroupUserResultsWithIdentities:userIds
+                            leaderboardPath:LCLeaderboardPathUser
+                             aroundIdentity:userId
+                                     option:option
+                                   callback:callback];
+}
+
+- (void)getGroupUserResultsWithIdentities:(NSArray<NSString *> *)identities
+                          leaderboardPath:(LCLeaderboardPath)leaderboardPath
+                           aroundIdentity:(NSString *)identity
+                                   option:(LCLeaderboardQueryOption *)option
+                                 callback:(void (^)(NSArray<LCLeaderboardRanking *> * _Nullable, NSError * _Nullable))callback
+{
+    if (!identities || identities.count == 0) {
+        NSError *error = LCError(LCErrorInternalErrorCodeInconsistency, @"First parameter invalid.", nil);
+        [LCUtils callArrayResultBlock:callback array:nil error:error];
+        return;
+    }
+    NSDictionary *parameters = @{ @"ids" : identities };
+    NSString *path = [NSString stringWithFormat:@"leaderboard/leaderboards/%@/%@/group/ranks", leaderboardPath, self.statisticName];
+    if (identity && identity.length > 0) {
+        path = [path stringByAppendingPathComponent:identity];
+    }
+    NSMutableDictionary<NSString *, NSString *> *urlQueryDictionary = [NSMutableDictionary dictionary];
+    [[self class] trySetOption:option parameters:urlQueryDictionary];
+    if (!identity && self.skip > 0) {
+        urlQueryDictionary[@"startPosition"] = @(self.skip).stringValue;
+    }
+    if (self.limit > 0) {
+        urlQueryDictionary[@"maxResultsCount"] = @(self.limit).stringValue;
+    }
+    if (self.includeStatistics && self.includeStatistics.count > 0) {
+        urlQueryDictionary[@"includeStatistics"] = [self.includeStatistics componentsJoinedByString:@","];
+    }
+    if (self.version > -1) {
+        urlQueryDictionary[@"version"] = @(self.version).stringValue;
+    }
+    NSString *urlQuery;
+    if (urlQueryDictionary.count > 0) {
+        NSMutableArray<NSURLQueryItem *> *queryItems = [NSMutableArray arrayWithCapacity:urlQueryDictionary.count];
+        for (NSString *key in urlQueryDictionary) {
+            NSString *value = urlQueryDictionary[key];
+            NSURLQueryItem *queryItem = [NSURLQueryItem queryItemWithName:key value:value];
+            [queryItems addObject:queryItem];
+        }
+        NSURLComponents *urlComponents = [NSURLComponents componentsWithString:@"http://example.com"];
+        urlComponents.queryItems = queryItems;
+        urlQuery = urlComponents.URL.query;
+    }
+    if (urlQuery) {
+        path = [path stringByAppendingFormat:@"?%@", urlQuery];
+    }
+    [[LCPaasClient sharedInstance] postObject:path
+                               withParameters:parameters
+                                        block:^(id  _Nullable object, NSError * _Nullable error) {
+        if (error) {
+            [LCUtils callArrayResultBlock:callback array:nil error:error];
+            return;
+        }
+        if ([NSDictionary _lc_isTypeOf:object]) {
+            NSArray *results = [NSArray _lc_decoding:object key:@"results"];
+            NSMutableArray<LCLeaderboardRanking *> *rankings = [NSMutableArray arrayWithCapacity:results.count];
+            for (NSDictionary *item in results) {
+                if ([NSDictionary _lc_isTypeOf:item]) {
+                    LCLeaderboardRanking *ranking = [[LCLeaderboardRanking alloc] initWithDictionary:item];
+                    [rankings addObject:ranking];
+                }
+            }
+            [LCUtils callArrayResultBlock:callback array:rankings error:nil];
+        } else {
+            NSError *error = LCError(LCErrorInternalErrorCodeMalformedData, @"Malformed response data.", nil);
+            [LCUtils callArrayResultBlock:callback array:nil error:error];
         }
     }];
 }
