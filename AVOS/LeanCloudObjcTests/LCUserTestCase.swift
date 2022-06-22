@@ -572,4 +572,66 @@ class LCUserTestCase: BaseTestCase {
         }
     }
     
+    func testUpdateAuthData() {
+        let user = LCUser()
+        let accessTokenKey = "access_token"
+        let platform1 = "platform1";
+        let openid1 = UUID().uuidString
+        let authData1: [String: String] = [
+            accessTokenKey : UUID().uuidString,
+            "openid": openid1
+        ]
+        expecting { exp in
+            user.login(withAuthData: authData1, platformId: platform1, options: nil) { succeeded, error in
+                XCTAssertTrue(Thread.isMainThread)
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+        let getUserAuthData = { (platform: String, key: String) -> Any? in
+            let authData = user["authData"] as? [String : Any]
+            let platformAuthData = authData?[platform] as? [String : Any]
+            return platformAuthData?[key]
+        }
+        XCTAssertEqual(getUserAuthData(platform1, accessTokenKey) as? String, authData1[accessTokenKey])
+        
+        let authData1_1: [String: String] = [
+            accessTokenKey : UUID().uuidString,
+            "openid": openid1
+        ]
+        let platform2 = "platform2";
+        let openid2 = UUID().uuidString
+        let authData2: [String: String] = [
+            accessTokenKey : UUID().uuidString,
+            "openid": openid2
+        ]
+        user["authData.\(platform1)"] = authData1_1
+        user["authData.\(platform2)"] = authData2
+        let saveOption = LCSaveOption()
+        saveOption.fetchWhenSave = true
+        try! user.save(with: saveOption)
+        XCTAssertEqual(getUserAuthData(platform1, accessTokenKey) as? String, authData1_1[accessTokenKey])
+        XCTAssertEqual(getUserAuthData(platform2, accessTokenKey) as? String, authData2[accessTokenKey])
+        XCTAssertEqual((user["authData"] as? [String : Any])?.count, 2)
+        
+        let openid1_1 = UUID().uuidString
+        let authData1_2: [String: String] = [
+            accessTokenKey : UUID().uuidString,
+            "openid": openid1_1
+        ]
+        let openid2_1 = UUID().uuidString
+        let authData2_1: [String: String] = [
+            accessTokenKey : UUID().uuidString,
+            "openid": openid2_1
+        ]
+        user["authData.\(platform1)"] = authData1_2
+        user["authData.\(platform2)"] = authData2_1
+        try! user.save(with: saveOption)
+        XCTAssertEqual(getUserAuthData(platform1, accessTokenKey) as? String, authData1_2[accessTokenKey])
+        XCTAssertEqual(getUserAuthData(platform2, accessTokenKey) as? String, authData2_1[accessTokenKey])
+        XCTAssertEqual(getUserAuthData(platform1, "openid") as? String, authData1_2["openid"])
+        XCTAssertEqual(getUserAuthData(platform2, "openid") as? String, authData2_1["openid"])
+        XCTAssertEqual((user["authData"] as? [String : Any])?.count, 2)
+    }
 }
