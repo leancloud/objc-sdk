@@ -1298,6 +1298,12 @@ static BOOL enableAutomatic = NO;
     return[dict allKeys];
 }
 
+// MARK: LCSubclassing
+
++ (instancetype)objectWithoutDataWithObjectId:(NSString *)objectId {
+    return [[self class] objectWithObjectId:objectId];
+}
+
 @end
 
 @implementation LCUser (Friendship)
