@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'LeanCloudObjc'
-  s.version  = '13.9.1'
+  s.version  = '13.9.2'
   s.homepage = 'https://leancloud.cn/'
   s.summary  = 'LeanCloud Objective-C SDK'
   s.authors  = 'LeanCloud'
@@ -13,10 +13,10 @@ Pod::Spec.new do |s|
     :tag => "#{s.version}"
   }
 
-  s.ios.deployment_target     = '9.0'
-  s.osx.deployment_target     = '10.10'
-  s.watchos.deployment_target = '2.0'
-  s.tvos.deployment_target    = '9.0'
+  s.ios.deployment_target     = '12.0'
+  s.osx.deployment_target     = '11.0'
+  s.watchos.deployment_target = '6.0'
+  s.tvos.deployment_target    = '12.0'
 
   s.default_subspec = 'Realtime'
 
@@ -73,8 +73,8 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'Realtime' do |ss|
-    ss.ios.deployment_target = '9.0'
-    ss.osx.deployment_target = '10.10'
+    ss.ios.deployment_target = '12.0'
+    ss.osx.deployment_target = '11.0'
 
     ss.dependency 'LeanCloudObjc/Foundation', "#{s.version}"
     ss.dependency 'LeanCloudObjc/Protobuf+Protocol', "#{s.version}"
