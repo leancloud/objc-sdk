@@ -1215,6 +1215,22 @@ static BOOL enableAutomatic = NO;
     }];
 }
 
+// MARK: Misc
+
++ (void)retrieveShortTokenWithCallback:(void (^)(NSString * _Nullable, NSError * _Nullable))callback
+{
+    [[LCPaasClient sharedInstance] getObject:@"/storage/1.1/users/tap-support/identity"
+                              paddingVersion:false
+                              withParameters:nil
+                                       block:^(id  _Nullable object, NSError * _Nullable error) {
+        if (error) {
+            [LCUtils callStringResultBlock:callback string:nil error:error];
+        } else {
+            [LCUtils callStringResultBlock:callback string:((NSDictionary *)object)[@"identityToken"] error:nil];
+        }
+    }];
+}
+
 #pragma mark - Override from LCObject
 
 /**

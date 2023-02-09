@@ -215,10 +215,21 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
                                  headers:(NSDictionary *)headers
                               parameters:(id)parameters
 {
+    return [self requestWithPath:path method:method headers:headers parameters:parameters paddingVersion:true];
+}
+
+- (NSMutableURLRequest *)requestWithPath:(NSString *)path
+                                  method:(NSString *)method
+                                 headers:(NSDictionary *)headers
+                              parameters:(id)parameters
+                          paddingVersion:(BOOL)paddingVersion
+{
     NSURL *URL = [NSURL URLWithString:path];
     
     if (!URL.scheme.length) {
-        NSString *URLString = [[LCRouter sharedInstance] appURLForPath:path appID:[LCApplication getApplicationId]];
+        NSString *URLString = [[LCRouter sharedInstance] appURLForPath:path
+                                                                 appID:[LCApplication getApplicationId]
+                                                        paddingVersion:paddingVersion];
         URL = [NSURL URLWithString:URLString];
     }
     
@@ -258,12 +269,48 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
     return request;
 }
 
-- (void)getObject:(NSString *)path withParameters:(NSDictionary *)parameters block:(LCIdResultBlock)block {
-    [self getObject:path withParameters:parameters block:block wait:false];
+- (void)getObject:(NSString *)path
+   withParameters:(NSDictionary *)parameters
+            block:(LCIdResultBlock)block {
+    [self getObject:path
+     paddingVersion:true
+     withParameters:parameters
+              block:block];
 }
 
-- (void)getObject:(NSString *)path withParameters:(NSDictionary *)parameters block:(LCIdResultBlock)block wait:(BOOL)wait {
-    [self getObjectFromNetworkWithPath:path withParameters:parameters policy:kLCCachePolicyIgnoreCache block:block wait:wait];
+- (void)getObject:(NSString *)path
+   paddingVersion:(BOOL)paddingVersion
+   withParameters:(NSDictionary *)parameters
+            block:(LCIdResultBlock)block {
+    [self getObject:path
+     paddingVersion:paddingVersion
+     withParameters:parameters
+              block:block
+               wait:false];
+}
+
+- (void)getObject:(NSString *)path
+   withParameters:(NSDictionary *)parameters
+            block:(LCIdResultBlock)block
+             wait:(BOOL)wait {
+    [self getObjectFromNetworkWithPath:path
+                        withParameters:parameters
+                                policy:kLCCachePolicyIgnoreCache
+                                 block:block
+                                  wait:wait];
+}
+
+- (void)getObject:(NSString *)path
+   paddingVersion:(BOOL)paddingVersion
+   withParameters:(NSDictionary *)parameters
+            block:(LCIdResultBlock)block
+             wait:(BOOL)wait {
+    [self getObjectFromNetworkWithPath:path
+                        paddingVersion:paddingVersion
+                        withParameters:parameters
+                                policy:kLCCachePolicyIgnoreCache
+                                 block:block
+                                  wait:wait];
 }
 
 - (void)getObjectFromNetworkWithPath:(NSString *)path
@@ -272,7 +319,22 @@ NSString * const LCHeaderFieldNameProduction = @"X-LC-Prod";
                                block:(LCIdResultBlock)block
                                 wait:(BOOL)wait
 {
-    NSURLRequest *request = [self requestWithPath:path method:@"GET" headers:nil parameters:parameters];
+    [self getObjectFromNetworkWithPath:path
+                        paddingVersion:true
+                        withParameters:parameters
+                                policy:policy
+                                 block:block
+                                  wait:wait];
+}
+
+- (void)getObjectFromNetworkWithPath:(NSString *)path
+                      paddingVersion:(BOOL)paddingVersion
+                      withParameters:(NSDictionary *)parameters
+                              policy:(LCCachePolicy)policy
+                               block:(LCIdResultBlock)block
+                                wait:(BOOL)wait
+{
+    NSURLRequest *request = [self requestWithPath:path method:@"GET" headers:nil parameters:parameters paddingVersion:paddingVersion];
     
     if (parameters && request.URL.absoluteString.length > 4096) {
         /* If GET request too heavy, wrap it into a POST request and ignore cache policy. */

@@ -509,6 +509,10 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
 + (void)strictlyFindWithQuery:(LCQuery *)query
                      callback:(void (^)(NSArray<LCUser *> * _Nullable users, NSError * _Nullable error))callback;
 
+// MARK: Misc
+
++ (void)retrieveShortTokenWithCallback:(void (^)(NSString * _Nullable jwt, NSError * _Nullable error))callback;
+
 @end
 
 /**
