@@ -54,6 +54,12 @@ class BaseTestCase: XCTestCase {
 //        serverURL: "https://beta.leancloud.cn",
         masterKey: "Q26gTodbyi1Ki7lM9vtncF6U,master")
     
+    static let tds1App = AppInfo(
+        id: "7DY3DVgOQogGnYMMUajgvPRq-TjsS5DXC",
+        key: "RJOLaAvGiF7mQguXp68W9Mv5",
+        serverURL: "https://7DY3DVgO.cloud.tds1.tapapis.cn",
+        masterKey: "3PSWpjByenawCVo0FpnXfNgx")
+    
     static let ceApp = AppInfo(
         id: "skhiVsqIk7NLVdtHaUiWn0No-9Nh9j0Va",
         key: "T3TEAIcL8Ls5XGPsGz41B1bz",
@@ -68,6 +74,7 @@ class BaseTestCase: XCTestCase {
     
     static let appInfoTable = [
         cnApp.id : cnApp,
+        tds1App.id : tds1App,
         ceApp.id : ceApp,
         usApp.id : usApp,
     ]

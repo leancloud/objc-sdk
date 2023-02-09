@@ -60,6 +60,15 @@ FOUNDATION_EXPORT NSString * const LCHeaderFieldNameProduction;
    withParameters:(NSDictionary *)parameters
             block:(LCIdResultBlock)block;
 - (void)getObject:(NSString *)path
+   paddingVersion:(BOOL)paddingVersion
+   withParameters:(NSDictionary *)parameters
+            block:(LCIdResultBlock)block;
+- (void)getObject:(NSString *)path
+   withParameters:(NSDictionary *)parameters
+            block:(LCIdResultBlock)block
+             wait:(BOOL)wait;
+- (void)getObject:(NSString *)path
+   paddingVersion:(BOOL)paddingVersion
    withParameters:(NSDictionary *)parameters
             block:(LCIdResultBlock)block
              wait:(BOOL)wait;
@@ -116,6 +125,12 @@ FOUNDATION_EXPORT NSString * const LCHeaderFieldNameProduction;
                                   method:(NSString *)method
                                  headers:(NSDictionary *)headers
                               parameters:(id)parameters;
+
+- (NSMutableURLRequest *)requestWithPath:(NSString *)path
+                                  method:(NSString *)method
+                                 headers:(NSDictionary *)headers
+                              parameters:(id)parameters
+                          paddingVersion:(BOOL)paddingVersion;
 
 - (void)performRequest:(NSURLRequest *)request
                success:(void (^)(NSHTTPURLResponse *response, id responseObject))successBlock

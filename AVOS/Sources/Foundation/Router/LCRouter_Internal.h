@@ -63,6 +63,8 @@ static RouterKey RouterKeyRTMServer = @"server";
 
 - (NSString *)appURLForPath:(NSString *)path appID:(NSString *)appID;
 
+- (NSString *)appURLForPath:(NSString *)path appID:(NSString *)appID paddingVersion:(BOOL)paddingVersion;
+
 - (void)getRTMURLWithAppID:(NSString *)appID callback:(void (^)(NSDictionary *dictionary, NSError *error))callback;
 
 - (NSString *)batchPathForPath:(NSString *)path;

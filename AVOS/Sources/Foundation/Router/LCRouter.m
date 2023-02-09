@@ -229,6 +229,11 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
 
 - (NSString *)appURLForPath:(NSString *)path appID:(NSString *)appID
 {
+    return [self appURLForPath:path appID:appID paddingVersion:true];
+}
+
+- (NSString *)appURLForPath:(NSString *)path appID:(NSString *)appID paddingVersion:(BOOL)paddingVersion
+{
     NSParameterAssert(path);
     NSParameterAssert(appID);
     
@@ -238,7 +243,7 @@ static void cachingRouterData(NSDictionary *routerDataMap, RouterCacheKey key)
         if ([serverKey isEqualToString:RouterKeyAppRTMRouterServer]) {
             return absoluteURLStringWithHostAndPath(host, path);
         } else {
-            return absoluteURLStringWithHostAndPath(host, pathWithVersion(path));
+            return absoluteURLStringWithHostAndPath(host, paddingVersion ? pathWithVersion(path) : path);
         }
     };
     
