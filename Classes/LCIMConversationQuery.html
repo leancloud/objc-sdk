@@ -1,0 +1,2534 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>LCIMConversationQuery Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/objc/Class/LCIMConversationQuery" class="dashAnchor"></a>
+    <a title="LCIMConversationQuery Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">LeanCloud 13.9.3 Docs</a> (42% documented)</p>
+        <p class="header-right"><a href="https://github.com/leancloud/objc-sdk"><img src="../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Fleancloud.github.io%2Fobjc-sdk%2Fdocsets%2FLeanCloud.xml"><img src="../img/dash.png" alt="Dash"/>Install in Dash</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">LeanCloud Reference</a>
+        <img id="carat" src="../img/carat.png" alt=""/>
+        LCIMConversationQuery Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Categories.html">Categories</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Categories/NSObject%28LeanCloudObjcSDK%29.html">NSObject(LeanCloudObjcSDK)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/LCACL.html">LCACL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCApplication.html">LCApplication</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCCaptcha.html">LCCaptcha</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCCaptchaDigest.html">LCCaptchaDigest</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCCaptchaRequestOptions.html">LCCaptchaRequestOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCCloud.html">LCCloud</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCCloudQueryResult.html">LCCloudQueryResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCCompoundResponseSerializer.html">LCCompoundResponseSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCDynamicObject.html">LCDynamicObject</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCFile.html">LCFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCFileQuery.html">LCFileQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCFriendship.html">LCFriendship</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCFriendshipRequest.html">LCFriendshipRequest</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCGeoPoint.html">LCGeoPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCHTTPRequestSerializer.html">LCHTTPRequestSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCHTTPResponseSerializer.html">LCHTTPResponseSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCHTTPSessionManager.html">LCHTTPSessionManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMAudioMessage.html">LCIMAudioMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)LCIMChatRoom">LCIMChatRoom</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMClient.html">LCIMClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMClientOption.html">LCIMClientOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMConversation.html">LCIMConversation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMConversationCreationOption.html">LCIMConversationCreationOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMConversationMemberInfo.html">LCIMConversationMemberInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMConversationQuery.html">LCIMConversationQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMFileMessage.html">LCIMFileMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMImageMessage.html">LCIMImageMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMKeyedConversation.html">LCIMKeyedConversation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMLocationMessage.html">LCIMLocationMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMMessage.html">LCIMMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMMessageInterval.html">LCIMMessageInterval</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMMessageIntervalBound.html">LCIMMessageIntervalBound</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMMessageOption.html">LCIMMessageOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMMessagePatchedReason.html">LCIMMessagePatchedReason</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMOperationFailure.html">LCIMOperationFailure</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMRecalledMessage.html">LCIMRecalledMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMServiceConversation.html">LCIMServiceConversation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMSignature.html">LCIMSignature</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)LCIMTemporaryConversation">LCIMTemporaryConversation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMTextMessage.html">LCIMTextMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMTypedMessage.html">LCIMTypedMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMVideoMessage.html">LCIMVideoMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCImageResponseSerializer.html">LCImageResponseSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCInstallation.html">LCInstallation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCJSONRequestSerializer.html">LCJSONRequestSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCJSONResponseSerializer.html">LCJSONResponseSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCLeaderboard.html">LCLeaderboard</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCLeaderboardQueryOption.html">LCLeaderboardQueryOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCLeaderboardRanking.html">LCLeaderboardRanking</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCLeaderboardStatistic.html">LCLeaderboardStatistic</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCLiveQuery.html">LCLiveQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCLogger.html">LCLogger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCNetworkReachabilityManager.html">LCNetworkReachabilityManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCObject.html">LCObject</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCObjectFetchOption.html">LCObjectFetchOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCPaasClient.html">LCPaasClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCPropertyListRequestSerializer.html">LCPropertyListRequestSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCPropertyListResponseSerializer.html">LCPropertyListResponseSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCPush.html">LCPush</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCQuery.html">LCQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCRTMWebSocket.html">LCRTMWebSocket</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCRTMWebSocketMessage.html">LCRTMWebSocketMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCRelation.html">LCRelation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCRole.html">LCRole</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCSMS.html">LCSMS</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCSaveOption.html">LCSaveOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCSearchQuery.html">LCSearchQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCSearchSortBuilder.html">LCSearchSortBuilder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCSecurityPolicy.html">LCSecurityPolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCShortMessageRequestOptions.html">LCShortMessageRequestOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCStatus.html">LCStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCStatusQuery.html">LCStatusQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCURLSessionManager.html">LCURLSessionManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCUser.html">LCUser</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCUserAuthDataLoginOption.html">LCUserAuthDataLoginOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCUserShortMessageRequestOptions.html">LCUserShortMessageRequestOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCUtils.html">LCUtils</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)LCXMLParserResponseSerializer">LCXMLParserResponseSerializer</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Constants.html">Constants</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCHeaderFieldNameId">LCHeaderFieldNameId</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCHeaderFieldNameKey">LCHeaderFieldNameKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCHeaderFieldNameProduction">LCHeaderFieldNameProduction</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCHeaderFieldNameSession">LCHeaderFieldNameSession</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCHeaderFieldNameSign">LCHeaderFieldNameSign</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMConversationUpdatedKeyLastDeliveredAt">LCIMConversationUpdatedKeyLastDeliveredAt</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMConversationUpdatedKeyLastMessage">LCIMConversationUpdatedKeyLastMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMConversationUpdatedKeyLastMessageAt">LCIMConversationUpdatedKeyLastMessageAt</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMConversationUpdatedKeyLastReadAt">LCIMConversationUpdatedKeyLastReadAt</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMConversationUpdatedKeyUnreadMessagesCount">LCIMConversationUpdatedKeyUnreadMessagesCount</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMConversationUpdatedKeyUnreadMessagesMentioned">LCIMConversationUpdatedKeyUnreadMessagesMentioned</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeAudio">LCIMMessageMediaTypeAudio</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeFile">LCIMMessageMediaTypeFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeImage">LCIMMessageMediaTypeImage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeLocation">LCIMMessageMediaTypeLocation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeNone">LCIMMessageMediaTypeNone</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeRecalled">LCIMMessageMediaTypeRecalled</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeText">LCIMMessageMediaTypeText</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeVideo">LCIMMessageMediaTypeVideo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMSignatureActionAdd">LCIMSignatureActionAdd</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMSignatureActionBlock">LCIMSignatureActionBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMSignatureActionOpen">LCIMSignatureActionOpen</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMSignatureActionRemove">LCIMSignatureActionRemove</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMSignatureActionStart">LCIMSignatureActionStart</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMSignatureActionUnblock">LCIMSignatureActionUnblock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCLoggerDomainCURL">LCLoggerDomainCURL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCLoggerDomainDefault">LCLoggerDomainDefault</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCLoggerDomainIM">LCLoggerDomainIM</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCLoggerDomainNetwork">LCLoggerDomainNetwork</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCLoggerDomainStorage">LCLoggerDomainStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingOperationFailingURLRequestErrorKey">LCNetworkingOperationFailingURLRequestErrorKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingOperationFailingURLResponseDataErrorKey">LCNetworkingOperationFailingURLResponseDataErrorKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingOperationFailingURLResponseErrorKey">LCNetworkingOperationFailingURLResponseErrorKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingReachabilityDidChangeNotification">LCNetworkingReachabilityDidChangeNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingReachabilityNotificationStatusItem">LCNetworkingReachabilityNotificationStatusItem</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidCompleteAssetPathKey">LCNetworkingTaskDidCompleteAssetPathKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidCompleteErrorKey">LCNetworkingTaskDidCompleteErrorKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidCompleteNotification">LCNetworkingTaskDidCompleteNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidCompleteResponseDataKey">LCNetworkingTaskDidCompleteResponseDataKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidCompleteResponseSerializerKey">LCNetworkingTaskDidCompleteResponseSerializerKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidCompleteSerializedResponseKey">LCNetworkingTaskDidCompleteSerializedResponseKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidResumeNotification">LCNetworkingTaskDidResumeNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidSuspendNotification">LCNetworkingTaskDidSuspendNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCURLRequestSerializationErrorDomain">LCURLRequestSerializationErrorDomain</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCURLResponseSerializationErrorDomain">LCURLResponseSerializationErrorDomain</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCURLSessionDidInvalidateNotification">LCURLSessionDidInvalidateNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCURLSessionDownloadTaskDidFailToMoveFileNotification">LCURLSessionDownloadTaskDidFailToMoveFileNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LeanCloudObjcVersionNumber">LeanCloudObjcVersionNumber</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LeanCloudObjcVersionString">LeanCloudObjcVersionString</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LeanCloudSocialPlatformQQ">LeanCloudSocialPlatformQQ</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LeanCloudSocialPlatformWeiBo">LeanCloudSocialPlatformWeiBo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LeanCloudSocialPlatformWeiXin">LeanCloudSocialPlatformWeiXin</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:LCPaasClient.h@USER_AGENT">USER_AGENT</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorAccountAlreadyLinked">kLCErrorAccountAlreadyLinked</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorCacheMiss">kLCErrorCacheMiss</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorCommandUnavailable">kLCErrorCommandUnavailable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorConnectionFailed">kLCErrorConnectionFailed</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorDuplicateValue">kLCErrorDuplicateValue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorExceededQuota">kLCErrorExceededQuota</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorFileDeleteFailure">kLCErrorFileDeleteFailure</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorIncorrectType">kLCErrorIncorrectType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInternalServer">kLCErrorInternalServer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidACL">kLCErrorInvalidACL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidChannelName">kLCErrorInvalidChannelName</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidClassName">kLCErrorInvalidClassName</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidDeviceToken">kLCErrorInvalidDeviceToken</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidEmailAddress">kLCErrorInvalidEmailAddress</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidFileName">kLCErrorInvalidFileName</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidImageData">kLCErrorInvalidImageData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidJSON">kLCErrorInvalidJSON</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidKeyName">kLCErrorInvalidKeyName</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidLinkedSession">kLCErrorInvalidLinkedSession</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidNestedKey">kLCErrorInvalidNestedKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidPointer">kLCErrorInvalidPointer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidProductIdentifier">kLCErrorInvalidProductIdentifier</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidPurchaseReceipt">kLCErrorInvalidPurchaseReceipt</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidQuery">kLCErrorInvalidQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidRoleName">kLCErrorInvalidRoleName</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidServerResponse">kLCErrorInvalidServerResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorLinkedIdMissing">kLCErrorLinkedIdMissing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorMissingObjectId">kLCErrorMissingObjectId</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorObjectNotFound">kLCErrorObjectNotFound</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorObjectTooLarge">kLCErrorObjectTooLarge</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorOperationForbidden">kLCErrorOperationForbidden</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorPaymentDisabled">kLCErrorPaymentDisabled</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorProductDownloadFileSystemFailure">kLCErrorProductDownloadFileSystemFailure</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorProductNotFoundInAppStore">kLCErrorProductNotFoundInAppStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorPushMisconfigured">kLCErrorPushMisconfigured</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorReceiptMissing">kLCErrorReceiptMissing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorTimeout">kLCErrorTimeout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUnsavedFile">kLCErrorUnsavedFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserCanOnlyBeCreatedThroughSignUp">kLCErrorUserCanOnlyBeCreatedThroughSignUp</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserCannotBeAlteredWithoutSession">kLCErrorUserCannotBeAlteredWithoutSession</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserEmailMissing">kLCErrorUserEmailMissing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserEmailTaken">kLCErrorUserEmailTaken</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserIdMismatch">kLCErrorUserIdMismatch</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserMobilePhoneMissing">kLCErrorUserMobilePhoneMissing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserMobilePhoneNotVerified">kLCErrorUserMobilePhoneNotVerified</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserMobilePhoneNumberTaken">kLCErrorUserMobilePhoneNumberTaken</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserNotFound">kLCErrorUserNotFound</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserPasswordMissing">kLCErrorUserPasswordMissing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserSNSAuthDataInvalid">kLCErrorUserSNSAuthDataInvalid</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserWithEmailNotFound">kLCErrorUserWithEmailNotFound</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserWithMobilePhoneNotFound">kLCErrorUserWithMobilePhoneNotFound</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUsernameMissing">kLCErrorUsernameMissing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUsernamePasswordMismatch">kLCErrorUsernamePasswordMismatch</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUsernameTaken">kLCErrorUsernameTaken</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCIMAppCodeKey">kLCIMAppCodeKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCIMAppMsgKey">kLCIMAppMsgKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCIMCodeKey">kLCIMCodeKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCIMDetailKey">kLCIMDetailKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCIMReasonKey">kLCIMReasonKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCPushTargetPlatformAndroid">kLCPushTargetPlatformAndroid</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCPushTargetPlatformIOS">kLCPushTargetPlatformIOS</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCPushTargetPlatformWindowsPhone">kLCPushTargetPlatformWindowsPhone</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCScriptError">kLCScriptError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCStatusTypePrivateMessage">kLCStatusTypePrivateMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCStatusTypeTimeline">kLCStatusTypeTimeline</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCUploadStream3GSuggestedDelay">kLCUploadStream3GSuggestedDelay</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCUploadStream3GSuggestedPacketSize">kLCUploadStream3GSuggestedPacketSize</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCValidationError">kLCValidationError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLeanCloudErrorDomain">kLeanCloudErrorDomain</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLeanCloudRESTAPIResponseError">kLeanCloudRESTAPIResponseError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/LCCachePolicy.html">LCCachePolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCErrorInternalErrorCode.html">LCErrorInternalErrorCode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCFileDownloadOption.html">LCFileDownloadOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCFileUploadOption.html">LCFileUploadOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCHTTPRequestQueryStringSerializationStyle.html">LCHTTPRequestQueryStringSerializationStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMCachePolicy.html">LCIMCachePolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMClientOpenOption.html">LCIMClientOpenOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMClientStatus.html">LCIMClientStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMConversationMemberRole.html">LCIMConversationMemberRole</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMConversationQueryOption.html">LCIMConversationQueryOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMErrorCode.html">LCIMErrorCode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMMessageIOType.html">LCIMMessageIOType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMMessagePriority.html">LCIMMessagePriority</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMMessageQueryDirection.html">LCIMMessageQueryDirection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMMessageStatus.html">LCIMMessageStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCLogLevel.html">LCLogLevel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCNetworkReachabilityStatus.html">LCNetworkReachabilityStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCQueryDistanceUnit.html">LCQueryDistanceUnit</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCRTMWebSocketCloseCode.html">LCRTMWebSocketCloseCode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCRTMWebSocketMessageType.html">LCRTMWebSocketMessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCSSLPinningMode.html">LCSSLPinningMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCServiceModule.html">LCServiceModule</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCShortMessageType.html">LCShortMessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/kLCIMMessageMediaType.html">kLCIMMessageMediaType</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/LCIMClientDelegate.html">LCIMClientDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCIMSignatureDataSource.html">LCIMSignatureDataSource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCIMTypedMessageSubclassing.html">LCIMTypedMessageSubclassing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCLiveQueryDelegate.html">LCLiveQueryDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCMultipartFormData.html">LCMultipartFormData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCRTMWebSocketDelegate.html">LCRTMWebSocketDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCSubclassing.html">LCSubclassing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCURLRequestSerialization.html">LCURLRequestSerialization</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCURLResponseSerialization.html">LCURLResponseSerialization</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Type%20Definitions.html">Type Definitions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCArrayResultBlock">LCArrayResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCBooleanResultBlock">LCBooleanResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCCaptcha.h@T@LCCaptchaRequestCallback">LCCaptchaRequestCallback</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCCaptcha.h@T@LCCaptchaVerificationCallback">LCCaptchaVerificationCallback</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCCloudQueryCallback">LCCloudQueryCallback</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCDataResultBlock">LCDataResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCDictionaryResultBlock">LCDictionaryResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCFileResultBlock">LCFileResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMArrayResultBlock">LCIMArrayResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMBooleanResultBlock">LCIMBooleanResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMChatRoomResultBlock">LCIMChatRoomResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMConversationResultBlock">LCIMConversationResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMConversationUpdatedKey">LCIMConversationUpdatedKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMIntegerResultBlock">LCIMIntegerResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMMessage.h@T@LCIMMessageMediaType">LCIMMessageMediaType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMProgressBlock">LCIMProgressBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMSignatureAction">LCIMSignatureAction</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMTemporaryConversationResultBlock">LCIMTemporaryConversationResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCIdResultBlock">LCIdResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCIntegerResultBlock">LCIntegerResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions/LCLoggerLevel.html">LCLoggerLevel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCObjectResultBlock">LCObjectResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCProgressBlock">LCProgressBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCSetResultBlock">LCSetResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCStatus.h@T@LCStatusResultBlock">LCStatusResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCStatus.h@T@LCStatusType">LCStatusType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCStringResultBlock">LCStringResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCUserResultBlock">LCUserResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUser.h@T@LeanCloudSocialPlatform">LeanCloudSocialPlatform</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCError">LCError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCErrorFromUnderlyingError">LCErrorFromUnderlyingError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCErrorInconsistency">LCErrorInconsistency</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCErrorInternalServer">LCErrorInternalServer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCPercentEscapedStringFromString">LCPercentEscapedStringFromString</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCQueryStringFromParameters">LCQueryStringFromParameters</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCStringFromNetworkReachabilityStatus">LCStringFromNetworkReachabilityStatus</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>LCIMConversationQuery</h1>
+              <div class="declaration">
+                <div class="language">
+                  <p class="aside-title">Objective-C</p>
+                  <pre class="highlight objective_c"><code><span class="k">@interface</span> <span class="nc">LCIMConversationQuery</span> <span class="p">:</span> <span class="nc">NSObject</span>
+
+<span class="cm">/*!
+ The max count of the query result, default is 10. 
+ */</span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">)</span> <span class="n">NSInteger</span> <span class="n">limit</span><span class="p">;</span>
+
+<span class="cm">/*!
+ The offset of the query, default is 0.
+ */</span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">)</span> <span class="n">NSInteger</span> <span class="n">skip</span><span class="p">;</span>
+
+<span class="cm">/*!
+ Configures cache policy, default is kLCCachePolicyCacheElseNetwork
+ */</span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">)</span> <span class="n"><a href="../Enums/LCIMCachePolicy.html">LCIMCachePolicy</a></span> <span class="n">cachePolicy</span><span class="p">;</span>
+
+<span class="cm">/*!
+ Configures cache time, default is one hour (1 * 60 * 60)
+ */</span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">)</span> <span class="n">NSTimeInterval</span> <span class="n">cacheMaxAge</span><span class="p">;</span>
+
+<span class="cm">/*!
+ * Query conditions.
+ */</span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">)</span> <span class="n"><a href="../Enums/LCIMConversationQueryOption.html">LCIMConversationQueryOption</a></span> <span class="n">option</span><span class="p">;</span>
+
+<span class="cm">/*!
+ * Build an query that is the OR of the passed in queries.
+ * @param queries The list of queries to OR together.
+ * @return an query that is the OR of the passed in queries.
+ */</span>
+<span class="k">+</span> <span class="p">(</span><span class="n">nullable</span> <span class="n">instancetype</span><span class="p">)</span><span class="nf">orQueryWithSubqueries</span><span class="p">:(</span><span class="n">NSArray</span><span class="o">&lt;</span><span class="n">LCIMConversationQuery</span> <span class="o">*&gt;</span> <span class="o">*</span><span class="p">)</span><span class="nv">queries</span><span class="p">;</span>
+
+<span class="cm">/*!
+ * Build an query that is the AND of the passed in queries.
+ * @param queries The list of queries to AND together.
+ * @return an query that is the AND of the passed in queries.
+ */</span>
+<span class="k">+</span> <span class="p">(</span><span class="n">nullable</span> <span class="n">instancetype</span><span class="p">)</span><span class="nf">andQueryWithSubqueries</span><span class="p">:(</span><span class="n">NSArray</span><span class="o">&lt;</span><span class="n">LCIMConversationQuery</span> <span class="o">*&gt;</span> <span class="o">*</span><span class="p">)</span><span class="nv">queries</span><span class="p">;</span>
+
+<span class="cm">/*!
+ Add a constraint that requires a particular key exists.
+ @param key The key that should exist.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKeyExists</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span><span class="p">;</span>
+
+<span class="cm">/*!
+ Add a constraint that requires a key not exist.
+ @param key The key that should not exist.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKeyDoesNotExist</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span><span class="p">;</span>
+
+<span class="cm">/*!
+ The value corresponding to key is equal to object,
+ or the array corresponding to key contains object.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">equalTo</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span>
+
+<span class="cm">/*!
+ The value corresponding to key is less than object.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">lessThan</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span>
+
+<span class="cm">/*!
+ The value corresponding to key is less than or equal to object.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">lessThanOrEqualTo</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span>
+
+<span class="cm">/*!
+ The value corresponding to key is greater than object.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">greaterThan</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span>
+
+<span class="cm">/*!
+ The value corresponding to key is greater than or equal to object.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">greaterThanOrEqualTo</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span>
+
+<span class="cm">/*!
+ The value corresponding to key is not equal to object,
+ or the array corresponding to key does not contain object.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">notEqualTo</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span>
+
+<span class="cm">/*!
+ array contains value corresponding to key,
+ or array contains at least one element in the array value corresponding to key.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">containedIn</span><span class="p">:(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">array</span><span class="p">;</span>
+
+<span class="cm">/*!
+ array does not contain value corresponding to key,
+ or the field corresponding to key does not exist.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">notContainedIn</span><span class="p">:(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">array</span><span class="p">;</span>
+
+<span class="cm">/*!
+ The array corresponding to key contains all elements in array.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">containsAllObjectsInArray</span><span class="p">:(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">array</span><span class="p">;</span>
+
+<span class="cm">/*!
+ Near a geopoint. Returned results will be sorted in distances to the geopoint.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">nearGeoPoint</span><span class="p">:(</span><span class="n"><a href="../Classes/LCGeoPoint.html">LCGeoPoint</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">geopoint</span><span class="p">;</span>
+
+<span class="cm">/*!
+ Near a geopoint. Returned results will be sorted in distances to the geopoint.
+ @param maxDistance in miles
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">nearGeoPoint</span><span class="p">:(</span><span class="n"><a href="../Classes/LCGeoPoint.html">LCGeoPoint</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">geopoint</span> <span class="nf">withinMiles</span><span class="p">:(</span><span class="kt">double</span><span class="p">)</span><span class="nv">maxDistance</span><span class="p">;</span>
+
+<span class="cm">/*!
+ Near a geopoint. Returned results will be sorted in distances to the geopoint.
+ @param maxDistance in kilometers
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">nearGeoPoint</span><span class="p">:(</span><span class="n"><a href="../Classes/LCGeoPoint.html">LCGeoPoint</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">geopoint</span> <span class="nf">withinKilometers</span><span class="p">:(</span><span class="kt">double</span><span class="p">)</span><span class="nv">maxDistance</span><span class="p">;</span>
+
+<span class="cm">/*!
+ Near a geopoint. Returned results will be sorted in distances to the geopoint.
+ @param maxDistance in radians
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">nearGeoPoint</span><span class="p">:(</span><span class="n"><a href="../Classes/LCGeoPoint.html">LCGeoPoint</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">geopoint</span> <span class="nf">withinRadians</span><span class="p">:(</span><span class="kt">double</span><span class="p">)</span><span class="nv">maxDistance</span><span class="p">;</span>
+
+<span class="cm">/*!
+ Within a rectangle.
+ @param southwest the lower left corner of the rectangle
+ @param northeast the upper right corner of the rectangle
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">withinGeoBoxFromSouthwest</span><span class="p">:(</span><span class="n"><a href="../Classes/LCGeoPoint.html">LCGeoPoint</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">southwest</span> <span class="nf">toNortheast</span><span class="p">:(</span><span class="n"><a href="../Classes/LCGeoPoint.html">LCGeoPoint</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">northeast</span><span class="p">;</span>
+
+<span class="cm">/*!
+ Matches a regex. This query may have a significant performance impact.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">matchesRegex</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">regex</span><span class="p">;</span>
+
+<span class="cm">/*!
+ Matches a regex. This query may have a significant performance impact.
+ @param modifiers PCRE regex modifiers such as i and m.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">matchesRegex</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">regex</span> <span class="nf">modifiers</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">modifiers</span><span class="p">;</span>
+
+<span class="cm">/*!
+ The string corresponding to key has a substring.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">containsString</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">substring</span><span class="p">;</span>
+
+<span class="cm">/*!
+ The string corresponding to key has a prefix.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">hasPrefix</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">prefix</span><span class="p">;</span>
+
+<span class="cm">/*!
+ The string corresponding to key has a suffix.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">hasSuffix</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">suffix</span><span class="p">;</span>
+
+<span class="cm">/*!
+ The size of the array corresponding to key is equal to count.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">sizeEqualTo</span><span class="p">:(</span><span class="n">NSUInteger</span><span class="p">)</span><span class="nv">count</span><span class="p">;</span>
+
+
+<span class="cm">/*!
+ The ascending order by the value corresponding to key, support for multi-field sorting with comma.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">orderByAscending</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span><span class="p">;</span>
+
+<span class="cm">/*!
+ Adding a ascending order by the value corresponding to key to the order.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">addAscendingOrder</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span><span class="p">;</span>
+
+<span class="cm">/*!
+ The descending order by the value corresponding to key, support for multi-field sorting with comma.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">orderByDescending</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span><span class="p">;</span>
+
+<span class="cm">/*!
+ Adding a descending order by the value corresponding to key to the order.
+ @param key 降序的 key
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">addDescendingOrder</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span><span class="p">;</span>
+
+<span class="cm">/*!
+ Sort with sortDescriptor.
+ @param sortDescriptor NSSortDescriptor object
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">orderBySortDescriptor</span><span class="p">:(</span><span class="n">NSSortDescriptor</span> <span class="o">*</span><span class="p">)</span><span class="nv">sortDescriptor</span><span class="p">;</span>
+
+<span class="cm">/*!
+ Sort with sortDescriptors.
+ @param sortDescriptors NSSortDescriptor object array
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">orderBySortDescriptors</span><span class="p">:(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">sortDescriptors</span><span class="p">;</span>
+
+<span class="cm">/*!
+ Queries for an LCIMConversation object based on its conversationId.
+ @param callback on returned results
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">getConversationById</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">conversationId</span>
+                   <span class="nf">callback</span><span class="p">:(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n"><a href="../Classes/LCIMConversation.html">LCIMConversation</a></span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">conversation</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">error</span><span class="p">))</span><span class="nv">callback</span><span class="p">;</span>
+
+<span class="cm">/*!
+ Queries for an array of LCIMConversation objects.
+ If limit is unspecified or invalid, it will return 10 results by default.
+ @param callback on returned results
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">findConversationsWithCallback</span><span class="p">:(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSArray</span><span class="o">&lt;</span><span class="n"><a href="../Classes/LCIMConversation.html">LCIMConversation</a></span> <span class="o">*&gt;</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">conversations</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">error</span><span class="p">))</span><span class="nv">callback</span><span class="p">;</span>
+
+
+<span class="cm">/**
+ Find temporary conversations from server.
+
+ @param tempConvIds ID array of temporary conversations.
+ @param callback Result callback.
+ */</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">findTemporaryConversationsWith</span><span class="p">:(</span><span class="n">NSArray</span><span class="o">&lt;</span><span class="n">NSString</span> <span class="o">*&gt;</span> <span class="o">*</span><span class="p">)</span><span class="nv">tempConvIds</span>
+                              <span class="nf">callback</span><span class="p">:(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSArray</span><span class="o">&lt;</span><span class="n"><a href="../Classes.html#/c:objc(cs)LCIMTemporaryConversation">LCIMTemporaryConversation</a></span> <span class="o">*&gt;</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">conversations</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">error</span><span class="p">))</span><span class="nv">callback</span><span class="p">;</span>
+
+<span class="k">@end</span></code></pre>
+
+                </div>
+                <div class="language">
+                  <p class="aside-title">Swift</p>
+                  <pre class="highlight swift"><code><span class="kd">class</span> <span class="kt">LCIMConversationQuery</span> <span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+
+                </div>
+              </div>
+            <p>Undocumented</p>
+
+              <div class="slightly-smaller">
+                <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L15-L236">Show on GitHub</a>
+              </div>
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(py)limit"></a>
+                    <a name="//apple_ref/objc/Property/limit" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(py)limit">limit</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSInteger</span> <span class="n">limit</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">limit</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L20">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(py)skip"></a>
+                    <a name="//apple_ref/objc/Property/skip" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(py)skip">skip</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSInteger</span> <span class="n">skip</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">skip</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L25">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(py)cachePolicy"></a>
+                    <a name="//apple_ref/objc/Property/cachePolicy" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(py)cachePolicy">cachePolicy</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Enums/LCIMCachePolicy.html">LCIMCachePolicy</a></span> <span class="n">cachePolicy</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt"><a href="../Enums/LCIMCachePolicy.html">LCIMCachePolicy</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L30">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(py)cacheMaxAge"></a>
+                    <a name="//apple_ref/objc/Property/cacheMaxAge" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(py)cacheMaxAge">cacheMaxAge</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSTimeInterval</span> <span class="n">cacheMaxAge</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">cacheMaxAge</span><span class="p">:</span> <span class="kt">TimeInterval</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L35">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(py)option"></a>
+                    <a name="//apple_ref/objc/Property/option" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(py)option">option</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Enums/LCIMConversationQueryOption.html">LCIMConversationQueryOption</a></span> <span class="n">option</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">option</span><span class="p">:</span> <span class="kt"><a href="../Enums/LCIMConversationQueryOption.html">LCIMConversationQueryOption</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L40">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(cm)orQueryWithSubqueries:"></a>
+                    <a name="//apple_ref/objc/Method/+orQueryWithSubqueries:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(cm)orQueryWithSubqueries:">+orQueryWithSubqueries:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">nullable</span> <span class="n">instancetype</span><span class="p">)</span><span class="nf">orQueryWithSubqueries</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">nonnull</span> <span class="n">NSArray</span><span class="o">&lt;</span><span class="n">LCIMConversationQuery</span> <span class="o">*&gt;</span> <span class="o">*</span><span class="p">)</span><span class="nv">queries</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">class</span> <span class="kd">func</span> <span class="nf">orQuery</span><span class="p">(</span><span class="n">withSubqueries</span> <span class="nv">queries</span><span class="p">:</span> <span class="p">[</span><span class="kt">LCIMConversationQuery</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="k">Self</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L47">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(cm)andQueryWithSubqueries:"></a>
+                    <a name="//apple_ref/objc/Method/+andQueryWithSubqueries:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(cm)andQueryWithSubqueries:">+andQueryWithSubqueries:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">nullable</span> <span class="n">instancetype</span><span class="p">)</span><span class="nf">andQueryWithSubqueries</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">nonnull</span> <span class="n">NSArray</span><span class="o">&lt;</span><span class="n">LCIMConversationQuery</span> <span class="o">*&gt;</span> <span class="o">*</span><span class="p">)</span><span class="nv">queries</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">class</span> <span class="kd">func</span> <span class="nf">andQuery</span><span class="p">(</span><span class="n">withSubqueries</span> <span class="nv">queries</span><span class="p">:</span> <span class="p">[</span><span class="kt">LCIMConversationQuery</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="k">Self</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L54">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKeyExists:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKeyExists:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKeyExists:">-whereKeyExists:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKeyExists</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKeyExists</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L60">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKeyDoesNotExist:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKeyDoesNotExist:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKeyDoesNotExist:">-whereKeyDoesNotExist:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKeyDoesNotExist</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKeyDoesNotExist</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L66">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:equalTo:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:equalTo:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:equalTo:">-whereKey:<wbr>equalTo:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">equalTo</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">id</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">equalTo</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L72">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:lessThan:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:lessThan:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:lessThan:">-whereKey:<wbr>lessThan:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">lessThan</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">id</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">lessThan</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L77">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:lessThanOrEqualTo:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:lessThanOrEqualTo:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:lessThanOrEqualTo:">-whereKey:<wbr>lessThanOrEqualTo:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">lessThanOrEqualTo</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">id</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">lessThanOrEqualTo</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L82">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:greaterThan:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:greaterThan:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:greaterThan:">-whereKey:<wbr>greaterThan:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">greaterThan</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">id</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">greaterThan</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L87">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:greaterThanOrEqualTo:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:greaterThanOrEqualTo:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:greaterThanOrEqualTo:">-whereKey:<wbr>greaterThanOrEqualTo:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span>
+    <span class="nf">greaterThanOrEqualTo</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">id</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">greaterThanOrEqualTo</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L92">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:notEqualTo:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:notEqualTo:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:notEqualTo:">-whereKey:<wbr>notEqualTo:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">notEqualTo</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">id</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">notEqualTo</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L98">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:containedIn:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:containedIn:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:containedIn:">-whereKey:<wbr>containedIn:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">containedIn</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">array</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">containedIn</span> <span class="nv">array</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L104">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:notContainedIn:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:notContainedIn:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:notContainedIn:">-whereKey:<wbr>notContainedIn:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span>
+    <span class="nf">notContainedIn</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">array</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">notContainedIn</span> <span class="nv">array</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L110">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:containsAllObjectsInArray:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:containsAllObjectsInArray:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:containsAllObjectsInArray:">-whereKey:<wbr>containsAllObjectsInArray:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span>
+    <span class="nf">containsAllObjectsInArray</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">array</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">containsAllObjectsIn</span> <span class="nv">array</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L115">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:nearGeoPoint:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:nearGeoPoint:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:nearGeoPoint:">-whereKey:<wbr>nearGeoPoint:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span>
+    <span class="nf">nearGeoPoint</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n"><a href="../Classes/LCGeoPoint.html">LCGeoPoint</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">geopoint</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">nearGeoPoint</span> <span class="nv">geopoint</span><span class="p">:</span> <span class="kt"><a href="../Classes/LCGeoPoint.html">LCGeoPoint</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L120">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:nearGeoPoint:withinMiles:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:nearGeoPoint:withinMiles:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:nearGeoPoint:withinMiles:">-whereKey:<wbr>nearGeoPoint:<wbr>withinMiles:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span>
+    <span class="nf">nearGeoPoint</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n"><a href="../Classes/LCGeoPoint.html">LCGeoPoint</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">geopoint</span>
+     <span class="nf">withinMiles</span><span class="p">:(</span><span class="kt">double</span><span class="p">)</span><span class="nv">maxDistance</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">nearGeoPoint</span> <span class="nv">geopoint</span><span class="p">:</span> <span class="kt"><a href="../Classes/LCGeoPoint.html">LCGeoPoint</a></span><span class="p">,</span> <span class="n">withinMiles</span> <span class="nv">maxDistance</span><span class="p">:</span> <span class="kt">Double</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L126">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:nearGeoPoint:withinKilometers:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:nearGeoPoint:withinKilometers:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:nearGeoPoint:withinKilometers:">-whereKey:<wbr>nearGeoPoint:<wbr>withinKilometers:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span>
+        <span class="nf">nearGeoPoint</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n"><a href="../Classes/LCGeoPoint.html">LCGeoPoint</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">geopoint</span>
+    <span class="nf">withinKilometers</span><span class="p">:(</span><span class="kt">double</span><span class="p">)</span><span class="nv">maxDistance</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">nearGeoPoint</span> <span class="nv">geopoint</span><span class="p">:</span> <span class="kt"><a href="../Classes/LCGeoPoint.html">LCGeoPoint</a></span><span class="p">,</span> <span class="n">withinKilometers</span> <span class="nv">maxDistance</span><span class="p">:</span> <span class="kt">Double</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L132">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:nearGeoPoint:withinRadians:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:nearGeoPoint:withinRadians:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:nearGeoPoint:withinRadians:">-whereKey:<wbr>nearGeoPoint:<wbr>withinRadians:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span>
+     <span class="nf">nearGeoPoint</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n"><a href="../Classes/LCGeoPoint.html">LCGeoPoint</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">geopoint</span>
+    <span class="nf">withinRadians</span><span class="p">:(</span><span class="kt">double</span><span class="p">)</span><span class="nv">maxDistance</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">nearGeoPoint</span> <span class="nv">geopoint</span><span class="p">:</span> <span class="kt"><a href="../Classes/LCGeoPoint.html">LCGeoPoint</a></span><span class="p">,</span> <span class="n">withinRadians</span> <span class="nv">maxDistance</span><span class="p">:</span> <span class="kt">Double</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L138">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:withinGeoBoxFromSouthwest:toNortheast:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:withinGeoBoxFromSouthwest:toNortheast:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:withinGeoBoxFromSouthwest:toNortheast:">-whereKey:<wbr>withinGeoBoxFromSouthwest:<wbr>toNortheast:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span>
+    <span class="nf">withinGeoBoxFromSouthwest</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n"><a href="../Classes/LCGeoPoint.html">LCGeoPoint</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">southwest</span>
+                  <span class="nf">toNortheast</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n"><a href="../Classes/LCGeoPoint.html">LCGeoPoint</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">northeast</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">withinGeoBoxFromSouthwest</span> <span class="nv">southwest</span><span class="p">:</span> <span class="kt"><a href="../Classes/LCGeoPoint.html">LCGeoPoint</a></span><span class="p">,</span> <span class="n">toNortheast</span> <span class="nv">northeast</span><span class="p">:</span> <span class="kt"><a href="../Classes/LCGeoPoint.html">LCGeoPoint</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L145">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:matchesRegex:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:matchesRegex:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:matchesRegex:">-whereKey:<wbr>matchesRegex:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">matchesRegex</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">regex</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">matchesRegex</span> <span class="nv">regex</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L150">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:matchesRegex:modifiers:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:matchesRegex:modifiers:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:matchesRegex:modifiers:">-whereKey:<wbr>matchesRegex:<wbr>modifiers:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span>
+    <span class="nf">matchesRegex</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">regex</span>
+       <span class="nf">modifiers</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">modifiers</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">matchesRegex</span> <span class="nv">regex</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">modifiers</span><span class="p">:</span> <span class="kt">String</span><span class="p">?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L156">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:containsString:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:containsString:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:containsString:">-whereKey:<wbr>containsString:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span>
+    <span class="nf">containsString</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">substring</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">contains</span> <span class="nv">substring</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L161">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:hasPrefix:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:hasPrefix:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:hasPrefix:">-whereKey:<wbr>hasPrefix:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">hasPrefix</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">prefix</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">hasPrefix</span> <span class="nv">prefix</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L166">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:hasSuffix:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:hasSuffix:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:hasSuffix:">-whereKey:<wbr>hasSuffix:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">hasSuffix</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">suffix</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">hasSuffix</span> <span class="nv">suffix</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L171">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)whereKey:sizeEqualTo:"></a>
+                    <a name="//apple_ref/objc/Method/-whereKey:sizeEqualTo:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)whereKey:sizeEqualTo:">-whereKey:<wbr>sizeEqualTo:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">whereKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">sizeEqualTo</span><span class="p">:(</span><span class="n">NSUInteger</span><span class="p">)</span><span class="nv">count</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">whereKey</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">sizeEqualTo</span> <span class="nv">count</span><span class="p">:</span> <span class="kt">UInt</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L176">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)orderByAscending:"></a>
+                    <a name="//apple_ref/objc/Method/-orderByAscending:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)orderByAscending:">-orderByAscending:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">orderByAscending</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">order</span><span class="p">(</span><span class="n">byAscending</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L182">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)addAscendingOrder:"></a>
+                    <a name="//apple_ref/objc/Method/-addAscendingOrder:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)addAscendingOrder:">-addAscendingOrder:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">addAscendingOrder</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">addAscendingOrder</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L187">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)orderByDescending:"></a>
+                    <a name="//apple_ref/objc/Method/-orderByDescending:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)orderByDescending:">-orderByDescending:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">orderByDescending</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">order</span><span class="p">(</span><span class="n">byDescending</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L192">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)addDescendingOrder:"></a>
+                    <a name="//apple_ref/objc/Method/-addDescendingOrder:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)addDescendingOrder:">-addDescendingOrder:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">addDescendingOrder</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">addDescendingOrder</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L198">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)orderBySortDescriptor:"></a>
+                    <a name="//apple_ref/objc/Method/-orderBySortDescriptor:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)orderBySortDescriptor:">-orderBySortDescriptor:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">orderBySortDescriptor</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSSortDescriptor</span> <span class="o">*</span><span class="p">)</span><span class="nv">sortDescriptor</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">order</span><span class="p">(</span><span class="n">by</span> <span class="nv">sortDescriptor</span><span class="p">:</span> <span class="kt">NSSortDescriptor</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L204">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)orderBySortDescriptors:"></a>
+                    <a name="//apple_ref/objc/Method/-orderBySortDescriptors:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)orderBySortDescriptors:">-orderBySortDescriptors:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">orderBySortDescriptors</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">sortDescriptors</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">order</span><span class="p">(</span><span class="n">bySortDescriptors</span> <span class="nv">sortDescriptors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L210">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)getConversationById:callback:"></a>
+                    <a name="//apple_ref/objc/Method/-getConversationById:callback:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)getConversationById:callback:">-getConversationById:<wbr>callback:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">getConversationById</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">conversationId</span>
+                   <span class="nf">callback</span><span class="p">:(</span><span class="n">nonnull</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n"><a href="../Classes/LCIMConversation.html">LCIMConversation</a></span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">,</span>
+                                              <span class="n">NSError</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">))</span><span class="n">callback</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getConversationById</span><span class="p">(</span><span class="n">_</span> <span class="nv">conversationId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Classes/LCIMConversation.html">LCIMConversation</a></span><span class="p">?,</span> <span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L216-L217">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)findConversationsWithCallback:"></a>
+                    <a name="//apple_ref/objc/Method/-findConversationsWithCallback:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)findConversationsWithCallback:">-findConversationsWithCallback:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">findConversationsWithCallback</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">nonnull</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSArray</span><span class="o">&lt;</span><span class="n"><a href="../Classes/LCIMConversation.html">LCIMConversation</a></span> <span class="o">*&gt;</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">,</span>
+                      <span class="n">NSError</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">))</span><span class="n">callback</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">findConversations</span><span class="p">(</span><span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Classes/LCIMConversation.html">LCIMConversation</a></span><span class="p">]?,</span> <span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L224">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCIMConversationQuery(im)findTemporaryConversationsWith:callback:"></a>
+                    <a name="//apple_ref/objc/Method/-findTemporaryConversationsWith:callback:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCIMConversationQuery(im)findTemporaryConversationsWith:callback:">-findTemporaryConversationsWith:<wbr>callback:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Find temporary conversations from server.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">findTemporaryConversationsWith</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">nonnull</span> <span class="n">NSArray</span><span class="o">&lt;</span><span class="n">NSString</span> <span class="o">*&gt;</span> <span class="o">*</span><span class="p">)</span><span class="nv">tempConvIds</span>
+                              <span class="nf">callback</span><span class="p">:(</span><span class="n">nonnull</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span>
+                                           <span class="n">NSArray</span><span class="o">&lt;</span><span class="n"><a href="../Classes.html#/c:objc(cs)LCIMTemporaryConversation">LCIMTemporaryConversation</a></span> <span class="o">*&gt;</span>
+                                               <span class="o">*</span><span class="n">_Nullable</span><span class="p">,</span>
+                                           <span class="n">NSError</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">))</span><span class="n">callback</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">findTemporaryConversations</span><span class="p">(</span><span class="n">with</span> <span class="nv">tempConvIds</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Classes.html#/c:objc(cs)LCIMTemporaryConversation">LCIMTemporaryConversation</a></span><span class="p">]?,</span> <span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>tempConvIds</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>ID array of temporary conversations.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Result callback.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Realtime/IM/Conversation/LCIMConversationQuery.h#L233-L234">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2023 <a class="link" href="https://leancloud.cn" target="_blank" rel="external noopener">LeanCloud</a>. All rights reserved. (Last updated: 2023-12-05)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,2402 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>LCHTTPSessionManager Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/objc/Class/LCHTTPSessionManager" class="dashAnchor"></a>
+    <a title="LCHTTPSessionManager Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">LeanCloud 13.9.3 Docs</a> (42% documented)</p>
+        <p class="header-right"><a href="https://github.com/leancloud/objc-sdk"><img src="../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Fleancloud.github.io%2Fobjc-sdk%2Fdocsets%2FLeanCloud.xml"><img src="../img/dash.png" alt="Dash"/>Install in Dash</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">LeanCloud Reference</a>
+        <img id="carat" src="../img/carat.png" alt=""/>
+        LCHTTPSessionManager Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Categories.html">Categories</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Categories/NSObject%28LeanCloudObjcSDK%29.html">NSObject(LeanCloudObjcSDK)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/LCACL.html">LCACL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCApplication.html">LCApplication</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCCaptcha.html">LCCaptcha</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCCaptchaDigest.html">LCCaptchaDigest</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCCaptchaRequestOptions.html">LCCaptchaRequestOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCCloud.html">LCCloud</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCCloudQueryResult.html">LCCloudQueryResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCCompoundResponseSerializer.html">LCCompoundResponseSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCDynamicObject.html">LCDynamicObject</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCFile.html">LCFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCFileQuery.html">LCFileQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCFriendship.html">LCFriendship</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCFriendshipRequest.html">LCFriendshipRequest</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCGeoPoint.html">LCGeoPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCHTTPRequestSerializer.html">LCHTTPRequestSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCHTTPResponseSerializer.html">LCHTTPResponseSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCHTTPSessionManager.html">LCHTTPSessionManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMAudioMessage.html">LCIMAudioMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)LCIMChatRoom">LCIMChatRoom</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMClient.html">LCIMClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMClientOption.html">LCIMClientOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMConversation.html">LCIMConversation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMConversationCreationOption.html">LCIMConversationCreationOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMConversationMemberInfo.html">LCIMConversationMemberInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMConversationQuery.html">LCIMConversationQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMFileMessage.html">LCIMFileMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMImageMessage.html">LCIMImageMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMKeyedConversation.html">LCIMKeyedConversation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMLocationMessage.html">LCIMLocationMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMMessage.html">LCIMMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMMessageInterval.html">LCIMMessageInterval</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMMessageIntervalBound.html">LCIMMessageIntervalBound</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMMessageOption.html">LCIMMessageOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMMessagePatchedReason.html">LCIMMessagePatchedReason</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMOperationFailure.html">LCIMOperationFailure</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMRecalledMessage.html">LCIMRecalledMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMServiceConversation.html">LCIMServiceConversation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMSignature.html">LCIMSignature</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)LCIMTemporaryConversation">LCIMTemporaryConversation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMTextMessage.html">LCIMTextMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMTypedMessage.html">LCIMTypedMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMVideoMessage.html">LCIMVideoMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCImageResponseSerializer.html">LCImageResponseSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCInstallation.html">LCInstallation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCJSONRequestSerializer.html">LCJSONRequestSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCJSONResponseSerializer.html">LCJSONResponseSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCLeaderboard.html">LCLeaderboard</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCLeaderboardQueryOption.html">LCLeaderboardQueryOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCLeaderboardRanking.html">LCLeaderboardRanking</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCLeaderboardStatistic.html">LCLeaderboardStatistic</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCLiveQuery.html">LCLiveQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCLogger.html">LCLogger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCNetworkReachabilityManager.html">LCNetworkReachabilityManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCObject.html">LCObject</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCObjectFetchOption.html">LCObjectFetchOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCPaasClient.html">LCPaasClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCPropertyListRequestSerializer.html">LCPropertyListRequestSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCPropertyListResponseSerializer.html">LCPropertyListResponseSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCPush.html">LCPush</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCQuery.html">LCQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCRTMWebSocket.html">LCRTMWebSocket</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCRTMWebSocketMessage.html">LCRTMWebSocketMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCRelation.html">LCRelation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCRole.html">LCRole</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCSMS.html">LCSMS</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCSaveOption.html">LCSaveOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCSearchQuery.html">LCSearchQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCSearchSortBuilder.html">LCSearchSortBuilder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCSecurityPolicy.html">LCSecurityPolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCShortMessageRequestOptions.html">LCShortMessageRequestOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCStatus.html">LCStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCStatusQuery.html">LCStatusQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCURLSessionManager.html">LCURLSessionManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCUser.html">LCUser</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCUserAuthDataLoginOption.html">LCUserAuthDataLoginOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCUserShortMessageRequestOptions.html">LCUserShortMessageRequestOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCUtils.html">LCUtils</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)LCXMLParserResponseSerializer">LCXMLParserResponseSerializer</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Constants.html">Constants</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCHeaderFieldNameId">LCHeaderFieldNameId</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCHeaderFieldNameKey">LCHeaderFieldNameKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCHeaderFieldNameProduction">LCHeaderFieldNameProduction</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCHeaderFieldNameSession">LCHeaderFieldNameSession</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCHeaderFieldNameSign">LCHeaderFieldNameSign</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMConversationUpdatedKeyLastDeliveredAt">LCIMConversationUpdatedKeyLastDeliveredAt</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMConversationUpdatedKeyLastMessage">LCIMConversationUpdatedKeyLastMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMConversationUpdatedKeyLastMessageAt">LCIMConversationUpdatedKeyLastMessageAt</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMConversationUpdatedKeyLastReadAt">LCIMConversationUpdatedKeyLastReadAt</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMConversationUpdatedKeyUnreadMessagesCount">LCIMConversationUpdatedKeyUnreadMessagesCount</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMConversationUpdatedKeyUnreadMessagesMentioned">LCIMConversationUpdatedKeyUnreadMessagesMentioned</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeAudio">LCIMMessageMediaTypeAudio</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeFile">LCIMMessageMediaTypeFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeImage">LCIMMessageMediaTypeImage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeLocation">LCIMMessageMediaTypeLocation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeNone">LCIMMessageMediaTypeNone</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeRecalled">LCIMMessageMediaTypeRecalled</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeText">LCIMMessageMediaTypeText</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeVideo">LCIMMessageMediaTypeVideo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMSignatureActionAdd">LCIMSignatureActionAdd</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMSignatureActionBlock">LCIMSignatureActionBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMSignatureActionOpen">LCIMSignatureActionOpen</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMSignatureActionRemove">LCIMSignatureActionRemove</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMSignatureActionStart">LCIMSignatureActionStart</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMSignatureActionUnblock">LCIMSignatureActionUnblock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCLoggerDomainCURL">LCLoggerDomainCURL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCLoggerDomainDefault">LCLoggerDomainDefault</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCLoggerDomainIM">LCLoggerDomainIM</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCLoggerDomainNetwork">LCLoggerDomainNetwork</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCLoggerDomainStorage">LCLoggerDomainStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingOperationFailingURLRequestErrorKey">LCNetworkingOperationFailingURLRequestErrorKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingOperationFailingURLResponseDataErrorKey">LCNetworkingOperationFailingURLResponseDataErrorKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingOperationFailingURLResponseErrorKey">LCNetworkingOperationFailingURLResponseErrorKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingReachabilityDidChangeNotification">LCNetworkingReachabilityDidChangeNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingReachabilityNotificationStatusItem">LCNetworkingReachabilityNotificationStatusItem</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidCompleteAssetPathKey">LCNetworkingTaskDidCompleteAssetPathKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidCompleteErrorKey">LCNetworkingTaskDidCompleteErrorKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidCompleteNotification">LCNetworkingTaskDidCompleteNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidCompleteResponseDataKey">LCNetworkingTaskDidCompleteResponseDataKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidCompleteResponseSerializerKey">LCNetworkingTaskDidCompleteResponseSerializerKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidCompleteSerializedResponseKey">LCNetworkingTaskDidCompleteSerializedResponseKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidResumeNotification">LCNetworkingTaskDidResumeNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidSuspendNotification">LCNetworkingTaskDidSuspendNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCURLRequestSerializationErrorDomain">LCURLRequestSerializationErrorDomain</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCURLResponseSerializationErrorDomain">LCURLResponseSerializationErrorDomain</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCURLSessionDidInvalidateNotification">LCURLSessionDidInvalidateNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCURLSessionDownloadTaskDidFailToMoveFileNotification">LCURLSessionDownloadTaskDidFailToMoveFileNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LeanCloudObjcVersionNumber">LeanCloudObjcVersionNumber</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LeanCloudObjcVersionString">LeanCloudObjcVersionString</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LeanCloudSocialPlatformQQ">LeanCloudSocialPlatformQQ</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LeanCloudSocialPlatformWeiBo">LeanCloudSocialPlatformWeiBo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LeanCloudSocialPlatformWeiXin">LeanCloudSocialPlatformWeiXin</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:LCPaasClient.h@USER_AGENT">USER_AGENT</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorAccountAlreadyLinked">kLCErrorAccountAlreadyLinked</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorCacheMiss">kLCErrorCacheMiss</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorCommandUnavailable">kLCErrorCommandUnavailable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorConnectionFailed">kLCErrorConnectionFailed</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorDuplicateValue">kLCErrorDuplicateValue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorExceededQuota">kLCErrorExceededQuota</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorFileDeleteFailure">kLCErrorFileDeleteFailure</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorIncorrectType">kLCErrorIncorrectType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInternalServer">kLCErrorInternalServer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidACL">kLCErrorInvalidACL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidChannelName">kLCErrorInvalidChannelName</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidClassName">kLCErrorInvalidClassName</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidDeviceToken">kLCErrorInvalidDeviceToken</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidEmailAddress">kLCErrorInvalidEmailAddress</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidFileName">kLCErrorInvalidFileName</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidImageData">kLCErrorInvalidImageData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidJSON">kLCErrorInvalidJSON</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidKeyName">kLCErrorInvalidKeyName</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidLinkedSession">kLCErrorInvalidLinkedSession</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidNestedKey">kLCErrorInvalidNestedKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidPointer">kLCErrorInvalidPointer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidProductIdentifier">kLCErrorInvalidProductIdentifier</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidPurchaseReceipt">kLCErrorInvalidPurchaseReceipt</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidQuery">kLCErrorInvalidQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidRoleName">kLCErrorInvalidRoleName</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidServerResponse">kLCErrorInvalidServerResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorLinkedIdMissing">kLCErrorLinkedIdMissing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorMissingObjectId">kLCErrorMissingObjectId</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorObjectNotFound">kLCErrorObjectNotFound</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorObjectTooLarge">kLCErrorObjectTooLarge</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorOperationForbidden">kLCErrorOperationForbidden</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorPaymentDisabled">kLCErrorPaymentDisabled</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorProductDownloadFileSystemFailure">kLCErrorProductDownloadFileSystemFailure</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorProductNotFoundInAppStore">kLCErrorProductNotFoundInAppStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorPushMisconfigured">kLCErrorPushMisconfigured</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorReceiptMissing">kLCErrorReceiptMissing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorTimeout">kLCErrorTimeout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUnsavedFile">kLCErrorUnsavedFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserCanOnlyBeCreatedThroughSignUp">kLCErrorUserCanOnlyBeCreatedThroughSignUp</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserCannotBeAlteredWithoutSession">kLCErrorUserCannotBeAlteredWithoutSession</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserEmailMissing">kLCErrorUserEmailMissing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserEmailTaken">kLCErrorUserEmailTaken</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserIdMismatch">kLCErrorUserIdMismatch</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserMobilePhoneMissing">kLCErrorUserMobilePhoneMissing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserMobilePhoneNotVerified">kLCErrorUserMobilePhoneNotVerified</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserMobilePhoneNumberTaken">kLCErrorUserMobilePhoneNumberTaken</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserNotFound">kLCErrorUserNotFound</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserPasswordMissing">kLCErrorUserPasswordMissing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserSNSAuthDataInvalid">kLCErrorUserSNSAuthDataInvalid</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserWithEmailNotFound">kLCErrorUserWithEmailNotFound</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserWithMobilePhoneNotFound">kLCErrorUserWithMobilePhoneNotFound</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUsernameMissing">kLCErrorUsernameMissing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUsernamePasswordMismatch">kLCErrorUsernamePasswordMismatch</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUsernameTaken">kLCErrorUsernameTaken</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCIMAppCodeKey">kLCIMAppCodeKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCIMAppMsgKey">kLCIMAppMsgKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCIMCodeKey">kLCIMCodeKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCIMDetailKey">kLCIMDetailKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCIMReasonKey">kLCIMReasonKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCPushTargetPlatformAndroid">kLCPushTargetPlatformAndroid</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCPushTargetPlatformIOS">kLCPushTargetPlatformIOS</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCPushTargetPlatformWindowsPhone">kLCPushTargetPlatformWindowsPhone</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCScriptError">kLCScriptError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCStatusTypePrivateMessage">kLCStatusTypePrivateMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCStatusTypeTimeline">kLCStatusTypeTimeline</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCUploadStream3GSuggestedDelay">kLCUploadStream3GSuggestedDelay</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCUploadStream3GSuggestedPacketSize">kLCUploadStream3GSuggestedPacketSize</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCValidationError">kLCValidationError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLeanCloudErrorDomain">kLeanCloudErrorDomain</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLeanCloudRESTAPIResponseError">kLeanCloudRESTAPIResponseError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/LCCachePolicy.html">LCCachePolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCErrorInternalErrorCode.html">LCErrorInternalErrorCode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCFileDownloadOption.html">LCFileDownloadOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCFileUploadOption.html">LCFileUploadOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCHTTPRequestQueryStringSerializationStyle.html">LCHTTPRequestQueryStringSerializationStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMCachePolicy.html">LCIMCachePolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMClientOpenOption.html">LCIMClientOpenOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMClientStatus.html">LCIMClientStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMConversationMemberRole.html">LCIMConversationMemberRole</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMConversationQueryOption.html">LCIMConversationQueryOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMErrorCode.html">LCIMErrorCode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMMessageIOType.html">LCIMMessageIOType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMMessagePriority.html">LCIMMessagePriority</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMMessageQueryDirection.html">LCIMMessageQueryDirection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMMessageStatus.html">LCIMMessageStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCLogLevel.html">LCLogLevel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCNetworkReachabilityStatus.html">LCNetworkReachabilityStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCQueryDistanceUnit.html">LCQueryDistanceUnit</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCRTMWebSocketCloseCode.html">LCRTMWebSocketCloseCode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCRTMWebSocketMessageType.html">LCRTMWebSocketMessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCSSLPinningMode.html">LCSSLPinningMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCServiceModule.html">LCServiceModule</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCShortMessageType.html">LCShortMessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/kLCIMMessageMediaType.html">kLCIMMessageMediaType</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/LCIMClientDelegate.html">LCIMClientDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCIMSignatureDataSource.html">LCIMSignatureDataSource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCIMTypedMessageSubclassing.html">LCIMTypedMessageSubclassing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCLiveQueryDelegate.html">LCLiveQueryDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCMultipartFormData.html">LCMultipartFormData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCRTMWebSocketDelegate.html">LCRTMWebSocketDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCSubclassing.html">LCSubclassing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCURLRequestSerialization.html">LCURLRequestSerialization</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCURLResponseSerialization.html">LCURLResponseSerialization</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Type%20Definitions.html">Type Definitions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCArrayResultBlock">LCArrayResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCBooleanResultBlock">LCBooleanResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCCaptcha.h@T@LCCaptchaRequestCallback">LCCaptchaRequestCallback</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCCaptcha.h@T@LCCaptchaVerificationCallback">LCCaptchaVerificationCallback</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCCloudQueryCallback">LCCloudQueryCallback</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCDataResultBlock">LCDataResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCDictionaryResultBlock">LCDictionaryResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCFileResultBlock">LCFileResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMArrayResultBlock">LCIMArrayResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMBooleanResultBlock">LCIMBooleanResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMChatRoomResultBlock">LCIMChatRoomResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMConversationResultBlock">LCIMConversationResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMConversationUpdatedKey">LCIMConversationUpdatedKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMIntegerResultBlock">LCIMIntegerResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMMessage.h@T@LCIMMessageMediaType">LCIMMessageMediaType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMProgressBlock">LCIMProgressBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMSignatureAction">LCIMSignatureAction</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMTemporaryConversationResultBlock">LCIMTemporaryConversationResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCIdResultBlock">LCIdResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCIntegerResultBlock">LCIntegerResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions/LCLoggerLevel.html">LCLoggerLevel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCObjectResultBlock">LCObjectResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCProgressBlock">LCProgressBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCSetResultBlock">LCSetResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCStatus.h@T@LCStatusResultBlock">LCStatusResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCStatus.h@T@LCStatusType">LCStatusType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCStringResultBlock">LCStringResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCUserResultBlock">LCUserResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUser.h@T@LeanCloudSocialPlatform">LeanCloudSocialPlatform</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCError">LCError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCErrorFromUnderlyingError">LCErrorFromUnderlyingError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCErrorInconsistency">LCErrorInconsistency</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCErrorInternalServer">LCErrorInternalServer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCPercentEscapedStringFromString">LCPercentEscapedStringFromString</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCQueryStringFromParameters">LCQueryStringFromParameters</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCStringFromNetworkReachabilityStatus">LCStringFromNetworkReachabilityStatus</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>LCHTTPSessionManager</h1>
+              <div class="declaration">
+                <div class="language">
+                  <p class="aside-title">Objective-C</p>
+                  <pre class="highlight objective_c"><code><span class="k">@interface</span> <span class="nc">LCHTTPSessionManager</span>
+    <span class="p">:</span> <span class="nc"><a href="../Classes/LCURLSessionManager.html">LCURLSessionManager</a></span> <span class="o">&lt;</span><span class="n">NSSecureCoding</span><span class="p">,</span> <span class="n">NSCopying</span><span class="o">&gt;</span></code></pre>
+
+                </div>
+                <div class="language">
+                  <p class="aside-title">Swift</p>
+                  <pre class="highlight swift"><code><span class="kd">class</span> <span class="kt">LCHTTPSessionManager</span> <span class="p">:</span> <span class="kt"><a href="../Classes/LCURLSessionManager.html">LCURLSessionManager</a></span><span class="p">,</span> <span class="kt">NSSecureCoding</span><span class="p">,</span> <span class="kt">NSCopying</span></code></pre>
+
+                </div>
+              </div>
+            <p><code>LCHTTPSessionManager</code> is a subclass of <code><a href="../Classes/LCURLSessionManager.html">LCURLSessionManager</a></code> with convenience methods for making HTTP requests. When a <code>baseURL</code> is provided, requests made with the <code>GET</code> / <code>POST</code> / et al. convenience methods can be made with relative paths.</p>
+<h2 id='subclassing-notes' class='heading'>Subclassing Notes</h2>
+
+<p>Developers targeting iOS 7 or Mac OS X 10.9 or later that deal extensively with a web service are encouraged to subclass <code>LCHTTPSessionManager</code>, providing a class method that returns a shared singleton object on which authentication and other configuration can be shared across the application.</p>
+
+<p>For developers targeting iOS 6 or Mac OS X 10.8 or earlier, <code>LCHTTPRequestOperationManager</code> may be used to similar effect.</p>
+<h2 id='methods-to-override' class='heading'>Methods to Override</h2>
+
+<p>To change the behavior of all data task operation construction, which is also used in the <code>GET</code> / <code>POST</code> / et al. convenience methods, override <code>dataTaskWithRequest:uploadProgress:downloadProgress:completionHandler:</code>.</p>
+<h2 id='serialization' class='heading'>Serialization</h2>
+
+<p>Requests created by an HTTP client will contain default headers and encode parameters according to the <code>requestSerializer</code> property, which is an object conforming to <code>&lt;LCURLRequestSerialization&gt;</code>.</p>
+
+<p>Responses received from the server are automatically validated and serialized by the <code>responseSerializers</code> property, which is an object conforming to <code>&lt;LCURLResponseSerialization&gt;</code></p>
+<h2 id='url-construction-using-relative-paths' class='heading'>URL Construction Using Relative Paths</h2>
+
+<p>For HTTP convenience methods, the request serializer constructs URLs from the path relative to the <code>-baseURL</code>, using <code>NSURL +URLWithString:relativeToURL:</code>, when provided. If <code>baseURL</code> is <code>nil</code>, <code>path</code> needs to resolve to a valid <code>NSURL</code> object using <code>NSURL +URLWithString:</code>.</p>
+
+<p>Below are a few examples of how <code>baseURL</code> and relative paths interact:</p>
+
+<p>NSURL *baseURL = [NSURL URLWithString:@&ldquo;<a href="http://example.com/v1/%22">http://example.com/v1/&rdquo;</a>];
+   [NSURL URLWithString:@&ldquo;foo&rdquo; relativeToURL:baseURL];                  // <a href="http://example.com/v1/foo">http://example.com/v1/foo</a>
+   [NSURL URLWithString:@&ldquo;foo?bar=baz&rdquo; relativeToURL:baseURL];          // <a href="http://example.com/v1/foo?bar=baz">http://example.com/v1/foo?bar=baz</a>
+   [NSURL URLWithString:@&ldquo;/foo&rdquo; relativeToURL:baseURL];                 // <a href="http://example.com/foo">http://example.com/foo</a>
+   [NSURL URLWithString:@&ldquo;foo/&rdquo; relativeToURL:baseURL];                 // <a href="http://example.com/v1/foo">http://example.com/v1/foo</a>
+   [NSURL URLWithString:@&ldquo;/foo/&rdquo; relativeToURL:baseURL];                // <a href="http://example.com/foo/">http://example.com/foo/</a>
+   [NSURL URLWithString:@&ldquo;<a href="http://example2.com/">http://example2.com/</a>&rdquo; relativeToURL:baseURL]; // <a href="http://example2.com/">http://example2.com/</a></p>
+
+<p>Also important to note is that a trailing slash will be added to any <code>baseURL</code> without one. This would otherwise cause unexpected behavior when constructing URLs using paths without a leading slash.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    Managers for background sessions must be owned for the duration of their use. This can be accomplished by creating an application-wide or shared singleton instance.
+
+</div>
+
+              <div class="slightly-smaller">
+                <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCHTTPSessionManager.h#L76-L302">Show on GitHub</a>
+              </div>
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPSessionManager(py)baseURL"></a>
+                    <a name="//apple_ref/objc/Property/baseURL" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPSessionManager(py)baseURL">baseURL</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The URL used to construct requests from relative paths in methods like <code>requestWithMethod:URLString:parameters:</code>, and the <code>GET</code> / <code>POST</code> / et al. convenience methods.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">readonly</span><span class="p">,</span> <span class="n">nullable</span><span class="p">)</span> <span class="n">NSURL</span> <span class="o">*</span><span class="n">baseURL</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">baseURL</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCHTTPSessionManager.h#L81">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPSessionManager(py)requestSerializer"></a>
+                    <a name="//apple_ref/objc/Property/requestSerializer" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPSessionManager(py)requestSerializer">requestSerializer</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Requests created with <code>requestWithMethod:URLString:parameters:</code> &amp; <code>multipartFormRequestWithMethod:URLString:parameters:constructingBodyWithBlock:</code> are constructed with a set of default headers using a parameter serialization specified by this property. By default, this is set to an instance of <code><a href="../Classes/LCHTTPRequestSerializer.html">LCHTTPRequestSerializer</a></code>, which serializes query string parameters for <code>GET</code>, <code>HEAD</code>, and <code>DELETE</code> requests, or otherwise URL-form-encodes HTTP message bodies.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    <code>requestSerializer</code> must not be <code>nil</code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n"><a href="../Classes/LCHTTPRequestSerializer.html">LCHTTPRequestSerializer</a></span><span class="o">&lt;</span><span class="n"><a href="../Protocols/LCURLRequestSerialization.html">LCURLRequestSerialization</a></span><span class="o">&gt;</span> <span class="o">*</span><span class="n">_Nonnull</span> <span class="n">requestSerializer</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">requestSerializer</span><span class="p">:</span> <span class="kt"><a href="../Classes/LCHTTPRequestSerializer.html">LCHTTPRequestSerializer</a></span> <span class="o">&amp;</span> <span class="kt"><a href="../Protocols/LCURLRequestSerialization.html">LCURLRequestSerialization</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCHTTPSessionManager.h#L88">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPSessionManager(py)responseSerializer"></a>
+                    <a name="//apple_ref/objc/Property/responseSerializer" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPSessionManager(py)responseSerializer">responseSerializer</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Responses sent from the server in data tasks created with <code>dataTaskWithRequest:success:failure:</code> and run using the <code>GET</code> / <code>POST</code> / et al. convenience methods are automatically validated and serialized by the response serializer. By default, this property is set to an instance of <code><a href="../Classes/LCJSONResponseSerializer.html">LCJSONResponseSerializer</a></code>.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    <code>responseSerializer</code> must not be <code>nil</code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n"><a href="../Classes/LCHTTPResponseSerializer.html">LCHTTPResponseSerializer</a></span><span class="o">&lt;</span><span class="n"><a href="../Protocols/LCURLResponseSerialization.html">LCURLResponseSerialization</a></span><span class="o">&gt;</span> <span class="o">*</span><span class="n">_Nonnull</span> <span class="n">responseSerializer</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">responseSerializer</span><span class="p">:</span> <span class="kt"><a href="../Classes/LCHTTPResponseSerializer.html">LCHTTPResponseSerializer</a></span> <span class="o">&amp;</span> <span class="kt"><a href="../Protocols/LCURLResponseSerialization.html">LCURLResponseSerialization</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCHTTPSessionManager.h#L95">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Managing%20Security%20Policy"></a>
+                <a name="//apple_ref/objc/Section/Managing Security Policy" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Managing%20Security%20Policy"></a>
+                  <h3 class="section-name"><span>Managing Security Policy</span>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPSessionManager(py)securityPolicy"></a>
+                    <a name="//apple_ref/objc/Property/securityPolicy" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPSessionManager(py)securityPolicy">securityPolicy</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The security policy used by created session to evaluate server trust for secure connections. <code><a href="../Classes/LCURLSessionManager.html">LCURLSessionManager</a></code> uses the <code>defaultPolicy</code> unless otherwise specified. A security policy configured with <code>LCSSLPinningModePublicKey</code> or <code>LCSSLPinningModeCertificate</code> can only be applied on a session manager initialized with a secure base URL (i.e. https). Applying a security policy with pinning enabled on an insecure session manager throws an <code>Invalid Security Policy</code> exception.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n"><a href="../Classes/LCSecurityPolicy.html">LCSecurityPolicy</a></span> <span class="o">*</span><span class="n">_Nonnull</span> <span class="n">securityPolicy</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">securityPolicy</span><span class="p">:</span> <span class="kt"><a href="../Classes/LCSecurityPolicy.html">LCSecurityPolicy</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCHTTPSessionManager.h#L104">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Initialization"></a>
+                <a name="//apple_ref/objc/Section/Initialization" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Initialization"></a>
+                  <h3 class="section-name"><span>Initialization</span>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPSessionManager(cm)manager"></a>
+                    <a name="//apple_ref/objc/Method/+manager" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPSessionManager(cm)manager">+manager</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates and returns an <code>LCHTTPSessionManager</code> object.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">nonnull</span> <span class="n">instancetype</span><span class="p">)</span><span class="n">manager</span><span class="p">;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCHTTPSessionManager.h#L113">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPSessionManager(im)initWithBaseURL:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithBaseURL:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPSessionManager(im)initWithBaseURL:">-initWithBaseURL:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializes an <code>LCHTTPSessionManager</code> object with the specified base URL.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">nonnull</span> <span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithBaseURL</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">NSURL</span> <span class="o">*</span><span class="p">)</span><span class="nv">url</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">convenience</span> <span class="nf">init</span><span class="p">(</span><span class="n"><a href="../Classes/LCHTTPSessionManager.html#/c:objc(cs)LCHTTPSessionManager(py)baseURL">baseURL</a></span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>url</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The base URL for the HTTP client.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The newly-initialized HTTP client</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCHTTPSessionManager.h#L122">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPSessionManager(im)initWithBaseURL:sessionConfiguration:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithBaseURL:sessionConfiguration:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPSessionManager(im)initWithBaseURL:sessionConfiguration:">-initWithBaseURL:<wbr>sessionConfiguration:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializes an <code>LCHTTPSessionManager</code> object with the specified base URL.</p>
+
+<p>This is the designated initializer.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">nonnull</span> <span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithBaseURL</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">NSURL</span> <span class="o">*</span><span class="p">)</span><span class="nv">url</span>
+                   <span class="nf">sessionConfiguration</span><span class="p">:</span>
+                       <span class="p">(</span><span class="n">nullable</span> <span class="n">NSURLSessionConfiguration</span> <span class="o">*</span><span class="p">)</span><span class="nv">configuration</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="nf">init</span><span class="p">(</span><span class="n"><a href="../Classes/LCHTTPSessionManager.html#/c:objc(cs)LCHTTPSessionManager(py)baseURL">baseURL</a></span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?,</span> <span class="n">sessionConfiguration</span> <span class="nv">configuration</span><span class="p">:</span> <span class="kt">URLSessionConfiguration</span><span class="p">?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>url</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The base URL for the HTTP client.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>configuration</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The configuration used to create the managed session.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The newly-initialized HTTP client</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCHTTPSessionManager.h#L134-L135">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Making%20HTTP%20Requests"></a>
+                <a name="//apple_ref/objc/Section/Making HTTP Requests" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Making%20HTTP%20Requests"></a>
+                  <h3 class="section-name"><span>Making HTTP Requests</span>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPSessionManager(im)GET:parameters:success:failure:"></a>
+                    <a name="//apple_ref/objc/Method/-GET:parameters:success:failure:" class="dashAnchor"></a>
+                    <a class="token discouraged" href="#/c:objc(cs)LCHTTPSessionManager(im)GET:parameters:success:failure:">-GET:<wbr>parameters:<wbr>success:<wbr>failure:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="aside aside-deprecated">
+                        <p class="aside-title">Deprecated</p>
+                        
+                      </div>
+                      <div class="abstract">
+                        <p>Creates and runs an <code>NSURLSessionDataTask</code> with a <code>GET</code> request.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <p>-dataTaskWithRequest:completionHandler:</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">nullable</span> <span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="p">)</span>
+           <span class="nf">GET</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">URLString</span>
+    <span class="nf">parameters</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">id</span><span class="p">)</span><span class="nv">parameters</span>
+       <span class="nf">success</span><span class="p">:(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">,</span>
+                                  <span class="n">id</span> <span class="n">_Nullable</span><span class="p">))</span><span class="n">success</span>
+       <span class="n">failure</span><span class="o">:</span><span class="p">(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">,</span>
+                                  <span class="n">NSError</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">))</span><span class="n">failure</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">get</span><span class="p">(</span><span class="n">_</span> <span class="kt">URLString</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">parameters</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?,</span> <span class="nv">success</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">,</span> <span class="kt">Any</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?,</span> <span class="nv">failure</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">?,</span> <span class="kt">Error</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URLSessionDataTask</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>URLString</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL string used to create the request URL.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>parameters</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters to be encoded according to the client request serializer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>success</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes successfully. This block has no return value and takes two arguments: the data task, and the response object created by the client response serializer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>failure</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a two arguments: the data task and the error describing the network or parsing error that occurred.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCHTTPSessionManager.h#L151-L154">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPSessionManager(im)GET:parameters:progress:success:failure:"></a>
+                    <a name="//apple_ref/objc/Method/-GET:parameters:progress:success:failure:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPSessionManager(im)GET:parameters:progress:success:failure:">-GET:<wbr>parameters:<wbr>progress:<wbr>success:<wbr>failure:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates and runs an <code>NSURLSessionDataTask</code> with a <code>GET</code> request.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <p>-dataTaskWithRequest:uploadProgress:downloadProgress:completionHandler:</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">nullable</span> <span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="p">)</span>
+           <span class="nf">GET</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">URLString</span>
+    <span class="nf">parameters</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">id</span><span class="p">)</span><span class="nv">parameters</span>
+      <span class="nf">progress</span><span class="p">:(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSProgress</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">))</span><span class="nv">downloadProgress</span>
+       <span class="nf">success</span><span class="p">:(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">,</span>
+                                  <span class="n">id</span> <span class="n">_Nullable</span><span class="p">))</span><span class="n">success</span>
+       <span class="n">failure</span><span class="o">:</span><span class="p">(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">,</span>
+                                  <span class="n">NSError</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">))</span><span class="n">failure</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">get</span><span class="p">(</span><span class="n">_</span> <span class="kt">URLString</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">parameters</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?,</span> <span class="n">progress</span> <span class="nv">downloadProgress</span><span class="p">:</span> <span class="p">((</span><span class="kt">Progress</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?,</span> <span class="nv">success</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">,</span> <span class="kt">Any</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?,</span> <span class="nv">failure</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">?,</span> <span class="kt">Error</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URLSessionDataTask</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>URLString</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL string used to create the request URL.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>parameters</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters to be encoded according to the client request serializer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>downloadProgress</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the download progress is updated. Note this block is called on the session queue, not the main queue.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>success</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes successfully. This block has no return value and takes two arguments: the data task, and the response object created by the client response serializer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>failure</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a two arguments: the data task and the error describing the network or parsing error that occurred.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCHTTPSessionManager.h#L168-L172">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPSessionManager(im)HEAD:parameters:success:failure:"></a>
+                    <a name="//apple_ref/objc/Method/-HEAD:parameters:success:failure:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPSessionManager(im)HEAD:parameters:success:failure:">-HEAD:<wbr>parameters:<wbr>success:<wbr>failure:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates and runs an <code>NSURLSessionDataTask</code> with a <code>HEAD</code> request.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <p>-dataTaskWithRequest:completionHandler:</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">nullable</span> <span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="p">)</span>
+          <span class="nf">HEAD</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">URLString</span>
+    <span class="nf">parameters</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">id</span><span class="p">)</span><span class="nv">parameters</span>
+       <span class="nf">success</span><span class="p">:(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">))</span><span class="nv">success</span>
+       <span class="nf">failure</span><span class="p">:(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">,</span>
+                                  <span class="n">NSError</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">))</span><span class="n">failure</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">head</span><span class="p">(</span><span class="n">_</span> <span class="kt">URLString</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">parameters</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?,</span> <span class="nv">success</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?,</span> <span class="nv">failure</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">?,</span> <span class="kt">Error</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URLSessionDataTask</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>URLString</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL string used to create the request URL.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>parameters</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters to be encoded according to the client request serializer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>success</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes successfully. This block has no return value and takes a single arguments: the data task.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>failure</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a two arguments: the data task and the error describing the network or parsing error that occurred.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCHTTPSessionManager.h#L184-L187">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPSessionManager(im)POST:parameters:success:failure:"></a>
+                    <a name="//apple_ref/objc/Method/-POST:parameters:success:failure:" class="dashAnchor"></a>
+                    <a class="token discouraged" href="#/c:objc(cs)LCHTTPSessionManager(im)POST:parameters:success:failure:">-POST:<wbr>parameters:<wbr>success:<wbr>failure:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="aside aside-deprecated">
+                        <p class="aside-title">Deprecated</p>
+                        
+                      </div>
+                      <div class="abstract">
+                        <p>Creates and runs an <code>NSURLSessionDataTask</code> with a <code>POST</code> request.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <p>-dataTaskWithRequest:completionHandler:</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">nullable</span> <span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="p">)</span>
+          <span class="nf">POST</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">URLString</span>
+    <span class="nf">parameters</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">id</span><span class="p">)</span><span class="nv">parameters</span>
+       <span class="nf">success</span><span class="p">:(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">,</span>
+                                  <span class="n">id</span> <span class="n">_Nullable</span><span class="p">))</span><span class="n">success</span>
+       <span class="n">failure</span><span class="o">:</span><span class="p">(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">,</span>
+                                  <span class="n">NSError</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">))</span><span class="n">failure</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">post</span><span class="p">(</span><span class="n">_</span> <span class="kt">URLString</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">parameters</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?,</span> <span class="nv">success</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">,</span> <span class="kt">Any</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?,</span> <span class="nv">failure</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">?,</span> <span class="kt">Error</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URLSessionDataTask</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>URLString</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL string used to create the request URL.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>parameters</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters to be encoded according to the client request serializer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>success</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes successfully. This block has no return value and takes two arguments: the data task, and the response object created by the client response serializer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>failure</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a two arguments: the data task and the error describing the network or parsing error that occurred.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCHTTPSessionManager.h#L199-L202">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPSessionManager(im)POST:parameters:progress:success:failure:"></a>
+                    <a name="//apple_ref/objc/Method/-POST:parameters:progress:success:failure:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPSessionManager(im)POST:parameters:progress:success:failure:">-POST:<wbr>parameters:<wbr>progress:<wbr>success:<wbr>failure:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates and runs an <code>NSURLSessionDataTask</code> with a <code>POST</code> request.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <p>-dataTaskWithRequest:uploadProgress:downloadProgress:completionHandler:</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">nullable</span> <span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="p">)</span>
+          <span class="nf">POST</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">URLString</span>
+    <span class="nf">parameters</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">id</span><span class="p">)</span><span class="nv">parameters</span>
+      <span class="nf">progress</span><span class="p">:(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSProgress</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">))</span><span class="nv">uploadProgress</span>
+       <span class="nf">success</span><span class="p">:(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">,</span>
+                                  <span class="n">id</span> <span class="n">_Nullable</span><span class="p">))</span><span class="n">success</span>
+       <span class="n">failure</span><span class="o">:</span><span class="p">(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">,</span>
+                                  <span class="n">NSError</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">))</span><span class="n">failure</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">post</span><span class="p">(</span><span class="n">_</span> <span class="kt">URLString</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">parameters</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?,</span> <span class="n">progress</span> <span class="nv">uploadProgress</span><span class="p">:</span> <span class="p">((</span><span class="kt">Progress</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?,</span> <span class="nv">success</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">,</span> <span class="kt">Any</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?,</span> <span class="nv">failure</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">?,</span> <span class="kt">Error</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URLSessionDataTask</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>URLString</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL string used to create the request URL.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>parameters</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters to be encoded according to the client request serializer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>uploadProgress</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the upload progress is updated. Note this block is called on the session queue, not the main queue.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>success</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes successfully. This block has no return value and takes two arguments: the data task, and the response object created by the client response serializer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>failure</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a two arguments: the data task and the error describing the network or parsing error that occurred.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCHTTPSessionManager.h#L215-L219">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPSessionManager(im)POST:parameters:constructingBodyWithBlock:success:failure:"></a>
+                    <a name="//apple_ref/objc/Method/-POST:parameters:constructingBodyWithBlock:success:failure:" class="dashAnchor"></a>
+                    <a class="token discouraged" href="#/c:objc(cs)LCHTTPSessionManager(im)POST:parameters:constructingBodyWithBlock:success:failure:">-POST:<wbr>parameters:<wbr>constructingBodyWithBlock:<wbr>success:<wbr>failure:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="aside aside-deprecated">
+                        <p class="aside-title">Deprecated</p>
+                        
+                      </div>
+                      <div class="abstract">
+                        <p>Creates and runs an <code>NSURLSessionDataTask</code> with a multipart <code>POST</code> request.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <p>-dataTaskWithRequest:completionHandler:</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">nullable</span> <span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="p">)</span>
+                         <span class="nf">POST</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">URLString</span>
+                   <span class="nf">parameters</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">id</span><span class="p">)</span><span class="nv">parameters</span>
+    <span class="nf">constructingBodyWithBlock</span><span class="p">:</span>
+        <span class="p">(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">id</span><span class="o">&lt;</span><span class="n"><a href="../Protocols/LCMultipartFormData.html">LCMultipartFormData</a></span><span class="o">&gt;</span> <span class="n">_Nonnull</span><span class="p">))</span><span class="nv">block</span>
+                      <span class="nf">success</span><span class="p">:(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">,</span>
+                                                 <span class="n">id</span> <span class="n">_Nullable</span><span class="p">))</span><span class="n">success</span>
+                      <span class="n">failure</span><span class="o">:</span>
+                          <span class="p">(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">,</span>
+                                             <span class="n">NSError</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">))</span><span class="n">failure</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">post</span><span class="p">(</span><span class="n">_</span> <span class="kt">URLString</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">parameters</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?,</span> <span class="n">constructingBodyWith</span> <span class="nv">block</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Protocols/LCMultipartFormData.html">LCMultipartFormData</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?,</span> <span class="nv">success</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">,</span> <span class="kt">Any</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?,</span> <span class="nv">failure</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">?,</span> <span class="kt">Error</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URLSessionDataTask</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>URLString</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL string used to create the request URL.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>parameters</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters to be encoded according to the client request serializer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>block</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block that takes a single argument and appends data to the HTTP body. The block argument is an object adopting the <code><a href="../Protocols/LCMultipartFormData.html">LCMultipartFormData</a></code> protocol.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>success</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes successfully. This block has no return value and takes two arguments: the data task, and the response object created by the client response serializer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>failure</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a two arguments: the data task and the error describing the network or parsing error that occurred.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCHTTPSessionManager.h#L232-L236">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPSessionManager(im)POST:parameters:constructingBodyWithBlock:progress:success:failure:"></a>
+                    <a name="//apple_ref/objc/Method/-POST:parameters:constructingBodyWithBlock:progress:success:failure:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPSessionManager(im)POST:parameters:constructingBodyWithBlock:progress:success:failure:">-POST:<wbr>parameters:<wbr>constructingBodyWithBlock:<wbr>progress:<wbr>success:<wbr>failure:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates and runs an <code>NSURLSessionDataTask</code> with a multipart <code>POST</code> request.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <p>-dataTaskWithRequest:uploadProgress:downloadProgress:completionHandler:</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">nullable</span> <span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="p">)</span>
+                         <span class="nf">POST</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">URLString</span>
+                   <span class="nf">parameters</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">id</span><span class="p">)</span><span class="nv">parameters</span>
+    <span class="nf">constructingBodyWithBlock</span><span class="p">:</span>
+        <span class="p">(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">id</span><span class="o">&lt;</span><span class="n"><a href="../Protocols/LCMultipartFormData.html">LCMultipartFormData</a></span><span class="o">&gt;</span> <span class="n">_Nonnull</span><span class="p">))</span><span class="nv">block</span>
+                     <span class="nf">progress</span><span class="p">:</span>
+                         <span class="p">(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSProgress</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">))</span><span class="nv">uploadProgress</span>
+                      <span class="nf">success</span><span class="p">:(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">,</span>
+                                                 <span class="n">id</span> <span class="n">_Nullable</span><span class="p">))</span><span class="n">success</span>
+                      <span class="n">failure</span><span class="o">:</span>
+                          <span class="p">(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">,</span>
+                                             <span class="n">NSError</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">))</span><span class="n">failure</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">post</span><span class="p">(</span><span class="n">_</span> <span class="kt">URLString</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">parameters</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?,</span> <span class="n">constructingBodyWith</span> <span class="nv">block</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Protocols/LCMultipartFormData.html">LCMultipartFormData</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?,</span> <span class="n">progress</span> <span class="nv">uploadProgress</span><span class="p">:</span> <span class="p">((</span><span class="kt">Progress</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?,</span> <span class="nv">success</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">,</span> <span class="kt">Any</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?,</span> <span class="nv">failure</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">?,</span> <span class="kt">Error</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URLSessionDataTask</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>URLString</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL string used to create the request URL.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>parameters</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters to be encoded according to the client request serializer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>block</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block that takes a single argument and appends data to the HTTP body. The block argument is an object adopting the <code><a href="../Protocols/LCMultipartFormData.html">LCMultipartFormData</a></code> protocol.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>uploadProgress</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the upload progress is updated. Note this block is called on the session queue, not the main queue.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>success</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes successfully. This block has no return value and takes two arguments: the data task, and the response object created by the client response serializer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>failure</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a two arguments: the data task and the error describing the network or parsing error that occurred.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCHTTPSessionManager.h#L250-L255">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPSessionManager(im)PUT:parameters:success:failure:"></a>
+                    <a name="//apple_ref/objc/Method/-PUT:parameters:success:failure:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPSessionManager(im)PUT:parameters:success:failure:">-PUT:<wbr>parameters:<wbr>success:<wbr>failure:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates and runs an <code>NSURLSessionDataTask</code> with a <code>PUT</code> request.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <p>-dataTaskWithRequest:completionHandler:</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">nullable</span> <span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="p">)</span>
+           <span class="nf">PUT</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">URLString</span>
+    <span class="nf">parameters</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">id</span><span class="p">)</span><span class="nv">parameters</span>
+       <span class="nf">success</span><span class="p">:(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">,</span>
+                                  <span class="n">id</span> <span class="n">_Nullable</span><span class="p">))</span><span class="n">success</span>
+       <span class="n">failure</span><span class="o">:</span><span class="p">(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">,</span>
+                                  <span class="n">NSError</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">))</span><span class="n">failure</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">put</span><span class="p">(</span><span class="n">_</span> <span class="kt">URLString</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">parameters</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?,</span> <span class="nv">success</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">,</span> <span class="kt">Any</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?,</span> <span class="nv">failure</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">?,</span> <span class="kt">Error</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URLSessionDataTask</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>URLString</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL string used to create the request URL.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>parameters</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters to be encoded according to the client request serializer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>success</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes successfully. This block has no return value and takes two arguments: the data task, and the response object created by the client response serializer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>failure</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a two arguments: the data task and the error describing the network or parsing error that occurred.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCHTTPSessionManager.h#L267-L270">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPSessionManager(im)PATCH:parameters:success:failure:"></a>
+                    <a name="//apple_ref/objc/Method/-PATCH:parameters:success:failure:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPSessionManager(im)PATCH:parameters:success:failure:">-PATCH:<wbr>parameters:<wbr>success:<wbr>failure:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates and runs an <code>NSURLSessionDataTask</code> with a <code>PATCH</code> request.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <p>-dataTaskWithRequest:completionHandler:</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">nullable</span> <span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="p">)</span>
+         <span class="nf">PATCH</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">URLString</span>
+    <span class="nf">parameters</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">id</span><span class="p">)</span><span class="nv">parameters</span>
+       <span class="nf">success</span><span class="p">:(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">,</span>
+                                  <span class="n">id</span> <span class="n">_Nullable</span><span class="p">))</span><span class="n">success</span>
+       <span class="n">failure</span><span class="o">:</span><span class="p">(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">,</span>
+                                  <span class="n">NSError</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">))</span><span class="n">failure</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">patch</span><span class="p">(</span><span class="n">_</span> <span class="kt">URLString</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">parameters</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?,</span> <span class="nv">success</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">,</span> <span class="kt">Any</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?,</span> <span class="nv">failure</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">?,</span> <span class="kt">Error</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URLSessionDataTask</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>URLString</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL string used to create the request URL.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>parameters</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters to be encoded according to the client request serializer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>success</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes successfully. This block has no return value and takes two arguments: the data task, and the response object created by the client response serializer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>failure</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a two arguments: the data task and the error describing the network or parsing error that occurred.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCHTTPSessionManager.h#L282-L285">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPSessionManager(im)DELETE:parameters:success:failure:"></a>
+                    <a name="//apple_ref/objc/Method/-DELETE:parameters:success:failure:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPSessionManager(im)DELETE:parameters:success:failure:">-DELETE:<wbr>parameters:<wbr>success:<wbr>failure:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates and runs an <code>NSURLSessionDataTask</code> with a <code>DELETE</code> request.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <p>-dataTaskWithRequest:completionHandler:</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">nullable</span> <span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="p">)</span>
+        <span class="nf">DELETE</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">URLString</span>
+    <span class="nf">parameters</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">id</span><span class="p">)</span><span class="nv">parameters</span>
+       <span class="nf">success</span><span class="p">:(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">,</span>
+                                  <span class="n">id</span> <span class="n">_Nullable</span><span class="p">))</span><span class="n">success</span>
+       <span class="n">failure</span><span class="o">:</span><span class="p">(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">,</span>
+                                  <span class="n">NSError</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">))</span><span class="n">failure</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">delete</span><span class="p">(</span><span class="n">_</span> <span class="kt">URLString</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">parameters</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?,</span> <span class="nv">success</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">,</span> <span class="kt">Any</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?,</span> <span class="nv">failure</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLSessionDataTask</span><span class="p">?,</span> <span class="kt">Error</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URLSessionDataTask</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>URLString</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL string used to create the request URL.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>parameters</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters to be encoded according to the client request serializer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>success</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes successfully. This block has no return value and takes two arguments: the data task, and the response object created by the client response serializer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>failure</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block object to be executed when the task finishes unsuccessfully, or that finishes successfully, but encountered an error while parsing the response data. This block has no return value and takes a two arguments: the data task and the error describing the network or parsing error that occurred.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCHTTPSessionManager.h#L297-L300">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2023 <a class="link" href="https://leancloud.cn" target="_blank" rel="external noopener">LeanCloud</a>. All rights reserved. (Last updated: 2023-12-05)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</html>

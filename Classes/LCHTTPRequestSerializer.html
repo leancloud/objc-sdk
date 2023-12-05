@@ -1,0 +1,1996 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>LCHTTPRequestSerializer Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/objc/Class/LCHTTPRequestSerializer" class="dashAnchor"></a>
+    <a title="LCHTTPRequestSerializer Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">LeanCloud 13.9.3 Docs</a> (42% documented)</p>
+        <p class="header-right"><a href="https://github.com/leancloud/objc-sdk"><img src="../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Fleancloud.github.io%2Fobjc-sdk%2Fdocsets%2FLeanCloud.xml"><img src="../img/dash.png" alt="Dash"/>Install in Dash</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">LeanCloud Reference</a>
+        <img id="carat" src="../img/carat.png" alt=""/>
+        LCHTTPRequestSerializer Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Categories.html">Categories</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Categories/NSObject%28LeanCloudObjcSDK%29.html">NSObject(LeanCloudObjcSDK)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/LCACL.html">LCACL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCApplication.html">LCApplication</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCCaptcha.html">LCCaptcha</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCCaptchaDigest.html">LCCaptchaDigest</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCCaptchaRequestOptions.html">LCCaptchaRequestOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCCloud.html">LCCloud</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCCloudQueryResult.html">LCCloudQueryResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCCompoundResponseSerializer.html">LCCompoundResponseSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCDynamicObject.html">LCDynamicObject</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCFile.html">LCFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCFileQuery.html">LCFileQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCFriendship.html">LCFriendship</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCFriendshipRequest.html">LCFriendshipRequest</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCGeoPoint.html">LCGeoPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCHTTPRequestSerializer.html">LCHTTPRequestSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCHTTPResponseSerializer.html">LCHTTPResponseSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCHTTPSessionManager.html">LCHTTPSessionManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMAudioMessage.html">LCIMAudioMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)LCIMChatRoom">LCIMChatRoom</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMClient.html">LCIMClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMClientOption.html">LCIMClientOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMConversation.html">LCIMConversation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMConversationCreationOption.html">LCIMConversationCreationOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMConversationMemberInfo.html">LCIMConversationMemberInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMConversationQuery.html">LCIMConversationQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMFileMessage.html">LCIMFileMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMImageMessage.html">LCIMImageMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMKeyedConversation.html">LCIMKeyedConversation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMLocationMessage.html">LCIMLocationMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMMessage.html">LCIMMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMMessageInterval.html">LCIMMessageInterval</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMMessageIntervalBound.html">LCIMMessageIntervalBound</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMMessageOption.html">LCIMMessageOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMMessagePatchedReason.html">LCIMMessagePatchedReason</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMOperationFailure.html">LCIMOperationFailure</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMRecalledMessage.html">LCIMRecalledMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMServiceConversation.html">LCIMServiceConversation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMSignature.html">LCIMSignature</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)LCIMTemporaryConversation">LCIMTemporaryConversation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMTextMessage.html">LCIMTextMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMTypedMessage.html">LCIMTypedMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCIMVideoMessage.html">LCIMVideoMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCImageResponseSerializer.html">LCImageResponseSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCInstallation.html">LCInstallation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCJSONRequestSerializer.html">LCJSONRequestSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCJSONResponseSerializer.html">LCJSONResponseSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCLeaderboard.html">LCLeaderboard</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCLeaderboardQueryOption.html">LCLeaderboardQueryOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCLeaderboardRanking.html">LCLeaderboardRanking</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCLeaderboardStatistic.html">LCLeaderboardStatistic</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCLiveQuery.html">LCLiveQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCLogger.html">LCLogger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCNetworkReachabilityManager.html">LCNetworkReachabilityManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCObject.html">LCObject</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCObjectFetchOption.html">LCObjectFetchOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCPaasClient.html">LCPaasClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCPropertyListRequestSerializer.html">LCPropertyListRequestSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCPropertyListResponseSerializer.html">LCPropertyListResponseSerializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCPush.html">LCPush</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCQuery.html">LCQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCRTMWebSocket.html">LCRTMWebSocket</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCRTMWebSocketMessage.html">LCRTMWebSocketMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCRelation.html">LCRelation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCRole.html">LCRole</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCSMS.html">LCSMS</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCSaveOption.html">LCSaveOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCSearchQuery.html">LCSearchQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCSearchSortBuilder.html">LCSearchSortBuilder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCSecurityPolicy.html">LCSecurityPolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCShortMessageRequestOptions.html">LCShortMessageRequestOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCStatus.html">LCStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCStatusQuery.html">LCStatusQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCURLSessionManager.html">LCURLSessionManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCUser.html">LCUser</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCUserAuthDataLoginOption.html">LCUserAuthDataLoginOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCUserShortMessageRequestOptions.html">LCUserShortMessageRequestOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LCUtils.html">LCUtils</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)LCXMLParserResponseSerializer">LCXMLParserResponseSerializer</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Constants.html">Constants</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCHeaderFieldNameId">LCHeaderFieldNameId</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCHeaderFieldNameKey">LCHeaderFieldNameKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCHeaderFieldNameProduction">LCHeaderFieldNameProduction</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCHeaderFieldNameSession">LCHeaderFieldNameSession</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCHeaderFieldNameSign">LCHeaderFieldNameSign</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMConversationUpdatedKeyLastDeliveredAt">LCIMConversationUpdatedKeyLastDeliveredAt</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMConversationUpdatedKeyLastMessage">LCIMConversationUpdatedKeyLastMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMConversationUpdatedKeyLastMessageAt">LCIMConversationUpdatedKeyLastMessageAt</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMConversationUpdatedKeyLastReadAt">LCIMConversationUpdatedKeyLastReadAt</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMConversationUpdatedKeyUnreadMessagesCount">LCIMConversationUpdatedKeyUnreadMessagesCount</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMConversationUpdatedKeyUnreadMessagesMentioned">LCIMConversationUpdatedKeyUnreadMessagesMentioned</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeAudio">LCIMMessageMediaTypeAudio</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeFile">LCIMMessageMediaTypeFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeImage">LCIMMessageMediaTypeImage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeLocation">LCIMMessageMediaTypeLocation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeNone">LCIMMessageMediaTypeNone</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeRecalled">LCIMMessageMediaTypeRecalled</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeText">LCIMMessageMediaTypeText</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMMessageMediaTypeVideo">LCIMMessageMediaTypeVideo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMSignatureActionAdd">LCIMSignatureActionAdd</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMSignatureActionBlock">LCIMSignatureActionBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMSignatureActionOpen">LCIMSignatureActionOpen</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMSignatureActionRemove">LCIMSignatureActionRemove</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMSignatureActionStart">LCIMSignatureActionStart</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCIMSignatureActionUnblock">LCIMSignatureActionUnblock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCLoggerDomainCURL">LCLoggerDomainCURL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCLoggerDomainDefault">LCLoggerDomainDefault</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCLoggerDomainIM">LCLoggerDomainIM</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCLoggerDomainNetwork">LCLoggerDomainNetwork</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCLoggerDomainStorage">LCLoggerDomainStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingOperationFailingURLRequestErrorKey">LCNetworkingOperationFailingURLRequestErrorKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingOperationFailingURLResponseDataErrorKey">LCNetworkingOperationFailingURLResponseDataErrorKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingOperationFailingURLResponseErrorKey">LCNetworkingOperationFailingURLResponseErrorKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingReachabilityDidChangeNotification">LCNetworkingReachabilityDidChangeNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingReachabilityNotificationStatusItem">LCNetworkingReachabilityNotificationStatusItem</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidCompleteAssetPathKey">LCNetworkingTaskDidCompleteAssetPathKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidCompleteErrorKey">LCNetworkingTaskDidCompleteErrorKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidCompleteNotification">LCNetworkingTaskDidCompleteNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidCompleteResponseDataKey">LCNetworkingTaskDidCompleteResponseDataKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidCompleteResponseSerializerKey">LCNetworkingTaskDidCompleteResponseSerializerKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidCompleteSerializedResponseKey">LCNetworkingTaskDidCompleteSerializedResponseKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidResumeNotification">LCNetworkingTaskDidResumeNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCNetworkingTaskDidSuspendNotification">LCNetworkingTaskDidSuspendNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCURLRequestSerializationErrorDomain">LCURLRequestSerializationErrorDomain</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCURLResponseSerializationErrorDomain">LCURLResponseSerializationErrorDomain</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCURLSessionDidInvalidateNotification">LCURLSessionDidInvalidateNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LCURLSessionDownloadTaskDidFailToMoveFileNotification">LCURLSessionDownloadTaskDidFailToMoveFileNotification</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LeanCloudObjcVersionNumber">LeanCloudObjcVersionNumber</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LeanCloudObjcVersionString">LeanCloudObjcVersionString</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LeanCloudSocialPlatformQQ">LeanCloudSocialPlatformQQ</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LeanCloudSocialPlatformWeiBo">LeanCloudSocialPlatformWeiBo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@LeanCloudSocialPlatformWeiXin">LeanCloudSocialPlatformWeiXin</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:LCPaasClient.h@USER_AGENT">USER_AGENT</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorAccountAlreadyLinked">kLCErrorAccountAlreadyLinked</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorCacheMiss">kLCErrorCacheMiss</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorCommandUnavailable">kLCErrorCommandUnavailable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorConnectionFailed">kLCErrorConnectionFailed</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorDuplicateValue">kLCErrorDuplicateValue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorExceededQuota">kLCErrorExceededQuota</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorFileDeleteFailure">kLCErrorFileDeleteFailure</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorIncorrectType">kLCErrorIncorrectType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInternalServer">kLCErrorInternalServer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidACL">kLCErrorInvalidACL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidChannelName">kLCErrorInvalidChannelName</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidClassName">kLCErrorInvalidClassName</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidDeviceToken">kLCErrorInvalidDeviceToken</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidEmailAddress">kLCErrorInvalidEmailAddress</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidFileName">kLCErrorInvalidFileName</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidImageData">kLCErrorInvalidImageData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidJSON">kLCErrorInvalidJSON</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidKeyName">kLCErrorInvalidKeyName</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidLinkedSession">kLCErrorInvalidLinkedSession</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidNestedKey">kLCErrorInvalidNestedKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidPointer">kLCErrorInvalidPointer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidProductIdentifier">kLCErrorInvalidProductIdentifier</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidPurchaseReceipt">kLCErrorInvalidPurchaseReceipt</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidQuery">kLCErrorInvalidQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidRoleName">kLCErrorInvalidRoleName</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorInvalidServerResponse">kLCErrorInvalidServerResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorLinkedIdMissing">kLCErrorLinkedIdMissing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorMissingObjectId">kLCErrorMissingObjectId</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorObjectNotFound">kLCErrorObjectNotFound</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorObjectTooLarge">kLCErrorObjectTooLarge</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorOperationForbidden">kLCErrorOperationForbidden</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorPaymentDisabled">kLCErrorPaymentDisabled</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorProductDownloadFileSystemFailure">kLCErrorProductDownloadFileSystemFailure</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorProductNotFoundInAppStore">kLCErrorProductNotFoundInAppStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorPushMisconfigured">kLCErrorPushMisconfigured</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorReceiptMissing">kLCErrorReceiptMissing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorTimeout">kLCErrorTimeout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUnsavedFile">kLCErrorUnsavedFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserCanOnlyBeCreatedThroughSignUp">kLCErrorUserCanOnlyBeCreatedThroughSignUp</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserCannotBeAlteredWithoutSession">kLCErrorUserCannotBeAlteredWithoutSession</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserEmailMissing">kLCErrorUserEmailMissing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserEmailTaken">kLCErrorUserEmailTaken</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserIdMismatch">kLCErrorUserIdMismatch</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserMobilePhoneMissing">kLCErrorUserMobilePhoneMissing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserMobilePhoneNotVerified">kLCErrorUserMobilePhoneNotVerified</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserMobilePhoneNumberTaken">kLCErrorUserMobilePhoneNumberTaken</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserNotFound">kLCErrorUserNotFound</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserPasswordMissing">kLCErrorUserPasswordMissing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserSNSAuthDataInvalid">kLCErrorUserSNSAuthDataInvalid</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserWithEmailNotFound">kLCErrorUserWithEmailNotFound</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUserWithMobilePhoneNotFound">kLCErrorUserWithMobilePhoneNotFound</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUsernameMissing">kLCErrorUsernameMissing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUsernamePasswordMismatch">kLCErrorUsernamePasswordMismatch</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCErrorUsernameTaken">kLCErrorUsernameTaken</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCIMAppCodeKey">kLCIMAppCodeKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCIMAppMsgKey">kLCIMAppMsgKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCIMCodeKey">kLCIMCodeKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCIMDetailKey">kLCIMDetailKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCIMReasonKey">kLCIMReasonKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCPushTargetPlatformAndroid">kLCPushTargetPlatformAndroid</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCPushTargetPlatformIOS">kLCPushTargetPlatformIOS</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCPushTargetPlatformWindowsPhone">kLCPushTargetPlatformWindowsPhone</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCScriptError">kLCScriptError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCStatusTypePrivateMessage">kLCStatusTypePrivateMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCStatusTypeTimeline">kLCStatusTypeTimeline</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCUploadStream3GSuggestedDelay">kLCUploadStream3GSuggestedDelay</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCUploadStream3GSuggestedPacketSize">kLCUploadStream3GSuggestedPacketSize</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLCValidationError">kLCValidationError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLeanCloudErrorDomain">kLeanCloudErrorDomain</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kLeanCloudRESTAPIResponseError">kLeanCloudRESTAPIResponseError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/LCCachePolicy.html">LCCachePolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCErrorInternalErrorCode.html">LCErrorInternalErrorCode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCFileDownloadOption.html">LCFileDownloadOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCFileUploadOption.html">LCFileUploadOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCHTTPRequestQueryStringSerializationStyle.html">LCHTTPRequestQueryStringSerializationStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMCachePolicy.html">LCIMCachePolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMClientOpenOption.html">LCIMClientOpenOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMClientStatus.html">LCIMClientStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMConversationMemberRole.html">LCIMConversationMemberRole</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMConversationQueryOption.html">LCIMConversationQueryOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMErrorCode.html">LCIMErrorCode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMMessageIOType.html">LCIMMessageIOType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMMessagePriority.html">LCIMMessagePriority</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMMessageQueryDirection.html">LCIMMessageQueryDirection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCIMMessageStatus.html">LCIMMessageStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCLogLevel.html">LCLogLevel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCNetworkReachabilityStatus.html">LCNetworkReachabilityStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCQueryDistanceUnit.html">LCQueryDistanceUnit</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCRTMWebSocketCloseCode.html">LCRTMWebSocketCloseCode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCRTMWebSocketMessageType.html">LCRTMWebSocketMessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCSSLPinningMode.html">LCSSLPinningMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCServiceModule.html">LCServiceModule</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LCShortMessageType.html">LCShortMessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/kLCIMMessageMediaType.html">kLCIMMessageMediaType</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/LCIMClientDelegate.html">LCIMClientDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCIMSignatureDataSource.html">LCIMSignatureDataSource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCIMTypedMessageSubclassing.html">LCIMTypedMessageSubclassing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCLiveQueryDelegate.html">LCLiveQueryDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCMultipartFormData.html">LCMultipartFormData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCRTMWebSocketDelegate.html">LCRTMWebSocketDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCSubclassing.html">LCSubclassing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCURLRequestSerialization.html">LCURLRequestSerialization</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/LCURLResponseSerialization.html">LCURLResponseSerialization</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Type%20Definitions.html">Type Definitions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCArrayResultBlock">LCArrayResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCBooleanResultBlock">LCBooleanResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCCaptcha.h@T@LCCaptchaRequestCallback">LCCaptchaRequestCallback</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCCaptcha.h@T@LCCaptchaVerificationCallback">LCCaptchaVerificationCallback</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCCloudQueryCallback">LCCloudQueryCallback</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCDataResultBlock">LCDataResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCDictionaryResultBlock">LCDictionaryResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCFileResultBlock">LCFileResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMArrayResultBlock">LCIMArrayResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMBooleanResultBlock">LCIMBooleanResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMChatRoomResultBlock">LCIMChatRoomResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMConversationResultBlock">LCIMConversationResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMConversationUpdatedKey">LCIMConversationUpdatedKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMIntegerResultBlock">LCIMIntegerResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMMessage.h@T@LCIMMessageMediaType">LCIMMessageMediaType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMProgressBlock">LCIMProgressBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMSignatureAction">LCIMSignatureAction</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCIMCommon.h@T@LCIMTemporaryConversationResultBlock">LCIMTemporaryConversationResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCIdResultBlock">LCIdResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCIntegerResultBlock">LCIntegerResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions/LCLoggerLevel.html">LCLoggerLevel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCObjectResultBlock">LCObjectResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCProgressBlock">LCProgressBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCSetResultBlock">LCSetResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCStatus.h@T@LCStatusResultBlock">LCStatusResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCStatus.h@T@LCStatusType">LCStatusType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCStringResultBlock">LCStringResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUtils.h@T@LCUserResultBlock">LCUserResultBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:LCUser.h@T@LeanCloudSocialPlatform">LeanCloudSocialPlatform</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCError">LCError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCErrorFromUnderlyingError">LCErrorFromUnderlyingError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCErrorInconsistency">LCErrorInconsistency</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCErrorInternalServer">LCErrorInternalServer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCPercentEscapedStringFromString">LCPercentEscapedStringFromString</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCQueryStringFromParameters">LCQueryStringFromParameters</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@LCStringFromNetworkReachabilityStatus">LCStringFromNetworkReachabilityStatus</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>LCHTTPRequestSerializer</h1>
+              <div class="declaration">
+                <div class="language">
+                  <p class="aside-title">Objective-C</p>
+                  <pre class="highlight objective_c"><code><span class="k">@interface</span> <span class="nc">LCHTTPRequestSerializer</span> <span class="p">:</span> <span class="nc">NSObject</span> <span class="o">&lt;</span><span class="n"><a href="../Protocols/LCURLRequestSerialization.html">LCURLRequestSerialization</a></span><span class="o">&gt;</span></code></pre>
+
+                </div>
+                <div class="language">
+                  <p class="aside-title">Swift</p>
+                  <pre class="highlight swift"><code><span class="kd">class</span> <span class="kt">LCHTTPRequestSerializer</span> <span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt"><a href="../Protocols/LCURLRequestSerialization.html">LCURLRequestSerialization</a></span></code></pre>
+
+                </div>
+              </div>
+            <p><code>LCHTTPRequestSerializer</code> conforms to the <code><a href="../Protocols/LCURLRequestSerialization.html">LCURLRequestSerialization</a></code> &amp; <code><a href="../Protocols/LCURLResponseSerialization.html">LCURLResponseSerialization</a></code> protocols, offering a concrete base implementation of query string / URL form-encoded parameter serialization and default request headers, as well as response status code and content type validation.</p>
+
+<p>Any request or response serializer dealing with HTTP is encouraged to subclass <code>LCHTTPRequestSerializer</code> in order to ensure consistent default behavior.</p>
+
+              <div class="slightly-smaller">
+                <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L96-L276">Show on GitHub</a>
+              </div>
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPRequestSerializer(py)stringEncoding"></a>
+                    <a name="//apple_ref/objc/Property/stringEncoding" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPRequestSerializer(py)stringEncoding">stringEncoding</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The string encoding used to serialize parameters. <code>NSUTF8StringEncoding</code> by default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSStringEncoding</span> <span class="n">stringEncoding</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">stringEncoding</span><span class="p">:</span> <span class="kt">UInt</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L101">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPRequestSerializer(py)allowsCellularAccess"></a>
+                    <a name="//apple_ref/objc/Property/allowsCellularAccess" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPRequestSerializer(py)allowsCellularAccess">allowsCellularAccess</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Whether created requests can use the device’s cellular radio (if present). <code>YES</code> by default.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    NSMutableURLRequest -setAllowsCellularAccess:
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n">allowsCellularAccess</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">allowsCellularAccess</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L108">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPRequestSerializer(py)cachePolicy"></a>
+                    <a name="//apple_ref/objc/Property/cachePolicy" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPRequestSerializer(py)cachePolicy">cachePolicy</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The cache policy of created requests. <code>NSURLRequestUseProtocolCachePolicy</code> by default.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    NSMutableURLRequest -setCachePolicy:
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSURLRequestCachePolicy</span> <span class="n">cachePolicy</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt">NSURLRequest</span><span class="o">.</span><span class="kt">CachePolicy</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L115">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPRequestSerializer(py)HTTPShouldHandleCookies"></a>
+                    <a name="//apple_ref/objc/Property/HTTPShouldHandleCookies" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPRequestSerializer(py)HTTPShouldHandleCookies">HTTPShouldHandleCookies</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Whether created requests should use the default cookie handling. <code>YES</code> by default.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    NSMutableURLRequest -setHTTPShouldHandleCookies:
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n">HTTPShouldHandleCookies</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">httpShouldHandleCookies</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L122">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPRequestSerializer(py)HTTPShouldUsePipelining"></a>
+                    <a name="//apple_ref/objc/Property/HTTPShouldUsePipelining" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPRequestSerializer(py)HTTPShouldUsePipelining">HTTPShouldUsePipelining</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Whether created requests can continue transmitting data before receiving a response from an earlier transmission. <code>NO</code> by default</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    NSMutableURLRequest -setHTTPShouldUsePipelining:
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n">HTTPShouldUsePipelining</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">httpShouldUsePipelining</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L129">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPRequestSerializer(py)networkServiceType"></a>
+                    <a name="//apple_ref/objc/Property/networkServiceType" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPRequestSerializer(py)networkServiceType">networkServiceType</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The network service type for created requests. <code>NSURLNetworkServiceTypeDefault</code> by default.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    NSMutableURLRequest -setNetworkServiceType:
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSURLRequestNetworkServiceType</span> <span class="n">networkServiceType</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">networkServiceType</span><span class="p">:</span> <span class="kt">NSURLRequest</span><span class="o">.</span><span class="kt">NetworkServiceType</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L136">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPRequestSerializer(py)timeoutInterval"></a>
+                    <a name="//apple_ref/objc/Property/timeoutInterval" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPRequestSerializer(py)timeoutInterval">timeoutInterval</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The timeout interval, in seconds, for created requests. The default timeout interval is 60 seconds.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    NSMutableURLRequest -setTimeoutInterval:
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSTimeInterval</span> <span class="n">timeoutInterval</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">timeoutInterval</span><span class="p">:</span> <span class="kt">TimeInterval</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L143">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Configuring%20HTTP%20Request%20Headers"></a>
+                <a name="//apple_ref/objc/Section/Configuring HTTP Request Headers" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Configuring%20HTTP%20Request%20Headers"></a>
+                  <h3 class="section-name"><span>Configuring HTTP Request Headers</span>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPRequestSerializer(py)HTTPRequestHeaders"></a>
+                    <a name="//apple_ref/objc/Property/HTTPRequestHeaders" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPRequestSerializer(py)HTTPRequestHeaders">HTTPRequestHeaders</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Default HTTP header field values to be applied to serialized requests. By default, these include the following:</p>
+
+<ul>
+<li><code>Accept-Language</code> with the contents of <code>NSLocale +preferredLanguages</code></li>
+<li><code>User-Agent</code> with the contents of various bundle identifiers and OS designations</li>
+</ul>
+
+<p>@discussion To add or remove default request headers, use <code>setValue:forHTTPHeaderField:</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">readonly</span><span class="p">)</span> <span class="n">NSDictionary</span><span class="o">&lt;</span><span class="n">NSString</span> <span class="o">*</span><span class="p">,</span> <span class="n">NSString</span> <span class="o">*&gt;</span> <span class="o">*</span><span class="n">_Nonnull</span> <span class="n">HTTPRequestHeaders</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">httpRequestHeaders</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">String</span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L157">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPRequestSerializer(cm)serializer"></a>
+                    <a name="//apple_ref/objc/Method/+serializer" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPRequestSerializer(cm)serializer">+serializer</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates and returns a serializer with default configuration.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">nonnull</span> <span class="n">instancetype</span><span class="p">)</span><span class="n">serializer</span><span class="p">;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L162">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPRequestSerializer(im)setValue:forHTTPHeaderField:"></a>
+                    <a name="//apple_ref/objc/Method/-setValue:forHTTPHeaderField:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPRequestSerializer(im)setValue:forHTTPHeaderField:">-setValue:<wbr>forHTTPHeaderField:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Sets the value for the HTTP headers set in request objects made by the HTTP client. If <code>nil</code>, removes the existing value for that header.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setValue</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">value</span>
+    <span class="nf">forHTTPHeaderField</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">field</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">setValue</span><span class="p">(</span><span class="n">_</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="n">forHTTPHeaderField</span> <span class="nv">field</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>field</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The HTTP header to set a default value for</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>value</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The value set as default for the specified header, or <code>nil</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L170-L171">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPRequestSerializer(im)valueForHTTPHeaderField:"></a>
+                    <a name="//apple_ref/objc/Method/-valueForHTTPHeaderField:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPRequestSerializer(im)valueForHTTPHeaderField:">-valueForHTTPHeaderField:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the value for the HTTP headers set in the request serializer.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">nullable</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">valueForHTTPHeaderField</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">field</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">value</span><span class="p">(</span><span class="n">forHTTPHeaderField</span> <span class="nv">field</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>field</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The HTTP header to retrieve the default value for</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The value set as default for the specified header, or <code>nil</code></p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L180">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPRequestSerializer(im)setAuthorizationHeaderFieldWithUsername:password:"></a>
+                    <a name="//apple_ref/objc/Method/-setAuthorizationHeaderFieldWithUsername:password:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPRequestSerializer(im)setAuthorizationHeaderFieldWithUsername:password:">-setAuthorizationHeaderFieldWithUsername:<wbr>password:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Sets the &ldquo;Authorization&rdquo; HTTP header set in request objects made by the HTTP client to a basic authentication value with Base64-encoded username and password. This overwrites any existing value for this header.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setAuthorizationHeaderFieldWithUsername</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">username</span>
+                                       <span class="nf">password</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">password</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">setAuthorizationHeaderFieldWithUsername</span><span class="p">(</span><span class="n">_</span> <span class="nv">username</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">password</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>username</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The HTTP basic auth username</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>password</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The HTTP basic auth password</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L188-L189">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPRequestSerializer(im)clearAuthorizationHeader"></a>
+                    <a name="//apple_ref/objc/Method/-clearAuthorizationHeader" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPRequestSerializer(im)clearAuthorizationHeader">-clearAuthorizationHeader</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Clears any existing value for the &ldquo;Authorization&rdquo; HTTP header.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">clearAuthorizationHeader</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">clearAuthorizationHeader</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L194">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Configuring%20Query%20String%20Parameter%20Serialization"></a>
+                <a name="//apple_ref/objc/Section/Configuring Query String Parameter Serialization" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Configuring%20Query%20String%20Parameter%20Serialization"></a>
+                  <h3 class="section-name"><span>Configuring Query String Parameter Serialization</span>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPRequestSerializer(py)HTTPMethodsEncodingParametersInURI"></a>
+                    <a name="//apple_ref/objc/Property/HTTPMethodsEncodingParametersInURI" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPRequestSerializer(py)HTTPMethodsEncodingParametersInURI">HTTPMethodsEncodingParametersInURI</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>HTTP methods for which serialized requests will encode parameters as a query string. <code>GET</code>, <code>HEAD</code>, and <code>DELETE</code> by default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSSet</span><span class="o">&lt;</span><span class="n">NSString</span> <span class="o">*&gt;</span> <span class="o">*</span><span class="n">_Nonnull</span> <span class="n">HTTPMethodsEncodingParametersInURI</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">httpMethodsEncodingParametersInURI</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L203">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPRequestSerializer(im)setQueryStringSerializationWithStyle:"></a>
+                    <a name="//apple_ref/objc/Method/-setQueryStringSerializationWithStyle:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPRequestSerializer(im)setQueryStringSerializationWithStyle:">-setQueryStringSerializationWithStyle:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Set the method of query string serialization according to one of the pre-defined styles.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <p>LCHTTPRequestQueryStringSerializationStyle</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setQueryStringSerializationWithStyle</span><span class="p">:</span>
+    <span class="p">(</span><span class="n"><a href="../Enums/LCHTTPRequestQueryStringSerializationStyle.html">LCHTTPRequestQueryStringSerializationStyle</a></span><span class="p">)</span><span class="nv">style</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">setQueryStringSerializationWith</span><span class="p">(</span><span class="n">_</span> <span class="nv">style</span><span class="p">:</span> <span class="kt"><a href="../Enums/LCHTTPRequestQueryStringSerializationStyle.html">LCHTTPRequestQueryStringSerializationStyle</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>style</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The serialization style.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L212">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPRequestSerializer(im)setQueryStringSerializationWithBlock:"></a>
+                    <a name="//apple_ref/objc/Method/-setQueryStringSerializationWithBlock:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPRequestSerializer(im)setQueryStringSerializationWithBlock:">-setQueryStringSerializationWithBlock:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Set the a custom method of query string serialization according to the specified block.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setQueryStringSerializationWithBlock</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">nullable</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">_Nonnull</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLRequest</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">,</span> <span class="n">id</span> <span class="n">_Nonnull</span><span class="p">,</span>
+                                     <span class="n">NSError</span> <span class="o">*</span><span class="n">_Nullable</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">))</span><span class="n">block</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">setQueryStringSerializationWith</span><span class="p">(</span><span class="n">_</span> <span class="nv">block</span><span class="p">:</span> <span class="p">((</span><span class="kt">URLRequest</span><span class="p">,</span> <span class="kt">Any</span><span class="p">,</span> <span class="kt">NSErrorPointer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">)?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>block</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block that defines a process of encoding parameters into a query string. This block returns the query string and takes three arguments: the request, the parameters to encode, and the error that occurred when attempting to encode parameters for the given request.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L219">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Creating%20Request%20Objects"></a>
+                <a name="//apple_ref/objc/Section/Creating Request Objects" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Creating%20Request%20Objects"></a>
+                  <h3 class="section-name"><span>Creating Request Objects</span>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPRequestSerializer(im)requestWithMethod:URLString:parameters:error:"></a>
+                    <a name="//apple_ref/objc/Method/-requestWithMethod:URLString:parameters:error:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPRequestSerializer(im)requestWithMethod:URLString:parameters:error:">-requestWithMethod:<wbr>URLString:<wbr>parameters:<wbr>error:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates an <code>NSMutableURLRequest</code> object with the specified HTTP method and URL string.</p>
+
+<p>If the HTTP method is <code>GET</code>, <code>HEAD</code>, or <code>DELETE</code>, the parameters will be used to construct a url-encoded query string that is appended to the request&rsquo;s URL. Otherwise, the parameters will be encoded according to the value of the <code>parameterEncoding</code> property, and set as the request body.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">nonnull</span> <span class="n">NSMutableURLRequest</span> <span class="o">*</span><span class="p">)</span>
+    <span class="nf">requestWithMethod</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">method</span>
+            <span class="nf">URLString</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">URLString</span>
+           <span class="nf">parameters</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">id</span><span class="p">)</span><span class="nv">parameters</span>
+                <span class="nf">error</span><span class="p">:(</span><span class="n">NSError</span> <span class="o">*</span><span class="n">_Nullable</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">)</span><span class="nv">error</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">request</span><span class="p">(</span><span class="n">withMethod</span> <span class="nv">method</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">urlString</span> <span class="kt">URLString</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">parameters</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">NSErrorPointer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">NSMutableURLRequest</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>method</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The HTTP method for the request, such as <code>GET</code>, <code>POST</code>, <code>PUT</code>, or <code>DELETE</code>. This parameter must not be <code>nil</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>URLString</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL string used to create the request URL.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>parameters</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters to be either set as a query string for <code>GET</code> requests, or the request HTTP body.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>error</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The error that occurred while constructing the request.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An <code>NSMutableURLRequest</code> object.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L237-L240">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPRequestSerializer(im)multipartFormRequestWithMethod:URLString:parameters:constructingBodyWithBlock:error:"></a>
+                    <a name="//apple_ref/objc/Method/-multipartFormRequestWithMethod:URLString:parameters:constructingBodyWithBlock:error:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPRequestSerializer(im)multipartFormRequestWithMethod:URLString:parameters:constructingBodyWithBlock:error:">-multipartFormRequestWithMethod:<wbr>URLString:<wbr>parameters:<wbr>constructingBodyWithBlock:<wbr>error:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates an <code>NSMutableURLRequest</code> object with the specified HTTP method and URLString, and constructs a <code>multipart/form-data</code> HTTP body, using the specified parameters and multipart form data block. See <a href="http://www.w3.org/TR/html4/interact/forms.html#h-17.13.4.2">http://www.w3.org/TR/html4/interact/forms.html#h-17.13.4.2</a></p>
+
+<p>Multipart form requests are automatically streamed, reading files directly from disk along with in-memory data in a single HTTP body. The resulting <code>NSMutableURLRequest</code> object has an <code>HTTPBodyStream</code> property, so refrain from setting <code>HTTPBodyStream</code> or <code>HTTPBody</code> on this request object, as it will clear out the multipart form body stream.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">nonnull</span> <span class="n">NSMutableURLRequest</span> <span class="o">*</span><span class="p">)</span>
+    <span class="nf">multipartFormRequestWithMethod</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">method</span>
+                         <span class="nf">URLString</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">URLString</span>
+                        <span class="nf">parameters</span><span class="p">:</span>
+                            <span class="p">(</span><span class="n">nullable</span> <span class="n">NSDictionary</span><span class="o">&lt;</span><span class="n">NSString</span> <span class="o">*</span><span class="p">,</span> <span class="n">id</span><span class="o">&gt;</span> <span class="o">*</span><span class="p">)</span><span class="nv">parameters</span>
+         <span class="nf">constructingBodyWithBlock</span><span class="p">:</span>
+             <span class="p">(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">id</span><span class="o">&lt;</span><span class="n"><a href="../Protocols/LCMultipartFormData.html">LCMultipartFormData</a></span><span class="o">&gt;</span> <span class="n">_Nonnull</span><span class="p">))</span><span class="nv">block</span>
+                             <span class="nf">error</span><span class="p">:(</span><span class="n">NSError</span> <span class="o">*</span><span class="n">_Nullable</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">)</span><span class="nv">error</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">multipartFormRequest</span><span class="p">(</span><span class="n">withMethod</span> <span class="nv">method</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">urlString</span> <span class="kt">URLString</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">parameters</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?,</span> <span class="n">constructingBodyWith</span> <span class="nv">block</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Protocols/LCMultipartFormData.html">LCMultipartFormData</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">NSErrorPointer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">NSMutableURLRequest</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>method</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The HTTP method for the request. This parameter must not be <code>GET</code> or <code>HEAD</code>, or <code>nil</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>URLString</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL string used to create the request URL.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>parameters</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters to be encoded and set in the request HTTP body.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>block</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block that takes a single argument and appends data to the HTTP body. The block argument is an object adopting the <code><a href="../Protocols/LCMultipartFormData.html">LCMultipartFormData</a></code> protocol.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>error</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The error that occurred while constructing the request.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An <code>NSMutableURLRequest</code> object</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L255-L259">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)LCHTTPRequestSerializer(im)requestWithMultipartFormRequest:writingStreamContentsToFile:completionHandler:"></a>
+                    <a name="//apple_ref/objc/Method/-requestWithMultipartFormRequest:writingStreamContentsToFile:completionHandler:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)LCHTTPRequestSerializer(im)requestWithMultipartFormRequest:writingStreamContentsToFile:completionHandler:">-requestWithMultipartFormRequest:<wbr>writingStreamContentsToFile:<wbr>completionHandler:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates an <code>NSMutableURLRequest</code> by removing the <code>HTTPBodyStream</code> from a request, and asynchronously writing its contents into the specified file, invoking the completion handler when finished.</p>
+
+<p>@discussion There is a bug in <code>NSURLSessionTask</code> that causes requests to not send a <code>Content-Length</code> header when streaming contents from an HTTP body, which is notably problematic when interacting with the Amazon S3 webservice. As a workaround, this method takes a request constructed with <code>multipartFormRequestWithMethod:URLString:parameters:constructingBodyWithBlock:error:</code>, or any other request with an <code>HTTPBodyStream</code>, writes the contents to the specified file and returns a copy of the original request with the <code>HTTPBodyStream</code> property set to <code>nil</code>. From here, the file can either be passed to <code>LCURLSessionManager -uploadTaskWithRequest:fromFile:progress:completionHandler:</code>, or have its contents read into an <code>NSData</code> that&rsquo;s assigned to the <code>HTTPBody</code> property of the request.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <a href="https://github.com/AFNetworking/AFNetworking/issues/1398">https://github.com/AFNetworking/AFNetworking/issues/1398</a>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">nonnull</span> <span class="n">NSMutableURLRequest</span> <span class="o">*</span><span class="p">)</span>
+    <span class="nf">requestWithMultipartFormRequest</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSURLRequest</span> <span class="o">*</span><span class="p">)</span><span class="nv">request</span>
+        <span class="nf">writingStreamContentsToFile</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSURL</span> <span class="o">*</span><span class="p">)</span><span class="nv">fileURL</span>
+                  <span class="nf">completionHandler</span><span class="p">:</span>
+                      <span class="p">(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSError</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">))</span><span class="nv">handler</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">request</span><span class="p">(</span><span class="n">withMultipartForm</span> <span class="nv">request</span><span class="p">:</span> <span class="kt">URLRequest</span><span class="p">,</span> <span class="n">writingStreamContentsToFile</span> <span class="nv">fileURL</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="n">completionHandler</span> <span class="nv">handler</span><span class="p">:</span> <span class="p">((</span><span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">NSMutableURLRequest</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>request</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The multipart form request. The <code>HTTPBodyStream</code> property of <code>request</code> must not be <code>nil</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>fileURL</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The file URL to write multipart form contents to.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>handler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler block to execute.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/leancloud/objc-sdk/tree/13.9.3/AVOS/Sources/Vendor/LCNetworking/LCURLRequestSerialization.h#L272-L274">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2023 <a class="link" href="https://leancloud.cn" target="_blank" rel="external noopener">LeanCloud</a>. All rights reserved. (Last updated: 2023-12-05)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</html>
