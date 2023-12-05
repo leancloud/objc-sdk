@@ -1,0 +1,51 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    tags:
+      - "*"
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: macos-12
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo gem install jazzy
+          brew bundle
+          bundle install
+
+      - name: Set version env var
+        run: |
+          echo "CURRENT_VERSION=$(cat ./AVOS/Sources/Foundation/UserAgent.h | sed 's/^#define SDK_VERSION @"\(.*\)"$/\1/' | xargs)" >> "$GITHUB_ENV"
+
+      - name: Build docs
+        env:
+          REPO_URL: "${{ github.server_url }}/${{ github.repository }}"
+        run: >-
+          jazzy
+          --objc
+          --output ./apidocs
+          --author LeanCloud
+          --author_url https://leancloud.cn
+          --module LeanCloud
+          --module-version $CURRENT_VERSION
+          --github_url $REPO_URL
+          --github-file-prefix "${REPO_URL}/tree/${CURRENT_VERSION}"
+          --root-url "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+          --umbrella-header ./AVOS/LeanCloudObjc/LeanCloudObjc.h
+          --framework-root ./AVOS
+          --sdk iphonesimulator
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: apidocs
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
