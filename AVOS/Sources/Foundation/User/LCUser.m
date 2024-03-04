@@ -726,13 +726,18 @@ static BOOL enableAutomatic = NO;
     }];
 }
 
-+(void)resetPasswordWithSmsCode:(NSString *)code
-                    newPassword:(NSString *)password
-                          block:(LCBooleanResultBlock)block {
++ (void)resetPasswordWithSmsCode:(NSString *)code
+                     newPassword:(NSString *)password
+                     phoneNumber:(NSString *)phoneNumber
+                           block:(LCBooleanResultBlock)block {
     NSParameterAssert(code);
     
     NSString *path=[NSString stringWithFormat:@"resetPasswordBySmsCode/%@",code];
-    [[LCPaasClient sharedInstance] putObject:path withParameters:@{ @"password" : password } sessionToken:nil block:^(id object, NSError *error) {
+    [[LCPaasClient sharedInstance] putObject:path
+                              withParameters:@{ @"password" : password,
+                                                @"mobilePhoneNumber" : phoneNumber }
+                                sessionToken:nil
+                                       block:^(id object, NSError *error) {
         [LCUtils callBooleanResultBlock:block error:error];
     }];
 }

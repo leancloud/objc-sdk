@@ -380,11 +380,13 @@ FOUNDATION_EXPORT LeanCloudSocialPlatform const LeanCloudSocialPlatformWeiXin;
  *  使用验证码重置密码
  *  @param code 6位验证码
  *  @param password 新密码
+ *  @param phoneNumber 手机号码
  *  @param block 回调结果
  */
-+(void)resetPasswordWithSmsCode:(NSString *)code
-                    newPassword:(NSString *)password
-                          block:(LCBooleanResultBlock)block;
++ (void)resetPasswordWithSmsCode:(NSString *)code
+                     newPassword:(NSString *)password
+                     phoneNumber:(NSString *)phoneNumber
+                           block:(LCBooleanResultBlock)block;
 
 /*!
  *  用 sessionToken 来登录用户
