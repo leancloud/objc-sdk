@@ -740,7 +740,7 @@ static BOOL enableAutomatic = NO;
                                        block:^(id object, NSError *error) {
         [LCUtils callBooleanResultBlock:block error:error];
     }];
-}
+}1
 
 // MARK: - query
 
