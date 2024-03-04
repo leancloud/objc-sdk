@@ -2991,35 +2991,35 @@
     },
     {
       "file": "/Users/runner/work/objc-sdk/objc-sdk/AVOS/Sources/Foundation/User/LCUser.h",
-      "line": 385,
-      "symbol": "LCUser.+resetPasswordWithSmsCode:newPassword:block:",
+      "line": 386,
+      "symbol": "LCUser.+resetPasswordWithSmsCode:newPassword:phoneNumber:block:",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.class",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/objc-sdk/objc-sdk/AVOS/Sources/Foundation/User/LCUser.h",
-      "line": 394,
+      "line": 396,
       "symbol": "LCUser.+becomeWithSessionTokenInBackground:block:",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.class",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/objc-sdk/objc-sdk/AVOS/Sources/Foundation/User/LCUser.h",
-      "line": 401,
+      "line": 403,
       "symbol": "LCUser.+becomeWithSessionToken:error:",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.class",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/objc-sdk/objc-sdk/AVOS/Sources/Foundation/User/LCUser.h",
-      "line": 408,
+      "line": 410,
       "symbol": "LCUser.+query",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.class",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/objc-sdk/objc-sdk/AVOS/Sources/Foundation/User/LCUser.h",
-      "line": 514,
+      "line": 516,
       "symbol": "LCUser.+retrieveShortTokenWithCallback:",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.class",
       "warning": "undocumented"
