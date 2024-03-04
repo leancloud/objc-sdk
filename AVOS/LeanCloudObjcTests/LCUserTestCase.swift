@@ -15,6 +15,20 @@ class LCUserTestCase: BaseTestCase {
     static let testablePhoneNumber = "+8618622223333"
     static let testableSMSCode = "170402"
     
+    func testResetPasswordWithSmsCode() {
+        expecting() { exp in
+            LCUser.resetPassword(
+                withSmsCode: LCUserTestCase.testableSMSCode,
+                newPassword: "22223333",
+                phoneNumber: LCUserTestCase.testablePhoneNumber)
+            { succeeded, error in
+                XCTAssertTrue(succeeded)
+                XCTAssertNil(error)
+                exp.fulfill()
+            }
+        }
+    }
+    
     func testSignUpAndLoginAndOther() {
         
         let username = uuid
